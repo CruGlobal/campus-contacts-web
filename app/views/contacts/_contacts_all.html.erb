@@ -2,13 +2,8 @@
 	<td colspan="99" id="all_contacts_select_all_option">
 		<span id="all_text">
       <% @filtered_people.each do |person| %>
-        <% if params[:include_archived] || params[:archived] %>
-					<% permissions = person.assigned_organizational_permissions_including_archived(current_organization.id).arrange_all %>
-				<% else %>
-					<% permissions = person.assigned_organizational_permissions(current_organization.id).arrange_all %>
-				<% end %>
     		<span class="all_row" data-id="<%= person.id %>" data-name="<%= person.first_name %> <%= person.last_name %>" data-email="<%= person.email %>" data-phone-number="<%= person.pretty_phone_number %>">
-    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-permissions' => "#{person.permissions.collect(&:id).join(',')}", 'data-labels'=>"#{person.labels.collect(&:id).join(',')}"%>
+    		  <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", style: 'display:none;', 'data-email'=>person.email, 'data-permissions' => @permissions_by_person_id[person.id], 'data-labels'=>"#{person.labels.collect(&:id).join(',')}"%>
     		</span>
       <% end %>
 

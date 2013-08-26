@@ -303,7 +303,7 @@ class PeopleController < ApplicationController
     end
 
     if ids.present?
-      current_organization.organizational_permissions.where(person_id: ids, archive_date: nil).each do |ors|
+      current_organization.organizational_permissions.where(person_id: ids, archive_date: nil, deleted_at: nil).each do |ors|
         if(ors.permission_id == Permission::USER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
@@ -489,8 +489,8 @@ class PeopleController < ApplicationController
     all.sort!
     all.each_with_index do |permission_id, index|
       begin
-        ors = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id: person.id, permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id) if to_be_added_permissions.include?(permission_id)
-        ors.update_attributes({:archive_date => nil}) unless ors.nil?
+        ors = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id: person.id, permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id, deleted_at: nil) if to_be_added_permissions.include?(permission_id)
+        ors.update_attributes({archive_date: nil}) unless ors.nil?
       rescue OrganizationalPermission::InvalidPersonAttributesError
         render 'update_leader_error', :locals => { :person => person } if permission_id == Permission::USER_ID
         render 'update_admin_error', :locals => { :person => person } if permission_id == Permission::ADMIN_ID
@@ -511,7 +511,7 @@ class PeopleController < ApplicationController
     begin
       ors.check_if_only_remaining_admin_permission_in_a_root_org
       ors.check_if_admin_is_destroying_own_admin_permission(current_person)
-      ors.update_attributes({:archive_date => Date.today})
+      ors.update_attributes({deleted_at: Date.today})
     rescue OrganizationalPermission::CannotDestroyPermissionError
       render 'cannot_delete_admin_error'
       return false
@@ -633,7 +633,7 @@ class PeopleController < ApplicationController
           permission_tables_joint = true
         else
           @q = @q.joins("INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id")
-                  .where("organizational_permissions.archive_date" => nil, "organizational_permissions.organization_id" => current_organization.id)
+                  .where("organizational_permissions.archive_date" => nil, "organizational_permissions.deleted_at" => nil, "organizational_permissions.organization_id" => current_organization.id)
                   .where("permissions.id = :search",{:search => "#{search_params[:permission]}"})
                    sort_by.unshift("permissions.id")
           permission_tables_joint = true
@@ -686,7 +686,7 @@ class PeopleController < ApplicationController
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_permission(order, permission_tables_joint)
     end
 
-    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_permissions.archive_date > ? AND organizational_permissions.archive_date < ?", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
+    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_permissions.archive_date > ? AND organizational_permissions.archive_date < ? AND organizational_permissions.deleted_at IS NULL", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 

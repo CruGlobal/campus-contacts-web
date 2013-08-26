@@ -34,7 +34,10 @@
         <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(assigned_to: person.id) %>
       <% end %>
-      <li class="entry leader <%= 'selected_entry' if params[:assigned_to].present? && params[:assigned_to].to_i == person.id %>" data-id="<%= person.id %>">
+
+      <% param_assigned_to = (params[:assigned_to].is_a?(Array)) ? (params[:assigned_to].include?(person.id.to_s)) : (params[:assigned_to].to_i == person.id) if params[:assigned_to].present?  %>
+
+      <li class="entry leader <%= 'selected_entry' if param_assigned_to.present? && param_assigned_to %>" data-id="<%= person.id %>">
         <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png', title: 'Remove Leader', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
@@ -69,7 +72,10 @@
         <% count = label.label_contacts_from_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(filter_label: label.id) %>
       <% end %>
-      <li class="entry label <%= 'selected_entry' if params[:filter_label].present? && params[:filter_label].include?(label.id.to_s) %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+
+      <% param_filter_label = (params[:filter_label].is_a?(Array)) ? (params[:filter_label].include?(label.id.to_s)) : (params[:filter_label].to_i == label.id) if params[:filter_label].present?  %>
+
+      <li class="entry label <%= 'selected_entry' if param_filter_label.present? && param_filter_label %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <%= link_to label, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
@@ -106,7 +112,10 @@
         <% count = interaction_type.interaction_receivers_from_org(@organization).collect(&:id).count %>
         <% link = all_contacts_path(interaction_type: interaction_type.id) %>
       <% end %>
-      <li class="entry interaction <%= 'selected_entry' if params[:interaction_type].to_i == interaction_type.id %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+
+      <% param_interaction_type = (params[:interaction_type].is_a?(Array)) ? (params[:interaction_type].include?(interaction_type.id.to_s)) : (params[:interaction_type].to_i == interaction_type.id) if params[:interaction_type].present?  %>
+
+      <li class="entry interaction <%= 'selected_entry' if param_interaction_type.present? && param_interaction_type %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
         <%= link_to interaction_type.name, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
@@ -143,14 +152,17 @@
         <% count = permission.permission_contacts_from_org(@organization).count %>
         <% link = all_contacts_path(permission: permission.id) %>
       <% end %>
-      <li class="entry permission <%= 'selected_entry' if params[:permission].present? && params[:permission].include?(permission.id.to_s) %>" data-id="<%= permission.id %>">
+
+      <% param_permission = (params[:permission].is_a?(Array)) ? (params[:permission].include?(permission.id.to_s)) : (params[:permission].to_i == permission.id) if params[:permission].present?  %>
+
+      <li class="entry permission <%= 'selected_entry' if param_permission.present? && param_permission %>" data-id="<%= permission.id %>">
         <%= link_to permission, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
   </div>
 </ul>
 
-<ul class="ac_dropdown_list">
+<ul class="ac_dropdown_list" id="saved_searches_group" style="<%= @saved_searches.count > 0 ? 'display:block;' : 'display:none;'%>">
 	<li class="ac_dropdown_list_header">
     <a href="#" class="side_toggle arrow_anchor">
       <div class="arrow">
@@ -170,7 +182,7 @@
       <li class="entry <%= 'selected_entry' if request.fullpath == saved_search.full_path %>">
         <%= link_to saved_search.name, saved_search.full_path %>
         <%= link_to(image_tag('edit.png', title: t('contacts.index.edit_saved_search'), class: 'tip'), '#', class: 'edit_icon', id: 'edit_saved_search_button', 'data-full-path'=>saved_search.full_path, 'data-name'=>saved_search.name, 'data-id'=>saved_search.id) %>
-        <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
+        <%= link_to(image_tag('delete.png', title: t('contacts.index.delete_saved_search'), class: 'tip'), saved_contact_search_path(saved_search), method: :delete, remote: true, class: 'delete_icon delete_saved_search', data: { confirm: t('contacts.index.delete_search_confirm') }) %>
       </li>
     <% end %>
   </div>

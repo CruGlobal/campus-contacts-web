@@ -17,8 +17,8 @@ class Organization < ActiveRecord::Base
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
-  has_many :people, through: :organizational_permissions, uniq: true
-  has_many :not_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date is NULL"], uniq: true
+  has_many :people, through: :organizational_permissions, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
+  has_many :not_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -37,18 +37,18 @@ class Organization < ActiveRecord::Base
       contacts.where(id: people_ids.collect(&:receiver_id)).order('people.last_name, people.first_name').uniq
     end
 
-    has_many :leaders, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
-    has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.archive_date IS NULL"], uniq: true
-    has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL"], uniq: true
-    has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
-    has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
-    has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
-    has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = 'do_not_contact'"]
-    has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
-    has_many :completed_contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
-    has_many :no_activity_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'uncontacted']
+    has_many :leaders, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
+    has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
+    has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
+    has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'", Permission::NO_PERMISSIONS_ID]
+    has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
+    has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = 'do_not_contact'"]
+    has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
+    has_many :completed_contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL AND organizational_permissions.permission_id = ? AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
+    has_many :no_activity_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'uncontacted']
   end
 
   has_many :rejoicables
@@ -422,6 +422,7 @@ class Organization < ActiveRecord::Base
         AND organizational_permissions.followup_status <> 'do_not_contact'
         AND organizational_permissions.followup_status <> 'completed'
         AND org_permissions.archive_date IS NULL
+        AND org_permissions.deleted_at IS NULL
         LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
@@ -433,6 +434,7 @@ class Organization < ActiveRecord::Base
         AND organizational_permissions.permission_id = '#{Permission::NO_PERMISSIONS_ID}'
         AND organizational_permissions.followup_status <> 'do_not_contact'
         AND organizational_permissions.followup_status <> 'completed'
+        AND organizational_permissions.deleted IS NULL
         LEFT JOIN contact_assignments ON contact_assignments.person_id = people.id
         AND contact_assignments.organization_id = #{id}")
         .where("contact_assignments.assigned_to_id IN (?)", only_leaders)
@@ -445,7 +447,7 @@ class Organization < ActiveRecord::Base
       person.destroy
     else
       # Otherwise just delete all their permissions in this org
-      organizational_permissions.where(person_id: person.id).destroy_all
+      organizational_permissions.where(person_id: person.id).update_all(deleted_at: Time.now)
       # Delete any contact assignments for this person in this org
       contact_assignments.where(assigned_to_id: person.id).destroy_all
     end
@@ -482,24 +484,23 @@ class Organization < ActiveRecord::Base
       current_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
       if current_permission.present? && current_permission.permission_id == permission_id
         permission = current_permission
-        permission.update_attribute(:archive_date, nil)
+        permission.update_attributes(archive_date: nil, deleted_at: nil)
       else
         permission = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).first_or_create(added_by_id: added_by_id)
-        permission.update_attribute(:archive_date, nil)
+        permission.update_attributes(archive_date: nil, deleted_at: nil)
       end
 
-      # Assure single permission per organization
-      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id)
-      org_permissions.where("id <> ?", permission.id).destroy_all
+      # Assure single permission per organization based on hierarchy
+      permission = Person.find(person_id).clean_permissions_for_org_id(id)
 
       return permission
     end
   end
 
   def add_label_to_person(person, label_id, added_by_id = nil)
-    person_id = person.is_a?(Person) ? person.id : person
+    person = person.is_a?(Person) ? person : Person.find(person)
     Retryable.retryable :times => 5 do
-      label = OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).first_or_create!(added_by_id: added_by_id)
+      label = OrganizationalLabel.where(person_id: person.id, organization_id: id, label_id: label_id).first_or_create!(added_by_id: added_by_id)
       label.update_attributes(removed_date: nil)
       label
     end
@@ -523,19 +524,30 @@ class Organization < ActiveRecord::Base
 
   def remove_permission_from_person(person, permission_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).each { |r| r.update_attributes(archive_date: Time.now) }
+    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).each { |r| r.update_attributes(deleted_at: Time.now) }
+  end
+
+  def remove_permissions_from_people(people, permissions)
+    people.each do |person|
+      remove_permission_from_person(person, permissions)
+    end
+  end
+
+  def archive_permission_from_person(person, permission_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).each { |r| r.update_attributes(archive_date: Time.now) }
+  end
+
+  def archive_permissions_from_people(people, permissions)
+    people.each do |person|
+      archive_permission_from_person(person, permissions)
+    end
   end
 
   def remove_label_from_person(person, label_id)
     person_id = person.is_a?(Person) ? person.id : person
     OrganizationalLabel.where(person_id: person_id, organization_id: id, label_id: label_id).each do |r|
       r.update_attributes(removed_date: Time.now)
-    end
-  end
-
-  def remove_permissions_from_people(people, permissions)
-    people.each do |person|
-      remove_permission_from_person(person, permissions)
     end
   end
 
@@ -549,8 +561,8 @@ class Organization < ActiveRecord::Base
     person_id = person.is_a?(Person) ? person.id : person
     begin
       org_leader = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id, id, Permission::USER_ID, :added_by_id => current_person.id)
-      unless org_leader.archive_date.nil?
-        org_leader.update_attributes({:added_by_id => current_person.id, :archive_date => nil})
+      if org_leader.archive_date != nil || org_leader.deleted_at != nil
+        org_leader.update_attributes({added_by_id: current_person.id, archive_date: nil, deleted_at: nil})
         org_leader.notify_new_leader
       end
     rescue => error

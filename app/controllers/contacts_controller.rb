@@ -88,7 +88,7 @@ class ContactsController < ApplicationController
 
   def contacts_all
     fetch_contacts(true)
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+    @filtered_people = @all_people - @people
     render partial: "contacts/contacts_all"
   end
 
@@ -514,7 +514,7 @@ class ContactsController < ApplicationController
                                  .joins(:organizational_permissions_including_archived)
 
       if params[:include_archived].blank? && params[:archived].blank?
-        @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil)
+        @people_unfiltered = @people_unfiltered.where('organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil)
       end
       @people_scope = @people_scope.merge(@people_unfiltered) if @people_scope.present?
     end
@@ -538,7 +538,7 @@ class ContactsController < ApplicationController
           @header = @labels.collect{|desc| (desc.i18n.present? ? desc.i18n : desc.name).try('titleize')}.to_sentence
         end
 
-        @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', current_organization.id)
+        @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ?', current_organization.id)
       	if params[:label_tag].present? && params[:label_tag].to_i == Label::ALL_SELECTED_LABEL[1]
 					valid_ids = []
 			  	@labels.collect(&:id).each do |label|
@@ -607,7 +607,7 @@ class ContactsController < ApplicationController
       	end
 
         if !params[:include_archived].present? && !params[:include_archived] == 'true'
-          @people_scope = @people_scope.where("organizational_permissions.archive_date" => nil)
+          @people_scope = @people_scope.where("organizational_permissions.archive_date" => nil, "organizational_permissions.deleted_at" => nil)
         end
       end
     end
@@ -754,7 +754,16 @@ class ContactsController < ApplicationController
       	order_query = "people.last_name asc, people.first_name asc"
       end
       if fetch_all
-        @all_people = @people_scope.order(order_query).group('people.id')
+        @all_people = @people_scope.includes(:primary_email_address, :primary_phone_number, :labels).order(order_query).group('people.id')
+        if params[:include_archived] || params[:archived]
+          all_permissions = OrganizationalPermission.where(organization_id: current_organization.id, archive_date: nil, deleted_at: nil)
+        else
+          all_permissions = OrganizationalPermission.where(organization_id: current_organization.id).where("archive_date IS NOT NULL AND deleted_at IS NULL")
+        end
+        all_permissions = ActiveRecord::Base.connection.select_all(all_permissions.select('GROUP_CONCAT(permission_id) as permission_ids, person_id').group(:person_id))
+        @permissions_by_person_id = {}
+        all_permissions.each {|p| @permissions_by_person_id[p['person_id']] = p['permission_ids']}
+
         @people = @all_people.page(page)
       else
         @people = @people_scope.order(order_query).group('people.id').page(page)

@@ -341,6 +341,7 @@ Mh::Application.routes.draw do
         collection do
           post :bulk
           post :bulk_create
+          post :bulk_archive
           delete :bulk_destroy
         end
       end

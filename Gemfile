@@ -36,8 +36,8 @@ gem 'mysql2', '~> 0.3.11'
 gem 'newrelic_rpm', '>= 3.5.3.25'
 gem 'nokogiri'
 gem 'oj'
-gem 'omniauth'
-gem 'omniauth-facebook'#, '~> 1.0.0.rc2'
+gem 'omniauth', '~> 1.1.1'
+gem 'omniauth-facebook', '~> 1.4.1'
 gem 'paper_trail', '~> 2'
 gem 'rack-offline'
 gem 'rails', '3.2.13'
@@ -85,7 +85,7 @@ group :development do
   gem 'travis-lint'
   gem 'mailcatcher'
   gem 'railroady'
-  gem 'localeapp'
+  #gem 'localeapp'
   gem "better_errors", ">= 0.7.2"
   #gem "binding_of_caller"
 end
