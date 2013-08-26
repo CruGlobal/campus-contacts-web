@@ -9,8 +9,8 @@ class Person < ActiveRecord::Base
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
-  has_many :organizational_labels, dependent: :destroy
-  has_many :labels, through: :organizational_labels, conditions: ["removed_date IS NULL"]
+  has_many :organizational_labels, dependent: :destroy, conditions: ["removed_date IS NULL"]
+  has_many :labels, through: :organizational_labels
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
   has_many :groups, through: :group_memberships
