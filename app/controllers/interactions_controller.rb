@@ -9,7 +9,7 @@ class InteractionsController < ApplicationController
     @person = current_person.id == params[:id].to_i ? current_person : current_organization.people.where(id: params[:id]).first
     if @person.present?
       @interaction = Interaction.new
-      @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC')
+      @completed_answer_sheets = @person.completed_answer_sheets(current_organization).order('completed_at DESC')
 
 			@labels = @person.assigned_organizational_labels(current_organization.id).uniq
 			@permission = @person.assigned_organizational_permissions(current_organization.id).first
