@@ -184,19 +184,18 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (2.0.5)
-    faraday (0.8.7)
-      multipart-post (~> 1.1)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     fastercsv (1.5.5)
     ffaker (1.16.0)
     foreigner (1.4.1)
       activerecord (>= 3.0.0)
     formtastic (2.1.1)
       actionpack (~> 3.0)
-    gli (2.5.6)
     haml (4.0.2)
       tilt
     has_scope (0.5.1)
-    hashie (2.0.4)
+    hashie (2.0.5)
     hashr (0.0.22)
     highline (1.6.18)
     hike (1.2.3)
@@ -221,12 +220,6 @@ GEM
       activesupport (>= 3.0.0)
     kgio (2.8.0)
     libv8 (3.11.8.17)
-    localeapp (0.6.9)
-      gli
-      i18n
-      json
-      rest-client
-      ya2yaml
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -253,7 +246,7 @@ GEM
       rest-client
     mocha (0.13.3)
       metaclass (~> 0.0.1)
-    multi_json (1.7.7)
+    multi_json (1.7.9)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
@@ -276,9 +269,9 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
-    omniauth-facebook (1.0.0)
-      omniauth-oauth2 (~> 1.0.0)
-    omniauth-oauth2 (1.0.3)
+    omniauth-facebook (1.4.1)
+      omniauth-oauth2 (~> 1.1.0)
+    omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
     orm_adapter (0.0.7)
@@ -425,7 +418,6 @@ GEM
       chronic (>= 0.6.3)
     wiser_date (0.3.0)
       rails (>= 3.1)
-    ya2yaml (0.31)
     yard (0.8.6.1)
 
 PLATFORMS
@@ -465,7 +457,6 @@ DEPENDENCIES
   i18n-js!
   jquery-rails
   kaminari
-  localeapp
   mailcatcher
   mini_fb
   mocha
@@ -473,8 +464,8 @@ DEPENDENCIES
   newrelic_rpm (>= 3.5.3.25)
   nokogiri
   oj
-  omniauth
-  omniauth-facebook
+  omniauth (~> 1.1.1)
+  omniauth-facebook (~> 1.4.1)
   paper_trail (~> 2)
   paperclip!
   quiet_assets
