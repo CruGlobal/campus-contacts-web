@@ -51,13 +51,13 @@ module ContactActions
       flash[:selected_permissions] = params[:permissions_ids]
       flash[:add_to_group_tag] = @add_to_group_tag
 
-      form_email_address = params[:person][:email_address][:email]
-      form_first_name = params[:person][:first_name]
-      form_last_name = params[:person][:last_name]
+      form_email_address = params[:person][:email_address][:email].to_s.strip
+      form_first_name = params[:person][:first_name].to_s.strip
+      form_last_name = params[:person][:last_name].to_s.strip
       custom_errors = Array.new
 
       # Validation if email address has value, first name and last name should be required
-      if form_email_address.present? && (!form_first_name || !form_last_name)
+      if form_email_address.present? && (form_first_name.blank? || form_last_name.blank?)
         custom_errors << t("contacts.index.no_name_message")
       end
 
@@ -68,11 +68,10 @@ module ContactActions
           get_last_name = get_person.last_name.downcase.strip
           form_first_name = form_first_name.downcase.strip
           form_last_name = form_last_name.downcase.strip
-          if (get_first_name == form_first_name) && (get_last_name == form_last_name)
-            if get_person.organizational_permissions.where(:organization_id => current_organization).first
-              custom_errors << t("contacts.index.add_already_registered_contact")
-            end
-          else
+          if get_person.organizational_permissions.where(:organization_id => current_organization).first
+            custom_errors << t("contacts.index.add_already_registered_contact")
+          end
+          if custom_errors.present? || get_first_name != form_first_name || get_last_name != form_last_name
             @person = Person.new(params[:person].except(:email_address, :phone_number))
             @person.email_address = params[:person][:email_address]
             @person.phone_number = params[:person][:phone_number]
@@ -106,9 +105,8 @@ module ContactActions
 
       if custom_errors.present?
         # Include the @person errors if invalid
-        if @person.invalid?
-          @person.save
-          custom_errors = @person.errors.full_messages << custom_errors
+        unless @person.valid?
+          custom_errors = @person.errors.full_messages + custom_errors
         end
 
         respond_to do |wants|
