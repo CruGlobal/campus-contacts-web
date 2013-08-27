@@ -8,8 +8,8 @@ class EmailAddress < ActiveRecord::Base
   before_validation :set_primary, on: :create
   after_commit :ensure_only_one_primary
   after_destroy :set_new_primary
-  validates_uniqueness_of :email, on: :create, message: "already taken"
-  validates_uniqueness_of :email, on: :update, message: "already taken"
+  #validates_uniqueness_of :email, on: :create, message: "already taken"
+  #validates_uniqueness_of :email, on: :update, message: "already taken"
   strip_attributes :only => :email
 
   def to_s
