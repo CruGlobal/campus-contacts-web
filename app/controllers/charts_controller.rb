@@ -44,6 +44,7 @@ class ChartsController < ApplicationController
       @chart = Chart.new
       @chart.person = current_person
       @chart.chart_type = Chart::SNAPSHOT
+      @chart.save
     end
 
     @movements = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
