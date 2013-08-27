@@ -35,6 +35,7 @@ class PersonTest < ActiveSupport::TestCase
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.user)
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+      Factory(:email_address, person_id: @person.id)
       assert_equal 3, @person.organizational_permissions.where(organization_id: @org.id).count
       @person.clean_permissions_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
@@ -43,10 +44,27 @@ class PersonTest < ActiveSupport::TestCase
     should "prioritize user permission" do
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.user)
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
+      Factory(:email_address, person_id: @person.id)
       assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
       @person.clean_permissions_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
       assert_equal Permission.user, @person.permission_for_org_id(@org.id)
+    end
+    should "disregard the admin permission if no email present?" do
+      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
+      assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
+      @person.clean_permissions_for_org_id(@org.id)
+      assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
+      assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
+    end
+    should "disregard the user permission if no email present?" do
+      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.user)
+      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
+      assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
+      @person.clean_permissions_for_org_id(@org.id)
+      assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
+      assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
     end
     should "leave the contact permission" do
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)

@@ -59,6 +59,8 @@ class Apis::V3::OrganizationalRolesControllerTest < ActionController::TestCase
       @admin_permission = Permission.find_by_i18n("admin")
     end
     should 'create bulk organizational_permissions' do
+      EmailAddress.create(person_id: @contact1.id, email: "contact1email@x.com")
+      EmailAddress.create(person_id: @contact2.id, email: "contact2email@x.com")
       get :bulk_create, filters: {ids: "#{@contact1.id},#{@contact2.id}"}, roles: "#{@admin_permission.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)
@@ -78,6 +80,8 @@ class Apis::V3::OrganizationalRolesControllerTest < ActionController::TestCase
     end
 
     should 'create bulk organizational_permissions and organizational_labels' do
+      EmailAddress.create(person_id: @contact1.id, email: "contact1email@x.com")
+      EmailAddress.create(person_id: @contact2.id, email: "contact2email@x.com")
       get :bulk_create, filters: {ids: "#{@contact1.id},#{@contact2.id}"}, roles: "#{@label.id},#{@admin_permission.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)

@@ -60,7 +60,7 @@ class InteractionsController < ApplicationController
     @permission_id = params[:permission_id]
 
     @people.each do |person|
-      current_organization.add_permission_to_person(person, @permission_id, current_person.id)
+      current_organization.change_person_permission(person, @permission_id, current_person.id)
       @permissions = person.permissions_for_org_id(current_organization.id)
       @assigned_tos = person.assigned_tos.where("contact_assignments.organization_id" => current_organization.id)
     end

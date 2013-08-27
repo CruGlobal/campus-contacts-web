@@ -80,6 +80,8 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       @admin_permission = Permission.find_by_i18n("admin")
     end
     should 'create and destroy bulk organizational_permissions' do
+      EmailAddress.create(person_id: @contact1.id, email: "contact1email@x.com")
+      EmailAddress.create(person_id: @contact2.id, email: "contact2email@x.com")
       get :bulk, filters: {ids: "#{@contact1.id},#{@contact2.id}"}, add_permission: "#{@admin_permission.id}", remove_permission: "#{@permission_contact.id}", secret: @client.secret, order: 'created_at'
       assert_response :success
       json = JSON.parse(response.body)

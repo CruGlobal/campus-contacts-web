@@ -159,8 +159,13 @@ class PeopleControllerTest < ActionController::TestCase
       # @person3 initially have permissions [4]
       # Apply permission "2" to both of them
       # @person2 and @person 3 should retain permissions [3] and [4] respectively after PeopleController#update_permissions
-
-      OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id: @person2.id, permission_id: 3, organization_id: @org.id, added_by_id: @user.person.id) # @person2 has permission '1'
+      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(@person2.id, @org.id)
+      org_permission.update_attributes({
+        archive_date: nil,
+        added_by_id: @user.person.id,
+        deleted_at: nil,
+        permission_id: 3
+      })
 
       old_person_2_permissions = @person2.organizational_permissions.where(organization_id: @org.id).collect { |permission| permission.permission_id }
       old_person_3_permissions = @person3.organizational_permissions.where(organization_id: @org.id).collect { |permission| permission.permission_id }
@@ -176,15 +181,6 @@ class PeopleControllerTest < ActionController::TestCase
       assert old_person_2_permissions & new_person_2_permissions # permission 2 still has his old permissions?
       assert old_person_3_permissions & new_person_3_permissions # permission 3 still has his old permissions?
 
-    end
-
-    should "archive permissions when trying to remove them (instead of deleting them in the database)" do
-      Factory(:organizational_permission, organization: @user.person.organizations.first, person: @person2, permission: Permission.no_permissions)
-      Factory(:organizational_permission, organization: @user.person.organizations.first, person: @person2, permission: Permission.user)
-
-      assert_difference "OrganizationalPermission.where(person_id: #{@person2.id}, organization_id: #{@user.person.organizations.first.id}, archive_date: nil, deleted_at: nil).count", -1 do
-        xhr :post, :update_permissions, { :permission_ids => "#{Permission.no_permissions.id}", :some_permission_ids => "", :person_id => @person2.id }
-      end
     end
 
     context "removing an admin permission" do
@@ -205,7 +201,8 @@ class PeopleControllerTest < ActionController::TestCase
         org_2 = Organization.create({"parent_id"=> @org.id, "name"=>"Org 2", "terminology"=>"Organization", "show_sub_orgs"=>"0"}) # org with show_sub_orgs == false
         org_3 = Organization.create({"parent_id"=> org_2.id, "name"=>"Org 3", "terminology"=>"Organization", "show_sub_orgs"=>"1"})
         @user_neil = Factory(:user_with_auxs)
-        org_3.add_admin(@user_neil.person)
+        Factory(:email_address, person_id: @user_neil.person.id)
+        org_3.add_admin(@user_neil.person, @admin2.id)
         sign_in @user_neil
         @request.session[:current_organization_id] = org_3.id
 
@@ -350,7 +347,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     should "update the contact's permission to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
-      xhr :post, :update_permissions, { :permission_ids => @permissions, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
+      xhr :post, :update_permissions, { :permission_ids => Permission::USER_ID, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
       assert_response :success
       assert_equal(person.id, OrganizationalPermission.last.person_id)
       assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
@@ -369,22 +366,21 @@ class PeopleControllerTest < ActionController::TestCase
       setup do
         @existing_permissions = []
         @existing_permissions << Permission.no_permissions
-        @existing_permissions << Permission.user
+        @existing_permissions << Permission.admin
         @existing_permissions = @existing_permissions.collect { |permission| permission.id }.join(',')
       end
 
-      should "append the leader permission if the person already has existing permissions" do
+      should "replace permission if the person already has existing permissions" do
         person = Factory(:person, email: 'thisemailisalsounique@mail.com')
         Factory(:organizational_permission, person: person, permission: Permission.no_permissions, organization: @org, :added_by_id => @user.person.id)
         #check the persons permissions
         assert_equal(1, person.permissions.count)
-        assert_equal(Permission.no_permissions, person.permissions.last)
+        assert_equal(Permission.no_permissions, person.permission_for_org_id(@org.id))
         xhr :post, :update_permissions, { :permission_ids => @existing_permissions, :some_permission_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader permission was not added
         assert_response :success
-        assert_equal(2, person.permissions.count)
-        assert(person.permissions.include? Permission.user)
-        assert(person.permissions.include? Permission.no_permissions)
+        assert_equal(1, person.permissions.count)
+        assert_equal(Permission.admin, person.permission_for_org_id(@org.id))
         assert_equal(person.id, OrganizationalPermission.last.person_id)
         assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
       end
@@ -394,12 +390,13 @@ class PeopleControllerTest < ActionController::TestCase
         Factory(:organizational_permission, person: person, permission: Permission.no_permissions, organization: @org, :added_by_id => @user.person.id)
         #check the persons permissions
         assert_equal(1, person.permissions.count)
-        assert_equal(Permission.no_permissions, person.permissions.last)
+        assert_equal(Permission.no_permissions, person.permission_for_org_id(@org.id))
         xhr :post, :update_permissions, { :permission_ids => @existing_permissions, :some_permission_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader permission was not added
         assert_response :success
         assert_equal(1, person.permissions.count)
-        assert_equal(Permission.no_permissions, person.permissions.last)
+        assert_equal(Permission.no_permissions, person.permission_for_org_id(@org.id))
+        assert_equal(person.id, OrganizationalPermission.last.person_id)
       end
     end
   end

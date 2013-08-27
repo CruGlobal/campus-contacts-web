@@ -15,7 +15,7 @@ class OrganizationalPermission < ActiveRecord::Base
   scope :completed, where("followup_status = 'completed' AND permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")
   # scope :uncontacted, where("followup_status = 'uncontacted' AND permission_id = #{Permission::NO_PERMISSIONS_ID}")
   before_create :set_start_date, :set_contact_uncontacted
-  before_create :notify_new_leader, :if => :permission_is_leader_or_admin
+  before_save :notify_new_leader, :if => :permission_is_leader_or_admin
   #before_destroy :check_if_only_remaining_admin_permission_in_a_root_org, :check_if_admin_is_destroying_own_admin_permission
   #attr_accessor :destroyer #temporary variable to remember which Person is about to destroy this permission
 
@@ -59,7 +59,7 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   def permission_is_leader_or_admin
-    if (permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID) && added_by_id
+    if (permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID) && added_by_id && self.permission_id_changed?
       true
     else
       false

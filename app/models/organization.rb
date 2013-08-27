@@ -477,6 +477,21 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
 
+  def change_person_permission(person, permission_id, added_by_id = nil)
+    person_id = person.is_a?(Person) ? person.id : person
+    Retryable.retryable :times => 5 do
+      permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
+      if permission.permission_id == permission_id
+        if permission.archive_date.present? || permission.deleted_at.present?
+          permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+        end
+      else
+        permission.update_attributes(permission_id: permission_id, archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+      end
+      return permission
+    end
+  end
+
   def add_permission_to_person(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
 
@@ -484,9 +499,11 @@ class Organization < ActiveRecord::Base
       current_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
       if current_permission.present? && current_permission.permission_id == permission_id
         permission = current_permission
+        current_permission.notify_new_leader if current_permission.permission_is_leader_or_admin && (current_permission.archive_date != nil || current_permission.deleted_at != nil)
         permission.update_attributes(archive_date: nil, deleted_at: nil)
       else
         permission = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).first_or_create(added_by_id: added_by_id)
+        permission.notify_new_leader if permission.permission_is_leader_or_admin
         permission.update_attributes(archive_date: nil, deleted_at: nil)
       end
 
@@ -560,11 +577,13 @@ class Organization < ActiveRecord::Base
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
     begin
-      org_leader = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id, id, Permission::USER_ID, :added_by_id => current_person.id)
-      if org_leader.archive_date != nil || org_leader.deleted_at != nil
-        org_leader.update_attributes({added_by_id: current_person.id, archive_date: nil, deleted_at: nil})
-        org_leader.notify_new_leader
-      end
+      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
+      org_permission.update_attributes({
+        archive_date: nil,
+        added_by_id: current_person.id,
+        deleted_at: nil,
+        permission_id: Permission::USER_ID
+      })
     rescue => error
       @save_retry_count =  (@save_retry_count || 5)
       retry if( (@save_retry_count -= 1) > 0 )
@@ -572,9 +591,9 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def add_contact(person)
+  def add_contact(person, added_by_id = nil)
     begin
-      add_permission_to_person(person, Permission::NO_PERMISSIONS_ID)
+      add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
     rescue => error
       @save_retry_count =  (@save_retry_count || 5)
       retry if( (@save_retry_count -= 1) > 0 )
@@ -582,16 +601,16 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def add_admin(person)
-    add_permission_to_person(person, Permission::ADMIN_ID)
+  def add_admin(person, added_by_id = nil)
+    add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
   end
 
-  def add_user(person)
-    add_permission_to_person(person, Permission::USER_ID)
+  def add_user(person, added_by_id = nil)
+    add_permission_to_person(person, Permission::USER_ID, added_by_id)
   end
 
-  def add_no_permissions(person)
-    add_contact(person)
+  def add_no_permissions(person, added_by_id = nil)
+    add_contact(person, added_by_id)
   end
 
   def remove_people(people)
