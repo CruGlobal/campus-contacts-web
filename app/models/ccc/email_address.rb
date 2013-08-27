@@ -8,11 +8,11 @@ class Ccc::EmailAddress < ActiveRecord::Base
   after_destroy :set_new_primary
   validates_uniqueness_of :email, on: :create, message: "already taken"
   validates_uniqueness_of :email, on: :update, message: "already taken"
-  
+
   def to_s
     email
   end
-  
+
   def merge(other)
     EmailAddress.transaction do
       if updated_at && other.primary? && other.updated_at > updated_at
@@ -33,9 +33,9 @@ class Ccc::EmailAddress < ActiveRecord::Base
   def is_unique?
     EmailAddress.where(email: email).blank?
   end
-  
+
   protected
-  
+
   def set_primary
     if person
       if person.primary_email_address && person.primary_email_address.valid?
@@ -44,12 +44,12 @@ class Ccc::EmailAddress < ActiveRecord::Base
         person.primary_email_address.try(:destroy)
         self.primary = true
       end
-    else 
+    else
       self.primary = true
     end
     true
   end
-  
+
   def set_new_primary
     if self.primary?
       if person && person.email_addresses.present?

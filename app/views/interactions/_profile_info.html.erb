@@ -75,6 +75,7 @@
 
 </div>
 
+<% @person.reload if @person.present? %>
 <% email_addresses = @person.email_addresses %>
 <% phone_numbers = @person.phone_numbers %>
 <% addresses = @person.addresses %>
@@ -82,11 +83,10 @@
 <% if (addresses.present? && addresses.first.address1.present?) || phone_numbers.present? || email_addresses.present? %>
   <div class="feed_box info_display">
 
-
     <% if email_addresses.present? %>
     	<div class="email col_left"><%= t('general.email') %>:</div>
     	<div class="email col_right">
-        <% @person.email_addresses.each do |email| %>
+        <% email_addresses.each do |email| %>
           <div class="email_record">
             <%= mail_to email.email %>
           </div>

@@ -8,7 +8,7 @@ class EmailAddressTest < ActiveSupport::TestCase
   # should validate_presence_of(:person_id)
 
   context "an email address" do
-    setup do 
+    setup do
       @person = Factory(:person)
     end
     should "set first email to primary" do
@@ -19,6 +19,7 @@ class EmailAddressTest < ActiveSupport::TestCase
 
     should "set new primary when primary email is deleted" do
       person = Factory(:person)
+      @person.reload
       email1 = @person.email_addresses.create(email: 'test@example.com')
       assert(!email1.new_record?, email1.errors.full_messages.join(','))
       email2 = @person.email_addresses.create(email: 'test2@example.com')

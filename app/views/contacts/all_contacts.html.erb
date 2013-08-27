@@ -117,29 +117,34 @@
         <th class='first_name'><%= sort_link @q, :first_name, t('.first_name'), params %></th>
         <th class='last_name'><%= sort_link @q, :last_name, t('.last_name'), params %></th>
 
-    		<% if params[:role].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:role].map{|id| id }) %>
+      	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   	      <th class='status'><%= sort_link @q, :followup_status, t('.status'), params %></th>
   		  <% end %>
 
         <th class='gender'><%= sort_link @q, :gender, t('.gender'), params %></th>
         <th class='phone' style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
         <th class='labels'><%= sort_link @q, :labels, t('.labels'), params %></th>
-        <% @questions.each do |q| %>
-          <th class="question <%= dom_id(q) %>">
-            <% if @predefined_questions.include?(q) %>
-              <%= q.attribute_name.gsub('_',' ').titleize %>
-            <% else %>
-              <%= q.slug.present? ? q.slug.titleize : q.label.titleize %>
-            <% end%>
-            <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
-          </th>
+
+        <% if @questions.present? %>
+          <% @questions.uniq.each do |q| %>
+            <th class="question <%= dom_id(q) %>">
+              <% if @predefined_questions.include?(q) %>
+                <%= q.attribute_name.gsub('_',' ').titleize %>
+              <% else %>
+                <%= q.slug.present? ? q.slug.titleize : q.label.titleize %>
+              <% end%>
+              <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
+            </th>
+          <% end %>
         <% end %>
+
         <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
           <th class="visible_surveys_column">
         	  <%= t('.surveys') %>
             <%= link_to("(#{t('nav.hide')})", hide_survey_question_path('0', 'visible_surveys_column'), remote: true, method: :put, class: 'hide', 'data-class' => 'visible_surveys_column') %>
           </th>
       	<% end %>
+
         <th class='last_survey'><%= sort_link @q, :last_survey, t('.last_survey'), params %></th>
         <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
       </tr>
