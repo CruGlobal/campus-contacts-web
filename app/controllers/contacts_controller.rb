@@ -336,31 +336,6 @@ class ContactsController < ApplicationController
     get_and_merge_unfiltered_people
   end
 
-  def check_email
-    email = params[:email]
-    fname = params[:fname]
-    lname = params[:lname]
-
-    code = '100'
-    if email.present? && fname.present? && lname.present?
-      if fetched_email = EmailAddress.find_by_email(email) || User.find_by_username(email) || User.find_by_email(email)
-        person = fetched_email.person
-        if person.present?
-          if person.first_name.downcase.strip == fname.downcase.strip && person.last_name.downcase.strip == lname.downcase.strip
-            if person.organizational_permissions.where(:organization_id => current_organization).first
-              code = '201'
-            end
-          else
-            code = '202'
-          end
-        end
-      end
-    else
-      code = '203'
-    end
-    render :text => code
-  end
-
   def search_locate_contact
     firstname = params[:fname]
     lastname = params[:lname]
@@ -427,15 +402,19 @@ class ContactsController < ApplicationController
       @saved_contact_search = current_user.saved_contact_searches.where("full_path = '#{request.fullpath.gsub(I18n.t('contacts.index.edit_true'),"")}'").first || SavedContactSearch.new
 
       # Surveys & Questions
+      initialize_surveys_and_questions
+
+      # Labels
+      @people_for_labels = Person.people_for_labels(current_organization)
+    end
+
+    def initialize_surveys_and_questions
       @surveys = @organization.surveys
       @all_questions = @organization.questions
       excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
       @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
       @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
       @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
-
-      # Labels
-      @people_for_labels = Person.people_for_labels(current_organization)
     end
 
     def build_people_scope

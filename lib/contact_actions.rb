@@ -40,20 +40,48 @@ module ContactActions
         end
       end if params[:answers]
 
+      # Initialize Person or get the existing person data
       @person = Person.new_from_params(params[:person])
       @email = @person.email_addresses.first
       @phone = @person.phone_numbers.first
 
-      #If has error message, this would set the selected values to the add contact form fields
+      # This would set the selected values to the add contact form fields if there's an error messages
       flash[:selected_labels] = params[:labels]
       flash[:selected_answers] = params[:answers]
       flash[:selected_permissions] = params[:permissions_ids]
       flash[:add_to_group_tag] = @add_to_group_tag
 
+      form_email_address = params[:person][:email_address][:email].to_s.strip
+      form_first_name = params[:person][:first_name].to_s.strip
+      form_last_name = params[:person][:last_name].to_s.strip
       custom_errors = Array.new
+
+      # Validation if email address has value, first name and last name should be required
+      if form_email_address.present? && (form_first_name.blank? || form_last_name.blank?)
+        custom_errors << t("contacts.index.no_name_message")
+      end
+
+      # Validation existing person email address, create duplicate person and email if name does not match
+      if form_email_address.present? && form_first_name.present? && form_last_name.present?
+        if get_person = Person.find_existing_person_by_email(form_email_address)
+          get_first_name = get_person.first_name.downcase.strip
+          get_last_name = get_person.last_name.downcase.strip
+          form_first_name = form_first_name.downcase.strip
+          form_last_name = form_last_name.downcase.strip
+          if get_person.organizational_permissions.where(:organization_id => current_organization).first
+            custom_errors << t("contacts.index.add_already_registered_contact")
+          end
+          if custom_errors.present? || get_first_name != form_first_name || get_last_name != form_last_name
+            @person = Person.new(params[:person].except(:email_address, :phone_number))
+            @person.email_address = params[:person][:email_address]
+            @person.phone_number = params[:person][:phone_number]
+          end
+        end
+      end
+
       # Validation that requires the email if the permission is set to User or Admin
       if params[:permissions_ids].present? && Permission.is_set_to_user_or_admin?(params[:permissions_ids].first.to_i)
-        unless params[:person][:email_address][:email].present?
+        unless form_email_address.present?
           if permission_name = Permission.find_by_id(params[:permissions_ids])
             custom_errors << t("contacts.index.for_this_permission_email_is_required", :permission => permission_name)
           else
@@ -77,17 +105,20 @@ module ContactActions
 
       if custom_errors.present?
         # Include the @person errors if invalid
-        if @person.invalid?
-          @person.save
-          custom_errors = @person.errors.full_messages << custom_errors
+        unless @person.valid?
+          custom_errors = @person.errors.full_messages + custom_errors
         end
+
         respond_to do |wants|
           wants.js do
             flash.now[:error] = custom_errors.join('<br />')
             render 'add_contact'
           end
+          wants.json do
+            raise ApiErrors::MissingData, custom_errors.join(', ')
+          end
         end
-        return
+        return false
       end
 
       if @person.save
@@ -97,7 +128,7 @@ module ContactActions
           end
         end
 
-        @questions = @organization.all_questions.where("#{SurveyElement.table_name}.hidden" => false)
+        # Save survey answers
         save_survey_answers
 
         # Record that this person was created so we can notify leaders/admins
@@ -130,6 +161,8 @@ module ContactActions
           wants.js do
             @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
             @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: @person).map {|r| [r.person_id, r]}]
+
+            initialize_surveys_and_questions
             @answers = generate_answers(Person.where(id: @person.id), @organization, @questions)
           end
           wants.json { render json: @person.to_hash_basic(@organization) }

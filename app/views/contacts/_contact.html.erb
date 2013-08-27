@@ -40,22 +40,23 @@
     </div>
   </td>
 
-  <% dates = [] %>
-  <% questions.uniq.each do |q| %>
-    <td class="cell <%= dom_id(q) %>">
-      <% if q.slug == 'email' %>
-        <span class="email"><%= mail_to(person.email) %></span>
-      <% elsif q.object_name == 'person' %>
-        <span><%= person.send(:"#{q.attribute_name}") %></span>
-      <% else %>
-        <% if answers[person.id] %>
-          <% if answer = answers[person.id][q.id] %>
-            <% date = answer.last %>
-            <span title="<%= l(date, format: :date) if date %>" class="tipitmiddle"><%= answer.first %></span>
+  <% if questions.present? %>
+    <% questions.uniq.each do |q| %>
+      <td class="cell <%= dom_id(q) %>">
+        <% if q.slug == 'email' %>
+          <span class="email"><%= mail_to(person.email) %></span>
+        <% elsif q.object_name == 'person' %>
+          <span><%= person.send(:"#{q.attribute_name}") %></span>
+        <% else %>
+          <% if answers[person.id] %>
+            <% if answer = answers[person.id][q.id] %>
+              <% date = answer.last %>
+              <span title="<%= l(date, format: :date) if date %>" class="tipitmiddle"><%= answer.first %></span>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </td>
+      </td>
+    <% end %>
   <% end %>
 
   <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
@@ -69,8 +70,9 @@
   <% end %>
 
   <td class="cell">
-    <%= l(last_answer_sheet.updated_at, :format => :date) if last_answer_sheet.present? %>
+    <%= (last_answer_sheet.present?) ? l(last_answer_sheet.updated_at, :format => :date) : raw("&nbsp;") %>
   </td>
+
   <td class="cell controls" align="right">
     <%- assigned_to = (assignments[person.id] || []).first.try(:assigned_to) %>
     <span class="assigned_to" style="display:none;"><%= assigned_to %></span>
