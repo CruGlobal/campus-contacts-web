@@ -946,9 +946,9 @@ class PeopleControllerTest < ActionController::TestCase
       #assert_redirected_to person_path(assigns(:person))
     end
 
-    should "not be able to update a person when email is already taken" do
-      put :update, id: @contact2.id, person: {first_name: 'Rickon', last_name: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
-      assert_empty @contact2.email_addresses
-    end
+    #should "not be able to update a person when email is already taken" do
+      #put :update, id: @contact2.id, person: {first_name: 'Rickon', last_name: 'Stark', :email_address => {:email => "brandonstark@email.com", "primary"=>"1"} }
+      #assert_empty @contact2.email_addresses
+    #end
   end
 end
