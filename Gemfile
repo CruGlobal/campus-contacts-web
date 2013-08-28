@@ -64,6 +64,7 @@ gem 'wiser_date', '~> 0.3.0'
 
 group :development, :test do
   gem 'guard'
+  gem 'guard-test'
   gem 'awesome_print'
   gem 'quiet_assets'
 end

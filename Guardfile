@@ -10,3 +10,5 @@ guard 'test' do
   watch('app/controllers/application_controller.rb') { ["test/functional", "test/integration"] }
   watch('test/test_helper.rb')                       { "test" }
 end
+
+
