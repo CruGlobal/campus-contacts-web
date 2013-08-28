@@ -1,31 +1,21 @@
+<%= render :partial => 'survey_responses/survey_response_sidebar' %>
 <div class="titlebar titlebarmod">
-  <span style="font-size: 16px; font-weight:bold;"><%= t('.title', name: @person) %></span>
+  <h1>
+    <%= t('survey_responses.show.title', name: @person) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
 </div>
-<br/>
-<div class="pagemenu">
-  <%= link_to("Back", person_url(@person)) %>
-</div>
-<br/>
-<div class="pad">
-  <div id="survey_answers">
-    <% current_organization.surveys.flatten.uniq.each do |survey| %>
-      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
-      <% questions_with_answers = survey.questions_with_answers(answer_sheet, @person) %>
-      <% if questions_with_answers.present? %>
-        <div class="survey_title"><%= survey.title %></div>
-      <% end %>
-      <ul>
-        <% questions_with_answers.each do |q| %>
-          <% q.display_response(answer_sheet, @person).tap do |answer| %>
-            <% if answer.present? %>
-              <li><%= q.label %><%= ':' unless q.label[-1] =~ /\.;:\?/ %> <%= answer %></li>
-            <% end %>
-          <% end %>
-        <% end %>
-      </ul>
+
+<% if @completed_answer_sheets.present? && @completed_answer_sheets.count %>
+  <% @completed_answer_sheets.each do |answer_sheet| %>
+    <% if answer_sheet.answers.count > 0 %>
+      <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: answer_sheet} %>
     <% end %>
-    <% unless @person.answer_sheets.present? %>
-      <%= t('.no_answers', name: @person) %><br/><br/>
-    <% end %>
+  <% end %>
+<% else %>
+  <div class="feed_box notice">
+    No completed surveys yet.
   </div>
-</div>
+<% end %>
