@@ -11,7 +11,7 @@
     <% if !@survey || [0, 1].include?(@survey.login_option) %>
       <div id="login_paragraph"><h1><%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
       <br><br>
-      <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), id: 'facebook_button', rel: 'external', style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
+      <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook_mhub', id: 'facebook_button', rel: 'external', style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
       <% if cookies[:survey_mode].present? %>
         <span id="waiting"><%= t('.waiting_for_logout') %></span>
       <% end %>
@@ -32,7 +32,7 @@
     <div class="left width30">
       <div class="loginscreen" style="text-align: center;">
         <p class="error_container"><%= raw(flash[:error]) %></p>
-        <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook), rel: 'external') %>
+        <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook', rel: 'external') %>
         <p><a href="/"><%= t('.back') %></a></p>
       </div>
     </div>

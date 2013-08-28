@@ -233,10 +233,13 @@ Mh::Application.routes.draw do
   match 'tutorials' => "welcome#tutorials"
   get "/test" => "welcome#test"
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks", sessions: "sessions" }
+  devise_for :users, controllers: { sessions: "sessions" }
+
   devise_scope :user do
-    get "sign_in", to: "sessions#new"
-    get "sign_out", to: "sessions#destroy"
+    match "/sign_in", to: "sessions#new"
+    match "/sign_out", to: "sessions#destroy"
+    match '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
+    match '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
 

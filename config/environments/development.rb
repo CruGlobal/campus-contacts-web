@@ -23,15 +23,14 @@ Mh::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
   config.action_mailer.default_url_options = {
-    host: 'local.missionhub.com',
-    port: 7888
+    host: 'local.missionhub.com:7888'
   }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { :host => "localhost", :port => 1025 }
 
-  config.dev_tweaks.autoload_rules do
-    keep :xhr
-  end
+  #config.dev_tweaks.autoload_rules do
+    #keep :xhr
+  #end
 
   Paperclip.options[:command_path] = "/usr/local/bin/"
 
@@ -48,3 +47,4 @@ Mh::Application.configure do
   end
   config.assets.logger = false
 end
+

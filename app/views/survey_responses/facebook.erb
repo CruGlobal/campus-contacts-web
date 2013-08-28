@@ -1,6 +1,6 @@
 <center>
   <%= t('.facebook_login') %><br/><br/>
-  <%= link_to(image_tag('facebookconnect.png'), user_omniauth_authorize_path(:facebook_mhub), rel: 'external') %>
+  <%= link_to(image_tag('facebookconnect.png'), "/users/auth/facebook_mhub", rel: 'external') %>
 </center>
 <div class="info"><br/><br/>
   <% survey_url = start_survey_url(@survey) %>

@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 gem "default_value_for"
-gem "devise", '1.5.1' #, git: "git://github.com/plataformatec/devise.git"
+gem "devise", '~> 2.1.0' #, git: "git://github.com/plataformatec/devise.git"
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
-gem "ransack", :git => "git://github.com/ernie/ransack.git"
+gem "ransack", :git => "git://github.com/ernie/ransack.git", ref: 'c7c4e46dc19fe6f755183a6da39fcb82a265ed10'
 gem "state_machine"
 gem "strip_attributes"
 gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
@@ -37,7 +37,7 @@ gem 'newrelic_rpm', '>= 3.5.3.25'
 gem 'nokogiri'
 gem 'oj'
 gem 'omniauth', '~> 1.1.1'
-gem 'omniauth-facebook', '~> 1.4.1'
+gem 'omniauth-facebook', '1.4.0'
 gem 'paper_trail', '~> 2'
 gem 'rack-offline'
 gem 'rails', '3.2.13'
@@ -52,7 +52,7 @@ gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'sass'
 gem 'sass-rails', "~>3.2.3"
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
-gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git'
+gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
 gem 'unicorn'
 gem 'valium'
 gem 'versionist', '~> 1.0.0'
@@ -79,7 +79,7 @@ group :test do
 end
 
 group :development do
-  gem 'rails-dev-tweaks'
+  #gem 'rails-dev-tweaks'
   gem 'rails-footnotes'
   gem 'bullet'
   gem 'travis-lint'

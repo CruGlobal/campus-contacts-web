@@ -9,10 +9,10 @@
   	for you to care for the people<br />
   	who need you most.
   </h4>
-  
+
   <div class="salespush">
     <% if mhub? %>
-	  <%= link_to('Get Started', user_omniauth_authorize_path(:facebook_mhub), :class => "getstartedbt btn-danger") %>
+	  <%= link_to('Get Started', "/users/auth/facebook_mhub", :class => "getstartedbt btn-danger") %>
 	<% else %>
 	  <%= link_to('Get Started', new_user_session_path, :class => "getstartedbt btn-danger") %>
 	<% end %>
