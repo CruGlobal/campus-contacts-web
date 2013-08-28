@@ -132,6 +132,13 @@ class SurveyResponsesController < ApplicationController
         end
       end
 
+      if faculty_element = @survey.questions.where(attribute_name: 'faculty').first
+        is_faculty = params[:answers]["#{faculty_element.id}"]
+        if faculty_element.present? && is_faculty.present?
+          params[:answers]["#{faculty_element.id}"] = is_faculty.downcase == "yes" ? true : false
+        end
+      end
+
       if existing_person
         if @person
           @person = existing_person.smart_merge(@person) unless @person == existing_person
@@ -205,7 +212,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def destroy_answer_sheet_when_answers_are_all_blank
-    @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
+    @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| [true,false].include?(x) || x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
   end
 
   def get_person

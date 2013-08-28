@@ -260,6 +260,24 @@ class Organization < ActiveRecord::Base
     return 'twilio'
   end
 
+  def predefined_survey_questions
+    questions = Survey.find(APP_CONFIG['predefined_survey']).questions
+    if is_bridge? #bridges
+      return questions.where("attribute_name <> 'faculty'")
+    elsif has_parent?(1) #cru
+      return questions.where("attribute_name <> 'nationality'")
+    else
+      return questions
+    end
+
+    if is_bridge?
+      raise questions.collect(&:label).inspect
+      return questions
+    else
+      return questions.where("attribute_name != 'faculty'")
+    end
+  end
+
   def pending_transfer
     sent.includes(:sent_person).where('sent_people.id IS NULL')
   end
