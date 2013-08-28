@@ -467,41 +467,29 @@ class PeopleController < ApplicationController
 
     data = ""
     person = Person.find(params[:person_id])
-
     permission_ids = params[:permission_ids].split(',').map(&:to_i)
+    if permission_ids.present?
+      permission_ids.each do |permission_id|
+        new_permission = Permission.where(id: permission_id).first
+        if new_permission.present?
+          begin
+            org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, current_organization.id)
+            org_permission.update_attributes(
+              archive_date: nil,
+              deleted_at: nil,
+              added_by_id: current_person.id,
+              permission_id: new_permission.id
+            )
+          rescue OrganizationalPermission::InvalidPersonAttributesError
+            render 'update_leader_error', :locals => { :person => person } if new_permission.id == Permission::USER_ID
+            render 'update_admin_error', :locals => { :person => person } if new_permission.id == Permission::ADMIN_ID
+            return
+          rescue ActiveRecord::RecordNotUnique
 
-
-    new_permissions = params[:permission_ids].split(',').map(&:to_i)
-    old_permissions = person.organizational_permissions.where(organization_id: current_organization.id).collect { |permission| permission.permission_id }
-    some_permissions = params[:some_permission_ids].nil? ? [] : params[:some_permission_ids].split(',').map(&:to_i) # permissions that only SOME persons have
-
-    new_permissions = new_permissions - some_permissions #remove permissions that SOME of the persons have. We should not touch them. They are disabled in the views anyway.
-
-    some_permissions = old_permissions if params[:include_old_permissions] == "yes"
-    to_be_added_permissions = new_permissions - old_permissions
-    to_be_removed_permissions = old_permissions - new_permissions - some_permissions
-
-    person.organizational_permissions.where(organization_id: current_organization.id, permission_id: to_be_removed_permissions).each do |organizational_permission|
-      return unless delete_permission(organizational_permission)
-    end
-
-    all = to_be_added_permissions | (new_permissions & old_permissions) | (old_permissions & some_permissions)
-    all.sort!
-    all.each_with_index do |permission_id, index|
-      begin
-        ors = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(person_id: person.id, permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id, deleted_at: nil) if to_be_added_permissions.include?(permission_id)
-        ors.update_attributes({archive_date: nil}) unless ors.nil?
-      rescue OrganizationalPermission::InvalidPersonAttributesError
-        render 'update_leader_error', :locals => { :person => person } if permission_id == Permission::USER_ID
-        render 'update_admin_error', :locals => { :person => person } if permission_id == Permission::ADMIN_ID
-        return
-      rescue ActiveRecord::RecordNotUnique
-
+          end
+          data << "<div id='#{person.id}_#{new_permission.id}' class='permission_label permission_#{new_permission.id}' style='margin-right:4px;'>#{new_permission.to_s}</div>"
+        end
       end
-
-      data << "<div id='#{person.id}_#{permission_id}' class='permission_label permission_#{permission_id}'"
-      data << "style='margin-right:4px;'" if index < all.length - 1
-      data << ">#{Permission.find(permission_id).to_s}</div>"
     end
 
     render :text => data

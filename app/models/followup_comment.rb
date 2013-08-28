@@ -56,7 +56,7 @@ class FollowupComment < ActiveRecord::Base
 
   private
   def update_followup_status
-    om = OrganizationalPermission.find_or_create_by_person_id_and_organization_id_and_permission_id(contact_id, organization_id, Permission::NO_PERMISSIONS_ID)
-    om.update_attribute(:followup_status, status)
+    org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(contact_id, organization_id)
+    org_permission.update_attribute(:followup_status, status) if org_permission.permission_id == Permission::NO_PERMISSIONS_ID
   end
 end
