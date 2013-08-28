@@ -29,7 +29,7 @@
     <div id="assigned_to_dropdown" class="custom_dropdown view" data-current-id="<%= current_id %>">
       <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
       <div id="selected">
-        <% if @assigned_tos.count == 0 %>
+        <% if @assigned_tos.nil? || @assigned_tos.count == 0 %>
           <%= "Unassigned" %>
         <% elsif @assigned_tos.count > 1 %>
           <%= "#{@assigned_tos.count} people selected" %>
