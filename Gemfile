@@ -48,8 +48,8 @@ gem 'resque', '~> 1.20.0'
 gem 'resque_mail_queue'
 gem 'rest-client'                                     # to make FB api requests
 gem 'retryable-rb'
-gem 'rubycas-client', '~> 2.2.1'
-gem 'rubycas-client-rails', '~> 0.1.0'
+#gem 'rubycas-client', '~> 2.2.1'
+#gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'sass'
 gem 'sass-rails', "~>3.2.3"
 gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
