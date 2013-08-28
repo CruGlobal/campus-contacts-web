@@ -31,6 +31,7 @@ gem 'http_accept_language'
 gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'jquery-rails'
 gem 'kaminari'
+gem 'libv8', '=3.11.8.17'
 gem 'mini_fb'
 gem 'mysql2', '~> 0.3.11'
 gem 'newrelic_rpm', '>= 3.5.3.25'
@@ -62,6 +63,7 @@ gem 'wiser_date', '~> 0.3.0'
 
 
 group :development, :test do
+  gem 'guard'
   gem 'awesome_print'
   gem 'quiet_assets'
 end
