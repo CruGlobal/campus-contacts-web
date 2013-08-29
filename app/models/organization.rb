@@ -500,23 +500,24 @@ class Organization < ActiveRecord::Base
     # Ensure single permission
     Person.find(person_id).ensure_single_permission_for_org_id(id)
 
-    Retryable.retryable :times => 5 do
-      current_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
-      if current_permission.present? && current_permission.permission_id == permission_id
-        permission = current_permission
-        current_permission.notify_new_leader if current_permission.permission_is_leader_or_admin && (current_permission.archive_date != nil || current_permission.deleted_at != nil)
-        permission.update_attributes(archive_date: nil, deleted_at: nil)
-      else
-        permission = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id).first_or_create(added_by_id: added_by_id)
-        permission.notify_new_leader if permission.permission_is_leader_or_admin
-        permission.update_attributes(archive_date: nil, deleted_at: nil)
+    permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id).first
+    if permission.present? && permission.permission_id == permission_id
+      permission.notify_new_leader if permission.permission_is_leader_or_admin && (permission.archive_date != nil || permission.deleted_at != nil)
+      permission.update_attributes(archive_date: nil, deleted_at: nil)
+    else
+      begin
+        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first ||
+                     OrganizationalPermission.create(person_id: person_id, organization_id: id, permission_id: permission_id, added_by_id: added_by_id)
+      rescue ActiveRecord::RecordNotUnique
+        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first 
       end
-
-      # Assure single permission per organization based on hierarchy
-      permission = Person.find(person_id).ensure_single_permission_for_org_id(id)
-
-      return permission
+      permission.notify_new_leader if permission.permission_is_leader_or_admin
+      permission.update_attributes(archive_date: nil, deleted_at: nil)
     end
+    # Assure single permission per organization based on hierarchy
+    permission = Person.find(person_id).ensure_single_permission_for_org_id(id)
+
+    return permission
   end
 
   def add_label_to_person(person, label_id, added_by_id = nil)
