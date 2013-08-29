@@ -5,7 +5,7 @@
 	  <span class="feed_item_privacy">
       <strong>Visible to:</strong>
       <%= "Everyone in #{answer_sheet.survey.organization.name}" %>
-      <%= link_to image_tag("edit_sprite.png"), edit_survey_response_path(@person), class: "edit_survey_icon tip", "data-id" => answer_sheet.id, "data-person-id" => @person.id, title: "Edit Survey Answers" %>
+      <%= link_to image_tag("edit_sprite.png"), edit_survey_response_path(@person, :jump_to_hash=>"s_"+answer_sheet.survey.id.to_s), class: "edit_survey_icon tip", "data-id" => answer_sheet.id, "data-person-id" => @person.id, title: t("interactions.edit_this_survey") %>
     </span>
 	</div>
 	<div class="feed_item_content">

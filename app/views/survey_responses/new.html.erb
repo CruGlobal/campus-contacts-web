@@ -5,6 +5,5 @@
   <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
 <% end %>
 
-<h1><%= @survey.title %></h1>
-
+<h2><%= @survey.title %></h2>
 <%= render partial: 'form', locals: {person: @person, survey: @survey, answer_sheet: @answer_sheet} %>

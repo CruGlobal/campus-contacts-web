@@ -12,9 +12,10 @@ jQuery(document).ready(function(){
 	$("#welcome_controller .inner_space .menu .list .video_entry").click(function(){
 		select_video_by_id($(this));
 	});
-	
+
 	$(window).load(function(){
 		click_url();
+    click_anchor();
 	});
 	hide_loader();
 })
@@ -55,6 +56,13 @@ function click_url(){
   click_id = $.url(window.location.href).param("click")
   if(click_id){
     $('#'+click_id).click()
+  }
+}
+
+function click_anchor(){
+  anchor = $.url(window.location.href).param("jump_to_hash")
+  if(anchor){
+    location.hash = "#" + anchor;
   }
 }
 

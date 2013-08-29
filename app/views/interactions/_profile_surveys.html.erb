@@ -1,3 +1,7 @@
+<div class="info_display info_display_buttons">
+  <%= link_to raw("<button class='red_accent'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+</div>
+
 <% if @completed_answer_sheets.count == 0 %>
   <div class="feed_box notice">
     No completed surveys yet.

@@ -13,7 +13,7 @@ module Mh
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-    
+
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/app/presenters)
 
@@ -41,8 +41,8 @@ module Mh
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(prototype prototype_ujs)
 
-    config.rubycas.cas_base_url = 'https://signin.relaysso.org/cas'
-    config.rubycas.logger = Rails.logger
+    #config.rubycas.cas_base_url = 'https://signin.relaysso.org/cas'
+    #config.rubycas.logger = Rails.logger
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
