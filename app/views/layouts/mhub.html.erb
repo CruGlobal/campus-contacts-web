@@ -16,21 +16,21 @@
               <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
                 <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])))  %>
               <% end %>
-            </li>   
+            </li>
           </ul>
         </div>
       </div>
     <% end %>
-  
+
     <div class="<%= params[:action] %>">
       <%= yield %>
     </div>
-    
+
     <!--     <div class="footer">
           <%= link_to(t('nav.terms'), '/terms') %> |
           <%= link_to(t('nav.privacy'), '/privacy') %>
         </div> -->
-    
+
   </div><!-- outer -->
 
 </body>

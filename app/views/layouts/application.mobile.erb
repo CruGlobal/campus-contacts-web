@@ -8,13 +8,16 @@
 		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" ></script>
     <%= javascript_include_tag 'rails-validations' %>
     <%= javascript_include_tag 'mh' %>
-		
+
 		<%= stylesheet_link_tag 'mobile' %>
 
     <%= render 'google_analytics' %>
     <%= yield(:head) %>
     <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
-    
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
   </head>
   <body>
     <%= render 'fb_init' %>

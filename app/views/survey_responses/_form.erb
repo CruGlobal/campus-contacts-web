@@ -1,5 +1,5 @@
 <% if !@survey.is_frozen? %>
-
+<div id="survey_mode">
 <%= form_for(person, url: person.new_record? ? survey_responses_path : survey_response_path(person), html: {method: person.new_record? ? :post : :put, class: 'form', validate: true, 'data-ajax' => false}) do |f| %>
   <% if answer_sheet.present? && answer_sheet.person.present? %>
     <%= error_messages_for person, answer_sheet.person %>
@@ -51,7 +51,7 @@
           <li>
             <div data-role="fieldcontain" class="field">
               <label class="desc" for="email"><%= t('contacts.form.email') %></label>
-              <%= f.text_field :email %>
+              <p><%= f.text_field :email %></p>
             </div>
           </li>
         <% end %>
@@ -63,6 +63,7 @@
   <div>
     <div data-role="fieldcontain"><%= f.submit "Submit" %></div>
   </div>
+</div>
 <% end %>
 
 <% else %>

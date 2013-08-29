@@ -24,6 +24,12 @@
 }
 
 #survey_responses_controller {
+  .new{
+    padding: 0px 10px;
+  }
+  #survey_mode{
+    padding: 0px 40px;
+  }
   .pad {
     padding: 0 0 25px 15px;
   }
