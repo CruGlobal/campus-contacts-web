@@ -220,12 +220,12 @@ class Person < ActiveRecord::Base
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
 
-  def clean_permissions_for_org_id(org_id)
+  def ensure_single_permission_for_org_id(org_id)
     org_permissions_with_archived = organizational_permissions.where("organizational_permissions.organization_id = ?", org_id)
     org_permissions = organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", org_id)
     return org_permissions.first.try(:permission) unless org_permissions.count > 1
 
-    if self.email.present?
+    # if self.email.present?
       admin = org_permissions.where("organizational_permissions.permission_id = ?", Permission::ADMIN_ID)
       if admin.present?
         org_permission = admin.first
@@ -239,7 +239,7 @@ class Person < ActiveRecord::Base
         org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
         return org_permission.try(:permission)
       end
-    end
+    # end
 
     contact = org_permissions.where("organizational_permissions.permission_id = ?", Permission::NO_PERMISSIONS_ID)
     if contact.present?
@@ -1041,7 +1041,7 @@ class Person < ActiveRecord::Base
         rescue ActiveRecord::RecordNotUnique
           permission.destroy
         end
-        clean_permissions_for_org_id(permission.organization_id)
+        ensure_single_permission_for_org_id(permission.organization_id)
       end
 
       # Answer Sheets
