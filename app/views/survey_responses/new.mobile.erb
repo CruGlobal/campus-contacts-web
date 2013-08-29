@@ -1,3 +1,3 @@
-<% title @survey.title %>
+<div id="survey_mode_title"><% title @survey.title %></div>
 <%= render partial: 'form', format: 'html', locals: {person: @person, survey: @survey, answer_sheet: @answer_sheet} %>
 <br />
