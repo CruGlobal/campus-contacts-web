@@ -479,6 +479,9 @@ class Organization < ActiveRecord::Base
 
   def change_person_permission(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
+    # Ensure single permission
+    Person.find(person_id).ensure_single_permission_for_org_id(id)
+
     Retryable.retryable :times => 5 do
       permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
       if permission.permission_id == permission_id
@@ -494,6 +497,8 @@ class Organization < ActiveRecord::Base
 
   def add_permission_to_person(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
+    # Ensure single permission
+    Person.find(person_id).ensure_single_permission_for_org_id(id)
 
     Retryable.retryable :times => 5 do
       current_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
@@ -508,7 +513,7 @@ class Organization < ActiveRecord::Base
       end
 
       # Assure single permission per organization based on hierarchy
-      permission = Person.find(person_id).clean_permissions_for_org_id(id)
+      permission = Person.find(person_id).ensure_single_permission_for_org_id(id)
 
       return permission
     end

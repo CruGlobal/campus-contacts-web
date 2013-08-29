@@ -17,7 +17,7 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:assigned_tos)
   should have_many(:assigned_contacts)
 
-  context "clean_permissions_for_org_id method" do
+  context "ensure_single_permission_for_org_id method" do
     setup do
       @person = Factory(:person)
       @org = Factory(:organization, id: 1)
@@ -28,7 +28,7 @@ class PersonTest < ActiveSupport::TestCase
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
       assert_equal 3, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
+      @person.ensure_single_permission_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
     end
     should "prioritize admin permission" do
@@ -37,7 +37,7 @@ class PersonTest < ActiveSupport::TestCase
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
       Factory(:email_address, person_id: @person.id)
       assert_equal 3, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
+      @person.ensure_single_permission_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
       assert_equal Permission.admin, @person.permission_for_org_id(@org.id)
     end
@@ -46,30 +46,31 @@ class PersonTest < ActiveSupport::TestCase
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
       Factory(:email_address, person_id: @person.id)
       assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
+      @person.ensure_single_permission_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
       assert_equal Permission.user, @person.permission_for_org_id(@org.id)
     end
-    should "disregard the admin permission if no email present?" do
-      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
-      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
-      assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
-      assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
-      assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
-    end
-    should "disregard the user permission if no email present?" do
-      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.user)
-      Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
-      assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
-      assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
-      assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
-    end
+    # Removed to avoid automated downgrade of permission
+    # should "disregard the admin permission if no email present?" do
+    #   Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
+    #   Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
+    #   assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
+    #   @person.ensure_single_permission_for_org_id(@org.id)
+    #   assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
+    #   assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
+    # end
+    # should "disregard the user permission if no email present?" do
+    #   Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.user)
+    #   Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
+    #   assert_equal 2, @person.organizational_permissions.where(organization_id: @org.id).count
+    #   @person.ensure_single_permission_for_org_id(@org.id)
+    #   assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
+    #   assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
+    # end
     should "leave the contact permission" do
       Factory(:organizational_permission, person: @person, organization: @org, permission: Permission.no_permissions)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
-      @person.clean_permissions_for_org_id(@org.id)
+      @person.ensure_single_permission_for_org_id(@org.id)
       assert_equal 1, @person.organizational_permissions.where(organization_id: @org.id).count
       assert_equal Permission.no_permissions, @person.permission_for_org_id(@org.id)
     end
