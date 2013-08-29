@@ -679,7 +679,9 @@ class Person < ActiveRecord::Base
   end
 
   def self.find_from_facebook(data)
-    find_existing_person_by_fb_uid(data.id) || (find_existing_person_by_email(data.email) if data.email.present?)
+    person = find_existing_person_by_fb_uid(data.id)
+    person ||= find_existing_person_by_email(data.email) if data.email.present?
+    person
   end
 
   def self.create_from_facebook(data, authentication, response = nil)
