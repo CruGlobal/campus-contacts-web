@@ -382,9 +382,9 @@ class ApplicationController < ActionController::Base
                                      .collect { |r| Permission.find_by_id(r.permission_id) }.compact
 
     if current_user_permissions.include?(Permission.admin)
-      @permissions_for_assign = current_organization.permissions.arrange_all
+      @permissions_for_assign = current_organization.permissions
     else
-      @permissions_for_assign = current_organization.permissions.arrange_all.delete_if { |permission| permission == Permission.admin }
+      @permissions_for_assign = current_organization.permissions.delete_if { |permission| permission == Permission.admin }
     end
   end
 
