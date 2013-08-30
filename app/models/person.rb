@@ -541,7 +541,7 @@ class Person < ActiveRecord::Base
 
   def permissions_by_org_id(org_id)
     unless @permissions_by_org_id
-      @permissions_by_org_id = Hash[OrganizationalPermission.connection.select_all("select organization_id, group_concat(permission_id) as permission_ids from organizational_permissions where person_id = #{id} and (archive_date is NULL and deleted_at is NULL) group by organization_id").collect { |row| [row['organization_id'], row['permission_ids'].split(',').map(&:to_i) ]}]
+      @permissions_by_org_id = Hash[OrganizationalPermission.connection.select_all("select organization_id, group_concat(permission_id) as permission_ids from organizational_permissions where person_id = #{id} and (archive_date is NULL and deleted_at is NULL) group by organization_id").collect { |row| [row['organization_id'], row['permission_ids'].to_s.split(',').map(&:to_i) ]}]
     end
     @permissions_by_org_id[org_id]
   end
