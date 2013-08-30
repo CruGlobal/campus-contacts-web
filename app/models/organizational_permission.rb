@@ -69,11 +69,8 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   def create_user_for_person_if_not_existing
-    if self.person.user.nil?
-      return self.person.create_user!
-    else
-      return self.person
-    end
+    return self.person.create_user! if self.person && self.person.user.nil?
+    return self.person
   end
 
   def notify_new_leader
