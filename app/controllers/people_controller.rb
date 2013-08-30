@@ -473,13 +473,7 @@ class PeopleController < ApplicationController
         new_permission = Permission.where(id: permission_id).first
         if new_permission.present?
           begin
-            org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, current_organization.id)
-            org_permission.update_attributes(
-              archive_date: nil,
-              deleted_at: nil,
-              added_by_id: current_person.id,
-              permission_id: new_permission.id
-            )
+            current_organization.change_person_permission(person, new_permission.id, current_person.id)
           rescue OrganizationalPermission::InvalidPersonAttributesError
             render 'update_leader_error', :locals => { :person => person } if new_permission.id == Permission::USER_ID
             render 'update_admin_error', :locals => { :person => person } if new_permission.id == Permission::ADMIN_ID

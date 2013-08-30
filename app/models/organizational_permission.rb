@@ -7,7 +7,7 @@ class OrganizationalPermission < ActiveRecord::Base
   belongs_to :person, :touch => true
   belongs_to :permission
   belongs_to :organization
-  default_scope where("organizational_permissions.deleted_at is NULL")
+
   scope :active, where("organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at is NULL")
   scope :contact, where("permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")
   # scope :not_dnc, where("followup_status <> 'do_not_contact' AND permission_id = #{Permission::NO_PERMISSIONS_ID}")
@@ -59,11 +59,13 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   def permission_is_leader_or_admin
-    if (permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID) && added_by_id && self.permission_id_changed?
-      true
-    else
-      false
-    end
+    leader_permission = permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID
+    is_new = self.new_record?
+    is_updated = (self.permission_id_changed? || self.archive_date_changed? || self.deleted_at_changed?)
+    is_active = self.archive_date.nil? && self.deleted_at.nil?
+    new_or_updated = is_new || (is_updated && is_active)
+    has_added_by_id = added_by_id.present?
+    return leader_permission && has_added_by_id && new_or_updated
   end
 
   def create_user_for_person_if_not_existing
@@ -86,6 +88,10 @@ class OrganizationalPermission < ActiveRecord::Base
       person.user.save(validate: false)
       LeaderMailer.added(person, added_by, self.organization, token).deliver
     end
+  end
+
+  def delete
+    update_attributes({deleted_at: Date.today})
   end
 
   def archive

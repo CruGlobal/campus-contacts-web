@@ -7,15 +7,7 @@ class OrganizationalPermissionsController < ApplicationController
       person.organizational_permissions(current_organization.id).where('permission_id NOT IN (?)', permission_ids).update_all({archive_date: Date.today})
 
       permission_ids.each do |permission_id|
-        if permission_id.present?
-          org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, current_organization.id)
-          org_permission.update_attributes({
-            archive_date: nil,
-            added_by_id: current_person.id,
-            deleted_at: nil,
-            permission_id: permission_id
-          })
-        end
+        current_organization.change_person_permission(person, permission_id, current_person.id)
       end
     else
       # We don't want to remove all of a person's permissions using this method.

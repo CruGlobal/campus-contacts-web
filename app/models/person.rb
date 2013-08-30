@@ -43,9 +43,9 @@ class Person < ActiveRecord::Base
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_permissions, conditions: {archive_date: nil, deleted_at: nil}
+  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: {deleted_at: nil}
   has_one :contact_permission, class_name: 'OrganizationalPermission'
   has_many :permissions, through: :organizational_permissions
-  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id"
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
 
   if Permission.table_exists? # added for travis testing
@@ -220,34 +220,63 @@ class Person < ActiveRecord::Base
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
 
-  def ensure_single_permission_for_org_id(org_id)
-    org_permissions_with_archived = organizational_permissions.where("organizational_permissions.organization_id = ?", org_id)
-    org_permissions = organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", org_id)
-    return org_permissions.first.try(:permission) unless org_permissions.count > 1
+  def all_organizational_permissions_for_org_id(org_id)
+    OrganizationalPermission.where("person_id = ? AND organization_id = ?", id, org_id)
+  end
 
-    # if self.email.present?
-      admin = org_permissions.where("organizational_permissions.permission_id = ?", Permission::ADMIN_ID)
+  def ensure_single_permission_for_org_id(org_id, permission_id = nil)
+    org_permissions_with_archived = all_organizational_permissions_for_org_id(org_id)
+    org_permissions = organizational_permissions.where("organizational_permissions.organization_id = ?", org_id)
+
+    if org_permissions.count == 0
+      return nil
+    elsif org_permissions.count == 1
+      org_permission = org_permissions.first
+      if org_permission.present?
+        org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
+        return org_permission.try(:permission)
+      else
+        return nil
+      end
+    elsif permission_id.present? && permission = Permission.where(id: permission_id).first
+      return org_permissions.first.try(:permission) if permission.nil?
+    end
+
+    if permission_id.present?
+      # Clean permissions by priority
+      priority = org_permissions.where("organizational_permissions.permission_id = ?", permission.id).first
+      if priority.present?
+        org_permission = priority
+        org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
+        return org_permission.try(:permission)
+      else
+        return org_permissions.first.try(:permission)
+      end
+    else
+      # Clean permissions by hierarchy
+      admin = org_permissions.where("organizational_permissions.permission_id = ?", Permission::ADMIN_ID).first
       if admin.present?
-        org_permission = admin.first
+        org_permission = admin
         org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
         return org_permission.try(:permission)
       end
 
-      user = org_permissions.where("organizational_permissions.permission_id = ?", Permission::USER_ID)
+      user = org_permissions.where("organizational_permissions.permission_id = ?", Permission::USER_ID).first
       if user.present?
-        org_permission = user.first
+        org_permission = user
         org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
         return org_permission.try(:permission)
       end
-    # end
 
-    contact = org_permissions.where("organizational_permissions.permission_id = ?", Permission::NO_PERMISSIONS_ID)
-    if contact.present?
-      org_permission = contact.first
-      org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
-      return org_permission.try(:permission)
+      contact = org_permissions.where("organizational_permissions.permission_id = ?", Permission::NO_PERMISSIONS_ID).first
+      if contact.present?
+        org_permission = contact
+        org_permissions_with_archived.where("organizational_permissions.id <> ?", org_permission.id).destroy_all
+        return org_permission.try(:permission)
+      end
     end
   end
+
 
   def filtered_interactions(viewer, current_org)
     q = Array.new
@@ -577,11 +606,11 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_permissions_for_org(org)
-    organizational_permissions.where(organization_id: org.id, archive_date: nil, deleted_at: nil)
+    organizational_permissions.where(organization_id: org.id)
   end
 
   def organizational_permission_for_org(org)
-    organizational_permissions.where(organization_id: org.id, archive_date: nil, deleted_at: nil).try(:first)
+    organizational_permissions.where(organization_id: org.id).try(:first)
   end
 
   def organizational_labels_for_org(org)
@@ -1037,13 +1066,16 @@ class Person < ActiveRecord::Base
         opn = other.organizational_permissions.detect {|oa| oa.organization_id == pn.organization_id}
         pn.merge(opn) if opn
       end
-      other.organizational_permissions.each do |permission|
-        begin
-          permission.update_attribute(:person_id, id) unless permission.frozen?
-        rescue ActiveRecord::RecordNotUnique
-          permission.destroy
+      other.organizational_permissions.each do |org_permission|
+        unless org_permission.frozen?
+          begin
+            org_permission.organization.add_permission_to_person(org_permission.person, org_permission.permission_id, org_permission.added_by_id)
+            org_permission.destroy
+          rescue ActiveRecord::RecordNotUnique
+            permission.destroy
+          end
+          ensure_single_permission_for_org_id(org_permission.organization_id)
         end
-        ensure_single_permission_for_org_id(permission.organization_id)
       end
 
       # Answer Sheets
