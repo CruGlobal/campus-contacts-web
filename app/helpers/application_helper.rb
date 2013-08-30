@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def tip(tip)
-    "<span class=\"icon help tip help_bubble_keyword\" title=\"#{h(tip)}\" style=\"float: none;\"></span>".html_safe
+    "<span class=\"icon help tip help_bubble_keyword\" title=\"#{tip}\" style=\"float: none;\"></span>".html_safe
   end
 
   def spinner(extra = nil)
