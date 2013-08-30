@@ -1,8 +1,5 @@
 $ ->
   $(document).ready ->
-    if $('div.carea div.flash_message').length > 0
-      $('div.carea div.flash_message').delay(5000).hide(1)
-
     $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json",
       theme: 'facebook'
       preventDuplicates: true
@@ -25,7 +22,8 @@ $ ->
 
   $("#survey_updated_from").datepicker dateFormat: "mm/dd/yy"
   $("#survey_updated_to").datepicker dateFormat: "mm/dd/yy"
-  $('#archive_contacts_before').datepicker dateFormat: "dd-mm-yy"
+  $("#archive_contacts_before").datepicker dateFormat: "yy-mm-dd"
+  $("#date_leaders_not_logged_in_after").datepicker dateFormat: "yy-mm-dd"
 
   $(".field_with_errors").each ->
     $(this).children().eq(0).blur()

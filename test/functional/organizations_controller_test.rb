@@ -257,8 +257,12 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     should "archive contacts" do
+      @contact3.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
+      @contact2.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
+      @contact1.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
+
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count, 3
+      assert_equal @org.all_people_with_archived.archived(@org.id).count, 3
     end
 
     should "not delete contact permissions" do
@@ -268,17 +272,12 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     should "archive contacts with the chosen time" do
-      #deliberately change the create date of @contact3 contact permission
-      @contact3.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID).first.update_attributes({created_at: (Date.today+5).strftime("%Y-%m-%d")})
-      post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      assert_equal 2, @org.people.archived(@org.id).count
-    end
-
-    should "not include contacts in archive with some permissions not yet archived" do
-      #deliberately add a non-contact permission to @contact 3
-      post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%m-%d-%Y") }
-      #only 2 contacts will be included in archived since @contact3 has 2 permissions and contact is the only permission archived
-      assert_equal 3, @org.people.archived(@org.id).count
+      chosen_date = (Date.today).strftime("%Y-%m-%d")
+      @contact3.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: chosen_date})
+      @contact2.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: chosen_date})
+      @contact1.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: chosen_date})
+      post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%Y-%m-%d") }
+      assert_equal 3, @org.all_people_with_archived.where("DATE(archive_date) = ?", chosen_date).archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no contacts archived" do
@@ -300,24 +299,18 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
 
     should "archive leaders" do
-      post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count, 3
+      @leader1.person.organizational_permissions.where(permission_id: Permission::USER_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
+      @leader2.person.organizational_permissions.where(permission_id: Permission::USER_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
+      @leader3.person.organizational_permissions.where(permission_id: Permission::USER_ID, organization_id: @org.id).first.update_attributes({archive_date: (Date.today).strftime("%Y-%m-%d")})
 
+      post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%Y-%m-%d") }
+      assert_equal @org.all_people_with_archived.archived(@org.id).count, 3
     end
 
     should "not delete leader permissions" do
       assert_no_difference('OrganizationalPermission.count') do
         post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       end
-    end
-
-    should "not include leaders in archive with some permissions not yet archived" do
-      #deliberately add a non-contact permission to @contact 3
-      #@leader2.update_attributes({current_sign_in_at: Date.today})
-      Factory(:organizational_permission, organization: @org, person: @leader2.person, permission: Permission.admin)
-      post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
-      #only 2 contacts will be included in archived since @contact3 has 2 permissions and contact is the only permission archived
-      assert_equal 2, @org.people.archived(@org.id).count
     end
 
     should "redirect to cleanup page when there were no leaders archived" do
