@@ -454,7 +454,7 @@ class Organization < ActiveRecord::Base
   end
 
   def permissions
-    Permission.order('updated_at')
+    Permission.arrange_all
   end
 
   def labels
@@ -509,7 +509,7 @@ class Organization < ActiveRecord::Base
         permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first ||
                      OrganizationalPermission.create(person_id: person_id, organization_id: id, permission_id: permission_id, added_by_id: added_by_id)
       rescue ActiveRecord::RecordNotUnique
-        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first 
+        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first
       end
       permission.notify_new_leader if permission.permission_is_leader_or_admin
       permission.update_attributes(archive_date: nil, deleted_at: nil)

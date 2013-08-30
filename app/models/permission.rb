@@ -20,8 +20,16 @@ class Permission < ActiveRecord::Base
     :order => "permissions.name ASC"
   }}
   scope :arrange_all, lambda {{
-    order: "FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
+    order: "#{self.order_default_permissions}"
   }}
+
+  def self.order_default_permissions
+    str = "CASE "
+    self::DEFAULT_PERMISSIONS.each_with_index do |p, i|
+      str = str + "WHEN permissions.i18n = '#{p}' THEN #{i} "
+    end
+    str = str + "ELSE permissions.id END"
+  end
 
   def members_from_permission_org(org_id, include_archive = false)
   	is_archived = include_archive ? "" : "AND archive_date IS NULL"
