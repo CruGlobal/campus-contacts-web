@@ -477,47 +477,59 @@ class Organization < ActiveRecord::Base
     "#{name} (#{keywords.count})"
   end
 
+  # Change Permission will not consider permission heirarchy
   def change_person_permission(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
     # Ensure single permission
-    Person.find(person_id).ensure_single_permission_for_org_id(id)
+    person = Person.where(id: person_id).first
+    person.ensure_single_permission_for_org_id(id)
 
-    Retryable.retryable :times => 5 do
-      permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
-      if permission.permission_id == permission_id
-        if permission.archive_date.present? || permission.deleted_at.present?
-          permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+    if person.present? && permission = Permission.where(id: permission_id).first
+      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
+      if org_permission.permission_id == permission.id
+        if org_permission.archive_date.present? || org_permission.deleted_at.present?
+          org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
       else
-        permission.update_attributes(permission_id: permission_id, archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+        if org_permission.archive_date.present? || org_permission.deleted_at.present?
+          org_permission.update_attributes(permission_id: permission.id, archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+        else
+          org_permission.update_attributes(permission_id: permission.id, added_by_id: added_by_id)
+        end
       end
+      # Ensure single permission to selected
+      permission = person.ensure_single_permission_for_org_id(id, permission_id)
       return permission
+    else
+      return nil
     end
   end
 
+  # Add Permission will prioritize the permission heirarchy
   def add_permission_to_person(person, permission_id, added_by_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
     # Ensure single permission
-    Person.find(person_id).ensure_single_permission_for_org_id(id)
+    person = Person.where(id: person_id).first
+    person.ensure_single_permission_for_org_id(id)
 
-    permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id).first
-    if permission.present? && permission.permission_id == permission_id
-      permission.notify_new_leader if permission.permission_is_leader_or_admin && (permission.archive_date != nil || permission.deleted_at != nil)
-      permission.update_attributes(archive_date: nil, deleted_at: nil)
-    else
-      begin
-        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first ||
-                     OrganizationalPermission.create(person_id: person_id, organization_id: id, permission_id: permission_id, added_by_id: added_by_id)
-      rescue ActiveRecord::RecordNotUnique
-        permission = OrganizationalPermission.unscoped.where(person_id: person_id, organization_id: id, permission_id: permission_id).first
+    if person.present? && permission = Permission.where(id: permission_id).first
+      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, id)
+
+      if org_permission.permission_id == permission.id
+        if org_permission.archive_date.present? || org_permission.deleted_at.present?
+          org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+        end
+      else
+        OrganizationalPermission.create(permission_id: permission.id, person_id: person.id, organization_id: id)
       end
-      permission.notify_new_leader if permission.permission_is_leader_or_admin
-      permission.update_attributes(archive_date: nil, deleted_at: nil)
-    end
-    # Assure single permission per organization based on hierarchy
-    permission = Person.find(person_id).ensure_single_permission_for_org_id(id)
+      # permission.notify_new_leader if permission.permission_is_leader_or_admin
+      # Assure single permission per organization based on hierarchy
+      permission = person.ensure_single_permission_for_org_id(id)
 
-    return permission
+      return permission
+    else
+      return nil
+    end
   end
 
   def add_label_to_person(person, label_id, added_by_id = nil)
@@ -582,37 +594,34 @@ class Organization < ActiveRecord::Base
 
   def add_leader(person, current_person)
     person_id = person.is_a?(Person) ? person.id : person
-    begin
-      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
-      org_permission.update_attributes({
-        archive_date: nil,
-        added_by_id: current_person.id,
-        deleted_at: nil,
-        permission_id: Permission::USER_ID
-      })
-    rescue => error
-      @save_retry_count =  (@save_retry_count || 5)
-      retry if( (@save_retry_count -= 1) > 0 )
-      raise error
+    person = Person.where(id: person_id).first
+    if person.present?
+      change_person_permission(person, Permission::USER_ID, current_person.id)
     end
   end
 
   def add_contact(person, added_by_id = nil)
-    begin
+    person_id = person.is_a?(Person) ? person.id : person
+    person = Person.where(id: person_id).first
+    if person.present?
       add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
-    rescue => error
-      @save_retry_count =  (@save_retry_count || 5)
-      retry if( (@save_retry_count -= 1) > 0 )
-      raise error
     end
   end
 
   def add_admin(person, added_by_id = nil)
-    add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    person = Person.where(id: person_id).first
+    if person.present?
+      add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+    end
   end
 
   def add_user(person, added_by_id = nil)
-    add_permission_to_person(person, Permission::USER_ID, added_by_id)
+    person_id = person.is_a?(Person) ? person.id : person
+    person = Person.where(id: person_id).first
+    if person.present?
+      add_permission_to_person(person, Permission::USER_ID, added_by_id)
+    end
   end
 
   def add_no_permissions(person, added_by_id = nil)
