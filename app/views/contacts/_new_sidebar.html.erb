@@ -144,7 +144,7 @@
     </a>
   </li>
   <div id='permission_list' class="side_list" style="<%= 'display:block;' if selected %>">
-    <% @organization.permissions.arrange_all.each do |permission| %>
+    <% @organization.permissions.each do |permission| %>
       <% if params[:include_archived] %>
         <% count = permission.permission_contacts_from_org_with_archived(@organization).count %>
         <% link = all_contacts_path(permission: permission.id, include_archived: 'true') %>
