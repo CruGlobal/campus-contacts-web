@@ -394,7 +394,7 @@ class PeopleControllerTest < ActionController::TestCase
         xhr :post, :update_permissions, { :permission_ids => @existing_permissions, :some_permission_ids => "", :person_id => person, :added_by_id => @user.person.id }
         #assert that the leader permission was not added
         assert_response :success
-        assert_equal(1, person.permissions.count)
+        assert_equal(1, person.organizational_permissions_for_org(@org).count)
         assert_equal(Permission.no_permissions, person.permission_for_org_id(@org.id))
         assert_equal(person.id, OrganizationalPermission.last.person_id)
       end
