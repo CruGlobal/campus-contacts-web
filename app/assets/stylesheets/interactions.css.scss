@@ -406,9 +406,6 @@ body{
     .edit_phone_fields,
     .edit_address_fields {
       margin-bottom: 6px;
-      .remove_field {
-        display: none;
-      }
       &:hover .remove_field {
         display: inline-block;;
       }
