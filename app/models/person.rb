@@ -291,7 +291,7 @@ class Person < ActiveRecord::Base
     end
 
     # filter organization
-    if current_org.people.where(id: viewer.id).present?
+    if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
       q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
     end
 

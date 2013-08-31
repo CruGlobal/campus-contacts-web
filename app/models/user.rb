@@ -25,6 +25,11 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :password, :username
 
+  def ability
+    @ability ||= Ability.new(self)
+  end
+  delegate :can?, :cannot?, :to => :ability
+
   def self.from_access_token(token)
     if access_token = Rack::OAuth2::Server::AccessToken.find_by_code(token)
       return User.find(access_token.identity)
