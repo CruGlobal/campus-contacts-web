@@ -396,8 +396,8 @@ class Organization < ActiveRecord::Base
   end
 
   def assigned_contacts
-    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
-    assignments.present? ? contacts.where(id: assignments.collect(&:person_id)) : contacts
+    assignments = contact_assignments.where(person_id: all_people.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? all_people.where(id: assignments.collect(&:person_id)) : []
   end
 
   def assigned_contacts_with_archived
@@ -406,8 +406,8 @@ class Organization < ActiveRecord::Base
   end
 
   def unassigned_contacts
-    assignments = contact_assignments.where(person_id: contacts.collect(&:id), assigned_to_id: leaders.collect(&:id))
-    assignments.present? ? contacts.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts
+    assignments = contact_assignments.where(person_id: all_people.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? all_people.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : all_people
   end
 
   def unassigned_contacts_with_archived

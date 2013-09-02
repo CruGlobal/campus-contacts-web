@@ -628,6 +628,15 @@ class ContactsController < ApplicationController
       if params[:gender].present?
         @people_scope = @people_scope.where("gender = ?", params[:gender].strip)
       end
+      if params[:assignment].present?
+        if params[:assignment] == "Assigned"
+          assigned_people_ids = current_organization.assigned_contacts.collect(&:id).uniq
+          @people_scope = @people_scope.where("people.id IN (?)", assigned_people_ids)
+        elsif params[:assignment] == "Unassigned"
+          unassigned_people_ids = current_organization.unassigned_contacts.collect(&:id).uniq
+          @people_scope = @people_scope.where("people.id IN (?)", unassigned_people_ids)
+        end
+      end
       if params[:nationality].present?
         @people_scope = @people_scope.where("nationality = ?", params[:nationality].strip)
       end
