@@ -102,12 +102,14 @@
       <div class="phone col_left"><%= t('general.phone') %>:</div>
       <div class="phone col_right">
         <% phone_numbers.each do |phone| %>
-          <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
-          <div class="info_tag"><%= phone.location.titleize %></div>
-      		<% if phone.primary %>
-            <div class="info_tag">Primary</div>
+          <% if phone.number.present? %>
+            <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
+            <div class="info_tag"><%= phone.location.titleize %></div>
+        		<% if phone.primary %>
+              <div class="info_tag">Primary</div>
+            <% end %>
+            <br/>
           <% end %>
-          <br/>
         <% end %>
       </div>
     <% end %>
