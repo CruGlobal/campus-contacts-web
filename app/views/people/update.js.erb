@@ -13,8 +13,8 @@ if($('body').hasClass("reload_info")){
     $('.feed_content .tab_content.profile_info .view_space').fadeIn()
   }
   if("<%= @new_status.present? %>" == 'true'){
-    $('.followup_status_field').val("<%= @new_status.try(:humanize).try(:titleize) %>");
-  } 
-  $('body').removeClass("reload_info") 
+    $('.followup_status_field').val("<%= @new_status %>");
+  }
+  $('body').removeClass("reload_info")
 }
 $.toggleLoader('profile_name','')
