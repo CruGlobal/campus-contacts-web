@@ -1,10 +1,17 @@
+<% provide :sidebar do %>
+  <%= render :partial => 'goal_sidebar'%>
+<% end %>
+
 <div class="titlebar titlebarmod">
   <h1>
-    Goal Tracker (preview)
+    Goal Tracker
   </h1>
 </div>
 
 <%= javascript_include_tag 'highcharts' %>
-<%= javascript_include_tag 'highcharts-more' %>
 
-<%= image_tag 'goal_tracker_preview.png' %>
+<div id="goal_container"></div>
+
+<div id="goal_chart">
+  <%= render :partial => 'goal_js' %>
+</div>

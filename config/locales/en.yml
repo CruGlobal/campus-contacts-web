@@ -126,7 +126,7 @@ en:
     visual_tools: "Visual Tools"
     snapshot: "Snapshot View"
     trend: "Trend Tracker (coming soon)"
-    goal: "Goal Tracker (coming soon)"
+    goal: "Goal Tracker"
   general:
     group_name: "Group"
     remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"

@@ -1,0 +1,105 @@
+<script>
+  $(function () {
+
+    // Parse the data from an inline table using the Highcharts Data plugin
+    $('#goal_container').highcharts({
+
+      chart: {
+        type: 'line'
+      },
+
+      title: {
+        text: null
+      },
+
+      pane: {
+        size: '100%',
+        startAngle: -180,
+        endAngle: 90
+      },
+
+      legend: {
+        enabled: false,
+        align: 'right',
+        verticalAlign: 'top',
+        layout: 'vertical'
+      },
+
+      xAxis: {
+        type: 'datetime',
+        min: Date.UTC(2012, 7, 15),
+        tickInternal: 7 * 24 * 3600 * 1000,
+        gridLineWidth: 1
+      },
+
+      yAxis: {
+        title: {
+          text: null
+        },
+        min: 0,
+        type: 'linear',
+        endOnTick: false,
+        showLastLabel: true
+      },
+
+      tooltip: {
+        followPointer: true
+      },
+
+      plotOptions: {
+
+        column: {
+          grouping: false
+        },
+
+        series: {
+          shadow: false,
+          groupPadding: 0,
+          pointPlacement: 'on'
+        }
+      },
+      series: [{
+        data: [{
+          x: Date.UTC(2012, 7, 15),
+          y: 0
+        }, {
+          x: Date.UTC(2012, 10, 7),
+          y: 85
+        }],
+        dashStyle: 'LongDash',
+        name: 'Goal'
+      }, {
+        data: [{
+          x: Date.UTC(2012, 7, 15),
+          y: 0
+        }, {
+          x: Date.UTC(2012, 7, 22),
+          y: 4
+        }, {
+          x: Date.UTC(2012, 7, 29),
+          y: 9
+        }, {
+          x: Date.UTC(2012, 8, 5),
+          y: 13
+        }, {
+          x: Date.UTC(2012, 8, 12),
+          y: 17
+        }, {
+          x: Date.UTC(2012, 8, 19),
+          y: 24
+        }, {
+          x: Date.UTC(2012, 8, 26),
+          y: 32
+        }, {
+          x: Date.UTC(2012, 9, 3),
+          y: 57
+        }, {
+          x: Date.UTC(2012, 9, 10),
+          y: 58
+        }],
+        color: '#FF0000',
+        name: 'Personal Evangelism'
+      }]
+    });
+  });
+</script>
