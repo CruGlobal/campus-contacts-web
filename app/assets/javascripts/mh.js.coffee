@@ -48,7 +48,7 @@ $ ->
   $('a.remove_field').live 'click', (e)->
     e.preventDefault()
     group_name = $(this).parents('.sfield').attr("data-group")
-    if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 1
+    if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 0
       link = this
       $(link).prev("input[type=hidden]").val("1")
       $(link).closest(".sfield").hide()

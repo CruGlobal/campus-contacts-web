@@ -69,6 +69,7 @@ class Organization < ActiveRecord::Base
   after_create :create_admin_user, :notify_admin_of_request, :touch_people
   after_destroy :touch_people
   after_update :touch_people_if_show_sub_orgs_changed
+  before_destroy :ensure_not_from_infobase
 
   serialize :settings, Hash
 
@@ -797,5 +798,10 @@ class Organization < ActiveRecord::Base
     if changed.include?('show_sub_orgs')
       touch_people
     end
+  end
+
+  def ensure_not_from_infobase
+    return false if importable_id
+    true
   end
 end
