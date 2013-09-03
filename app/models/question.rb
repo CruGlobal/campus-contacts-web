@@ -128,10 +128,10 @@ class Question < Element
           eval("app." + objects[0..-2].join('.')).reload
         end
       end
-      unless responses(app) == values
+      #unless responses(app) == values
         value = values.first
         object.send("#{attribute_name}=".to_sym, value) if object
-      end
+      #end
     else
       @answers ||= []
       if multiple_answers_allowed?

@@ -61,10 +61,13 @@ task "move_answers" => :environment do
   good = Element.find(good_id)
   # Copy answers over
   bad.sheet_answers.each do |a|
-    Element.transaction do
-      begin
-        good.set_response(a.value, a.answer_sheet)
-      rescue ActiveRecord::RecordNotUnique
+    if a.answer_sheet.person
+      Element.transaction do
+        begin
+          good.set_response(a.value, a.answer_sheet)
+          a.answer_sheet.person.save
+        rescue ActiveRecord::RecordNotUnique
+        end
       end
     end
   end
@@ -84,6 +87,8 @@ task 'restore_org' => :environment do
     case
     when s.is_a?(String)
       "'#{Mysql2::Client.escape(s)}'"
+    when s.is_a?(Date) || s.is_a?(DateTime) || s.is_a?(Time)
+      "'#{s}'"
     else
       s
     end
@@ -184,12 +189,14 @@ task 'restore_org' => :environment do
 
       #Organization.connection.update("update organizational_permissions set organization_id = #{new_id} where organization_id = #{old_id}")
 
-      #organizational_permissions = Organization.connection.select_all("select id, person_id, permission_id, #{new_id} as organization_id, followup_status, start_date, added_by_id, archive_date, created_at, updated_at from missionhub_20130829.organizational_permissions where organization_id = #{old_id}")
-      #organizational_permissions.each do |ol|
-        #sql = "insert into organizational_permissions(id, person_id, permission_id, organization_id, followup_status, start_date, added_by_id, archive_date, created_at, updated_at) VALUES (#{ol['id']}, #{ol['person_id']}, #{ol['permission_id']}, #{ol['organization_id']}, #{q(ol['followup_status'])}, #{q(ol['start_date'])}, #{ol['added_by_id']}, #{q(ol['archive_date'])}, '#{ol['created_at']}', '#{ol['updated_at']}')"
-        #puts sql
-        #Organization.connection.insert(sql)
-      #end
+      organizational_permissions = Organization.connection.select_all("select id, person_id, permission_id, #{new_id} as organization_id, followup_status, start_date, added_by_id, archive_date, created_at, updated_at from missionhub_20130829.organizational_permissions where organization_id = #{old_id}")
+      organizational_permissions.each do |ol|
+        unless Organization.connection.select_all("select id from missionhub.organizational_permissions where organization_id = #{new_id} AND person_id = #{ol['person_id']}").present?
+          sql = "insert into organizational_permissions(id, person_id, permission_id, organization_id, followup_status, start_date, added_by_id, archive_date, created_at, updated_at) VALUES (#{ol['id']}, #{ol['person_id']}, #{ol['permission_id']}, #{ol['organization_id']}, #{q(ol['followup_status'])}, #{q(ol['start_date'])}, #{q(ol['added_by_id'])}, #{q(ol['archive_date'])}, '#{ol['created_at']}', '#{ol['updated_at']}')"
+          puts sql
+          Organization.connection.insert(sql)
+        end
+      end
 
       #Organization.connection.update("update rejoicables set organization_id = #{new_id} where organization_id = #{old_id}")
 
@@ -200,21 +207,21 @@ task 'restore_org' => :environment do
         #Organization.connection.insert(sql)
       #end
 
-      surveys = Organization.connection.select_all("select id, title, #{new_id} as organization_id, post_survey_message, terminology, login_option, is_frozen, login_paragraph, css, background_color, text_color, crs_registrant_type_id, redirect_url, created_at, updated_at from missionhub_20130829.surveys where organization_id = #{old_id}")
+      #surveys = Organization.connection.select_all("select id, title, #{new_id} as organization_id, post_survey_message, terminology, login_option, is_frozen, login_paragraph, css, background_color, text_color, crs_registrant_type_id, redirect_url, created_at, updated_at from missionhub_20130829.surveys where organization_id = #{old_id}")
       #surveys.each do |ol|
         #sql = "insert into surveys(id, title, organization_id, post_survey_message, terminology, login_option, is_frozen, login_paragraph, css, background_color, text_color, crs_registrant_type_id, redirect_url, created_at, updated_at) VALUES (#{ol['id']}, #{q(ol['title'])}, #{ol['organization_id']}, #{q(ol['post_survey_message'])}, #{q(ol['terminology'])}, #{q(ol['login_option'])}, #{q(ol['is_frozen'])}, #{q(ol['login_paragraph'])}, #{q(ol['css'])}, #{q(ol['background_color'])}, #{q(ol['text_color'])}, #{q(ol['crs_registrant_type_id'])}, #{q(ol['redirect_url'])}, '#{ol['created_at']}', '#{ol['updated_at']}')"
         #puts sql
         #Organization.connection.insert(sql)
       #end
 
-      surveys.each do |survey|
-        survey_elements = Organization.connection.select_all("select id, survey_id, element_id, position, hidden, archived, created_at, updated_at from missionhub_20130829.survey_elements where survey_id = #{survey['id']}")
-        survey_elements.each do |ol|
-          sql = "insert into survey_elements(id, survey_id, element_id, position, hidden, archived, created_at, updated_at) VALUES (#{ol['id']}, #{q(ol['survey_id'])}, #{ol['element_id']}, #{q(ol['position'])}, #{q(ol['hidden'])}, #{q(ol['archived'])}, '#{ol['created_at']}', '#{ol['updated_at']}')"
-          puts sql
-          Organization.connection.insert(sql)
-        end
-      end
+      #surveys.each do |survey|
+        #survey_elements = Organization.connection.select_all("select id, survey_id, element_id, position, hidden, archived, created_at, updated_at from missionhub_20130829.survey_elements where survey_id = #{survey['id']}")
+        #survey_elements.each do |ol|
+          #sql = "insert into survey_elements(id, survey_id, element_id, position, hidden, archived, created_at, updated_at) VALUES (#{ol['id']}, #{q(ol['survey_id'])}, #{ol['element_id']}, #{q(ol['position'])}, #{q(ol['hidden'])}, #{q(ol['archived'])}, '#{ol['created_at']}', '#{ol['updated_at']}')"
+          #puts sql
+          #Organization.connection.insert(sql)
+        #end
+      #end
 
       #Organization.connection.update("update sms_keywords set organization_id = #{new_id} where organization_id = #{old_id}")
 
