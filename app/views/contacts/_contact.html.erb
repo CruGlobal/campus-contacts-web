@@ -59,10 +59,11 @@
     <% end %>
   <% end %>
 
+  <% get_surveys = person.completed_answer_sheets(current_organization) %>
   <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
   <td class="cell visible_surveys_column">
     <% last_answer_sheet = "" %>
-    <% person.completed_answer_sheets(current_organization).each_with_index do |answer_sheet, i| %>
+    <% get_surveys.each_with_index do |answer_sheet, i| %>
       <% last_answer_sheet = answer_sheet if i == 0 %>
       <span title="<%= l(answer_sheet.updated_at, format: :date) %>" class="tipit"><%= answer_sheet.survey.title %></span><br/>
     <% end %>
@@ -70,7 +71,7 @@
   <% end %>
 
   <td class="cell">
-    <%= (last_answer_sheet.present?) ? l(last_answer_sheet.updated_at, :format => :date) : raw("&nbsp;") %>
+    <%= (get_surveys.present?) ? l(get_surveys.first.updated_at, :format => :date) : raw("&nbsp;") %>
   </td>
 
   <td class="cell controls" align="right">
