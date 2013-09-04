@@ -46,7 +46,12 @@ class SurveyResponsesController < ApplicationController
 
     authorize! :followup, @person
 
-    @completed_answer_sheets = @person.completed_answer_sheets(current_organization).where("completed_at IS NOT NULL").order('completed_at DESC') if @person.present?
+    org = current_organization
+    org ||= @person.organizations.first if @person.organizations
+
+    if @person && org
+      @completed_answer_sheets = @person.completed_answer_sheets(org).where("completed_at IS NOT NULL").order('completed_at DESC')
+    end
   end
 
   def edit
