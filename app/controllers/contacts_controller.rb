@@ -49,7 +49,7 @@ class ContactsController < ApplicationController
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
-    params[:status] ||= 'in_progress' # set a default filter in my contacts
+    params[:status] ||= 'all' # set a default filter in my contacts
     params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
 
     fetch_contacts(false)
