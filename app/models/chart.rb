@@ -1,5 +1,7 @@
 class Chart < ActiveRecord::Base
   SNAPSHOT = 'snapshot'
+  GOAL = 'goal'
+  TREND = 'trend'
 
   belongs_to :person
   has_many :chart_organizations
