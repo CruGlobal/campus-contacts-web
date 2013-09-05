@@ -31,7 +31,7 @@
     </div>
     <div class="stepcontent cleanup_content">
       <span class="name">
-        <%=raw t('.archive_inst', date_field: h(text_field_tag(:archive_contacts_before, @date))) %>
+        <%=raw t('.archive_inst', date_field: h(text_field_tag(:archive_contacts_before, @date))) %> (Date format: YYYY-MM-DD)
         <br/>
         <br/>
         <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive'), class: "min_width_button" %>
@@ -59,7 +59,7 @@
     </div>
     <div class="stepcontent cleanup_content">
       <span class="name">
-        <%=raw t('.remove_leader_inst', date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %>
+        <%=raw t('.remove_leader_inst', date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %> (Date format: YYYY-MM-DD)
         <br/>
         <br/>
         <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders'), class: "min_width_button" %>

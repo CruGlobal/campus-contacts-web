@@ -102,8 +102,8 @@ class OrganizationsController < ApplicationController
   end
 
   def cleanup
-    @date = (Date.today-1).strftime("%m-%d-%Y")
-    @date_leaders = (Date.today-91).strftime("%m-%d-%Y")
+    @date = (Date.today-1).strftime("%Y-%m-%d")
+    @date_leaders = (Date.today-91).strftime("%Y-%m-%d")
   end
 
   def available_for_transfer
@@ -150,46 +150,66 @@ class OrganizationsController < ApplicationController
   end
 
   def archive_contacts
-    a = params[:archive_contacts_before].split('-')
-    a[0], a[1] = a[1], a[0]
-    a = a.join('-')
-    a = (a.to_date+1).strftime("%Y-%m-%d")
-    to_archive = current_organization.contacts.find_by_date_created_before_date_given(a)
-    no = 0
-    to_archive.each do |ta| # destroying contact permissions of persons and replacing them with the new created permission for archiving
-      ta.archive_contact_permission(current_organization)
-      no+=1 if ta.is_archived?(current_organization)
+    full_date = params[:archive_contacts_before]
+    total_updated = 0
+
+    if full_date.present?
+      begin
+        date = Date.parse(full_date).strftime("%Y-%m-%d")
+      rescue
+        msg = "Please enter a valid date format."
+      end
+
+      if date.present?
+        contacts = current_organization.contacts.where("DATE(`organizational_permissions`.updated_at) <= ?", date)
+        if contacts.present?
+          contacts.each do |contact|
+            archive = contact.archive_contact_permission(current_organization)
+            total_updated += 1 if archive
+          end
+        end
+      end
     end
-    flash[:notice] = t('organizations.cleanup.archive_notice', no: no)
-    #redirect_to cleanup_organizations_path
-    if no == 0
-      redirect_to cleanup_organizations_path
+    if msg.present?
+      flash[:notice] = msg
     else
-      redirect_to people_path+"?archived=true&include_archived=true"
+      flash[:notice] = t('organizations.cleanup.archive_notice', no: total_updated)
     end
+
+    redirect_to cleanup_organizations_path
   end
 
   def archive_leaders
-    if params[:date_leaders_not_logged_in_after].present?
-      date_given = (Date.strptime(params[:date_leaders_not_logged_in_after], "%m-%d-%Y") + 1.day).strftime('%Y-%m-%d')
-      leaders = current_organization.users.find_by_last_login_date_before_date_given(date_given)
-      leaders_count = leaders.count
-
-      leaders.each do |leader|
-        leader.archive_user_permission(current_organization)
-        assignments = leader.contact_assignments.where(organization_id: current_organization.id).all
-        assignments.collect(&:destroy)
+    full_date = params[:date_leaders_not_logged_in_after]
+    total_updated = 0
+    if full_date.present?
+      begin
+        date = Date.parse(full_date).strftime("%Y-%m-%d")
+      rescue
+        msg = "Please enter a valid date format."
       end
-
-      flash[:notice] = t('organizations.cleanup.removal_notice', no: leaders_count)
-      person_ids = leaders.collect(&:id)
+      if date.present?
+        leaders = current_organization.users.find_by_last_login_date_before_date_given(date)
+        if leaders.present?
+          leaders.each do |leader|
+            archive = leader.archive_user_permission(current_organization)
+            if archive
+              contact_assignments = leader.contact_assignments.where(organization_id: current_organization.id)
+              contact_assignments.destroy_all if contact_assignments
+              total_updated += 1
+            end
+          end
+        end
+      end
     end
 
-    if leaders.blank?
-      redirect_to cleanup_organizations_path
+    if msg.present?
+      flash[:notice] = msg
     else
-      redirect_to people_path+"?archived=true&include_archived=true"
+      flash[:notice] = t('organizations.cleanup.removal_notice', no: total_updated)
     end
+
+    redirect_to cleanup_organizations_path
   end
 
   def update_settings

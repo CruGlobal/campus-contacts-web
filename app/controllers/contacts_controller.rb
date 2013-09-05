@@ -49,7 +49,7 @@ class ContactsController < ApplicationController
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
-    params[:status] ||= 'in_progress' # set a default filter in my contacts
+    params[:status] ||= 'all' # set a default filter in my contacts
     params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
 
     fetch_contacts(false)
@@ -627,6 +627,15 @@ class ContactsController < ApplicationController
       end
       if params[:gender].present?
         @people_scope = @people_scope.where("gender = ?", params[:gender].strip)
+      end
+      if params[:assignment].present?
+        if params[:assignment] == "Assigned"
+          assigned_people_ids = current_organization.assigned_contacts.collect(&:id).uniq
+          @people_scope = @people_scope.where("people.id IN (?)", assigned_people_ids)
+        elsif params[:assignment] == "Unassigned"
+          unassigned_people_ids = current_organization.unassigned_contacts.collect(&:id).uniq
+          @people_scope = @people_scope.where("people.id IN (?)", unassigned_people_ids)
+        end
       end
       if params[:nationality].present?
         @people_scope = @people_scope.where("nationality = ?", params[:nationality].strip)

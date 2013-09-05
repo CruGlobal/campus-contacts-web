@@ -48,12 +48,10 @@
                 <%= radio_button_tag :gender, '', params[:gender] == '' %> <%= t('general.both') %>
               </div>
               <br/>
-              <% if current_organization.is_bridge? %>
-                <div class="field">
-                  <label for="nationality"><span class="title"><%= t('general.nationality') %></span></label>
-                  <%= select_tag :nationality, options_for_select(Person::NATIONALITIES, params[:nationality]), include_blank: "Not Specified" %>
-                </div>
-              <% end %>
+              <div class="field">
+                <label for="assignment"><span class="title"><%= t('general.assignment') %></span></label>
+                <%= select_tag :assignment, options_for_select(["Assigned","Unassigned"], params[:assignment]), :prompt => "" %>
+              </div>
               <div class="field">
                 <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
                 <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>
@@ -62,6 +60,12 @@
                 <label for="status"><span class="title"><%= t('general.status') %></span></label>
                 <%= select_tag :status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [s.titleize, s]}, params[:status]), include_blank: true, :class=>"search_status"%>
               </div>
+              <% if current_organization.is_bridge? %>
+                <div class="field">
+                  <label for="nationality"><span class="title"><%= t('general.nationality') %></span></label>
+                  <%= select_tag :nationality, options_for_select(Person::NATIONALITIES, params[:nationality]), include_blank: "Not Specified" %>
+                </div>
+              <% end %>
               <div class="field">
                 <label for="gender"><span class="title"><%= t('general.faculty') %></span></label>
                 <%= radio_button_tag :faculty, '1', params[:faculty] == '1' %> Yes

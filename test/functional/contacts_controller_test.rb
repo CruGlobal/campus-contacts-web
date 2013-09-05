@@ -393,7 +393,7 @@ class ContactsControllerTest < ActionController::TestCase
       @org.add_contact(@contact4)
 
       xhr :get, :index, {:assigned_to => "unassigned"}
-      assert_equal [@contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:people).collect(&:id).sort
+      assert_equal [@user.person.id, @contact1.id, @contact2.id, @contact3.id, @contact4.id], assigns(:people).collect(&:id).sort
     end
 
   end

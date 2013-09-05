@@ -64,8 +64,8 @@ module ContactActions
       # Validation existing person email address, create duplicate person and email if name does not match
       if form_email_address.present? && form_first_name.present? && form_last_name.present?
         if get_person = Person.find_existing_person_by_email(form_email_address)
-          get_first_name = get_person.first_name.downcase.strip
-          get_last_name = get_person.last_name.downcase.strip
+          get_first_name = (get_person.first_name.nil?) ? "" : get_person.first_name.downcase.strip
+          get_last_name = (get_person.last_name.nil?) ? "" : get_person.last_name.downcase.strip
           form_first_name = form_first_name.downcase.strip
           form_last_name = form_last_name.downcase.strip
           if get_person.organizational_permissions.where(:organization_id => current_organization).first
