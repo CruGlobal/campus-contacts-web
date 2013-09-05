@@ -1,10 +1,10 @@
 <div id="goal_select_org">
-  <%= select_tag "goal_organization", options_for_select(@movements) %>
+  <%= select_tag "goal_organization", options_for_select(@movements, @current_movement.id) %>
 </div>
 <br/>
 
 <div id="goal_select_category">
-  <%= select_tag "goal_category", options_for_select(MovementIndicator.all) %>
+  <%= select_tag "goal_category", options_for_select(MovementIndicator.all, @current_criteria) %>
 </div>
 <br/>
 

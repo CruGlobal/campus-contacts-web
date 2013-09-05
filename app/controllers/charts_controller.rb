@@ -39,7 +39,18 @@ class ChartsController < ApplicationController
 
   def goal
     get_goal_chart
-    @movements = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
+    organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
+    @movements = organizations.collect{|org| [org.name, org.id]}
+    if @chart.goal_organization_id.blank?
+      @chart.goal_organization_id = @movements.first.id
+      @chart.save
+    end
+    @current_movement = Organization.find(@chart.goal_organization_id)
+    if @chart.goal_criteria.blank?
+      @chart.goal_criteria = MovementIndicator.all.first
+      @chart.save
+    end
+    @current_criteria = @chart.goal_criteria
   end
 
   protected
