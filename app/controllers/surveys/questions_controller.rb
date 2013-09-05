@@ -35,14 +35,14 @@ class Surveys::QuestionsController < ApplicationController
   # GET /questions/1/edit
   def edit
     survey_element = @survey.survey_elements.find_by_element_id(@question.id)
-    
+
     rule_notify = Rule.find_by_rule_code('AUTONOTIFY')
     @auto_notify = survey_element.question_rules.find_by_rule_id(rule_notify.id) if survey_element
-  
+
     rule_assign = Rule.find_by_rule_code('AUTOASSIGN')
     @auto_assign = survey_element.question_rules.find_by_rule_id(rule_assign.id) if survey_element
   end
-  
+
   def add
   end
 
@@ -184,9 +184,11 @@ class Surveys::QuestionsController < ApplicationController
 		    @question = @predefined_survey.elements.find(@selected_question_id.to_i)
 		    @organization = current_organization
 		    @survey = @predefined_survey
-		    current_organization.settings[:visible_predefined_questions] = Array.new if current_organization.settings[:visible_predefined_questions].nil?
-		    current_organization.settings[:visible_predefined_questions] << @question.id
-		    current_organization.save!
+
+        settings = current_organization.settings
+        settings[:visible_predefined_questions] = Array.new if settings[:visible_predefined_questions].nil?
+        settings[:visible_predefined_questions] << @question.id
+        current_organization.update_attribute(:settings, settings)
       else
         @survey = Survey.find(params[:survey_id])
         @organization = @survey.organization
@@ -201,10 +203,10 @@ class Surveys::QuestionsController < ApplicationController
     end
   end
 
-  def suggestion    
+  def suggestion
     type = params[:type]
     keyword = params[:q]
-    
+
     @response = Array.new
     if type.present? && keyword.present?
    	 	keyword = keyword.strip
@@ -224,7 +226,7 @@ class Surveys::QuestionsController < ApplicationController
 			else
 			end
 		end
-    
+
 		respond_to do |format|
 		  format.json { render json: @response.to_json }
 		end
