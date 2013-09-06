@@ -53,6 +53,23 @@ class ChartsController < ApplicationController
     @current_criteria = @chart.goal_criteria
   end
 
+  def update_goal_org
+    get_goal_chart
+    @current_movement = Organization.find(params[:org_id])
+    @current_criteria = @chart.goal_criteria
+    @chart.goal_organization_id = @current_movement.id
+    @chart.save
+  end
+
+  def update_goal_criteria
+    get_goal_chart
+    @current_movement = Organization.find(@chart.goal_organization_id)
+    @current_criteria = params[:criteria]
+    @chart.goal_criteria = @current_criteria
+    @chart.save
+    render :update_goal_org
+  end
+
   protected
 
   def get_snapshot_chart

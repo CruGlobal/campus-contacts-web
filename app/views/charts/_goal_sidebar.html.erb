@@ -1,12 +1,16 @@
 <div id="goal_select_org">
-  <%= select_tag "goal_organization", options_for_select(@movements, @current_movement.id) %>
+  <%= select_tag "goal_organization", options_for_select(@movements, @current_movement.id), id: "goal_org_select" %>
 </div>
 <br/>
 
-<div id="goal_select_category">
-  <%= select_tag "goal_category", options_for_select(MovementIndicator.all, @current_criteria) %>
+<div id="goal_select_criteria">
+  <%= select_tag "goal_criteria", options_for_select(MovementIndicator.all, @current_criteria), id: "goal_criteria_select" %>
 </div>
 <br/>
+
+<div id="goal_box_spinner">
+  <br/>Updating Goal Information...&nbsp;<%= image_tag "spinner.gif" %>
+</div>
 
 <div id="goal_box">
   <%= render :partial => "goal_sidebar_goal_box" %>
