@@ -1,7 +1,52 @@
 require 'test_helper'
 
 class LeadersControllerTest < ActionController::TestCase
-
+  context "Leader Link is clicked" do
+    setup do
+      @leader_user = Factory(:user_with_auxs, remember_token: "123456", remember_token_expires_at: Date.today + 10.day)
+    end
+    should "redirect if incorrect token" do
+      get :leader_sign_in, user_id: @leader_user.id, token: "123"
+      assert_redirected_to '/users/sign_in'
+    end
+    should "redirect to login page when no active session" do
+      get :leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_redirected_to '/users/sign_in'
+    end
+    should "redirect to merge page when there is an active session" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      get :leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_response :success
+      assert_template 'leaders/leader_sign_in'
+      assert assigns(:valid_token)
+    end
+    should "say sorry if the token is expired when visiting the leader_link" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      @leader_user.update_attribute(:remember_token_expires_at, Date.today - 1.day)
+      get :leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_response :success
+      assert_template 'leaders/leader_sign_in'
+      assert !assigns(:valid_token)
+    end
+    should "say sorry if the token is expired when visiting the merge_leader_link" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      @leader_user.update_attribute(:remember_token_expires_at, Date.today - 1.day)
+      get :merge_leader_accounts, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_response :success
+      assert_template 'leaders/leader_sign_in'
+      assert !assigns(:valid_token)
+    end
+    should "destroy session and redirect to login page when do user do not want to merge accounts" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      get :sign_out_and_leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_nil session[:user_id]
+      assert_redirected_to "/l/#{@leader_user.remember_token}/#{@leader_user.id}"
+    end
+  end
   context "After logging in a person with orgs" do
     setup do
       @user = Factory(:user_with_auxs)  #user with a person object

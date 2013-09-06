@@ -1,0 +1,28 @@
+<% provide :title, t('general.leader_login_title') %>
+
+<% if @valid_token %>
+  <div class="info leader_confirmation">
+    <center>
+      <% if current_person.fb_uid.present? %>
+        <%= image_tag("https://graph.facebook.com/#{current_person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
+      <% else %>
+        <%= image_tag("no_image.png", alt: '', width: '200', height: '200', id: 'profile_image') %>
+      <% end %>
+      <h2><%=raw t('general.leader_login_confirmation', name: current_user.person.name )%></h2></center>
+  	<br>
+    <p class="leader_confirmation_options">
+      <%= link_to raw("Yes, merge <b>#{@user.person.name} &lt;#{@user.email.downcase}&gt;</b> to my account."), merge_leader_link_path(@token, @user.id), class: "answer_yes" %>
+      <br/>
+      <%= link_to "No, I want to login my own account.", sign_out_and_leader_sign_in_path, class: "answer_no" %>
+    </p>
+  </div>
+<% else %>
+  <div class="info leader_confirmation">
+    <center>
+      <h2><%=raw t('general.leader_link_expired' )%></h2></center>
+  	<br>
+    <p class="leader_confirmation_options">
+      <%= link_to "Login manually", root_path, class: "answer_yes" %>
+    </p>
+  </div>
+<% end %>

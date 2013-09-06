@@ -818,6 +818,15 @@ class Person < ActiveRecord::Base
     @email.to_s
   end
 
+  def emails
+    return email_addresses.collect{|e| e.email.downcase}
+  end
+
+  def has_email?(e)
+    return false unless e.present?
+    return emails.include?(e.downcase)
+  end
+
   def email=(val)
     return if val.blank?
     e = email_addresses.detect { |email| email.email == val }
@@ -1053,28 +1062,29 @@ class Person < ActiveRecord::Base
       end
 
       # Organizational Labels
-      # other.organizational_labels.each do |label|
-      #   begin
-      #     label.update_attribute(:person_id, id) unless label.frozen?
-      #   rescue ActiveRecord::RecordNotUnique
-      #     label.destroy
-      #   end
-      # end
+      other.organizational_labels.each do |org_label|
+        begin
+          org_label.update_attribute(:person_id, id) unless org_label.frozen?
+        rescue ActiveRecord::RecordNotUnique
+          org_label.destroy
+        end
+      end
 
       # Organizational Permissions
       organizational_permissions.each do |pn|
         opn = other.organizational_permissions.detect {|oa| oa.organization_id == pn.organization_id}
         pn.merge(opn) if opn
       end
+
+      # Clean permission for each orgs
+      other.organizations.each do |org|
+        other.ensure_single_permission_for_org_id(org.id)
+      end
+
+      # Merge permissions
       other.organizational_permissions.each do |org_permission|
         unless org_permission.frozen?
-          begin
-            org_permission.organization.add_permission_to_person(org_permission.person, org_permission.permission_id, org_permission.added_by_id)
-            org_permission.destroy
-          rescue ActiveRecord::RecordNotUnique
-            permission.destroy
-          end
-          ensure_single_permission_for_org_id(org_permission.organization_id)
+          org_permission.organization.add_permission_to_person(self, org_permission.permission_id, org_permission.added_by_id)
         end
       end
 

@@ -5,15 +5,57 @@ class LeadersController < ApplicationController
     # Reconcile the person comeing from a leader link with the link itself.
     # This is for the case where the person gets entered with one email, but has a different email for FB
     if params[:token] && params[:user_id]
-      user = User.find(params[:user_id])
-      if current_user != user && user.remember_token == params[:token] && user.remember_token_expires_at >= Time.now
-        # the link was valid merge the created user into the current user
-        current_user.merge(user)
-        user.destroy
-        redirect_to '/contacts/mine'
+      @token = params[:token]
+      @user = User.find(params[:user_id])
+      if @user.remember_token == @token && @user.remember_token_expires_at >= Time.now
+        if current_user == @user
+          @user.update_attributes({remember_token_expires_at: Time.now})
+          redirect_to user_root_path
+        else
+          if current_user.person.has_email?(@user.email)
+            current_user.merge(@user)
+            @user.destroy
+            redirect_to '/mycontacts'
+          else
+            @valid_token = true
+            render layout: 'mhub'
+          end
+        end
       else
-        redirect_to user_root_path
+        @valid_token = false
+        render layout: 'mhub'
       end
+    else
+      redirect_to root_path
+    end
+  end
+
+  def merge_leader_accounts
+    if params[:token] && params[:user_id]
+      @token = params[:token]
+      @user = User.find(params[:user_id])
+      if @user.remember_token == @token && @user.remember_token_expires_at >= Time.now
+        if current_user == @user
+          @user.update_attributes({remember_token_expires_at: Time.now})
+          redirect_to user_root_path
+        else
+          current_user.merge(@user)
+          @user.destroy
+          redirect_to '/mycontacts'
+        end
+      else
+        @valid_token = false
+        render "leader_sign_in", layout: 'mhub'
+      end
+    else
+      redirect_to root_path
+    end
+  end
+
+  def sign_out_and_leader_sign_in
+    if params[:token] && params[:user_id]
+      sign_out(current_user)
+      redirect_to leader_link_path(params[:token], params[:user_id])
     else
       redirect_to user_root_path
     end
