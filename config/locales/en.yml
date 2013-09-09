@@ -196,7 +196,11 @@ en:
     subject: 'Subject:'
     email_note: "Check this box to send your Email with an \"anonymous reply to\" of do-not-reply@missionhub.com<br/>Be sure to identify yourself or your organization in the text of your email message."
     sms_note: "Due to the lack of local phone standards, the receiver is not able to use the \"reply function\" for this message,<br/>so if the sender wants a reply, a \"reply to phone number\" needs to be included in the text of the message."
-    sms_preview_title: "Your recipients will receive the following text message:"
+    sms_preview_title: "Your recipient without email will receive the following text message:"
+    default_email_from: "do-not-reply@missionhub.com"
+    sms_change_default_email_desc: "Change the default '%{default_email_from}' from your added phone numbers."
+    sms_change_default_email_send_as_desc: "Send as "
+    sms_append_to_phone_number: "@do-not-reply.com"
     sms_preview_from: "FRM:"
     sms_preview_body: "MSG:"
     sms_autocomplete_description: "Type to search by first name, last name, phone number, group name, or label name."
