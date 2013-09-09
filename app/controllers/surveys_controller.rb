@@ -67,8 +67,11 @@ class SurveysController < ApplicationController
         new_survey = @receiving_org.surveys.new(@survey.attributes)
         if new_survey.save
           @survey.survey_elements.each do |q|
-            new_question = new_survey.survey_elements.new(q.attributes)
-            new_question.save
+            if element = q.element
+              new_element = element.kind.constantize.create(element.attributes.except("id","kind"))
+              new_question = new_survey.survey_elements.new(q.attributes.merge("element_id" => new_element.id))
+              new_question.save
+            end
           end
           @status = 'copied'
         end
