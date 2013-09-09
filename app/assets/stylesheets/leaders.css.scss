@@ -1,0 +1,26 @@
+div.leader_confirmation {
+  h2 {
+    color: #808284;
+    display: block;
+    font-family: Georgia;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: normal;
+  }
+  p.leader_confirmation_options {
+    text-align: center;
+    a.answer_yes {
+      color: #0379AE;
+      display: block;
+      font-family: Georgia;
+      font-size: 16px;
+      margin-bottom: -5px;
+    }
+    a.answer_no {
+      color: #808284;
+      display: block;
+      font-family: Georgia;
+      font-size: 13px;
+    }
+  }
+}

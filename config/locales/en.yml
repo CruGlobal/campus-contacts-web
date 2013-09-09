@@ -130,6 +130,9 @@ en:
   general:
     group_name: "Group"
     remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"
+    leader_login_title: "MissionHub Confirmation"
+    leader_login_confirmation: "You are currently logged in as %{name}.<br>Do you want to continue?"
+    leader_link_expired: "Sorry, this link is already used."
     transfer: "Transfer"
     permissions_applied: "labels have been applied."
     no_recipient_in_comment: "You didn't select any people to comment on."

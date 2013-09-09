@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :remember_me, :password, :username
+  attr_accessible :email, :remember_me, :password, :username, :remember_token_expires_at
 
   def ability
     @ability ||= Ability.new(self)
