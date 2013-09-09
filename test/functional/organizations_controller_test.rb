@@ -279,13 +279,14 @@ class OrganizationsControllerTest < ActionController::TestCase
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%Y-%m-%d") }
       assert_equal 3, @org.all_people_with_archived.where("DATE(archive_date) = ?", chosen_date).archived(@org.id).count
     end
+  end
 
-    should "redirect to cleanup page when there were no contacts archived" do
+  context "Archiving Contacts when no contacts" do
+    should "redirect to cleanup page" do
       post :archive_contacts, { :archive_contacts_before => (Date.today-30).strftime("%m-%d-%Y") }
-      assert_equal @org.people.archived(@org.id).count, 0
+      assert_equal 0, @org.people.archived(@org.id).count
       assert_redirected_to cleanup_organizations_path
     end
-
   end
 
   context "Archiving leaders" do
@@ -312,8 +313,10 @@ class OrganizationsControllerTest < ActionController::TestCase
         post :archive_leaders, { :date_leaders_not_logged_in_after => Date.today.strftime("%m-%d-%Y") }
       end
     end
+  end
 
-    should "redirect to cleanup page when there were no leaders archived" do
+  context "Archiving leaders when no leaders" do
+    should "redirect to cleanup page" do
       post :archive_leaders, { :date_leaders_not_logged_in_after => (Date.today-30).strftime("%m-%d-%Y") }
       assert_equal @org.people.archived(@org.id).count, 0
       assert_redirected_to cleanup_organizations_path
