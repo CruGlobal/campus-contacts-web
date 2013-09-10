@@ -1,5 +1,5 @@
 <% if @status == 'copied' %>
-  $('#transfer_survey_div').dialog('close')
+  $.hideDialog($('#transfer_survey_div'))
 <% else %>
   <% if @status == 'duplicate' %>
     msg = "<b><%= @receiving_org.name %></b> already have this survey."
