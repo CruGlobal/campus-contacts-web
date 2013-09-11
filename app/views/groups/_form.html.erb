@@ -55,10 +55,12 @@
     </div>
     <div class="field">
       <div class="day_of_week_div regular" style="<%= 'display:none' unless @group.meets == 'weekly' || @group.meets.blank? %>">
-        <%= select_tag :day_of_week, options_for_select(t('date.day_names').collect.with_index {|d, i| [d, i]}) %>
+        <% selected = (@group.meets == 'weekly') ? @group.meeting_day : 0 %>
+        <%= select_tag :day_of_week, options_for_select(t('date.day_names').collect.with_index {|d, i| [d, i]}, selected) %>
       </div>
       <div class="day_of_month_div regular" style="<%= 'display:none' unless @group.meets == 'monthly' %>">
-        <%= select_tag :day_of_month, options_for_select((1..31).collect {|i| [i.ordinalize, i]}) %>
+        <% selected = (@group.meets == 'monthly') ? @group.meeting_day : 0 %>
+        <%= select_tag :day_of_month, options_for_select((1..31).collect {|i| [i.ordinalize, i]}, selected) %>
         <%= t('.of_month') %>
       </div>
     </div>
