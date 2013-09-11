@@ -1,0 +1,33 @@
+<h2><%= @current_criteria %></h2>
+<h3><%= @current_movement.name %></h3>
+
+<div id="goal_description">
+  <%= form_for @goal, url: update_goal_charts_path, remote: true do |f| %>
+    <div class="fieldWithErrors">
+      <%= f.error_messages %>
+    </div>
+  Starting Date:<br/>
+    <%= f.date_select(:start_date, start_year: Time.now.year - 3, end_year: Time.now.year) %><br/>
+    Starting Amount:
+    <%= f.text_field(:start_value) %><br/>
+    Ending Date:<br/>
+    <%= f.date_select(:end_date, start_year: Time.now.year - 3, end_year: Time.now.year) %><br/>
+    Ending Amount:
+    <%= f.text_field(:end_value) %><br/>
+    <%= f.submit 'Save', class: 'large_red', id: 'save_goal_button' %>
+  <% end %>
+  <%= button_tag 'Cancel', class: 'large_gray', id: 'cancel_edit_goal_button' %>
+</div>
+
+<script>
+  $('button#cancel_edit_goal_button').bind('click', function(){
+    $.ajax({
+      url: "/charts/cancel_edit_goal",
+      type: "GET"
+    })
+  });
+  $('button#save_goal_button').bind('click', function(){
+    $('div#goal_container, div#goal_box').hide();
+    $('div#goal_spinner, div#goal_box_spinner').show();
+  });
+</script>

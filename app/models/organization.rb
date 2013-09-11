@@ -29,6 +29,7 @@ class Organization < ActiveRecord::Base
   has_many :followup_comments
   has_many :organizational_permissions, inverse_of: :organization
   has_many :movement_indicator_suggestions
+  has_many :organizational_goal
 
   if Permission.table_exists? # added for travis testing
 

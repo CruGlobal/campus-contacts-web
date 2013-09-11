@@ -2,9 +2,22 @@
 <h3><%= @current_movement.name %></h3>
 
 <div id="goal_description">
-  from 0 to 60 interactions<br/>
-  Aug 15, 2013 to Nov 07, 2013
+  <% if @goal.id? %>
+    from <%= @goal.start_value %> to <%= @goal.end_value %> interactions<br/>
+    <%= @goal.start_date.to_s %> to <%= @goal.end_date.to_s %>
+  <% else %>
+    A goal for <%= @current_criteria %> has not yet been set for <%= @current_movement.name %>.
+  <% end %>
 </div>
 <br/>
 
-<%= button_tag 'Edit Goal', class: 'large_red', id: 'edit_goal' %>
+<%= button_tag 'Edit Goal', class: 'large_red', id: 'edit_goal_button' %>
+
+<script>
+  $('button#edit_goal_button').bind('click', function(){
+    $.ajax({
+      url: "/charts/edit_goal",
+      type: "GET"
+    })
+  });
+</script>

@@ -44,30 +44,60 @@ class ChartsController < ApplicationController
     if @chart.goal_organization_id.blank?
       @chart.goal_organization_id = @movements.first.id
       @chart.save
+      @current_movement = Organization.find(@chart.goal_organization_id)
     end
-    @current_movement = Organization.find(@chart.goal_organization_id)
     if @chart.goal_criteria.blank?
       @chart.goal_criteria = MovementIndicator.all.first
       @chart.save
+      @current_criteria = @chart.goal_criteria
     end
-    @current_criteria = @chart.goal_criteria
+    get_goal
   end
 
   def update_goal_org
     get_goal_chart
     @current_movement = Organization.find(params[:org_id])
-    @current_criteria = @chart.goal_criteria
     @chart.goal_organization_id = @current_movement.id
     @chart.save
+    get_goal
   end
 
   def update_goal_criteria
     get_goal_chart
-    @current_movement = Organization.find(@chart.goal_organization_id)
     @current_criteria = params[:criteria]
     @chart.goal_criteria = @current_criteria
     @chart.save
+    get_goal
     render :update_goal_org
+  end
+
+  def edit_goal
+    get_goal_chart
+  end
+
+  def cancel_edit_goal
+    get_goal_chart
+  end
+
+  def update_goal
+    get_goal_chart
+
+    attribs = params["organizational_goal"]
+    start_date = Date.civil(attribs["start_date(1i)"].to_i, attribs["start_date(2i)"].to_i, attribs["start_date(3i)"].to_i)
+    end_date = Date.civil(attribs["end_date(1i)"].to_i, attribs["end_date(2i)"].to_i, attribs["end_date(3i)"].to_i)
+
+    @goal.start_date = start_date
+    @goal.end_date = end_date
+    @goal.start_value = attribs["start_value"]
+    @goal.end_value = attribs["end_value"]
+    @goal.organization = @current_movement
+    @goal.criteria = @current_criteria
+
+    if @goal.save
+      render :update_goal_org
+    else
+      render :edit_goal_error
+    end
   end
 
   protected
@@ -78,6 +108,9 @@ class ChartsController < ApplicationController
 
   def get_goal_chart
     get_chart(Chart::GOAL)
+    @current_movement = Organization.where(id: @chart.goal_organization_id).first
+    @current_criteria = @chart.goal_criteria
+    get_goal
   end
 
   def get_chart(type, orgs = false)
@@ -94,6 +127,11 @@ class ChartsController < ApplicationController
       @chart.update_movements(@movements)
       @chart.save
     end
+  end
+
+  def get_goal
+    @goal = @current_movement.organizational_goal.where(criteria: @current_criteria).first if (@current_movement && @current_criteria)
+    @goal ||= OrganizationalGoal.new()
   end
 
   def refresh_snapshot_data
