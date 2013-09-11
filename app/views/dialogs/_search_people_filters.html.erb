@@ -50,8 +50,11 @@
               <br/>
               <div class="field">
                 <label for="assignment"><span class="title"><%= t('general.assignment') %></span></label>
-                <%= select_tag :assignment, options_for_select(["Assigned","Unassigned"], params[:assignment]), :prompt => "" %>
+                <%= radio_button_tag :assignment, 'Assigned', params[:assignment] == 'Assigned' %> <%= t('general.assigned_to_first_option') %>
+                <%= radio_button_tag :assignment, 'Unassigned', params[:assignment] == 'Unassigned' %> <%= t('general.assigned_to_second_option') %>
+                <%= radio_button_tag :assignment, '', params[:assignment] == '' %> <%= t('general.assigned_to_both_option') %>
               </div>
+              <br/>
               <div class="field">
                 <label for="survey"><span class="title"><%= t('general.survey') %></span></label>
                 <%= select_tag :survey, options_for_select(current_organization.surveys.order(:title).collect {|s| [s, s.id]}, params[:survey]), :prompt => "All" %>
