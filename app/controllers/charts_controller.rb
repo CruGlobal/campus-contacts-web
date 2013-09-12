@@ -42,7 +42,7 @@ class ChartsController < ApplicationController
     organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
     @movements = organizations.collect{|org| [org.name, org.id]}
     if @movements.blank?
-      redirect_to :goal_empty
+      redirect_to goal_empty_charts_path
       return
     end
     if @chart.goal_organization_id.blank?

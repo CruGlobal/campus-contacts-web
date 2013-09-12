@@ -13,5 +13,9 @@
 </div>
 
 <div id="goal_box">
-  <%= render :partial => "goal_sidebar_goal_box" %>
+  <% if (can? :manage, @current_movement) && !@goal.id? %>
+    <%= render :partial => "goal_sidebar_edit_goal_box" %>
+  <% else %>
+    <%= render :partial => "goal_sidebar_goal_box" %>
+  <% end %>
 </div>
