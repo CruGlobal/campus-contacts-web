@@ -210,6 +210,7 @@ Mh::Application.routes.draw do
       get :cancel_edit_goal
       post :update_goal
       put :update_goal
+      get :goal_empty
       get :trend
     end
   end

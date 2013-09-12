@@ -41,6 +41,10 @@ class ChartsController < ApplicationController
     get_goal_chart
     organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
     @movements = organizations.collect{|org| [org.name, org.id]}
+    if @movements.blank?
+      redirect_to :goal_empty
+      return
+    end
     if @chart.goal_organization_id.blank?
       @chart.goal_organization_id = @movements.first.id
       @chart.save
