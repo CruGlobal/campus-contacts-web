@@ -11,7 +11,9 @@
 </div>
 <br/>
 
-<%= button_tag 'Edit Goal', class: 'large_red', id: 'edit_goal_button' %>
+<% if can? :manage, @current_movement %>
+  <%= button_tag 'Edit Goal', class: 'large_red', id: 'edit_goal_button' %>
+<% end %>
 
 <script>
   $('button#edit_goal_button').bind('click', function(){

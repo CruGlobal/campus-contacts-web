@@ -82,21 +82,25 @@ class ChartsController < ApplicationController
   def update_goal
     get_goal_chart
 
-    attribs = params["organizational_goal"]
-    start_date = Date.civil(attribs["start_date(1i)"].to_i, attribs["start_date(2i)"].to_i, attribs["start_date(3i)"].to_i)
-    end_date = Date.civil(attribs["end_date(1i)"].to_i, attribs["end_date(2i)"].to_i, attribs["end_date(3i)"].to_i)
+    if can? :manage, @current_movement
+      attribs = params["organizational_goal"]
+      start_date = Date.civil(attribs["start_date(1i)"].to_i, attribs["start_date(2i)"].to_i, attribs["start_date(3i)"].to_i)
+      end_date = Date.civil(attribs["end_date(1i)"].to_i, attribs["end_date(2i)"].to_i, attribs["end_date(3i)"].to_i)
 
-    @goal.start_date = start_date
-    @goal.end_date = end_date
-    @goal.start_value = attribs["start_value"]
-    @goal.end_value = attribs["end_value"]
-    @goal.organization = @current_movement
-    @goal.criteria = @current_criteria
+      @goal.start_date = start_date
+      @goal.end_date = end_date
+      @goal.start_value = attribs["start_value"]
+      @goal.end_value = attribs["end_value"]
+      @goal.organization = @current_movement
+      @goal.criteria = @current_criteria
 
-    if @goal.save
-      render :update_goal_org
+      if @goal.save
+        render :update_goal_org
+      else
+        render :edit_goal_error
+      end
     else
-      render :edit_goal_error
+      redirect_to goal_chart_path
     end
   end
 
