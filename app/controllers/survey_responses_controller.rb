@@ -21,8 +21,10 @@ class SurveyResponsesController < ApplicationController
     if @sms
       if @person.new_record?
         @person.phone_number = @sms.phone_number
-        @person.first_name = @sms.person.first_name
-        @person.last_name = @sms.person.last_name
+        if @sms.person
+          @person.first_name = @sms.person.first_name
+          @person.last_name = @sms.person.last_name
+        end
       else
         @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
         @sms.update_attribute(:person_id, @person.id) unless @sms.person_id

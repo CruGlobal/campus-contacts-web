@@ -143,6 +143,9 @@ en:
     contact_location: "Contact Location"
     archived: "Archived"
     assigned_to:  "Assigned to"
+    assigned_to_first_option: "Assigned"
+    assigned_to_second_option: "Unassigned"
+    assigned_to_both_option: "Both"
     survey: Survey
     nationality: Nationality
     assignment: Assigned To

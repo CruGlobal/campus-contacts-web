@@ -84,11 +84,15 @@ class Api::FollowupCommentsController < ApiController
     comment = {}
     comment['id'] = object.id
     comment['contact_id'] = object.receiver_id
-    comment['commenter'] = {
-        'id' => object.creator.id,
-        'name' => object.creator.name,
-        'picture' => object.creator.picture,
-    }
+    if object.creator.present?
+      comment['commenter'] = {
+          'id' => object.creator.id,
+          'name' => object.creator.name,
+          'picture' => object.creator.picture,
+      }
+    else
+      comment['commenter'] = {}
+    end
     comment['comment'] = object.comment
     comment['status'] = object.receiver.organizational_permission_for_org(@organization).try(:followup_status)
     comment['organization_id'] = object.organization_id
