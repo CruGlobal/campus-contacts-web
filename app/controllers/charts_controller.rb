@@ -46,7 +46,7 @@ class ChartsController < ApplicationController
       return
     end
     if @chart.goal_organization_id.blank?
-      @chart.goal_organization_id = @movements.first.id
+      @chart.goal_organization_id = @movements.first[1]
       @chart.save
       @current_movement = Organization.find(@chart.goal_organization_id)
     end
