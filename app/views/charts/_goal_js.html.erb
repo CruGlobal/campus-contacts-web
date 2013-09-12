@@ -27,7 +27,12 @@
 
       xAxis: {
         type: 'datetime',
-        min: Date.UTC(2012, 7, 15),
+        <% if @goal_line.present? %>
+          min: Date.UTC(<%= @goal_line.keys.first.year %>, <%= @goal_line.keys.first.month - 1 %>, <%= @goal_line.keys.first.day %>),
+          max: Date.UTC(<%= @goal_line.keys.last.year %>, <%= @goal_line.keys.last.month - 1 %>, <%= @goal_line.keys.last.day %>),
+        <% else %>
+          min: Date.UTC(<%= (Date.today - 3.months).year %>, <%= (Date.today - 3.months).month - 1 %>, <%= (Date.today - 3.months).day %>),
+        <% end %>
         tickInternal: 7 * 24 * 3600 * 1000,
         gridLineWidth: 1
       },
@@ -60,45 +65,31 @@
       },
       series: [{
         data: [{
-          x: Date.UTC(2012, 7, 15),
-          y: 0
-        }, {
-          x: Date.UTC(2012, 10, 7),
-          y: 85
+        <% @goal_line.each_key do |date| %>
+          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+          y: <%= @goal_line[date] %>
+          <% unless date == @goal_line.keys.last %>
+            },
+            {
+          <% end %>
+        <% end %>
         }],
         dashStyle: 'LongDash',
-        name: 'Goal'
+        name: 'Goal',
+        enableMouseTracking: false
       }, {
         data: [{
-          x: Date.UTC(2012, 7, 15),
-          y: 0
-        }, {
-          x: Date.UTC(2012, 7, 22),
-          y: 4
-        }, {
-          x: Date.UTC(2012, 7, 29),
-          y: 9
-        }, {
-          x: Date.UTC(2012, 8, 5),
-          y: 13
-        }, {
-          x: Date.UTC(2012, 8, 12),
-          y: 17
-        }, {
-          x: Date.UTC(2012, 8, 19),
-          y: 24
-        }, {
-          x: Date.UTC(2012, 8, 26),
-          y: 32
-        }, {
-          x: Date.UTC(2012, 9, 3),
-          y: 57
-        }, {
-          x: Date.UTC(2012, 9, 10),
-          y: 58
+          <% @data_points.each_key do |date| %>
+          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+          y: <%= @data_points[date] %>
+          <% unless date == @data_points.keys.last %>
+            },
+            {
+          <% end %>
+        <% end %>
         }],
         color: '#FF0000',
-        name: 'Personal Evangelism'
+        name: '<%= @current_criteria %>'
       }]
     });
   });

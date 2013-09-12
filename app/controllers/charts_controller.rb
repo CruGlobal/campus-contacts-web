@@ -52,6 +52,7 @@ class ChartsController < ApplicationController
       @current_criteria = @chart.goal_criteria
     end
     get_goal
+    refresh_goal_data
   end
 
   def update_goal_org
@@ -60,6 +61,7 @@ class ChartsController < ApplicationController
     @chart.goal_organization_id = @current_movement.id
     @chart.save
     get_goal
+    refresh_goal_data
   end
 
   def update_goal_criteria
@@ -68,6 +70,7 @@ class ChartsController < ApplicationController
     @chart.goal_criteria = @current_criteria
     @chart.save
     get_goal
+    refresh_goal_data
     render :update_goal_org
   end
 
@@ -95,8 +98,10 @@ class ChartsController < ApplicationController
       @goal.criteria = @current_criteria
 
       if @goal.save
+        refresh_goal_data
         render :update_goal_org
       else
+        refresh_goal_data
         render :edit_goal_error
       end
     else
@@ -202,6 +207,45 @@ class ChartsController < ApplicationController
     people.each do |person|
       unless (@changed_lives.size >= 8 || person.blank? || @changed_lives.include?(person))
         @changed_lives << person
+      end
+    end
+  end
+
+  def refresh_goal_data
+    begin_date = Date.today - 3.months
+    end_date = Date.today
+
+    if @goal.id?
+      begin_date = @goal.start_date
+      end_date = @goal.end_date
+    end
+
+    begin
+      resp = RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      json = JSON.parse(resp)
+    rescue
+      raise resp.inspect
+    end
+
+    @goal_line = {}
+    if @goal.id?
+      @goal_line[@goal.start_date] = @goal.start_value
+      @goal_line[@goal.end_date] = @goal.end_value
+    end
+
+    @data_points = {}
+    stats = json["statistics"]
+    criteria = MovementIndicator.translate[@current_criteria]
+
+    if MovementIndicator.semester.include?(@current_criteria)
+      stats.each do |stat|
+        @data_points[Date.parse(stat["period_end"])] = stat[criteria]
+      end
+    elsif MovementIndicator.weekly.include?(@current_criteria)
+      total = 0
+      stats.each do |stat|
+        total += stat[criteria]
+        @data_points[Date.parse(stat["period_end"])] = total
       end
     end
   end
