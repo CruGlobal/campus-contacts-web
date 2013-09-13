@@ -13,12 +13,13 @@
       <%= "Everyone in #{message.organization.name}" %>
     </span>
 	</div>
+  <% if message.sender.present? %>
 	<div class="feed_item_content">
     <strong><%= message.sender.name %></strong> sent
     <%= message.sent_via == "sms" ? "sms to" : "an email to" %>
     <%= message.to %>.
-
   </div>
+  <% end %>
   <% if message.message.present? %>
     <div class="feed_item_comment">
       <% if message.subject.present? %>
