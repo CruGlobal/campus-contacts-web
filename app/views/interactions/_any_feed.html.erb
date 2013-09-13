@@ -7,4 +7,6 @@
   <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: feed} %>
 <% when "OrganizationalLabel" %>
   <%= render partial: 'interactions/label_feed', locals: {org_label: feed} %>
+<% when "Message" %>
+  <%= render partial: 'interactions/message_feed', locals: {message: feed} %>
 <% end %>

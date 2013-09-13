@@ -29,7 +29,8 @@
 			<ul id="panel_nav">
 				<li id="info" class="current">Info</li>
 				<li id="interactions">Interactions</li>
-				<li id="surveys">Surveys</li>
+        <li id="surveys">Surveys</li>
+        <li id="messages">Messages</li>
 				<li id="all">All</li>
 			</ul>
 		</div>
@@ -42,6 +43,9 @@
       <div class="tab_content profile_interactions">
         <div class="edit_space"><%= render partial: "interactions/profile_interactions_edit" %></div>
         <div class="view_space"><%= render partial: "interactions/profile_interactions" %></div>
+      </div>
+      <div class="tab_content profile_messages">
+        <%= render partial: "interactions/profile_messages" %>
       </div>
       <div class="tab_content profile_surveys">
         <%= render partial: "interactions/profile_surveys" %>

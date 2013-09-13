@@ -18,6 +18,7 @@ class InteractionsController < ApplicationController
       @groups = @person.groups_for_org_id(current_organization.id)
       @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
       @friends = @person.friends_in_orgnization(current_organization)
+      @received_emails = @person.received_messages_in_org(current_organization.id)
       if can? :manage, @person
         @interactions = @person.filtered_interactions(current_person, current_organization)
         @last_interaction = @interactions.last

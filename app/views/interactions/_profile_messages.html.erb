@@ -1,0 +1,9 @@
+<% if @received_emails.count == 0 %>
+  <div class="feed_box notice">
+    No received messages yet.
+  </div>
+<% else %>
+  <% @received_emails.each do |message| %>
+	<%= render partial: 'interactions/message_feed', locals: {message: message} %>
+  <% end %>
+<% end %>
