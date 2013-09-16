@@ -333,7 +333,7 @@ en:
     left_sidebar:
       profile: "%{name}'s Profile"
       edit_profile: "Edit %{name}'s Profile"
-      survey_answers: 'Survey Answers'
+      survey_answers: 'Completed Survey Answers'
       involvement: Involvement
     involvement:
       conferences: Conferences
@@ -684,6 +684,7 @@ en:
     add_comment_title: "Add comment"
     comment_field_title: "Comment"
     edit_survey_results: "Edit Survey Results"
+    answer_other_surveys: "Answer Other Surveys"
     edit_this_survey: "Edit this survey"
     profile_info:
       email_contact_info: "Email Me This Contact Info"
@@ -926,13 +927,15 @@ en:
       facebook_login: "You can connect your account to Facebook so we can know who you really are."
       pick_keyword: "Pick a Keyword"
     show:
-      title: "%{name}'s Survey Answers"
+      title: "%{name}'s Completed Survey Answers"
       edit_answers: "Edit Answers"
       no_answers: "There is no information for %{name}"
     edit:
-      title: "Edit %{name}'s Survey Answers"
+      title: "Edit %{name}'s Survey Results"
       multiple_answers: "Choose one or more. "
       cancel: "Cancel and go back"
+    answer_other_surveys:
+      title: "%{name} - Answer Other Surveys"
     form:
       frozen: "Sorry. The survey '%{survey}' is currently on hold."
   date:

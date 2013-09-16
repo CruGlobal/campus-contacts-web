@@ -233,7 +233,7 @@ class ContactsController < ApplicationController
           wants.html { redirect_to survey_response_path(@person) }
         end
       else
-        redirect_to edit_survey_response_path(params[:id])
+        redirect_to survey_response_path(@person)
       end
     end
   end
