@@ -1,6 +1,4 @@
 FactoryGirl.define do
-  sequence(:count) {|n| n}
-
   def attachment(name, path, content_type = nil)
     path_with_rails_root = "#{RAILS_ROOT}/#{path}"
     uploaded_file = if content_type ActionController::TestUploadedFile.new(path_with_rails_root, content_type)
@@ -10,15 +8,8 @@ FactoryGirl.define do
     add_attribute name, uploaded_file
   end
 
-=begin
-  factory :csv_file do
-    include ActionDispatch::TestProcess
-    csv_file fixture_file_upload('/files/sample_contacts.csv', 'application/csv')
-  end
-=end
-
   factory :dashboard_post do
-    title "Gangnam Style #{Factory.next(:count)}"
+    sequence(:title) {|n| "dashboard_post_#{n}"}
     context "Music Video"
     video "http://www.youtube.com/watch?v=9bZkp7q19f0"
   end
@@ -28,14 +19,14 @@ FactoryGirl.define do
     association :receiver
     association :creator
     interaction_type_id 1
-    comment "Sample Comment #{Factory.next(:count)}"
+    sequence(:comment) {|n| "interaction_comment_#{n}"}
     privacy_setting 'everyone'
   end
 
   factory :interaction_type do
     association :organization
-    name "Sample Interaction Type #{Factory.next(:count)}"
-    i18n "sample_interaction_type_#{Factory.next(:count)}"
+    sequence(:name) {|n| "interaction_type_name_#{n}"}
+    sequence(:i18n) {|n| "interaction_type_i18n#{n}"}
     icon "icon/path"
   end
 
@@ -46,7 +37,7 @@ FactoryGirl.define do
   end
 
   factory :group_label do
-    name "group #{Factory.next(:count)}"
+    sequence(:name) {|n| "group_label_name_#{n}"}
   end
 
   factory :group_labeling do
@@ -95,7 +86,7 @@ FactoryGirl.define do
   end
 
   factory :sms_keyword do
-    keyword {"test#{Factory.next(:count)}"}
+    sequence(:keyword) {|n| "sms_keyword_keyword_#{n}"}
     association :organization
     explanation "haoeu"
     state "requested"
@@ -126,7 +117,7 @@ FactoryGirl.define do
   end
 
   factory :survey do
-    title {"Test survey #{Factory.next(:count)}"}
+    sequence(:title) {|n| "survey_title_#{n}"}
     association :organization
     post_survey_message "bye!"
     login_option 0
@@ -136,7 +127,7 @@ FactoryGirl.define do
     first_name 'John'
     last_name 'Doe'
     gender '1'
-    fb_uid {"690860831#{Factory.next(:count)}"}
+    sequence(:fb_uid) {|n| "person_fb_uid_#{n}"}
   end
 
   factory :person_without_name, parent: :person do
@@ -151,18 +142,18 @@ FactoryGirl.define do
   end
 
   factory :user do
-    email {"test#{Factory.next(:count)}@example.com"}
+    sequence(:email) {|n| "user_email_#{n}@example.com"}
     password 'asdfasdf'
   end
 
   factory :authentication do
     provider "facebook"
-    uid {"690860831#{Factory.next(:count)}"}
+    sequence(:uid) {|n| "authentication_uid_#{n}"}
     token "164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"
   end
 
   factory :organization do
-    name {"Organization #{Factory.next(:count)}"}
+    sequence(:name) {|n| "organization_name_#{n}"}
     terminology 'Organization'
     show_sub_orgs true
     status 'active'
@@ -216,14 +207,14 @@ FactoryGirl.define do
   end
 
   factory :interest, class: Interest do
-    interest_id "#{Factory.next(:count)}"
-    name "Test Interest #{Factory.next(:count)}"
+    sequence(:interest_id) {|n| "#{n}"}
+    sequence(:name) {|n| "interest_name_#{n}"}
     provider "facebook"
     category "Test Category"
   end
 
   factory :access_token, class: Rack::OAuth2::Server::AccessToken do
-    code "9d68af577f8a4c9076752c9699d2ac2ace64f9dcb407897f754439096cedbfca"
+    sequence(:code) {|n| "access_token_code_#{n}" }
     scope "userinfo contacts followup_comments contact_assignment permissions labels organization_info"
   end
 
@@ -264,12 +255,12 @@ FactoryGirl.define do
   end
 
   factory :permission do
-    name "permission #{Factory.next(:count)}"
+    sequence(:name) {|n| "permission_name_#{n}"}
   end
 
   factory :label do
     association :organization
-    name "label #{Factory.next(:count)}"
+    sequence(:name) {|n| "label_name_#{n}"}
   end
 
   factory :organizational_label do
@@ -293,6 +284,12 @@ FactoryGirl.define do
     association :organization
     association :assigned_to
     association :person
+  end
+
+  factory :user_api, parent: :user do
+    after_create do |a|
+      Factory(:person, user: a)
+    end
   end
 
   factory :user_with_auxs, parent: :user do
@@ -343,7 +340,7 @@ FactoryGirl.define do
 
   factory :choice_field, parent: :element do
     kind          'ChoiceField'
-    label         'Which of the following are you interested in? #{Factory.next(:count)}'
+    sequence(:label) {|n| "choice_field_label_#{n}"}
     style         'checkbox'
     content       "Prayer Group\nJesus"
     object_name ''
@@ -476,7 +473,7 @@ FactoryGirl.define do
   end
 
   factory :email_address do
-    email     "email#{Factory.next(:count)}@email.com"
+    sequence(:email) {|n| "email_address_email_#{n}@email.com"}
     association :person
   end
 
@@ -507,8 +504,8 @@ FactoryGirl.define do
   factory :client, class: Rack::OAuth2::Server::Client do
     association :organization
     secret 'mfp'
-    display_name 'foo'
-    link 'bar'
+    sequence(:display_name) {|n| "client_display_name_#{n}"}
+    sequence(:link) {|n| "client_link_#{n}"}
   end
 
   factory :sent_person do

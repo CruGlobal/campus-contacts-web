@@ -4,7 +4,6 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
   def index
     list = add_includes_and_order(organizational_labels)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}

@@ -616,27 +616,39 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def add_contact(person, added_by_id = nil)
+  def add_contact(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      end
     end
   end
 
-  def add_admin(person, added_by_id = nil)
+  def add_admin(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::ADMIN_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+      end
     end
   end
 
-  def add_user(person, added_by_id = nil)
+  def add_user(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::USER_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::USER_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::USER_ID, added_by_id)
+      end
     end
   end
 

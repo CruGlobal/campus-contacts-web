@@ -2,7 +2,6 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
   before_filter :get_contact_assignment, only: [:show, :update, :destroy]
 
   def index
-
     render json: filtered_contact_assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
@@ -17,7 +16,6 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
   def create
     contact_assignment = contact_assignments.new(params[:contact_assignment])
     contact_assignment.organization_id = current_organization.id
-
     if contact_assignment.save
       render json: contact_assignment,
              status: :created,
@@ -40,52 +38,38 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
              status: :unprocessable_entity,
              callback: params[:callback]
     end
-
   end
 
   def bulk_update
-
     error_messages = []
-
     assignments = []
-    
     begin
-
       ActiveRecord::Base.transaction do
-        params[:contact_assignments].collect do |_, assignment|
+        params[:contact_assignments].each do |assignment|
           contact_assignment = assignment[:id] ? contact_assignments.find(assignment.delete(:id)) : contact_assignments.new
           contact_assignment.attributes = assignment
-
           unless contact_assignment.save
             error_messages += contact_assignment.errors.full_messages
           end
-
           assignments << contact_assignment
         end
-
         raise ActiveRecord::RecordInvalid if error_messages.present?
-        
       end
-      
     rescue ActiveRecord::RecordInvalid
       # Rescue the validation error we threw so we can send the error
       # messages back to the user
       render json: {errors: error_messages},
              status: :unprocessable_entity,
              callback: params[:callback]
-
       return
     end
-            
     render json: assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization}
-    
   end
 
   def destroy
     @contact_assignment.destroy
-
     render json: @contact_assignment,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, deleted: true}
@@ -93,15 +77,11 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
 
   def bulk_destroy
     unless params[:filters]
-      render json: {errors: ["You must include a 'filters' parameter for specifying which contact assignments you'd like to delete"]},
-             status: :bad_request,
-             callback: params[:callback]
+      render json: {errors: ["You must include a 'filters' parameter for specifying which contact assignments you'd like to delete"]}, status: :bad_request, callback: params[:callback]
       return
     end
-
     @contact_assignments = filtered_contact_assignments
     @contact_assignments.destroy_all
-
     render json: @contact_assignments,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, deleted: true}

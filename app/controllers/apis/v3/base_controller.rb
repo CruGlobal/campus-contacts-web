@@ -34,11 +34,15 @@ class Apis::V3::BaseController < ApplicationController
       end
     end
 
-    if oauth_access_token && (!current_user || current_user.person.organizations.empty?)
-      render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
-             status: :unauthorized,
-             callback: params[:callback]
-      return false
+    if oauth_access_token
+      if !current_user
+        render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
+               status: :unauthorized,
+               callback: params[:callback]
+        return false
+      elsif current_user && current_organization.nil?
+        render_unauthorized_call
+      end
     end
 
     if params[:secret] && !current_organization
@@ -128,5 +132,10 @@ class Apis::V3::BaseController < ApplicationController
     []
   end
 
+  def render_unauthorized_call(msg = nil)
+    msg ||= "You do not have the correct permission level to make this call."
+    render json: {errors: [msg]}, status: :unauthorized, callback: params[:callback]
+    return false
+  end
 end
 

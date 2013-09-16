@@ -18,11 +18,8 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     interaction = Interaction.new(params[:interaction])
     interaction.organization_id = current_organization.id
     interaction.created_by_id = current_person.id
-
     if interaction.save
-
       interaction.set_initiators(get_initiator_ids)
-
       render json: interaction,
              status: :created,
              callback: params[:callback],
@@ -35,27 +32,35 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
   end
 
   def update
-    params[:interaction].delete(:created_by_id) if params[:interaction].present?
-    params[:interaction][:updated_by_id] = current_person.id if params[:interaction].present?
-    if @interaction.update_attributes(params[:interaction])
-
-      @interaction.set_initiators(get_initiator_ids)
-
-      render json: @interaction,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+    if current_person != @interaction.creator
+      render_unauthorized_call("You did not create this interaction or do not have permission to update it. Please talk to the owner of the interaction.")
     else
-      render json: {errors: interaction.errors.full_messages},
-             status: :unprocessable_entity,
-             callback: params[:callback]
+      params[:interaction].delete(:created_by_id) if params[:interaction].present?
+      params[:interaction][:updated_by_id] = current_person.id if params[:interaction].present?
+      if @interaction.update_attributes(params[:interaction])
+
+        @interaction.set_initiators(get_initiator_ids)
+
+        render json: @interaction,
+               callback: params[:callback],
+               scope: {include: includes, organization: current_organization}
+      else
+        render json: {errors: interaction.errors.full_messages},
+               status: :unprocessable_entity,
+               callback: params[:callback]
+      end
     end
   end
 
   def destroy
-    @interaction.destroy
-    render json: @interaction,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+    if current_person != @interaction.creator
+      render_unauthorized_call("You did not create this interaction or do not have permission to delete it. Please talk to the owner of the interaction.")
+    else
+      @interaction.destroy
+      render json: @interaction,
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization}
+    end
   end
 
   private

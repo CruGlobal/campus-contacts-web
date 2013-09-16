@@ -1,10 +1,9 @@
 class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
-  before_filter :get_organizational_permission, only: [:show, :update, :destroy]
+  before_filter :get_organizational_permission, only: [:show, :update, :destroy, :archive]
 
   def index
     list = add_includes_and_order(organizational_permissions)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
@@ -21,7 +20,9 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     org_permission.organization_id = current_organization.id
     org_permission.added_by_id = current_person.id
 
-    if org_permission.save
+    if org_permission.permission_id == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    elsif org_permission.save
       render json: org_permission,
              status: :created,
              callback: params[:callback],
@@ -34,7 +35,11 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def update
-    if @organizational_permission.update_attributes(params[:organizational_permission])
+    if params[:organizational_permission][:permission_id] == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    elsif @organizational_permission.permission_id == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    elsif @organizational_permission.update_attributes(params[:organizational_permission])
       render json: @organizational_permission,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization}
@@ -46,48 +51,78 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def destroy
-    @organizational_permission.archive
-    render json: @organizational_permission,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+    if @organizational_permission.permission_id == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      @organizational_permission.delete
+      render json: @organizational_permission,
+            callback: params[:callback],
+            scope: {include: includes, organization: current_organization}
+    end
+  end
+
+  def archive
+    if @organizational_permission.permission_id == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      @organizational_permission.archive
+      render json: @organizational_permission,
+            callback: params[:callback],
+            scope: {include: includes, organization: current_organization}
+    end
   end
 
   def bulk
-    add_permissions(filtered_people, params[:add_permission])
-    remove_permissions(filtered_people, params[:remove_permission])
-    set_status(filtered_people, params[:followup_status]) if params[:followup_status]
+    if params[:add_permission].present? && params[:add_permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call("You do not have permission to create the Admin permission level in organization=#{current_organization.id}.")
+    elsif params[:remove_permission].present? && params[:remove_permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call("You do not have permission to destroy the Admin permission level in organization=#{current_organization.id}.")
+    else
+      add_permissions(filtered_people, params[:add_permission])
+      remove_permissions(filtered_people, params[:remove_permission])
+      set_status(filtered_people, params[:followup_status]) if params[:followup_status]
 
-    render json: filtered_people,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
-           root: 'people'
+      render json: filtered_people,
+            callback: params[:callback],
+              scope: {include: includes, organization: current_organization},
+              root: 'people'
+    end
   end
 
   def bulk_create
-    add_permissions(filtered_people, params[:permission])
-
-    render json: filtered_people,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
-           root: 'people'
+    if params[:permission].present? && params[:permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call("You do not have permission to create the Admin permission level in organization=#{current_organization.id}.")
+    else
+      add_permissions(filtered_people, params[:permission])
+      render json: filtered_people,
+              callback: params[:callback],
+              scope: {include: includes, organization: current_organization},
+              root: 'people'
+    end
   end
 
   def bulk_destroy
-    remove_permissions(filtered_people, params[:permission])
-
-    render json: filtered_people,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
-           root: 'people'
+    if params[:permission].present? && params[:permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call("You do not have permission to destroy the Admin permission level in organization=#{current_organization.id}.")
+    else
+      remove_permissions(filtered_people, params[:permission])
+      render json: filtered_people,
+              callback: params[:callback],
+              scope: {include: includes, organization: current_organization},
+              root: 'people'
+    end
   end
 
   def bulk_archive
-    archive_permissions(filtered_people, params[:permission])
-
-    render json: filtered_people,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
-           root: 'people'
+    if params[:permission].present? && params[:permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      archive_permissions(filtered_people, params[:permission])
+      render json: filtered_people,
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization},
+             root: 'people'
+    end
   end
 
 
