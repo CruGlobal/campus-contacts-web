@@ -18,3 +18,6 @@ $ ->
       url: '/movement_indicators/details',
       data: 'name='+$(this).siblings('input').attr('name')
     false
+  $('button.back-button').on 'click', ->
+    history.back();
+

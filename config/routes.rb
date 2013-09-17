@@ -3,6 +3,7 @@ Mh::Application.routes.draw do
   resources :movement_indicators, only: [:index, :create] do
     collection do
       get :details
+      get :error
     end
   end
 

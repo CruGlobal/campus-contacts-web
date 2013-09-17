@@ -6,7 +6,10 @@ class MovementIndicatorsController < ApplicationController
     if current_organization.last_push_to_infobase >= current_organization.last_week
       # don't do anything
     else
-      current_organization.push_to_infobase(params)
+      unless current_organization.push_to_infobase(params)
+        redirect_to error_movement_indicators_path
+        return
+      end
     end
   end
 

@@ -1,0 +1,11 @@
+<div class="titlebar titlebarmod">
+</div>
+
+<div class="error_message">
+  <h1><%= t('movement_indicator_suggestions.index.title', org_name: current_organization) %></h1>
+
+  <p style="padding-left:8px;">There was an error connecting to the Infobase.  Please try again.
+    If you receive this message multiple times, please contact <%= mail_to "support@missionhub.com" %>.</p>
+
+  <%= button_tag "Back", class: 'back-button large_gray' %>
+</div>
