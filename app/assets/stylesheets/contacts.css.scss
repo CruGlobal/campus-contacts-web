@@ -255,7 +255,7 @@
 		width:10px;
 	}
 	.message_body {
-		width: 280px;
+		width: 500px;
 		word-wrap:break-word;
 	}
 }
@@ -433,6 +433,15 @@ input.text.validate-date {
 }
 
 #bulk_send_msg_dialog {
+  #bulk_send_msg_message{
+    margin-bottom: 50px;
+    padding: 5px;
+    padding-left: 40px;
+    min-height: 30px;
+  }
+  #default_email_from_div{
+    padding-left: 20px;
+  }
   .note {
 		margin: 10px 0;
 		font-family: Georgia;
