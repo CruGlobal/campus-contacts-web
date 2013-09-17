@@ -329,19 +329,22 @@ class Person < ActiveRecord::Base
   def all_feeds(current_person, current_organization, page = 1)
     limit = 5
     offset = page > 1 ? (page * limit) - limit : 0
-    interaction_ids = filtered_interactions(current_person, current_organization).collect{|x| x.id}.join(',')
+    interaction_ids = filtered_interactions(current_person, current_organization).collect(&:id).join(',')
     interaction_ids = "0" unless interaction_ids.present?
     survey_ids = current_organization.survey_ids.join(',')
     survey_ids = "0" unless survey_ids.present?
+    message_ids = received_messages_in_org(current_organization.id).collect(&:id).join(',')
+    message_ids = "0" unless message_ids.present?
 
-    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id}")
+    counts = Person.find_by_sql("SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id} UNION SELECT COUNT(people.id) AS COUNT FROM people LEFT JOIN messages ON messages.receiver_id = people.id WHERE people.id = #{id} AND messages.created_at IS NOT NULL AND messages.id IN (#{message_ids})")
+
     total = 0;
     counts.each{|x| total += x['COUNT']}
     max_page = (total.to_f / limit.to_f).ceil
     if page > max_page
       return []
     else
-      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, Timestamp(interactions.timestamp) AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND Timestamp(answer_sheets.completed_at) IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT @var := 'OrganizationalLabel' AS CLASS, organizational_labels.id AS RECORD_ID, Timestamp(organizational_labels.start_date) AS SORT_DATE FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id} ORDER BY Date(SORT_DATE) DESC, Time(SORT_DATE) DESC LIMIT #{limit} OFFSET #{offset}")
+      records = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, Timestamp(interactions.timestamp) AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, answer_sheets.completed_at AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND Timestamp(answer_sheets.completed_at) IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT @var := 'OrganizationalLabel' AS CLASS, organizational_labels.id AS RECORD_ID, Timestamp(organizational_labels.start_date) AS SORT_DATE FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id} UNION SELECT @var := 'Message' AS CLASS, messages.id AS RECORD_ID, messages.created_at AS SORT_DATE FROM people LEFT JOIN messages ON messages.receiver_id = people.id WHERE people.id = #{id} AND Timestamp(messages.created_at) IS NOT NULL AND messages.id IN (#{message_ids}) ORDER BY Date(SORT_DATE) DESC, Time(SORT_DATE) DESC LIMIT #{limit} OFFSET #{offset}")
       return records.collect{|x| x['CLASS'].constantize.find(x['RECORD_ID']) }
     end
   end
@@ -351,13 +354,19 @@ class Person < ActiveRecord::Base
     interaction_ids = "0" unless interaction_ids.present?
     survey_ids = current_organization.survey_ids.join(',')
     survey_ids = "0" unless survey_ids.present?
-    record = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, Timestamp(interactions.timestamp) AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, Timestamp(answer_sheets.completed_at) AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT @var := 'OrganizationalLabel' AS CLASS, organizational_labels.id AS RECORD_ID, Timestamp(organizational_labels.start_date) AS SORT_DATE FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id} ORDER BY Date(SORT_DATE) ASC, Time(SORT_DATE) ASC LIMIT 1")
+    message_ids = received_messages_in_org(current_organization.id).collect(&:id).join(',')
+    message_ids = "0" unless message_ids.present?
+    record = Person.find_by_sql("SELECT @var := 'Interaction' AS CLASS, interactions.id AS RECORD_ID, Timestamp(interactions.timestamp) AS SORT_DATE FROM people LEFT JOIN interactions ON interactions.receiver_id = people.id WHERE people.id = #{id} AND interactions.id IN (#{interaction_ids}) UNION SELECT @var := 'AnswerSheet' AS CLASS, answer_sheets.id AS RECORD_ID, Timestamp(answer_sheets.completed_at) AS SORT_DATE FROM people LEFT JOIN answer_sheets ON answer_sheets.person_id = people.id WHERE people.id = #{id} AND answer_sheets.completed_at IS NOT NULL AND answer_sheets.survey_id IN (#{survey_ids}) UNION SELECT @var := 'OrganizationalLabel' AS CLASS, organizational_labels.id AS RECORD_ID, Timestamp(organizational_labels.start_date) AS SORT_DATE FROM people LEFT JOIN organizational_labels ON organizational_labels.person_id = people.id WHERE organizational_labels.organization_id = #{current_organization.id} AND people.id = #{id} UNION SELECT @var := 'Message' AS CLASS, messages.id AS RECORD_ID, messages.created_at AS SORT_DATE FROM people LEFT JOIN messages ON messages.receiver_id = people.id WHERE people.id = #{id} AND Timestamp(messages.created_at) IS NOT NULL AND messages.id IN (#{message_ids}) ORDER BY Date(SORT_DATE) ASC, Time(SORT_DATE) ASC LIMIT 1")
     return [] unless record.present?
     return record.first['CLASS'].constantize.find(record.first['RECORD_ID'])
   end
 
   def messages_in_org(org_id)
     sent_messages.where("organization_id = ?", org_id).order('created_at DESC')
+  end
+
+  def received_messages_in_org(org_id)
+    received_messages.where("organization_id = ?", org_id).order('created_at DESC')
   end
 
   def permission_for_org_id(org_id)

@@ -1,0 +1,32 @@
+<div class="feed_box survey_display">
+	<div class="feed_icon">
+    <% if message.sent_via == "sms" || message.sent_via == "sms_email" %>
+      <%= image_tag("comment.png", class: 'tip', title: "SMS") %>
+    <% elsif message.sent_via == "email" %>
+      <%= image_tag("mail.png", class: 'tip', title: "Email") %>
+    <% end %>
+  </div>
+	<div class="feed_item_header">
+    <span class="feed_item_date"><%= wiser_date(message.created_at, custom_class: 'tip') %></span>
+	  <span class="feed_item_privacy">
+      <strong>Visible to:</strong>
+      <%= "Everyone in #{message.organization.name}" %>
+    </span>
+	</div>
+  <% if message.sender.present? %>
+	<div class="feed_item_content">
+    <strong><%= message.sender.name %></strong> sent
+    <%= message.sent_via == "sms" ? "sms to" : "an email to" %>
+    <%= message.to %>.
+  </div>
+  <% end %>
+  <% if message.message.present? %>
+    <div class="feed_item_comment">
+      <% if message.subject.present? %>
+        <strong><%= message.subject %></strong>
+        <br/>
+      <% end %>
+      “<%= message.message %>”
+    </div>
+  <% end %>
+</div>

@@ -10,7 +10,7 @@ class PhoneNumber < ActiveRecord::Base
   validate do |value|
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      unless (phone_number =~ /^(\d|\ |\/|\(|\)|\-){1,100}$/)
+      unless (phone_number =~ /^(\d|\+|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
       else
         self[:number] = PhoneNumber.strip_us_country_code(phone_number)
@@ -29,20 +29,32 @@ class PhoneNumber < ActiveRecord::Base
 
   def self.strip_us_country_code(num)
     return unless num
-    num = num.to_s.strip.gsub(/[^\d]/, '')
+    num = num.to_s.strip.gsub(/[^\d|\+]/, '')
     num.length == 11 && num.first == '1' ? num[1..-1] : num
   end
 
   def pretty_number
-    case number.length
-    when 7
-      "#{number[0..2]}-#{number[3..-1]}"
-    when 10
-      "(#{number[0..2]}) #{number[3..5]}-#{number[6..-1]}"
-    when 11
-      "(#{number[0..3]}) #{number[4..6]}-#{number[7..-1]}"
+    case
+    # Hungary
+    when number =~ /^\+36/
+      "#{number[0..2]} #{number[3]} #{number[4..6]}-#{number[7..10]}"
+    when number =~ /^06/
+      area_code = number.length == 10 ? number[2] : number[2..3]
+      "#{number[0..1]} #{area_code} #{number[-7..-5]}-#{number[-4..-1]}"
     else
-      number
+      # General US formatting
+      case number.length
+      when 7
+        "#{number[0..2]}-#{number[3..-1]}"
+      when 10
+        "(#{number[0..2]}) #{number[3..5]}-#{number[6..-1]}"
+      when 9
+        "#{number[0..1]} #{number[-7..-5]}-#{number[-4..-1]}"
+      when 8
+        "#{number[0]} #{number[-7..-5]}-#{number[-4..-1]}"
+      else
+        number
+      end
     end
   end
 

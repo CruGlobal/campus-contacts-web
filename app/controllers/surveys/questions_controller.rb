@@ -188,7 +188,7 @@ class Surveys::QuestionsController < ApplicationController
         settings = current_organization.settings
         settings[:visible_predefined_questions] = Array.new if settings[:visible_predefined_questions].nil?
         settings[:visible_predefined_questions] << @question.id
-        current_organization.update_attribute(:settings, settings)
+        current_organization.save(validate: false)
       else
         @survey = Survey.find(params[:survey_id])
         @organization = @survey.organization
