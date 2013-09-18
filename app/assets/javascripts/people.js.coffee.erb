@@ -423,7 +423,11 @@ $('#send_bulkemail_link_new, #action_menu_email').live 'click', (e)->
 
 $('#change_default_email').live 'click', ()->
   if $(this).is(':checked')
-    $("#preview_from").html($("#send_as_phone_number option:selected").text())
+    selected = $("#send_as_phone_number option:selected")
+    if selected.val() > 0
+      $("#preview_from").html(selected.text())
+    else
+      $("#preview_from").html($(this).attr("data-current-user"))
   else
     $("#preview_from").html($(this).attr("data-current-user"))
   $("#default_email_from_div").toggle()
