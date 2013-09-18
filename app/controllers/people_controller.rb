@@ -405,7 +405,7 @@ class PeopleController < ApplicationController
           current_person_send_as = current_person.phone_numbers.where("id = ?", params[:send_as_phone_number])
           from = I18n.t('general.default_email_from')
           if current_person_send_as.present?
-            from = current_person_send_as.first.number.to_s + t("general.sms_append_to_phone_number")
+            from = current_person_send_as.first.number.to_s + I18n.t("general.sms_append_to_phone_number")
           end
 
           @message = current_person.sent_messages.create(

@@ -695,6 +695,18 @@ class Person < ActiveRecord::Base
     p
   end
 
+  def txt_to_email_phone_numbers
+    all_phone_numbers = phone_numbers.order("phone_numbers.primary DESC, phone_numbers.number ASC")
+    if all_phone_numbers.present?
+      numbers = all_phone_numbers.collect {|phone|
+        number = phone.number.to_s + I18n.t("general.sms_append_to_phone_number")
+        [(phone.primary) ? "#{number} (Primary)" : number, phone.id]
+      }
+    else
+      numbers = [[I18n.t("general.sms_no_phone_numbers"), 0]]
+    end
+    numbers
+  end
 
   delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_or_blank_address
 
