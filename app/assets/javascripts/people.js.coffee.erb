@@ -476,9 +476,18 @@ $('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
   $('#bulk_send_msg_dialog #bulk_send_body').keyup ->
     $('#preview_body').html($(this).val())
 
-  $("#change_default_email").prop 'checked', false
-  $("#default_email_from_div").hide()
-  $("#preview_from").html($(this).attr("data-current-user"))
+  # Start Set default for Send Text 'Send as' option
+  $("#change_default_email").prop 'checked', true
+  $("#default_email_from_div").show()
+  if $("#change_default_email").is(':checked')
+    selected = $("#send_as_phone_number option:selected")
+    if selected.val() > 0
+      $("#preview_from").html(selected.text())
+    else
+      $("#preview_from").html($("#change_default_email").attr("data-current-user"))
+  else
+    $("#preview_from").html($("#change_default_email").attr("data-current-user"))
+  # End Set default for Send Text 'Send as' option
 
   total_chars = 0
   $('.message_desc').each ->

@@ -14,7 +14,7 @@
           <br/>
           <div>
             <div>
-              <%= check_box_tag "change_default_email", 1, false, id: "change_default_email", "data-current-user" => current_user %>
+              <%= check_box_tag "change_default_email", 1, true, id: "change_default_email", "data-current-user" => current_user %>
               <%=raw t('general.sms_change_default_email_desc', default_email_from: t('general.default_email_from')) %>
             </div>
             <div id="default_email_from_div" style="display: none;">
