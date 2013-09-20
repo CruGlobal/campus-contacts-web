@@ -4,8 +4,16 @@
       <%= link_to raw("<button class='red_accent full_width_button'>#{t('people.left_sidebar.profile', name: @person.first_name)}</button>"), profile_path(@person) %>
       <% if params[:action] == "edit" %>
         <%= link_to raw("<button class='action_gray full_width_button'>#{t('people.left_sidebar.survey_answers')}</button>"), survey_response_path(@person) %>
-      <% else %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.answer_other_surveys')}</button>"), :controller => "survey_responses", :action => "answer_other_surveys", :id => @person.id %>
+
+      <% elsif params[:action] == "answer_other_surveys" %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('people.left_sidebar.survey_answers')}</button>"), survey_response_path(@person) %>
         <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+
+      <% else %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.answer_other_surveys')}</button>"), :controller => "survey_responses", :action => "answer_other_surveys", :id => @person.id %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+
       <% end %>
     </div>
   </div>

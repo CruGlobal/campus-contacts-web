@@ -79,6 +79,7 @@ Mh::Application.routes.draw do
     end
   end
 
+  match 'survey_responses/:id/answer_other_surveys' => 'survey_responses#answer_other_surveys', as: "answer_other_surveys"
   resources :survey_responses do
     collection do
       get :thanks

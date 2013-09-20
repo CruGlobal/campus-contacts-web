@@ -286,7 +286,7 @@ class ContactsControllerTest < ActionController::TestCase
       @contact.save(validate: false)
       @user.person.organizations.first.add_contact(@contact)
       put :update, id: @contact.id, person: {last_name: 'Jake'}
-      assert_redirected_to edit_survey_response_path(@contact)
+      assert_redirected_to survey_response_path(@contact)
     end
 
     should "remove a contact from an organization" do
