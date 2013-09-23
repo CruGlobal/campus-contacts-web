@@ -294,7 +294,14 @@ class ApplicationController < ActionController::Base
 
   def user_root_path
     if mhub?
-      render_404
+      if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
+        url = "/c/#{cookies[:keyword]}"
+      elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
+        url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
+      else
+        url = "/users/sign_in"
+      end
+      return url
     else
       return '/dashboard'
     end
