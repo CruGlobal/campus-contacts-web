@@ -24,7 +24,7 @@
         <% if mhub? %>
           <% if !@survey || [0, 1].include?(@survey.login_option) %>
             <div class="info">
-              <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:24px;'>
+              <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:34px;'>
                 <%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
               </span><br>
             </div>
@@ -44,7 +44,7 @@
           <% end %>
         <% else %>
           <div class="info">
-            <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:24px;'>
+            <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:34px;'>
                 <%= t('.login_with_facebook') %>
             </span><br>
           </div>
