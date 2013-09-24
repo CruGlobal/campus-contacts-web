@@ -48,8 +48,4 @@ $.blur('#add_contact_div .mh_popup_box_scroller', 'hide')
 $.toggleLoader('add_contact_title','')
 
 $('#<%= dom_id(@person) %>').effect('highlight')
-
-$('#new_person').find('input[type=text], textarea').not('.default').val('')
-$('#new_person').find('input[type=checkbox], checkbox').not('.default').removeAttr('checked')
-$('#new_person').find('input[type=radio], radio').not('.default').removeAttr('checked')
-$('#new_person').find('select').not('.default').val(0)
+$.fn.reset_add_contact_form()
