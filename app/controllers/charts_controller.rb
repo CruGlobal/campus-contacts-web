@@ -243,12 +243,12 @@ class ChartsController < ApplicationController
 
     if MovementIndicator.semester.include?(@current_criteria)
       stats.each do |stat|
-        @data_points[Date.parse(stat["period_end"])] = stat[criteria]
+        @data_points[Date.parse(stat["period_end"])] = stat[criteria].to_i
       end
     elsif MovementIndicator.weekly.include?(@current_criteria)
       total = 0
       stats.each do |stat|
-        total += stat[criteria]
+        total += stat[criteria].to_i
         @data_points[Date.parse(stat["period_end"])] = total
       end
     end
