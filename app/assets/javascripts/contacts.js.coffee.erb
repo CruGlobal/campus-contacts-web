@@ -853,6 +853,12 @@ $ ->
     false
 
 $.fn.show_add_contact = () ->
+  $.fn.reset_add_contact_form()
+  $.blur('#add_contact_div .mh_popup_box_scroller','hide')
+  $.toggleLoader('add_contact_title','')
+  $.showDialog($("#add_contact_div"))
+
+$.fn.reset_add_contact_form = () ->
   $(".field_with_errors, .red_errors, #add_contact_form .remove_in_add_contact").remove()
   $("#add_contact_form input[type='text']").val("")
   $("#add_contact_form textarea").val("")
@@ -862,9 +868,6 @@ $.fn.show_add_contact = () ->
   $(".form_group_fields .permission_checkbox.no_permissions").attr("checked",true)
   disabled = $("#add_contact_form input[type='checkbox']:not(:disabled)")
   disabled.attr("checked",false)
-  $.blur('#add_contact_div .mh_popup_box_scroller','hide')
-  $.toggleLoader('add_contact_title','')
-  $.showDialog($("#add_contact_div"))
 
 $.fn.search_status = () ->
   check = $(".search_status :selected").val() != ""
