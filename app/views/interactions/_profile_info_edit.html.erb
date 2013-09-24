@@ -38,30 +38,31 @@
     	<div class="gender col_left">Assigned To:</div>
     	<div class="gender col_right" id="assigned_to_div">
         <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
-        <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.first.assigned_to_id : '0' %>
+        <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.collect(&:id).join(",") : '0' %>
         <%= text_field_tag :assigned_to_id, current_id, id: 'assigned_to_id', class: 'hidden' %>
-        <div id="assigned_to_dropdown" class="custom_dropdown edit" data-current-id="<%= current_id %>">
+        <div id="assigned_to_dropdown" class="custom_dropdown edit assigned_to_dropdown" data-current-id="<%= current_id %>">
           <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
           <div id="selected">
-            <% if @assigned_tos.nil? || @assigned_tos.first.nil? || @assigned_tos.first.assigned_to.nil? || @assigned_tos.count == 0 %>
+            <% if @assigned_tos.nil? || @assigned_tos.first.nil? || @assigned_tos.first.nil? || @assigned_tos.count == 0 %>
               <%= "Unassigned" %>
             <% elsif @assigned_tos.count > 1 %>
               <%= "#{@assigned_tos.count} people selected" %>
             <% else %>
-              <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
+              <% assigned_to = @assigned_tos.first %>
+              <%= assigned_to == current_person ? "#{assigned_to.first_name} (Me)" : "#{assigned_to.name}" %>
             <% end %>
           </div>
           <div id="togglable">
             <div id="default_leader_options" class="edit">
-              <div class="option leader" data-id="0">
-                <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
+              <div class="option unassigned" data-id="0">
+                <%= check_box_tag 'leader_id[]', 0, false, class: "unassigned_box", id: "leader_0", "data-id" => "0" %>
                 <div class="leader_name dropdown_name">Unassigned</div>
               </div>
-              <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
+              <% if current_person.leader_for_org(current_organization) %>
                 <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
               <% end %>
-              <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
-                <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment.assigned_to} %>
+              <% @assigned_tos.where("id <> ?", current_person.id).each do |assignment| %>
+                <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment} %>
               <% end %>
             </div>
             <div class="search">

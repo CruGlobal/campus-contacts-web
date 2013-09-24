@@ -1,0 +1,18 @@
+<% if @assign_to.present? %>
+  $('#person_info .title.assigned_to_leader').html('<%= I18n.t("people.show.assigned_to", assigned_to: "#{@assign_to}") %>')
+  $('#followup_comment_status').val('uncontacted')
+<% else %>
+  $('#person_info .title.assigned_to_leader').html('')
+  if("<%= params[:assign_to] %>" == 'do_not_contact'){
+    $('#followup_comment_status').val('do_not_contact')
+  }else if("<%= params[:assign_to] %>" == ''){
+    $('#followup_comment_status').val('uncontacted')
+  }
+<% end %>
+<% if @person.present? %>
+  $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
+  $('.feed_content .tab_content.profile_info .edit_space').html("<%= escape_javascript(render partial: 'interactions/profile_info_edit') %>")
+<% end %>
+$.toggleLoader('profile_name','')
+$.toggleLoader('ac_button_bar','')
+$.fn.listCheckboxes()

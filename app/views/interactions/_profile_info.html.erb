@@ -22,41 +22,17 @@
   	</div>
   <% end %>
 
-	<div class="status col_left">Assigned To:</div>
-	<div class="status col_right" id="assigned_to_div">
-    <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
-    <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.first.assigned_to_id : '0' %>
-    <div id="assigned_to_dropdown" class="custom_dropdown view" data-current-id="<%= current_id %>">
-      <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
-      <div id="selected">
-        <% if @assigned_tos.nil? || @assigned_tos.first.nil? || @assigned_tos.count == 0 %>
-          <%= "Unassigned" %>
-        <% elsif @assigned_tos.count > 1 %>
-          <%= "#{@assigned_tos.count} people selected" %>
-        <% else %>
-          <%= @assigned_tos.first.assigned_to == current_person ? "#{@assigned_tos.first.assigned_to.first_name} (Me)" : "#{@assigned_tos.first.assigned_to.name}" %>
+  <% if @assigned_tos.count >= 1 %>
+  	<div class="gender col_left">Assigned To:</div>
+  	<div class="gender col_right" id="assigned_to_div">
+      <% @assigned_tos.each do |assigned_to| %>
+        <% if assigned_to.present? %> 
+          <%= link_to assigned_to.name, profile_path(assigned_to.id) %>
+          <br/>
         <% end %>
-      </div>
-      <div id="togglable">
-        <div id="default_leader_options" class="view">
-          <div class="option leader" data-id="0">
-            <%= check_box_tag 'leader_id[]', 0, false, class: "leader_box", id: "leader_0", "data-id" => "0" %>
-            <div class="leader_name dropdown_name">Unassigned</div>
-          </div>
-          <% if current_person.labeled_in_org?(Label.leader, current_organization) %>
-            <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
-          <% end %>
-          <% @assigned_tos.where("assigned_to_id <> ?", current_person.id).each do |assignment| %>
-            <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment.assigned_to} %>
-          <% end %>
-        </div>
-        <div class="search">
-          <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", class: "view", "data-person-id" => @person.id %>
-        </div>
-        <div class="results view" id="search_leader_results"></div>
-      </div>
+      <% end %>
     </div>
-  </div>
+  <% end %>
 
   <% if @person.gender.present? %>
   	<div class="gender col_left"><%= t('general.gender') %>:</div>

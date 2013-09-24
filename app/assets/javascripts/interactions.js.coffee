@@ -139,50 +139,58 @@ $ ->
     e.preventDefault()
     $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
 
-  $('#assigned_to_dropdown.view, #assigned_to_dropdown.view #selected').live 'click', (e)->
-    assigned_to_id = $('#assigned_to_dropdown.view').attr('data-current-id')
-    $("#assigned_to_dropdown.view .option.leader[data-id='" + assigned_to_id  + "'] input").prop('checked',true)
+  $('#default_leader_options.edit .option.unassigned input').live 'change', (e)->
+    $('#assigned_to_dropdown.edit .option input.leader_box').prop('checked',false)
+    $('#assigned_to_dropdown.edit .option input.unassigned_box').prop('checked',true)
+    $('#assigned_to_id').val("0")
+    $('#assigned_to_dropdown.edit #selected').text("Unassigned")
 
-  $('#assigned_to_dropdown.edit, #assigned_to_dropdown.edit #selected').live 'click', (e)->
-    assigned_to_id = $('#assigned_to_dropdown.edit').attr('data-current-id')
-    $("#assigned_to_dropdown.edit .option.leader[data-id='" + assigned_to_id  + "'] input").prop('checked',true)
-
-  $('#assigned_to_dropdown.edit .option').live 'click', (e)->
-    $('#assigned_to_dropdown.edit input.leader_box').prop('checked',false)
-    checkbox = $(this).children('input.leader_box').eq(0)
-    checkbox.prop('checked',true)
-    selected_name = checkbox.siblings('.leader_name').text()
-    checkbox.change()
-    $('#assigned_to_id').val(checkbox.attr('data-id'))
+  $('#default_leader_options.edit .option.leader input').live 'change', (e)->
+    $('#default_leader_options.edit .option.unassigned input').prop('checked',false)
+    checked = $('#assigned_to_dropdown.edit .option input.leader_box:checked')
+    checkbox = checked.eq(0)
+    checked_count = checked.size()
+    if checked_count == 0
+      $('#assigned_to_dropdown.edit .option input.unassigned_box').prop('checked',true)
+      value = "0"
+      selected_name = "Unassigned"
+    else if checked_count > 1
+      value = checked.map ->
+        return $(this).attr('data-id')
+      value = value.get().join()
+      selected_name = checked_count + " people selected"
+    else
+      value = checkbox.attr('data-id')
+      selected_name = checkbox.siblings('.leader_name').text()
+    $('#assigned_to_id').val(value)
     $('#assigned_to_dropdown.edit #selected').text(selected_name)
-    $('#assigned_to_dropdown.edit').removeClass('active')
 
-  $('#assigned_to_dropdown.view .option').live 'click', (e)->
-    $('#assigned_to_dropdown.view input.leader_box').prop('checked',false)
-    checkbox = $(this).children('input.leader_box').eq(0)
-    checkbox.prop('checked',true)
-    selected_name = checkbox.siblings('.leader_name').text()
-    checkbox.change()
-    $('#assigned_to_id').val(checkbox.attr('data-id'))
-    $('#assigned_to_dropdown.view #selected').text(selected_name)
-    $('#assigned_to_dropdown.view').removeClass('active')
-    $('#info_edit_save_button').click()
 
-  $('#search_leader_results.view .option.leader input').live 'change', (e)->
+  $('#search_leader_results.edit .option.leader input').live 'change', (e)->
     if $(this).is(':checked')
       data_id = $(this).attr('data-id')
-      if $('#default_leader_options.edit .option.receiver[data-id=' + data_id + ']').size() == 0
+      if $('#default_leader_options.edit .option.leader[data-id=' + data_id + ']').size() == 0
         $('#default_leader_options.edit').append($(this).parents('.option'))
       else
-        $(this).parents('.option').remove()
-
-  $('#search_leader_results.view .option.leader input').live 'change', (e)->
-    if $(this).is(':checked')
-      data_id = $(this).attr('data-id')
-      if $('#default_leader_options.view .option.receiver[data-id=' + data_id + ']').size() == 0
-        $('#default_leader_options.view').append($(this).parents('.option'))
-      else
-        $(this).parents('.option').remove()
+        $(this).parents('.option').remove() 
+    $('#default_leader_options.edit .option.unassigned input').prop('checked',false)
+    checked = $('#assigned_to_dropdown.edit .option input.leader_box:checked')
+    checkbox = checked.eq(0)
+    checked_count = checked.size()
+    if checked_count == 0
+      $('#assigned_to_dropdown.edit .option input.leader_box.unassigned_box').prop('checked',true)
+      value = "0"
+      selected_name = "Unassigned"
+    else if checked_count > 1
+      value = checked.map ->
+        return $(this).attr('data-id')
+      value = value.get().join()
+      selected_name = checked_count + " people selected"
+    else
+      value = checkbox.attr('data-id')
+      selected_name = checkbox.siblings('.leader_name').text()
+    $('#assigned_to_id').val(value)
+    $('#assigned_to_dropdown.edit #selected').text(selected_name) 
 
   $('#search_leader_field.edit').live 'keyup', (e)->
     e.preventDefault()
@@ -192,20 +200,6 @@ $ ->
       $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
       ids = []
       $("#default_leader_options.edit .option.leader").each ->
-        ids.push($(this).attr('data-id'))
-      ids = ids.join(",")
-      $.ajax
-        type: 'GET',
-        url: '/interactions/search_leaders?keyword=' + $(this).val() + '&person_id=' + $(this).attr('data-person-id') + '&except=' + ids
-
-  $('#search_leader_field.view').live 'keyup', (e)->
-    e.preventDefault()
-    if $(this).val() == ""
-      $(this).removeClass("ui-autocomplete-input ui-autocomplete-loading")
-    if $(this).val().length > 2
-      $(this).addClass("ui-autocomplete-input ui-autocomplete-loading")
-      ids = []
-      $("#default_leader_options.view .option.leader").each ->
         ids.push($(this).attr('data-id'))
       ids = ids.join(",")
       $.ajax
@@ -474,6 +468,10 @@ $ ->
     unless $(this).parents('.custom_dropdown').first().hasClass('active')
       $('.custom_dropdown').removeClass('active')
       $(this).parents('.custom_dropdown').first().addClass('active')
+      if $(this).parents('.custom_dropdown').hasClass('assigned_to_dropdown')
+        selected = $(this).parents('.custom_dropdown').attr("data-current-id").split(",")
+        for id in selected
+          $("#leader_" + id).prop('checked',true)
 
   $('.interaction_field.more_div .more_options_link').live 'click', (e)->
     e.preventDefault()

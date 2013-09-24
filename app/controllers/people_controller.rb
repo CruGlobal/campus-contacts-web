@@ -237,18 +237,21 @@ class PeopleController < ApplicationController
     authorize! :edit, @person
 
     if params[:assigned_to_id].present?
-      leader_id = params[:assigned_to_id].to_i
-      if leader_id == 0
+      if params[:assigned_to_id] == 0
         @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
       else
-        if leader = current_organization.leaders.where(id: leader_id).try(:first)
-          @person.assigned_tos.delete_all
-          new_assignment = @person.assigned_tos.new(organization_id: current_organization.id, assigned_to_id: leader_id)
-          new_assignment.save
+        leader_ids = params[:assigned_to_id].split(",")
+        @person.assigned_tos.delete_all
+        leader_ids.each do |leader_id|
+          if leader = current_organization.leaders.where(id: leader_id).try(:first)
+            new_assignment = @person.assigned_tos.new(organization_id: current_organization.id, assigned_to_id: leader_id)
+            new_assignment.save
+          end
         end
       end
     end
-    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+    @assigned_tos = @person.assigned_to_people_by_org(current_organization)
+    
     respond_to do |format|
       if @person.update_attributes(params[:person])
         @person.update_date_attributes_updated
