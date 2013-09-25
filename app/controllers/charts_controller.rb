@@ -91,8 +91,17 @@ class ChartsController < ApplicationController
 
     if can? :manage, @current_movement
       attribs = params["organizational_goal"]
-      start_date = Date.civil(attribs["start_date(1i)"].to_i, attribs["start_date(2i)"].to_i, attribs["start_date(3i)"].to_i)
-      end_date = Date.civil(attribs["end_date(1i)"].to_i, attribs["end_date(2i)"].to_i, attribs["end_date(3i)"].to_i)
+      begin
+        start_date = Date.parse(attribs["start_date"]) if attribs["start_date"].present?
+      rescue
+        start_date = nil
+      end
+
+      begin
+        end_date = Date.parse(attribs["end_date"]) if attribs["end_date"].present?
+      rescue
+        end_date = nil
+      end
 
       @goal.start_date = start_date
       @goal.end_date = end_date
@@ -219,7 +228,7 @@ class ChartsController < ApplicationController
     begin_date = Date.today - 3.months
     end_date = Date.today
 
-    if @goal.id?
+    if @goal.id? && @goal.valid?
       begin_date = @goal.start_date
       end_date = @goal.end_date
     end
@@ -232,7 +241,7 @@ class ChartsController < ApplicationController
     end
 
     @goal_line = {}
-    if @goal.id?
+    if @goal.id? && @goal.valid?
       @goal_line[@goal.start_date] = @goal.start_value
       @goal_line[@goal.end_date] = @goal.end_value
     end

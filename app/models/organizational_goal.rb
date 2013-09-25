@@ -7,7 +7,7 @@ class OrganizationalGoal < ActiveRecord::Base
   validates_uniqueness_of :criteria, scope: :organization_id
 
   def date_check
-    if start_date >= end_date
+    if start_date.present? && end_date.present? && start_date >= end_date
       errors.add(:start_date, "must be before End date")
     end
   end

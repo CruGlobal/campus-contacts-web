@@ -7,11 +7,11 @@
       <%= f.error_messages %>
     </div>
   Starting Date:<br/>
-    <%= f.date_select(:start_date, start_year: Time.now.year - 3, end_year: Time.now.year) %><br/>
+    <%= f.text_field :start_date, class: 'datepicker' %><br/>
     Starting Amount:
     <%= f.text_field(:start_value) %><br/>
     Ending Date:<br/>
-    <%= f.date_select(:end_date, start_year: Time.now.year - 3, end_year: Time.now.year) %><br/>
+    <%= f.text_field :end_date, class: 'datepicker' %><br/>
     Ending Amount:
     <%= f.text_field(:end_value) %><br/>
     <%= f.submit 'Save', class: 'large_red', id: 'save_goal_button' %>
@@ -29,5 +29,8 @@
   $('input#save_goal_button').bind('click', function(){
     $('div#goal_container, div#goal_box').hide();
     $('div#goal_spinner, div#goal_box_spinner').show();
+  });
+  $(function() {
+      $("input.datepicker").datepicker({dateFormat: 'yy-mm-dd', minDate: '<%= (Date.today - 3.years).to_s %>'});
   });
 </script>
