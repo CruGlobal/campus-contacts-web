@@ -31,6 +31,10 @@ class Survey < ActiveRecord::Base
     title
   end
 
+  def predefined_questions
+    self.questions.where("object_name IS NOT NULL AND attribute_name IS NOT NULL")
+  end
+
   # def questions_before_position(position)
   #   self.elements.where(["#{SurveyElement.table_name}.position < ?", position])
   # end
