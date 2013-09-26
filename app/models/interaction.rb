@@ -8,7 +8,7 @@ class Interaction < ActiveRecord::Base
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id', touch: true
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id', touch: true
 
-  scope :sorted, order('created_at DESC')
+  scope :sorted, order('interactions.created_at DESC')
   scope :limited, limit(5)
   after_save :ensure_timestamp
 
