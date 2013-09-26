@@ -71,6 +71,7 @@ class InteractionsController < ApplicationController
     if @people.count == 1
       @person = @people.first
     end
+    permissions_for_assign
   end
 
   def create_label
