@@ -16,40 +16,39 @@
 		<div data-role="page">
        <div data-role="header">
          <div data-role="header" role="banner">
-           <h1 style='font-family:helvetica;font-size:44px;'><%= t('.login') %></h1>
+           <div class="header_login"><%= t('.login') %></div>
          </div>
       </div>
 	    <div data-role="content">
         <% title t('.welcome') %>
+        <br/>
         <% if mhub? %>
           <% if !@survey || [0, 1].include?(@survey.login_option) %>
             <div class="info">
-              <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:34px;'>
-                <%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
-              </span><br>
+              <%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %>
             </div>
+            <br/>
+            <hr>
+            <br/><br/>
             <div class="info">
-              <center>
-                <%= link_to(image_tag('fb_login_button_new.png'), "/users/auth/#{mhub? ? :facebook_mhub : :facebook}", id: 'facebook_button', rel: 'external', alt: t('.login_with_facebook'), style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
-                <% if cookies[:survey_mode].present? %>
-                  <span id="waiting"><%= t('.waiting_for_logout') %></span>
-                <% end %>
-              </center>
+              <%= link_to(image_tag('fb_login_button_new.png'), "/users/auth/#{mhub? ? :facebook_mhub : :facebook}", id: 'facebook_button', rel: 'external', alt: t('.login_with_facebook'), style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
+              <% if cookies[:survey_mode].present? %>
+                <span id="waiting"><%= t('.waiting_for_logout') %></span>
+              <% end %>
             </div>
             <% if @survey && @survey.login_option == 0 %>
-              <div class="info"><br/><br/>
-                <center><%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %></center>
+              <div class="info">
+                <br/><br/>
+                <%= link_to(t('.no_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) : "/s/#{cookies[:survey_id]}?nologin=true") %>
               </div>
             <% end %>
           <% end %>
         <% else %>
           <div class="info">
-            <span style='text-align:center; width:100%;display:block;font-family:helvetica;font-size:34px;'>
-                <%= t('.login_with_facebook') %>
-            </span><br>
+            <%= t('.login_with_facebook') %>
           </div>
           <div class="info">
-            <center><%= link_to(image_tag('fb_login_button_new.png'), "/users/auth/#{mhub? ? :facebook_mhub : :facebook}", rel: 'external', alt: t('.login_with_facebook')) %></center>
+            <%= link_to(image_tag('fb_login_button_new.png'), "/users/auth/#{mhub? ? :facebook_mhub : :facebook}", rel: 'external', alt: t('.login_with_facebook')) %>
           </div>
         <% end %>
 		  </div>
