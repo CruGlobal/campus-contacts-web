@@ -9,9 +9,7 @@ if($('#profile_label_box').size() > 0){
   <% end %>
 <% end %>
 
-$.showDialog($("#profile_permissions_dialog"))
 $("#profile_permissions_dialog").replaceWith("<%= j(render('dialogs/dialog_permissions')) %>")
-$.hideDialog($("#profile_permissions_dialog"))
 
 $("#assign_search").addClass('should_reload')
 $.toggleLoader('profile_name','')
