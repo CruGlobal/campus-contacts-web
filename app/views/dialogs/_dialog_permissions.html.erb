@@ -5,7 +5,7 @@
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Permissions</span></div>
     	<div class="fancy">
         Apply selected permission to
-        <span class="selected_contacts_name"><%= @person.name %></span>:
+        <span class="selected_contacts_name"><%= @person.present? ? @person.name : current_person %></span>:
       </div>
     	<div class="permissions_chooser_box" id="permissions_chooser_box">
         <% current_permission_ids = Array.new %>

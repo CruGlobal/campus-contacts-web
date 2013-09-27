@@ -119,7 +119,11 @@ Mh::Application.routes.draw do
 
   resources :followup_comments, :only => [:index, :create, :destroy]
 
-  resources :contact_assignments, :only => [:create]
+  resources :contact_assignments, :only => [:create] do
+    collection do
+      delete :destroy
+    end
+  end
 
   resources :ministries
 
