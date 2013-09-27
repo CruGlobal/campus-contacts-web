@@ -16,7 +16,7 @@ class InteractionsController < ApplicationController
 			@labels = @person.assigned_organizational_labels(current_organization.id).uniq
 			@permission = @person.assigned_organizational_permissions(current_organization.id).first
       @groups = @person.groups_for_org_id(current_organization.id)
-      @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+      @assigned_tos = @person.assigned_to_people_by_org(current_organization)
       @friends = @person.friends_in_orgnization(current_organization)
       @received_emails = @person.received_messages_in_org(current_organization.id)
       if can? :manage, @person
@@ -65,12 +65,13 @@ class InteractionsController < ApplicationController
     @people.each do |person|
       current_organization.change_person_permission(person, @permission_id, current_person.id)
       @permissions = person.permissions_for_org_id(current_organization.id)
-      @assigned_tos = person.assigned_tos.where("contact_assignments.organization_id" => current_organization.id)
+      @assigned_tos = person.assigned_to_people_by_org(current_organization)
     end
 
     if @people.count == 1
       @person = @people.first
     end
+    permissions_for_assign
   end
 
   def create_label
@@ -143,7 +144,7 @@ class InteractionsController < ApplicationController
   def reset_edit_form
     @person = current_organization.people.find(params[:person_id])
     if @person.present?
-      @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+      @assigned_tos = @person.assigned_to_people_by_org(current_organization)
     end
   end
 
@@ -194,7 +195,7 @@ class InteractionsController < ApplicationController
     @interaction.update_attributes(params[:interaction])
     @interaction.update_attribute(:updated_by_id, current_person.id)
     @interaction.set_initiators(params[:initiator_id])
-    @assigned_tos = @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id)
+    @assigned_tos = @person.assigned_to_people_by_org(current_organization)
   end
 
   def destroy
