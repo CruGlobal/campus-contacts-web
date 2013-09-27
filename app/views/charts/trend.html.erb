@@ -1,3 +1,7 @@
+<% provide :sidebar do %>
+    <%= render :partial => 'trend_sidebar'%>
+<% end %>
+
 <div class="titlebar titlebarmod">
   <h1>
     Trend Tracker (preview)
@@ -7,4 +11,11 @@
 <%= javascript_include_tag 'highcharts' %>
 <%= javascript_include_tag 'highcharts-more' %>
 
-<%= image_tag 'trend_tracker_preview.png' %>
+<div id="trend_spinner">
+  <br/>Updating Chart...&nbsp;<%= image_tag "spinner.gif" %>
+</div>
+<div id="trend_container"></div>
+
+<div id="trend_chart">
+  <%= render :partial => 'trend_js' %>
+</div>

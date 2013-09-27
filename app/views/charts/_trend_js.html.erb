@@ -1,0 +1,96 @@
+<script>
+  $(function () {
+
+    // Parse the data from an inline table using the Highcharts Data plugin
+    $('#goal_container').highcharts({
+
+      chart: {
+        type: 'line'
+      },
+
+      title: {
+        text: null
+      },
+
+      pane: {
+        size: '100%',
+        startAngle: -180,
+        endAngle: 90
+      },
+
+      legend: {
+        enabled: false,
+        align: 'right',
+        verticalAlign: 'top',
+        layout: 'vertical'
+      },
+
+      xAxis: {
+        type: 'datetime',
+        <% if @goal_line.present? %>
+          min: Date.UTC(<%= @goal_line.keys.first.year %>, <%= @goal_line.keys.first.month - 1 %>, <%= @goal_line.keys.first.day %>),
+          max: Date.UTC(<%= @goal_line.keys.last.year %>, <%= @goal_line.keys.last.month - 1 %>, <%= @goal_line.keys.last.day %>),
+        <% else %>
+          min: Date.UTC(<%= (Date.today - 3.months).year %>, <%= (Date.today - 3.months).month - 1 %>, <%= (Date.today - 3.months).day %>),
+        <% end %>
+        tickInternal: 7 * 24 * 3600 * 1000,
+        gridLineWidth: 1
+      },
+
+      yAxis: {
+        title: {
+          text: null
+        },
+        min: 0,
+        type: 'linear',
+        endOnTick: false,
+        showLastLabel: true
+      },
+
+      tooltip: {
+        followPointer: true
+      },
+
+      plotOptions: {
+
+        column: {
+          grouping: false
+        },
+
+        series: {
+          shadow: false,
+          groupPadding: 0,
+          pointPlacement: 'on'
+        }
+      },
+      series: [{
+        data: [{
+        <% @goal_line.each_key do |date| %>
+          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+          y: <%= @goal_line[date] %>
+          <% unless date == @goal_line.keys.last %>
+            },
+            {
+          <% end %>
+        <% end %>
+        }],
+        dashStyle: 'LongDash',
+        name: 'Goal',
+        enableMouseTracking: false
+      }, {
+        data: [{
+          <% @data_points.each_key do |date| %>
+          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+          y: <%= @data_points[date] %>
+          <% unless date == @data_points.keys.last %>
+            },
+            {
+          <% end %>
+        <% end %>
+        }],
+        color: '#FF0000',
+        name: '<%= @current_criteria %>'
+      }]
+    });
+  });
+</script>
