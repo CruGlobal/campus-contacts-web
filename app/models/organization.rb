@@ -527,7 +527,10 @@ class Organization < ActiveRecord::Base
           org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
       else
-        OrganizationalPermission.create(permission_id: permission.id, person_id: person.id, organization_id: id)
+        new_org_permission = OrganizationalPermission.find_or_create_by_permission_id_and_person_id_and_organization_id(permission.id, person.id, id)
+        if new_org_permission.archive_date.present? || new_org_permission.deleted_at.present?
+          new_org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+        end
       end
       # permission.notify_new_leader if permission.permission_is_leader_or_admin
       # Assure single permission per organization based on hierarchy
