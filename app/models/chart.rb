@@ -16,7 +16,7 @@ class Chart < ActiveRecord::Base
       end
     end
   end
-  
+
   def update_movements_displayed(selections)
     if selections
       chart_organizations.each do |movement|
@@ -30,7 +30,21 @@ class Chart < ActiveRecord::Base
       end
     end
   end
-  
+
+  def update_trend_movements_displayed(selections)
+    if selections
+      chart_organizations.each do |movement|
+        movement.trend_display = selections.include?(movement.organization_id.to_s)
+        movement.save
+      end
+    else
+      chart_organizations.each do |movement|
+        movement.trend_display = false
+        movement.save
+      end
+    end
+  end
+
   def self.evang_range_options
     {
       "Past Week" => 0,

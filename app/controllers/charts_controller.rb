@@ -128,6 +128,54 @@ class ChartsController < ApplicationController
     @line_1 = {}
   end
 
+  def update_trend_movements
+    get_trend_chart
+    @chart.trend_all_movements = params[:all]
+    @chart.save
+
+    if !@chart.trend_all_movements
+      @chart.update_trend_movements_displayed(params[:movements])
+    end
+
+    begin
+      start_date = Date.parse(params["start_date"]) if params["start_date"].present?
+    rescue
+      start_date = nil
+    end
+
+    begin
+      end_date = Date.parse(params["end_date"]) if params["end_date"].present?
+    rescue
+      end_date = nil
+    end
+
+    @chart.trend_start_date = start_date
+    @chart.trend_end_date = end_date
+    @chart.save
+
+    @line_1 = {}
+  end
+
+  def update_trend_field
+    get_trend_chart
+
+    @chart.try(params[:changed].to_s + '=', params[:criteria])
+    @chart.save
+
+    @line_1 = {}
+    render :update_trend_movements
+  end
+
+  def update_trend_compare
+    get_trend_chart
+
+    @chart.trend_compare_year_ago = params[:compare]
+    @chart.save
+
+    @line_1 = {}
+    render :update_trend_movements
+  end
+
   protected
 
   def get_snapshot_chart
