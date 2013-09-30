@@ -218,6 +218,7 @@ Mh::Application.routes.draw do
       put :update_goal
       get :goal_empty
       get :trend
+      post :update_trend_movements
     end
   end
 

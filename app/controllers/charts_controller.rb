@@ -123,6 +123,8 @@ class ChartsController < ApplicationController
   end
 
   def trend
+    get_trend_chart
+
     @line_1 = {}
   end
 
@@ -137,6 +139,10 @@ class ChartsController < ApplicationController
     @current_movement = Organization.where(id: @chart.goal_organization_id).first
     @current_criteria = @chart.goal_criteria
     get_goal
+  end
+
+  def get_trend_chart
+    get_chart(Chart::TREND, true)
   end
 
   def get_chart(type, orgs = false)
