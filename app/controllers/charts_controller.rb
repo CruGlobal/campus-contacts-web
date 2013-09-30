@@ -122,6 +122,10 @@ class ChartsController < ApplicationController
     end
   end
 
+  def trend
+    @line_1 = {}
+  end
+
   protected
 
   def get_snapshot_chart

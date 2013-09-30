@@ -125,7 +125,7 @@ en:
     cru: "Cru"
     visual_tools: "Visual Tools"
     snapshot: "Snapshot View"
-    trend: "Trend Tracker (coming soon)"
+    trend: "Trend Tracker"
     goal: "Goal Tracker"
   general:
     group_name: "Group"

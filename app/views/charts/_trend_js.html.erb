@@ -65,24 +65,10 @@
       },
       series: [{
         data: [{
-        <% @goal_line.each_key do |date| %>
-          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
-          y: <%= @goal_line[date] %>
-          <% unless date == @goal_line.keys.last %>
-            },
-            {
-          <% end %>
-        <% end %>
-        }],
-        dashStyle: 'LongDash',
-        name: 'Goal',
-        enableMouseTracking: false
-      }, {
-        data: [{
-          <% @data_points.each_key do |date| %>
-          x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
-          y: <%= @data_points[date] %>
-          <% unless date == @data_points.keys.last %>
+          <% @line_1.each_key do |date| %>
+            x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+            y: <%= @line_1[date] %>
+          <% unless date == @line_1.keys.last %>
             },
             {
           <% end %>
