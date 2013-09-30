@@ -13,7 +13,11 @@
   <label for="assign_to_dnc"><%= t('contacts.statuses.do_not_contact') %></label>
 </div>
 <div class="leader_search modalresults" style="display:none">
-  <p style="margin: 0 0 5px 0;"><%= t('.type_to_find_leader') %></p>
+  <p style="margin: 0 0 5px 0;">
+    <%= t('.type_to_find_leader') %>
+    <br/>
+    <%= t('.assign_to_user_note') %>
+  </p>
   <%= text_field_tag :leader_name, '', class: 'leader_search_name', autocomplete: 'off', placeholder: 'Type Here:' %>
   <div class="leaders_list">
     <ul>
