@@ -105,7 +105,7 @@ class ChartsController < ApplicationController
 
       @goal.start_date = start_date
       @goal.end_date = end_date
-      @goal.start_value = attribs["start_value"]
+      @goal.start_value = attribs["start_value"].blank? ? 0 : attribs["start_value"]
       @goal.end_value = attribs["end_value"]
       @goal.organization = @current_movement
       @goal.criteria = @current_criteria
