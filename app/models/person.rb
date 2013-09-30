@@ -50,6 +50,7 @@ class Person < ActiveRecord::Base
 
   if Permission.table_exists? # added for travis testing
     has_many :organizations, through: :organizational_permissions, conditions: ["status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}"], uniq: true
+    has_many :active_organizations, through: :organizational_permissions, source: :organization, conditions: ["status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
   end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
@@ -634,7 +635,7 @@ class Person < ActiveRecord::Base
   def org_tree_node(o = nil, parent_permissions = [])
     orgs = {}
     @org_ids ||= {}
-    (o ? o.children : organizations).order('name').each do |org|
+    (o ? o.children : active_organizations).order('name').each do |org|
       # collect permissions associated with each org
       @org_ids[org.id] ||= {}
       @org_ids[org.id]['permissions'] = (Array.wrap(@org_ids[org.id]['permissions']) + Array.wrap(permissions_by_org_id(org.id)) + Array.wrap(parent_permissions)).uniq
