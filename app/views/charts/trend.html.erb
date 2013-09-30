@@ -4,7 +4,7 @@
 
 <div class="titlebar titlebarmod">
   <h1>
-    Trend Tracker (preview)
+    Trend Tracker
   </h1>
 </div>
 
@@ -18,4 +18,20 @@
 
 <div id="trend_chart">
   <%= render :partial => 'trend_js' %>
+</div>
+
+<div id="trend_fields">
+  <div class="trend_fields_row">
+    <%= select_tag "trend_field_one", options_for_select([""] + MovementIndicator.all, @chart.trend_field_one), id: "trend_field_one_select" %>
+    <%= select_tag "trend_field_two", options_for_select([""] + MovementIndicator.all, @chart.trend_field_two), id: "trend_field_two_select" %>
+  </div>
+  <div class="trend_fields_row">
+    <%= select_tag "trend_field_three", options_for_select([""] + MovementIndicator.all, @chart.trend_field_three), id: "trend_field_three_select" %>
+    <%= select_tag "trend_field_four", options_for_select([""] + MovementIndicator.all, @chart.trend_field_four), id: "trend_field_four_select" %>
+  </div>
+</div>
+
+<div id="trend_compare">
+  <%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago %>
+  &nbsp;Compare With One Year Ago
 </div>

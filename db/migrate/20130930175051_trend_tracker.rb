@@ -7,6 +7,7 @@ class TrendTracker < ActiveRecord::Migration
     add_column :charts, :trend_field_two, :string
     add_column :charts, :trend_field_three, :string
     add_column :charts, :trend_field_four, :string
+    add_column :charts, :trend_compare_year_ago, :boolean, :default => false
 
     add_column :chart_organizations, :trend_display, :boolean, :default => true
   end
