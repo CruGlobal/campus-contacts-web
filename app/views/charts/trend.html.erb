@@ -32,6 +32,6 @@
 </div>
 
 <div id="trend_compare">
-  <%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago %>
+  <%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago, disabled: @chart.trend_end_date - @chart.trend_start_date > 365 %>
   &nbsp;Compare With One Year Ago
 </div>

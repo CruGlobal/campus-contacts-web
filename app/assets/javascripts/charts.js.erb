@@ -79,7 +79,7 @@ $(document).ready(function() {
     $('div#trend_container').hide();
     $('div#trend_spinner').show();
   });
-  $("input.datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+  $("input.datepicker").datepicker({dateFormat: 'yy-mm-dd', minDate: '<%= (Date.today - 3.years).to_s %>'});
   $('div#trend_fields select').change(function() {
     $('div#trend_container').hide();
     $('div#trend_spinner').show();
