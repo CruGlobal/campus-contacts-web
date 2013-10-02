@@ -45,7 +45,8 @@ en:
     assign_search:
       assign_explanation: 'You can assign a contact using any of the options below:'
       me: Me
-      type_to_find_leader: Type to find a leader then click on the leader's name
+      type_to_find_leader: Type to find a leader then click on the leader's name.
+      assign_to_user_note: "This will add an assignment to any other assignments already in place."
       type_to_find_org: "Type to find a %{terminology} then click on the %{terminology}'s name"
       type_to_find_group: Type to find a group then click on the group's name
       type_to_find_label: "Type to find a label then click on the label's name"
