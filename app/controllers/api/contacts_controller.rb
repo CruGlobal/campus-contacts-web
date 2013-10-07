@@ -218,7 +218,7 @@ class Api::ContactsController < ApiController
     @keywords = SmsKeyword.where(survey_id: @all_survey_ids)
     @keys = @keywords.collect {|k| {name: k.keyword, keyword_id: k.id, questions: k.survey.questions.collect {|q| q.id}}}
 
-    json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}}
+    json_output = {keywords: @keys, questions: @all_questions.collect {|q| q.attributes.slice('id', 'kind', 'label', 'style', 'required')}, people: @people.collect {|person| {person: person.to_hash(@organization, params[:show_sub_orgs] == "true"), form: (@answer_sheets[person].collect {|as| @questions[person][as].collect {|q| {q: q.id, a: q.display_response(as)}}}).flatten(2).uniq}}}
     final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
     render json: final_output
   end
