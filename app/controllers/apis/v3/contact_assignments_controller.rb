@@ -45,7 +45,7 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
     assignments = []
     begin
       ActiveRecord::Base.transaction do
-        params[:contact_assignments].each do |assignment|
+        params[:contact_assignments].each do |_, assignment|
           contact_assignment = assignment[:id] ? contact_assignments.find(assignment.delete(:id)) : contact_assignments.new
           contact_assignment.attributes = assignment
           unless contact_assignment.save
