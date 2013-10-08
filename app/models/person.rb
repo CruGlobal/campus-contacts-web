@@ -1178,7 +1178,7 @@ class Person < ActiveRecord::Base
     hash
   end
 
-  def to_hash_basic(organization = nil, show_sub_orgs = false)
+  def to_hash_basic(organization = nil)
     hash = self.to_hash_assign(organization)
     hash['gender'] = gender
     hash['fb_id'] = fb_uid.to_s unless fb_uid.nil?
@@ -1188,7 +1188,7 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = apiv1_orgnizational_roles(show_sub_orgs)
+    hash['organizational_roles'] = apiv1_orgnizational_roles(organization.show_sub_orgs)
     hash
   end
 
@@ -1208,7 +1208,7 @@ class Person < ActiveRecord::Base
           }
           if show_sub_orgs
             organization = Organization.find(p.organization_id)
-            if organization.present?
+            if organization.present? && organization.show_sub_orgs
               organization.descendant_ids.each do |child_org_id|
                 roles_array << {
                     'org_id' => child_org_id,
@@ -1227,8 +1227,8 @@ class Person < ActiveRecord::Base
     @organizational_roles_hash
   end
 
-  def to_hash(organization = nil, show_sub_orgs = false)
-    hash = self.to_hash_basic(organization, show_sub_orgs)
+  def to_hash(organization = nil)
+    hash = self.to_hash_basic(organization)
     hash['first_name'] = first_name.to_s.gsub(/\n/," ")
     hash['last_name'] = last_name.to_s.gsub(/\n/," ")
     hash['phone_number'] = primary_phone_number.number if primary_phone_number
