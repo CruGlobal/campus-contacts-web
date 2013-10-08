@@ -1188,11 +1188,11 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = apiv1_orgnizational_roles(organization.show_sub_orgs)
+    hash['organizational_roles'] = apiv1_orgnizational_roles(false)
     hash
   end
 
-  def apiv1_orgnizational_roles (show_sub_orgs = false)
+  def apiv1_orgnizational_roles(show_sub_orgs = false)
     unless @organizational_roles_hash
       roles_array = []
 
