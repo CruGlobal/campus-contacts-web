@@ -78,8 +78,8 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     elsif params[:remove_permission].present? && params[:remove_permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
       render_unauthorized_call("You do not have permission to destroy the Admin permission level in organization=#{current_organization.id}.")
     else
-      add_permissions(filtered_people, params[:add_permission])
       remove_permissions(filtered_people, params[:remove_permission])
+      add_permissions(filtered_people, params[:add_permission])
       set_status(filtered_people, params[:followup_status]) if params[:followup_status]
 
       render json: filtered_people,
