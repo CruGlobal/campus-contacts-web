@@ -213,7 +213,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "update and return an ADMIN organizational_permission" do
         @org_permission.update_attributes(permission_id: @admin_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
@@ -221,7 +221,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "update and return an USER organizational_permission" do
         @org_permission.update_attributes(permission_id: @user_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
@@ -229,7 +229,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "update and return an CONTACT organizational_permission" do
         @org_permission.update_attributes(permission_id: @contact_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
@@ -242,14 +242,14 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "not update and return an ADMIN organizational_permission" do
         @org_permission.update_attributes(permission_id: @admin_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should "update and return an USER organizational_permission" do
         @org_permission.update_attributes(permission_id: @user_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
@@ -257,7 +257,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "update and return an CONTACT organizational_permission" do
         @org_permission.update_attributes(permission_id: @contact_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_equal '2013-01-01'.to_date, json['organizational_permission']['archive_date'].to_date, json.inspect
@@ -270,21 +270,21 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       end
       should "not update and return an ADMIN organizational_permission" do
         @org_permission.update_attributes(permission_id: @admin_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should "update and return an USER organizational_permission" do
         @org_permission.update_attributes(permission_id: @user_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should "update and return an CONTACT organizational_permission" do
         @org_permission.update_attributes(permission_id: @contact_permission.id)
-        put :update, access_token: @token, 
+        put :update, access_token: @token,
             id: @org_permission.id, organizational_permission: {archive_date: '2013-01-01'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
@@ -458,7 +458,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @admin_token.code
       end
       should 'create ADMIN and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@admin_permission.id}", remove_permission: "#{@contact_permission.id}"
         json = JSON.parse(response.body)
         assert_equal 2, json['people'].count, json.inspect
@@ -468,7 +468,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert !@another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
       end
       should 'create USER and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@user_permission.id}", remove_permission: "#{@contact_permission.id}"
         json = JSON.parse(response.body)
         assert_equal 2, json['people'].count, json.inspect
@@ -478,7 +478,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert !@another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
       end
       should 'create CONTACT and destroy USER organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@contact_permission.id}", remove_permission: "#{@user_permission.id}"
         json = JSON.parse(response.body)
         assert_equal 2, json['people'].count, json.inspect
@@ -493,7 +493,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @user_token.code
       end
       should 'not create ADMIN and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@admin_permission.id}", remove_permission: "#{@contact_permission.id}"
         assert @person.permissions_for_org_id(@org.id).include?(@contact_permission)
         assert @another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
@@ -503,7 +503,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert_not_nil json["errors"], json.inspect
       end
       should 'create USER and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@user_permission.id}", remove_permission: "#{@contact_permission.id}"
         json = JSON.parse(response.body)
         assert_equal 2, json['people'].count, json.inspect
@@ -513,7 +513,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert !@another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
       end
       should 'create CONTACT and destroy USER organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@contact_permission.id}", remove_permission: "#{@user_permission.id}"
         json = JSON.parse(response.body)
         assert_equal 2, json['people'].count, json.inspect
@@ -528,7 +528,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @no_permission_token.code
       end
       should 'not create ADMIN and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@admin_permission.id}", remove_permission: "#{@contact_permission.id}"
         assert @person.permissions_for_org_id(@org.id).include?(@contact_permission)
         assert @another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
@@ -538,7 +538,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert_not_nil json["errors"], json.inspect
       end
       should 'not create USER and destroy CONTACT organizational_permissions' do
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@user_permission.id}", remove_permission: "#{@contact_permission.id}"
         assert @person.permissions_for_org_id(@org.id).include?(@contact_permission)
         assert @another_person.permissions_for_org_id(@org.id).include?(@contact_permission)
@@ -550,7 +550,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
       should 'not create CONTACT and destroy USER organizational_permissions' do
         @org_permission.update_attributes(permission_id: @user_permission.id)
         @another_org_permission.update_attributes(permission_id: @user_permission.id)
-        get :bulk, access_token: @token, 
+        get :bulk, access_token: @token,
           filters: {ids: "#{@person.id},#{@another_person.id}"}, add_permission: "#{@contact_permission.id}", remove_permission: "#{@user_permission.id}"
         assert @person.permissions_for_org_id(@org.id).include?(@user_permission)
         assert @another_person.permissions_for_org_id(@org.id).include?(@user_permission)
@@ -568,7 +568,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @admin_token.code
       end
       should 'bulk create ADMIN organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@admin_permission.id}"
         assert_response :success
         json = JSON.parse(response.body)
@@ -577,7 +577,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert @another_person.permissions_for_org_id(@org.id).include?(@admin_permission)
       end
       should 'bulk create USER organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@user_permission.id}"
         assert_response :success
         json = JSON.parse(response.body)
@@ -586,7 +586,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert @another_person.permissions_for_org_id(@org.id).include?(@user_permission)
       end
       should 'bulk create CONTACT organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@contact_permission.id}"
         assert_response :success
         json = JSON.parse(response.body)
@@ -600,13 +600,13 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @user_token.code
       end
       should 'not bulk create ADMIN organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@admin_permission.id}"
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should 'bulk create USER organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@user_permission.id}"
         assert_response :success
         json = JSON.parse(response.body)
@@ -615,7 +615,7 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         assert @another_person.permissions_for_org_id(@org.id).include?(@user_permission)
       end
       should 'bulk create CONTACT organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@contact_permission.id}"
         assert_response :success
         json = JSON.parse(response.body)
@@ -629,19 +629,19 @@ class Apis::V3::OrganizationalPermissionsControllerTest < ActionController::Test
         @token = @no_permission_token.code
       end
       should 'not bulk create ADMIN organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@admin_permission.id}"
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should 'bulk create USER organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@user_permission.id}"
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
       should 'bulk create CONTACT organizational_permissions' do
-        post :bulk_create, access_token: @token, 
+        post :bulk_create, access_token: @token,
               filters: {ids: "#{@person.id},#{@another_person.id}"}, permission: "#{@contact_permission.id}"
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
