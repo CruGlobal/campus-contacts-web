@@ -375,7 +375,7 @@ class ContactsController < ApplicationController
       # get_and_merge_unfiltered_people unless params[:dnc] == 'true'
 
       # Filter results
-      filter_by_label if params[:label].present?
+      filter_by_label if params[:label].present? || (params[:label_tag].to_i == Label::NO_SELECTED_LABEL[1])
       filter_by_permission if params[:permission].present?
       filter_by_interaction_type if params[:interaction_type].present?
       filter_by_search if params[:do_search].present?
@@ -510,6 +510,7 @@ class ContactsController < ApplicationController
 
     def filter_by_label
       @labels = Label.where("id IN (?)", (params[:label].is_a?(Array)) ? params[:label] : [params[:label]])
+
       if @labels.present?
         if params[:do_search].present?
           @header = I18n.t('contacts.index.matching_seach')
@@ -518,6 +519,7 @@ class ContactsController < ApplicationController
         end
 
         @people_scope = @people_scope.joins(:organizational_labels).where('organizational_labels.organization_id = ?', current_organization.id)
+
       	if params[:label_tag].present? && params[:label_tag].to_i == Label::ALL_SELECTED_LABEL[1]
 					valid_ids = []
 			  	@labels.collect(&:id).each do |label|
@@ -534,7 +536,17 @@ class ContactsController < ApplicationController
 					@people_scope = @people_scope.where("people.id IN (?)", (null_ids) ? [] : filtered_ids)
       	else
         	@people_scope = @people_scope.where("organizational_labels.label_id IN (?)", @labels.collect(&:id))
-      	end
+        end
+      elsif params[:label_tag].to_i == Label::NO_SELECTED_LABEL[1]
+        filtered_ids = []
+        if @people_scope.present?
+          @people_scope.each do |person|
+            active_labels = person.organizational_labels.where("removed_date IS NULL AND organization_id = ?", current_organization.id)
+            filtered_ids << person.id if active_labels.count == 0
+          end
+        end
+
+				@people_scope = @people_scope.where("people.id IN (?)", filtered_ids)
       end
     end
 
