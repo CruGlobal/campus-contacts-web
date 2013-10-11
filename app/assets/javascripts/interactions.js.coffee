@@ -93,6 +93,10 @@ $ ->
     $('li#interactions').click()
     $('#interaction_new_record_button').click()
 
+  $('li #action_menu_assign_profile').live 'click', (e)->
+    e.preventDefault()
+    $("#info_display_edit_button").click()
+
   $('li #action_menu_assign').live 'click', (e)->
     e.preventDefault()
     $('.profile_checkbox').prop('checked',true)
@@ -172,7 +176,7 @@ $ ->
       if $('#default_leader_options.edit .option.leader[data-id=' + data_id + ']').size() == 0
         $('#default_leader_options.edit').append($(this).parents('.option'))
       else
-        $(this).parents('.option').remove() 
+        $(this).parents('.option').remove()
     $('#default_leader_options.edit .option.unassigned input').prop('checked',false)
     checked = $('#assigned_to_dropdown.edit .option input.leader_box:checked')
     checkbox = checked.eq(0)
@@ -190,7 +194,7 @@ $ ->
       value = checkbox.attr('data-id')
       selected_name = checkbox.siblings('.leader_name').text()
     $('#assigned_to_id').val(value)
-    $('#assigned_to_dropdown.edit #selected').text(selected_name) 
+    $('#assigned_to_dropdown.edit #selected').text(selected_name)
 
   $('#search_leader_field.edit').live 'keyup', (e)->
     e.preventDefault()

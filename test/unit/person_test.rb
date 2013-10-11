@@ -17,6 +17,109 @@ class PersonTest < ActiveSupport::TestCase
   should have_many(:assigned_tos)
   should have_many(:assigned_contacts)
 
+
+
+  context "user_permission_for_org method" do
+    setup do
+      @person = Factory(:person)
+      @organization = Factory(:organization)
+      @organization.add_user(@person)
+    end
+    should "return the user organizational_permission" do
+      assert_equal 1, @person.organizational_permissions_for_org(@organization).count, "check permission count for org"
+      result = @person.user_permission_for_org(@organization)
+      assert_equal Permission.user.id, result.permission_id, "check returned permission"
+    end
+  end
+
+
+  context "has_interaction_in_org? method" do
+    setup do
+      @person = Factory(:person)
+      @other_person = Factory(:person)
+      @organization = Factory(:organization)
+      @organization.add_contact(@person)
+      @organization.add_contact(@other_person)
+      @interaction = Factory(:interaction, organization: @organization, receiver: @other_person, creator: @person1, comment: "Comment")
+    end
+    should "return a true if there's an interaction" do
+      results = @other_person.has_interaction_in_org?([@interaction.interaction_type_id], @organization)
+      assert results
+    end
+    should "return a false if there's no interaction" do
+      results = @person.has_interaction_in_org?([@interaction.interaction_type_id], @organization)
+      assert_false results
+    end
+  end
+
+  context "labeled_in_org method" do
+    setup do
+      @person = Factory(:person)
+      @organization = Factory(:organization)
+      @organization.add_contact(@person)
+      @label = Factory(:label, organization: @organization)
+      @org_label = Factory(:organizational_label, organization: @organization, person: @person, label: @label)
+    end
+    should "return a boolean if there's a organizational_label" do
+      results = @person.labeled_in_org?(@label, @organization)
+      assert results
+    end
+  end
+
+  context "ensure_single_permission_for_org_id method" do
+    setup do
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      @organization = Factory(:organization)
+      @organization.add_contact(@person1)
+      @organization.add_contact(@person2)
+      Factory(:organizational_permission, person: @person1, organization: @organization, permission: Permission.user)
+
+      @other_organization = Factory(:organization)
+      @other_organization.add_contact(@person1)
+    end
+    should "ensure single permission" do
+      assert_equal 2, @person1.organizational_permissions_for_org(@organization).count, "check permission count for org"
+      @person1.ensure_single_permission_for_org_id(@organization.id)
+      assert_equal 1, @person1.organizational_permissions_for_org(@organization).count, "check if permission is single"
+      assert_equal Permission.user.id, @person1.organizational_permissions_for_org(@organization).first.permission_id, "check remaining permission"
+    end
+    should "not touch other org's permission" do
+      assert_equal 1, @person1.organizational_permissions_for_org(@other_organization).count, "check permission count for other org"
+      @person1.ensure_single_permission_for_org_id(@organization.id)
+      assert_equal 1, @person1.organizational_permissions_for_org(@other_organization).count, "check permission count for other org"
+    end
+    should "prioritize specified permission" do
+      @person1.ensure_single_permission_for_org_id(@organization.id, Permission.no_permissions.id)
+      assert_equal 1, @person1.organizational_permissions_for_org(@organization).count, "check if permission is single"
+      assert_equal Permission.no_permissions.id, @person1.organizational_permissions_for_org(@organization).first.permission_id, "check remaining permission"
+    end
+  end
+
+  context "with_label scope" do
+    setup do
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
+      @person3 = Factory(:person)
+      @organization = Factory(:organization)
+      @organization.add_contact(@person1)
+      @organization.add_contact(@person2)
+      @label = Factory(:label, organization: @organization)
+      Factory(:organizational_label, organization: @organization, person: @person1, label: @label)
+    end
+    should "return people with labels" do
+      results = @organization.all_people.with_label(@label, @organization)
+      assert_equal 1, results.count
+      assert results.include?(@person1)
+    end
+    should "not return people without labels" do
+      results = @organization.all_people.with_label(@label, @organization)
+      assert !results.include?(@person2)
+      assert !results.include?(@person3)
+    end
+  end
+
   context "ensure_single_permission_for_org_id method" do
     setup do
       @person = Factory(:person)

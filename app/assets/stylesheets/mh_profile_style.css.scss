@@ -825,7 +825,7 @@ div {
   margin: 10px 5px 0px;
 }
 
-.feed_item_survey_answer, .feed_item_text {
+.feed_item_survey_answer, .feed_item_text, .feed_item_comment  {
   font-family: Arial, Sans-serif;
   font-size: 11px;
   color: #808284;
@@ -834,12 +834,9 @@ div {
 }
 
 .feed_item_comment {
-  font-family: Arial, Sans-serif;
   font-size: 12px;
   font-style: italic;
-  font-weight: normal;
-  margin-top: 8px;
-  color: #808284;
+  white-space: pre-line;
 }
 
 .feed_item_header {

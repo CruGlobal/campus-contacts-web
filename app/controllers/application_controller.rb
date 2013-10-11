@@ -405,7 +405,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_super_admin?
 
   def format_date_for_search(input_date)
-		if input_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
+		if input_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][0-9]|3[01])\/(19|2\d)\d\d$/
 			begin
 				get_date = input_date.split('/')
 				new_date = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime("%Y-%m-%d")

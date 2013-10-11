@@ -9,7 +9,7 @@ class Friend
     @name = name
     follow!(person) if person
   end
-  
+
   def to_hash
     hash = {}
     hash['uid'] = @uid
@@ -17,7 +17,7 @@ class Friend
     hash['provider'] = @provider
     hash
   end
-  
+
   def self.get_friends_from_person_id(person_id)
     person = person_id.is_a?(Person) ? person_id : Person.find_by_id(person_id)
     friends = Person.where(fb_uid: Friend.followers(person)).collect { |p| Friend.new(p.fb_uid, p.name) }
@@ -26,7 +26,7 @@ class Friend
   def self.redis_key(obj, str)
     case obj
     when Person
-      "friend:#{obj.id}:#{str}" 
+      "friend:#{obj.id}:#{str}"
     when Friend
       "friend:#{obj.uid}:#{str}"
     else
@@ -35,16 +35,24 @@ class Friend
   end
 
   def self.followers(person)
-   $redis.smembers(Friend.redis_key(person, :followers)) || []
+    begin
+      $redis.smembers(Friend.redis_key(person, :followers)) || []
+    rescue
+      []
+    end
   end
 
   def follow!(person)
-    $redis.sadd(Friend.redis_key(self, :following), person.id)
-    $redis.sadd(Friend.redis_key(person, :followers), self.uid)
+    begin
+      $redis.sadd(Friend.redis_key(self, :following), person.id)
+      $redis.sadd(Friend.redis_key(person, :followers), self.uid)
+    rescue;end
   end
 
   def following?(person)
-    $redis.sismember(Friend.redis_key(self, :following), person.id)
+    begin
+      $redis.sismember(Friend.redis_key(self, :following), person.id)
+    rescue;end
   end
 
   def unfollow(person)
@@ -52,8 +60,10 @@ class Friend
   end
 
   def self.unfollow(person, uid)
-    $redis.srem(Friend.redis_key(self, :following), person.id)
-    $redis.srem(Friend.redis_key(person, :followers), uid)
+    begin
+      $redis.srem(Friend.redis_key(self, :following), person.id)
+      $redis.srem(Friend.redis_key(person, :followers), uid)
+    rescue;end
   end
 
   def ==(other)

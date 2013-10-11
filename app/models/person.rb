@@ -190,7 +190,7 @@ class Person < ActiveRecord::Base
 
   scope :phone_search, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_permissions.organization_id = ? AND (first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :conditions => ["(org_permissions.organization_id = ? AND (concat(first_name,' ',last_name) LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id",
     :limit => 5
   }}
@@ -1188,11 +1188,11 @@ class Person < ActiveRecord::Base
     hash['request_org_id'] = organization.id unless organization.nil?
     hash['first_contact_date'] = answer_sheets.first.created_at.utc.to_s unless answer_sheets.empty?
     hash['date_surveyed'] = answer_sheets.last.created_at.utc.to_s unless answer_sheets.empty?
-    hash['organizational_roles'] = apiv1_orgnizational_roles
+    hash['organizational_roles'] = apiv1_orgnizational_roles(false)
     hash
   end
 
-  def apiv1_orgnizational_roles ()
+  def apiv1_orgnizational_roles(show_sub_orgs = false)
     unless @organizational_roles_hash
       roles_array = []
 
@@ -1206,10 +1206,23 @@ class Person < ActiveRecord::Base
               'name' => permission.apiv1_name,
               'primary' => primary_organization.id == p.organization_id ? 'true' : 'false'
           }
+          if show_sub_orgs
+            organization = Organization.find(p.organization_id)
+            if organization.present? && organization.show_sub_orgs
+              organization.descendant_ids.each do |child_org_id|
+                roles_array << {
+                    'org_id' => child_org_id,
+                    'role' => permission.apiv1_i18n,
+                    'name' => permission.apiv1_name,
+                    'primary' => 'false'
+                }
+              end
+            end
+          end
         end
       end
 
-      @organizational_roles_hash = roles_array
+      @organizational_roles_hash = roles_array.uniq
     end
     @organizational_roles_hash
   end
@@ -1231,8 +1244,10 @@ class Person < ActiveRecord::Base
   end
 
   def async_get_or_update_friends_and_interests(authentication)
-    Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
-    Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
+    begin
+      Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
+      Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
+    rescue;end
   end
 
   def picture
