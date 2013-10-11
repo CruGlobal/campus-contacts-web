@@ -1,3 +1,17 @@
 // Place all the styles related to the movement_indicators controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.rollovernum {
+  display:inline-block;
+  background-color:#f4f4f4;
+  border:1px solid #f2f2f2;
+  padding:5px 10px 3px;
+  position:relative;
+  top:-2px;
+
+}
+
+div#hint.rollovernum {
+  margin-right:16px;
+}
