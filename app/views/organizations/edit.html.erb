@@ -44,13 +44,30 @@
     <div class="item formactions">
       <%= f.submit %><%= link_to(t('.back'), :back, :class=> "cancel")%>
     </div>
-    <div class="formactions dangerzone">
-      <h3><%= t('.danger_zone') %></h3>
-      <div class="content">
-      <p><%= t('.danger_explanation') %></p>
-      <hr/>
-      <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', data: { confirm: t('.delete_confirm', terminology: @organization.terminology) })%></p>
+    <% if @organization.importable_id %>
+      <div class="formactions dangerzone">
+        <h3><%= t('.delete_zone') %></h3>
+        <div class="content">
+        <p><%= t('.infobase_explanation') %></p>
+        </div>
       </div>
-    </div>
+    <% elsif @organization.children.count > 0 %>
+      <div class="formactions dangerzone">
+        <h3><%= t('.delete_zone') %></h3>
+        <div class="content">
+        <p><%= t('.with_children_explanation') %></p>
+        </div>
+      </div>
+      </div>
+    <% else %>
+      <div class="formactions dangerzone">
+        <h3><%= t('.danger_zone') %></h3>
+        <div class="content">
+        <p><%= t('.danger_explanation') %></p>
+        <hr/>
+        <p style="margin-top: 15px;"><%= link_to(t('.delete'), organization_path(@organization), method: :delete, class: 'delete cleangray', data: { confirm: t('.delete_confirm', terminology: @organization.terminology) })%></p>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% end %>
