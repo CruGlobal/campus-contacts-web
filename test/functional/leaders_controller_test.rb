@@ -187,10 +187,22 @@ class LeadersControllerTest < ActionController::TestCase
       user2.person.reload
       user3.person.reload
       @user.person.primary_organization.add_leader(user2.person, user3.person)
-      assert_difference('OrganizationalPermission.where("archive_date" => nil).count', -1) do
+      assert_difference("OrganizationalPermission.where(permission_id: Permission.user.id, archive_date: nil).count", -1) do
         xhr :get,  :destroy, id: user2.person.id
         assert_response :success
       end
+    end
+
+    should "should set the leader as no_permission" do
+      org = @user.person.primary_organization
+      user2 = Factory(:user_with_auxs)
+      user3 = Factory(:user_with_auxs)
+      Factory(:email_address, email: 'user2@email.com', person: user2.person)
+      Factory(:email_address, email: 'user3@email.com', person: user3.person)
+      org.add_leader(user2.person, user3.person)
+      xhr :get, :destroy, id: user2.person.id
+      assert_response :success
+      assert_equal Permission.no_permissions, user2.person.permission_for_org_id(org.id)
     end
 
     should "not be able to sign in leader" do
