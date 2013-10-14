@@ -216,6 +216,7 @@ en:
     label_select_description: List contacts that have %{element} of the following labels applied to them.
     label_clear_selected: Clear Selected Labels
     label_search_last_survey: Last Survey
+    label_search_not_allow_to_no_label: "Search by 'No label' is not allowed if you have checked any of the labels."
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
     help_redirect_link: http://help.missionhub.com
