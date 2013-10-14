@@ -93,8 +93,8 @@ class LeadersController < ApplicationController
         r.archive
       end
       # make any contacts assigned to this person go back to unassinged
-      @contacts = @person.contact_assignments.where(organization_id: current_organization.id).all
-      @contacts.collect(&:destroy)
+      @contacts = @person.contact_assignments.where(organization_id: current_organization.id).destroy_all
+      current_organization.add_contact(@person)
     end
   end
 
