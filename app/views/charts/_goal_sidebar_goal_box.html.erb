@@ -3,7 +3,7 @@
 
 <div id="goal_description">
   <% if @goal.id? %>
-    from <b><%= @goal.start_value %></b> to <b><%= @goal.end_value %></b> interactions<br/>
+    from <b><%= @goal.start_value %></b> to <b><%= @goal.end_value %></b><br/>
     <b><%= @goal.start_date.to_s %></b> to <b><%= @goal.end_date.to_s %></b>
   <% else %>
     A goal for <%= @current_criteria %> has not yet been set for <%= @current_movement.name %>.
