@@ -1,4 +1,13 @@
 $ ->
+  $(document).on 'change', '#select_language', ()->
+    language = $("#select_language option:selected").val()
+    params = window.location.href.split("?")[1]
+    if $.url().param('locale') && params
+      params = params.replace(/&?locale=([^&]$|[^&]*)/i, "")
+    if params
+      window.location.href = "?"+params+"&locale="+language
+    else
+      window.location.href = "?locale="+language
 
   $('.org_control').not('.tree_no_child').each ->
     if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1

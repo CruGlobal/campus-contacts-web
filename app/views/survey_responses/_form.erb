@@ -20,7 +20,7 @@
     <%# if person.first_name.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
-          <label class="desc" for="first_name"><%= t('contacts.form.first_name') %></label>
+          <label class="desc" for="first_name"><%= t('survey_responses.first_name') %></label>
         	<%= f.text_field :first_name, :readonly => person.first_name.present? && session[:fb_token].present? %>
         </div>
       </li>
@@ -29,7 +29,7 @@
     <%# if person.last_name.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
-          <label class="desc" for="last_name"><%= t('contacts.form.last_name') %></label>
+          <label class="desc" for="last_name"><%= t('survey_responses.last_name') %></label>
           <%= f.text_field :last_name, :readonly => person.last_name.present? && session[:fb_token].present? %>
         </div>
       </li>
@@ -38,7 +38,7 @@
     <%# if person.phone_number.blank? %>
       <li>
         <div data-role="fieldcontain" class="field">
-          <label class="desc" for="last_name"><%= t('contacts.form.phone_number') %></label>
+          <label class="desc" for="last_name"><%= t('survey_responses.phone_number') %></label>
           <%= f.text_field :phone_number, :readonly => person.phone_number.present? && session[:fb_token].present? %>
         </div>
       </li>
@@ -50,7 +50,7 @@
         <% if person.email.blank? %>
           <li>
             <div data-role="fieldcontain" class="field">
-              <label class="desc" for="email"><%= t('contacts.form.email') %></label>
+              <label class="desc" for="email"><%= t('survey_responses.email') %></label>
               <p><%= f.text_field :email %></p>
             </div>
           </li>

@@ -4,6 +4,11 @@
 <% if @survey.logo_file_name.present? %>
   <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
 <% end %>
-
-<h2><%= @survey.title %></h2>
+<div id="select_language_container">
+  <label class="desc" for="select_language"><%= t('survey_responses.select_language') %></label>
+  <%= select_tag :select_language, options_for_select(Person::LANGUAGES, params[:locale]), include_blank: "Choose..." %>
+</div>
+<div>
+  <h2><%= @survey.title %></h2>
+</div>
 <%= render partial: 'form', locals: {person: @person, survey: @survey, answer_sheet: @answer_sheet} %>
