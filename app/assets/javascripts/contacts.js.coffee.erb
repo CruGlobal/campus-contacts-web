@@ -819,6 +819,16 @@ $ ->
     $(".search_label_checkbox").removeAttr("checked")
     false
 
+  $(document).on 'change', '#label_tag', (e)->
+    if $(this).val() == "1"
+      $(".search_label_checkbox").removeAttr("checked")
+    false
+
+  $(document).on 'click', '.search_label_checkbox', (e)->
+    if $("#label_tag").val() == "1"
+      $.a(t("general.label_search_not_allow_to_no_label"))
+      $("#label_tag").val("2")
+
   $(".search_status").live "change", ->
     $.fn.search_status()
 

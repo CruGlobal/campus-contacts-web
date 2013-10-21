@@ -210,6 +210,13 @@ Mh::Application.routes.draw do
       post :update_snapshot_movements
       post :update_snapshot_range
       get :goal
+      post :update_goal_org
+      post :update_goal_criteria
+      get :edit_goal
+      get :cancel_edit_goal
+      post :update_goal
+      put :update_goal
+      get :goal_empty
       get :trend
     end
   end

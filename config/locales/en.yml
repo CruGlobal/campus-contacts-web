@@ -127,10 +127,10 @@ en:
     visual_tools: "Visual Tools"
     snapshot: "Snapshot View"
     trend: "Trend Tracker (coming soon)"
-    goal: "Goal Tracker (coming soon)"
+    goal: "Goal Tracker"
   general:
     group_name: "Group"
-    remove_leader_confirm: "Are you sure you want to remove %{person} from leaders?"
+    remove_leader_confirm: "Are you sure you want to remove the User permission from %{person}?"
     leader_login_title: "MissionHub Confirmation"
     leader_login_confirmation: "You are currently logged in as %{name}.<br>Do you want to continue?"
     leader_link_expired: "Sorry, this link is already used."
@@ -216,6 +216,7 @@ en:
     label_select_description: List contacts that have %{element} of the following labels applied to them.
     label_clear_selected: Clear Selected Labels
     label_search_last_survey: Last Survey
+    label_search_not_allow_to_no_label: "Search by 'No label' is not allowed if you have checked any of the labels."
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
     help_redirect_link: http://help.missionhub.com

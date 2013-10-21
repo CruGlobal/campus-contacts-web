@@ -39,4 +39,22 @@ $(document).ready(function() {
       data: {laborers_range: $('select#laborers_range option:selected').val()}
     })
   });
+  $('select#goal_org_select').change(function(){
+    $('div#goal_container, div#goal_box').hide();
+    $('div#goal_spinner, div#goal_box_spinner').show();
+    $.ajax({
+      url: "/charts/update_goal_org",
+      type: "POST",
+      data: {org_id: $('select#goal_org_select option:selected').val()}
+    })
+  });
+  $('select#goal_criteria_select').change(function(){
+    $('div#goal_container, div#goal_box').hide();
+    $('div#goal_spinner, div#goal_box_spinner').show();
+    $.ajax({
+      url: "/charts/update_goal_criteria",
+      type: "POST",
+      data: {criteria: $('select#goal_criteria_select option:selected').val()}
+    })
+  });
 });

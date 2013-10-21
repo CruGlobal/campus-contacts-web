@@ -40,7 +40,7 @@
       <li class="entry leader <%= 'selected_entry' if param_assigned_to.present? && param_assigned_to %>" data-id="<%= person.id %>">
         <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
         <% if can? :manage, @organization %>
-          <%= link_to(image_tag('delete.png', title: 'Remove Leader', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
+          <%= link_to(image_tag('delete.png', title: 'Remove User Permission', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
         <% end %>
       </li>
     <% end %>
