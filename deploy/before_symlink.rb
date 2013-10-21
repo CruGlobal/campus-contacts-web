@@ -2,6 +2,14 @@ Chef::Log.info("Running deploy/before_symlink.rb...")
 
 Chef::Log.info("Symlinking #{release_path}/public/assets to #{new_resource.deploy_to}/shared/assets")
 
+file "#{release_path}/config/redis.yml" do
+  action :delete
+end
+
+link "#{release_path}/config/redis.yml" do
+  to "#{new_resource.deploy_to}/shared/config/redis.yml"
+end
+
 directory "#{new_resource.deploy_to}/shared/assets" do
   user new_resource.user
   action :create
