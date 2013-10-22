@@ -1,5 +1,4 @@
 class SmsMailer < ActionMailer::Base
-  @queue = :bulk_email
 
   def text(to, from, msg, reply_to = nil)
     from = from.present? ? from : APP_CONFIG['from_email']

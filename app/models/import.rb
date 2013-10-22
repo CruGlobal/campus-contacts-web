@@ -1,10 +1,12 @@
 require 'csv'
 require 'open-uri'
 require 'contact_methods'
+require 'async'
 class Import < ActiveRecord::Base
+  include Async
+  include Sidekiq::Worker
   include ContactMethods
 
-  @queue = :general
   serialize :headers
   serialize :preview
   serialize :header_mappings

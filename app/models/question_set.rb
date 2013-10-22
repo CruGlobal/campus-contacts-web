@@ -67,7 +67,7 @@ class QuestionSet
               unless keyword_found.blank?
                 leaders = Person.find(question_rule.extra_parameters['leaders'])
                 recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                PeopleMailer.enqueue.notify_on_survey_answer(recipients, question_rule.id, keyword_found, answer.id)
+                PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, keyword_found, answer.id)
               end
 
             when 'AUTOASSIGN'

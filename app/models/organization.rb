@@ -1,7 +1,9 @@
 require 'name_uniqueness_validator'
 require 'retryable'
-
+require 'async'
 class Organization < ActiveRecord::Base
+  include Async
+  include Sidekiq::Worker
   attr_accessor :person_id
 
   has_ancestry
@@ -68,7 +70,8 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name, :terminology#, :person_id
   validates :name, :name_uniqueness => true
 
-  @queue = :general
+  sidekiq_options queue: :general
+
   after_create :create_admin_user, :notify_admin_of_request, :touch_people
   after_destroy :touch_people
   after_update :touch_people_if_show_sub_orgs_changed
@@ -788,7 +791,7 @@ class Organization < ActiveRecord::Base
       if parent
         update_column(:status, 'active')
       else
-        OrganizationMailer.enqueue.notify_admin_of_request(self.id)
+        OrganizationMailer.delay.notify_admin_of_request(self.id)
       end
     rescue ActiveRecord::RecordNotFound
     end
@@ -799,7 +802,7 @@ class Organization < ActiveRecord::Base
     person.user.remember_token = token
     person.user.remember_token_expires_at = 1.month.from_now
     person.user.save(validate: false)
-    LeaderMailer.added(person, added_by, self, token).deliver
+    LeaderMailer.delay.added(person.id, added_by.id, self.id, token)
   end
 
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
@@ -860,14 +863,14 @@ class Organization < ActiveRecord::Base
 
   def notify_user
     if admins
-      OrganizationMailer.enqueue.notify_user(id)
+      OrganizationMailer.delay.notify_user(id)
     end
     true
   end
 
   def notify_user_of_denial
     if admins
-      OrganizationMailer.enqueue.notify_user_of_denial(id)
+      OrganizationMailer.delay.notify_user_of_denial(id)
     end
     true
   end

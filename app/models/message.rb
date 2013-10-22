@@ -25,12 +25,12 @@ class Message < ActiveRecord::Base
   def process_message
     case sent_via
     when 'sms_email'
-      SmsMailer.enqueue.text(to, from, message, reply_to)
+      SmsMailer.delay.text(to, from, message, reply_to)
     when 'sms'
       sent_sms = SentSms.create!(message: message, recipient: to, sent_via: organization.sms_gateway)
       sent_sms.queue_sms
     when 'email'
-      PeopleMailer.enqueue.bulk_message(to, from, subject, message, reply_to)
+      PeopleMailer.delay.bulk_message(to, from, subject, message, reply_to)
     end
   end
 end

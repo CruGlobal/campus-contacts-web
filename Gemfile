@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
+
 gem "default_value_for"
 gem "devise", '~> 2.1.0' #, git: "git://github.com/plataformatec/devise.git"
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
@@ -40,11 +41,11 @@ gem 'omniauth', '~> 1.1.1'
 gem 'omniauth-facebook', '1.4.0'
 gem 'paper_trail', '~> 2'
 gem 'rack-offline'
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.15'
 gem 'rails_autolink'
 gem 'redis'
-gem 'resque', '~> 1.20.0'
-gem 'resque_mail_queue'
+gem 'sidekiq'
+gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'rest-client'                                     # to make FB api requests
 gem 'retryable-rb'
 #gem 'rubycas-client', '~> 2.2.1'
@@ -60,10 +61,11 @@ gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
 gem 'wiser_date', '~> 0.3.0'
 gem 'infobase'
+gem 'multi_json', '~> 1.8.2'
 
 
 group :development, :test do
-  gem 'guard'
+  gem 'guard', '~> 1.8.2'
   gem 'guard-test'
   gem 'awesome_print'
   gem 'quiet_assets'
@@ -73,9 +75,7 @@ group :test do
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl','~> 2.0.0.rc4'
   gem 'simplecov', '>= 0.3.5', require: false
-  # gem 'ZenTest', '= 4.8.3'
-  # gem 'autotest-rails'
-  gem 'resque_unit'
+  #gem 'resque_unit'
   gem 'shoulda', :require => false
   gem 'mocha', :require => false
   gem 'ffaker'

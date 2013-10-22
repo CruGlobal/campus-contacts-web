@@ -3,7 +3,6 @@
 
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
-require 'resque/tasks'
 # require 'simplecov'
 # SimpleCov.start 'rails' do
 #   add_filter "vendor"

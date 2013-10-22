@@ -1,7 +1,3 @@
-require 'resque/tasks'
-task "resque:setup" => :environment do
-end
-
 task "answer_comments" => :environment do
   OrganizationalRole.contact.includes(:organization, {person: :answer_sheets}).each do |role|
     OrganizationalRole.transaction do

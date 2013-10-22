@@ -1,5 +1,5 @@
 require 'vpim/vcard'
-    
+
 class VcardMailer < ActionMailer::Base
   default from: "support@missionhub.com"
   

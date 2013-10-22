@@ -17,6 +17,8 @@ require File.dirname(__FILE__) + "/factories"
 require 'webmock/test_unit'
 require "strip_attributes/shoulda"
 
+require 'sidekiq/testing'
+#Sidekiq::Testing.inline!
 # EphemeralResponse.activate
 #
 # EphemeralResponse.configure do |config|

@@ -400,7 +400,7 @@ Mh::Application.routes.draw do
   match "welcome/tour" => 'welcome#tutorials'
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-  mount Resque::Server.new, at: "/resque"
+  #mount Resque::Server.new, at: "/resque"
 
   #other oauth calls
   match "oauth/authorize" => "oauth#authorize"

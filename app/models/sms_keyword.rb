@@ -1,4 +1,8 @@
+require 'async'
 class SmsKeyword < ActiveRecord::Base
+  include Async
+  include Sidekiq::Worker
+
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
 
@@ -50,7 +54,7 @@ class SmsKeyword < ActiveRecord::Base
     end
   end
 
-  @queue = :general
+  sidekiq_options queue: :general
   after_create :notify_admin_of_request
 
   def to_s
@@ -58,7 +62,7 @@ class SmsKeyword < ActiveRecord::Base
   end
 
   def notify_admin_of_request
-    KeywordRequestMailer.enqueue.new_keyword_request(self.id)
+    KeywordRequestMailer.delay.new_keyword_request(self.id)
   end
 
   # def questions
@@ -73,14 +77,14 @@ class SmsKeyword < ActiveRecord::Base
 
     def notify_user
       if user
-        KeywordRequestMailer.notify_user(self).deliver
+        KeywordRequestMailer.delay.notify_user(self.id)
       end
       true
     end
 
     def notify_user_of_denial
       if user
-        KeywordRequestMailer.notify_user_of_denial(self).deliver
+        KeywordRequestMailer.delay.notify_user_of_denial(self.id)
       end
       true
     end

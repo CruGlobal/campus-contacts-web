@@ -309,7 +309,7 @@ class ContactsController < ApplicationController
     users = current_organization.users.where(id: to_ids)
 
     if users.present?
-      ContactsMailer.enqueue.reminder(users.collect(&:email).compact, current_person.email, params[:subject], params[:body])
+      ContactsMailer.delay.reminder(users.collect(&:email).compact, current_person.email, params[:subject], params[:body])
     end
     render nothing: true
   end

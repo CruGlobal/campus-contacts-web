@@ -8,13 +8,13 @@ class KeywordRequestMailer < ActionMailer::Base
          subject: 'New sms keyword request')
   end
 
-  def notify_user(keyword)
-    @keyword = keyword
+  def notify_user(keyword_id)
+    @keyword = SmsKeyword.find(keyword_id)
     mail(to: @keyword.user.person.email, subject: "Keyword '#{@keyword}' was approved!")
   end
 
-  def notify_user_of_denial(keyword)
-    @keyword = keyword
+  def notify_user_of_denial(keyword_id)
+    @keyword = SmsKeyword.find(keyword_id)
     mail(to: @keyword.user.person.email, subject: "Keyword '#{@keyword}' was rejected.")
   end
 end

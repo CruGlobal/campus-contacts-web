@@ -1,7 +1,8 @@
 class Jobs::UpdateFB
-  @queue = :facebook
+  include Sidekiq::Worker
+  sidekiq_options queue: :facebook
 
-  def self.perform(person_id,auth,action)
+  def perform(person_id, auth, action)
     authentication = auth['authentication']
     person = Person.find_by_id(person_id)
     if person

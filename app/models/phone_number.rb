@@ -1,9 +1,13 @@
 require 'open-uri'
+require 'async'
 class PhoneNumber < ActiveRecord::Base
+  include Async
+  include Sidekiq::Worker
+
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
 
-  @queue = :general
+  sidekiq_options queue: :general
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
   belongs_to :person, touch: true
 

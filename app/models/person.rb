@@ -1276,8 +1276,8 @@ class Person < ActiveRecord::Base
 
   def async_get_or_update_friends_and_interests(authentication)
     begin
-      Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'friends')
-      Resque.enqueue(Jobs::UpdateFB, self.id, authentication,'interests')
+      Jobs::UpdateFB.perform_async(self.id, authentication,'friends')
+      Jobs::UpdateFB.perform_async(self.id, authentication,'interests')
     rescue;end
   end
 

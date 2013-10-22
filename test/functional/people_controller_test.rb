@@ -335,7 +335,7 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)
       @org = Factory(:organization)
-      org_permission = Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
 
       sign_in @user
       @request.session[:current_organization_id] = @org.id
@@ -346,11 +346,13 @@ class PeopleControllerTest < ActionController::TestCase
     end
 
     should "update the contact's permission to leader that has a valid email" do
-      person = Factory(:person, email: "super_duper_unique_email@mail.com")
-      xhr :post, :update_permissions, { :permission_ids => Permission::USER_ID, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
-      assert_response :success
-      assert_equal(person.id, OrganizationalPermission.last.person_id)
-      assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+      Sidekiq::Testing.inline! do
+        person = Factory(:person, email: "super_duper_unique_email@mail.com")
+        xhr :post, :update_permissions, { :permission_ids => Permission::USER_ID, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
+        assert_response :success
+        assert_equal(person.id, OrganizationalPermission.last.person_id)
+        assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+      end
     end
 
     should "not attempt to email if contact doesnt have a valid email" do
@@ -376,13 +378,15 @@ class PeopleControllerTest < ActionController::TestCase
         #check the persons permissions
         assert_equal(1, person.permissions.count)
         assert_equal(Permission.no_permissions, person.permission_for_org_id(@org.id))
-        xhr :post, :update_permissions, { :permission_ids => @existing_permissions, :some_permission_ids => "", :person_id => person, :added_by_id => @user.person.id }
-        #assert that the leader permission was not added
-        assert_response :success
-        assert_equal(1, person.permissions.count)
-        assert_equal(Permission.admin, person.permission_for_org_id(@org.id))
-        assert_equal(person.id, OrganizationalPermission.last.person_id)
-        assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+        Sidekiq::Testing.inline! do
+          xhr :post, :update_permissions, { :permission_ids => @existing_permissions, :some_permission_ids => "", :person_id => person, :added_by_id => @user.person.id }
+          #assert that the leader permission was not added
+          assert_response :success
+          assert_equal(1, person.permissions.count)
+          assert_equal(Permission.admin, person.permission_for_org_id(@org.id))
+          assert_equal(person.id, OrganizationalPermission.last.person_id)
+          assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+        end
       end
 
       should "restore the person previous permission if the person has an invalid email" do

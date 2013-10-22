@@ -24,23 +24,23 @@ class SmsKeywordTest < ActiveSupport::TestCase
 
   test "notify user" do
     user = Factory(:user_with_auxs)
-    email = Factory(:email_address, person: user.person)
+    Factory(:email_address, person: user.person)
     user.person.reload
     org = Factory(:organization)
     k = Factory(:sms_keyword, user: user, organization: org, keyword: "Wat")
-    count = ActionMailer::Base.deliveries.count
-    k.send(:notify_user)
-    assert_equal count + 1, ActionMailer::Base.deliveries.count
+    assert_difference("Sidekiq::Extensions::DelayedMailer.jobs.size", 1) do
+      k.send(:notify_user)
+    end
   end
 
   test "notify user of denial" do
     user = Factory(:user_with_auxs)
-    email = Factory(:email_address, person: user.person)
+    Factory(:email_address, person: user.person)
     user.person.reload
     org = Factory(:organization)
     k = Factory(:sms_keyword, user: user, organization: org, keyword: "Wat")
-    count = ActionMailer::Base.deliveries.count
-    k.send(:notify_user_of_denial)
-    assert_equal count + 1, ActionMailer::Base.deliveries.count
+    assert_difference("Sidekiq::Extensions::DelayedMailer.jobs.size", 1) do
+      k.send(:notify_user_of_denial)
+    end
   end
 end

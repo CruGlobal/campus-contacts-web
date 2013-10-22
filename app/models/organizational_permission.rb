@@ -78,12 +78,11 @@ class OrganizationalPermission < ActiveRecord::Base
     if person.nil?
       raise InvalidPersonAttributesError
     else
-      added_by = Person.find(added_by_id)
       token = SecureRandom.hex(12)
       person.user.remember_token = token
       person.user.remember_token_expires_at = 1.month.from_now
       person.user.save(validate: false)
-      LeaderMailer.added(person, added_by, self.organization, token).deliver
+      LeaderMailer.delay.added(person.id, added_by_id, self.organization.id, token)
     end
   end
 

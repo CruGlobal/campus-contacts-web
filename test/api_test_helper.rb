@@ -35,8 +35,8 @@ def setup_api_env
   @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "abcdefghijklmnop")
 
   #setup question sheets, questions, and an answer sheet for user1 and user2
-  @survey = Factory(:survey, organization: @temp_org)
-  @keyword = Factory(:approved_keyword, organization: @temp_org, survey: @survey)
+  @keyword = Factory(:approved_keyword, organization: @temp_org)
+  @survey = @keyword.survey
   @first_nameQ = Factory(:element)
   @survey.elements << @first_nameQ
   @questions = @survey.questions

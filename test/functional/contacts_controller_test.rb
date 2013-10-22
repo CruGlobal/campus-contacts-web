@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class ContactsControllerTest < ActionController::TestCase
+  setup do
+    stub_request(:get, /https:\/\/graph.facebook.com\/.*/).
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => "", :headers => {})
+  end
+
   context "Before logging in" do
     should "redirect on update" do
       @contact = Factory(:person)
@@ -179,7 +185,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "remove the being 'archived' Contact permission of a Person when it is going to be created again (using existing first_name, last_name and email) in 'My Contacts' tab (:assign_to_me => true)" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
-        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:email_address, email: "jonsnow@email.com", person: contact)
         Factory(:organizational_permission, permission: Permission.no_permissions, person: contact, organization: @org)
         assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
@@ -194,7 +200,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       should "remove the being 'archived' Contact permission of a Person when it is going to be created again (using existing first_name, last_name and email) in 'All Contacts' tab" do
         contact = Factory(:person, first_name: "Jon", last_name: "Snow")
-        email = Factory(:email_address, email: "jonsnow@email.com", person: contact)
+        Factory(:email_address, email: "jonsnow@email.com", person: contact)
         Factory(:organizational_permission, permission: Permission.no_permissions, person: contact, organization: @org)
         assert_not_empty contact.organizational_permissions.where(permission_id: Permission.no_permissions.id)
         assert_not_empty @org.contacts.joins(:email_addresses).where(first_name: "Jon", last_name: "Snow", "email_addresses.email" => "jonsnow@email.com")
@@ -461,7 +467,7 @@ class ContactsControllerTest < ActionController::TestCase
       @user = Factory(:user_no_org)  #user with a person object
       sign_in @user
       @organization = Factory(:organization)
-      @keyword = Factory.create(:approved_keyword, organization: @organization)
+      @keyword = Factory.create(:approved_keyword, organization: @organization, user: @user)
     end
 
     context "on index page" do
@@ -493,7 +499,7 @@ class ContactsControllerTest < ActionController::TestCase
   end
 
   test "send reminder" do
-    Resque.reset!
+    #Resque.reset!
     user1 = Factory(:user_with_auxs)
     user2 = Factory(:user_with_auxs)
 
@@ -507,8 +513,7 @@ class ContactsControllerTest < ActionController::TestCase
     xhr :post, :send_reminder, { :to => "#{user1.person.id}, #{user2.person.id}" }
 
     assert_equal " ", response.body
-    assert_queued(ContactsMailer)
-    #assert_equal 1, ActionMailer::Base.deliveries.count
+    assert Sidekiq::Extensions::DelayedMailer.jobs.size > 0
   end
 
   context "Search by name or email" do
@@ -585,6 +590,7 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "search for contacts" do
+
       xhr :get, :index, {:do_search => "1", :first_name => "Neil", :last_name => "delaCruz"}
       assert_response :success
     end

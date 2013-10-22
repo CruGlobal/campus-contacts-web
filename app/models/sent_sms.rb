@@ -1,8 +1,13 @@
 require 'net/http'
 require 'open-uri'
+require 'async'
 class SentSms < ActiveRecord::Base
+  include Async
+  include Sidekiq::Worker
+
   belongs_to :received_sms
-  @queue = :sms
+  sidekiq_options queue: :sms
+
   serialize :reports
   serialize :separator
   default_value_for :sent_via, 'twilio'

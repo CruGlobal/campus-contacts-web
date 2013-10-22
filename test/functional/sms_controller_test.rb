@@ -5,8 +5,8 @@ class SmsControllerTest < ActionController::TestCase
   context "Receiving an incoming SMS" do
     setup do
       @carrier = Factory(:sms_carrier_sprint)
-      @survey = Factory(:survey)
-      @keyword = Factory(:approved_keyword, survey: @survey)
+      @keyword = Factory(:approved_keyword)
+      @survey = @keyword.survey
 
       element = Factory(:choice_field, label: 'foobar')
       @q1 = Factory(:survey_element, survey: @survey, element: element, position: 1, archived: true)
@@ -72,7 +72,7 @@ class SmsControllerTest < ActionController::TestCase
         @person.update_attribute(:first_name, 'Jesus')
         post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:person).last_name, 'Christ')
-        assert_equal(assigns(:sent_sms).message, "1/2 #{@keyword.questions.first.label_with_choices}")
+        assert_equal("1/3 #{@keyword.questions.first.label_with_choices}", assigns(:sent_sms).message)
       end
 
       should "send thank you message after last question is answered" do

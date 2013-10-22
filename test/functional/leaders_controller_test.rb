@@ -230,7 +230,7 @@ class LeadersControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user_with_auxs)
       @org = Factory(:organization)
-      org_permission = Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
+      Factory(:organizational_permission, organization: @org, person: @user.person, permission: Permission.admin)
 
       sign_in @user
       @request.session[:current_organization_id] = @org.id
@@ -241,7 +241,7 @@ class LeadersControllerTest < ActionController::TestCase
     end
 
     should "successfully find a searched Person if Person has valid email" do
-      person = Factory(:person, first_name: "NeilMarion", email: "super_duper_unique_email@mail.com")
+      Factory(:person, first_name: "NeilMarion", email: "super_duper_unique_email@mail.com")
       assert_equal(Person.count, 2)
       xhr :get, :search, {"show_all"=>"", "name"=>"NeilMarion"}
       assert_response :success
@@ -262,10 +262,12 @@ class LeadersControllerTest < ActionController::TestCase
 
     should "update the contact's permission to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
-      xhr :post, :create, { :person_id => person.id }
-      assert_response :success
-      assert_equal(person.id, OrganizationalPermission.last.person_id)
-      assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+      Sidekiq::Testing.inline! do
+        xhr :post, :create, { :person_id => person.id }
+        assert_response :success
+        assert_equal(person.id, OrganizationalPermission.last.person_id)
+        assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+      end
     end
 
   end

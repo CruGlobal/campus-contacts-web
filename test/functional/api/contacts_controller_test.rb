@@ -194,11 +194,13 @@ class Api::ContactsControllerTest < ActionController::TestCase
     end
     #
     should "be able to view their contacts by searching" do
-      get :search, :term => 'Useroo'
-      assert_response :success, @response.body
-      @json = ActiveSupport::JSON.decode(@response.body)
+      Sidekiq::Testing.inline! do
+        get :search, :term => 'Useroo'
+        assert_response :success, @response.body
+        @json = ActiveSupport::JSON.decode(@response.body)
 
-      person_basic_test(@json[0]['person'], @user2, @user)
+        person_basic_test(@json[0]['person'], @user2, @user)
+      end
     end
 
     should "be able to view their contacts by searching if organization does not have keywords" do
