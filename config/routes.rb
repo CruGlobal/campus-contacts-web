@@ -1,4 +1,13 @@
+require 'sidekiq/web'
 Mh::Application.routes.draw do
+  constraint = lambda { |request| request.env["rack.session"] and
+                                  request.env["rack.session"]["warden.user.user.key"] and
+                                  request.env["rack.session"]["warden.user.user.key"][0] and
+                                  request.env["rack.session"]["warden.user.user.key"][1] and
+                                  request.env["rack.session"]["warden.user.user.key"][0].constantize.find(request.env["rack.session"]["warden.user.user.key"][1].first).developer? }
+  constraints constraint do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :movement_indicators, only: [:index, :create] do
     collection do
