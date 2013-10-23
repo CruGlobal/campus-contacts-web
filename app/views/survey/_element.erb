@@ -1,3 +1,9 @@
 <% person ||= nil %>
-<label for="<%= dom_id(element) %>" class="desc"><%= raw element.label %></label>
+<label for="<%= dom_id(element) %>" class="desc">
+  <% if attribute = element.attribute_name %>
+    <%= raw I18n.t("survey_responses.#{element.attribute_name}")%>
+  <% else %>
+    <%= raw element.label %>
+  <% end %>
+</label>
 <p><%= render :partial => 'survey/' + element.ptemplate, :object => element, :locals => {:answer_sheet => @answer_sheet, :person => person} %></p>

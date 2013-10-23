@@ -920,26 +920,52 @@ en:
     drop_down_field:
       choose_one: "Choose One"
   survey_responses:
-    new:
-      greeting_with_name: "Hi %{name}!"
-      greeting_no_name: Hi!
-    thanks:
-      thanks: "Thanks!"
-    facebook:
-      facebook_login: "You can connect your account to Facebook so we can know who you really are."
-      pick_keyword: "Pick a Keyword"
-    show:
-      title: "%{name}'s Completed Survey Answers"
-      edit_answers: "Edit Answers"
-      no_answers: "There is no information for %{name}"
-    edit:
-      title: "Edit %{name}'s Survey Results"
-      multiple_answers: "Choose one or more. "
-      cancel: "Cancel and go back"
+    address1: Street Address
     answer_other_surveys:
-      title: "%{name} - Answer Other Surveys"
+      title: ! '%{name} - Answer Other Surveys'
+    birth_date: What is your birth date?
+    campus: Campus
+    country: Country
+    dorm: Dorm Building
+    edit:
+      cancel: Cancel and go back
+      multiple_answers: ! 'Choose one or more. '
+      title: Edit %{name}'s Survey Results
+    email: Email Address
+    facebook:
+      facebook_login: You can connect your account to Facebook so we can know who you really are.
+      pick_keyword: Pick a Keyword
+    faculty: Are you a faculty?
+    first_name: What is your first name?
     form:
-      frozen: "Sorry. The survey '%{survey}' is currently on hold."
+      frozen: Sorry. The survey '%{survey}' is currently on hold.
+    gender: What is your gender?
+    graduation_date: Graduation Date
+    iso_bs: Bosnian
+    iso_de: German
+    iso_en: English
+    iso_es: Español
+    iso_fr: French
+    iso_ru: Russian
+    iso_zh: Chinese
+    last_name: What is your last name?
+    major: What is your major?
+    nationality: Nationality
+    new:
+      greeting_no_name: Hi!
+      greeting_with_name: Hi %{name}!
+    phone_number: What is your phone number?
+    room: Room Number
+    select_language: Select Language
+    show:
+      edit_answers: Edit Answers
+      no_answers: There is no information for %{name}
+      title: ! '%{name}''s Completed Survey Answers'
+    state: State
+    thanks:
+      thanks: Thanks!
+    year_in_school: What is your year in school?
+    zip: Zip Code
   date:
     formats:
       default: "%m/%d/%Y"

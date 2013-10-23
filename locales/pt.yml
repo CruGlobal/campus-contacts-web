@@ -1,4 +1,4 @@
-fr:
+pt:
   activerecord:
     errors:
       full_messages:
@@ -104,9 +104,9 @@ fr:
       cancel: 
     form:
       email: 
-      first_name: Prénom
-      last_name: Nom
-      phone_number: Numéro de téléphone
+      first_name: 
+      last_name: 
+      phone_number: 
     import_contacts:
       blank_header: 
       cause_1: 
@@ -128,7 +128,7 @@ fr:
       success: 
       tip_2: 
     index:
-      add: Ajouter
+      add: 
       add_already_registered_contact: 
       add_already_registered_email: 
       add_contact: 
@@ -136,44 +136,42 @@ fr:
       add_label_exists: 
       add_label_failed: 
       add_label_success: 
-      add_question_back: Cliquez sur une question pour l&#39;ajouter à nouveau à la page
-      all: Tous les
-      all_responses: Tous les contacts
+      add_question_back: 
+      all: 
+      all_responses: 
       archived: 
       assign_contact: 
-      assign_people:
-        one: Attribuer une personne
-        other: Attribuer %{count} des gens
-      assign_to: ! 'Attribuer à:'
-      assigned_to: Assignée à
+      assign_people: 
+      assign_to: 
+      assigned_to: 
       bulk_vcard_dialog_desc: 
       bulk_vcard_dialog_title: 
       bulk_vcard_download_message: 
       bulk_vcard_email_message: 
-      clear_search_form: Formulaire de Recherche Effacer
-      completed: Terminé
+      clear_search_form: 
+      completed: 
       completed_contacts: 
       contact_no_select_message: 
-      delete_confirm: Vous allez envoyer ce contact à la &quot;Ne pas contacter&quot; liste. Si ce n&#39;est pas ce que vous vouliez faire, cliquez sur Annuler.
-      delete_contact: Supprimer ce contact
+      delete_confirm: 
+      delete_contact: 
       delete_saved_search: 
       delete_search_confirm: 
       delete_this_search: 
-      destroy_confirm: Etes-vous sûr de vouloir supprimer ce contact? Si ce n&#39;est pas ce que vous vouliez faire, cliquez sur Annuler.
-      dnc: Ne pas contacter
-      dnc_contacts: Tous les contacts - «Ne pas contacter»
+      destroy_confirm: 
+      dnc: 
+      dnc_contacts: 
       edit_saved_search: 
       edit_this_search: 
       edit_true: 
-      export: Export
-      filter: Rechercher
-      first_name: Prénom
+      export: 
+      filter: 
+      first_name: 
       for_this_permission_email_is_required: 
       for_this_permission_email_is_required_no_name: 
-      friend_responses: Les contacts qui sont aussi mes amis sur Facebook
-      friends: Amis
+      friend_responses: 
+      friends: 
       group: 
-      hidden_questions: Questions Invisible
+      hidden_questions: 
       import_contacts: 
       import_contacts2: 
       import_contacts3: 
@@ -181,25 +179,25 @@ fr:
       import_new_label: 
       import_step3_body1: 
       import_step3_body2: 
-      in_progress: Assigné
-      in_progress_responses: Tous les contacts - Assigné
-      last_name: Nom
+      in_progress: 
+      in_progress_responses: 
+      last_name: 
       last_survey: 
-      leaders: Leaders
-      matching_seach: Correspondant aux critères que vous avez cherché des
+      leaders: 
+      matching_seach: 
       me: 
-      my_friends: Mes amis
-      no_activity: Aucune activité
-      no_activity_responses: Tous les contacts - aucune activité
-      no_contacts: Désolé, il n&#39;y a pas de contacts ici.
+      my_friends: 
+      no_activity: 
+      no_activity_responses: 
+      no_contacts: 
       no_name_message: 
-      none_checked: Vous n&#39;avez pas sélectionné tous les contacts à affecter.
+      none_checked: 
       none_email_vcard: 
       not_valid_leader_selected: 
-      phone_number: Numéro de téléphone
-      reminder_email_body: ! "Salut! \r\nJuste vous faire savoir que vous avez reçu de nouveaux contacts pour le suivi. \r\nConnectez-vous au moins MissionHub http://www.missionhub.com pour accéder à vos contacts. \r\nDans le Christ,\r\n%{name}"
-      reminder_email_subject: De nouveaux contacts sont arrivés!
-      responses_assigned_to: Tous les contacts - Assigné à %{assigned_to}
+      phone_number: 
+      reminder_email_body: 
+      reminder_email_subject: 
+      responses_assigned_to: 
       save_this_search: 
       save_this_search_placeholder: 
       saved_search_name: 
@@ -210,25 +208,25 @@ fr:
       search_locate_help: 
       search_locate_title: 
       search_saved: 
-      send_reminder: Envoyer un rappel
-      show_all: Voir «en cours» des contacts
+      send_reminder: 
+      show_all: 
       surveys: 
       type_above_field: 
-      unassign_contact: Unassign contacts
-      unassigned: Unassigned
-      unassigned_responses: Tous les contacts - Unassigned
+      unassign_contact: 
+      unassigned: 
+      unassigned_responses: 
       user: 
       vcard: 
-      which_org: Vous devez choisir l&#39;organisation qui vous voulez faire folow-up de
+      which_org: 
     leader:
       archive_confirm: 
-      delete_confirm: Etes-vous sûr de vouloir supprimer %{person} en tant que leader?
+      delete_confirm: 
       delete_confirm_with_instructions: 
     leader_form:
-      start_typing: ! 'Commencez à taper un nom pour trouver une personne pour faire un chef de file:'
+      start_typing: 
     leaders:
-      reminder_prompt: Certains de vos dirigeants ont des contacts qui n&#39;ont pas été suivies! Laissez vos dirigeants savent!
-      show_more: Afficher plus Leaders
+      reminder_prompt: 
+      show_more: 
     mailer:
       bulk_vcard_email_content: 
       bulk_vcard_email_subject: 
@@ -240,9 +238,9 @@ fr:
     mine:
       all: 
       comments: 
-      completed: Terminé
+      completed: 
       detailed: 
-      email: Email
+      email: 
       first_name: 
       in_progress: 
       interactions: 
@@ -1123,52 +1121,52 @@ fr:
     notify:
       content: 
   survey_responses:
-    address1: Adresse
+    address1: 
     answer_other_surveys:
       title: 
-    birth_date: Quelle est votre date de naissance?
-    campus: Campus
-    country: pays
-    dorm: Dorm bâtiment
+    birth_date: 
+    campus: 
+    country: 
+    dorm: 
     edit:
       cancel: 
       multiple_answers: 
       title: 
-    email: Adresse Email
+    email: 
     facebook:
       facebook_login: 
       pick_keyword: 
-    faculty: Êtes-vous un corps professoral?
-    first_name: Quel est votre prénom?
+    faculty: 
+    first_name: 
     form:
       frozen: 
-    gender: Quel est votre sexe?
-    graduation_date: date de remise des diplômes
-    iso_bs: Bosnie
-    iso_de: allemand
-    iso_en: Anglais
-    iso_es: Español
-    iso_fr: français
-    iso_ru: Russie
-    iso_zh: chinois
-    last_name: Quel est votre nom?
-    major: Quel est votre principal?
-    nationality: nationalité
+    gender: 
+    graduation_date: 
+    iso_bs: 
+    iso_de: 
+    iso_en: 
+    iso_es: 
+    iso_fr: 
+    iso_ru: 
+    iso_zh: 
+    last_name: 
+    major: 
+    nationality: 
     new:
       greeting_no_name: 
       greeting_with_name: 
-    phone_number: Quel est votre numéro de téléphone?
-    room: Nombre de chambre
-    select_language: Sélectionnez la langue
+    phone_number: 
+    room: 
+    select_language: 
     show:
       edit_answers: 
       no_answers: 
       title: 
-    state: État
+    state: 
     thanks:
       thanks: 
-    year_in_school: Quelle est votre année scolaire?
-    zip: Code postal
+    year_in_school: 
+    zip: 
   surveys:
     edit:
       edit_survey: 

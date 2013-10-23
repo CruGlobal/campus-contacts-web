@@ -25,12 +25,20 @@ ru:
         too_long: is too long (maximum is %{count} characters)
         too_short: is too short (minimum is %{count} characters)
         wrong_length: is the wrong length (should be %{count} characters)
+      models:
+        email_address:
+          attributes:
+            email:
+              blank: 
+              invalid: 
+              taken: 
       template:
         body: ! 'There were problems with the following fields:'
         header:
           one: 1 error prohibited this %{model} from being saved
           other: ! '%{count} errors prohibited this %{model} from being saved'
     models:
+      person: 
       sms_keyword: Keyword
   application:
     add_contact:
@@ -41,6 +49,7 @@ ru:
       title_bio: 
       title_label: 
       title_optional: 
+      title_permission: 
       title_surveys: 
     assign:
       assign_explanation: ! 'Вы можете назначить контакт используя любую из нижеприведенных опций:'
@@ -50,6 +59,15 @@ ru:
       type_to_find_label: 
       type_to_find_leader: Чтобы найти лидера, наберите имя лидера и нажмите имя лидера
       type_to_find_org: Наберите чтобы найти a %{terminology} нажмите на %{terminology}на имя
+    assign_search:
+      assign_explanation: 
+      assign_to_user_note: 
+      keep_contact: 
+      me: 
+      type_to_find_group: 
+      type_to_find_label: 
+      type_to_find_leader: 
+      type_to_find_org: 
     messages:
       question_too_long: 
   batch:
@@ -57,8 +75,26 @@ ru:
     person_transfer_message: 
   bulk_email: Bulk Email
   bulk_sms: Bulk Text
+  charts:
+    snapshot:
+      key_leader: 
+      launched: 
+      movement_stages: 
+      multiplying: 
+      pioneering: 
+      title: 
   contacts:
     add_contact: Add Contact
+    all_contacts:
+      first_name: 
+      gender: 
+      labels: 
+      last_name: 
+      last_survey: 
+      phone_number: 
+      status: 
+      surveys: 
+      title: 
     assign: Назначить
     create:
       email_taken: 
@@ -82,17 +118,21 @@ ru:
       download_template_csv: 
       duplicate_header_match: 
       error: 
+      help_info: 
       instruction_1: 
       instruction_2: 
       instruction_3: 
       instruction_4: 
       instructions_label: 
+      present_first_name: 
       present_firstname: 
       select_csv: 
       success: 
       tip_2: 
     index:
       add: Add
+      add_already_registered_contact: 
+      add_already_registered_email: 
       add_contact: 
       add_label_empty: 
       add_label_exists: 
@@ -102,6 +142,7 @@ ru:
       all: All
       all_responses: All Contacts
       archived: 
+      assign_contact: 
       assign_people:
         one: Assign 1 person
         other: Assign %{count} people
@@ -117,17 +158,23 @@ ru:
       contact_no_select_message: 
       delete_confirm: You are about to send this contact to the "Do Not Contact" list. If that's not what you meant to do, click cancel.
       delete_contact: Delete this contact
+      delete_saved_search: 
       delete_search_confirm: 
       delete_this_search: 
       destroy_confirm: Are you sure you want to delete this contact? If that's not what you meant to do, click cancel.
       dnc: Do Not Contact
       dnc_contacts: All Contacts - 'Do Not Contact'
+      edit_saved_search: 
+      edit_this_search: 
       edit_true: 
       export: Export
       filter: Search
       first_name: First Name
+      for_this_permission_email_is_required: 
+      for_this_permission_email_is_required_no_name: 
       friend_responses: Contacts who are also my friends on Facebook
       friends: Friends
+      group: 
       hidden_questions: Hidden Questions
       import_contacts: 
       import_contacts2: 
@@ -142,12 +189,15 @@ ru:
       last_survey: 
       leaders: Leaders
       matching_seach: Matching the criteria you searched for
+      me: 
       my_friends: My Friends
       no_activity: No Activity
       no_activity_responses: All Contacts - No Activity
       no_contacts: Sorry, there are no contacts here.
       no_name_message: 
       none_checked: You didn't select any contacts to assign.
+      none_email_vcard: 
+      not_valid_leader_selected: 
       phone_number: Phone Number
       reminder_email_body: ! 'Hey!
 
@@ -165,7 +215,13 @@ ru:
       responses_assigned_to: All Contacts - Assigned to %{assigned_to}
       save_this_search: 
       save_this_search_placeholder: 
+      saved_search_name: 
       saved_searches: 
+      search_contact_no_results: 
+      search_contact_results_description: 
+      search_locate_contact_button: 
+      search_locate_help: 
+      search_locate_title: 
       search_saved: 
       send_reminder: Send Reminder
       show_all: Show 'In Progress' contacts
@@ -174,6 +230,7 @@ ru:
       unassign_contact: Unassign contact
       unassigned: Unassigned
       unassigned_responses: All Contacts - Unassigned
+      user: 
       vcard: 
       which_org: You need to choose which organization you want to do folow-up from
     leader:
@@ -190,20 +247,38 @@ ru:
       bulk_vcard_email_subject: 
       vcard_email_content: 
       vcard_email_subject: 
+    menu:
+      add_question_back: 
+      answered_surveys: 
     mine:
       all: 
       comments: 
       completed: Completed
       detailed: 
       email: Email
+      first_name: 
       in_progress: In Progress
+      interactions: 
+      last_name: 
       my_contacts: My Contacts
       name: Name
       phone: Phone Number
       year: Year
+    new_sidebar:
+      contact_assignments: 
+      interaction_types: 
+      labels: 
+      more_options: 
+      permissions: 
+    permission_assign_success: 
     plain:
       exit_survey: Exit survey mode
     role_assign_success: 
+    search:
+      add_question: 
+      first_name: 
+      last_name: 
+      phone_number: 
     show:
       add_comment: Add Comment / Update Status
       add_comments_here: Add comments here...
@@ -216,6 +291,9 @@ ru:
       send_contact_info: Send Contact Info
       status: Status
       survey_answers: Survey Answers
+    sidebar:
+      show_less: 
+      show_more: 
     statuses:
       attempted_contact: Attempted Contact
       completed: Completed
@@ -233,8 +311,28 @@ ru:
     update_notice_title: 
     update_notice_toggle: 
   dashboard:
+    button_add: 
+    button_add_sub: 
+    button_assign: 
+    button_assign_sub: 
+    button_email: 
+    button_email_sub: 
+    button_import: 
+    button_import_sub: 
+    button_label: 
+    button_label_sub: 
+    button_sent: 
+    button_sent_sub: 
+    button_text: 
+    button_text_sub: 
+    button_view: 
+    button_view_sub: 
     close: 
+    header_text: 
     learn_more: 
+    panel_managing: 
+    panel_messaging: 
+    panel_storing: 
     send_message_guide: 
     send_message_video_guide: 
   date:
@@ -334,6 +432,20 @@ ru:
       month: Month
       second: Seconds
       year: Year
+  dialogs:
+    search_people_filters:
+      advanced_search: 
+      advanced_search_link: 
+      basic_search: 
+      clear_search_form: 
+      email: 
+      first_name: 
+      last_name: 
+      permission: 
+      phone: 
+      phone_number: 
+      search_placeholder: 
+      search_title: 
   errors:
     format: ! '%{attribute} %{message}'
     messages:
@@ -374,6 +486,7 @@ ru:
     add: Добавить
     add_a_leader: Добавить лидера
     adding: Добавление...
+    address: 
     address1: 
     address2: 
     adv_search: 
@@ -381,40 +494,84 @@ ru:
     archive: 
     archived: 
     assigned_to: 
+    assigned_to_both_option: 
+    assigned_to_first_option: 
+    assigned_to_second_option: 
+    assignment: 
     autocomplete_name_hint: 
     back: Назад
     both: Оба
     city: 
+    comment_is_blank: 
+    contact_location: 
     contacts_updated_from: 
     country: 
     dash: 
+    default_email_from: 
     delete: Стереть
     edit: Редактировать
     email: Email
+    email_autocomplete_description: 
+    email_autocomplete_description_admin: 
+    email_note: 
+    faculty: 
     female: Женский
     first_name: Имя
     gender: Пол
+    group_name: 
+    help_redirect_link: 
+    help_redirect_link_import: 
     hide: скрыть
     home: 
     keyword: Ключевое слово
+    label_clear_selected: 
+    label_search_help: 
+    label_search_last_survey: 
+    label_search_not_allow_to_no_label: 
+    label_select_description: 
     last_name: Фамилия
+    leader_link_expired: 
+    leader_login_confirmation: 
+    leader_login_title: 
+    locate_contact_search_required_fields: 
     male: Мужской
     match_found: 
     message: 
     mobile: 
+    nationality: 
+    no_recipient_in_comment: 
+    no_recipient_in_send_comment: 
+    note: 
+    permission: 
+    permissions_applied: 
     phone: Телефон
     recipients: 
     remove: Удалить
+    remove_leader_confirm: 
     role: 
     roles_applied: 
     save: Сохранить
     search: Поиск
+    send_comment_success: 
     send_email: Отправить Email
     show: Показать
+    sms_another_note: 
+    sms_append_to_phone_number: 
+    sms_autocomplete_description: 
+    sms_autocomplete_description_admin: 
+    sms_change_default_email_desc: 
+    sms_change_default_email_send_as_desc: 
+    sms_no_phone_numbers: 
+    sms_note: 
+    sms_preview_body: 
+    sms_preview_from: 
+    sms_preview_title: 
     state: 
     status: Статус
     subject: 
     survey: 
+    survey_help_desc: 
+    survey_text_help_desc: 
     survey_text_tip_html: To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>
     survey_web_tip_html: For the web version of the survey, send people to <strong>http://mhub.cc/c/%{keyword}</strong>
     to: 
@@ -422,6 +579,7 @@ ru:
     unassign: 
     work: 
     zip: 
+  group: 
   group_memberships:
     form:
       add_a_leader: Add a leader
@@ -434,6 +592,10 @@ ru:
       showing_count: ! 'Showing %{length} of %{total}, keep typing or '
       showing_count_complete: 
   groups:
+    add_a_label: 
+    add_a_label_title: 
+    add_group_member_success: 
+    delete_group_member: 
     edit:
       edit_group: Editing %{group}
     form:
@@ -446,6 +608,7 @@ ru:
       of_month: of the month
     index:
       add: Add
+      add_a_group: 
       add_a_label: Add a Label
       add_group: Add a group
       assign_to_label:
@@ -458,25 +621,42 @@ ru:
       leaders: Leaders
       members: Involved
       new_label_prompt: Please enter a new label name
+      no_group_members: 
+      no_groups: 
     label:
       delete_confirm: Are you sure you want to remove the '%{label}' label?
+    label_name: 
+    label_name_is_added: 
+    label_name_is_required: 
     new:
       new_group: Create a New Group
+    new_label_prompt: 
     person:
       remove_confirm: Are you sure you want to remove %{name} from your group?
     see_all: See all groups
     show:
+      add_leader: 
       add_member: Add Member
+      back_to_list: 
       confirm_delete_group: Are you sure you want to delete this group?
       delete_group: Delete this group
+      details: 
       edit: edit
       edit_group: Edit Group
+      email: 
+      leaders: 
       location: Location
       meets: Meets
       monthly: Monthly on the %{day}<br /> %{start_time} - %{end_time}
       name: 
+      page_title: 
+      phone: 
+      role: 
       sporadically: Sporadically
       weekly: Weekly on %{day}s<br/> %{start_time} - %{end_time}
+    sidebar:
+      add: 
+      labels: 
   helpers:
     label:
       group:
@@ -489,9 +669,41 @@ ru:
     submit:
       update: 
   imports:
+    edit:
+      column1: 
+      column2: 
+      column3: 
+      guide: 
+      title: 
+    labels:
+      guide: 
+      title: 
     new:
       file_not_existing: 
+      guide: 
+      guide0: 
+      guide1: 
+      guide2: 
+      guide3: 
+      guide4: 
+      guide5: 
+      preview: 
+      sample_csv: 
+      title: 
       wrong_file_format_error: 
+    update:
+      default_login_paragraph: 
+      default_post_survey_message: 
+  interactions:
+    add_comment_title: 
+    answer_other_surveys: 
+    comment_field_title: 
+    edit_survey_results: 
+    edit_this_survey: 
+    profile_info:
+      email_contact_info: 
+    profile_interactions_edit:
+      confirm_delete_interaction: 
   keyword_request_mailer:
     notify_user:
       body_html: <h2>Your request for the keyword %{keyword} was APPROVED</h2> <p> To use the keyword, tell people to text %{keyword} to %{number}<br/> </p> <p> Если у вас есть вопросы, %{link}. </p>
@@ -526,6 +738,20 @@ ru:
     index:
       association: Ассоциировать контакты с
       association_help: When a contact responds to a survey, they are associated with the same team or movement as the keyword they responded to.
+  label: 
+  labels:
+    alumni: 
+    alumni_definition: 
+    alumni_sentence: 
+    engaged_disciple: 
+    engaged_disciple_definition: 
+    engaged_disciple_sentence: 
+    involved: 
+    involved_definition: 
+    involved_sentence: 
+    leader: 
+    leader_definition: 
+    leader_sentence: 
   leader: Leader
   leader_mailer:
     added:
@@ -544,19 +770,54 @@ ru:
       notify: Notify this person that they've been added and send them a link to log in.
     search:
       not_in_system: Если человек которого вы ищете еще не в системе, нажмите сюда чтобы добавить его.
+  manage_labels:
+    add_label_failed: 
+    add_label_success: 
+    add_title: 
+    delete_label_confirmation: 
+    edit_label_success: 
+    edit_title: 
+    label_exists: 
+    name: 
+    name_is_required: 
+    organizational_labels: 
+    system_labels: 
+    title: 
   member: Member
   monthly: Monthly
+  movement_indicator_suggestions:
+    index:
+      fetching: 
+      list_heading: 
+      show_old: 
+      title: 
+    reasons:
+      engaged_disciple: 
+      gospel_presentation: 
+      graduated: 
+      group_leader: 
+      group_membership: 
+      leader: 
+      spiritual_conversation: 
+    remove_suggestion_html: 
+  movement_indicators:
+    index:
+      list_heading: 
   nav:
     all_contacts: Все контакты
+    all_surveys: 
     archive: 
     back_to_dashboard: Вернуться в Мои контакты
     back_to_wizard: Завершить. Вернуться в мастер установки
     cleanup: 
     create_a_survey: 
+    cru: 
     dashboard: 
     directory: Директории
     enter_survey_mode: 
+    exit_survey_mode: 
     go_to: go to
+    goal: 
     groups: Группы
     help: 
     hide: Скрыть
@@ -570,16 +831,21 @@ ru:
     my_profile: 
     organizations: 
     people: 
+    permissions: 
     privacy: Политика конфиденциальности
     profile: Мой профиль
+    report_movement_indicators: 
     roles: Роли
     settings: 
+    snapshot: 
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: 
     terms: Условия и Соглашения
+    transfer: 
+    trend: 
     use_keyword: 
     view_details: Посмотреть детали
-    transfer: 
+    visual_tools: 
   number:
     currency:
       format:
@@ -607,10 +873,10 @@ ru:
           trillion: Trillion
           unit: 
       format:
+        delimiter: 
         precision: 3
         significant: true
         strip_insignificant_zeros: true
-        delimiter: 
       storage_units:
         format: ! '%n %u'
         units:
@@ -635,6 +901,12 @@ ru:
       link_text: 
     notify_user_of_denial:
       body_html: 
+  organizational_permissions:
+    cannot_delete_admin_error: 
+    cannot_delete_self_as_admin_error: 
+    copy_people_success: 
+    moving_people_success: 
+    moving_to_same_org: 
   organizational_roles:
     cannot_delete_admin_error: 
     cannot_delete_self_as_admin_error: 
@@ -671,21 +943,32 @@ ru:
       remove_leaders_submit: 
       title: 
     edit:
+      back: 
       back_to_orgs: 
       danger_explanation: 
       danger_zone: 
       delete: 
       delete_confirm: 
+      delete_zone: 
+      infobase_explanation: 
       name_explain: 
       show_sub_explain: 
       term_explain: 
       title: 
+      with_children_explanation: 
     index:
       add: 
       add_a_sub_org: 
       add_sub_org: 
+      add_sub_org_button: 
+      add_sub_org_title: 
+      crs_import_button_title: 
       crs_import_link: 
       crs_import_tip: 
+      edit_button: 
+      form_explaination: 
+      re_import_button: 
+      title: 
     new:
       signup: 
       title: 
@@ -694,6 +977,12 @@ ru:
       submit: 
       title: 
       year_in_school: 
+    transfer:
+      set_alumni: 
+      set_alumni_desc: 
+      set_archived: 
+      set_archived_desc: 
+      title: 
   people:
     add_person:
       add_person: 
@@ -703,6 +992,7 @@ ru:
       email: 
       first_name: 
       last_name: 
+      permission: 
       phone: 
       role: 
     all:
@@ -739,6 +1029,7 @@ ru:
       facebook_url_tip: 
     index:
       add_person: 
+      apply_labels: 
       apply_roles: Применить роли
       archived_directory_title: 
       archived_label: 
@@ -756,7 +1047,11 @@ ru:
       group_comment: 
       include_archived: 
       include_archived_tips: 
+      include_archived_tips_interactions: 
+      include_archived_tips_labels: 
       labels: Метки
+      locate_contact: 
+      manage_labels: 
       manage_roles: Управление ролями
       merge_contacts: 
       merge_people: 
@@ -764,6 +1059,7 @@ ru:
       phone: Телефон
       send_email: Отправить Email
       send_sms: Отправить текст
+      sent_messages: 
       statistics: 
       transfer_org: 
       vcard: 
@@ -782,6 +1078,7 @@ ru:
       preferred_name: 
     search:
       advanced_search: 
+      advanced_search_link: 
       clear_search_form: 
       search_placeholder: 
       search_title: 
@@ -802,6 +1099,10 @@ ru:
       send_vcard_desc: 
       status: 
       updated_time_difference: 
+  permissions:
+    admin: 
+    no_permissions: 
+    user: 
   questions:
     archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
     create:
@@ -823,8 +1124,11 @@ ru:
     admin: Админ
     alumni: Выпускник
     contact: Контакт
+    index:
+      title: 
     involved: Вовлечен
     leader: Лидер
+    sent: 
     views:
       create: Создать
       create_role: Создать новую роль
@@ -835,9 +1139,6 @@ ru:
       organizational_roles: Организационные роли
       system_roles: Системные роли
       update: Обновить
-    index:
-      title: 
-    sent: 
   sessions:
     destroy:
       signed_out: 
@@ -846,6 +1147,8 @@ ru:
       dont_like_facebook: Не нравится Facebook?
       instructions: Инструкции
       login: 
+      login_cannot_create_a_user: 
+      login_no_email: 
       login_paragraph_html: To get started, you'll need to have a Facebook account. <br/> Click the login link to the left and <strong>allow</strong> MHub to access your information. <br/> You'll be taken to the wizard if this is your first time accessing MissionHub.
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       login_with_facebook: 
@@ -860,6 +1163,7 @@ ru:
     keyword_inactive: The keyword you have just texted is not active. Please check your spelling and try again.
     no_survey: 
   sms_keywords:
+    all_keywords: 
     default_rejection_email: 
     edit:
       heading: 
@@ -885,7 +1189,9 @@ ru:
       association: 
       create_survey_first: 
       delete_confirm: 
+      delete_keyword: 
       delete_tip: 
+      edit_keyword: 
       request_keyword: 
     keyword_deleted: 
     new:
@@ -911,23 +1217,52 @@ ru:
     notify:
       content: 
   survey_responses:
+    address1: Улица,
+    answer_other_surveys:
+      title: 
+    birth_date: Какова Ваша дата рождения?
+    campus: кампус
+    country: страна
+    dorm: здание общежития
     edit:
+      cancel: 
       multiple_answers: 
       title: 
+    email: E-mail адрес
     facebook:
       facebook_login: 
       pick_keyword: 
+    faculty: Вы факультета?
+    first_name: Каково ваше первое имя?
     form:
       frozen: 
+    gender: Какой у вас пол?
+    graduation_date: Выпускной дате
+    iso_bs: боснийский
+    iso_de: немецкий
+    iso_en: английский
+    iso_es: Español
+    iso_fr: французский
+    iso_ru: русский
+    iso_zh: китайский
+    last_name: Какова ваша фамилия?
+    major: Какова ваша специальность?
+    nationality: гражданство
     new:
       greeting_no_name: 
       greeting_with_name: 
+    phone_number: Какой у вас номер?
+    room: номер комнаты
+    select_language: Выбор языка
     show:
       edit_answers: 
       no_answers: 
       title: 
+    state: государство
     thanks:
       thanks: 
+    year_in_school: Каково ваше год в школе?
+    zip: почтовый индекс
   surveys:
     edit:
       edit_survey: 
@@ -947,6 +1282,7 @@ ru:
       no_fb_login_option: 
       post_survey_message: 
       post_survey_placeholder: 
+      redirect_url: 
       skip_fb_login_option: 
       survey_associated_with: 
       terminology: 
@@ -954,16 +1290,20 @@ ru:
       title: 
       title_placeholder: 
       title_tip: 
-      redirect_url: 
     index:
       title: 
     index_admin:
       association_help: 
       confirm_delete: 
+      confirm_delete_survey: 
+      copy_survey: 
       delete_survey: 
       edit_survey: 
       link: 
       new: 
+      no_keywords: 
+      no_surveys: 
+      preview_survey: 
     new:
       choose_keyword_explanation_html: 
       create_a_survey: 
@@ -983,6 +1323,7 @@ ru:
         duplicate_error: 
         notice: 
       edit:
+        edit_question: 
         leader_invalid_email: 
         leader_invalid_email_with_name: 
       form:
@@ -1008,8 +1349,10 @@ ru:
         manage: 
         note: 
         predefined: 
+        predefined_help: 
         previously_used: 
         your_questions: 
+        your_questions_help: 
       multiple_choice_form:
         list_choices: 
       question:
