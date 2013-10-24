@@ -4,7 +4,6 @@ class OrganizationTest < ActiveSupport::TestCase
 
   should have_many(:group_labels)
   should have_many(:activities)
-  should have_many(:target_areas)
   should have_many(:people)
   should have_many(:contact_assignments)
   should have_many(:keywords)
