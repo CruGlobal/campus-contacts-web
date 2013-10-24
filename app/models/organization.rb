@@ -212,7 +212,7 @@ class Organization < ActiveRecord::Base
     json = {statistics: periods}.to_json
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/stats', json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      resp = RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/statistics', json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json_resp = JSON.parse(resp)
     rescue
       return false
@@ -226,7 +226,7 @@ class Organization < ActiveRecord::Base
     unless @last_push_to_infobase
       # check infobase for a stat entry
       begin
-        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\""))
+        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
         @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
         update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
       rescue

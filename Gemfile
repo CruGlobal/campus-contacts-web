@@ -60,6 +60,7 @@ gem 'versionist', '~> 1.0.0'
 gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
 gem 'wiser_date', '~> 0.3.0'
+gem 'infobase'
 
 
 group :development, :test do
