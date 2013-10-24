@@ -235,7 +235,7 @@ class ChartsController < ApplicationController
     }
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/stats/collate_stats", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/statistics/collate_stats", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json = JSON.parse(resp)
     rescue
       raise resp.inspect
@@ -254,7 +254,7 @@ class ChartsController < ApplicationController
     }
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/stats/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/statistics/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json = JSON.parse(resp)
     rescue
       raise resp.inspect
@@ -292,7 +292,7 @@ class ChartsController < ApplicationController
     end
 
     begin
-      resp = RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/stats/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+      resp = RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json = JSON.parse(resp)
     rescue
       raise resp.inspect
