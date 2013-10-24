@@ -251,7 +251,7 @@ class PeopleController < ApplicationController
       end
     end
     @assigned_tos = @person.assigned_to_people_by_org(current_organization)
-    
+
     respond_to do |format|
       if @person.update_attributes(params[:person])
         @person.update_date_attributes_updated
@@ -401,34 +401,38 @@ class PeopleController < ApplicationController
 
     person_ids.uniq.each do |id|
     	person = Person.find_by_id(id)
-      if person.present? && person.primary_phone_number
-        if person.primary_phone_number.email_address.present? && params[:change_default_email]
-          # Use email to sms if we have it
+      if person.present? && primary_phone = person.primary_phone_number
+        if is_subscribe = current_organization.is_sms_subscribe?(primary_phone.number)
+          # Do not allow to send text if the phone number is not subscribed
 
-          current_person_send_as = current_person.phone_numbers.where("id = ?", params[:send_as_phone_number])
-          from = I18n.t('general.default_email_from')
-          if current_person_send_as.present?
-            from = current_person_send_as.first.number.to_s + I18n.t("general.sms_append_to_phone_number")
+          if person.primary_phone_number.email_address.present? && params[:change_default_email]
+            # Use email to sms if we have it
+
+            current_person_send_as = current_person.phone_numbers.where("id = ?", params[:send_as_phone_number])
+            from = I18n.t('general.default_email_from')
+            if current_person_send_as.present?
+              from = current_person_send_as.first.number.to_s + I18n.t("general.sms_append_to_phone_number")
+            end
+
+            @message = current_person.sent_messages.create(
+              receiver_id: person.id,
+              organization_id: current_organization.id,
+              from: from,
+              reply_to: from,
+              to: person.primary_phone_number.email_address,
+              sent_via: 'sms_email',
+              message: params[:body]
+            )
+          else
+            # Otherwise send it as a text
+            @message = current_person.sent_messages.create(
+              receiver_id: person.id,
+              organization_id: current_organization.id,
+              to: person.phone_number,
+              sent_via: 'sms',
+              message: params[:body]
+            )
           end
-
-          @message = current_person.sent_messages.create(
-            receiver_id: person.id,
-            organization_id: current_organization.id,
-            from: from,
-            reply_to: from,
-            to: person.primary_phone_number.email_address,
-            sent_via: 'sms_email',
-            message: params[:body]
-          )
-        else
-          # Otherwise send it as a text
-          @message = current_person.sent_messages.create(
-            receiver_id: person.id,
-            organization_id: current_organization.id,
-            to: person.phone_number,
-            sent_via: 'sms',
-            message: params[:body]
-          )
         end
       end
     end
