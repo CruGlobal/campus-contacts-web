@@ -125,7 +125,7 @@ class ChartsController < ApplicationController
   def trend
     get_trend_chart
 
-    @line_1 = {}
+    refresh_trend_data
   end
 
   def update_trend_movements
@@ -153,7 +153,7 @@ class ChartsController < ApplicationController
     @chart.trend_end_date = end_date
     @chart.save
 
-    @line_1 = {}
+    refresh_trend_data
   end
 
   def update_trend_field
@@ -162,7 +162,7 @@ class ChartsController < ApplicationController
     @chart.try(params[:changed].to_s + '=', params[:criteria])
     @chart.save
 
-    @line_1 = {}
+    refresh_trend_data
     render :update_trend_movements
   end
 
@@ -172,7 +172,7 @@ class ChartsController < ApplicationController
     @chart.trend_compare_year_ago = params[:compare]
     @chart.save
 
-    @line_1 = {}
+    refresh_trend_data
     render :update_trend_movements
   end
 
@@ -319,5 +319,44 @@ class ChartsController < ApplicationController
         @data_points[Date.parse(stat["period_end"])] = total
       end
     end
+  end
+
+  def refresh_trend_data
+    begin_date = @chart.trend_start_date.beginning_of_week(:sunday)
+    end_date = @chart.trend_end_date.beginning_of_week(:sunday)
+
+    if @chart.trend_all_movements
+      @displayed_movements = @movements
+    else
+      org_ids = @chart.chart_organizations.where("trend_display = 1").all.collect(&:organization_id)
+      @displayed_movements = Organization.where("id IN (?)", org_ids)
+    end
+
+    max_fields = 4
+
+    fields, lines = [], []
+    (0..max_fields - 1).each do |number|
+      fields[number] = MovementIndicator.translate[@chart["trend_field_#{number}"]] if @chart["trend_field_#{number}"].present?
+      lines[number] = {}
+    end
+
+    infobase_hash = {
+      :activity_ids => @displayed_movements.collect(&:importable_id)
+    }
+
+    begin_date.step(end_date, 7) do |date|
+      date_hash = infobase_hash.clone[:date] = date
+
+      begin
+        resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/stats/date", date_hash.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
+        json = JSON.parse(resp)
+      rescue
+        raise resp.inspect
+      end
+
+
+
+    end
+    @line_1 = {}
   end
 end
