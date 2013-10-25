@@ -16,7 +16,7 @@ class SmsControllerTest < ActionController::TestCase
       @q3 = Factory(:survey_element, survey: @survey, element: element, position: 3)
 
       @phone_number = '16304182108'
-      @post_params = {message: @keyword.keyword, device_address: @phone_number,
+      @post_params = {message: @keyword.keyword, device_address: @phone_number, phone_number: @phone_number,
                       inbound_address: APP_CONFIG['sms_short_code'], country: 'US', carrier: @carrier.moonshado_name}
     end
 
@@ -116,7 +116,6 @@ class SmsControllerTest < ActionController::TestCase
 =end
     end
 
-
     context "on first sms" do
       should "reply with default message to inactive keyword" do
         @keyword = Factory(:sms_keyword)
@@ -145,17 +144,73 @@ class SmsControllerTest < ActionController::TestCase
       assert_equal(@response.body, '<Response></Response>')
     end
 
-    should "have response when user sends stop" do
-      post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-      assert_equal 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.', assigns(:msg)
-    end
-
     should "have response when user sends help" do
       post :mo, @post_params.merge!({message: 'help', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
       assert_equal 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user.', assigns(:msg)
     end
-  end
 
+    context "subscriptions WITHOUT sms_session" do
+      setup do
+        @person = Factory(:person)
+        Factory(:phone_number, number: @phone_number, person_id: @person.id)
+        @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)
+        @outbound_message = Factory(:outbound_text_message, :to => @strip_phone_number)
+        @organization = @outbound_message.organization
+        @organization.add_user(@person)
+      end
+
+      should "add unsubscribe record when user sends 'stop' message" do
+        assert_difference "SmsUnsubscribe.count", 1 do
+          post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        end
+      end
+
+      should "remove unsubscribe record when user sends 'on' message" do
+        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @organization.id)
+        assert_difference "SmsUnsubscribe.count", -1 do
+          post :mo, @post_params.merge!({message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        end
+      end
+    end
+
+    context "subscriptions WITH sms_session" do
+      setup do
+        @person = Factory(:person)
+        Factory(:phone_number, number: @phone_number, person_id: @person.id)
+
+        @sms_session = Factory(:sms_session, person_id: @person.id, sms_keyword_id: @keyword.id, phone_number: @phone_number)
+        @organization = @sms_session.sms_keyword.organization
+        @organization.add_user(@person)
+
+        @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)
+      end
+
+      should "add unsubscribe record when user sends 'stop' message WITH sms session" do
+        @sms_session.update_attribute(:interactive, false)
+        assert_difference "SmsUnsubscribe.count", 1 do
+          post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        end
+      end
+
+      should "remove unsubscribe record when user sends 'on' message WITH sms session" do
+        @sms_session.update_attribute(:interactive, false)
+        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @organization.id)
+        assert_difference "SmsUnsubscribe.count", -1 do
+          post :mo, @post_params.merge!({message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        end
+      end
+
+      should "have response when user sends 'on' subscribe" do
+        post :mo, @post_params.merge!({message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal 'You have been subscribed from MHub SMS alerts. You can now receive text messages.', assigns(:msg)
+      end
+
+      should "have response when user sends 'stop' unsubscribe" do
+        post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
+        assert_equal 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.', assigns(:msg)
+      end
+    end
+  end
 
   should "Test for email validation" do
     assert_equal("herp@derp.com", @controller.send(:try_to_extract_email_from, "My email is herp@derp.com Thanks!"))
@@ -166,5 +221,4 @@ class SmsControllerTest < ActionController::TestCase
 
     @controller.send(:try_to_extract_email_from, "myspacebarisbrokenbutmyemailisherp@derp.comthanks!")
   end
-
 end
