@@ -30,6 +30,7 @@ class Organization < ActiveRecord::Base
   has_many :organizational_permissions, inverse_of: :organization
   has_many :movement_indicator_suggestions
   has_many :organizational_goal
+  has_many :sms_unsubscribes
 
   if Permission.table_exists? # added for travis testing
 
@@ -212,7 +213,7 @@ class Organization < ActiveRecord::Base
     json = {statistics: periods}.to_json
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + '/api/v1/statistics', json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+      resp = RestClient.post(APP_CONFIG['infobase_url'] + '/statistics', json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json_resp = JSON.parse(resp)
     rescue
       return false
@@ -226,7 +227,7 @@ class Organization < ActiveRecord::Base
     unless @last_push_to_infobase
       # check infobase for a stat entry
       begin
-        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/api/v1/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
+        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
         @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
         update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
       rescue
@@ -285,6 +286,10 @@ class Organization < ActiveRecord::Base
 
   def is_child?
     !ancestry.nil?
+  end
+
+  def is_sms_subscribe?(phone_number)
+    sms_unsubscribes.where("phone_number = ?", phone_number).count < 1
   end
 
   def is_root_and_has_only_one_admin?

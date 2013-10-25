@@ -21,10 +21,39 @@ class SmsController < ApplicationController
     @sms_session = @sms_session.first
 
     # Handle STOP and HELP messages
+
     case message.downcase
     when 'stop'
-      @sms_session.update_attribute(:interactive, false) if @sms_session
+      phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
+      if @sms_session
+        @sms_session.update_attribute(:interactive, false)
+        @organization = @sms_session.sms_keyword.organization
+        SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization.present?
+      else
+        outbound = Message.outbound_text_messages(phone_number)
+        if outbound.present?
+          @organization = outbound.last.organization
+          SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization
+        end
+      end
       @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
+
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      render xml: @sent_sms.to_twilio and return
+    when 'on'
+      phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
+      if @sms_session
+        @organization = @sms_session.sms_keyword.organization
+        SmsUnsubscribe.remove_to_unsubscribe(phone_number, @organization.id) if @organization.present?
+      else
+        outbound = Message.outbound_text_messages(phone_number)
+        if outbound.present?
+          @organization = outbound.last.organization
+          SmsUnsubscribe.remove_to_unsubscribe(phone_number, @organization.id) if @organization
+        end
+      end
+      @msg = 'You have been subscribed from MHub SMS alerts. You can now receive text messages.'
+
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when 'help'
