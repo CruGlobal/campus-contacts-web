@@ -322,8 +322,10 @@ class ChartsController < ApplicationController
   end
 
   def refresh_trend_data
-    begin_date = @chart.trend_start_date.beginning_of_week(:sunday)
-    end_date = @chart.trend_end_date.beginning_of_week(:sunday)
+    @begin_date = Date.today - 3.months
+    @end_date = Date.today
+    @begin_date = @chart.trend_start_date.beginning_of_week(:sunday) if @chart.trend_start_date
+    @end_date = @chart.trend_end_date.beginning_of_week(:sunday) if @chart.trend_end_date
 
     if @chart.trend_all_movements
       @displayed_movements = @movements
@@ -334,29 +336,34 @@ class ChartsController < ApplicationController
 
     max_fields = 4
 
-    fields, lines = [], []
+    @fields, @lines = [], {}
     (0..max_fields - 1).each do |number|
-      fields[number] = MovementIndicator.translate[@chart["trend_field_#{number}"]] if @chart["trend_field_#{number}"].present?
-      lines[number] = {}
+      @fields << MovementIndicator.translate[@chart["trend_field_#{number}"]] if @chart["trend_field_#{number}"].present?
+      @lines[@fields[number].to_s] = {}
     end
 
     infobase_hash = {
       :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
-    begin_date.step(end_date, 7) do |date|
-      date_hash = infobase_hash.clone[:date] = date
+    if !@fields.empty?
+      @begin_date.step(@end_date, 7) do |date|
+        date_hash = infobase_hash.clone
+        date_hash[:begin_date] = date
+        date_hash[:semester_date] = date
+        date_hash[:end_date] = date + 1.day
 
-      begin
-        resp = RestClient.post(APP_CONFIG['infobase_url'] + "/api/v1/stats/date", date_hash.to_json, content_type: :json, accept: :json, authorization: "Token token=\"#{APP_CONFIG['infobase_token']}\"")
-        json = JSON.parse(resp)
-      rescue
-        raise resp.inspect
+        begin
+          resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats", date_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+          json = JSON.parse(resp)
+        rescue
+          raise resp.inspect
+        end
+
+        @fields.each do |field|
+          @lines[field][date] = json[field]
+        end
       end
-
-
-
     end
-    @line_1 = {}
   end
 end
