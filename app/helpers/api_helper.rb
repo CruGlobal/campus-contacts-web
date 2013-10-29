@@ -128,15 +128,6 @@ module ApiHelper
     object
   end
 
-  def restrict_to_contact_permission(people, organization)
-    people = people.where("`#{OrganizationalPermission.table_name}`.`organization_id` = ?", organization.id).
-    where("`#{OrganizationalPermission.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}`").
-    where("`#{OrganizationalPermission.table_name}`.`permission_id` = #{Permission::NO_PERMISSIONS_ID}").
-    where("`#{OrganizationalPermission.table_name}`.`followup_status` <> 'do_not_contact'")
-
-    people
-  end
-
   def restrict_to_unassigned_people(people,organization)
     people = people.joins("LEFT OUTER JOIN `#{ContactAssignment.table_name}` ON `#{ContactAssignment.table_name}`.`person_id` = `#{Person.table_name}`.`#{Person.primary_key}` AND `#{ContactAssignment.table_name}`.`organization_id` = #{organization.id}").where("#{ContactAssignment.table_name}.#{ContactAssignment.primary_key}" => nil)
 
@@ -203,7 +194,6 @@ module ApiHelper
       end
     end
 
-    people = restrict_to_contact_permission(people,organization)
     people
   end
 
