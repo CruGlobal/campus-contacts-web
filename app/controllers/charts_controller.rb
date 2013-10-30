@@ -322,10 +322,10 @@ class ChartsController < ApplicationController
   end
 
   def refresh_trend_data
-    @begin_date = Date.today - 3.months
-    @end_date = Date.today
-    @begin_date = @chart.trend_start_date.beginning_of_week(:sunday) if @chart.trend_start_date
-    @end_date = @chart.trend_end_date.beginning_of_week(:sunday) if @chart.trend_end_date
+    @begin_date = (Date.today - 3.months).end_of_week(:sunday)
+    @end_date = Date.today.end_of_week(:sunday)
+    @begin_date = @chart.trend_start_date.end_of_week(:sunday) if @chart.trend_start_date
+    @end_date = @chart.trend_end_date.end_of_week(:sunday) if @chart.trend_end_date
 
     if @chart.trend_all_movements
       @displayed_movements = @movements
@@ -342,26 +342,23 @@ class ChartsController < ApplicationController
       @lines[@fields[number].to_s] = {}
     end
 
-    infobase_hash = {
-      :activity_ids => @displayed_movements.collect(&:importable_id)
-    }
+    unless @fields.empty?
+      infobase_hash = {
+        activity_ids: @displayed_movements.collect(&:importable_id),
+        begin_date: @begin_date,
+        end_date: @end_date
+      }
 
-    if !@fields.empty?
+      begin
+        resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+        json = JSON.parse(resp)
+      rescue
+        raise resp.inspect
+      end
+
       @begin_date.step(@end_date, 7) do |date|
-        date_hash = infobase_hash.clone
-        date_hash[:begin_date] = date
-        date_hash[:semester_date] = date
-        date_hash[:end_date] = date + 1.day
-
-        begin
-          resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats", date_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
-          json = JSON.parse(resp)
-        rescue
-          raise resp.inspect
-        end
-
         @fields.each do |field|
-          @lines[field][date] = json[field]
+          @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
         end
       end
     end
