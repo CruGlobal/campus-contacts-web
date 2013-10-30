@@ -169,7 +169,6 @@ class Api::ContactsController < ApiController
       @people = @people.order("`#{OrganizationalPermission.table_name}`.`created_at` desc")
     end
 
-    @people = restrict_to_contact_permission(@people,@organization)
     @people = limit_and_offset_object(@people) if params[:start].present?
 
     output = @api_json_header
