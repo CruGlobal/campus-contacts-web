@@ -335,6 +335,8 @@ class ChartsController < ApplicationController
     end
 
     max_fields = 4
+    interval = 1 #week
+    interval = 4 if @end_date - @begin_date > 182 # interval should change to 4 weeks if period is greater than 6 months (182 days)
 
     @fields, @lines = [], {}
     (0..max_fields - 1).each do |number|
@@ -346,7 +348,8 @@ class ChartsController < ApplicationController
       infobase_hash = {
         activity_ids: @displayed_movements.collect(&:importable_id),
         begin_date: @begin_date,
-        end_date: @end_date
+        end_date: @end_date,
+        interval: interval
       }
 
       begin
