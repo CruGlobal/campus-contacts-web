@@ -339,7 +339,7 @@ class ChartsController < ApplicationController
     @fields, @lines = [], {}
     (0..max_fields - 1).each do |number|
       @fields << MovementIndicator.translate[@chart["trend_field_#{number + 1}"]] if @chart["trend_field_#{number + 1}"].present?
-      @lines[@fields[number].to_s] = {}
+      @lines[@fields.last.to_s] = {}
     end
 
     unless @fields.empty?
