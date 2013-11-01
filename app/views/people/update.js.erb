@@ -1,6 +1,6 @@
-$("#profile_name span#name").text("<%= escape_javascript(@person.name)%>")
+$("#profile_name span#name").text("<%= raw(@person.name)%>")
 if(<%= @person.id == @current_person.id %>){
-  $('#current_user_name').text("<%= @person.name %> Profile")
+  $('#current_user_name').text("<%= raw(@person.name) %> Profile")
 }
 if($('body').hasClass("reload_info")){
   $('.feed_content .tab_content.profile_info .view_space').html("<%= escape_javascript(render partial: 'interactions/profile_info') %>")
