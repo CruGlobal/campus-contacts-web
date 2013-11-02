@@ -22,7 +22,7 @@ class Address < ActiveRecord::Base
 	end
 	
   def merge(other)
-    Ccc::MinistryNewaddress.transaction do
+    Address.transaction do
       # We're only interested if the other address has been updated more recently
       if other.updated_at && updated_at && other.updated_at > updated_at
         # if any part of they physical address is there, copy all of it
