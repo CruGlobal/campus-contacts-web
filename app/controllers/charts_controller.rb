@@ -335,12 +335,15 @@ class ChartsController < ApplicationController
     end
 
     max_fields = 4
+    semester_stats_needed = false
     interval = 1 #week
     interval = 4 if @end_date - @begin_date > 182 # interval should change to 4 weeks if period is greater than 6 months (182 days)
 
     @fields, @lines = [], {}
     (0..max_fields - 1).each do |number|
-      @fields << MovementIndicator.translate[@chart["trend_field_#{number + 1}"]] if @chart["trend_field_#{number + 1}"].present?
+      field = @chart["trend_field_#{number + 1}"]
+      @fields << MovementIndicator.translate[field] if @chart[field].present?
+      semester_stats_needed = true if MovementIndicator.semester.include?(field)
       @lines[@fields.last.to_s] = {}
     end
 
@@ -349,7 +352,8 @@ class ChartsController < ApplicationController
         activity_ids: @displayed_movements.collect(&:importable_id),
         begin_date: @begin_date,
         end_date: @end_date,
-        interval: interval
+        interval: interval,
+        semester: semester_stats_needed
       }
 
       begin
