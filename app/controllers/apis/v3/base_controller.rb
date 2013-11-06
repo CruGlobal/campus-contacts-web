@@ -62,7 +62,7 @@ class Apis::V3::BaseController < ApplicationController
     unless @current_user
       if oauth_access_token
         @current_user = User.from_access_token(oauth_access_token)
-      elsif params[:secret]
+      elsif params[:secret] && current_organization
         @current_user = current_organization.parent_organization_admins.first.try(:user)
       end
     end
