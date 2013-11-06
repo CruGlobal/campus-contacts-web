@@ -1367,6 +1367,28 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_organizational_permissions(organization_id)
+    permissions = get_organizational_permissions(organization_id)
+
+    # if in current org/sub org has no permission, get the permission to the parent org
+    if !permissions.present? && get_org = Organization.find_by_id(organization_id)
+      if get_org.ancestors.present?
+        if get_org.ancestors.count > 1 && admin_of_org?(get_org.ancestors.last)
+          # get permission from the parent of the current organization
+          permissions = get_organizational_permissions(get_org.parent.id)
+        end
+
+        # if in parent org has no permission, get the permission to the root org
+        unless permissions.present?
+          # get permission from the root of the current organization
+          permissions = get_organizational_permissions(get_org.ancestors.first.id)
+        end
+      end
+    end
+
+    return permissions
+  end
+
+  def get_organizational_permissions(organization_id)
     permissions.where('organizational_permissions.organization_id' => organization_id, 'organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil)
   end
 
