@@ -342,7 +342,7 @@ class ChartsController < ApplicationController
     @fields, @lines = [], {}
     (0..max_fields - 1).each do |number|
       field = @chart["trend_field_#{number + 1}"]
-      @fields << MovementIndicator.translate[field] if @chart[field].present?
+      @fields << MovementIndicator.translate[field] if field.present?
       semester_stats_needed = true if MovementIndicator.semester.include?(field)
       @lines[@fields.last.to_s] = {}
     end
