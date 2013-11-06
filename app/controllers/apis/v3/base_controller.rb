@@ -69,10 +69,14 @@ class Apis::V3::BaseController < ApplicationController
     @current_user
   end
 
+  def current_client
+    @current_client ||= Rack::OAuth2::Server::Client.find_by_secret(params[:secret])
+  end
+
   def current_organization
     unless @current_organization
       if params[:secret]
-        api_org = Rack::OAuth2::Server::Client.find_by_secret(params[:secret]).try(:organization)
+        api_org = current_client.try(:organization)
         if api_org
           @current_organization = params[:organization_id] ? api_org.subtree.find(params[:organization_id]) : api_org
         end

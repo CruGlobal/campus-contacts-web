@@ -106,7 +106,10 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
       order = params[:order] || 'last_name, first_name'
 
       @filtered_people = case
-                         when params[:filters] && params[:filters][:is_friends_with].present?
+                           when current_client &&
+                                current_client.scope.split(',').include?('friends') &&
+                                params[:filters] &&
+                                params[:filters][:is_friends_with].present?
                            Person
                          when params[:include_archived] == 'true'
                             current_organization.people
