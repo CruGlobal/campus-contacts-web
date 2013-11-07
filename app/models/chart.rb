@@ -7,6 +7,8 @@ class Chart < ActiveRecord::Base
   has_many :chart_organizations
   
   validates_presence_of :person_id, :chart_type
+
+  TREND_MAX_FIELDS = 4
   
   def update_movements(orgs)
     corg_ids = chart_organizations.all.collect(&:organization_id)
@@ -51,6 +53,13 @@ class Chart < ActiveRecord::Base
 
   def needs_year_ago_stats?
     trend_compare_year_ago && trend_year_ago_available?
+  end
+
+  def trend_interval
+    interval = 1 # default is 1 week
+    # interval should change to 4 weeks if period is greater than 6 months (182 days)
+    interval = 4 if (trend_end_date || Date.today) - (trend_start_date || Date.today) > 182
+    interval
   end
 
   def self.evang_range_options

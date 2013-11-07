@@ -333,14 +333,13 @@ class ChartsController < ApplicationController
       @displayed_movements = Organization.where("id IN (?)", org_ids)
     end
 
-    max_fields = 4
+    max_fields = Chart::TREND_MAX_FIELDS
     semester_stats_needed = false
-    interval = 1 #week
-    interval = 4 if @end_date - @begin_date > 182 # interval should change to 4 weeks if period is greater than 6 months (182 days)
+    interval = @chart.trend_interval
 
     @fields, @lines = [], {}
-    (0..max_fields - 1).each do |number|
-      field = @chart["trend_field_#{number + 1}"]
+    (1..max_fields).each do |number|
+      field = @chart["trend_field_#{number}"]
       @fields << MovementIndicator.translate[field] if field.present?
       semester_stats_needed = true if MovementIndicator.semester.include?(field)
       @lines[@fields.last.to_s] = {}
@@ -362,7 +361,7 @@ class ChartsController < ApplicationController
         raise resp.inspect
       end
 
-      @begin_date.step(@end_date, 7) do |date|
+      @begin_date.step(@end_date, 7) do |date| # step through dates 1 week at a time
         @fields.each do |field|
           @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
         end
@@ -395,8 +394,9 @@ class ChartsController < ApplicationController
           raise resp.inspect
         end
 
-        year_ago_begin.step(year_ago_end, 7) do |date|
+        year_ago_begin.step(year_ago_end, 7) do |date| # step through dates 1 week at a time
           @fields_year_ago.each do |field|
+            # add 364 days to the plot point to line it up with the current year and day of the week
             @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
           end
         end
