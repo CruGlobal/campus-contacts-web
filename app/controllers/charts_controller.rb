@@ -40,7 +40,7 @@ class ChartsController < ApplicationController
   def goal
     get_goal_chart
     organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
-    @movements = organizations.collect{|org| [org.name, org.id]}
+    @movements = organizations.collect { |org| [org.name, org.id] }
     if @movements.blank?
       redirect_to goal_empty_charts_path
       return
@@ -124,7 +124,6 @@ class ChartsController < ApplicationController
 
   def trend
     get_trend_chart
-
     refresh_trend_data
   end
 
@@ -228,10 +227,10 @@ class ChartsController < ApplicationController
 
     @all_stats = {}
     infobase_hash = {
-      :begin_date => begin_date,
-      :end_date => end_date,
-      :semester_date => semester_date,
-      :activity_ids => @displayed_movements.collect(&:importable_id)
+        :begin_date => begin_date,
+        :end_date => end_date,
+        :semester_date => semester_date,
+        :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
@@ -250,7 +249,7 @@ class ChartsController < ApplicationController
 
   def get_movement_stages
     infobase_hash = {
-      :activity_ids => @displayed_movements.collect(&:importable_id)
+        :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
@@ -271,8 +270,8 @@ class ChartsController < ApplicationController
   def get_changed_lives
     org_ids = @movements.collect(&:id)
     interactions = Interaction.where("interaction_type_id = ?", InteractionType::PERSONAL_DECISION).
-      where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
-      order("created_at desc").all
+        where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
+        order("created_at desc").all
     people = interactions.collect(&:receiver)
     @changed_lives = []
     people.each do |person|
@@ -349,11 +348,11 @@ class ChartsController < ApplicationController
 
     unless @fields.empty?
       infobase_hash = {
-        activity_ids: @displayed_movements.collect(&:importable_id),
-        begin_date: @begin_date,
-        end_date: @end_date,
-        interval: interval,
-        semester: semester_stats_needed
+          activity_ids: @displayed_movements.collect(&:importable_id),
+          begin_date: @begin_date,
+          end_date: @end_date,
+          interval: interval,
+          semester: semester_stats_needed
       }
 
       begin

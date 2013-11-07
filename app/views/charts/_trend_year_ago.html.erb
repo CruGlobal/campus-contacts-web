@@ -1,0 +1,2 @@
+<%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago, disabled: (@chart.trend_end_date || Date.today) - (@chart.trend_start_date || Date.today) > 365 %>
+&nbsp;Compare With One Year Ago

@@ -1,5 +1,5 @@
 <% provide :sidebar do %>
-    <%= render :partial => 'trend_sidebar'%>
+  <%= render partial: 'trend_sidebar' %>
 <% end %>
 
 <div class="titlebar titlebarmod">
@@ -17,13 +17,14 @@
 <div id="trend_container"></div>
 
 <div id="trend_chart">
-  <%= render :partial => 'trend_js' %>
+  <%= render partial: 'trend_js' %>
 </div>
 
 <div id="trend_fields">
   <div class="trend_fields_row">
     <%= select_tag "trend_field_1", options_for_select([""] + MovementIndicator.all, @chart.trend_field_1), id: "trend_field_1" %>
     <%= select_tag "trend_field_2", options_for_select([""] + MovementIndicator.all, @chart.trend_field_2), id: "trend_field_2" %>
+  </div>
   <div class="trend_fields_row">
     <%= select_tag "trend_field_3", options_for_select([""] + MovementIndicator.all, @chart.trend_field_3), id: "trend_field_3" %>
     <%= select_tag "trend_field_4", options_for_select([""] + MovementIndicator.all, @chart.trend_field_4), id: "trend_field_4" %>
@@ -31,6 +32,5 @@
 </div>
 
 <div id="trend_compare">
-  <%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago, disabled: (@chart.trend_end_date || Date.today) - (@chart.trend_start_date || Date.today) > 365 %>
-  &nbsp;Compare With One Year Ago
+  <%= render partial: 'trend_year_ago' %>
 </div>
