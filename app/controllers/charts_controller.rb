@@ -397,7 +397,7 @@ class ChartsController < ApplicationController
 
         year_ago_begin.step(year_ago_end, 7) do |date|
           @fields_year_ago.each do |field|
-            @lines_year_ago[field][date + 1.year] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
+            @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
           end
         end
       end

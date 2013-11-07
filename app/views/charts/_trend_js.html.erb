@@ -58,6 +58,9 @@
           pointPlacement: 'on'
         }
       },
+
+      <% colors = ['#FF9900','#19D119','#4775D1','#CC0066'] %>
+
       series: [{
         <% @fields.each do |field| %>
           <% line = @lines[field] %>
@@ -72,7 +75,8 @@
                 <% end %>
               <% end %>
             }],
-            name: '<%= field.titleize %>'
+            name: '<%= field.titleize %>',
+            color: '<%= colors[@fields.index(field)] %>'
             <%= "}, {" unless field == @fields.last %>
           <% end %>
         <% end %>
@@ -94,7 +98,9 @@
                 <% end %>
                 <% end %>
               }],
-            name: '<%= field.titleize %> - One Year Ago'
+            name: '<%= field.titleize %> - One Year Ago',
+            dashStyle: 'LongDash',
+            color: '<%= colors[@fields.index(field)] %>'
             <%= "}, {" unless field == @fields.last %>
           <% end %>
         <% end %>
