@@ -7,7 +7,8 @@ class CrsImport
   end
 
   def import
-    email_address = @user.person.try(:email)
+    importer_person = @user.person
+    importer_email_address = importer_person.try(:email)
     if @conference
       begin
         questions = {}
@@ -60,9 +61,6 @@ class CrsImport
           survey = @org.surveys.where(crs_registrant_type_id: registrant_type.id).
                      first_or_initialize(title: registrant_type.name)
           survey.save(validate: false)
-
-          # create permission set to no_permission or "Contact"
-          @org.add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, current_person.id)
 
           # add questions to survey
           registrant_type.custom_questions_items.where("question_id is not null").each do |cqi|
@@ -130,6 +128,9 @@ class CrsImport
 
             person.save(validate: false)
 
+            # create permission set to no_permission or "Contact"
+            @org.add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, importer_person.id)
+
             # import latest address/email/phone
             crs2_person.all_email_addresses.each do |email|
               begin
@@ -183,13 +184,13 @@ class CrsImport
           end
         end
 
-        CrsImportMailer.completed(@org, email_address).deliver if email_address
+        CrsImportMailer.completed(@org, importer_email_address).deliver if importer_email_address
       rescue
-        CrsImportMailer.failed(@org, email_address).deliver if email_address
+        CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
         raise
       end
     else
-      CrsImportMailer.failed(@org, email_address).deliver if email_address
+      CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
       raise
     end
     nil

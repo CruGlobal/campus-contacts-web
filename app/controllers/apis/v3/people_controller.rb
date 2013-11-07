@@ -105,11 +105,17 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     unless @filtered_people
       order = params[:order] || 'last_name, first_name'
 
-      @filtered_people = if params[:include_archived] == 'true'
-        current_organization.people
-      else
-        current_organization.not_archived_people
-      end
+      @filtered_people = case
+                           when current_client &&
+                                current_client.scope.split(',').include?('friends') &&
+                                params[:filters] &&
+                                params[:filters][:is_friends_with].present?
+                           Person
+                         when params[:include_archived] == 'true'
+                            current_organization.people
+                          else
+                            current_organization.not_archived_people
+                          end
 
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonOrder.new(order, current_organization).order(@filtered_people) if order

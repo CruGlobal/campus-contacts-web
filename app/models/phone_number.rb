@@ -24,7 +24,7 @@ class PhoneNumber < ActiveRecord::Base
 
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
-  after_commit :async_update_carrier
+  #after_commit :async_update_carrier
   after_destroy :set_new_primary
 
   def self.strip_us_country_code(num)

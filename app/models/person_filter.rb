@@ -26,7 +26,16 @@ class PersonFilter
     end
 
     if @filters[:roles]
-      filtered_people = filtered_people.joins(:organizational_labels).where('(organizational_permissions.permission_id IN (:ids) AND organizational_permissions.organization_id = :org_id) OR (organizational_labels.label_id IN (:ids) AND organizational_labels.organization_id = :org_id AND organizational_labels.removed_date IS NULL)', ids: @filters[:roles].split(','), org_id: @organization.id)
+      permission_ids = @filters[:roles].split(',').collect {|r| r.to_i > 0 ? r : Permission.where(name: r).first.try(:id)}.compact
+      label_ids = @filters[:roles].split(',').collect {|r| r.to_i > 0 ? r : Label.where(name: r).first.try(:id)}.compact
+      filtered_people = filtered_people.joins(:organizational_labels)
+                                       .includes(:organizational_permissions)
+                                       .where('(organizational_permissions.permission_id IN (:permission_ids)
+                                                AND organizational_permissions.organization_id = :org_id)
+                                                OR (organizational_labels.label_id IN (:label_ids)
+                                                AND organizational_labels.organization_id = :org_id
+                                                AND organizational_labels.removed_date IS NULL)',
+                                              permission_ids: permission_ids, label_ids: label_ids, org_id: @organization.id)
     end
 
     if @filters[:interactions]
@@ -39,6 +48,15 @@ class PersonFilter
 
     if @filters[:last_name_like]
       filtered_people = filtered_people.where("last_name like ? ", "#{@filters[:last_name_like]}%")
+    end
+
+    if @filters[:is_friends_with]
+      friend_ids =  $redis.smembers(Friend.redis_key(@filters[:is_friends_with], :following))
+      if friend_ids.present?
+        filtered_people =  filtered_people.where('people.id' => friend_ids)
+      else
+        filtered_people = filtered_people.where('1=0')
+      end
     end
 
     if @filters[:name_or_email_like]
