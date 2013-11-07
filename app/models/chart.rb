@@ -45,6 +45,14 @@ class Chart < ActiveRecord::Base
     end
   end
 
+  def trend_year_ago_available?
+    (trend_end_date || Date.today) - (trend_start_date || Date.today) < 365
+  end
+
+  def needs_year_ago_stats?
+    trend_compare_year_ago && trend_year_ago_available?
+  end
+
   def self.evang_range_options
     {
       "Past Week" => 0,

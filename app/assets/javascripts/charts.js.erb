@@ -89,13 +89,4 @@ $(document).ready(function() {
       data: {changed: this.id, criteria: $('select#' + this.id + ' option:selected').val()}
     })
   });
-  $('input#trend_compare').change(function() {
-    $('div#trend_container').hide();
-    $('div#trend_spinner').show();
-    $.ajax({
-      url: "/charts/update_trend_compare",
-      type: "POST",
-      data: {compare: $('input#trend_compare').prop('checked')}
-    })
-  });
 });

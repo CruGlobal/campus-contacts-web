@@ -76,6 +76,28 @@
             <%= "}, {" unless field == @fields.last %>
           <% end %>
         <% end %>
+
+        <% unless @fields_year_ago.empty? %>
+          }, {
+        <% end %>
+
+        <% @fields_year_ago.each do |field| %>
+          <% line = @lines_year_ago[field] %>
+          <% if line %>
+            data: [{
+              <% line.each_key do |date| %>
+              x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+              y: <%= line[date] %>
+              <% unless date == line.keys.last %>
+            },
+              {
+                <% end %>
+                <% end %>
+              }],
+            name: '<%= field.titleize %> - One Year Ago'
+            <%= "}, {" unless field == @fields.last %>
+          <% end %>
+        <% end %>
       }]
     });
   });

@@ -368,5 +368,39 @@ class ChartsController < ApplicationController
         end
       end
     end
+
+    @fields_year_ago, @lines_year_ago = [], {}
+    if @chart.needs_year_ago_stats?
+      @fields_year_ago = @fields.clone
+      @fields_year_ago.each do |field|
+        @lines_year_ago[field] = {}
+      end
+
+      year_ago_begin = (@begin_date - 1.year).end_of_week(:sunday)
+      year_ago_end = (@end_date - 1.year).end_of_week(:sunday)
+
+      unless @fields_year_ago.empty?
+        infobase_hash = {
+            activity_ids: @displayed_movements.collect(&:importable_id),
+            begin_date: year_ago_begin,
+            end_date: year_ago_end,
+            interval: interval,
+            semester: semester_stats_needed
+        }
+
+        begin
+          resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+          json = JSON.parse(resp)
+        rescue
+          raise resp.inspect
+        end
+
+        year_ago_begin.step(year_ago_end, 7) do |date|
+          @fields_year_ago.each do |field|
+            @lines_year_ago[field][date + 1.year] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
+          end
+        end
+      end
+    end
   end
 end
