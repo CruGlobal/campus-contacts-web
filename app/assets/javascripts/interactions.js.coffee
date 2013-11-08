@@ -604,11 +604,9 @@ $ ->
   $("#profile_name_buttons #profile_name_edit_save_button").live 'click', (e)->
     e.preventDefault()
     new_name = $.trim($("#person_first_name").val() + " " + $("#person_last_name").val())
-    old_name = $.trim($("#profile_name span#name").text())
-    unless old_name == new_name
-      $.toggleLoader('profile_name','Applying Changes...')
-      $('#profile_name_edit #profile_name_form').submit()
-      $("#profile_name span#name").text(new_name)
+    $.toggleLoader('profile_name','Applying Changes...')
+    $('#profile_name_edit #profile_name_form').submit()
+    $("#profile_name span#name").text(new_name)
     $("#profile_name").show()
     $("#profile_name_edit").hide()
 
