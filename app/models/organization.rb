@@ -106,9 +106,9 @@ class Organization < ActiveRecord::Base
 
   def interaction_privacy_settings
     list = Array.new
-    list << ["Everyone", "everyone"]
-    list << ["Everyone in #{parent.name}", "organization"] if parent.present?
     list << ["Everyone in #{name}", "organization"]
+    #list << ["Everyone", "everyone"]
+    #list << ["Everyone in #{parent.name}", "organization"] if parent.present?
     list << ["Admins in #{name}", "admins"]
     list << ["Me only", "me"]
     return list
