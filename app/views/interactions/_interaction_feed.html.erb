@@ -14,7 +14,8 @@
     </div>
   <% end %>
 	<div class="feed_item_footer">
-    <% footer = "Created by #{interaction.creator.name}" %>
+    <% footer = "" %>
+    <% footer += "Created by #{interaction.creator.name}" if interaction.creator %>
     <% footer += " organinated from #{interaction.organization.name}" if interaction.organization %>
     <% footer += "<br/>Received by #{interaction.receiver.name}" if interaction.receiver %>
     <% if interaction.created_at != interaction.updated_at %>
