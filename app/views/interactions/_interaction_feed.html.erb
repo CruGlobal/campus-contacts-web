@@ -14,6 +14,12 @@
     </div>
   <% end %>
 	<div class="feed_item_footer">
-	  <%=raw "Last updated#{' by ' if interaction.last_updater.present?}#{interaction.last_updater.name if interaction.last_updater.present?} on #{wiser_date(interaction.updated_at, custom_class: 'tip', humanize: false)}"%>
+    <% footer = "Created by #{interaction.creator.name}" %>
+    <% footer += " organinated from #{interaction.organization.name}" if interaction.organization %>
+    <% footer += "<br/>Received by #{interaction.receiver.name}" if interaction.receiver %>
+    <% if interaction.created_at != interaction.updated_at %>
+      <% footer += "<br/>Last updated#{' by ' if interaction.last_updater.present?}#{interaction.last_updater.name if interaction.last_updater.present?} on #{wiser_date(interaction.updated_at, custom_class: 'tip', humanize: false)}" %>
+    <% end %>
+    <%= raw footer %>
 	</div>
 </div>

@@ -251,6 +251,16 @@ body{
       }
     }
 
+    .interaction_edit_permission {
+      width: 380px;
+      #privacy_setting_dropdown {
+        width: 378px;
+        #selected {
+          width: 335px;
+        }
+      }
+    }
+
     .custom_dropdown {
       position: absolute;
       font-style: normal;
@@ -394,13 +404,13 @@ body{
           color: red;
         }
       }
-      &.more_div {
-        line-height: 52px;
-        a.more_options_link, input#more_options_link {
-          margin-right: 5px;
-        }
+    }
+    .more_div {
+      a.more_options_link, input#more_options_link {
+        margin-right: 15px;
       }
     }
+
     .interaction_new #datepicker {
       width: 166px;
       color: #333333;
