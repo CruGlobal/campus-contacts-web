@@ -3,20 +3,23 @@ class Apis::V3::AnswersController < Apis::V3::BaseController
 
   def index
     order = params[:order] || 'created_at desc'
-
     list = add_includes_and_order(answers.where(question_id: params[:question_ids]), order: order)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
   end
 
+  def show
+    render json: @answer,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization}
+  end
+
   def create
     person = current_organization.people.find(params[:person_id])
     answer_sheet = person.answer_sheet_for_survey(params[:survey_id])
-    answer_sheet.save_survey(params[:answers])
-    render json: person,
-       callback: params[:callback]
+    answer_sheet.save_survey(params[:answers]).inspect
+    render json: person, callback: params[:callback]
   end
 
   private
@@ -26,9 +29,7 @@ class Apis::V3::AnswersController < Apis::V3::BaseController
   end
 
   def get_answer
-    @answer = add_includes_and_order(answers)
-                .find(params[:id])
-
+    @answer = add_includes_and_order(answers).find(params[:id])
   end
 
 end

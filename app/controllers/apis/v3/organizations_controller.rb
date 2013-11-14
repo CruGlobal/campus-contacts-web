@@ -3,9 +3,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def index
     order = params[:order] || 'name'
-
     list = add_includes_and_order(organizations, order: order)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
@@ -18,46 +16,55 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
   end
 
   def create
-    organization = organizations.new(params[:organization])
-
-    if organization.save
-      render json: organization,
-             status: :created,
-             callback: params[:callback],
-             scope: includes
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
     else
-      render json: {errors: organization.errors.full_messages},
-             status: :unprocessable_entity,
-             callback: params[:callback]
+      organization = organizations.new(params[:organization])
+
+      if organization.save
+        render json: organization,
+               status: :created,
+               callback: params[:callback],
+               scope: includes
+      else
+        render json: {errors: organization.errors.full_messages},
+               status: :unprocessable_entity,
+               callback: params[:callback]
+      end
     end
   end
 
   def update
-    if @organization.update_attributes(params[:organization])
-      render json: @organization,
-             callback: params[:callback],
-             scope: includes
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    elsif params[:id].to_i != current_organization.id
+      render_unauthorized_call
     else
-      render json: {errors: organization.errors.full_messages},
-             status: :unprocessable_entity,
-             callback: params[:callback]
+      if @organization.update_attributes(params[:organization])
+        render json: @organization,
+               callback: params[:callback],
+               scope: includes
+      else
+        render json: {errors: organization.errors.full_messages},
+               status: :unprocessable_entity,
+               callback: params[:callback]
+      end
     end
-
   end
 
   def destroy
-    if @current_organization == @organization
-      render json: {errors: ["You can't delete the organization associated with the API secret you are using"]},
-             status: :bad_request,
-             callback: params[:callback]
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    elsif !current_organization.self_and_descendant_ids.include?(params[:id].to_i)
+      render_unauthorized_call("You do not have permission to delete organization #{params[:id]}. You must but an Admin of this organization or one of its parent organization.")
+    elsif current_organization.id == params[:id].to_i
+      render_unauthorized_call("You can't delete the organization associated with the API secret you are using")
     else
       @organization.destroy
-
       render json: @organization,
              callback: params[:callback],
              scope: includes
     end
-
   end
 
   private
@@ -68,13 +75,12 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def get_organization
     @organization = add_includes_and_order(organizations)
-                      .find(params[:id])
+                      .find(params[:id].to_i)
 
   end
 
   def available_includes
-    [:contacts, :admins, :people, :surveys,
-     :groups, :keywords, :labels, :users]
+    [:contacts, :admins, :people, :surveys, :groups, :keywords, :labels, :users]
   end
 
 end

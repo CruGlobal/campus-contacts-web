@@ -3,9 +3,7 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
 
   def index
     order = params[:order] || 'survey_elements.position'
-
     list = add_includes_and_order(questions, order: order)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
@@ -18,15 +16,38 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   end
 
   def create
-    if survey
-      question = params[:question].delete(:kind).constantize.new(params[:question])
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      if survey
+        question = params[:question].delete(:kind).constantize.new(params[:question])
+        if question.save
+          survey.elements << question
+          survey.save
 
-      if question.save
-        survey.elements << question
-        survey.save
+          render json: question,
+                 status: :created,
+                 callback: params[:callback],
+                 scope: {include: includes, organization: current_organization}
+        else
+          render json: {errors: question.errors.full_messages},
+                 status: :unprocessable_entity,
+                 callback: params[:callback]
+        end
+      else
+        render json: {errors: "Your api key does not have access to the survey id you send in"},
+               status: :unauthorized,
+               callback: params[:callback]
+      end
+    end
+  end
 
-        render json: question,
-               status: :created,
+  def update
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      if @question.update_attributes(params[:question])
+        render json: @question,
                callback: params[:callback],
                scope: {include: includes, organization: current_organization}
       else
@@ -34,32 +55,18 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
                status: :unprocessable_entity,
                callback: params[:callback]
       end
-    else
-      render json: {errors: "Your api key does not have access to the survey id you send in"},
-             status: :unauthorized,
-             callback: params[:callback]
-    end
-
-  end
-
-  def update
-    if @question.update_attributes(params[:question])
-      render json: @question,
-             callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
-    else
-      render json: {errors: question.errors.full_messages},
-             status: :unprocessable_entity,
-             callback: params[:callback]
     end
   end
 
   def destroy
-    @question.destroy
-
-    render json: @question,
-           callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+    if current_person.is_user_for_org?(current_organization)
+      render_unauthorized_call
+    else
+      @question.destroy
+      render json: @question,
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization}
+    end
   end
 
   private
@@ -75,9 +82,7 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   end
 
   def get_question
-    @question = add_includes_and_order(questions)
-                .find(params[:id])
-
+    @question = add_includes_and_order(questions).find(params[:id])
   end
 
 end

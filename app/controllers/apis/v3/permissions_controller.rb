@@ -3,9 +3,7 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
 
   def index
     order = params[:order] || 'name'
-
     list = add_includes_and_order(permissions, order: order)
-
     render json: list,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, since: params[:since]}
