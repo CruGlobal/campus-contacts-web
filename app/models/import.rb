@@ -28,7 +28,7 @@ class Import < ActiveRecord::Base
     first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
     email_question = Element.where( :attribute_name => "email").first.id.to_s
 
-    file = URI.parse(upload.expiring_url).read.force_encoding('utf-8')
+    file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
     content = CSV.new(file, :headers => :first_row)
 
     content.each do |row|
