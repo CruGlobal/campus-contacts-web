@@ -575,7 +575,7 @@ class Organization < ActiveRecord::Base
 
   def remove_permission_from_person(person, permission_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).each { |r| r.update_attributes(deleted_at: Time.now) }
+    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).update_all(deleted_at: Time.now)
   end
 
   def remove_permissions_from_people(people, permissions)
@@ -586,7 +586,7 @@ class Organization < ActiveRecord::Base
 
   def archive_permission_from_person(person, permission_id)
     person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).each { |r| r.update_attributes(archive_date: Time.now) }
+    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).update_all(archive_date: Time.now)
   end
 
   def archive_permissions_from_people(people, permissions)
@@ -616,27 +616,39 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def add_contact(person, added_by_id = nil)
+  def add_contact(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+      end
     end
   end
 
-  def add_admin(person, added_by_id = nil)
+  def add_admin(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::ADMIN_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+      end
     end
   end
 
-  def add_user(person, added_by_id = nil)
+  def add_user(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      add_permission_to_person(person, Permission::USER_ID, added_by_id)
+      if force
+        change_person_permission(person, Permission::USER_ID, added_by_id)
+      else
+        add_permission_to_person(person, Permission::USER_ID, added_by_id)
+      end
     end
   end
 

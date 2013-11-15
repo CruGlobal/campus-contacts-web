@@ -2,121 +2,388 @@ require 'test_helper'
 
 class Apis::V3::OrganizationalLabelsControllerTest < ActionController::TestCase
   setup do
-    request.env['HTTP_ACCEPT'] = 'application/json'
-    @client = Factory(:client)
-    @user = Factory(:user_no_org)
-    @person = @user.person
-    @org = @client.organization
+    request.env["HTTP_ACCEPT"] = "application/json"
+    @org = Factory(:organization)
+    @client = Factory(:client, organization: @org)
 
-    @org.add_admin(@person)
+    # Admin
+    @user1 = Factory(:user_api)
+    @person1 = @user1.person
+    @org.add_admin(@person1)
+    @admin_permission = @person1.permission_for_org_id(@org.id)
+    @admin_token = Factory(:access_token, identity: @user1.id, client_id: @client.id)
 
-    @permission = @user.person.permission_for_org_id(@org.id)
-    @permission1 = Factory(:permission)
-    @label = Factory(:label, organization: @org)
+    # User
+    @user2 = Factory(:user_api)
+    @person2 = @user2.person
+    @org.add_user(@person2)
+    @user_permission = @person2.permission_for_org_id(@org.id)
+    @user_token = Factory(:access_token, identity: @user2.id, client_id: @client.id)
+
+    # No Permission
+    @user3 = Factory(:user_api)
+    @person3 = @user3.person
+    @org.add_contact(@person3)
+    @contact_permission = @person3.permission_for_org_id(@org.id)
+    @no_permission_token = Factory(:access_token, identity: @user3.id, client_id: @client.id)
+
+    # Other
     @label1 = Factory(:label, organization: @org)
+    @label2 = Factory(:label, organization: @org)
 
-    @org_label = Factory(:organizational_label, organization: @org, person: @person, label: @label)
+    @person = Factory(:person)
+    Factory(:email_address, person: @person)
+    @org.add_contact(@person)
+    @org_label = Factory(:organizational_label, organization: @org, person: @person, label: @label1)
 
-    @person1 = Factory(:person)
-    @org.add_contact(@person1)
-    @person2 = Factory(:person)
-    @org.add_contact(@person2)
+    @another_person = Factory(:person)
+    Factory(:email_address, person: @another_person)
+    @org.add_contact(@another_person)
+    @another_org_label = Factory(:organizational_label, organization: @org, person: @another_person, label: @label1)
+
+    @no_org_person = Factory(:person)
+    Factory(:email_address, person: @no_org_person)
+
+    @another_no_org_person = Factory(:person)
+    Factory(:email_address, person: @another_no_org_person)
   end
 
-  context '.index' do
-    should "return a list of organization's organizational_labels" do
-      get :index, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal @org.organizational_labels.count, json['organizational_labels'].count, json.inspect
-    end
-  end
-
-  context '.show' do
-    should 'return an organizational_label' do
-      get :show, id: @org_label.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal @org_label.id, json['organizational_label']['id'], json.inspect
-    end
-  end
-
-  context '.create' do
-    should 'create and return an organizational_label' do
-      assert_difference "OrganizationalLabel.count" do
-        post :create, organizational_label: {label_id: @label.id, person_id: @person2.id}, secret: @client.secret
+  context ".index" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
       end
-      json = JSON.parse(response.body)
-      assert_equal @person2.id, json['organizational_label']['person_id'], json.inspect
+      should "return a list of organizational_labels" do
+        get :index, access_token: @token
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org.organizational_labels.count, json['organizational_labels'].count, json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "return a list of organizational_labels" do
+        get :index, access_token: @token
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org.organizational_labels.count, json["organizational_labels"].count, json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not return a list of organizational_label" do
+        get :index, access_token: @token
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
     end
   end
 
-  context '.update' do
-    should 'create and return an organizational_label' do
-      put :update, id: @org_label.id, organizational_label: {removed_date: '2013-01-01'}, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal '2013-01-01', json['organizational_label']['removed_date'], json.inspect
+  context ".show" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "return an organizational_label" do
+        get :show, access_token: @token, id: @org_label.id
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org_label.id, json['organizational_label']['id'], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "return an organizational_label" do
+        get :show, access_token: @token, id: @org_label.id
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org_label.id, json['organizational_label']['id'], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not return an organizational_label" do
+        get :show, access_token: @token, id: @org_label.id
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
     end
   end
 
-  context '.destroy' do
-    should 'create and return an organizational_label' do
-      delete :destroy, id: @org_label.id, secret: @client.secret
-      @org_label.reload
-      assert_not_nil @org_label.removed_date, @org_label.inspect
+  context ".create" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "create and return an organizational_label" do
+        assert_difference "OrganizationalLabel.count" do
+          post :create, access_token: @token,
+                organizational_label: {label_id: @label2.id, person_id: @person.id}
+        end
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @person.id, json['organizational_label']['person_id'], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "create and return an organizational_label" do
+        assert_difference "OrganizationalLabel.count" do
+          post :create, access_token: @token,
+                organizational_label: {label_id: @label2.id, person_id: @person.id}
+        end
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @person.id, json['organizational_label']['person_id'], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not create and return an organizational_label" do
+        assert_difference "OrganizationalLabel.count", 0 do
+          post :create, access_token: @token,
+                organizational_label: {label_id: @label2.id, person_id: @person.id}
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
     end
   end
 
-  context '.bulk' do
-    should 'create and destroy bulk organizational_labels' do
-      get :bulk, filters: {ids: "#{@person1.id},#{@person2.id}"}, add_labels: "#{@label1.id}", remove_labels: "#{@label.id}", secret: @client.secret, order: 'created_at'
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal 2, json['people'].count, json.inspect
-      assert @person1.labels.include?(@label1), @person1.labels.inspect
-      assert @person2.labels.include?(@label1), @person2.labels.inspect
-      assert !@person1.labels.include?(@label), @person1.labels.inspect
-      assert !@person2.labels.include?(@label), @person2.labels.inspect
+  context ".update" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "update and return an organizational_label" do
+        put :update, access_token: @token,
+            id: @org_label.id, organizational_label: {removed_date: '2013-01-01'}
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal '2013-01-01', json['organizational_label']['removed_date'], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "update and return an organizational_label" do
+        put :update, access_token: @token,
+            id: @org_label.id, organizational_label: {removed_date: '2013-01-01'}
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal '2013-01-01', json['organizational_label']['removed_date'], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not update and return an organizational_label" do
+        put :update, access_token: @token,
+            id: @org_label.id, organizational_label: {removed_date: '2013-01-01'}
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
     end
   end
 
-  context '.bulk_create' do
-    should 'create organizational_labels' do
-      get :bulk_create, filters: {ids: "#{@person.id},#{@person1.id},#{@person2.id}"}, labels: "#{@label.id}", secret: @client.secret
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal 3, json['people'].count, json.inspect
-      assert @person.labels.include?(@label)
-      assert @person1.labels.include?(@label)
-      assert @person2.labels.include?(@label)
+  context ".destroy" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "destroy and mark organizational_label as removed" do
+        delete :destroy, access_token: @token, id: @org_label.id
+        assert_response :success
+        @org_label.reload
+        assert_not_nil @org_label.removed_date, @org_label.inspect
+      end
     end
-    should 'create bulk organizational_labels' do
-      get :bulk_create, filters: {ids: "#{@person.id},#{@person1.id},#{@person2.id}"}, labels: "#{@label.id},#{@label1.id}", secret: @client.secret
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal 3, json['people'].count, json.inspect
-      assert @person.labels.include?(@label)
-      assert @person1.labels.include?(@label)
-      assert @person2.labels.include?(@label)
-      assert @person.labels.include?(@label1)
-      assert @person1.labels.include?(@label1)
-      assert @person2.labels.include?(@label1)
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "destroy and mark organizational_label as removed" do
+        delete :destroy, access_token: @token, id: @org_label.id
+        assert_response :success
+        @org_label.reload
+        assert_not_nil @org_label.removed_date, @org_label.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not destroy and mark organizational_label as removed" do
+        delete :destroy, access_token: @token, id: @org_label.id
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+        @org_label.reload
+        assert_nil @org_label.removed_date, @org_label.inspect
+      end
     end
   end
 
+  context ".bulk" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "create and destroy bulk organizational_labels" do
+        get :bulk, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, add_labels: "#{@label2.id}", remove_labels: "#{@label1.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert @person.labels.include?(@label2)
+        assert @another_person.labels.include?(@label2)
+        assert !@person.labels.include?(@label1)
+        assert !@another_person.labels.include?(@label1)
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "create and destroy bulk organizational_labels" do
+        get :bulk, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, add_labels: "#{@label2.id}", remove_labels: "#{@label1.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert @person.labels.include?(@label2)
+        assert @another_person.labels.include?(@label2)
+        assert !@person.labels.include?(@label1)
+        assert !@another_person.labels.include?(@label1)
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not create and destroy bulk organizational_labels" do
+        get :bulk, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, add_labels: "#{@label2.id}", remove_labels: "#{@label1.id}"
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+        assert @person.labels.include?(@label1)
+        assert @another_person.labels.include?(@label1)
+        assert !@person.labels.include?(@label2)
+        assert !@another_person.labels.include?(@label2)
+      end
+    end
+  end
 
-  context '.bulk_destroy' do
-    should 'destroy bulk organizational_labels' do
-      Factory(:organizational_label, organization: @org, person: @person1, label: @label)
-      Factory(:organizational_label, organization: @org, person: @person2, label: @label)
-      assert @person1.labels.include?(@label)
-      assert @person2.labels.include?(@label)
+  context ".bulk_create" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "create bulk organizational_labels" do
+        get :bulk_create, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label2.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert @person.labels.include?(@label1)
+        assert @another_person.labels.include?(@label1)
+        assert @person.labels.include?(@label2)
+        assert @another_person.labels.include?(@label2)
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "create bulk organizational_labels" do
+        get :bulk_create, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label2.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert @person.labels.include?(@label1)
+        assert @another_person.labels.include?(@label1)
+        assert @person.labels.include?(@label2)
+        assert @another_person.labels.include?(@label2)
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not create bulk organizational_labels" do
+        get :bulk_create, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label2.id}"
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+        assert @person.labels.include?(@label1)
+        assert @another_person.labels.include?(@label1)
+        assert !@person.labels.include?(@label2)
+        assert !@another_person.labels.include?(@label2)
+      end
+    end
+  end
 
-      get :bulk_destroy, filters: {ids: "#{@person1.id},#{@person2.id}"}, labels: "#{@label.id}", secret: @client.secret
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal 2, json['people'].count, json.inspect
-      assert !@person1.labels.include?(@label), @person1.labels.inspect
-      assert !@person2.labels.include?(@label), @person2.labels.inspect
+  context ".bulk_destroy" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "destroy bulk organizational_labels" do
+        get :bulk_destroy, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label1.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert !@person.labels.include?(@label1)
+        assert !@another_person.labels.include?(@label1)
+        assert !@person.labels.include?(@label2)
+        assert !@another_person.labels.include?(@label2)
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "destroy bulk organizational_labels" do
+        get :bulk_destroy, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label1.id}"
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 2, json['people'].count, json.inspect
+        assert !@person.labels.include?(@label1)
+        assert !@another_person.labels.include?(@label1)
+        assert !@person.labels.include?(@label2)
+        assert !@another_person.labels.include?(@label2)
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "destroy bulk organizational_labels" do
+        get :bulk_destroy, access_token: @token,
+            filters: {ids: "#{@person.id},#{@another_person.id}"}, labels: "#{@label1.id}"
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+        assert @person.labels.include?(@label1)
+        assert @another_person.labels.include?(@label1)
+        assert !@person.labels.include?(@label2)
+        assert !@another_person.labels.include?(@label2)
+      end
     end
   end
 end
-

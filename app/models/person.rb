@@ -387,6 +387,22 @@ class Person < ActiveRecord::Base
     organizational_permissions.where("organizational_permissions.organization_id = ?", org.id).first
   end
 
+  def is_admin_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id = ?", org.id, Permission::ADMIN_ID).first.present?
+  end
+
+  def is_user_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id = ?", org.id, Permission::USER_ID).first.present?
+  end
+
+  def is_admin_or_user_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id IN (?)", org.id, [Permission::ADMIN_ID,Permission::USER_ID]).first.present?
+  end
+
+  def is_leader_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id IN (?)", org.id, [Permission::ADMIN_ID,Permission::USER_ID]).first.present?
+  end
+
   def leader_for_org(org)
     has_permission = organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id <> ?", org.id, Permission::NO_PERMISSIONS_ID).first
     return (has_permission.present?) ? has_permission : false

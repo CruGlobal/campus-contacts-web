@@ -52,7 +52,6 @@ class InteractionsControllerTest < ActionController::TestCase
         assert_not_nil(org_friends)
         assert(org_friends.include?(@person1),"should include person1")
         assert(org_friends.include?(@person2),"should include person2")
-        assert_equal(2, org_friends.length)
       end
     end
 

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
+class Apis::V3::QuestionsControllerTest < ActionController::TestCase
 
   setup do
     request.env["HTTP_ACCEPT"] = "application/json"
@@ -29,11 +29,11 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
     @no_permission_token = Factory(:access_token, identity: @user3.id, client_id: @client.id)
 
     # Other
-    @interaction_type = Factory(:interaction_type, organization_id: @org.id)
-    @other_org = Factory(:organization)
-    @other_org_interaction_type = Factory(:interaction_type, organization_id: @other_org.id)
-    @default_interaction_type = Factory(:interaction_type, organization_id: 0)
-
+    @survey = Factory(:survey, organization: @org)
+    @question1 = Factory(:choice_field, notify_via: "Both", trigger_words: "Word")
+    @question2 = Factory(:text_field, notify_via: "Both", trigger_words: "Short")
+    @survey.questions << @question1
+    @survey.questions << @question2
   end
 
   context ".index" do
@@ -41,29 +41,27 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @admin_token.code
       end
-      should "return a list of interaction_types" do
-        get :index, access_token: @token
-        assert_response :success
+      should "return a list of questions" do
+        get :index, access_token: @token, survey_id: @survey.id
         json = JSON.parse(response.body)
-        assert_equal @org.interaction_types.count, json['interaction_types'].count, json.inspect
+        assert_equal 2, json['questions'].length, json.inspect
       end
     end
     context "USER request" do
       setup do
         @token = @user_token.code
       end
-      should "return a list of interaction_types" do
-        get :index, access_token: @token
-        assert_response :success
+      should "return a list of questions" do
+        get :index, access_token: @token, survey_id: @survey.id
         json = JSON.parse(response.body)
-        assert_equal @org.interaction_types.count, json['interaction_types'].count, json.inspect
+        assert_equal 2, json['questions'].length, json.inspect
       end
     end
     context "NO_PERMISSION request" do
       setup do
         @token = @no_permission_token.code
       end
-      should "not return a list of interaction_types" do
+      should "not return a list of questions" do
         get :index, access_token: @token
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
@@ -76,30 +74,30 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @admin_token.code
       end
-      should "return a interaction_type" do
-        get :show, access_token: @token, id: @interaction_type.id
+      should "return a question" do
+        get :show, access_token: @token, survey_id: @survey.id, id: @question1.id
         assert_response :success
         json = JSON.parse(response.body)
-        assert_equal @interaction_type.id, json['interaction_type']['id'], json.inspect
+        assert_equal @question1.id, json['choice_field']['id'], json.inspect
       end
     end
     context "USER request" do
       setup do
         @token = @user_token.code
       end
-      should "return a interaction_type" do
-        get :show, access_token: @token, id: @interaction_type.id
+      should "return a question" do
+        get :show, access_token: @token, survey_id: @survey.id, id: @question1.id
         assert_response :success
         json = JSON.parse(response.body)
-        assert_equal @interaction_type.id, json['interaction_type']['id'], json.inspect
+        assert_equal @question1.id, json['choice_field']['id'], json.inspect
       end
     end
     context "NO_PERMISSION request" do
       setup do
         @token = @no_permission_token.code
       end
-      should "not return a interaction_type" do
-        get :show, access_token: @token, id: @interaction_type.id
+      should "not return a question" do
+        get :show, access_token: @token, survey_id: @survey.id, id: @question1.id
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
@@ -111,22 +109,24 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @admin_token.code
       end
-      should "create and return a interaction_type" do
-        assert_difference "InteractionType.count", 1 do
-          post :create, access_token: @token, interaction_type: {name: "New InteractionType"}
+      should "create and return a question" do
+        assert_difference "SurveyElement.count", 1 do
+          post :create, access_token: @token, survey_id: @survey.id,
+                question: {kind: "TextField", notify_via: "Both", trigger_words: "Short"}
         end
         assert_response :success
         json = JSON.parse(response.body)
-        assert_equal 'New InteractionType', json['interaction_type']['name'], json.inspect
+        assert_equal 'Short', json['text_field']['trigger_words'], json.inspect
       end
     end
     context "USER request" do
       setup do
         @token = @user_token.code
       end
-      should "not create and return a interaction_type" do
-        assert_difference "InteractionType.count", 0 do
-          post :create, access_token: @token, interaction_type: {name: "New InteractionType"}
+      should "not create and return a question" do
+        assert_difference "SurveyElement.count", 0 do
+          post :create, access_token: @token, survey_id: @survey.id,
+                question: {kind: "TextField", notify_via: "Both", trigger_words: "Short"}
         end
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
@@ -136,9 +136,10 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @no_permission_token.code
       end
-      should "not create and return a interaction_type" do
-        assert_difference "InteractionType.count", 0 do
-          post :create, access_token: @token, interaction_type: {name: "New InteractionType"}
+      should "not create and return a question" do
+        assert_difference "SurveyElement.count", 0 do
+          post :create, access_token: @token, survey_id: @survey.id,
+                question: {kind: "TextField", notify_via: "Both", trigger_words: "Short"}
         end
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
@@ -151,27 +152,21 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @admin_token.code
       end
-      should "update and return a interaction_type" do
-        put :update, access_token: @token, id: @interaction_type.id,
-            interaction_type: {name: 'New Name'}
+      should "update and return a question" do
+        put :update, access_token: @token,
+            survey_id: @survey.id, id: @question1.id, question: {trigger_words: 'new_word'}
         assert_response :success
         json = JSON.parse(response.body)
-        assert_equal 'New Name', json['interaction_type']['name'], json.inspect
-      end
-      should "not update and return a default interaction_type" do
-        put :update, access_token: @token, id: @default_interaction_type.id,
-            interaction_type: {name: 'New Name'}
-        json = JSON.parse(response.body)
-        assert_not_nil json["errors"], json.inspect
+        assert_equal 'new_word', json['choice_field']['trigger_words'], json.inspect
       end
     end
     context "USER request" do
       setup do
         @token = @user_token.code
       end
-      should "not update and return a interaction_type" do
-        put :update, access_token: @token, id: @interaction_type.id,
-            interaction_type: {name: 'New Name'}
+      should "not update and return a question" do
+        put :update, access_token: @token,
+            survey_id: @survey.id, id: @question1.id, question: {trigger_words: 'new_word'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
@@ -180,9 +175,9 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @no_permission_token.code
       end
-      should "not update and return a interaction_type" do
-        put :update, access_token: @token, id: @interaction_type.id,
-            interaction_type: {name: 'New Name'}
+      should "not update and return a question" do
+        put :update, access_token: @token,
+            survey_id: @survey.id, id: @question1.id, question: {trigger_words: 'new_word'}
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
       end
@@ -194,27 +189,20 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @admin_token.code
       end
-      should "destroy a interaction_type" do
-        assert_difference "InteractionType.count", -1 do
-          delete :destroy, access_token: @token, id: @interaction_type.id
+      should "destroy a question" do
+        assert_difference "SurveyElement.count", -1 do
+          delete :destroy, access_token: @token, survey_id: @survey.id, id: @question1.id
         end
         assert_response :success
-      end
-      should "not destroy a default interaction_type" do
-        assert_difference "InteractionType.count", 0 do
-          delete :destroy, access_token: @token, id: @default_interaction_type.id
-        end
-        json = JSON.parse(response.body)
-        assert_not_nil json["errors"], json.inspect
       end
     end
     context "USER request" do
       setup do
         @token = @user_token.code
       end
-      should "not destroy a interaction_type" do
-        assert_difference "InteractionType.count", 0 do
-          delete :destroy, access_token: @token, id: @interaction_type.id
+      should "not destroy a question" do
+        assert_difference "SurveyElement.count", 0 do
+          delete :destroy, access_token: @token, survey_id: @survey.id, id: @question1.id
         end
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect
@@ -224,9 +212,9 @@ class Apis::V3::InteractionTypesControllerTest < ActionController::TestCase
       setup do
         @token = @no_permission_token.code
       end
-      should "not destroy a interaction_type" do
-        assert_difference "InteractionType.count", 0 do
-          delete :destroy, access_token: @token, id: @interaction_type.id
+      should "not destroy a question" do
+        assert_difference "SurveyElement.count", 0 do
+          delete :destroy, access_token: @token, survey_id: @survey.id, id: @question1.id
         end
         json = JSON.parse(response.body)
         assert_not_nil json["errors"], json.inspect

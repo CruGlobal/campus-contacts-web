@@ -1,78 +1,235 @@
 require 'test_helper'
 
 class Apis::V3::LabelsControllerTest < ActionController::TestCase
+
   setup do
-    request.env['HTTP_ACCEPT'] = 'application/json'
-    @client = Factory(:client)
-    @user = Factory(:user_no_org)
+    request.env["HTTP_ACCEPT"] = "application/json"
+    @org = Factory(:organization)
+    @client = Factory(:client, organization: @org)
 
-    @org = @client.organization
-    @org.add_admin(@user.person)
-    @other_org = Factory(:organization)
+    # Admin
+    @user1 = Factory(:user_api)
+    @person1 = @user1.person
+    @org.add_admin(@person1)
+    @admin_permission = @person1.permission_for_org_id(@org.id)
+    @admin_token = Factory(:access_token, identity: @user1.id, client_id: @client.id)
 
+    # User
+    @user2 = Factory(:user_api)
+    @person2 = @user2.person
+    @org.add_user(@person2)
+    @user_permission = @person2.permission_for_org_id(@org.id)
+    @user_token = Factory(:access_token, identity: @user2.id, client_id: @client.id)
+
+    # No Permission
+    @user3 = Factory(:user_api)
+    @person3 = @user3.person
+    @org.add_contact(@person3)
+    @contact_permission = @person3.permission_for_org_id(@org.id)
+    @no_permission_token = Factory(:access_token, identity: @user3.id, client_id: @client.id)
+
+    # Other
     @label1 = Factory(:label, organization: @org)
     @label2 = Factory(:label, organization: @org)
 
     @default_label = Factory(:label, organization_id: 0)
-    @other_org_label = Factory(:label, organization: @other_org)
   end
 
-  context '.index' do
-    should 'return all labels' do
-      get :index, secret: @client.secret, order: 'created_at'
-      assert_response :success
-      json = JSON.parse(response.body)
-      assert_equal @org.labels.count, json['labels'].count, json.inspect
-    end
-  end
-
-  context '.show' do
-    should 'return a label' do
-      get :show, id: @label1.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal @label1.name, json['label']['name'], json.inspect
-    end
-    should 'return a default label' do
-      get :show, id: @default_label.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal @default_label.name, json['label']['name'], json.inspect
-    end
-  end
-
-  context '.create' do
-    should 'create and return a label' do
-      assert_difference "Label.count" do
-        post :create, label: {name: 'sample_label'}, secret: @client.secret
+  context ".index" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
       end
-      json = JSON.parse(response.body)
-      assert_equal 'sample_label', json['label']['name'], json.inspect
-      assert_not_nil json['label']['created_at'], json.inspect
-    end
-  end
-
-  context '.update' do
-    should 'update and return a label' do
-      put :update, id: @label1.id, label: {name: 'new_label_name'}, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_equal 'new_label_name', json['label']['name']
-    end
-    should 'return error when passing default label' do
-      put :update, id: @default_label.id, label: {name: 'new_label_name'}, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_not_nil json['errors'], json.inspect
-    end
-  end
-
-  context '.destroy' do
-    should 'destroy label' do
-      assert_difference "Label.count", -1 do
-        delete :destroy, id: @label1.id, secret: @client.secret
+      should "return a list of labels" do
+        get :index, access_token: @token
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org.labels.count, json['labels'].length, json.inspect
       end
     end
-    should 'return error when passing default label' do
-      delete :destroy, id: @default_label.id, secret: @client.secret
-      json = JSON.parse(response.body)
-      assert_not_nil json['errors'], json.inspect
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "return a list of labels" do
+        get :index, access_token: @token
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @org.labels.count, json['labels'].length, json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not return a list of labels" do
+        get :index, access_token: @token
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+  end
+
+  context ".show" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "return a label" do
+        get :show, access_token: @token, id: @label1.id
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @label1.id, json['label']['id'], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "return a label" do
+        get :show, access_token: @token, id: @label1.id
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal @label1.id, json['label']['id'], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not return a label" do
+        get :show, access_token: @token, id: @label1.id
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+  end
+
+  context ".create" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "create and return a label" do
+        assert_difference "Label.count", 1 do
+          post :create, access_token: @token, label: {name: "New Label"}
+        end
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 'New Label', json['label']['name'], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "not create and return a label" do
+        assert_difference "Label.count", 0 do
+          post :create, access_token: @token, label: {name: "New Label"}
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not create and return a label" do
+        assert_difference "Label.count", 0 do
+          post :create, access_token: @token, label: {name: "New Label"}
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+  end
+
+  context ".update" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "update and return a label" do
+        put :update, access_token: @token, id: @label1.id,
+            label: {name: 'New Name'}
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal 'New Name', json['label']['name'], json.inspect
+      end
+      should "not update and return a default label" do
+        put :update, access_token: @token, id: @default_label.id,
+            label: {name: 'New Name'}
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "not update and return a label" do
+        put :update, access_token: @token, id: @label1.id,
+            label: {name: 'New Name'}
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not update and return a label" do
+        put :update, access_token: @token, id: @label1.id,
+            label: {name: 'New Name'}
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+  end
+
+  context ".destroy" do
+    context "ADMIN request" do
+      setup do
+        @token = @admin_token.code
+      end
+      should "destroy a label" do
+        assert_difference "Label.count", -1 do
+          delete :destroy, access_token: @token, id: @label1.id
+        end
+        assert_response :success
+      end
+      should "not destroy a default label" do
+        assert_difference "Label.count", 0 do
+          delete :destroy, access_token: @token, id: @default_label.id
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+    context "USER request" do
+      setup do
+        @token = @user_token.code
+      end
+      should "not destroy a label" do
+        assert_difference "Label.count", 0 do
+          delete :destroy, access_token: @token, id: @label1.id
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
+    end
+    context "NO_PERMISSION request" do
+      setup do
+        @token = @no_permission_token.code
+      end
+      should "not destroy a label" do
+        assert_difference "Label.count", 0 do
+          delete :destroy, access_token: @token, id: @label1.id
+        end
+        json = JSON.parse(response.body)
+        assert_not_nil json["errors"], json.inspect
+      end
     end
   end
 end
