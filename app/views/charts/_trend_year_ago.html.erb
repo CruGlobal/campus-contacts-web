@@ -1,5 +1,6 @@
 <%= check_box_tag "trend_compare", "trend_compare", @chart.trend_compare_year_ago, disabled: !@chart.trend_year_ago_available? %>
 &nbsp;Compare With One Year Ago
+<div class="icon help tipitright help_bubble_keyword" title="<%= t('charts.trend.year_ago') %>"></div>
 
 <script>
   $('input#trend_compare').change(function () {
