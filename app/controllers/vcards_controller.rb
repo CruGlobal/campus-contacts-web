@@ -3,9 +3,9 @@ require 'vpim/book'
 class VcardsController < ApplicationController
 
   def create
-     VcardMailer.vcard(params[:email], params[:person_id]).deliver
+     VcardMailer.enqueue.vcard(params[:email], params[:person_id])
 
-     render nothing: true      
+     render nothing: true
   end
 
   def bulk_create

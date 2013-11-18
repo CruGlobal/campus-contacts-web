@@ -71,7 +71,7 @@ namespace :infobase do
 
             next unless ccc_person['user_id'].present?
             ccc_user = Infobase::User.find(ccc_person['user_id'], include: 'authentications')['user']
-            
+
             # If this person doesn't already exist in missionhub, we need to create them
             # We'll try to match on FB authentication, then username
 
@@ -88,7 +88,7 @@ namespace :infobase do
 
             # If we didn't find a corresponding person in MH, create one
             unless mh_person
-              attributes = ccc_person.keys.except('id', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
+              attributes = ccc_person.except('id', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
               attributes['first_name'] = attributes['preferred_name'].present? ? attributes['preferred_name'] : attributes['first_name']
               attributes['infobase_person_id'] = ccc_person['id']
 

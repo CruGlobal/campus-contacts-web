@@ -387,6 +387,22 @@ class Person < ActiveRecord::Base
     organizational_permissions.where("organizational_permissions.organization_id = ?", org.id).first
   end
 
+  def is_admin_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id = ?", org.id, Permission::ADMIN_ID).first.present?
+  end
+
+  def is_user_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id = ?", org.id, Permission::USER_ID).first.present?
+  end
+
+  def is_admin_or_user_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id IN (?)", org.id, [Permission::ADMIN_ID,Permission::USER_ID]).first.present?
+  end
+
+  def is_leader_for_org?(org)
+    organizational_permissions.where("organizational_permissions.organization_id = ? && organizational_permissions.permission_id IN (?)", org.id, [Permission::ADMIN_ID,Permission::USER_ID]).first.present?
+  end
+
   def leader_for_org(org)
     has_permission = organizational_permissions.where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id <> ?", org.id, Permission::NO_PERMISSIONS_ID).first
     return (has_permission.present?) ? has_permission : false
@@ -1367,6 +1383,28 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_organizational_permissions(organization_id)
+    permissions = get_organizational_permissions(organization_id)
+
+    # if in current org/sub org has no permission, get the permission to the parent org
+    if !permissions.present? && get_org = Organization.find_by_id(organization_id)
+      if get_org.ancestors.present?
+        if get_org.ancestors.count > 1 && admin_of_org?(get_org.ancestors.last)
+          # get permission from the parent of the current organization
+          permissions = get_organizational_permissions(get_org.parent.id)
+        end
+
+        # if in parent org has no permission, get the permission to the root org
+        unless permissions.present?
+          # get permission from the root of the current organization
+          permissions = get_organizational_permissions(get_org.ancestors.first.id)
+        end
+      end
+    end
+
+    return permissions
+  end
+
+  def get_organizational_permissions(organization_id)
     permissions.where('organizational_permissions.organization_id' => organization_id, 'organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil)
   end
 

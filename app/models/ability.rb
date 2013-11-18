@@ -9,11 +9,10 @@ class Ability
       user_permission = permissions.detect {|r| r.i18n == 'user'}
       admin_permission = permissions.detect {|r| r.i18n == 'admin'}
       user ||= User.new # guest user (not logged in)
+
       if user && user.person
         admin_of_org_ids = user.person.admin_of_org_ids
-        #user.person.organizations.where('organizational_permissions.permission_id' => admin_permission.id).collect {|org| org.subtree_ids}.flatten
         user_of_org_ids = user.person.user_of_org_ids
-        #user.person.organizations.where('organizational_permissions.permission_id' => Permission.user_ids).collect {|org| org.subtree_ids}.flatten
 
         can :manage, Organization, id: admin_of_org_ids
         can :lead, Organization, id: user_of_org_ids
