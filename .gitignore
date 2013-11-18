@@ -31,3 +31,4 @@ log/localeapp.yml
 dump.rdb
 node_modules
 db/schema.rb
+.rvmrc
