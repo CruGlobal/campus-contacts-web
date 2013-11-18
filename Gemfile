@@ -1,6 +1,4 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
-
 gem "default_value_for"
 gem "devise", '~> 2.1.0' #, git: "git://github.com/plataformatec/devise.git"
 gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
