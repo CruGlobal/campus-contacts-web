@@ -4,8 +4,6 @@ class VcardsController < ApplicationController
 
   def create
      VcardMailer.vcard(params[:email], params[:person_id]).deliver!
-
-     render nothing: true
   end
 
   def bulk_create

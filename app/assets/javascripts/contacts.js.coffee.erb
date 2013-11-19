@@ -312,8 +312,11 @@ $ ->
       modal: true,
       buttons:
         Ok: ->
-          form.submit()
-          $.n('Contact information has been sent.')
+          person_id = $("form#send_contact_info_form input#person_id").val()
+          email = $("form#send_contact_info_form input#email").val()
+          $.ajax
+            type: 'POST',
+            url: "/vcards?person_id=#{person_id}&email=#{email}"
           $(this).dialog('destroy')
         Cancel: ->
           $(this).dialog('destroy')
