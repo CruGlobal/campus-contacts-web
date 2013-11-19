@@ -39,7 +39,7 @@ class ChartsController < ApplicationController
 
   def goal
     get_goal_chart
-    organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
+    organizations = current_person.all_organization_and_children
     @movements = organizations.collect { |org| [org.name, org.id] }
     if @movements.blank?
       redirect_to goal_empty_charts_path
@@ -211,6 +211,24 @@ class ChartsController < ApplicationController
   def get_goal
     @goal = @current_movement.organizational_goal.where(criteria: @current_criteria).first if (@current_movement && @current_criteria)
     @goal ||= OrganizationalGoal.new()
+    @grouped_criteria_options = get_goal_criteria_options(@current_movement)
+    unless @grouped_criteria_options.flatten.include?(@current_criteria)
+      @current_criteria = @grouped_criteria_options.first.last.first if @grouped_criteria_options.first
+      @chart.goal_criteria = @current_criteria
+      @chart.save
+    end
+  end
+
+  def get_goal_criteria_options(org)
+    options = []
+    if org
+      if org.is_in_infobase?
+        options << ["Movement Indicators", MovementIndicator.all]
+      end
+      labels = org.labels.pluck(:name)
+      options << ["Labels", labels] unless labels.empty?
+    end
+    options
   end
 
   def refresh_snapshot_data

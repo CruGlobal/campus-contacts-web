@@ -48,15 +48,6 @@ $(document).ready(function() {
       data: {org_id: $('select#goal_org_select option:selected').val()}
     })
   });
-  $('select#goal_criteria_select').change(function(){
-    $('div#goal_container, div#goal_box').hide();
-    $('div#goal_spinner, div#goal_box_spinner').show();
-    $.ajax({
-      url: "/charts/update_goal_criteria",
-      type: "POST",
-      data: {criteria: $('select#goal_criteria_select option:selected').val()}
-    })
-  });
 
   $('button#trend_uncheck_all_movements').bind('click', function () {
     $('div#trend_movements input.trend_movement').prop({

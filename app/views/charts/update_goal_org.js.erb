@@ -1,4 +1,5 @@
 $('div#goal_spinner, div#goal_box_spinner').hide()
 $('div#goal_box, div#goal_container').show()
+$('div#goal_select_criteria').html("<%= escape_javascript(render partial: 'goal_select_criteria') %>")
 $("#goal_box").html("<%= escape_javascript(render partial: 'goal_sidebar_goal_box') %>")
 $("#goal_container").html("<%= escape_javascript(render partial: 'goal_js') %>")
