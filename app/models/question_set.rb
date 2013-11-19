@@ -107,8 +107,8 @@ class QuestionSet
                   when 'group'
                     if Group.exists?(assign_to_id)
                       @assign_to = Group.find(assign_to_id)
-                      group_membership = @assign_to.group_memberships.find_or_initialize_by_person_id(person.id)
-                      group_membership.permission = 'member'
+                      group_membership = @assign_to.group_memberships.find_or_create_by_person_id(person.id)
+                      group_membership.role = 'member'
                       group_membership.save
                     end
                   when 'label'
