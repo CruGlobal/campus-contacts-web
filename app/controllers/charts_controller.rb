@@ -50,11 +50,6 @@ class ChartsController < ApplicationController
       @chart.save
       @current_movement = Organization.find(@chart.goal_organization_id)
     end
-    if @chart.goal_criteria.blank?
-      @chart.goal_criteria = MovementIndicator.all.first
-      @chart.save
-      @current_criteria = @chart.goal_criteria
-    end
     get_goal
     refresh_goal_data
   end
