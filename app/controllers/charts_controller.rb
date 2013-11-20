@@ -303,13 +303,6 @@ class ChartsController < ApplicationController
       end_date = @goal.end_date
     end
 
-    begin
-      resp = RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
-      json = JSON.parse(resp)
-    rescue
-      raise resp.inspect
-    end
-
     @goal_line = {}
     if @goal.id? && @goal.valid?
       @goal_line[@goal.start_date] = @goal.start_value
@@ -317,18 +310,35 @@ class ChartsController < ApplicationController
     end
 
     @data_points = {}
-    stats = json["statistics"]
-    criteria = MovementIndicator.translate[@current_criteria]
 
-    if MovementIndicator.semester.include?(@current_criteria)
-      stats.each do |stat|
-        @data_points[Date.parse(stat["period_end"])] = stat[criteria].to_i
+    if MovementIndicator.all.include?(@current_criteria)
+      begin
+        resp = RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+        json = JSON.parse(resp)
+      rescue
+        raise resp.inspect
       end
-    elsif MovementIndicator.weekly.include?(@current_criteria)
-      total = 0
-      stats.each do |stat|
-        total += stat[criteria].to_i
-        @data_points[Date.parse(stat["period_end"])] = total
+
+      stats = json["statistics"]
+      criteria = MovementIndicator.translate[@current_criteria]
+
+      if MovementIndicator.semester.include?(@current_criteria)
+        stats.each do |stat|
+          @data_points[Date.parse(stat["period_end"])] = stat[criteria].to_i
+        end
+      elsif MovementIndicator.weekly.include?(@current_criteria)
+        total = 0
+        stats.each do |stat|
+          total += stat[criteria].to_i
+          @data_points[Date.parse(stat["period_end"])] = total
+        end
+      end
+    else
+      end_date = Date.today if Date.today < end_date
+      label_id = @current_movement.labels.where(name: @current_criteria).pluck(:id)
+      begin_date.end_of_week(:sunday).step(end_date.end_of_week(:sunday), 7) do |date|
+        value = OrganizationalLabel.where(organization_id: @current_movement.id, label_id: label_id).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+        @data_points[date] = value
       end
     end
   end
