@@ -289,7 +289,7 @@ class Organization < ActiveRecord::Base
   end
 
   def is_sms_subscribe?(phone_number)
-    sms_unsubscribes.where("phone_number = ?", phone_number).count < 1
+    sms_unsubscribes.where(phone_number: phone_number).none?
   end
 
   def is_root_and_has_only_one_admin?
