@@ -329,7 +329,9 @@ Mh::Application.routes.draw do
       resources :people do
         collection do
           get :ids
+          post :archive
           delete :bulk_destroy
+          post :bulk_archive
         end
       end
       resources :organizations
@@ -354,6 +356,7 @@ Mh::Application.routes.draw do
       end
       resources :organizational_permissions do
         collection do
+          post :archive
           post :bulk
           post :bulk_create
           post :bulk_archive

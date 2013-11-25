@@ -1,5 +1,5 @@
 class Apis::V3::PeopleController < Apis::V3::BaseController
-  before_filter :get_person, only: [:show, :update, :destroy]
+  before_filter :get_person, only: [:show, :update, :destroy, :archive]
 
   def index
     render json: filtered_people,
@@ -68,19 +68,34 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
            scope: {include: includes, organization: current_organization, user: current_user}
   end
 
+  def archive
+    archive_permissions([@person])
+    render json: @person,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization, user: current_user}
+  end
+
   def destroy
-    current_organization.remove_person(@person)
+    remove_permissions([@person])
     render json: @person,
            callback: params[:callback],
            scope: {include: includes, organization: current_organization, user: current_user}
   end
 
   def bulk_destroy
-    @people = filtered_people
-    current_organization.remove_people(@people)
-    render json: @people,
+    remove_permissions(filtered_people('bulk_destroy'))
+    render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
+  end
+
+  def bulk_archive
+    archive_permissions(filtered_people('bulk_archive'))
+    render json: filtered_people,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization},
+           root: 'people'
   end
 
   def ids
@@ -101,27 +116,35 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     end
   end
 
-  def filtered_people
+  def filtered_people(process = nil)
     unless @filtered_people
       order = params[:order] || 'last_name, first_name'
-
-      @filtered_people = case
-                           when current_client &&
-                                current_client.scope.split(',').include?('friends') &&
-                                params[:filters] &&
-                                params[:filters][:is_friends_with].present?
-                           Person
-                         when params[:include_archived] == 'true'
-                            current_organization.people
-                          else
-                            current_organization.not_archived_people
-                          end
-
+      if process == 'bulk_archive'
+        @filtered_people = current_organization.not_archived_people
+      elsif process == 'bulk_destroy'
+        @filtered_people = current_organization.not_deleted_people
+      else
+        if params[:include_archived] == 'true'
+          @filtered_people = current_organization.people
+        else
+          @filtered_people = current_organization.not_archived_people
+        end
+      end
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonOrder.new(order, current_organization).order(@filtered_people) if order
       @filtered_people = PersonFilter.new(params[:filters], current_organization).filter(@filtered_people) if params[:filters]
     end
     @filtered_people
+  end
+
+  def remove_permissions(people, permissions = nil)
+    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    current_organization.remove_permissions_from_people(people, permissions)
+  end
+
+  def archive_permissions(people, permissions = nil)
+    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    current_organization.archive_permissions_from_people(people, permissions)
   end
 
   def available_includes
