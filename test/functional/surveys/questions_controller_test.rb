@@ -17,7 +17,6 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     element = Factory(:choice_field, label: 'foobar', attribute_name: 'phone_number')
     Factory(:survey_element, survey: @org.surveys.first, element: element, position: 1, archived: true)
 
-    APP_CONFIG['predefined_survey'] = Factory(:survey).id
     get :index, survey_id: @survey.id
     assert_response :success
   end

@@ -153,6 +153,8 @@ class QuestionSet
       else
         values = [Date.new(year.to_i, month.to_i, 1).strftime('%m/%d/%Y')]  # for mm/yy drop downs
       end
+    elsif [true, false].include?(param)
+      values = param
     elsif param.kind_of?(Hash)
       # from Hash with multiple answers per question
       values = param.values.map {|v| CGI.unescape(v)}.select {|v| v.to_s.strip.present?}
