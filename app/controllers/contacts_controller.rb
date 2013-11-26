@@ -14,10 +14,12 @@ class ContactsController < ApplicationController
   end
 
   def all_contacts
+    # raise params.inspect
     permissions_for_assign
     groups_for_assign
     labels_for_assign
     params[:page] ||= 1
+    params[:limit] ||= 25
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
@@ -769,7 +771,7 @@ class ContactsController < ApplicationController
 
         @people = @all_people.page(page)
       else
-        @people = @people_scope.order(order_query).group('people.id').page(page)
+        @people = @people_scope.order(order_query).group('people.id').page(page).per(params[:limit])
       end
     end
 
