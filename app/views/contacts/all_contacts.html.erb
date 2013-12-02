@@ -20,80 +20,80 @@
   </h1>
 </div>
 
-<div id="ac_button_bar">
-	<ul class="button_bar" id="menu_assign_link">
-		<li class="action_lightblue">
-		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_left">
-		  <%= link_to "Permissions", "#", id: "action_menu_permissions" %>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_right">
-		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_left">
-		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text", "data-current-user" => current_user %>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_middle">
-		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_right">
-		  <%= link_to(t('people.index.sent_messages'), "#", :id => "new_sent_messages_link") %>
-		</li>
-	</ul>
-
-  <% with_save_search = (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 && !@saved_contact_search.full_path.present? %>
-
-	<ul class="button_bar">
-		<li class="action_lightblue <%= 'btn_left' if with_save_search %>">
-		  <%= link_to "Search", "#", id: "action_menu_search_filters" %>
-		</li>
-	</ul>
-
-  <% if with_save_search %>
-    <ul class="button_bar">
-      <li class="action_lightblue btn_right">
-        <%= link_to("Save Search", "", id: 'search_people_filters_save_search_button') %>
-      </li>
-    </ul>
-  <% end %>
-	<ul class="button_bar">
-		<li class="action_lightblue">
-      <%= link_to('More ▾', '#', class: 'action_dropdown') %>
-      <ul style="display:none" id="all_contacts_more_menu">
-        <% if can? :manage, current_organization %>
-          <li><%= link_to(t('people.index.merge_contacts'), "", id: "merge_people") %></li>
-        <% end %>
-        <li><%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %></li>
-        <li><%= link_to(t('people.index.vcard'), '', id: 'bulk_vcard_link' ) %></li>
-        <% if can? :manage, current_organization %>
-          <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
-          <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
-          <li><%= link_to(t('general.transfer'), '', id: "transfer_to_org_link") %></li>
-        <% end %>
-      </ul>
-    </li>
-	</ul>
-
-</div>
-
-<div id="ac_pagination">
-  <%= render "contacts/top_pagination" %>
-</div>
-
-<br>
-
 <div id="ac_contact_spread">
+
+
+
+  <div id='pagination_space'>
+    <%= paginate @people %>
+  </div>
+
+  <div id="ac_button_bar">
+  	<ul class="button_bar" id="menu_assign_link">
+  		<li class="action_lightblue">
+  		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_left">
+  		  <%= link_to "Permissions", "#", id: "action_menu_permissions" %>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_right">
+  		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_left">
+  		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text", "data-current-user" => current_user %>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_middle">
+  		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_right">
+  		  <%= link_to(t('people.index.sent_messages'), "#", :id => "new_sent_messages_link") %>
+  		</li>
+  	</ul>
+
+    <% with_save_search = (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 && !@saved_contact_search.full_path.present? %>
+
+  	<ul class="button_bar">
+  		<li class="action_lightblue <%= 'btn_left' if with_save_search %>">
+  		  <%= link_to "Search", "#", id: "action_menu_search_filters" %>
+  		</li>
+  	</ul>
+
+    <% if with_save_search %>
+      <ul class="button_bar">
+        <li class="action_lightblue btn_right">
+          <%= link_to("Save Search", "", id: 'search_people_filters_save_search_button') %>
+        </li>
+      </ul>
+    <% end %>
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
+        <%= link_to('More ▾', '#', class: 'action_dropdown') %>
+        <ul style="display:none" id="all_contacts_more_menu">
+          <% if can? :manage, current_organization %>
+            <li><%= link_to(t('people.index.merge_contacts'), "", id: "merge_people") %></li>
+          <% end %>
+          <li><%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %></li>
+          <li><%= link_to(t('people.index.vcard'), '', id: 'bulk_vcard_link' ) %></li>
+          <% if can? :manage, current_organization %>
+            <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
+            <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
+            <li><%= link_to(t('general.transfer'), '', id: "transfer_to_org_link") %></li>
+          <% end %>
+        </ul>
+      </li>
+  	</ul>
+
+  </div>
   <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
     <%= hidden_field_tag :status, "do_not_contact" %>
   <% end %>
