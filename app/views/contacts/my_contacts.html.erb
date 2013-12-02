@@ -9,40 +9,37 @@
   </h1>
 </div>
 
-<div id="ac_button_bar">
-	<ul class="button_bar" id="menu_assign_link">
-		<li class="action_lightblue">
-		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue">
-		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_left">
-		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_right">
-		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
-		</li>
-	</ul>
-</div>
-
-<div id="ac_pagination">
-  <% min_display = (params[:page].to_i * 25) - 24 %>
-  <% max_display = @people.total_count <= 25 ? @people.total_count : params[:page].to_i * 25 %>
-	<div class="fancy"><%= "#{min_display} - #{max_display} of #{@people.total_count}" %></div>
-	<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left'>&#9664;</button>"), :params => params %>
-	<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right'>&#9654;</button>"), :params => params %>
-</div>
-
-<br>
-
 <div id="ac_contact_spread">
+
+
+  <div id='pagination_space'>
+    <%= paginate @people %>
+  </div>
+
+  <div id="ac_button_bar">
+  	<ul class="button_bar" id="menu_assign_link">
+  		<li class="action_lightblue">
+  		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
+  		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_left">
+  		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_right">
+  		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+  		</li>
+  	</ul>
+  </div>
+
+
   <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_contact', count: 1) %></span>
   <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_contact', count: 0) %></span>
 
