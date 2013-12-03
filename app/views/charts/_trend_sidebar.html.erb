@@ -1,0 +1,36 @@
+<div id="trend_sidebar">
+  <%= form_tag update_trend_movements_charts_path, remote: true do %>
+      <div id="trend_radio">
+        <div id="trend_radio_buttons">
+          <div id="trend_radio_button_all">
+            <%= radio_button_tag 'all', 'true', @chart.trend_all_movements, :id => "trend_all_true" %> All
+          </div>
+          <div id="trend_radio_button_custom">
+            <%= radio_button_tag 'all', 'false', !@chart.trend_all_movements, :id => "trend_all_false" %> Custom
+          </div>
+        </div>
+
+        <div id="trend_movements">
+          <% @movements.each do |movement| %>
+              <div class="trend_movement_line">
+                <%= check_box_tag "movements[]", movement.id, @chart.chart_organizations.where("organization_id = ?", movement.id).first.trend_display, disabled: @chart.trend_all_movements, class: 'trend_movement' %>
+                <span><%= movement.name %></span>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="trend_date_select">
+        <br/>
+        Start Date:<br/>
+        <%= text_field_tag "start_date", @chart.trend_start_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
+        End Date:<br/>
+        <%= text_field_tag "end_date", @chart.trend_end_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
+      </div>
+
+      <div id="trend_movements_submit">
+        <%= submit_tag 'Update Chart', class: 'large_gray' %>
+      </div>
+  <% end %>
+  <%= button_tag 'Uncheck All', class: 'large_gray', id: 'trend_uncheck_all_movements' %>
+</div>

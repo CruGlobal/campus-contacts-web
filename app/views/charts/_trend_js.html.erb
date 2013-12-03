@@ -1,0 +1,110 @@
+<script>
+  $(function () {
+
+    // Parse the data from an inline table using the Highcharts Data plugin
+    $('#trend_container').highcharts({
+
+      chart: {
+        type: 'line'
+      },
+
+      title: {
+        text: null
+      },
+
+      pane: {
+        size: '100%',
+        startAngle: -180,
+        endAngle: 90
+      },
+
+      legend: {
+        align: 'right',
+        verticalAlign: 'top',
+        layout: 'vertical'
+      },
+
+      xAxis: {
+        type: 'datetime',
+        min: Date.UTC(<%= @begin_date.year %>, <%= @begin_date.month - 1 %>, <%= @begin_date.day %>),
+        max: Date.UTC(<%= @end_date.year %>, <%= @end_date.month - 1 %>, <%= @end_date.day %>),
+        tickInternal: 7 * 24 * 3600 * 1000,
+        gridLineWidth: 1
+      },
+
+      yAxis: {
+        title: {
+          text: null
+        },
+        min: 0,
+        type: 'linear',
+        endOnTick: false,
+        showLastLabel: true
+      },
+
+      tooltip: {
+        followPointer: true
+      },
+
+      plotOptions: {
+
+        column: {
+          grouping: false
+        },
+
+        series: {
+          shadow: false,
+          groupPadding: 0,
+          pointPlacement: 'on'
+        }
+      },
+
+      <% colors = ['#FF9900','#19D119','#4775D1','#CC0066'] %>
+
+      series: [{
+        <% @fields.each do |field| %>
+          <% line = @lines[field] %>
+          <% if line %>
+            data: [{
+              <% line.each_key do |date| %>
+                x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+                y: <%= line[date] %>
+                <% unless date == line.keys.last %>
+                  },
+                  {
+                <% end %>
+              <% end %>
+            }],
+            name: '<%= field.titleize %>',
+            color: '<%= colors[@fields.index(field)] %>'
+            <%= "}, {" unless field == @fields.last %>
+          <% end %>
+        <% end %>
+
+        <% unless @fields_year_ago.empty? %>
+          }, {
+        <% end %>
+
+        <% @fields_year_ago.each do |field| %>
+          <% line = @lines_year_ago[field] %>
+          <% if line %>
+            data: [{
+              <% line.each_key do |date| %>
+              x: Date.UTC(<%= date.year %>, <%= date.month - 1 %>, <%= date.day %>),
+              y: <%= line[date] %>
+              <% unless date == line.keys.last %>
+            },
+              {
+                <% end %>
+                <% end %>
+              }],
+            name: '<%= field.titleize %> - One Year Ago',
+            dashStyle: 'LongDash',
+            color: '<%= colors[@fields.index(field)] %>'
+            <%= "}, {" unless field == @fields.last %>
+          <% end %>
+        <% end %>
+      }]
+    });
+  });
+</script>

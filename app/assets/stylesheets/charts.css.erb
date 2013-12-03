@@ -26,7 +26,7 @@ svg>text[text-anchor=end] tspan{
   display:none;
 }
 
-div#snap_spinner, div#goal_spinner, div#goal_box_spinner {
+div#snap_spinner, div#goal_spinner, div#goal_box_spinner, div#trend_spinner {
   width: 100%;
   display:none;
 }
@@ -67,7 +67,7 @@ button#edit_goal_button, button#cancel_edit_goal_button, input[type="submit"]#sa
   margin:12px auto;
 }
 
-div#snapshot_movements {
+div#snapshot_movements, div#trend_movements {
   background-color:#ffffff;
   padding:8px 12px 8px 8px;
   max-height:300px;
@@ -88,7 +88,7 @@ div#snap_movements_data div.help_bubble_keyword {
   margin-left: 5px;
 }
 
-div#snapshot_sidebar, div#goal_box {
+div#snapshot_sidebar, div#goal_box, div#trend_sidebar {
   background-color:#f6f6f6;
   /*--Border--*/
   border: 1px solid #c0c0c0;
@@ -99,7 +99,7 @@ div#snapshot_sidebar, div#goal_box {
   padding:12px;
 }
 
-div.movement_line {
+div.movement_line, div.trend_movement_line {
   text-indent:-24px;
   margin-bottom:4px;
   margin-left:20px;
@@ -111,20 +111,20 @@ div.movement_line span {
   margin-left:4px;
 }
 
-div#snapshot_radio_buttons {
+div#snapshot_radio_buttons, div#trend_radio_buttons {
   padding:12px 8px;
 }
 
-div#snapshot_radio_button_custom {
+div#snapshot_radio_button_custom, div#trend_radio_button_custom {
   display:inline-block;
   margin-left:6px;
 }
 
-div#snapshot_radio_button_all {
+div#snapshot_radio_button_all, div#trend_radio_button_all {
   display:inline-block;
 }
 
-div#snapshot_button_uncheck_all {
+div#snapshot_button_uncheck_all, div#trend_button_uncheck_all {
   display:inline-block;
   margin-left:6px;
 }
@@ -138,11 +138,11 @@ div#snapshot_radio_button_custom{
   float:right;
 }
 */
-div#snapshot_movements_submit, div#goal_description{
+div#snapshot_movements_submit, div#goal_description, div#trend_movements_submit {
   width:100%;
 }
 
-div#snapshot_movements_submit input{
+div#snapshot_movements_submit input, div#trend_movements_submit input{
   width:140px;
   margin:12px auto 0;
 }
@@ -156,14 +156,36 @@ div#goal_description input#organizational_goal_start_value, div#goal_description
   width: 100px;
 }
 
-button#uncheck_all_movements {
+button#uncheck_all_movements, button#trend_uncheck_all_movements{
   width: 140px;
   margin: 12px auto;
 }
 
-div#goal_description input#save_goal_button, button#cancel_edit_goal_button{
-  width:140px;
+div#goal_description input#save_goal_button, button#cancel_edit_goal_button {
+  width: 140px;
 }
+
+div#trend_date_select {
+  margin: 0px 8px;
+}
+
+div#trend_date_select input {
+  width: 140px;
+}
+
+div#trend_fields {
+  width: 100%;
+}
+
+div.trend_fields_row, div#trend_compare {
+  display: table;
+  margin: 0 auto;
+}
+
+div.trend_fields_row select {
+  margin: 20px;
+}
+
 
 input[type="submit"].large_gray {
     /*--Border--*/

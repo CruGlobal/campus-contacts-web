@@ -40,7 +40,7 @@ class ChartsController < ApplicationController
   def goal
     get_goal_chart
     organizations = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
-    @movements = organizations.collect{|org| [org.name, org.id]}
+    @movements = organizations.collect { |org| [org.name, org.id] }
     if @movements.blank?
       redirect_to goal_empty_charts_path
       return
@@ -122,6 +122,59 @@ class ChartsController < ApplicationController
     end
   end
 
+  def trend
+    get_trend_chart
+    refresh_trend_data
+  end
+
+  def update_trend_movements
+    get_trend_chart
+    @chart.trend_all_movements = params[:all]
+    @chart.save
+
+    if !@chart.trend_all_movements
+      @chart.update_trend_movements_displayed(params[:movements])
+    end
+
+    begin
+      start_date = Date.parse(params["start_date"]) if params["start_date"].present?
+    rescue
+      start_date = nil
+    end
+
+    begin
+      end_date = Date.parse(params["end_date"]) if params["end_date"].present?
+    rescue
+      end_date = nil
+    end
+
+    @chart.trend_start_date = start_date
+    @chart.trend_end_date = end_date
+    @chart.save
+
+    refresh_trend_data
+  end
+
+  def update_trend_field
+    get_trend_chart
+
+    @chart.try(params[:changed].to_s + '=', params[:criteria])
+    @chart.save
+
+    refresh_trend_data
+    render :update_trend_movements
+  end
+
+  def update_trend_compare
+    get_trend_chart
+
+    @chart.trend_compare_year_ago = params[:compare]
+    @chart.save
+
+    refresh_trend_data
+    render :update_trend_movements
+  end
+
   protected
 
   def get_snapshot_chart
@@ -133,6 +186,10 @@ class ChartsController < ApplicationController
     @current_movement = Organization.where(id: @chart.goal_organization_id).first
     @current_criteria = @chart.goal_criteria
     get_goal
+  end
+
+  def get_trend_chart
+    get_chart(Chart::TREND, true)
   end
 
   def get_chart(type, orgs = false)
@@ -170,10 +227,10 @@ class ChartsController < ApplicationController
 
     @all_stats = {}
     infobase_hash = {
-      :begin_date => begin_date,
-      :end_date => end_date,
-      :semester_date => semester_date,
-      :activity_ids => @displayed_movements.collect(&:importable_id)
+        :begin_date => begin_date,
+        :end_date => end_date,
+        :semester_date => semester_date,
+        :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
@@ -192,7 +249,7 @@ class ChartsController < ApplicationController
 
   def get_movement_stages
     infobase_hash = {
-      :activity_ids => @displayed_movements.collect(&:importable_id)
+        :activity_ids => @displayed_movements.collect(&:importable_id)
     }
 
     begin
@@ -213,8 +270,8 @@ class ChartsController < ApplicationController
   def get_changed_lives
     org_ids = @movements.collect(&:id)
     interactions = Interaction.where("interaction_type_id = ?", InteractionType::PERSONAL_DECISION).
-      where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
-      order("created_at desc").all
+        where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
+        order("created_at desc").all
     people = interactions.collect(&:receiver)
     @changed_lives = []
     people.each do |person|
@@ -259,6 +316,90 @@ class ChartsController < ApplicationController
       stats.each do |stat|
         total += stat[criteria].to_i
         @data_points[Date.parse(stat["period_end"])] = total
+      end
+    end
+  end
+
+  def refresh_trend_data
+    @begin_date = (Date.today - 3.months).end_of_week(:sunday)
+    @end_date = Date.today.end_of_week(:sunday)
+    @begin_date = @chart.trend_start_date.end_of_week(:sunday) if @chart.trend_start_date
+    @end_date = @chart.trend_end_date.end_of_week(:sunday) if @chart.trend_end_date
+
+    if @chart.trend_all_movements
+      @displayed_movements = @movements
+    else
+      org_ids = @chart.chart_organizations.where("trend_display = 1").all.collect(&:organization_id)
+      @displayed_movements = Organization.where("id IN (?)", org_ids)
+    end
+
+    max_fields = Chart::TREND_MAX_FIELDS
+    semester_stats_needed = false
+    interval = @chart.trend_interval
+
+    @fields, @lines = [], {}
+    (1..max_fields).each do |number|
+      field = @chart["trend_field_#{number}"]
+      @fields << MovementIndicator.translate[field] if field.present?
+      semester_stats_needed = true if MovementIndicator.semester.include?(field)
+      @lines[@fields.last.to_s] = {}
+    end
+
+    unless @fields.empty?
+      infobase_hash = {
+          activity_ids: @displayed_movements.collect(&:importable_id),
+          begin_date: @begin_date,
+          end_date: @end_date,
+          interval: interval,
+          semester: semester_stats_needed
+      }
+
+      begin
+        resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+        json = JSON.parse(resp)
+      rescue
+        raise resp.inspect
+      end
+
+      @begin_date.step(@end_date, 7) do |date| # step through dates 1 week at a time
+        @fields.each do |field|
+          @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
+        end
+      end
+    end
+
+    @fields_year_ago, @lines_year_ago = [], {}
+    if @chart.needs_year_ago_stats?
+      @fields_year_ago = @fields.clone
+      @fields_year_ago.each do |field|
+        @lines_year_ago[field] = {}
+      end
+
+      year_ago_begin = (@begin_date - 1.year).end_of_week(:sunday)
+      year_ago_end = (@end_date - 1.year).end_of_week(:sunday)
+
+      unless @fields_year_ago.empty?
+        infobase_hash = {
+            activity_ids: @displayed_movements.collect(&:importable_id),
+            begin_date: year_ago_begin,
+            end_date: year_ago_end,
+            interval: interval,
+            semester: semester_stats_needed
+        }
+
+        begin
+          resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+          json = JSON.parse(resp)
+        rescue
+          raise resp.inspect
+        end
+
+        year_ago_begin.step(year_ago_end, 7) do |date| # step through dates 1 week at a time
+          @fields_year_ago.each do |field|
+            # add 364 days to the plot point to line it up with the current year and day of the week
+            @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
+          end
+        end
       end
     end
   end

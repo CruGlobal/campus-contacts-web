@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('button#uncheck_all_movements').bind('click', function () {
-    $('#snapshot_movements input.snap_movement').prop({
+    $('div#snapshot_movements input.snap_movement').prop({
       disabled: false,
       checked: false
     });
@@ -16,7 +16,6 @@ $(document).ready(function() {
       disabled: false
     });
   });
-
   $('div#snapshot_movements_submit input.large_gray').bind('click', function () {
     $('div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers').hide();
     $('div#snap_spinner').show();
@@ -39,6 +38,7 @@ $(document).ready(function() {
       data: {laborers_range: $('select#laborers_range option:selected').val()}
     })
   });
+
   $('select#goal_org_select').change(function(){
     $('div#goal_container, div#goal_box').hide();
     $('div#goal_spinner, div#goal_box_spinner').show();
@@ -55,6 +55,38 @@ $(document).ready(function() {
       url: "/charts/update_goal_criteria",
       type: "POST",
       data: {criteria: $('select#goal_criteria_select option:selected').val()}
+    })
+  });
+
+  $('button#trend_uncheck_all_movements').bind('click', function () {
+    $('div#trend_movements input.trend_movement').prop({
+      disabled: false,
+      checked: false
+    });
+    $('input#trend_all_false').prop('checked',true);
+  });
+  $('input#trend_all_true').bind('click', function () {
+    $('input.trend_movement').prop({
+      disabled: true
+    });
+  });
+  $('input#trend_all_false').bind('click', function () {
+    $('input.trend_movement').prop({
+      disabled: false
+    });
+  });
+  $('div#trend_movements_submit input.large_gray').bind('click', function () {
+    $('div#trend_container').hide();
+    $('div#trend_spinner').show();
+  });
+  $("input.datepicker").datepicker({dateFormat: 'yy-mm-dd', minDate: '<%= (Date.today - 3.years).to_s %>'});
+  $('div#trend_fields select').change(function() {
+    $('div#trend_container').hide();
+    $('div#trend_spinner').show();
+    $.ajax({
+      url: "/charts/update_trend_field",
+      type: "POST",
+      data: {changed: this.id, criteria: $('select#' + this.id + ' option:selected').val()}
     })
   });
 });

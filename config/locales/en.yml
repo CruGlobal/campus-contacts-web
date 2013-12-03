@@ -126,7 +126,7 @@ en:
     cru: "Cru"
     visual_tools: "Visual Tools"
     snapshot: "Snapshot View"
-    trend: "Trend Tracker (coming soon)"
+    trend: "Trend Tracker"
     goal: "Goal Tracker"
   general:
     group_name: "Group"
@@ -1399,3 +1399,5 @@ en:
       launched: "We have five people aligned to Win/Build/Send as well as a leader.  These people can be students, faculty, volunteers or a staff member."
       multiplying: "A Movement of 50 or more students involved, or 1% of the student body."
       title: "The graphs on this page pull from data that has been submitted to the Infobase, and thus will only be as up to date as the most recent submission of Movement Indicators for these movements.  Click on each category name to hide or display it on the graph."
+    trend:
+      year_ago: "This is only available if the Start Date and End Date are less than one year apart."
