@@ -1,0 +1,14 @@
+<% limit = params[:limit].to_i %>
+<% page = params[:page].to_i == 0 ? 1 : params[:page].to_i %>
+<% min_display = page == 1 ? 1 : (page * limit) - (limit - 1) %>
+<% if @people.total_count <= limit %>
+  <% max_display = @people.total_count %>
+<% else %>
+  <% max_display = page * limit %>
+  <% if max_display > @people.total_count %>
+    <% max_display = @people.total_count %>
+  <% end %>
+<% end %>
+<div class="fancy"><%= "#{min_display} - #{max_display} of #{@people.total_count}" %></div>
+<%= link_to_previous_page @people, raw("<button class='action_lightblue btn_left nav_arrows'>&#9668;</button>"), :params => params %>
+<%= link_to_next_page @people, raw("<button class='action_lightblue btn_right nav_arrows'>&#9658;</button>"), :params => params %>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  number: MyString
+  messages_sent: 1
+  active: false
+
+two:
+  number: MyString
+  messages_sent: 1
+  active: false

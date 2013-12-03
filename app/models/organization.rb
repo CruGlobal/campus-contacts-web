@@ -19,6 +19,7 @@ class Organization < ActiveRecord::Base
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
   has_many :people, through: :organizational_permissions, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :not_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
+  has_many :not_deleted_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :contact_assignments
   has_many :keywords, class_name: 'SmsKeyword'
   has_many :surveys, dependent: :destroy
@@ -259,6 +260,24 @@ class Organization < ActiveRecord::Base
     return 'twilio'
   end
 
+  def predefined_survey_questions
+    questions = Survey.find(APP_CONFIG['predefined_survey']).questions
+    if is_bridge? #bridges
+      return questions.where("attribute_name <> 'faculty'")
+    elsif has_parent?(1) #cru
+      return questions.where("attribute_name <> 'nationality'")
+    else
+      return questions
+    end
+
+    if is_bridge?
+      raise questions.collect(&:label).inspect
+      return questions
+    else
+      return questions.where("attribute_name != 'faculty'")
+    end
+  end
+
   def pending_transfer
     sent.includes(:sent_person).where('sent_people.id IS NULL')
   end
@@ -289,7 +308,7 @@ class Organization < ActiveRecord::Base
   end
 
   def is_sms_subscribe?(phone_number)
-    sms_unsubscribes.where("phone_number = ?", phone_number).count < 1
+    sms_unsubscribes.where(phone_number: phone_number).none?
   end
 
   def is_root_and_has_only_one_admin?
@@ -573,23 +592,47 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def remove_permission_from_person(person, permission_id)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).update_all(deleted_at: Time.now)
+  def remove_permission_from_person(person, permission_ids = nil)
+    if person.is_a?(Person)
+      person_id = person.id
+    else
+      person_id = person
+      person = Person.where(id: person_id).first
+    end
+    person.ensure_single_permission_for_org_id(id) if person.present?
+
+    if permission_ids.present?
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_ids, deleted_at: nil)
+    else
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id, deleted_at: nil)
+    end
+    org_permissions.update_all(deleted_at: Time.now) if org_permissions.present?
   end
 
-  def remove_permissions_from_people(people, permissions)
+  def remove_permissions_from_people(people, permissions = nil)
     people.each do |person|
       remove_permission_from_person(person, permissions)
     end
   end
 
-  def archive_permission_from_person(person, permission_id)
-    person_id = person.is_a?(Person) ? person.id : person
-    OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_id, deleted_at: nil).update_all(archive_date: Time.now)
+  def archive_permission_from_person(person, permission_ids = nil)
+    if person.is_a?(Person)
+      person_id = person.id
+    else
+      person_id = person
+      person = Person.where(id: person_id).first
+    end
+    person.ensure_single_permission_for_org_id(id) if person.present?
+
+    if permission_ids.present?
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id, permission_id: permission_ids, deleted_at: nil)
+    else
+      org_permissions = OrganizationalPermission.where(person_id: person_id, organization_id: id, deleted_at: nil)
+    end
+    org_permissions.update_all(archive_date: Time.now) if org_permissions.present?
   end
 
-  def archive_permissions_from_people(people, permissions)
+  def archive_permissions_from_people(people, permissions = nil)
     people.each do |person|
       archive_permission_from_person(person, permissions)
     end

@@ -50,14 +50,21 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     end
   end
 
+  def archive
+    @organizational_permission.archive
+    render json: @organizational_permission,
+           callback: params[:callback],
+           scope: {include: includes, organization: current_organization, user: current_user}
+  end
+
   def destroy
     if @organizational_permission.permission_id == Permission::ADMIN_ID && current_person.is_user_for_org?(current_organization)
       render_unauthorized_call
     else
       @organizational_permission.delete
       render json: @organizational_permission,
-            callback: params[:callback],
-            scope: {include: includes, organization: current_organization}
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization}
     end
   end
 
@@ -105,11 +112,11 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     if params[:permission].present? && params[:permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
       render_unauthorized_call("You do not have permission to destroy the Admin permission level in organization=#{current_organization.id}.")
     else
-      remove_permissions(filtered_people, params[:permission])
+      remove_permissions(filtered_people('bulk_destroy'))
       render json: filtered_people,
-              callback: params[:callback],
-              scope: {include: includes, organization: current_organization},
-              root: 'people'
+             callback: params[:callback],
+             scope: {include: includes, organization: current_organization},
+             root: 'people'
     end
   end
 
@@ -117,7 +124,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     if params[:permission].present? && params[:permission].split(',').include?(Permission::ADMIN_ID.to_s) && current_person.is_user_for_org?(current_organization)
       render_unauthorized_call
     else
-      archive_permissions(filtered_people, params[:permission])
+      archive_permissions(filtered_people('bulk_archive'))
       render json: filtered_people,
              callback: params[:callback],
              scope: {include: includes, organization: current_organization},
@@ -140,31 +147,38 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     end
   end
 
-  def filtered_people
+  def filtered_people(process = nil)
     unless @filtered_people
-      @filtered_people = if params[:include_archived] == 'true'
-                           current_organization.people
-                         else
-                           current_organization.not_archived_people
-                         end
-
+      if process == 'bulk_archive'
+        @filtered_people = current_organization.not_archived_people
+      elsif process == 'bulk_destroy'
+        @filtered_people = current_organization.not_deleted_people
+      else
+        if params[:include_archived] == 'true'
+          @filtered_people = current_organization.people
+        else
+          @filtered_people = current_organization.not_archived_people
+        end
+      end
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonOrder.new(params[:order]).order(@filtered_people) if params[:order]
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
     end
-    @filtered_people
+    return @filtered_people
   end
 
   def add_permissions(people, permissions)
     current_organization.add_permissions_to_people(people, permissions.split(',')) if permissions
   end
 
-  def remove_permissions(people, permissions)
-    current_organization.remove_permissions_from_people(people, permissions.split(',')) if permissions
+  def remove_permissions(people, permissions = nil)
+    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    current_organization.remove_permissions_from_people(people, permissions)
   end
 
-  def archive_permissions(people, permissions)
-    current_organization.archive_permissions_from_people(people, permissions.split(',')) if permissions
+  def archive_permissions(people, permissions = nil)
+    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    current_organization.archive_permissions_from_people(people, permissions)
   end
 
   def set_status(people, status)
