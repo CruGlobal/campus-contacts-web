@@ -9,8 +9,8 @@ class Surveys::QuestionsController < ApplicationController
   def index
     session[:wizard] = false
     @questions = @survey.questions
-    @predefined_questions = @predefined.questions.uniq - @questions
-    @other_questions = current_organization.all_questions.uniq - @predefined.questions.uniq - @survey.questions
+    @predefined_questions = current_organization.predefined_survey_questions.uniq - @questions
+    @other_questions = current_organization.all_questions.uniq - current_organization.predefined_survey_questions.uniq - @survey.questions
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -147,10 +147,9 @@ class Surveys::QuestionsController < ApplicationController
       current_organization.settings[:visible_surveys_column] = false
       current_organization.save!
   	else
-		  @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-		  @predefined_questions = @predefined_survey.questions
+		  @predefined_questions = current_organization.predefined_survey_questions
 		  if @predefined_questions.collect(&:id).include?(@selected_question_id.to_i)
-		    @question = @predefined_survey.elements.find(@selected_question_id.to_i)
+		    @question = @predefined_questions.find(@selected_question_id.to_i)
 		    @organization = current_organization
 		    @organization.survey_elements.each do |pe|
 		      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
@@ -178,10 +177,9 @@ class Surveys::QuestionsController < ApplicationController
       current_organization.settings[:visible_surveys_column] = true
       current_organization.save!
   	else
-		  @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-		  @predefined_questions = @predefined_survey.questions
+		  @predefined_questions = current_organization.predefined_survey_questions
 		  if @predefined_questions.collect(&:id).include?(@selected_question_id.to_i)
-		    @question = @predefined_survey.elements.find(@selected_question_id.to_i)
+		    @question = @predefined_questions.find(@selected_question_id.to_i)
 		    @organization = current_organization
 		    @survey = @predefined_survey
 

@@ -44,12 +44,12 @@ class SmsController < ApplicationController
       phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
       if @sms_session
         @organization = @sms_session.sms_keyword.organization
-        SmsUnsubscribe.remove_to_unsubscribe(phone_number, @organization.id) if @organization.present?
+        SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization.present?
       else
         outbound = Message.outbound_text_messages(phone_number)
         if outbound.present?
           @organization = outbound.last.organization
-          SmsUnsubscribe.remove_to_unsubscribe(phone_number, @organization.id) if @organization
+          SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
       @msg = 'You have been subscribed from MHub SMS alerts. You can now receive text messages.'

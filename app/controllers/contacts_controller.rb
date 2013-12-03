@@ -14,10 +14,12 @@ class ContactsController < ApplicationController
   end
 
   def all_contacts
+    # raise params.inspect
     permissions_for_assign
     groups_for_assign
     labels_for_assign
     params[:page] ||= 1
+    params[:limit] ||= 25
     url = request.url.split('?')
     @attr = url.size > 1 ? url[1] : ''
 
@@ -311,7 +313,7 @@ class ContactsController < ApplicationController
     @all_questions = @organization.questions
     @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
     excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
-    @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
+    @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
     @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
     @hidden_questions = ((@predefined_questions + @all_questions) - @questions).flatten.uniq
   end
@@ -413,7 +415,7 @@ class ContactsController < ApplicationController
       @all_questions = @organization.questions
       excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
       @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-      @predefined_questions = @predefined_survey.questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
+      @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
       @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
     end
 
@@ -769,7 +771,7 @@ class ContactsController < ApplicationController
 
         @people = @all_people.page(page)
       else
-        @people = @people_scope.order(order_query).group('people.id').page(page)
+        @people = @people_scope.order(order_query).group('people.id').page(page).per(params[:limit])
       end
     end
 
