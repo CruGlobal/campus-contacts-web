@@ -218,10 +218,10 @@ class ChartsController < ApplicationController
     options = []
     if org
       if org.is_in_infobase?
-        options << ["Movement Indicators", MovementIndicator.all]
+        options << ["Movement Indicators (pulled from info submitted to the Infobase)", MovementIndicator.all]
       end
       labels = org.labels.pluck(:name)
-      options << ["Labels", labels] unless labels.empty?
+      options << ["Labels (pulled from current MissionHub labeling)", labels] unless labels.empty?
     end
     options
   end
