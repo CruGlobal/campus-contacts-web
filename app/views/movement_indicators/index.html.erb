@@ -181,7 +181,7 @@
                   <td>&nbsp;</td>
                   <td colspan="3" style="padding-top:12px;">
                     <div id="hint" class="rollovernum">
-                      <%= @stats ? "The shaded boxes show the most recently submitted values, dated " + @stats["period_end"] : "" %>.
+                      <%= @stats ? "The shaded boxes show the most recently submitted values, dated " + l(Date.parse(@stats["period_end"])) : "" %>.
                     </div>
                   </td>
                 </tr>
