@@ -1,0 +1,13 @@
+<%= select_tag "goal_criteria", grouped_options_for_select(@grouped_criteria_options, @current_criteria), id: "goal_criteria_select" %>
+
+<script>
+  $('select#goal_criteria_select').change(function(){
+    $('div#goal_container, div#goal_box').hide();
+    $('div#goal_spinner, div#goal_box_spinner').show();
+    $.ajax({
+      url: "/charts/update_goal_criteria",
+      type: "POST",
+      data: {criteria: $('select#goal_criteria_select option:selected').val()}
+    })
+  });
+</script>

@@ -4,7 +4,7 @@
 <br/>
 
 <div id="goal_select_criteria">
-  <%= select_tag "goal_criteria", options_for_select(MovementIndicator.all, @current_criteria), id: "goal_criteria_select" %>
+  <%= render partial: 'goal_select_criteria' %>
 </div>
 <br/>
 
@@ -13,5 +13,5 @@
 </div>
 
 <div id="goal_box">
-  <%= render :partial => "goal_sidebar_goal_box" %>
+  <%= render partial: 'goal_sidebar_goal_box' %>
 </div>

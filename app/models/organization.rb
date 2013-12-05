@@ -101,6 +101,10 @@ class Organization < ActiveRecord::Base
     (name =~ /^Bridges at/) != nil
   end
 
+  def is_in_infobase?
+    importable_type == 'Ccc::MinistryActivity'
+  end
+
   def interaction_types
     return InteractionType.where(organization_id: [0, id]).order('id')
   end

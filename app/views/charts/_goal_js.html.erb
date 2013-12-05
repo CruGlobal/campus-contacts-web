@@ -29,7 +29,7 @@
         type: 'datetime',
         <% if @goal_line.present? %>
           min: Date.UTC(<%= @goal_line.keys.first.year %>, <%= @goal_line.keys.first.month - 1 %>, <%= @goal_line.keys.first.day %>),
-          max: Date.UTC(<%= @goal_line.keys.last.year %>, <%= @goal_line.keys.last.month - 1 %>, <%= @goal_line.keys.last.day %>),
+          max: Date.UTC(<%= @goal_line.keys.last.end_of_week(:sunday).year %>, <%= @goal_line.keys.last.end_of_week(:sunday).month - 1 %>, <%= @goal_line.keys.last.end_of_week(:sunday).day %>),
         <% else %>
           min: Date.UTC(<%= (Date.today - 3.months).year %>, <%= (Date.today - 3.months).month - 1 %>, <%= (Date.today - 3.months).day %>),
         <% end %>
