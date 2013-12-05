@@ -12,6 +12,7 @@
  *= require interactions
  *= require mh_profile_style
  *= require mh_permissions_labels_style
+ *= require movement_indicators
  *= require jquery.qtip2
  *= require jquery.chosen
  *= require superfish

@@ -228,16 +228,13 @@ class Organization < ActiveRecord::Base
   end
 
   def last_push_to_infobase
-    @last_push_to_infobase ||= self[:last_push_to_infobase]
-    unless @last_push_to_infobase
-      # check infobase for a stat entry
-      begin
-        stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
-        @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
-        update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
-      rescue
-        @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
-      end
+    # check infobase for a stat entry
+    begin
+      stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
+      @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
+      update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
+    rescue
+      @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
     end
     @last_push_to_infobase
   end
