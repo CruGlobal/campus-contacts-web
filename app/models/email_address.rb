@@ -66,7 +66,7 @@ class EmailAddress < ActiveRecord::Base
 
   def remove_duplicate_email_from_person
     person.email_addresses.order("id DESC").group(:email).uniq.each do |e|
-      person.email_addresses.where("person_id = ? AND id <> ? AND email = ?", person.id, e.id, e.to_s).try(:destroy_all)
+      person.email_addresses.where("person_id = ? AND id <> ? AND email = ?", person.id, e.id, e.to_s.downcase).try(:destroy_all)
     end
   end
 
