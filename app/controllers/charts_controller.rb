@@ -283,7 +283,7 @@ class ChartsController < ApplicationController
   def get_changed_lives
     org_ids = @movements.collect(&:id)
     interactions = Interaction.where("interaction_type_id = ?", InteractionType::PERSONAL_DECISION).
-        where("organization_id IN (?)", org_ids).where("privacy_setting IN ('everyone','organization')").
+        where("organization_id IN (?)", org_ids).where("privacy_setting = 'organization'").
         order("created_at desc").all
     people = interactions.collect(&:receiver)
     @changed_lives = []

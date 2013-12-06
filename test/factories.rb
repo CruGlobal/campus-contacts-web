@@ -20,7 +20,7 @@ FactoryGirl.define do
     association :creator
     interaction_type_id 1
     sequence(:comment) {|n| "interaction_comment_#{n}"}
-    privacy_setting 'everyone'
+    privacy_setting 'organization'
   end
 
   factory :interaction_type do

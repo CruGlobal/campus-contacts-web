@@ -18,6 +18,10 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     interaction = Interaction.new(params[:interaction])
     interaction.organization_id = current_organization.id
     interaction.created_by_id = current_person.id
+    unless ['me','admins','organization'].include?(interaction.privacy_setting)
+      interaction.privacy_setting = Interaction::DEFAULT_PRIVACY
+    end
+
     if interaction.save
       interaction.set_initiators(get_initiator_ids)
       render json: interaction,
@@ -37,8 +41,11 @@ class Apis::V3::InteractionsController < Apis::V3::BaseController
     else
       params[:interaction].delete(:created_by_id) if params[:interaction].present?
       params[:interaction][:updated_by_id] = current_person.id if params[:interaction].present?
-      if @interaction.update_attributes(params[:interaction])
+      unless ['me','admins','organization'].include?(params[:interaction][:privacy_setting])
+        params[:interaction][:privacy_setting] = Interaction::DEFAULT_PRIVACY
+      end
 
+      if @interaction.update_attributes(params[:interaction])
         @interaction.set_initiators(get_initiator_ids)
 
         render json: @interaction,
