@@ -36,13 +36,13 @@ $ ->
     url = $.url(window.location.href)
     path = url.attr('path')
     params = window.location.search
-    if url.param('limit')
-      window.location.href = params.replace("limit=#{url.param('limit')}", "limit=#{$(this).val()}")
+    if url.param('per_page')
+      window.location.href = params.replace("per_page=#{url.param('per_page')}", "per_page=#{$(this).val()}")
     else
       if params == ""
-        window.location.href = "#{path}?limit=#{$(this).val()}"
+        window.location.href = "#{path}?per_page=#{$(this).val()}"
       else
-        window.location.href = "#{params}&limit=#{$(this).val()}"
+        window.location.href = "#{params}&per_page=#{$(this).val()}"
 
   $('#bulk_vcard_dialog_download_button').live 'click', (e)->
     e.preventDefault()
