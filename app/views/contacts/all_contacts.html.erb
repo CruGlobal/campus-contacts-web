@@ -163,7 +163,7 @@
   <div id='pagination_space'>
     <%= paginate @people %>
     <%= form_tag all_contacts_path(params), method: :get, id: "pagination_limit_select" do %>
-       <%= select_tag :limit, options_for_select([25, 50, 100], selected: params[:limit] || 25) %>
+       <%= select_tag :per_page, options_for_select([25, 50, 100], selected: session[:per_page] || 25) %>
        contacts per page
     <% end %>
   </div>
