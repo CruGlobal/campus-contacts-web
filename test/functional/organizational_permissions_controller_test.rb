@@ -16,6 +16,21 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
     end
   end
 
+  context "Updating person permission by all labels " do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @person1 = Factory(:person)
+      @org_permission = Factory(:organizational_permission, person: @person1, organization: @org)
+    end
+
+    should "archive data" do
+      xhr :put, :update_all, { :id => @person1.id, :labels => [@org_permission.id] }
+      assert_response :success
+      assert_equal 0, assigns(:new_label_set).count
+      assert_not_nil OrganizationalPermission.find_by_person_id(@person1.id).archive_date
+    end
+  end
+
   context "Moving contacts" do
     setup do
       @user, @org = admin_user_login_with_org
@@ -116,12 +131,46 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       assert_equal [], @another_org.people.includes(:organizational_permissions).where("organizational_permissions.permission_id" => Permission.user.id).collect(&:id) # only contact permission will be obtained by the transferred person
     end
 
-    should "not be able to move an admin person if he's the only remaining admin in the org" do
+    should "not be able to move an admin of current person if he's the only remaining admin in the org" do
       ids = [@user.person.id]
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false", :current_admin => @user }
 
       assert_equal I18n.t('organizational_permissions.cannot_delete_self_as_admin_error'), @response.body
+      assert_equal ids, @org.admins.collect(&:id)
+      assert_equal [], @another_org.contacts.collect(&:id)
+    end
+
+    should "not be able to move to archive if there's only one admin remaining in the org" do
+      @another_user = Factory(:user_with_auxs)
+      @another_person = @another_user.person
+      @org.add_user(@another_person)
+
+      sign_in @another_user
+
+      @org.add_admin(@person3)
+      ids = [@user.person.id, @person3.id]
+
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false"}
+
+      assert_equal I18n.t('organizational_permissions.cannot_delete_admin_error', names: Person.find(ids).collect(&:name).join(", ")), @response.body
+      assert_equal ids, @org.admins.collect(&:id)
+      assert_equal [], @another_org.contacts.collect(&:id)
+    end
+
+    should "not be able to move a person to the same org" do
+      @another_user = Factory(:user_with_auxs)
+      @another_person = @another_user.person
+      @org.add_user(@another_person)
+
+      sign_in @another_user
+
+      @org.add_admin(@person3)
+      ids = [@user.person.id, @person3.id]
+
+      xhr :post, :move_to, { :from_id => @org.id , :to_id => @org.id, :ids => ids.join(','), :keep_contact => "false"}
+
+      assert_equal I18n.t('organizational_permissions.moving_to_same_org'), @response.body
       assert_equal ids, @org.admins.collect(&:id)
       assert_equal [], @another_org.contacts.collect(&:id)
     end
@@ -189,6 +238,21 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       assert_equal a+1, OrganizationalPermission.where(:followup_status => 'do_not_contact').count
       assert_equal [@contact], @organization.dnc_contacts
       assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
+    end
+
+    should "delete contact assignments if the permission is 'USER' and change organizational_permission.followup_status to 'do_not_contact'" do
+      @organization.remove_contact(@contact)
+      @permission = Factory(:organizational_permission, person: @contact, organization: @organization, :permission => Permission.user)
+
+      @contact2 = Factory(:person)
+      @organization.add_contact(@contact2)
+      ContactAssignment.find_or_create_by_assigned_to_id_and_person_id_and_organization_id(@contact2.id, @contact.id, @organization.id)
+
+      xhr :put, :update, {:status => "do_not_contact", :id => @permission.id}
+      assert_equal 1, OrganizationalPermission.where(:followup_status => 'do_not_contact').count
+      assert_equal [@contact], @organization.dnc_contacts
+      assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
+      assert_nil ContactAssignment.find_by_person_id_and_organization_id(@contact.id, @organization.id)
     end
   end
 

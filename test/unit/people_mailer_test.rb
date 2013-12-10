@@ -20,13 +20,17 @@ class PeopleMailerTest < ActiveSupport::TestCase
       content = ActionMailer::Base.deliveries.last
       assert_equal "Someone answered \"Testing1\" in your survey", content.subject
     end
-
   end
 
   test "bulk message" do
     PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content").deliver
     content = ActionMailer::Base.deliveries.last
+    assert_match /content/, content.body.to_s
+  end
 
+  test "bulk message with reply_to" do
+    PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content", "vincent.paca@gmail.com").deliver
+    content = ActionMailer::Base.deliveries.last
     assert_match /content/, content.body.to_s
   end
 end
