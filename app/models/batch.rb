@@ -32,6 +32,7 @@ class Batch # < ActiveRecord::Base
             transferred_contacts.update_all(notified: true)
           end
         else
+          transferred_contacts.update_all(skipped: true)
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           if Rails.env.production?
             Airbrake.notify(              
@@ -94,7 +95,7 @@ class Batch # < ActiveRecord::Base
   end
   
   def self.get_unnotified_transfers
-    PersonTransfer.where(notified: false)
+    PersonTransfer.where(notified: false, skipped: false)
   end
   
   def self.get_unnotified_new_contacts
