@@ -206,8 +206,9 @@ class SmsControllerTest < ActionController::TestCase
       end
 
       should "have response when user sends 'stop' unsubscribe" do
+        message = "You have been unsubscribed from MHub SMS alerts for #{@organization.name}. You will receive no more messages."
         post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.', assigns(:msg)
+        assert_equal message, assigns(:msg)
       end
     end
   end
