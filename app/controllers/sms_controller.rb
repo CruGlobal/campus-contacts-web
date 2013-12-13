@@ -36,7 +36,9 @@ class SmsController < ApplicationController
           SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
-      @msg = 'You have been unsubscribed from MHub SMS alerts. You will receive no more messages.'
+      @msg = "You have been unsubscribed from MHub SMS alerts"
+      @msg += " for #{@organization.name}" if @organization.present?
+      @msg += ". You will receive no more messages."
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
