@@ -407,6 +407,10 @@ button.add_gray {
   /* Android ≤ 1.6, iOS 1-3.2, Safari 3-4 */
   border-radius: 2px;
   /* Android 2.1+, Chrome, Firefox 4+, IE 9+, iOS 4+, Opera 10.50+, Safari 5+ */
+  &.warning {
+    color: #990000 !important;
+    background-color: #ffeeee !important;
+  }
 }
 
 .fb_thumb {

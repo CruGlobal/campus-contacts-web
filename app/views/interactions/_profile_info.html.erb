@@ -26,7 +26,7 @@
   	<div class="gender col_left">Assigned To:</div>
   	<div class="gender col_right" id="assigned_to_div">
       <% @assigned_tos.each do |assigned_to| %>
-        <% if assigned_to.present? %> 
+        <% if assigned_to.present? %>
           <%= link_to assigned_to.name, profile_path(assigned_to.id) %>
           <br/>
         <% end %>
@@ -83,6 +83,9 @@
             <div class="info_tag"><%= phone.location.titleize %></div>
         		<% if phone.primary %>
               <div class="info_tag">Primary</div>
+            <% end %>
+        		<% unless phone.active_for_org?(current_organization) %>
+              <div class="info_tag warning">Opted Out</div>
             <% end %>
             <br/>
           <% end %>

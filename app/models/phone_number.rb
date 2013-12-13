@@ -27,6 +27,14 @@ class PhoneNumber < ActiveRecord::Base
   #after_commit :async_update_carrier
   after_destroy :set_new_primary
 
+  def active_for_org?(org)
+    !SmsUnsubscribe.where(phone_number: number, organization_id: org.id).present?
+  end
+
+  def inactive_from_orgs
+    SmsUnsubscribe.where(phone_number: number).pluck(:organization_id)
+  end
+
   def self.strip_us_country_code(num)
     return unless num
     num = num.to_s.strip.gsub(/[^\d|\+]/, '')
