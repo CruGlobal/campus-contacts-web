@@ -283,15 +283,6 @@ class Person < ActiveRecord::Base
   def filtered_interactions(viewer, current_org)
     q = Array.new
 
-    # filter everyone
-    q << "(interactions.privacy_setting = 'everyone')"
-
-    # filter parent
-    org_with_permissions = viewer.organizational_permissions.collect(&:organization_id).uniq
-    org_with_permissions.each do |org_id|
-      q << "(interactions.privacy_setting = 'parent' AND (organizations.ancestry LIKE '#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}/%' OR organizations.ancestry LIKE '%/#{org_id}' OR organizations.ancestry = #{org_id} OR organizations.id = #{org_id}))"
-    end
-
     # filter organization
     if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
       q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
@@ -304,9 +295,6 @@ class Person < ActiveRecord::Base
 
     # filter me
     q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
-
-    # all interactions are visible to the person created it
-    # q << "(interactions.created_by_id = #{viewer.id})"
 
     query = q.join(" OR ") # combine queries
     return self.interactions.joins(:organization).where(query).sorted
@@ -1490,7 +1478,7 @@ class Person < ActiveRecord::Base
       receiver_id: id,
       created_by_id: added_by_person_id,
       organization_id: org_id,
-      privacy_setting: 'everyone'
+      privacy_setting: Interaction::DEFAULT_PRIVACY
     )
     if interaction.save
       interaction.interaction_initiators.find_or_create_by_person_id(added_by_person_id)

@@ -12,7 +12,7 @@ class Interaction < ActiveRecord::Base
   scope :limited, limit(5)
   after_save :ensure_timestamp
 
-  DEFAULT_PRIVACY = "everyone"
+  DEFAULT_PRIVACY = "organization"
 
   def destroy
     run_callbacks :destroy do
@@ -47,10 +47,6 @@ class Interaction < ActiveRecord::Base
 
   def privacy
     case privacy_setting
-    when 'everyone'
-      return "Everyone"
-    when 'parents'
-      return "Everyone in #{self.organization.parent.name}"
     when 'organization'
       return "Everyone in #{self.organization.name}"
     when 'admins'

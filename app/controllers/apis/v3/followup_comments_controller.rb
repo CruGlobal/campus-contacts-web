@@ -103,6 +103,12 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
     interaction_hash['created_by_id'] = object['commenter_id'].to_i if object['commenter_id'].present?
     interaction_hash['comment'] = object['comment'] if object['comment'].present?
     interaction_hash['deleted_at'] = object['deleted_at'] if object['deleted_at'].present?
+
+    interaction_hash['privacy_setting'] = object['privacy_setting']
+    unless ['me','admins','organization'].include?(interaction_hash['privacy_setting'])
+      interaction_hash['privacy_setting'] = Interaction::DEFAULT_PRIVACY
+    end
+
     return interaction_hash
   end
 
