@@ -72,24 +72,25 @@ class Person < ActiveRecord::Base
     # validate date format
     ["birth_date","graduation_date"].each do |field_name|
       raw_date = value.send("#{field_name}_before_type_cast")
-      next unless raw_date.present?
-      if raw_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
-        begin
-          date_str = raw_date.split('/')
-          self[:"#{field_name}"] = Date.parse("#{date_str[2]}-#{date_str[0]}-#{date_str[1]}")
-        rescue
+      if raw_date.present?
+        if raw_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][1-9]|3[01])\/(19|2\d)\d\d$/
+          begin
+            date_str = raw_date.split('/')
+            self[:"#{field_name}"] = Date.parse("#{date_str[2]}-#{date_str[0]}-#{date_str[1]}")
+          rescue
+            errors.add(:"#{field_name}", "invalid - should be MM/DD/YYYY")
+          end
+        elsif raw_date =~ /^(19|2\d)\d\d\-([1-9]|0[1-9]|1[0-2])\-([1-9]|[012][0-9]|3[01])/
+          begin
+            self[:"#{field_name}"] = Date.parse(raw_date.split(' ').first)
+          rescue
+            errors.add(:"#{field_name}", "invalid - should be MM/DD/YYYY")
+          end
+        elsif raw_date.is_a?(Date)
+          self[:"#{field_name}"] = birth_date
+        else
           errors.add(:"#{field_name}", "invalid - should be MM/DD/YYYY")
         end
-      elsif raw_date =~ /^(19|2\d)\d\d\-([1-9]|0[1-9]|1[0-2])\-([1-9]|[012][0-9]|3[01])/
-        begin
-          self[:"#{field_name}"] = Date.parse(raw_date.split(' ').first)
-        rescue
-          errors.add(:"#{field_name}", "invalid - should be MM/DD/YYYY")
-        end
-      elsif raw_date.is_a?(Date)
-        self[:"#{field_name}"] = birth_date
-      else
-        errors.add(:"#{field_name}", "invalid - should be MM/DD/YYYY")
       end
     end
   end
