@@ -343,6 +343,18 @@ class ChartsController < ApplicationController
     end
   end
 
+  def get_trend_criteria_options(orgs)
+    all_labels = []
+    all_labels = orgs.first.label_set.collect(&:name).map{|x| x.titleize.strip} unless orgs.empty?
+    orgs.each do |org|
+      labels = org.label_set.collect(&:name).map{|x| x.titleize.strip}
+      all_labels = all_labels & labels
+    end
+    options = [["Movement Indicators (pulled from info submitted to the Infobase)", MovementIndicator.all]]
+    options << ["Labels (pulled from current MissionHub labeling)", all_labels] unless all_labels.empty?
+    options
+  end
+
   def refresh_trend_data
     @begin_date = (Date.today - 3.months).end_of_week(:sunday)
     @end_date = Date.today.end_of_week(:sunday)
@@ -355,6 +367,8 @@ class ChartsController < ApplicationController
       org_ids = @chart.chart_organizations.where("trend_display = 1").all.collect(&:organization_id)
       @displayed_movements = Organization.where("id IN (?)", org_ids)
     end
+
+    @grouped_criteria_options = get_trend_criteria_options(@displayed_movements)
 
     max_fields = Chart::TREND_MAX_FIELDS
     semester_stats_needed = false
