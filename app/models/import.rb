@@ -87,7 +87,7 @@ class Import < ActiveRecord::Base
         names << person.name
         if person.errors.present?
           person.errors.messages.each do |error|
-            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].gsub('_',' ').titleize} #{error[1].first}"
+            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].titleize} #{error[1].first}"
           end
         else
         	labels.each do |label_id|
