@@ -144,7 +144,7 @@ fr:
       assign_people:
         one: Attribuer une personne
         other: Attribuer %{count} des gens
-      assign_to: ! 'Attribuer à:'
+      assign_to: 'Attribuer à:'
       assigned_to: Assignée à
       bulk_vcard_dialog_desc: 
       bulk_vcard_dialog_title: 
@@ -197,7 +197,7 @@ fr:
       none_email_vcard: 
       not_valid_leader_selected: 
       phone_number: Numéro de téléphone
-      reminder_email_body: ! "Salut! \r\nJuste vous faire savoir que vous avez reçu de nouveaux contacts pour le suivi. \r\nConnectez-vous au moins MissionHub http://www.missionhub.com pour accéder à vos contacts. \r\nDans le Christ,\r\n%{name}"
+      reminder_email_body: "Salut! \r\nJuste vous faire savoir que vous avez reçu de nouveaux contacts pour le suivi. \r\nConnectez-vous au moins MissionHub http://www.missionhub.com pour accéder à vos contacts. \r\nDans le Christ,\r\n%{name}"
       reminder_email_subject: De nouveaux contacts sont arrivés!
       responses_assigned_to: Tous les contacts - Assigné à %{assigned_to}
       save_this_search: 
@@ -225,7 +225,7 @@ fr:
       delete_confirm: Etes-vous sûr de vouloir supprimer %{person} en tant que leader?
       delete_confirm_with_instructions: 
     leader_form:
-      start_typing: ! 'Commencez à taper un nom pour trouver une personne pour faire un chef de file:'
+      start_typing: 'Commencez à taper un nom pour trouver une personne pour faire un chef de file:'
     leaders:
       reminder_prompt: Certains de vos dirigeants ont des contacts qui n&#39;ont pas été suivies! Laissez vos dirigeants savent!
       show_more: Afficher plus Leaders

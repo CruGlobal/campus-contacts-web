@@ -2,7 +2,7 @@ es:
   activerecord:
     errors:
       full_messages:
-        format: ! '%{attribute} %{message}'
+        format: '%{attribute} %{message}'
       messages:
         accepted: debe ser aceptada
         blank: no puede estar en blanco
@@ -20,7 +20,7 @@ es:
         not_a_number: no es un número
         not_an_integer: debe ser un entero
         odd: debe ser impar
-        record_invalid: ! 'Error de validación: %{errors}'
+        record_invalid: 'Error de validación: %{errors}'
         taken: ya lo están utilizando
         too_long: está muy largo (máximo de %{count} caracteres)
         too_short: es demasiado corto (mínimo de %{count} caracteres)
@@ -33,10 +33,10 @@ es:
               invalid: 
               taken: 
       template:
-        body: ! 'Hubo problemas con los siguientes campos:'
+        body: 'Hubo problemas con los siguientes campos:'
         header:
           one: 1 error está prohibido %{model} de ser guardados
-          other: ! '%{count} errores que prohíbe este %{model} de ser guardados'
+          other: '%{count} errores que prohíbe este %{model} de ser guardados'
     models:
       person: 
       sms_keyword: Palabra clave
@@ -52,7 +52,7 @@ es:
       title_permission: 
       title_surveys: 
     assign:
-      assign_explanation: ! 'Puedes añadir un contacto usando cualquiera de las opciones abajo:'
+      assign_explanation: 'Puedes añadir un contacto usando cualquiera de las opciones abajo:'
       keep_contact: 
       me: Yo
       type_to_find_group: 
@@ -146,7 +146,7 @@ es:
       assign_people:
         one: Asignar 1 persona
         other: Asignar %{count} personas
-      assign_to: ! 'Asignar a:'
+      assign_to: 'Asignar a:'
       assigned_to: Asignado a
       bulk_vcard_dialog_desc: 
       bulk_vcard_dialog_title: 
@@ -199,18 +199,15 @@ es:
       none_email_vcard: 
       not_valid_leader_selected: 
       phone_number: Número telefónico
-      reminder_email_body: ! 'Hola!
-
+      reminder_email_body: |-
+        Hola!
 
         Solo para hacerte saber que se te ha dado nuevos contactos para que les des seguimiento.
 
-
         Inicia sesión MissionHub en http://www.missionhub.com para accesar a tus contactos.
 
-
         En Cristo,
-
-        %{name}'
+        %{name}
       reminder_email_subject: Un nuevo contacto ha llegado!
       responses_assigned_to: Todos los contactos - Asignados a%{assigned_to}
       save_this_search: 
@@ -238,7 +235,7 @@ es:
       delete_confirm: ¿Estás seguro que quieres eliminar a%{person} como líder?
       delete_confirm_with_instructions: 
     leader_form:
-      start_typing: ! 'Comienza escribir un nombre para encontrar una persona para hacerle líder:'
+      start_typing: 'Comienza escribir un nombre para encontrar una persona para hacerle líder:'
     leaders:
       reminder_prompt: Alguno de tus líderes tienen contactos a los cuales no se les ha dado seguimiento! Hazle saber a tus líderes!
       show_more: Mostrar más líderes
@@ -284,9 +281,9 @@ es:
       add_comments_here: Agregar comentarios aquí...
       attach_rejoicable: Adjunto a Rejoicable
       edit_contact_info: Editar Información de Contacto
-      email: ! 'Correo electrónico:'
+      email: 'Correo electrónico:'
       facebook_profile: Perfil de Facebook
-      phone_number: ! 'Teléfono #:'
+      phone_number: 'Teléfono #:'
       previous_comments: Comentarios Previos
       send_contact_info: 
       status: Estado
@@ -367,10 +364,10 @@ es:
     - Viernes
     - Sábado
     formats:
-      default: ! '%Y-%m-%d'
-      long: ! '%B %d, %Y'
-      short: ! '%b %d'
-      time: ! '%l:%M %p'
+      default: '%Y-%m-%d'
+      long: '%B %d, %Y'
+      short: '%b %d'
+      time: '%l:%M %p'
     month_names:
     - 
     - Enero
@@ -415,16 +412,16 @@ es:
         other: más %{count} año
       x_days:
         one: 1 día
-        other: ! '%{count} días'
+        other: '%{count} días'
       x_minutes:
         one: 1 minuto
-        other: ! '%{count} minutos'
+        other: '%{count} minutos'
       x_months:
         one: 1 mes
-        other: ! '%{count} mes'
+        other: '%{count} mes'
       x_seconds:
         one: 1 segundo
-        other: ! '%{count} segundos'
+        other: '%{count} segundos'
     prompts:
       day: Día
       hour: Hora
@@ -447,7 +444,7 @@ es:
       search_placeholder: 
       search_title: 
   errors:
-    format: ! '%{attribute} %{message}'
+    format: '%{attribute} %{message}'
     messages:
       accepted: debe ser aceptada
       blank: no puede estar en blanco
@@ -584,12 +581,12 @@ es:
     form:
       add_a_leader: Agregar un líder
       add_a_member: Agregar un miembro
-      start_typing: ! 'Comienza a escribir un nombre para encontrar una persona para agregar a este grupo:'
+      start_typing: 'Comienza a escribir un nombre para encontrar una persona para agregar a este grupo:'
     search:
       add_new_person_group: 
       not_found: No pudimos encontrar a nadie en tu %{terminology} con ese nombre
       show_all: muestra todo
-      showing_count: ! 'Mostrando %{length} de %{total}, sigue escribiendo o '
+      showing_count: 'Mostrando %{length} de %{total}, sigue escribiendo o '
       showing_count_complete: 
   groups:
     add_a_label: 
@@ -613,7 +610,7 @@ es:
       add_group: Agregar a grupo
       assign_to_label:
         one: 1 Grupo
-        other: ! '%{count} Grupo'
+        other: '%{count} Grupo'
       group_list: Lista de grupo para %{org}
       group_name: Nombre del grupo
       labeled_with: Etiquetar con "%{label}"
@@ -709,13 +706,11 @@ es:
       body_html: <h2>Tu solicitud para la palabra clave %{keyword} fue APROBADA</h2> <p> Para usar la palabra clave, dile a las personas que escriban%{keyword} a %{number}<br/> </p> <p> si tienes alguna pregunta, %{link}. </p>
       link_text: envíanos un correo electrónico a support@missionhub.com
     notify_user_of_denial:
-      body_html: ! '<p>Tu solicitud de palabra clave para la palabra clave ha sido denegada. Las palabras claves son denegadas por alguna de estas razones:</p>
-
+      body_html: |-
+        <p>Tu solicitud de palabra clave para la palabra clave ha sido denegada. Las palabras claves son denegadas por alguna de estas razones:</p>
         <ul> <li>La palabra clave está muy larga. Te recomendamos que mantengas tu palabra clave lo más corta posible, preferiblemente abajo de los 10 caracteres.</li> <li>La palabra clave es demasiada genérica. La palabra clave debe ser específica para tu ubicación. Reservamos las palabras claves genéricas para una región o audiencia nacional. (e.g. osucru en vez de cru)</li> <li>Demasiadas palabras fueron solicitadas. En estos momentos, solo estamos permitiendo 2 palabras claves por ubicación para minimizar nuestro costo.</li> </ul>
-
         <p>Si tienes una buena razón para una excepción, por favor envíanos una explicación a support@missionhub.com con la Solicitud de la Palabra Clave Denegada en el asunto y revisaremos tu situación.</p>
-
-        <p> Gracias,<br/> MissionHub Equipo de Soporte </p>'
+        <p> Gracias,<br/> MissionHub Equipo de Soporte </p>
   keywords:
     default_rejection_email: 
     edit:
@@ -755,18 +750,16 @@ es:
   leader: Líder
   leader_mailer:
     added:
-      body_html: ! '<p>Hi %{name},</p>
-
+      body_html: |-
+        <p>Hi %{name},</p>
         <p>Te acabo de agregar como lider de%{org} en MissionHub</p>
-
         <p>Visita %{link} para iniciar sesión. Por favor no compartas este enlace con nadie.</p>
-
-        <p>%{added_by}</p>'
+        <p>%{added_by}</p>
   leaders:
     create:
       no_user_account: 
     form:
-      name_required: ! 'Se requiere llenar los campos de Nombre y correo para poder agregar un líder:'
+      name_required: 'Se requiere llenar los campos de Nombre y correo para poder agregar un líder:'
       notify: Notificarle a la persona que ha sido agregada y enviarle un enlace para que pueda iniciar sesión.
     search:
       not_in_system: Si la persona que buscas no está en el sistema, haga clic aquí para agregarle.
@@ -843,28 +836,28 @@ es:
     terms: Terminos y Condiciones
     transfer: 
     trend: 
-    use_keyword: ! 'Utilizar palabra clave: %{keyword}'
+    use_keyword: 'Utilizar palabra clave: %{keyword}'
     view_details: Ver detalles
     visual_tools: 
   number:
     currency:
       format:
-        delimiter: ! ','
-        format: ! '%u%n'
+        delimiter: ','
+        format: '%u%n'
         precision: 2
         separator: .
         significant: falso
         strip_insignificant_zeros: falso
         unit: $
     format:
-      delimiter: ! ','
+      delimiter: ','
       precision: 3
       separator: .
       significant: falso
       strip_insignificant_zeros: falso
     human:
       decimal_units:
-        format: ! '%n %u'
+        format: '%n %u'
         units:
           billion: Billones
           million: Millones
@@ -878,7 +871,7 @@ es:
         significant: verdadero
         strip_insignificant_zeros: verdadero
       storage_units:
-        format: ! '%n %u'
+        format: '%n %u'
         units:
           byte:
             one: Byte
@@ -1179,11 +1172,11 @@ es:
       initial_response: ¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)
       initial_response_default: 
       keyword: Palabra Clave
-      keyword_instruct: ! '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
+      keyword_instruct: '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
       keyword_tip: Esto es lo que las personas escribirán en su teléfono.
       keyword_why: Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá.
-      note: ! 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
+      note: 'Note: El proceso de la solicitud puede tomar hasta 24 horas.'
       post_survey_why: cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo.<br/><br/>Si desea incluir un enlace a su sitio, no se incluyen aquí - incluirla en el mensaje posterior a la encuesta (paso 3 en el proceso de la encuesta Crear)
     index:
       association: Asociar contactos con
@@ -1195,19 +1188,19 @@ es:
       request_keyword: Solicita una Palabra
     keyword_deleted: 
     new:
-      choose_keyword_explanation_html: ! 'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
+      choose_keyword_explanation_html: 'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
       predefined_help: 
       your_questions_help: 
     show:
-      explanation: ! 'Explicación:'
-      keyword: ! 'Palabra clave:'
-      status: ! 'Estado:'
+      explanation: 'Explicación:'
+      keyword: 'Palabra clave:'
+      status: 'Estado:'
   sporadically: Esporádicamente
   support:
     array:
-      last_word_connector: ! ', y '
-      two_words_connector: ! ' y '
-      words_connector: ! ', '
+      last_word_connector: ', y '
+      two_words_connector: ' y '
+      words_connector: ', '
     select:
       prompt: Por favor seleccionar
   survey:
@@ -1366,18 +1359,18 @@ es:
     am: am
     formats:
       date: 
-      default: ! '%m/%d/%Y %H:%M:%S'
-      long: ! '%B %d, %Y %H:%M'
-      short: ! '%d %b %H:%M'
-      time_only: ! '%l:%M %p'
+      default: '%m/%d/%Y %H:%M:%S'
+      long: '%B %d, %Y %H:%M'
+      short: '%d %b %H:%M'
+      time_only: '%l:%M %p'
     pm: pm
   views:
     pagination:
-      first: ! '&laquo; Primero'
+      first: '&laquo; Primero'
       last: Último &raquo;
       next: Siguiente &rsaquo;
-      previous: ! '&lsaquo; Anterior'
-      truncate: ! '...'
+      previous: '&lsaquo; Anterior'
+      truncate: '...'
   weekly: Semanalmente
   welcome:
     home:
@@ -1387,7 +1380,7 @@ es:
       edit_orgs: Editar tus involucramiento en la Organización.
       follow_up:
         one: 1 Persona para darle seguimiento
-        other: ! '%{count} Personas para darle seguimiento'
+        other: '%{count} Personas para darle seguimiento'
       keywords: Encuesta
       manage_questions: Administrar Preguntas de Encuesta
       no_mobile: La versión de esta página para móvil aun no está construida. Lo sentimos.
@@ -1428,7 +1421,7 @@ es:
       skip_step: Saltar este paso
       survey_paragraph: Ahora que has solicitado una palabra clave, vas a querer crear un par de preguntas para hacerle a las personas. Piensa a lo largo de las líneas en una encuesta corta o una tarjeta de contacto básico.
       verify_identity: Verifica tu identidad
-      verify_paragraph: ! 'Si ya tienes una cuenta relacionada de acceso de CCC, por favor inicie sesión para vincular su cuenta. Solo necesitarás hacer esto una vez. ADVERTENCIA: Si haz iniciado sesión en MissionHub utilizando la cuenta de Facebook de alguien más, Cierra la sesión! Al hacer clic en verificar combinará su información con la de ellos, creando un gran enredo.'
+      verify_paragraph: 'Si ya tienes una cuenta relacionada de acceso de CCC, por favor inicie sesión para vincular su cuenta. Solo necesitarás hacer esto una vez. ADVERTENCIA: Si haz iniciado sesión en MissionHub utilizando la cuenta de Facebook de alguien más, Cierra la sesión! Al hacer clic en verificar combinará su información con la de ellos, creando un gran enredo.'
       verify_with_relay: Verificar con Relé
       welcome: Bienvenido
       welcome_paragraph: Bienvenido MissionHub!<br><br> Este asistente de configuración te ayudará a empezar y crear una palabra clave, que es una parte esencial para obtener contactos en el sistema.

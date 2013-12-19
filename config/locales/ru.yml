@@ -2,7 +2,7 @@ ru:
   activerecord:
     errors:
       full_messages:
-        format: ! '%{attribute} %{message}'
+        format: '%{attribute} %{message}'
       messages:
         accepted: must be accepted
         blank: can't be blank
@@ -20,7 +20,7 @@ ru:
         not_a_number: is not a number
         not_an_integer: must be an integer
         odd: must be odd
-        record_invalid: ! 'Validation failed: %{errors}'
+        record_invalid: 'Validation failed: %{errors}'
         taken: has already been taken
         too_long: is too long (maximum is %{count} characters)
         too_short: is too short (minimum is %{count} characters)
@@ -33,10 +33,10 @@ ru:
               invalid: 
               taken: 
       template:
-        body: ! 'There were problems with the following fields:'
+        body: 'There were problems with the following fields:'
         header:
           one: 1 error prohibited this %{model} from being saved
-          other: ! '%{count} errors prohibited this %{model} from being saved'
+          other: '%{count} errors prohibited this %{model} from being saved'
     models:
       person: 
       sms_keyword: Keyword
@@ -52,7 +52,7 @@ ru:
       title_permission: 
       title_surveys: 
     assign:
-      assign_explanation: ! 'Вы можете назначить контакт используя любую из нижеприведенных опций:'
+      assign_explanation: 'Вы можете назначить контакт используя любую из нижеприведенных опций:'
       keep_contact: 
       me: Я
       type_to_find_group: 
@@ -146,7 +146,7 @@ ru:
       assign_people:
         one: Assign 1 person
         other: Assign %{count} people
-      assign_to: ! 'Assign To:'
+      assign_to: 'Assign To:'
       assigned_to: Assigned To
       bulk_vcard_dialog_desc: 
       bulk_vcard_dialog_title: 
@@ -199,18 +199,15 @@ ru:
       none_email_vcard: 
       not_valid_leader_selected: 
       phone_number: Phone Number
-      reminder_email_body: ! 'Hey!
-
+      reminder_email_body: |-
+        Hey!
 
         Just letting you know that you have been given new contacts to follow-up.
 
-
         Login to MissionHub at http://www.missionhub.com to access your contacts.
 
-
         In Christ,
-
-        %{name}'
+        %{name}
       reminder_email_subject: New contacts have arrived!
       responses_assigned_to: All Contacts - Assigned to %{assigned_to}
       save_this_search: 
@@ -238,7 +235,7 @@ ru:
       delete_confirm: Вы уверены что вы хотите удалить человека %{person} из списка лидеров?
       delete_confirm_with_instructions: 
     leader_form:
-      start_typing: ! 'Start typing a name to find a person to make a leader:'
+      start_typing: 'Start typing a name to find a person to make a leader:'
     leaders:
       reminder_prompt: Some of your leaders have contacts that haven't been followed up! Let your leaders know!
       show_more: Show More Leaders
@@ -284,9 +281,9 @@ ru:
       add_comments_here: Add comments here...
       attach_rejoicable: Attach a Rejoicable
       edit_contact_info: Edit Contact Info
-      email: ! 'Email:'
+      email: 'Email:'
       facebook_profile: Facebook Profile
-      phone_number: ! 'Phone #:'
+      phone_number: 'Phone #:'
       previous_comments: Previous Comments
       send_contact_info: Send Contact Info
       status: Status
@@ -367,10 +364,10 @@ ru:
     - Friday
     - Saturday
     formats:
-      default: ! '%Y-%m-%d'
-      long: ! '%B %d, %Y'
-      short: ! '%b %d'
-      time: ! '%l:%M %p'
+      default: '%Y-%m-%d'
+      long: '%B %d, %Y'
+      short: '%b %d'
+      time: '%l:%M %p'
     month_names:
     - 
     - January
@@ -415,16 +412,16 @@ ru:
         other: over %{count} years
       x_days:
         one: 1 day
-        other: ! '%{count} days'
+        other: '%{count} days'
       x_minutes:
         one: 1 minute
-        other: ! '%{count} minutes'
+        other: '%{count} minutes'
       x_months:
         one: 1 month
-        other: ! '%{count} months'
+        other: '%{count} months'
       x_seconds:
         one: 1 second
-        other: ! '%{count} seconds'
+        other: '%{count} seconds'
     prompts:
       day: Day
       hour: Hour
@@ -447,7 +444,7 @@ ru:
       search_placeholder: 
       search_title: 
   errors:
-    format: ! '%{attribute} %{message}'
+    format: '%{attribute} %{message}'
     messages:
       accepted: must be accepted
       blank: can't be blank
@@ -584,12 +581,12 @@ ru:
     form:
       add_a_leader: Add a leader
       add_a_member: Add a member
-      start_typing: ! 'Start typing a name to find a person add to this group:'
+      start_typing: 'Start typing a name to find a person add to this group:'
     search:
       add_new_person_group: 
       not_found: We couldn't find anyone in your %{terminology} with that name
       show_all: show all
-      showing_count: ! 'Showing %{length} of %{total}, keep typing or '
+      showing_count: 'Showing %{length} of %{total}, keep typing or '
       showing_count_complete: 
   groups:
     add_a_label: 
@@ -613,7 +610,7 @@ ru:
       add_group: Add a group
       assign_to_label:
         one: 1 Group
-        other: ! '%{count} Groups'
+        other: '%{count} Groups'
       group_list: Group List for %{org}
       group_name: Group Name
       labeled_with: Labeled With "%{label}"
@@ -709,13 +706,11 @@ ru:
       body_html: <h2>Your request for the keyword %{keyword} was APPROVED</h2> <p> To use the keyword, tell people to text %{keyword} to %{number}<br/> </p> <p> Если у вас есть вопросы, %{link}. </p>
       link_text: send us an email at support@missionhub.com
     notify_user_of_denial:
-      body_html: ! '<p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
-
+      body_html: |-
+        <p>Your request for the keyword keyword has been declined. Keywords are typically declined for one of the following reasons:</p>
         <ul> <li>The keyword was too long. We recommend that you keep your keywords as short as possible, preferably under 10 characters.</li> <li>The keyword was too generic. Keywords should be specific to your location. We reserve generic keywords for regional or national audiences.  (e.g. osucru instead of cru)</li> <li>Too many keywords were requested. At this point in time, we are only allowing 2 keywords per location to minimize our cost.</li> </ul>
-
         <p>If you have good reason for an exception, please send an explanation to support@missionhub.com with Keyword Request Declined in the subject line and we will review your situation.</p>
-
-        <p> Спасибо,<br/> MissionHub Support Team </p>'
+        <p> Спасибо,<br/> MissionHub Support Team </p>
   keywords:
     default_rejection_email: Your keyword request has been denied
     edit:
@@ -730,7 +725,7 @@ ru:
       explanation: Please explain what you plan to use this keyword for.
       initial_response: What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, dont change that part of the response.)
       keyword: Keyword
-      keyword_instruct: ! '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
+      keyword_instruct: '- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - ''FSUCRU'' is the keyword in ''Text FSUCRU to 85005''.<br/>- Use at least 3 letters for your keyword.'
       keyword_tip: This is what people will type into their phone.
       keyword_why: This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have.
       post_survey_message: What message would you like to show after the person has completed the survey?
@@ -755,18 +750,16 @@ ru:
   leader: Leader
   leader_mailer:
     added:
-      body_html: ! '<p>Привет %{name},</p>
-
+      body_html: |-
+        <p>Привет %{name},</p>
         <p>Я только что добавил вас в качестве лидера %{org} на MissionHub</p>
-
         <p>Посетите %{link} чтобы войти. Пожалуйста не делитесь этой ссылкой ни с кем.</p>
-
-        <p>%{added_by}</p>'
+        <p>%{added_by}</p>
   leaders:
     create:
       no_user_account: 
     form:
-      name_required: ! 'Name and email fields are required to add a leader:'
+      name_required: 'Name and email fields are required to add a leader:'
       notify: Notify this person that they've been added and send them a link to log in.
     search:
       not_in_system: Если человек которого вы ищете еще не в системе, нажмите сюда чтобы добавить его.
@@ -849,22 +842,22 @@ ru:
   number:
     currency:
       format:
-        delimiter: ! ','
-        format: ! '%u%n'
+        delimiter: ','
+        format: '%u%n'
         precision: 2
         separator: .
         significant: false
         strip_insignificant_zeros: false
         unit: $
     format:
-      delimiter: ! ','
+      delimiter: ','
       precision: 3
       separator: .
       significant: false
       strip_insignificant_zeros: false
     human:
       decimal_units:
-        format: ! '%n %u'
+        format: '%n %u'
         units:
           billion: Billion
           million: Million
@@ -878,7 +871,7 @@ ru:
         significant: true
         strip_insignificant_zeros: true
       storage_units:
-        format: ! '%n %u'
+        format: '%n %u'
         units:
           byte:
             one: Byte
@@ -1205,9 +1198,9 @@ ru:
   sporadically: Sporadically
   support:
     array:
-      last_word_connector: ! ', and '
-      two_words_connector: ! ' and '
-      words_connector: ! ', '
+      last_word_connector: ', and '
+      two_words_connector: ' and '
+      words_connector: ', '
     select:
       prompt: Please select
   survey:
@@ -1366,18 +1359,18 @@ ru:
     am: am
     formats:
       date: 
-      default: ! '%m/%d/%Y %H:%M:%S'
-      long: ! '%B %d, %Y %H:%M'
-      short: ! '%d %b %H:%M'
-      time_only: ! '%l:%M %p'
+      default: '%m/%d/%Y %H:%M:%S'
+      long: '%B %d, %Y %H:%M'
+      short: '%d %b %H:%M'
+      time_only: '%l:%M %p'
     pm: pm
   views:
     pagination:
-      first: ! '&laquo; Первый'
+      first: '&laquo; Первый'
       last: Последний &raquo;
       next: Следующий &rsaquo;
-      previous: ! '&lsaquo; Предыдущий'
-      truncate: ! '...'
+      previous: '&lsaquo; Предыдущий'
+      truncate: '...'
   weekly: Weekly
   welcome:
     home:
@@ -1387,7 +1380,7 @@ ru:
       edit_orgs: Edit your organizational involvements.
       follow_up:
         one: 1 Person to Follow-up
-        other: ! '%{count} People to Follow-up'
+        other: '%{count} People to Follow-up'
       keywords: Анкеты
       manage_questions: Организовать вопросы анкеты
       no_mobile: 
@@ -1428,7 +1421,7 @@ ru:
       skip_step: Пропустить этот шаг
       survey_paragraph: Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a basic contact card.
       verify_identity: Подтвердите вашу личность
-      verify_paragraph: ! 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
+      verify_paragraph: 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
       verify_with_relay: Verify With Relay
       welcome: Добро пожаловать
       welcome_paragraph: Добро пожаловать в MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system.
