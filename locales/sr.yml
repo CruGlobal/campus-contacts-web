@@ -1155,18 +1155,18 @@ sr:
     new:
       greeting_no_name: 
       greeting_with_name: 
-    phone_number: 
-    room: 
-    select_language: 
+    phone_number: Који је ваш број телефона?
+    room: Број соба
+    select_language: Изаберите језик
     show:
       edit_answers: 
       no_answers: 
       title: 
-    state: 
+    state: држава
     thanks:
       thanks: 
-    year_in_school: 
-    zip: 
+    year_in_school: Која је ваша година у школи?
+    zip: Поштански број
   surveys:
     edit:
       edit_survey: 

@@ -922,15 +922,15 @@ en:
   survey_responses:
     address1: Street Address
     answer_other_surveys:
-      title: ! '%{name} - Answer Other Surveys'
+      title: '%{name} - Answer Other Surveys'
     birth_date: What is your birth date?
     campus: Campus
     country: Country
     dorm: Dorm Building
     edit:
       cancel: Cancel and go back
-      multiple_answers: ! 'Choose one or more. '
-      title: Edit %{name}'s Survey Results
+      multiple_answers: 'Choose one or more. '
+      title: "Edit %{name}'s Survey Results"
     email: Email Address
     facebook:
       facebook_login: You can connect your account to Facebook so we can know who you really are.
@@ -938,9 +938,9 @@ en:
     faculty: Are you a faculty?
     first_name: What is your first name?
     form:
-      frozen: Sorry. The survey '%{survey}' is currently on hold.
+      frozen: "Sorry. The survey '%{survey}' is currently on hold."
     gender: What is your gender?
-    graduation_date: Graduation Date
+    graduation_date: What is/was your college graduation date?
     iso_bs: Bosnian
     iso_de: German
     iso_en: English
@@ -949,8 +949,8 @@ en:
     iso_ru: Russian
     iso_zh: Chinese
     last_name: What is your last name?
-    major: What is your major?
-    nationality: Nationality
+    major: What is/was your major?
+    nationality: What is your nationality?
     new:
       greeting_no_name: Hi!
       greeting_with_name: Hi %{name}!
@@ -960,12 +960,12 @@ en:
     show:
       edit_answers: Edit Answers
       no_answers: There is no information for %{name}
-      title: ! '%{name}''s Completed Survey Answers'
+      title: "%{name}'s Completed Survey Answers"
     state: State
     thanks:
       thanks: Thanks!
     year_in_school: What is your year in school?
-    zip: Zip Code
+    zip: What is your zip code?
   date:
     formats:
       default: "%m/%d/%Y"
