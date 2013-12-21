@@ -20,18 +20,14 @@ namespace :infobase do
       "SV" => "Cru",
       "OT" => "Other"
     }
-    ['Campus Ministry','AIA'].each do |ministry_name|
-      campus_ministry = Infobase::Ministry.get("filters[name]" => ministry_name)['ministries'].first
+    #['Campus Ministry','AIA'].each do |ministry_name|
+      campus_ministry = Infobase::Ministry.get("filters[name]" => 'Campus Ministry')['ministries'].first
       campus = Organization.where(importable_id: campus_ministry['id'], importable_type: 'Ccc::Ministry').first
       campus ||= root.children.create!(name: campus_ministry['name'], terminology: 'Ministry', importable_id: campus_ministry['id'], importable_type: 'Ccc::Ministry')
-      # strategies.each_pair do |ab, name|
-      #   if strategy = Ccc::Strategy.find_by_name(name)
-      #     unless s = Organization.where(importable_id: strategy.id, importable_type: 'Ccc::Strategy').first
-      #       s = root.children.create!(name: name, terminology: 'Strategy', importable_id: strategy.id, importable_type: 'Ccc::Strategy')
-      #     end
-      #     campus = s if ab == 'FS'
-      #   end
-      # end
+
+      chs_ministry = Infobase::Ministry.get("filters[name]" => 'Cru High School')['ministries'].first
+      chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first
+
 
       puts "Insert regions."
 
@@ -57,11 +53,15 @@ namespace :infobase do
           if mh_team
             mh_team.update_attributes(attribs)
           else
-            region = regions[team['region']]
-            next unless region
-            mh_team = region.children.create!(attribs)
+            if team['lane'] == 'SV'
+              chs.children.create!(attribs)
+            else
+              region = regions[team['region']]
+              next unless region
+              mh_team = region.children.create!(attribs)
+            end
           end
-
+next
           team_id_to_ministry[team['id']] = mh_team
 
           puts "Adding team members for #{team['name']}"
@@ -158,6 +158,6 @@ namespace :infobase do
         end
       end
     end
-  end
+  #end
 
 end
