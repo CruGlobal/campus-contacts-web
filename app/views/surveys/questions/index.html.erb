@@ -48,8 +48,8 @@
   </table>
 
   <div class="button_block">
+    <%= link_to(t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
     <%= link_to(t('.add_question'), add_survey_question_path(@survey), {id:'add_suvey_question_link', remote: true, class: 'cleangray'}) %>
-		<%= link_to(t('.add_prev_question'), '', id: 'add_old_question_link', class: "cleangray") %>
   </div>
 
   <div id='loading' class="hidden">
