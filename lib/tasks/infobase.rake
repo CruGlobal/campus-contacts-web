@@ -61,7 +61,7 @@ namespace :infobase do
               mh_team = region.children.create!(attribs)
             end
           end
-next
+
           team_id_to_ministry[team['id']] = mh_team
 
           puts "Adding team members for #{team['name']}"
@@ -70,7 +70,11 @@ next
           team['people'].each do |ccc_person|
 
             next unless ccc_person['user_id'].present?
-            ccc_user = Infobase::User.find(ccc_person['user_id'], include: 'authentications')['user']
+            begin
+              ccc_user = Infobase::User.find(ccc_person['user_id'], include: 'authentications')['user']
+            rescue Net::HTTPNotFound
+              next
+            end
 
             # If this person doesn't already exist in missionhub, we need to create them
             # We'll try to match on FB authentication, then username
