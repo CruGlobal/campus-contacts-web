@@ -3,6 +3,19 @@
   They will automatically be included in application.css.
 */
 
+.contact_row {
+  cursor: pointer;
+  &:hover {
+    background: #fcfcfc !important;
+  }
+  td {
+    vertical-align: top;
+    &.handle_container .handle {
+      cursor: move !important;
+    }
+  }
+}
+
 #pagination_space {
   margin-top: 10px;
   .pagination {
