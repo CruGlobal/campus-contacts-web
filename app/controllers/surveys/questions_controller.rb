@@ -219,8 +219,8 @@ class Surveys::QuestionsController < ApplicationController
 				groups = current_organization.group_search(keyword)
 				@response = groups.collect{|p| {label: "#{p.name} (#{p.location})", id: p.id}}
 			when 'Label'
-				permissions = current_organization.permission_search(keyword)
-				@response = permissions.collect{|p| {label: p.name, id: p.id}}
+				labels = current_organization.label_search(keyword)
+				@response = labels.collect{|p| {label: p.name, id: p.id}}
 			else
 			end
 		end

@@ -112,21 +112,21 @@ class QuestionSet
                       group_membership.save
                     end
                   when 'label'
-                    if Permission.exists?(assign_to_id)
+                    if Label.exists?(assign_to_id)
 
-                      new_permissions = [assign_to_id]
-                      old_permissions = person.organizational_permissions.where(organization_id: organization.id).collect { |permission| permission.permission_id }
-                      permissions_to_add = new_permissions - old_permissions
-                      permissions_to_remove = old_permissions - new_permissions
+                      new_labels = [assign_to_id]
+                      old_labels = person.organizational_labels.where(organization_id: organization.id).collect { |label| label.label_id }
+                      labels_to_add = new_labels - old_labels
+                      labels_to_remove = old_labels - new_labels
 
-                      person.organizational_permissions.where(organization_id: organization.id, permission_id: permissions_to_remove).destroy_all
+                      person.organizational_labels.where(organization_id: organization.id, label_id: labels_to_remove).destroy_all
 
-                      all_permissions = permissions_to_add | (new_permissions & old_permissions)
-                      all_permissions.sort!.each do |permission_id|
-                        OrganizationalPermission.find_or_create_by_person_id(
+                      all_labels = labels_to_add | (new_labels & old_labels)
+                      all_labels.sort!.each do |label_id|
+                        OrganizationalLabel.find_or_create_by_person_id(
                           person_id: person.id,
-                          permission_id: permission_id,
-                          organization_id: organization.id) if permissions_to_add.include?(permission_id)
+                          label_id: label_id,
+                          organization_id: organization.id) if labels_to_add.include?(label_id)
                       end
                     end
                   end
