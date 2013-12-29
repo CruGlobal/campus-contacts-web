@@ -10,7 +10,7 @@ class PhoneNumber < ActiveRecord::Base
   validate do |value|
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      unless (phone_number =~ /^(\d|\+|\ |\/|\(|\)|\-){1,100}$/)
+      unless (phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
       else
         self[:number] = PhoneNumber.strip_us_country_code(phone_number)
