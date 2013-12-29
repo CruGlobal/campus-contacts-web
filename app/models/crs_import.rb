@@ -74,6 +74,9 @@ class CrsImport
 
             # Get the ministry_person or the crs2_person
             profile = registrant.profile
+
+            next unless profile
+            
             crs2_person = profile.ministry_person || profile.crs2_person
 
             unless person
@@ -148,7 +151,7 @@ class CrsImport
 
             crs2_person.all_phone_numbers.each do |number|
               person.phone_number = number
-              person.save
+              person.save(validate: false)
             end
 
             # Make this person a contact in this org
