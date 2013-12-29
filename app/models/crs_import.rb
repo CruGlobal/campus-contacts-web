@@ -148,6 +148,7 @@ class CrsImport
 
             crs2_person.all_phone_numbers.each do |number|
               person.phone_number = number
+              person.save
             end
 
             # Make this person a contact in this org
