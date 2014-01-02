@@ -90,11 +90,12 @@ $ ->
   # START - ACTION MENU
   $('li a#action_menu_record_interaction').live 'click', (e)->
     e.preventDefault()
-    $('li#interactions').click()
+    $('#panel_nav li#interactions').click()
     $('#interaction_new_record_button').click()
 
   $('li #action_menu_assign_profile').live 'click', (e)->
     e.preventDefault()
+    $('#panel_nav li#info').click()
     $("#info_display_edit_button").click()
 
   $('li #action_menu_assign').live 'click', (e)->
