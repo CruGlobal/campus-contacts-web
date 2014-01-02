@@ -781,8 +781,9 @@ class ContactsController < ApplicationController
 
         @people = @all_people.page(page)
       else
-        @people = @people_scope.order(order_query).group('people.id').page(page).per(session[:per_page])
+        @people = @people_scope.order(order_query).group('people.id').page(page)
       end
+      @people = @people.per(session[:per_page])
     end
 
     def fetch_mine
