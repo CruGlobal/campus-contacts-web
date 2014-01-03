@@ -334,22 +334,30 @@ class Organization < ActiveRecord::Base
     permissions.non_default_permissions
   end
 
+  def all_labels
+    Label.where("(organization_id = 0 OR organization_id = #{id}) AND (i18n <> 'sent' OR i18n IS NULL)")
+  end
+
+  def labels
+    all_labels.where(id: label_set.collect(&:id))
+  end
+
   def label_set
     default_labels + non_default_labels
   end
 
   def default_labels
     if is_bridge?
-      labels.default_bridge_labels
+      all_labels.default_bridge_labels
     elsif has_parent?(1)
-      labels.default_cru_labels
+      all_labels.default_cru_labels
     else
-      labels.default_labels
+      all_labels.default_labels
     end
   end
 
   def non_default_labels
-    labels.non_default_labels
+    all_labels.non_default_labels
   end
 
   def parent_organization_admins
@@ -487,10 +495,6 @@ class Organization < ActiveRecord::Base
 
   def permissions
     Permission.arrange_all
-  end
-
-  def labels
-    Label.where("(organization_id = 0 OR organization_id = #{id}) AND (i18n <> 'sent' OR i18n IS NULL)")
   end
 
   def <=>(other)
