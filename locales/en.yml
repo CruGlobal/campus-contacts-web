@@ -679,13 +679,13 @@ en:
       title: Step 3 of 3 - Add Labels to New Contacts
     new:
       file_not_existing: File does not exist.
-      guide: Easily import all your contacts quickly with a CSV (comma-separated value) file. If you have a CSV file to import, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong>.
+      guide: Easily import all your contacts quickly with a CSV (comma-separated value) file. If you have a CSV file to import, click <strong>Browse</strong> to locate your file and then click <strong>Upload</strong>.
       guide0: 'To create a new CSV file, you can use Microsoft Excel to make one from a spreadsheet. '
       guide1: Open your current contact spreadsheet or download a %{link}.
       guide2: List your category (column) headings across the first row of your spreadsheet like first name, last name, email etc.
       guide3: Select <strong>File</strong>, choose <strong>Save As</strong>.
       guide4: In the <strong>Save As</strong> box, from the drop-down menu for <strong>File Type/Format</strong>, select <strong>CSV, Comma Separated</strong> and then continue by saving the spreadsheet to your computer.
-      guide5: In MissionHub, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong> to continue.
+      guide5: In MissionHub, click <strong>Browse</strong> to locate your file and then click <strong>Upload</strong> to continue.
       preview: View picture for an example.
       sample_csv: CSV Sample Template
       title: Step 1 of 3 - Upload a File
