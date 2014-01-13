@@ -171,6 +171,10 @@ class Import < ActiveRecord::Base
 
   end
 
+  class InvalidCSVFormat < StandardError
+
+  end
+
   private
 
   def create_table(new_person_ids, excel_answers)
@@ -198,9 +202,15 @@ class Import < ActiveRecord::Base
   def parse_headers
     return unless upload?
     tempfile = upload.queued_for_write[:original]
+
+    # Since we have to encode the csv file to avoid the "invalid byte sequence in utf-8" error
+    # And import has no format validation, this line is the safest and lightest format validation
+    # Rather than to set the validation from model, it's too strict.
+    raise InvalidCSVFormat unless File.extname(upload.original_filename) == ".csv"
+
     unless tempfile.nil?
       ctr = 0
-      CSV.foreach(tempfile.path) do |row|
+      CSV.foreach(tempfile.path, 'r:iso-8859-1:utf-8') do |row|
         Rails.logger.info "---COLLECT#{ctr}---"
         if ctr == 0
           begin

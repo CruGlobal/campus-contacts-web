@@ -2,6 +2,7 @@ class ImportsController < ApplicationController
   before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
   before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
+  rescue_from Import::InvalidCSVFormat, with: :invalid_csv_format
   rescue_from CanCan::AccessDenied, with: :import_access_denied
 
   def index
@@ -21,14 +22,10 @@ class ImportsController < ApplicationController
       if @import.save
         redirect_to edit_import_path(@import)
       else
-        init_org
-        render :new
+        invalid_csv_format
       end
     rescue ArgumentError
-      flash.now[:error] = t('imports.new.wrong_file_format_error')
-      init_org
-      @import = Import.new
-      render :new
+      invalid_csv_format
     end
   end
 
@@ -111,6 +108,12 @@ class ImportsController < ApplicationController
   def nil_column_header
     init_org
     flash.now[:error] = t('contacts.import_contacts.blank_header')
+    render :new
+  end
+
+  def invalid_csv_format
+    init_org
+    flash.now[:error] = t('imports.new.wrong_file_format_error')
     render :new
   end
 
