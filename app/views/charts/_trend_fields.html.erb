@@ -1,10 +1,10 @@
 <div class="trend_fields_row">
-  <%= select_tag "trend_field_1", grouped_options_for_select([["",[""]]] + @grouped_criteria_options, @chart.trend_field_1), id: "trend_field_1" %>
-  <%= select_tag "trend_field_2", grouped_options_for_select([["",[""]]] + @grouped_criteria_options, @chart.trend_field_2), id: "trend_field_2" %>
+  <%= select_tag "trend_field_1", grouped_options_for_select([["None",[""]]] + @grouped_criteria_options, @chart.trend_field_1), id: "trend_field_1" %>
+  <%= select_tag "trend_field_2", grouped_options_for_select([["None",[""]]] + @grouped_criteria_options, @chart.trend_field_2), id: "trend_field_2" %>
 </div>
 <div class="trend_fields_row">
-  <%= select_tag "trend_field_3", grouped_options_for_select([["",[""]]] + @grouped_criteria_options, @chart.trend_field_3), id: "trend_field_3" %>
-  <%= select_tag "trend_field_4", grouped_options_for_select([["(Blank)",[""]]] + @grouped_criteria_options, @chart.trend_field_4), id: "trend_field_4" %>
+  <%= select_tag "trend_field_3", grouped_options_for_select([["None",[""]]] + @grouped_criteria_options, @chart.trend_field_3), id: "trend_field_3" %>
+  <%= select_tag "trend_field_4", grouped_options_for_select([["None",[""]]] + @grouped_criteria_options, @chart.trend_field_4), id: "trend_field_4" %>
 </div>
 
 <script>

@@ -345,9 +345,9 @@ class ChartsController < ApplicationController
 
   def get_trend_criteria_options(orgs)
     all_labels = []
-    all_labels = orgs.first.label_set.collect(&:name).map{|x| x.titleize.strip} unless orgs.empty?
+    all_labels = orgs.first.label_set.collect(&:name).map{|x| x.upcase.titleize.strip} unless orgs.empty?
     orgs.each do |org|
-      labels = org.label_set.collect(&:name).map{|x| x.titleize.strip}
+      labels = org.label_set.collect(&:name).map{|x| x.upcase.titleize.strip}
       all_labels = all_labels & labels
      end
     options = [["Movement Indicators (pulled from info submitted to the Infobase)", MovementIndicator.all]]
