@@ -53,6 +53,7 @@ en:
       keep_contact: "Leave a copy of the Contact in the Organization"
       copy_survey_answers: "Copy Survey Answers with Contact"
       copy_interactions: "Copy Interactions with Contact"
+      copy_interactions_help: "Privacy settings will be respected: Share with everyone here = share with everyone there, share with our admins = share with their admins, share with only me means share with only me."
     messages:
       question_too_long: "WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages."
   permissions:
