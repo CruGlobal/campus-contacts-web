@@ -193,8 +193,14 @@ $ ->
 
   $('#transfer_to_org_link').live 'click', (e)->
     e.preventDefault()
-    if $('.id_checkbox:checked').length > 0
+    selected = $('.id_checkbox:checked')
+    if selected.length > 0
       $.showDialog($('#transfer_to_org'))
+      if selected.length > 1
+        msg = "(#{selected.length} contacts selected)"
+      else
+        msg = "(#{selected.length} contact selected)"
+      $('#transfer_to_org .mh_popup_heading .selected_count').text(msg)
     else
       $.a(t('contacts.index.none_checked'))
 
@@ -485,6 +491,8 @@ $ ->
     from_id = $(this).closest('div').attr('data-org-id')
     to_id = $(this).attr('data-id')
     keep_contact = $('#keep-contact-copy > input').is(':checked')
+    survey_answers = $('#survey-answers-copy > input').is(':checked')
+    interactions= $('#interactions-copy > input').is(':checked')
 
     ids = []
     $('.id_checkbox:checked:visible').each ->
@@ -501,7 +509,7 @@ $ ->
     $.ajax
       type: 'POST'
       url: '/organizational_permissions/move_to'
-      data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids
+      data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids+'&survey_answers='+survey_answers+'&interactions='+interactions
       success: (data) ->
         $.toggleLoader('ac_button_bar','')
         if data.indexOf("success") != -1

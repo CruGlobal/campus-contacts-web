@@ -104,6 +104,38 @@ class Survey < ActiveRecord::Base
         element.duplicate(new_survey)
       end
     end
+    return new_survey
+  end
+
+  def duplicate_to_org(org, copy_answers = false, person = nil)
+    new_survey = Survey.new(self.attributes)
+    new_survey.organization_id = org.id
+    new_survey.save(:validate => false)
+    if copy_answers && person.present?
+      answer_sheet = person.answer_sheet_for_survey(self.id)
+      if answer_sheet.present?
+        new_answer_sheet = answer_sheet.clone
+        new_answer_sheet.survey_id = new_survey.id
+        new_answer_sheet.save
+      end
+    end
+    self.elements.each do |element|
+      if element.reuseable?
+        new_element = SurveyElement.create(:element => element, :survey => new_survey)
+      else
+        new_element = element.duplicate(new_survey)
+      end
+      if copy_answers && person.present? && answer_sheet.present? && new_element.present?
+        answer = answer_sheet.answers.find_by_question_id(new_element.id)
+        if answer.present?
+          new_answer = answer.clone
+          new_answer.answer_sheet_id = new_answer_sheet.id
+          new_answer.question_id = new_element.id
+          new_answer.save
+        end
+      end
+    end
+    return new_survey
   end
 
   def questions=(questions_attributes)
