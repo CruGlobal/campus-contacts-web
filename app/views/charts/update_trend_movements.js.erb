@@ -1,4 +1,5 @@
 $('div#trend_spinner').hide()
 $('div#trend_container').show()
 $("#trend_chart").html("<%= escape_javascript(render partial: 'trend_js') %>")
+$("#trend_fields").html("<%= escape_javascript(render partial: 'trend_fields') %>")
 $("#trend_compare").html("<%= escape_javascript(render partial: 'trend_year_ago') %>")

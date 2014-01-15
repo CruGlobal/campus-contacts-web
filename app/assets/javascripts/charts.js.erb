@@ -71,13 +71,4 @@ $(document).ready(function() {
     $('div#trend_spinner').show();
   });
   $("input.datepicker").datepicker({dateFormat: 'yy-mm-dd', minDate: '<%= (Date.today - 3.years).to_s %>'});
-  $('div#trend_fields select').change(function() {
-    $('div#trend_container').hide();
-    $('div#trend_spinner').show();
-    $.ajax({
-      url: "/charts/update_trend_field",
-      type: "POST",
-      data: {changed: this.id, criteria: $('select#' + this.id + ' option:selected').val()}
-    })
-  });
 });

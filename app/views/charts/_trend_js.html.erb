@@ -26,8 +26,8 @@
 
       xAxis: {
         type: 'datetime',
-        min: Date.UTC(<%= @begin_date.year %>, <%= @begin_date.month - 1 %>, <%= @begin_date.day %>),
-        max: Date.UTC(<%= @end_date.year %>, <%= @end_date.month - 1 %>, <%= @end_date.day %>),
+        min: Date.UTC(<%= @chart_start_date.year %>, <%= @chart_start_date.month - 1 %>, <%= @chart_start_date.day %>),
+        max: Date.UTC(<%= @chart_end_date.year %>, <%= @chart_end_date.month - 1 %>, <%= @chart_end_date.day %>),
         tickInternal: 7 * 24 * 3600 * 1000,
         gridLineWidth: 1
       },

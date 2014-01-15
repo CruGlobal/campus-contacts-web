@@ -343,6 +343,18 @@ class ChartsController < ApplicationController
     end
   end
 
+  def get_trend_criteria_options(orgs)
+    all_labels = []
+    all_labels = orgs.first.label_set.collect(&:name).map{|x| x.upcase.titleize.strip} unless orgs.empty?
+    orgs.each do |org|
+      labels = org.label_set.collect(&:name).map{|x| x.upcase.titleize.strip}
+      all_labels = all_labels & labels
+     end
+    options = [["Movement Indicators (pulled from info submitted to the Infobase)", MovementIndicator.all]]
+    options << ["Labels (pulled from current MissionHub labeling)", all_labels] unless all_labels.empty?
+    options
+  end
+
   def refresh_trend_data
     @begin_date = (Date.today - 3.months).end_of_week(:sunday)
     @end_date = Date.today.end_of_week(:sunday)
@@ -356,14 +368,22 @@ class ChartsController < ApplicationController
       @displayed_movements = Organization.where("id IN (?)", org_ids)
     end
 
+    @grouped_criteria_options = get_trend_criteria_options(@displayed_movements)
+
     max_fields = Chart::TREND_MAX_FIELDS
     semester_stats_needed = false
     interval = @chart.trend_interval
+    @chart_start_date = @begin_date + (interval - 1) * 7
+    @chart_end_date = @end_date + interval * 7 - 1 # make sure the last data point includes the data at the end date specified
 
     @fields, @lines = [], {}
     (1..max_fields).each do |number|
       field = @chart["trend_field_#{number}"]
-      @fields << MovementIndicator.translate[field] if field.present?
+      if field.present? && MovementIndicator.all.include?(field)
+        @fields << MovementIndicator.translate[field] #Movement Indicator
+      elsif field.present? && @grouped_criteria_options.flatten.include?(field)
+        @fields << field #Label
+      end
       semester_stats_needed = true if MovementIndicator.semester.include?(field)
       @lines[@fields.last.to_s] = {}
     end
@@ -384,9 +404,15 @@ class ChartsController < ApplicationController
         raise resp.inspect
       end
 
-      @begin_date.step(@end_date, 7) do |date| # step through dates 1 week at a time
+      @chart_start_date.step(@chart_end_date, interval * 7) do |date| # step through dates 1 interval at a time
         @fields.each do |field|
           @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
+          unless MovementIndicator.translate.values.include?(field)
+            org_ids = @displayed_movements.pluck(:id) + [0]
+            label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
+            value = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+            @lines[field][date] = value
+          end
         end
       end
     end
@@ -400,6 +426,8 @@ class ChartsController < ApplicationController
 
       year_ago_begin = (@begin_date - 1.year).end_of_week(:sunday)
       year_ago_end = (@end_date - 1.year).end_of_week(:sunday)
+      chart_year_ago_start_date = year_ago_begin + (interval - 1) * 7
+      chart_year_ago_end_date = year_ago_end + interval * 7 - 1 # make sure the last data point includes the data at the end date specified
 
       unless @fields_year_ago.empty?
         infobase_hash = {
@@ -417,10 +445,16 @@ class ChartsController < ApplicationController
           raise resp.inspect
         end
 
-        year_ago_begin.step(year_ago_end, 7) do |date| # step through dates 1 week at a time
+        (chart_year_ago_start_date).step(chart_year_ago_end_date, interval * 7) do |date| # step through dates 1 interval at a time
           @fields_year_ago.each do |field|
             # add 364 days to the plot point to line it up with the current year and day of the week
             @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
+            unless MovementIndicator.translate.values.include?(field)
+              org_ids = @displayed_movements.pluck(:id) + [0]
+              label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
+              value = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+              @lines_year_ago[field][date + 364.days] = value
+            end
           end
         end
       end
