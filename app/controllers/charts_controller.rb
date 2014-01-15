@@ -373,6 +373,8 @@ class ChartsController < ApplicationController
     max_fields = Chart::TREND_MAX_FIELDS
     semester_stats_needed = false
     interval = @chart.trend_interval
+    @chart_start_date = @begin_date + (interval - 1) * 7
+    @chart_end_date = @end_date + interval * 7 - 1 # make sure the last data point includes the data at the end date specified
 
     @fields, @lines = [], {}
     (1..max_fields).each do |number|
@@ -402,8 +404,6 @@ class ChartsController < ApplicationController
         raise resp.inspect
       end
 
-      @chart_start_date = @begin_date + (interval - 1) * 7
-      @chart_end_date = @end_date + interval * 7 - 1 # make sure the last data point includes the data at the end date specified
       @chart_start_date.step(@chart_end_date, interval * 7) do |date| # step through dates 1 interval at a time
         @fields.each do |field|
           @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
