@@ -194,8 +194,8 @@ li.btn_right, button.btn_right {
 
 .mh_popup_box_scroller {
   margin: -5px -13px 0;
-  height: 300px;
-  padding: 10px 20px;
+  max-height: 250px;
+  padding: 10px 28px 10px 20px;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   overflow-y: scroll;
@@ -416,20 +416,28 @@ button {
   position: absolute;
   right: 0px;
   bottom: 16px;
-  width: 400px;
+  width: 100%;
   display: inline-block;
-  margin-right: 22px;
-  margin-left: 24px;
+  padding: 0 12px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .groups_popup_box .groups_save, .permissions_popup_box .permissions_save, .labels_popup_box .labels_save, .error_popup_box .error_save {
   position: absolute;
   right: 0px;
   bottom: 16px;
-  width: 444px;
+  width: 100%;
   display: inline-block;
-  margin-right: 24px;
-  margin-left: 24px;
+  padding: 0 12px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .assign_popup_box button, .msg_popup_box button, .groups_popup_box button, .permissions_popup_box button, .labels_popup_box button, .error_popup_box button {
@@ -440,4 +448,5 @@ button {
 
 button#labels_popup_manage_button {
   float: left;
+  margin: 0;
 }

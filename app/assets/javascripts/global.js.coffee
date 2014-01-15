@@ -1,13 +1,19 @@
 $ ->
+  $(window).resize ->
+    active_dialog = $(".mh_popup_box:visible")
+    $.autoAdjustDialog(active_dialog.first().parents(".custom_mh_popup_box"))
+
   $(document).ready ->
+    $(".mh_popup_box").each ->
+      $.autoAdjustDialog($(this))
+
     $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json",
       theme: 'facebook'
       preventDuplicates: true
       minChars: 3
       resultsLimit: 10
       hintText: "",
-      placeHolder: $('#send_email_to').attr("data-search-desc"),
-      defaultWidth: 690
+      placeHolder: $('#send_email_to').attr("data-search-desc")
 
     $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json",
       theme: 'facebook'
@@ -15,8 +21,7 @@ $ ->
       minChars: 3
       resultsLimit: 10
       hintText: "",
-      placeHolder: $('#send_text_to').attr("data-search-desc"),
-      defaultWidth: 690
+      placeHolder: $('#send_text_to').attr("data-search-desc")
 
   $('a#survey_keywords_mode_link').siblings('ul').width(300)
 
