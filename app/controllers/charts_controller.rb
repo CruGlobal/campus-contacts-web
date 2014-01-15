@@ -278,7 +278,7 @@ class ChartsController < ApplicationController
     json["Pioneering"] ||= 0
     json["Key Leader"] ||= 0
     json["Launched"] ||= 0
-    json["Multiplying (formerly Transformational)"] ||= 0
+    json["Multiplying"] ||= 0
 
     @movement_stages = json
   end
