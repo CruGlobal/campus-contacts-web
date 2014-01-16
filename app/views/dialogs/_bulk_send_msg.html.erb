@@ -1,4 +1,4 @@
-<div id="bulk_send_msg_dialog" style="display:none" class="custom_mh_popup_box">
+<div id="bulk_send_msg_dialog" style="display:none" class="custom_mh_popup_box" data-width=650>
   <div class="ui-widget-overlay pop_box_overlay_container"></div>
   <div class="pop_box_container">
     <div class="mh_popup_box">
@@ -13,9 +13,7 @@
         <div class="note send_email">
           <div class="reply_to_toggle">
             <%= check_box_tag "reply_to_email", 1, id: "reply_to_email" %>
-          </div>
-          <div class="reply_to_toggle">
-            <%=raw t('general.email_note') %>
+            <span class="reply_to_info"><%=raw t('general.email_note') %></span>
           </div>
         </div>
         <div class="mh_popup_box_scroller">
