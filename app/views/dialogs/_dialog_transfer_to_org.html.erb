@@ -5,6 +5,7 @@
     	<div class="mh_popup_box_top">
         <span class="mh_popup_heading">
           Transfer to Another Organization
+          <span class="selected_count"></span>
         </span>
       </div>
       <div class="fancy">
@@ -12,7 +13,16 @@
         <%= spinner('org_search') %>
         <div id="keep-contact-copy">
           <%= check_box_tag :keep_contact, 1, true %>
-          <%= t('application.assign.keep_contact') %>
+          <%= t('application.assign_search.keep_contact') %>
+        </div>
+        <div id="survey-answers-copy">
+          <%= check_box_tag :survey_answers, 1, false %>
+          <%= t('application.assign_search.copy_survey_answers') %>
+        </div>
+        <div id="interactions-copy">
+          <%= check_box_tag :interactions, 1, false %>
+          <%= t('application.assign_search.copy_interactions') %>
+          <div class="icon help tip help_bubble_keyword " title="<%= t('application.assign_search.copy_interactions_help') %>"></div>
         </div>
       </div>
       <div class="mh_popup_box_content">

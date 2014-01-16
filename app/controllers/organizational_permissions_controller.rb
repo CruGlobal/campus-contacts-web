@@ -65,6 +65,8 @@ class OrganizationalPermissionsController < ApplicationController
       from_org = Organization.find(params[:from_id])
       to_org = Organization.find(params[:to_id])
       keep_contact = params[:keep_contact]
+      survey_answers = params[:survey_answers]
+      interactions = params[:interactions]
 
       unless from_org == to_org
         ids = params[:ids].to_s.split(',')
@@ -81,7 +83,7 @@ class OrganizationalPermissionsController < ApplicationController
         end
 
         people.each do |person|
-          from_org.move_contact(person, to_org, keep_contact, current_person)
+          from_org.move_contact(person, from_org, to_org, keep_contact, current_person, survey_answers == "true", interactions == "true")
         end
         render :text => keep_contact == "false" ? I18n.t('organizational_permissions.moving_people_success') : I18n.t('organizational_permissions.copy_people_success')
         return

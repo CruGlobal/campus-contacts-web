@@ -454,7 +454,7 @@ class OrganizationTest < ActiveSupport::TestCase
     assert !org1.contacts.include?(person1)
   end
 
-  test "move_contact(person, to_org, keep_contact, current_user)" do # revise!
+  test "move_contact(person, from_org, to_org, keep_contact, current_user)" do # revise!
     person = Factory(:person_with_things)
     contact = Factory(:person)
     org1 = Factory(:organization)
@@ -462,11 +462,63 @@ class OrganizationTest < ActiveSupport::TestCase
     org1.add_contact(contact)
     org1.add_admin(person)
     FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
-    org1.move_contact(contact, org2, "false", person)
+    org1.move_contact(contact, org1, org2, "false", person, false)
     assert_equal(0, org1.contacts.length)
     assert_equal(1, org2.contacts.length)
     assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
     assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
+  end
+
+  test "move contact with survey answers" do
+    person = Factory(:person_with_things)
+    contact = Factory(:person)
+    org1 = Factory(:organization)
+    org2 = Factory(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+
+
+    survey = Factory(:survey, organization: org1, title: "Special Survey")
+    question = Factory(:text_field, notify_via: "Both", trigger_words: "Short")
+    survey.questions << question
+
+    answer_sheet = Factory(:answer_sheet, survey: survey, person: contact)
+    answer = Factory(:answer_1, answer_sheet: answer_sheet, question: question)
+
+    org1.move_contact(contact, org1, org2, "false", person, true)
+
+    assert_equal 0, org1.contacts.length
+    assert_equal 1, org2.contacts.length
+    assert_equal 1, org2.surveys.length
+    assert org2.people.include?(contact)
+    assert_equal "Special Survey", contact.answered_surveys_in_org(org2).first.title
+  end
+
+  test "move contact with interactions" do
+    person = Factory(:person_with_things)
+    contact = Factory(:person)
+    org1 = Factory(:organization)
+    org2 = Factory(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+
+
+    interaction_type = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
+    interaction = Factory(:interaction, receiver: contact, creator: person, organization: org1, interaction_type_id: interaction_type.id)
+
+
+    assert_equal 1, contact.interactions.where(organization_id: org1.id).count
+    assert_equal 0, contact.interactions.where(organization_id: org2.id).count
+
+    org1.move_contact(contact, org1, org2, "false", person, false, true)
+
+    assert_equal 0, org1.contacts.length
+    assert_equal 1, org2.contacts.length
+
+    assert !org1.people.include?(contact)
+    assert org2.people.include?(contact)
+
+    assert_equal 1, contact.interactions.where(organization_id: org2.id).count
   end
 
   test "create_admin_user" do

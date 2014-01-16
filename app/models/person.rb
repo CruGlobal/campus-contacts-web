@@ -222,6 +222,15 @@ class Person < ActiveRecord::Base
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
 
+  def answered_surveys
+    survey_ids = answer_sheets.pluck(:survey_id)
+    Survey.where(id: survey_ids)
+  end
+
+  def answered_surveys_in_org(org)
+    answered_surveys.where(organization_id: org.id)
+  end
+
   def all_organizational_permissions_for_org_id(org_id)
     OrganizationalPermission.where("person_id = ? AND organization_id = ?", id, org_id)
   end

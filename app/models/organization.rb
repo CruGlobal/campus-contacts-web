@@ -729,7 +729,7 @@ class Organization < ActiveRecord::Base
     person.remove_assigned_contacts(self)
   end
 
-  def move_contact(person, to_org, keep_contact, current_admin = nil)
+  def move_contact(person, from_org, to_org, keep_contact, current_admin = nil, copy_survey_answers = false, copy_interactions = false)
     @followup_comments = followup_comments.where(contact_id: person.id)
     @rejoicables = rejoicables.where(person_id: person.id)
 
@@ -747,6 +747,27 @@ class Organization < ActiveRecord::Base
         @rejoicables.where(followup_comment_id: fc.id).each do |r|
           to_org.rejoicables.create(r.attributes.slice(:person_id, :created_by_id, :what, :updated_at, :created_at, :deleted_at))
         end
+      end
+    end
+
+    # Copy Survey Questions
+    if copy_survey_answers
+      person.answered_surveys_in_org(from_org).each do |survey|
+        survey.duplicate_to_org(to_org, true, person)
+      end
+    end
+
+    # Copy Interactions
+    if copy_interactions
+      person.interactions.where(organization_id: from_org.id).each do |interaction|
+        new_interaction = interaction.clone
+        new_interaction.organization_id = to_org.id
+        to_org_people_ids = to_org.all_people.pluck(:id)
+
+        new_interaction.created_by_id = nil unless to_org_people_ids.include?(interaction.created_by_id)
+        new_interaction.updated_by_id = nil unless to_org_people_ids.include?(interaction.updated_by_id)
+
+        new_interaction.save
       end
     end
 
