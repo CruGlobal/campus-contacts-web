@@ -20,8 +20,13 @@
   }
 }
 
-#pagination_space {
+.pagination_space {
   margin-top: 10px;
+  .pagination_details {
+    padding-right: 10px;
+    line-height: 1.5em;
+    float: right;
+  }
   .pagination {
     float: right;
     span a {
