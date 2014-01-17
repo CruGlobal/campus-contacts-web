@@ -184,10 +184,10 @@ class ChartsController < ApplicationController
   end
 
   def get_trend_chart
-    get_chart(Chart::TREND, true)
+    get_chart(Chart::TREND, true, true)
   end
 
-  def get_chart(type, orgs = false)
+  def get_chart(type, orgs = false, all_orgs = false)
     @chart = current_person.charts.where("chart_type = ?", type).first
     unless @chart
       @chart = Chart.new
@@ -197,7 +197,10 @@ class ChartsController < ApplicationController
     end
 
     if orgs
-      @movements = current_person.all_organization_and_children.where("importable_type = 'Ccc::MinistryActivity'")
+      @movements = current_person.all_organization_and_children
+      unless all_orgs
+        @movements = @movements.where("importable_type = 'Ccc::MinistryActivity'")
+      end
       @chart.update_movements(@movements)
       @chart.save
     end
