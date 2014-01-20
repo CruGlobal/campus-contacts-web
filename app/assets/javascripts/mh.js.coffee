@@ -210,8 +210,8 @@ $.blur = (selector, hide) ->
   width = parseInt(el.width()) + parseInt(pad_left) + parseInt(pad_right)
   height = parseInt(el.height()) + parseInt(pad_top) + parseInt(pad_bottom)
 
-  if $("#"+id).size() == 0
-    el.prepend("<div style='width:"+width+"px; height:"+height+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
+  # if $("#"+id).size() == 0
+    # el.prepend("<div style='width:"+width+"px; height:"+height+"px; background:#666; position: absolute; z-index: 999; opacity: 0.1; display: none;' id='"+id+"'></div>")
 
   $('#'+id).css('margin-top','-'+pad_top)
   $('#'+id).css('margin-left','-'+pad_left)
