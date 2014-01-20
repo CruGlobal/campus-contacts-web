@@ -9,40 +9,42 @@
   </h1>
 </div>
 
-<div id="ac_button_bar">
-	<ul class="button_bar">
-		<li class="action_lightblue">
-      <%= link_to(t('.add_member'), "#", class: "add_group_member", "data-desc"=>t('group_memberships.form.add_a_member'), "data-role"=>"member") %>
-		</li>
-	</ul>
-
-	<ul class="button_bar">
-		<li class="action_lightblue">
-      <%= link_to(t('.add_leader'), "#", class: "add_group_leader", "data-desc"=>t('group_memberships.form.add_a_leader'), "data-role"=>"leader") %>
-		</li>
-	</ul>
-
-	<ul class="button_bar">
-		<li class="action_lightblue btn_left">
-		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
-		</li>
-	</ul>
-
-	<ul class="button_bar">
-		<li class="action_lightblue btn_right">
-		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
-		</li>
-	</ul>
-
-	<ul class="button_bar">
-		<li class="action_lightblue">
-      <%= link_to(t('people.index.group_comment'), "#", id: "action_menu_comment") %>
-		</li>
-	</ul>
-</div>
-<br/>
-
 <div id="ac_contact_spread">
+  <div class="pagination_space">
+  </div>
+
+  <div id="ac_button_bar">
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
+        <%= link_to(t('.add_member'), "#", class: "add_group_member", "data-desc"=>t('group_memberships.form.add_a_member'), "data-role"=>"member") %>
+  		</li>
+  	</ul>
+
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
+        <%= link_to(t('.add_leader'), "#", class: "add_group_leader", "data-desc"=>t('group_memberships.form.add_a_leader'), "data-role"=>"leader") %>
+  		</li>
+  	</ul>
+
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_left">
+  		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
+  		</li>
+  	</ul>
+
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_right">
+  		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+  		</li>
+  	</ul>
+
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
+        <%= link_to(t('people.index.group_comment'), "#", id: "action_menu_comment") %>
+  		</li>
+  	</ul>
+  </div>
+
   <table class="listing contact_listing" cellpadding="0" cellspacing="0">
     <tr id="table_header">
       <th class="checkbox_cell header_checkbox">
