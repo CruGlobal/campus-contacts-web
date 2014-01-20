@@ -1337,7 +1337,7 @@ en:
       guide2: "List your category (column) headings across the first row of your spreadsheet like first name, last name, email etc."
       guide3: "Select <strong>File</strong>, choose <strong>Save As</strong>."
       guide4: "In the <strong>Save As</strong> box, from the drop-down menu for <strong>File Type/Format</strong>, select <strong>CSV, Comma Separated</strong> and then continue by saving the spreadsheet to your computer."
-      guide5: "In MissionHub, click <strong>Choose File</strong> to locate your file and then click <strong>Upload</strong> to continue."
+      guide5: "In MissionHub, click <strong>Browse</strong> to locate your file and then click <strong>Upload</strong> to continue."
       preview: 'View picture for an example.'
       sample_csv: "CSV Sample Template"
       wrong_file_format_error: "Uploaded wrong file format. File must be .csv"
