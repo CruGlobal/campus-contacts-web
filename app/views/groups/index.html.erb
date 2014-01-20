@@ -10,21 +10,22 @@
   </h1>
 </div>
 
-<div id="ac_button_bar">
-	<ul class="button_bar">
-		<li class="action_lightblue btn_left">
-		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
-		</li>
-	</ul>
-	<ul class="button_bar">
-		<li class="action_lightblue btn_right">
-		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
-		</li>
-	</ul>
-</div>
-<br/>
-
 <div id="ac_contact_spread">
+  <div class="pagination_space">
+  </div>
+
+  <div id="ac_button_bar">
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_left">
+  		  <%= link_to t("people.index.send_sms"), "#", id: "action_menu_text" %>
+  		</li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue btn_right">
+  		  <%= link_to t("people.index.send_email"), "#", id: "action_menu_email" %>
+  		</li>
+  	</ul>
+  </div>
   <span style="display:none" id="drag_helper_text_one"><%= t('.assign_to_label', count: 1) %></span>
   <span style="display:none" id="drag_helper_text_other"><%= t('.assign_to_label', count: 0) %></span>
 
