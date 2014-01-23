@@ -426,7 +426,7 @@ button {
           box-sizing: border-box;
 }
 
-.groups_popup_box .groups_save, .permissions_popup_box .permissions_save, .labels_popup_box .labels_save, .error_popup_box .error_save {
+.groups_popup_box .groups_save, .permissions_popup_box .permissions_save, .labels_popup_box .labels_save, .error_popup_box .error_save, .avatar_save {
   position: absolute;
   right: 0px;
   bottom: 16px;
@@ -438,6 +438,49 @@ button {
       -ms-box-sizing: border-box;
        -o-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+#avatar_form_container{
+  text-align:center;
+  margin-top:40px;
+  img{
+    border:3px solid #ddd;
+  }
+
+	button#browse_avatar {
+		float: left;
+		background: #fff;
+		border-radius: 4px;
+		border: 1px solid #808284;
+	}
+
+	button#browse_avatar:hover,
+  input[type="submit"]:hover {
+		background: #c7dff0;
+		border-color: #0379ae;
+	}
+	.select_avatar_file_button {
+		background: #fff;
+		border-radius: 4px;
+		border: 1px solid #808284;
+		&:hover {
+			background: #c7dff0;
+			border-color: #0379ae;
+		}
+	}
+  #avatar_browse_container{
+    text-align:center;
+    overflow:hidden;
+    width: 175px;
+    margin: 0 auto;
+  }
+  #display_avatar_file_name{
+    text-align:center;
+    color:#aaa;
+    font-weight:bold;
+    font-size: 12px;
+    margin-top:2px;
+  }
 }
 
 .assign_popup_box button, .msg_popup_box button, .groups_popup_box button, .permissions_popup_box button, .labels_popup_box button, .error_popup_box button {

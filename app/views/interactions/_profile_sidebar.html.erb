@@ -1,10 +1,4 @@
-<% if @person.fb_uid.present? %>
-  <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
-<% else %>
-  <%= image_tag("no_image.png", alt: '', width: '200', height: '200', id: 'profile_image') %>
-<% end %>
-
-  
+<%= image_tag(@person.get_avatar, alt: '', width: '200', height: '200', id: 'profile_image', class:'change_avatar current_avatar_display') %>
 <div id="profile_label_header">
 	Labels
   <%= link_to image_tag("edit_sprite.png", class: 'tip', title: 'Manage Labels'), "#", id: "show_profile_labels_button" %>
@@ -19,7 +13,7 @@
 	<% end %>
 </div>
 
-  
+
 <div id="profile_group_header">
 	Groups
   <%= link_to image_tag("edit_sprite.png", class: 'tip', title: 'Manage Groups'), "#", id: "show_profile_groups_button" %>

@@ -122,6 +122,21 @@ $ ->
   $('li #action_menu_permissions').live 'click', (e)->
     e.preventDefault()
     $.fn.openPermissionsDialog()
+
+  $(document).on 'click', '.change_avatar', (e)->
+    e.preventDefault()
+    $.showDialog($("#profile_avatar_dialog"))
+
+  $(document).on 'click', 'button#browse_avatar', (e)->
+    e.preventDefault()
+    $('#avatar_upload').click()
+
+  $(document).on 'click', '#avatar_save_button', (e)->
+    e.preventDefault()
+    $('#avatar_upload_form').submit()
+
+  $(document).on 'change', '#avatar_upload', (e)->
+    $('#display_avatar_file_name').text($(this).val().split('\\').pop())
   # END - ACTION MENU
 
   $('.arrow.down').live 'click', (e)->

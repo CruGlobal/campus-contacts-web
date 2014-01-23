@@ -19,6 +19,7 @@ active-record-query-trace
 rails_best_practices_output.html
 .idea
 public/uploads/*
+public/system/*
 tmp
 app/assets/javascripts/i18n/translations.js
 mh
