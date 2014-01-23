@@ -204,6 +204,12 @@ class InteractionsController < ApplicationController
     @interaction.destroy
   end
 
+  def change_avatar
+    @person = Person.find(params[:person_id])
+    @person.update_attributes(params[:person]) if @person.present?
+    redirect_to :back
+  end
+
   protected
   def authorize
     authorize! :manage_contacts, current_organization

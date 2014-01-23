@@ -6,6 +6,13 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
+  has_attached_file :avatar,
+    :styles => { :medium => "200x200>", :thumb => "100x100>", big_square: "300x300#"},
+    :default_url => "/images/:style/missing.png"
+
+  validates_attachment :avatar,
+    :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
+
   belongs_to :interaction_initiator
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
@@ -229,6 +236,16 @@ class Person < ActiveRecord::Base
 
   def answered_surveys_in_org(org)
     answered_surveys.where(organization_id: org.id)
+  end
+
+  def get_avatar
+    if self.avatar_file_name.present?
+      return self.avatar.url(:medium)
+    elsif self.fb_uid.present?
+      return "https://graph.facebook.com/#{self.fb_uid}/picture?width=200&height=200"
+    else
+      return "no_image.png"
+    end
   end
 
   def all_organizational_permissions_for_org_id(org_id)

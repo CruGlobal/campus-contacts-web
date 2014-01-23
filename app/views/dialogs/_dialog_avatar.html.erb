@@ -1,0 +1,24 @@
+<div id="profile_avatar_dialog" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box permissions_popup_box">
+    	<div class="mh_popup_box_top"><span class="mh_popup_heading">Avatar</span></div>
+    	<div id="avatar_form_container">
+        <%= image_tag(@person.get_avatar, width:'200', height:'200', class:'current_avatar_display') %>
+        <%= form_for @person, url: change_avatar_interactions_path(person_id: @person), remote: true, :html => { method: :post, :multipart => true, id: "avatar_upload_form" } do |f| %>
+          <div id="avatar_browse_container">
+            <button id="browse_avatar" name="button" type="submit">Browse</button>
+          </div>
+          <div id="display_avatar_file_name">&nbsp;</div>
+          <div class="hidden">
+            <%= f.file_field :avatar, id: "avatar_upload", class: "select_avatar_file_button" %>
+          </div>
+        <% end %>
+    	</div>
+    	<div class="avatar_save">
+    		<button class="red_accent" id="avatar_save_button">Save</button>
+    		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

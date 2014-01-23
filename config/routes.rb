@@ -44,6 +44,7 @@ Mh::Application.routes.draw do
       get :set_permissions
       get :set_groups
       get :search_leaders
+      post :change_avatar
     end
   end
 
