@@ -86,6 +86,7 @@ en:
   contacts:
     add_contact: Add Contact
     all_contacts:
+      assigned_to: Assigned To
       first_name: First Name
       gender: Gender
       labels: Labels
