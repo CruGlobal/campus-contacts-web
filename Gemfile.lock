@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/ernie/ransack.git
+  remote: http://github.com/ernie/ransack.git
   revision: c7c4e46dc19fe6f755183a6da39fcb82a265ed10
   ref: c7c4e46dc19fe6f755183a6da39fcb82a265ed10
   specs:
@@ -9,21 +9,21 @@ GIT
       polyamorous (~> 0.5.0)
 
 GIT
-  remote: git://github.com/fnando/i18n-js.git
+  remote: http://github.com/fnando/i18n-js.git
   revision: eab4137f83777963f0ebe6960704a7f64fd8911d
   specs:
     i18n-js (2.1.2)
       i18n
 
 GIT
-  remote: git://github.com/stefankroes/ancestry.git
-  revision: 0f819efcc052a3445d513ebccebf2afaf881a769
+  remote: http://github.com/stefankroes/ancestry.git
+  revision: ec24b4813f6816ee61e39aaa0ee049e73a4e372b
   specs:
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
 
 GIT
-  remote: git://github.com/stevegraham/twilio-rb.git
+  remote: http://github.com/stevegraham/twilio-rb.git
   revision: fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b
   ref: fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b
   specs:
@@ -36,23 +36,23 @@ GIT
       jwt (>= 0.1.3)
 
 GIT
-  remote: git://github.com/thoughtbot/paperclip.git
-  revision: 1d8982325fb43ee654b9476b34213a37429d7e22
+  remote: http://github.com/thoughtbot/paperclip.git
+  revision: 52840dcd9d87708eccded7477221c5420761e085
   specs:
-    paperclip (3.5.1)
+    paperclip (3.5.3)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
-      cocaine (~> 0.5.0)
+      cocaine (~> 0.5.3)
       mime-types
 
 GIT
-  remote: git://github.com/twinge/carmen.git
+  remote: http://github.com/twinge/carmen.git
   revision: 84d00d0319ff09ccff17c21d24e327806e665edb
   specs:
     carmen (0.2.7)
 
 GIT
-  remote: git://github.com/twinge/rack-oauth2-server.git
+  remote: http://github.com/twinge/rack-oauth2-server.git
   revision: 33a5b65845faf84c0094a770447a5e716a19cb2e
   branch: active_record
   specs:
@@ -61,7 +61,7 @@ GIT
       rails (>= 2.3.11)
 
 GIT
-  remote: git://github.com/twinge/vpim.git
+  remote: http://github.com/twinge/vpim.git
   revision: d1d95aac5eccccc7c258b7f9eacb00ba6b31d39e
   specs:
     vpim (11.9.6)
@@ -151,7 +151,7 @@ GEM
     client_side_validations (3.2.6)
     climate_control (0.0.3)
       activesupport (>= 3.0)
-    cocaine (0.5.2)
+    cocaine (0.5.3)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -217,6 +217,11 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.0)
     i18n (0.6.5)
+    infobase (1.0.0)
+      activesupport
+      oj (~> 2.1.0)
+      rest-client (~> 1.6.7)
+      retryable-rb (~> 1.1.0)
     inherited_resources (1.4.1)
       has_scope (~> 0.6.0.rc)
       responders (~> 1.0.0.rc)

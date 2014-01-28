@@ -1,22 +1,22 @@
 source 'http://rubygems.org'
 
 gem "default_value_for"
-gem "devise", '~> 2.1.0' #, git: "git://github.com/plataformatec/devise.git"
-gem "paperclip", :git => 'git://github.com/thoughtbot/paperclip.git'
-gem "ransack", :git => "git://github.com/ernie/ransack.git", ref: 'c7c4e46dc19fe6f755183a6da39fcb82a265ed10'
+gem "devise", '~> 2.1.0' #, git: "http://github.com/plataformatec/devise.git"
+gem "paperclip", :git => 'http://github.com/thoughtbot/paperclip.git'
+gem "ransack", :git => "http://github.com/ernie/ransack.git", ref: 'c7c4e46dc19fe6f755183a6da39fcb82a265ed10'
 gem "state_machine"
 gem "strip_attributes"
-gem 'active_model_serializers'#, git: 'git://github.com/josevalim/active_model_serializers.git'
-gem 'activeadmin', '~> 0.4.4' #, git: 'git://github.com/gregbell/active_admin.git'
+gem 'active_model_serializers'#, git: 'http://github.com/josevalim/active_model_serializers.git'
+gem 'activeadmin', '~> 0.4.4' #, git: 'http://github.com/gregbell/active_admin.git'
 gem 'acts_as_list'
 gem 'airbrake'
-gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
+gem 'ancestry', git: 'http://github.com/stefankroes/ancestry.git'
 gem 'aws-sdk', '1.8.1.3'
 gem 'bitly'
 gem 'bluepill', '0.0.60', require: false
 gem 'cancan'
 gem 'capistrano'
-gem 'carmen', git: 'git://github.com/twinge/carmen.git'
+gem 'carmen', git: 'http://github.com/twinge/carmen.git'
 gem 'client_side_validations'
 gem 'coffee-script'
 gem 'copycopter_client'
@@ -28,7 +28,7 @@ gem 'dynamic_form'
 gem 'enforce_schema_rules'
 gem 'foreigner'
 gem 'http_accept_language'
-gem 'i18n-js', git: 'git://github.com/fnando/i18n-js.git'     # allow i18n on js files
+gem 'i18n-js', git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'libv8', '=3.11.8.17'
@@ -52,12 +52,12 @@ gem 'retryable-rb'
 #gem 'rubycas-client-rails', '~> 0.1.0'
 gem 'sass'
 gem 'sass-rails', "~>3.2.3"
-gem 'trumant-rack-oauth2-server', git: 'git://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
-gem 'twilio-rb', git: 'git://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
+gem 'trumant-rack-oauth2-server', git: 'http://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
+gem 'twilio-rb', git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
 gem 'unicorn'
 gem 'valium'
 gem 'versionist', '~> 1.0.0'
-gem 'vpim', git: 'git://github.com/twinge/vpim.git'   # vcard maker
+gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'
 gem 'wiser_date', '~> 0.3.0'
 gem 'infobase'
@@ -108,7 +108,7 @@ end
 
 group :capistrano do
   # Shared capistrano recipes
-  #gem 'pd-cap-recipes', :git => 'git://github.com/PagerDuty/pd-cap-recipes.git'
+  #gem 'pd-cap-recipes', :git => 'http://github.com/PagerDuty/pd-cap-recipes.git'
 
   # extra dependencies for some tasks
   #gem 'git', '1.2.5'
