@@ -45,6 +45,7 @@ gem 'rails', '3.2.15'
 gem 'rails_autolink'
 gem 'redis'
 gem 'sidekiq'
+gem 'sidekiq-failures'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'rest-client'                                     # to make FB api requests
 gem 'retryable-rb'
