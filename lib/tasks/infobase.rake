@@ -45,7 +45,7 @@ namespace :infobase do
 
       includes = 'people,phone_numbers,email_addresses'
       team_json = Infobase::Team.get(include: includes)
-      while team_json['meta']['to'] < team_json['meta']['total'] do
+      loop do
         team_json['teams'].each do |team|
           mh_team = Organization.where(importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel').first
           attribs = {name: team['name'], terminology: 'Missional Team', importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel',
@@ -54,7 +54,7 @@ namespace :infobase do
             mh_team.update_attributes(attribs)
           else
             if team['lane'] == 'SV'
-              chs.children.create!(attribs)
+              mh_team = chs.children.create!(attribs)
             else
               region = regions[team['region']]
               next unless region
@@ -72,7 +72,7 @@ namespace :infobase do
             next unless ccc_person['user_id'].present?
             begin
               ccc_user = Infobase::User.find(ccc_person['user_id'], include: 'authentications')['user']
-            rescue Net::HTTPNotFound
+            rescue
               next
             end
 
@@ -156,10 +156,11 @@ namespace :infobase do
               end
             end
           end
-
-          # get the next page of teams
-          team_json = Infobase::Team.get(page: team_json['meta']['page'] + 1, include: includes)
         end
+
+        break unless team_json['meta']['to'] < team_json['meta']['total']
+        # get the next page of teams
+        team_json = Infobase::Team.get(page: team_json['meta']['page'] + 1, include: includes)
       end
     end
   #end
