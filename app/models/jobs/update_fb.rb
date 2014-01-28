@@ -1,6 +1,5 @@
 class Jobs::UpdateFB
   include Sidekiq::Worker
-  sidekiq_options queue: :facebook
 
   def perform(person_id, auth, action)
     authentication = auth['authentication']

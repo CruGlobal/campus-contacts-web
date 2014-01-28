@@ -70,8 +70,6 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name, :terminology#, :person_id
   validates :name, :name_uniqueness => true
 
-  sidekiq_options queue: :general
-
   after_create :create_admin_user, :notify_admin_of_request, :touch_people
   after_destroy :touch_people
   after_update :touch_people_if_show_sub_orgs_changed

@@ -54,7 +54,6 @@ class SmsKeyword < ActiveRecord::Base
     end
   end
 
-  sidekiq_options queue: :general
   after_create :notify_admin_of_request
 
   def to_s

@@ -6,7 +6,6 @@ class SentSms < ActiveRecord::Base
   include Sidekiq::Worker
 
   belongs_to :received_sms
-  sidekiq_options queue: :sms
 
   serialize :reports
   serialize :separator
