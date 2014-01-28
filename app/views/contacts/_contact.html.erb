@@ -86,7 +86,7 @@
     <% end %>
     <% tip = "#{t('contacts.index.unassign_contact')} from #{assigned_tos_name}" %>
 
-    <span class="assigned_to" style="display:none;"><%= assigned_tos_name %></span>
+    <span class="assigned_to"><%= assigned_tos_name %></span>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_tos.present? || params[:dnc].present? %>">
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id, from: ids), remote: true, method: :delete, class: "icon unassign tipitleft", :title => tip, "data-assigned_to_id" => ids) %>
     </span>
