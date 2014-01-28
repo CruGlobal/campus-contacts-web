@@ -9,7 +9,7 @@ Sidekiq.configure_client do |config|
 end
 
 Sidekiq.configure_server do |config|
-  config.redis = { url: 'redis://' + resque_config[rails_env],
+  config.redis = { url: 'redis://' + redis_config[rails_env],
                    namespace: "MPDX:#{rails_env}:resque"}
   config.failures_default_mode = :exhausted
 end
