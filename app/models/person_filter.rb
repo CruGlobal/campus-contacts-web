@@ -13,15 +13,19 @@ class PersonFilter
   def filter(people)
     filtered_people = people
 
-    if @filters[:ids]
+    if @filters[:ids].present?
       filtered_people = filtered_people.where('people.id' => @filters[:ids].split(','))
     end
 
-    if @filters[:labels]
+    if @filters[:fb_uids].present?
+      filtered_people = filtered_people.where('people.fb_uid' => @filters[:fb_uids].split(','))
+    end
+
+    if @filters[:labels].present?
       filtered_people = filtered_people.joins(:organizational_labels).where('organizational_labels.label_id IN (?) AND organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', @filters[:labels].split(','), @organization.id)
     end
 
-    if @filters[:permissions]
+    if @filters[:permissions].present?
       filtered_people = filtered_people.where('organizational_permissions.permission_id IN (?) AND organizational_permissions.organization_id = ?', @filters[:permissions].split(','), @organization.id)
     end
 

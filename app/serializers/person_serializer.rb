@@ -10,7 +10,8 @@ class PersonSerializer < ActiveModel::Serializer
 
   INCLUDES = HAS_MANY + HAS_ONE
 
-  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date, :date_became_christian, :graduation_date, :picture, :user_id, :fb_uid, :created_at, :updated_at
+  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date, :date_became_christian, :graduation_date,
+             :picture, :user_id, :fb_uid, :created_at, :updated_at
 
   has_many *HAS_MANY
   has_one *HAS_ONE
