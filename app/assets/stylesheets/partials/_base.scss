@@ -1,7 +1,7 @@
 @import "normalize";
 @import "compass";
 @import "susy";
-@import "bootstrap/bootstrap";
+// @import "bootstrap/bootstrap";
 
 @function pem($target, $context: $base-font-size) {
   @if $target == 0 { @return 0 }
