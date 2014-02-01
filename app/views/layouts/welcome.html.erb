@@ -15,7 +15,14 @@
 
   <div class="<%= params[:action] %>">
     <div class="container">
-      <%= yield %>
+      <section role="global">
+        <%= yield %>
+      </section>
+      <% if content_for?(:aside) -%>
+        <aside role="global">
+          <%= yield :aside %>
+        </aside>
+      <% end -%>
     </div>
   </div>
 

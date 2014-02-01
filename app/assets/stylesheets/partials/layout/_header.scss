@@ -1,47 +1,71 @@
-header[role="global"] {
-  height: 125px;
-  line-height: 125px;
-  background-color: #3492c5;
+body.welcome {
+  header[role="global"] {
+    text-align: center;
+    background-color: #3492c5;
+    @extend #clearfix;
 
-  h1 {
-    display: inline-block;
-    width: 147px;
-    height: 39px;
-    margin: 0;
+    @include at-breakpoint($tablet) {
+      height: 125px;
+      line-height: 125px;
+      text-align: left;
+    }
 
-    a {
+    h1 {
       display: inline-block;
       width: 147px;
       height: 39px;
-      background-image: url(/assets/welcome/mh-logo.png);
-      text-indent: -1000em;
-      overflow: hidden;
-    }
-  }
+      margin: .5em 0;
+      vertical-align: middle;
 
-  nav {
-    @include float-right;
-
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-
-      li {
+      @include at-breakpoint($tablet) {
         @include float-left;
-        margin-right: 1.5em;
+        margin: 40px 0 0;
+      }
 
-        &:last-child {
-          margin-right: 0;
-        }
+      a {
+        display: inline-block;
+        width: 147px;
+        height: 39px;
+        background-image: url(/assets/welcome/mh-logo.png);
+        text-indent: -1000em;
+        overflow: hidden;
+      }
+    }
 
-        a {
-          display: block;
-          color: $color-white;
-          font-family: $font-secondary-sans-serif;
-          font-size: 13px;
-          letter-spacing: 1px;
-          text-transform: uppercase;
+    nav {
+      @include at-breakpoint($tablet) {
+        @include float-right;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+          @include inline-block;
+          @include at-breakpoint($tablet) {
+            @include float-left;
+            margin-right: 1.5em;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          a {
+            display: block;
+            height: 39px;
+            padding: 0 .25em;
+            @include at-breakpoint($tablet) {
+              padding: 0;
+            }
+            color: $color-white;
+            font-family: $font-secondary-sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+          }
         }
       }
     }
