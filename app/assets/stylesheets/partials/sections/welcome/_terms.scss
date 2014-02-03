@@ -18,7 +18,7 @@ body.welcome.terms {
 
     @include at-breakpoint($desktop) {
       @include span-columns(4 omega, $desktop);
-      padding-top: 10em;
+      padding-top: 9em;
     }
 
     @include at-breakpoint($widescreen) {
