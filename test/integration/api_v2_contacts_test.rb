@@ -12,13 +12,9 @@ class ApiV2ContactsTest < ActionDispatch::IntegrationTest
       get path, {'access_token' => @access_token3.code}, {:accept => 'application/vnd.missionhub-v2+json'}
       assert_response :success, @response.body
       @json = ActiveSupport::JSON.decode(@response.body)
-      if @json['contacts'][0]['person']['name'] == "John Doe"
-        person_basic_test(@json['contacts'][0]['person'],@user,@user2)
-        person_basic_test(@json['contacts'][1]['person'],@user2,@user)
-      else
-        # person_basic_test(@json['contacts'][0]['person'],@user2,@user)
-        person_basic_test(@json['contacts'][1]['person'],@user,@user2)
-      end
+      result_names = @json['contacts'].collect{|x| x['person']['name']}
+      assert result_names.include?(@user.person.name)
+      assert result_names.include?(@user2.person.name)
     end
 
     #make sure that filtering by gender works
