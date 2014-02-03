@@ -1,12 +1,13 @@
 body.welcome {
   header[role="global"] {
+    padding: 10px;
     text-align: center;
     background-color: #3492c5;
     @extend #clearfix;
 
     @include at-breakpoint($tablet) {
       height: 125px;
-      line-height: 125px;
+      padding-top: 30px;
       text-align: left;
     }
 
@@ -14,19 +15,20 @@ body.welcome {
       display: inline-block;
       width: 147px;
       height: 39px;
-      margin: .5em 0;
-      vertical-align: middle;
+      margin: 0 0 20px;
 
       @include at-breakpoint($tablet) {
         @include float-left;
-        margin: 40px 0 0;
+        margin: 0;
       }
 
       a {
-        display: inline-block;
+        @include inline-block;
         width: 147px;
         height: 39px;
         background-image: url(/assets/welcome/mh-logo.png);
+        background-position: center center;
+        background-repeat: no-repeat;
         text-indent: -1000em;
         overflow: hidden;
       }
@@ -34,6 +36,7 @@ body.welcome {
 
     nav {
       @include at-breakpoint($tablet) {
+        padding-top: 20px;
         @include float-right;
       }
 
