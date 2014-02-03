@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render 'welcome/head' %>
+</head>
+<body id="<%= controller.controller_name %>_controller" class="<%= yield :body_classes %>">
+  <%= render 'fb_init' %>
+  <%= render 'welcome/header' %>
+
+  <% if content_for?(:hero) -%>
+    <div class="hero">
+      <%= yield :hero %>
+    </div>
+  <% end -%>
+
+  <div class="<%= params[:action] %>">
+    <div class="container">
+      <%= yield %>
+    </div>
+  </div>
+
+  <%= render "welcome/footer" %>
+</body>
+</html>

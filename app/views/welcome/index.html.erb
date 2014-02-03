@@ -1,22 +1,15 @@
-<div id="squarewrap">
+<% body_classes("welcome index") %>
 
-  <h1 class="aright headlinetext">
-  	Never lose<br />
-  	a contact again
-  </h1>
-  <h4 class="aright subheadlinetext">
-  	We&#39;re here to make it easier<br />
-  	for you to care for the people<br />
-  	who need you most.
-  </h4>
+<% content_for(:hero) do %>
+  <h1>Never lose a contact again.</h1>
 
-  <div class="salespush">
+  <h4>We&#39;re here to make it easier for you to care for the people who need you most.</h4>
+
+  <div class="call_to_action">
     <% if mhub? %>
-	  <%= link_to('Get Started', "/users/auth/facebook_mhub", :class => "getstartedbt btn-danger") %>
-	<% else %>
-	  <%= link_to('Get Started', new_user_session_path, :class => "getstartedbt btn-danger") %>
-	<% end %>
+  	  <%= link_to 'Get Started', "/users/auth/facebook_mhub" %>
+  	<% else %>
+  	  <%= link_to 'Get Started', new_user_session_path %>
+  	<% end %>
   </div>
-</div>
-
-
+<% end %>

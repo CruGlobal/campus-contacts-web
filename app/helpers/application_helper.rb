@@ -1,6 +1,10 @@
 module ApplicationHelper
   include ActionView::Helpers::DateHelper
 
+  def body_classes(body_classes)
+    content_for(:body_classes) { body_classes }
+  end
+
   def uri?(string)
     uri = URI.parse(string)
     %w( http https ).include?(uri.scheme)

@@ -1,0 +1,58 @@
+header[role="global"] {
+  height: 125px;
+  line-height: 125px;
+  background-color: #3492c5;
+
+  h1 {
+    display: inline-block;
+    width: 147px;
+    height: 39px;
+    margin: 0;
+
+    a {
+      display: inline-block;
+      width: 147px;
+      height: 39px;
+      background-image: url(/assets/welcome/mh-logo.png);
+      text-indent: -1000em;
+      overflow: hidden;
+    }
+  }
+
+  nav {
+    @include float-right;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        @include float-left;
+        margin-right: 1.5em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        a {
+          display: block;
+          color: $color-white;
+          font-family: $font-secondary-sans-serif;
+          font-size: 13px;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+body.welcome.index {
+  header[role="global"] {
+    @include background(
+      url(/assets/welcome/home-header-bg.jpg) center center no-repeat,
+      #2b76ad
+    );
+  }
+}

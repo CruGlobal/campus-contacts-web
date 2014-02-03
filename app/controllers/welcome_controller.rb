@@ -5,7 +5,7 @@ class WelcomeController < ApplicationController
     if user_signed_in?
       redirect_to user_root_path and return
     end
-    render layout: 'splash'#, stream: true
+    render layout: 'welcome'#, stream: true
   end
 
   def tutorials
@@ -32,11 +32,11 @@ class WelcomeController < ApplicationController
   end
 
   def terms
-    render layout: mhub? ? 'mhub' : 'splash'
+    render layout: mhub? ? 'mhub' : 'welcome'
   end
 
   def privacy
-    render layout: mhub? ? 'mhub' : 'splash'
+    render layout: mhub? ? 'mhub' : 'welcome'
   end
 
   def duplicate
