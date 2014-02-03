@@ -384,6 +384,7 @@ Mh::Application.routes.draw do
   match 'wizard' => 'welcome#wizard', as: 'wizard'
   match 'terms' => 'welcome#terms', as: 'terms'
   match 'privacy' => 'welcome#privacy', as: 'privacy'
+  match "welcome/tour" => 'welcome#tutorials'
 
   # SMS keyword state transitions
   match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
@@ -402,11 +403,8 @@ Mh::Application.routes.draw do
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
-  #
   match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
   match 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
-
-  match "welcome/tour" => 'welcome#tutorials'
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   #mount Resque::Server.new, at: "/resque"

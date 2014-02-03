@@ -1,0 +1,28 @@
+body.welcome.terms {
+  section[role="global"] {
+    padding-top: 4em;
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(9, $desktop);
+      padding-top: 6em;
+    }
+
+    @include at-breakpoint($widescreen) {
+      @include span-columns(12, $widescreen);
+    }
+
+  }
+
+  aside[role="global"] {
+    padding-top: 4em;
+
+    @include at-breakpoint($desktop) {
+      @include span-columns(4 omega, $desktop);
+      padding-top: 9em;
+    }
+
+    @include at-breakpoint($widescreen) {
+      @include span-columns(5 omega, $widescreen);
+    }
+  }
+}

@@ -1,0 +1,85 @@
+body.welcome {
+  header[role="global"] {
+    padding: 10px;
+    text-align: center;
+    background-color: #3492c5;
+    @extend #clearfix;
+
+    @include at-breakpoint($tablet) {
+      height: 125px;
+      padding-top: 30px;
+      text-align: left;
+    }
+
+    h1 {
+      display: inline-block;
+      width: 147px;
+      height: 39px;
+      margin: 0 0 20px;
+
+      @include at-breakpoint($tablet) {
+        @include float-left;
+        margin: 0;
+      }
+
+      a {
+        @include inline-block;
+        width: 147px;
+        height: 39px;
+        background-image: url(/assets/welcome/mh-logo.png);
+        background-position: center center;
+        background-repeat: no-repeat;
+        text-indent: -1000em;
+        overflow: hidden;
+      }
+    }
+
+    nav {
+      @include at-breakpoint($tablet) {
+        padding-top: 20px;
+        @include float-right;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+          @include inline-block;
+          @include at-breakpoint($tablet) {
+            @include float-left;
+            margin-right: 1.5em;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          a {
+            display: block;
+            height: 39px;
+            padding: 0 .25em;
+            @include at-breakpoint($tablet) {
+              padding: 0;
+            }
+            color: $color-white;
+            font-family: $font-secondary-sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.welcome.index {
+  header[role="global"] {
+    @include background(
+      url(/assets/welcome/home-header-bg.jpg) center center no-repeat,
+      #2b76ad
+    );
+  }
+}
