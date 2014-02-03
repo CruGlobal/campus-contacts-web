@@ -102,9 +102,19 @@ end
 # in production environments by default.
 #gem 'sass-rails', "  ~> 3.1.0"
 group :assets do
-  gem 'therubyracer', '~> 0.11.4'
-  gem 'coffee-rails', "~> 3.2.1"
-  gem 'uglifier', ">= 1.0.3"
+  gem 'therubyracer',           '~> 0.11.4'
+  gem 'coffee-rails',           "~> 3.2.1"
+  gem 'uglifier',               ">= 1.0.3"
+  gem 'coffee-script',          '~> 2.2.0'
+  gem 'jquery-rails',           '~> 3.0.4'
+
+  gem 'sass',                   "~> 3.2.12"
+  gem 'sass-rails',             "~> 3.2.3"
+  gem "compass",                '~> 0.12.2'
+  gem "compass-rails",          '~> 1.1.2'
+  gem "compass-normalize",      '~> 1.4.3'
+  gem 'susy',                   '~> 1.0.9'
+  gem 'bootstrap-sass',         '~> 3.1.0'
 end
 
 group :capistrano do
