@@ -93,7 +93,7 @@ class PersonFilter
     if @filters[:email_like]
       filtered_people = filtered_people.includes(:email_addresses)
                                          .where("email_addresses.email LIKE :search",
-                                                 {:search => "#{filters[:name_or_email_like]}%"})
+                                                 {:search => "%#{filters[:email_like]}%"})
     end
 
     if @filters[:gender]
