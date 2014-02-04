@@ -1,4 +1,4 @@
-test:
+development: &defaults
   from_email: from@example.com
   send_sms: false
   sms_default_keyword: 26am
@@ -7,3 +7,9 @@ test:
   bitly_port: 7888
   bitly_username: vincentpaca
   bitly_key: R_1b6fbe0b4987dc3801ddb9f812d60f84
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

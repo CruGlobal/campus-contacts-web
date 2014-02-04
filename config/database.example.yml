@@ -1,20 +1,21 @@
-test:
+defaults: &defaults
   adapter: mysql2
-  database: mh_test
-  username: mh_test
-  password: mh_test
+  username: root
+  password:
   encoding: utf8
-  
+
 development:
-  adapter: mysql2
-  database: mh_test
-  username: mh_test
-  password: mh_test
-  encoding: utf8
-  
+  database: missionhub_development
+  <<: *defaults
+
+test:
+  database: missionhub_test
+  <<: *defaults
+
+uscm:
+  database: missionhub_uscm
+  <<: *defaults
+
 production:
-  adapter: mysql2
-  database: mh_test
-  username: mh_test
-  password: mh_test
-  encoding: utf8
+  database: missionhub_production
+  <<: *defaults

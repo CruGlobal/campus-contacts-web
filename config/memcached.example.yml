@@ -1,0 +1,11 @@
+development: &defaults
+  host: 127.0.0.1
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
