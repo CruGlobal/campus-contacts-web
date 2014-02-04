@@ -5,7 +5,7 @@ require 'rack/oauth2/server/admin'
 require 'openssl'
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env, *Rails.groups(:assets => %w(production development test))) if defined?(Bundler)
+Bundler.require(:default, Rails.env, :assets) if defined?(Bundler)
 
 module Mh
   class Application < Rails::Application
