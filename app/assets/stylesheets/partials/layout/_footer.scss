@@ -1,0 +1,57 @@
+body.welcome {
+  footer[role="global"] {
+    padding-top: 80px;
+    text-align: center;
+    color: #878787;
+    font-size: 12px;
+
+    .stores {
+      @include at-breakpoint($tablet) {
+        width: 370px;
+      }
+      display: inline-block;
+      margin-bottom: 50px;
+      @extend #clearfix;
+
+      a {
+        display: block;
+        margin-bottom: 1em;
+        @include at-breakpoint($tablet) {
+          display: inline;
+        }
+        width: 166px;
+        height: 63px;
+        background-repeat: no-repeat;
+        text-indent: -1000em;
+        overflow: hidden;
+
+        &.apple {
+          @include at-breakpoint($tablet) {
+            @include float-left;
+          }
+          background-image: url(/assets/welcome/app-button-apple.png);
+        }
+
+        &.google {
+          @include at-breakpoint($tablet) {
+            @include float-right;
+          }
+         background-image: url(/assets/welcome/app-button-google.png);
+        }
+      }
+    }
+
+    nav {
+      margin-bottom: 1em;
+
+      a {
+        color: #878797;
+        text-decoration: underline;
+      }
+    }
+
+    .copyright {
+      font-size: 12px;
+    }
+  }
+}

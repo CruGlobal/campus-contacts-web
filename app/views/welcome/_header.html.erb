@@ -1,0 +1,30 @@
+<header role="global">
+  <div class="container">
+    <h1><%= link_to "Mission Hub", root_path %></h1>
+
+    <nav class="primary">
+      <ul>
+        <% if session[:old_user_id].present? %>
+          <li><%= link_to('Exit SU Mode', '?exit=true') %></li>
+        <% end %>
+
+        <li>
+          <%= link_to('Support', t('general.help_redirect_link'), :class => "navlink") %>
+        </li>
+        <li>
+          <%= link_to('FAQ', t('general.help_redirect_link'), :class => "navlink") %>
+        </li>
+        <li>
+          <%= link_to('Learn More', tutorials_path, :class => "navlink") %>
+        </li>
+        <li>
+          <% if mhub? %>
+            <%= link_to(t('nav.login'), "/users/auth/facebook_mhub", :class => "loginbt") %>
+          <% else %>
+            <%= link_to(t('nav.login'), new_user_session_path, :class => "loginbt") %>
+          <% end %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
