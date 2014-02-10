@@ -96,7 +96,6 @@ class PersonFilter
     end
 
     if @filters[:email_exact]
-      raise filters[:email_exact].inspect
       filtered_people = filtered_people.includes(:email_addresses)
                                          .where("email_addresses.email = ?", filters[:email_exact])
     end
