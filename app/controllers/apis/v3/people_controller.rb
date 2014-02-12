@@ -22,7 +22,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     if person.save
 
       # add permissions in current org
-      permission_ids = params[:permissions].split(',') if params[:permissions]
+      permission_ids = params[:permissions].to_s.split(',') if params[:permissions]
       permission_ids = [Permission::NO_PERMISSIONS_ID] if permission_ids.blank?
       permission_ids.each do |permission_id|
         current_organization.add_permission_to_person(person, permission_id)
