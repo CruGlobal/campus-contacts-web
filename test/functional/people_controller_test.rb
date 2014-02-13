@@ -61,6 +61,7 @@ class PeopleControllerTest < ActionController::TestCase
 
         p2 = PhoneNumber.new(:number => "12390900", :person_id => @person2.id, :primary => true)
         assert p2.save
+        Twilio::SMS.stubs(:create)
       end
 
       should "not send bulk email if receiver do not have an email" do
