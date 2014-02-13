@@ -104,7 +104,7 @@ class SentSms < ActiveRecord::Base
         from = received_sms.shortcode
       #else
       #  from = long_code.number
-      end
+      #end
       SentSms.smart_split(message, separator).each do |message|
         #begin
           Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
