@@ -90,7 +90,8 @@ class SentSms < ActiveRecord::Base
   end
 
   def queue_sms
-    async(:send_sms)
+    send_sms
+    #async(:send_sms)
   end
 
   private
@@ -100,11 +101,11 @@ class SentSms < ActiveRecord::Base
     when 'smseco'
       to_smseco
     else
-      #if received_sms
-      #  from = received_sms.shortcode
-      #else
-        from = '85005'
-      #end
+      if received_sms
+        from = received_sms.shortcode
+      else
+        from = long_code.number
+      end
       SentSms.smart_split(message, separator).each do |message|
         #begin
           Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
