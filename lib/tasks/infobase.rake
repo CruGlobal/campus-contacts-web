@@ -21,7 +21,7 @@ namespace :infobase do
       "OT" => "Other"
     }
     #['Campus Ministry','AIA'].each do |ministry_name|
-      campus_ministry = Infobase::Ministry.get("filters[name]" => 'Campus Ministry')['ministries'].first
+      campus_ministry = Infobase::Ministry.get("filters[name]" => 'Campus Field Ministry')['ministries'].first
       campus = Organization.where(importable_id: campus_ministry['id'], importable_type: 'Ccc::Ministry').first
       campus ||= root.children.create!(name: campus_ministry['name'], terminology: 'Ministry', importable_id: campus_ministry['id'], importable_type: 'Ccc::Ministry')
 
