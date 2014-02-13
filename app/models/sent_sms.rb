@@ -101,9 +101,9 @@ class SentSms < ActiveRecord::Base
       to_smseco
     else
       #if received_sms
-        from = received_sms.shortcode
+      #  from = received_sms.shortcode
       #else
-      #  from = long_code.number
+        from = '85005'
       #end
       SentSms.smart_split(message, separator).each do |message|
         #begin
