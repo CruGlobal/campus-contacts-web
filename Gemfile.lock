@@ -272,7 +272,7 @@ GEM
       activerecord (~> 3.1)
       activesupport (~> 3.1)
       polyamorous (~> 0.5.0)
-    metaclass (0.0.1)
+    metaclass (0.0.2)
     method_source (0.8.2)
     mime-types (1.25)
     mini_fb (2.0.0)
@@ -281,7 +281,7 @@ GEM
       rest-client
       rest-client
     mini_portile (0.5.1)
-    mocha (0.14.0)
+    mocha (1.0.0)
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
     multi_xml (0.5.5)

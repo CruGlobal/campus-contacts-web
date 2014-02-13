@@ -16,6 +16,8 @@ require 'api_test_helper'
 require File.dirname(__FILE__) + "/factories"
 require 'webmock/test_unit'
 require "strip_attributes/shoulda"
+require 'test/unit'
+require 'mocha/test_unit'
 
 require 'sidekiq/testing'
 #Sidekiq::Testing.inline!

@@ -104,8 +104,9 @@ class SentSms < ActiveRecord::Base
       if received_sms
         from = received_sms.shortcode
       else
-        from = long_code.number
+        from = long_code ? long_code.number : SmsKeyword::SHORT
       end
+
       SentSms.smart_split(message, separator).each do |message|
         begin
           Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
@@ -117,15 +118,15 @@ class SentSms < ActiveRecord::Base
           end
         end
       end
+
+      long_code.increment!(:messages_sent) if long_code
     end
   end
 
   def long_code
     unless @long_code
       @long_code = LongCode.active.order(:messages_sent).first
-      raise 'You need to put at least one nuber in the "long_coes" table' unless @long_code
-
-      @long_code.update_attribute(:messages_sent, @long_code.messages_sent + 1)
+      #raise 'You need to put at least one number in the "long_codes" table' unless @long_code
     end
     @long_code
   end
