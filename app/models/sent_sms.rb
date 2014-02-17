@@ -114,7 +114,7 @@ class SentSms < ActiveRecord::Base
           if e.message.include?('not a valid phone number')
             PhoneNumber.where(number: recipient).destroy_all
           else
-            raise e
+            Airbrake.notify(e)
           end
         end
       end
