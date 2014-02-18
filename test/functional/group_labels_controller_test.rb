@@ -12,6 +12,13 @@ class GroupLabelsControllerTest < ActionController::TestCase
         xhr :post, :create, :name => "Groupie"
       end
     end
+
+    should "not create" do
+      assert_difference "GroupLabel.count", 0 do
+        xhr :post, :create, :name => ""
+        assert_equal I18n.t("groups.label_name_is_required"), assigns(:message)
+      end
+    end
   end
 
   context "destroy" do

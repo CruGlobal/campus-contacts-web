@@ -21,6 +21,19 @@ class LeadersControllerTest < ActionController::TestCase
       assert_template 'leaders/leader_sign_in'
       assert assigns(:valid_token)
     end
+    should "merge user when the same email address" do
+      @user = Factory(:user_with_auxs)
+      @person1 = @user.person
+      @person2 = @leader_user.person
+      sign_in @user
+      @leader_user.update_attribute(:username, 'example1@yahoo.com')
+      EmailAddress.create(email: "example1@yahoo.com", person_id: @person1.id)
+      EmailAddress.create(email: "example1@yahoo.com", person_id: @person2.id)
+
+      get :leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_response :redirect
+      assert_equal 1, User.count
+    end
     should "say sorry if the token is expired when visiting the leader_link" do
       @user = Factory(:user_with_auxs)
       sign_in @user
@@ -39,12 +52,36 @@ class LeadersControllerTest < ActionController::TestCase
       assert_template 'leaders/leader_sign_in'
       assert !assigns(:valid_token)
     end
+    should "redirect to user root if there's no token and user_id when visiting the merge_leader_link" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      get :merge_leader_accounts
+      assert_response :redirect
+    end
+    should "redirect to user_root if the current_user triggered when visiting the merge_leader_link" do
+       sign_in @leader_user
+       get :merge_leader_accounts, user_id: @leader_user.id, token: @leader_user.remember_token
+       @leader_user.update_attribute(:remember_token_expires_at, Date.today - 1.day)
+       assert_response :redirect
+     end
+    should "redirect to user root if the current_user not triggered when visiting the merge_leader_link" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      get :merge_leader_accounts, user_id: @leader_user.id, token: @leader_user.remember_token
+      assert_redirected_to "/mycontacts"
+    end
     should "destroy session and redirect to login page when do user do not want to merge accounts" do
       @user = Factory(:user_with_auxs)
       sign_in @user
       get :sign_out_and_leader_sign_in, user_id: @leader_user.id, token: @leader_user.remember_token
       assert_nil session[:user_id]
       assert_redirected_to "/l/#{@leader_user.remember_token}/#{@leader_user.id}"
+    end
+    should "redirect to user root if there's no token and user id" do
+      @user = Factory(:user_with_auxs)
+      sign_in @user
+      get :sign_out_and_leader_sign_in
+      assert_response :redirect
     end
   end
   context "After logging in a person with orgs" do
