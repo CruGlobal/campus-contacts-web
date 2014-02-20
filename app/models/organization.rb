@@ -102,6 +102,10 @@ class Organization < ActiveRecord::Base
     (name =~ /^Bridges at/) != nil
   end
 
+  def is_cru?
+    has_parent?(1)
+  end
+
   def is_in_infobase?
     importable_type == 'Ccc::MinistryActivity'
   end
@@ -349,7 +353,7 @@ class Organization < ActiveRecord::Base
   def default_labels
     if is_bridge?
       all_labels.default_bridge_labels
-    elsif has_parent?(1)
+    elsif is_cru?
       all_labels.default_cru_labels
     else
       all_labels.default_labels
