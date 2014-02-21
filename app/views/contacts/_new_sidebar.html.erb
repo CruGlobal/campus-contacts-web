@@ -75,7 +75,7 @@
 
       <% param_filter_label = (params[:filter_label].is_a?(Array)) ? (params[:filter_label].include?(label.id.to_s)) : (params[:filter_label].to_i == label.id) if params[:filter_label].present?  %>
 
-      <li class="entry label <%= 'selected_entry' if param_filter_label.present? && param_filter_label %>" data-id="<%= label.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
+      <li class="entry label <%= 'selected_entry' if param_filter_label.present? && param_filter_label %>" data-id="<%= label.id %>">
         <%= link_to label, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>

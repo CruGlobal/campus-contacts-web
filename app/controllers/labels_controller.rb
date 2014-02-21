@@ -18,7 +18,7 @@ class LabelsController < ApplicationController
     @name = params[:name]
     @message = t('manage_labels.name_is_required')
     if @name.present?
-      if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], @name.downcase).present?
+      if current_organization.labels.where("LOWER(name) = ?", @name.downcase).present?
         @message = t('manage_labels.label_exists')
       else
         @new_label = Label.create(organization_id: current_organization.id, name: @name)
