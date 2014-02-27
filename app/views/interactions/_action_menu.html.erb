@@ -1,3 +1,8 @@
+<% if request.referer.present? %>
+  <ul class="button_bar">
+    <li class="action_lightgray"><%= link_to "Back", "#", id: "action_menu_back" %></li>
+  </ul>
+<% end %>
 <ul class="button_bar">
   <li class="action_lightblue"><%= link_to "Record Interaction", "#", id: "action_menu_record_interaction" %></li>
 </ul>

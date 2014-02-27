@@ -88,6 +88,10 @@ $ ->
     $('.custom_dropdown').removeClass('active')
 
   # START - ACTION MENU
+  $('li a#action_menu_back').live 'click', (e)->
+    e.preventDefault()
+    window.history.back()
+
   $('li a#action_menu_record_interaction').live 'click', (e)->
     e.preventDefault()
     $('#panel_nav li#interactions').click()
