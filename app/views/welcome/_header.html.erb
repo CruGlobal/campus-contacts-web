@@ -21,7 +21,7 @@
           <% if mhub? %>
             <%= link_to(t('nav.login'), "/users/auth/facebook_mhub", :class => "loginbt") %>
           <% else %>
-            <%= link_to(t('nav.login'), new_user_session_path, :class => "loginbt") %>
+            <%= link_to(image_tag('fb_button.png'), '/users/auth/facebook', id: 'fb_button', rel: 'external') %>
           <% end %>
         </li>
       </ul>
