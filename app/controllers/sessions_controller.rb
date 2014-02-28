@@ -43,7 +43,7 @@ class SessionsController < Devise::SessionsController
         root_path
       end
     else
-      '/users/sign_in'
+      root_path
     end
   end
 
