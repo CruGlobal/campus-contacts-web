@@ -16,7 +16,7 @@ class Ccc::Person < ActiveRecord::Base
   def email
     @email = primary_email_address.try(:email)
     @email ||= email_addresses.first.try(:email) if email_addresses.present?
-    @email ||= (user.username || user.email) if user
+    @email ||= user.username if user
     @email ||= current_address.email if current_address
     @email
   end
@@ -38,7 +38,6 @@ class Ccc::Person < ActiveRecord::Base
     end
     if user
       emails << user.username
-      emails << user.email if user.email.present?
     end
     emails
   end

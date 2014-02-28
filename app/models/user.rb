@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :remember_me, :password, :username, :remember_token_expires_at
+  attr_accessible :remember_me, :password, :username, :remember_token_expires_at
 
   def ability
     @ability ||= Ability.new(self)
@@ -127,10 +127,10 @@ class User < ActiveRecord::Base
         # If all else fails, create a user
         unless user
           begin
-            user = create!(email: data["email"], password: Devise.friendly_token[0,20])
+            user = create!(username: data["email"], password: Devise.friendly_token[0,20])
           rescue
             sleep(1)
-            user = find_by_email(data['email']) || find_by_username(data['email']) # create!(email: data["email"], password: Devise.friendly_token[0,20])
+            user = find_by_username(data['email'])
             if !user && attempts < 3
               find_for_facebook_oauth(access_token, signed_in_resource, attempts + 1)
             else
@@ -170,7 +170,6 @@ class User < ActiveRecord::Base
 
   def email=(email)
     self.username = email
-    self[:email] = email
   end
 
   def email
@@ -178,7 +177,7 @@ class User < ActiveRecord::Base
   end
 
   def to_s
-    person ? person.to_s : (email || username).to_s
+    person ? person.to_s : username.to_s
   end
 
   def name_with_keyword_count
@@ -213,5 +212,15 @@ class User < ActiveRecord::Base
 
   def person_id
     person.try(:id)
+  end
+
+  # To hook the Devise validation of email field.
+  # Since we've removed the the email column from the database, we have to put these methods
+  def email_required?
+    false
+  end
+
+  def email_changed?
+    false
   end
 end

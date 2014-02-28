@@ -181,7 +181,7 @@ class PersonTest < ActiveSupport::TestCase
 
   context "create a person from params" do
     should "not fail if there's no phone number when adding a person who already exists" do
-      Factory(:user_with_auxs, email: 'test@uscm.org')
+      Factory(:user_with_auxs, username: 'test@uscm.org')
       person = Person.new_from_params({"email_address" => {"email" => "test@uscm.org"},"first_name" => "Test","last_name" => "Test","phone_number" => {"number" => ""}})
       assert_nil(person.phone_numbers.first)
     end

@@ -12,7 +12,7 @@ class LeadersController < ApplicationController
           @user.update_attributes({remember_token_expires_at: Time.now})
           redirect_to user_root_path
         else
-          if current_user.person.has_email?(@user.email)
+          if current_user.person.has_email?(@user.username)
             current_user.merge(@user)
             @user.destroy
             redirect_to '/mycontacts'

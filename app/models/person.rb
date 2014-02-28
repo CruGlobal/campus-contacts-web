@@ -1322,7 +1322,7 @@ class Person < ActiveRecord::Base
           self.user = user
         end
       else
-        self.user = User.create!(:username => email, :email => email, :password => SecureRandom.hex(10))
+        self.user = User.create!(:username => email, :password => SecureRandom.hex(10))
       end
       self.save(validate: false)
       return self
@@ -1357,8 +1357,7 @@ class Person < ActiveRecord::Base
   def self.find_existing_person_by_email(email)
     return unless email.present?
     (EmailAddress.find_by_email(email) ||
-      User.find_by_username(email) ||
-      User.find_by_email(email)).try(:person)
+      User.find_by_username(email)).try(:person)
   end
 
   def self.find_existing_person_by_email_address(email_address)
