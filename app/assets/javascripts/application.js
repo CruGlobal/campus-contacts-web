@@ -47,6 +47,7 @@
 //= require surveys
 //= require imports
 //= require interactions
+//= require profile
 //= require movement_indicator_suggestions
 //= require movement_indicators
 

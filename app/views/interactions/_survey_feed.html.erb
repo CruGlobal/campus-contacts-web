@@ -24,7 +24,7 @@
     <% end %>
   <% end %>
   <% answer_sheet.answers.each do |answer| %>
-    <% if answer.value.present? %>
+    <% if answer.question.present? && answer.value.present? %>
       <div class="feed_item_survey_answer">
         <strong><%= answer.question.label %></strong>
         <%= answer.value %>

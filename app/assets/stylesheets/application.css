@@ -7,6 +7,7 @@
  *= require messages
  *= require leaders
  *= require surveys
+ *= require profile
  *= require charts
  *= require survey_responses
  *= require interactions

@@ -1,0 +1,76 @@
+// Place all the styles related to the profile controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#profile_image {
+  img {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    cursor:pointer;
+  }
+  .info {
+    text-align: center;
+    font-weight: normal;
+    font-style: italic;
+    color: #999;
+    padding: 3px 3px 5px 3px;
+    cursor:pointer;
+  }
+}
+
+#avatar_fb_container {
+  margin-bottom: 10px;
+  .info {
+    font-family: Georgia, Serif;
+    text-align: center;
+    font-weight: normal;
+    font-style: italic;
+    color: #999;
+  }
+}
+
+#avatar_form_container{
+  text-align: center;
+  margin: 40px 0 60px;
+
+  img {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin: 5px;
+  }
+
+	button#browse_avatar {
+		float: none;
+		background: #fff;
+    margin: 0px !important;
+		border-radius: 4px;
+		border: 1px solid #808284;
+	}
+
+	button#browse_avatar:hover,
+  input[type="submit"]:hover {
+		background: #c7dff0;
+		border-color: #0379ae;
+	}
+	.select_avatar_file_button {
+		background: #fff;
+		border-radius: 4px;
+		border: 1px solid #808284;
+		&:hover {
+			background: #c7dff0;
+			border-color: #0379ae;
+		}
+	}
+  #avatar_browse_container {
+    text-align:center;
+    overflow:hidden;
+    width: 350px;
+    margin: 0 auto;
+  }
+  #display_avatar_file_name {
+    text-align:center;
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+}

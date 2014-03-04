@@ -5,9 +5,16 @@
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Avatar</span></div>
     	<div id="avatar_form_container">
         <%= image_tag(@person.get_avatar, width:'200', height:'200', class:'current_avatar_display') %>
-        <%= form_for @person, url: change_avatar_interactions_path(person_id: @person), remote: true, :html => { method: :post, :multipart => true, id: "avatar_upload_form" } do |f| %>
+        <%= form_for @person, url: change_avatar_profile_path(@person), :html => { method: :post, :multipart => true, id: "avatar_upload_form" } do |f| %>
+          <div id='avatar_fb_container'>
+            <%= text_field_tag :facebook_name_search, "", id: 'facebook_name_search', placeholder: "Search name or Facebook profile url", autocomplete: "off" %>
+            <div class='info'>
+              Some Facebook users may not appear because of their privacy settings.
+            </div>
+      			<%= f.hidden_field :fb_uid, data: {default: current_person.fb_uid} %>
+          </div>
           <div id="avatar_browse_container">
-            <button id="browse_avatar" name="button" type="submit">Browse</button>
+            <button id="browse_avatar" name="button" type="submit">Browse Computer</button>
           </div>
           <div id="display_avatar_file_name">&nbsp;</div>
           <div class="hidden">
