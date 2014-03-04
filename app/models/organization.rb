@@ -808,7 +808,9 @@ class Organization < ActiveRecord::Base
     person.user.remember_token = token
     person.user.remember_token_expires_at = 1.month.from_now
     person.user.save(validate: false)
-    LeaderMailer.delay.added(person.id, added_by.id, self.id, token)
+
+    person.create_user! if person && person.user.nil?
+    LeaderMailer.delay.added(person.id, added_by.id, self.id, token) if person.user.present?
   end
 
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)

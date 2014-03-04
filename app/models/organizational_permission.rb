@@ -75,7 +75,7 @@ class OrganizationalPermission < ActiveRecord::Base
 
   def notify_new_leader
     person = create_user_for_person_if_not_existing
-    if person.nil? || (person.present? && person.user.nil?)
+    if person.blank? || person.user.blank?
       raise InvalidPersonAttributesError
     else
       token = SecureRandom.hex(12)
