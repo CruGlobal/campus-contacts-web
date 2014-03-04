@@ -1,20 +1,28 @@
 <% if person %>
-  <strong>Person ID: <%= person.id %></strong><br/>
-  First Name: <%= person.first_name %><br/>
-  Last Name: <%= person.last_name %><br/>
-  Gender: <%= person.gender %><br/>
-  Campus: <%= person.campus %><br/>
-  Birthday: <%= l(person.birth_date) if person.birth_date %><br/>
-  Person Created: <%= l(person.created_at) if person.created_at %><br/>
-  Person Updated: <%= l(person.updated_at) if person.updated_at %>
-  <% user = person.user %>
-  <% if user %>
-  <hr>
-  User ID: <%= user.id %><br/>
-  Username: <%= user.username %><br/>
-  User Created: <%= l(user.created_at) if user.created_at %><br/>
-  User Updated: <%= l(user.updated_at) if user.updated_at %><br/>
-  <% end %>
+    <% emails = person.email_addresses.pluck(:email)
+       emails = emails.compact.reject(&:empty?).uniq.join(", ")
+       phone_numbers = person.phone_numbers.pluck(:number)
+       phone_numbers = phone_numbers.compact.reject(&:empty?).uniq.join(", ") %>
+    <strong>Person ID: <%= person.id %></strong><br/>
+    <strong>First Name:</strong> <%= person.first_name %><br/>
+    <strong>Last Name:</strong> <%= person.last_name %><br/>
+    <strong>Gender:</strong> <%= person.gender %><br/>
+    <strong>Account Number:</strong> <%= person.accountNo %><br/>
+    <strong>Email Addresses:</strong> <%= emails %><br/>
+    <strong>Phone Numbers:</strong> <%= phone_numbers %><br/>
+    <strong>Campus:</strong> <%= person.campus %><br/>
+    <strong>Birthday:</strong> <%= l(person.birth_date) if person.birth_date %><br/>
+    <strong>Person Created:</strong> <%= l(person.created_at) if person.created_at %><br/>
+    <strong>Person Updated:</strong> <%= l(person.updated_at) if person.updated_at %>
+    <% user = person.user %>
+    <% if user %>
+        <hr>
+        <strong>User ID:</strong> <%= user.id %><br/>
+        <strong>Username:</strong> <%= user.username %><br/>
+        <strong>User Created:</strong> <%= l(user.created_at) if user.created_at %><br/>
+        <strong>User Updated:</strong> <%= l(user.updated_at) if user.updated_at %><br/>
+        <strong>Last Login:</strong> <%= l(user.last_sign_in_at) if user.last_sign_in_at %><br/>
+    <% end %>
 <% else %>
-  No person with ID of <%= params[:id] %>
+    No person with ID of <%= params[:id] %>
 <% end %>
