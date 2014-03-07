@@ -42,7 +42,15 @@
 #ac_contact_spread {
   margin: -10px 0 0 5px;
   display: inline-block;
-  min-width: 850px;
+  width: 100%;
+  .scroll_table {
+    border: 1px solid #C7DFF0;
+    width: 100%;
+    overflow-x: auto;
+    table {
+      border: none !important;
+    }
+  }
 }
 
 .ac_contact_spread_space{
