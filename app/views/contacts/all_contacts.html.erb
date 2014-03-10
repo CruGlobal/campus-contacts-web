@@ -129,13 +129,13 @@
 
           <% if @questions.present? %>
             <% @questions.uniq.each do |q| %>
-              <th class="question <%= dom_id(q) %>">
-                <% if @predefined_questions.include?(q) %>
-                  <% question = q.attribute_name.gsub('_',' ').titleize %>
-                <% else %>
-                  <% question = q.slug.present? ? q.slug.titleize : q.label.titleize %>
-                <% end%>
-                <span class='tip' title="<%= question %>"><%= question %></span>
+              <% if @predefined_questions.include?(q) %>
+                <% question = q.attribute_name.gsub('_',' ').titleize %>
+              <% else %>
+                <% question = q.slug.present? ? q.slug.titleize : q.label.titleize %>
+              <% end%>
+              <th class="question <%= dom_id(q) %>" class='tip' title="<%= question %>">
+                <%= question %>
                 <br/>
                 <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
               </th>

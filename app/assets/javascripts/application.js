@@ -10,6 +10,7 @@
 //= require jquery.cookie
 //= require jquery.tokeninput
 //= require jquery.wiser_date
+//= require jquery.doubleScroll
 //= require jquery.qtip2
 //= require jquery-ui-timepicker-addon_mh
 //= require colorpicker.js
