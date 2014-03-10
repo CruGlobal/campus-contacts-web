@@ -824,7 +824,7 @@ $ ->
     $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
     $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).fadeOut()
-    $('.doubleScroll-scroll').width($('.scroll_table').width())
+    $('.doubleScroll-scroll').width($('.scroll_table table').width())
 
   $('#hidden_questions_link').live 'click', (e)->
     e.preventDefault
