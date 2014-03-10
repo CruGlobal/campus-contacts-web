@@ -46,7 +46,7 @@
     border-bottom: none;
     margin-bottom: 5px;
   }
-  #all_contacts_more_menu {
+  #all_contacts_more_menu, #all_contacts_export_menu {
     position: absolute;
     background: white;
     padding: 0;
@@ -59,16 +59,22 @@
       text-align: left;
       padding: 0;
       color: #333;
+      overflow:hidden;
       a {
         color: #0379ae;
         font-size: 11px;
         padding: 0px 8px;
         line-height: 24px;
         margin: 0;
-        &:hover {
-          background: #eaf1f6;
-          text-decoration: none;
-        }
+        float:left;
+      }
+      span {
+        float:right;
+        margin: 5px 3px 0px 0px;
+      }
+      &:hover {
+        background: #eaf1f6;
+        text-decoration: none;
       }
     }
   }

@@ -82,13 +82,26 @@
     <% end %>
   	<ul class="button_bar">
   		<li class="action_lightblue">
+        <%= link_to('Export ▾', '#', class: 'action_dropdown') %>
+        <ul style="display:none" id="all_contacts_export_menu">
+          <li>
+            <%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %>
+            <span class="icon help tipitright help_bubble_keyword" title="<%= t('general.export_csv_help') %>"></span>
+          </li>
+          <li id='bulk_vcard_link'>
+            <%= link_to(t('people.index.vcard'), '') %>
+            <span class="icon help tipitright help_bubble_keyword" title="<%= t('general.export_vcard_help') %>"></span>
+          </li>
+        </ul>
+      </li>
+  	</ul>
+  	<ul class="button_bar">
+  		<li class="action_lightblue">
         <%= link_to('More ▾', '#', class: 'action_dropdown') %>
         <ul style="display:none" id="all_contacts_more_menu">
           <% if can? :manage, current_organization %>
             <li><%= link_to(t('people.index.merge_contacts'), "", id: "merge_people") %></li>
           <% end %>
-          <li><%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %></li>
-          <li><%= link_to(t('people.index.vcard'), '', id: 'bulk_vcard_link' ) %></li>
           <% if can? :manage, current_organization %>
             <li><%= link_to(t('general.delete'), bulk_delete_people_path, id: "bulk_delete") %></li>
             <li><%= link_to(t('general.archive'), bulk_archive_people_path, id: "bulk_archive") %></li>
