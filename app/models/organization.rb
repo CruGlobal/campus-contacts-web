@@ -803,16 +803,6 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def notify_new_leader(person, added_by)
-    token = SecureRandom.hex(12)
-    person.user.remember_token = token
-    person.user.remember_token_expires_at = 1.month.from_now
-    person.user.save(validate: false)
-
-    person.create_user! if person && person.user.nil?
-    LeaderMailer.delay.added(person.id, added_by.id, self.id, token) if person.user.present?
-  end
-
   def attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
     admin_ids = parent_organization_admins.collect(&:id)
     i = admin_ids & ids.collect(&:to_i)

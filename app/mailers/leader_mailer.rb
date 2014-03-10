@@ -6,12 +6,16 @@ class LeaderMailer < ActionMailer::Base
   #
   #   en.leader_mailer.added.subject
   #
-  def added(person_id, added_by_id, org_id, token)
-    @person = Person.find(person_id)
+  def added(person, added_by_id, org, token)
+    @person = person
     @added_by = Person.find(added_by_id)
-    @org = Organization.find(org_id)
+    @org = org
     @token = token
     @from = @added_by.present? && @added_by.primary_email_address.present? ? @added_by.email : 'support@missionhub.com'
-    mail to: @person.email, from: @from, subject: "Missionhub.com - #{@org}"
+
+    if @person.user.present?
+      @link = leader_link_url(@token, @person.user.id)
+      mail to: @person.email, from: @from, subject: "Missionhub.com - #{@org}"
+    end
   end
 end
