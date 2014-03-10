@@ -821,9 +821,9 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide, #contacts_controller .all_contacts a.hide').live 'click', ->
-    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
+    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).hide()
     $('#hidden_questions_div').hide()
-    $('.' + $(this).attr('data-class')).fadeOut()
+    $('.' + $(this).attr('data-class')).hide()
     $('.doubleScroll-scroll').width($('.scroll_table table').width())
 
   $('#hidden_questions_link').live 'click', (e)->
