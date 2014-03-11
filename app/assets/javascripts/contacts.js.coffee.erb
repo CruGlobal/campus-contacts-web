@@ -1,5 +1,6 @@
 $ ->
   $(document).ready ->
+    $(".scroll_table").doubleScroll()
     $(".leftmenu .leader, .leftmenu .dnc, .leftmenu .completed").droppable
       activeClass: "ui-state-active"
       hoverClass: "ui-state-hover"
@@ -820,16 +821,16 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
   $('#contacts_controller .index a.hide, #contacts_controller .all_contacts a.hide').live 'click', ->
-    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).fadeOut()
+    $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).hide()
     $('#hidden_questions_div').hide()
-    $('.' + $(this).attr('data-class')).fadeOut()
+    $('.' + $(this).attr('data-class')).hide()
+    $('.doubleScroll-scroll').width($('.scroll_table table').width())
 
   $('#hidden_questions_link').live 'click', (e)->
     e.preventDefault
-    position = parseInt($('#table_header').position().top) + parseInt($('#table_header').height())
-    $('#hidden_questions_div').css('top': position)
-    $('#hidden_questions_div').toggle()
-    if $('#hidden_questions_div').is(':visible')
+    $('#hidden_questions_div').show()
+    $.showDialog($("#hidden_questions_dialog"))
+    if $('#hidden_questions_dialog').is(':visible')
       $.ajax
         type: 'GET',
         url: '/show_hidden_questions'

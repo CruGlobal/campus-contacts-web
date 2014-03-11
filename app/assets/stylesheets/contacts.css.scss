@@ -2,6 +2,15 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+.contact_listing {
+  .question {
+    min-width: 100px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
 .reply_to_info {
   margin-left: 20px !important;
   display: inline-block;
@@ -345,34 +354,37 @@
   }
 }
 #hidden_questions_div {
-  position: absolute;
-	border: 1px solid red;
-	right: 20px;
-	width: 400px;
-	background: white;
-	padding: 0px;
-	width: 450px;
-  margin: 0;
-	border: 1px solid #999;
-	border-image: initial;
-	box-shadow: #BBB 0px 2px 5px;
+  margin: 10px;
+  text-align: left;
+  img {
+    border: none;
+  }
   #hidden_questions_list {
-    max-height: 300px;
     overflow-x: auto;
+    margin-bottom: 60px;
+    max-height: 250px;
   }
   #hidden_questions_guide {
     padding: 10px;
-    font-size: 14px;
+    font-size: 15px;
   }
   #hidden_questions_loader {
     text-align: center;
     padding: 20px;
-    font-size: 14px;
+    font-size: 16px;
+    img {
+      border: none;
+    }
   }
   ul#hidden_questions {
-    padding: 0px;
-    margin: 0px;
     padding: 0px 10px 10px 30px;
+    li {
+      margin: 0 0 3px;
+      a {
+        font-size: 13px;
+        color: #0379ae;
+      }
+    }
   }
 }
 #all_contacts_select_all_option {
