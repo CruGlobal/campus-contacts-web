@@ -1,3 +1,12 @@
+.fb_user a {
+  text-decoration: none;
+}
+
+#facebook_name_search {
+  width: 290px;
+  text-align: center;
+}
+
 body {
   background-color: #fff;
 }
@@ -1093,12 +1102,6 @@ div {
 #interaction_edit_delete_button {
   float: left;
   margin-left: 9px;
-}
-
-img#profile_image {
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  cursor:pointer;
 }
 
 #person_email_address_email {

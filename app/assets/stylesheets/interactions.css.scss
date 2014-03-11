@@ -171,7 +171,7 @@ body{
     }
   }
 
-  &#interactions_controller {
+  &#interactions_controller, &#profile_controller {
     .add_email, .add_phone, .add_address {
       float: right;
       padding: 0;

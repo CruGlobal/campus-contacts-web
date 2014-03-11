@@ -1,5 +1,7 @@
 require 'sidekiq/web'
 Mh::Application.routes.draw do
+  get "profile/show"
+
   constraint = lambda { |request| request.env["rack.session"] and
                                   request.env["rack.session"]["warden.user.user.key"] and
                                   request.env["rack.session"]["warden.user.user.key"][0] and
@@ -7,6 +9,13 @@ Mh::Application.routes.draw do
                                   request.env["rack.session"]["warden.user.user.key"][0].constantize.find(request.env["rack.session"]["warden.user.user.key"][1].first).developer? }
   constraints constraint do
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  resources :profile, only: [:show] do
+    member do
+      get :show, as: 'profile'
+      post :change_avatar
+    end
   end
 
   resources :movement_indicators, only: [:index, :create] do
@@ -37,7 +46,6 @@ Mh::Application.routes.draw do
   end
 
   # Interactions
-  match 'profile/:id' => 'interactions#show_profile', as: "profile"
   resources :interactions do
     collection do
       get :change_followup_status
@@ -53,7 +61,6 @@ Mh::Application.routes.draw do
       get :set_permissions
       get :set_groups
       get :search_leaders
-      post :change_avatar
     end
   end
 

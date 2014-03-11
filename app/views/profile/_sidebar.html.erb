@@ -1,4 +1,10 @@
-<%= image_tag(@person.get_avatar, alt: '', width: '200', height: '200', id: 'profile_image', class:'change_avatar current_avatar_display') %>
+<div id="profile_image">
+  <%= image_tag(@person.get_avatar, alt: '', width: '200', height: '200', class:'change_avatar current_avatar_display') %>
+  <div class="info change_avatar">
+    Click to change avatar.
+  </div>
+</div>
+
 <div id="profile_label_header">
 	Labels
   <%= link_to image_tag("edit_sprite.png", class: 'tip', title: 'Manage Labels'), "#", id: "show_profile_labels_button" %>
