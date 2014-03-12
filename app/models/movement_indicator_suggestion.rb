@@ -4,8 +4,9 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
   belongs_to :label
   attr_accessible :accepted, :reason, :person_id, :label_id, :action
 
-  scope :active, -> { where('accepted IS NULL AND person_id IS NOT NULL') }
-  scope :declined, -> { where('accepted = false AND person_id IS NOT NULL') }
+  scope :valid_person, -> { includes(:person).where('people.id IS NOT NULL') }
+  scope :active, -> { where(accepted: nil).valid_person }
+  scope :declined, -> { where(accepted: false).valid_person }
 
   before_save :check_action
 

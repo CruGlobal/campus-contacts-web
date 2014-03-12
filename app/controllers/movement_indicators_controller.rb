@@ -4,7 +4,11 @@ class MovementIndicatorsController < ApplicationController
       resp = RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{current_organization.importable_id}&begin_date=#{Date.today - 3.years}&end_date=#{Date.today}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
       json = JSON.parse(resp)
     rescue
-      raise resp.inspect
+      if resp.present?
+        raise resp.inspect
+      else
+        raise "Could not connect to infobase."
+      end
     end
 
     @stats = json["statistics"].last
