@@ -58,6 +58,35 @@ class SentSms < ActiveRecord::Base
     END
   end
 
+  def to_bulksms
+    url = APP_CONFIG['bulksms_url']
+    login = APP_CONFIG['bulksms_username']
+    password = APP_CONFIG['bulksms_password']
+
+    SentSms.smart_split(message, separator).each_with_index do |message, i|
+      msgid = URI.encode("#{id}-#{i+1}")
+      msg = URI.encode(message.strip)
+
+      request = "#{url}?username=#{login}&password=#{password}"
+      request += "&message=#{msg}&msisdn=#{recipient}"
+
+      begin
+        response = open(request).read
+        response_hash = Hash.from_xml(response)
+        response_code = response_hash['REPONSE']['statut'].to_i
+        self.update_attribute('reports', response_hash)
+        if response_code == 0
+          puts "Success (#{response_code})"
+        else
+          puts "Failed (#{response_code})"
+        end
+      rescue
+        puts "Connection Failed"
+      end
+    end
+
+  end
+
   def to_smseco
     url = APP_CONFIG['smseco_url']
     login = APP_CONFIG['smseco_username']
@@ -100,6 +129,8 @@ class SentSms < ActiveRecord::Base
     case sent_via
     when 'smseco'
       to_smseco
+    when 'bulksms'
+      to_bulksms
     else
       if received_sms
         from = received_sms.shortcode

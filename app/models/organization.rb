@@ -261,7 +261,13 @@ class Organization < ActiveRecord::Base
     ancestors.reverse.each do |org|
       return org.settings[:sms_gateway] if org.settings[:sms_gateway].present?
     end
-    return 'twilio'
+    if APP_CONFIG['bulksms_gateway_orgs'].present? && APP_CONFIG['bulksms_gateway_orgs'].include?(id)
+      return 'bulksms'
+    elsif APP_CONFIG['smseco_gateway_orgs'].present? && APP_CONFIG['smseco_gateway_orgs'].include?(id)
+      return 'smseco'
+    else
+      return 'twilio'
+    end
   end
 
   def predefined_survey_questions
