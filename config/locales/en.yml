@@ -108,12 +108,17 @@ en:
   application:
     add_contact:
       add_contact: Add a contact to %{org}
+      existing_contact: "Existing contacts with the same email"
+      confirm_existing_contact: "Are you sure '%{name}' is what you looking for?"
       title_bio: Bio
       title_label: Labels
       title_permission: Permissions
       title_surveys: Survey
       title_optional: (Optional)
-      survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
+      survey_mode_instructions: "If the person you are adding is standing next to you, click \"Enter Survey Mode\" from the top right corner of your screen."
+      existing_person_email: "This email address already exists in the Missionhub database. Please select the appropriate contact from the list below."
+      loading_description: "Validating email address.. Please wait..."
+      system_is_still_busy: "The system is still processing the form, please wait for a moment."
       save_and_close: 'Save and close'
       save_and_add: 'Save and add another'
     assign_search:
@@ -935,6 +940,9 @@ en:
       bulk_vcard_email_message: 'Contacts information has been sent to '
       contact_no_select_message: 'Please select atleast one contact.'
       no_name_message: 'First Name and Last Name are required.'
+      email_is_already_exists: "Email address is already exists."
+      already_selected_an_existing_contact: "You have already selected an existing contact. You cannot allow to change the email address of '%{name}'"
+      invalid_existing_contact: "Invalid existing contact, please try again later."
       saved_searches: 'Saved Searches'
       delete_this_search: "Delete this search"
       save_this_search: "Save this search"

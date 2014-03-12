@@ -1,0 +1,8 @@
+<% if @people.present? %>
+  $("#existing_contacts_loader").hide()
+  $("#existing_contacts_table").show()
+  $.showDialog($("#existing_contact_dialog"))
+  $("#existing_contact_content").html("<%= j(render('contacts/existing_contacts', people: @people)) %>")
+<% else %>
+  $.hideDialog($("#existing_contact_dialog"))
+<% end %>

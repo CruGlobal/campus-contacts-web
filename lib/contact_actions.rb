@@ -3,6 +3,8 @@ module ContactActions
   def create_contact
     @organization ||= current_organization
     @add_to_group_tag = params[:add_to_group_tag]
+    @existing_contact_found = params[:existing_contact_found]
+    @existing_contact = params[:existing_contact]
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -40,11 +42,6 @@ module ContactActions
         end
       end if params[:answers]
 
-      # Initialize Person or get the existing person data
-      @person = Person.new_from_params(params[:person])
-      @email = @person.email_addresses.first
-      @phone = @person.phone_numbers.first
-
       # This would set the selected values to the add contact form fields if there's an error messages
       flash[:selected_labels] = params[:labels]
       flash[:selected_answers] = params[:answers]
@@ -62,19 +59,52 @@ module ContactActions
       end
 
       # Validation existing person email address, create duplicate person and email if name does not match
-      if form_email_address.present? && form_first_name.present? && form_last_name.present?
-        if get_person = Person.find_existing_person_by_email(form_email_address)
-          get_first_name = (get_person.first_name.nil?) ? "" : get_person.first_name.downcase.strip
-          get_last_name = (get_person.last_name.nil?) ? "" : get_person.last_name.downcase.strip
-          form_first_name = form_first_name.downcase.strip
-          form_last_name = form_last_name.downcase.strip
-          if get_person.organizational_permissions.where(:organization_id => current_organization).first
-            custom_errors << t("contacts.index.add_already_registered_contact")
-          end
-          if custom_errors.present? || get_first_name != form_first_name || get_last_name != form_last_name
-            @person = Person.new(params[:person].except(:email_address, :phone_number))
-            @person.email_address = params[:person][:email_address]
-            @person.phone_number = params[:person][:phone_number]
+      #if form_email_address.present? && form_first_name.present? && form_last_name.present?
+      #  if get_person = Person.find_existing_person_by_email(form_email_address)
+      #    get_first_name = (get_person.first_name.nil?) ? "" : get_person.first_name.downcase.strip
+      #    get_last_name = (get_person.last_name.nil?) ? "" : get_person.last_name.downcase.strip
+      #    form_first_name = form_first_name.downcase.strip
+      #    form_last_name = form_last_name.downcase.strip
+      #    if get_person.organizational_permissions.where(:organization_id => current_organization).first
+      #      custom_errors << t("contacts.index.add_already_registered_contact")
+      #    end
+      #    if custom_errors.present? || get_first_name != form_first_name || get_last_name != form_last_name
+      #      @person = Person.new(params[:person].except(:email_address, :phone_number))
+      #      @person.email_address = params[:person][:email_address]
+      #      @person.phone_number = params[:person][:phone_number]
+      #    end
+      #  end
+      #end
+
+      # We do not allow the duplicate person's email address
+      # And we have commented/removed the process above of creating of duplicate person and email if name does not match
+      # We should validate the unique email address in server side and not in the model - Not that so strict.
+      get_person = Person.find_existing_person_by_email(form_email_address)
+      if get_person.present? && @existing_contact.blank?
+        if get_person.organizational_permissions.find_by_organization_id(current_organization.id)
+          custom_errors << t("contacts.index.add_already_registered_contact")
+        else
+          custom_errors << t("contacts.index.email_is_already_exists")
+        end
+      end
+
+      if @existing_contact_found.blank?
+        # Initialize Person or get the existing person data
+        @person = Person.new(params[:person])
+
+        # Process for adding an existing contact from the other organization
+        if @existing_contact.present?
+          @person = Person.find_by_id(@existing_contact)
+          if @person.present?
+            @existing_contact_found = 1
+            unless @person.email_addresses.collect(&:email).include?(form_email_address)
+              custom_errors << t("contacts.index.already_selected_an_existing_contact",
+                name: @person.name,
+                email: @person.email
+              )
+            end
+          else
+            custom_errors << t("contacts.index.invalid_existing_contact")
           end
         end
       end
@@ -102,6 +132,9 @@ module ContactActions
       #    end
       #  end
       #end
+
+      @email = @person.email_addresses.first
+      @phone = @person.phone_numbers.first
 
       if custom_errors.present?
         # Include the @person errors if invalid

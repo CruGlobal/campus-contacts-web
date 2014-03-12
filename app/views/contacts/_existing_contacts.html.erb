@@ -1,0 +1,9 @@
+<% people.each do |person| %>
+  <tr>
+    <td><%= person.first_name %></td>
+    <td><%= person.last_name %></td>
+    <td>
+      <%= link_to "Add", "#", class: "add_existing_link", title: "Add as a contact", data: { id: person.id, first_name: person.first_name, last_name: person.last_name, confirm_message: t('application.add_contact.confirm_existing_contact', name: "#{person.first_name} #{person.last_name}")} %>
+    </td>
+  </tr>
+<% end if people.present? %>

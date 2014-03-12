@@ -28,6 +28,8 @@
                 <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
                 <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
                 <%= hidden_field_tag :dnc, params[:dnc] %>
+                <%= hidden_field_tag :existing_contact, @existing_contact %>
+                <%= hidden_field_tag :existing_contact_found, @existing_contact_found %>
 
                 <%= render 'people/person_form', person: person %>
               </div>

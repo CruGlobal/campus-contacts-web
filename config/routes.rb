@@ -308,6 +308,8 @@ Mh::Application.routes.draw do
       get :auto_suggest_send_text
       post :hide_question_column
       post :unhide_question_column
+
+      post :add_contact_check_email
     end
   end
 
