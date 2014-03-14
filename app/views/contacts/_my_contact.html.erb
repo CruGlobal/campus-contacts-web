@@ -29,9 +29,8 @@
     </div>
   </td>
   <td><%= person.year_in_school.present? ? person.year_in_school : "&nbsp;".html_safe %></td>
-  <td class="controls">
+  <td class="controls" align="right">
     <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id), remote: true, method: :post, class: "icon unassign mineunassign tipit", :title => "#{t('contacts.index.unassign_contact')} from you") %>
-    <%= link_to(t('nav.view_details'), profile_path(person), :class => "icon magnify tipit", :title => t('nav.view_details')) %>
     <% if contact_permission %>
       <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipit", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
     <% end %>

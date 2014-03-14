@@ -13,6 +13,7 @@ class Organization < ActiveRecord::Base
   has_many :interactions
   has_many :labels, inverse_of: :organization
   has_many :organizational_labels, inverse_of: :organization
+  has_many :group_memberships
 
   belongs_to :importable, polymorphic: true
   has_many :messages
@@ -47,12 +48,13 @@ class Organization < ActiveRecord::Base
     end
 
     has_many :leaders, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
+
     has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
     has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
-    has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND (organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL)", Permission::NO_PERMISSIONS_ID], uniq: true
-    has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact' AND organizational_permissions.archive_date IS NOT NULL", Permission::NO_PERMISSIONS_ID]
+    has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::NO_PERMISSIONS_ID], uniq: true
+    has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.archive_date IS NOT NULL", Permission::NO_PERMISSIONS_ID]
     has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
     has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = 'do_not_contact' AND organizational_permissions.permission_id = ?", Permission::NO_PERMISSIONS_ID]
     has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
@@ -286,13 +288,6 @@ class Organization < ActiveRecord::Base
     else
       return questions
     end
-
-    if is_bridge?
-      raise questions.collect(&:label).inspect
-      return questions
-    else
-      return questions.where("attribute_name != 'faculty'")
-    end
   end
 
   def pending_transfer
@@ -476,12 +471,22 @@ class Organization < ActiveRecord::Base
 
   def assigned_contacts
     assignments = contact_assignments.where(person_id: all_people.collect(&:id), assigned_to_id: leaders.collect(&:id))
-    assignments.present? ? all_people.where(id: assignments.collect(&:person_id)) : []
+    assignments.present? ? all_people.where(id: assignments.collect(&:person_id)) : nil
+  end
+
+  def assigned_contacts_to(leaders)
+    assignments = contact_assignments.where(person_id: all_people.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? all_people.where(id: assignments.collect(&:person_id)) : nil
   end
 
   def assigned_contacts_with_archived
-    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
-    assignments.present? ? contacts_with_archived.where(id: assignments.collect(&:person_id)) : contacts_with_archived
+    assignments = contact_assignments.where(person_id: all_people_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? all_people_with_archived.where(id: assignments.collect(&:person_id)) : nil
+  end
+
+  def assigned_contacts_with_archived_to(leaders)
+    assignments = contact_assignments.where(person_id: all_people_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments.present? ? all_people_with_archived.where(id: assignments.collect(&:person_id)) : nil
   end
 
   def unassigned_contacts
@@ -490,7 +495,7 @@ class Organization < ActiveRecord::Base
   end
 
   def unassigned_contacts_with_archived
-    assignments = contact_assignments.where(person_id: contacts_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
+    assignments = contact_assignments.where(person_id: all_people_with_archived.collect(&:id), assigned_to_id: leaders.collect(&:id))
     assignments.present? ? contacts_with_archived.where("people.id NOT IN (?)", assignments.collect(&:person_id)) : contacts_with_archived
   end
 

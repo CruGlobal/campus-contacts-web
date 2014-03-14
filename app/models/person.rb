@@ -4,6 +4,7 @@ require 'vpim/book'
 
 class Person < ActiveRecord::Base
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
+  GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
@@ -52,7 +53,7 @@ class Person < ActiveRecord::Base
 
   has_many :organization_memberships, inverse_of: :person
   has_many :organizational_permissions, conditions: {archive_date: nil, deleted_at: nil}
-  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: {deleted_at: nil}
+  has_many :organizational_permissions_including_archived , class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: ["organizational_permissions.deleted_at IS NULL"]
   has_one :contact_permission, class_name: 'OrganizationalPermission'
   has_many :permissions, through: :organizational_permissions
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
@@ -71,6 +72,8 @@ class Person < ActiveRecord::Base
   has_many :group_memberships
 
   has_one :person_photo
+
+  scope :contacts, lambda {|organization| includes(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", organization.id, Permission::NO_PERMISSIONS_ID)}
 
   scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :first_name
@@ -249,6 +252,126 @@ class Person < ActiveRecord::Base
       end
     end
     LeaderMailer.delay.assignment(valid_ids, self, assigned_by, org) if valid_ids.present?
+  end
+
+  def self.filter_archived(people, organization)
+    return people unless people.present?
+    people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.archive_date IN (?) AND organizational_permissions.deleted_at IS NULL", organization.id, permissions.collect(&:id))
+  end
+
+  def self.filter_by_label(people, organization, labels, filter = 'any')
+    return people unless people.present?
+    ids = labels.is_a?(Array) ? labels : [labels]
+    labels = organization.labels.where("id IN (?)", ids)
+    if labels.present?
+      people = people.joins(:organizational_labels)
+      if filter == 'any'
+        people = people.where("organizational_labels.organization_id = ? AND organizational_labels.label_id IN (?)", organization.id, labels.collect(&:id))
+      else
+        people_ids = people.collect(&:id)
+        labels.each do |label|
+          people_ids &=  people.where("organizational_labels.organization_id = ? AND organizational_labels.label_id = ?", organization.id, label).collect(&:id)
+        end
+        people = people.where('people.id IN (?)', people_ids)
+      end
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_group(people, organization, groups, filter = 'any')
+    return people unless people.present?
+    ids = groups.is_a?(Array) ? groups : [groups]
+    groups = organization.groups.where("id IN (?)", ids)
+    if groups.present?
+      people = people.joins(:groups, :group_memberships)
+      if filter == 'any'
+        people = people.where("groups.organization_id = ? AND group_memberships.group_id IN (?)", organization.id, groups.collect(&:id))
+      else
+        people_ids = people.collect(&:id)
+        groups.each do |group|
+          people_ids &= people.get_from_group(group.id).collect(&:id)
+        end
+        people = people.where('people.id IN (?)', people_ids)
+      end
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_permission(people, organization, permissions)
+    return people unless people.present?
+    ids = permissions.is_a?(Array) ? permissions : [permissions]
+    permissions = Permission.where("id IN (?)", ids)
+    if permissions.present?
+      people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id IN (?) AND organizational_permissions.deleted_at IS NULL", organization.id, permissions.collect(&:id))
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_status(people, organization, statuses)
+    return people unless people.present?
+    statuses = statuses.is_a?(Array) ? statuses : [statuses]
+    statuses += ['',nil] if statuses.include?('uncontacted')
+    people = people.contacts(organization)
+    if statuses.present?
+      if statuses.include?('uncontacted')
+        people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND (organizational_permissions.followup_status IN (?) OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.deleted_at IS NULL", organization.id, statuses)
+      elsif statuses.include?('in_progress')
+        people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status <> 'completed' AND organizational_permissions.followup_status <> 'do_not_contact' AND organizational_permissions.deleted_at IS NULL", organization.id)
+      else
+        people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status IN (?) AND organizational_permissions.deleted_at IS NULL", organization.id, statuses)
+      end
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_gender(people, organization, genders)
+    return people unless people.present?
+    genders = genders.is_a?(Array) ? genders : [genders]
+
+    if genders.present?
+      if genders.include?('no_response')
+        people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.deleted_at IS NULL AND (people.gender IN (?) OR people.gender IS NULL)", organization.id, genders)
+      else
+        people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.deleted_at IS NULL AND people.gender IN (?)", organization.id, genders)
+      end
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_faculty(people, organization, faculties)
+    return people unless people.present?
+    faculties = faculties.is_a?(Array) ? faculties : [faculties]
+
+    if faculties.present?
+      people = people.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.deleted_at IS NULL AND people.faculty IN (?)", organization.id, faculties)
+    end
+    return people.uniq
+  end
+
+  def self.filter_by_interaction(people, organization, interactions, filter = 'any')
+    ids = interactions.is_a?(Array) ? interactions : [interactions]
+    interactions = organization.interaction_types.where("id IN (?)", ids)
+
+    if interactions.present?
+      people = people.joins(:interactions)
+      if filter == 'any'
+        people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', organization.id, interactions.collect(&:id))
+      else
+        interactions.each do |interaction_type|
+          people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id = ?', organization.id, interaction_type)
+        end
+      end
+    end
+  end
+
+  def self.build_survey_scope(organization, surveys)
+    ids = surveys.is_a?(Array) ? surveys : [surveys]
+    surveys = organization.surveys.where("id IN (?)", ids)
+    return surveys.present? ? surveys.includes(:questions).order(:title) : []
+  end
+
+  def self.filter_by_survey_scope(people, organization, survey_scope)
+    return people.joins(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).uniq
   end
 
   def answered_surveys

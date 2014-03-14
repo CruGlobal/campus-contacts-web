@@ -1,0 +1,12 @@
+<%- active ||= false %>
+<div class="toggler <%= 'active' if active %>">
+  <span class="expanded">
+    <%= image_tag("collapse.png")%>
+  </span>
+  <span class="collapsed">
+    <%= image_tag("expand.png")%>
+  </span>
+</div>
+<div class="clear_filter" data-tip="Clear">
+  <%= link_to image_tag("delete_gray.png"), "#" %>
+</div>

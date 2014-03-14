@@ -3,6 +3,44 @@
 # Use this as the base for the locale file of your language.
 
 en:
+  search:
+    sidebar:
+      standard_title: "Standard Filters"
+      survey_title: "Survey Filters"
+      saved_search_title: "Saved Searches"
+      search_any_placeholder: "Search"
+      standard_hide: "Hide Standard Filters"
+      standard_show: "Show Standard Filters"
+      survey_hide: "Hide Survey Filters"
+      survey_show: "Show Survey Filters"
+      saved_hide: "Hide Saved Searches"
+      saved_show: "Show Saved Searches"
+      include_archived: "Include archived contacts"
+      friends_only: "My Friends"
+    triggers:
+      title: "Filter Results"
+    assignments:
+      title: "Assigned To"
+    status:
+      title: "Status"
+    interactions:
+      title: "Interactions"
+    permissions:
+      title: "Permissions"
+    labels:
+      title: "Labels"
+    groups:
+      title: "Groups"
+    gender:
+      title: "Gender"
+      male: "Male"
+      female: "Female"
+    faculty:
+      title: "Faculty"
+      yes: "Yes"
+      no: "No"
+    included_surveys:
+      title: "Survey List"
   manage_labels:
     title: "%{org} Labels"
     add_title: "Add a Organizational Label"
@@ -27,6 +65,32 @@ en:
       facebook_search_guide: "Some Facebook users may not appear because of their privacy settings."
       browse_computer: "Browse Computer"
       invalid_format: "Invalid picture format, please upload .jpg, .jpeg, .png, or .gif file"
+    advanced_search:
+      header: "Matching the criteria for Filtered Search"
+      search_any: "Search for a Person:"
+      search_any_guide: "... by first name, last name, phone number or email address"
+      search_filter:
+        title: "Filtered Search:"
+        contact_data:
+          title: "Contact Data"
+          gender: "Gender"
+          faculty: "Faculty"
+          assigned: "Assigned"
+          status: "Status"
+        label_and_group_data:
+          title: "Label and Group Data"
+          labels: "Labels"
+          groups: "Groups"
+        surveys:
+          title: "Surveys to include in Search"
+          range: "Survey Date Range"
+          range_guide: "Include only survey responses given between:"
+          scope: "Survey List"
+          scope_guide: "Include these survey titles:"
+        survey_questions:
+          title: "Survey Responses"
+          loader: "Updating Survey Questions"
+          no_questions: "There are no questions in this survey."
     search_people_filters:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
@@ -728,6 +792,7 @@ en:
       interaction_types: "Interactions"
     all_contacts:
       title: "All Contacts"
+    contact_list:
       first_name: "First Name"
       last_name: "Last Name"
       status: "Status"

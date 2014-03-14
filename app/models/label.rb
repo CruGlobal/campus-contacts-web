@@ -1,4 +1,9 @@
 class Label < ActiveRecord::Base
+  NO_SELECTED_LABEL = ["No label",1]
+  ANY_SELECTED_LABEL = ["Any",2]
+	ALL_SELECTED_LABEL = ["All",3]
+	LABEL_SEARCH_FILTERS = [NO_SELECTED_LABEL, ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
+
   attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
   # added :created_at and :updated_at for migration only
 
@@ -109,9 +114,5 @@ class Label < ActiveRecord::Base
     ENGAGED_DISCIPLE = engaged_disciple.id
     SEEKER_ID = seeker.id
   end
-  NO_SELECTED_LABEL = ["No label",1]
-  ANY_SELECTED_LABEL = ["Any",2]
-	ALL_SELECTED_LABEL = ["All",3]
-	LABEL_SEARCH_FILTERS = [NO_SELECTED_LABEL, ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
 
 end

@@ -1,0 +1,21 @@
+<% conditions = params[:status].present? %>
+<div class="side-search-option singleton checkboxes_only" data-id="side_search_status" data-type="Standard" data-value="<%= params[:status] %>">
+  <%= render "search/toggler" %>
+  <div class="title"><%= t('.title') %></div>
+  <div class="fields">
+		<% OrganizationalPermission::FOLLOWUP_STATUSES.each do |status| %>
+      <% if params[:include_archived] %>
+        <% count = Person.filter_by_status(current_organization.contacts_with_archived, current_organization, status).collect(&:id).count %>
+      <% else %>
+        <% count = Person.filter_by_status(current_organization.contacts, current_organization, status).collect(&:id).count %>
+      <% end %>
+
+      <%- active = conditions && params[:status].include?(status.to_s)%>
+			<div class="option checkbox <%= 'active' if active %>">
+				<%= check_box_tag "status[]", status, active, id: "search_status_#{status}", class: "search_status_checkbox" %>
+				<div class="sidebar-label"><%= status.titleize %></div>
+        <span class="info">(<span class="count"><%= count %></span>)</span>
+			</div>
+		<% end %>
+  </div>
+</div>

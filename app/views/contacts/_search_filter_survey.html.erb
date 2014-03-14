@@ -1,0 +1,100 @@
+<div class="group_title"><%= survey.title %></div>
+<% if survey.questions.count > 0 %>
+  <% survey.questions.each do |question| %>
+    <% begin %>
+      <% answer = params[:survey_answer][survey.id.to_s][question.id.to_s] %>
+    <% rescue %>
+      <% answer = "" %>
+    <% end %>
+    <div class="field">
+      <% begin %>
+        <% selected_option = params[:survey_answer_option][survey.id.to_s][question.id.to_s] %>
+      <% rescue %>
+        <% selected_option = Element::TEXTFIELD_MATCH.first[1] %>
+      <% end %>
+
+      <% if question.kind == "DateField" %>
+        <% is_active = (answer.present? && answer["start"].present?) && params[:advanced_search].present?%>
+      <% else %>
+        <% is_active = (answer.present? || ['is_blank','any'].include?(selected_option)) && params[:advanced_search].present?%>
+      <% end %>
+      <% if question.kind == "ChoiceField" %>
+        <div class="search_filter_options" style="display:<%= is_active ? 'block' : 'none'%>">
+          <div class="search_filter_option">
+            <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip checkbox_search", title: "Reset Search", data: {value: (answer || "").split(",").join(","), id: "answer_#{survey.id}_#{question.id}"} %>
+          </div>
+        </div>
+      <% elsif question.kind == "TextField" %>
+        <div class="search_filter_options" style="display:<%= is_active ? 'block' : 'none'%>">
+          <div class="search_filter_option">
+            <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip textbox_search", title: "Reset Search", data: {value: (answer || ""), option: selected_option, id: "answer_#{survey.id}_#{question.id}"} %>
+          </div>
+        </div>
+      <% end %>
+      <div class="field_title">
+        <span class="arrow">
+          <%=raw is_active ? "&#x25BC;" : "&#x25B6;"%>
+        </span>
+        <span class="text"><%= question.label %></span>
+      </div>
+      <div class="field_element <%= 'active' if is_active %>">
+        <% if question.kind == "TextField" %>
+          <div class="field_option near">
+            <%= select_tag "survey_answer_option[#{survey.id}][#{question.id}]", options_for_select(Element::TEXTFIELD_MATCH, selected_option),
+                id: "answer_#{survey.id}_#{question.id}_textbox_option", class: "textfield_search_option" %>
+          </div>
+          <div class="field_option">
+            <%= text_field_tag "survey_answer[#{survey.id}][#{question.id}]", answer,
+                autocomplete: "off", class: "text_field", id: "answer_#{survey.id}_#{question.id}_textbox_answer" %>
+          </div>
+        <% elsif question.kind == "ChoiceField" %>
+          <% question.content.split("\r\n").each do |option| %>
+            <div class="field_option fixed">
+              <%= check_box_tag "survey_answer[#{survey.id}][#{question.id}][]", option, answer.present? && answer.include?(option), class: "answer_#{survey.id}_#{question.id}_checkbox" %>
+              <%= option %>
+            </div>
+          <% end %>
+          <div class="field_option fixed">
+            <%= check_box_tag "survey_answer[#{survey.id}][#{question.id}][]", "no_response", answer.present? && answer.include?("no_response"), class: "answer_#{survey.id}_#{question.id}_checkbox" %>
+            No Response
+          </div>
+        <% elsif question.kind == "DateField" %>
+          <div class="field_option near custom_datefield">
+            <%= select_tag "survey_answer_option[#{survey.id}][#{question.id}]", options_for_select(Element::DATEFIELD_MATCH, selected_option), class: "datefield_option_select" %>
+          </div>
+          <% if answer.present? && answer["start"].present? %>
+            <% answer_start = answer["start"].to_date %>
+            <% answer_start_year = answer["start"].split("-").first() %>
+            <% answer_end = answer["end"].to_date %>
+            <% answer_end_year = answer["end"].split("-").first() %>
+          <% else %>
+            <% answer_start = nil %>
+            <% answer_start_year = nil %>
+            <% answer_end = nil %>
+            <% answer_end_year = nil %>
+          <% end %>
+          <div class="field_option datefield datefield_start_select">
+            Day:
+            <%= date_select "survey_answer[#{survey.id}][#{question.id}][start]", "", {:default => answer_start, :discard_year => true, order: [:day, :month, :year]}, {class: "date_field_survey"} %>
+            Year:
+            <%= text_field_tag "survey_answer[#{survey.id}][#{question.id}][start][(1i)]", answer_start_year, style: "width: 35px", placeholder: "" %>
+          </div>
+          <div class="field_option near custom_datefield"></div>
+          <div class="field_option datefield datefield_end_select" style="display: <%= selected_option == 'between' ? 'inline-block' : 'none'%>">
+            <% answer_year = answer.present? && answer["end"].present? ? answer["end"].split("-").first() : nil %>
+            Day:
+            <%= date_select "survey_answer[#{survey.id}][#{question.id}][end]", "", {:default => answer_end, :include_blank => true, :discard_year => true, order: [:day, :month, :year]}, {class: "date_field_survey"} %>
+            Year:
+            <%= text_field_tag "survey_answer[#{survey.id}][#{question.id}][end][(1i)]", answer_end_year, style: "width: 35px", placeholder: "" %>
+          </div>
+        <% else %>
+          <%= question.kind %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="note">
+    <%= t('dialogs.advanced_search.search_filter.survey_questions.no_questions') %>
+  </div>
+<% end %>

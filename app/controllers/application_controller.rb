@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
   before_filter :authenticate_user!, :except => [:facebook_logout]
+  before_filter :clear_advanced_search
   before_filter :set_login_cookie
   before_filter :check_su
   before_filter :check_valid_subdomain
@@ -14,6 +15,10 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery
+
+  def clear_advanced_search
+    session[:filters] = nil
+  end
 
   def set_user_time_zone
     old_time_zone = Time.zone
@@ -54,6 +59,15 @@ class ApplicationController < ActionController::Base
     term = "%"+term[1..term.size] if term.first == "*"
     term = term[0..term.size-2]+"%" if term.last == "*"
     return term
+  end
+
+  def convert_hash_to_url(hash)
+    return "/allcontacts?#{hash.reject{|k,v| ['action','controller'].include?(k) }.to_param}" if hash.present?
+  end
+
+
+  def search?
+    params[:advanced_search].present? || params[:do_search].present? || params[:search].present?
   end
 
   protected

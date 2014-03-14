@@ -1,0 +1,70 @@
+<div id="advanced_search_div" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box" id="search_people_filters_box">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          Advanced Search
+        </span>
+      </div>
+      <div class="mh_popup_box_content">
+        <div class="mh_popup_box_scroller">
+          <%= form_tag params, method: :get, id: 'advanced_search_form' do %>
+            <%= hidden_field_tag :advanced_search, 1 %>
+            <!-- <%= hidden_field_tag :assigned_to, params[:assigned_to] if params[:assigned_to].present? %>
+            <%= hidden_field_tag :filter_label, params[:filter_label] if params[:filter_label].present? %>
+            <%= hidden_field_tag :interaction_type, params[:interaction_type] if params[:interaction_type].present? %>
+            <%= hidden_field_tag :permission, params[:permission] if params[:permission].present? %>
+            <%= hidden_field_tag :completed, params[:completed] if params[:completed].present? %>
+            <%= hidden_field_tag :archived, params[:archived] if params[:archived].present? %> -->
+            <div class="search_section">
+              <div class="search_section_title"><%= t('.search_any') %></div>
+              <div class="search_plain">
+                <div class="fields">
+                  <%= text_field_tag :search_any, params[:search_any],
+                      class: "field-full", placeholder: t('.search_any_guide') %>
+                </div>
+              </div>
+            </div>
+            <div class="search_section">
+              <div class="search_section_title"><%= t('.search_filter.title') %></div>
+              <div class="search_category" id="search_filter_contact_data">
+                <%= render partial: "contacts/search_filter_contact_data"%>
+              </div>
+              <div class="search_category" id="search_filter_label_and_group">
+                <%= render partial: "contacts/search_filter_label_and_group"%>
+              </div>
+              <div class="search_category" id="search_filter_surveys">
+                <%= render partial: "contacts/search_filter_surveys"%>
+              </div>
+              <div class="search_category" id="search_filter_survey_questions">
+                <%= render partial: "contacts/search_filter_survey_questions"%>
+              </div>
+            </div>
+            <div class="actionbarinline" style="display:none;">
+              <table>
+                <tr>
+                  <td>
+                    <%= submit_tag t('general.search'), id: 'advanced_search_submit' %>
+                  </td>
+                  <td>
+                    <%= link_to "Hidden Questions", "", id: "search_show_question" %>
+                  </td>
+                </tr>
+              </table>
+              <%#= link_to t('.clear_search_form'), '', onclick: "$('form').clearForm(); return false;" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    	<div class="mh_popup_buttons" id="search_people_filter_buttons">
+    		<button class="red_accent" id="advanced_search_button">Search</button>
+        <% if params[:advanced_search] == "1" && @people.length > 0 && !@saved_contact_search.full_path.present? %>
+          <button class="large_lightgray" id="search_people_filters_save_search_button">Save Search</button>
+        <% end %>
+    		<button class="large_lightgray" id="search_people_filters_hidden_questions_button">Hidden Questions</button>
+    		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

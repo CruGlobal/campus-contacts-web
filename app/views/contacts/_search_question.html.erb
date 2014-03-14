@@ -1,6 +1,6 @@
 <div class="field user_defined" id="search_question_field_<%= q.id %>">
   <span class="title">
-    <%= q.label %> <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
+    <%= q.label %> <%= link_to("(#{t('nav.hide')})", hide_question_column_contacts_path(survey_id: @organization.surveys.first || @predefined_survey.id, question_id: q), remote: true, method: :post, class: 'show_hidden_question_link hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
   </span>
   <% if q.style == 'radio' %>
     <div class="field field_radio">

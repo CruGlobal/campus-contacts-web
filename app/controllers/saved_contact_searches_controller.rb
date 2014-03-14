@@ -1,8 +1,11 @@
 class SavedContactSearchesController < ApplicationController
+  skip_before_filter :clear_advanced_search
+
   def index
   end
 
   def create
+    params[:saved_contact_search][:full_path] = convert_hash_to_url(session[:filters]) if session[:filters].present?
     current_user.saved_contact_searches.create(params[:saved_contact_search]) if params[:saved_contact_search].present?
     redirect_to params[:saved_contact_search][:full_path]
   end
@@ -27,7 +30,7 @@ class SavedContactSearchesController < ApplicationController
   end
 
   def destroy
-    saved_contact_search = SavedContactSearch.find(params[:id])
+    saved_contact_search = current_user.saved_contact_searches.find(params[:id])
     saved_contact_search.destroy
     render :nothing => true
   end
