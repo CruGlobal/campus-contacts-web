@@ -15,7 +15,7 @@
     $.widget("suwala.doubleScroll", {
 		options: {
             contentElement: undefined, // Widest element, if not specified first child element will be used
-			topScrollBarMarkup: '<div class="doubleScroll-wrapper" style="height: 20px; width: 100%;"><div class="doubleScroll-scroll" style="height: 20px;"></div></div>',
+			topScrollBarMarkup: '<div class="doubleScroll-wrapper" style="height: 20px; width: 100%; margin: 0 0 0 1px;"><div class="doubleScroll-scroll" style="height: 20px;"></div></div>',
 			topScrollBarInnerSelector: '.doubleScroll-scroll',
 			scrollCss: {
 				'overflow-x': 'auto',
