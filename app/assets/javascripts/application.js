@@ -22,6 +22,7 @@
 //= require mh
 //= require questions
 //= require contacts
+//= require all_contacts
 //= require my_contacts
 //= require manage_labels
 //= require rails-validations

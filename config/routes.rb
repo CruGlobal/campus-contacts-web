@@ -57,7 +57,6 @@ Mh::Application.routes.draw do
       get :load_more_interactions
       get :load_more_all_feeds
       get :create_label
-      get :set_labels
       get :set_permissions
       get :set_groups
       get :search_leaders
@@ -126,6 +125,7 @@ Mh::Application.routes.draw do
   resources :organizational_labels do
     collection do
       post :update_all
+      post :set_labels
     end
   end
 
