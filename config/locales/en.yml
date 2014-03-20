@@ -1375,6 +1375,7 @@ en:
     index:
       title: Report Movement Indicators for %{org_name}
       list_heading: Suggested Movement Indicator Actions
+      guide: "These suggestions are designed to reinforce the proper labeling of contacts for the <b>involved</b>, <b>engaged disciple</b>, and <b>leader</b> categories, which will be reported on the next page."
       fetching: 'Fetching suggestions (this might take a while)'
       show_old: 'Click here to show old suggestions'
     reasons:
