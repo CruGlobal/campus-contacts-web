@@ -88,7 +88,7 @@ group :development do
   gem 'travis-lint', '~> 1.7.0'
   gem 'mailcatcher', '~> 0.5.12'
   gem 'railroady', '~> 1.1.1'
-  #gem 'localeapp'
+  gem 'localeapp'
   gem "better_errors", ">= 0.7.2"
   #gem "binding_of_caller"
 end
