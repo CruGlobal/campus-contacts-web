@@ -273,6 +273,7 @@ Mh::Application.routes.draw do
     match "/sign_out", to: "sessions#destroy"
     match '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
     match '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
+    match '/users/auth/relay/callback', to: 'users/omniauth_callbacks#relay'
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
 
