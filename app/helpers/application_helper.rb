@@ -16,6 +16,10 @@ module ApplicationHelper
     "<span class=\"icon help tip help_bubble_keyword\" title=\"#{tip}\" style=\"float: none;\"></span>".html_safe
   end
 
+  def dtip(tip)
+    "<span class=\"icon help tipitmiddle help_bubble_keyword\" title=\"#{tip}\" style=\"float: none;\"></span>".html_safe
+  end
+
   def spinner(extra = nil)
     e = extra ? "spinner_#{extra}" : 'spinner'
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')

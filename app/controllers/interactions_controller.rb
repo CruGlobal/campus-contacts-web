@@ -61,29 +61,6 @@ class InteractionsController < ApplicationController
     end
   end
 
-  def set_labels
-    @people = Person.where(id: params[:people_ids].split(','))
-    @label_ids = params[:label_ids].split(',')
-    @remove_label_ids = params[:remove_label_ids].split(',')
-
-    @people.each do |person|
-      @label_ids.each do |label_id|
-        label = person.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id.to_i, current_organization.id)
-        label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
-      end
-      removed_labels = person.organizational_labels_for_org(current_organization).where("label_id IN (?)", @remove_label_ids)
-      removed_labels.delete_all if removed_labels.present?
-    end
-
-    if @people.count == 1
-      @person = @people.first
-      @labels = @person.assigned_organizational_labels(current_organization.id).uniq
-      @all_feeds_page = 1
-      @all_feeds = @person.all_feeds(current_person, current_organization, @all_feeds_page)
-      @last_all_feeds = @person.all_feeds_last(current_person, current_organization)
-    end
-  end
-
   def load_more_all_feeds
     @person = Person.find(params[:person_id])
     @all_feeds_page = params[:next_page].to_i
