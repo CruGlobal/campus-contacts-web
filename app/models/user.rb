@@ -1,6 +1,7 @@
 require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
+require 'errors/not_allowed_to_use_cas_error'
 class User < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
@@ -33,6 +34,26 @@ class User < ActiveRecord::Base
   def self.from_access_token(token)
     if access_token = Rack::OAuth2::Server::AccessToken.find_by_code(token)
       return User.find(access_token.identity)
+    end
+  end
+
+  def self.find_for_cas_oauth(cas_info)
+    data = cas_info['extra']
+    if data['username'].blank?
+      raise NoEmailError
+    else
+      username = data['username']
+      person = Person.find_existing_person_by_email(username)
+      if person.present?
+        user = person.user
+        unless user
+          user = create!(username: username, password: Devise.friendly_token[0,20])
+        end
+      else
+        raise NotAllowedToUseCASError
+      end
+
+      return user
     end
   end
 

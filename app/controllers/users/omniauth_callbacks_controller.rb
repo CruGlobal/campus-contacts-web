@@ -50,6 +50,29 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def relay
+    if user_signed_in?
+      redirect_to root_path
+    else
+      begin
+        @user = User.find_for_cas_oauth(request.env['omniauth.auth'])
+        if @user.present?
+          sign_in(@user)
+          session[:relay_login] = true
+          redirect_to root_path
+        else
+          raise NoEmailError
+        end
+      rescue NotAllowedToUseCASError
+        flash[:error] = t('sessions.new.not_allowed_to_use_cas')
+        redirect_to '/users/sign_in'
+      rescue NoEmailError
+        flash[:error] = t('sessions.new.login_no_email')
+        redirect_to '/users/sign_in'
+      end
+    end
+  end
+
   protected
 
   def after_sign_out_path_for(resource_or_scope)
@@ -83,4 +106,5 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     person
   end
+
 end

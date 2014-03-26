@@ -303,6 +303,10 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
+    omniauth-cas (1.0.4)
+      addressable (~> 2.3)
+      nokogiri (~> 1.6)
+      omniauth (~> 1.1.0)
     omniauth-facebook (1.4.0)
       omniauth-oauth2 (~> 1.0.2)
     omniauth-oauth2 (1.0.3)
@@ -517,6 +521,7 @@ DEPENDENCIES
   nokogiri (~> 1.6.0)
   oj (~> 2.1.7)
   omniauth (~> 1.1.1)
+  omniauth-cas
   omniauth-facebook (= 1.4.0)
   paper_trail (~> 2.7.2)
   paperclip!

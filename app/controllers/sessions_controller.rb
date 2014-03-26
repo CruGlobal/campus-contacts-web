@@ -26,8 +26,14 @@ class SessionsController < Devise::SessionsController
       fb_session_key = split_token[1]
       session[:fb_token] = nil
     end
-    super
-    flash[:facebook_logout] = true
+
+    if session[:relay_login].present?
+      session.clear
+      redirect_to "https://signin.relaysso.org/cas/logout?service="+CGI::escape(root_url)
+    else
+      super
+      flash[:facebook_logout] = true
+    end
   end
 
   protected
