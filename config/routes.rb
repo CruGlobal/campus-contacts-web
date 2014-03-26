@@ -31,6 +31,7 @@ Mh::Application.routes.draw do
       get :fetch_declined_suggestions
       get :confirm
       post :post_to_infobase
+      post :accept_all
     end
   end
 

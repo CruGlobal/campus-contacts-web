@@ -1167,7 +1167,7 @@ div {
 }
 
 
-.suggestions_buttons, .report_buttons {
+.report_buttons {
     height:32px;
     margin: 24px 0 0 0;
 }
@@ -1193,8 +1193,18 @@ button#suggestions_next_button, button#report_submit_button {
 
 /*--- Movement Indicator Suggestions Page -----*/
 
-tfoot#declined_suggestions td {
-    padding:24px 0px 12px 8px;
+#declined_suggestions {
+  padding: 10px;
+  margin-top: 20px;
+  display: inline-block;
+  float: left;
+}
+
+.suggestions_buttons {
+  height:32px;
+  margin: 24px 0 0 0;
+  display: block;
+  text-align: right;
 }
 
 

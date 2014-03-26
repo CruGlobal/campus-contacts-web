@@ -1,8 +1,13 @@
 <% if suggestions.present? %>
+  <tr class='link_to_accept_all_movement_indicator_suggestions'>
+    <td colspan='4' class='aright'>
+      <%= link_to "Accept All Suggestions", accept_all_movement_indicator_suggestions_path, method: 'post', id: 'accept_all_suggestions_link', data: {count: suggestions.count}%>
+    </td>
+  </tr>
   <% suggestions.each do |suggestion| %>
     <% suggestion_presenter = Present(suggestion) %>
-    <tr>
-      <td><%== suggestion_presenter.suggestion %></td>
+    <tr class="suggestion <%= 'declined_suggestion' if suggestion.accepted == false %>">
+      <td class='aleft'><%== suggestion_presenter.suggestion %></td>
       <td><%= link_to('Yes', '#', data: {behavior: 'accept', id: suggestion.id}) %></td>
       <td>
         <% if suggestion.accepted.nil? %>
@@ -12,5 +17,5 @@
     </tr>
   <% end %>
 <% else %>
-  <tr><th>No new suggestions were found.</th></tr>
+  <tr id='no_movement_indicator_suggestion'><th>No new suggestions were found.</th></tr>
 <% end %>

@@ -18,4 +18,21 @@ class MovementIndicatorSuggestionsController < ApplicationController
     end
   end
 
+  def accept_all
+    @accepted_suggestions = MovementIndicatorSuggestion.fetch_active(current_organization)
+    @accepted_suggestions.each do |suggestion|
+      suggestion.accepted = true
+      suggestion.save
+    end if @accepted_suggestions.present?
+
+    if params[:include_declined] == 'true'
+      @declined_suggestions = MovementIndicatorSuggestion.fetch_declined(current_organization)
+      @declined_suggestions.each do |suggestion|
+        suggestion.accepted = true
+        suggestion.save
+      end if @declined_suggestions.present?
+    end
+    redirect_to :back
+  end
+
 end
