@@ -229,6 +229,17 @@ class Person < ActiveRecord::Base
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
 
+  def assign_contacts(ids, org, assigned_by)
+    valid_ids = []
+    ids.each do |contact_id|
+      if org.all_people.exists?(id: contact_id)
+        valid_ids << contact_id
+        self.contact_assignments.find_or_create_by_person_id_and_organization_id(contact_id, org.id)
+      end
+    end
+    LeaderMailer.delay.assignment(valid_ids, self, assigned_by, org) if valid_ids.present?
+  end
+
   def answered_surveys
     survey_ids = answer_sheets.pluck(:survey_id)
     Survey.where(id: survey_ids)

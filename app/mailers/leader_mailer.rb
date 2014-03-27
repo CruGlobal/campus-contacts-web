@@ -18,4 +18,17 @@ class LeaderMailer < ActionMailer::Base
       mail to: @person.email, from: @from, subject: "Missionhub.com - #{@org}"
     end
   end
+
+  def assignment(people_ids, assigned_to, assigned_by, org)
+    @contacts = Person.where(id: people_ids)
+    @assigned_to = assigned_to
+    @assigned_by = assigned_by
+    @organization = org
+    if @assigned_by.present? && @assigned_by.primary_email_address.present?
+      @from = @assigned_by.email
+    else
+      @from = 'support@missionhub.com'
+    end
+    mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
+  end
 end

@@ -27,9 +27,7 @@ class ContactAssignmentsController < ApplicationController
         @reload_sidebar = true
       else
         @assign_to = Person.find(params[:assign_to])
-        params[:ids].each do |id|
-          ContactAssignment.find_or_create_by_person_id_and_organization_id_and_assigned_to_id(id, @organization.id, @assign_to.id)
-        end if params[:ids].present?
+        @assign_to.assign_contacts(params[:ids], current_organization, current_person) if params[:ids].present?
         @reload_sidebar = true
       end
     else
