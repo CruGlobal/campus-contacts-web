@@ -94,6 +94,10 @@ namespace :infobase do
             unless mh_person
               attributes = ccc_person.except('id', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
               attributes['first_name'] = attributes['preferred_name'].present? ? attributes['preferred_name'] : attributes['first_name']
+
+              attributes['graduation_date'] = nil unless Person.valid_attribute?(:graduation_date, attributes['graduation_date'])
+              attributes['birth_date'] = nil unless Person.valid_attribute?(:birth_date, attributes['birth_date'])
+
               attributes['infobase_person_id'] = ccc_person['id']
 
               mh_person_attributes = Person.first.attributes.keys

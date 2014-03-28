@@ -101,6 +101,11 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def self.valid_attribute?(attr, value)
+    mock = self.new(attr => value)
+    (!mock.valid?) && (!mock.errors.has_key?(attr.class == Symbol ? attr : attr.to_sym))
+  end
+
   accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :addresses, :reject_if => lambda { |a| a[:address1].blank? }, allow_destroy: true
