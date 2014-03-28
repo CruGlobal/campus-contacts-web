@@ -7,7 +7,7 @@
   <ul>
   <% @contacts.each do |contact| %>
     <li>
-      <b><%= link_to contact.name, profile_path(contact) %></b>
+      <b><%= link_to contact.name, profile_url(contact) %></b>
     </li>
   <% end %>
   </ul>
