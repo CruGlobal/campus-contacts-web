@@ -4,7 +4,7 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
   belongs_to :label
   attr_accessible :accepted, :reason, :person_id, :label_id, :action
 
-  scope :valid_person, -> { includes(:person).where('people.id IS NOT NULL') }
+  scope :valid_person, -> { includes(:person).where('people.id IS NOT NULL AND people.is_staff IS false') }
   scope :active, -> { where(accepted: nil).valid_person }
   scope :declined, -> { where(accepted: false).valid_person }
 
@@ -54,10 +54,7 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
                 end
 
       if reason
-        org.movement_indicator_suggestions.create(person_id: person.id,
-                                          label_id: Label.leader.id,
-                                          reason: reason,
-                                          action: 'add')
+        generate_suggestion(org, person, Label.leader, reason)
 
         # delete the inverse
         #org.movement_indicator_suggestions.where(person_id: person.id, label_id: Label.leader.id, action: 'remove').first.try(:destroy)
@@ -87,10 +84,7 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
                 end
 
       if reason
-        org.movement_indicator_suggestions.create(person_id: person.id,
-                                          label_id: Label.engaged_disciple.id,
-                                          reason: reason,
-                                          action: 'add')
+        generate_suggestion(org, person, Label.engaged_disciple, reason)
 
         # delete the inverse
         #org.movement_indicator_suggestions.where(person_id: person.id, label_id: Label.engaged_disciple.id, action: 'remove').first.try(:destroy)
@@ -113,15 +107,16 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
                 end
 
       if reason
-        org.movement_indicator_suggestions.create(person_id: person.id,
-                                          label_id: Label.involved.id,
-                                          reason: reason,
-                                          action: 'add')
+        generate_suggestion(org, person, Label.involved, reason)
 
         # delete the inverse
         #org.movement_indicator_suggestions.where(person_id: person.id, label_id: Label.involved.id, action: 'remove').first.try(:destroy)
       end
     end
+  end
+
+  def self.generate_suggestion(org, person, label, reason, action = 'add')
+    org.movement_indicator_suggestions.find_or_create_by_person_id_and_label_id_and_reason_and_action(person.id, label.id, reason, action)
   end
 
   #def self.check_for_remove(person, org, label)
