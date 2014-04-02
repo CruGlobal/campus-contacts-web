@@ -1,0 +1,2 @@
+class NotAllowedToUseKeyError < StandardError
+end

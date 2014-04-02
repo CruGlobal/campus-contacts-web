@@ -2,6 +2,8 @@ require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
 require 'errors/not_allowed_to_use_cas_error'
+require 'errors/not_allowed_to_use_key_error'
+require 'errors/no_ticket_error'
 class User < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
@@ -51,6 +53,24 @@ class User < ActiveRecord::Base
         end
       else
         raise NotAllowedToUseCASError
+      end
+
+      return user
+    end
+  end
+
+  def self.find_for_key_oauth(key_info)
+    data = key_info['extra']
+    if data['user'].blank?
+      raise NoEmailError
+    else
+      email = data['user']
+      person = Person.find_existing_person_by_email(email)
+      if person.present?
+        user = person.user
+        user = create!(username: email, password: Devise.friendly_token[0,20]) unless user
+      else
+        raise NotAllowedToUseKeyError
       end
 
       return user

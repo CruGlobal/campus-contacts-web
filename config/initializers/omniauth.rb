@@ -7,5 +7,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, FB_APP_ID, FB_SECRET, scope: 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
   provider :facebook_mhub, FB_APP_ID_MHUB, FB_SECRET_MHUB, scope: 'user_birthday,email,user_interests,user_location,user_education_history'
   provider :cas, name: 'relay', url: 'https://signin.relaysso.org/cas'
+  provider :cas, name: 'key', url: 'https://thekey.me/cas'
 end
 
