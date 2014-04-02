@@ -9,9 +9,16 @@ div.rollovernum {
   padding:5px 10px 3px;
   position:relative;
   top:-2px;
-
 }
 
 div#hint.rollovernum {
   margin-right:16px;
+}
+
+#suggestions {
+  td {
+    a {
+      color: #0379ae;
+    }
+  }
 }
