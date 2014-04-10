@@ -200,6 +200,7 @@ namespace :sp do
     # Fetch Non-SP Projects
     non_sp = root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first
     non_sp ||= root.children.create!(name: "Other Summer Projects", terminology: 'Other Summer Projects')
+    imported_partner << "Bridges" # skip bridges
     puts "-- Checking Other Summer Projects - #{ministry['name']}"
     (2014..Date.today.year).each do |year|
       puts "---- Importing Other Summer Projects #{year}..."
