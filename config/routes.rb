@@ -275,6 +275,7 @@ Mh::Application.routes.draw do
     match '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
     match '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
     match '/users/auth/relay/callback', to: 'users/omniauth_callbacks#relay'
+    match '/users/auth/key/callback', to: 'users/omniauth_callbacks#key'
   end
   match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
 

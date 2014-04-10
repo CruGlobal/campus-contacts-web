@@ -30,6 +30,9 @@ class SessionsController < Devise::SessionsController
     if session[:relay_login].present?
       session.clear
       redirect_to "https://signin.relaysso.org/cas/logout?service="+CGI::escape(root_url)
+    elsif session[:key_ticket].present?
+      session.clear
+      redirect_to "https://thekey.me/cas/logout?service="+CGI::escape(root_url)
     else
       super
       flash[:facebook_logout] = true
