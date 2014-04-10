@@ -127,9 +127,14 @@ namespace :sp do
     end
   end
 
+  def get_projects(primary_partner, year, is_not = false)
+    project_includes = "pd,apd,opd,staff,volunteers,applicants"
+    filter = is_not ? 'not_primary_partner' : 'primary_partner'
+    return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 100000)['projects']
+  end
+
   # Main Task
   task sync: :environment do
-    project_includes = "pd,apd,opd,staff,volunteers,applicants"
     imported_partner = Array.new
     root = Organization.find_or_create_by_name "Cru"
 
@@ -143,13 +148,13 @@ namespace :sp do
       (2014..Date.today.year).each do |year|
         puts "---- Importing Projects #{year}..."
         search_name = get_search_name(ministry)
-        project_json = SummerProject::Project.get("filters[primary_partner]" => search_name, "filters[year]" => year, include: project_includes)['projects']
+        project_json = get_projects(search_name, year)
         if project_json.present?
           mh_mission = import_mission(year, mh_ministry)
           project_json.each do |project|
             puts "------ Checking Project - #{year} - #{project['name']}"
             imported_partner << project['primary_partner']
-            # mh_project = import_project(project, mh_mission)
+            mh_project = import_project(project, mh_mission)
           end
         end
       end
@@ -166,13 +171,13 @@ namespace :sp do
       mh_region = import_region(region, mh_ministry)
       (2014..Date.today.year).each do |year|
         puts "-------- Importing Projects #{year}..."
-        project_json = SummerProject::Project.get("filters[primary_partner]" => region['abbrv'], "filters[year]" => year, include: project_includes)['projects']
+        project_json = get_projects(region['abbrv'], year)
         if project_json.present?
           mh_mission = import_mission(year, mh_region)
           project_json.each do |project|
             puts "---------- Checking Project - #{year} - #{project['name']}"
             imported_partner << project['primary_partner']
-            # mh_project = import_project(project, mh_mission)
+            mh_project = import_project(project, mh_mission)
           end
         end
       end
@@ -184,13 +189,13 @@ namespace :sp do
       #   mh_team = import_team(team, mh_region)
       #   (2014..Date.today.year).each do |year|
       #     puts "-------- Importing Projects #{year}..."
-      #     project_json = SummerProject::Project.get("filters[primary_partner]" => team['name'], "filters[year]" => year, include: project_includes)['projects']
+      #     project_json = get_projects(team['name'], year)
       #     if project_json.present?
       #       mh_mission = import_mission(year, mh_region)
       #       project_json.each do |project|
       #         puts "---------- Checking Project - #{year} - #{project['name']}"
       #         imported_partner << project['primary_partner']
-      #         # mh_project = import_project(project, mh_mission)
+      #         mh_project = import_project(project, mh_mission)
       #       end
       #     end
       #   end
@@ -205,12 +210,12 @@ namespace :sp do
     (2014..Date.today.year).each do |year|
       puts "---- Importing Other Summer Projects #{year}..."
       puts "---- Not #{imported_partner.uniq}"
-      project_json = SummerProject::Project.get("filters[not_primary_partner]" => imported_partner.uniq.join(','), "filters[year]" => year, include: project_includes)['projects']
+      project_json = get_projects(imported_partner.uniq.join(','), year, true)
       if project_json.present?
         mh_mission = import_mission(year, non_sp)
         project_json.each do |project|
           puts "------ Checking Project - #{year} - #{project['name']}"
-          # mh_project = import_project(project, mh_mission)
+          mh_project = import_project(project, mh_mission)
         end
       end
     end
