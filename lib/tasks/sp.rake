@@ -13,6 +13,18 @@ namespace :sp do
     return org
   end
 
+  def import_region(region_hash, parent_org)
+    org = Organization.where(importable_id: region_hash['id'], importable_type: 'Ccc::Region').first
+    org ||= parent_org.children.create!(name: region_hash['name'], terminology: 'Region', importable_id: region_hash['id'], importable_type: 'Ccc::Region')
+    return org
+  end
+
+  def import_team(team_hash, parent_org)
+    org = Organization.where(importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel').first
+    org ||= parent_org.children.create!(name: team_hash['name'], terminology: 'Missional Team', importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel')
+    return org
+  end
+
   def import_project(project_hash, parent_org)
     org = Organization.where(importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first
     org ||= parent_org.children.create!(name: project_hash['name'], terminology: 'Project', importable_id: project_hash['id'], importable_type: 'Ccc::SpProject')
@@ -36,10 +48,15 @@ namespace :sp do
     return org
   end
 
-  def import_region(region_hash, parent_org)
-    org = Organization.where(importable_id: region_hash['id'], importable_type: 'Ccc::Region').first
-    org ||= parent_org.children.create!(name: region_hash['name'], terminology: 'Region', importable_id: region_hash['id'], importable_type: 'Ccc::Region')
-    return org
+  def get_search_name(ministry)
+    case ministry['name']
+    when 'Athletes In Action'
+      return "AIA"
+    when 'Global Missions'
+      return "WSN"
+    else
+      ministry['name']
+    end
   end
 
   def import_person(person_hash, org, type = 'contact')
@@ -110,68 +127,92 @@ namespace :sp do
     end
   end
 
+  # Main Task
   task sync: :environment do
     project_includes = "pd,apd,opd,staff,volunteers,applicants"
+    imported_partner = Array.new
     root = Organization.find_or_create_by_name "Cru"
 
-    chs_ministry = SummerProject::Ministry.get("filters[name]" => 'Cru High School')['ministries'].first
-    chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first
-
-    # Fetch Ministries
-    ministry_json = SummerProject::Ministry.get("filters[name]" => 'Campus Field Ministry')['ministries']
+    # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
+    ministry_json = SummerProject::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
     ministry_json.each do |ministry|
       puts "-- Checking Ministry - #{ministry['name']}"
       mh_ministry = import_ministry(ministry, root)
 
-      if ministry['name'] != 'Campus Field Ministry'
-        # Import Non-CRU ministries
-        (2013..Date.today.year).each do |year|
-          puts "---- Importing Projects #{year}..."
-
-          search_name = ministry['name'] == 'Athletes In Action' ? "AiA" : ministry['name']
-          project_json = SummerProject::Project.get("filters[primary_partner]" => search_name, "filters[year]" => year, include: project_includes)['projects']
-
-          if project_json.present?
-            mh_mission = import_mission(year, mh_ministry)
-
-            project_json.each do |project|
-              puts "------ Checking Project - #{year} - #{project['name']}"
-              mh_project = import_project(project, mh_mission)
-            end
-
+      # Import Non-CRU ministries
+      (2014..Date.today.year).each do |year|
+        puts "---- Importing Projects #{year}..."
+        search_name = get_search_name(ministry)
+        project_json = SummerProject::Project.get("filters[primary_partner]" => search_name, "filters[year]" => year, include: project_includes)['projects']
+        if project_json.present?
+          mh_mission = import_mission(year, mh_ministry)
+          project_json.each do |project|
+            puts "------ Checking Project - #{year} - #{project['name']}"
+            imported_partner << project['primary_partner']
+            # mh_project = import_project(project, mh_mission)
           end
-        end
-      else
-        # Import CRU ministrty
-
-        puts "---- Importing Regions..."
-        region_json = SummerProject::Region.get()['regions']
-        region_json.each do |region|
-          puts "------ Checking Region - #{region['abbrv']} - #{region['name']}"
-          mh_region = import_region(region, mh_ministry)
-
-          (2013..Date.today.year).each do |year|
-            puts "-------- Importing Projects #{year}..."
-            project_json = SummerProject::Project.get("filters[primary_partner]" => region['abbrv'], "filters[year]" => year, include: project_includes)['projects']
-
-            if project_json.present?
-              mh_mission = import_mission(year, mh_region)
-
-              project_json.each do |project|
-                puts "------ Checking Project - #{year} - #{project['name']}"
-                mh_project = import_project(project, mh_mission)
-              end
-
-            end
-          end
-
-          # puts "-------- Importing Teams..."
-          # team_json = SummerProject::Team.get("filters[region]" => region['region'], per_page: 10000)
-          # team_json.each do |team|
-          #   puts "---------- Checking Team - #{team['lane']} - #{team['name']}"
-          # end
         end
       end
     end
+
+    # Fetch Regions and Teams for Campus Field Ministry
+    ministry = SummerProject::Ministry.get('filters[names]' => 'Campus Field Ministry')['ministries'].first
+    mh_ministry = import_ministry(ministry, root)
+    puts "-- Checking Ministry - #{ministry['name']}"
+    puts "---- Importing Regions..."
+    region_json = SummerProject::Region.get()['regions']
+    region_json.each do |region|
+      puts "------ Checking Region - #{region['abbrv']} - #{region['name']}"
+      mh_region = import_region(region, mh_ministry)
+      (2014..Date.today.year).each do |year|
+        puts "-------- Importing Projects #{year}..."
+        project_json = SummerProject::Project.get("filters[primary_partner]" => region['abbrv'], "filters[year]" => year, include: project_includes)['projects']
+        if project_json.present?
+          mh_mission = import_mission(year, mh_region)
+          project_json.each do |project|
+            puts "---------- Checking Project - #{year} - #{project['name']}"
+            imported_partner << project['primary_partner']
+            # mh_project = import_project(project, mh_mission)
+          end
+        end
+      end
+
+      # puts "---- Importing Team..."
+      # team_json = SummerProject::Team.get('filters[lanes]' => 'SC,CA', 'filters[country]' => 'USA')['teams']
+      # team_json.each do |team|
+      #   puts "------ Checking Team - #{team['lane']} - #{team['name']}"
+      #   mh_team = import_team(team, mh_region)
+      #   (2014..Date.today.year).each do |year|
+      #     puts "-------- Importing Projects #{year}..."
+      #     project_json = SummerProject::Project.get("filters[primary_partner]" => team['name'], "filters[year]" => year, include: project_includes)['projects']
+      #     if project_json.present?
+      #       mh_mission = import_mission(year, mh_region)
+      #       project_json.each do |project|
+      #         puts "---------- Checking Project - #{year} - #{project['name']}"
+      #         imported_partner << project['primary_partner']
+      #         # mh_project = import_project(project, mh_mission)
+      #       end
+      #     end
+      #   end
+      # end
+    end
+
+    # Fetch Non-SP Projects
+    non_sp = root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first
+    non_sp ||= root.children.create!(name: "Other Summer Projects", terminology: 'Other Summer Projects')
+    puts "-- Checking Other Summer Projects - #{ministry['name']}"
+    (2014..Date.today.year).each do |year|
+      puts "---- Importing Other Summer Projects #{year}..."
+      puts "---- Not #{imported_partner.uniq}"
+      project_json = SummerProject::Project.get("filters[not_primary_partner]" => imported_partner.uniq.join(','), "filters[year]" => year, include: project_includes)['projects']
+      if project_json.present?
+        mh_mission = import_mission(year, non_sp)
+        project_json.each do |project|
+          puts "------ Checking Project - #{year} - #{project['name']}"
+          # mh_project = import_project(project, mh_mission)
+        end
+      end
+    end
+
   end
 end
