@@ -475,7 +475,7 @@ class ContactsController < ApplicationController
         @people_scope = @organization.all_archived_people
       elsif params[:filter_label].present?
         if filter_label = Label.find(params[:filter_label])
-          if params[:include_archived].present? && params[:include_archived] == 'true'
+          if params[:include_archived_labels].present? && params[:include_archived_labels] == 'true'
             @people_scope = filter_label.label_contacts_from_org_with_archived(@organization)
           else
             @people_scope = filter_label.label_contacts_from_org(@organization)
