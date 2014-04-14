@@ -60,7 +60,7 @@ gem 'whenever', '~> 0.8.4'
 gem 'wiser_date', '~> 0.3.0'
 gem 'infobase', '~> 1.0.0'
 gem 'multi_json', '~> 1.8.2'
-gem 'sp_client', '~> 1.0.1'
+gem 'sp_client', '~> 1.0.2'
 
 
 group :development, :test do

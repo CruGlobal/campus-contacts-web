@@ -97,10 +97,10 @@ namespace :sp do
       mh_person_attributes = Person.first.attributes.keys
       attributes.slice!(*mh_person_attributes)
 
-      mh_person = Person.create!(attributes)
+      mh_person = Person.create(attributes)
       mh_person.user = user ||
                        User.find_by_username(ccc_user['username']) ||
-                       User.create!(username: ccc_user['username'], password: Time.now.to_i)
+                       User.create(username: ccc_user['username'], password: Devise.friendly_token[0,20])
 
       # copy over email and phone data
       person['email_addresses'].each do |email_address|
@@ -165,7 +165,7 @@ namespace :sp do
     mh_ministry = import_ministry(ministry, root)
     puts "-- Checking Ministry - #{ministry['name']}"
     puts "---- Importing Regions..."
-    region_json = SummerProject::Region.get()['regions']
+    region_json = Infobase::Region.get()['regions']
     region_json.each do |region|
       puts "------ Checking Region - #{region['abbrv']} - #{region['name']}"
       mh_region = import_region(region, mh_ministry)
