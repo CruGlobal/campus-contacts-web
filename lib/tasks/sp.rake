@@ -139,7 +139,7 @@ namespace :sp do
     root = Organization.find_or_create_by_name "Cru"
 
     # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
-    ministry_json = SummerProject::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
+    ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
     ministry_json.each do |ministry|
       puts "-- Checking Ministry - #{ministry['name']}"
       mh_ministry = import_ministry(ministry, root)
@@ -161,7 +161,7 @@ namespace :sp do
     end
 
     # Fetch Regions and Teams for Campus Field Ministry
-    ministry = SummerProject::Ministry.get('filters[names]' => 'Campus Field Ministry')['ministries'].first
+    ministry = Infobase::Ministry.get('filters[names]' => 'Campus Field Ministry')['ministries'].first
     mh_ministry = import_ministry(ministry, root)
     puts "-- Checking Ministry - #{ministry['name']}"
     puts "---- Importing Regions..."
@@ -183,7 +183,7 @@ namespace :sp do
       end
 
       # puts "---- Importing Team..."
-      # team_json = SummerProject::Team.get('filters[lanes]' => 'SC,CA', 'filters[country]' => 'USA')['teams']
+      # team_json = Infobase::Team.get('filters[lanes]' => 'SC,CA', 'filters[country]' => 'USA')['teams']
       # team_json.each do |team|
       #   puts "------ Checking Team - #{team['lane']} - #{team['name']}"
       #   mh_team = import_team(team, mh_region)
