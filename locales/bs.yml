@@ -60,6 +60,9 @@ bs:
     assign_search:
       assign_explanation: 
       assign_to_user_note: 
+      copy_interactions: 
+      copy_interactions_help: 
+      copy_survey_answers: 
       keep_contact: 
       me: 
       type_to_find_group: 
@@ -81,6 +84,8 @@ bs:
       multiplying: 
       pioneering: 
       title: 
+    trend:
+      year_ago: 
   contacts:
     add_contact: 
     all_contacts:
@@ -434,6 +439,8 @@ bs:
     email_autocomplete_description: 
     email_autocomplete_description_admin: 
     email_note: 
+    export_csv_help: 
+    export_vcard_help: 
     faculty: 
     female: 
     first_name: 
