@@ -74,71 +74,9 @@ namespace :infobase do
             end
 
             teams[team['id']] = mh_team
-            i = 0
-
             puts "------ Importing people..."
             team['people'].each do |ccc_person|
-              puts "-------- Import Person - #{ccc_person['first_name']} #{ccc_person['last_name']}"
-
-              next unless ccc_person['user_id'].present?
-              begin
-                ccc_user = Infobase::User.find(ccc_person['user_id'], include: 'authentications')['user']
-              rescue
-                next
-              end
-
-              # If this person doesn't already exist in missionhub, we need to create them
-              # We'll try to match on FB authentication, then username
-
-              unless mh_person = Person.where(infobase_person_id: ccc_person['id']).first
-                ccc_authentication = ccc_user['authentications'].detect {|a| a['provider'] == 'facebook'}
-                authentication = Authentication.where(ccc_authentication.slice('provider', 'uid')).first if ccc_authentication
-                if authentication && authentication.user
-                  mh_person = authentication.user.person
-                else
-                  user = User.find_by_username(ccc_user['username'])
-                  mh_person = user.person if user
-                end
-              end
-
-              # If we didn't find a corresponding person in MH, create one
-              unless mh_person
-                attributes = ccc_person.except('id', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
-                attributes['first_name'] = attributes['preferred_name'].present? ? attributes['preferred_name'] : attributes['first_name']
-
-                attributes['graduation_date'] = nil unless Person.valid_attribute?(:graduation_date, attributes['graduation_date'])
-                attributes['birth_date'] = nil unless Person.valid_attribute?(:birth_date, attributes['birth_date'])
-
-                attributes['infobase_person_id'] = ccc_person['id']
-
-                mh_person_attributes = Person.first.attributes.keys
-                attributes.slice!(*mh_person_attributes)
-
-                mh_person = Person.create!(attributes)
-                mh_person.user = user ||
-                                 User.find_by_username(ccc_user['username']) ||
-                                 User.create!(username: ccc_user['username'], password: Time.now.to_i)
-
-                # copy over email and phone data
-                ccc_person['email_addresses'].each do |email_address|
-                  mh_person.email = email_address['email'] unless mh_person.email_addresses.detect {|e| email_address['email'] == e.email} || EmailAddress.where(email: email_address['email']).first
-                end
-
-
-                mh_person.save!
-
-                ccc_person['phone_numbers'].each do |phone|
-                  mh_person.phone_number = phone['number'] unless mh_person.phone_numbers.detect {|p| p.number == phone['number']}
-                end
-              end
-
-              mh_person.sp_person_id = mh_person.si_person_id = mh_person.pr_person_id = mh_person.infobase_person_id = ccc_person['id']
-              mh_person.save(validate: false) if mh_person.changed?
-
-              mh_team.add_admin(mh_person)
-
-              i += 1
-              puts i if i % 1000 == 0
+              mh_team.import_person_from_api(ccc_person, 'admin')
             end
 
 
