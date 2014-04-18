@@ -9,7 +9,7 @@ class SurveyResponsesController < ApplicationController
 
   def new
     unless mhub? || Rails.env.test?
-      redirect_to new_survey_response_url(params.merge(host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      redirect_to new_survey_response_url(params.merge(protocol: 'http', host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
       return false
     end
 
