@@ -15,6 +15,7 @@ Mh::Application.routes.draw do
     member do
       get :show, as: 'profile'
       post :change_avatar
+      post :remove_avatar
     end
   end
 
