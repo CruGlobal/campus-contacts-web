@@ -58,10 +58,7 @@ class SentSms < ActiveRecord::Base
     END
   end
 
-  def to_bulksms
-    url = APP_CONFIG['bulksms_url']
-    login = APP_CONFIG['bulksms_username']
-    password = APP_CONFIG['bulksms_password']
+  def to_bulksms(url, login, password)
 
     SentSms.smart_split(message, separator).each_with_index do |message, i|
       msgid = URI.encode("#{id}-#{i+1}")
@@ -72,8 +69,8 @@ class SentSms < ActiveRecord::Base
 
       begin
         response = open(request).read
-        response_hash = Hash.from_xml(response)
-        response_code = response_hash['REPONSE']['statut'].to_i
+        response_hash = response.split("|")
+        response_code = response_hash.first.to_i
         self.update_attribute('reports', response_hash)
         if response_code == 0
           puts "Success (#{response_code})"
@@ -130,7 +127,9 @@ class SentSms < ActiveRecord::Base
     when 'smseco'
       to_smseco
     when 'bulksms'
-      to_bulksms
+      to_bulksms(APP_CONFIG['bulksms_url'], APP_CONFIG['bulksms_username'], APP_CONFIG['bulksms_password'])
+    when 'bulksms1'
+      to_bulksms(APP_CONFIG['bulksms_url1'], APP_CONFIG['bulksms_username1'], APP_CONFIG['bulksms_password1'])
     else
       if received_sms
         from = received_sms.shortcode

@@ -263,6 +263,8 @@ class Organization < ActiveRecord::Base
     end
     if APP_CONFIG['bulksms_gateway_orgs'].present? && APP_CONFIG['bulksms_gateway_orgs'].include?(id)
       return 'bulksms'
+    elsif APP_CONFIG['bulksms_gateway_orgs1'].present? && APP_CONFIG['bulksms_gateway_orgs1'].include?(id)
+      return 'bulksms1'
     elsif APP_CONFIG['smseco_gateway_orgs'].present? && APP_CONFIG['smseco_gateway_orgs'].include?(id)
       return 'smseco'
     else
