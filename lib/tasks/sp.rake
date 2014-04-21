@@ -9,8 +9,9 @@ namespace :sp do
   end
 
   def import_mission(year, parent_org)
-    org = parent_org.children.where(name: "Summer Mission #{year}", terminology: 'Mission').first
-    org ||= parent_org.children.create!(name: "Summer Mission #{year}", terminology: 'Mission')
+    org = parent_org.children.where(name: ["Summer Mission #{year}","Summer Missions #{year}"], terminology: 'Mission').first
+    org.update_attribute(:name, "Summer Missions #{year}") if org.name == "Summer Mission #{year}"
+    org ||= parent_org.children.create!(name: "Summer Missions #{year}", terminology: 'Mission')
     return org
   end
 
@@ -33,6 +34,7 @@ namespace :sp do
     org.import_person_from_api(project_hash['pd'], 'admin') if project_hash['pd'].present?
     org.import_person_from_api(project_hash['apd'], 'admin') if project_hash['apd'].present?
     org.import_person_from_api(project_hash['opd'], 'admin') if project_hash['opd'].present?
+    org.import_person_from_api(project_hash['coordinator'], 'admin') if project_hash['opd'].present?
 
     project_hash['staff'].each do |person|
       org.import_person_from_api(person, 'user')
