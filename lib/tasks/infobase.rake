@@ -1,4 +1,6 @@
 namespace :infobase do
+  require "import_methods"
+
   desc "pulls the ministry_* table info into missionhub tables"
   task sync: :environment do
     root = Organization.find_or_create_by_name "Cru"
@@ -76,7 +78,7 @@ namespace :infobase do
             teams[team['id']] = mh_team
             puts "------ Importing people..."
             team['people'].each do |ccc_person|
-              mh_team.import_person_from_api(ccc_person, 'admin')
+              ImportMethods.person_from_api(ccc_person, mh_team, 'admin')
             end
 
 

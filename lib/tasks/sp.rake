@@ -1,4 +1,5 @@
 namespace :sp do
+  require "import_methods"
 
   desc "pulls the ministry_* table info into missionhub tables"
 
@@ -31,21 +32,21 @@ namespace :sp do
     org = Organization.where(importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first
     org ||= parent_org.children.create!(name: project_hash['name'], terminology: 'Project', importable_id: project_hash['id'], importable_type: 'Ccc::SpProject')
 
-    org.import_person_from_api(project_hash['pd'], 'admin') if project_hash['pd'].present?
-    org.import_person_from_api(project_hash['apd'], 'admin') if project_hash['apd'].present?
-    org.import_person_from_api(project_hash['opd'], 'admin') if project_hash['opd'].present?
-    org.import_person_from_api(project_hash['coordinator'], 'admin') if project_hash['opd'].present?
+    ImportMethods.person_from_api(project_hash['pd'], org, 'admin') if project_hash['pd'].present?
+    ImportMethods.person_from_api(project_hash['apd'], org, 'admin') if project_hash['apd'].present?
+    ImportMethods.person_from_api(project_hash['opd'], org, 'admin') if project_hash['opd'].present?
+    ImportMethods.person_from_api(project_hash['coordinator'], org, 'admin') if project_hash['coordinator'].present?
 
     project_hash['staff'].each do |person|
-      org.import_person_from_api(person, 'user')
+      ImportMethods.person_from_api(person, org, 'user')
     end if project_hash['staff'].present?
 
     project_hash['volunteers'].each do |person|
-      org.import_person_from_api(person, 'user')
+      ImportMethods.person_from_api(person, org, 'user')
     end if project_hash['volunteers'].present?
 
     project_hash['applicants'].each do |person|
-      org.import_person_from_api(person, 'contact')
+      ImportMethods.person_from_api(person, org, 'contact')
     end if project_hash['applicants'].present?
 
     return org
