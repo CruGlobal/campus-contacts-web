@@ -24,6 +24,7 @@ job_type :rails,    "cd :path && PATH=/usr/local/bin:$PATH RAILS_ENV=:environmen
 
 every 4.hours do
   rake "infobase:sync"
+  rake "sp:sync"
 end
 
 every 1.day do
