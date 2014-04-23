@@ -91,15 +91,14 @@ namespace :infobase do
                 mh_activity = Organization.where(importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity').first
                 attribs = {name: "#{strategies[activity['strategy']]} at #{activity['target_area']['name']}", terminology: 'Movement', importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity', status: 'active'}
                 if mh_activity
-                  if mh_team == mh_activity.parent
-                    mh_activity.update_attributes(attribs)
-                  else
-                    begin
-                      # The movement was moved from one team to another
-                      mh_activity.parent = mh_team
-                      mh_activity.save!
-                    rescue; end
+                  mh_activity.update_attributes(attribs)
+
+                  if mh_activity.parent_organization != mh_team
+                    mh_activity.parent_organization = mh_team
                   end
+
+                  # Ensure that the parents are synchronized
+                  mh_activity.fix_ancestry
                 else
                   next unless mh_team
                   mh_activity = mh_team.children.create!(attribs)
