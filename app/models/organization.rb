@@ -330,8 +330,29 @@ class Organization < ActiveRecord::Base
   def to_s() name; end
 
   def parent_organization
-    org = Organization.find(ancestry.split('/').last) if ancestry.present?
-    return org if org.present?
+    @parent_organization ||= Organization.find(ancestry.split('/').last) if ancestry.present?
+  end
+
+  def parent_organization=(new_parent)
+    return nil if new_parent.present? && !new_parent.is_a?(Organization)
+    if new_parent.present? && parent != new_parent
+      self.parent = new_parent
+      save!
+    end
+  end
+
+  def fix_ancestry
+    if parent_organization.present?
+      if parent_organization.ancestry.present?
+        correct_ancestry = "#{parent_organization.ancestry}/#{parent_organization.id}"
+      else
+        correct_ancestry = "#{parent_organization.id}"
+      end
+      unless ancestry == correct_ancestry
+        self.update_attribute(:ancestry, correct_ancestry)
+      end
+      parent_organization.fix_ancestry
+    end
   end
 
   def permission_set
