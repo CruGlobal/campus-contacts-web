@@ -11,7 +11,7 @@ namespace :sp do
 
   def import_mission(year, parent_org)
     org = parent_org.children.where(name: ["Summer Mission #{year}","Summer Missions #{year}"], terminology: 'Mission').first
-    org.update_attribute(:name, "Summer Missions #{year}") if org.name == "Summer Mission #{year}"
+    org.update_attribute(:name, "Summer Missions #{year}") if org.present? && org.name == "Summer Mission #{year}"
     org ||= parent_org.children.create!(name: "Summer Missions #{year}", terminology: 'Mission')
     return org
   end
