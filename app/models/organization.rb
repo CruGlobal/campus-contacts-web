@@ -336,8 +336,10 @@ class Organization < ActiveRecord::Base
   def parent_organization=(new_parent)
     return nil if new_parent.present? && !new_parent.is_a?(Organization)
     if new_parent.present? && parent != new_parent
-      self.parent = new_parent
-      save!
+      begin
+        self.parent = new_parent
+        save!
+      rescue; end
     end
   end
 
