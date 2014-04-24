@@ -3,6 +3,11 @@
   <div class="info change_avatar">
     Click to change avatar.
   </div>
+  <% if @person.fb_uid.present? || @person.avatar.exists? %>
+    <div class="info">
+      <%= link_to("Click to remove avatar.", remove_avatar_profile_path, method: :post, data:{confirm: "Do you want to remove this avatar?"}) %>
+    </div>
+  <% end %>
 </div>
 
 <div id="profile_label_header">

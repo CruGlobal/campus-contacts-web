@@ -11,7 +11,7 @@
             <div class='info'>
               Some Facebook users may not appear because of their privacy settings.
             </div>
-      			<%= f.hidden_field :fb_uid, data: {default: current_person.fb_uid} %>
+      			<%= f.hidden_field :fb_uid, data: {default: @person.fb_uid} %>
           </div>
           <div id="avatar_browse_container">
             <button id="browse_avatar" name="button" type="submit">Browse Computer</button>

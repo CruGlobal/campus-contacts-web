@@ -45,6 +45,16 @@ class ProfileController < ApplicationController
     redirect_to :back
   end
 
+  def remove_avatar
+    @person = Person.find(params[:id])
+    if @person.present?
+      @person.fb_uid = nil if @person.fb_uid.present?
+      @person.avatar.destroy if @person.avatar.exists?
+      @person.save
+    end
+    redirect_to :back
+  end
+
   protected
   def authorize
     authorize! :manage_contacts, current_organization
