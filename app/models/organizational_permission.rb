@@ -82,7 +82,7 @@ class OrganizationalPermission < ActiveRecord::Base
       person.user.remember_token = token
       person.user.remember_token_expires_at = 1.month.from_now
       person.user.save(validate: false)
-      LeaderMailer.delay.added(person, added_by_id, self.organization, token)
+      LeaderMailer.delay.added(person, added_by_id, self.organization, token, permission.name)
     end
   end
 
