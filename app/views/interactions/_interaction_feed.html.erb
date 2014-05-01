@@ -3,10 +3,12 @@
 	<div class="feed_item_header">
     <span class="feed_item_date"><%= wiser_date(interaction.timestamp, custom_class: 'tip') %></span>
     <span class="feed_item_privacy">
-      <strong>Visible to:&nbsp;</strong><%= interaction.privacy %>
       <%= link_to image_tag("edit_sprite.png"), "#menutop", class: "edit_feed_icon tip", "data-id" => interaction.id, "data-person-id" => @person.id, title: "Edit Interaction" %>
     </span>
 	</div>
+  <div class="feed_visible_to">
+    <strong>Visible to:&nbsp;</strong><%= interaction.privacy %>
+  </div>
 	<div class="feed_item_content"><%= interaction.title %></div>
   <% if interaction.comment.present? %>
   	<div class="feed_item_comment">
