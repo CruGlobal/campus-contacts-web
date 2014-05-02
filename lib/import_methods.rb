@@ -1,10 +1,14 @@
 module ImportMethods
   def self.person_from_api(person_hash, org, type = 'contact')
-    return nil unless person_hash['user_id'].present?
-    puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']}"
+    unless person_hash['user_id'].present?
+      puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Failed! ~ user_id not present in summer project db"
+      return nil
+    end
+
     begin
       ccc_user = SummerProject::User.find(person_hash['user_id'], include: 'authentications')['user']
     rescue
+      puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Failed! ~ user_id not found in summer project db"
       return nil
     end
 
@@ -25,7 +29,10 @@ module ImportMethods
     # If we didn't find a corresponding person in MH, create one
     unless mh_person
       person = SummerProject::Person.get('filters[id]' => person_hash['id'], include: 'current_address,email_addresses,phone_numbers')['people'].first
-      return nil unless person.present?
+      unless person.present?
+        puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Failed! ~ person not found in summper project db"
+        return nil
+      end
 
       attributes = person.except('id', 'created_at', 'dateChanged', 'fk_ssmUserId', 'fk_StaffSiteProfileID', 'fk_spouseID', 'fk_childOf', 'primary_campus_involvement_id', 'mentor_id')
       attributes['first_name'] = attributes['preferred_name'].present? ? attributes['preferred_name'] : attributes['first_name']
@@ -65,6 +72,7 @@ module ImportMethods
     else
       org.add_contact(mh_person)
     end
+    puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Success!"
     return mh_person
   end
 end
