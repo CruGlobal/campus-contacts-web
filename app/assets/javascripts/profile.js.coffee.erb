@@ -1,4 +1,11 @@
 $ ->
+  $(document).on 'click', '.info_edit #person_faculty', (e)->
+    if $(this).is(':checked')
+      $('#student_status_div').hide()
+    else
+      $('#student_status_div').show()
+
+
   $(document).on 'click', '.change_avatar', (e)->
     e.preventDefault()
     $('#avatar_fb_container').show()

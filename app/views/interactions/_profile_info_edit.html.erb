@@ -73,6 +73,45 @@
         </div>
       </div>
 
+      <% if current_organization.is_cru? %>
+        <div id="cru_status_div">
+        	<div class="gender col_left">Cru Status:</div>
+        	<div class="gender col_right">
+            <%= pf.text_field :cru_status_id, id: 'cru_status_id', class: 'hidden' %>
+            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.cru_status_id %>">
+              <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+              <div id="selected"><%= @person.cru_status || 'Select Status' %></div>
+              <div id="togglable">
+                <% CruStatus.all.each do |cru_status| %>
+                  <div class="option" data-id="<%= cru_status.id %>" data-name="<%= cru_status.name %>">
+                    <%= cru_status.name %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="student_status_div" style="display: <%= @person.faculty? ? 'none' : 'block' %>;">
+        	<div class="gender col_left">Student Status:</div>
+        	<div class="gender col_right">
+            <%= pf.text_field :student_status, id: 'student_status', class: 'hidden' %>
+            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.cru_status_id %>">
+              <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+              <% status = @person.student_status.present? ? Person::STUDENT_STATUS[@person.student_status] : 'Select Status' %>
+              <div id="selected"><%= status %></div>
+              <div id="togglable">
+                <% Person::STUDENT_STATUS.each do |key, val| %>
+                  <div class="option" data-id="<%= key %>" data-name="<%= val %>">
+                    <%= val %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
   		<div class="gender col_left">
         <label for="person_gender"><%= t('general.gender') %></label>:
       </div>

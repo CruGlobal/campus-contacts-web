@@ -3,6 +3,7 @@ require 'vpim/vcard'
 require 'vpim/book'
 
 class Person < ActiveRecord::Base
+  STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
@@ -13,6 +14,7 @@ class Person < ActiveRecord::Base
   validates_attachment :avatar,
     :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
 
+  belongs_to :cru_status
   belongs_to :interaction_initiator
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
