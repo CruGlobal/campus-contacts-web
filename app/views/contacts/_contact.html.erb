@@ -19,9 +19,9 @@
   <td class="cell status">
     <% if contact_permission %>
       <%= contact_permission.followup_status.to_s.titleize %>
-      <% if person.organizational_permissions.where('organizational_permissions.organization_id' => current_organization.id).blank? %>
-        <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
-      <% end %>
+    <% end %>
+    <% if person.organizational_permissions.is_archived?(current_organization) %>
+      <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>
     <% end %>
   </td>
   <% end %>
