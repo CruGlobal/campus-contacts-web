@@ -98,6 +98,10 @@ class OrganizationalPermission < ActiveRecord::Base
     update_attributes({:archive_date => nil})
   end
 
+  def self.is_archived?(organization)
+    self.where('organizational_permissions.organization_id' => organization.id).blank?
+  end
+
   class InvalidPersonAttributesError < StandardError
 
   end
