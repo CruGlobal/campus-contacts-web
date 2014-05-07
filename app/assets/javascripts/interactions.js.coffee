@@ -234,6 +234,14 @@ $ ->
       $(document).click()
       $('form#new_interaction_form').submit()
 
+  $('.custom_dropdown.select_one .option').live 'click', (e)->
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    dropdown = $(this).parents('.custom_dropdown')
+    dropdown.children('#selected').text(selected_name)
+    dropdown.prev('input').val(selected_id)
+    dropdown.removeClass('active')
+
   $('#privacy_setting_dropdown .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')
     selected_id = $(this).attr('data-id')

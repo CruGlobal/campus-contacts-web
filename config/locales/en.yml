@@ -166,6 +166,7 @@ en:
     state: State
     country: Country
     zip: Zip
+
     alert: Alert
     permission: Label
     save: 'Save'
@@ -186,6 +187,8 @@ en:
     both: Both
     gender: Gender
     status: Status
+    cru_status: "Cru Status"
+    student_status: "Student Status"
     first_name: First Name
     last_name: Last Name
     email: Email

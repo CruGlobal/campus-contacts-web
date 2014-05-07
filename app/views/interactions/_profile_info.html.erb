@@ -34,6 +34,19 @@
     </div>
   <% end %>
 
+  <% if current_organization.is_cru? && @person.cru_status.present? %>
+  	<div class="gender col_left"><%= t('general.cru_status') %>:</div>
+  	<div class="gender col_right"><%= @person.cru_status.name %></div>
+  <% end %>
+
+  <% if current_organization.is_cru? && @person.student_status.present? && !@person.faculty? %>
+  	<div class="gender col_left"><%= t('general.student_status') %>:</div>
+  	<div class="gender col_right">
+      <% status = @person.student_status.present? ? Person::STUDENT_STATUS[@person.student_status] : 'Select Status' %>
+      <%= status %>
+    </div>
+  <% end %>
+
   <% if @person.gender.present? %>
   	<div class="gender col_left"><%= t('general.gender') %>:</div>
   	<div class="gender col_right"><%= @person.gender %></div>
