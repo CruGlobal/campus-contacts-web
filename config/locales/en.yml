@@ -19,6 +19,14 @@ en:
   dialogs:
     dialog_labels:
       guide: "A dash means only some of the selected contacts have the label. A check mark means all selected contacts have the label. An empty box means no one has the label. Click the box to change to checked or empty. Remember to click save changes."
+    dialog_avatar:
+      dialog_title: "Profile Picture"
+      change_avatar: "Click to change picture"
+      remove_avatar: "Click to remove picture"
+      confirm_remove: "Do you want to remove this picture?"
+      facebook_search_guide: "Some Facebook users may not appear because of their privacy settings."
+      browse_computer: "Browse Computer"
+      invalid_format: "Invalid picture format, please upload .jpg, .jpeg, .png, or .gif file"
     search_people_filters:
       search_placeholder: 'Search for the first name, last name or email.'
       search_title: 'Search'
