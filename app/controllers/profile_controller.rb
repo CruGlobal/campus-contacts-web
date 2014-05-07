@@ -40,9 +40,10 @@ class ProfileController < ApplicationController
         @person.update_attributes(fb_uid: params[:person][:fb_uid], avatar: nil)
       else
         @person.update_attributes(params[:person])
+        @msg = I18n.t('dialogs.dialog_avatar.invalid_format') if @person.invalid?
       end
     end
-    redirect_to :back
+    redirect_to :back, notice: @msg || nil
   end
 
   def remove_avatar
