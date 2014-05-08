@@ -28,7 +28,7 @@ module ImportMethods
 
     # If we didn't find a corresponding person in MH, create one
     unless mh_person
-      person = SummerProject::Person.get('filters[id]' => person_hash['id'], include: 'current_address,email_addresses,phone_numbers')['people'].first
+      person = SummerProject::Person.get('filters[id]' => person_hash['id'], include: 'current_address,email_addresses,phone_numbers', include_secure: true)['people'].first
       unless person.present?
         puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Failed! ~ person not found in summper project db"
         return nil
