@@ -4,6 +4,7 @@ class OrganizationalPermission < ActiveRecord::Base
                              person_id: :person_id }
 
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
+  belongs_to :cru_status
   belongs_to :person, :touch => true
   belongs_to :permission
   belongs_to :organization

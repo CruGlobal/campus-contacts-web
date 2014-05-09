@@ -77,10 +77,12 @@
         <div id="cru_status_div">
         	<div class="gender col_left">Cru Status:</div>
         	<div class="gender col_right">
-            <%= pf.text_field :cru_status_id, id: 'cru_status_id', class: 'hidden' %>
-            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.cru_status_id %>">
+            <% cru_status = @person.cru_status(current_organization) %>
+            <% cru_status_id = cru_status.present? ? cru_status.id : nil %>
+            <%= text_field_tag :cru_status_id, cru_status_id, id: 'cru_status_id', class: 'hidden' %>
+            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= cru_status_id %>">
               <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
-              <div id="selected"><%= @person.cru_status || 'Select Status' %></div>
+              <div id="selected"><%= cru_status || 'Select Status' %></div>
               <div id="togglable">
                 <% CruStatus.all.each do |cru_status| %>
                   <div class="option" data-id="<%= cru_status.id %>" data-name="<%= cru_status.name %>">
@@ -96,7 +98,7 @@
         	<div class="gender col_left">Student Status:</div>
         	<div class="gender col_right">
             <%= pf.text_field :student_status, id: 'student_status', class: 'hidden' %>
-            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.cru_status_id %>">
+            <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.student_status %>">
               <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
               <% status = @person.student_status.present? ? Person::STUDENT_STATUS[@person.student_status] : 'Select Status' %>
               <div id="selected"><%= status %></div>

@@ -34,9 +34,9 @@
     </div>
   <% end %>
 
-  <% if current_organization.is_cru? && @person.cru_status.present? %>
+  <% if current_organization.is_cru? && @person.cru_status(current_organization).present? %>
   	<div class="gender col_left"><%= t('general.cru_status') %>:</div>
-  	<div class="gender col_right"><%= @person.cru_status.name %></div>
+  	<div class="gender col_right"><%= @person.cru_status(current_organization).name %></div>
   <% end %>
 
   <% if current_organization.is_cru? && @person.student_status.present? && !@person.faculty? %>

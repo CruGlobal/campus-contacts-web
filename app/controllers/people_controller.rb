@@ -211,12 +211,16 @@ class PeopleController < ApplicationController
     if params[:followup_status].present?
       @new_status = params[:followup_status]
       @contact_permission = @person.permission_for_org(current_organization)
-      Rails.logger.info @contact_permission.inspect
       if @contact_permission.present?
         @contact_permission.followup_status = @new_status
         @contact_permission.save!
       end
-      Rails.logger.info @contact_permission.inspect
+    end
+
+    if params[:cru_status_id].present?
+      if org_permission = @person.organizational_permission_for_org(current_organization)
+        org_permission.update_attribute(:cru_status_id, params[:cru_status_id])
+      end
     end
 
     # Handle duplicate emails

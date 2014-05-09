@@ -14,7 +14,6 @@ class Person < ActiveRecord::Base
   validates_attachment :avatar,
     :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
 
-  belongs_to :cru_status
   belongs_to :interaction_initiator
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
@@ -235,6 +234,11 @@ class Person < ActiveRecord::Base
   scope :non_staff, -> { where(is_staff: false) }
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
+
+  def cru_status(org)
+    org_permission = organizational_permission_for_org(org)
+    return org_permission.cru_status if org_permission.present?
+  end
 
   def assign_contacts(ids, org, assigned_by)
     valid_ids = []
@@ -674,7 +678,7 @@ class Person < ActiveRecord::Base
   end
 
   def organizational_permission_for_org(org)
-    organizational_permissions.where(organization_id: org.id).try(:first)
+    organizational_permissions.where(organization_id: org.id, archive_date: nil, deleted_at: nil).try(:first)
   end
 
   def organizational_labels_for_org(org)
