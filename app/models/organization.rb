@@ -557,17 +557,20 @@ class Organization < ActiveRecord::Base
 
     if person.present? && permission = Permission.where(id: permission_id).first
       org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
-      if org_permission.permission_id == permission.id
-        if org_permission.archive_date.present? || org_permission.deleted_at.present?
-          org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
+
+      unless org_permission.permission_id == permission.id
+        org_permission.permission_id = permission.id
+        org_permission.added_by_id = added_by_id
+        org_permission.archive_date = nil
+        org_permission.deleted_at = nil
+
+        if permission.id != Permission::NO_PERMISSIONS_ID
+          org_permission.followup_status = nil
         end
-      else
-        if org_permission.archive_date.present? || org_permission.deleted_at.present?
-          org_permission.update_attributes(permission_id: permission.id, archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
-        else
-          org_permission.update_attributes(permission_id: permission.id, added_by_id: added_by_id)
-        end
+
+        org_permission.save
       end
+
       # Ensure single permission to selected
       permission = person.ensure_single_permission_for_org_id(id, permission_id)
       return permission
