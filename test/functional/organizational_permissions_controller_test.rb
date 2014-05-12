@@ -149,12 +149,15 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       sign_in @another_user
 
       @org.add_admin(@person3)
-      ids = [@user.person.id, @person3.id]
+      id1 = @user.person.id
+      id2 = @person3.id
+      ids = [id1, id2]
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @another_org.id, :ids => ids.join(','), :keep_contact => "false"}
 
       assert_equal I18n.t('organizational_permissions.cannot_delete_admin_error', names: Person.find(ids).collect(&:name).join(", ")), @response.body
-      assert_equal ids, @org.admins.collect(&:id)
+      assert @org.admins.collect(&:id).include?(id1)
+      assert @org.admins.collect(&:id).include?(id2)
       assert_equal [], @another_org.contacts.collect(&:id)
     end
 
@@ -166,12 +169,15 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       sign_in @another_user
 
       @org.add_admin(@person3)
-      ids = [@user.person.id, @person3.id]
+      id1 = @user.person.id
+      id2 = @person3.id
+      ids = [id1, id2]
 
       xhr :post, :move_to, { :from_id => @org.id , :to_id => @org.id, :ids => ids.join(','), :keep_contact => "false"}
 
       assert_equal I18n.t('organizational_permissions.moving_to_same_org'), @response.body
-      assert_equal ids, @org.admins.collect(&:id)
+      assert @org.admins.collect(&:id).include?(id1)
+      assert @org.admins.collect(&:id).include?(id2)
       assert_equal [], @another_org.contacts.collect(&:id)
     end
 
