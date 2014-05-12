@@ -416,7 +416,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
     assert_equal org.id, org_permission.organization_id, "The last permission should have the org"
     assert_equal user1.person.id, org_permission.person_id, "The last permission should have the person"
-    assert_equal user3.person.id, org_permission.added_by_id, "The last permission should have the other person who adds the leader"
+    assert_equal user2.person.id, org_permission.added_by_id, "The last permission should have the other person who adds the leader"
     assert_equal Permission::USER_ID, org_permission.permission_id, "The last permission should have the leader permission id"
 
   end
