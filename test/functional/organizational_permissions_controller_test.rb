@@ -255,9 +255,7 @@ class OrganizationalPermissionsControllerTest < ActionController::TestCase
       ContactAssignment.find_or_create_by_assigned_to_id_and_person_id_and_organization_id(@contact2.id, @contact.id, @organization.id)
 
       xhr :put, :update, {:status => "do_not_contact", :id => @permission.id}
-      assert_equal 1, OrganizationalPermission.where(:followup_status => 'do_not_contact').count
-      assert_equal [@contact], @organization.dnc_contacts
-      assert_not_empty @organization.dnc_contacts.where(id: @contact.id)
+      assert_equal 1, OrganizationalPermission.where("deleted_at IS NOT NULL AND organization_id = ? AND person_id = ?", @organization.id, @contact.id).count
       assert_nil ContactAssignment.find_by_person_id_and_organization_id(@contact.id, @organization.id)
     end
   end
