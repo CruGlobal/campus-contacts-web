@@ -45,12 +45,12 @@ class Organization < ActiveRecord::Base
     has_many :leaders, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
     has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true
-    has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
-    has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["(organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL) AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :all_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :all_people_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
     has_many :contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND (organizational_permissions.followup_status <> 'do_not_contact' OR organizational_permissions.followup_status IS NULL)", Permission::NO_PERMISSIONS_ID], uniq: true
     has_many :contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact' AND organizational_permissions.archive_date IS NOT NULL", Permission::NO_PERMISSIONS_ID]
     has_many :all_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status <> 'do_not_contact'"]
-    has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = 'do_not_contact'"]
+    has_many :dnc_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = 'do_not_contact' AND organizational_permissions.permission_id = ?", Permission::NO_PERMISSIONS_ID]
     has_many :completed_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
     has_many :completed_contacts_with_archived, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL AND organizational_permissions.permission_id = ? AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'completed']
     has_many :no_activity_contacts, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL AND organizational_permissions.followup_status = ?", Permission::NO_PERMISSIONS_ID, 'uncontacted']
@@ -563,11 +563,6 @@ class Organization < ActiveRecord::Base
         org_permission.added_by_id = added_by_id
         org_permission.archive_date = nil
         org_permission.deleted_at = nil
-
-        if permission.id != Permission::NO_PERMISSIONS_ID
-          org_permission.followup_status = nil
-        end
-
         org_permission.save
       end
 
