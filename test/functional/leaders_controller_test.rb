@@ -129,7 +129,7 @@ class LeadersControllerTest < ActionController::TestCase
     end
 
     should "prompt for email when adding a person without a user or valid email as a leader" do
-      person = Factory(:person)
+      person = Factory(:person_without_email)
       person.email = 'bad email'
       person.user = nil
       person.save(validate: false)

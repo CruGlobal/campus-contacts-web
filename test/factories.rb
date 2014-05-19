@@ -123,11 +123,21 @@ FactoryGirl.define do
     login_option 0
   end
 
+  factory :person_without_email, class: Person do
+    first_name 'John'
+    last_name 'Doe'
+    gender '1'
+    sequence(:fb_uid) {|n| "person_fb_uid_#{n}"}
+  end
+
   factory :person do
     first_name 'John'
     last_name 'Doe'
     gender '1'
     sequence(:fb_uid) {|n| "person_fb_uid_#{n}"}
+    after_create do |x|
+      Factory(:email_address, person: x)
+    end
   end
 
   factory :person_without_name, parent: :person do

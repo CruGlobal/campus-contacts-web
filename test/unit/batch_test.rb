@@ -34,12 +34,12 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
-      
-      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
+
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-        
+
       results = Batch.person_transfer_notify
       transfer1.reload
       transfer2.reload
@@ -50,12 +50,12 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
-      
-      transfer1 = Factory(:person_transfer, person: @person1, new_organization_id: 99999, 
+
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization_id: 99999,
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org1, 
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org1,
         old_organization: @org2, transferred_by: @admin)
-        
+
       assert_equal(false, transfer1.notified, "notified should be false")
       assert_equal(false, transfer2.notified, "notified should be false")
       results = Batch.person_transfer_notify
@@ -68,12 +68,12 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
-      
-      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
+
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin, notified: true)
-        
+
       assert_equal(transfer1.notified, false, "notified should be false")
       assert_equal(transfer2.notified, true, "notified should be true")
       results = Batch.person_transfer_notify
@@ -85,12 +85,13 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify person_transfer from org with admin without email and raise an error" do
       @admin = Factory(:person)
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
-      
-      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
+      @admin.email_addresses.destroy_all
+
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-        
+
       exception = assert_raise RuntimeError do
         results = Batch.person_transfer_notify
       end
@@ -100,11 +101,11 @@ class PersonTest < ActiveSupport::TestCase
       assert_equal(transfer2.notified, false, "notified should be false")
     end
     should "not notify person_transfer from org without admin and raise an error" do
-      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2, 
+      transfer1 = Factory(:person_transfer, person: @person1, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2, 
+      transfer2 = Factory(:person_transfer, person: @person2, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-        
+
       exception = assert_raise RuntimeError do
         results = Batch.person_transfer_notify
       end
@@ -117,9 +118,9 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
-      transfer1 = Factory(:person_transfer, person_id: 0, new_organization: @org2, 
+      transfer1 = Factory(:person_transfer, person_id: 0, new_organization: @org2,
         old_organization: @org1, transferred_by: @admin)
-        
+
       results = Batch.person_transfer_notify
       transfer1.reload
       assert_equal(transfer1.notified, true, "notified should be true without error raised")
@@ -160,10 +161,10 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
-      
+
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
-      
+
       results = Batch.new_person_notify
       newperson1.reload
       newperson2.reload
@@ -174,10 +175,10 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
-      
+
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization_id: 99999)
-      
+
       assert_equal(newperson1.notified, false, "notified should be false")
       assert_equal(newperson2.notified, false, "notified should be false")
       results = Batch.new_person_notify
@@ -190,10 +191,10 @@ class PersonTest < ActiveSupport::TestCase
       @admin = Factory(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
-      
+
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1, notified: true)
-      
+
       assert_equal(newperson1.notified, false, "notified should be false")
       assert_equal(newperson2.notified, true, "notified should be true")
       results = Batch.new_person_notify
@@ -205,10 +206,11 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify new_person from org with admin without email and raise an error" do
       @admin = Factory(:person)
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
-      
+      @admin.email_addresses.destroy_all
+
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
-      
+
       exception = assert_raise RuntimeError do
         results = Batch.new_person_notify
       end
@@ -220,7 +222,7 @@ class PersonTest < ActiveSupport::TestCase
     should "not notify new_person from org without admin and raise an error" do
       newperson1 = Factory(:new_person, person: @person1, organization: @org1)
       newperson2 = Factory(:new_person, person: @person2, organization: @org1)
-      
+
       exception = assert_raise RuntimeError do
         results = Batch.new_person_notify
       end
@@ -234,7 +236,7 @@ class PersonTest < ActiveSupport::TestCase
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = Factory(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       newperson1 = Factory(:new_person, person_id: 0, organization: @org1)
-        
+
       results = Batch.new_person_notify
       newperson1.reload
       assert_equal(newperson1.notified, true, "notified should be true without error raised")

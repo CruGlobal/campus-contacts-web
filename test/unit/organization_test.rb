@@ -205,8 +205,8 @@ class OrganizationTest < ActiveSupport::TestCase
 
   context "all_possible_admins_with_email method" do
     setup do
-      @person1 = Factory(:person, :email => "person1@email.com")
-      @person2 = Factory(:person, :email => "person2@email.com")
+      @person1 = Factory(:person)
+      @person2 = Factory(:person)
       @person3 = Factory(:person)
       @person4 = Factory(:person)
       @org1 = Factory(:organization, id: '1')
@@ -216,6 +216,7 @@ class OrganizationTest < ActiveSupport::TestCase
     should "return the admins with email of org3" do
       Factory(:organizational_permission, organization: @org3, person: @person1, permission: Permission.admin)
       Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      @person3.email_addresses.destroy_all
       results = @org3.all_possible_admins_with_email
       assert_equal(1, results.count, "when org3 have admins")
       assert(results.include?(@person1), "person1 should be returned")
@@ -224,6 +225,7 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organizational_permission, organization: @org2, person: @person1, permission: Permission.admin)
       Factory(:organizational_permission, organization: @org2, person: @person2, permission: Permission.admin)
       Factory(:organizational_permission, organization: @org2, person: @person3, permission: Permission.admin)
+      @person3.email_addresses.destroy_all
       results = @org3.all_possible_admins_with_email
       assert_equal(2, results.count, "when org3 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -233,7 +235,9 @@ class OrganizationTest < ActiveSupport::TestCase
       Factory(:organizational_permission, organization: @org1, person: @person1, permission: Permission.admin)
       Factory(:organizational_permission, organization: @org1, person: @person2, permission: Permission.admin)
       Factory(:organizational_permission, organization: @org1, person: @person3, permission: Permission.admin)
+      @person3.email_addresses.destroy_all
       Factory(:organizational_permission, organization: @org1, person: @person4, permission: Permission.admin)
+      @person4.email_addresses.destroy_all
       results = @org3.all_possible_admins_with_email
       assert_equal(2, results.count, "when org3 and org2 dont have admin")
       assert(results.include?(@person1), "person1 should be returned")
@@ -245,7 +249,9 @@ class OrganizationTest < ActiveSupport::TestCase
     end
     should "return null if no admin has email" do
       Factory(:organizational_permission, organization: @org3, person: @person3, permission: Permission.admin)
+      @person3.email_addresses.destroy_all
       Factory(:organizational_permission, organization: @org3, person: @person4, permission: Permission.admin)
+      @person4.email_addresses.destroy_all
       results = @org3.all_possible_admins_with_email
       assert_equal(0, results.count, "when org3 and org2 and org1 dont have admins")
     end
