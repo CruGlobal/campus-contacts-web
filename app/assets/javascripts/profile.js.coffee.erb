@@ -13,6 +13,8 @@ $ ->
     $('#display_avatar_file_name').text('')
     $('#avatar_fb_container #facebook_name_search').val('')
     $('#avatar_fb_container #person_fb_uid').val($('#avatar_fb_container #person_fb_uid').data('default'))
+    $("img.browse_preview").attr("src", $("img.change_avatar").attr("src"))
+    $("#avatar_upload").val("")
     $.showDialog($("#profile_avatar_dialog"))
 
   $(document).on 'click', 'button#browse_avatar', (e)->
