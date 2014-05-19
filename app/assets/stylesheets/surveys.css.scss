@@ -56,7 +56,35 @@
 #advanced_toggle {
   color: rgb(3, 121, 174);
 }
-
+#remove_logo_link{
+  color:#007cc8;
+}
+.file_upload_container{
+  overflow:hidden;
+  margin:10px 0px;
+  .file_upload_name_container{
+    float:left;
+    height: 20px;
+    margin: 8px 0px 0px 10px;
+  }
+  .file_upload {
+    float:left;
+  	position: relative;
+  	overflow: hidden;
+    margin: 0px;
+    input.file_field {
+    	position: absolute;
+    	top: 0;
+    	right: 0;
+    	margin: 0;
+    	padding: 0;
+    	font-size: 20px;
+    	cursor: pointer;
+    	opacity: 0;
+    	filter: alpha(opacity=0);
+    }
+  }
+}
 .new_sms_keyword, .edit_sms_keyword{
   textarea{
     width: 610px;

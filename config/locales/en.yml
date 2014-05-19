@@ -538,6 +538,11 @@ en:
       freeze: "Check this box to freeze the survey. Once a survey is frozen, you will be able to see responses that have already come in, but no one new will be able to complete the survey."
       customize_look: 'Optional - FOR ADVANCED USERS ONLY - Customize how the survey will look:'
       logo: 'Logo (we will wrap this in a div with the class "logo"):'
+      logo_valid_format: "Upload .jpg, .jpeg, .png, or .gif file"
+      remove_logo_link: "Click to remove logo"
+      remove_logo_cofirmation: "Do you want to remove this logo?"
+      remove_logo_success: "You have successfully removed the logo."
+      remove_logo_failed: "Invalid survey. Please try again later."
       background_color: 'Background Color:'
       text_color: 'Text Color:'
       css_file: 'Upload your own custom css file (optional):'

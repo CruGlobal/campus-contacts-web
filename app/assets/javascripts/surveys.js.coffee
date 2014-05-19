@@ -2,13 +2,17 @@ $ ->
   $('#survey_background_color, #survey_text_color').excolor({root_path: '/assets/'})
   false
 
+  $(".file_upload_container .file_field").on "change", () ->
+    parent = $(this).parents(".file_upload_container")
+    file_name = parent.find(".file_upload_name_container")
+    file_name.html($(this).val().split('\\').pop())
+
   $('#show_advanced_survey_option').live 'click', ()->
     $('#advanced_survey_option').toggle()
     if($('#advanced_survey_option').is(":visible"))
       $(this).html($(this).html().replace("Show","Hide"))
     else
       $(this).html($(this).html().replace("Hide","Show"))
-    end
 
   $('#transfer_survey_content #other_orgs_list .other_org').live 'click', ->
     org_id = $(this).attr('data-org-id')

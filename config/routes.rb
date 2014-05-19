@@ -250,6 +250,7 @@ Mh::Application.routes.draw do
     collection do
       get :index_admin
       get :stop
+      post :remove_logo
     end
     resources :questions, controller: "surveys/questions" do
       member do
