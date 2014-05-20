@@ -338,9 +338,9 @@ class ChartsController < ApplicationController
       end
     else
       end_date = Date.today if Date.today < end_date
-      label_id = @current_movement.labels.where(name: @current_criteria).pluck(:id)
+      label = @current_movement.labels.where(name: @current_criteria).first
       begin_date.end_of_week(:sunday).step(end_date.end_of_week(:sunday), 7) do |date|
-        value = OrganizationalLabel.where(organization_id: @current_movement.id, label_id: label_id).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+        value = label.count_label_contacts_from_orgs([@current_movement.id], date)
         @data_points[date] = value
       end
     end
@@ -412,8 +412,8 @@ class ChartsController < ApplicationController
           @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
           unless MovementIndicator.translate.values.include?(field)
             org_ids = @displayed_movements.pluck(:id) + [0]
-            label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
-            value = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+            label = Label.where(organization_id: org_ids, name: field).first
+            value = label.count_label_contacts_from_orgs(org_ids, date)
             @lines[field][date] = value
           end
         end
@@ -454,8 +454,8 @@ class ChartsController < ApplicationController
             @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
             unless MovementIndicator.translate.values.include?(field)
               org_ids = @displayed_movements.pluck(:id) + [0]
-              label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
-              value = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).count
+              label = Label.where(organization_id: org_ids, name: field).first
+              value = label.count_label_contacts_from_orgs(org_ids, date)
               @lines_year_ago[field][date + 364.days] = value
             end
           end
