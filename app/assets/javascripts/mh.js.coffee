@@ -1,4 +1,7 @@
 $ ->
+  $(document).on 'change', ".with_browse_picture", () ->
+    $.mh.readURL(this, $("img."+$(this).attr("data-target")))
+
   $(document).on 'change', '#select_language', ()->
     language = $("#select_language option:selected").val()
     params = window.location.href.split("?")[1]
@@ -281,3 +284,11 @@ $.mh.fbEnsureInit = (callback) ->
         callback
       , 50)
 
+$.mh.readURL = (input, target_preview) ->
+  if input.files && input.files[0]
+    reader = new FileReader()
+    reader.onload = (e) ->
+      target_preview.attr "src", e.target.result
+      return
+    reader.readAsDataURL input.files[0]
+  return
