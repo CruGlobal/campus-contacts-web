@@ -86,7 +86,12 @@ class Label < ActiveRecord::Base
   def count_label_contacts_from_orgs(org_ids, date = nil)
     people_ids = OrganizationalLabel.where(label_id: id, organization_id: org_ids).
         where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).collect(&:person_id).uniq
-    people_ids.size
+    result = 0
+    org_ids.each do |org_id|
+      org = Organization.find(org_id)
+      result += org.all_people.where(id: people_ids).count
+    end
+    result
   end
 
   def label_contacts_from_org_with_archived(org)

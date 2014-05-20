@@ -412,8 +412,14 @@ class ChartsController < ApplicationController
           @lines[field][date] = json[date.to_s][field] if @lines[field] && json[date.to_s]
           unless MovementIndicator.translate.values.include?(field)
             org_ids = @displayed_movements.pluck(:id) + [0]
-            label = Label.where(organization_id: org_ids, name: field).first
-            value = label.count_label_contacts_from_orgs(org_ids, date)
+            label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
+            people_ids = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).
+                where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).collect(&:person_id).uniq
+            value = 0
+            org_ids.each do |org_id|
+              org = Organization.find(org_id) if org_id != 0
+              value += org.all_people.where(id: people_ids).count if org
+            end
             @lines[field][date] = value
           end
         end
@@ -454,8 +460,14 @@ class ChartsController < ApplicationController
             @lines_year_ago[field][date + 364.days] = json[date.to_s][field] if @lines_year_ago[field] && json[date.to_s]
             unless MovementIndicator.translate.values.include?(field)
               org_ids = @displayed_movements.pluck(:id) + [0]
-              label = Label.where(organization_id: org_ids, name: field).first
-              value = label.count_label_contacts_from_orgs(org_ids, date)
+              label_ids = Label.where(organization_id: org_ids, name: field).pluck(:id)
+              people_ids = OrganizationalLabel.where(organization_id: org_ids, label_id: label_ids).
+                  where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).collect(&:person_id).uniq
+              value = 0
+              org_ids.each do |org_id|
+                org = Organization.find(org_id) if org_id != 0
+                value += org.all_people.where(id: people_ids).count if org
+              end
               @lines_year_ago[field][date + 364.days] = value
             end
           end
