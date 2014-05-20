@@ -42,6 +42,10 @@ class Organization < ActiveRecord::Base
       contacts.where(id: people_ids.collect(&:receiver_id)).order('people.last_name, people.first_name').uniq
     end
 
+    def all_people_with_archived_by_date(date)
+      all_people_with_archived.where("organizational_permissions.archive_date IS NULL OR organizational_permissions.archive_date > ?", date)
+    end
+
     has_many :leaders, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]], order: "people.last_name, people.first_name", uniq: true
     has_many :users, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID], order: "people.last_name, people.first_name", uniq: true
     has_many :admins, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::ADMIN_ID], order: "people.last_name, people.first_name", uniq: true

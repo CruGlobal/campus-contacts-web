@@ -418,7 +418,7 @@ class ChartsController < ApplicationController
             value = 0
             org_ids.each do |org_id|
               org = Organization.find(org_id) if org_id != 0
-              value += org.all_people.where(id: people_ids).count if org
+              value += org.all_people_with_archived_by_date(date).where(id: people_ids).count if org
             end
             @lines[field][date] = value
           end
@@ -466,7 +466,7 @@ class ChartsController < ApplicationController
               value = 0
               org_ids.each do |org_id|
                 org = Organization.find(org_id) if org_id != 0
-                value += org.all_people.where(id: people_ids).count if org
+                value += org.all_people_with_archived_by_date(date).where(id: people_ids).count if org
               end
               @lines_year_ago[field][date + 364.days] = value
             end
