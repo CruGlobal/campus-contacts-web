@@ -9,7 +9,7 @@ class EmailAddressTest < ActiveSupport::TestCase
 
   context "an email address" do
     setup do
-      @person = Factory(:person)
+      @person = Factory(:person_without_email)
     end
     should "set first email to primary" do
       email = @person.email_addresses.create(email: 'test@example.com')
@@ -18,7 +18,7 @@ class EmailAddressTest < ActiveSupport::TestCase
     end
 
     should "set new primary when primary email is deleted" do
-      person = Factory(:person)
+      person = Factory(:person_without_email)
       @person.reload
       email1 = @person.email_addresses.create(email: 'test@example.com')
       assert(!email1.new_record?, email1.errors.full_messages.join(','))

@@ -35,6 +35,17 @@ class OrganizationalPermission < ActiveRecord::Base
     #person.clear_org_cache if person
   #end
 
+  validate do |value|
+    # if person have email
+    if [Permission.admin.id, Permission.user.id].include?(value.permission_id)
+      if person = Person.find(value.person_id)
+        unless person.email.present?
+          errors.add(:base, "This person does not have an email address")
+        end
+      end
+    end
+  end
+
   def merge(other)
     # We can have multiple permissions, but if we're a contact that should be the only permission
     OrganizationalPermission.transaction do

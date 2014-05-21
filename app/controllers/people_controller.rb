@@ -163,17 +163,23 @@ class PeopleController < ApplicationController
           end
 
           permission_ids.each do |permission_id|
+            invalid_email = false
             begin
-              @person.organizational_permissions.create(permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+              p =@person.organizational_permissions.new(permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+              unless p.save
+                invalid_email = true
+              end
             rescue OrganizationalPermission::InvalidPersonAttributesError
+              invalid_email = true
+            rescue ActiveRecord::RecordNotUnique
+            end
+            if invalid_email
               @person.destroy
               @person = Person.new(params[:person])
               flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if permission_id == Permission::USER_ID.to_s
               flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if permission_id == Permission::ADMIN_ID.to_s
               params[:error] = 'true'
               render and return
-            rescue ActiveRecord::RecordNotUnique
-
             end
           end
         else

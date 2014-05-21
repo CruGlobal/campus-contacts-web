@@ -54,8 +54,8 @@ class PeopleControllerTest < ActionController::TestCase
 
     context "bulk sending" do
       setup do
-        @person1 = Factory(:person)
-        @person2 = Factory(:person)
+        @person1 = Factory(:person_without_email)
+        @person2 = Factory(:person_without_email)
         p1 = PhoneNumber.new(:number => "123129312", :person_id => @person1.id)
         assert p1.save
 
@@ -391,7 +391,7 @@ class PeopleControllerTest < ActionController::TestCase
       end
 
       should "restore the person previous permission if the person has an invalid email" do
-        person = Factory(:person)
+        person = Factory(:person_without_email)
         Factory(:organizational_permission, person: person, permission: Permission.no_permissions, organization: @org, :added_by_id => @user.person.id)
         #check the persons permissions
         assert_equal(1, person.permissions.count)
@@ -622,7 +622,6 @@ class PeopleControllerTest < ActionController::TestCase
         post :create, { :person => { :first_name => "Rob", :last_name => "Derp", :email_address => { :email => "robstarkemail.com" }} }
       end
     end
-
 
     should "not create a person with admin permission without a valid email" do
       assert_no_difference "Person.count" do
@@ -956,4 +955,4 @@ class PeopleControllerTest < ActionController::TestCase
       #assert_empty @contact2.email_addresses
     #end
   end
-end
+   end

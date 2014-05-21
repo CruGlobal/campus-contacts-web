@@ -538,7 +538,7 @@ class PersonTest < ActiveSupport::TestCase
 
   context "a person" do
     setup do
-      @person = Factory(:person)
+      @person = Factory(:person_without_email)
       @authentication = Factory(:authentication)
     end
     should "output the person's correct full name" do
