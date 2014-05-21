@@ -134,14 +134,14 @@
                     <div class="rollovernum"><%= @stats ? @stats["students_involved"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :involved_students, current_organization.people.students.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :involved_students, current_organization.all_people.students.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many students are regularly involved - attending movement events?') %>
                   </td>
                   <td>
                     <div class="rollovernum"><%= @stats ? @stats["faculty_involved"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :involved_faculty, current_organization.people.faculty.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :involved_faculty, current_organization.all_people.faculty.with_label(Label.involved, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many faculty are regularly involved?') %>
                   </td>
                 </tr>
@@ -150,14 +150,14 @@
                     <div class="rollovernum"><%= @stats ? @stats["students_engaged"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :engaged_disciple, current_organization.people.students.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :engaged_disciple, current_organization.all_people.students.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many students have intentionally engaged someone in a spiritual conversation within the past semester?') %>
                   </td>
                   <td>
                     <div class="rollovernum"><%= @stats ? @stats["faculty_engaged"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :engaged_disciple_faculty, current_organization.people.faculty.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :engaged_disciple_faculty, current_organization.all_people.faculty.with_label(Label.engaged_disciple, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many faculty have intentionally engaged in a spiritual conversation within the past semester?') %>
                   </td>
                 </tr>
@@ -166,14 +166,14 @@
                     <div class="rollovernum"><%= @stats ? @stats["student_leaders"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :leader, current_organization.people.students.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :leader, current_organization.all_people.students.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many students are leading small groups of Win, Build, Send ministry?') %>
                   </td>
                   <td>
                     <div class="rollovernum"><%= @stats ? @stats["faculty_leaders"] : "&nbsp;".html_safe %></div>
                   </td>
                   <td>
-                    <%= text_field_tag :leader_faculty, current_organization.people.faculty.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
+                    <%= text_field_tag :leader_faculty, current_organization.all_people.faculty.with_label(Label.leader, current_organization).where("organizational_labels.created_at < ?", current_organization.last_week).count %>
                     <%= tip('How many faculty are leading small groups of Win, Build, Send ministry?') %>
                   </td>
                 </tr>
