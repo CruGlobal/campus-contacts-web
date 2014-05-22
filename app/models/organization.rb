@@ -560,19 +560,32 @@ class Organization < ActiveRecord::Base
     person.ensure_single_permission_for_org_id(id)
 
     if person.present? && permission = Permission.where(id: permission_id).first
-      org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person_id, id)
-
-      unless org_permission.permission_id == permission.id
+      to_save = false
+      org_permission = OrganizationalPermission.find_by_person_id_and_organization_id(person_id, id)
+      if org_permission.present?
+        if org_permission.permission_id != permission.id
+          org_permission.permission_id = permission.id
+          org_permission.added_by_id = added_by_id
+          org_permission.archive_date = nil
+          org_permission.deleted_at = nil
+          to_save = true
+        else
+          return permission
+        end
+      else
+        org_permission = OrganizationalPermission.new(person_id: person_id, organization_id: id)
         org_permission.permission_id = permission.id
         org_permission.added_by_id = added_by_id
-        org_permission.archive_date = nil
-        org_permission.deleted_at = nil
-        org_permission.save
+        to_save = true
       end
 
-      # Ensure single permission to selected
-      permission = person.ensure_single_permission_for_org_id(id, permission_id)
-      return permission
+      if to_save && org_permission.save
+        # Ensure single permission
+        permission = person.ensure_single_permission_for_org_id(id, permission_id)
+        return permission
+      else
+        return nil
+      end
     else
       return nil
     end
