@@ -197,7 +197,7 @@ class Organization < ActiveRecord::Base
         periods << stats
         break
       else
-        stats.merge!({students_involved: all_people_with_archived_by_date(period_end).people.students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
+        stats.merge!({students_involved: all_people_with_archived_by_date(period_end).students.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
                       faculty_involved: all_people_with_archived_by_date(period_end).faculty.with_label(Label.involved, self).where("organizational_labels.created_at < ?", period_end).count,
                       students_engaged: all_people_with_archived_by_date(period_end).students.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
                       faculty_engaged: all_people_with_archived_by_date(period_end).faculty.with_label(Label.engaged_disciple, self).where("organizational_labels.created_at < ?", period_end).count,
