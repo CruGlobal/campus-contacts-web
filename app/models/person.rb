@@ -1543,5 +1543,4 @@ class Person < ActiveRecord::Base
       permission.save
     end
   end
-
 end
