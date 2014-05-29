@@ -46,6 +46,18 @@ class SurveysController < ApplicationController
     end
   end
 
+  def remove_logo
+    @survey = current_organization.surveys.find_by_id(params[:id])
+    msg = I18n.t('surveys.form.remove_logo_failed')
+    if @survey.present?
+      @survey.logo.destroy if @survey.logo.exists?
+      if @survey.save
+        msg = I18n.t('surveys.form.remove_logo_success')
+      end
+    end
+    redirect_to :back, notice: msg
+  end
+
   def show_other_orgs
     org_ids = (current_person.admin_of_org_ids - [current_organization.id]).uniq
     @managed_orgs = Organization.where(id: org_ids)
