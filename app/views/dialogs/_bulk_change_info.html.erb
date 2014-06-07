@@ -1,0 +1,141 @@
+<div id="bulk_change_info_dialog" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box">
+    	<div class="mh_popup_box_top">
+        <span class="mh_popup_heading">
+          Change
+        </span>
+      </div>
+      <div class="mh_popup_box_content inline_form">
+        <%= form_tag(bulk_update_contacts_path, id: 'bulk_change_form', remote: true, method: 'post') do %>
+          <%= hidden_field_tag :people_ids %>
+
+          <!-- Assignment -->
+          <div class="form_row edit" id="assigned_to_dropdown">
+          	<div class="label"><%= t('general.assign_to') %>:</div>
+          	<div class="field">
+              <div class="custom_dropdown default" data-default="Select Assignment">
+                <%= text_field_tag :assigned_to_id, '', class: 'custom_dropdown_value' %>
+                <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+                <div id="selected">Select Assignment</div>
+                <div id="togglable">
+                  <div id="default_leader_options" class="edit">
+                    <div class="option unassigned" data-id="0">
+                      <%= check_box_tag 'leader_id[]', 0, false, class: "unassigned_box", id: "leader_0", "data-id" => "0" %>
+                      <div class="leader_name dropdown_name">Unassigned</div>
+                    </div>
+                    <% if current_person.leader_for_org(current_organization) %>
+                      <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
+                    <% end %>
+                  </div>
+                  <div class="search">
+                    <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", class: "edit", "data-person-id" => @person.id %>
+                  </div>
+                  <div class="results edit" id="search_leader_results"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Followup Status -->
+          <div class="form_row">
+          	<div class="label"><%= t('general.status') %>:</div>
+          	<div class="field">
+              <div class="custom_dropdown default">
+                <%- options = OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]} %>
+                <%= select_tag :followup_status, options_for_select(options), {include_blank: true, class: 'custom_dropdown_value'} %>
+                <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+                <div id="selected">Select Status</div>
+                <div id="togglable">
+                  <% OrganizationalPermission::FOLLOWUP_STATUSES.each do |s| %>
+                    <div class="option" data-id="<%= s %>" data-name="<%= t("contacts.statuses.#{s}") %>">
+                      <%= t("contacts.statuses.#{s}") %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+          	</div>
+          </div>
+
+          <% if current_organization.is_cru? %>
+            <!-- Cru Status -->
+            <div class="form_row">
+            	<div class="label"><%= t('general.cru_status') %>:</div>
+            	<div class="field">
+                <div class="custom_dropdown default">
+                  <%= text_field_tag :cru_status_id, '', class: 'custom_dropdown_value' %>
+                  <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+                  <div id="selected">Select Status</div>
+                  <div id="togglable">
+                    <% CruStatus.all.each do |cru_status| %>
+                      <div class="option" data-id="<%= cru_status.id %>" data-name="<%= cru_status.name %>">
+                        <%= cru_status.name %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Student Status -->
+            <div class="form_row">
+            	<div class="label"><%= t('general.student_status') %>:</div>
+            	<div class="field">
+                <div class="custom_dropdown default">
+                  <%= text_field_tag :student_status, '', class: 'custom_dropdown_value' %>
+                  <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+                  <div id="selected">Select Status</div>
+                  <div id="togglable">
+                    <div class="option" data-id="" data-name="Select Status">
+                      Select Status
+                    </div>
+                    <% Person::STUDENT_STATUS.each do |student_status| %>
+                      <div class="option" data-id="<%= student_status[0] %>" data-name="<%= student_status[1] %>">
+                        <%= student_status[1] %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Gender -->
+          <div class="form_row">
+          	<div class="label"><%= t('general.gender') %>:</div>
+          	<div class="field">
+              <div class="item">
+              	<%= radio_button_tag :gender, Person::GENDER['male'] %>
+                <label for="gender_Male"><%= t('general.male') %></label>
+              </div>
+              <div class="item">
+                <%= radio_button_tag :gender, Person::GENDER['female'] %>
+                <label for="gender_Female"><%= t('general.female') %></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Faculty -->
+          <div class="form_row">
+          	<div class="label"><%= t('general.faculty') %>:</div>
+          	<div class="field">
+              <div class="item">
+              	<%= radio_button_tag :faculty, true %>
+                <label for="faculty"><%= t('general.yes') %></label>
+              </div>
+              <div class="item">
+                <%= radio_button_tag :faculty, false %>
+                <label for="faculty"><%= t('general.no') %></label>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    	<div class="mh_popup_buttons">
+    		<button class="red_accent" id="bulk_change_info_save_button">Save</button>
+    		<button class="large_lightgray mh_popup_cancel_button">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

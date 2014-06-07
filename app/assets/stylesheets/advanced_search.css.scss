@@ -1,12 +1,18 @@
 .filter_loader {
   vertical-align: top;
-  color: #999;
-  font-style: italic;
-	font-family: Georgia;
-  padding-top: 6px;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
+  img {
+    margin: 4px 6px 6px 10px;
+    float: left;
+  }
+  .msg{
+    padding: 15px;
+    color: #999;
+    font-style: italic;
+    font-family: Georgia;
+    font-weight: normal;
+    font-size: 16px;
+    padding: 0;
+  }
 }
 
 .search_section {

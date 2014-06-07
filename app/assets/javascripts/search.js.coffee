@@ -28,7 +28,7 @@ $ ->
       $('#search_stamp').val(stamp)
       $("#ac_sidebar #sidebar_lists").data('stamp',stamp)
       $.fn.handleSearchOptions()
-      $.fn.filterLoader('show')
+      $.fn.filterLoader('show', "Updating contacts list")
 
     # Delete Saved Search
     $(document).on "click", ".side-search#saved_search .option.link .delete a", (e)->

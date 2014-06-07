@@ -31,6 +31,7 @@ $ ->
     e.preventDefault()
     $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
 
+
   $('#default_leader_options.edit .option.unassigned input').live 'change', (e)->
     $('#assigned_to_dropdown.edit .option input.leader_box').prop('checked',false)
     $('#assigned_to_dropdown.edit .option input.unassigned_box').prop('checked',true)
@@ -116,8 +117,6 @@ $ ->
     $('.followup_status_field_edit').val(selected_id)
     $('.followup_status_field_edit').change()
     $('#followup_status_dropdown.edit').removeClass('active')
-
-
 
   $('#nationality_dropdown.edit .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')

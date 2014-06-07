@@ -17,7 +17,7 @@
     <%= "#{'-' if @header.present?} #{@header}" %>
     <div id='global_loader' style='' class='filter_loader'>
       <%= image_tag 'loader.gif', height: '20'%>
-      Loading Contacts
+      <span class='msg'>Loading Contacts</span>
     </div>
   </h1>
 </div>
@@ -27,11 +27,16 @@
     <%= render 'contacts/pagination', people: @people %>
   </div>
   <div id="ac_button_bar">
-  	<ul class="button_bar" id="menu_assign_link">
+  	<ul class="button_bar" id="menu_change_link">
   		<li class="action_lightblue">
-  		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
+  		  <%= link_to "Change", "#", id: "action_menu_change"%>
   		</li>
   	</ul>
+    <!-- <ul class="button_bar" id="menu_assign_link">
+      <li class="action_lightblue">
+        <%= link_to "Assign", "#", id: "action_menu_assign"%>
+      </li>
+    </ul> -->
   	<ul class="button_bar">
   		<li class="action_lightblue btn_left">
   		  <%= link_to "Permissions", "#", id: "action_menu_permissions" %>
@@ -133,3 +138,6 @@
 
 <!-- Existing Contacts Dialog -->
 <%= render 'dialogs/add_existing_contact' %>
+
+<!-- Batch Change Info Dialog -->
+<%= render 'dialogs/bulk_change_info' %

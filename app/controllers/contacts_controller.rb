@@ -13,6 +13,50 @@ class ContactsController < ApplicationController
     #render 'update_leader_error'
   end
 
+  def bulk_update
+    people_to_update = current_organization.all_people_with_archived.where("people.id IN (?)", params[:people_ids].split(","))
+    people_to_update.each do |person|
+      if params[:leader_id].present?
+        if params[:leader_id].include?("0")
+          person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
+        else
+          @person.assigned_tos.delete_all
+          params[:leader_id].each do |leader_id|
+            if leader = current_organization.leaders.where(id: leader_id).try(:first)
+              person.assigned_tos.create(organization_id: current_organization.id, assigned_to_id: leader_id)
+            end
+          end
+        end
+      end
+
+      update_org_permission_field = Hash.new
+      org_permission = person.organizational_permission_for_org(current_organization)
+      if org_permission.present?
+        if params[:followup_status].present?
+          update_org_permission_field[:followup_status] = params[:followup_status]
+        end
+        if params[:cru_status_id].present?
+          update_org_permission_field[:cru_status_id] = params[:cru_status_id]
+        end
+        org_permission.update_attributes(update_org_permission_field) if update_org_permission_field.present?
+      end
+
+      update_person_fields = Hash.new
+      if params[:student_status].present?
+        update_person_fields[:student_status] = params[:student_status]
+      end
+      if params[:gender].present?
+        update_person_fields[:gender] = params[:gender]
+      end
+      if !params[:faculty].nil?
+        update_person_fields[:faculty] = params[:faculty]
+      end
+      person.update_attributes(update_person_fields) if update_person_fields.present?
+
+    end if people_to_update.present?
+    filter
+  end
+
   def filter
     # Set per_page
     if params[:per_page].present?

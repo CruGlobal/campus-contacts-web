@@ -235,7 +235,12 @@ en:
     nationality: Nationality
     assignment: Assigned To
     faculty: Faculty
+    cru_status: Cru Status
+    student_status: Student Status
     nationality: Nationality
+    assign_to: Assign To
+    yes: Yes
+    no: No
     mobile: Cell
     home: Home
     work: Work
