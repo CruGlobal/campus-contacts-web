@@ -17,5 +17,6 @@ if(stamp == '' || stamp == "<%= params[:search_stamp] %>" || clear || <%= params
   $.fn.filterLoader('force')
   $("#ac_pagination_top").html("<%= escape_javascript(render partial: 'contacts/pagination') %>")
   $("#ac_contact_list").html("<%= escape_javascript(render partial: 'contacts/contact_list') %>")
+  $(".pagination_space #per_page").attr("disabled", false)
   $(".scroll_table").doubleScroll()
 }

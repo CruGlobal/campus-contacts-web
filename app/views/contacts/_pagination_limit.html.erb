@@ -1,4 +1,4 @@
-<%= form_tag filter_contacts_path, method: :get, remote: true, id: "pagination_limit_select" do %>
-   <%= select_tag :per_page, options_for_select([25, 50, 100, 500], selected: session[:per_page] || 25) %>
+<%= form_tag filter_contacts_path(paginate: 'true'), method: :get, remote: true, id: "pagination_limit_select" do %>
+  <%= select_tag :per_page, options_for_select([25, 50, 100, 500], selected: session[:per_page] || 25) %>
    contacts per page
 <% end %>

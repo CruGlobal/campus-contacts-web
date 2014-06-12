@@ -29,11 +29,11 @@ class ContactsController < ApplicationController
       if params[:advanced_search].present?
         session[:filters] = params
       elsif params[:per_page].present?
-        session[:filters][:per_page] = session[:per_page]
-        session[:filters][:page] = 1
+        session[:per_page] = session[:per_page]
+        session[:page] = 1
       elsif params[:search].present?
         session[:filters][:search] = params[:search]
-        session[:filters][:page] = 1
+        session[:page] = 1
       end
     end
     clean_params

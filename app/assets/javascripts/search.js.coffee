@@ -16,6 +16,12 @@ $ ->
     else
       $('.save-search-option').hide()
 
+    $(document).on 'change', ".pagination_space select#per_page", (e)->
+      $(document).scrollTop(0)
+      $.fn.filterLoader('show')
+      $("#pagination_limit_select").submit()
+      $(".pagination_space #per_page").attr("disabled", true)
+
     # Search trigger
     $(document).on 'click', '#search_any_button', (e)->
       stamp = $.now()

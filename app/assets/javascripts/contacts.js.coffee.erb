@@ -41,11 +41,6 @@ $ ->
         unless $(this).hasClass('locked')
           $.hideDialog($(this))
 
-  $("#pagination_limit_select select#per_page").live 'change', (e)->
-    $(document).scrollTop(0)
-    $.fn.filterLoader('show')
-    $("#pagination_limit_select").submit()
-
   $(".pagination_links .pagination span a").live 'click', (e)->
     $(document).scrollTop(0)
     $.fn.filterLoader('show')
