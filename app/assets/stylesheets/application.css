@@ -1,4 +1,5 @@
 /*
+ *= require search
  *= require contacts
  *= require people
  *= require organizations
@@ -23,6 +24,7 @@
  *= require jquery.notifications
  *= require excolor
  *= require global
+ *= require advanced_search
  *= require date_time_picker_style
  *= require token-input-facebook
 */

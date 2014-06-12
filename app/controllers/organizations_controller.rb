@@ -2,6 +2,9 @@ class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy, :update_from_crs]
 
+  def load_tree
+  end
+
   def index
   end
 

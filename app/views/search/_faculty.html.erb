@@ -1,0 +1,21 @@
+<% conditions = params[:faculty].present? %>
+<div class="side-search-option singleton checkboxes_only" data-id="side_search_faculty" data-type="Standard" data-value="<%= params[:faculty] %>">
+  <%= render "search/toggler" %>
+  <div class="title"><%= t('.title') %></div>
+  <div class="fields">
+    <% {"yes" => 1, "no" => 0}.each do |k, v| %>
+      <% if params[:include_archived] %>
+        <% count = Person.filter_by_faculty(current_organization.all_people_with_archived, current_organization, v).collect(&:id).count %>
+      <% else %>
+        <% count = Person.filter_by_faculty(current_organization.all_people, current_organization, v).collect(&:id).count %>
+      <% end %>
+
+      <%- active = conditions && params[:faculty].include?("#{v}") %>
+      <div class="option checkbox <%= 'active' if active %>">
+        <%= check_box_tag "faculty[]", "#{v}", active, id: "search_faculty_#{v}", class: "search_faculty" %>
+        <div class="sidebar-label"><%= k.titleize %></div>
+        <span class="info">(<span class="count"><%= count %></span>)</span>
+      </div>
+    <% end %>
+  </div>
+</div>

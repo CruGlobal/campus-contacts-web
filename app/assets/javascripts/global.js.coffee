@@ -1,9 +1,22 @@
 $ ->
+  # $(document).ajaxStart (e)->
+  #   NProgress.start()
+  #
+  # $(document).ajaxStop (e)->
+  #   NProgress.done()
+
   $(window).resize ->
     active_dialog = $(".mh_popup_box:visible")
     $.autoAdjustDialog(active_dialog.first().parents(".custom_mh_popup_box"))
 
   $(document).ready ->
+    $(document).on "hover", ".org_tree_link", ->
+      unless $(this).hasClass("loaded")
+        $(this).addClass("loaded")
+        $.ajax
+          type: 'GET',
+          url: '/load_organization_tree'
+
     $(".mh_popup_box").each ->
       $.autoAdjustDialog($(this))
 
@@ -27,6 +40,8 @@ $ ->
 
   $("#survey_updated_from").datepicker dateFormat: "mm/dd/yy"
   $("#survey_updated_to").datepicker dateFormat: "mm/dd/yy"
+  $("#advanced_search_survey_range_from").datepicker dateFormat: "mm/dd/yy"
+  $("#advanced_search_survey_range_to").datepicker dateFormat: "mm/dd/yy"
   $("#archive_contacts_before").datepicker dateFormat: "yy-mm-dd"
   $("#date_leaders_not_logged_in_after").datepicker dateFormat: "yy-mm-dd"
 

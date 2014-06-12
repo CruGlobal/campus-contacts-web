@@ -27,23 +27,32 @@ $ ->
     if e.keyCode == $.ui.keyCode.ENTER
       $('#contact_search_form').submit()
 
+  $(document).on 'click', '.show_hidden_question_link', (e)->
+    $.hideDialog($("#hidden_questions_dialog"))
+    $.fn.filterLoader('show')
+
+  $(document).on 'click', '.unassign_link a', (e)->
+    $(this).parents(".controls").find(".assigned_to").remove()
+    $(this).remove()
+
   $(document).on 'keyup', (e)->
     if e.keyCode == $.ui.keyCode.ESCAPE
       $('.custom_mh_popup_box').each ->
         unless $(this).hasClass('locked')
           $.hideDialog($(this))
 
-  $("#pagination_limit_select select").change (e)->
-    url = $.url(window.location.href)
-    path = url.attr('path')
-    params = window.location.search
-    if url.param('per_page')
-      window.location.href = params.replace("per_page=#{url.param('per_page')}", "per_page=#{$(this).val()}")
-    else
-      if params == ""
-        window.location.href = "#{path}?per_page=#{$(this).val()}"
-      else
-        window.location.href = "#{params}&per_page=#{$(this).val()}"
+  $("#pagination_limit_select select#per_page").live 'change', (e)->
+    $(document).scrollTop(0)
+    $.fn.filterLoader('show')
+    $("#pagination_limit_select").submit()
+
+  $(".pagination_links .pagination span a").live 'click', (e)->
+    $(document).scrollTop(0)
+    $.fn.filterLoader('show')
+
+  $(".contact_listing a.sort_contact_link").live 'click', (e)->
+    $(document).scrollTop(0)
+    $.fn.filterLoader('show')
 
   $('#bulk_vcard_dialog_download_button').live 'click', (e)->
     e.preventDefault()
@@ -86,9 +95,23 @@ $ ->
     e.preventDefault()
     $.showDialog($("#search_people_filters_div"))
 
+  $('#action_menu_advanced_search').live 'click', (e)->
+    e.preventDefault()
+    $.showDialog($("#advanced_search_div"))
+
+
   $('#search_people_filters_search_button').live 'click', (e)->
     e.preventDefault()
     $('#search_people_form_submit').click()
+
+
+  $('#search_people_filters_search_button').live 'click', (e)->
+    e.preventDefault()
+    $('#search_people_form_submit').click()
+
+  $('#advanced_search_button').live 'click', (e)->
+    e.preventDefault()
+    $('#advanced_search_submit').click()
 
   $('#search_people_filters_save_search_button').live 'click', (e)->
     e.preventDefault()
@@ -226,12 +249,6 @@ $ ->
     if href.indexOf('?') < 0
       href = href+"?"
     document.location = href+"&only_ids="+ids.join(',')
-
-  $('#contacts_controller #include_archived').live 'click', ->
-    if $(this).is(':checked')
-      document.location = '/contacts?include_archived=true'
-    else
-      document.location = '/contacts'
 
   $('#contacts_controller #include_archived_interactions').live 'click', ->
     params = $(this).attr("data-params")
@@ -376,9 +393,8 @@ $ ->
         else
           field.val(v)
 
-  $('#contacts_controller.index .filter_link').attr('href','#')
-
-  $('#contacts_controller.index .filter_link').click ->
+  $('#contacts_controller.index .filter_link').click (e)->
+    e.preventDefault()
     $('#filter_box').toggle()
     false
 

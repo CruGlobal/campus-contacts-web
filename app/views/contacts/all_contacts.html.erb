@@ -5,7 +5,8 @@
       <%= link_to raw("<button class='action_gray full_width_button' id='allcontacts_import_contacts_button'>#{t('contacts.index.import_contacts')}</button>"), new_import_path %>
     </div>
   	<div id="sidebar_lists" class="leftmenu">
-      <%= render partial: 'contacts/new_sidebar' %>
+      <%= render partial: 'search/sidebar' %>
+      <!-- <%= render partial: 'contacts/new_sidebar' %> -->
     </div>
   </div>
 <% end %>
@@ -14,25 +15,17 @@
   <h1>
     <%= t('.title') %>
     <%= "#{'-' if @header.present?} #{@header}" %>
-    <div id='global_loader' style='display:none;'>
-      <%= image_tag 'loader.gif'%>
+    <div id='global_loader' style='' class='filter_loader'>
+      <%= image_tag 'loader.gif', height: '20'%>
+      Loading Contacts
     </div>
   </h1>
 </div>
 
 <div id="ac_contact_spread">
-
-
-
-  <div class="pagination_space">
-    <%= paginate @people %>
-    <% if @people.length < @people.total_count %>
-      <div class="pagination_details">
-        <%= "Displaying #{@people.offset_value + 1} - #{@people.offset_value + @people.length} of #{@people.total_count}" %>
-      </div>
-    <% end %>
+  <div id="ac_pagination_top">
+    <%= render 'contacts/pagination', people: @people %>
   </div>
-
   <div id="ac_button_bar">
   	<ul class="button_bar" id="menu_assign_link">
   		<li class="action_lightblue">
@@ -60,21 +53,6 @@
   		</li>
   	</ul>
 
-    <% with_save_search = (params[:do_search] == "1" || params[:search] == "1") && @people.length > 0 && !@saved_contact_search.full_path.present? %>
-
-  	<ul class="button_bar">
-  		<li class="action_lightblue <%= 'btn_left' if with_save_search %>">
-  		  <%= link_to "Search", "#", id: "action_menu_search_filters" %>
-  		</li>
-  	</ul>
-
-    <% if with_save_search %>
-      <ul class="button_bar">
-        <li class="action_lightblue btn_right">
-          <%= link_to("Save Search", "", id: 'search_people_filters_save_search_button') %>
-        </li>
-      </ul>
-    <% end %>
   	<ul class="button_bar">
   		<li class="action_lightblue">
         <%= link_to('Export ▾', '#', class: 'action_dropdown') %>
@@ -106,93 +84,15 @@
         </ul>
       </li>
   	</ul>
-
   </div>
+
   <%= form_tag("", :id => "move_to_dnc", :method => :put) do %>
     <%= hidden_field_tag :status, "do_not_contact" %>
   <% end %>
 
-  <span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
-  <span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
-  <%= form_for ContactAssignment.new do |f| %>
-    <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
-    <%= hidden_field_tag :assign_to %>
-    <div class='scroll_table'>
-      <table class="listing contact_listing <%= 'unassigned_contacts' if params[:assigned_to] == 'unassigned' %>" cellpadding="0" cellspacing="0">
-        <tr id="table_header">
-        	<th>&nbsp;</th>
-          <th class="checkbox_cell header_checkbox">
-            <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment',
-                  class: 'check_all_contacts', 'data-status' => @attr %>
-          </th>
-          <th class='first_name'><%= sort_link @q, :first_name, t('.first_name'), params %></th>
-          <th class='last_name'><%= sort_link @q, :last_name, t('.last_name'), params %></th>
-
-        	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
-    	      <th class='status'><%= sort_link @q, :followup_status, t('.status'), params %></th>
-    		  <% end %>
-
-          <th class='gender'><%= sort_link @q, :gender, t('.gender'), params %></th>
-          <th class='phone' style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), params %></th>
-          <th class='labels'><%= sort_link @q, :labels, t('.labels'), params %></th>
-
-          <% if @questions.present? %>
-            <% @questions.uniq.each do |q| %>
-              <% if @predefined_questions.include?(q) %>
-                <% question = q.attribute_name.gsub('_',' ').titleize %>
-              <% else %>
-                <% question = q.slug.present? ? q.slug.titleize : q.label.titleize %>
-              <% end%>
-              <th class="question <%= dom_id(q) %>" class='tip' title="<%= question %>">
-                <%= question %>
-                <br/>
-                <%= link_to("(#{t('nav.hide')})", hide_survey_question_path(@organization.surveys.first || @predefined_survey.id, q), remote: true, method: :put, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
-              </th>
-            <% end %>
-          <% end %>
-
-          <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
-            <th class="visible_surveys_column">
-          	  <%= t('.surveys') %>
-              <%= link_to("(#{t('nav.hide')})", hide_survey_question_path('0', 'visible_surveys_column'), remote: true, method: :put, class: 'hide', 'data-class' => 'visible_surveys_column') %>
-            </th>
-        	<% end %>
-
-          <th class='last_survey'><%= sort_link @q, :last_survey, t('.last_survey'), params %></th>
-          <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
-        </tr>
-        <tbody id="contacts_table">
-          <% @people.each do |person| %>
-            <%= render 'contacts/contact', person: person, questions: @questions, answers: @answers, assignments: @assignments %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <% if @people.blank? %>
-      <div class="contentpad no_contacts">
-        <%= t('contacts.index.no_contacts') %>
-      </div>
-  	<% end %>
-
-    <%= render 'application/assign' %>
-  <% end %>
-
-  <div class="pagination_space">
-    <%= paginate @people %>
-    <%= form_tag all_contacts_path(params), method: :get, id: "pagination_limit_select" do %>
-       <%= select_tag :per_page, options_for_select([25, 50, 100, 500], selected: session[:per_page] || 25) %>
-       contacts per page
-    <% end %>
+  <div id="ac_contact_list">
+    <%= render partial: 'contacts/contact_list' %>
   </div>
-
-  <%- if false %>
-    <div id="update_notice_div">
-      <%= render partial: 'update_notice' if false %>
-    </div>
-  <%- end %>
-  <input type="button" value="Show Message Guide" id="show_message_guide_button" style="display:none">
-
 </div>
 
 <!-- Add Contact Dialog -->
@@ -215,6 +115,9 @@
 
 <!-- Search Filters Dialog -->
 <%= render 'dialogs/search_people_filters' %>
+
+<!-- Advanced Search Dialog -->
+<%# render 'dialogs/advanced_search' %>
 
 <!-- Show Hidden Question Dialog -->
 <%= render 'dialogs/search_hidden_questions'%>

@@ -1,0 +1,36 @@
+<% conditions = params[:group].present? %>
+<% selected_option = params[:group_filter].present? ? params[:group_filter] : Element::CHOICEFILED_MATCH[0][1] %>
+<% selected_title = Element::CHOICEFILED_MATCH.map{|a| a[0] if a.include?(selected_option)}.compact!.try(:first) %>
+<div class="side-search-option singleton" data-id="side_search_group" data-type="Standard" data-value="<%= params[:group] %>" data-set="<%= conditions.present? %>">
+  <%= render "search/toggler" %>
+  <div class="title"><%= t('.title') %></div>
+  <div class="options <%= 'active' if conditions %>">
+    <div class="selected">
+      <%= selected_title %>
+    </div>
+    <div class="choices">
+      <% Element::CHOICEFILED_MATCH.each do |option| %>
+        <div class="text_option <%= option[1] %>">
+          <%= radio_button_tag :group_filter, option[1], selected_option == option[1] %>
+          <%= option[0].titleize %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="fields">
+		<% current_organization.groups.each do |group| %>
+      <% if params[:include_archived] %>
+        <% count = current_organization.all_people_with_archived.get_from_group(group.id).collect(&:id).count %>
+      <% else %>
+        <% count = current_organization.all_people.get_from_group(group.id).collect(&:id).count %>
+      <% end %>
+
+      <%- active = conditions && params[:group].include?(group.id.to_s) %>
+      <div class="option checkbox <%= 'active' if active %>">
+        <%= check_box_tag "group[]", group.id, active, id: "search_group_#{group.id}", class: "search_group_checkbox" %>
+        <div class="sidebar-label"><%= group.name %></div>
+        <span class="info">(<span class="count"><%= count %></span>)</span>
+      </div>
+		<% end %>
+  </div>
+</div>

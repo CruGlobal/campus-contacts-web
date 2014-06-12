@@ -1,0 +1,13 @@
+<div class="title"><%= t('dialogs.advanced_search.search_filter.survey_questions.title') %></div>
+<div class="extra_content">
+  <div class="advanced_search_survey_update_loader">
+    <%= t('dialogs.advanced_search.search_filter.survey_questions.loader') %>
+  </div>
+</div>
+<div class="fields advanced_search_survey_list">
+  <% @survey_scope.each do |survey| %>
+    <div class="search_group" id="search_survey_group_<%= survey.id %>">
+      <%= render partial: 'contacts/search_filter_survey', locals: {survey: survey} %>
+    </div>
+  <% end if @survey_scope.present? %>
+</div>

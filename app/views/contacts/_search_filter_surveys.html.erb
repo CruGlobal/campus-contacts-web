@@ -1,0 +1,59 @@
+<div class="title"><%= t('dialogs.advanced_search.search_filter.surveys.title') %></div>
+<div class="fields">
+  <div class="field">
+    <div class="search_filter_options" style="display:<%= params[:survey_range_toggle].present? && params[:advanced_search].present? ? 'block' : 'none'%>">
+      <div class="search_filter_option">
+        <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip survey_range_search", title: "Reset Search", data: {value: (params[:survey_range] || "").split(",").join(","), id: "survey_range", toggle: params[:survey_range_toggle]} %>
+      </div>
+    </div>
+    <div class="field_title">
+      <span class="arrow">
+        <%=raw params[:survey_range_toggle].present? && params[:advanced_search].present? ? "&#x25BC;" : "&#x25B6;"%>
+      </span>
+      <span class="text"><%= t('dialogs.advanced_search.search_filter.surveys.range') %></span>
+    </div>
+    <div class="field_element <%= 'active' if params[:survey_range_toggle].present? && params[:advanced_search].present? %>">
+			<div class="field_row">
+				<%= check_box_tag "survey_range_toggle", "on", params[:survey_range_toggle].present? && params[:advanced_search].present?, class: "survey_range_toggle" %>
+				<%= t('dialogs.advanced_search.search_filter.surveys.range_guide') %>
+			</div>
+      <div class="field_option survey_range">
+        <% params[:survey_range] = [] unless params[:survey_range_toggle] == "on"%>
+        <%= text_field_tag "survey_range[]", params[:survey_range].try(:first),
+            id: "advanced_search_survey_range_from", class: "date_field survey_range_start",
+            placeholder: "Click to insert date", autocomplete: "off" %>
+        and
+        <%= text_field_tag "survey_range[]", params[:survey_range].try(:last),
+            id: "advanced_search_survey_range_to", class: "date_field survey_range_stop",
+            placeholder: "Click to insert date", autocomplete: "off" %>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <div class="search_filter_options" style="display:<%= params[:survey_scope].present? && params[:advanced_search].present? ? 'block' : 'none'%>">
+      <div class="search_filter_option">
+        <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip checkbox_search survey_scope", title: "Reset Search", data: {value: (params[:survey_scope] || "").split(",").join(","), id: "survey_scope"} %>
+      </div>
+    </div>
+    <div class="field_title">
+      <span class="arrow">
+        <%=raw params[:survey_scope].present? && params[:advanced_search].present? ? "&#x25BC;" : "&#x25B6;"%>
+      </span>
+      <span class="text"><%= t('dialogs.advanced_search.search_filter.surveys.scope') %></span>
+    </div>
+    <div class="field_element <%= 'active' if params[:survey_scope].present? && params[:advanced_search].present? %>">
+      <% condition = params[:advanced_search].present? %>
+			<div class="field_row">
+				<%= check_box_tag "survey_scope[]", "all", condition && (params[:survey_scope].nil? || params[:survey_scope].include?("all")),
+            id: "search_survey_all", class: "search_survey_checkbox survey_scope_checkbox" %>
+				<%= "All" %>
+			</div>
+      <% current_organization.surveys.order(:title).each do |survey| %>
+				<div class="field_row">
+					<%= check_box_tag "survey_scope[]", survey.id, condition && (params[:survey_scope].nil? || params[:survey_scope].include?(survey.id.to_s) || params[:survey_scope].include?("all")), id: "search_survey_#{survey.id}", class: "search_survey_checkbox survey_item survey_scope_checkbox" %>
+					<%= survey.title %>
+				</div>
+      <% end %>
+    </div>
+  </div>
+</div>

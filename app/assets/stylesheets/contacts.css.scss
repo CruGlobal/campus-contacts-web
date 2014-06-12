@@ -2,6 +2,9 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+.no_wrap {
+  white-space: nowrap;
+}
 .contact_listing {
   .question {
     min-width: 100px;
@@ -28,21 +31,29 @@
     }
   }
 }
-
 .pagination_space {
   margin-top: 10px;
-  .pagination_details {
-    padding-right: 10px;
-    line-height: 1.5em;
-    float: right;
+}
+.pagination_area {
+  margin-top: -5px;
+  float: right;
+  text-align: right;
+  .pagination_info {
+    margin: 3px 0;
+    color: #aaa;
+    font-size: 12;
+    font-style: italic;
+		font-family: Georgia;
   }
-  .pagination {
-    float: right;
-    span a {
-      color: #0379ae;
-      &:hover {
-        text-decoration: none;
-        color: #01467b;
+  .pagination_links {
+    height: 21px;
+    .pagination {
+      span a {
+        color: #0379ae;
+        &:hover {
+          text-decoration: none;
+          color: #01467b;
+        }
       }
     }
   }
@@ -255,8 +266,11 @@
     }
     td.cell {
       padding: 5px;
-      &.labels {
+      &.survey {
         min-width: 150px;
+      }
+      &.labels {
+        min-width: 120px;
         .roles_spaces {
           width: 160px;
           overflow: hidden;
@@ -388,6 +402,9 @@
     padding: 20px;
   }
 }
+#hidden_questions_loader {
+  text-align: center;
+}
 #search_hidden_questions_div {
   #search_hidden_questions_guide {
     padding: 10px;
@@ -480,9 +497,6 @@ input.text.validate-date {
     overflow:hidden;
     width: 297px;
     #search_locate_button_container{
-      float:left;
-    }
-    #advanced_search_button_container{
       float:right;
     }
   }

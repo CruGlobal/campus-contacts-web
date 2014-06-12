@@ -1,0 +1,15 @@
+<div class="actions">
+  <div class="apply">
+    <button class="action_gray search_result_button" id="search_apply_button">
+      Apply
+    </button>
+    <div class="other">
+      <%= link_to "Cancel", "#", class: "reset_filter"%>
+    </div>
+  </div>
+  <% if clear %>
+    <div class="clear">
+      <%= link_to "Clear Filter", "#", class: "clear_filter"%>
+    </div>
+  <% end %>
+</div>

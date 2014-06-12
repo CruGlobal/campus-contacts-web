@@ -241,31 +241,6 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     end
   end
 
-  context "hide & unhide" do
-    setup do
-      @user, org = admin_user_login_with_org
-      @survey = Factory(:survey, organization: org) #create survey
-      @question = Factory(:some_question)
-      @survey.questions << @question
-
-      @predefined = Factory(:survey, organization: org)
-      APP_CONFIG['predefined_survey'] = @predefined.id
-      @predefined.questions << Factory(:year_in_school_element)
-    end
-
-    should "hide" do
-      xhr :put, :hide, {:survey_id => @survey.id, :id => @question.id}
-      assert_response :success
-    end
-
-    should "unhide" do
-      request.env["HTTP_REFERER"] = "localhost:3000"
-      @question.update_attributes({:hidden => true})
-      xhr :put, :unhide, {:survey_id => @survey.id, :id => @question.id}
-      assert_response :success
-    end
-  end
-
   context "Suggestions" do
     setup do
       @user, org = admin_user_login_with_org

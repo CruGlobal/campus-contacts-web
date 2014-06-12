@@ -139,68 +139,6 @@ class Surveys::QuestionsController < ApplicationController
     end
   end
 
-  def hide
-  	@selected_question_id = params[:id]
-  	@selected_survey_id = params[:survey_id]
-
-  	if @selected_question_id == "visible_surveys_column"
-      current_organization.settings[:visible_surveys_column] = false
-      current_organization.save!
-  	else
-		  @predefined_questions = current_organization.predefined_survey_questions
-		  if @predefined_questions.collect(&:id).include?(@selected_question_id.to_i)
-		    @question = @predefined_questions.find(@selected_question_id.to_i)
-		    @organization = current_organization
-		    @organization.survey_elements.each do |pe|
-		      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
-		    end
-		    if current_organization.settings[:visible_predefined_questions].present?
-		      current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
-		      current_organization.save!
-		    end
-		  else
-		    @survey = Survey.find(@selected_survey_id)
-		    @question = Element.find(@selected_question_id)
-		    @organization = @survey.organization
-		    @organization.survey_elements.each do |pe|
-		      pe.update_attribute(:hidden, true) if pe.element_id == @question.id
-		    end
-		  end
-		end
-  end
-
-  def unhide
-  	@selected_question_id = params[:id]
-  	@selected_survey_id = params[:survey_id]
-
-  	if @selected_question_id == "visible_surveys_column"
-      current_organization.settings[:visible_surveys_column] = true
-      current_organization.save!
-  	else
-		  @predefined_questions = current_organization.predefined_survey_questions
-		  if @predefined_questions.collect(&:id).include?(@selected_question_id.to_i)
-		    @question = @predefined_questions.find(@selected_question_id.to_i)
-		    @organization = current_organization
-		    @survey = @predefined_survey
-
-        settings = current_organization.settings
-        settings[:visible_predefined_questions] = Array.new if settings[:visible_predefined_questions].nil?
-        settings[:visible_predefined_questions] << @question.id
-        current_organization.save(validate: false)
-      else
-        @survey = Survey.find(params[:survey_id])
-        @organization = @survey.organization
-        @survey_element = @organization.survey_elements.find_by_element_id(params[:id].to_i)
-        @survey_element.update_attribute(:hidden, false)
-        @question = @survey_element.element
-      end
-    end
-    respond_to do |wants|
-      wants.html { redirect_to :back }
-      wants.js
-    end
-  end
-
   def suggestion
     type = params[:type]
     keyword = params[:q]

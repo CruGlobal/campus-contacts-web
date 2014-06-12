@@ -133,8 +133,7 @@ Mh::Application.routes.draw do
 
   # resources :rejoicables
 
-  resources :saved_contact_searches#, :only => [:show, :create, :edit, :destroy, :index]
-  match "/saved_contact_searches/:id" => "saved_contact_searches#update"
+  resources :saved_contact_searches
 
   resources :followup_comments, :only => [:index, :create, :destroy]
 
@@ -198,6 +197,7 @@ Mh::Application.routes.draw do
   #   resources :organizations
   # end
 
+  match "load_organization_tree" => "organizations#load_tree"
   resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
@@ -253,10 +253,6 @@ Mh::Application.routes.draw do
       post :remove_logo
     end
     resources :questions, controller: "surveys/questions" do
-      member do
-        put :hide
-        put :unhide
-      end
       collection do
         post :reorder
       end
@@ -289,8 +285,10 @@ Mh::Application.routes.draw do
   match "/allcontacts" => "contacts#all_contacts", as: "all_contacts"
   match "/mycontacts" => "contacts#my_contacts", as: "my_contacts"
   match "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
-  resources :contacts, :only => [:show, :create, :edit, :update, :destroy, :index] do
+  resources :contacts do
     collection do
+      get :filter
+      get :update_advanced_search_surveys
       get :all_contacts
       get :my_contacts
       get :mine
@@ -308,6 +306,8 @@ Mh::Application.routes.draw do
       get :search_by_name_and_email
       get :auto_suggest_send_email
       get :auto_suggest_send_text
+      post :hide_question_column
+      post :unhide_question_column
     end
   end
 

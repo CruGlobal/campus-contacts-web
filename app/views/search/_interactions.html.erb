@@ -1,0 +1,36 @@
+<% conditions = params[:interaction_type].present? %>
+<% selected_option = params[:interaction_filter].present? ? params[:interaction_filter] : Element::CHOICEFILED_MATCH[0][1] %>
+<% selected_title = Element::CHOICEFILED_MATCH.map{|a| a[0] if a.include?(selected_option)}.compact!.try(:first) %>
+<div class="side-search-option singleton checkboxes_only " data-id="side_search_interaction" data-type="Standard" data-value="<%= params[:interaction_type] %>" data-set="<%= conditions.present? %>">
+  <%= render "search/toggler" %>
+  <div class="title"><%= t('.title') %></div>
+  <div class="options <%= 'active' if conditions %>">
+    <div class="selected">
+      <%= selected_title %>
+    </div>
+    <div class="choices">
+      <% Element::CHOICEFILED_MATCH.each do |option| %>
+        <div class="text_option <%= option[1] %>">
+          <%= radio_button_tag :interaction_filter, option[1], selected_option == option[1] %>
+          <%= option[0].titleize %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="fields">
+    <% @organization.interaction_types.exclude_comment.each do |interaction_type| %>
+      <% if params[:include_archived_interactions] %>
+        <% count = interaction_type.interaction_receivers_from_org_with_archived(@organization).collect(&:id).count %>
+      <% else %>
+        <% count = interaction_type.interaction_receivers_from_org(@organization).collect(&:id).count %>
+      <% end %>
+
+      <%- active = conditions && params[:interaction_type].include?(interaction_type.id.to_s) %>
+      <div class="option checkbox <%= 'active' if active %>">
+        <%= check_box_tag "interaction_type[]", interaction_type.id, active, id: "search_interaction_type_#{interaction_type.id}", class: "search_interaction_type_checkbox" %>
+        <div class="sidebar-label"><%= interaction_type.name %></div>
+        <span class="info">(<span class="count"><%= count %></span>)</span>
+      </div>
+    <% end %>
+  </div>
+</div>

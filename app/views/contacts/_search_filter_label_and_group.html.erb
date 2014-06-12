@@ -1,0 +1,63 @@
+<div class="title"><%= t('dialogs.advanced_search.search_filter.label_and_group_data.title') %></div>
+<div class="fields">
+  <div class="field">
+    <div class="search_filter_options" style="display:<%= params[:label].present? && params[:advanced_search].present? ? 'block' : 'none'%>">
+      <div class="search_filter_option">
+        <%= radio_button_tag :label_filter, 'all', params[:label_filter] == 'all' %>
+        Match All
+      </div>
+      <div class="search_filter_option">
+        <%= radio_button_tag :label_filter, 'any', params[:label_filter] == 'any' || params[:label_filter].nil? %>
+        Match Any
+      </div>
+      <div class="search_filter_option">
+        <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip label_search", title: "Reset Search", data: {value: (params[:label] || "").split(",").join(","), filter: params[:label_filter]} %>
+      </div>
+    </div>
+    <div class="field_title">
+      <span class="arrow">
+        <%=raw params[:label].present? && params[:advanced_search].present? ? "&#x25BC;" : "&#x25B6;"%>
+      </span>
+      <span class="text"><%= t('dialogs.advanced_search.search_filter.label_and_group_data.labels') %></span>
+    </div>
+    <div class="field_element <%= 'active' if params[:label].present? && params[:advanced_search].present? %>">
+      <% condition = params[:label].present? && params[:advanced_search].present? %>
+			<% current_organization.label_set.each do |label| %>
+				<div class="field_row">
+					<%= check_box_tag "label[]", label.id, condition && params[:label].include?(label.id.to_s), id: "search_label_#{label.id}", class: "search_label_checkbox" %>
+					<%= label %>
+				</div>
+			<% end %>
+    </div>
+  </div>
+  <div class="field">
+    <div class="search_filter_options" style="display:<%= params[:group].present? && params[:advanced_search].present? ? 'block' : 'none'%>">
+      <div class="search_filter_option">
+        <%= radio_button_tag :group_filter, 'all', params[:group_filter] == 'all' %>
+        Match All
+      </div>
+      <div class="search_filter_option">
+        <%= radio_button_tag :group_filter, 'any', params[:group_filter] == 'any' || params[:group_filter].nil? %>
+        Match Any
+      </div>
+      <div class="search_filter_option">
+        <%= link_to image_tag("reset_button.png"), "#", class: "reset_search tip group_search", title: "Reset Search", data: {value: (params[:group] || "").split(",").join(","), filter: params[:group_filter]} %>
+      </div>
+    </div>
+    <div class="field_title">
+      <span class="arrow">
+        <%=raw params[:group].present? && params[:advanced_search].present? ? "&#x25BC;" : "&#x25B6;"%>
+      </span>
+      <span class="text"><%= t('dialogs.advanced_search.search_filter.label_and_group_data.groups') %></span>
+    </div>
+    <div class="field_element <%= 'active' if params[:group].present? && params[:advanced_search].present? %>">
+      <% condition = params[:group].present? && params[:advanced_search].present? %>
+			<% current_organization.groups.each do |group| %>
+				<div class="field_row">
+					<%= check_box_tag "group[]", group.id, condition && params[:group].include?(group.id.to_s), id: "search_group_#{group.id}", class: "search_group_checkbox" %>
+					<%= group.name %>
+				</div>
+			<% end %>
+    </div>
+  </div>
+</div>

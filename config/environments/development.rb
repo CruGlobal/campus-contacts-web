@@ -49,8 +49,8 @@ Mh::Application.configure do
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.after_initialize do
-    Bullet.enable = false
-    Bullet.bullet_logger = true
+    Bullet.enable = true
+    Bullet.rails_logger = true
   end
   config.assets.logger = false
 end

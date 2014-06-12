@@ -489,7 +489,7 @@ ul.leftmenu {
     padding: 5px;
 		vertical-align: top;
 		&.hidden_questions {
-		  text-align: center;
+		  text-align: right;
 		}
   }
   .check {
@@ -2709,18 +2709,32 @@ ul.sf-menu {
   ul {
     margin-right: -1px;
   }
-  ul li a{
-    overflow: hidden;
-    white-space: nowrap;
+  ul li {
+    text-align: left;
+    a{
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 }
 ul.under_tree {
   right: 1px;
   width: 350px;
   max-height: 450px;
+  min-height: 50px;
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid #d9d9d9;
+  background: white;
+  .loader {
+    margin: 10px 0 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-family: Georgia;
+    color: #808284;
+    font-style: italic;
+  }
   .org_nav_item {
     padding: 5px 5px;
     background: #f0f0f0;

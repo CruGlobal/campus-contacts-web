@@ -4,5 +4,5 @@
   <% link_text = hidden_question.slug.present? ? hidden_question.slug : hidden_question.label %>
 <% end %>
 <li>
-  <%= link_to(link_text.titleize, unhide_survey_question_path(@organization.surveys.first || @predefined_survey.id, hidden_question.id), method: :put) %>
+  <%= link_to(link_text.titleize, unhide_question_column_contacts_path(survey_id: @organization.surveys.first || @predefined_survey.id, question_id: hidden_question.id), method: :post, remote: true, class: 'show_hidden_question_link') %>
 </li>

@@ -15,6 +15,222 @@ class ContactsControllerTest < ActionController::TestCase
     end
   end
 
+  context "hide & unhide question column" do
+    setup do
+      @user, org = admin_user_login_with_org
+      @survey = Factory(:survey, organization: org) #create survey
+      @question = Factory(:some_question)
+      @survey.questions << @question
+
+      @predefined = Factory(:survey, organization: org)
+      APP_CONFIG['predefined_survey'] = @predefined.id
+      @predefined.questions << Factory(:year_in_school_element)
+    end
+
+    should "hide the column" do
+      xhr :post, :hide_question_column, {:survey_id => @survey.id, :question_id => @question.id}
+      assert_response :success
+    end
+
+    should "unhide the column" do
+      request.env["HTTP_REFERER"] = "localhost:3000"
+      @question.update_attributes({:hidden => true})
+      xhr :post, :unhide_question_column, {:survey_id => @survey.id, :question_id => @question.id}
+      assert_response :success
+    end
+  end
+
+  context "Advanced Search - " do
+    setup do
+      @user = Factory(:user_with_auxs)
+      @person = @user.person
+      sign_in @user
+
+      @org = Factory(:organization)
+      @org.add_admin(@person)
+      @request.session[:current_organization_id] = @org.id
+
+      @contact1 = Factory(:person, first_name: "abc", last_name: "qrs")
+      Factory(:email_address, email: 'contact1@email.com', person: @contact1)
+      @org.add_contact(@contact1)
+
+      @contact2 = Factory(:person, first_name: "bcd", last_name: "rst")
+      Factory(:email_address, email: 'contact2@email.com', person: @contact2)
+      Factory(:phone_number, person: @contact2, number: "1111122222", primary: true)
+      @org.add_contact(@contact2)
+
+      @contact3 = Factory(:person, first_name: "cde", last_name: "stu")
+      Factory(:phone_number, person: @contact3, number: "2222233333", primary: true)
+      @org.add_contact(@contact3)
+
+      @predefined_survey = Factory(:survey, organization: @org)
+      APP_CONFIG['predefined_survey'] = @predefined_survey.id
+      @predefined_survey.questions << Factory(:year_in_school_element)
+    end
+
+    context "Search Person" do
+      should "search by first name" do
+        xhr :get, :index, {:advanced_search => "1", :search_any => "bc"}
+        assert_response :success
+        assert_equal 2, assigns(:people).total_count
+      end
+      should "search by last name" do
+        xhr :get, :index, {:advanced_search => "1", :search_any => "rs"}
+        assert_response :success
+        assert_equal 2, assigns(:people).total_count
+      end
+      should "search by email" do
+        xhr :get, :index, {:advanced_search => "1", :search_any => "contact"}
+        assert_response :success
+        assert_equal 2, assigns(:people).total_count
+      end
+      should "search by phone" do
+        xhr :get, :index, {:advanced_search => "1", :search_any => "222"}
+        assert_response :success
+        assert_equal 2, assigns(:people).total_count
+      end
+    end
+
+    context "Search by Contact Data" do
+      setup do
+        @person.update_attribute(:gender, nil)
+        @contact1.update_attribute(:gender, 1)
+        @contact2.update_attribute(:gender, 1)
+        @contact3.update_attribute(:gender, 0)
+        @contact3.update_attribute(:faculty, true)
+        @assignment = Factory(:contact_assignment, organization: @org, person: @contact1, assigned_to: @person).inspect
+
+        @contact1.permission_for_org(@org).update_attribute(:followup_status, 'contacted')
+        @contact2.permission_for_org(@org).update_attribute(:followup_status, 'completed')
+      end
+      # Gender
+      should "search by gender - male" do
+        xhr :get, :index, {:advanced_search => "1", :gender => "1"}
+        assert_response :success
+        assert_equal 2, assigns(:people).total_count
+      end
+      should "search by gender - female" do
+        xhr :get, :index, {:advanced_search => "1", :gender => "0"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      should "search by gender - no_response" do
+        xhr :get, :index, {:advanced_search => "1", :gender => "no_response"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      # Faculty
+      should "search by faculty - yes" do
+        xhr :get, :index, {:advanced_search => "1", :faculty => "1"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      should "search by faculty - no" do
+        xhr :get, :index, {:advanced_search => "1", :faculty => "0"}
+        assert_response :success
+        assert_equal 3, assigns(:people).total_count
+      end
+      # Assigned
+      should "search by assignment - yes" do
+        xhr :get, :index, {:advanced_search => "1", :assignment => "1"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      should "search by assignment - no" do
+        xhr :get, :index, {:advanced_search => "1", :assignment => "0"}
+        assert_response :success
+        assert_equal 3, assigns(:people).total_count
+      end
+      # Status
+      should "search by status - uncontacted & blank" do
+        xhr :get, :index, {:advanced_search => "1", :status => "uncontacted"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      should "search by status - contacted" do
+        xhr :get, :index, {:advanced_search => "1", :status => "contacted"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+      should "search by status - completed" do
+        xhr :get, :index, {:advanced_search => "1", :status => "completed"}
+        assert_response :success
+        assert_equal 1, assigns(:people).total_count
+      end
+    end
+
+    context "Search by Label & Group" do
+      setup do
+        Factory(:organizational_label, organization: @org, person: @contact1, label: Label.involved)
+        Factory(:organizational_label, organization: @org, person: @contact2, label: Label.involved)
+        Factory(:organizational_label, organization: @org, person: @contact2, label: Label.leader)
+        Factory(:organizational_label, organization: @org, person: @contact3, label: Label.leader)
+
+        @group1 = Factory(:group, organization: @org, name: "Test Group 1")
+        @group2 = Factory(:group, organization: @org, name: "Test Group 2")
+        Factory(:group_membership, group: @group1, person: @contact1)
+        Factory(:group_membership, group: @group1, person: @contact2)
+        Factory(:group_membership, group: @group2, person: @contact2)
+        Factory(:group_membership, group: @group2, person: @contact3)
+      end
+
+      context "search by label (match any)" do
+        should "return any people with 1 selected label" do
+          xhr :get, :index, {:advanced_search => "1", label_filter: "any", label: [Label.involved.id]}
+          assert_response :success
+          assert_equal 2, assigns(:people).total_count
+        end
+        should "return any people with 2 selected label" do
+          xhr :get, :index, {:advanced_search => "1", label_filter: "any", label: [Label.involved.id, Label.leader.id]}
+          assert_response :success
+          assert_equal 3, assigns(:people).total_count
+        end
+      end
+
+      context "search by label (match all)" do
+        should "return any people with 1 selected label" do
+          xhr :get, :index, {:advanced_search => "1", label_filter: "all", label: [Label.involved.id]}
+          assert_response :success
+          assert_equal 2, assigns(:people).total_count
+        end
+        should "return any people with 2 selected label" do
+          xhr :get, :index, {:advanced_search => "1", label_filter: "all", label: [Label.involved.id, Label.leader.id]}
+          assert_response :success
+          assert_equal 1, assigns(:people).total_count
+        end
+      end
+
+      context "search by group (match any)" do
+        should "return any people with 1 selected group" do
+          xhr :get, :index, {:advanced_search => "1", group_filter: "any", group: [@group1.id]}
+          assert_response :success
+          assert_equal 2, assigns(:people).total_count
+        end
+        should "return any people with 2 selected group" do
+          xhr :get, :index, {:advanced_search => "1", group_filter: "any", group: [@group1.id, @group2.id]}
+          assert_response :success
+          assert_equal 3, assigns(:people).total_count
+        end
+      end
+
+      context "search by group (match all)" do
+        should "return any people with 1 selected group" do
+          xhr :get, :index, {:advanced_search => "1", group_filter: "all", group: [@group1.id]}
+          assert_response :success
+          assert_equal 2, assigns(:people).total_count
+        end
+        should "return any people with 2 selected group" do
+          xhr :get, :index, {:advanced_search => "1", group_filter: "all", group: [@group1.id, @group2.id]}
+          assert_response :success
+          assert_equal 1, assigns(:people).total_count
+        end
+      end
+    end
+    # should "raise error" do
+    #   raise "ERROR"
+    # end
+  end
+
   should "redirect when there is no current_organization" do
     get :index
     assert_response :redirect
@@ -60,32 +276,31 @@ class ContactsControllerTest < ActionController::TestCase
         @predefined.questions << @year_in_school_question
 
       end
-
-      context "filter by interaction_types" do
-        setup do
-          @interaction_type1 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
-          @interaction_type2 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 2")
-          @person1 = Factory(:person)
-          @person2 = Factory(:person)
-          @person3 = Factory(:person)
-          @org.add_contact(@person1)
-          @org.add_contact(@person2)
-          @org.add_contact(@person3)
-          Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
-          Factory(:interaction, receiver: @person2, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
-          Factory(:interaction, receiver: @person3, creator: @person, organization: @org, interaction_type_id: @interaction_type2.id)
-        end
-
-        should "return people with specified interaction" do
-          get :all_contacts, interaction_type: @interaction_type1.id
-          assert_response :success
-          assert_equal "Interaction 1", assigns(:header), assigns(:header).inspect
-          assert assigns(:people).include?(@person1)
-          assert assigns(:people).include?(@person2)
-          assert !assigns(:people).include?(@person3)
-        end
-
-      end
+      #
+      # context "filter by interaction_types" do
+      #   setup do
+      #     @interaction_type1 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
+      #     @interaction_type2 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 2")
+      #     @person1 = Factory(:person)
+      #     @person2 = Factory(:person)
+      #     @person3 = Factory(:person)
+      #     @org.add_contact(@person1)
+      #     @org.add_contact(@person2)
+      #     @org.add_contact(@person3)
+      #     Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+      #     Factory(:interaction, receiver: @person2, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+      #     Factory(:interaction, receiver: @person3, creator: @person, organization: @org, interaction_type_id: @interaction_type2.id)
+      #   end
+      #
+      #   should "return people with specified interaction" do
+      #     get :all_contacts, interaction_type: @interaction_type1.id
+      #     assert_response :success
+      #     assert assigns(:people).include?(@person1)
+      #     assert assigns(:people).include?(@person2)
+      #     assert !assigns(:people).include?(@person3)
+      #   end
+      #
+      # end
     end
   end
 
@@ -319,6 +534,7 @@ class ContactsControllerTest < ActionController::TestCase
         @contact3 = Factory(:person)
         @contact4 = Factory(:person)
         @contact5 = Factory(:person)
+        Factory(:email_address, email: 'user@email.com', person: @user.person)
         @user.person.organizations.first.add_leader(@user.person, @user.person)
         @user.person.organizations.first.add_contact(@contact1)
         @user.person.organizations.first.add_contact(@contact2)
@@ -327,18 +543,6 @@ class ContactsControllerTest < ActionController::TestCase
         @user.person.organizations.first.add_contact(@contact5)
       end
 
-      should "have header for admin" do
-        xhr :get, :index, {:permission => Permission::ADMIN_ID}
-        assert_equal assigns(:header).upcase, "Admin".upcase
-      end
-      should "have header for leader" do
-        xhr :get, :index, {:permission => Permission::USER_ID}
-        assert_equal assigns(:header).upcase, "User".upcase
-      end
-      should "have header for contact" do
-        xhr :get, :index, {:permission => Permission::NO_PERMISSIONS_ID}
-        assert_equal assigns(:header).upcase, "No Permissions".upcase
-      end
       should "have header when viewing unassigned contacts" do
         xhr :get, :index, {:assigned_to => "unassigned"}
         assert_equal assigns(:header), "Unassigned"
@@ -381,7 +585,7 @@ class ContactsControllerTest < ActionController::TestCase
       end
       should "have header for assigned to specific person" do
         xhr :get, :index, {:assigned_to => @user.person.id}
-        assert_equal assigns(:header), "Assigned to #{@user.person.name}"
+        assert_equal "Assigned to #{@user.person.name}", assigns(:header)
       end
     end
 
@@ -961,7 +1165,7 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "return admins when Admin link is clicked" do
       Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.admin)
-      xhr :get, :index, { :permission => Permission::ADMIN_ID }
+      xhr :get, :index, { :permission => [Permission::ADMIN_ID] }
       assert_equal 2, assigns(:people).total_count, "only 2 record should be returned"
       assert assigns(:people).include?(@person1)
       assert assigns(:people).include?(@user.person)
@@ -969,13 +1173,13 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "return leaders when Leader link is clicked" do
       Factory(:organizational_permission, organization: @org, person: @person1, permission: Permission.user)
-      xhr :get, :index, { :permission => Permission::USER_ID }
+      xhr :get, :index, { :permission => [Permission::USER_ID] }
       assert_equal 1, assigns(:people).total_count, "only 1 record should be returned"
       assert assigns(:people).include?(@person1)
     end
 
     should "return contacts when Contact link is clicked" do
-      xhr :get, :index, { :permission => Permission::NO_PERMISSIONS_ID }
+      xhr :get, :index, { :permission => [Permission::NO_PERMISSIONS_ID] }
       assert_equal 4, assigns(:people).total_count, "4 records should be returned"
       assert assigns(:people).include?(@person1)
       assert assigns(:people).include?(@person2)

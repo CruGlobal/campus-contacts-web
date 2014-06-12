@@ -47,8 +47,10 @@
 //= require tour
 //= require surveys
 //= require imports
+//= require search
 //= require interactions
 //= require profile
+//= require advanced_search
 //= require movement_indicator_suggestions
 //= require movement_indicators
 

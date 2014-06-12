@@ -1,0 +1,182 @@
+<div class="side-search-survey" id="side-search-survey-<%= survey.id %>">
+  <div class="clear_filter" data-tip="Clear">
+    <%= link_to image_tag("delete_gray.png"), "#" %>
+  </div>
+
+  <div class="survey-title"><%= survey.title %></div>
+  <div class="side-search-survey-questions">
+    <% if survey.questions.count > 0 %>
+      <% survey.questions.each do |question| %>
+        <% begin %>
+          <% answer = params[:survey_answer][survey.id.to_s][question.id.to_s] %>
+        <% rescue %>
+          <% answer = "" %>
+        <% end %>
+
+        <% begin %>
+          <% selected_option = params[:survey_answer_option][survey.id.to_s][question.id.to_s] %>
+        <% rescue %>
+          <% if question.kind == "TextField" %>
+            <% selected_option = Element::TEXTFIELD_MATCH[4][1] %>
+          <% elsif question.kind == "ChoiceField" %>
+            <% selected_option = Element::CHOICEFILED_MATCH[0][1] %>
+          <% elsif question.kind == "DateField" %>
+            <% selected_option = Element::DATEFIELD_MATCH[0][1] %>
+          <% end %>
+        <% end %>
+
+        <% if question.kind == "TextField" %>
+          <% selected_title = Element::TEXTFIELD_MATCH.map{|a| a[0] if a.include?(selected_option)}.compact!.try(:first) %>
+        <% elsif question.kind == "ChoiceField" %>
+          <% selected_title = Element::CHOICEFILED_MATCH.map{|a| a[0] if a.include?(selected_option)}.compact!.try(:first) %>
+        <% elsif question.kind == "DateField" %>
+          <% selected_title = Element::DATEFIELD_MATCH.map{|a| a[0] if a.include?(selected_option)}.compact!.try(:first) %>
+        <% end %>
+
+        <% conditions = answer.present? %>
+        <% has_answer = answer.is_a?(Hash) ? answer.values.first.present? : answer.present? %>
+
+        <div class="side-search-option singleton" data-id="side_search_survey_<%= survey.id %>_<%= question.id %>" data-option-title="<%= selected_title %>" data-type="<%= question.kind %>" data-value="<%= answer %>" data-option="<%= selected_option %>" data-set="<%= has_answer %>">
+
+          <% if question.kind == "DateField" %>
+            <% is_active = (answer.present? && answer["start"].present?) %>
+          <% elsif question.kind == "TextField" %>
+            <% is_active = ['contains','is_exactly','does_not_contain','is_blank'].include?(selected_option) %>
+          <% elsif question.kind == "ChoiceField" %>
+            <% if params[:survey_answer].present? && params[:survey_answer][survey.id.to_s].present? %>
+              <% is_active = params[:survey_answer][survey.id.to_s][question.id.to_s].present? %>
+            <% else %>
+              <% is_active = false %>
+            <% end %>
+          <% end %>
+
+          <%= render "search/toggler", active: is_active %>
+          <div class="title"><%= question.label %></div>
+
+          <div class="options <%= 'active' if is_active %> ">
+            <div class="selected">
+              <%= selected_title %>
+            </div>
+            <% if question.kind == "TextField" %>
+              <div class="choices">
+                <% Element::TEXTFIELD_MATCH.each do |option| %>
+                  <div class="text_option <%= option[1] %>">
+                    <%= radio_button_tag "survey_answer_option[#{survey.id}][#{question.id}]", option[1], selected_option == option[1], id: "answer_#{survey.id}_#{question.id}_textbox_option" %>
+                    <%= option[0].titleize %>
+                  </div>
+                <% end %>
+              </div>
+            <% elsif question.kind == "ChoiceField" %>
+              <div class="choices">
+                <% Element::CHOICEFILED_MATCH.each do |option| %>
+                  <div class="text_option <%= option[1] %>">
+                    <%= radio_button_tag "survey_answer_option[#{survey.id}][#{question.id}]", option[1], selected_option == option[1], id: "answer_#{survey.id}_#{question.id}_textbox_option" %>
+                    <%= option[0].titleize %>
+                  </div>
+                <% end %>
+              </div>
+            <% elsif question.kind == "DateField" %>
+              <div class="choices">
+                <% Element::DATEFIELD_MATCH.each do |option| %>
+                  <div class="text_option <%= option[1] %>">
+                    <%= radio_button_tag "survey_answer_option[#{survey.id}][#{question.id}]", option[1], selected_option == option[1], id: "answer_#{survey.id}_#{question.id}_textbox_option" %>
+                    <%= option[0].titleize %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="fields">
+            <% if question.kind == "TextField" %>
+              <div class="field text_field <%= 'active' if is_active && selected_option != 'is_blank' %>">
+                <%= text_field_tag "survey_answer[#{survey.id}][#{question.id}]", answer,
+                    autocomplete: "off", class: "textfield", id: "answer_#{survey.id}_#{question.id}_textbox_answer" %>
+              </div>
+            <% elsif question.kind == "ChoiceField" %>
+              <% question.content.split(/\r\n|\n/).push("no_response").each do |option| %>
+                <% if params[:survey_answer].present? && params[:survey_answer][survey.id.to_s].present? %>
+                  <%- selected_options = params[:survey_answer][survey.id.to_s][question.id.to_s] %>
+                <% else %>
+                  <%- selected_options = [] %>
+                <% end %>
+                <%- active = selected_options.present? ? selected_options.include?(option) : false %>
+                <div class="option checkbox choice_option <%= 'active' if active %>">
+                  <%= check_box_tag "survey_answer[#{survey.id}][#{question.id}][]", option, active, class: "answer_#{survey.id}_#{question.id}_checkbox" %>
+                  <div class="sidebar-label wide"><%= option == "no_response" ? "No Response" : option %></div>
+                </div>
+              <% end %>
+            <% elsif question.kind == "DateField" %>
+              <div class="field date_field">
+                <% if answer.present? && answer["start"].present? %>
+                  <% ans_start = answer["start"].split("-").collect{|x| x.to_i}%>
+                  <% @answer_start = answer["start"].to_date %>
+                  <% @answer_start_year = start[0] %>
+                  <% @answer_start_month = start[1] %>
+                  <% @answer_start_day = start[2] %>
+                  <% if answer["end"].present? %>
+                    <% ans_end = answer["end"].split("-").collect{|x| x.to_i}%>
+                    <% @answer_end = answer["end"].to_date %>
+                    <% @answer_end_year = ans_end[0] %>
+                    <% @answer_end_month = ans_end[1] %>
+                    <% @answer_end_day = ans_end[2] %>
+                  <% end %>
+                <% end %>
+
+                <div class="dateselect start">
+                  <div class="dateselect_item day">
+                    <div class="dateselect_label">Day</div>
+                    <div class="dateselect_field">
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_day]", options_for_select(1..31, @answer_start_day), include_blank: true, data: {value: @answer_start_day}, class: "select_day" %>
+                    </div>
+                  </div>
+                  <div class="dateselect_item month">
+                    <div class="dateselect_label">Month</div>
+                    <div class="dateselect_field">
+                      <%= select_month @answer_start_month, {field_name: 'start_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true}, {data: {value: @answer_start_month}, class: "select_month"} %>
+                    </div>
+                  </div>
+                  <div class="dateselect_item year">
+                    <div class="dateselect_label">Year</div>
+                    <div class="dateselect_field">
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_year]", options_for_select(1950..Date.today.year, @answer_start_year), include_blank: true, data: {value: @answer_start_year}, class: "select_year" %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dateselect end">
+                  <% status_class = selected_option == Element::DATEFIELD_MATCH[0][1] ? "inactive" : "" %>
+                  <% disabled = selected_option == Element::DATEFIELD_MATCH[0][1] %>
+                  <div class="dateselect_intro <%= status_class %>">and</div>
+                  <div class="dateselect_item day">
+                    <div class="dateselect_label <%= status_class %>">Day</div>
+                    <div class="dateselect_field">
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_day]", options_for_select(1..31, @answer_end_day), disabled: disabled, include_blank: true, data: {value: @answer_end_day} %>
+                    </div>
+                  </div>
+                  <div class="dateselect_item month">
+                    <div class="dateselect_label <%= status_class %>">Month</div>
+                    <div class="dateselect_field">
+                      <%= select_month @answer_end_month, {field_name: 'end_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true}, {disabled: disabled, data: {value: @answer_end_month}} %>
+                    </div>
+                  </div>
+                  <div class="dateselect_item year">
+                    <div class="dateselect_label <%= status_class %>">Year</div>
+                    <div class="dateselect_field">
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_year]", options_for_select(1950..Date.today.year, @answer_end_year), disabled: disabled, include_blank: true, data: {value: @answer_end_year} %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <%# render "search/actions", clear: conditions %>
+            <% else %>
+              <%= question.kind %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="search_info">No Questions</div>
+    <% end %>
+  </div>
+</div>

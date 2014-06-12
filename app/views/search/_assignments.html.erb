@@ -1,0 +1,40 @@
+<% leaders = @organization.leaders.all %>
+<% leaders << 'unassigned' %>
+<% conditions = params[:assigned_to].present? %>
+<div class="side-search-option singleton checkboxes_only" data-id="side_search_assignment" data-type="Standard" data-value="<%= params[:assigned_to] %>">
+  <%= render "search/toggler" %>
+  <div class="title">
+    <%= t('.title') %>
+  </div>
+  <div class="fields">
+    <% leaders.each do |leader| %>
+      <% if leader == "unassigned"%>
+        <% if params[:include_archived] %>
+          <% count = @organization.unassigned_contacts_with_archived.uniq.count %>
+        <% else %>
+          <% count = @organization.unassigned_contacts.uniq.count %>
+        <% end %>
+
+        <%- active = conditions && params[:assigned_to].include?("unassigned") %>
+        <div class="option checkbox <%= 'active' if active %>">
+          <%= check_box_tag "assigned_to[]", 'unassigned', active, id: "search_assigned_to_unassigned", class: "search_assigned_to_checkbox" %>
+          <div class="sidebar-label"><%= leader.titleize %></div>
+          <span class="info">(<span class="count"><%= count %></span>)</span>
+        </div>
+      <% else %>
+        <% if params[:include_archived] %>
+          <% count = leader.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
+        <% else %>
+          <% count = leader.assigned_contacts_limit_org(@organization).collect(&:id).count %>
+        <% end %>
+
+        <%- active = conditions && params[:assigned_to].include?(leader.id.to_s) %>
+        <div class="option checkbox <%= 'active' if active %>">
+          <%= check_box_tag "assigned_to[]", leader.id, active, id: "search_assigned_to_#{leader.id}", class: "search_assigned_to_checkbox" %>
+          <div class="sidebar-label"><%= leader.name %></div>
+          <span class="info">(<span class="count"><%= count %></span>)</span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
