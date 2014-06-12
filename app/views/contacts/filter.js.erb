@@ -1,6 +1,6 @@
 stamp = $("#ac_sidebar #sidebar_lists").data('stamp')
 clear = "<%= params[:filters] %>" == "clear"
-if(stamp == '' || stamp == "<%= params[:search_stamp] %>" || clear || <%= params[:paginate] == 'true' %>){
+if(stamp == '' || stamp == "<%= params[:search_stamp] %>" || clear || <%= params[:paginate] == 'true' %> || <%= (session[:filters].present? && session[:filters][:search].present? && session[:filters][:search][:meta_sort].present?) %>){
   if(clear){
     $('.save-search-option').hide()
     $("#ac_sidebar #sidebar_lists").html("<%= escape_javascript(render partial: 'search/sidebar') %>")

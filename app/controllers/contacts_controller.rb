@@ -22,6 +22,7 @@ class ContactsController < ApplicationController
     end
 
     # Set filters
+    session[:filters] ||= {}
     if params[:filters] == "clear"
       session[:filters] = nil
       @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
