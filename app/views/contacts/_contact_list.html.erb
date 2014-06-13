@@ -8,19 +8,30 @@
       <tr id="table_header">
       	<th>&nbsp;</th>
         <th class="checkbox_cell header_checkbox">
-          <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment',
-                class: 'check_all_contacts', 'data-status' => @attr %>
+          <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %>
         </th>
-        <th class='first_name'><%= sort_link @q, :first_name, t('.first_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
-        <th class='last_name'><%= sort_link @q, :last_name, t('.last_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
+        <th class='first_name'>
+          <%= sort_link @q, :first_name, t('.first_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+        </th>
+        <th class='last_name'>
+          <%= sort_link @q, :last_name, t('.last_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+        </th>
 
       	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
-  	      <th class='status'><%= sort_link @q, :followup_status, t('.status'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
+  	      <th class='status'>
+            <%= sort_link @q, :followup_status, t('.status'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          </th>
   		  <% end %>
 
-        <th class='gender'><%= sort_link @q, :gender, t('.gender'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
-        <th class='phone' style='min-width:100px;'><%= sort_link @q, :phone_number, t('.phone_number'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
-        <th class='labels'><%= sort_link @q, :labels, t('.labels'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %></th>
+        <th class='gender'>
+          <%= sort_link @q, :gender, t('.gender'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+        </th>
+        <th class='phone' style='min-width:100px;'>
+          <%= sort_link @q, :phone_number, t('.phone_number'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+        </th>
+        <th class='labels'>
+          <%= sort_link @q, :labels, t('.labels'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+        </th>
 
         <% if @questions.present? %>
           <% @questions.uniq.each do |q| %>
@@ -44,7 +55,8 @@
           </th>
       	<% end %>
 
-        <th class='last_survey'><%= sort_link @q, :last_survey, t('.last_survey'), params %></th>
+        <th class='last_survey'>
+          <%= sort_link @q, :last_survey, t('.last_survey'), params, remote: true, class: "sort_contact_link" %></th>
         <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
       </tr>
       <tbody id="contacts_table">
