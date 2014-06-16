@@ -143,10 +143,12 @@ class Element < ActiveRecord::Base
         return people.where(id: all_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
       end
     elsif option == "all"
-      all_answers = all_answers.includes(:answer_sheet).where('answer_sheets.person_id' => people.collect(&:id))
-      answers.each do |answer|
-        filtered_answers = all_answers.where(value: answer)
-        people = people.where(id: filtered_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
+      if answers.present?
+        all_answers = all_answers.includes(:answer_sheet).where('answer_sheets.person_id' => people.collect(&:id))
+        answers.each do |answer|
+          filtered_answers = all_answers.where(value: answer)
+          people = people.where(id: filtered_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
+        end
       end
       return people
     end

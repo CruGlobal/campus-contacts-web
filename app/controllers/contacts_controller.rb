@@ -42,6 +42,11 @@ class ContactsController < ApplicationController
     fetch_contacts
     @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
     @answers = generate_answers(@people, @organization, @questions, @surveys)
+
+    respond_to do |format|
+      format.js
+      format.html { redirect_to all_contacts_path }
+    end
   end
 
   def clean_params(clean_all = false)
