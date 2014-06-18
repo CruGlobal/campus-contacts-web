@@ -41,7 +41,7 @@ $('.assign_to_radio').live('change',function(){
 function autoassign_search(id, name){
 	id = typeof id !== 'undefined' ? id : "";
 	name = typeof name !== 'undefined' ? name : "";
-  
+
 	$('#autoassign_autosuggest').off();
 	if(id != "" && name != ""){
 		$('#autoassign_autosuggest').tokenInput(function() {
