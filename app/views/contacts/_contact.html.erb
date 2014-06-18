@@ -18,7 +18,8 @@
 	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   <td class="cell status no_wrap">
     <% if contact_permission %>
-      <%= contact_permission.followup_status.to_s.titleize %>
+      <%- status = contact_permission.followup_status %>
+      <%= (status.present? ? status : "uncontacted").titleize %>
     <% end %>
     <% if person.organizational_permissions.is_archived?(current_organization) %>
       <span class="archived_group_label">&nbsp<%= t('general.archived') %>&nbsp</span>

@@ -119,6 +119,7 @@ class ContactsController < ApplicationController
     end
     @inprogress_contacts = @all_people.where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status <> 'completed'", current_organization.id)
     @completed_contacts = @all_people.where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status = 'completed'", current_organization.id)
+    session[:filters] = nil
   end
 
   def my_contacts_all
@@ -256,7 +257,7 @@ class ContactsController < ApplicationController
 
     order = params[:q].present? ? params[:q][:s] : "people.last_name ASC, people.first_name ASC";
 	  @all_people = @all_people.order("#{order}")
-    @people = @all_people.group('people.id').page(params[:page])
+    @people = @all_people.select("DISTINCT(people.id), people.*").page(params[:page])
   end
 
   def mine_all
@@ -959,22 +960,24 @@ class ContactsController < ApplicationController
 
     def sort_people(page = 1, fetch_all = false)
       @q = Person.where('1 <> 1').search(nil) # Fake a search object for sorting
+      @all_people = Person.includes(:primary_email_address, :primary_phone_number, :labels).where("people.id IN (?)", @people_scope.collect(&:id)).joins(:organizational_permissions).select("DISTINCT(people.id), people.*")
+
       if params[:search].present?
         sort_query = params[:search][:meta_sort].gsub('.',' ')
         if sort_query.include?('last_survey')
-	        @people_scope = @people_scope.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
+	        @all_people = @all_people.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
 		    end
 
         if sort_query.include?('labels')
-          @people_scope = @people_scope.get_and_order_by_label(sort_query, current_organization.id)
+          @all_people = @all_people.get_and_order_by_label(sort_query, current_organization.id)
         end
 
 		    if sort_query.include?('followup_status')
-		    	@people_scope = @people_scope.order_by_followup_status(sort_query)
+		    	@all_people = @all_people.order_by_followup_status(current_organization, sort_query)
 		    end
 
 		    if sort_query.include?('phone_number')
-		    	@people_scope = @people_scope.order_by_primary_phone_number(sort_query)
+		    	@all_people = @all_people.order_by_primary_phone_number(sort_query)
 		    end
 
 	    	if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
@@ -985,7 +988,7 @@ class ContactsController < ApplicationController
       else
       	order_query = "people.last_name asc, people.first_name asc"
       end
-      @all_people = @people_scope.includes(:primary_email_address, :primary_phone_number, :labels).order(order_query).group('people.id')
+      @all_people = @all_people.order(order_query)
 
       if fetch_all
         if params[:include_archived] || params[:archived]
@@ -999,9 +1002,8 @@ class ContactsController < ApplicationController
 
         @people = @all_people
       else
-        @people = @people_scope.order(order_query)
+        @people = @all_people.page(page).per(session[:per_page])
       end
-      @people = @people.group('people.id').page(page).per(session[:per_page])
     end
 
     def fetch_mine
