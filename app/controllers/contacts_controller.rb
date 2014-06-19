@@ -117,8 +117,8 @@ class ContactsController < ApplicationController
     else
       @assigned_contacts = @organization.assigned_contacts_to([current_person])
     end
-    @inprogress_contacts = @all_people.where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status <> 'completed'", current_organization.id)
-    @completed_contacts = @all_people.where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status = 'completed'", current_organization.id)
+    @inprogress_contacts = @assigned_contacts.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status <> 'completed'", current_organization.id)
+    @completed_contacts = @assigned_contacts.joins(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.followup_status = 'completed'", current_organization.id)
     session[:filters] = nil
   end
 
