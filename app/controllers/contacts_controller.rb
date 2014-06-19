@@ -564,7 +564,7 @@ class ContactsController < ApplicationController
           @survey_scope = Person.build_survey_scope(@organization, params[:survey_scope])
           @people_scope = Person.filter_by_survey_scope(@people_scope, @organization, @survey_scope)
         end
-        filter_by_advanced_search
+        @people_scope = filter_by_advanced_search(@people_scope)
       end
 
       filter_by_search if params[:do_search].present?
@@ -687,11 +687,12 @@ class ContactsController < ApplicationController
       end
     end
 
-    def filter_by_advanced_search
+    def filter_by_advanced_search(people)
+      people = Person.where(id: people.collect(&:id))
       @header = I18n.t('dialogs.advanced_search.header')
       if params[:search_any].present?
         key = "%#{params[:search_any].downcase.strip}%"
-        @people_scope = @people_scope
+        people = people
           .joins("LEFT OUTER JOIN email_addresses ON people.id = email_addresses.person_id")
           .joins("LEFT OUTER JOIN phone_numbers ON people.id = phone_numbers.person_id")
           .where("people.last_name LIKE :key OR people.first_name LIKE :key OR email_addresses.email LIKE :key OR phone_numbers.number LIKE :key", key: key)
@@ -699,9 +700,9 @@ class ContactsController < ApplicationController
       if params[:gender].present?
         params[:gender] = params[:gender].is_a?(Array) ? params[:gender] : [params[:gender]]
         if params[:gender].include?("no_response")
-          @people_scope = @people_scope.where("people.gender = '' OR people.gender IS NULL OR people.gender IN (?)", params[:gender])
+          people = people.where("people.gender = '' OR people.gender IS NULL OR people.gender IN (?)", params[:gender])
         else
-          @people_scope = @people_scope.where("people.gender IN (?)", params[:gender])
+          people = people.where("people.gender IN (?)", params[:gender])
         end
       end
       if params[:assignment].present?
@@ -709,17 +710,17 @@ class ContactsController < ApplicationController
         if params[:assignment].count == 1
           if params[:assignment].first == "1"
             assigned_people_ids = current_organization.assigned_contacts.collect(&:id).uniq
-            @people_scope = @people_scope.where("people.id IN (?)", assigned_people_ids)
+            people = people.where("people.id IN (?)", assigned_people_ids)
           elsif params[:assignment].first == "0"
             unassigned_people_ids = current_organization.unassigned_contacts.collect(&:id).uniq
-            @people_scope = @people_scope.where("people.id IN (?)", unassigned_people_ids)
+            people = people.where("people.id IN (?)", unassigned_people_ids)
           end
         end
       end
 
       if params[:faculty].present?
         params[:faculty] = params[:faculty].is_a?(Array) ? params[:faculty] : [params[:faculty]]
-        @people_scope = @people_scope.where("people.faculty IN (?)", params[:faculty])
+        people = people.where("people.faculty IN (?)", params[:faculty])
       end
 
       if params[:survey_answer_option].present?
@@ -737,16 +738,16 @@ class ContactsController < ApplicationController
                 if option != 'contains' || (option == 'contains' && answer.present?)
                   if element.is_in_object?
                     if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                      @people_scope = element.search_survey_people(@people_scope, answer, current_organization, option, params[:survey_range])
+                      people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                     else
-                      @people_scope = element.search_survey_people(@people_scope, answer, current_organization, option)
+                      people = element.search_survey_people(people, answer, current_organization, option)
                     end
                   else
                     if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
                       if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                        @people_scope = element.search_people_answer_textfield(@people_scope, survey, answer, option, params[:survey_range])
+                        people = element.search_people_answer_textfield(people, survey, answer, option, params[:survey_range])
                       else
-                        @people_scope = element.search_people_answer_textfield(@people_scope, survey, answer, option)
+                        people = element.search_people_answer_textfield(people, survey, answer, option)
                       end
                     end
                   end
@@ -760,16 +761,16 @@ class ContactsController < ApplicationController
 
                 if element.is_in_object?
                   if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                    @people_scope = element.search_survey_people(@people_scope, answer, current_organization, option, params[:survey_range])
+                    people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                   else
-                    @people_scope = element.search_survey_people(@people_scope, answer, current_organization, option)
+                    people = element.search_survey_people(people, answer, current_organization, option)
                   end
                 else
                   if ['all','any'].include?(option)
                     if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                      @people_scope = element.search_people_answer_choicefield(@people_scope, survey, answer, option, params[:survey_range])
+                      people = element.search_people_answer_choicefield(people, survey, answer, option, params[:survey_range])
                     else
-                      @people_scope = element.search_people_answer_choicefield(@people_scope, survey, answer, option)
+                      people = element.search_people_answer_choicefield(people, survey, answer, option)
                     end
                   end
                 end
@@ -804,11 +805,11 @@ class ContactsController < ApplicationController
                 if answer["start"].present?
                   if element.is_in_object?
                     if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                      people = element.search_survey_people(@people_scope, answer, current_organization, option, params[:survey_range])
+                      result_people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                     else
-                      people = element.search_survey_people(@people_scope, answer, current_organization, option)
+                      result_people = element.search_survey_people(people, answer, current_organization, option)
                     end
-                    people_ids = people.present? ? people.pluck(:id) : []
+                    people_ids = result_people.present? ? result_people.pluck(:id) : []
                     result_ids += people_ids
                   else
                     if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
@@ -823,14 +824,14 @@ class ContactsController < ApplicationController
                       end
                     end
                   end
-                  @people_scope = @people_scope.where(id: result_ids)
+                  people = people.where(id: result_ids)
                 end
               end
             end
           end
         end
       end
-
+      return people
     end
 
     def filter_by_search
@@ -960,7 +961,7 @@ class ContactsController < ApplicationController
 
     def sort_people(page = 1, fetch_all = false)
       @q = Person.where('1 <> 1').search(nil) # Fake a search object for sorting
-      @all_people = Person.includes(:primary_email_address, :primary_phone_number, :labels).where("people.id IN (?)", @people_scope.collect(&:id)).joins(:organizational_permissions).select("DISTINCT(people.id), people.*")
+      @all_people = Person.includes(:primary_email_address, :primary_phone_number, :labels).where("people.id IN (?)", @people_scope.collect(&:id)).select("DISTINCT(people.id), people.*")
 
       if params[:search].present?
         sort_query = params[:search][:meta_sort].gsub('.',' ')
@@ -988,7 +989,7 @@ class ContactsController < ApplicationController
       else
       	order_query = "people.last_name asc, people.first_name asc"
       end
-      @all_people = @all_people.order(order_query)
+      @all_people = @all_people.select("DISTINCT(people.id), people.*").order(order_query)
 
       if fetch_all
         if params[:include_archived] || params[:archived]

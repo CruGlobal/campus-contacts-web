@@ -1,5 +1,3 @@
-<span style="display:none" id="drag_helper_text_one"><%= I18n.t('contacts.index.assign_people', count: 1) %></span>
-<span style="display:none" id="drag_helper_text_other"><%= I18n.t('contacts.index.assign_people', count: 0) %></span>
 <%= form_for ContactAssignment.new do |f| %>
   <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
   <%= hidden_field_tag :assign_to %>
@@ -11,26 +9,26 @@
           <%= check_box_tag 'check_all_contacts', true, false, 'data-target' => '#new_contact_assignment', class: 'check_all_contacts', 'data-status' => @attr %>
         </th>
         <th class='first_name'>
-          <%= sort_link @q, :first_name, t('.first_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          <%= sortable(:first_name, t('.first_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
         </th>
         <th class='last_name'>
-          <%= sort_link @q, :last_name, t('.last_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          <%= sortable(:last_name, t('.last_name'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
         </th>
 
       	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   	      <th class='status'>
-            <%= sort_link @q, :followup_status, t('.status'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+            <%= sortable(:followup_status, t('.followup_status'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
           </th>
   		  <% end %>
 
         <th class='gender'>
-          <%= sort_link @q, :gender, t('.gender'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          <%= sortable(:gender, t('.gender'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
         </th>
         <th class='phone' style='min-width:100px;'>
-          <%= sort_link @q, :phone_number, t('.phone_number'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          <%= sortable(:phone_number, t('.phone_number'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
         </th>
         <th class='labels'>
-          <%= sort_link @q, :labels, t('.labels'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link' %>
+          <%= sortable(:labels, t('.labels'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
         </th>
 
         <% if @questions.present? %>
@@ -56,7 +54,8 @@
       	<% end %>
 
         <th class='last_survey'>
-          <%= sort_link @q, :last_survey, t('.last_survey'), params, remote: true, class: "sort_contact_link" %></th>
+          <%= sortable(:last_survey, t('.last_survey'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
+        </th>
         <th class="hidden_questions"><%= link_to "Hidden Questions ▾", "#", id: 'hidden_questions_link' %></th>
       </tr>
       <tbody id="contacts_table">
@@ -82,3 +81,11 @@
     <%= render 'contacts/pagination_limit' %>
   <% end %>
 </div>
+
+<span style="display:none" id="drag_helper_text_one">
+  <%= I18n.t('contacts.index.assign_people', count: 1) %>
+</span>
+
+<span style="display:none" id="drag_helper_text_other">
+  <%= I18n.t('contacts.index.assign_people', count: 0) %>
+</span>
