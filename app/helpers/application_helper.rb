@@ -25,6 +25,16 @@ module ApplicationHelper
     image_tag('spinner.gif', id: e, style: 'display:none', class: 'spinner')
   end
 
+  def sortable(column, title = nil, url = {}, options = {})
+    title ||= column.titleize
+    url ||= {controller: params[:controller], action: params[:action]}
+    direction = "asc"
+    if session[:filters].present? && session[:filters][:search].present? && session[:filters][:search][:meta_sort].present?
+      direction = session[:filters][:search][:meta_sort].split(" ")[1] == "asc" ? "desc" : "asc"
+    end
+    link_to(title, url.merge(search: {meta_sort: "#{column} #{direction}"}, page: nil), options)
+  end
+
   def add_params(url, hash)
     if url.is_a?(Hash)
       url.merge(hash)

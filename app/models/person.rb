@@ -138,8 +138,10 @@ class Person < ActiveRecord::Base
     :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
   } }
 
-  scope :order_by_followup_status, lambda { |order| {
-    :order => "ISNULL(organizational_permissions.followup_status) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
+  scope :order_by_followup_status, lambda { |org, order| {
+    :joins => "JOIN organizational_permissions ON people.id = organizational_permissions.person_id AND  organizational_permissions.organization_id = #{org.id}",
+    :order => "organizational_permissions.permission_id NOT IN (#{Permission.admin.id},#{Permission.user.id}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
+
   } }
 
 
@@ -152,10 +154,10 @@ class Person < ActiveRecord::Base
     order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status DESC")
 
   scope :sort_by_phone_number_asc,
-    order("phone_numbers.number ASC}")
+    order("phone_numbers.number ASC")
 
   scope :sort_by_phone_number_desc,
-    order("phone_numbers.number DESC}")
+    order("phone_numbers.number DESC")
 
   scope :sort_by_labels_asc,
     where("id <> 0")

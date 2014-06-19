@@ -801,6 +801,7 @@ en:
       labels: "Labels"
       last_survey: "Last Survey"
       surveys: "Surveys"
+      followup_status: "Status"
     sidebar:
       show_more: "Show More"
       show_less: "Show Less"

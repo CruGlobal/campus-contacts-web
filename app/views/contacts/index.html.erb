@@ -18,7 +18,7 @@
   </h1>
 </div>
 
-<%= render('contacts/pagination') unless @people.count.count < 25 %>
+<%= render('contacts/pagination') unless @people.count < 25 %>
 
 <div class="pagemenu">
   <%= render partial: 'menu' %>

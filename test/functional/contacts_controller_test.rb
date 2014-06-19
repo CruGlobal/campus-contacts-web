@@ -873,14 +873,14 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "export all people" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv"}
-      assert_equal 4, assigns(:all_people).count.count
+      assert_equal 4, assigns(:all_people).count
       assert_response :success
     end
 
     should "export selected people only" do
       xhr :get, :index, {:assigned_to => "all", :format => "csv", only_ids: @contact1.id.to_s}
       assert assigns(:all_people).include?(@contact1)
-      assert_equal(assigns(:all_people).count.count, 1)
+      assert_equal(assigns(:all_people).count, 1)
       assert_response :success
     end
 
@@ -1088,13 +1088,13 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "sort by status asc" do
-      xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "followup_status asc"}}
-      assert_equal [@person2.id, @person3.id, @person1.id, @user.person.id], assigns(:people).collect(&:id)
+      xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status asc"}}
+      assert_equal [@user.person.id, @person2.id, @person3.id, @person1.id], assigns(:people).collect(&:id)
     end
 
     should "sort by status desc" do
-      xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "followup_status desc"}}
-      assert_equal [@user.person.id, @person1.id, @person3.id, @person2.id], assigns(:people).collect(&:id)
+      xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status desc"}}
+      assert_equal [@person1.id, @person3.id, @person2.id, @user.person.id], assigns(:people).collect(&:id)
     end
   end
 
@@ -1120,11 +1120,11 @@ class ContactsControllerTest < ActionController::TestCase
 
     should "not display contacts multiple times" do
       xhr :get, :index, {:assigned_to => "all"}
-      assert_equal 1, assigns(:people).where(id: @contact1.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact2.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact3.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact4.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact5.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact1.id).count
+      assert_equal 1, assigns(:people).where(id: @contact2.id).count
+      assert_equal 1, assigns(:people).where(id: @contact3.id).count
+      assert_equal 1, assigns(:people).where(id: @contact4.id).count
+      assert_equal 1, assigns(:people).where(id: @contact5.id).count
     end
 
     should "not display contacts multiple times when by searching phone_numbers" do
@@ -1138,10 +1138,10 @@ class ContactsControllerTest < ActionController::TestCase
       @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
 
       xhr :get, :index, {:do_search => "1", :phone_number => '0916'}
-      assert_equal 1, assigns(:people).where(id: @contact1.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact3.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact4.id).count.count
-      assert_equal 1, assigns(:people).where(id: @contact5.id).count.count
+      assert_equal 1, assigns(:people).where(id: @contact1.id).count
+      assert_equal 1, assigns(:people).where(id: @contact3.id).count
+      assert_equal 1, assigns(:people).where(id: @contact4.id).count
+      assert_equal 1, assigns(:people).where(id: @contact5.id).count
       assert !assigns(:people).include?(@contact2)
     end
   end
@@ -1217,19 +1217,19 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "sort by phone_number should include person without primary_phone_numbers" do
-        xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
-        assert_equal 5, assigns(:people).size
+        xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
+        assert_equal 7, assigns(:people).size
       end
 
-      #should "sort by phone_number asc" do
-        #xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
-        #assert_equal [@person4.id, @user.person.id, @person1.id, @person2.id, @person3.id], assigns(:people).collect(&:id)
-      #end
-
-      #should "sort by phone_number desc" do
-        #xhr :get, :index, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number desc"}}
-        #assert_equal [@person3.id, @person2.id, @person1.id, @person4.id, @user.person.id], assigns(:people).collect(&:id)
-      #end
+      # should "sort by phone_number asc" do
+      #   xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
+      #   assert_equal @person3, assigns(:people).last
+      # end
+      #
+      # should "sort by phone_number desc" do
+      #   xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number desc"}}
+      #   assert_equal @person3, assigns(:people).first
+      # end
     end
 
     context "by labels" do
@@ -1241,13 +1241,13 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "return people sorted by their labels (default labels) asc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"labels.asc"}}
+        xhr :get, :all_contacts, {:search=>{:meta_sort=>"labels.asc"}}
         results = assigns(:people).collect(&:id)
         assert_equal @person1.id, results.first
       end
 
       should "return people sorted by their labels (default labels) desc" do
-        xhr :get, :index, {:search=>{:meta_sort=>"labels.desc"}}
+        xhr :get, :all_contacts, {:search=>{:meta_sort=>"labels.desc"}}
         results = assigns(:people).collect(&:id)
         assert_equal @person4.id, results.last
       end
@@ -1282,7 +1282,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "first_name"=>"", "last_name"=>"", "phone_number"=>"", "person_updated_from"=>"", "person_updated_to"=>"", "status"=>"", "survey"=>"", "answers"=>{"#{@question.id}" => "DSU"}, "commit"=>"Search"}
 
-      assert_equal 1, assigns(:people).count.count
+      assert_equal 1, assigns(:people).count
       assert assigns(:people).include? @contact1
       assert assigns(:people).include?(@contact2) == false
     end
@@ -1296,7 +1296,7 @@ class ContactsControllerTest < ActionController::TestCase
 
       xhr :get, :index, {:do_search => "1", "assigned_to"=>"all", "answers"=>{"#{@campus_question.id}" => "DSU"}, "commit"=>"Search"}
 
-      assert_equal 1, assigns(:people).count.count
+      assert_equal 1, assigns(:people).count
       assert assigns(:people).include?(Person.where(first_name: "Eloisa", last_name: "Bongalbal").first)
       assert !assigns(:people).include?(Person.where(first_name: "Neil", last_name: "dela Cruz").first)
     end
@@ -1314,7 +1314,7 @@ class ContactsControllerTest < ActionController::TestCase
         @org.add_contact(contact)
       end
       xhr :get, :contacts_all
-      assert_equal 51, assigns(:all_people).count.count
+      assert_equal 51, assigns(:all_people).count
     end
   end
 
