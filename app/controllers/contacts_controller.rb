@@ -30,9 +30,9 @@ class ContactsController < ApplicationController
       end
 
       if params[:group_id].present?
-        @group = current_organization.groups.find(params[:group_id])
-        @group_membership = @group.group_memberships.find_or_initialize_by_person_id(person.id)
-        @group_membership.save
+        group = current_organization.groups.find(params[:group_id])
+        group_membership = group.group_memberships.find_or_initialize_by_person_id(person.id)
+        group_membership.save
       end
 
       update_org_permission_field = Hash.new
