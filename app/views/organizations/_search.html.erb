@@ -4,7 +4,3 @@
   <% end %>
   <%= t('contacts.index.type_above_field') if organizations.blank? %>
 </ul>
-
-<% if @total && @total > organizations.length %>
-  <span style="font-size: 11px;">Showing <%= organizations.length %> of <%= @total %>, keep typing to narrow search</span>
-<% end %>

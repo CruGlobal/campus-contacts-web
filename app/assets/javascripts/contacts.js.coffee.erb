@@ -210,8 +210,9 @@ $ ->
       Close: ->
         $(this).dialog('close')
 
-  $('#transfer_to_org_link').live 'click', (e)->
+  $(document).on 'click', "#transfer_to_org_link", (e) ->
     e.preventDefault()
+    $("#transfer_show_guide").html("")
     selected = $('.id_checkbox:checked')
     if selected.length > 0
       $.showDialog($('#transfer_to_org'))
@@ -496,8 +497,7 @@ $ ->
     $.hideDialog($("#assign_search"))
   false
 
-
-  $('#transfer_to_org .org a').live 'click', (e)->
+  $(document).on 'click', '#transfer_to_org .org a', (e)->
     e.preventDefault()
     form = $('#new_contact_assignment')
     from_id = $(this).closest('div').attr('data-org-id')
@@ -513,26 +513,28 @@ $ ->
       $('.all_row').each ->
         ids.push($(this).attr('data-id'))
 
-    $('input.org_search_name').val('')
-    $('#keep_contact').attr('checked','checked')
-    $.hideDialog($('#transfer_to_org'))
-    $.toggleLoader('ac_button_bar','Transferring...')
+    selected = $('.id_checkbox:checked')
+    if confirm($(this).data("confirm-message").replace("~SELECTED~", selected.length))
+      $('input.org_search_name').val('')
+      $('#keep_contact').attr('checked','checked')
+      $.hideDialog($('#transfer_to_org'))
+      $.toggleLoader('ac_button_bar','Transferring...')
 
-    $.ajax
-      type: 'POST'
-      url: '/organizational_permissions/move_to'
-      data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids+'&survey_answers='+survey_answers+'&interactions='+interactions
-      success: (data) ->
-        $.toggleLoader('ac_button_bar','')
-        if data.indexOf("success") != -1
-          if keep_contact == false
-            $.a(data)
-            $('.id_checkbox:checked').each ->
-              $(this).closest('tr').remove()
+      $.ajax
+        type: 'POST'
+        url: '/organizational_permissions/move_to'
+        data: 'from_id='+from_id+'&to_id='+to_id+'&keep_contact='+keep_contact+'&ids='+ids+'&survey_answers='+survey_answers+'&interactions='+interactions
+        success: (data) ->
+          $.toggleLoader('ac_button_bar','')
+          if data.indexOf("success") != -1
+            if keep_contact == false
+              $.a(data)
+              $('.id_checkbox:checked').each ->
+                $(this).closest('tr').remove()
+            else
+              $.a(data)
           else
             $.a(data)
-        else
-          $.a(data)
   false
 
   $('#assign_search .group a').live 'click', (e)->
