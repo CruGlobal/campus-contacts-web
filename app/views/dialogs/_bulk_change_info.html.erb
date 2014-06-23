@@ -80,8 +80,8 @@
 
             <!-- Student Status -->
             <div class="form_row">
-            	<div class="label"><%= t('general.student_status') %>:</div>
-            	<div class="field">
+              <div class="label"><%= t('general.student_status') %>:</div>
+              <div class="field">
                 <div class="custom_dropdown default">
                   <%= text_field_tag :student_status, '', class: 'custom_dropdown_value' %>
                   <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
@@ -100,6 +100,28 @@
               </div>
             </div>
           <% end %>
+
+          <!-- Group -->
+          <div class="form_row">
+            <div class="label"><%= t('general.group') %>:</div>
+            <div class="field">
+              <div class="custom_dropdown default" data-default="Select Group">
+                <%= text_field_tag :group_id, '', class: 'custom_dropdown_value' %>
+                <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+                <div id="selected">Select Group</div>
+                <div id="togglable">
+                  <div class="option" data-id="" data-name="Select Status">
+                    Select Group
+                  </div>
+                  <% current_organization.groups.collect{|x| [x.id, x.name]}.each do |group| %>
+                    <div class="option" data-id="<%= group[0] %>" data-name="<%= group[1] %>">
+                      <%= group[1] %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Gender -->
           <div class="form_row">

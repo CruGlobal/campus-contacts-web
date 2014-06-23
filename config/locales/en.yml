@@ -273,6 +273,7 @@ en:
     status: Status
     cru_status: "Cru Status"
     student_status: "Student Status"
+    group: "Group"
     first_name: First Name
     last_name: Last Name
     email: Email
