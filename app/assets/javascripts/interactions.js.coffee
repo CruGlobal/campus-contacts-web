@@ -2,7 +2,7 @@ $ ->
   $(document).ready ->
     $.fn.tip()
 
-  $(document).live 'click', (e)->
+  $('html').live 'click', (e)->
     $('.custom_dropdown').removeClass('active')
 
   $(":not(.tip)").live 'click', (e)->
@@ -12,6 +12,7 @@ $ ->
     $('.custom_dropdown').removeClass('active')
 
   $('.arrow.down').live 'click', (e)->
+    e.stopPropagation()
     $('.custom_dropdown').removeClass('active')
     $(this).parents('.custom_dropdown').addClass('active')
 
