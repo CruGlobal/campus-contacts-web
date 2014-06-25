@@ -76,10 +76,6 @@ a, a:visited {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
 .clear {
   clear: both;
 }
@@ -2716,20 +2712,51 @@ ul.sf-menu {
     a{
       overflow: hidden;
       white-space: nowrap;
+      &:hover {
+        text-decoration: none !important;
+      }
+    }
+  }
+  &.mh-top {
+    li a {
+      color: #eee !important;
+      &:hover {
+        color: #fff !important;
+      }
+    }
+    .sfHover ul {
+      min-width: 120px;
+      border: 1px solid #06415f;
+      border-top: none;
+      background-color: #06415f !important;
+      li a {
+        color: #ddd !important;
+        &:hover {
+          background-color: #085378;
+          color: #fff !important;
+          text-decoration: none;
+        }
+      }
+      li.current a {
+        background-color: #085378;
+        color: #fff !important;
+        text-decoration: none;
+      }
     }
   }
 }
+
 ul.under_tree {
   right: 1px;
   width: 350px;
   max-height: 450px;
-  min-height: 50px;
+  min-height: 20px;
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid #d9d9d9;
   background: white;
   .loader {
-    margin: 10px 0 0;
+    margin: 10px 0 10px;
     width: 100%;
     text-align: center;
     font-size: 14px;
@@ -2861,3 +2888,7 @@ ul.divider {
   bottom:1px;
 }
 
+.survey_listing {
+  border: 1px solid #d9d9d9;
+  border-top: none;
+}
