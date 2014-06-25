@@ -4,12 +4,17 @@
 
 #profile_image {
   margin-bottom: 10px;
+  text-align: center;
+  color: #999;
+  font-size: 11px;
   img {
     -webkit-border-radius: 4px;
     border-radius: 4px;
     cursor:pointer;
   }
   .info {
+    display: inline-block;
+    font-style: none;
     text-align: center;
     font-weight: normal;
     font-style: italic;

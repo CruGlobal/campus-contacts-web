@@ -59,8 +59,8 @@ en:
       guide: "A dash means only some of the selected contacts have the label. A check mark means all selected contacts have the label. An empty box means no one has the label. Click the box to change to checked or empty. Remember to click save changes."
     dialog_avatar:
       dialog_title: "Profile Picture"
-      change_avatar: "Click to change picture"
-      remove_avatar: "Click to remove picture"
+      change_avatar: "Change"
+      remove_avatar: "Remove"
       confirm_remove: "Do you want to remove this picture?"
       facebook_search_guide: "Some Facebook users may not appear because of their privacy settings."
       browse_computer: "Browse Computer"

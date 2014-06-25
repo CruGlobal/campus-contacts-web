@@ -4,6 +4,7 @@
     <%= t("dialogs.dialog_avatar.change_avatar") %>
   </div>
   <% if @person.fb_uid.present? || @person.avatar.exists? %>
+    |
     <div class="info">
       <%= link_to(t("dialogs.dialog_avatar.remove_avatar"), remove_avatar_profile_path, method: :post, data:{confirm: t("dialogs.dialog_avatar.confirm_remove")}) %>
     </div>
