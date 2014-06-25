@@ -18,7 +18,7 @@
 	</div>
 <% end %>
 
-<div class="gender col_left">Assigned To:</div>
+<div class="gender col_left"><%= t('general.assign_to') %>:</div>
 <div class="gender col_right" id="assigned_to_div">
   <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
   <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.collect(&:id).join(",") : '0' %>
@@ -58,7 +58,7 @@
 
 <% if current_organization.is_cru? %>
   <div id="cru_status_div">
-  	<div class="gender col_left">Cru Status:</div>
+  	<div class="gender col_left"><%= t('general.cru_status') %>:</div>
   	<div class="gender col_right">
       <% cru_status = @person.cru_status(current_organization) %>
       <% cru_status_id = cru_status.present? ? cru_status.id : nil %>
@@ -78,7 +78,7 @@
   </div>
 
   <div id="student_status_div" style="display: <%= @person.faculty? ? 'none' : 'block' %>;">
-  	<div class="gender col_left">Student Status:</div>
+  	<div class="gender col_left"><%= t('general.student_status') %>:</div>
   	<div class="gender col_right">
       <%= pf.text_field :student_status, id: 'student_status', class: 'hidden' %>
       <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.student_status %>">

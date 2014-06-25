@@ -235,8 +235,8 @@ en:
     nationality: Nationality
     assignment: Assigned To
     faculty: Faculty
-    cru_status: Cru Status
-    student_status: Student Status
+    cru_status: Cru Role
+    student_status: Enrollment
     nationality: Nationality
     assign_to: Assign To
     yes: Yes
@@ -271,8 +271,8 @@ en:
     both: Both
     gender: Gender
     status: Status
-    cru_status: "Cru Status"
-    student_status: "Student Status"
+    cru_status: "Cru Role"
+    student_status: "Enrollment"
     group: "Group"
     first_name: First Name
     last_name: Last Name

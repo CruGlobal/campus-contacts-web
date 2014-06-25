@@ -18,9 +18,17 @@ $ ->
     $.fn.tip()
 
   $(document).on 'click', '#bulk_change_info_save_button', (e)->
-    $("#bulk_change_form").submit()
-    $.hideDialog($("#bulk_change_info_dialog"))
-    $.fn.filterLoader("show", "Saving changes")
+    selected = $('.id_checkbox:checked')
+    if selected.length > 1
+      s = "#{selected.length} selected contacts"
+    else
+      s = "#{selected.length} selected contact"
+    if confirm("Are you sure you want to save changes on #{s}?")
+      $("#bulk_change_form").submit()
+      $.hideDialog($("#bulk_change_info_dialog"))
+      $.fn.filterLoader("show", "Saving changes")
+    else
+      e.preventDefault()
 
   $(document).on 'click', '.custom_dropdown.default .option', (e)->
     dropdown = $(this).parents('.custom_dropdown')
