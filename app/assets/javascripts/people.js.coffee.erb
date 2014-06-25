@@ -707,21 +707,16 @@ $('.check_all_contacts, .check_all_mine').live 'click', ->
   if true || $('.pagination').length
     if checked
       $("#all").remove()
-      $('#contacts_table').prepend('<tr><td colspan="99">Fetching information...</td></tr>')
       if $(this).hasClass("check_all_mine")
-        status = $(this).attr('data-status')
-        id = $(this).attr('data-owner-id')
+        $('#contacts_table').prepend('<tr><td colspan="99" class="all_contacts_loader">Selecting all contacts...</td></tr>')
         $.ajax
-          type: 'POST',
-          url: '/my_contacts_all',
-          data: 'status='+status+'&assigned_to='+id,
-          success: (html)->
-            $('#contacts_table').find('tr:first').remove()
-            $('#contacts_table').prepend(html)
+          type: 'GET',
+          url: '/my_contacts_all?status=' + $(this).data('status')
       else
-        $.get '/contacts/contacts_all?' + $(this).attr('data-status'), (html) ->
-          $('#contacts_table').find('tr:first').remove()
-          $('#contacts_table').prepend(html)
+        $('#contacts_table').prepend('<tr><td colspan="99" class="all_contacts_loader">Selecting all filtered contacts...</td></tr>')
+        $.ajax
+          type: 'GET',
+          url: '/contacts/contacts_all'
     else
       first_row.remove()
   change_all_permission_checkboxes(true) if checked

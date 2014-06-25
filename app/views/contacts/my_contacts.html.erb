@@ -3,25 +3,32 @@
 <div class="titlebar titlebarmod">
   <h1>
     <%= t('contacts.mine.my_contacts') %>
-    <div id='global_loader'>
-      <%= image_tag 'loader.gif'%>
+    <div id='global_loader' style='' class='filter_loader'>
+      <%= image_tag 'loader.gif', height: '20'%>
+      <span class='msg'>Loading Contacts</span>
     </div>
   </h1>
 </div>
 
 <div id="ac_contact_spread">
+  <div id="ac_pagination_top">
+    <div class="pagination_area">
+      <div class="pagination_links">
+        <%= paginate(@people) %>
+      </div>
+      <div class="pagination_info">
+        <%= page_entries_info(@people).gsub("information","").squeeze(" ").html_safe %>
+      </div>
+    </div>
 
-
-  <div id='pagination_space'>
-    <%= paginate @people %>
   </div>
 
   <div id="ac_button_bar">
-  	<ul class="button_bar" id="menu_assign_link">
-  		<li class="action_lightblue">
-  		  <%= link_to "Assign", "#", id: "action_menu_assign"%>
-  		</li>
-  	</ul>
+    <ul class="button_bar" id="menu_change_link">
+      <li class="action_lightblue">
+        <%= link_to "Change", "#", id: "action_menu_change"%>
+      </li>
+    </ul>
   	<ul class="button_bar">
   		<li class="action_lightblue">
   		  <%= link_to "Labels", "#", id: "action_menu_labels"%>
@@ -97,3 +104,6 @@
 
 <!-- Labels Dialog -->
 <%= render 'dialogs/dialog_labels' %>
+
+<!-- Batch Change Info Dialog -->
+<%= render 'dialogs/bulk_change_info' %>

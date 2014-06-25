@@ -113,6 +113,16 @@ class ContactsController < ApplicationController
     end
   end
 
+  def contacts_all
+    session[:filters].each do |k, v|
+      unless ['controller','action'].include?(k)
+        params[k] = v
+      end
+    end if session[:filters].present?
+    fetch_contacts(true)
+    @filtered_people = @all_people - @people
+  end
+
   def all_contacts
     session[:filters] = nil if params[:filters] == "clear"
     clean_params(true)
@@ -148,6 +158,14 @@ class ContactsController < ApplicationController
     @remove_survey_ids = current_organization.surveys.pluck(:id) - @filtered_surveys.pluck(:id)
   end
 
+  def my_contacts_all
+    params[:status] = nil if params[:status] == 'all'
+    params[:assigned_to] = current_person.id
+    session[:filters] = params
+    fetch_contacts(true)
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+  end
+
   def my_contacts
     permissions_for_assign
     labels_for_assign
@@ -157,7 +175,7 @@ class ContactsController < ApplicationController
     @attr = url.size > 1 ? url[1] : ''
 
     params[:status] = nil if params[:status] == 'all'
-    params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
+    params[:assigned_to] = current_person.id
     session[:filters] = params
 
     fetch_contacts(false)
@@ -175,13 +193,6 @@ class ContactsController < ApplicationController
       @completed_contacts = []
     end
     session[:filters] = nil
-  end
-
-  def my_contacts_all
-    # this needs to have status and assigned_to parameters
-    fetch_contacts(true)
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    render :partial => 'contacts/mine_all'
   end
 
   def index
@@ -207,12 +218,6 @@ class ContactsController < ApplicationController
         send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
-  end
-
-  def contacts_all
-    fetch_contacts(true)
-    @filtered_people = @all_people - @people
-    render partial: "contacts/contacts_all"
   end
 
   def search_by_name_and_email
@@ -1066,11 +1071,8 @@ class ContactsController < ApplicationController
         all_permissions = ActiveRecord::Base.connection.select_all(all_permissions.select('GROUP_CONCAT(permission_id) as permission_ids, person_id').group(:person_id))
         @permissions_by_person_id = {}
         all_permissions.each {|p| @permissions_by_person_id[p['person_id']] = p['permission_ids']}
-
-        @people = @all_people
-      else
-        @people = @all_people.page(page).per(session[:per_page])
       end
+      @people = @all_people.page(page).per(session[:per_page])
     end
 
     def fetch_mine

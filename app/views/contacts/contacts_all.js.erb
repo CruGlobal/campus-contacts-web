@@ -1,0 +1,2 @@
+$('#contacts_table').find('tr:first').remove()
+$('#contacts_table').prepend("<%= escape_javascript(render partial: 'contacts/contacts_all')%>")

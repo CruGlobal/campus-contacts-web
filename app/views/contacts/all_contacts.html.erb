@@ -6,7 +6,6 @@
     </div>
   	<div id="sidebar_lists" class="leftmenu">
       <%= render partial: 'search/sidebar' %>
-      <!-- <%= render partial: 'contacts/new_sidebar' %> -->
     </div>
   </div>
 <% end %>
@@ -24,7 +23,7 @@
 
 <div id="ac_contact_spread">
   <div id="ac_pagination_top">
-    <%= render 'contacts/pagination', people: @people %>
+    <%= render 'contacts/pagination', people: @people, type: "remote" %>
   </div>
   <div id="ac_button_bar">
   	<ul class="button_bar" id="menu_change_link">
@@ -32,11 +31,6 @@
   		  <%= link_to "Change", "#", id: "action_menu_change"%>
   		</li>
   	</ul>
-    <!-- <ul class="button_bar" id="menu_assign_link">
-      <li class="action_lightblue">
-        <%= link_to "Assign", "#", id: "action_menu_assign"%>
-      </li>
-    </ul> -->
   	<ul class="button_bar">
   		<li class="action_lightblue btn_left">
   		  <%= link_to "Permissions", "#", id: "action_menu_permissions" %>
