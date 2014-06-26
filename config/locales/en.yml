@@ -109,7 +109,7 @@ en:
     add_contact:
       add_contact: Add a contact to %{org}
       existing_contact: "Existing contacts with the same email"
-      confirm_existing_contact: "Are you sure '%{name}' is what you looking for?"
+      confirm_existing_contact: "Are you sure %{name} is who you are looking for?"
       title_bio: Bio
       title_label: Labels
       title_permission: Permissions
@@ -942,7 +942,7 @@ en:
       bulk_vcard_email_message: 'Contacts information has been sent to '
       contact_no_select_message: 'Please select atleast one contact.'
       no_name_message: 'First Name and Last Name are required.'
-      email_is_already_exists: "Email address is already exists."
+      email_is_already_exists: "Email address currently in the database"
       already_selected_an_existing_contact: "You have already selected an existing contact. You cannot allow to change the email address of '%{name}'"
       invalid_existing_contact: "Invalid existing contact, please try again later."
       saved_searches: 'Saved Searches'
