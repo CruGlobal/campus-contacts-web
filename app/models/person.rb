@@ -141,8 +141,11 @@ class Person < ActiveRecord::Base
   scope :order_by_followup_status, lambda { |org, order| {
     :joins => "JOIN organizational_permissions ON people.id = organizational_permissions.person_id AND  organizational_permissions.organization_id = #{org.id}",
     :order => "organizational_permissions.permission_id NOT IN (#{Permission.admin.id},#{Permission.user.id}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
+  }}
 
-  } }
+  scope :order_by_all_followup_status, lambda { |order| {
+    :order => "organizational_permissions.permission_id NOT IN (#{Permission.admin.id},#{Permission.user.id}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
+  }}
 
 
   # Start of custom sorting for meta_search
