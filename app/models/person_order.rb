@@ -14,7 +14,7 @@ class PersonOrder
     end
   end
 
-  def order(people)
+  def order(people, organization = nil)
     ordered_people = people
 
     @order.each do |key, direction|
@@ -30,7 +30,7 @@ class PersonOrder
           ordered_people = ordered_people.order("people.gender #{direction}")
 
         when :followup_status
-          ordered_people = ordered_people.order_by_followup_status("followup_status #{direction}")
+          ordered_people = ordered_people.order_by_followup_status(organization, "followup_status #{direction}")
 
         when :permission
           ordered_people = ordered_people.order_by_permission("permission_id #{direction}")

@@ -168,7 +168,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
         end
       end
       @filtered_people = add_includes_and_order(@filtered_people)
-      @filtered_people = PersonOrder.new(params[:order]).order(@filtered_people) if params[:order]
+      @filtered_people = PersonOrder.new(params[:order]).order(@filtered_people, current_organization) if params[:order]
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
     end
     return @filtered_people
