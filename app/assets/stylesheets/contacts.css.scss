@@ -133,20 +133,24 @@
         li {
           display: block;
           text-align: left;
-          padding: 0;
+          padding: 0px 24px;
+          margin: 0;
           a {
             font-size: 12px;
-            padding: 0px 12px;
             display: block;
             line-height: 24px;
-            margin: 0;
-            &:hover {
-              text-decoration: none;
-              background: #eaf1f6;
-            }
+          }
+          &:hover {
+            text-decoration: none;
+            background: #eaf1f6;
           }
         }
       }
+    }
+    #transfer_show_guide{
+      font-size: 12px;
+      color: #aaa;
+      padding: 4px 12px;
     }
   }
   #bulk_vcard_dialog {

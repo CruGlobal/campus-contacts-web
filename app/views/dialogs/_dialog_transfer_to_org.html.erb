@@ -29,6 +29,7 @@
         <div class="mh_popup_box_scroller orgs_list" id="transfer_to_org_content" data-org-id="<%= current_organization.id %>">
           <%= render 'organizations/search', organizations: current_person.orgs_with_children %>
         </div>
+        <div id="transfer_show_guide"></div>
       </div>
     	<div class="mh_popup_buttons" id="transfer_to_org_buttons">
     		<button class="large_lightgray mh_popup_cancel_button" id="transfer_to_org_cancel_button">Cancel</button>
