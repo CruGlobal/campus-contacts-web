@@ -66,13 +66,13 @@ class Element < ActiveRecord::Base
 
       case attribute_name
       when "email"
-        all_people = all_people.joins(:email_addresses)
+        all_people = all_people.joins("LEFT JOIN email_addresses ON email_addresses.person_id = people.id")
         query_object = "email_addresses.email"
       when "phone_number"
-        all_people = all_people.joins(:phone_numbers)
+        all_people = all_people.joins("LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id")
         query_object = "phone_numbers.number"
       when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
-        all_people = all_people.joins(:addresses)
+        all_people = all_people.joins("LEFT JOIN addresses ON addresses.person_id = people.id")
         query_object = "addresses.#{attribute_name}"
       else
         query_object = "people.#{attribute_name}"
