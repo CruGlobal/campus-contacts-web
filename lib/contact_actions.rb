@@ -97,7 +97,7 @@ module ContactActions
           @person = Person.find_by_id(@existing_contact)
           if @person.present?
             @existing_contact_found = 1
-            unless @person.email_addresses.collect(&:email).include?(form_email_address)
+            unless @person.email_addresses.find_by_email(form_email_address)
               custom_errors << t("contacts.index.already_selected_an_existing_contact",
                 name: @person.name,
                 email: @person.email

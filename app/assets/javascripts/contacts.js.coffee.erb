@@ -906,6 +906,8 @@ $ ->
         $("#person_first_name").val($(this).data("first-name"))
         $("#person_last_name").val($(this).data("last-name"))
         $("#existing_contact").val($(this).data("id"))
+        $("#person_email_address_email").val($(this).data("email"))
+        $("#add_contact_save_and_close_button").click()
         $.hideDialog($("#existing_contact_dialog"))
       else
         $.a(t("application.add_contact.system_is_still_busy"))
@@ -917,6 +919,7 @@ $.fn.show_add_contact = () ->
   $.showDialog($("#add_contact_div"))
 
 $.fn.reset_add_contact_form = () ->
+  $("#existing_contact, #existing_contact_found").val("")
   $(".email_field_container input[type='text']").val("")
   $(".field_with_errors, .red_errors, #add_contact_form .remove_in_add_contact").remove()
   $("#add_contact_form input[type='text']").val("")
