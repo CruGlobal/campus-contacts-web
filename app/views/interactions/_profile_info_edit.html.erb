@@ -125,12 +125,13 @@
         <label for="person_gender_female"><%= t('general.female') %></label>
   		</div>
 
-  		<div class="gender col_left">
-      </div>
-  		<div class="gender col_right">
-  			<%= pf.check_box :faculty %>
-        <label for="person_faculty"><%= t('general.faculty') %></label>
-  		</div>
+      <% if current_organization.is_cru? %>
+        <div class="gender col_left"></div>
+        <div class="gender col_right">
+          <%= pf.check_box :faculty %>
+          <label for="person_faculty"><%= t('general.faculty') %></label>
+        </div>
+      <% end %>
 
       <% if current_organization.is_bridge? %>
     		<div class="status col_left"><%= t('general.nationality') %>:</div>
