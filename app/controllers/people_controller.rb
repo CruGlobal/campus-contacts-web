@@ -416,12 +416,13 @@ class PeopleController < ApplicationController
         if is_subscribe = current_organization.is_sms_subscribe?(primary_phone.number)
           # Do not allow to send text if the phone number is not subscribed
 
+          body = params[:body] + "\n\n#{I18n.t('people.bulk_sms.sms_footer_message')}"
           @message = current_person.sent_messages.create(
             receiver_id: person.id,
             organization_id: current_organization.id,
             to: person.phone_number,
             sent_via: 'sms',
-            message: params[:body]
+            message: body
           )
         end
       end

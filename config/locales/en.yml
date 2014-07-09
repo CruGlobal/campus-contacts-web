@@ -438,6 +438,8 @@ en:
     bulk_archive:
       archiving_people_success: "People were successfully archived!"
       cannot_archive_admin_error: "You cannot archive <b>%{names}</b> since you are going to remove all the admins in this organization!"
+    bulk_sms:
+      sms_footer_message: "Reply STOP to opt out of text messages"
   followup_comments:
     index:
       comments_title: 'Comments'
