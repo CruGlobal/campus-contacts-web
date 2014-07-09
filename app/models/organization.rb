@@ -303,12 +303,8 @@ class Organization < ActiveRecord::Base
   end
 
   def has_parent?(org_id)
-    if id == org_id
-      return true
-    elsif !ancestry.present?
-      return false
-    end
-    ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : true
+    return true if id == org_id
+    ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : false
   end
 
   def is_root? # an org is considered root if it has no parents
