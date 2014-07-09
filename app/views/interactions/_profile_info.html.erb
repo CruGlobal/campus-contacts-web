@@ -57,7 +57,7 @@
   	<div class="gender col_right"><%= @person.nationality %></div>
   <% end %>
 
-  <% if @person.faculty %>
+  <% if current_organization.is_cru? && @person.faculty %>
   	<div class="gender col_left"><%= t('general.faculty') %>:</div>
   	<div class="gender col_right">Yes</div>
   <% end %>
