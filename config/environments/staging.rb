@@ -35,7 +35,11 @@ Mh::Application.configure do
   config.assets.digest = true
   config.assets.initialize_on_precompile = true
 
-  cache_servers = ['127.0.0.1']
+  if File.exist?(Rails.root.join('config','memcached.yml'))
+    cache_servers = YAML.load_file(Rails.root.join('config','memcached.yml'))[Rails.env]['host']
+  else
+    cache_servers = ['127.0.0.1']
+  end
 
   config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubStagingCache', :expire_after => 1.day, :compress => true }
 
