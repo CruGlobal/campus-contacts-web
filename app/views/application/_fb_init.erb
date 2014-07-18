@@ -14,7 +14,6 @@
       oauth      : true, // enable OAuth 2.0
       xfbml      : true  // parse XFBML
     });
-    $.mh.fb = FB;
     <% if @facebook_logout || flash[:facebook_logout] || mhub? %>
       // Try to log the user out of facebook
       FB.getLoginStatus(function(response) {

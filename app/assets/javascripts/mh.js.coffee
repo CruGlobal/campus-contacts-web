@@ -274,15 +274,15 @@ $.mh.logout = (url) ->
 
 
 $.mh.fbEnsureInit = (callback) ->
-  if(!$.mh.fb)
-    setTimeout(()->
-      $.mh.fbEnsureInit(callback)
-    , 50)
-  else
-    if(callback)
+  if FB?
+    if callback
       setTimeout(()->
         callback
       , 50)
+  else
+    setTimeout(()->
+      $.mh.fbEnsureInit(callback)
+    , 50)
 
 $.mh.readURL = (input, target_preview) ->
   if input.files && input.files[0]
