@@ -35,3 +35,4 @@ db/schema.rb
 .rvmrc
 config/memcached.yml
 .rubocop.yml
+.ruby-version
