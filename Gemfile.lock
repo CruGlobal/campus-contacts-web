@@ -9,13 +9,6 @@ GIT
       polyamorous (~> 0.5.0)
 
 GIT
-  remote: http://github.com/fnando/i18n-js.git
-  revision: fcbcb528dfe1689cf8c26c1b494d471526732713
-  specs:
-    i18n-js (3.0.0.rc6)
-      i18n (~> 0.6)
-
-GIT
   remote: http://github.com/stefankroes/ancestry.git
   revision: 46449bce3edaf19400e3042297a5563777a3ee4b
   specs:
@@ -235,6 +228,8 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.1)
     i18n (0.6.11)
+    i18n-js (2.1.2)
+      i18n
     infobase (1.0.0)
       activesupport
       oj (~> 2.1.0)
@@ -518,7 +513,7 @@ DEPENDENCIES
   guard (~> 1.8.2)
   guard-test (~> 1.0.0)
   http_accept_language (~> 2.0.0)
-  i18n-js!
+  i18n-js
   infobase (~> 1.0.0)
   jquery-rails (~> 3.0.4)
   kaminari (~> 0.14.1)
