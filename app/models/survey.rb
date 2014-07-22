@@ -6,6 +6,7 @@ class Survey < ActiveRecord::Base
 
   belongs_to :organization
 
+  has_many :custom_element_labels
   has_many :survey_elements, :dependent => :destroy, :order => :position
   has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position', autosave: true
   has_many :question_grid_with_totals, :through => :survey_elements, :conditions => "kind = 'QuestionGridWithTotal'", :source => :element

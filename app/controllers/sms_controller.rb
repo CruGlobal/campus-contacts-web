@@ -161,14 +161,14 @@ class SmsController < ApplicationController
             msg = question.email_should_be_unique_msg
           end
         else
-          msg = question.label
+          msg = question.label_for_survey(survey)
         end
         #msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
       rescue
-        msg = question.label
+        msg = question.label_for_survey(survey)
       end
       if question.kind == 'ChoiceField'
-        msg = question.label_with_choices
+        msg = question.label_with_choices(survey)
         separator = / [a-z]\)/
       end
 

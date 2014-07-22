@@ -1,0 +1,21 @@
+table_for assigns[:questions], :class => "index_table" do
+  column :id
+  column :label
+  column "Custom Label" do |question|
+    if question.get_custom_element_label(assigns[:survey])
+      question.label_for_survey(assigns[:survey])
+    else
+      status_tag('None', :ok)
+    end
+  end
+  column "Actions" do |question|
+    ret = []
+    if custom_element_label = question.get_custom_element_label(assigns[:survey])
+      ret << link_to("Edit Custom Label", edit_admin_custom_element_label_path(custom_element_label, survey_id: @survey, element_id: question.id))
+      ret << link_to("Delete", admin_custom_element_label_path(custom_element_label), :method => :delete, :confirm => "Are you sure you want to delete this custom label?")
+    else
+      ret << link_to("Add Custom Label", new_admin_custom_element_label_path(survey_id: @survey, element_id: question.id))
+    end
+    raw ret.join(' | ')
+  end
+end

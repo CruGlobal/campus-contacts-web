@@ -73,7 +73,7 @@ class SmsControllerTest < ActionController::TestCase
         @person.update_attribute(:first_name, 'Jesus')
         post :mo, @post_params.merge!({message: 'Christ', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal(assigns(:person).last_name, 'Christ')
-        assert_equal("1/3 #{@keyword.questions.first.label_with_choices}", assigns(:sent_sms).message)
+        assert_equal("1/3 #{@keyword.questions.first.label_with_choices(@survey)}", assigns(:sent_sms).message)
       end
 
       should "send thank you message after last question is answered" do

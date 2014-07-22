@@ -3,7 +3,11 @@
   <% if attribute = element.attribute_name %>
     <%= raw I18n.t("survey_responses.#{element.attribute_name}")%>
   <% else %>
-    <%= raw element.label %>
+    <% if @survey.present? %>
+      <%= raw element.label_for_survey(@survey) %>
+    <% else %>
+      <%= raw element.label %>
+    <% end %>
   <% end %>
 </label>
 <p><%= render :partial => 'survey/' + element.ptemplate, :object => element, :locals => {:answer_sheet => @answer_sheet, :person => person} %></p>

@@ -1,5 +1,5 @@
 <div class="field">
-  Action: 
+  Action:
   <% @sms_keyword.state_paths.events.each do |event| %>
     <%= link_to(event, "/admin/sms_keywords/#{@sms_keyword.id}/t/#{event}", method: :post, class: "#{event} keyword") %>
   <% end %>

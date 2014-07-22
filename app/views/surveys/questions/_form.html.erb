@@ -10,11 +10,15 @@
     <div class="right_col" style="<%= 'display:none' if question.new_record? || question.web_only %>">
       <div class="sms_length_div">
         <label><%= t('.text_message_length') %></label>
-        <span class="sms_length"><%= (question.kind == 'ChoiceField' ? question.label_with_choices : question.label).to_s.length %></span> / 140
+        <span class="sms_length">
+          <%= (question.kind == 'ChoiceField' ? question.label_with_choices(@survey) : question.label_for_survey(@survey)).to_s.length %>
+        </span> / 140
       </div><br>
       <div class="sms_preview_div">
         <label><%= t('.text_message_preview') %></label><br/>
-        <span class="sms_preview"><%= question.kind == 'ChoiceField' ? question.label_with_choices : question.label %></span>
+        <span class="sms_preview">
+          <%= question.kind == 'ChoiceField' ? question.label_with_choices(@survey) : question.label_for_survey(@survey) %>
+        </span>
       </div>
     </div>
     <div class="short_answer_form" style="<%= question.new_record? ? 'display:none' : '' %>">

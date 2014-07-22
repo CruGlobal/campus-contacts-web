@@ -668,6 +668,7 @@ en:
         add_question: Add a new question
         add_prev_question: Add a predefined or previously used question
         forced_tip: This question is required on every survey and will be pre-filled if they connect with facebook.
+        your_custom_question_help: "If you want to modify a locked, predefined question, please email support@missionhub.com with the name of the organization, survey title and changes to the question."
         your_questions_help: "Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service."
         predefined_help: "Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided."
       advanced_options:

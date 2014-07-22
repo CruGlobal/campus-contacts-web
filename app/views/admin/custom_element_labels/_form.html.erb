@@ -1,0 +1,11 @@
+<div class="field">
+  <%= link_to("Back to Questions", admin_survey_questions_path(params[:survey_id])) %>
+</div>
+<%= semantic_form_for [:admin, @custom_element_label] do |f| %>
+  <%= hidden_field_tag 'custom_element_label[survey_id]', params[:survey_id] %>
+  <%= hidden_field_tag 'custom_element_label[question_id]', params[:element_id] %>
+  <%= f.inputs "" do %>
+    <%= f.input :label %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>
