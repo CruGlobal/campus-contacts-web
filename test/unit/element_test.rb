@@ -5,7 +5,6 @@ class ElementTest < ActiveSupport::TestCase
   should have_many(:surveys)
   should have_many(:question_leaders)
   should have_many(:leaders)
-  should belong_to(:question_grid)
   should belong_to(:choice_field)
   
   setup do    

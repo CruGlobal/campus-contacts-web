@@ -8,30 +8,22 @@ class Element < ActiveRecord::Base
   CHOICEFILED_MATCH = [["Match Any","any"], ["Match All","all"]]
   DATEFIELD_MATCH = [["Exact","match"],["Between","between"]]
 
-  belongs_to :question_grid, :class_name => "QuestionGrid", :foreign_key => "question_grid_id"
-  belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
-
   self.inheritance_column = :kind
 
+  belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
   has_many :survey_elements, :dependent => :destroy
   has_many :surveys, :through => :survey_elements
-
   has_many :question_leaders, :dependent => :destroy
   has_many :leaders, through: :question_leaders, source: :person
   has_many :answers, foreign_key: :question_id
 
-  # belongs_to :question_sheet
-
+  before_validation :set_defaults, :on => :create
   validates_presence_of :kind, :style
   # validates_presence_of :label, :style, :on => :update
-
   validates_length_of :kind, :style, :maximum => 40, :allow_nil => true
   # validates_length_of :label, :maximum => 255, :allow_nil => true
-
   # TODO: This needs to get abstracted out to a CustomQuestion class in BOAT
   validates_inclusion_of :kind, :in => %w{Section Paragraph TextField ChoiceField DateField FileField SchoolPicker ProjectPreference StateChooser QuestionGrid QuestionGridWithTotal AttachmentField ReferenceQuestion PaymentQuestion}  # leaf classes
-
-  before_validation :set_defaults, :on => :create
 
   # HUMANIZED_ATTRIBUTES = {
   #   :slug => "Variable"
