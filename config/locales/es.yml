@@ -31,7 +31,7 @@ es:
             email:
               blank: no puede estar vacío
               invalid: está en un formato inválido
-              taken: 
+              taken:
       template:
         body: ! 'Hubo problemas con los siguientes campos:'
         header:
@@ -55,43 +55,43 @@ es:
       assign_explanation: ! 'Puedes añadir un contacto usando cualquiera de las opciones abajo:'
       keep_contact: Marque la cajita a dejar una copia del contacto en la organización
       me: Yo
-      type_to_find_group: 
-      type_to_find_label: 
+      type_to_find_group:
+      type_to_find_label:
       type_to_find_leader: Escribe para encontrar un líder y luego haz clic en el nombre del líder
       type_to_find_org: Escribe para encontrar un %{terminology} luego haz clic en %{terminology} del nombre
     assign_search:
       assign_explanation: ! 'Puedes asignar un contacto utilizando cualquier opción abajo:'
-      assign_to_user_note: 
-      copy_interactions: 
-      copy_interactions_help: 
-      copy_survey_answers: 
-      keep_contact: 
-      me: 
-      type_to_find_group: 
-      type_to_find_label: 
-      type_to_find_leader: 
-      type_to_find_org: 
+      assign_to_user_note:
+      copy_interactions:
+      copy_interactions_help:
+      copy_survey_answers:
+      keep_contact:
+      me:
+      type_to_find_group:
+      type_to_find_label:
+      type_to_find_leader:
+      type_to_find_org:
     messages:
-      question_too_long: 
+      question_too_long:
   batch:
-    new_person_message: 
-    person_transfer_message: 
+    new_person_message:
+    person_transfer_message:
   bulk_email: Correo electrónico masivo
   bulk_sms: Texto masivo
   charts:
     snapshot:
-      key_leader: 
-      launched: 
-      movement_stages: 
-      multiplying: 
-      pioneering: 
-      title: 
+      key_leader:
+      launched:
+      movement_stages:
+      multiplying:
+      pioneering:
+      title:
     trend:
-      year_ago: 
+      year_ago:
   contacts:
     add_contact: Agregar un Contacto
     all_contacts:
-      first_name: Primer Nombre
+      first_name: Nombre
       gender: Sexo
       labels: Etiquetas
       last_name: Apellido
@@ -115,33 +115,33 @@ es:
       last_name: Apellido
       phone_number: Número Telefónico
     import_contacts:
-      blank_header: 
-      cause_1: 
-      cause_2: 
-      cause_3: 
-      download_sample_csv: 
-      download_template_csv: 
-      duplicate_header_match: 
-      error: 
+      blank_header:
+      cause_1:
+      cause_2:
+      cause_3:
+      download_sample_csv:
+      download_template_csv:
+      duplicate_header_match:
+      error:
       help_info: Todavía no entiendo, por favor
       instruction_1: seguir el orden de los columnos como ilustrado por arriba
       instruction_2: Primer nombre no debe estar vacío
-      instruction_3: 
-      instruction_4: 
+      instruction_3:
+      instruction_4:
       instructions_label: Instrucciones
-      present_first_name: 
-      present_firstname: 
+      present_first_name:
+      present_firstname:
       select_csv: ! 'Elejir un archivo tipo CSV:'
-      success: 
-      tip_2: 
+      success:
+      tip_2:
     index:
       add: Agregar
       add_already_registered_contact: Este individuo ya existe en su organización actual.
-      add_already_registered_email: 
+      add_already_registered_email:
       add_contact: Agregar un Contacto a %{org}
-      add_label_empty: 
-      add_label_exists: 
-      add_label_failed: 
+      add_label_empty:
+      add_label_exists:
+      add_label_failed:
       add_label_success: Nueva etiqueta agregada exitosamente
       add_question_back: Haz clic en una pregunta para agregarla otra vez a la página
       all: Todos
@@ -155,10 +155,10 @@ es:
         other: Asignar %{count} personas
       assign_to: ! 'Asignar a:'
       assigned_to: Asignado a
-      bulk_vcard_dialog_desc: 
-      bulk_vcard_dialog_title: 
-      bulk_vcard_download_message: 
-      bulk_vcard_email_message: 
+      bulk_vcard_dialog_desc:
+      bulk_vcard_dialog_title:
+      bulk_vcard_download_message:
+      bulk_vcard_email_message:
       clear_search_form: Borrar la búsqueda
       completed: Completado
       completed_contacts: Todos los Contactos -- Completado
@@ -227,13 +227,13 @@ es:
       search_contact_no_results: Ningún resultado encontrado.
       search_contact_results_description: Por favor utilice el formulario para encontrar un contacto.
       search_locate_contact_button: Encontrar
-      search_locate_help: 
+      search_locate_help:
       search_locate_title: Encontrar la Ubicación de un Contacto
       search_saved: La búsqueda ha sido guardada
       send_reminder: Enviar Recordatorio
       show_all: Mostrar 'En Proceso' contactos
       surveys: Encuestas
-      type_above_field: 
+      type_above_field:
       unassign_contact: Desasignar contacto
       unassigned: Desasignado
       unassigned_responses: Todos los contactos - Desasignados
@@ -243,14 +243,14 @@ es:
     leader:
       archive_confirm: ! '%{person} va a estar puesto en archivos.'
       delete_confirm: ¿Estás seguro que quieres eliminar a%{person} como líder?
-      delete_confirm_with_instructions: 
+      delete_confirm_with_instructions:
     leader_form:
       start_typing: ! 'Comienza escribir un nombre para encontrar una persona para hacerle líder:'
     leaders:
-      reminder_prompt: Alguno de tus líderes tienen contactos a los cuales no se les ha dado seguimiento! Hazle saber a tus líderes!
+      reminder_prompt: Algunos de tus líderes tienen contactos a los cuales no les ha dado seguimiento! Avísales!
       show_more: Mostrar más líderes
     mailer:
-      bulk_vcard_email_content: 
+      bulk_vcard_email_content:
       bulk_vcard_email_subject: Su pedido para información del contacto
       vcard_email_content: Ajunto en este mail está el vcard conteniendo el contacto que usted selecionó.
       vcard_email_subject: ! 'Información del Contacto:  %{name} de MissionHub'
@@ -313,10 +313,10 @@ es:
       message: Gracias por tu interés.
     unassign: Desasignar
     update_notice_content: Contenido del Anuncio
-    update_notice_link: 
+    update_notice_link: Entérate acerca del nuevo look en nuestro blog.
     update_notice_link_url: http://blog.missionhub.com/2012/10/16/new-all-contacts/
-    update_notice_title: Títelo del Anuncio
-    update_notice_toggle: No muestre esta noticia otra vez
+    update_notice_title: Título del Anuncio
+    update_notice_toggle: No mostrar esta noticia otra vez
   dashboard:
     button_add: AGREGAR
     button_add_sub: UN CONTACTO
@@ -330,18 +330,18 @@ es:
     button_label_sub: CREAR LISTAS
     button_sent: ENVIADOS
     button_sent_sub: MENSAJES
-    button_text: TEXTO
+    button_text: MENSAJE DE TEXTO
     button_text_sub: ENVIAR
     button_view: VER
-    button_view_sub: TODOS CONTACTOS
+    button_view_sub: TODOS LOS CONTACTOS
     close: Cerrar
-    header_text: Hacerlo Más Fácil Cuidar a la Gente que te Más Necesiten
-    learn_more: Conocer Más
+    header_text: Haciendo Más Fácil El Cuidado De La Gente Que Más Te Necesita
+    learn_more: Aprende más
     panel_managing: Administrando Contactos
-    panel_messaging: Enviando Mensajes a Contactos
-    panel_storing: Guardando a Contactos
-    send_message_guide: 
-    send_message_video_guide: 
+    panel_messaging: Mensajeando Contactos
+    panel_storing: Guardando Contactos
+    send_message_guide:
+    send_message_video_guide:
   date:
     abbr_day_names:
     - Dom
@@ -352,7 +352,7 @@ es:
     - Vie
     - Sáb
     abbr_month_names:
-    - 
+    -
     - Ene
     - Feb
     - Mar
@@ -379,7 +379,7 @@ es:
       short: ! '%b %d'
       time: ! '%l:%M %p'
     month_names:
-    - 
+    -
     - Enero
     - Febrero
     - Marzo
@@ -441,18 +441,18 @@ es:
       year: Año
   dialogs:
     search_people_filters:
-      advanced_search: 
-      advanced_search_link: 
-      basic_search: 
-      clear_search_form: 
-      email: 
-      first_name: 
-      last_name: 
-      permission: 
-      phone: 
-      phone_number: 
-      search_placeholder: 
-      search_title: 
+      advanced_search:
+      advanced_search_link:
+      basic_search:
+      clear_search_form:
+      email:
+      first_name:
+      last_name:
+      permission:
+      phone:
+      phone_number:
+      search_placeholder:
+      search_title:
   errors:
     format: ! '%{attribute} %{message}'
     messages:
@@ -477,18 +477,18 @@ es:
       wrong_length: es la longitud incorrecta (en caso de ser %{count} caracteres)
   followup_comments:
     index:
-      comment: 
-      comments_title: 
-      date_commented: 
-      email: 
-      filter: 
-      first_name: 
-      last_name: 
-      phone_number: 
-      status: 
+      comment:
+      comments_title:
+      date_commented:
+      email:
+      filter:
+      first_name:
+      last_name:
+      phone_number:
+      status:
     search:
-      search_placeholder: 
-      search_title: 
+      search_placeholder:
+      search_title:
   general:
     add: Agregar
     add_a_leader: Agregar un líder
@@ -500,7 +500,7 @@ es:
     alert: Alerta
     archive: Archivo
     archived: Archivado
-    assigned_to: Asignado A
+    assigned_to: Asignado a
     assigned_to_both_option: Ambos
     assigned_to_first_option: Asignado
     assigned_to_second_option: No Asignado
@@ -518,9 +518,9 @@ es:
     delete: Eliminar
     edit: Editar
     email: Correo electrónico
-    email_autocomplete_description: 
-    email_autocomplete_description_admin: 
-    email_note: 
+    email_autocomplete_description:
+    email_autocomplete_description_admin:
+    email_note:
     export_csv_help: Exportar hoja del cálculo
     export_vcard_help: Exportar a la lista del contactos (mail o teléfono)
     faculty: Docente
@@ -534,47 +534,47 @@ es:
     home: Inicio
     keyword: Palabra Clave
     label_clear_selected: Quitar Etiquetas Selecionadas
-    label_search_help: 
+    label_search_help:
     label_search_last_survey: Última Encuesta
-    label_search_not_allow_to_no_label: 
-    label_select_description: 
+    label_search_not_allow_to_no_label:
+    label_select_description:
     last_name: Apellido
     leader_link_expired: ! 'Lo siento, este enlace ya está en uso. '
-    leader_login_confirmation: 
+    leader_login_confirmation:
     leader_login_title: MissionHub Confirmación
-    locate_contact_search_required_fields: 
+    locate_contact_search_required_fields:
     male: Masculino
-    match_found: 
+    match_found:
     message: ! 'Mensaje:'
     mobile: Celular
     nationality: Nacionalidad
-    no_recipient_in_comment: 
-    no_recipient_in_send_comment: 
+    no_recipient_in_comment:
+    no_recipient_in_send_comment:
     note: Nota
     permission: Etiqueta
     permissions_applied: etiquetas han sido aplicadas.
     phone: Teléfono
-    recipients: ! 'Destinarios:'
+    recipients: ! 'Destinatarios:'
     remove: Borrar
-    remove_leader_confirm: 
+    remove_leader_confirm:
     role: Etiquetas
     roles_applied: Etiquetas han sido aplicadas.
     save: Guardar
     search: Buscar
-    send_comment_success: 
-    send_email: Enviar un correo
+    send_comment_success:
+    send_email: Enviar correo
     show: Mostrar
-    sms_another_note: 
+    sms_another_note:
     sms_append_to_phone_number: ! '@mhub.cc'
-    sms_autocomplete_description: 
-    sms_autocomplete_description_admin: 
-    sms_change_default_email_desc: 
+    sms_autocomplete_description:
+    sms_autocomplete_description_admin:
+    sms_change_default_email_desc:
     sms_change_default_email_send_as_desc: Enviar como
-    sms_no_phone_numbers: 
-    sms_note: 
+    sms_no_phone_numbers:
+    sms_note:
     sms_preview_body: ! 'MSJ:'
     sms_preview_from: ! 'DE:'
-    sms_preview_title: 
+    sms_preview_title:
     state: Provincia
     status: Estado
     subject: Asunto
@@ -588,23 +588,23 @@ es:
     unassign: Desasignar
     work: Trabajo
     zip: Código postal
-  group: 
+  group:
   group_memberships:
     form:
       add_a_leader: Agregar un líder
       add_a_member: Agregar un miembro
       start_typing: ! 'Comienza a escribir un nombre para encontrar una persona para agregar a este grupo:'
     search:
-      add_new_person_group: 
+      add_new_person_group:
       not_found: No pudimos encontrar a nadie en tu %{terminology} con ese nombre
       show_all: muestra todo
       showing_count: ! 'Mostrando %{length} de %{total}, sigue escribiendo o '
-      showing_count_complete: 
+      showing_count_complete:
   groups:
-    add_a_label: 
-    add_a_label_title: 
-    add_group_member_success: 
-    delete_group_member: 
+    add_a_label:
+    add_a_label_title:
+    add_group_member_success:
+    delete_group_member:
     edit:
       edit_group: Editar %{group}
     form:
@@ -617,102 +617,102 @@ es:
       of_month: del mes
     index:
       add: Agregar
-      add_a_group: 
+      add_a_group:
       add_a_label: Agregar una etiqueta
       add_group: Agregar a grupo
       assign_to_label:
         one: 1 Grupo
         other: ! '%{count} Grupo'
       group_list: Lista de grupo para %{org}
-      group_name: Nombre del grupo
+      group_name: Nombre del Grupo
       labeled_with: Etiquetar con "%{label}"
       labels: Etiquetas
       leaders: Líderes
-      members: Involucrado
+      members: Involucrados
       new_label_prompt: Por favor, introduzca un nuevo nombre de etiqueta
-      no_group_members: 
-      no_groups: 
+      no_group_members:
+      no_groups:
     label:
       delete_confirm: ¿Estás seguro de querer eliminar '%{label}' etiqueta?
-    label_name: 
-    label_name_is_added: 
-    label_name_is_required: 
+    label_name:
+    label_name_is_added:
+    label_name_is_required:
     new:
       new_group: Crear un nuevo grupo
-    new_label_prompt: 
+    new_label_prompt:
     person:
       remove_confirm: ¿Estás seguro de querer eliminar %{name} de tu grupo?
     see_all: Ver todo los grupos
     show:
-      add_leader: 
+      add_leader:
       add_member: Agregar Miembro
-      back_to_list: 
+      back_to_list:
       confirm_delete_group: ¿Estás seguro de querer eliminar este grupo?
       delete_group: Eliminar este grupo
-      details: 
+      details:
       edit: editar
       edit_group: Editar este grupo
-      email: 
-      leaders: 
+      email:
+      leaders:
       location: Ubicación
-      meets: Cumple
+      meets: Se reúne
       monthly: Mensualmente en el %{day}<br /> %{start_time} - %{end_time}
-      name: 
-      page_title: 
-      phone: 
-      role: 
+      name:
+      page_title:
+      phone:
+      role:
       sporadically: Esporadicamente
       weekly: Semanalmente en %{day}s<br/> %{start_time} - %{end_time}
     sidebar:
-      add: 
-      labels: 
+      add:
+      labels:
   helpers:
     label:
       group:
         name: Nombre del Grupo
         start_time: De
       organization:
-        terminology: 
+        terminology:
       sms_keyword:
-        survey_id: 
+        survey_id:
     submit:
-      update: 
+      update:
   imports:
     edit:
-      column1: 
-      column2: 
-      column3: 
-      guide: 
-      title: 
+      column1:
+      column2:
+      column3:
+      guide:
+      title:
     labels:
-      guide: 
-      title: 
+      guide:
+      title:
     new:
-      file_not_existing: 
-      guide: 
-      guide0: 
-      guide1: 
-      guide2: 
-      guide3: 
-      guide4: 
-      guide5: 
-      preview: 
-      sample_csv: 
-      title: 
-      wrong_file_format_error: 
+      file_not_existing:
+      guide:
+      guide0:
+      guide1:
+      guide2:
+      guide3:
+      guide4:
+      guide5:
+      preview:
+      sample_csv:
+      title:
+      wrong_file_format_error:
     update:
-      default_login_paragraph: 
-      default_post_survey_message: 
+      default_login_paragraph:
+      default_post_survey_message:
   interactions:
-    add_comment_title: 
-    answer_other_surveys: 
-    comment_field_title: 
-    edit_survey_results: 
-    edit_this_survey: 
+    add_comment_title:
+    answer_other_surveys:
+    comment_field_title:
+    edit_survey_results:
+    edit_this_survey:
     profile_info:
-      email_contact_info: 
+      email_contact_info:
     profile_interactions_edit:
-      confirm_delete_interaction: 
+      confirm_delete_interaction:
   keyword_request_mailer:
     notify_user:
       body_html: <h2>Tu solicitud para la palabra clave %{keyword} fue APROBADA</h2> <p> Para usar la palabra clave, dile a las personas que escriban%{keyword} a %{number}<br/> </p> <p> si tienes alguna pregunta, %{link}. </p>
@@ -726,41 +726,41 @@ es:
 
         <p> Gracias,<br/> MissionHub Equipo de Soporte </p>'
   keywords:
-    default_rejection_email: 
+    default_rejection_email:
     edit:
-      heading: 
+      heading:
     flash:
-      created: 
-      pick_org: 
-      updated: 
+      created:
+      pick_org:
+      updated:
     form:
-      association: 
-      chartfield: 
-      explanation: 
-      initial_response: 
-      keyword: 
-      keyword_instruct: 
-      keyword_tip: 
-      keyword_why: 
-      post_survey_message: 
-      post_survey_why: 
+      association:
+      chartfield:
+      explanation:
+      initial_response:
+      keyword:
+      keyword_instruct:
+      keyword_tip:
+      keyword_why:
+      post_survey_message:
+      post_survey_why:
     index:
-      association: 
-      association_help: 
-  label: 
+      association:
+      association_help:
+  label:
   labels:
-    alumni: 
-    alumni_definition: 
-    alumni_sentence: 
-    engaged_disciple: 
-    engaged_disciple_definition: 
-    engaged_disciple_sentence: 
-    involved: 
-    involved_definition: 
-    involved_sentence: 
-    leader: 
-    leader_definition: 
-    leader_sentence: 
+    alumni:
+    alumni_definition:
+    alumni_sentence:
+    engaged_disciple:
+    engaged_disciple_definition:
+    engaged_disciple_sentence:
+    involved:
+    involved_definition:
+    involved_sentence:
+    leader:
+    leader_definition:
+    leader_sentence:
   leader: Líder
   leader_mailer:
     added:
@@ -773,88 +773,88 @@ es:
         <p>%{added_by}</p>'
   leaders:
     create:
-      no_user_account: 
+      no_user_account:
     form:
       name_required: ! 'Se requiere llenar los campos de Nombre y correo para poder agregar un líder:'
       notify: Notificarle a la persona que ha sido agregada y enviarle un enlace para que pueda iniciar sesión.
     search:
       not_in_system: Si la persona que buscas no está en el sistema, haga clic aquí para agregarle.
   manage_labels:
-    add_label_failed: 
-    add_label_success: 
-    add_title: 
-    delete_label_confirmation: 
-    edit_label_success: 
-    edit_title: 
-    label_exists: 
-    name: 
-    name_is_required: 
-    organizational_labels: 
-    system_labels: 
-    title: 
+    add_label_failed:
+    add_label_success:
+    add_title:
+    delete_label_confirmation:
+    edit_label_success:
+    edit_title:
+    label_exists:
+    name:
+    name_is_required:
+    organizational_labels:
+    system_labels:
+    title:
   member: Miembro
   monthly: Mensualmente
   movement_indicator_suggestions:
     index:
-      fetching: 
-      list_heading: 
-      show_old: 
-      title: 
+      fetching:
+      list_heading:
+      show_old:
+      title:
     reasons:
-      engaged_disciple: 
-      gospel_presentation: 
-      graduated: 
-      group_leader: 
-      group_membership: 
-      leader: 
-      spiritual_conversation: 
-    remove_suggestion_html: 
+      engaged_disciple:
+      gospel_presentation:
+      graduated:
+      group_leader:
+      group_membership:
+      leader:
+      spiritual_conversation:
+    remove_suggestion_html:
   movement_indicators:
     index:
-      list_heading: 
+      list_heading:
   nav:
-    all_contacts: Todos los Contáctos
-    all_surveys: 
-    archive: 
+    all_contacts: Todos los Contactos
+    all_surveys:
+    archive:
     back_to_dashboard: Regresar a mis Contactos
     back_to_wizard: Ya he terminado. Regresar al asistente
-    cleanup: 
-    create_a_survey: 
-    cru: 
-    dashboard: 
+    cleanup:
+    create_a_survey:
+    cru:
+    dashboard:
     directory: Directorio
     enter_survey_mode: Entrar en modo de encuesta
-    exit_survey_mode: 
+    exit_survey_mode:
     go_to: ir a
-    goal: 
+    goal:
     groups: Grupos
-    help: 
+    help:
     hide: Hide
     keywords: Encuestas
     login: Iniciar sesión
     logout: Cerrar sesión
     make_default: hacer por defecto
-    manage: 
-    my_comments: 
-    my_contacts: Mis Contáctos
+    manage:
+    my_comments:
+    my_contacts: Mis Contactos
     my_profile: Mi Perfil
-    organizations: 
-    people: 
-    permissions: 
+    organizations:
+    people:
+    permissions:
     privacy: Política de Privacidad
     profile: Mi Perfil
-    report_movement_indicators: 
+    report_movement_indicators:
     roles: Roles
-    settings: 
-    snapshot: 
+    settings:
+    snapshot:
     survey_mode_tip: El modo de encuesta permite que otras personas puedan llenar las encuestas en tu dispositivo. Les pedirá iniciar sesión con su cuenta de Facebook y se cerrará la sesión al completar la encuesta. La siguiente persona que entra a la encuesta se le pedirá iniciar sesión en Facebook, etc.. etc. Cuando haya terminado con la encuesta haga clic el el modo de salir de la encuesta, en la esquina superior izquierda y todos aquellos que completaron la encuesta aparecerán en Contactos sin Asignar
-    surveys: 
+    surveys:
     terms: Terminos y Condiciones
-    transfer: 
-    trend: 
+    transfer:
+    trend:
     use_keyword: ! 'Utilizar palabra clave: %{keyword}'
     view_details: Ver detalles
-    visual_tools: 
+    visual_tools:
   number:
     currency:
       format:
@@ -880,9 +880,9 @@ es:
           quadrillion: Cuatrillones
           thousand: Miles
           trillion: Trillones
-          unit: 
+          unit:
       format:
-        delimiter: 
+        delimiter:
         precision: 3
         significant: verdadero
         strip_insignificant_zeros: verdadero
@@ -898,233 +898,233 @@ es:
           tb: TB
     percentage:
       format:
-        delimiter: 
+        delimiter:
     precision:
       format:
-        delimiter: 
+        delimiter:
   org_membership:
     confirm_delete: Estás seguro que quieres disociarte de %{org}
   organization_mailer:
     notify_user:
-      body_html: 
-      link_text: 
+      body_html:
+      link_text:
     notify_user_of_denial:
-      body_html: 
+      body_html:
   organizational_permissions:
-    cannot_delete_admin_error: 
-    cannot_delete_self_as_admin_error: 
-    copy_people_success: 
-    moving_people_success: 
-    moving_to_same_org: 
+    cannot_delete_admin_error:
+    cannot_delete_self_as_admin_error:
+    copy_people_success:
+    moving_people_success:
+    moving_to_same_org:
   organizational_roles:
-    cannot_delete_admin_error: 
-    cannot_delete_self_as_admin_error: 
-    copy_people_success: 
-    moving_people_success: 
-    moving_to_same_org: 
+    cannot_delete_admin_error:
+    cannot_delete_self_as_admin_error:
+    copy_people_success:
+    moving_people_success:
+    moving_to_same_org:
   organizations:
     add_org:
-      name_not_unique: 
+      name_not_unique:
     add_org_from_crs:
-      admin_password: 
-      bad_password: 
-      bad_url: 
-      conference_is_importing: 
-      crs_import_instructions: 
-      example: 
-      url: 
+      admin_password:
+      bad_password:
+      bad_url:
+      conference_is_importing:
+      crs_import_instructions:
+      example:
+      url:
     cleanup:
-      alumni_inst: 
-      alumni_inst_path: 
-      annual_inst_1: 
-      annual_inst_2: 
-      archive_contacts_submit: 
-      archive_inst: 
-      archive_instructions: 
-      archive_notice: 
-      confirm_archive: 
-      confirm_remove_leaders: 
-      contact_tips: 
-      instructions: 
-      leader_tips: 
-      removal_notice: 
-      remove_leader_inst: 
-      remove_leaders_submit: 
-      title: 
+      alumni_inst:
+      alumni_inst_path:
+      annual_inst_1:
+      annual_inst_2:
+      archive_contacts_submit:
+      archive_inst:
+      archive_instructions:
+      archive_notice:
+      confirm_archive:
+      confirm_remove_leaders:
+      contact_tips:
+      instructions:
+      leader_tips:
+      removal_notice:
+      remove_leader_inst:
+      remove_leaders_submit:
+      title:
     edit:
-      back: 
-      back_to_orgs: 
-      danger_explanation: 
-      danger_zone: 
-      delete: 
-      delete_confirm: 
-      delete_zone: 
-      infobase_explanation: 
-      name_explain: 
-      show_sub_explain: 
-      term_explain: 
-      title: 
-      with_children_explanation: 
+      back:
+      back_to_orgs:
+      danger_explanation:
+      danger_zone:
+      delete:
+      delete_confirm:
+      delete_zone:
+      infobase_explanation:
+      name_explain:
+      show_sub_explain:
+      term_explain:
+      title:
+      with_children_explanation:
     index:
-      add: 
-      add_a_sub_org: 
-      add_sub_org: 
-      add_sub_org_button: 
-      add_sub_org_title: 
-      crs_import_button_title: 
-      crs_import_link: 
-      crs_import_tip: 
-      edit_button: 
-      form_explaination: 
-      re_import_button: 
-      title: 
+      add:
+      add_a_sub_org:
+      add_sub_org:
+      add_sub_org_button:
+      add_sub_org_title:
+      crs_import_button_title:
+      crs_import_link:
+      crs_import_tip:
+      edit_button:
+      form_explaination:
+      re_import_button:
+      title:
     new:
-      signup: 
-      title: 
-      your_org: 
+      signup:
+      title:
+      your_org:
     settings:
-      submit: 
-      title: 
-      year_in_school: 
+      submit:
+      title:
+      year_in_school:
     transfer:
-      set_alumni: 
-      set_alumni_desc: 
-      set_archived: 
-      set_archived_desc: 
-      title: 
+      set_alumni:
+      set_alumni_desc:
+      set_archived:
+      set_archived_desc:
+      title:
   people:
     add_person:
-      add_person: 
+      add_person:
     advanced_search:
-      basic_search: 
-      clear_search_form: 
-      email: 
-      first_name: 
-      last_name: 
-      permission: 
-      phone: 
-      role: 
+      basic_search:
+      clear_search_form:
+      email:
+      first_name:
+      last_name:
+      permission:
+      phone:
+      role:
     all:
-      all_selected_html: 
-      all_selected_html_mine: 
-      page_selected_html: 
-      select_all_html: 
-      select_all_html_mine: 
+      all_selected_html:
+      all_selected_html_mine:
+      page_selected_html:
+      select_all_html:
+      select_all_html_mine:
     assign:
-      keep_contact: 
+      keep_contact:
     bulk_archive:
-      archiving_people_success: 
-      cannot_archive_admin_error: 
+      archiving_people_success:
+      cannot_archive_admin_error:
     bulk_delete:
-      cannot_delete_admin_error: 
-      deleting_people_success: 
+      cannot_delete_admin_error:
+      deleting_people_success:
     create:
-      email_error: 
-      email_taken: 
-      error_creating_admin_no_valid_email: 
-      error_creating_leader_no_valid_email: 
-      firstname_error: 
-      phone_number_error: 
+      email_error:
+      email_taken:
+      error_creating_admin_no_valid_email:
+      error_creating_leader_no_valid_email:
+      firstname_error:
+      phone_number_error:
     edit:
       editing: Editar
-      fb_name_search_dialog_desc: 
-      fb_name_search_dialog_no_more: 
-      fb_name_search_dialog_title: 
-      fb_profile_link: 
-      more_facebook_matches: 
-      no_results: 
+      fb_name_search_dialog_desc:
+      fb_name_search_dialog_no_more:
+      fb_name_search_dialog_title:
+      fb_profile_link:
+      more_facebook_matches:
+      no_results:
     form:
-      facebook_url: 
-      facebook_url_tip: 
+      facebook_url:
+      facebook_url_tip:
     index:
-      add_person: 
-      apply_labels: 
+      add_person:
+      apply_labels:
       apply_roles: Aplicar Roles
-      archived_directory_title: 
-      archived_label: 
-      cannot_archive_admin_error: 
-      cannot_delete_admin_error: 
+      archived_directory_title:
+      archived_label:
+      cannot_archive_admin_error:
+      cannot_delete_admin_error:
       directory_title: Directorio - %{org}
       displaying: Mostrando %{start} - %{finish} de %{total}
       email: Correo
-      error_message: 
-      error_message_update_admin_without_person: 
-      error_message_update_leader_without_person: 
+      error_message:
+      error_message_update_admin_without_person:
+      error_message_update_leader_without_person:
       export: Exportar esta lista
-      filter: 
+      filter:
       gender: Sexo
-      group_comment: 
-      include_archived: 
-      include_archived_tips: 
-      include_archived_tips_interactions: 
-      include_archived_tips_labels: 
+      group_comment:
+      include_archived:
+      include_archived_tips:
+      include_archived_tips_interactions:
+      include_archived_tips_labels:
       labels: Etiquetas
-      locate_contact: 
-      manage_labels: 
+      locate_contact:
+      manage_labels:
       manage_roles: Gestión de Roles
-      merge_contacts: 
-      merge_people: 
+      merge_contacts:
+      merge_people:
       no_people: Lo siento, no hay gente involucrada aquí.
       phone: Telefono
       send_email: Enviar Correo
-      send_sms: Enviar texto
-      sent_messages: 
-      statistics: 
-      transfer_org: 
-      vcard: 
+      send_sms: Enviar mensaje de texto
+      sent_messages:
+      statistics:
+      transfer_org:
+      vcard:
       year_in_school: Año que cursa
     involvement:
-      conferences: 
-      summer_projects: 
+      conferences:
+      summer_projects:
     left_sidebar:
-      edit_profile: 
-      involvement: 
-      profile: 
-      survey_answers: 
+      edit_profile:
+      involvement:
+      profile:
+      survey_answers:
     person_form:
-      add_email_address: 
-      add_phone_number: 
-      preferred_name: 
+      add_email_address:
+      add_phone_number:
+      preferred_name:
     search:
-      advanced_search: 
-      advanced_search_link: 
-      clear_search_form: 
-      search_placeholder: 
-      search_title: 
+      advanced_search:
+      advanced_search_link:
+      clear_search_form:
+      search_placeholder:
+      search_title:
     show:
-      add_comment: 
-      add_comments_here: 
-      assigned_to: 
-      attach_rejoicable: 
+      add_comment:
+      add_comments_here:
+      assigned_to:
+      attach_rejoicable:
       edit_profile: Editar Perfil
-      email: 
-      facebook_profile: 
-      google_map: 
-      label_button: 
-      persons_friends: 
-      phone_number: 
-      previous_comments: 
-      send_contact_info: 
-      send_vcard_desc: 
-      status: 
-      updated_time_difference: 
+      email:
+      facebook_profile:
+      google_map:
+      label_button:
+      persons_friends:
+      phone_number:
+      previous_comments:
+      send_contact_info:
+      send_vcard_desc:
+      status:
+      updated_time_difference:
   permissions:
-    admin: 
-    no_permissions: 
-    user: 
+    admin:
+    no_permissions:
+    user:
   questions:
-    archived_help: 
+    archived_help:
     create:
-      notice: 
+      notice:
     form:
-      checkboxes: 
-      dropdown: 
-      multiple_choice: 
-      short_answer: 
-      web_only: 
-      what_question_type: 
-    predefined_help: 
-    your_questions_help: 
+      checkboxes:
+      dropdown:
+      multiple_choice:
+      short_answer:
+      web_only:
+      what_question_type:
+    predefined_help:
+    your_questions_help:
   rejoicables:
     gospel_presentation: Presentación del Evangelio
     prayed_to_receive: Oró para recibir a Cristo
@@ -1134,10 +1134,10 @@ es:
     alumni: graduados
     contact: Contacto
     index:
-      title: 
+      title:
     involved: Involucrado
     leader: Líder
-    sent: 
+    sent:
     views:
       create: Crear
       create_role: Crear un nuevo rol
@@ -1156,23 +1156,23 @@ es:
       dont_like_facebook: ¿No te gusta el Facebook?
       instructions: Instrucciones
       login: Iniciar
-      login_cannot_create_a_user: 
-      login_no_email: 
+      login_cannot_create_a_user:
+      login_no_email:
       login_paragraph_html: Para comenzar, necesitarás tener una cuenta de Facebook. <br/> Haz clic en el enlace de iniciar que está a la izquierda y <strong>permite</strong> MHub para acceder tu información. <br/> Serás dirigido con el asistente si es tu primera vez accesando MissionHub.
       login_paragraph_mhub: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
       login_with_facebook: Por favor inicia sesión en Facebook para comenzar
       no_facebook: ¿No te gusta el Facebook? Haz clic aquí para saltar el iniciar en Facebook
       skip_facebook: Haz clic para saltar el iniciar en Facebook
       start_survey: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
-      waiting_for_logout: 
+      waiting_for_logout:
       welcome: Bienvenido!
   sms:
-    email_invalid_msg: 
-    email_should_be_unique_msg: 
+    email_invalid_msg:
+    email_should_be_unique_msg:
     keyword_inactive: La palabra clave que acabas de escribir no está activa. Por favor verifique su ortografía e inténtelo de nuevo.
-    no_survey: 
+    no_survey:
   sms_keywords:
-    all_keywords: 
+    all_keywords:
     default_rejection_email: Tu solicitud de palabra clave ha sido denegada
     edit:
       heading: Editando Palabra Clave
@@ -1183,10 +1183,10 @@ es:
       pick_org: Por favor elige con que organización te asocias
       updated: La Palabra Clave fue actualizada correctamente.
     form:
-      associated_survey_tip: 
+      associated_survey_tip:
       explanation: Por favor explica para que va utilizar esta palabra clave.
       initial_response: ¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)
-      initial_response_default: 
+      initial_response_default:
       keyword: Palabra Clave
       keyword_instruct: ! '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
@@ -1196,17 +1196,17 @@ es:
       post_survey_why: cuando alguien te envía un mensaje de texto, el mensaje será enviado ellos y '{{link}}' será sustituida por una dirección de sitio web que les llevará a una encuesta en línea para que la completen. Si no tienen Internet, contestando 'yo' les enviará a todas las preguntas a través de mensaje de texto interactivo.<br/><br/>Si desea incluir un enlace a su sitio, no se incluyen aquí - incluirla en el mensaje posterior a la encuesta (paso 3 en el proceso de la encuesta Crear)
     index:
       association: Asociar contactos con
-      create_survey_first: 
-      delete_confirm: 
-      delete_keyword: 
-      delete_tip: 
-      edit_keyword: 
+      create_survey_first:
+      delete_confirm:
+      delete_keyword:
+      delete_tip:
+      edit_keyword:
       request_keyword: Solicita una Palabra
-    keyword_deleted: 
+    keyword_deleted:
     new:
       choose_keyword_explanation_html: ! 'Escoger una palabra clave para tu comunidad o evento te permite que las personas completen las encuestas a través de la web, texto interactivo, y celulares inteligentes.  <strong>Ellos escribirán tu palabra clave al número %{number}</strong> y tu encuesta de preguntas aparecerán en el dispositivo.  Note: El proceso de adquirir una nueva palabra clave requiere una intervención manual. Una vez que solicitas tu palabra clave, espera hasta 24 horas para ser notificado a través de tu correo electrónico de que tu palabra clave fue aprobada y está lista para su uso.'
-      predefined_help: 
-      your_questions_help: 
+      predefined_help:
+      your_questions_help:
     show:
       explanation: ! 'Explicación:'
       keyword: ! 'Palabra clave:'
@@ -1224,27 +1224,27 @@ es:
       choose_one: Elige una
   survey_mailer:
     notify:
-      content: 
+      content:
   survey_responses:
     address1: Dirección
     answer_other_surveys:
-      title: 
+      title:
     birth_date: ¿Cuál es su fecha de nacimiento?
     campus: campus
     country: país
     dorm: residencia universitaria
     edit:
-      cancel: 
-      multiple_answers: 
-      title: 
+      cancel:
+      multiple_answers:
+      title:
     email: dirección de correo electrónico
     facebook:
-      facebook_login: 
-      pick_keyword: 
+      facebook_login:
+      pick_keyword:
     faculty: ¿Eres una facultad?
     first_name: ¿Cuál es su nombre?
     form:
-      frozen: 
+      frozen:
     gender: ¿Cuál es su género?
     graduation_date: Fecha de Graduación
     iso_bs: bosnio
@@ -1264,9 +1264,9 @@ es:
     room: Número de habitaciones
     select_language: Seleccione Idioma
     show:
-      edit_answers: 
-      no_answers: 
-      title: 
+      edit_answers:
+      no_answers:
+      title:
     state: estado
     thanks:
       thanks: ¡Gracias!
@@ -1274,107 +1274,107 @@ es:
     zip: código postal
   surveys:
     edit:
-      edit_survey: 
+      edit_survey:
     form:
-      association: 
-      background_color: 
-      css: 
-      css_file: 
-      customize_look: 
-      default_login_option: 
-      fb_only_login_option: 
-      freeze: 
-      login_option: 
-      login_paragraph: 
-      login_paragraph_tip: 
-      logo: 
-      no_fb_login_option: 
-      post_survey_message: 
-      post_survey_placeholder: 
-      redirect_url: 
-      skip_fb_login_option: 
-      survey_associated_with: 
-      terminology: 
-      text_color: 
-      title: 
-      title_placeholder: 
-      title_tip: 
+      association:
+      background_color:
+      css:
+      css_file:
+      customize_look:
+      default_login_option:
+      fb_only_login_option:
+      freeze:
+      login_option:
+      login_paragraph:
+      login_paragraph_tip:
+      logo:
+      no_fb_login_option:
+      post_survey_message:
+      post_survey_placeholder:
+      redirect_url:
+      skip_fb_login_option:
+      survey_associated_with:
+      terminology:
+      text_color:
+      title:
+      title_placeholder:
+      title_tip:
     index:
-      title: 
+      title:
     index_admin:
-      association_help: 
-      confirm_delete: 
-      confirm_delete_survey: 
-      copy_survey: 
-      delete_survey: 
-      edit_survey: 
-      link: 
-      new: 
-      no_keywords: 
-      no_surveys: 
-      preview_survey: 
+      association_help:
+      confirm_delete:
+      confirm_delete_survey:
+      copy_survey:
+      delete_survey:
+      edit_survey:
+      link:
+      new:
+      no_keywords:
+      no_surveys:
+      preview_survey:
     new:
-      choose_keyword_explanation_html: 
-      create_a_survey: 
+      choose_keyword_explanation_html:
+      create_a_survey:
     questions:
       advanced_options:
-        autoassign_group_label: 
-        autoassign_guide: 
-        autoassign_keywords_label: 
-        autonotify_guide: 
-        autonotify_keywords_label: 
-        autonotify_leader_label: 
-        hidden: 
-        leaders: 
-        trigger_words: 
-        web_only: 
+        autoassign_group_label:
+        autoassign_guide:
+        autoassign_keywords_label:
+        autonotify_guide:
+        autonotify_keywords_label:
+        autonotify_leader_label:
+        hidden:
+        leaders:
+        trigger_words:
+        web_only:
       create:
-        duplicate_error: 
-        notice: 
+        duplicate_error:
+        notice:
       edit:
-        edit_question: 
-        leader_invalid_email: 
-        leader_invalid_email_with_name: 
+        edit_question:
+        leader_invalid_email:
+        leader_invalid_email_with_name:
       form:
-        checkboxes: 
-        dropdown: 
-        hide_advanced_options: 
-        hide_assignment_options: 
-        hide_notification_options: 
-        multiple_choice: 
-        short_answer: 
-        show_advanced_options: 
-        show_assignment_options: 
-        show_notification_options: 
-        text_message_length: 
-        text_message_preview: 
-        toggle_advanced_options: 
-        web_only: 
-        what_question_type: 
+        checkboxes:
+        dropdown:
+        hide_advanced_options:
+        hide_assignment_options:
+        hide_notification_options:
+        multiple_choice:
+        short_answer:
+        show_advanced_options:
+        show_assignment_options:
+        show_notification_options:
+        text_message_length:
+        text_message_preview:
+        toggle_advanced_options:
+        web_only:
+        what_question_type:
       index:
-        add_prev_question: 
-        add_question: 
-        forced_tip: 
-        manage: 
-        note: 
-        predefined: 
-        predefined_help: 
-        previously_used: 
-        your_questions: 
-        your_questions_help: 
+        add_prev_question:
+        add_question:
+        forced_tip:
+        manage:
+        note:
+        predefined:
+        predefined_help:
+        previously_used:
+        your_questions:
+        your_questions_help:
       multiple_choice_form:
-        list_choices: 
+        list_choices:
       question:
-        confirm_delete: 
-        delete_tip: 
+        confirm_delete:
+        delete_tip:
       short_answer_form:
-        column_header: 
-        column_header_hint: 
-        question: 
+        column_header:
+        column_header_hint:
+        question:
   time:
     am: am
     formats:
-      date: 
+      date:
       default: ! '%m/%d/%Y %H:%M:%S'
       long: ! '%B %d, %Y %H:%M'
       short: ! '%d %b %H:%M'

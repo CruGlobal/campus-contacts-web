@@ -91,7 +91,7 @@ es:
   contacts:
     add_contact: Agregar un Contacto
     all_contacts:
-      first_name: Primer Nombre
+      first_name: Nombre
       gender: Sexo
       labels: Etiquetas
       last_name: Apellido
@@ -247,7 +247,7 @@ es:
     leader_form:
       start_typing: ! 'Comienza escribir un nombre para encontrar una persona para hacerle líder:'
     leaders:
-      reminder_prompt: Alguno de tus líderes tienen contactos a los cuales no se les ha dado seguimiento! Hazle saber a tus líderes!
+      reminder_prompt: Algunos de tus líderes tienen contactos a los cuales no les ha dado seguimiento! Avísales!
       show_more: Mostrar más líderes
     mailer:
       bulk_vcard_email_content: 
@@ -313,10 +313,10 @@ es:
       message: Gracias por tu interés.
     unassign: Desasignar
     update_notice_content: Contenido del Anuncio
-    update_notice_link: 
+    update_notice_link: Entérate acerca del nuevo look en nuestro blog.
     update_notice_link_url: http://blog.missionhub.com/2012/10/16/new-all-contacts/
-    update_notice_title: Títelo del Anuncio
-    update_notice_toggle: No muestre esta noticia otra vez
+    update_notice_title: Título del Anuncio
+    update_notice_toggle: No mostrar esta noticia otra vez
   dashboard:
     button_add: AGREGAR
     button_add_sub: UN CONTACTO
@@ -330,16 +330,16 @@ es:
     button_label_sub: CREAR LISTAS
     button_sent: ENVIADOS
     button_sent_sub: MENSAJES
-    button_text: TEXTO
+    button_text: MENSAJE DE TEXTO
     button_text_sub: ENVIAR
     button_view: VER
-    button_view_sub: TODOS CONTACTOS
+    button_view_sub: TODOS LOS CONTACTOS
     close: Cerrar
-    header_text: Hacerlo Más Fácil Cuidar a la Gente que te Más Necesiten
-    learn_more: Conocer Más
+    header_text: Haciendo Más Fácil El Cuidado De La Gente Que Más Te Necesita
+    learn_more: Aprende más
     panel_managing: Administrando Contactos
-    panel_messaging: Enviando Mensajes a Contactos
-    panel_storing: Guardando a Contactos
+    panel_messaging: Mensajeando Contactos
+    panel_storing: Guardando Contactos
     send_message_guide: 
     send_message_video_guide: 
   date:
@@ -500,7 +500,7 @@ es:
     alert: Alerta
     archive: Archivo
     archived: Archivado
-    assigned_to: Asignado A
+    assigned_to: Asignado a
     assigned_to_both_option: Ambos
     assigned_to_first_option: Asignado
     assigned_to_second_option: No Asignado
@@ -554,7 +554,7 @@ es:
     permission: Etiqueta
     permissions_applied: etiquetas han sido aplicadas.
     phone: Teléfono
-    recipients: ! 'Destinarios:'
+    recipients: ! 'Destinatarios:'
     remove: Borrar
     remove_leader_confirm: 
     role: Etiquetas
@@ -562,7 +562,7 @@ es:
     save: Guardar
     search: Buscar
     send_comment_success: 
-    send_email: Enviar un correo
+    send_email: Enviar correo
     show: Mostrar
     sms_another_note: 
     sms_append_to_phone_number: ! '@mhub.cc'
@@ -624,11 +624,11 @@ es:
         one: 1 Grupo
         other: ! '%{count} Grupo'
       group_list: Lista de grupo para %{org}
-      group_name: Nombre del grupo
+      group_name: Nombre del Grupo
       labeled_with: Etiquetar con "%{label}"
       labels: Etiquetas
       leaders: Líderes
-      members: Involucrado
+      members: Involucrados
       new_label_prompt: Por favor, introduzca un nuevo nombre de etiqueta
       no_group_members: 
       no_groups: 
@@ -655,7 +655,7 @@ es:
       email: 
       leaders: 
       location: Ubicación
-      meets: Cumple
+      meets: Se reúne
       monthly: Mensualmente en el %{day}<br /> %{start_time} - %{end_time}
       name: 
       page_title: 
@@ -813,7 +813,7 @@ es:
     index:
       list_heading: 
   nav:
-    all_contacts: Todos los Contáctos
+    all_contacts: Todos los Contactos
     all_surveys: 
     archive: 
     back_to_dashboard: Regresar a mis Contactos
@@ -836,7 +836,7 @@ es:
     make_default: hacer por defecto
     manage: 
     my_comments: 
-    my_contacts: Mis Contáctos
+    my_contacts: Mis Contactos
     my_profile: Mi Perfil
     organizations: 
     people: 
@@ -1067,7 +1067,7 @@ es:
       no_people: Lo siento, no hay gente involucrada aquí.
       phone: Telefono
       send_email: Enviar Correo
-      send_sms: Enviar texto
+      send_sms: Enviar mensaje de texto
       sent_messages: 
       statistics: 
       transfer_org: 

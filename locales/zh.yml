@@ -326,16 +326,39 @@ zh:
     send_message_guide: 
     send_message_video_guide: 
   date:
-    abbr_day_names: 
-    abbr_month_names: 
+    abbr_day_names:
+    - 周一
+    - 周二
+    - 周三
+    - 周四
+    - 周五
+    - 周六
+    - 周日
+    abbr_month_names:
+    - 
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
     day_names: 
     formats:
-      default: 
+      default: ! '%Y/%m/%d'
       long: 
       short: 
       time: 
     month_names: 
-    order: 
+    order:
+    - :年
+    - :月
+    - :日
   datetime:
     distance_in_words:
       about_x_hours: 
@@ -1028,9 +1051,9 @@ zh:
     predefined_help: 
     your_questions_help: 
   rejoicables:
-    gospel_presentation: 
-    prayed_to_receive: 
-    spiritual_conversation: 
+    gospel_presentation: 分享福音
+    prayed_to_receive: 决志接受基督
+    spiritual_conversation: 属灵对话
   roles:
     admin: 
     alumni: 
@@ -1128,52 +1151,52 @@ zh:
     notify:
       content: 
   survey_responses:
-    address1: 街道地址
+    address1: 地址
     answer_other_surveys:
       title: 
-    birth_date: 什麼是你的出生日期？
-    campus: 校園
-    country: 國家
-    dorm: 宿舍樓
+    birth_date: 出生日期
+    campus: 校园
+    country: 国家
+    dorm: 宿舍楼
     edit:
       cancel: 
       multiple_answers: 
       title: 
-    email: 電子郵件地址
+    email: 电子邮件号
     facebook:
       facebook_login: 
       pick_keyword: 
-    faculty: 你是一名教師嗎？
-    first_name: 什麼是你的名字嗎？
+    faculty: 你是一名教师吗？
+    first_name: 名（拼音）
     form:
       frozen: 
-    gender: 您的性別是什麼？
-    graduation_date: 畢業日期
-    iso_bs: 波斯尼亞
-    iso_de: 德國人
-    iso_en: 英語
-    iso_es: 供應
-    iso_fr: 法國人
-    iso_ru: 俄
-    iso_zh: 中國的
-    last_name: 什麼是你姓什麼？
-    major: 你是什麼專業？
-    nationality: 國籍
+    gender: 性別
+    graduation_date: 毕业日期
+    iso_bs: 波斯尼亚语
+    iso_de: 德语
+    iso_en: 英语
+    iso_es: 西班牙语
+    iso_fr: 法语
+    iso_ru: 俄罗斯语
+    iso_zh: 中文
+    last_name: 姓（拼音）
+    major: 学习专业
+    nationality: 国籍
     new:
-      greeting_no_name: 
-      greeting_with_name: 
-    phone_number: 你的電話號碼是什麼?
-    room: 房間號
-    select_language: 選擇語言
+      greeting_no_name: 您好！
+      greeting_with_name: ! '%{name}，您好！'
+    phone_number: 电话或手机号码
+    room: 宿舍房间号
+    select_language: 选择语言
     show:
       edit_answers: 
       no_answers: 
       title: 
-    state: 國
+    state: 州
     thanks:
-      thanks: 
-    year_in_school: 什麼是你一年在學校？
-    zip: 郵編
+      thanks: 谢谢！
+    year_in_school: 学习年级
+    zip: 邮政编码
   surveys:
     edit:
       edit_survey: 
