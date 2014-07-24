@@ -31,6 +31,22 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
 
+  $('#action_menu_change').live 'click', (e)->
+    e.preventDefault()
+    if $('.id_checkbox:checked').length > 0
+      selected_ids = $(".id_checkbox:checked").map ->
+        return $(this).data('id')
+      .get().join(",")
+      $('#bulk_change_form #people_ids').val(selected_ids)
+      $.showDialog($("#bulk_change_info_dialog"))
+      $('.custom_dropdown').each ->
+        selected = $(this).data('default') || 'Select Status'
+        $(this).find('#selected').text(selected)
+        $(this).find('.custom_dropdown_value').val('')
+      $('#bulk_change_form').find('input[type=radio], input[type=checkbox]').prop('checked',false)
+    else
+      $.a(t('contacts.index.none_checked'))
+
   $('#action_menu_labels').live 'click', (e)->
     e.preventDefault()
     $.fn.openLabelsDialog()

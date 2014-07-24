@@ -235,7 +235,12 @@ en:
     nationality: Nationality
     assignment: Assigned To
     faculty: Faculty
+    cru_status: Cru Role
+    student_status: Enrollment
     nationality: Nationality
+    assign_to: Assign To
+    yes: Yes
+    no: No
     mobile: Cell
     home: Home
     work: Work
@@ -266,8 +271,9 @@ en:
     both: Both
     gender: Gender
     status: Status
-    cru_status: "Cru Status"
-    student_status: "Student Status"
+    cru_status: "Cru Role"
+    student_status: "Enrollment"
+    group: "Group"
     first_name: First Name
     last_name: Last Name
     email: Email
@@ -372,11 +378,11 @@ en:
       cannot_archive_admin_error: "As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that \"new ADMIN\" to remove your ADMIN label."
       transfer_org: Transfer to another team/organization
     all:
-      page_selected_html: "All <b>%{count}</b> people on this page are selected."
-      select_all_html: "Select all <b>%{count}</b> people in the directory."
-      select_all_html_mine: "Select all <b>%{count}</b> people in the your contacts."
-      all_selected_html: "All <b>%{count}</b> people in the directory are selected."
-      all_selected_html_mine: "All <b>%{count}</b> people in your contacts are selected."
+      page_selected_html: "All <b>%{count}</b> displayed contacts are selected."
+      select_all_html: "Select all <b>%{count}</b> filtered contacts."
+      all_selected_html: "All <b>%{count}</b> filtered contacts are selected."
+      select_all_html_mine: "Select all <b>%{count}</b> contacts."
+      all_selected_html_mine: "All <b>%{count}</b> contacts are selected."
     show:
       updated_time_difference: "Updated %{time_diff} ago."
       add_comments_here: 'Add comments here...'

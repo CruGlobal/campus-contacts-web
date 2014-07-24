@@ -1,0 +1,8 @@
+if($("#check_all_mine").size() == 0){
+  $.fn.filterLoader('force')
+  $("#ac_pagination_top").html("<%= escape_javascript(render partial: 'contacts/pagination') %>")
+  $("#ac_contact_list").html("<%= escape_javascript(render partial: 'contacts/contact_list') %>")
+  $(".scroll_table").doubleScroll()
+}else{
+  location.reload();
+}

@@ -289,6 +289,7 @@ Mh::Application.routes.draw do
     collection do
       get :filter
       get :update_advanced_search_surveys
+      post :bulk_update
       get :all_contacts
       get :my_contacts
       get :mine

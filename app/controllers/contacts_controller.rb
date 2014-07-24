@@ -13,6 +13,56 @@ class ContactsController < ApplicationController
     #render 'update_leader_error'
   end
 
+  def bulk_update
+    people_to_update = current_organization.all_people_with_archived.where("people.id IN (?)", params[:people_ids].split(","))
+    people_to_update.each do |person|
+      if params[:leader_id].present?
+        if params[:leader_id].include?("0")
+          person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
+        else
+          @person.assigned_tos.delete_all
+          params[:leader_id].each do |leader_id|
+            if leader = current_organization.leaders.where(id: leader_id).try(:first)
+              person.assigned_tos.create(organization_id: current_organization.id, assigned_to_id: leader_id)
+            end
+          end
+        end
+      end
+
+      if params[:group_id].present?
+        group = current_organization.groups.find(params[:group_id])
+        group_membership = group.group_memberships.find_or_initialize_by_person_id(person.id)
+        group_membership.save
+      end
+
+      update_org_permission_field = Hash.new
+      org_permission = person.organizational_permission_for_org(current_organization)
+      if org_permission.present?
+        if params[:followup_status].present?
+          update_org_permission_field[:followup_status] = params[:followup_status]
+        end
+        if params[:cru_status_id].present?
+          update_org_permission_field[:cru_status_id] = params[:cru_status_id]
+        end
+        org_permission.update_attributes(update_org_permission_field) if update_org_permission_field.present?
+      end
+
+      update_person_fields = Hash.new
+      if params[:student_status].present?
+        update_person_fields[:student_status] = params[:student_status]
+      end
+      if params[:gender].present?
+        update_person_fields[:gender] = params[:gender]
+      end
+      if !params[:faculty].nil?
+        update_person_fields[:faculty] = params[:faculty]
+      end
+      person.update_attributes(update_person_fields) if update_person_fields.present?
+
+    end if people_to_update.present?
+    filter
+  end
+
   def filter
     # Set per_page
     if params[:per_page].present?
@@ -63,6 +113,16 @@ class ContactsController < ApplicationController
     end
   end
 
+  def contacts_all
+    session[:filters].each do |k, v|
+      unless ['controller','action'].include?(k)
+        params[k] = v
+      end
+    end if session[:filters].present?
+    fetch_contacts(true)
+    @filtered_people = @all_people - @people
+  end
+
   def all_contacts
     session[:filters] = nil if params[:filters] == "clear"
     clean_params(true)
@@ -98,6 +158,14 @@ class ContactsController < ApplicationController
     @remove_survey_ids = current_organization.surveys.pluck(:id) - @filtered_surveys.pluck(:id)
   end
 
+  def my_contacts_all
+    params[:status] = nil if params[:status] == 'all'
+    params[:assigned_to] = current_person.id
+    session[:filters] = params
+    fetch_contacts(true)
+    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
+  end
+
   def my_contacts
     permissions_for_assign
     labels_for_assign
@@ -107,7 +175,7 @@ class ContactsController < ApplicationController
     @attr = url.size > 1 ? url[1] : ''
 
     params[:status] = nil if params[:status] == 'all'
-    params[:assigned_to] = current_person.id # to hook and sync the assigned contacts for the current_person
+    params[:assigned_to] = current_person.id
     session[:filters] = params
 
     fetch_contacts(false)
@@ -125,13 +193,6 @@ class ContactsController < ApplicationController
       @completed_contacts = []
     end
     session[:filters] = nil
-  end
-
-  def my_contacts_all
-    # this needs to have status and assigned_to parameters
-    fetch_contacts(true)
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    render :partial => 'contacts/mine_all'
   end
 
   def index
@@ -157,12 +218,6 @@ class ContactsController < ApplicationController
         send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
       end
     end
-  end
-
-  def contacts_all
-    fetch_contacts(true)
-    @filtered_people = @all_people - @people
-    render partial: "contacts/contacts_all"
   end
 
   def search_by_name_and_email
@@ -1016,11 +1071,8 @@ class ContactsController < ApplicationController
         all_permissions = ActiveRecord::Base.connection.select_all(all_permissions.select('GROUP_CONCAT(permission_id) as permission_ids, person_id').group(:person_id))
         @permissions_by_person_id = {}
         all_permissions.each {|p| @permissions_by_person_id[p['person_id']] = p['permission_ids']}
-
-        @people = @all_people
-      else
-        @people = @all_people.page(page).per(session[:per_page])
       end
+      @people = @all_people.page(page).per(session[:per_page])
     end
 
     def fetch_mine

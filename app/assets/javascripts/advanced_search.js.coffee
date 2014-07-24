@@ -84,7 +84,9 @@ $ ->
       element.slideDown "fast", ->
         $(this).parents(".field").children(".search_filter_options").fadeIn("fast")
 
-$.fn.filterLoader = (action) ->
+$.fn.filterLoader = (action, msg) ->
+  msg ||= "Loading Contacts"
+  $(".filter_loader .msg").text(msg)
   count = $(".filter_loader").data("count") || 0
   if action == 'show'
     count += 1

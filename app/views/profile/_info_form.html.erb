@@ -1,0 +1,140 @@
+<% if @person.contact_permission_for_org(current_organization) %>
+	<div class="status col_left"><%= t('general.status') %>:</div>
+	<div class="status col_right edit" id="followup_status_div">
+    <%- contact_permission = @person.permission_for_org(current_organization) %>
+    <%- followup_status = contact_permission.nil? ? "" : contact_permission.followup_status %>
+    <%= select_tag :followup_status, options_for_select(OrganizationalPermission::FOLLOWUP_STATUSES.collect {|s| [t("contacts.statuses.#{s}"), s]}, followup_status), {disabled: contact_permission.nil?, include_blank: contact_permission.nil?, 'data-person-id' => "#{@person.id}", class: "followup_status_field followup_status_field_edit", style: 'display: none;'} %>
+    <div id="followup_status_dropdown" class="custom_dropdown edit" data-current-id="<%= followup_status %>">
+      <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+      <div id="selected"><%= followup_status.present? ? t("contacts.statuses.#{followup_status}") : "Select Status" %></div>
+      <div id="togglable">
+        <% OrganizationalPermission::FOLLOWUP_STATUSES.each do |fs| %>
+          <div class="option" data-id="<%= fs %>" data-name="<%= t("contacts.statuses.#{fs}") %>">
+            <%= t("contacts.statuses.#{fs}") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+	</div>
+<% end %>
+
+<div class="gender col_left"><%= t('general.assign_to') %>:</div>
+<div class="gender col_right" id="assigned_to_div">
+  <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
+  <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.collect(&:id).join(",") : '0' %>
+  <%= text_field_tag :assigned_to_id, current_id, id: 'assigned_to_id', class: 'hidden' %>
+  <div id="assigned_to_dropdown" class="custom_dropdown edit assigned_to_dropdown" data-current-id="<%= current_id %>">
+    <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+    <div id="selected">
+      <% if @assigned_tos.nil? || @assigned_tos.first.nil? || @assigned_tos.first.nil? || @assigned_tos.count == 0 %>
+        <%= "Unassigned" %>
+      <% elsif @assigned_tos.count > 1 %>
+        <%= "#{@assigned_tos.count} people selected" %>
+      <% else %>
+        <% assigned_to = @assigned_tos.first %>
+        <%= assigned_to == current_person ? "#{assigned_to.first_name} (Me)" : "#{assigned_to.name}" %>
+      <% end %>
+    </div>
+    <div id="togglable">
+      <div id="default_leader_options" class="edit">
+        <div class="option unassigned" data-id="0">
+          <%= check_box_tag 'leader_id[]', 0, false, class: "unassigned_box", id: "leader_0", "data-id" => "0" %>
+          <div class="leader_name dropdown_name">Unassigned</div>
+        </div>
+        <% if current_person.leader_for_org(current_organization) %>
+          <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
+        <% end %>
+        <% @assigned_tos.where("id <> ?", current_person.id).each do |assignment| %>
+          <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment} %>
+        <% end %>
+      </div>
+      <div class="search">
+        <%= text_field_tag :search_leader, "", placeholder: "Search by name", id: "search_leader_field", class: "edit", "data-person-id" => @person.id %>
+      </div>
+      <div class="results edit" id="search_leader_results"></div>
+    </div>
+  </div>
+</div>
+
+<% if current_organization.is_cru? %>
+  <div id="cru_status_div">
+  	<div class="gender col_left"><%= t('general.cru_status') %>:</div>
+  	<div class="gender col_right">
+      <% cru_status = @person.cru_status(current_organization) %>
+      <% cru_status_id = cru_status.present? ? cru_status.id : nil %>
+      <%= text_field_tag :cru_status_id, cru_status_id, id: 'cru_status_id', class: 'hidden' %>
+      <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= cru_status_id %>">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <div id="selected"><%= cru_status || 'Select Status' %></div>
+        <div id="togglable">
+          <% CruStatus.all.each do |cru_status| %>
+            <div class="option" data-id="<%= cru_status.id %>" data-name="<%= cru_status.name %>">
+              <%= cru_status.name %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="student_status_div" style="display: <%= @person.faculty? ? 'none' : 'block' %>;">
+  	<div class="gender col_left"><%= t('general.student_status') %>:</div>
+  	<div class="gender col_right">
+      <%= pf.text_field :student_status, id: 'student_status', class: 'hidden' %>
+      <div id="cru_status_dropdown" class="custom_dropdown select_one edit" data-current-id="<%= @person.student_status %>">
+        <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+        <% status = @person.student_status.present? ? Person::STUDENT_STATUS[@person.student_status] : 'Select Status' %>
+        <div id="selected"><%= status %></div>
+        <div id="togglable">
+          <% Person::STUDENT_STATUS.each do |key, val| %>
+            <div class="option" data-id="<%= key %>" data-name="<%= val %>">
+              <%= val %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="gender col_left">
+  <label for="person_gender"><%= t('general.gender') %></label>:
+</div>
+<div class="gender col_right">
+	<%= pf.radio_button :gender, 'Male' %>
+  <label for="person_gender_male"><%= t('general.male') %></label>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <%= pf.radio_button :gender, 'Female' %>
+  <label for="person_gender_female"><%= t('general.female') %></label>
+</div>
+
+<% if current_organization.is_cru? %>
+  <div class="gender col_left">
+    <label for="person_faculty"><%= t('general.faculty') %></label>:
+  </div>
+  <div class="gender col_right">
+  	<%= pf.radio_button :faculty, true %>
+    <label for="person_faculty">Yes</label>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <%= pf.radio_button :faculty, false %>
+    <label for="person_faculty">No</label>
+  </div>
+<% end %>
+
+<% if current_organization.is_bridge? %>
+	<div class="status col_left"><%= t('general.nationality') %>:</div>
+	<div class="status col_right edit" id="followup_status_div">
+    <%= pf.select :nationality, options_for_select(Person::NATIONALITIES, @person.nationality), {include_blank: "Not Specified"}, {'data-person-id' => "#{@person.id}", class: "nationality_field nationality_field_edit", style: 'display: none;'} %>
+    <div id="nationality_dropdown" class="custom_dropdown edit" data-current-id="<%= @person.nationality %>">
+      <div class="arrow up">&#x25B2;</div><div class="arrow down">&#x25BC;</div>
+      <div id="selected"><%= @person.nationality.present? ? @person.nationality : "Select Nationality" %></div>
+      <div id="togglable">
+        <% Person::NATIONALITIES.each do |nationality| %>
+          <div class="option" data-name="<%= nationality %>">
+            <%= nationality %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+	</div>
+<% end %>

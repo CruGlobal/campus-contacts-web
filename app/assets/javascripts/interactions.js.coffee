@@ -2,7 +2,7 @@ $ ->
   $(document).ready ->
     $.fn.tip()
 
-  $(document).live 'click', (e)->
+  $('html').live 'click', (e)->
     $('.custom_dropdown').removeClass('active')
 
   $(":not(.tip)").live 'click', (e)->
@@ -12,6 +12,7 @@ $ ->
     $('.custom_dropdown').removeClass('active')
 
   $('.arrow.down').live 'click', (e)->
+    e.stopPropagation()
     $('.custom_dropdown').removeClass('active')
     $(this).parents('.custom_dropdown').addClass('active')
 
@@ -30,6 +31,7 @@ $ ->
   $('#msg_popup_save_button').live 'click', (e)->
     e.preventDefault()
     $('#bulk_send_msg_dialog').submitBulkSendTextDialog()
+
 
   $('#default_leader_options.edit .option.unassigned input').live 'change', (e)->
     $('#assigned_to_dropdown.edit .option input.leader_box').prop('checked',false)
@@ -116,8 +118,6 @@ $ ->
     $('.followup_status_field_edit').val(selected_id)
     $('.followup_status_field_edit').change()
     $('#followup_status_dropdown.edit').removeClass('active')
-
-
 
   $('#nationality_dropdown.edit .option').live 'click', (e)->
     selected_name = $(this).attr('data-name')

@@ -17,6 +17,28 @@ $ ->
         else $.fn.moveToCompleted ui.draggable  if $(this).hasClass("completed")
     $.fn.tip()
 
+  $(document).on 'click', '#bulk_change_info_save_button', (e)->
+    selected = $('.id_checkbox:checked')
+    if selected.length > 1
+      s = "#{selected.length} selected contacts"
+    else
+      s = "#{selected.length} selected contact"
+    if confirm("Are you sure you want to save changes on #{s}?")
+      $("#bulk_change_form").submit()
+      $.hideDialog($("#bulk_change_info_dialog"))
+      $.fn.filterLoader("show", "Saving changes")
+    else
+      e.preventDefault()
+
+  $(document).on 'click', '.custom_dropdown.default .option', (e)->
+    dropdown = $(this).parents('.custom_dropdown')
+    selected_name = $(this).attr('data-name')
+    selected_id = $(this).attr('data-id')
+    dropdown.find('#selected').text(selected_name)
+    dropdown.find('.custom_dropdown_value').val(selected_id)
+    dropdown.find('.custom_dropdown_value').change()
+    dropdown.removeClass('active')
+
   $(document).on 'change', '#add_contact_div .permission_checkbox', (e)->
     email_address = $("#person_email_address_email").val()
     identify = $(this).attr("data-i18n")
