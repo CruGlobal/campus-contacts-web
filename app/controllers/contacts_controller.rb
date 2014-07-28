@@ -287,8 +287,8 @@ class ContactsController < ApplicationController
 		# Search People
     people = current_organization.people.phone_search(term, current_organization.id).uniq
     people = people.archived_not_included unless params[:include_archived].present?
-		people_results = people.collect{|p| {name: "#{p.name} - #{p.primary_phone_number.pretty_number}", id: p.id.to_s}}
-
+		people_results = people.collect{|p| {name: "#{p.name} - #{p.pretty_text_phone_number}", id: p.id.to_s}}
+    
 		@results = all_contacts + permissions_results + labels_results + groups_results + people_results
 
 		respond_to do |format|

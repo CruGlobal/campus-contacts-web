@@ -420,8 +420,8 @@ $('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
     name = $(this).attr('data-name')
-    number = $(this).attr('data-number')
-    if $(this).attr('data-number') && $(this).attr('data-number').length > 0
+    number = $(this).attr('data-text-number')
+    if $(this).attr('data-text-number') && $(this).attr('data-text-number').length > 0
       $('#send_text_to').tokenInput 'add',
         id: id,
         name: "#{name} - #{number}"
