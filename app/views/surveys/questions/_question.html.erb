@@ -1,5 +1,5 @@
 <tr id="question-<%= dom_id(question) %>">
-  <td class="questiontitle"><%= question.label %></td>
+  <td class="questiontitle"><%= question.label_for_survey(@survey) %></td>
   <td>
     <% if @predefined.questions.include?(question) %>
       <span class="icon_holder"></span>

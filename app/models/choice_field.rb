@@ -124,9 +124,9 @@ class ChoiceField < Question
     choices_by_letter = Hash[choices.map.with_index {|c, i| [letters[i], c[0]]}]
   end
 
-  def label_with_choices
+  def label_with_choices(survey)
     unless @label_with_choices
-      @label_with_choices = label + ' ' + choices_by_letter.collect {|k, v| "#{k})#{v}"}.join(' ')
+      @label_with_choices = self.label_for_survey(survey) + ' ' + choices_by_letter.collect {|k, v| "#{k})#{v}"}.join(' ')
     end
     @label_with_choices
   end

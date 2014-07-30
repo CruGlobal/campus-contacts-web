@@ -12,6 +12,7 @@ class Question < Element
   include ActionController::RecordIdentifier # dom_id
 
   has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
+  has_many :custom_labels, :class_name => "CustomElementLabel", :foreign_key => :question_id, :dependent => :destroy
 
   belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
 
@@ -52,6 +53,30 @@ class Question < Element
   # element view provides the element label with required indicator
   def default_label?
     true
+  end
+
+  def get_custom_element_label(survey)
+    self.custom_labels.find_by_survey_id(survey.id)
+  end
+
+  def label_for_survey(survey)
+    custom_label = self.custom_labels.find_by_survey_id(survey.id)
+    custom_label.present? ? custom_label.label : self.label
+  end
+
+  def self.get_specific_question(survey, attribute_name)
+    unless I18n.locale == :en
+      case attribute_name
+      when 'first_name'
+        return I18n.t('survey_responses.first_name')
+      when 'last_name'
+        return I18n.t('survey_responses.last_name')
+      when 'phone_number'
+        return I18n.t('survey_responses.phone_number')
+      end
+    end
+    element = Element.find_by_attribute_name(attribute_name)
+    element.present? ? element.label_for_survey(survey) : attribute_name.humanize.capitalize
   end
 
   # css class names for javascript-based validation
