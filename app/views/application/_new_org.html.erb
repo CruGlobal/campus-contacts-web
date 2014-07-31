@@ -8,6 +8,6 @@
       id: "org_nav_#{org.id}" %>
   </div>
 </div>
-<div class="org_nav_children" id="children_org_<%= org.id %>">
+<div class="org_nav_children children_org_<%= org.id %>" id="children_org_<%= org.id %>" style="display: none;">
   <%= new_render_org_tree(children) %>
 </div>

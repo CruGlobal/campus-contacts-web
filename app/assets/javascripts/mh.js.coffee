@@ -12,17 +12,16 @@ $ ->
     else
       window.location.href = "?locale="+language
 
-  $('.org_control').not('.tree_no_child').each ->
-    if $("." + $(this).attr('id')).not('.tree_no_child').size() > 1
-      $("." + $(this).attr('id')).not('.tree_no_child').last().addClass('tree_no_child')
-
-  $('.org_control').live 'click', ->
-    child_div = $('#' + $(this).attr('child_div'))
-    child_div.toggle()
+  $(document).on 'click', '.org_control', () ->
+    child_div = $(this).parents(".org_nav_item").last().siblings('.' + $(this).attr('child_div'))
+    
     if child_div.is(':visible')
-      $(this).addClass('tree_open')
-    else
+      child_div.hide()
       $(this).removeClass('tree_open')
+    else
+      child_div.show()
+      $(this).addClass('tree_open')
+      
   $('.org_star').live 'click', ->
     document.location = $(this).attr('url')
 
