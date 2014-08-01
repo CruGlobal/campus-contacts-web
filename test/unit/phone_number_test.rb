@@ -136,4 +136,37 @@ class PhoneNumberTest < ActiveSupport::TestCase
       assert_equal("123456789", PhoneNumber.last.number)
     end
   end
+
+  context "text phone number" do
+    setup do
+      @person = Factory(:person)
+    end
+    should "return nil if no phone number" do
+      assert_nil @person.text_phone_number
+    end
+    should "use the primary phone number if it is a mobile" do
+      @person.phone_numbers.create(number: '4444444444', location: 'mobile', primary: true)
+      @person.phone_numbers.create(number: '5555555555', location: 'mobile')
+      assert_equal @person.text_phone_number.number, '4444444444'
+    end
+    should "use the other mobile phone number if the primary is not mobile" do
+      @person.phone_numbers.create(number: '4444444444', location: 'home', primary: true)
+      @person.phone_numbers.create(number: '5555555555', location: 'mobile')
+      assert_equal @person.text_phone_number.number, '5555555555'
+    end
+    should "use the primary phone number if no mobile phone number is present" do
+      @person.phone_numbers.create(number: '4444444444', location: 'home', primary: true)
+      @person.phone_numbers.create(number: '5555555555', location: 'home')
+      assert_equal @person.text_phone_number.number, '4444444444'
+    end
+    should "use mobile phone number if no primary phone number is present" do
+      @person.phone_numbers.create(number: '4444444444', location: 'home')
+      @person.phone_numbers.create(number: '5555555555', location: 'mobile')
+      assert_equal @person.text_phone_number.number, '5555555555'
+    end
+    should "use any phone number if no mobile phone number or primary phone number is present" do
+      @person.phone_numbers.create(number: '5555555555', location: 'home')
+      assert_equal @person.text_phone_number.number, '5555555555'
+    end
+  end
 end
