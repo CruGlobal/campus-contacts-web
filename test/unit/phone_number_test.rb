@@ -143,30 +143,36 @@ class PhoneNumberTest < ActiveSupport::TestCase
     end
     should "return nil if no phone number" do
       assert_nil @person.text_phone_number
+      assert_nil @person.pretty_text_phone_number
     end
     should "use the primary phone number if it is a mobile" do
       @person.phone_numbers.create(number: '4444444444', location: 'mobile', primary: true)
       @person.phone_numbers.create(number: '5555555555', location: 'mobile')
       assert_equal @person.text_phone_number.number, '4444444444'
+      assert_equal @person.pretty_text_phone_number, '(444) 444-4444'
     end
     should "use the other mobile phone number if the primary is not mobile" do
       @person.phone_numbers.create(number: '4444444444', location: 'home', primary: true)
       @person.phone_numbers.create(number: '5555555555', location: 'mobile')
       assert_equal @person.text_phone_number.number, '5555555555'
+      assert_equal @person.pretty_text_phone_number, '(555) 555-5555'
     end
     should "use the primary phone number if no mobile phone number is present" do
       @person.phone_numbers.create(number: '4444444444', location: 'home', primary: true)
       @person.phone_numbers.create(number: '5555555555', location: 'home')
       assert_equal @person.text_phone_number.number, '4444444444'
+      assert_equal @person.pretty_text_phone_number, '(444) 444-4444'
     end
     should "use mobile phone number if no primary phone number is present" do
       @person.phone_numbers.create(number: '4444444444', location: 'home')
       @person.phone_numbers.create(number: '5555555555', location: 'mobile')
       assert_equal @person.text_phone_number.number, '5555555555'
+      assert_equal @person.pretty_text_phone_number, '(555) 555-5555'
     end
     should "use any phone number if no mobile phone number or primary phone number is present" do
       @person.phone_numbers.create(number: '5555555555', location: 'home')
       assert_equal @person.text_phone_number.number, '5555555555'
+      assert_equal @person.pretty_text_phone_number, '(555) 555-5555'
     end
   end
 end
