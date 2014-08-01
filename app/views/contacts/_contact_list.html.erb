@@ -33,11 +33,7 @@
 
         <% if @questions.present? %>
           <% @questions.uniq.each do |q| %>
-            <% if @predefined_questions.include?(q) %>
-              <% question = q.attribute_name.gsub('_',' ').titleize %>
-            <% else %>
-              <% question = q.slug.present? ? q.slug.titleize : q.label.titleize %>
-            <% end %>
+            <% question = q.label.titleize %>
             <th class="question <%= dom_id(q) %> tip" title="<%= question %>">
               <%= question %>
               <br/>
