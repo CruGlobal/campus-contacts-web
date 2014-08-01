@@ -539,15 +539,15 @@ class PeopleController < ApplicationController
       begin
         resp = RestClient.get url, { accept: :json}
         @json = JSON.parse(resp)
+        @all_data = @json['data']
       rescue
-        raise resp.inspect
       end
 
       @data = []
 
-      if @json['data'].size > 0
+      if @all_data.present?
         # construct the json result - autocomplete only accepts an array
-        @json['data'].each do |d|
+        @all_data.each do |d|
           @data << { 'name' => d['name'] , 'id' => d['id'] }
         end
 
