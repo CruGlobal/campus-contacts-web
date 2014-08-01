@@ -17,7 +17,14 @@ ActiveAdmin.register Organization do
     column :created_at
     column :updated_at
     column :show_sub_orgs
-    column :status
+    column :status do |stat|
+      case stat.status
+      when 'requested'
+        status_tag(stat.status, :ok)
+      else
+        status_tag(stat.status, :important)
+      end
+    end
     column "Actions" do |org|
       ret = []
       ret << link_to("View", admin_organization_path(org))
