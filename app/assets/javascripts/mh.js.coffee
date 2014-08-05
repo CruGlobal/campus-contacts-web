@@ -13,13 +13,21 @@ $ ->
       window.location.href = "?locale="+language
 
   $(document).on 'click', '.org_control', () ->
+    org_id = $(this).data('id')
     child_div = $(this).parents(".org_nav_item").last().siblings('.' + $(this).attr('child_div'))
-    
-    if child_div.is(':visible')
-      child_div.hide()
-      $(this).removeClass('tree_open')
+    if child_div.hasClass("loaded")
+      if child_div.is(':visible')
+        child_div.hide()
+        $(this).removeClass('tree_open')
+      else
+        child_div.show()
+        $(this).addClass('tree_open')
     else
-      child_div.show()
+      child_div.html("<div class='loader left'><img src='/assets/loader-gray.gif'>&nbsp;Fetching sub-organizations</div>")
+      child_div.addClass("loaded").show()
+      $.ajax
+        type: 'GET',
+        url: "/load_organization_tree?id=#{org_id}"
       $(this).addClass('tree_open')
       
   $('.org_star').live 'click', ->

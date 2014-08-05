@@ -3,6 +3,14 @@ class OrganizationsController < ApplicationController
   before_filter :get_organization, :only => [:show, :edit, :update, :destroy, :update_from_crs]
 
   def load_tree
+    if params[:id].present?
+      @organization = Organization.find(params[:id])
+      if @organization.present?
+        @child_tree = key_value_in_nested_hash(current_person.organization_tree, @organization.id)
+      end
+    else
+      @organization = current_organization
+    end
   end
 
   def index
@@ -246,6 +254,16 @@ class OrganizationsController < ApplicationController
     end
     unless can?(:manage, @organization) || can?(:manage, @organization.parent) || can?(:manage, @organization.root)
       raise CanCan::AccessDenied
+    end
+  end
+  
+  def key_value_in_nested_hash(obj, key)
+    if obj.respond_to?(:key?) && obj.key?(key)
+      obj[key]
+    elsif obj.respond_to?(:each)
+      r = nil
+      obj.find{ |*a| r = key_value_in_nested_hash(a.last,key) }
+      r
     end
   end
 end
