@@ -257,5 +257,29 @@ class Apis::V3::OrganizationsControllerTest < ActionController::TestCase
       end
     end
   end
+
+  context ".create sub organization" do
+    setup do
+      @token = @client.secret
+    end
+    should "create a child org" do
+      assert_difference "Organization.count", +1 do
+        post :create, secret: @token,
+              organization: {name: "NewOrganization", terminology: "Term", parent_id: @org.id}
+      end
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal @org.id.to_s, json['organization']['ancestry'], json.inspect
+    end
+    should "return a token" do
+      assert_difference "Organization.count", +1 do
+        post :create, secret: @token,
+              organization: {name: "NewOrganization", terminology: "Term", parent_id: @org.id}
+      end
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_not_nil json['organization']['token'], json.inspect
+    end
+  end
 end
 

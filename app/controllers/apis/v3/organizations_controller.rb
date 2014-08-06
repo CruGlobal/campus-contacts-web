@@ -22,6 +22,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
       organization = organizations.new(params[:organization])
 
       if organization.save
+        token = organization.generate_api_secret
         render json: organization,
                status: :created,
                callback: params[:callback],
