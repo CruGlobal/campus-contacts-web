@@ -1,6 +1,6 @@
-<% primary = current_organization.id == org.id %>
+<%- primary = current_organization.id == org.id %>
 <div class="org_nav_item">
-  <div class="org_control org_control_<%= org.id %> <%= 'tree_no_child' unless children.present? %>" child_div="children_org_<%= org.id %>" id="org_control_<%= org.id %>"></div>
+  <div class="org_control org_control_<%= org.id %> <%= 'tree_no_child' unless children.present? %>" child_div="children_org_<%= org.id %>" id="org_control_<%= org.id %>" data-id="<%= org.id %>"></div>
   <div class="org_star tipitmiddle <%= 'primary' if primary %>" url='<%= set_primary_organizational_permission_path(org) %>' title="Set <%= org %> as your default organization"></div>
   <div class="org_name">
     <%= link_to "#{org}", set_current_organizational_permission_path(org),
@@ -8,6 +8,4 @@
       id: "org_nav_#{org.id}" %>
   </div>
 </div>
-<div class="org_nav_children children_org_<%= org.id %>" id="children_org_<%= org.id %>" style="display: none;">
-  <%= new_render_org_tree(children) %>
-</div>
+<div class="org_nav_children children_org_<%= org.id %>" id="children_org_<%= org.id %>" style="display: none;"></div>

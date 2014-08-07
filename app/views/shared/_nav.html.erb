@@ -29,8 +29,9 @@
             <% if current_person.organization_objects.length > 1 %>
               <% cache(['org_nav', current_person]) do %>
                 <ul class="under_tree">
-                  <div class="loader">
-                    <%= image_tag 'loader.gif'%><br/>Fetching organizations
+                  <div class='loader'>
+                    <img src='/assets/loader-gray.gif'>
+                    Fetching organizations
                   </div>
                 </ul>
               <% end %>
