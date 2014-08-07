@@ -14,7 +14,7 @@ class LeaderMailer < ActionMailer::Base
     @permission_name = permission_name
     @from = @added_by.present? && @added_by.primary_email_address.present? ? @added_by.email : 'support@missionhub.com'
 
-    if @person.user.present?
+    if @person.user.present? && @person.email.present?
       @link = leader_link_url(@token, @person.user.id)
       mail to: @person.email, from: @from, subject: "Missionhub.com - #{@org}"
     end
@@ -30,6 +30,8 @@ class LeaderMailer < ActionMailer::Base
     else
       @from = 'support@missionhub.com'
     end
-    mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
+    if @assigned_to.email.present?
+      mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
+    end
   end
 end
