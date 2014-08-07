@@ -416,6 +416,7 @@ $('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
 
   ids = []
   fails = []
+  $('.active_profile.id_checkbox').prop 'checked', true
   $('.id_checkbox:checked').each ->
     id = $(this).attr('data-id')
     name = $(this).attr('data-name')

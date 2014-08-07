@@ -137,14 +137,17 @@ class SentSms < ActiveRecord::Base
         from = long_code ? long_code.number : SmsKeyword::SHORT
       end
 
-      SentSms.smart_split(message, separator).each do |message|
-        begin
-          Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-        rescue Twilio::APIError => e
-          if e.message.include?('not a valid phone number')
-            PhoneNumber.where(number: recipient).destroy_all
-          else
-            Airbrake.notify(e)
+      phone_number = PhoneNumber.find_by_number(recipient)
+      if phone_number.present? && !phone_number.not_mobile?
+        SentSms.smart_split(message, separator).each do |message|
+          begin
+            Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
+          rescue Twilio::APIError => e
+            if e.message.include?('is not a mobile number')
+              phone_number.not_mobile!
+            else
+              Airbrake.notify(e)
+            end
           end
         end
       end

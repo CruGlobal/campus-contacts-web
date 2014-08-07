@@ -29,6 +29,11 @@ class PhoneNumber < ActiveRecord::Base
   before_save :clear_carrier_if_number_changed
   #after_commit :async_update_carrier
   after_destroy :set_new_primary
+  
+  def not_mobile!(value = true)
+    update_attribute(:not_mobile, value)
+    return self
+  end
 
   def active_for_org?(org)
     !SmsUnsubscribe.where(phone_number: number, organization_id: org.id).present?
