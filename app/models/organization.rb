@@ -720,35 +720,41 @@ class Organization < ActiveRecord::Base
     person = Person.where(id: person_id).first
     if person.present?
       if force
-        change_person_permission(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+        permission = change_person_permission(person, Permission::NO_PERMISSIONS_ID, added_by_id)
       else
-        add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
+        permission = add_permission_to_person(person, Permission::NO_PERMISSIONS_ID, added_by_id)
       end
+      return permission
     end
+    return false
   end
 
   def add_admin(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
-    if person.present?
+    if person.present? && person.email_addresses.present?
       if force
-        change_person_permission(person, Permission::ADMIN_ID, added_by_id)
+        permission = change_person_permission(person, Permission::ADMIN_ID, added_by_id)
       else
-        add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
+        permission = add_permission_to_person(person, Permission::ADMIN_ID, added_by_id)
       end
+      return permission
     end
+    return false
   end
 
   def add_user(person, added_by_id = nil, force = false)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
-    if person.present?
+    if person.present? && person.email_addresses.present?
       if force
-        change_person_permission(person, Permission::USER_ID, added_by_id)
+        permission = change_person_permission(person, Permission::USER_ID, added_by_id)
       else
-        add_permission_to_person(person, Permission::USER_ID, added_by_id)
+        permission = add_permission_to_person(person, Permission::USER_ID, added_by_id)
       end
+      return permission
     end
+    return false
   end
 
   def add_no_permissions(person, added_by_id = nil)
