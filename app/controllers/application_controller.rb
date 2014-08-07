@@ -449,4 +449,12 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  def include_sms_footer(body)
+    # 140 as the maximum character because we adjusted it for the sms headers
+    footer_msg = "\n\n#{I18n.t('people.bulk_sms.sms_footer_message')}"
+    total_characters = body.length + footer_msg.length
+    body += footer_msg if total_characters <= 140
+    body
+  end
 end

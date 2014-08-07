@@ -36,9 +36,9 @@ class SmsController < ApplicationController
           SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
-      @msg = "You have been unsubscribed from MHub SMS alerts"
-      @msg += " for #{@organization.name}" if @organization.present?
-      @msg += ". You will receive no more messages."
+
+      @msg = I18n.t('sms.sms_unsubscribed_without_org')
+      @msg = I18n.t('sms.sms_unsubscribed_with_org', org: @organization) if @organization.present?
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
@@ -54,12 +54,13 @@ class SmsController < ApplicationController
           SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
-      @msg = 'You have been subscribed from MHub SMS alerts. You can now receive text messages.'
+      @msg = I18n.t('sms.sms_subscribed_without_org')
+      @msg = I18n.t('sms.sms_subscribed_with_org', org: @organization) if @organization.present?
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when 'help'
-      @msg = 'MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user.'
+      @msg = I18n.t('sms.sms_help_guide')
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when ''
