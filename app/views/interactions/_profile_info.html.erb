@@ -100,6 +100,9 @@
         		<% unless phone.active_for_org?(current_organization) %>
               <div class="info_tag warning">Opted Out</div>
             <% end %>
+            <% if phone.not_mobile? %>
+              <div class="info_tag warning">Not Mobile</div>
+            <% end %>
             <br/>
           <% end %>
         <% end %>
