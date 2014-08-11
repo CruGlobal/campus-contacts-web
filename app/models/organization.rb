@@ -572,7 +572,7 @@ class Organization < ActiveRecord::Base
           org_permission.deleted_at = nil
           to_save = true
         else
-          return permission
+          return org_permission.permission
         end
       else
         org_permission = OrganizationalPermission.new(person_id: person_id, organization_id: id)
@@ -581,7 +581,7 @@ class Organization < ActiveRecord::Base
         to_save = true
       end
 
-      if to_save && org_permission.save
+      if to_save && !org_permission.destroyed? && org_permission.save
         # Ensure single permission
         permission = person.ensure_single_permission_for_org_id(id, permission_id)
         return permission
