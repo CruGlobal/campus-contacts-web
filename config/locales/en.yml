@@ -1391,6 +1391,10 @@ en:
       back: 'Cancel and go back'
       delete: Delete Organization
       title: "Edit Organization: \"%{org}\" "
+      form_description: "An organization can be something like your church, an association or network,
+      or your non-profit. Once you've made your organization, you'll be able to add what we call \"sub-organizations.\"
+      These are things like departments, divisions or whatever you decide to call sub-organizations.
+      For flexibility, you can have as many levels of sub-organizations as you'd like."
       term_explain: Terminology is how you define this item, for example, Church, Organization, Ministry etc.
       name_explain: A name is what you call something
       back_to_orgs: Back to Organizations
