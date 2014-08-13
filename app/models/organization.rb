@@ -581,16 +581,15 @@ class Organization < ActiveRecord::Base
         to_save = true
       end
 
-      if to_save && !org_permission.destroyed? && org_permission.save
-        # Ensure single permission
-        permission = person.ensure_single_permission_for_org_id(id, permission_id)
-        return permission
-      else
-        return nil
+      if to_save
+        if org_permission.save
+          # Ensure single permission
+          permission = person.ensure_single_permission_for_org_id(id, permission_id)
+          return permission
+        end
       end
-    else
-      return nil
     end
+    return nil
   end
 
   # Add Permission will prioritize the permission heirarchy
