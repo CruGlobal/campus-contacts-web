@@ -1066,7 +1066,7 @@ class ContactsController < ApplicationController
         if params[:include_archived] || params[:archived]
           all_permissions = OrganizationalPermission.where(organization_id: current_organization.id, archive_date: nil, deleted_at: nil)
         else
-          all_permissions = OrganizationalPermission.where(organization_id: current_organization.id).where("archive_date IS NOT NULL AND deleted_at IS NULL")
+          all_permissions = OrganizationalPermission.where(organization_id: current_organization.id).where("organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL")
         end
         all_permissions = ActiveRecord::Base.connection.select_all(all_permissions.select('GROUP_CONCAT(permission_id) as permission_ids, person_id').group(:person_id))
         @permissions_by_person_id = {}
