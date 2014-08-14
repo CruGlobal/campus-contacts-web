@@ -581,7 +581,7 @@ class Organization < ActiveRecord::Base
         to_save = true
       end
 
-      if to_save
+      if to_save && !org_permission.destroyed?
         if org_permission.save
           # Ensure single permission
           permission = person.ensure_single_permission_for_org_id(id, permission_id)
