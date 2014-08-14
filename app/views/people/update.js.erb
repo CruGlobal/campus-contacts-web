@@ -18,3 +18,7 @@ if($('body').hasClass("reload_info")){
   $('body').removeClass("reload_info")
 }
 $.toggleLoader('profile_name','')
+$.facebook_autocomplete($("#profile_facebook_search"))
+
+// This will automatically changed the profile picture if the user updates the fb_uid
+$(".current_avatar_display").attr("src", "<%= @person.get_avatar %>")
