@@ -90,6 +90,7 @@ class Permission < ActiveRecord::Base
     ADMIN_ID = admin.id
     USER_ID = user.id
     NO_PERMISSIONS_ID = no_permissions.id
+    ADMIN_AND_USER_ID = [ADMIN_ID, USER_ID].compact.join(',')
   end
 
   DEFAULT_PERMISSIONS = ["admin", "user", "no_permissions"]
