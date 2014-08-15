@@ -1,17 +1,19 @@
 $ ->
+  $.facebook_autocomplete($("#avatar_facebook_search"))
+  $.facebook_autocomplete($("#profile_facebook_search"))
+
   $(document).on 'click', '.info_edit #person_faculty', (e)->
     if $(this).is(':checked')
       $('#student_status_div').hide()
     else
       $('#student_status_div').show()
 
-
   $(document).on 'click', '.change_avatar', (e)->
     e.preventDefault()
     $('#avatar_fb_container').show()
     $('#avatar_browse_container').show()
     $('#display_avatar_file_name').text('')
-    $('#avatar_fb_container #facebook_name_search').val('')
+    $('#avatar_fb_container #avatar_facebook_search').val('')
     $('#avatar_fb_container #person_fb_uid').val($('#avatar_fb_container #person_fb_uid').data('default'))
     $("img.browse_preview").attr("src", $("img.change_avatar").attr("src"))
     $("#avatar_upload").val("")
@@ -30,51 +32,31 @@ $ ->
     $('#avatar_fb_container').hide()
     $('#display_avatar_file_name').text($(this).val().split('\\').pop())
 
-  $(document).on 'click', '.fb_user a', (e)->
-    parent = $(this).parents('li.fb_user')
-    if $(this).hasClass('no_user')
-      $('#avatar_fb_container #facebook_name_search').val('')
-    else
-      $('#avatar_fb_container #facebook_name_search').val($(this).text())
-      $('#avatar_fb_container #person_fb_uid').val(parent.data('id'))
+  $(document).on 'click', '.facebook_search_result', (e)->
+    result = $(this)
+    facebook_field = $("#"+result.data("for"))
+    facebook_field.val("")
+    facebook_field.val(result.find(".facebook_result_name").html())
+    fb_uid_field = facebook_field.siblings(".facebook_uid").val(result.data("id"))
+    if $('#avatar_browse_container').is(":visible")
       $('#avatar_browse_container').hide()
+    $(".facebook_search_result").remove()
 
-  $(document).on 'keyup', '#facebook_name_search', (e)->
-    $(this).autocomplete
+$.facebook_autocomplete = (facebook_field) ->
+  search_field = $(facebook_field)
+  if search_field.length > 0
+    search_field.autocomplete
       minLength: 3
-      delay: 1000
+      delay: 300
       source: '/people/facebook_search.json'
-      select: (event, ui)->
-        if(isNaN(ui.item.id))
-          url = escape(ui.item.id)
-          $('#fb_name_search_dialog').dialog
-            resizable: false,
-            height: 600,
-            width: 800,
-            modal: true,
-            open: (event, ui) ->
-              $(this).fbNameSearch(url)
-            buttons:
-              Cancel: ->
-                $(this).dialog('destroy')
-              Previous: ->
-              More: ->
-          false
-        else
-          if(ui.item.id == null)
-            $('#fb_name_search_dialog').dialog('destroy')
-          else
-            $('#person_fb_uid').val(ui.item.id)
-            link = 'http://www.facebook.com/profile.php?id=' + ui.item.id
-            $('#facebook_url').html('<a href="' + link + '">' + link + '<a>')
-        false
     .data("autocomplete")
     ._renderItem = ( ul, item )->
       image_src = 'http://graph.facebook.com/' + item.id + '/picture'
-      resp = $( "<li class='fb_user' data-id='" + item.id + "'></li>" ).data("item.autocomplete", item)
       if item.id == null
-        resp.append("<a class='no_user'>Couldn't find facebook user with that name</a>")
+        resp = $("<li class='facebook_search_no_result'>Couldn't find facebook user with that name</li>")
       else
-        resp.append("<div class='fb_img' style='background:url(" + image_src + ")'>&nbsp</div> <a>" + item.name + "</a>")
+        resp = $( "<li class='facebook_search_result' data-id='" + item.id + "'></li>" ).data("item.autocomplete", item)
+        resp.attr("data-for", search_field.attr("id"))
+        resp.append("<div><img class='picture' src='" + image_src + "'/><span class='facebook_result_name'>" + item.name + "</span></div>")
       resp.appendTo(ul)
       return resp
