@@ -143,7 +143,8 @@ class SentSms < ActiveRecord::Base
           begin
             Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
           rescue Twilio::APIError => e
-            if e.message.include?('is not a mobile number')
+            msg = e.message
+            if msg.include?('is not a mobile number') || msg.include?('is not a valid phone number')
               phone_number.not_mobile!
             else
               Airbrake.notify(e)
