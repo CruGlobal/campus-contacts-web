@@ -93,7 +93,7 @@
         <% phone_numbers.each do |phone| %>
           <% if phone.number.present? %>
             <%= link_to phone.pretty_number, "tel:#{phone.number}" %>
-            <div class="info_tag"><%= phone.location.titleize %></div>
+            <div class="info_tag"><%= phone.location.try(:titleize) %></div>
         		<% if phone.primary %>
               <div class="info_tag">Primary</div>
             <% end %>
