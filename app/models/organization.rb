@@ -563,20 +563,19 @@ class Organization < ActiveRecord::Base
 
     if person.present? && permission = Permission.where(id: permission_id).first
       to_save = false
-      org_permission = OrganizationalPermission.find_by_person_id_and_organization_id(person_id, id)
+      org_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
       if org_permission.present?
-        if org_permission.permission_id != permission.id
+        if org_permission.permission_id == permission.id
+          return org_permission.permission
+        else
           org_permission.permission_id = permission.id
           org_permission.added_by_id = added_by_id
           org_permission.archive_date = nil
           org_permission.deleted_at = nil
           to_save = true
-        else
-          return org_permission.permission
         end
       else
-        org_permission = OrganizationalPermission.new(person_id: person_id, organization_id: id)
-        org_permission.permission_id = permission.id
+        org_permission = OrganizationalPermission.find_or_initialize_by_person_id_and_organization_id_and_permission_id(person_id, id, permission.id)
         org_permission.added_by_id = added_by_id
         to_save = true
       end
