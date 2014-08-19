@@ -705,7 +705,7 @@ en:
     form:
       keyword: 'Keyword'
       keyword_tip: "This is what people will type into their phone."
-      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 85005'.<br/>- Use at least 3 letters for your keyword."
+      keyword_instruct: "- A keyword is required to collect contacts and surveys via text, web and smartphones. <br/> - 'FSUCRU' is the keyword in 'Text FSUCRU to 85005'.<br/>- Use at least 3 letters (no special characters or spaces) for your keyword."
       keyword_why: "This is for our use only. The use description could include words like 'weekly meeting', 'outreach event', and other uses the keyword will have."
       explanation: 'Please explain what you plan to use this keyword for.'
       initial_response: "What response should we send back to people when they text in? <br/>If you want the person to complete a survey, the response MUST include {{ link }}<br/>(exactly like that, don't change that part of the response.)"
