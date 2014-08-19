@@ -128,19 +128,21 @@ class Element < ActiveRecord::Base
     end
 
     if option == "any"
-      if answers.present?
-        valid_answers = all_answers.where("value IN (?)", answers)
-        return people.where(id: valid_answers.collect{|x| x.answer_sheet.person_id})
-      else
-        return people.where(id: all_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
-      end
-    elsif option == "all"
-      if answers.present?
-        all_answers = all_answers.includes(:answer_sheet).where('answer_sheets.person_id' => people.collect(&:id))
-        answers.each do |answer|
-          filtered_answers = all_answers.where(value: answer)
-          people = people.where(id: filtered_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
+      if answers.include?("no_response")
+        answers = answers.reject { |ans| ans == "no_response" }
+        if answers.count > 0
+          all_answers = all_answers.where("value NOT IN (?)", answers)
         end
+        person_ids = people.collect(&:id) - all_answers.collect{|x| x.answer_sheet.person_id}
+      else
+        person_ids = all_answers.where("value IN (?)", answers).collect{|x| x.answer_sheet.person_id}
+      end
+      return people.where(id: person_ids)
+    elsif option == "all"
+      all_answers = all_answers.includes(:answer_sheet).where('answer_sheets.person_id' => people.collect(&:id))
+      answers.each do |answer|
+        filtered_answers = all_answers.where(value: answer)
+        people = people.where(id: filtered_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
       end
       return people
     end

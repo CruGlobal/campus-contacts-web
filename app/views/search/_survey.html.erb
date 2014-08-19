@@ -111,9 +111,9 @@
                 <% if answer.present? && answer["start"].present? %>
                   <% ans_start = answer["start"].split("-").collect{|x| x.to_i}%>
                   <% @answer_start = answer["start"].to_date %>
-                  <% @answer_start_year = start[0] %>
-                  <% @answer_start_month = start[1] %>
-                  <% @answer_start_day = start[2] %>
+                  <% @answer_start_year = ans_start[0] %>
+                  <% @answer_start_month = ans_start[1] %>
+                  <% @answer_start_day = ans_start[2] %>
                   <% if answer["end"].present? %>
                     <% ans_end = answer["end"].split("-").collect{|x| x.to_i}%>
                     <% @answer_end = answer["end"].to_date %>
