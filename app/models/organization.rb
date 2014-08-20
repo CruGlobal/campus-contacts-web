@@ -555,40 +555,31 @@ class Organization < ActiveRecord::Base
   end
 
   # Change Permission will not consider permission heirarchy
-  def change_person_permission(person, permission_id, added_by_id = nil)
+  def change_person_permission(person, permission_id, changed_by_person_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
-    # Ensure single permission
     person = Person.where(id: person_id).first
+    
+    # Ensure single permission
     person.ensure_single_permission_for_org_id(id)
 
     if person.present? && permission = Permission.where(id: permission_id).first
-      to_save = false
-      org_permission = OrganizationalPermission.where(person_id: person_id, organization_id: id).first
-      if org_permission.present?
-        if org_permission.permission_id == permission.id
-          return org_permission.permission
-        else
-          org_permission.permission_id = permission.id
-          org_permission.added_by_id = added_by_id
-          org_permission.archive_date = nil
-          org_permission.deleted_at = nil
-          to_save = true
+      org_permission = OrganizationalPermission.where(person_id: person.id, organization_id: id).first_or_create
+      if org_permission.permission_id == permission.id
+        if org_permission.archive_date.present? || org_permission.deleted_at.present?
+          org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: changed_by_person_id)
         end
       else
-        org_permission = OrganizationalPermission.find_or_initialize_by_person_id_and_organization_id_and_permission_id(person_id, id, permission.id)
-        org_permission.added_by_id = added_by_id
-        to_save = true
+        org_permission = OrganizationalPermission.find_or_create_by_permission_id_and_person_id_and_organization_id(permission.id, person.id, id)
+        org_permission.update_attributes(added_by_id: changed_by_person_id)
       end
-
-      if to_save && !org_permission.destroyed?
-        if org_permission.save
-          # Ensure single permission
-          permission = person.ensure_single_permission_for_org_id(id, permission_id)
-          return permission
-        end
-      end
+      
+      # Assure single permission per organization based on hierarchy
+      permission = person.ensure_single_permission_for_org_id(id, permission_id)
+      org_permission.notify_new_leader if [Permission::ADMIN_ID, Permission::USER_ID].include?(permission.id)
+      return permission
+    else
+      return nil
     end
-    return nil
   end
 
   # Add Permission will prioritize the permission heirarchy
@@ -709,7 +700,7 @@ class Organization < ActiveRecord::Base
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
     if person.present?
-      change_person_permission(person, Permission::USER_ID, current_person.id)
+      return change_person_permission(person, Permission::USER_ID, current_person.id)
     end
   end
 

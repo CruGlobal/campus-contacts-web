@@ -415,14 +415,13 @@ class OrganizationTest < ActiveSupport::TestCase
 
     # Archive Leader
     org_permission.archive
-
     # Add Leader Again
     org.add_leader(user1.person, user3.person)
     org_permission = OrganizationalPermission.last
-
+    
     assert_equal org.id, org_permission.organization_id, "The last permission should have the org"
     assert_equal user1.person.id, org_permission.person_id, "The last permission should have the person"
-    assert_equal user2.person.id, org_permission.added_by_id, "The last permission should have the other person who adds the leader"
+    assert_equal user3.person.id, org_permission.added_by_id, "The last permission should have the other person who adds the leader"
     assert_equal Permission::USER_ID, org_permission.permission_id, "The last permission should have the leader permission id"
 
   end

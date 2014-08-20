@@ -52,8 +52,9 @@ class Person < ActiveRecord::Base
   has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
+  has_many :all_organizational_permissions, class_name: "OrganizationalPermission", foreign_key: "person_id"
   has_many :organizational_permissions, conditions: {archive_date: nil, deleted_at: nil}
-  has_many :organizational_permissions_including_archived , class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: ["organizational_permissions.deleted_at IS NULL"]
+  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: ["organizational_permissions.deleted_at IS NULL"]
   has_one :contact_permission, class_name: 'OrganizationalPermission'
   has_many :permissions, through: :organizational_permissions
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission

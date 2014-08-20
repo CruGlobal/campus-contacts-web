@@ -349,10 +349,13 @@ class PeopleControllerTest < ActionController::TestCase
     should "update the contact's permission to leader that has a valid email" do
       Sidekiq::Testing.inline! do
         person = Factory(:person, email: "super_duper_unique_email@mail.com")
-        xhr :post, :update_permissions, { :permission_ids => Permission::USER_ID, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
+        assert_difference "OrganizationalPermission.count", 1 do
+          xhr :post, :update_permissions, { :permission_ids => Permission::USER_ID, :some_permission_ids => "", :person_id => person.id, :added_by_id => @user.person.id }
+        end
         assert_response :success
         assert_equal(person.id, OrganizationalPermission.last.person_id)
-        assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+        assert_not_nil ActionMailer::Base.deliveries.last
+        assert_equal "super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s
       end
     end
 
@@ -367,10 +370,7 @@ class PeopleControllerTest < ActionController::TestCase
 
     context "person has existing permissions" do
       setup do
-        @existing_permissions = []
-        @existing_permissions << Permission.no_permissions
-        @existing_permissions << Permission.admin
-        @existing_permissions = @existing_permissions.collect { |permission| permission.id }.join(',')
+        @existing_permissions = Permission.admin.id
       end
 
       should "replace permission if the person already has existing permissions" do
@@ -386,6 +386,7 @@ class PeopleControllerTest < ActionController::TestCase
           assert_equal(1, person.permissions.count)
           assert_equal(Permission.admin, person.permission_for_org_id(@org.id))
           assert_equal(person.id, OrganizationalPermission.last.person_id)
+          assert_not_nil ActionMailer::Base.deliveries.last
           assert_equal("thisemailisalsounique@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
         end
       end

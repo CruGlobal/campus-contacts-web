@@ -300,9 +300,12 @@ class LeadersControllerTest < ActionController::TestCase
     should "update the contact's permission to leader that has a valid email" do
       person = Factory(:person, email: "super_duper_unique_email@mail.com")
       Sidekiq::Testing.inline! do
-        xhr :post, :create, { :person_id => person.id }
+        assert_difference "OrganizationalPermission.count", 1 do
+          xhr :post, :create, { :person_id => person.id }
+        end
         assert_response :success
         assert_equal(person.id, OrganizationalPermission.last.person_id)
+        assert_not_nil ActionMailer::Base.deliveries.last
         assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
       end
     end
