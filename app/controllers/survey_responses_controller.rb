@@ -155,11 +155,13 @@ class SurveyResponsesController < ApplicationController
 
       @current_person = @person
       if @person.valid?
-        NewPerson.create(person_id: @person.id, organization_id: @survey.organization.id)
+        @org = @survey.organization
+        NewPerson.create(person_id: @person.id, organization_id: @org.id)
         save_survey
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
+          @org.change_person_permission(@person, Permission::NO_PERMISSIONS_ID, current_person.id)
           unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
             create_contact_at_org(@person, @survey.organization)
             FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
