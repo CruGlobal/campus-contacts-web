@@ -42,51 +42,73 @@ class Element < ActiveRecord::Base
   end
 
   def search_survey_people(people, answer, organization, option = TEXTFIELD_MATCH.first[1].underscore, range = nil)
-    begin
-      answer.strip!
-    rescue; end
-    option = "is_blank" if answer == "no_response"
-    if object_name.present? && attribute_name.present? && object_name == "person"
-      if range.present?
-        date_from = translate_date(range.first())
-        date_to = translate_date(range.last())
-        answer_sheets = AnswerSheet.where(survey_id: surveys.where(organization_id: organization.id, created_at: date_from..date_to).pluck(:id))
-      else
-        answer_sheets = AnswerSheet.where(survey_id: surveys.where(organization_id: organization.id).pluck(:id))
-      end
-      all_people = organization.all_people.where(id: answer_sheets.pluck(:person_id))
-
-      case attribute_name
-      when "email"
-        all_people = all_people.joins("LEFT JOIN email_addresses ON email_addresses.person_id = people.id")
-        query_object = "email_addresses.email"
-      when "phone_number"
-        all_people = all_people.joins("LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id")
-        query_object = "phone_numbers.number"
-      when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
-        all_people = all_people.joins("LEFT JOIN addresses ON addresses.person_id = people.id")
-        query_object = "addresses.#{attribute_name}"
-      else
-        query_object = "people.#{attribute_name}"
-      end
-
-      if option == "contains"
-        people = all_people.where("#{query_object} LIKE ?", "%#{answer}%")
-      elsif option == "is_exactly"
-        people = all_people.where("#{query_object} = ?", answer)
-      elsif option == "does_not_contain"
-        people = all_people.where("#{query_object} NOT LIKE ?", "%#{answer}%")
-      elsif option == "is_blank"
-        people = all_people.where("#{query_object} IS NULL OR #{query_object} = ''")
-      elsif option == "is_not_blank"
-        people = all_people.where("#{query_object} IS NOT NULL AND #{query_object} <> ''")
-      elsif option == "match"
-        people = all_people.where("DATE(#{query_object}) = DATE(?)", answer["start"])
-      elsif option == "between"
-        people = all_people.where("DATE(#{query_object}) >= DATE(?) AND DATE(#{query_object}) <= DATE(?)", answer["start"], answer["end"])
-      end
-      return people
+    if range.present?
+      date_from = translate_date(range.first())
+      date_to = translate_date(range.last())
+      answer_sheets = AnswerSheet.where(survey_id: surveys.where(organization_id: organization.id, created_at: date_from..date_to).pluck(:id))
+    else
+      answer_sheets = AnswerSheet.where(survey_id: surveys.where(organization_id: organization.id).pluck(:id))
     end
+    all_people = organization.all_people.where(id: answer_sheets.pluck(:person_id))
+
+    if object_name.present? && attribute_name.present? && object_name == "person"
+      is_multiple_answers = answer.is_a?(Array)
+      if is_multiple_answers
+        converted_answers = []
+        case attribute_name
+        when 'gender'
+          answer.each do |ans|
+            if ans.downcase == "female"
+              converted_answers << "0"
+            elsif ans.downcase == "male"
+              converted_answers << "1"
+            end
+          end
+
+          if answer.include?("no_response")
+            people = all_people.where("people.gender IN (?) OR (people.gender IS NULL OR people.gender = '')", converted_answers)
+          else
+            people = all_people.where("people.gender IN (?)", converted_answers)
+          end
+        end
+      else
+        begin
+          answer.strip!
+        rescue; end
+        option = "is_blank" if answer == "no_response"
+
+        case attribute_name
+        when "email"
+          all_people = all_people.joins("LEFT JOIN email_addresses ON email_addresses.person_id = people.id")
+          query_object = "email_addresses.email"
+        when "phone_number"
+          all_people = all_people.joins("LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id")
+          query_object = "phone_numbers.number"
+        when 'address1', 'city', 'state', 'country', 'dorm', 'room', 'zip'
+          all_people = all_people.joins("LEFT JOIN addresses ON addresses.person_id = people.id")
+          query_object = "addresses.#{attribute_name}"
+        else
+          query_object = "people.#{attribute_name}"
+        end
+
+        if option == "contains"
+          people = all_people.where("#{query_object} LIKE ?", "%#{answer}%")
+        elsif option == "is_exactly"
+          people = all_people.where("#{query_object} = ?", answer)
+        elsif option == "does_not_contain"
+          people = all_people.where("#{query_object} NOT LIKE ?", "%#{answer}%")
+        elsif option == "is_blank"
+          people = all_people.where("#{query_object} IS NULL OR #{query_object} = ''")
+        elsif option == "is_not_blank"
+          people = all_people.where("#{query_object} IS NOT NULL AND #{query_object} <> ''")
+        elsif option == "match"
+          people = all_people.where("DATE(#{query_object}) = DATE(?)", answer["start"])
+        elsif option == "between"
+          people = all_people.where("DATE(#{query_object}) >= DATE(?) AND DATE(#{query_object}) <= DATE(?)", answer["start"], answer["end"])
+        end
+      end
+    end
+    people
   end
 
   def search_people_answer_textfield(people, survey, answer, option = TEXTFIELD_MATCH.first[1].underscore, range = nil)
