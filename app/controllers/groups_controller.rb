@@ -23,26 +23,30 @@ class GroupsController < ApplicationController
   end
 
   def show
-    permissions_for_assign
+    if @group.present?
+      permissions_for_assign
 
-    @group = Present(@group)
-    @people = current_organization.all_people.get_from_group(@group.id).uniq
+      @group = Present(@group)
+      @people = current_organization.all_people.get_from_group(@group.id).uniq
 
-    if params[:search].present? && params[:search][:meta_sort].present?
-      sort_query = params[:search][:meta_sort].gsub('.',' ')
-      @people = @people.includes(:group_memberships) if sort_query.include?('permission')
-			order_string = sort_query.gsub('first_name','people.first_name')
-                               .gsub('permission','group_memberships.permission')
+      if params[:search].present? && params[:search][:meta_sort].present?
+        sort_query = params[:search][:meta_sort].gsub('.',' ')
+        @people = @people.includes(:group_memberships) if sort_query.include?('permission')
+  			order_string = sort_query.gsub('first_name','people.first_name')
+                                 .gsub('permission','group_memberships.permission')
+      else
+        order_string = "people.first_name"
+      end
+
+      @q = @people.where('1 <> 1').search(params[:search])
+      @people = @people.order(order_string)
+      @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
+      @all_people_with_email = @people.includes(:primary_email_address).where('email_addresses.email is not NULL')
+
+      authorize! :read, @group
     else
-      order_string = "people.first_name"
+      redirect_to groups_path, error: I18n.t('groups.no_group_found')
     end
-
-    @q = @people.where('1 <> 1').search(params[:search])
-    @people = @people.order(order_string)
-    @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
-    @all_people_with_email = @people.includes(:primary_email_address).where('email_addresses.email is not NULL')
-
-    authorize! :read, @group
   end
 
   def edit
@@ -85,7 +89,7 @@ class GroupsController < ApplicationController
         @group = current_organization.groups.find(params[:id]) if params[:id]
       rescue ActiveRecord::RecordNotFound
         @group = nil
-        flash[:error] = "Group not found"
+        flash[:error] = I18n.t('groups.no_group_found')
       end
     end
 

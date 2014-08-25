@@ -1278,6 +1278,7 @@ en:
   sporadically: Sporadically
 
   groups:
+    no_group_found: "Group was not found"
     add_a_label: "Add a Group Label"
     label_name: "Group Label Name"
     label_name_is_required: "Group Label Name is required."
