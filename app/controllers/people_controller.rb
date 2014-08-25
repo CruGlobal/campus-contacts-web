@@ -263,6 +263,9 @@ class PeopleController < ApplicationController
     @assigned_tos = @person.assigned_to_people_by_org(current_organization)
 
     respond_to do |format|
+
+      @person.reload if @person.readonly? # This might fix the readonly error
+
       if @person.update_attributes(params[:person])
         @person.update_attribute(:student_status, nil) if @person.faculty?
         @person.update_date_attributes_updated
