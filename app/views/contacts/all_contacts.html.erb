@@ -57,7 +57,7 @@
         <%= link_to('Export ▾', '#', class: 'action_dropdown') %>
         <ul style="display:none" id="all_contacts_export_menu">
           <li>
-            <%= link_to(t('people.index.export'), params.merge(format: 'csv'), id: 'bulk_export_link') %>
+            <%= link_to(t('people.index.export'), params.merge(format: 'csv').except(:advanced_search), id: 'bulk_export_link') %>
             <span class="icon help tipitright help_bubble_keyword" title="<%= t('general.export_csv_help') %>"></span>
           </li>
           <li id='bulk_vcard_link'>
