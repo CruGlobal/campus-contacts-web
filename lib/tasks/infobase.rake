@@ -84,7 +84,7 @@ namespace :infobase do
 
             puts "------ Importing activity rows..."
             i = 0
-            Infobase::Activity.get('filters[team_id]' => team['id'], per_page: 10000)['activities'].each do |activity|
+            Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)['activities'].each do |activity|
               if activity['target_area'].present?
                 i += 1
                 puts i if i % 1000 == 0
