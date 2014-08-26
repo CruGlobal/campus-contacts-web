@@ -798,6 +798,7 @@ en:
     edit_this_survey: "Edit this survey"
     profile_info:
       email_contact_info: "Email Me This Contact Info"
+      opt_in_help: "If you would like to receive text messages, text 'ON' to 85005 to opt back in."
     profile_interactions_edit:
       confirm_delete_interaction: "Are you sure you want to delete this interaction?"
   contacts:
@@ -1029,6 +1030,11 @@ en:
     email_should_be_unique_msg: "Email already used, try another email address."
     email_invalid_msg: "Email is invalid, try again."
     no_survey: "There isn't a survey associated with that keyword"
+    sms_subscribed_without_org: "You have been subscribed from MHub text alerts. You can now receive text messages."
+    sms_subscribed_with_org: "You have been subscribed from MHub text alerts. You can now receive text messages from %{org}."
+    sms_unsubscribed_with_org: "You have been unsubscribed from MHub text alerts for %{org}. You will receive no more messages. To opt back in, reply ON."
+    sms_unsubscribed_without_org: "You have been unsubscribed from MHub text alerts. You will receive no more messages. To opt back in, reply ON."
+    sms_help_guide: "MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user."
   survey:
     drop_down_field:
       choose_one: "Choose One"

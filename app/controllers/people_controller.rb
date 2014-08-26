@@ -416,10 +416,12 @@ class PeopleController < ApplicationController
     person_ids.uniq.each do |id|
     	person = Person.find_by_id(id)
       if person.present? && primary_phone = person.primary_phone_number
+        # Do not allow to send text if the phone number is not subscribed
         if is_subscribe = current_organization.is_sms_subscribe?(primary_phone.number)
-          # Do not allow to send text if the phone number is not subscribed
 
-          body = params[:body] + "\n\n#{I18n.t('people.bulk_sms.sms_footer_message')}"
+          # Include sms footer if it can fits to the body
+          body = include_sms_footer(params[:body])
+
           @message = current_person.sent_messages.create(
             receiver_id: person.id,
             organization_id: current_organization.id,

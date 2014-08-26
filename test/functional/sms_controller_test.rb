@@ -203,12 +203,13 @@ class SmsControllerTest < ActionController::TestCase
       end
 
       should "have response when user sends 'on' subscribe" do
+        message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@organization.name}."
         post :mo, @post_params.merge!({message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
-        assert_equal 'You have been subscribed from MHub SMS alerts. You can now receive text messages.', assigns(:msg)
+        assert_equal message, assigns(:msg)
       end
 
       should "have response when user sends 'stop' unsubscribe" do
-        message = "You have been unsubscribed from MHub SMS alerts for #{@organization.name}. You will receive no more messages."
+        message = "You have been unsubscribed from MHub text alerts for #{@organization.name}. You will receive no more messages. To opt back in, reply ON."
         post :mo, @post_params.merge!({message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S')})
         assert_equal message, assigns(:msg)
       end

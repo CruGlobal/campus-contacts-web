@@ -99,6 +99,7 @@
             <% end %>
         		<% unless phone.active_for_org?(current_organization) %>
               <div class="info_tag warning">Opted Out</div>
+              <div class="icon help tip help_bubble_keyword " title="<%= t('.opt_in_help') %>"></div>
             <% end %>
             <% if phone.not_mobile? %>
               <div class="info_tag warning">Not Mobile</div>
