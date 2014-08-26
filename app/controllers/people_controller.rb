@@ -423,7 +423,7 @@ class PeopleController < ApplicationController
           @message = current_person.sent_messages.create(
             receiver_id: person.id,
             organization_id: current_organization.id,
-            to: person.phone_number,
+            to: person.text_phone_number.number,
             sent_via: 'sms',
             message: body
           )

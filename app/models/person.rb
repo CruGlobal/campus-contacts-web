@@ -213,7 +213,7 @@ class Person < ActiveRecord::Base
 
   scope :phone_search, lambda { |keyword, org_id| {
     :select => "people.*",
-    :conditions => ["(org_permissions.organization_id = ? AND (concat(first_name,' ',last_name) LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.primary = 1 AND phone_numbers.not_mobile = 0", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
+    :conditions => ["(org_permissions.organization_id = ? AND (concat(first_name,' ',last_name) LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.not_mobile = 0", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
     :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id",
     :limit => 5
   }}
@@ -863,6 +863,21 @@ class Person < ActiveRecord::Base
 
   def pretty_phone_number
     primary_phone_number.try(:pretty_number)
+  end
+  
+  def text_phone_number
+    primary = primary_phone_number
+    return primary_phone_number if primary.present? && primary.location == 'mobile'
+    
+    if mobile = phone_numbers.where(location: 'mobile').first
+      return mobile
+    else
+      return primary
+    end
+  end
+  
+  def pretty_text_phone_number
+    text_phone_number.try(:pretty_number)
   end
 
   def phone_number=(val)
