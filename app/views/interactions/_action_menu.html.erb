@@ -1,6 +1,9 @@
 <% if request.referer.present? %>
   <ul class="button_bar">
-    <li class="action_lightgray"><%= link_to "Back", "#", id: "action_menu_back" %></li>
+    <li class="action_lightgray">
+      <%#= link_to "Back", "#", id: "action_menu_back" %>
+      <%= link_to "Back", :back %>
+    </li>
   </ul>
 <% end %>
 <ul class="button_bar">
