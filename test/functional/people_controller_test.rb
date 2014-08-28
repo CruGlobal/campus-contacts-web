@@ -492,6 +492,12 @@ class PeopleControllerTest < ActionController::TestCase
   context "merging people" do
     setup do
       @user, @org = admin_user_login_with_org
+      @person = @user.person
+      @person1 = Factory(:person, first_name: "Clark", last_name: "Kent")
+      @person2 = Factory(:person, first_name: "Bruce", last_name: "Wayne")
+      @person3 = Factory(:person, first_name: "Hal", last_name: "Jordan")
+      @person4 = Factory(:person, first_name: "Clark", last_name: "Kent")
+      @person5 = Factory(:person, first_name: "clark", last_name: "kent")
     end
 
     should "redirect when id = 0" do
@@ -555,6 +561,26 @@ class PeopleControllerTest < ActionController::TestCase
         post :do_merge, { :keep_id => contact1.id, :merge_ids => [contact2.id] }
       end
       assert_equal "You've just merged #{ids.length} people", flash[:notice]
+    end
+    
+    should "merge received interactions" do
+      @interaction_type = Factory(:interaction_type, organization_id: 0, i18n: "Comment")
+      Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type.id)
+      Factory(:interaction, receiver: @person2, creator: @person, organization: @org, interaction_type_id: @interaction_type.id)
+      assert_difference "Person.find(#{@person1.id}).interactions.count", 1 do
+        post :do_merge, { :keep_id => @person1.id, :merge_ids => [@person2.id] }
+      end
+      assert_equal "You've just merged 2 people", flash[:notice]
+    end
+    
+    should "merge created interactions" do
+      @interaction_type = Factory(:interaction_type, organization_id: 0, i18n: "Comment")
+      Factory(:interaction, receiver: @person3, creator: @person1, organization: @org, interaction_type_id: @interaction_type.id)
+      Factory(:interaction, receiver: @person4, creator: @person2, organization: @org, interaction_type_id: @interaction_type.id)
+      assert_difference "Person.find(#{@person1.id}).created_interactions.count", 1 do
+        post :do_merge, { :keep_id => @person1.id, :merge_ids => [@person2.id] }
+      end
+      assert_equal "You've just merged 2 people", flash[:notice]
     end
   end
 
@@ -956,4 +982,4 @@ class PeopleControllerTest < ActionController::TestCase
       #assert_empty @contact2.email_addresses
     #end
   end
-   end
+end

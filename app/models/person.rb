@@ -1324,6 +1324,13 @@ class Person < ActiveRecord::Base
 
       # Group Memberships
       other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
+      
+      # Received Interactions
+      other.interactions_with_deleted.collect {|gm| gm.update_column(:receiver_id, id)}
+      
+      # Created Interactions
+      other.created_interactions.collect {|gm| gm.update_column(:created_by_id, id)}
+      
 
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload
