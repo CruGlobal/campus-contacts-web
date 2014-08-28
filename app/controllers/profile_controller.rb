@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
   before_filter :authorize
+  skip_before_filter :clear_advanced_search
 
   def show
     permissions_for_assign
