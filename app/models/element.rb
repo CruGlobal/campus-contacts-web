@@ -54,22 +54,28 @@ class Element < ActiveRecord::Base
     if object_name.present? && attribute_name.present? && object_name == "person"
       is_multiple_answers = answer.is_a?(Array)
       if is_multiple_answers
-        converted_answers = []
+        get_answers = answer
+
         case attribute_name
         when 'gender'
+          get_answers = []
           answer.each do |ans|
             if ans.downcase == "female"
-              converted_answers << "0"
+              get_answers << "0"
             elsif ans.downcase == "male"
-              converted_answers << "1"
+              get_answers << "1"
+            else
+              get_answers << ans
             end
           end
+        end
 
-          if answer.include?("no_response")
-            people = all_people.where("people.gender IN (?) OR (people.gender IS NULL OR people.gender = '')", converted_answers)
-          else
-            people = all_people.where("people.gender IN (?)", converted_answers)
-          end
+        if answer.include?("no_response")
+          people = all_people.where("people.#{attribute_name} IN (?) OR
+            (people.#{attribute_name} IS NULL OR
+            people.#{attribute_name} = '')", get_answers)
+        else
+          people = all_people.where("people.#{attribute_name} IN (?)", get_answers)
         end
       else
         begin
