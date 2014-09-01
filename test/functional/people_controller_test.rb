@@ -85,28 +85,6 @@ class PeopleControllerTest < ActionController::TestCase
         assert_nil assigns(:message)
       end
 
-      should "send bulk sms" do
-        xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-        assert_response :success
-        assert_not_nil assigns(:message)
-      end
-
-      should "send bulk SMS via twilio" do
-        assert_difference "SentSms.count", +2 do
-          xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-        end
-        assert_equal 'twilio', SentSms.last.sent_via
-      end
-
-      should "send bulk SMS via smseco" do
-        @org.settings[:sms_gateway] = 'smseco'
-        @org.save
-        assert_difference "SentSms.count", +2 do
-          xhr :post, :bulk_sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-        end
-        assert_equal 'smseco', SentSms.last.sent_via
-      end
-
       should "update permissions" do
         permissions = []
         (1..3).each { |index| permissions << Permission.create!(name: "member_#{index}", i18n: "member_#{index}") }

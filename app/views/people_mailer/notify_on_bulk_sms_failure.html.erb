@@ -1,0 +1,28 @@
+<h1>Failed Text Message Delivery</h1>
+<p>
+  <b>Text Message:</b>
+  <%= @message %>
+  <br/>
+  <b>Date/Time of message sent:</b>
+  <%= @bulk_message.created_at.in_time_zone(@person.timezone).strftime("%B %d, %Y %I:%M%P") %>
+</p>
+<p>
+  <b>Total number of sent messages:</b>
+  <%= @sent_count %>
+  <br/>
+  <b>Total number of failed messages:</b>
+  <%= @failed_count %>
+</p>
+<p>
+  <b>Complete list of delivery failure(s):</b>
+  <br/>
+  <ul>
+    <%- @results.each do |result| %>
+      <%- unless result[:is_sent] %>
+        <li>
+          <%= "#{result[:receiver_name]} <#{result[:to]}>" %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</p>

@@ -1,5 +1,5 @@
 class SurveyMailer < ActionMailer::Base
-  default from: "support@missionhub.com"
+  default from: "\"MissionHub Support\" <support@missionhub.com>"
 
   def notify(to, msg)
     @msg = msg

@@ -6,12 +6,13 @@ class SentSms < ActiveRecord::Base
   include Sidekiq::Worker
 
   belongs_to :received_sms
+  # belongs_to :message
 
   serialize :reports
   serialize :separator
   default_value_for :sent_via, 'twilio'
 
-  # after_create :queue_sms
+  # after_create :send_sms
 
   def self.smart_split(text, separator=nil, char_limit=160)
     return [text] if text.length <= char_limit
@@ -59,96 +60,128 @@ class SentSms < ActiveRecord::Base
   end
 
   def to_bulksms(url, login, password)
+    result = true
 
-    SentSms.smart_split(message, separator).each_with_index do |message, i|
-      msgid = URI.encode("#{id}-#{i+1}")
-      msg = URI.encode(message.strip)
+    phone_number = PhoneNumber.find_by_number(recipient)
+    if phone_number.present? && !phone_number.not_mobile?
+      SentSms.smart_split(message, separator).each_with_index do |message, i|
+        self.update_attributes(status: "sending")
+        msgid = URI.encode("#{id}-#{i+1}")
+        msg = URI.encode(message.strip)
 
-      request = "#{url}?username=#{login}&password=#{password}"
-      request += "&message=#{msg}&msisdn=#{recipient}"
+        request = "#{url}?username=#{login}&password=#{password}"
+        request += "&message=#{msg}&msisdn=#{recipient}"
 
-      begin
-        response = open(request).read
-        response_hash = response.split("|")
-        response_code = response_hash.first.to_i
-        self.update_attribute('reports', response_hash)
-        if response_code == 0
-          puts "Success (#{response_code})"
-        else
-          puts "Failed (#{response_code})"
+        begin
+          response = open(request).read
+          response_hash = response.split("|")
+          response_code = response_hash.first.to_i
+          self.update_attribute('reports', response_hash)
+          if response_code == 0
+            puts "Success (#{response_code})"
+            self.update_attributes(reports: response_hash, status: "sent")
+          else
+            puts "Failed (#{response_code})"
+            self.update_attributes(reports: response_hash, status: "failed")
+            result = false
+          end
+        rescue
+          msg = "Connection to #{url} failed!"
+          puts msg
+          self.update_attributes(reports: msg, status: "failed")
+          result = false
         end
-      rescue
-        puts "Connection Failed"
       end
+    else
+      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      result = false
     end
-
+    return result
   end
 
   def to_smseco
+    result = true
     url = APP_CONFIG['smseco_url']
     login = APP_CONFIG['smseco_username']
     password = APP_CONFIG['smseco_password']
     numero = recipient
     expediteur = "0"
 
-    SentSms.smart_split(message, separator).each_with_index do |message, i|
-      msgid = URI.encode("#{id}-#{i+1}")
-      msg = URI.encode(message.strip)
+    phone_number = PhoneNumber.find_by_number(recipient)
+    if phone_number.present? && !phone_number.not_mobile?
+      SentSms.smart_split(message, separator).each_with_index do |message, i|
+        self.update_attributes(status: "sending")
+      
+        msgid = URI.encode("#{id}-#{i+1}")
+        msg = URI.encode(message.strip)
 
-      request = "#{url}?login=#{login}&password=#{password}"
-      request += "&msgid=#{msgid}&expediteur=#{expediteur}&msg=#{msg}&numero=#{numero}"
-      request += "&flash=0&unicode=0&binaire=0"
+        request = "#{url}?login=#{login}&password=#{password}"
+        request += "&msgid=#{msgid}&expediteur=#{expediteur}&msg=#{msg}&numero=#{numero}"
+        request += "&flash=0&unicode=0&binaire=0"
 
-      begin
-        response = open(request).read
-        response_hash = Hash.from_xml(response)
-        response_code = response_hash['REPONSE']['statut'].to_i
-        self.update_attribute('reports', response_hash)
-        if response_code == 0
-          puts "Success (#{response_code})"
-        else
-          puts "Failed (#{response_code})"
+        begin
+          response = open(request).read
+          response_hash = Hash.from_xml(response)
+          response_code = response_hash['REPONSE']['statut'].to_i
+          self.update_attribute('reports', response_hash)
+          if response_code == 0
+            puts "Success (#{response_code})"
+            self.update_attributes(reports: response_hash['REPONSE'], status: "sent")
+          else
+            puts "Failed (#{response_code})"
+            self.update_attributes(reports: response_hash['REPONSE'], status: "failed")
+            result = false
+          end
+        rescue
+          msg = "Connection to #{url} failed!"
+          puts msg
+          self.update_attributes(reports: msg, status: "failed")
+          result = false
         end
-      rescue
-        puts "Connection Failed"
       end
+    else
+      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      result = false
     end
+    return result
   end
   
   def send_to_twilio(from)
+    result = true
     phone_number = PhoneNumber.find_by_number(recipient)
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each do |message|
+        self.update_attributes(status: "sending")
         begin
-          Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
+          results = Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
+          self.update_attributes(reports: results, status: "sent")
         rescue Twilio::APIError => e
           msg = e.message
-          if msg.include?('is not a mobile number') || msg.include?('is not a valid phone number')
+          if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
             phone_number.not_mobile!
           else
             Airbrake.notify(e)
           end
+          self.update_attributes(reports: results || msg, status: "failed")
+          result = false
         end
       end
+    else
+      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      result = false
     end
     long_code.increment!(:messages_sent) if long_code
+    return result
   end
-
-  def queue_sms
-    send_sms
-    #async(:send_sms)
-  end
-
-  private
 
   def send_sms
     case sent_via
     when 'smseco'
-      to_smseco
+      return to_smseco
     when 'bulksms'
-      to_bulksms(APP_CONFIG['bulksms_url'], APP_CONFIG['bulksms_username'], APP_CONFIG['bulksms_password'])
+      return to_bulksms(APP_CONFIG['bulksms_url'], APP_CONFIG['bulksms_username'], APP_CONFIG['bulksms_password'])
     when 'bulksms1'
-      to_bulksms(APP_CONFIG['bulksms_url1'], APP_CONFIG['bulksms_username1'], APP_CONFIG['bulksms_password1'])
+      return to_bulksms(APP_CONFIG['bulksms_url1'], APP_CONFIG['bulksms_username1'], APP_CONFIG['bulksms_password1'])
     else
       # Twilio
       if received_sms
@@ -163,7 +196,7 @@ class SentSms < ActiveRecord::Base
           from = long_code ? long_code.number : SmsKeyword::SHORT
         end
       end
-      send_to_twilio(from)
+      return send_to_twilio(from)
     end
   end
 

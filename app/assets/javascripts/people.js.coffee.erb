@@ -409,7 +409,7 @@ $('#send_bulksms_link_new, #action_menu_text').live 'click', (e)->
   $('#subject_div').hide()
   $('.bulk-msg').addClass('bulk-text')
   $('.bulk-msg').removeClass('bulk-email')
-  $('.bulk-msg').attr('action', '/people/bulk_sms')
+  $('.bulk-msg').attr('action', '/bulk_messages/sms')
   $('#bulk_send_msg_dialog .note.send_text').show()
   $('#bulk_send_msg_dialog .note.send_email').hide()
   $("#bulk_send_msg_dialog .mh_popup_heading").text("Send Text")
@@ -546,7 +546,7 @@ $('.send_sms_link').live 'click', ->
     title: 'Send Text Message',
     open: (event, ui) ->
       $('#bulk_send_dialog_message').hide()
-      $(this).find('form').attr('action', '/people/bulk_sms')
+      $(this).find('form').attr('action', '/bulk_messages/sms')
     close: (event, ui) ->
       $('#bulk_sms_message').val($('#bulk_send_body').val())
     buttons:

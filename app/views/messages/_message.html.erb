@@ -4,6 +4,11 @@
     <span class="to">
       - <%= message.to.downcase %>
     </span>
+    <% if sms = message.sent_sms %>
+      <span class="to">
+        - <%= sms.status.titleize %>
+      </span>
+    <% end %>
   </td>
   <td class="table_cell info">
     <%= wiser_date(message.created_at) %>

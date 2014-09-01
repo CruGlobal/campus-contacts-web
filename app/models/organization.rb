@@ -10,6 +10,7 @@ class Organization < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :parent_id }
 
+  has_many :bulk_messages
   has_many :interactions
   has_many :labels, inverse_of: :organization
   has_many :organizational_labels, inverse_of: :organization

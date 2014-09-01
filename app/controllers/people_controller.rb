@@ -266,7 +266,15 @@ class PeopleController < ApplicationController
     respond_to do |format|
 
       @person.reload if @person.readonly? # This might fix the readonly error
-
+      
+      if params[:person][:phone_numbers_attributes].present?
+        params[:person][:phone_numbers_attributes].each do |phone|
+          begin
+            params[:person][:phone_numbers_attributes][phone.first[0]]["not_mobile"] = false
+          rescue; end
+        end
+      end
+      
       if @person.update_attributes(params[:person])
         @person.update_attribute(:student_status, nil) if @person.faculty?
         @person.update_date_attributes_updated
@@ -386,54 +394,6 @@ class PeopleController < ApplicationController
         )
       end
     end
-    render :nothing => true
-  end
-
-  def bulk_sms
-    authorize! :lead, current_organization
-    to_ids = params[:to]
-
-		person_ids = []
-		if to_ids.present?
-			ids = to_ids.split(',').uniq
-			ids.each do |id|
-				if id.upcase =~ /GROUP-/
-					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
-					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
-				elsif id.upcase =~ /ROLE-/
-					permission = Permission.find(id.gsub("ROLE-",""))
-					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
-        elsif id.upcase =~ /LABEL-/
-					label = Label.find(id.gsub("LABEL-",""))
-					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
-				elsif id.upcase =~ /ALL-PEOPLE/
-					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
-				else
-					person_ids << id
-				end
-			end
-		end
-
-    person_ids.uniq.each do |id|
-    	person = Person.find_by_id(id)
-      if person.present? && primary_phone = person.primary_phone_number
-        # Do not allow to send text if the phone number is not subscribed
-        if is_subscribe = current_organization.is_sms_subscribe?(primary_phone.number)
-
-          # Include sms footer if it can fits to the body
-          body = include_sms_footer(params[:body])
-
-          @message = current_person.sent_messages.create(
-            receiver_id: person.id,
-            organization_id: current_organization.id,
-            to: person.text_phone_number.number,
-            sent_via: 'sms',
-            message: body
-          )
-        end
-      end
-    end
-
     render :nothing => true
   end
 
