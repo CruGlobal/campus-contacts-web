@@ -49,7 +49,7 @@ class Element < ActiveRecord::Base
     else
       answer_sheets = AnswerSheet.where(survey_id: surveys.where(organization_id: organization.id).pluck(:id))
     end
-    all_people = organization.all_people.where(id: answer_sheets.pluck(:person_id))
+    all_people = people.where(id: answer_sheets.collect(&:person_id).uniq)
 
     if object_name.present? && attribute_name.present? && object_name == "person"
       is_multiple_answers = answer.is_a?(Array)
