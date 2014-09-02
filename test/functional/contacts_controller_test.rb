@@ -62,10 +62,23 @@ class ContactsControllerTest < ActionController::TestCase
       @contact3 = Factory(:person, first_name: "cde", last_name: "stu")
       Factory(:phone_number, person: @contact3, number: "2222233333", primary: true)
       @org.add_contact(@contact3)
+      
+      @assignment1 = Factory(:contact_assignment, organization: @org, person: @contact1, assigned_to: @person)
 
       @predefined_survey = Factory(:survey, organization: @org)
       APP_CONFIG['predefined_survey'] = @predefined_survey.id
       @predefined_survey.questions << Factory(:year_in_school_element)
+    end
+    
+    context "combined filters" do
+      setup do
+        @interaction_type1 = Factory(:interaction_type, organization_id: 0, i18n: "Interaction 1")
+        Factory(:interaction, receiver: @contact1, creator: @person, organization: @org, interaction_type_id: @interaction_type1.id)
+      end
+      should "search status, interaction, and assigned_to" do
+        xhr :get, :filter, {advanced_search: 1, search_any: "", assigned_to: [@person.id], interaction_filter: "any", interaction_type: [@interaction_type1.id], label_filter: "any", group_filter: "any", status: ["contacted"]}
+        assert_response :success
+      end
     end
 
     context "Search Person" do
@@ -226,9 +239,6 @@ class ContactsControllerTest < ActionController::TestCase
         end
       end
     end
-    # should "raise error" do
-    #   raise "ERROR"
-    # end
   end
 
   should "redirect when there is no current_organization" do
