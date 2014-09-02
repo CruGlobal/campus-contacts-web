@@ -16,10 +16,10 @@ class Person < ActiveRecord::Base
     :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
 
   belongs_to :interaction_initiator
-  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["deleted_at IS NULL"]
+  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["interactions.deleted_at IS NULL"]
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
-  has_many :organizational_labels, dependent: :destroy, conditions: ["removed_date IS NULL"]
+  has_many :organizational_labels, dependent: :destroy, conditions: ["organizational_labels.removed_date IS NULL"]
   has_many :labels, through: :organizational_labels
   has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
@@ -60,8 +60,8 @@ class Person < ActiveRecord::Base
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
 
   if Permission.table_exists? # added for travis testing
-    has_many :organizations, through: :organizational_permissions, conditions: ["status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}"], uniq: true
-    has_many :active_organizations, through: :organizational_permissions, source: :organization, conditions: ["status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :organizations, through: :organizational_permissions, conditions: ["organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}"], uniq: true
+    has_many :active_organizations, through: :organizational_permissions, source: :organization, conditions: ["organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
   end
 
   has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
