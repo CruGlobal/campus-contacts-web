@@ -18,7 +18,7 @@
 	<div class="feed_item_footer">
     <% footer = "" %>
     <% footer += "Created by #{interaction.creator.name}" if interaction.creator %>
-    <% footer += " organinated from #{interaction.organization.name}" if interaction.organization %>
+    <% footer += " originated from #{interaction.organization.name}" if interaction.organization %>
     <% footer += "<br/>Received by #{interaction.receiver.name}" if interaction.receiver %>
     <% if interaction.created_at != interaction.updated_at %>
       <% footer += "<br/>Last updated#{' by ' if interaction.last_updater.present?}#{interaction.last_updater.name if interaction.last_updater.present?} on #{wiser_date(interaction.updated_at, custom_class: 'tip', humanize: false)}" %>
