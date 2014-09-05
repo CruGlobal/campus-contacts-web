@@ -372,7 +372,7 @@ class PeopleController < ApplicationController
     person_ids.uniq.each do |id|
       person = Person.find_by_id(id)
       if person.present? && person.email.present?
-        from = params[:reply_to_email] ? "do-not-reply@missionhub.com" : current_person.email
+        from = params[:reply_to_email] ? "do-not-reply@mhub.cc" : current_person.email
         @message = current_person.sent_messages.create(
           receiver_id: person.id,
           organization_id: current_organization.id,
