@@ -3,6 +3,9 @@
     <div id="upper_sidebar_lists">
     	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
     </div>
+    <div id="upper_sidebar_lists">
+      <%= link_to(raw("<button class='action_gray full_width_button'>#{t('contacts.mine.details')}</button>"), all_contacts_path(assigned_to: current_person.id)) %>
+    </div>
   	<div id="mine_sidebar_lists" class="leftmenu">
       <ul class="ac_dropdown_list">
       	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'all' %>">
@@ -17,9 +20,9 @@
           <%= link_to(t('contacts.mine.in_progress'), my_contacts_path(status: 'in_progress')) %>
           (<span class="count"><%= @inprogress_contacts.count %></span>)
         </li>
-      	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'detailed' %>">
-          <%= link_to(t('contacts.mine.detailed'), all_contacts_path(assigned_to: current_person.id)) %>
-        </li>
+      	<!--li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'detailed' %>">
+          <%= link_to(t('contacts.mine.details'), all_contacts_path(assigned_to: current_person.id)) %>
+        </li-->
       	<!--li class="ac_dropdown_list_header">
           <%= link_to(t('contacts.mine.interactions'), profile_path(current_person, :click=>"interactions")) %>
         </li-->
