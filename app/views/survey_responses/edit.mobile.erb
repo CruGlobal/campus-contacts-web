@@ -1,0 +1,58 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="upper_sidebar_lists">
+      <%= link_to raw("<button class='red_accent full_width_button'>#{t('people.left_sidebar.profile', name: @person.first_name)}</button>"), profile_path(@person) %>
+      <% if params[:action] == "edit" %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('people.left_sidebar.survey_answers')}</button>"), survey_response_path(@person) %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.answer_other_surveys')}</button>"), :controller => "survey_responses", :action => "answer_other_surveys", :id => @person.id %>
+
+      <% elsif params[:action] == "answer_other_surveys" %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('people.left_sidebar.survey_answers')}</button>"), survey_response_path(@person) %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+
+      <% else %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.answer_other_surveys')}</button>"), :controller => "survey_responses", :action => "answer_other_surveys", :id => @person.id %>
+        <%= link_to raw("<button class='action_gray full_width_button'>#{t('interactions.edit_survey_results')}</button>"), edit_survey_response_path(@person) %>
+
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1>
+    <%= t('survey_responses.edit.title', name: @person) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+<%= form_for @person, url: contact_path(@person), method: :put do |f| %>
+  <% if flash[:error] %>
+    <div class="flash error"><%= raw flash[:error] %></div>
+  <% end %>
+  <div class="user_defined_contact_fields survey_edit">
+    <% current_organization.surveys.each do |survey| %>
+      <% @survey = survey %>
+      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+      <% all_questions = survey.questions %>
+      <% if all_questions.count > 0 && answer_sheet.present? %>
+        <div class="survey_title">
+          <%= link_to survey.title, "##{'s_'+survey.id.to_s}", "name"=>'s_'+survey.id.to_s %>
+        </div>
+        <% all_questions.each do |question| %>
+          <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
+          <% answer = question.display_response(answer_sheet, @person) %>
+            <div class="field">
+            	<label><%= raw question.label %></label>
+            	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
+            </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="formactions">
+    <%= submit_tag t('general.save') %>
+  </div>
+<% end %>
