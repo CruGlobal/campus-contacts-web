@@ -1,5 +1,6 @@
 class OrganizationalLabelsController < ApplicationController
   before_filter :authorize
+  skip_before_filter :clear_advanced_search
 
   def set_labels
     @people = Person.where(id: params[:people_ids].split(','))

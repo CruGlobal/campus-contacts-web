@@ -1,5 +1,6 @@
 class InteractionsController < ApplicationController
   before_filter :authorize
+  skip_before_filter :clear_advanced_search
 
   def search_leaders
     @person = Person.find(params[:person_id])
