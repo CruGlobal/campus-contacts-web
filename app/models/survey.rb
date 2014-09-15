@@ -109,34 +109,50 @@ class Survey < ActiveRecord::Base
   end
 
   def duplicate_to_org(org, copy_answers = false, person = nil)
-    new_survey = Survey.new(self.attributes)
-    new_survey.organization_id = org.id
-    new_survey.save(:validate => false)
-    if copy_answers && person.present?
-      answer_sheet = person.answer_sheet_for_survey(self.id)
-      if answer_sheet.present?
-        new_answer_sheet = answer_sheet.clone
-        new_answer_sheet.survey_id = new_survey.id
-        new_answer_sheet.save
-      end
+    survey = org.surveys.find_by_copy_from_survey_id(self.id)
+
+    # Copy the survey
+    unless survey.present?
+      survey = org.surveys.new(self.attributes)
+      survey.copy_from_survey_id = self.id
+      survey.save(:validate => false)
     end
-    self.elements.each do |element|
-      if element.reuseable?
-        new_element = SurveyElement.create(:element => element, :survey => new_survey)
-      else
-        new_element = element.duplicate(new_survey)
-      end
-      if copy_answers && person.present? && answer_sheet.present? && new_element.present?
-        answer = answer_sheet.answers.find_by_question_id(new_element.id)
-        if answer.present?
-          new_answer = answer.clone
-          new_answer.answer_sheet_id = new_answer_sheet.id
-          new_answer.question_id = new_element.id
-          new_answer.save
+
+    # Copy the answer_sheet
+    if copy_answers && person.present?
+      if answer_sheet = person.answer_sheets.find_by_survey_id(self.id)
+        new_answer_sheet = person.answer_sheets.find_by_survey_id(survey.id)
+        unless new_answer_sheet.present?
+          new_answer_sheet = person.answer_sheets.new(answer_sheet.attributes)
+          new_answer_sheet.survey_id = survey.id
+          new_answer_sheet.save
         end
       end
     end
-    return new_survey
+
+    self.elements.each do |element|
+      # Copy the elements
+      new_element = survey.elements.find_by_id(element.id)
+      unless new_element.present?
+        if element.reuseable?
+          new_element = SurveyElement.create(:element => element, :survey => survey)
+        else
+          new_element = element.duplicate(survey)
+        end
+      end
+
+      # Copy the answers
+      if new_element.present? && new_answer_sheet.present? && copy_answers
+        if answer = answer_sheet.answers.find_by_question_id(element.id)
+          new_answer = new_answer_sheet.answers.find_by_question_id(new_element.id)
+          unless new_answer.present?
+            new_answer = new_answer_sheet.answers.new(answer.attributes, question_id: new_element.id)
+            new_answer.save
+          end
+        end
+      end
+    end
+    survey
   end
 
   def questions=(questions_attributes)

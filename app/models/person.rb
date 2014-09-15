@@ -381,8 +381,7 @@ class Person < ActiveRecord::Base
   end
 
   def answered_surveys
-    survey_ids = answer_sheets.pluck(:survey_id)
-    Survey.where(id: survey_ids)
+    Survey.where(id: answer_sheets.pluck(:survey_id))
   end
 
   def answered_surveys_in_org(org)
@@ -864,18 +863,18 @@ class Person < ActiveRecord::Base
   def pretty_phone_number
     primary_phone_number.try(:pretty_number)
   end
-  
+
   def text_phone_number
     primary = primary_phone_number
     return primary_phone_number if primary.present? && primary.location == 'mobile'
-    
+
     if mobile = phone_numbers.where(location: 'mobile').first
       return mobile
     else
       return primary
     end
   end
-  
+
   def pretty_text_phone_number
     text_phone_number.try(:pretty_number)
   end
@@ -1324,13 +1323,13 @@ class Person < ActiveRecord::Base
 
       # Group Memberships
       other.group_memberships.collect {|gm| gm.update_column(:person_id, id)}
-      
+
       # Received Interactions
       other.interactions_with_deleted.collect {|gm| gm.update_column(:receiver_id, id)}
-      
+
       # Created Interactions
       other.created_interactions.collect {|gm| gm.update_column(:created_by_id, id)}
-      
+
 
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload

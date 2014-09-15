@@ -558,7 +558,7 @@ class Organization < ActiveRecord::Base
   def change_person_permission(person, permission_id, changed_by_person_id = nil)
     person_id = person.is_a?(Person) ? person.id : person
     person = Person.where(id: person_id).first
-    
+
     # Ensure single permission
     person.ensure_single_permission_for_org_id(id)
 
@@ -572,7 +572,7 @@ class Organization < ActiveRecord::Base
         org_permission = OrganizationalPermission.find_or_create_by_permission_id_and_person_id_and_organization_id(permission.id, person.id, id)
         org_permission.update_attributes(added_by_id: changed_by_person_id)
       end
-      
+
       # Assure single permission per organization based on hierarchy
       permission = person.ensure_single_permission_for_org_id(id, permission_id)
       org_permission.notify_new_leader if [Permission::ADMIN_ID, Permission::USER_ID].include?(permission.id)
@@ -827,8 +827,6 @@ class Organization < ActiveRecord::Base
     val_copy = keep_contact == "false" ? false : true
     val_transferred_by = current_admin.id if current_admin.present?
     PersonTransfer.create(person_id: person.id, old_organization_id: id, new_organization_id: to_org.id, transferred_by_id: val_transferred_by, copy: val_copy)
-
-    FollowupComment.where(organization_id: id, contact_id: person.id).update_all(organization_id: to_org.id)
   end
 
   def create_admin_user
