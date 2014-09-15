@@ -4,6 +4,7 @@ class PeopleController < ApplicationController
   before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
   before_filter :permissions_for_assign
   before_filter :labels_for_assign
+  skip_before_filter :clear_advanced_search
 
   # GET /people
   # GET /people.xml
