@@ -36,6 +36,10 @@ class Element < ActiveRecord::Base
   # def has_response?(answer_sheet = nil)
   #   false
   # end
+  
+  def predefined?
+    is_in_object?
+  end
 
   def is_in_object?
     object_name.present? && attribute_name.present?
