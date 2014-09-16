@@ -1,6 +1,6 @@
 class PersonSerializer < ActiveModel::Serializer
 
-  HAS_MANY_SIMPLE = [:addresses, :phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :answer_sheets, :all_organization_and_children, :organizational_labels]
+  HAS_MANY_SIMPLE = [:addresses, :phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :all_organization_and_children, :organizational_labels]
   HAS_MANY_CUSTOM = [:contact_assignments, :interactions, :all_organizational_permissions]
   HAS_MANY = HAS_MANY_SIMPLE + HAS_MANY_CUSTOM;
 
@@ -10,8 +10,7 @@ class PersonSerializer < ActiveModel::Serializer
 
   INCLUDES = HAS_MANY + HAS_ONE
 
-  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date, :date_became_christian, :graduation_date,
-             :picture, :user_id, :fb_uid, :created_at, :updated_at
+  attributes :id, :first_name, :last_name, :gender, :campus, :year_in_school, :major, :minor, :birth_date, :date_became_christian, :graduation_date, :picture, :user_id, :fb_uid, :created_at, :updated_at
 
   has_many *HAS_MANY
   has_one *HAS_ONE
@@ -32,13 +31,13 @@ class PersonSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  [:assigned_tos, :organizational_roles, :organizational_labels].each do |relationship|
+  [:assigned_tos, :organizational_roles, :organizational_labels, :answer_sheets].each do |relationship|
     define_method(relationship) do
       add_since(organization_filter(relationship))
     end
   end
 
-  [:phone_numbers, :email_addresses, :person_transfers, :user, :answer_sheets, :current_address, :addresses].each do |relationship|
+  [:phone_numbers, :email_addresses, :person_transfers, :user, :current_address, :addresses].each do |relationship|
     define_method(relationship) do
       add_since(object.send(relationship))
     end
@@ -68,6 +67,7 @@ class PersonSerializer < ActiveModel::Serializer
 
   def backported_attributes(hash)
     if scope[:include]
+      hash['answer_sheets'] = backported_answer_sheets(scope[:organization].id) if scope[:include].include?('answer_sheets')
       hash['organizational_roles'] = backported_organizational_roles(scope[:organization].id) if scope[:include].include?('organizational_roles')
       hash['all_organizational_roles'] = backported_organizational_roles if scope[:include].include?('all_organizational_roles')
       hash['followup_comments'] = backported_followup_comments if scope[:include].include?('followup_comments')
@@ -75,6 +75,43 @@ class PersonSerializer < ActiveModel::Serializer
       hash['rejoicables'] = backported_rejoicables if scope[:include].include?('rejoicables')
     end
     hash
+  end
+  
+  def get_person_answers(object, answer_sheet)
+    answers = []
+    answer_sheet.survey.questions.each do |question|
+      if question.predefined?
+        answer_id = 0
+        answer_value = object.send(question.attribute_name)
+      else
+        answer = answer_sheet.answers.where(question_id: question.id).first
+        answer_id = answer.try(:id)
+        answer_value = answer.try(:value)
+      end
+      answers << {
+        question_id: question.id,
+        id: answer_id,
+        question: question.label,
+        value: answer_value || ""
+      }
+    end
+    return answers
+  end
+  
+  def backported_answer_sheets(org_id)
+    surveys = Organization.find(org_id).surveys
+    answer_sheets = []
+    object.answer_sheets.where(survey_id: surveys).each do |answer_sheet|
+      answer_sheets << {
+        completed_at: answer_sheet.completed_at,
+        updated_at: answer_sheet.updated_at,
+        survey_id: answer_sheet.survey_id,
+        answers: get_person_answers(object, answer_sheet),
+        id: answer_sheet.id,
+        created_at: answer_sheet.created_at
+      }
+    end
+    answer_sheets
   end
 
   def backported_followup_comments
