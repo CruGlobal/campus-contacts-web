@@ -40,6 +40,15 @@ class Element < ActiveRecord::Base
   def predefined?
     object_name.present? && attribute_name.present?
   end
+  
+  def options
+    return nil unless kind == "ChoiceField"
+    content.split("\n").map{|x| x.gsub("\r","")}
+  end
+  
+  def options_with_blank
+    [""] + options
+  end
 
   def search_survey_people(people, answer, organization, option = TEXTFIELD_MATCH.first[1].underscore, range = nil)
     if range.present?

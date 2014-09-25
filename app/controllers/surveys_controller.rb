@@ -11,7 +11,139 @@ class SurveysController < ApplicationController
   def index_admin
     @organization = current_person.organization_from_id(params[:org_id]) || current_organization
     authorize! :manage, @organization
-    @surveys = @organization.surveys
+    @surveys = @organization.surveys.includes(:keyword)
+  end
+  
+  def mass_entry
+    render 'mass_entry', layout: 'mass_entry'
+  end
+  
+  def mass_entry_data
+    @people = current_organization.not_archived_people.who_answered(@survey.id)
+    questions = @survey.questions.order(:position)
+    
+    # Collect survey settings
+    settings = Array.new
+    # settings << {data: "id", type: "text", readOnly: true}
+    settings << {data: "first_name", type: "text", readOnly: true}
+    settings << {data: "last_name", type: "text", readOnly: true}
+    settings << {data: "phone_number", type: "text", readOnly: true}
+    questions.each do |question|
+      setting = Hash.new
+      setting["data"] = question.id
+      setting["allowInvalid"] = false
+      setting["readOnly"] = question.predefined?
+      case question.kind
+      when "ChoiceField"
+        if question.style == "radio"
+          setting["type"] = "dropdown"
+          setting["strict"] = "false"
+          setting["source"] = question.options_with_blank
+        elsif question.style == "drop-down"
+          setting["type"] = "dropdown"
+          setting["strict"] = "false"
+          setting["source"] = question.options_with_blank
+        else
+          setting["editor"] = "multiselect"
+          setting["strict"] = "false"
+          setting["selectOptions"] = question.options_with_blank
+        end
+      when "DateField"
+        setting["type"] = "date"
+        setting["dateFormat"] = "yy-mm-dd"
+      when "TextField"
+      end
+      settings << setting
+    end
+    
+    # Collect survey questions & answers
+    data = Array.new
+    @people.each do |person|
+      values = Hash.new
+      answer_sheet = person.answer_sheet_for_survey(@survey.id)
+      values["id"] = person.id
+      values["first_name"] = person.first_name
+      values["last_name"] = person.last_name
+      values["phone_number"] = person.pretty_phone_number
+      questions.each do |question|
+        if question.predefined?
+          if ['faculty'].include?(question.attribute_name)
+            values[question.id] = person.send(question.attribute_name) ? "Yes" : "No"
+          else
+            values[question.id] = person.send(question.attribute_name) || ""
+          end
+        else
+          if answer = answer_sheet.answers.where(question_id: question.id).first
+            values[question.id] = answer.value || ""
+          else
+            values[question.id] = ""
+          end
+        end
+      end
+      data << values
+    end
+    response = Hash.new
+    response['headers'] = ["First Name", "Last Name", "Phone Number"] + questions.collect(&:label)
+    response['settings'] = settings
+    response['data'] = data
+    render json: response.to_json
+  end
+  
+  def mass_entry_save
+    @msg = Array.new
+    return false unless params["values"].present?
+    @people = current_organization.not_archived_people.who_answered(@survey.id)
+    questions = @survey.questions.order(:position)
+    updated_ids = []
+    params["values"].values.each_with_index do |value, i|
+      value.keys.each{|k| value[k] = nil if value[k] == "null"}
+      if value["id"].nil?
+        # Try to create new record
+        if value["first_name"].present? || value["last_name"].present?
+          if value["first_name"] && value["last_name"].present?
+            # Create record
+            email_question = Element.find_by_attribute_name("email")
+            email = value[email_question.id.to_s] if email_question.present?
+            if email.present?
+              # Save w/o email
+              person = EmailAddress.where(email: email).first.try(:person)
+              if person
+                # Existing person
+                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+              else
+                # New person
+                person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email)
+                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+              end
+            else
+              if value["phone_number"].present?
+                # See if we can match someone by name and phone number
+                person = Person.find_existing_person_by_name_and_phone(number: value["phone_number"], first_name: value["first_name"], last_name: value["last_name"])
+                if person
+                  # Existing person
+                  person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+                else
+                  # New person
+                  person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email, phone_number: value["phone_number"])
+                  person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+                end
+              else
+                # Save w/o email
+                person = Person.create(first_name: value['first_name'], last_name: value['last_name'])
+                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+              end
+            end
+          else
+            @msg << " - Row##{i + 1}: First and last names are required."
+          end
+        end
+      else
+        person = @people.find(value["id"])
+        person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+      end
+      updated_ids << person.id if person.present?
+    end
+    @survey.answer_sheets.where("person_id NOT IN (?)", updated_ids).destroy_all if @msg == []
   end
 
   def index

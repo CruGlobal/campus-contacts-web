@@ -19,7 +19,7 @@ class Survey < ActiveRecord::Base
                              path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
   has_attached_file :css_file, s3_credentials: 'config/s3.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
-
+  has_many :answer_sheets
   has_many :rules, :through => :survey_elements
 
   # validation

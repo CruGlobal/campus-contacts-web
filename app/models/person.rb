@@ -246,6 +246,29 @@ class Person < ActiveRecord::Base
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
 
+  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false)
+    organization.add_permission_to_person(self, Permission.no_permissions.id, current_person.id)
+    answer_sheet = self.answer_sheet_for_survey(survey.id)
+    questions.each do |question|
+      answer = answers[question.id.to_s]
+      if question.predefined?
+        if save_predefined_questions
+          if ['faculty'].include?(question.attribute_name)
+            self.send("#{question.attribute_name}=", answer == "Yes")
+          else
+            self.send("#{question.attribute_name}=", answer)
+          end
+        end
+      else
+        answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
+        if answer.value != answers[question.id.to_s]
+          answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
+        end
+      end
+    end
+    self.save
+  end
+
   def cru_status(org)
     org_permission = organizational_permission_for_org(org)
     return org_permission.cru_status if org_permission.present?

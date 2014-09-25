@@ -577,11 +577,17 @@ en:
   surveys:
     index:
       title: "Surveys for %{org}"
+    mass_entry:
+      title: "Mass Entry - %{survey}"
+      loading: "Loading survey answers, this could take a while..."
+      saving: "Saving changes, this could take a while..."
+      help: Answers to predefined questions will appear in grey text once entered. These answers cannot be changed.
     index_admin:
       preview_survey: "Preview this survey"
       confirm_delete: "Are you sure you want to delete this keyword?"
       confirm_delete_survey: "Are you sure you want to delete this survey?"
       delete_survey: "Delete this survey"
+      manual_entry: "Mass Entry"
       new: 'New Survey'
       copy_survey: 'Copy survey to another Organization'
       edit_survey: "Edit this survey"

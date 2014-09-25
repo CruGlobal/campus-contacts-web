@@ -1,19 +1,129 @@
 require 'test_helper'
 
 class SurveysControllerTest < ActionController::TestCase
+  context "Mass Entry - " do
+    setup do
+      @user, @org = admin_user_login_with_org
+      @person = @user.person
+
+      @contact1 = Factory(:person)
+      @org.add_contact(@contact1)
+      @contact2 = Factory(:person)
+      @org.add_contact(@contac2)
+      @contact3 = Factory(:person)
+      @org.add_contact(@contac3)
+
+      @survey = Factory(:survey, organization: @org)
+      @question1 = Factory(:element, label: "Question1", position: 1, object_name: nil, attribute_name: nil)
+      @survey.questions << @question1
+      @question2 = Factory(:element, label: "Question2", position: 2, object_name: "person", attribute_name: "campus")
+      @survey.questions << @question2
+      
+      @answer_sheet1 = Factory(:answer_sheet, survey: @survey, person: @contact1)
+      @answer11 = Factory(:answer, answer_sheet: @answer_sheet1, question: @question1, value: "Random String Value")
+      @contact1.update_attribute(:campus, "Campus String Value")
+    end
+    
+    context "mass_entry_save" do
+      should "do nothing if no value is present" do
+        xhr :post, :mass_entry_save, id: @survey.id
+        assert_response :success
+      end
+      # should "update answer for default question" do
+      #   value = {
+      #     "id" => @contact1.id.to_s,
+      #     "first_name" => "New First Name",
+      #     "last_name" => @contact1.last_name
+      #   }
+      #   data = {"0" => value}
+      #   puts data.inspect
+      #
+      #   xhr :post, :mass_entry_save, id: @survey.id, values: data
+      #   assert_response :success
+      #   assert_equal "New First Name", @contact1.first_name
+      # end
+      should "update answer for predefined question" do
+        value = {
+          "id" => @contact1.id.to_s,
+          "#{@question2.id}" => "New Campus String"
+        }
+        data = {"0" => value}
+        
+        xhr :post, :mass_entry_save, id: @survey.id, values: data
+        assert_response :success
+        @contact1.reload
+        assert_equal "New Campus String", @contact1.campus
+      end
+      should "update answer to non-predefined question" do
+        value = {
+          "id" => @contact1.id.to_s,
+          "#{@question1.id}" => "New String Value"
+        }
+        data = {"0" => value}
+        
+        xhr :post, :mass_entry_save, id: @survey.id, values: data
+        assert_response :success
+        assert_equal "New String Value", @answer_sheet1.answers.where(question_id: @question1.id).first.value.to_s
+      end
+    end
+    
+    context "mass_entry_data" do
+      should "return headers correctly" do
+        get :mass_entry_data, id: @survey.id
+        json = JSON.parse(response.body)
+        headers = json["headers"]
+
+        assert_response :success
+        assert_equal 5, headers.count
+        assert_equal ["First Name", "Last Name", "Phone Number", "Question1", "Question2"], headers
+      end
+      
+      should "return settings correctly" do
+        get :mass_entry_data, id: @survey.id
+        json = JSON.parse(response.body)
+        settings = json["settings"]
+
+        assert_response :success
+        settings.each do |setting|
+          if ['id','first_name','last_name','phone_number',@question2.id].include?(setting['data'])
+            assert setting['readOnly']
+          else
+            assert !setting['readOnly']
+          end
+        end
+      end
+      
+      should "return data correctly" do
+        get :mass_entry_data, id: @survey.id
+        json = JSON.parse(response.body)
+        data = json["data"]
+
+        assert_response :success
+        data.each do |d|
+          if d["id"] == @contact1.id
+            assert_equal @contact1.first_name, d["first_name"]
+            assert_equal @contact1.last_name, d["last_name"]
+            assert_equal @answer11.value, d[@question1.id.to_s]
+            assert_equal @contact1.campus, d[@question2.id.to_s] # Answer to Predefined Question
+          end
+        end
+      end
+    end
+  end
+  
   context "Before logging in" do
     should "redirect on to mhub from non-mhub" do
       @request.host = 'missionhub.com'
       @survey = Factory(:survey)
       get :start, id: @survey.id
-      assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
+      assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
     end
 
     should "redirect to sign out" do
       @request.host = 'mhub.cc'
       @survey = Factory(:survey)
       get :start, id: @survey.id
-      assert_redirected_to "https://mhub.cc/sign_out?next=https%3A%2F%2Fmhub.cc%2Fs%2F#{@survey.id}"
+      assert_redirected_to "http://mhub.cc/sign_out?next=http%3A%2F%2Fmhub.cc%2Fs%2F#{@survey.id}"
     end
 
     context "start survey no matter what the login option" do
@@ -24,25 +134,25 @@ class SurveysControllerTest < ActionController::TestCase
       should "redirect to mhub when login option is 0" do
         @survey = Factory(:survey, login_option: 0)
         get :start, id: @survey.id
-        assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
+        assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
 
       should "redirect to mhub when login option is 1" do
         @survey = Factory(:survey, login_option: 1)
         get :start, id: @survey.id
-        assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
+        assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
 
       should "redirect to mhub when login option is 2" do
         @survey = Factory(:survey, login_option: 0)
         get :start, id: @survey.id
-        assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
+        assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
 
       should "redirect to mhub when login option is 3" do
         @survey = Factory(:survey, login_option: 3)
         get :start, id: @survey.id
-        assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
+        assert_redirected_to "http://mhub.cc:80/surveys/#{@survey.id}/start"
       end
 
       should "stop" do

@@ -1,0 +1,10 @@
+$(".fetching-loader").hide()
+$(".saving-loader").hide()
+$("#mass_entry_table").show()
+$(".mass_entry_buttons").show()
+<% if @msg == [] %>
+  $("body").data('has_changes','false')
+  $("#reload_mass_entry").click()
+<% else %>
+  $.a("Failed to save changes, please try again! <br/> <%= @msg.join('<br/>')%>")
+<% end %>

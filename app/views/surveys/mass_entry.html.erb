@@ -1,0 +1,27 @@
+<div class="titlebar titlebarmod">
+  <div id="ac_button_bar" class="mass_entry_buttons">
+  	<%= render "actions" %>
+  </div>
+  <h1>
+    <%= t('.title', survey: @survey.title) %>
+    <div id='global_loader'>
+      <%= image_tag 'loader.gif'%>
+    </div>
+  </h1>
+</div>
+
+<div id="ac_contact_spread">
+  <%- questions = Array.new %>
+  <div class='loader-space fetching-loader hidden'>
+    <%= image_tag 'loader.gif'%>
+    <br/>
+    <%= t('.loading') %>
+  </div>
+  <div class='loader-space saving-loader hidden'>
+    <%= image_tag 'loader.gif'%>
+    <br/>
+    <%= t('.saving') %>
+  </div>
+  <div id="mass_entry_table" data-survey-id="<%= @survey.id %>">
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/head' %>
+  </head>
+  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
+    <%= render 'fb_init' %>
+    <%= render 'dialogs/alert' %>
+    <%= render 'dialogs/locate_contact' %>
+    <div id="outer">
+      <div id="fixed_header">
+        <%= render 'shared/nav' %>
+        <div id="gandalfthewhite">
+	        <div id="menutop" class="topmenu">
+    	      <%= render 'shared/menu' %>
+        	</div>
+        </div>
+      </div>
+
+      <div id="">
+        <div id="mass_entry_main">
+          <%= render "shared/main" %>
+        </div><!-- main -->
+
+        <div class="clear"></div>
+      </div>
+
+      <div id="fixed_footer" class="footer">
+        <%= render 'shared/footer' %>
+      </div>
+
+    </div><!-- outer -->
+
+  </body>
+</html>
+
+

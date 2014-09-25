@@ -2,6 +2,90 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body.mass_entry {
+  #gandalfthewhite {
+    height: 65px;
+  }
+  #outer {
+    margin: 140px auto 0px;
+  }
+  #ac_button_bar {
+    margin-left: 15px;
+  }
+  .titlebar {
+    z-index: 999;
+    position: fixed;
+    background-color: #fff;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    #ac_button_bar {
+      float: right;
+      margin: 2px 20px 0 0;
+      z-index: 9999999;
+    }
+  }
+}
+
+#fixed_footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 25px 0 0;
+}
+
+
+#fixed_header {
+  height: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999999;
+}
+
+#mass_entry_main {
+  margin-bottom: 30px;
+}
+
+#surveys_controller.mass_entry {
+  #outer #main {
+    padding: 0 !important;
+    margin: 0 !important;
+    #ac_button_bar {
+      margin-left: 23px;
+      display: none;
+    }
+    #ac_contact_spread {
+      margin: 0 !important;
+    }
+  }
+}
+
+#mass_entry_table {
+  width: 100%;
+  overflow: visible;
+}
+
+.htDatepickerHolder .ui-datepicker {
+  border: 1px solid #ccc !important;
+}
+
+.ui-datepicker a.ui-state-active {
+  background-color: #666 !important;
+  color: #fff !important;
+  padding: 1px 3px !important;
+}
+
+.ui-datepicker-calendar td a.ui-state-default {
+  color: #000;
+}
+
+.htCore thead th {
+  text-align: left;
+}
+
 #transfer_survey_div {
   #transfer_survey_guide {
     #survey_name {
@@ -107,4 +191,8 @@
   padding: 5px 9px;
   display: block;
   cursor: pointer;
+}
+
+.mass_entry_buttons.bottom {
+  padding: 15px 0 0;
 }
