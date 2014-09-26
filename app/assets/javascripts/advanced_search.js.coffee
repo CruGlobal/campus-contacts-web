@@ -11,13 +11,13 @@ $ ->
         $(this).children("select").first().after("&nbsp;Month:")
       $(this).addClass("with_month")
 
-  $(".datefield_option_select").live 'change', (e)->
+  $(document).on 'change', ".datefield_option_select", (e)->
     if $(this).val() == "match"
       $(this).parents(".field_option").siblings(".datefield_end_select").hide()
     else
       $(this).parents(".field_option").siblings(".datefield_end_select").show()
 
-  $('a.reset_search').live 'click', (e)->
+  $(document).on 'click', "a.reset_search", (e)->
     el = $(this)
     values = el.attr('data-value').split(",")
     if el.hasClass "group_search"
@@ -59,10 +59,10 @@ $ ->
       $("##{el.attr('data-id')}_textbox_option").val(el.attr('data-option'))
       $("##{el.attr('data-id')}_textbox_answer").val(values)
 
-  $('input#search_survey_all').live 'click', (e)->
+  $(document).on 'click', "input#search_survey_all", (e)->
     $('input.search_survey_checkbox.survey_item').prop('checked', $(this).is(':checked'))
 
-  $('input.search_survey_checkbox').live 'click', (e)->
+  $(document).on 'click', "input.search_survey_checkbox", (e)->
     survey_ids = []
     $('input.search_survey_checkbox.survey_item:checked').each ->
       survey_ids.push($(this).attr("value"))
@@ -72,7 +72,7 @@ $ ->
       type: 'GET',
       url: '/contacts/update_advanced_search_surveys?survey_ids=' + survey_ids
 
-  $('.search_category .field_title').live 'click', (e)->
+  $(document).on 'click', ".search_category .field_title", (e)->
     e.preventDefault()
     element = $(this).siblings(".field_element").first()
     if element.is(":visible")
