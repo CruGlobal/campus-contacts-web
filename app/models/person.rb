@@ -1023,6 +1023,8 @@ class Person < ActiveRecord::Base
   def gender=(gender)
     if ['male','female'].include?(gender.to_s.downcase)
       self[:gender] = gender.downcase == 'male' ? '1' : '0'
+    elsif ['m','f'].include?(gender.to_s.downcase)
+      self[:gender] = gender.downcase == 'm' ? '1' : '0'
     else
       self[:gender] = gender
     end
