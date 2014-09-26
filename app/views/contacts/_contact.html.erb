@@ -77,7 +77,7 @@
 
   <td class="cell controls" align="right">
     <%- assigned_tos = person.assigned_to_people_by_org(current_organization) %>
-    <% if params[:assigned_to].present? %>
+    <% if params[:assigned_to].present? && params[:assigned_to] != "all" %>
       <%- ids = params[:assigned_to] %>
       <%- assigned_tos = assigned_tos.where(id: params[:assigned_to].to_s).first %>
       <%- assigned_tos_name = assigned_tos.try(:name) %>
@@ -87,7 +87,6 @@
     <% end %>
     <% tip = "#{t('contacts.index.unassign_contact')} from #{assigned_tos_name}" %>
 
-    <span class="assigned_to"><%= assigned_tos_name if assigned_tos_name.present? %></span>
     <span class="unassign_link" style="<%= 'display:none' unless assigned_tos.present? || params[:dnc].present? %>">
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id, from: ids), remote: true, method: :delete, class: "icon unassign tipitleft", :title => tip, "data-assigned_to_id" => ids) %>
     </span>
