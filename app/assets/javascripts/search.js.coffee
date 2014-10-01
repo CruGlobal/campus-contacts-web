@@ -467,9 +467,7 @@ $.fn.handleSearchOptions = ()->
     $("#search-sidebar .side-search-links").show()
   else if $.trim($("#search-sidebar #search_any").val()) != ""
     $("#search-sidebar .side-search-links").show()
-  else if $("#search-sidebar #include_archived").is(":checked")
-    $("#search-sidebar .side-search-links").show()
-  else if $("#search-sidebar #friends_only").is(":checked")
+  else if $("#search-sidebar input[type='checkbox']:checked").length > 0
     $("#search-sidebar .side-search-links").show()
   else
     $("#search-sidebar .side-search-links").hide()

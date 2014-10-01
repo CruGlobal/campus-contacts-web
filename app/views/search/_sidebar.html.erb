@@ -24,7 +24,8 @@
     </div>
 
     <!-- Special Actions -->
-    <div class="side-search-links" style="display: <%= session[:filters].present? ? 'block' : 'none'%>">
+    <% active = (session[:filters].present? || @survey_scope.present?) %>
+    <div class="side-search-links" style="display: <%=  active ? 'block' : 'none'%>">
       <div class="pull-right">
         <%= link_to("Reset All", filter_contacts_path(filters: 'clear'), remote: true, id: 'search_people_filters_reset_all_button') %>
       </div>
