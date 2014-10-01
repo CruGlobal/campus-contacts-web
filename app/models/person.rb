@@ -1194,6 +1194,9 @@ class Person < ActiveRecord::Base
     reload
     ::Person.transaction do
       attributes.each do |k, v|
+        next if k == "first_name"
+        next if k == "last_name"
+        next if k == "middle_name"
         next if k == ::Person.primary_key
         next if v == other.attributes[k]
         self[k] = case
