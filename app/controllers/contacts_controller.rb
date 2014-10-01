@@ -463,7 +463,7 @@ class ContactsController < ApplicationController
 
   	if @selected_question_id == "visible_surveys_column"
       current_organization.settings[:visible_surveys_column] = false
-      current_organization.save!
+      current_organization.save(validate: false)
   	else
     	@selected_question_id = @selected_question_id.to_i
 		  @predefined_questions = current_organization.predefined_survey_questions
@@ -475,7 +475,7 @@ class ContactsController < ApplicationController
 		    end
 		    if current_organization.settings[:visible_predefined_questions].present?
 		      current_organization.settings[:visible_predefined_questions] = current_organization.settings[:visible_predefined_questions].reject {|x| x == @question.id}
-		      current_organization.save!
+		      current_organization.save(validate: false)
 		    end
 		  else
 		    @survey = Survey.find(@selected_survey_id)
