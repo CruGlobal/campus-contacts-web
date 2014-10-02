@@ -367,13 +367,12 @@ class ContactsController < ApplicationController
       redirect_to edit_survey_response_path(@person), notice: @person.errors.full_messages.first
     else
       if @person.valid? && (!@answer_sheet || @answer_sheet.valid_person?)
-        respond_to do |wants|
-          params[:update] = 'true'
-          wants.js
-          wants.html { redirect_to survey_response_path(@person) }
-        end
-      else
-        redirect_to survey_response_path(@person)
+        params[:update] = 'true'
+      end
+      respond_to do |wants|
+        wants.js
+        wants.html { redirect_to survey_response_path(@person) }
+        wants.mobile { redirect_to survey_response_path(@person) }
       end
     end
   end

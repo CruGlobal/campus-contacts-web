@@ -2,7 +2,7 @@ class SurveyResponsesController < ApplicationController
   before_filter :get_person
   before_filter :get_survey, except: [:show, :edit, :answer_other_surveys]
   before_filter :set_keyword_cookie, only: :new
-  before_filter :prepare_for_mobile
+  before_filter :prepare_for_mobile, except: [:show, :edit, :answer_other_surveys]
   before_filter :set_locale
   skip_before_filter :authenticate_user!, except: [:update, :live]
   skip_before_filter :check_url
@@ -53,7 +53,7 @@ class SurveyResponsesController < ApplicationController
     org ||= @person.organizations.first if @person.organizations
 
     if @person && org
-      @completed_answer_sheets = @person.completed_answer_sheets(org).where("completed_at IS NOT NULL").order('completed_at DESC')
+      @completed_answer_sheets = @person.completed_answer_sheets(org)
     end
   end
 
