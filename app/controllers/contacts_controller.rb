@@ -77,7 +77,7 @@ class ContactsController < ApplicationController
       session[:filters] = nil
       @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
     else
-      if params[:advanced_search].present?
+      if params[:advanced_search].present? || params[:page].present?
         session[:filters] = params
       elsif params[:per_page].present?
         session[:per_page] = session[:per_page]
