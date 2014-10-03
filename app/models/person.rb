@@ -669,8 +669,7 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_to_people_by_org(org)
-    ids = assigned_tos.where(organization_id: org.id).collect(&:assigned_to_id)
-    return Person.where(id: ids)
+    Person.where(id: assigned_tos_by_org(org).collect(&:assigned_to_id))
   end
 
   def assigned_contacts_limit_org(org)
