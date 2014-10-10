@@ -51,11 +51,11 @@ class ContactsController < ApplicationController
       if params[:student_status].present?
         update_person_fields[:student_status] = params[:student_status]
       end
-      if params[:gender].present?
-        update_person_fields[:gender] = params[:gender]
+      if params[:change_gender].present?
+        update_person_fields[:gender] = params[:change_gender]
       end
-      if !params[:faculty].nil?
-        update_person_fields[:faculty] = params[:faculty]
+      if params[:change_faculty].present?
+        update_person_fields[:faculty] = params[:change_faculty]
       end
       person.update_attributes(update_person_fields) if update_person_fields.present?
 

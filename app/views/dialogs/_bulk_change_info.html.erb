@@ -128,11 +128,11 @@
           	<div class="label"><%= t('general.gender') %>:</div>
           	<div class="field">
               <div class="item">
-              	<%= radio_button_tag :gender, Person::GENDER['male'] %>
+              	<%= radio_button_tag :change_gender, Person::GENDER['male'] %>
                 <label for="gender_Male"><%= t('general.male') %></label>
               </div>
               <div class="item">
-                <%= radio_button_tag :gender, Person::GENDER['female'] %>
+                <%= radio_button_tag :change_gender, Person::GENDER['female'] %>
                 <label for="gender_Female"><%= t('general.female') %></label>
               </div>
             </div>
@@ -143,11 +143,11 @@
           	<div class="label"><%= t('general.faculty') %>:</div>
           	<div class="field">
               <div class="item">
-              	<%= radio_button_tag :faculty, true %>
+              	<%= radio_button_tag :change_faculty, true %>
                 <label for="faculty"><%= t('general.yes') %></label>
               </div>
               <div class="item">
-                <%= radio_button_tag :faculty, false %>
+                <%= radio_button_tag :change_faculty, false %>
                 <label for="faculty"><%= t('general.no') %></label>
               </div>
             </div>
