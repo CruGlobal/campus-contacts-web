@@ -4,7 +4,7 @@
 
 <% if @completed_answer_sheets.count == 0 %>
   <div class="feed_box notice">
-    No completed surveys yet.
+    <%= t('survey_responses.no_completed_surveys') %>
   </div>
 <% else %>
   <% @completed_answer_sheets.each do |answer_sheet| %>

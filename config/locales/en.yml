@@ -1085,6 +1085,8 @@ en:
       thanks: Thanks!
     year_in_school: What is your year in school?
     zip: What is your zip code?
+    no_surveys: "No surveys yet."
+    no_completed_surveys: "No completed surveys yet."
   date:
     formats:
       default: "%m/%d/%Y"
