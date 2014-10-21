@@ -857,6 +857,7 @@ en:
     menu:
       add_question_back: Click on a question to add it back to the page
       answered_surveys: Surveys
+      column_header_guide: "Column headers are what appear in the All Contacts view. You can update column headers by editing specific survey questions as needed."
     index:
       edit_true: '&edit=true'
       search_saved: 'This search has been saved'

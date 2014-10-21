@@ -5,6 +5,10 @@
     	<div class="mh_popup_box_top"><span class="mh_popup_heading">Hidden Questions</span></div>
     	<div id="avatar_form_container">
         <div id="hidden_questions_div" style="display:block">
+          <div id="hidden_questions_guide">
+            <%= t('contacts.menu.add_question_back') %>
+            <span class="icon help tip help_bubble_keyword" title="<%= t('contacts.menu.column_header_guide') %>"/>
+          </div>
           <div id="hidden_questions_loader">
             <%= image_tag 'loader.gif'%><br/>Fetching Questions...
           </div>
