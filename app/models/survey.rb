@@ -87,7 +87,7 @@ class Survey < ActiveRecord::Base
       triggers = rule.trigger_keywords.split(', ')
       if triggers.present? && element.present? && answer.present? && rule.extra_parameters.present?
         if rule.extra_parameters['type'].downcase == type.downcase
-          return true if triggers.include?(answer.value)
+          return true if triggers.map(&:downcase).include?(answer.value.downcase)
         end
       end
     end

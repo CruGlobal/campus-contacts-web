@@ -341,6 +341,8 @@ class Person < ActiveRecord::Base
         end
       end
     end
+
+    answer_sheet.save_survey(answers)
     self.save
   end
 
@@ -782,6 +784,28 @@ class Person < ActiveRecord::Base
   def is_archived?(org)
     org_permission = organizational_permission_for_org(org)
     return org_permission.present? && org_permission.archive_date.present? && org_permission.deleted_at.nil?
+  end
+
+  def assign_to_leader(org, leader)
+    leader_id = leader.is_a?(String) ? leader : leader.id
+    leader = org.leaders.where(id: leader_id).try(:first)
+    return false unless leader.present?
+    leader.assign_contacts([self.id], org)
+  end
+
+  def add_to_group(organization, group, role = "member")
+		group = organization.groups.find_by_id(group.id)
+    return false unless group.present?
+    group_membership = group.group_memberships.find_by_person_id(self.id)
+    group.group_memberships.create(person_id: self.id, role: role) unless group_membership.present?
+  end
+
+  def add_to_label(organization, label, added_by_id = nil)
+    label_id = label.is_a?(String) ? label : label.id
+    get_label = self.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id, organization.id)
+    get_label.added_by_id = added_by_id if get_label.added_by_id.nil?
+    get_label.save
+    get_label
   end
 
   def assigned_tos_by_org(org)
