@@ -499,6 +499,36 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal "Special Survey", contact.answered_surveys_in_org(org2).first.title
   end
 
+  test "move contact with multiple survey answers" do
+    person = Factory(:person_with_things)
+    contact = Factory(:person)
+    org1 = Factory(:organization)
+    org2 = Factory(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+
+
+    survey = Factory(:survey, organization: org1, title: "Special Survey")
+    question = Factory(:text_field, notify_via: "Both", trigger_words: "Short")
+    survey.questions << question
+
+    answer_sheet = Factory(:answer_sheet, survey: survey, person: contact)
+    answer1 = Factory(:answer_1, answer_sheet: answer_sheet, question: question)
+    answer2 = Factory(:answer_1, answer_sheet: answer_sheet, question: question)
+
+    org1.move_contact(contact, org1, org2, "false", person, true)
+
+    assert_equal 0, org1.contacts.length
+    assert_equal 1, org2.contacts.length
+    assert_equal 1, org2.surveys.length
+    assert org2.people.include?(contact)
+    
+    new_survey = contact.answered_surveys_in_org(org2).last
+    new_answer_sheet = AnswerSheet.where(survey_id: new_survey.id, person_id: contact.id).last
+    assert_equal 2, new_answer_sheet.answers.where(question_id: new_survey.questions.first.id).count
+    assert_equal "Special Survey", new_survey.title
+  end
+
   test "move contact with interactions" do
     person = Factory(:person_with_things)
     contact = Factory(:person)
