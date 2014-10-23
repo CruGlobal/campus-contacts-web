@@ -16,21 +16,24 @@
     <strong><%= answer_sheet.survey.title %></strong>
     survey.
   </div>
-  <% answer_sheet.survey.predefined_questions.each do |question| %>
-    <% answer = @person.send(question.attribute_name) %>
-    <% if answer.present? %>
-      <div class="feed_item_survey_answer">
-        <strong><%= question.label %></strong>
-        <%= answer %>
-      </div>
-    <% end %>
-  <% end %>
-  <% answer_sheet.answers.each do |answer| %>
-    <% if answer.question.present? && answer.value.present? %>
-      <div class="feed_item_survey_answer">
-        <strong><%= answer.question.label %></strong>
-        <%= answer.value %>
-      </div>
+  
+  <% answer_sheet.survey.questions.each do |question| %>
+    <% if question.predefined? %>
+      <% answer = @person.send(question.attribute_name) %>
+      <% if answer.present? %>
+        <div class="feed_item_survey_answer">
+          <strong><%= question.label %></strong>
+          <%= answer %>
+        </div>
+      <% end %>
+    <% else %>
+      <% answers = answer_sheet.answers.where(question_id: question.id) %>
+      <% if answers.present? %>
+        <div class="feed_item_survey_answer">
+          <strong><%= question.label %></strong>
+          <%= answers.collect(&:value).compact.reject(&:empty?).to_sentence %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 </div>
