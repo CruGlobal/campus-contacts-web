@@ -143,11 +143,13 @@ class Survey < ActiveRecord::Base
 
       # Copy the answers
       if new_element.present? && new_answer_sheet.present? && copy_answers
-        if answer = answer_sheet.answers.find_by_question_id(element.id)
+        if answers = answer_sheet.answers.where(question_id: element.id)
           new_answer = new_answer_sheet.answers.find_by_question_id(new_element.id)
           unless new_answer.present?
-            new_answer = new_answer_sheet.answers.new(answer.attributes, question_id: new_element.id)
-            new_answer.save
+            answers.each do |answer|
+              new_answer = new_answer_sheet.answers.new(answer.attributes, question_id: new_element.id)
+              new_answer.save
+            end
           end
         end
       end
