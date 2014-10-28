@@ -1,4 +1,6 @@
-<div id="snapshot_sidebar">
+<%- snapshot = params[:action] == "load_snapshot" && params[:id].present? %>
+<%- snapshot_id = snapshot ? params[:id] : 0 %>
+<div id="snapshot_sidebar" class="<%= 'load_snapshot' if snapshot %>">
   <%= form_tag update_snapshot_movements_charts_path, remote: true do %>
     <div id="snapshot_radio">
       <div id="snapshot_radio_buttons">
@@ -7,6 +9,9 @@
         </div>
         <div id="snapshot_radio_button_custom">
           <%= radio_button_tag 'all', 'false', !@chart.snapshot_all_movements, :id => "snap_all_false" %> Custom
+        </div>
+        <div id="snapshot_radio_button_saved">
+          <%= radio_button_tag 'all', 'saved', false, :id => "saved_visual_tool_radio" %> Saved
         </div>
       </div>
       <div id="snapshot_movements">
@@ -17,10 +22,21 @@
           </div>
         <% end %>
       </div>
+      <div id="saved_visual_tools">
+        <% if @saved_visual_tools.present? %>
+          <% @saved_visual_tools.each do |saved_visual_tool| %>
+            <%= render "charts/saved_snapshot", saved_visual_tool: saved_visual_tool, current_snapshot_id: snapshot_id %>
+          <% end %>
+        <% else %>
+          No saved snapshots.
+        <% end %>
+      </div>
     </div>
     <div id="snapshot_movements_submit">
-      <%= submit_tag 'Update Chart', class: 'large_gray' %>
+      <%= submit_tag 'Update Chart', class: 'large_gray', id: "update_chart" %>
     </div>
   <% end %>
+  <%= render 'dialogs/save_snapshot' %>
+  <%= button_tag 'Save Selected', class: 'large_gray', id: 'save_snapshot_button' %>
   <%= button_tag 'Uncheck All', class: 'large_gray', id: 'uncheck_all_movements' %>
 </div>

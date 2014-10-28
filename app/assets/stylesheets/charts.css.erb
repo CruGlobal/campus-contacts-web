@@ -1,3 +1,15 @@
+.snapshot-tab {
+  display: none;
+}
+
+.snapshot-tab.snapshot-active {
+  display: block !important;
+}
+
+.saved_visual_tool_line a {
+  color: #0379ae !important;
+}
+
 div#clear {
   clear: both;
 }
@@ -67,7 +79,7 @@ button#edit_goal_button, button#cancel_edit_goal_button, input[type="submit"]#sa
   margin:12px auto;
 }
 
-div#snapshot_movements, div#trend_movements {
+div#snapshot_movements, div#trend_movements, div#saved_visual_tools {
   background-color:#ffffff;
   padding:8px 12px 8px 8px;
   max-height:300px;
@@ -75,6 +87,10 @@ div#snapshot_movements, div#trend_movements {
   overflow-y:scroll;
   border:1px solid #c0c0c0;
   margin:0 8px;
+}
+
+div#saved_visual_tools {
+  display: none;
 }
 
 div#snap_movements_data h2 {
@@ -105,6 +121,23 @@ div.movement_line, div.trend_movement_line {
   margin-left:20px;
 }
 
+div.saved_visual_tool_line {
+  margin: 4px 2px;
+}
+
+.saved_visual_tool_line .saved_visual_tool_delete {
+  display: none;
+  line-height: 1;
+  float: right;
+  background-color: #eee;
+  padding: 0px 3px 2px;
+  margin: -1px -5px 0 0;
+}
+
+.saved_visual_tool_line:hover .saved_visual_tool_delete {
+  display: inline-block;
+}
+
 div.movement_line span {
   line-height:18px;
   margin-top:-8px;
@@ -112,12 +145,12 @@ div.movement_line span {
 }
 
 div#snapshot_radio_buttons, div#trend_radio_buttons {
-  padding:12px 8px;
+  padding: 5px 0px;
+  text-align: center;
 }
 
-div#snapshot_radio_button_custom, div#trend_radio_button_custom {
+div#snapshot_radio_button_saved, div#snapshot_radio_button_custom, div#trend_radio_button_custom, div#trend_radio_button_saved {
   display:inline-block;
-  margin-left:6px;
 }
 
 div#snapshot_radio_button_all, div#trend_radio_button_all {
@@ -156,7 +189,7 @@ div#goal_description input#organizational_goal_start_value, div#goal_description
   width: 100px;
 }
 
-button#uncheck_all_movements, button#trend_uncheck_all_movements{
+button#uncheck_all_movements, button#trend_uncheck_all_movements, button#save_snapshot_button, button#save_trend_button {
   width: 140px;
   margin: 12px auto;
 }
@@ -426,4 +459,8 @@ div#goal_container, div#goal_spinner {
   box-shadow: 0px 0px 8px 4px #666;
 
   opacity: 0.8;
+}
+
+.saved_visual_tool_line.active a {
+  font-weight: bold;
 }

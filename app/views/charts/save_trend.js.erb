@@ -1,0 +1,10 @@
+$.a("Trend Tracker successfully saved!")
+$("#saved_visual_tool_line").removeClass("active")
+if($("#saved_visual_tools .saved_visual_tool_line").size() == 0){
+  $("#saved_visual_tools").html("<%= escape_javascript(render 'charts/saved_trend', saved_visual_tool: @saved_visual_tool) %>")
+}else{
+  $("#saved_visual_tools").append("<%= escape_javascript(render 'charts/saved_trend', saved_visual_tool: @saved_visual_tool) %>")
+}
+$("#saved_visual_tool_line").first().addClass("active")
+$("#trend_radio_button_saved input").click()
+$.hideDialog($("#save_trend_div"))

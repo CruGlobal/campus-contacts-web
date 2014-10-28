@@ -1,0 +1,135 @@
+$(document).ready ->
+  $(document).on "click", "button#save_trend_button", ->
+    $.showDialog($("#save_trend_div"))
+    $("#trend_name").val("")
+  
+  $(document).on "click", "button#save_snapshot_button", ->
+    $.showDialog($("#save_snapshot_div"))
+    $("#snapshot_name").val("")
+    
+  $(document).on "click", "#submit_save_trend", ->
+    trend_name = $.trim($("#trend_name").val())
+    if trend_name != ""
+      selected_ids = $(".trend_movement_line .trend_movement:checked").map(->
+        $(this).val()
+      )
+      start = $("#trend_date_select #start_date").val()
+      end = $("#trend_date_select #end_date").val()
+      $.ajax
+        url: "/charts/save_trend"
+        type: "POST"
+        data:
+          start_date: start
+          end_date: end
+          trend_name: trend_name 
+          movement_ids: selected_ids.get()
+    else
+      $.a("Please enter the trend tracker name before saving.")
+    
+  $(document).on "click", "#submit_save_snapshot", ->
+    snapshot_name = $.trim($("#snapshot_name").val())
+    if snapshot_name != ""
+      selected_ids = $(".movement_line .snap_movement:checked").map(->
+        $(this).val()
+      )
+      $.ajax
+        url: "/charts/save_snapshot"
+        type: "POST"
+        data:
+          snapshot_name: snapshot_name 
+          movement_ids: selected_ids.get()
+    else
+      $.a("Please enter the snapshot name before saving.")
+
+  $("button#uncheck_all_movements").bind "click", ->
+    $("div#snapshot_movements input.snap_movement").prop
+      disabled: false
+      checked: false
+
+    $("input#snap_all_false").prop "checked", true
+
+  $("input#snap_all_true").bind "click", ->
+    $("#saved_visual_tools").hide()
+    $("#snapshot_movements").show()
+    $("#update_chart, #save_snapshot_button, #uncheck_all_movements").show()
+    $("input.snap_movement").prop disabled: true
+
+  $("input#snap_all_false").bind "click", ->
+    $("#saved_visual_tools").hide()
+    $("#snapshot_movements").show()
+    $("#update_chart, #save_snapshot_button, #uncheck_all_movements").show()
+    $("input.snap_movement").prop disabled: false
+
+  $("input#saved_visual_tool_radio").bind "click", ->
+    $("#snapshot_movements").hide()
+    $("#trend_movements").hide()
+    $("#trend_date_select").hide()
+    $("#update_chart, #save_snapshot_button, #uncheck_all_movements").hide()
+    $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").hide()
+    $("#saved_visual_tools").show()
+
+  $("div#snapshot_movements_submit input.large_gray").bind "click", ->
+    $("div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers").hide()
+    $("div#snap_spinner").show()
+
+  $("select#gospel_exp_range").change ->
+    $("div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers").hide()
+    $("div#snap_spinner").show()
+    $.ajax
+      url: "/charts/update_snapshot_range"
+      type: "POST"
+      data:
+        gospel_exp_range: $("select#gospel_exp_range option:selected").val()
+
+  $("select#laborers_range").change ->
+    $("div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers").hide()
+    $("div#snap_spinner").show()
+    $.ajax
+      url: "/charts/update_snapshot_range"
+      type: "POST"
+      data:
+        laborers_range: $("select#laborers_range option:selected").val()
+
+  $("select#goal_org_select").change ->
+    $("div#goal_container, div#goal_box").hide()
+    $("div#goal_spinner, div#goal_box_spinner").show()
+    $.ajax
+      url: "/charts/update_goal_org"
+      type: "POST"
+      data:
+        org_id: $("select#goal_org_select option:selected").val()
+
+  $("button#trend_uncheck_all_movements").bind "click", ->
+    $("div#trend_movements input.trend_movement").prop
+      disabled: false
+      checked: false
+
+    $("input#trend_all_false").prop "checked", true
+
+  $("input#trend_all_true").bind "click", ->
+    $("#saved_visual_tools").hide()
+    $("#trend_movements").show()
+    $("#trend_date_select").show()
+    $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").show()
+    $("input.trend_movement").prop disabled: true
+
+  $("input#trend_all_false").bind "click", ->
+    $("#saved_visual_tools").hide()
+    $("#trend_movements").show()
+    $("#trend_date_select").show()
+    $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").show()
+    $("input.trend_movement").prop disabled: false
+
+  $("div#trend_movements_submit input.large_gray").bind "click", ->
+    $("div#trend_container").hide()
+    $("div#trend_spinner").show()
+
+  $("input.datepicker").datepicker
+    dateFormat: "yy-mm-dd"
+    minDate: "<%= (Date.today - 3.years).to_s %>"
+    
+  if $("#snapshot_sidebar").hasClass("load_snapshot")
+    $("#snapshot_radio_button_saved input").click()
+    
+  if $("#trend_sidebar").hasClass("load_trend")
+    $("#trend_radio_button_saved input").click()
