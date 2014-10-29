@@ -55,6 +55,12 @@ class Question < Element
     true
   end
 
+  def column_header
+    slug = self.slug
+    column_header = slug.present? ? slug : self.label.capitalize
+    column_header.try(:titleize)
+  end
+
   def get_custom_element_label(survey)
     self.custom_labels.find_by_survey_id(survey.id)
   end

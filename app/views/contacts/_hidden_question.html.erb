@@ -1,3 +1,6 @@
 <li>
-  <%= link_to(hidden_question.label.titleize, unhide_question_column_contacts_path(survey_id: @organization.surveys.first || @predefined_survey.id, question_id: hidden_question.id), method: :post, remote: true, class: 'show_hidden_question_link') %>
+  <% label = hidden_question.label.try(:titleize) %>
+  <% slug = hidden_question.slug.try(:titleize) %>
+  <% question = slug.present? ? "#{label} [Column Header: #{slug}]" : label %>
+  <%= link_to(question, unhide_question_column_contacts_path(survey_id: @organization.surveys.first || @predefined_survey.id, question_id: hidden_question.id), method: :post, remote: true, class: 'show_hidden_question_link') %>
 </li>
