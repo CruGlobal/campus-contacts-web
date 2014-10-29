@@ -36,7 +36,7 @@ class Element < ActiveRecord::Base
   # def has_response?(answer_sheet = nil)
   #   false
   # end
-  
+
   def predefined?
     is_in_object?
   end
@@ -151,7 +151,8 @@ class Element < ActiveRecord::Base
     end
   end
 
-  def search_people_answer_choicefield(people, survey, answers, option = CHOICEFILED_MATCH.first[1].underscore, range = nil)
+  def search_people_answer_choicefield(people, survey, field_answers, option = CHOICEFILED_MATCH.first[1].underscore, range = nil)
+    field_answers = field_answers.map{|x| x.downcase.strip}
     all_answers = Answer.includes(:answer_sheet).where("answer_sheets.survey_id = ? AND question_id = ?", survey.id, id)
     if range.present?
       date_from = translate_date(range.first())
@@ -160,19 +161,19 @@ class Element < ActiveRecord::Base
     end
 
     if option == "any"
-      if answers.include?("no_response")
-        answers = answers.reject { |ans| ans == "no_response" }
-        if answers.count > 0
-          all_answers = all_answers.where("value NOT IN (?)", answers)
+      if field_answers.include?("no_response")
+        field_answers = field_answers.reject { |ans| ans == "no_response" }
+        if field_answers.count > 0
+          all_answers = all_answers.where("LOWER(value) NOT IN (?)", field_answers)
         end
         person_ids = people.collect(&:id) - all_answers.collect{|x| x.answer_sheet.person_id}
       else
-        person_ids = all_answers.where("value IN (?)", answers).collect{|x| x.answer_sheet.person_id}
+        person_ids = all_answers.where("LOWER(value) IN (?)", field_answers).collect{|x| x.answer_sheet.person_id}
       end
       return people.where(id: person_ids)
     elsif option == "all"
       all_answers = all_answers.includes(:answer_sheet).where('answer_sheets.person_id' => people.collect(&:id))
-      answers.each do |answer|
+      field_answers.each do |answer|
         filtered_answers = all_answers.where(value: answer)
         people = people.where(id: filtered_answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id})
       end
