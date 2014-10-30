@@ -465,4 +465,15 @@ class ApplicationController < ActionController::Base
     body += footer_msg if total_characters <= 140
     body
   end
+
+  def initialize_surveys_and_questions
+    @organization = current_organization
+    @surveys = @organization.surveys
+    @all_questions = @organization.questions
+    excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
+    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
+    @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
+  end
+  helper_method :initialize_surveys_and_questions
 end

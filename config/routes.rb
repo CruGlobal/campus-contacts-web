@@ -64,7 +64,6 @@ Mh::Application.routes.draw do
       get :load_more_interactions
       get :load_more_all_feeds
       get :create_label
-      get :set_permissions
       get :set_groups
       get :search_leaders
     end
@@ -318,6 +317,7 @@ Mh::Application.routes.draw do
       post :unhide_question_column
 
       post :add_contact_check_email
+      post :set_permissions
     end
   end
 
