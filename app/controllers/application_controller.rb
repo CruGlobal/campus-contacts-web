@@ -1,4 +1,5 @@
 require 'contact_methods'
+include WiserTimezone::WiserTimezoneHelper
 class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
@@ -11,7 +12,8 @@ class ApplicationController < ActionController::Base
   before_filter :check_url, except: :facebook_logout
   before_filter :export_i18n_messages
   before_filter :set_newrelic_params
-  around_filter :set_user_time_zone
+  before_filter :ensure_timezone
+  # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery
@@ -20,20 +22,20 @@ class ApplicationController < ActionController::Base
     session[:filters] = nil
   end
 
-  def set_user_time_zone
-    old_time_zone = Time.zone
-    if user_signed_in? && current_user.settings[:time_zone]
-      Time.zone = current_user.settings[:time_zone]
-    else
-      if cookies[:timezone].present?
-        Time.zone = ActiveSupport::TimeZone[-cookies[:timezone].to_i.minutes]
-        current_user.update_attribute(:time_zone, Time.zone.name) if user_signed_in?
-      end
-    end
-    yield
-  ensure
-    Time.zone = old_time_zone
-  end
+  # def set_user_time_zone
+  #   old_time_zone = Time.zone
+  #   if user_signed_in? && current_user.settings[:time_zone]
+  #     Time.zone = current_user.settings[:time_zone]
+  #   else
+  #     if cookies[:timezone].present?
+  #       Time.zone = ActiveSupport::TimeZone[-cookies[:timezone].to_i.minutes]
+  #       current_user.update_attribute(:time_zone, Time.zone.name) if user_signed_in?
+  #     end
+  #   end
+  #   yield
+  # ensure
+  #   Time.zone = old_time_zone
+  # end
 
   def facebook_logout
     redirect_url = params[:next] ? params[:next] : root_url

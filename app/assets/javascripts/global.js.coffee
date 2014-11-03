@@ -10,6 +10,8 @@ $ ->
     $.autoAdjustDialog(active_dialog.first().parents(".custom_mh_popup_box"))
 
   $(document).ready ->
+    wiser_timezone_reload();
+    
     $(document).on "hover", ".org_tree_link", ->
       unless $(this).hasClass("loaded")
         $(this).addClass("loaded")

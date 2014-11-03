@@ -58,6 +58,7 @@ gem 'versionist', '~> 1.0.0'
 gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever', '~> 0.8.4'
 gem 'wiser_date', '~> 0.3.0'
+gem 'wiser_timezone', '~> 0.1.9'
 gem 'infobase', '~> 1.0.0'
 gem 'multi_json', '~> 1.8.2'
 gem 'sp_client', '~> 1.0.2'
