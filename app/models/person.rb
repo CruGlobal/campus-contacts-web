@@ -248,6 +248,10 @@ class Person < ActiveRecord::Base
     org_permission = organizational_permission_for_org(org)
     return org_permission.cru_status if org_permission.present?
   end
+  
+  def initiated_interaction_ids
+    InteractionInitiator.where(person_id: id).collect(&:interaction_id).uniq
+  end
 
   def assign_contacts(ids, org, assigned_by)
     valid_ids = []
@@ -457,6 +461,11 @@ class Person < ActiveRecord::Base
 
 
   def filtered_interactions(viewer, current_org)
+    if self.initiated_interaction_ids.present?
+      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id})"
+    else
+      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id})"
+    end
     q = Array.new
 
     # filter organization
@@ -473,7 +482,7 @@ class Person < ActiveRecord::Base
     q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
 
     query = q.join(" OR ") # combine queries
-    return self.interactions.joins(:organization).where(query).sorted
+    return Interaction.joins(:organization).where("#{base_q} AND #{query}").sorted
   end
 
   def labeled_in_org(label, org)
