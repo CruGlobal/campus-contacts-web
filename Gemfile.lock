@@ -471,6 +471,7 @@ GEM
       chronic (>= 0.6.3)
     wiser_date (0.3.0)
       rails (>= 3.1)
+    wiser_timezone (0.1.9)
     yard (0.8.7.4)
 
 PLATFORMS
@@ -566,3 +567,4 @@ DEPENDENCIES
   webmock
   whenever (~> 0.8.4)
   wiser_date (~> 0.3.0)
+  wiser_timezone (~> 0.1.9)

@@ -2,6 +2,7 @@
 // FIXME: Tell people how Sprockets and CoffeeScript works
 //
 //= require jquery_ujs
+//= require wiser_timezone
 //= require jquery.counter-1.0.min
 //= require jquery.observe_field.js
 //= require jquery.one_finger_scroll.js
