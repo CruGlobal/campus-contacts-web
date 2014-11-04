@@ -3,6 +3,7 @@ require 'vpim/vcard'
 require 'vpim/book'
 
 class Person < ActiveRecord::Base
+
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
   has_paper_trail :on => [:destroy],
@@ -248,7 +249,7 @@ class Person < ActiveRecord::Base
     org_permission = organizational_permission_for_org(org)
     return org_permission.cru_status if org_permission.present?
   end
-  
+
   def initiated_interaction_ids
     InteractionInitiator.where(person_id: id).collect(&:interaction_id).uniq
   end
@@ -1467,10 +1468,14 @@ class Person < ActiveRecord::Base
   end
 
   def picture
-    if person_photo
-      Rails.env.development? ? "http://local.missionhub.com/#{person_photo.image.url}" : "http://www.missionhub.com/#{person_photo.image.url}"
-    elsif fb_uid.present?
-      "http://graph.facebook.com/#{fb_uid}/picture"
+    if self.person_photo.present?
+      "#{APP_CONFIG['site_domain']}/#{person_photo.image.url}"
+    elsif self.avatar_file_name.present?
+      "#{APP_CONFIG['site_domain']}#{self.avatar.url(:thumb)}"
+    elsif self.fb_uid.present?
+      "https://graph.facebook.com/#{self.fb_uid}/picture"
+    else
+      "#{APP_CONFIG['site_domain']}#{ActionController::Base.helpers.asset_path("no_image.png")}"
     end
   end
 
