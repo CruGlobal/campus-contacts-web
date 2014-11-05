@@ -6,9 +6,11 @@
 <div id='interaction_feeds_container'>
   <% if @interactions.present? %>
     <% @interactions.each do |interaction| %>
-      <div class='interaction_feed_container' id='interaction_feed_container_<%= interaction.id %>'>
-        <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
-      </div>
+      <% if interaction.receiver.present? %>
+        <div class='interaction_feed_container' id='interaction_feed_container_<%= interaction.id %>'>
+          <%= render partial: 'interactions/interaction_feed', locals: {interaction: interaction} %>
+        </div>
+      <% end %>
     <% end %>
   <% else %>
     <div class='feed_box notice'>
