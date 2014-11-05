@@ -471,19 +471,20 @@ class Person < ActiveRecord::Base
 
     # filter organization
     if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
-      q << "(interactions.privacy_setting = 'organization' AND interactions.organization_id = #{current_org.id})"
+      q << "interactions.privacy_setting = 'organization'"
     end
 
     # filter admins
     if viewer.admin_of_org?(current_org)
-      q << "(interactions.privacy_setting = 'admins' AND interactions.organization_id = #{current_org.id})"
+      q << "interactions.privacy_setting = 'admins'"
     end
 
     # filter me
     q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
 
     query = q.join(" OR ") # combine queries
-    return Interaction.joins(:organization).where("#{base_q} AND #{query}").sorted
+
+    return Interaction.joins(:organization).where("#{base_q} AND (#{query})").sorted
   end
 
   def labeled_in_org(label, org)
