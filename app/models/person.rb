@@ -9,9 +9,9 @@ class Person < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
-  has_attached_file :avatar,
-    :styles => { :medium => "200x200>", :thumb => "100x100>", big_square: "300x300#"},
-    :default_url => "/images/:style/missing.png"
+  has_attached_file :avatar, :styles => { :medium => "200x200>", :thumb => "100x100>", big_square: "300x300#"},
+    s3_credentials: 'config/s3.yml', storage: :s3, path: 'people/:attachment/:style/:id/:filename',
+    s3_storage_class: :reduced_redundancy
 
   validates_attachment :avatar,
     :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
@@ -1469,14 +1469,10 @@ class Person < ActiveRecord::Base
   end
 
   def picture
-    if self.person_photo.present?
-      "#{APP_CONFIG['site_domain']}/#{person_photo.image.url}"
-    elsif self.avatar_file_name.present?
-      "#{APP_CONFIG['site_domain']}#{self.avatar.url(:thumb)}"
+    if self.avatar_file_name.present?
+      self.avatar.url(:thumb)
     elsif self.fb_uid.present?
       "https://graph.facebook.com/#{self.fb_uid}/picture"
-    else
-      "#{APP_CONFIG['site_domain']}#{ActionController::Base.helpers.asset_path("no_image.png")}"
     end
   end
 
