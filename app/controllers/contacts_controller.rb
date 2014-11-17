@@ -805,7 +805,7 @@ class ContactsController < ApplicationController
                   answer ||= ""
 
                   if option != 'contains' || (option == 'contains' && answer.present?)
-                    if element.is_in_object?
+                    if element.predefined?
                       if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
                         people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                       else
@@ -828,7 +828,7 @@ class ContactsController < ApplicationController
                   rescue; end
 
                   if answer.present?
-                    if element.is_in_object?
+                    if element.predefined?
                       if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
                         people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                       else
@@ -878,7 +878,7 @@ class ContactsController < ApplicationController
                     params[:survey_answer][survey.id.to_s][question_id.to_s]['end'] = answer["end"]
 
                     if answer["start"].present?
-                      if element.is_in_object?
+                      if element.predefined?
                         if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
                           result_people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
                         else
