@@ -76,7 +76,7 @@ class CrsImport
             profile = registrant.profile
 
             next unless profile
-            
+
             crs2_person = profile.ministry_person || profile.crs2_person
 
             unless person
@@ -188,13 +188,13 @@ class CrsImport
           end
         end
 
-        CrsImportMailer.completed(@org, importer_email_address).deliver if importer_email_address
+        CrsImportMailer.delay.completed(@org, importer_email_address) if importer_email_address
       rescue
-        CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
+        CrsImportMailer.delay.failed(@org, importer_email_address) if importer_email_address
         raise
       end
     else
-      CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
+      CrsImportMailer.delay.failed(@org, importer_email_address) if importer_email_address
       raise
     end
     nil
