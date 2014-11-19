@@ -38,10 +38,6 @@ class Element < ActiveRecord::Base
   # end
 
   def predefined?
-    is_in_object?
-  end
-
-  def is_in_object?
     object_name.present? && attribute_name.present?
   end
 
