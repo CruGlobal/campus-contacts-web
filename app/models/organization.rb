@@ -274,6 +274,8 @@ class Organization < ActiveRecord::Base
       return 'bulksms1'
     elsif APP_CONFIG['smseco_gateway_orgs'].present? && APP_CONFIG['smseco_gateway_orgs'].include?(id)
       return 'smseco'
+    elsif has_parent?(APP_CONFIG['power_to_change_org_id'])
+      return 'twilio_power2change'
     else
       return 'twilio'
     end
