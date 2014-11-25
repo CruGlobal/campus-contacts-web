@@ -112,11 +112,11 @@ class SurveysController < ApplicationController
   # Enter survey mode
   def start
     unless mhub? #|| Rails.env.test?
-      redirect_to start_survey_url(@survey, protocol: 'http', host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])
+      redirect_to start_survey_url(@survey, protocol: 'https', host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])
       return false
     end
     cookies[:survey_mode] = 1
-    redirect_to sign_out_url(next: short_survey_url(@survey.id))
+    redirect_to sign_out_url(protocol: 'https', next: short_survey_url(@survey.id, protocol: 'https'))
     #redirect_to short_survey_url(@survey.id)
   end
 
@@ -125,7 +125,7 @@ class SurveysController < ApplicationController
     cookies[:survey_mode] = nil
     cookies[:keyword] = nil
     cookies[:survey_id] = nil
-    redirect_to(request.referrer ? :back : 'http://www.missionhub.com')
+    redirect_to(request.referrer ? :back : 'https://www.missionhub.com')
   end
 
 

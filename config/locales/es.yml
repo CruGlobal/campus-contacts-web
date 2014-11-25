@@ -212,7 +212,7 @@ es:
         Solo para hacerte saber que se te ha dado nuevos contactos para que les des seguimiento.
 
 
-        Inicia sesión MissionHub en http://www.missionhub.com para accesar a tus contactos.
+        Inicia sesión MissionHub en https://www.missionhub.com para accesar a tus contactos.
 
 
         En Cristo,
@@ -582,7 +582,7 @@ es:
     survey_help_desc: Para iniciar su encuesta,
     survey_text_help_desc: Mandar un texto con su palabra clave a 85005
     survey_text_tip_html: Para iniciar tu encuesta, <strong>text %{keyword} de %{shortcode}.</strong>
-    survey_web_tip_html: Para la versión web de la encuesta, enviar a la gente a <strong>http://mhub.cc/c/%{keyword}/</strong>
+    survey_web_tip_html: Para la versión web de la encuesta, enviar a la gente a <strong>https://mhub.cc/c/%{keyword}/</strong>
     to: A
     transfer: Transferir
     unassign: Desasignar
