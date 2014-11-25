@@ -879,7 +879,7 @@ en:
         Just letting you know that you have been given new contacts to follow-up.
 
 
-        Login to MissionHub at http://www.missionhub.com to access your contacts.
+        Login to MissionHub at https://www.missionhub.com to access your contacts.
 
 
         In Christ,
@@ -1035,7 +1035,7 @@ en:
     sms_subscribed_with_org: "You have been subscribed from MHub text alerts. You can now receive text messages from %{org}."
     sms_unsubscribed_with_org: "You have been unsubscribed from MHub text alerts for %{org}. You will receive no more messages. To opt back in, reply ON."
     sms_unsubscribed_without_org: "You have been unsubscribed from MHub text alerts. You will receive no more messages. To opt back in, reply ON."
-    sms_help_guide: "MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to http://mhub.cc/terms for more help. Msg frequency depends on user."
+    sms_help_guide: "MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to https://mhub.cc/terms for more help. Msg frequency depends on user."
   survey:
     drop_down_field:
       choose_one: "Choose One"
