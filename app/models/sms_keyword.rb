@@ -9,6 +9,7 @@ class SmsKeyword < ActiveRecord::Base
   MOONSHADO_SHORT = '75572'
   SHORT = '85005'
   LONG = '14248886482'
+  LONG_POWER2CHANGE = '12897993100'
 
   default_value_for :gateway, 'twilio'
   default_value_for :initial_response do |keyword|

@@ -114,6 +114,25 @@ class SentSms < ActiveRecord::Base
       end
     end
   end
+  
+  def to_twilio(from, to, message, separator)
+    phone_number = PhoneNumber.find_by_number(to)
+    if phone_number.present? && !phone_number.not_mobile?
+      SentSms.smart_split(message, separator).each do |message|
+        begin
+          Twilio::SMS.create(:to => to, :body => message.strip, :from => from)
+        rescue Twilio::APIError => e
+          msg = e.message
+          if msg.include?('is not a mobile number') || msg.include?('is not a valid phone number')
+            phone_number.not_mobile!
+          else
+            Airbrake.notify(e)
+          end
+        end
+      end
+    end
+    long_code.increment!(:messages_sent) if long_code
+  end
 
   def queue_sms
     send_sms
@@ -131,29 +150,20 @@ class SentSms < ActiveRecord::Base
     when 'bulksms1'
       to_bulksms(APP_CONFIG['bulksms_url1'], APP_CONFIG['bulksms_username1'], APP_CONFIG['bulksms_password1'])
     else
+      # Twilio
       if received_sms
         from = received_sms.shortcode
       else
-        from = long_code ? long_code.number : SmsKeyword::SHORT
-      end
-
-      phone_number = PhoneNumber.find_by_number(recipient)
-      if phone_number.present? && !phone_number.not_mobile?
-        SentSms.smart_split(message, separator).each do |message|
-          begin
-            Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-          rescue Twilio::APIError => e
-            msg = e.message
-            if msg.include?('is not a mobile number') || msg.include?('is not a valid phone number')
-              phone_number.not_mobile!
-            else
-              Airbrake.notify(e)
-            end
-          end
+        case sent_via
+        when 'twilio_power2change'
+          # Special for Power To Change orgs MH-1054
+          from = SmsKeyword::LONG_POWER2CHANGE
+        else
+          # Default Twilio
+          from = long_code ? long_code.number : SmsKeyword::SHORT
         end
       end
-
-      long_code.increment!(:messages_sent) if long_code
+      to_twilio(from, recipient, message, separator)
     end
   end
 
