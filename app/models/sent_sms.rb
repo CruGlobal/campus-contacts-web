@@ -115,12 +115,12 @@ class SentSms < ActiveRecord::Base
     end
   end
   
-  def to_twilio(from, to, message, separator)
-    phone_number = PhoneNumber.find_by_number(to)
+  def send_to_twilio(from)
+    phone_number = PhoneNumber.find_by_number(recipient)
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each do |message|
         begin
-          Twilio::SMS.create(:to => to, :body => message.strip, :from => from)
+          Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
         rescue Twilio::APIError => e
           msg = e.message
           if msg.include?('is not a mobile number') || msg.include?('is not a valid phone number')
@@ -163,7 +163,7 @@ class SentSms < ActiveRecord::Base
           from = long_code ? long_code.number : SmsKeyword::SHORT
         end
       end
-      to_twilio(from, recipient, message, separator)
+      send_to_twilio(from)
     end
   end
 
