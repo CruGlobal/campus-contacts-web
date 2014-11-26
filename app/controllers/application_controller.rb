@@ -3,6 +3,8 @@ include WiserTimezone::WiserTimezoneHelper
 class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
+
+  force_ssl if: :ssl_configured?
   before_filter :authenticate_user!, :except => [:facebook_logout]
   before_filter :clear_advanced_search
   before_filter :set_login_cookie
@@ -17,6 +19,10 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, with: :access_denied
   protect_from_forgery
+
+  def ssl_configured?
+    !Rails.env.development? && !Rails.env.test?
+  end
 
   def clear_advanced_search
     session[:filters] = nil
