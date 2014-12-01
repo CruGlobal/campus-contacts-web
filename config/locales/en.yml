@@ -314,7 +314,7 @@ en:
     label_search_not_allow_to_no_label: "Search by 'No label' is not allowed if you have checked any of the labels."
     contacts_updated_from: 'Contacts Updated From'
     dash: ' - '
-    faq_redirect_link: "http://help.missionhub.com/entries/52006057-FAQs-Frequently-Asked-Questions"
+    faq_redirect_link: "http://help.missionhub.com/article/34-faqs-frequently-asked-questions"
     help_redirect_link: http://help.missionhub.com
     help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
     locate_contact_search_required_fields: "You should enter at least 1 search field."
