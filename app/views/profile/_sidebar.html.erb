@@ -18,7 +18,7 @@
 <div id="profile_label_box">
   <% if @labels.present? %>
     <% @labels.each do |label| %>
-      <div class='profile_label'><%= label.name %></div>
+      <div class='profile_label with_wrap tip' title="<%= label.name %>"><%= label.name %></div>
     <% end %>
   <% else %>
     <div class="no_labels">No labels assigned.</div>

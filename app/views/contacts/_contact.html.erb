@@ -35,7 +35,7 @@
         <% sorted_labels = labels.arrange_all %>
         <% sorted_labels = labels.arrange_all_desc if params['search'] && params['search']['meta_sort'] == 'labels.desc' %>
         <% sorted_labels.each do |label| %>
-          <div id="<%= person.id%>_<%= label.id %>" class="no_wrap permission_label label_<%= label.id %>"><%= label.name %></div>
+          <%= render partial: 'contacts/label_column', locals: {person: person, label: label} %>
         <% end %>
       </div>
     </div>
