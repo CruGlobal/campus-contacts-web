@@ -15,20 +15,22 @@ class ContactsController < ApplicationController
 
   def bulk_update
     people_to_update = current_organization.all_people_with_archived.where("people.id IN (?)", params[:people_ids].split(","))
-    people_to_update.each do |person|
-      if params[:leader_id].present?
-        if params[:leader_id].include?("0")
+
+    if params[:leader_id].present? && people_to_update.present?
+      if params[:leader_id].include?("0")
+        people_to_update.each do |person|
           person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
-        else
-          @person.assigned_tos.delete_all
-          params[:leader_id].each do |leader_id|
-            if leader = current_organization.leaders.where(id: leader_id).try(:first)
-              person.assigned_tos.create(organization_id: current_organization.id, assigned_to_id: leader_id)
-            end
+        end
+      else
+        params[:leader_id].each do |leader_id|
+          if leader = current_organization.leaders.where(id: leader_id).try(:first)
+            leader.assign_contacts(people_to_update.collect(&:id), current_organization, current_person)
           end
         end
       end
+    end
 
+    people_to_update.each do |person|
       if params[:group_id].present?
         group = current_organization.groups.find(params[:group_id])
         group_membership = group.group_memberships.find_or_initialize_by_person_id(person.id)
