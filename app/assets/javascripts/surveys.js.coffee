@@ -59,6 +59,12 @@ $ ->
   # if $("#copy_mass_entry").size() > 0
   #   $(document).on "click", "#copy_mass_entry", (e)->
   #     e.preventDefault()
+  
+  $(document).on "click", "#new_mass_entry", (e)->
+    e.preventDefault()
+    row = $("#mass_entry_table").handsontable("countRows")-1
+    $("#mass_entry_table").handsontable("selectCell", row, 0)
+    $(document).scrollTop(9999)
       
   $(document).on "click", "#reload_mass_entry", (e)->
     e.preventDefault()
