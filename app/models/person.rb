@@ -18,6 +18,7 @@ class Person < ActiveRecord::Base
 
   belongs_to :interaction_initiator
   has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["interactions.deleted_at IS NULL"]
+  has_many :bulk_messages
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
   has_many :organizational_labels, dependent: :destroy, conditions: ["organizational_labels.removed_date IS NULL"]
@@ -383,6 +384,11 @@ class Person < ActiveRecord::Base
 
   def self.filter_by_survey_scope(people, organization, survey_scope)
     return people.joins(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).uniq
+  end
+  
+  def timezone
+    return nil unless user.present?
+    user.settings[:time_zone]
   end
 
   def answered_surveys

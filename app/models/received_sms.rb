@@ -8,7 +8,7 @@ class ReceivedSms < ActiveRecord::Base
     if sms_keyword.mpd? && sms_keyword.mpd_phone_number.present?
       message = "Someone just expressed an interest in your ministry. You might want to give them a call to follow up: #{phone_number}"
       sms = SentSms.create!(received_sms_id: id, message: message, recipient: sms_keyword.mpd_phone_number)
-      sms.queue_sms
+      sms.delay.send_sms
     end
   end
 

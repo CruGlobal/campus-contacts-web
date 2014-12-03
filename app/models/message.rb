@@ -1,12 +1,14 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
-  attr_accessible :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
+  attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
 
+  belongs_to :bulk_message
   belongs_to :organization
   belongs_to :sender, class_name: "Person", foreign_key: "person_id"
   belongs_to :receiver, class_name: "Person", foreign_key: "receiver_id"
+  has_one :sent_sms
 
-  after_create :process_message
+  # after_create :process_message
 
   def date_sent
     if ((Time.new - created_at) / 1.day).to_i < 1
@@ -19,18 +21,26 @@ class Message < ActiveRecord::Base
   def self.outbound_text_messages(phone_number)
     self.where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "%#{phone_number}%")
   end
-
-  private
+  
+  def status
+    if sent_via == "sms"
+      sent_sms.present? ? sent_sms.status : "none"
+    else
+      "sent"
+    end
+  end
 
   def process_message
     case sent_via
     when 'sms_email'
-      SmsMailer.delay.text(to, from, message, reply_to)
+      SmsMailer.text(to, from, message, reply_to)
+      return true
     when 'sms'
-      sent_sms = SentSms.create!(message: message, recipient: to, sent_via: organization.sms_gateway)
-      sent_sms.queue_sms
+      sent_sms = SentSms.create(message_id: id, message: message, recipient: to, sent_via: organization.sms_gateway)
+      return sent_sms.send_sms
     when 'email'
-      PeopleMailer.delay.bulk_message(to, from, subject, message, reply_to)
+      PeopleMailer.bulk_message(to, from, subject, message, reply_to)
+      return true
     end
   end
 end

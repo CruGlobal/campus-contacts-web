@@ -1,6 +1,5 @@
 require 'sidekiq/web'
 Mh::Application.routes.draw do
-  get "profile/show"
 
   constraint = lambda { |request| Rails.env.development? || (request.env["rack.session"] &&
                                   request.env["rack.session"]["warden.user.user.key"] &&
@@ -9,6 +8,12 @@ Mh::Application.routes.draw do
                                   request.env["rack.session"]["warden.user.user.key"][0].constantize.find(request.env["rack.session"]["warden.user.user.key"][1].first).developer?) }
   constraints constraint do
     mount Sidekiq::Web => '/sidekiq'
+  end
+  
+  resources :bulk_messages, only: [] do
+    collection do
+      post :sms
+    end
   end
 
   resources :profile, only: [:show] do
@@ -164,7 +169,6 @@ Mh::Application.routes.draw do
       get :hide_update_notice
       get :search_ids
       post :bulk_email
-      post :bulk_sms
       post :bulk_comment
       get :all
       post :update_permissions

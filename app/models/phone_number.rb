@@ -50,7 +50,11 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def pretty_number
-    case
+    PhoneNumber.prettify(number)
+  end
+  
+  def self.prettify(number)
+    case number
     # Hungary
     when number =~ /^\+36/
       "#{number[0..2]} #{number[3]} #{number[4..6]}-#{number[7..10]}"
@@ -62,12 +66,14 @@ class PhoneNumber < ActiveRecord::Base
       case number.length
       when 7
         "#{number[0..2]}-#{number[3..-1]}"
-      when 10
-        "(#{number[0..2]}) #{number[3..5]}-#{number[6..-1]}"
-      when 9
-        "#{number[0..1]} #{number[-7..-5]}-#{number[-4..-1]}"
       when 8
         "#{number[0]} #{number[-7..-5]}-#{number[-4..-1]}"
+      when 9
+        "#{number[0..1]} #{number[-7..-5]}-#{number[-4..-1]}"
+      when 10
+        "(#{number[0..2]}) #{number[3..5]}-#{number[6..-1]}"
+      when 11
+        "(#{number[0..3]}) #{number[4..6]}-#{number[7..-1]}"
       else
         number
       end
