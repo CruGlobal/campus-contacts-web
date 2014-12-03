@@ -12,6 +12,9 @@ $ ->
   $(document).ready ->
     wiser_timezone_reload();
     
+    $(window).on "beforeunload", (e) ->
+      "Warning! Leaving this page will not save your changes." if $("body").data("has_changes") == "true"
+    
     $(document).on "hover", ".org_tree_link", ->
       unless $(this).hasClass("loaded")
         $(this).addClass("loaded")

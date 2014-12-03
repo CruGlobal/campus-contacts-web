@@ -22,6 +22,7 @@
  *= require superscroll
  *= require dashboard
  *= require jquery.notifications
+ *= require jquery.handsontable.full.min
  *= require excolor
  *= require global
  *= require advanced_search

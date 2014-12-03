@@ -126,8 +126,8 @@ module ApplicationHelper
          'organizations/transfer', 'organizations/do_transfer',
          'imports/new', 'imports/edit', 'imports/labels', 'imports/update', 'imports/create',
          'permissions/index', 'permissions/new', 'permissions/create', 'permissions/edit', 'permissions/update',
-         'movement_indicator_suggestions/index', 'movement_indicators/index', 'movement_indicators/create'
-
+         'movement_indicator_suggestions/index', 'movement_indicators/index', 'movement_indicators/create',
+         'surveys/mass_entry'
       true
     else
       false

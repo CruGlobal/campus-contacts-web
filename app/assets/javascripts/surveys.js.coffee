@@ -1,4 +1,87 @@
+$.fn.load_answers = () ->
+  survey_id = $("#mass_entry_table").data("survey-id")
+  $(".fetching-loader").show()
+  $(".saving-loader").hide()
+  $("#mass_entry_table").hide()
+  $("#mass_entry_table").handsontable("destroy")
+  $(".mass_entry_buttons").hide()
+  $.getJSON "/surveys/#{survey_id}/mass_entry_data.json", (response)->
+    $(".fetching-loader").hide()
+    $(".saving-loader").hide()
+    $("#mass_entry_table").show()
+    $(".mass_entry_buttons").show()
+    $("#mass_entry_table").handsontable
+      data: response['data']
+      columns: response['settings']
+      colHeaders: response['headers']
+      rowHeaders: true
+      manualColumnResize: true
+      nativeScrollbars: true
+      stretchH: 'all'
+      columnSorting: true
+      wordWrap: true
+      allowInvalid: true
+      minSpareRows: 1
+      contextMenu: ['undo','redo','remove_row']
+      fixedColumnsLeft: 2
+      beforeChange: ()->
+        $("body").data('has_changes','true')
+      cells: (row, col, prop) ->
+        cellProperties = {}
+        id = $("#mass_entry_table").handsontable("getDataAtCell", row, 0)
+        val = $("#mass_entry_table").handsontable("getDataAtCell", row, col)
+        if id == "" || id == null || id == undefined
+          cellProperties.readOnly = false
+        else if (val == "" || val == null)
+          cellProperties.readOnly = false
+        # else if (val != "" && val != null) && (col == 1 || col == 2 || col == 3)
+        #   cellProperties.readOnly = true
+        cellProperties
+
+      
 $ ->
+    
+  $("#mass_entry_table").bind 'scroll', (e)->
+    $(window).scroll();
+  
+  $(document).on "click", ".htSelectEditor option", (e)->
+    if $(this).attr('value') == ''
+      $(".htSelectEditor").find("option").prop("selected", false)
+      $(this).prop("selected", true)
+    else
+      if $(this).is(":selected")
+        $(this).prop("selected", false)
+      else
+        $(this).prop("selected", true)
+        if $(this).attr('value') != ''
+          $(".htSelectEditor").find("option[value='']").prop("selected", false)
+  
+  # if $("#copy_mass_entry").size() > 0
+  #   $(document).on "click", "#copy_mass_entry", (e)->
+  #     e.preventDefault()
+      
+  $(document).on "click", "#reload_mass_entry", (e)->
+    e.preventDefault()
+    if $("body").data("has_changes") == "true"
+      if(confirm('Warning! Reloading the Mass Entry table will not save your changes. Save changes before reloading page.'))
+        $.fn.load_answers()
+  
+  $(document).on "click", "#save_mass_entry", (e)->
+    e.preventDefault()
+    $(".saving-loader").show()
+    $("#mass_entry_table").hide()
+    $(".mass_entry_buttons").hide()
+    survey_id = $("#mass_entry_table").data("survey-id")
+    table_val = $("#mass_entry_table").handsontable("getData")
+    $.ajax
+      type: "POST"
+      url: "/surveys/#{survey_id}/mass_entry_save"
+      data: {values: table_val}
+  
+  if $("#mass_entry_table").size() > 0
+    $.fn.load_answers()
+    
+  
   $('#survey_background_color, #survey_text_color').excolor({root_path: '/assets/'})
   false
 

@@ -250,6 +250,9 @@ Mh::Application.routes.draw do
   resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
     member do
       get :start
+      get :mass_entry
+      get :mass_entry_data
+      post :mass_entry_save
     end
     collection do
       get :index_admin

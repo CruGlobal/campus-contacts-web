@@ -1,5 +1,5 @@
 #rest {background: none;}
 #left {display: none;}
-#main {margin: 15px;}
+#main {margin: 15px !important; margin-left: 15px !important;}
 .titlebar {padding: 10;}
 .controlbar {padding-left: 0px; padding-bottom: 15px;}

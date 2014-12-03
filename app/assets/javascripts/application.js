@@ -13,6 +13,9 @@
 //= require jquery.wiser_date
 //= require jquery.doubleScroll
 //= require jquery.qtip2
+//= require jquery.handsontable.full.min
+//= require jquery.handsontable.multiselect
+//= require jquery.zeroclipboard
 //= require jquery-ui-timepicker-addon_mh
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
