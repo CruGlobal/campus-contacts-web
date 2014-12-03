@@ -134,7 +134,7 @@ class SurveysControllerTest < ActionController::TestCase
       should "redirect to mhub when login option is 0" do
         @survey = Factory(:survey, login_option: 0)
         get :start, id: @survey.id
-        assert_redirected_to "surveys://mhub.cc:80/surveys/#{@survey.id}/start"
+        assert_redirected_to "https://mhub.cc:80/surveys/#{@survey.id}/start"
       end
 
       should "redirect to mhub when login option is 1" do
