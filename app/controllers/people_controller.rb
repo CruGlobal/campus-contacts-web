@@ -392,6 +392,7 @@ class PeopleController < ApplicationController
           subject: params[:subject],
           message: params[:body]
         )
+        @message.process_message
       end
     end
     render :nothing => true
