@@ -24,13 +24,14 @@ class BulkMessage < ActiveRecord::Base
       bulk_message.messages.each do |msg|
         if msg.sent_via == 'sms'
           receiver = PhoneNumber.prettify(msg.to)
+          receiver_name = msg.receiver.present? ? msg.receiver.name : "Unknown"
           if msg.status != 'sent'
             is_sent = msg.process_message
             proper = 1
-            results << {id: msg.id, receiver_name: msg.receiver.name, to: receiver, type: msg.sent_via, is_sent: is_sent}
+            results << {id: msg.id, receiver_name: receiver_name, to: receiver, type: msg.sent_via, is_sent: is_sent}
             with_failure = true unless is_sent
           else
-            results << {id: msg.id, receiver_name: msg.receiver.name, to: receiver, type: msg.sent_via, is_sent: msg.status == 'sent'}
+            results << {id: msg.id, receiver_name: receiver_name, to: receiver, type: msg.sent_via, is_sent: msg.status == 'sent'}
           end
         end
       end
