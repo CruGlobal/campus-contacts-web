@@ -8,6 +8,19 @@
 .no_wrap {
   white-space: nowrap;
 }
+.with_wrap{
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.sidebar-label{
+    width: 130px !important;
+    max-width: 130px !important;
+  }
+  &.profile_label{
+    max-width: 130px !important;
+  }
+}
 .contact_listing {
   .question {
     min-width: 100px;
