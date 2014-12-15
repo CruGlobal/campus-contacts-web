@@ -18,6 +18,7 @@
       	<% if params[:permission].blank? || ![Permission::ADMIN_ID,Permission::USER_ID].include?(params[:permission].map{|id| id }) %>
   	      <th class='status'>
             <%= sortable(:followup_status, t('.followup_status'), {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
+            <div class="icon help tip help_bubble_keyword" title="<%= t('contacts.index.status_header_guide') %>" align="center"></div>
           </th>
   		  <% end %>
 

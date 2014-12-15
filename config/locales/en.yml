@@ -871,6 +871,7 @@ en:
       add_contact: "Add a Contact to %{org}"
       clear_search_form: 'Clear Search Form'
       no_contacts: 'Sorry, there are no contacts here.'
+      status_header_guide: "Status is visible only for contacts with No Permissions. Contacts with User or Admin permissions will not have a Status entry"
       export: 'Export CSV'
       add_question_back: Click on a question to add it back to the page
       unassign_contact: "Unassign contact"

@@ -71,8 +71,8 @@ $ ->
     $.toggleLoader('profile_name','Applying Changes...')
     $.toggleLoader('ac_button_bar','Applying Changes...')
     $.ajax
-      type: 'GET',
-      url: "/interactions/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id,
+      type: 'POST',
+      url: "/contacts/set_permissions?people_ids=" + people_ids + "&permission_id=" + checked_permission_id,
       complete: ->
         $.fn.listCheckboxes()
 

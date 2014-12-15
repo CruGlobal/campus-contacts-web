@@ -27,22 +27,6 @@ class InteractionsController < ApplicationController
     @groups = @person.groups_for_org_id(current_organization.id)
   end
 
-  def set_permissions
-    @people = Person.where(id: params[:people_ids].split(','))
-    @permission_id = params[:permission_id]
-
-    @people.each do |person|
-      current_organization.change_person_permission(person, @permission_id, current_person.id)
-      @permissions = person.permissions_for_org_id(current_organization.id)
-      @assigned_tos = person.assigned_to_people_by_org(current_organization)
-    end
-
-    if @people.count == 1
-      @person = @people.first
-    end
-    permissions_for_assign
-  end
-
   def create_label
     @status = "false"
     if params[:name].present?

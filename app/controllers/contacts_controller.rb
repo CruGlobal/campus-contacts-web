@@ -13,6 +13,22 @@ class ContactsController < ApplicationController
     #render 'update_leader_error'
   end
 
+  def set_permissions
+    @people = Person.where(id: params[:people_ids].split(','))
+    @permission_id = params[:permission_id]
+
+    @people.each do |person|
+      current_organization.change_person_permission(person, @permission_id, current_person.id)
+      @permissions = person.permissions_for_org_id(current_organization.id)
+      @assigned_tos = person.assigned_to_people_by_org(current_organization)
+    end
+
+    if @people.count == 1
+      @person = @people.first
+    end
+    filter
+  end
+
   def bulk_update
     people_to_update = current_organization.all_people_with_archived.where("people.id IN (?)", params[:people_ids].split(","))
 
@@ -648,15 +664,6 @@ class ContactsController < ApplicationController
     def update_fb_friends
       fb_auth = current_user.authentications.first
       current_person.update_friends(fb_auth) if fb_auth.present?
-    end
-
-    def initialize_surveys_and_questions
-      @surveys = @organization.surveys
-      @all_questions = @organization.questions
-      excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
-      @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
-      @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
-      @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
     end
 
     def build_people_scope
