@@ -41,9 +41,14 @@ zh:
   application:
     add_contact:
       add_contact: 
+      confirm_existing_contact: 
+      existing_contact: 
+      existing_person_email: 
+      loading_description: 
       save_and_add: 
       save_and_close: 
       survey_mode_instructions: 
+      system_is_still_busy: 
       title_bio: 
       title_label: 
       title_optional: 
@@ -60,8 +65,10 @@ zh:
     assign_search:
       assign_explanation: 
       assign_to_user_note: 
+      copy_confirm_message: 
       copy_interactions: 
       copy_interactions_help: 
+      copy_show_orgs_guide: 
       copy_survey_answers: 
       keep_contact: 
       me: 
@@ -99,6 +106,16 @@ zh:
       surveys: 
       title: 
     assign: 
+    contact_list:
+      first_name: 
+      followup_status: 
+      gender: 
+      labels: 
+      last_name: 
+      last_survey: 
+      phone_number: 
+      status: 
+      surveys: 
     create:
       email_taken: 
       success: 
@@ -144,6 +161,7 @@ zh:
       add_question_back: 
       all: 
       all_responses: 
+      already_selected_an_existing_contact: 
       archived: 
       assign_contact: 
       assign_people: 
@@ -168,6 +186,7 @@ zh:
       edit_saved_search: 
       edit_this_search: 
       edit_true: 
+      email_is_already_exists: 
       export: 
       filter: 
       first_name: 
@@ -186,6 +205,7 @@ zh:
       import_step3_body2: 
       in_progress: 
       in_progress_responses: 
+      invalid_existing_contact: 
       last_name: 
       last_survey: 
       leaders: 
@@ -215,6 +235,7 @@ zh:
       search_saved: 
       send_reminder: 
       show_all: 
+      status_header_guide: 
       surveys: 
       type_above_field: 
       unassign_contact: 
@@ -240,11 +261,13 @@ zh:
     menu:
       add_question_back: 
       answered_surveys: 
+      column_header_guide: 
     mine:
       all: 
       comments: 
       completed: 
       detailed: 
+      details: 
       email: 
       first_name: 
       in_progress: 
@@ -350,7 +373,7 @@ zh:
     - 十二月
     day_names: 
     formats:
-      default: ! '%Y/%m/%d'
+      default: '%Y/%m/%d'
       long: 
       short: 
       time: 
@@ -381,6 +404,42 @@ zh:
       second: 
       year: 
   dialogs:
+    advanced_search:
+      header: 
+      search_any: 
+      search_any_guide: 
+      search_filter:
+        contact_data:
+          assigned: 
+          faculty: 
+          gender: 
+          status: 
+          title: 
+        label_and_group_data:
+          groups: 
+          labels: 
+          title: 
+        survey_questions:
+          loader: 
+          no_questions: 
+          title: 
+        surveys:
+          range: 
+          range_guide: 
+          scope: 
+          scope_guide: 
+          title: 
+        title: 
+    dialog_avatar:
+      browse_computer: 
+      change_avatar: 
+      confirm_remove: 
+      dialog_title: 
+      facebook_search_guide: 
+      invalid_format: 
+      remove_avatar: 
+    dialog_labels:
+      guide: 
     search_people_filters:
       advanced_search: 
       advanced_search_link: 
@@ -441,6 +500,7 @@ zh:
     alert: 
     archive: 
     archived: 
+    assign_to: 
     assigned_to: 
     assigned_to_both_option: 
     assigned_to_first_option: 
@@ -454,6 +514,7 @@ zh:
     contact_location: 
     contacts_updated_from: 
     country: 
+    cru_status: 
     dash: 
     default_email_from: 
     delete: 
@@ -465,9 +526,12 @@ zh:
     export_csv_help: 
     export_vcard_help: 
     faculty: 
+    'false': 
+    faq_redirect_link: 
     female: 
     first_name: 
     gender: 
+    group: 
     group_name: 
     help_redirect_link: 
     help_redirect_link_import: 
@@ -518,6 +582,7 @@ zh:
     sms_preview_title: 
     state: 
     status: 
+    student_status: 
     subject: 
     survey: 
     survey_help_desc: 
@@ -526,6 +591,7 @@ zh:
     survey_web_tip_html: 
     to: 
     transfer: 
+    'true': 
     unassign: 
     work: 
     zip: 
@@ -579,6 +645,7 @@ zh:
     new:
       new_group: 
     new_label_prompt: 
+    no_group_found: 
     person:
       remove_confirm: 
     see_all: 
@@ -650,6 +717,7 @@ zh:
     edit_this_survey: 
     profile_info:
       email_contact_info: 
+      opt_in_help: 
     profile_interactions_edit:
       confirm_delete_interaction: 
   keyword_request_mailer:
@@ -724,6 +792,7 @@ zh:
   movement_indicator_suggestions:
     index:
       fetching: 
+      guide: 
       list_heading: 
       show_old: 
       title: 
@@ -884,6 +953,7 @@ zh:
       delete: 
       delete_confirm: 
       delete_zone: 
+      form_description: 
       infobase_explanation: 
       name_explain: 
       show_sub_explain: 
@@ -943,6 +1013,8 @@ zh:
     bulk_delete:
       cannot_delete_admin_error: 
       deleting_people_success: 
+    bulk_sms:
+      sms_footer_message: 
     create:
       email_error: 
       email_taken: 
@@ -1073,6 +1145,44 @@ zh:
       organizational_roles: 
       system_roles: 
       update: 
+  search:
+    assignments:
+      title: 
+    faculty:
+      'false': 
+      title: 
+      'true': 
+    gender:
+      female: 
+      male: 
+      title: 
+    groups:
+      title: 
+    included_surveys:
+      title: 
+    interactions:
+      title: 
+    labels:
+      title: 
+    permissions:
+      title: 
+    sidebar:
+      friends_only: 
+      include_archived: 
+      saved_hide: 
+      saved_search_title: 
+      saved_show: 
+      search_any_placeholder: 
+      standard_hide: 
+      standard_show: 
+      standard_title: 
+      survey_hide: 
+      survey_show: 
+      survey_title: 
+    status:
+      title: 
+    triggers:
+      title: 
   sessions:
     destroy:
       signed_out: 
@@ -1087,6 +1197,9 @@ zh:
       login_paragraph_mhub: 
       login_with_facebook: 
       no_facebook: 
+      no_ticket_error: 
+      not_allowed_to_use_cas: 
+      not_allowed_to_use_key: 
       skip_facebook: 
       start_survey: 
       waiting_for_logout: 
@@ -1096,6 +1209,11 @@ zh:
     email_should_be_unique_msg: 
     keyword_inactive: 
     no_survey: 
+    sms_help_guide: 
+    sms_subscribed_with_org: 
+    sms_subscribed_without_org: 
+    sms_unsubscribed_with_org: 
+    sms_unsubscribed_without_org: 
   sms_keywords:
     all_keywords: 
     default_rejection_email: 
@@ -1184,7 +1302,9 @@ zh:
     nationality: 国籍
     new:
       greeting_no_name: 您好！
-      greeting_with_name: ! '%{name}，您好！'
+      greeting_with_name: '%{name}，您好！'
+    no_completed_surveys: 
+    no_surveys: 
     phone_number: 电话或手机号码
     room: 宿舍房间号
     select_language: 选择语言
@@ -1213,10 +1333,15 @@ zh:
       login_paragraph: 
       login_paragraph_tip: 
       logo: 
+      logo_valid_format: 
       no_fb_login_option: 
       post_survey_message: 
       post_survey_placeholder: 
       redirect_url: 
+      remove_logo_cofirmation: 
+      remove_logo_failed: 
+      remove_logo_link: 
+      remove_logo_success: 
       skip_fb_login_option: 
       survey_associated_with: 
       terminology: 
@@ -1234,10 +1359,16 @@ zh:
       delete_survey: 
       edit_survey: 
       link: 
+      manual_entry: 
       new: 
       no_keywords: 
       no_surveys: 
       preview_survey: 
+    mass_entry:
+      help: 
+      loading: 
+      saving: 
+      title: 
     new:
       choose_keyword_explanation_html: 
       create_a_survey: 
@@ -1249,6 +1380,7 @@ zh:
         autonotify_guide: 
         autonotify_keywords_label: 
         autonotify_leader_label: 
+        autonotify_tip: 
         hidden: 
         leaders: 
         trigger_words: 
@@ -1285,6 +1417,7 @@ zh:
         predefined: 
         predefined_help: 
         previously_used: 
+        your_custom_question_help: 
         your_questions: 
         your_questions_help: 
       multiple_choice_form:
