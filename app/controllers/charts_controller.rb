@@ -9,6 +9,27 @@ class ChartsController < ApplicationController
     get_movement_stages
     get_changed_lives
   end
+  
+  def save_snapshot
+    @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
+  end
+  
+  def delete_snapshot
+    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
+    @saved_visual_tool.delete if @saved_visual_tool.present?
+  end
+  
+  def save_trend
+    @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:trend_name], group: Chart::TREND)
+    @saved_visual_tool.more_info[:start_date] = params[:start_date]
+    @saved_visual_tool.more_info[:end_date] = params[:end_date]
+    @saved_visual_tool.save
+  end
+  
+  def delete_trend
+    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
+    @saved_visual_tool.delete if @saved_visual_tool.present?
+  end
 
   def update_snapshot_movements
     get_snapshot_chart
@@ -22,6 +43,34 @@ class ChartsController < ApplicationController
     refresh_snapshot_data
     get_movement_stages
     get_changed_lives
+  end
+  
+  def load_snapshot
+    @snapshot = current_person.saved_visual_tools.find_by_id(params[:id])
+    if @snapshot.present?
+      params[:all] = "false"
+      params[:movements] = @snapshot.movement_ids
+      update_snapshot_movements
+      render 'snapshot'
+    else
+      redirect_to snapshot_charts_path
+    end
+  end
+  
+  def load_trend
+    @trend = current_person.saved_visual_tools.find_by_id(params[:id])
+    if @trend.present?
+      params[:all] = "false"
+      params[:movements] = @trend.movement_ids
+      if @trend.more_info.present?
+        params["start_date"] = @trend.more_info[:start_date] if @trend.more_info[:start_date].present?
+        params["end_date"] = @trend.more_info[:end_date] if @trend.more_info[:end_date].present?
+      end
+      update_trend_movements
+      render 'trend'
+    else
+      redirect_to trend_charts_path
+    end
   end
 
   def update_snapshot_range
@@ -173,6 +222,7 @@ class ChartsController < ApplicationController
   protected
 
   def get_snapshot_chart
+    @saved_visual_tools = current_user.person.saved_visual_tools.where(group: Chart::SNAPSHOT)
     get_chart(Chart::SNAPSHOT, true)
   end
 
@@ -184,6 +234,7 @@ class ChartsController < ApplicationController
   end
 
   def get_trend_chart
+    @saved_visual_tools = current_user.person.saved_visual_tools.where(group: Chart::TREND)
     get_chart(Chart::TREND, true, true)
   end
 

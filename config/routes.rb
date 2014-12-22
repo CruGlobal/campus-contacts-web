@@ -229,6 +229,12 @@ Mh::Application.routes.draw do
   resources :charts do
     collection do
       get :snapshot
+      get :load_snapshot
+      post :save_snapshot
+      get :load_trend
+      post :delete_snapshot
+      post :save_trend
+      post :delete_trend
       post :update_snapshot_movements
       post :update_snapshot_range
       get :goal

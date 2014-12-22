@@ -27,6 +27,7 @@ class Person < ActiveRecord::Base
   has_many :group_memberships
   has_many :groups, through: :group_memberships
   has_many :charts
+  has_many :saved_visual_tools
 
   has_one :sent_person
   has_many :sent_messages, class_name: "Message", foreign_key: "person_id"
