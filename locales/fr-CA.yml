@@ -1,0 +1,1546 @@
+fr-CA:
+  activerecord:
+    errors:
+      full_messages:
+        format: '%{attribute} %{message}'
+      messages:
+        accepted: doit être accepté
+        blank: ne peut pas être laissé en blanc
+        confirmation: ne correspond pas à la confirmation
+        empty: ne peut pas être vide
+        equal_to: doit être égal à %{count}
+        even: doit être un nombre pair
+        exclusion: est réservé
+        greater_than: doit être supérieur à %{count}
+        greater_than_or_equal_to: doit être supérieur à ou égal à %{count}
+        inclusion: n'est pas compris dans la liste
+        invalid: est invalide
+        less_than: doit être inférieur à %{count}
+        less_than_or_equal_to: doit être inférieur à ou égal à %{count}
+        not_a_number: n'est pas un nombre
+        not_an_integer: doit être un nombre entier
+        odd: doit être un nombre impair
+        record_invalid: 'Erreur de validation: %{errors}'
+        taken: a déjà été utilisé
+        too_long: est trop long (maximum de %{count} caractères
+        too_short: est trop court (minimum de %{count} caractères)
+        wrong_length: est la mauvaise longueur (devrait contenir %{count} caractères)
+      models:
+        email_address:
+          attributes:
+            email:
+              blank: ne peut pas être laissé en blanc
+              invalid: est dans un format non valide
+              taken: 
+      template:
+        body: 'Il y a eu des problèmes avec les champs suivants:'
+        header:
+          one: une erreur a empêché ce %{model} d'être sauvegardé
+          other: '%{count} a empêché ce %{model} d''être sauvegardé'
+    models:
+      person: informations
+      sms_keyword: Mot clé
+  application:
+    add_contact:
+      add_contact: Ajouter un contact à %{org}
+      confirm_existing_contact: 
+      existing_contact: 
+      existing_person_email: 
+      loading_description: 
+      save_and_add: Sauvegarder et ajouter un autre
+      save_and_close: Sauvegarder et fermer
+      survey_mode_instructions: 'Si la personne que vous ajoutez est à côté de vous, cliquez sur « Entrer en mode des sondages » au coin supérieur droit de votre écran. '
+      system_is_still_busy: 
+      title_bio: Bio
+      title_label: Étiquettes
+      title_optional: ¨(Optionnel)
+      title_permission: Permissions
+      title_surveys: Sondage
+    assign:
+      assign_explanation: 'Vous pouvez assigner un contact en choisissant n''importe laquelle des options ci-dessous:'
+      keep_contact: Cochez la case afin de laisser une copie du contact dans l'organisme.
+      me: Moi
+      type_to_find_group: Tapez afin de trouver un groupe, puis cliquez sur le nom du groupe
+      type_to_find_label: Tapez afin de trouver une étiquette, puis cliquez sur le nom de l'étiquette
+      type_to_find_leader: Tapez afin de trouver un leader, puis cliquez sur le nom du leader
+      type_to_find_org: Tapez afin de trouver un(e) %{terminology}, puis cliquez sur le nom du (de la) %{terminology}
+    assign_search:
+      assign_explanation: 'Vous pouvez assigner un contact en choisissant n''importe laquelle des options ci-dessous:'
+      assign_to_user_note: 'Ceci ajoutera une allocation à toute autre allocation déjà effectuée. '
+      copy_confirm_message: 
+      copy_interactions: Copier les interactions avec le contact
+      copy_interactions_help: 'Les paramètres de confidentialité seront respectées: Partager avec tous ici = partager avec tous là-bas; partager avec nos administrateurs = partager avec leurs administrateurs; partager avec moi seulement = partager avec moi seulement.'
+      copy_show_orgs_guide: 
+      copy_survey_answers: Copier les réponses au sondage avec le contact.
+      keep_contact: Laisser une copie du contact dans l'organisme
+      me: Moi
+      type_to_find_group: Tapez afin de trouver un groupe, puis cliquez sur le nom du groupe
+      type_to_find_label: Tapez afin de trouver une étiquette, puis cliquez sur le nom de l'étiquette
+      type_to_find_leader: Tapez afin de trouver un leader, puis cliquez sur le nom du leader.
+      type_to_find_org: Tapez afin de trouver un(e) %{terminology}, puis cliquez sur le nom du (de la) %{terminology}
+    messages:
+      question_too_long: 'AVERTISSEMENT: Cette question surpasse la limite de longueur d''un message texte unique et pourra être divisée en plusieurs messages.  '
+  batch:
+    new_person_message: 'Comme administrateur de %{org_name} pour <a href=''https://www.missionhub.com'' target=''_blank''>MissionHub</a>, il y a de nouveaux contacts pour votre organisme. Veuillez connectez-vous dès que possible afin de faire la suite avec les contacts. Vous trouverez ci-dessous une liste de %{contacts_count} nouveaux contacts. '
+    person_transfer_message: 'Comme administrateur de %{org_name} pour <a href=''https://www.missionhub.com'' target=''_blank''>MissionHub</a>, on vous a envoyé de nouveaux contacts. Veuillez connectez-vous dès que possible afin de faire la suite avec les contacts. Il se peut qu''il y aient des informations supplémentaires concernant les contacts dans la section des commentaires de leurs profils personnels. S''il n''y en a pas, vous désirerez peut-être contacter les expéditeurs à leurs adresses de courriel. Vous trouverez ci-dessous une liste de %{contacts_count} contacts envoyés. '
+  bulk_email: Courriel de masse
+  bulk_sms: Message texte en masse
+  charts:
+    snapshot:
+      key_leader: 
+      launched: 
+      movement_stages: 
+      multiplying: 
+      pioneering: 
+      title: 
+    trend:
+      year_ago: Ceci sera disponible seulement si la Date de début et la Date de fin sont à moins de 12 mois d'intervalle.
+  contacts:
+    add_contact: Ajouter un contact
+    all_contacts:
+      first_name: Prénom
+      gender: Sexe
+      labels: Étiquettes
+      last_name: Nom
+      last_survey: Dernier sondage
+      phone_number: Téléphone
+      status: Statut
+      surveys: Sondages
+      title: Tous les contacts
+    assign: Assigner
+    contact_list:
+      first_name: 
+      followup_status: 
+      gender: 
+      labels: 
+      last_name: 
+      last_survey: 
+      phone_number: 
+      status: 
+      surveys: 
+    create:
+      email_taken: 'Oups! Cette adresse courriel est déjà utilisée. Veuillez envoyer un courriel à support@missionhub.com avec l''ADRESSE COURRIEL et le NOM de la personne à laquelle vous désirez ajouter l''addresse courriel.  '
+      success: Le profil de %{name} a été mis à jour
+    edit:
+      additional_information: Informations supplémentaires
+      back: Retourner au profil
+      basic_information: Informations de base
+      cancel: Annuler et retourner au profil
+    form:
+      email: Adresse de courriel
+      first_name: Prénom
+      last_name: Nom
+      phone_number: Numéro de téléphone
+    import_contacts:
+      blank_header: Un des en-têtes du CSV est en blanc
+      cause_1: 
+      cause_2: 
+      cause_3: 
+      download_sample_csv: Téléchanger un fichier CSV type
+      download_template_csv: Téléchanger un fichier CSV modèle
+      duplicate_header_match: Au moins deux des en-têtes contiennent le même attribut de personne sélectionnée ou la même question de sondage
+      error: 'L''importation CSV de certaines rangées est échouée '
+      help_info: S'il vous plaît, je ne comprends toujours pas
+      instruction_1: Suivez l'ordre des colonnes tel qu'illustré ci-dessus
+      instruction_2: Le prénom ne devrait pas être manquant
+      instruction_3: Les numéros de téléphone et les adresses de courriel devraient être dans le bon format
+      instruction_4: Des en-têtes devraient être présents
+      instructions_label: Instructions
+      present_first_name: Le prénom est requis pour l'importation
+      present_firstname: Le prénom est requis pour l'importation
+      select_csv: Sélectionner un fichier CSV
+      success: Votre transfert CVS est en traitement. Vous recevrez un courriel dès la fin du processus
+      tip_2: 'Dans votre première rangée, donnez les en-têtes tels qu''indiqués ici: <strong>PRÉNOM, NOM, STATUT, SEXE, COURRIEL, NUMÉRO DE TÉLÉPHONE, ADRESSE 1, ADRESSE 2, VILLE, PROV, PAYS, C.P. </strong>'
+    index:
+      add: 
+      add_already_registered_contact: Cet individu existe déjà dans votre organisme actuel.
+      add_already_registered_email: 'Ladresse de courriel selectionnée ci-dessous est déjà utilisée par une autre personne en MissionHub, ou il existe peut-être un enregistrement double ailleurs dans le système pour cet individu. Veuillez contacter support@missionhub si vous avez besoin de l''aide. '
+      add_contact: Ajouter un contact à %{org}
+      add_label_empty: L'étiquette vide en peut pas être sauvegardée. Veuillez essayer de nouveau.
+      add_label_exists: L'étiquette est déjà comprise dans la liste!
+      add_label_failed: L'étiquette n'a pas été sauvegardée. Veuillez essayer de nouveau.
+      add_label_success: Une nouvelle étiquette a été ajoutée!
+      add_question_back: Cliquez sur une question pour l'ajouter de nouveau à la page
+      all: Tous
+      all_responses: Tous les contacts
+      already_selected_an_existing_contact: 
+      archived: Archivé
+      assign_contact:
+        one: Assigner 1 contact
+        other: Assigner %{count} contact
+      assign_people:
+        one: Assigner 1 personne
+        other: Assigner %{count} personnes
+      assign_to: 'Assigné à: '
+      assigned_to: Assigné à
+      bulk_vcard_dialog_desc: Nous pouvons vous envoyer les informations concernent ce contact par courriel, ou vous pouvez tout télécharger dans un fichier Zip.
+      bulk_vcard_dialog_title: Options pour les vCards en masse
+      bulk_vcard_download_message: Un fichier .vcf contenant toutes coordonnées demandées se télécharge.
+      bulk_vcard_email_message: 'Les coordonnées du contact ont été envoyées à '
+      clear_search_form: Effacer le formulaire de recherche
+      completed: Terminé
+      completed_contacts: Tous les contacts - terminé
+      contact_no_select_message: Veuillez sélectionner au moins un contact
+      delete_confirm: Vous allez envoyer ce contact à la liste « Ne pas contacter ». Si ce n'est pas ce que vouliez faire, cliquez sur Annuler.
+      delete_contact: Ne pas contacter
+      delete_saved_search: Supprimer cette recherche
+      delete_search_confirm: Êtes-vous sûr de vouloir supprimer cette recherche?
+      delete_this_search: Supprimer cette recherche
+      destroy_confirm: Êtes-vous sûr de vouloir supprimer ce contact? Si ce n'est pas ce que vous vouliez faire, cliquez sur Annuler.
+      dnc: Ne pas contacter
+      dnc_contacts: 'Tous les contacts: «Ne pas contacter»'
+      edit_saved_search: Modifier cette recherche
+      edit_this_search: Modifier cette recherche
+      edit_true: '&edit=true'
+      email_is_already_exists: 
+      export: Exporter CSV
+      filter: Rechercher
+      first_name: Prénom
+      for_this_permission_email_is_required: Un courriel est requis pour la permission pour '%{permission}'
+      for_this_permission_email_is_required_no_name: Un courriel est requis pour cette permission.
+      friend_responses: Les contacts qui sont aussi mes amis sur Facebook.
+      friends: Amis
+      group: Groupe
+      hidden_questions: Questions masquées
+      import_contacts: Importer des contacts
+      import_contacts2: Configurer vos en-têtes CSV
+      import_contacts3: Étiqueter de nouveaux contacts
+      import_labels_checkbox: Je voudrais étiqueter mes nouveaux contacts.
+      import_new_label: Ajouter une étiquette nouvelle
+      import_step3_body1: Vous êtes presque prêt à transférer %{count} nouveaux contacts.
+      import_step3_body2: Vous n'avez qu'à choisir n'importe quelle étiquette de la liste ci-dessous que vous aimeriez appliquer à ces nouveaux contacts, et ensuite à cliquer sur « Importer maintenant ».
+      in_progress: Assigné
+      in_progress_responses: 'Tous les contacts: Assignés'
+      invalid_existing_contact: 
+      last_name: Nom
+      last_survey: Dernier sondage
+      leaders: Leaders
+      matching_seach: Correspondant à vos critères de recherche
+      me: Moi
+      my_friends: Mes amis
+      no_activity: Aucune activité
+      no_activity_responses: 'Tous les contacts: aucune activité'
+      no_contacts: Désolé, il n'y a pas de contacts ici.
+      no_name_message: Prénom et Nom sont requis.
+      none_checked: Il faut sélectionner un contact pour utiliser cette fonction.
+      none_email_vcard: Un courriel est requis pour envoyer ce vCard.
+      not_valid_leader_selected: Vous avez sélectionné des contacts sans adresse courriel. Les autorisations <br/>Admin et Utilisateur seront désactivées.
+      phone_number: Téléphone
+      reminder_email_body: "Salut! \nJuste vous faire savoir que vous avez reçu de nouveaux contacts pour le suivi. \nConnectez-vous à MissionHub à http://www.missionhub.com pour accéder à vos contacts. \nEn Christ,\n%{name}"
+      reminder_email_subject: De nouveaux contacts sont arrivés!
+      responses_assigned_to: Assignés à %{assigned_to}
+      save_this_search: Sauvegarder cette recherche
+      save_this_search_placeholder: Nommer cette recherche
+      saved_search_name: Un nom désigné pour la recherche est requis.
+      saved_searches: Recherches sauvegardées
+      search_contact_no_results: Aucun résultat trouvé.
+      search_contact_results_description: Veuillez utiliser le formulaire pour trouver un contact.
+      search_locate_contact_button: Trouver
+      search_locate_help: Vous pouvez entrer, en entier ou en partie, le Prénom, Nom, et/ou Adresse de courriel, puis cliquer sur le bouton « Trouver » afin de découvrir dans lequel de « vos organismes MissionHub » l'individu est situé actuellement.
+      search_locate_title: Trouver la localisation d'un contact
+      search_saved: Cette recherche a été sauvegardée
+      send_reminder: Envoyer un rappel
+      show_all: Voir «En cours» des contacts
+      status_header_guide: 
+      surveys: Sondages
+      type_above_field: Commencer à taper dans le champ ci-dessus pour rechercher un endroit où vous allez transferer ces personnes
+      unassign_contact: Retirer ce contact
+      unassigned: Non assigné
+      unassigned_responses: 'Tous les contacts: Non assignés'
+      user: Utilisateur
+      vcard: Exporter vCard
+      which_org: Vous devez choisir de quel organisme vous voulez faire le suivi
+    leader:
+      archive_confirm: '%{person} sera archivé'
+      delete_confirm: Êtes-vous sûr de vouloir supprimer %{person} en tant que leader?
+      delete_confirm_with_instructions: 'Si vous voulez garder %{person} dans votre organisme, suivez les étapes suivantes: vous devez d''abord lui assigner une autre autorisation ou étiquette; cliquez  sur ANNULER; allez à l''écran Répertoire et « Ajouter une étiquette », indiquez par example participant ou ancien; le supprimez en tant que leader. Si vous voulez le supprimer complètement de votre organisme, cliquez OK. '
+    leader_form:
+      start_typing: 'Commencez à taper un nom pour trouver une personne que vous désirez faire leader:'
+    leaders:
+      reminder_prompt: Certains de vos leaders ont des contacts qui n'ont pas encore été suivis! Avisez-les!
+      show_more: Montrer plus
+    mailer:
+      bulk_vcard_email_content: Un vCard contenant les contacts que vous avez sélectionnés est attaché à ce courriel
+      bulk_vcard_email_subject: Votre demande de coordonnées
+      vcard_email_content: Un vCard contenant le contact que vous avez sélectionné est attaché à ce courriel.
+      vcard_email_subject: 
+    menu:
+      add_question_back: 
+      answered_surveys: Sondages
+      column_header_guide: 
+    mine:
+      all: Tous
+      comments: Mes commentaires
+      completed: Terminé
+      detailed: Détaillé
+      details: 
+      email: Courriel
+      first_name: Prénom
+      in_progress: En cours
+      interactions: Mes interactions
+      last_name: Nom
+      my_contacts: Mes contacts
+      name: Nom
+      phone: Numéro de téléphone
+      year: Année
+    new_sidebar:
+      contact_assignments: Contacts assignés
+      interaction_types: Interactions
+      labels: Étiquettes
+      more_options: Plus
+      permissions: Autorisations
+    permission_assign_success: Étiquettes des contacts assignés réussis
+    plain:
+      exit_survey: Quitter le mode de sondages
+    role_assign_success: Étiquettes des contacts assignés réussis
+    search:
+      add_question: Cliquez sur une question pour lui ajouter un champ de recherche
+      first_name: Prénom
+      last_name: Nom
+      phone_number: Numéro de téléphone
+    show:
+      add_comment: Ajouter un commentaire / Mettre le status à jour
+      add_comments_here: Ajoutez des commentaires ici ...
+      attach_rejoicable: Ajouter un « Alléluia! »
+      edit_contact_info: Modifier les coordonnées du contqact
+      email: Courriel
+      facebook_profile: Profil sur Facebook
+      phone_number: '# de téléphone'
+      previous_comments: Commentaires précédents
+      send_contact_info: Envoyer les coordonnées du contact
+      status: Statut
+      survey_answers: Réponses au sondage
+    sidebar:
+      show_less: Montrer moins
+      show_more: Montrer plus
+    statuses:
+      attempted_contact: Essayé de contacter
+      completed: Terminé
+      contacted: Contacté
+      do_not_contact: Ne pas contacter
+      uncontacted: Non contacté
+    thanks:
+      done: Fini
+      facebook: Vous êtes déconnecté de Facebook
+      message: Merci de votre intérêt
+    unassign: Retirer
+    update_notice_content: Contenu de l'annonce
+    update_notice_link: Découvrez le nouveau visage de notre blogue.
+    update_notice_link_url: http://blog.missionhub.com/2012/10/16/new-all-contacts/
+    update_notice_title: Titre de l'annonce
+    update_notice_toggle: Ne plus afficher ce message
+  dashboard:
+    button_add: AJOUTER
+    button_add_sub: UN CONTACT
+    button_assign: ASSIGNER
+    button_assign_sub: POUR LE SUIVI
+    button_email: COURRIEL
+    button_email_sub: ENVOYER
+    button_import: IMPORTER
+    button_import_sub: CONTACTS
+    button_label: ÉTIQUETTES
+    button_label_sub: CRÉER DES LISTES
+    button_sent: ENVOYÉ
+    button_sent_sub: MESSAGES
+    button_text: TEXTE
+    button_text_sub: ENVOYER
+    button_view: VOIR
+    button_view_sub: TOUS LES CONTACTS
+    close: Fermer
+    header_text: Faciliter le soin des personnes qui ont le plus besoin de vous
+    learn_more: En savoir plus
+    panel_managing: Gérer les contacts
+    panel_messaging: Evoyer des messages aux contacts
+    panel_storing: Enregistrer des contacts
+    send_message_guide: 
+    send_message_video_guide: Cliquez sur le vidéo ci-dessous pour voir comment faire.
+  date:
+    abbr_day_names:
+    - lun.
+    - mar.
+    - mer.
+    - jeu.
+    - ven.
+    - sam.
+    - dim.
+    abbr_month_names:
+    - janv.
+    - févr.
+    - mars
+    - avr.
+    - mai
+    - juin
+    - juill.
+    - août
+    - sept.
+    - oct.
+    - nov.
+    - déc.
+    day_names:
+    - lundi
+    - mardi
+    - mercredi
+    - jeudi
+    - vendredi
+    - samedi
+    - dimanche
+    formats:
+      default: '%Y-%m-%d'
+      long: le %d %B %Y
+      short: le %d %b
+      time: '%l h %M %p'
+    month_names:
+    - janvier
+    - février
+    - mars
+    - avril
+    - mai
+    - juin
+    - juillet
+    - août
+    - septembre
+    - octobre
+    - novembre
+    - décembre
+    order:
+    - :année
+    - :mois
+    - :jour
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: environ une heure
+        other: environ %{count} heures
+      about_x_months:
+        one: environ un mois
+        other: environ %{count} mois
+      about_x_years:
+        one: environ une année
+        other: environ %{count} années
+      almost_x_years:
+        one: presqu'un mois
+        other: presque %{count} mois
+      half_a_minute: 30 secondes
+      less_than_x_minutes:
+        one: moins qu'une minute
+        other: moins que %{count} minutes
+      less_than_x_seconds:
+        one: moins qu'une seconde
+        other: moins que %{count} secondes
+      over_x_years:
+        one: plus qu'une année
+        other: plus que %{count} années
+      x_days:
+        one: un jour
+        other: '%{count} jours'
+      x_minutes:
+        one: une minute
+        other: '%{count} minutes'
+      x_months:
+        one: un mois
+        other: '%{count} mois'
+      x_seconds:
+        one: une seconde
+        other: '%{count} secondes'
+    prompts:
+      day: Jour
+      hour: Heure
+      minute: Minute
+      month: Mois
+      second: Secondes
+      year: Année
+  dialogs:
+    advanced_search:
+      header: 
+      search_any: 
+      search_any_guide: 
+      search_filter:
+        contact_data:
+          assigned: 
+          faculty: 
+          gender: 
+          status: 
+          title: 
+        label_and_group_data:
+          groups: 
+          labels: 
+          title: 
+        survey_questions:
+          loader: 
+          no_questions: 
+          title: 
+        surveys:
+          range: 
+          range_guide: 
+          scope: 
+          scope_guide: 
+          title: 
+        title: 
+    dialog_avatar:
+      browse_computer: 
+      change_avatar: 
+      confirm_remove: 
+      dialog_title: 
+      facebook_search_guide: 
+      invalid_format: 
+      remove_avatar: 
+    dialog_labels:
+      guide: 
+    search_people_filters:
+      advanced_search: Passer à la Recherche avancée
+      advanced_search_link: Recherche avancée
+      basic_search: Passer à la Recherche de base
+      clear_search_form: Effacer le formulaire de recherche
+      email: Adressse de courriel
+      first_name: Prénom
+      last_name: Nom
+      permission: Étiquette
+      phone: Numéro de téléphone
+      phone_number: Numéro de téléphone
+      search_placeholder: Rechercher par le prénom, nom ou courriel
+      search_title: Rechercher
+  errors:
+    format: '%{attribute} %{message}'
+    messages:
+      accepted: doit être accepté
+      blank: ne peut pas être en blanc
+      confirmation: ne correspond pas à la confirmation
+      empty: ne peut pas être vide
+      equal_to: doit être égal à %{count}
+      even: doit être un nombre pair
+      exclusion: est réservé
+      greater_than: doit être supérieur à %{count}
+      greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      inclusion: n'est pas compris dans la liste
+      invalid: est invalide
+      less_than: doit être inférieur à %{count}
+      less_than_or_equal_to: doit être inférieur ou égal à %{count}
+      not_a_number: n'est pas un nombre
+      not_an_integer: doit être un nombre entier
+      odd: doit être un nombre impair
+      too_long: est trop long (maximum de %{count} caractères
+      too_short: est trop court (minimum de %{count} caractères
+      wrong_length: est la mauvaise longueur (devrait être %{count} caractères)
+  followup_comments:
+    index:
+      comment: Commenter
+      comments_title: Commentaires
+      date_commented: Date
+      email: Courriel
+      filter: Rechercher
+      first_name: Prénom
+      last_name: Nom
+      phone_number: Numéro de téléphone
+      status: Statut
+    search:
+      search_placeholder: Tapez votre recherche ici
+      search_title: Rechercher
+  general:
+    add: Ajouter
+    add_a_leader: Ajouter un leader
+    adding: Ajoutant ...
+    address: Adresse
+    address1: Adresse 1
+    address2: Adresse 2
+    adv_search: Recherche avancée
+    alert: Alerte
+    archive: Archive
+    archived: Archivé
+    assign_to: 
+    assigned_to: Assigné à
+    assigned_to_both_option: Aux deux
+    assigned_to_first_option: Assigné
+    assigned_to_second_option: Non assigné
+    assignment: Assigné à
+    autocomplete_name_hint: 'Tapez un nom ou un url d''un profil sur Facebook ici:'
+    back: Retour
+    both: Les deux
+    city: Ville
+    comment_is_blank: Veuillez entrer votre commentaire.
+    contact_location: Endroit du contact
+    contacts_updated_from: Formulaire actualisé du contact
+    country: Pays
+    cru_status: 
+    dash: '-'
+    default_email_from: do-not-reply@mhub.cc
+    delete: Supprimer
+    edit: Modifier
+    email: Courriel
+    email_autocomplete_description: Tapez pour rechercher par prénom, nom, courriel, nom de groupe, ou nom d'étiquette
+    email_autocomplete_description_admin: Tapez pour rechercher par prénom, nom, courriel, nom de groupe, nom d'étiquette, ou par tous.
+    email_note: 'Cochez cette case pour envoyer votre Courriel avec un « réponse anonyme à » de do-not-reply@missionhub.com. Assurez-vous de vous identifier ou d''identifier votre organisme dans le texte de votre courriel. '
+    export_csv_help: Exporter un tableur
+    export_vcard_help: Exporter à un liste de contacts (courriel ou téléphone)
+    faculty: Faculté
+    'false': 
+    faq_redirect_link: 
+    female: Femme
+    first_name: Prénom
+    gender: Sexe
+    group: 
+    group_name: Groupe
+    help_redirect_link: http://help.missionhub.com
+    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
+    hide: cacher
+    home: Accueil
+    keyword: Mot clé
+    label_clear_selected: Effacer les étiquettes sélectionnées
+    label_search_help: Si vous sélectionnez deux étiquettes, par example « Admin » et « Leader », <b>"N'IMPORTE LAQUELLE"</b> vous indiquerait des personnes avec L'UNE OU L'AUTRE des étiquettes, tandis que <b>"TOUTES"</b> réduirait la recherche en vous indiquerant seulement les personnes avec LES DEUX étiquettes. <br/><br/><b>"N'IMPORTE QUELLE"</b> utilise la logique booléenne  "OU " pour élargir la recherche. <br/><br/><b>"TOUTES"</b> utilise la logique "ET" pour réduire la recherche.
+    label_search_last_survey: Dernier sondage
+    label_search_not_allow_to_no_label: Il n'est pas permis d'effectuer une recherche par « Aucune étiquette » si vous avec coché une des étiquettes.
+    label_select_description: |
+      Indiquer les contacts auxquels %{element} des étiquettes suivantes ont été appliquées.
+    last_name: Nom
+    leader_link_expired: Désolé, ce lien est déjà utilisé.
+    leader_login_confirmation: Vous êtes connecté en tant que %{name}.<br>Aimeriez-vous continuer?
+    leader_login_title: Confirmation MissionHub
+    locate_contact_search_required_fields: Vous devriez entrer au moins un champ de recherche.
+    male: Homme
+    match_found: Correspondance trouvée
+    message: 'Message:'
+    mobile: Cellulaire
+    nationality: Nationalité
+    no_recipient_in_comment: Vous n'avez sélectionné personne pour ajouter un commentaire
+    no_recipient_in_send_comment: Vous devez sélectionner au moins un destinataire ou une personne pour ajouter un commentaire
+    note: Note
+    permission: Étiquette
+    permissions_applied: Des étiquettes ont été appliquées.
+    phone: Téléphone
+    recipients: 'Destinataires:'
+    remove: Enlever
+    remove_leader_confirm: Êtes-vous sûr de vouloir supprimer l'autorisation d'utilisateur de %{person}?
+    role: Étiquette
+    roles_applied: Des étiquettes ont été appliquées.
+    save: Sauvegarder
+    search: Rechercher
+    send_comment_success: Votre commentaire a été posté
+    send_email: Courriel
+    show: Montrer
+    sms_another_note: 
+    sms_append_to_phone_number: 
+    sms_autocomplete_description: Tapez pour effectuer une recherche par prénom, nom, numéro de téléphone, nom de groupe ou nom d'étiquette.
+    sms_autocomplete_description_admin: Tapez pour effectuer une recherche par prénom, nom, numéro de téléphone, nom de group, nom d'étiquette, ou par tous.
+    sms_change_default_email_desc: Changer l'option par défaut '%{default_email_from}' à mon numéro.
+    sms_change_default_email_send_as_desc: Envoyer comme
+    sms_no_phone_numbers: Aucun numéro de téléphone a été trouvé.
+    sms_note: 'Les messages textes de MissionHub ne sont pas en mesure de répondre à l''expéditeur. Si vous aimeriez que le destinataire réponde directement à votre cellulaire, veuillez inclure un numéro de téléphone auquel il pourrait répondre dans le corps de votre message. '
+    sms_preview_body: 'MSG:'
+    sms_preview_from: 'DE:'
+    sms_preview_title: 'Votre destinataire sans courriel recevra le message texte suivant:'
+    state: Province
+    status: Statut
+    student_status: 
+    subject: 'Sujet:'
+    survey: Sondage
+    survey_help_desc: 'Pour commencer votre sondage, '
+    survey_text_help_desc: Texte votre mot clé à 85005
+    survey_text_tip_html: Pour commencer votre sondage, <strong>text %{keyword} à %{shortcode}.</strong>
+    survey_web_tip_html: Pour la version Web du sondage, envoyez des gens à <strong>%{link}/</strong>.
+    to: À
+    transfer: Transférer
+    'true': 
+    unassign: Retirer
+    work: Au travail
+    zip: Code postal
+  group: Groupe
+  group_memberships:
+    form:
+      add_a_leader: Ajouter un leader de groupe
+      add_a_member: Ajouter un membre de groupe
+      start_typing: 'Commencer à taper un nom pour trouver une personne à ajouter a ce groupe:'
+    search:
+      add_new_person_group: Ajouter une nouvelle personne
+      not_found: Nous n'avons trouvé personne dans votre %{terminology} avec ce nom.
+      show_all: montrer tous
+      showing_count: ' %{length} de %{total} dossiers affichés, continuez à taper ou'
+      showing_count_complete: '%{length} dossiers affichés. '
+  groups:
+    add_a_label: Ajouter une étiquette de groupe
+    add_a_label_title: Ajouter une nouvelle étiquette
+    add_group_member_success: Vous avez ajouté un nouveau contact au groupe.
+    delete_group_member: Supprimer ce membre du groupe.
+    edit:
+      edit_group: En train de modifier %{group}
+    form:
+      approve_join_tip: 'Si le groupe est dans un liste publique et si vous cochez cette option, vous devrez approuver toute demande de se joindre au groupe. '
+      back: Annuler et retourner
+      list_publicly_tip: Si cette option est selectionnée, ce groupe sera visible au publique si quelqu'un fairait une recherche. (La recherche publique n'existe pas encore, mais existera dans l'avenir.)
+      location_tip: Pour votre endroit, tapez une adresse tel que ce serait si vous faisiez une recherche sur Google maps (par exemple « 460, rue Sainte Catherine Ouest, Montréal, QC H3B 1A7 »)
+      meets_on: les
+      meets_on_the: le
+      of_month: du mois
+    index:
+      add: Ajouter
+      add_a_group: Ajouter un groupe
+      add_a_label: 
+      add_group: 
+      assign_to_label: 
+      group_list: Liste de groupes de %{org}
+      group_name: Nom du groupe
+      labeled_with: Ètiquettée avec "%{label}"
+      labels: Étiquettes de groupe
+      leaders: Leaders de groupe
+      members: Disciple qui grandit
+      new_label_prompt: Veuillez entrer un nouveau nom d'étiquette
+      no_group_members: Désolé, il n'y a pas de membres de groupe ici.
+      no_groups: Désolé, il n'y a pas de groupes ici.
+    label:
+      delete_confirm: Êtes-vous sûr de vouloir enlever l'étiquette '%{label}'?
+    label_name: 
+    label_name_is_added: 
+    label_name_is_required: 
+    new:
+      new_group: 
+    new_label_prompt: 
+    no_group_found: 
+    person:
+      remove_confirm: 
+    see_all: 
+    show:
+      add_leader: 
+      add_member: 
+      back_to_list: 
+      confirm_delete_group: 
+      delete_group: 
+      details: 
+      edit: 
+      edit_group: 
+      email: 
+      leaders: 
+      location: 
+      meets: 
+      monthly: 
+      name: 
+      page_title: 
+      phone: 
+      role: 
+      sporadically: 
+      weekly: 
+    sidebar:
+      add: 
+      labels: 
+  helpers:
+    label:
+      group:
+        name: 
+        start_time: 
+      organization:
+        terminology: 
+      sms_keyword:
+        survey_id: 
+    submit:
+      update: 
+  imports:
+    edit:
+      column1: 
+      column2: 
+      column3: 
+      guide: 
+      title: 
+    labels:
+      guide: 
+      title: 
+    new:
+      file_not_existing: 
+      guide: 
+      guide0: 
+      guide1: 
+      guide2: 
+      guide3: 
+      guide4: 
+      guide5: 
+      preview: 
+      sample_csv: 
+      title: 
+      wrong_file_format_error: 
+    update:
+      default_login_paragraph: 
+      default_post_survey_message: 
+  interactions:
+    add_comment_title: 
+    answer_other_surveys: 
+    comment_field_title: 
+    edit_survey_results: 
+    edit_this_survey: 
+    profile_info:
+      email_contact_info: 
+      opt_in_help: 
+    profile_interactions_edit:
+      confirm_delete_interaction: 
+  keyword_request_mailer:
+    notify_user:
+      body_html: 
+      link_text: 
+    notify_user_of_denial:
+      body_html: 
+  keywords:
+    default_rejection_email: 
+    edit:
+      heading: 
+    flash:
+      created: 
+      pick_org: 
+      updated: 
+    form:
+      association: 
+      chartfield: 
+      explanation: 
+      initial_response: 
+      keyword: 
+      keyword_instruct: 
+      keyword_tip: 
+      keyword_why: 
+      post_survey_message: 
+      post_survey_why: 
+    index:
+      association: 
+      association_help: 
+  label: 
+  labels:
+    alumni: 
+    alumni_definition: 
+    alumni_sentence: 
+    engaged_disciple: 
+    engaged_disciple_definition: 
+    engaged_disciple_sentence: 
+    involved: 
+    involved_definition: 
+    involved_sentence: 
+    leader: 
+    leader_definition: 
+    leader_sentence: 
+  leader: 
+  leader_mailer:
+    added:
+      body_html: 
+  leaders:
+    create:
+      no_user_account: 
+    form:
+      name_required: 
+      notify: 
+    search:
+      not_in_system: 
+  manage_labels:
+    add_label_failed: 
+    add_label_success: 
+    add_title: 
+    delete_label_confirmation: 
+    edit_label_success: 
+    edit_title: 
+    label_exists: 
+    name: 
+    name_is_required: 
+    organizational_labels: 
+    system_labels: 
+    title: 
+  member: 
+  monthly: 
+  movement_indicator_suggestions:
+    index:
+      fetching: 
+      guide: 
+      list_heading: 
+      show_old: 
+      title: 
+    reasons:
+      engaged_disciple: 
+      gospel_presentation: 
+      graduated: 
+      group_leader: 
+      group_membership: 
+      leader: 
+      spiritual_conversation: 
+    remove_suggestion_html: 
+  movement_indicators:
+    index:
+      list_heading: 
+  nav:
+    all_contacts: 
+    all_surveys: 
+    archive: 
+    back_to_dashboard: 
+    back_to_wizard: 
+    cleanup: 
+    create_a_survey: 
+    cru: 
+    dashboard: 
+    directory: 
+    enter_survey_mode: 
+    exit_survey_mode: 
+    go_to: 
+    goal: 
+    groups: 
+    help: 
+    hide: 
+    keywords: 
+    login: 
+    logout: 
+    make_default: 
+    manage: 
+    my_comments: 
+    my_contacts: 
+    my_profile: 
+    organizations: 
+    people: 
+    permissions: 
+    privacy: 
+    profile: 
+    report_movement_indicators: 
+    roles: 
+    settings: 
+    snapshot: 
+    survey_mode_tip: 
+    surveys: 
+    terms: 
+    transfer: 
+    trend: 
+    use_keyword: 
+    view_details: 
+    visual_tools: 
+  number:
+    currency:
+      format:
+        delimiter: 
+        format: 
+        precision: 
+        separator: 
+        significant: 
+        strip_insignificant_zeros: 
+        unit: 
+    format:
+      delimiter: 
+      precision: 
+      separator: 
+      significant: 
+      strip_insignificant_zeros: 
+    human:
+      decimal_units:
+        format: 
+        units:
+          billion: 
+          million: 
+          quadrillion: 
+          thousand: 
+          trillion: 
+          unit: 
+      format:
+        delimiter: 
+        precision: 
+        significant: 
+        strip_insignificant_zeros: 
+      storage_units:
+        format: 
+        units:
+          byte: 
+          gb: 
+          kb: 
+          mb: 
+          tb: 
+    percentage:
+      format:
+        delimiter: 
+    precision:
+      format:
+        delimiter: 
+  org_membership:
+    confirm_delete: 
+  organization_mailer:
+    notify_user:
+      body_html: 
+      link_text: 
+    notify_user_of_denial:
+      body_html: 
+  organizational_permissions:
+    cannot_delete_admin_error: 
+    cannot_delete_self_as_admin_error: 
+    copy_people_success: 
+    moving_people_success: 
+    moving_to_same_org: 
+  organizational_roles:
+    cannot_delete_admin_error: 
+    cannot_delete_self_as_admin_error: 
+    copy_people_success: 
+    moving_people_success: 
+    moving_to_same_org: 
+  organizations:
+    add_org:
+      name_not_unique: 
+    add_org_from_crs:
+      admin_password: 
+      bad_password: 
+      bad_url: 
+      conference_is_importing: 
+      crs_import_instructions: 
+      example: 
+      url: 
+    cleanup:
+      alumni_inst: 
+      alumni_inst_path: 
+      annual_inst_1: 
+      annual_inst_2: 
+      archive_contacts_submit: 
+      archive_inst: 
+      archive_instructions: 
+      archive_notice: 
+      confirm_archive: 
+      confirm_remove_leaders: 
+      contact_tips: 
+      instructions: 
+      leader_tips: 
+      removal_notice: 
+      remove_leader_inst: 
+      remove_leaders_submit: 
+      title: 
+    edit:
+      back: 
+      back_to_orgs: 
+      danger_explanation: 
+      danger_zone: 
+      delete: 
+      delete_confirm: 
+      delete_zone: 
+      form_description: 
+      infobase_explanation: 
+      name_explain: 
+      show_sub_explain: 
+      term_explain: 
+      title: 
+      with_children_explanation: 
+    index:
+      add: 
+      add_a_sub_org: 
+      add_sub_org: 
+      add_sub_org_button: 
+      add_sub_org_title: 
+      crs_import_button_title: 
+      crs_import_link: 
+      crs_import_tip: 
+      edit_button: 
+      form_explaination: 
+      re_import_button: 
+      title: 
+    new:
+      signup: 
+      title: 
+      your_org: 
+    settings:
+      submit: 
+      title: 
+      year_in_school: 
+    transfer:
+      set_alumni: 
+      set_alumni_desc: 
+      set_archived: 
+      set_archived_desc: 
+      title: 
+  people:
+    add_person:
+      add_person: 
+    advanced_search:
+      basic_search: 
+      clear_search_form: 
+      email: 
+      first_name: 
+      last_name: 
+      permission: 
+      phone: 
+      role: 
+    all:
+      all_selected_html: 
+      all_selected_html_mine: 
+      page_selected_html: 
+      select_all_html: 
+      select_all_html_mine: 
+    assign:
+      keep_contact: 
+    bulk_archive:
+      archiving_people_success: 
+      cannot_archive_admin_error: 
+    bulk_delete:
+      cannot_delete_admin_error: 
+      deleting_people_success: 
+    bulk_sms:
+      sms_footer_message: 
+    create:
+      email_error: 
+      email_taken: 
+      error_creating_admin_no_valid_email: 
+      error_creating_leader_no_valid_email: 
+      firstname_error: 
+      phone_number_error: 
+    edit:
+      editing: 
+      fb_name_search_dialog_desc: 
+      fb_name_search_dialog_no_more: 
+      fb_name_search_dialog_title: 
+      fb_profile_link: 
+      more_facebook_matches: 
+      no_results: 
+    form:
+      facebook_url: 
+      facebook_url_tip: 
+    index:
+      add_person: 
+      apply_labels: 
+      apply_roles: 
+      archived_directory_title: 
+      archived_label: 
+      cannot_archive_admin_error: 
+      cannot_delete_admin_error: 
+      directory_title: 
+      displaying: 
+      email: 
+      error_message: 
+      error_message_update_admin_without_person: 
+      error_message_update_leader_without_person: 
+      export: 
+      filter: 
+      gender: 
+      group_comment: 
+      include_archived: 
+      include_archived_tips: 
+      include_archived_tips_interactions: 
+      include_archived_tips_labels: 
+      labels: 
+      locate_contact: 
+      manage_labels: 
+      manage_roles: 
+      merge_contacts: 
+      merge_people: 
+      no_people: 
+      phone: 
+      send_email: 
+      send_sms: 
+      sent_messages: 
+      statistics: 
+      transfer_org: 
+      vcard: 
+      year_in_school: 
+    involvement:
+      conferences: 
+      summer_projects: 
+    left_sidebar:
+      edit_profile: 
+      involvement: 
+      profile: 
+      survey_answers: 
+    person_form:
+      add_email_address: 
+      add_phone_number: 
+      preferred_name: 
+    search:
+      advanced_search: 
+      advanced_search_link: 
+      clear_search_form: 
+      search_placeholder: 
+      search_title: 
+    show:
+      add_comment: 
+      add_comments_here: 
+      assigned_to: 
+      attach_rejoicable: 
+      edit_profile: 
+      email: 
+      facebook_profile: 
+      google_map: 
+      label_button: 
+      persons_friends: 
+      phone_number: 
+      previous_comments: 
+      send_contact_info: 
+      send_vcard_desc: 
+      status: 
+      updated_time_difference: 
+  permissions:
+    admin: Admin
+    no_permissions: Aucunes autorisations
+    user: Utilisateur
+  questions:
+    archived_help: 
+    create:
+      notice: 
+    form:
+      checkboxes: 
+      dropdown: 
+      multiple_choice: 
+      short_answer: 
+      web_only: 
+      what_question_type: 
+    predefined_help: 
+    your_questions_help: 
+  rejoicables:
+    gospel_presentation: 
+    prayed_to_receive: 
+    spiritual_conversation: 
+  roles:
+    admin: 
+    alumni: 
+    contact: 
+    index:
+      title: 
+    involved: 
+    leader: 
+    sent: 
+    views:
+      create: 
+      create_role: 
+      delete_role: 
+      edit_role: 
+      i18n: 
+      name: 
+      organizational_roles: 
+      system_roles: 
+      update: 
+  search:
+    assignments:
+      title: 
+    faculty:
+      'false': 
+      title: 
+      'true': 
+    gender:
+      female: 
+      male: 
+      title: 
+    groups:
+      title: 
+    included_surveys:
+      title: 
+    interactions:
+      title: 
+    labels:
+      title: 
+    permissions:
+      title: 
+    sidebar:
+      friends_only: 
+      include_archived: 
+      saved_hide: 
+      saved_search_title: 
+      saved_show: 
+      search_any_placeholder: 
+      standard_hide: 
+      standard_show: 
+      standard_title: 
+      survey_hide: 
+      survey_show: 
+      survey_title: 
+    status:
+      title: 
+    triggers:
+      title: 
+  sessions:
+    destroy:
+      signed_out: 
+    new:
+      back: 
+      dont_like_facebook: 
+      instructions: 
+      login: 
+      login_cannot_create_a_user: 
+      login_no_email: 
+      login_paragraph_html: 
+      login_paragraph_mhub: 
+      login_with_facebook: 
+      no_facebook: 
+      no_ticket_error: 
+      not_allowed_to_use_cas: 
+      not_allowed_to_use_key: 
+      skip_facebook: 
+      start_survey: 
+      waiting_for_logout: 
+      welcome: 
+  sms:
+    email_invalid_msg: 
+    email_should_be_unique_msg: 
+    keyword_inactive: 
+    no_survey: 
+    sms_help_guide: 
+    sms_subscribed_with_org: 
+    sms_subscribed_without_org: 
+    sms_unsubscribed_with_org: 
+    sms_unsubscribed_without_org: 
+  sms_keywords:
+    all_keywords: 
+    default_rejection_email: 
+    edit:
+      heading: 
+      keywords: 
+      to_begin_survey_html: 
+    flash:
+      created: 
+      pick_org: 
+      updated: 
+    form:
+      associated_survey_tip: 
+      explanation: 
+      initial_response: 
+      initial_response_default: 
+      keyword: 
+      keyword_instruct: 
+      keyword_locked: 
+      keyword_tip: 
+      keyword_why: 
+      note: 
+      post_survey_why: 
+    index:
+      association: 
+      create_survey_first: 
+      delete_confirm: 
+      delete_keyword: 
+      delete_tip: 
+      edit_keyword: 
+      request_keyword: 
+    keyword_deleted: 
+    new:
+      choose_keyword_explanation_html: 
+      predefined_help: 
+      your_questions_help: 
+    show:
+      explanation: 
+      keyword: 
+      status: 
+  sporadically: 
+  support:
+    array:
+      last_word_connector: 
+      two_words_connector: 
+      words_connector: 
+    select:
+      prompt: 
+  survey:
+    drop_down_field:
+      choose_one: 
+  survey_mailer:
+    notify:
+      content: 
+  survey_responses:
+    address1: 
+    answer_other_surveys:
+      title: 
+    birth_date: 
+    campus: 
+    country: 
+    dorm: 
+    edit:
+      cancel: 
+      multiple_answers: 
+      title: 
+    email: 
+    facebook:
+      facebook_login: 
+      pick_keyword: 
+    faculty: 
+    first_name: 
+    form:
+      frozen: 
+    gender: 
+    graduation_date: 
+    iso_bs: 
+    iso_de: 
+    iso_en: 
+    iso_es: 
+    iso_fr: 
+    iso_ru: 
+    iso_zh: 
+    last_name: 
+    major: 
+    nationality: 
+    new:
+      greeting_no_name: 
+      greeting_with_name: 
+    no_completed_surveys: 
+    no_surveys: 
+    phone_number: 
+    room: 
+    select_language: 
+    show:
+      edit_answers: 
+      no_answers: 
+      title: 
+    state: 
+    thanks:
+      thanks: 
+    year_in_school: 
+    zip: 
+  surveys:
+    edit:
+      edit_survey: 
+    form:
+      association: 
+      background_color: 
+      css: 
+      css_file: 
+      customize_look: 
+      default_login_option: 
+      fb_only_login_option: 
+      freeze: 
+      login_option: 
+      login_paragraph: 
+      login_paragraph_tip: 
+      logo: 
+      logo_valid_format: 
+      no_fb_login_option: 
+      post_survey_message: 
+      post_survey_placeholder: 
+      redirect_url: 
+      remove_logo_cofirmation: 
+      remove_logo_failed: 
+      remove_logo_link: 
+      remove_logo_success: 
+      skip_fb_login_option: 
+      survey_associated_with: 
+      terminology: 
+      text_color: 
+      title: 
+      title_placeholder: 
+      title_tip: 
+    index:
+      title: 
+    index_admin:
+      association_help: 
+      confirm_delete: 
+      confirm_delete_survey: 
+      copy_survey: 
+      delete_survey: 
+      edit_survey: 
+      link: 
+      manual_entry: 
+      new: 
+      no_keywords: 
+      no_surveys: 
+      preview_survey: 
+    mass_entry:
+      help: 
+      loading: 
+      saving: 
+      title: 
+    new:
+      choose_keyword_explanation_html: 
+      create_a_survey: 
+    questions:
+      advanced_options:
+        autoassign_group_label: 
+        autoassign_guide: 
+        autoassign_keywords_label: 
+        autonotify_guide: 
+        autonotify_keywords_label: 
+        autonotify_leader_label: 
+        autonotify_tip: 
+        hidden: 
+        leaders: 
+        trigger_words: 
+        web_only: 
+      create:
+        duplicate_error: 
+        notice: 
+      edit:
+        edit_question: 
+        leader_invalid_email: 
+        leader_invalid_email_with_name: 
+      form:
+        checkboxes: 
+        dropdown: 
+        hide_advanced_options: 
+        hide_assignment_options: 
+        hide_notification_options: 
+        multiple_choice: 
+        short_answer: 
+        show_advanced_options: 
+        show_assignment_options: 
+        show_notification_options: 
+        text_message_length: 
+        text_message_preview: 
+        toggle_advanced_options: 
+        web_only: 
+        what_question_type: 
+      index:
+        add_prev_question: 
+        add_question: 
+        forced_tip: 
+        manage: 
+        note: 
+        predefined: 
+        predefined_help: 
+        previously_used: 
+        your_custom_question_help: 
+        your_questions: 
+        your_questions_help: 
+      multiple_choice_form:
+        list_choices: 
+      question:
+        confirm_delete: 
+        delete_tip: 
+      short_answer_form:
+        column_header: 
+        column_header_hint: 
+        question: 
+  time:
+    am: 
+    formats:
+      date: 
+      default: 
+      long: 
+      short: 
+      time_only: 
+    pm: 
+  views:
+    pagination:
+      first: 
+      last: 
+      next: 
+      previous: 
+      truncate: 
+  weekly: 
+  welcome:
+    home:
+      delete: 
+      delete_keyword_confirm: 
+      edit_keyword: 
+      edit_orgs: 
+      follow_up: 
+      keywords: 
+      manage_questions: 
+      no_mobile: 
+      surveys: 
+      title_top: 
+      your_orgs: 
+    index:
+      get_details_html: 
+      get_started: 
+      go_home: 
+      headline_html: 
+      learn_more: 
+      request_key: 
+      request_key_help: 
+      subheadline_html: 
+      title_top: 
+      title_top_mobile: 
+      video_headline_html: 
+      video_subheadline_html: 
+    tutorials:
+      get_started: 
+      video_headline_html: 
+      video_subheadline_html: 
+    wizard:
+      back: 
+      create_a_survey: 
+      create_survey: 
+      create_survey_link: 
+      designate_leaders: 
+      keyword_paragraph: 
+      leaders_header: 
+      leaders_paragraph: 
+      next: 
+      not_found_paragraph: 
+      request_a_keyword: 
+      request_keyword: 
+      request_keyword_link: 
+      skip_step: 
+      survey_paragraph: 
+      verify_identity: 
+      verify_paragraph: 
+      verify_with_relay: 
+      welcome: 
+      welcome_paragraph: 

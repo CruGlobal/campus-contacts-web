@@ -409,7 +409,7 @@ class Person < ActiveRecord::Base
   def self.filter_by_survey_scope(people, organization, survey_scope)
     return people.joins(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).uniq
   end
-  
+
   def timezone
     return nil unless user.present?
     user.settings[:time_zone]
@@ -1729,7 +1729,7 @@ class Person < ActiveRecord::Base
   end
 
   NATIONALITIES = ["Chinese", "South Asian (India, Nepal, Sri Lanka)", "TIP/Muslim", "American", "All Other Nations"]
-  LANGUAGES = [["босански (Bosnian)", "bs"], ["官话 (Chinese) ", "zh"], ["English (English)", "en"], ["Español (Spanish)", "es"], ["Français (French)", "fr"], ["Deutsch (German)", "de"], ["Pусский (Russian)", "ru"], ["српски (Serbian)", "sr"]]
+  LANGUAGES = [["босански (Bosnian)", "bs"], ["官话 (Chinese) ", "zh"], ["English (English)", "en"], ["Canadian English (English)", "ca"], ["Español (Spanish)", "es"], ["Français (French)", "fr"], ["Deutsch (German)", "de"], ["Pусский (Russian)", "ru"], ["српски (Serbian)", "sr"]]
 
   def set_followup_status(organization, status)
     permission = permission_for_org(organization)
