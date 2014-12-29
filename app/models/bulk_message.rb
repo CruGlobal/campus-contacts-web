@@ -14,7 +14,7 @@ class BulkMessage < ActiveRecord::Base
   
   def process
     bulk_message = BulkMessage.find_by_id(id)
-    if bulk_message.present?
+    if bulk_message.present? && bulk_message.messages.present?
       return bulk_message if bulk_message.status == 'completed'
       message = bulk_message.messages.first.message
       bulk_message.update_attributes(status: 'processing')
@@ -38,6 +38,9 @@ class BulkMessage < ActiveRecord::Base
       bulk_message.update_attributes(status: 'completed', results: results)
       # raise "(#{proper}) Intentional error for testing: #{with_failure.inspect}"
       PeopleMailer.notify_on_bulk_sms_failure(bulk_message.person, results, bulk_message, message).deliver! if with_failure
+      return bulk_message
+    elsif bulk_message.present?
+      bulk_message.update_attributes(status: 'failed', results: nil)
       return bulk_message
     end
   end
