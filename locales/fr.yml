@@ -673,7 +673,7 @@ fr:
       guide: 
       title: 
     new:
-      file_not_existing: 
+      file_not_existing: Ce fichier n'existe pas.
       guide: 
       guide0: 
       guide1: 

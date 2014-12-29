@@ -1,4 +1,4 @@
-fr-CA:
+qb:
   activerecord:
     errors:
       full_messages:
@@ -89,9 +89,9 @@ fr-CA:
     snapshot:
       key_leader: Nous avons trouvé un leader clé sur ce campus.
       launched: Nous avons trois disciples multiplicateurs sur ce campus.
-      movement_stages: 
-      multiplying: 
-      pioneering: 
+      movement_stages:
+      multiplying:
+      pioneering:
       title: Les graphiques sur cette page extraient des données ayant été soumises à la base de données, donc ils seront aussi à jour que les données les plus récentes soumises par les différents mouvements. Cliquez sur le nom de chaque catégorie pour la masquer ou l'afficher dans le graphique.
     trend:
       year_ago: Ceci est seulement disponible si l'intervalle entre la date de début et la date de fin est de moins de 12 mois.
@@ -560,7 +560,7 @@ fr-CA:
     contact_location: Emplacement du contact
     contacts_updated_from: Contacts mis à jour à partir de
     country: Pays
-    cru_status: 
+    cru_status:
     dash: '-'
     default_email_from: do-not-reply@mhub.cc
     delete: Supprimer
@@ -572,7 +572,7 @@ fr-CA:
     export_csv_help: Exporter un tableur
     export_vcard_help: Exporter vers la liste de contacts (adresse de courriel ou téléphone)
     faculty: Professeur
-    'false': 
+    'false':
     faq_redirect_link: http://help.missionhub.com/article/34-faqs-frequently-asked-questions
     female: Femme
     first_name: Prénom
@@ -637,7 +637,7 @@ fr-CA:
     survey_web_tip_html: Pour la version Web du sondage, dirigez les gens vers le lien <strong>%{link}/</strong>.
     to: À
     transfer: Transférer
-    'true': 
+    'true':
     unassign: Retirer
     work: Bureau
     zip: Code postal
@@ -848,10 +848,10 @@ fr-CA:
   movement_indicator_suggestions:
     index:
       fetching: Recherche de suggestions en cours (cela pourrait prendre un certain temps)
-      guide: 
-      list_heading: 
+      guide:
+      list_heading:
       show_old: Cliquez ici pour montrer des suggestions précédentes
-      title: 
+      title:
     reasons:
       engaged_disciple: <b>%{name}</b> porte l'étiquette de disciple engagé. Voulez-vous aussi appliquer l'étiquette "<b>%{label}</b>"?
       gospel_presentation: <b>%{name}</b> a aidé au moins une personne à comprendre l'évangile. Voulez-vous appliquer l'étiquette "<b>%{label}</b>"?
@@ -863,7 +863,7 @@ fr-CA:
     remove_suggestion_html: Il semble que <b>%{name}</b> ne soit plus %{label_sentence}. Voulez-vous retirer l'étiquette <b>%{label}</b>?
   movement_indicators:
     index:
-      list_heading: 
+      list_heading:
   nav:
     all_contacts: Tous les contacts
     all_surveys: Tous les sondages
@@ -878,7 +878,7 @@ fr-CA:
     enter_survey_mode: Entrer en mode sondage
     exit_survey_mode: Sortir du mode sondage
     go_to: aller à
-    goal: 
+    goal:
     groups: Groupes
     help: Ressources et aide
     hide: Masquer
@@ -895,7 +895,7 @@ fr-CA:
     permissions: Étiquettes
     privacy: Politique de confidentialité
     profile: Mon profil
-    report_movement_indicators: 
+    report_movement_indicators:
     roles: Étiquettes
     settings: Paramètres
     snapshot: Image instantanée
@@ -903,7 +903,7 @@ fr-CA:
     surveys: Sondages
     terms: Conditions
     transfer: Finissant en mission
-    trend: 
+    trend:
     use_keyword: 'Utiliser le mot-clé : %{keyword}'
     view_details: Afficher les détails
     visual_tools: Outils visuels
@@ -932,12 +932,12 @@ fr-CA:
           quadrillion: Quadrillion
           thousand: Mille
           trillion: Mille milliards
-          unit: 
+          unit:
       format:
-        delimiter: 
+        delimiter:
         precision: 3
         significant: true
-        strip_insignificant_zeros: 
+        strip_insignificant_zeros:
       storage_units:
         format: '%n %u'
         units:
@@ -950,10 +950,10 @@ fr-CA:
           tb: To
     percentage:
       format:
-        delimiter: 
+        delimiter:
     precision:
       format:
-        delimiter: 
+        delimiter:
   org_membership:
     confirm_delete: Êtes-vous sûr de vouloir vous désassocier de %{org}?
   organization_mailer:
@@ -1030,7 +1030,7 @@ fr-CA:
       add_sub_org_title: Ajouter un nouveau sous-organisme
       crs_import_button_title: Importer un congrès
       crs_import_link: Importer un congrès de l'Outil d'inscriptions aux congrès
-      crs_import_tip: 
+      crs_import_tip:
       edit_button: Modifier %{org}
       form_explaination: À partir de cet écran, vous pouvez modifier, supprimer ou réorganiser vos organismes. Si vous cliquez sur "Ajouter un nouvel organisme"<br/>, un ajout rapide par nom sera effectué. Pour modifier plus de détails, des autorisations ou d'autres données, sélectionnez le nom<br/> dans la liste et cliquez sur « modifier ».
       re_import_button: Ré-importer les données du congrès
@@ -1275,7 +1275,7 @@ fr-CA:
     email_should_be_unique_msg: L'adresse de courriel est déjà utilisée; essayez une autre adresse de courriel.
     keyword_inactive: Le mot-clé que vous venez de texter n'est pas actif. Vérifiez l'orthographe et réessayez.
     no_survey: Il n'y a pas de sondage associé à ce mot-clé.
-    sms_help_guide: 
+    sms_help_guide:
     sms_subscribed_with_org: Vous vous êtes abonné aux messages textes d'alerte de MissionHub. Vous pouvez maintenant recevoir des messages textes de %{org}.
     sms_subscribed_without_org: Vous vous êtes abonné aux messages textes d'alerte de MissionHub. Vous pouvez maintenant recevoir des messages textes.
     sms_unsubscribed_with_org: Vous ne recevrez plus d'autres messages textes d'alerte de MissionHub pour %{org}. Pour vous réabonner, répondez ACTIVER.
@@ -1399,7 +1399,7 @@ fr-CA:
       login_option: Choisissez une option d'ouverture de session pour vos utilisateurs.
       login_paragraph: Paragraphe pour l'ouverture de session
       login_paragraph_tip: Ceci est ce qu'une personne verra une fois arrivée à la page d'ouverture de session Facebook pour un sondage.
-      logo: 
+      logo:
       logo_valid_format: Télécharger un fichier .jpg, .jpeg, .pgn, ou .gif
       no_fb_login_option: Aucune ouverture de session
       post_survey_message: Quel message aimeriez-vous que la personne voie après avoir terminé le sondage?
