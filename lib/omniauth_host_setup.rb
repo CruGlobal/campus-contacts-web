@@ -10,7 +10,12 @@ class OmniauthHostSetup
 
   def setup
     if Rails.env.production?
-      OmniAuth.config.full_host = "https://#{@request.subdomain}.#{ActionMailer::Base.default_url_options[:host]}"
+      subdomain = @request.subdomain
+      if subdomain.present? && subdomain != "www"
+        OmniAuth.config.full_host = "https://#{subdomain}.#{ActionMailer::Base.default_url_options[:host]}"
+      else
+        OmniAuth.config.full_host = 'https://' + ActionMailer::Base.default_url_options[:host]
+      end
     end
   end
 end
