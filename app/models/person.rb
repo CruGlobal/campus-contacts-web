@@ -148,7 +148,7 @@ class Person < ActiveRecord::Base
   }}
 
   scope :order_by_any_column, lambda { |order| {
-    :order => "people.#{order}"
+    :order => "#{order}"
   }}
   
   
