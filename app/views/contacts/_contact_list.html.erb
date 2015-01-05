@@ -35,7 +35,11 @@
         <% if @questions.present? %>
           <% @questions.uniq.each do |q| %>
             <th class="question <%= dom_id(q) %> tip" title="<%= q.label.try(:titleize) %>">
-              <%= q.column_header %>
+              <% if q.predefined? %>
+                <%= sortable(q.attribute_name.to_sym, q.column_header, {controller: 'contacts', action: 'filter'}, remote: true, class: 'sort_contact_link') %>
+              <% else %>
+                <%= q.column_header %>
+              <% end %>
               <br/>
               <%= link_to("(#{t('nav.hide')})", hide_question_column_contacts_path(survey_id: @organization.surveys.first || @predefined_survey.id, question_id: q), remote: true, method: :post, class: 'hide', 'data-class' => dom_id(q), 'data-id' => q.id) %>
             </th>

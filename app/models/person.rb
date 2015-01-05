@@ -147,9 +147,11 @@ class Person < ActiveRecord::Base
     :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   }}
 
-  scope :order_by_all_followup_status, lambda { |order| {
-    :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
+  scope :order_by_any_column, lambda { |order| {
+    :order => "people.#{order}"
   }}
+  
+  
 
 
   # Start of custom sorting for meta_search

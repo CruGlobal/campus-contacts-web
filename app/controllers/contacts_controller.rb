@@ -1053,25 +1053,19 @@ class ContactsController < ApplicationController
         sort_query = params[:search][:meta_sort].gsub('.',' ')
         if sort_query.include?('last_survey')
 	        @all_people = @all_people.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
-		    end
-
-        if sort_query.include?('labels')
+        elsif sort_query.include?('labels')
           @all_people = @all_people.get_and_order_by_label(sort_query, current_organization.id)
-        end
-
-		    if sort_query.include?('followup_status')
+        elsif sort_query.include?('followup_status')
 		    	@all_people = @all_people.order_by_followup_status(current_organization, sort_query)
-		    end
-
-		    if sort_query.include?('phone_number')
+		    elsif sort_query.include?('phone_number')
 		    	@all_people = @all_people.order_by_primary_phone_number(sort_query)
-		    end
-
-	    	if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
+		    elsif ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
 					order_query = sort_query.gsub('gender','ISNULL(people.gender), people.gender')
 																	.gsub('first_name', 'people.first_name')
 																	.gsub('last_name', 'people.last_name')
-				end
+        else
+          @all_people = @all_people.order_by_any_column(sort_query)
+        end 
       else
       	order_query = "people.last_name asc, people.first_name asc"
       end
