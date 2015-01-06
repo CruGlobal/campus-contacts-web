@@ -1069,7 +1069,9 @@ class ContactsController < ApplicationController
 																	.gsub('last_name', 'people.last_name')
         end
         if Person.column_names.include?(sort_query.split(" ").first)
-          @all_people = @all_people.order_by_any_column(sort_query)
+          begin
+            @all_people = @all_people.order_by_any_column(sort_query)
+          rescue; end
         end 
       else
       	order_query = "people.last_name asc, people.first_name asc"
