@@ -1068,10 +1068,11 @@ class ContactsController < ApplicationController
 																	.gsub('first_name', 'people.first_name')
 																	.gsub('last_name', 'people.last_name')
         end
+        if ['dorm','zip','country','room','state','address1','city'].include?(sort_query.split(" ").first)
+          @all_people = @all_people.order_by_address_column(sort_query)
+        end
         if Person.column_names.include?(sort_query.split(" ").first)
-          begin
-            @all_people = @all_people.order_by_any_column(sort_query)
-          rescue; end
+          @all_people = @all_people.order_by_any_column(sort_query)
         end 
       else
       	order_query = "people.last_name asc, people.first_name asc"
