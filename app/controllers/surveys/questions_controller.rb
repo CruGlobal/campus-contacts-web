@@ -11,6 +11,7 @@ class Surveys::QuestionsController < ApplicationController
     @questions = @survey.questions
     @predefined_questions = current_organization.predefined_survey_questions.uniq - @questions
     @other_questions = current_organization.all_questions.uniq - current_organization.predefined_survey_questions.uniq - @survey.questions
+    @other_questions.uniq!{|x| x[:label].strip.gsub(/\?|\:/,"")}
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
