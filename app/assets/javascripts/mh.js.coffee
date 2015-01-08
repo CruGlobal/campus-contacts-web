@@ -29,7 +29,7 @@ $ ->
         type: 'GET',
         url: "/load_organization_tree?id=#{org_id}"
       $(this).addClass('tree_open')
-      
+
   $('.org_star').live 'click', ->
     document.location = $(this).attr('url')
 

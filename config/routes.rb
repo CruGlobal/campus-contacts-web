@@ -9,7 +9,7 @@ Mh::Application.routes.draw do
   constraints constraint do
     mount Sidekiq::Web => '/sidekiq'
   end
-  
+
   resources :bulk_messages, only: [] do
     collection do
       post :sms
@@ -66,6 +66,7 @@ Mh::Application.routes.draw do
       get :create_label
       get :set_groups
       get :search_leaders
+      get :remove_address
     end
   end
 

@@ -1,8 +1,8 @@
 <div class="edit_address_fields sfield" data-group="address">
-  <%= builder.select :address_type, Address::TYPES %>
-  <%= link_to_remove_fields(builder, false) %>
+  <%= builder.select :address_type, Address::TYPES, {}, class: "selection_address_type" %>
+  <%= link_to("", "#", class: "remove_address_field tip", title: "Remove") %>
   <div class="multi_line">
-    <%= builder.text_field :address1, placeholder: "Address Line 1" %>
+    <%= builder.text_field :address1, placeholder: "Address Line 1 (required)" %>
   </div>
   <div class="multi_line">
     <%= builder.text_field :address2, placeholder: "Address Line 2" %>
