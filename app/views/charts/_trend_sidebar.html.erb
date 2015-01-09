@@ -32,6 +32,13 @@
             No saved trend.
           <% end %>
         </div>
+        <% if trend && @trend.present? %>
+          <div id="current_movements">
+            <% @trend_movements.each do |trend_movement| %>
+              <div><%= trend_movement.name %></div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
 
       <div id="trend_date_select">

@@ -50,12 +50,14 @@ $(document).ready ->
 
   $("input#snap_all_true").bind "click", ->
     $("#saved_visual_tools").hide()
+    $("#current_movements").hide()
     $("#snapshot_movements").show()
     $("#update_chart, #save_snapshot_button, #uncheck_all_movements").show()
     $("input.snap_movement").prop disabled: true
 
   $("input#snap_all_false").bind "click", ->
     $("#saved_visual_tools").hide()
+    $("#current_movements").hide()
     $("#snapshot_movements").show()
     $("#update_chart, #save_snapshot_button, #uncheck_all_movements").show()
     $("input.snap_movement").prop disabled: false
@@ -67,6 +69,7 @@ $(document).ready ->
     $("#update_chart, #save_snapshot_button, #uncheck_all_movements").hide()
     $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").hide()
     $("#saved_visual_tools").show()
+    $("#current_movements").show()
 
   $("div#snapshot_movements_submit input.large_gray").bind "click", ->
     $("div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers").hide()
@@ -108,6 +111,7 @@ $(document).ready ->
 
   $("input#trend_all_true").bind "click", ->
     $("#saved_visual_tools").hide()
+    $("#current_movements").hide()
     $("#trend_movements").show()
     $("#trend_date_select").show()
     $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").show()
@@ -115,6 +119,7 @@ $(document).ready ->
 
   $("input#trend_all_false").bind "click", ->
     $("#saved_visual_tools").hide()
+    $("#current_movements").hide()
     $("#trend_movements").show()
     $("#trend_date_select").show()
     $("#update_chart, #save_trend_button, #trend_uncheck_all_movements").show()

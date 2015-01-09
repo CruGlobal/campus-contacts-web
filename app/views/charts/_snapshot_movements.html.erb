@@ -31,6 +31,13 @@
           No saved snapshots.
         <% end %>
       </div>
+      <% if snapshot && @snapshot.present? %>
+        <div id="current_movements">
+          <% @snapshot_movements.each do |snapshot_movement| %>
+            <div><%= snapshot_movement.name %></div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
     <div id="snapshot_movements_submit">
       <%= submit_tag 'Update Chart', class: 'large_gray', id: "update_chart" %>
