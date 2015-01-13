@@ -334,15 +334,20 @@ class Person < ActiveRecord::Base
     InteractionInitiator.where(person_id: id).collect(&:interaction_id).uniq
   end
 
-  def assign_contacts(ids, org, assigned_by)
+  def assign_contacts(ids, org, assigned_by = nil)
     valid_ids = []
     ids.each do |contact_id|
-      if org.all_people.exists?(id: contact_id)
-        valid_ids << contact_id
-        self.contact_assignments.find_or_create_by_person_id_and_organization_id(contact_id, org.id)
+      if org.all_people.where("people.id = ?", contact_id).present?
+        if leader = org.leaders.where(id: self.id).try(:first)
+          unless self.contact_assignments.where(person_id: contact_id, organization_id: org.id).present?
+            new_assignment = self.contact_assignments.new(person_id: contact_id, organization_id: org.id)
+            new_assignment.assigned_by_id = assigned_by.id if assigned_by.present?
+            new_assignment.save
+          end
+        end
       end
     end
-    LeaderMailer.delay.assignment(valid_ids, self, assigned_by, org) if valid_ids.present?
+    # LeaderMailer.delay.assignment(valid_ids, self, assigned_by, org) if valid_ids.present?
   end
 
   def self.filter_archived(people, organization)
@@ -1012,7 +1017,7 @@ class Person < ActiveRecord::Base
   end
 
   def name
-    [first_name, last_name].collect(&:to_s).join(' ')
+    [first_name, last_name].collect{|x| x.to_s.strip}.join(' ')
   end
 
   def managed_orgs

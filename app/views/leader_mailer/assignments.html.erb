@@ -1,0 +1,14 @@
+<h1>Contact Assignments Notification</h1>
+<p>
+  <%= "There are new assigned contacts to you in <b>#{@organization.name}</b> of <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>. Please login as soon as possible to followup the contacts. Below is the list of #{@assignment_array.count} new contact assignments:".html_safe %>
+  <br/>
+</p>
+<p>
+  <ul>
+  <% @assignment_array.each do |contact| %>
+    <li>
+      <b><%= link_to contact[:name], profile_url(contact[:id]) %></b>
+    </li>
+  <% end %>
+  </ul>
+</p>

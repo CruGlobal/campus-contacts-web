@@ -34,4 +34,13 @@ class LeaderMailer < ActionMailer::Base
       mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
     end
   end
+  
+  def assignments(leader, org, assignment_array)
+    @assigned_to = leader
+    @organization = org
+    @assignment_array = assignment_array
+    if @assigned_to.email.present?
+      mail(to: @assigned_to.email, from: 'support@missionhub.com', subject: "Contact Assignments Notification")
+    end
+  end
 end
