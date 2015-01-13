@@ -1063,6 +1063,9 @@ class ContactsController < ApplicationController
         if sort_query.include?('phone_number')
 		    	@all_people = @all_people.order_by_primary_phone_number(sort_query)
         end
+        if sort_query.include?('email')
+		    	@all_people = @all_people.order_by_primary_email_address(sort_query)
+        end
         if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
 					order_query = sort_query.gsub('gender','ISNULL(people.gender), people.gender')
 																	.gsub('first_name', 'people.first_name')
