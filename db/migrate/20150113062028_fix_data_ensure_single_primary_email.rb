@@ -2,7 +2,7 @@ class FixDataEnsureSinglePrimaryEmail < ActiveRecord::Migration
   def up
     EmailAddress.where(email: "").destroy_all
     EmailAddress.where(email: nil).destroy_all
-    people = Person.joins(:email_addresses).select("people.id").where("email_addresses.primary = 1").group("email_addresses.person_id").having("COUNT(*) > 1")
+    people = Person.joins("JOIN email_addresses ON email_addresses.person_id = people.id").select("people.id").where("email_addresses.primary = 1").group("email_addresses.person_id").having("COUNT(*) > 1")
     puts "Fixing #{people.length} people..."
     people.each do |person|
       emails = EmailAddress.where(person_id: person.id)
