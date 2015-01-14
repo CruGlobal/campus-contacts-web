@@ -895,6 +895,124 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def find_duplicate_surveys_by_title
+    self.surveys.select("id, title")
+      .where("title IS NOT NULL AND title <> ''")
+      .group(:title).having("count(id) > 1")
+  end
+
+  def merge_duplicate_surveys_by_title(array_titles)
+    return false unless array_titles.present?
+    puts "Survey Title with duplicate data: #{array_titles.to_sentence}"
+    array_titles.each do |title|
+      puts "Filter duplicate surveys by title: #{title}"
+      # Get all surveys triggered as duplicate by title
+      surveys = self.surveys.where("title = ?", title).order("created_at DESC, id DESC")
+
+      # Get the last data created which is the old and considering as the original copy
+      original = surveys.last
+
+      # Filter only the duplicate surveys
+      duplicate_surveys = surveys.where("id <> ?", original.id)
+
+      duplicate_surveys.each do |duplicate_survey|
+        survey_log = "Duplicate Survey ID ##{duplicate_survey.id})"
+        puts survey_log
+
+        # Copy all survey elements
+        duplicate_survey.survey_elements.each do |duplicate_survey_element|
+          survey_element_log = "#{survey_log}: Duplicate Survey Element ID ##{duplicate_survey_element.id}"
+          puts survey_element_log
+          # Recall orignal survey elements
+          original_survey_elements = original.survey_elements
+
+          # Recall original custom element labels
+          original_custom_element_labels = original.custom_element_labels
+
+          puts "#{survey_element_log}: Processing question rules..."
+          # Call question_rules from duplicate survey element
+          duplicate_question_rules = duplicate_survey_element.question_rules
+          # Secure to have same question to the original survey
+          existing_question = original.survey_elements.find_by_element_id(duplicate_survey_element.element_id)
+          if existing_question.present?
+            puts "#{survey_element_log}: Survey element is already exists."
+            duplicate_question_rules.destroy_all if duplicate_question_rules.present?
+            puts "#{survey_element_log}: Duplicate question rules were DELETED"
+          else
+            puts "#{survey_element_log}: Survey element is not existing in the original survey, copying data."
+            new_survey_element = original_survey_elements.new(duplicate_survey_element.attributes)
+            new_survey_element.save(:validate => false)
+
+            # Update the duplicate question rules to newly merged survey element
+            duplicate_question_rules.update_all(survey_element_id: new_survey_element.id) if duplicate_question_rules.present?
+            puts "#{survey_element_log}: Updated duplicate question rules in to newly created survey element."
+          end
+
+          puts "#{survey_element_log}: Processing custom element labels..."
+          # Call duplicate custom element labels from duplicate survey element
+          duplicate_custom_labels = duplicate_survey.custom_element_labels.where("question_id = ?", duplicate_survey_element.element_id)
+          duplicate_custom_labels.each do |duplicate_custom_label|
+            # Secure to have same custom element label for the original survey element
+            existing_custom_label = original_custom_element_labels.find_by_question_id(duplicate_custom_label.question_id)
+            unless existing_custom_label.present?
+              puts "#{survey_element_log}: Custom Element Label is not existing in the original survey, copying data."
+              new_custom_label = original_custom_element_labels.new(duplicate_custom_label.attributes)
+              new_custom_label.save(:validate => false)
+            end
+          end
+          if duplicate_custom_labels.present?
+            puts "#{survey_element_log}: Duplicate custom element labels were DELETED"
+            duplicate_custom_labels.destroy_all
+          end
+        end
+
+        # Call original answer_sheets
+        original_answer_sheets = original.answer_sheets
+
+        # Duplicate answer_sheets
+        duplicate_survey.answer_sheets.each do |duplicate_answer_sheet|
+          answer_sheet_log = "#{survey_log}: Duplicate Answer Sheet ID ##{duplicate_answer_sheet.id}"
+          # Duplicate answers
+          duplicate_answers = duplicate_answer_sheet.answers
+
+          # Ensure that the person should have answer sheet in to the original survey
+          existing_answer_sheet = original_answer_sheets.find_by_person_id(duplicate_answer_sheet.person_id)
+          if existing_answer_sheet.present?
+            puts "#{answer_sheet_log}: Person's Answer Sheet is already existing on the original survey"
+            original_answers = existing_answer_sheet.answers
+            duplicate_answers.each do |duplicate_answer|
+              existing_answer = original_answers.find_by_question_id(duplicate_answer.question_id)
+              if existing_answer_sheet.present?
+                puts "#{answer_sheet_log}: Person's Answer is already existing on the original survey"
+                duplicate_answer.destroy
+              else
+                puts "#{answer_sheet_log}: Updated the answer (AnswerID: #{duplicate_answer.id})from the duplicate answer sheet."
+                duplicate_answer.update(answer_sheet_id: existing_answer_sheet.id)
+              end
+            end
+          else
+            puts "#{answer_sheet_log}: Answer Sheet is not existing in the original survey, copying data."
+            new_answeer_sheet = original_answer_sheets.new(duplicate_answer_sheet.attributes)
+            new_answeer_sheet.save(:validate => false)
+
+            puts "#{answer_sheet_log}: Updated answers from the duplicate answer sheet"
+            duplicate_answers.update_all(answer_sheet_id: new_answeer_sheet.id) if duplicate_answers.present?
+          end
+          duplicate_answer_sheet.destroy if duplicate_answer_sheet.present?
+          puts "#{answer_sheet_log}: Answer Sheet was DELETED"
+        end
+
+        if duplicate_survey.survey_elements.present?
+          puts "#{survey_log}: All Duplicate Survey Elements were DELETED"
+          duplicate_survey.survey_elements.destroy_all
+        end
+
+        puts "#{survey_log}: Duplicate Survey was DELETED"
+        duplicate_survey.destroy if duplicate_survey.present?
+      end
+    end
+  end
+
   private
 
   def import_from_conference(user_id)
