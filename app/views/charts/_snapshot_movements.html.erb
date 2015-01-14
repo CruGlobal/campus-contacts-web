@@ -14,7 +14,7 @@
           <%= radio_button_tag 'all', 'saved', false, :id => "saved_visual_tool_radio" %> Saved
         </div>
       </div>
-      <div id="snapshot_movements">
+      <div id="snapshot_movements" class="<%= 'hidden' if snapshot && @snapshot.present? %>">
         <% @movements.each do |movement| %>
           <div class="movement_line">
             <%= check_box_tag "movements[]", movement.id, @chart.chart_organizations.where("organization_id = ?", movement.id).first.snapshot_display, disabled: @chart.snapshot_all_movements, class: 'snap_movement' %>
@@ -39,11 +39,13 @@
         </div>
       <% end %>
     </div>
-    <div id="snapshot_movements_submit">
+    <div id="snapshot_movements_submit" class="<%= 'hidden' if snapshot && @snapshot.present? %>">
       <%= submit_tag 'Update Chart', class: 'large_gray', id: "update_chart" %>
     </div>
   <% end %>
   <%= render 'dialogs/save_snapshot' %>
-  <%= button_tag 'Save Selected', class: 'large_gray', id: 'save_snapshot_button' %>
-  <%= button_tag 'Uncheck All', class: 'large_gray', id: 'uncheck_all_movements' %>
+  <div id="snapshot_actions" class="<%= 'hidden' if snapshot && @snapshot.present? %>">
+    <%= button_tag 'Save Selected', class: "large_gray", id: 'save_snapshot_button' %>
+    <%= button_tag 'Uncheck All', class: "large_gray #{'hidden' if snapshot && @snapshot.present?}", id: 'uncheck_all_movements' %>
+  </div>
 </div>
