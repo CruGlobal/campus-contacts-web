@@ -50,6 +50,7 @@ class ChartsController < ApplicationController
     if @snapshot.present?
       params[:all] = "false"
       params[:movements] = @snapshot.movement_ids
+      @snapshot_movements = Organization.where(id: @snapshot.movement_ids)
       update_snapshot_movements
       render 'snapshot'
     else
@@ -62,6 +63,7 @@ class ChartsController < ApplicationController
     if @trend.present?
       params[:all] = "false"
       params[:movements] = @trend.movement_ids
+      @trend_movements = Organization.where(id: @trend.movement_ids)
       if @trend.more_info.present?
         params["start_date"] = @trend.more_info[:start_date] if @trend.more_info[:start_date].present?
         params["end_date"] = @trend.more_info[:end_date] if @trend.more_info[:end_date].present?

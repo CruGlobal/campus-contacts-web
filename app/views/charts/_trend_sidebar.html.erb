@@ -15,7 +15,7 @@
           </div>
         </div>
 
-        <div id="trend_movements">
+        <div id="trend_movements" class="<%= 'hidden' if trend && @trend.present? %>">
           <% @movements.each do |movement| %>
               <div class="trend_movement_line">
                 <%= check_box_tag "movements[]", movement.id, @chart.chart_organizations.where("organization_id = ?", movement.id).first.trend_display, disabled: @chart.trend_all_movements, class: 'trend_movement' %>
@@ -32,9 +32,16 @@
             No saved trend.
           <% end %>
         </div>
+        <% if trend && @trend.present? %>
+          <div id="current_movements">
+            <% @trend_movements.each do |trend_movement| %>
+              <div><%= trend_movement.name %></div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
 
-      <div id="trend_date_select">
+      <div id="trend_date_select" class="<%= 'hidden' if trend && @trend.present? %>">
         <br/>
         Start Date:<br/>
         <%= text_field_tag "start_date", @chart.trend_start_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
@@ -42,11 +49,13 @@
         <%= text_field_tag "end_date", @chart.trend_end_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
       </div>
 
-      <div id="trend_movements_submit">
+      <div id="trend_movements_submit" class="<%= 'hidden' if trend && @trend.present? %>">
         <%= submit_tag 'Update Chart', class: 'large_gray', id: "update_chart" %>
       </div>
   <% end %>
   <%= render 'dialogs/save_trend' %>
-  <%= button_tag 'Save Selected', class: 'large_gray', id: 'save_trend_button' %>
-  <%= button_tag 'Uncheck All', class: 'large_gray', id: 'trend_uncheck_all_movements' %>
+  <div id="snapshot_actions" class="<%= 'hidden' if trend && @trend.present? %>">
+    <%= button_tag 'Save Selected', class: 'large_gray', id: 'save_trend_button' %>
+    <%= button_tag 'Uncheck All', class: 'large_gray', id: 'trend_uncheck_all_movements' %>
+  </div>
 </div>
