@@ -113,7 +113,8 @@
     var rootOffset = Handsontable.Dom.offset(this.instance.rootElement[0]);
     var tdOffset = Handsontable.Dom.offset(this.TD);
 
-    value = $.map(this.TD.innerHTML.split(","), function(e,i) {return $.trim(e)})
+    values = this.TD.innerHTML.split("<")[0]
+    value = $.map(values.split(","), function(e,i) {return $.trim(e)})
     $(".htSelectEditor").val(value);
 
     this.select.style.height = (($(".htSelectEditor").children("option").size() * 15) - 1) + 'px';
