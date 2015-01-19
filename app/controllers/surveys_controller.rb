@@ -24,11 +24,13 @@ class SurveysController < ApplicationController
     
     # Collect survey settings
     settings = Array.new
+    multi_col = Array.new
     # settings << {data: "id", type: "text", readOnly: true}
     settings << {data: "first_name", type: "text", readOnly: true}
     settings << {data: "last_name", type: "text", readOnly: true}
     settings << {data: "phone_number", type: "text", readOnly: true}
-    questions.each do |question|
+    questions.each_with_index do |question, index|
+      i = index + 3
       setting = Hash.new
       setting["data"] = question.id
       setting["allowInvalid"] = false
@@ -44,6 +46,7 @@ class SurveysController < ApplicationController
           setting["strict"] = "false"
           setting["source"] = question.options_with_blank
         else
+          multi_col << i
           setting["editor"] = "multiselect"
           setting["strict"] = "false"
           setting["selectOptions"] = question.options_with_blank
@@ -85,6 +88,7 @@ class SurveysController < ApplicationController
     response = Hash.new
     response['headers'] = ["First Name", "Last Name", "Phone Number"] + questions.collect(&:label)
     response['settings'] = settings
+    response['multi_col'] = multi_col
     response['data'] = data
     render json: response.to_json
   end

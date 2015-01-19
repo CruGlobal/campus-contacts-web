@@ -28,6 +28,8 @@ $.fn.load_answers = () ->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
         cellProperties = {}
+        if response['multi_col'].indexOf(col) >= 0
+          cellProperties.renderer = Handsontable.renderers.AutocompleteRenderer;
         id = $("#mass_entry_table").handsontable("getDataAtCell", row, 0)
         val = $("#mass_entry_table").handsontable("getDataAtCell", row, col)
         if id == "" || id == null || id == undefined
