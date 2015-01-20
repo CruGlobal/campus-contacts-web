@@ -158,7 +158,7 @@ class Person < ActiveRecord::Base
 
   scope :order_by_address_column, lambda { |order| {
     :joins => "JOIN addresses ON people.id = addresses.person_id AND addresses.address_type = 'current'",
-    :order => "addresses.#{order}"
+    :order => "#{order}"
   }}
   
   

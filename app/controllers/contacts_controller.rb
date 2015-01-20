@@ -1068,7 +1068,7 @@ class ContactsController < ApplicationController
         end
         if ['dorm','zip','country','room','state','address1','city'].include?(sort_query.split(" ").first)
           sort_words = sort_query.split(" ")
-          new_sort_query = "TRIM(#{sort_words[0]}) #{sort_words[1]}".strip if sort_words.count >= 1
+          new_sort_query = "TRIM(addresses.#{sort_words[0]}) #{sort_words[1]}".strip if sort_words.count >= 1
           @all_people = @all_people.order_by_address_column(new_sort_query)
         end
         if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
