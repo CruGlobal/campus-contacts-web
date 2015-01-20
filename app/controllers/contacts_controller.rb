@@ -1066,16 +1066,20 @@ class ContactsController < ApplicationController
         if sort_query.include?('email')
 		    	@all_people = @all_people.order_by_primary_email_address(sort_query)
         end
-        if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
-					order_query = sort_query.gsub('gender','ISNULL(people.gender), people.gender')
-																	.gsub('first_name', 'people.first_name')
-																	.gsub('last_name', 'people.last_name')
-        end
         if ['dorm','zip','country','room','state','address1','city'].include?(sort_query.split(" ").first)
-          @all_people = @all_people.order_by_address_column(sort_query)
+          sort_words = sort_query.split(" ")
+          new_sort_query = "TRIM(#{sort_words[0]}) #{sort_words[1]}".strip if sort_words.count >= 1
+          @all_people = @all_people.order_by_address_column(new_sort_query)
+        end
+        if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
+					order_query = sort_query.gsub('first_name', 'people.first_name')
+                                  .gsub('last_name', 'people.last_name')
+                                  .gsub('gender','ISNULL(people.gender), people.gender')
         end
         if Person.column_names.include?(sort_query.split(" ").first)
-          @all_people = @all_people.order_by_any_column(sort_query)
+          sort_words = sort_query.split(" ")
+          new_sort_query = "TRIM(#{sort_words[0]}) #{sort_words[1]}".strip if sort_words.count >= 1
+          @all_people = @all_people.order_by_any_column(new_sort_query)
         end 
       else
       	order_query = "people.last_name asc, people.first_name asc"
