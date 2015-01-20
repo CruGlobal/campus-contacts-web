@@ -6,6 +6,7 @@ class Person < ActiveRecord::Base
 
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
+  after_save :ensure_one_primary_email, :ensure_one_primary_number
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
@@ -257,6 +258,48 @@ class Person < ActiveRecord::Base
   scope :non_staff, -> { where(is_staff: false) }
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
+  
+  def ensure_one_primary_email
+    email_addresses = EmailAddress.where(person_id: id)
+    if email_addresses.count > 1
+      email_addresses.where(email: "").destroy_all
+      email_addresses.where(email: nil).destroy_all
+      if email_addresses.where(primary: 1)
+        first_email = email_addresses.where(primary: 1).last
+      else
+        first_email = email_addresses.last
+        first_email.update_attributes(primary: 1)
+      end
+      fe = first_email.email.downcase if first_email.email.present?
+      email_addresses.each do |email_address|
+        if email_address != first_email
+          e = email_address.email.downcase
+          e == fe ? email_address.destroy : email_address.update_attributes(primary: 0)
+        end
+      end
+    end
+  end
+  
+  def ensure_one_primary_number
+    phone_numbers = PhoneNumber.where(person_id: id)
+    if phone_numbers.count > 1
+      phone_numbers.where(number: "").destroy_all
+      phone_numbers.where(number: nil).destroy_all
+      if phone_numbers.where(primary: 1)
+        first_number = phone_numbers.where(primary: 1).last
+      else
+        first_number = phone_numbers.last
+        first_number.update_attributes(primary: 1)
+      end
+      fn = PhoneNumber.strip_us_country_code(first_number.number.to_s) if first_number.number.present?
+      phone_numbers.each do |phone_number|
+        if phone_number != first_number
+          n = PhoneNumber.strip_us_country_code(phone_number.number.to_s)
+          n == fn ? phone_number.destroy : phone_number.update_attributes(primary: 0)
+        end
+      end
+    end
+  end
 
   def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false)
     organization.add_permission_to_person(self, Permission.no_permissions.id, current_person.id)

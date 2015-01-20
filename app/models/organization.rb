@@ -590,7 +590,7 @@ class Organization < ActiveRecord::Base
     person_id = person.is_a?(Person) ? person.id : person
     # Ensure single permission
     person = Person.where(id: person_id).first
-    person.ensure_single_permission_for_org_id(id)
+    person.ensure_single_permission_for_org_id(id) if person.present?
 
     if person.present? && permission = Permission.where(id: permission_id).first
       org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, id)

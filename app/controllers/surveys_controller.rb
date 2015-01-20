@@ -103,29 +103,40 @@ class SurveysController < ApplicationController
           if value["first_name"] && value["last_name"].present?
             # Create record
             email_question = Element.find_by_attribute_name("email")
-            email = value[email_question.id.to_s] if email_question.present?
+            email = value[email_question.id.to_s].strip if email_question.present?
+            number = PhoneNumber.strip_us_country_code(value["phone_number"].to_s)
             if email.present?
               # Save w/o email
-              person = EmailAddress.where(email: email).first.try(:person)
-              if person
-                # Existing person
-                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
-              else
-                # New person
-                person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email)
-                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
-              end
-            else
-              if value["phone_number"].present?
-                # See if we can match someone by name and phone number
-                person = Person.find_existing_person_by_name_and_phone(number: value["phone_number"], first_name: value["first_name"], last_name: value["last_name"])
+              if EmailAddress.new(email: email).valid?
+                person = EmailAddress.where(email: email).first.try(:person)
                 if person
                   # Existing person
                   person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
                 else
                   # New person
-                  person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email, phone_number: value["phone_number"])
+                  person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email)
                   person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+                end
+                person.phone_number = number
+                person.save
+              else
+                @msg << " - Row##{i + 1}: Invalid email address format."
+              end
+            else
+              if value["phone_number"].present?
+                # See if we can match someone by name and phone number
+                if PhoneNumber.new(number: number).valid?
+                  person = Person.find_existing_person_by_name_and_phone(number: number, first_name: value["first_name"], last_name: value["last_name"])
+                  if person
+                    # Existing person
+                    person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+                  else
+                    # New person
+                    person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email, phone_number: number)
+                    person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+                  end
+                else
+                  @msg << " - Row##{i + 1}: Invalid phone number."
                 end
               else
                 # Save w/o email
