@@ -270,7 +270,7 @@ class Person < ActiveRecord::Base
         first_email = email_addresses.last
         first_email.update_attributes(primary: 1)
       end
-      fe = first_email.email.downcase if first_email.email.present?
+      fe = first_email.email.downcase if first_email.present? && first_email.email.present?
       email_addresses.each do |email_address|
         if email_address != first_email
           e = email_address.email.downcase
@@ -292,7 +292,7 @@ class Person < ActiveRecord::Base
         first_number = phone_numbers.last
         first_number.update_attributes(primary: 1)
       end
-      fn = PhoneNumber.strip_us_country_code(first_number.number.to_s) if first_number.number.present?
+      fn = PhoneNumber.strip_us_country_code(first_number.number.to_s) if first_number.present? && first_number.number.present?
       phone_numbers.each do |phone_number|
         if phone_number != first_number
           n = PhoneNumber.strip_us_country_code(phone_number.number.to_s)

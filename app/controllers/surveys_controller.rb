@@ -103,7 +103,7 @@ class SurveysController < ApplicationController
           if value["first_name"] && value["last_name"].present?
             # Create record
             email_question = Element.find_by_attribute_name("email")
-            email = value[email_question.id.to_s].strip if email_question.present?
+            email = value[email_question.id.to_s] if email_question.present?
             number = PhoneNumber.strip_us_country_code(value["phone_number"].to_s)
             if email.present?
               # Save w/o email
