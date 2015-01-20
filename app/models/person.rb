@@ -261,7 +261,7 @@ class Person < ActiveRecord::Base
   
   def ensure_one_primary_email
     email_addresses = EmailAddress.where(person_id: id)
-    if email_addresses.count > 1
+    if email_addresses.present? && email_addresses.where(primary: 1).count != 1
       email_addresses.where(email: "").destroy_all
       email_addresses.where(email: nil).destroy_all
       if email_addresses.where(primary: 1)
@@ -282,7 +282,8 @@ class Person < ActiveRecord::Base
   
   def ensure_one_primary_number
     phone_numbers = PhoneNumber.where(person_id: id)
-    if phone_numbers.count > 1
+    if phone_numbers.present? && phone_numbers.where(primary: 1).count != 1
+      
       phone_numbers.where(number: "").destroy_all
       phone_numbers.where(number: nil).destroy_all
       if phone_numbers.where(primary: 1)
