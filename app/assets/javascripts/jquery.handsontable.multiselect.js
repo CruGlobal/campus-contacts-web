@@ -64,10 +64,9 @@
     this.select.value = value;
   };
 
-  var onBeforeKeyDown = function (event) {
+  var onBeforeKeyDown =  function onBeforeKeyDown(event){
     var instance = this;
     var editor = instance.getActiveEditor();
-
     switch (event.keyCode){
       case Handsontable.helper.keyCode.ARROW_UP:
 
@@ -123,7 +122,6 @@
     this.select.style.left = tdOffset.left - rootOffset.left + 'px';
     this.select.style.margin = '0px';
     this.select.style.display = '';
-
     this.instance.addHook('beforeKeyDown', onBeforeKeyDown);
   };
 

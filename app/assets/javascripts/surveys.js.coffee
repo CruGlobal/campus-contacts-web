@@ -40,6 +40,10 @@ $.fn.load_answers = () ->
 
       
 $ ->
+  
+  $(document).on "keyup", ".htSelectEditor", (e)->
+    if e.which == 13
+      $("#mass_entry_table").handsontable("deselectCell")
     
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
