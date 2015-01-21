@@ -21,9 +21,11 @@ $.fn.load_answers = () ->
       columnSorting: true
       wordWrap: true
       allowInvalid: true
-      minSpareRows: 1
+      minSpareRows: true
       contextMenu: ['undo','redo','remove_row']
       fixedColumnsLeft: 2
+      autoWrapRow: true
+      autoWrapCol: true
       beforeChange: ()->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
@@ -43,10 +45,10 @@ $.fn.load_answers = () ->
       
 $ ->
   
-  $(document).on "keyup", ".htSelectEditor", (e)->
+  $(document).on "keyup", "body", (e)->
     if e.which == 13
       $("#mass_entry_table").handsontable("deselectCell")
-    
+          
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
   
