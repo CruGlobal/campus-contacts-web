@@ -26,6 +26,10 @@ $.fn.load_answers = () ->
       fixedColumnsLeft: 2
       autoWrapRow: true
       autoWrapCol: true
+      beforeKeyDown: (e)->
+        if e.which == 9
+          cell = $('#mass_entry_table').handsontable('getSelected')
+          $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
       beforeChange: ()->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
