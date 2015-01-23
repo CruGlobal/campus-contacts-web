@@ -16,6 +16,7 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
   def create
     contact_assignment = contact_assignments.new(params[:contact_assignment])
     contact_assignment.organization_id = current_organization.id
+    contact_assignment.assigned_by_id = current_person if current_person.present?
     if contact_assignment.save
       render json: contact_assignment,
              status: :created,

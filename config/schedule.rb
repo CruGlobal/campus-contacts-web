@@ -28,6 +28,7 @@ every 4.hours do
 end
 
 every 1.day do
+  rake "notify:contact_assignments"
   rails "runner Batch.person_transfer_notify"
   #rails "runner Batch.new_person_notify"
 end

@@ -249,14 +249,14 @@ class PeopleController < ApplicationController
 
     if params[:assigned_to_id].present?
       if params[:assigned_to_id] == 0
-        @person.assigned_tos.where('contact_assignments.organization_id' => current_organization.id).delete_all
+        @person.assigned_tos.where("contact_assignments.organization_id = ?", current_organization.id).delete_all
       else
         leader_ids = params[:assigned_to_id].split(",")
-        @person.assigned_tos.delete_all
+        @person.assigned_tos.where("contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)", current_organization.id, leader_ids).delete_all
+        
         leader_ids.each do |leader_id|
           if leader = current_organization.leaders.where(id: leader_id).try(:first)
-            new_assignment = @person.assigned_tos.new(organization_id: current_organization.id, assigned_to_id: leader_id)
-            new_assignment.save
+            leader.assign_contacts([@person.id], current_organization, current_person)
           end
         end
       end

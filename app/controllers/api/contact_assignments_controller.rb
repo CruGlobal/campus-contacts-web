@@ -11,7 +11,10 @@ class Api::ContactAssignmentsController < ApiController
       ContactAssignment.where(person_id: ids, organization_id: @organization.id).destroy_all
       ids.each do |id|
         raise ContactAssignmentCreateParamsError unless is_int?(id)
-        ContactAssignment.create!(person_id: id, organization_id: @organization.id, assigned_to_id: params[:assign_to])
+        contact_assignment = ContactAssignment.new(person_id: id, assigned_to_id: params[:assign_to])
+        contact_assignment.organization_id = current_organization.id
+        contact_assignment.assigned_by_id = current_person if current_person.present?
+        contact_assignment.save
       end
     else raise NoOrganizationError
     end
