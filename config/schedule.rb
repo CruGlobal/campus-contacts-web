@@ -27,11 +27,8 @@ every 4.hours do
   rake "sp:sync"
 end
 
-every 30.minutes do
-  rake "notify:contact_assignments"
-end
-
 every 1.day do
+  rake "notify:contact_assignments"
   rails "runner Batch.person_transfer_notify"
   #rails "runner Batch.new_person_notify"
 end
