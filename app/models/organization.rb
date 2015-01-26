@@ -600,7 +600,8 @@ class Organization < ActiveRecord::Base
           org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
       else
-        unless new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).try(:first)
+        new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).try(:first)
+        unless new_org_permission.present?
           new_org_permission = OrganizationalPermission.create(permission_id: permission.id, person_id: person.id, organization_id: id)
         end
         if new_org_permission.archive_date.present? || new_org_permission.deleted_at.present?
