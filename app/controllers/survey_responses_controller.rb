@@ -109,27 +109,29 @@ class SurveyResponsesController < ApplicationController
     @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
-      if params[:person]
-        if params[:person][:email].present?
-          # See if we can match someone by email
-          existing_person = EmailAddress.where(email: params[:person][:email]).first.try(:person)
-        end
 
-        params[:person][:phone_number] = @sms.phone_number if params[:person][:phone_number].blank? && @sms.present?
-        if params[:person][:phone_number].present?
-          # See if we can match someone by name and phone number
-          existing_person = Person.find_existing_person_by_name_and_phone(number: params[:person][:phone_number],
-                                                                          first_name: params[:person][:first_name],
-                                                                          last_name: params[:person][:last_name])
+      # Ensure that there's a person hash
+      params[:person] = Hash.new unless params[:person]
+
+      ['birth_date','graduation_date', 'email'].each do |attr_name|
+        if element = @survey.questions.find_by_attribute_name(attr_name)
+          if element.predefined? && params[:answers]["#{element.id}"].present?
+            params[:person][:"#{attr_name}"] = params[:answers]["#{element.id}"]
+          end
         end
-      else
-        params[:person] = Hash.new
       end
 
-      ['birth_date','graduation_date'].each do |attr_name|
-        if date_element = @survey.questions.where(attribute_name: attr_name)
-          params[:person][:"#{attr_name}"] = params[:answers]["#{date_element.first.id}"] if date_element.present? && params[:answers]["#{date_element.first.id}"].present?
-        end
+      form_email_address = params[:person][:email]
+      form_phone_number = params[:person][:phone_number]
+      if form_email_address.present?
+        # See if we can match someone by email
+        existing_person = Person.find_existing_person_by_email(form_email_address)
+      elsif form_phone_number.present? || (form_phone_number.blank? && @sms.present?)
+        form_phone_number = @sms.phone_number if @sms.present?
+        # See if we can match someone by name and phone number
+        existing_person = Person.find_existing_person_by_name_and_phone(number: form_phone_number,
+                                                                        first_name: params[:person][:first_name],
+                                                                        last_name: params[:person][:last_name])
       end
 
       if faculty_element = @survey.questions.where(attribute_name: 'faculty').first
@@ -145,11 +147,8 @@ class SurveyResponsesController < ApplicationController
         else
           @person = existing_person
         end
-      end
-
-      if @person
-        @person.update_attributes(params[:person])
       else
+        # Do not create a new person data when there's an existing to avoid duplicate data
         @person = Person.create(params[:person])
       end
 
@@ -161,9 +160,10 @@ class SurveyResponsesController < ApplicationController
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
-          @org.change_person_permission(@person, Permission::NO_PERMISSIONS_ID, current_person.id)
+          # Do not change the permission if there's an existing permission (add_contact method handles it)
+          @org.add_contact(@person)
+
           unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
-            create_contact_at_org(@person, @survey.organization)
             FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
           end
           destroy_answer_sheet_when_answers_are_all_blank
