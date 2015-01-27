@@ -172,6 +172,9 @@ body{
   }
 
   &#interactions_controller, &#profile_controller {
+    .interaction_form_container{
+      overflow: hidden;
+    }
     .add_email, .add_phone, .add_address {
       float: right;
       padding: 0;
