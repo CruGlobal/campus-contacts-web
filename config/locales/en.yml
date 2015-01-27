@@ -568,6 +568,7 @@ en:
     back: Back
     both: Both
     city: City
+    type: Type
     comment_is_blank: Please enter your comment.
     contact_location: Contact Location
     contacts_updated_from: Contacts Updated From
@@ -775,6 +776,7 @@ en:
     comment_field_title: Comment
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
+    addresses_limit: Only 4 different addresses can be added
     profile_info:
       email_contact_info: Email Me This Contact Info
       opt_in_help: If you would like to receive text messages, text 'ON' to 85005 to opt back in.

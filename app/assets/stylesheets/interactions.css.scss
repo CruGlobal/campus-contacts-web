@@ -302,8 +302,8 @@ body{
     .edit_phone_fields,
     .edit_address_fields {
       margin-bottom: 6px;
-      &:hover .remove_field {
-        display: inline-block;;
+      &:hover .remove_field, &:hover .remove_address_field {
+        display: inline-block;
       }
     }
     #profile_errors {

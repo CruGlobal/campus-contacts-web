@@ -266,7 +266,7 @@ class PeopleController < ApplicationController
     respond_to do |format|
 
       @person.reload if @person.readonly? # This might fix the readonly error
-      
+
       if params[:person][:phone_numbers_attributes].present?
         params[:person][:phone_numbers_attributes].each do |phone|
           begin
@@ -274,7 +274,7 @@ class PeopleController < ApplicationController
           rescue; end
         end
       end
-      
+
       if @person.update_attributes(params[:person])
         @person.update_attribute(:student_status, nil) if @person.faculty?
         @person.update_date_attributes_updated

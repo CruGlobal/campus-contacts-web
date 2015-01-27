@@ -50,10 +50,11 @@
         <label><%= t('general.address') %></label>:
       </div>
   		<div class="address col_right">
-        <div class="add_address" id="edit_profile_add_address_button">
+        <div class="add_address" id="add_address_button">
           <a href="#" class="tip" title="Add Address"><button class="add_gray"></button></a>
         </div>
-        <div id="edit_profile_address_list">
+        <% @person.addresses.build if @person.addresses.blank? %>
+        <div id="edit_profile_address_list" data-person-id="<%= @person.id %>">
           <%= pf.fields_for :addresses do |builder| %>
             <%= render 'interactions/address_fields', builder: builder %>
           <% end %>

@@ -69,7 +69,6 @@
 <% phone_numbers = @person.phone_numbers %>
 <% addresses = @person.addresses %>
 
-<% if (addresses.present? && addresses.first.address1.present?) || phone_numbers.present? || email_addresses.present? %>
   <div class="feed_box info_display">
 
     <% if email_addresses.present? %>
@@ -121,7 +120,11 @@
         		<div class="multi_line" id="address_line_3"><%= address.address3 %></div>
         		<div class="multi_line" id="address_line_4"><%= address.address4 %></div>
         		<div class="multi_line" id="address_city_state_zip">
-              <%= "#{address.city}, #{address.state} #{address.zip}" %>
+              <% address_city_state_zip = "" %>
+              <% address_city_state_zip += "#{address.city}, " if address.city.present? %>
+              <% address_city_state_zip += "#{address.state}" if address.state.present? %>
+              <% address_city_state_zip += "#{address.zip}" if address.zip.present? %>
+              <%= "#{address_city_state_zip}" %>
             </div>
         		<div class="multi_line"><%= address.country %></div>
           <% end %>
@@ -157,4 +160,3 @@
       </div>
     <% end %>
   </div>
-<% end %>

@@ -1,26 +1,26 @@
 class Address < ActiveRecord::Base
 	TYPES = {"Current" => "current", "Permanent" => "permanent", "Emergency 1" => "emergency1", "Emergency 2" => "emergency2"}
 	validates_presence_of :address_type
-	
+
 	belongs_to :person, touch: true
-	
+
 	def display_html
 	  ret_val = address1 || ''
-		ret_val += '<br/>'+address2 unless address2.nil? || address2.empty? 
+		ret_val += '<br/>'+address2 unless address2.nil? || address2.empty?
 		ret_val += '<br/>' unless ret_val.empty?
-		ret_val += city+', ' unless city.nil? || city.empty? 
+		ret_val += city+', ' unless city.nil? || city.empty?
 		ret_val += state + ' ' unless state.nil?
 		ret_val += zip unless zip.nil?
 		ret_val += '<br/>'+country unless country.nil? || country.empty? || country == 'US' || country == 'USA'
 		return ret_val
 	end
 	alias_method :to_s, :display_html
-	
+
 	def map_link
 	  address = [address1, address2, city, state, zip, country].select {|a| a.to_s.strip.present?}.join('+')
 	 "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=#{address}"
 	end
-	
+
   def merge(other)
     Address.transaction do
       # We're only interested if the other address has been updated more recently

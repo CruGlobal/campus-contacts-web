@@ -1010,7 +1010,7 @@ class Person < ActiveRecord::Base
     numbers
   end
 
-  delegate :address1, :address1=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_or_blank_address
+  delegate :address1, :address1=, :address2, :address2=, :address3, :address3=, :address4, :address4=, :city, :city=, :state, :state=, :zip, :zip=, :country, :country=, :dorm, :dorm=, :room, :room=, to: :current_or_blank_address
 
   def current_or_blank_address
     self.current_address ||= build_current_address

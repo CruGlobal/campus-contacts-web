@@ -134,6 +134,15 @@ class InteractionsController < ApplicationController
     @interaction.destroy
   end
 
+  def remove_address
+    person = Person.find_by_id(params[:person_id])
+    if person.present?
+      address = person.addresses.find_by_address_type(params[:address_type])
+      address.destroy if address.present?
+    end
+    render :nothing => true
+  end
+
   protected
   def authorize
     authorize! :manage_contacts, current_organization
