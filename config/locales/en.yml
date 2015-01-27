@@ -645,7 +645,7 @@ en:
     subject: 'Subject:'
     survey: Survey
     survey_help_desc: ' To begin your survey, '
-    survey_text_help_desc: Text your keyword to 85005
+    survey_text_help_desc: Text your keyword to %{shortcode}
     survey_text_tip_html: To begin your survey, <strong>text %{keyword} to %{shortcode}.</strong>
     survey_web_tip_html: For the web version of the survey, send people to <strong>%{link}/</strong>
     to: To

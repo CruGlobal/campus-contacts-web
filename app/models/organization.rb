@@ -282,6 +282,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def sms_code
+    has_parent?(APP_CONFIG['power_to_change_org_id']) ? SmsKeyword::LONG_POWER2CHANGE : SmsKeyword::SHORT
+  end
+
   def predefined_survey_questions
     questions = Survey.find(APP_CONFIG['predefined_survey']).questions
     if is_bridge? #bridges
