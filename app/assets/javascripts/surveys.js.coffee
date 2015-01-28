@@ -21,13 +21,21 @@ $.fn.load_answers = () ->
       columnSorting: true
       wordWrap: true
       allowInvalid: true
-      minSpareRows: 1
+      minSpareRows: true
       contextMenu: ['undo','redo','remove_row']
       fixedColumnsLeft: 2
+      autoWrapRow: true
+      autoWrapCol: true
+      beforeKeyDown: (e)->
+        if e.which == 9
+          cell = $('#mass_entry_table').handsontable('getSelected')
+          $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
       beforeChange: ()->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
         cellProperties = {}
+        if response['multi_col'].indexOf(col) >= 0
+          cellProperties.renderer = Handsontable.renderers.AutocompleteRenderer;
         id = $("#mass_entry_table").handsontable("getDataAtCell", row, 0)
         val = $("#mass_entry_table").handsontable("getDataAtCell", row, col)
         if id == "" || id == null || id == undefined
@@ -40,7 +48,11 @@ $.fn.load_answers = () ->
 
       
 $ ->
-    
+  
+  $(document).on "keyup", "body", (e)->
+    if e.which == 13
+      $("#mass_entry_table").handsontable("deselectCell")
+          
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
   
