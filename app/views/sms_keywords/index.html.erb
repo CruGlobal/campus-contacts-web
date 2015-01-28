@@ -12,7 +12,7 @@
 <div id="ac_button_bar">
 	<ul class="button_bar">
 		<li class="inlinehelp">
-      <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc') %></b>
+      <%= t('general.survey_help_desc') %><b><%= t('general.survey_text_help_desc', shortcode: current_organization.sms_code) %></b>
 		</li>
 	</ul>
 </div>
