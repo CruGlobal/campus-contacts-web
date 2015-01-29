@@ -20,7 +20,7 @@
 
 <div class="gender col_left"><%= t('general.assign_to') %>:</div>
 <div class="gender col_right" id="assigned_to_div">
-  <% get_assigned = (@assigned_tos.count == 0) ? false : true %>
+  <% get_assigned = (@assigned_tos.present? && @assigned_tos.count == 0) ? false : true %>
   <% current_id = (get_assigned && @assigned_tos.first.present?) ? @assigned_tos.collect(&:id).join(",") : '0' %>
   <%= text_field_tag :assigned_to_id, current_id, id: 'assigned_to_id', class: 'hidden' %>
   <div id="assigned_to_dropdown" class="custom_dropdown edit assigned_to_dropdown" data-current-id="<%= current_id %>">
