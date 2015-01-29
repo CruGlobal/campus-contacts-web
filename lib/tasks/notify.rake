@@ -16,6 +16,7 @@ namespace :notify do
           assignment_array = Array.new
           assignments = contact_assignments.where(organization_id: org.id, assigned_to_id: leader.id)
           assignments.each do |assignment|
+            next unless assignment.person.present?
             assigned_by = {id: assignment.assigned_by.id, name: assignment.assigned_by.name} if assignment.assigned_by
             assignment_hash = {id: assignment.id, name: assignment.person.name, assigned_by: assigned_by}
             puts "---- Assignment - #{assignment_hash}"
