@@ -10,6 +10,7 @@ class KeywordRequestMailer < ActionMailer::Base
 
   def notify_user(keyword_id)
     @keyword = SmsKeyword.find(keyword_id)
+    @organization = @keyword.organization
     mail(to: @keyword.user.person.email, subject: "Keyword '#{@keyword}' was approved!")
   end
 

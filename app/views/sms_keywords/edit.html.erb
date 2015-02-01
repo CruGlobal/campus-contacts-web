@@ -10,7 +10,7 @@
 </div>
 
 <p class="explanation1">
-  <%= t('sms_keywords.new.choose_keyword_explanation_html', number: SmsKeyword::SHORT) %>
+  <%= t('sms_keywords.new.choose_keyword_explanation_html', number: current_organization.sms_code) %>
 </p>
 
 <%= render 'form' %>
