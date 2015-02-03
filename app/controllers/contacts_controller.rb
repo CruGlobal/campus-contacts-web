@@ -13,6 +13,44 @@ class ContactsController < ApplicationController
     #render 'update_leader_error'
   end
 
+  def set_labels
+    people_ids = params[:people_ids]
+    label_ids = params[:label_ids]
+    remove_label_ids = params[:remove_label_ids]
+    unchanged_label_ids = params[:unchanged_label_ids]
+    @from_all_contacts = params[:from_all_contacts]
+
+    @selected_people = Person.where(id: people_ids.split(','))
+    @selected_people.each do |person|
+      if label_ids.present?
+        label_ids = label_ids.split(',')
+        label_ids.each do |label_id|
+          label = person.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id.to_i, current_organization.id)
+          label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
+        end
+      end
+
+      remove_label_ids = remove_label_ids.present? ? remove_label_ids.split(',') : []
+      unchanged_label_ids = unchanged_label_ids.present? ? unchanged_label_ids.split(',') : []
+
+      remove_labels = person.organizational_labels_for_org(current_organization)
+      if @from_all_contacts.present?
+        if label_ids.present?
+          remove_labels = remove_labels.where("label_id NOT IN (?)", label_ids)
+        end
+      else
+         remove_labels = remove_labels.where("label_id IN (?)", remove_label_ids - unchanged_label_ids)
+      end
+      remove_labels.destroy_all if remove_labels.present?
+    end
+
+    if @from_all_contacts == "0"
+      @person = @selected_people.first
+      @labels = @person.assigned_organizational_labels(current_organization.id).uniq
+    end
+    filter
+  end
+
   def set_permissions
     @people = Person.where(id: params[:people_ids].split(','))
     @permission_id = params[:permission_id]
@@ -1080,7 +1118,7 @@ class ContactsController < ApplicationController
           sort_words = sort_query.split(" ")
           new_sort_query = "TRIM(#{sort_words[0]}) #{sort_words[1]}".strip if sort_words.count >= 1
           @all_people = @all_people.order_by_any_column(new_sort_query)
-        end 
+        end
       else
       	order_query = "people.last_name asc, people.first_name asc"
       end

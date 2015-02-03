@@ -132,7 +132,6 @@ Mh::Application.routes.draw do
   resources :organizational_labels do
     collection do
       post :update_all
-      post :set_labels
     end
   end
 
@@ -325,6 +324,7 @@ Mh::Application.routes.draw do
 
       post :add_contact_check_email
       post :set_permissions
+      post :set_labels
     end
   end
 
