@@ -1,13 +1,13 @@
 <div class="titlebar titlebarmod">
-  <div id="ac_button_bar" class="mass_entry_buttons">
-  	<%= render "actions" %>
+  <div id='global_loader'>
+    <%= image_tag 'loader.gif'%>
   </div>
   <h1>
     <%= t('.title', survey: @survey.title) %>
-    <div id='global_loader'>
-      <%= image_tag 'loader.gif'%>
-    </div>
   </h1>
+  <div id="ac_button_bar" class="mass_entry_buttons">
+  	<%= render "actions" %>
+  </div>
 </div>
 
 <div id="ac_contact_spread">

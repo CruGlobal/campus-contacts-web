@@ -7,21 +7,36 @@ body.mass_entry {
     height: 65px;
   }
   #outer {
-    margin: 140px auto 0px;
+    margin: 133px auto 0px;
+    .ht_clone_top, .ht_clone_corner {
+      display: none;
+    }
   }
-  #ac_button_bar {
-    margin-left: 15px;
+  #fixed_header {
+    height: 65px;
+    #globalNav, #menu_search, .sf-menu, .ht_clone_top {
+      display: none;
+    }
   }
   .titlebar {
     z-index: 999;
     position: fixed;
     background-color: #fff;
-    top: 95px;
+    top: 60px;
     left: 0;
     width: 100%;
+    padding: 0;
+    h1 {
+      padding: 10px 10px 0;
+      overflow: hidden;
+      display: block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin: 0px auto;
+    }
     #ac_button_bar {
-      float: right;
-      margin: 2px 20px 0 0;
+      display: block;
+      margin: 5px 10px;
       z-index: 9999999;
     }
   }

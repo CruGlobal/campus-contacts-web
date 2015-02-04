@@ -23,7 +23,7 @@ $.fn.load_answers = () ->
       allowInvalid: true
       minSpareRows: true
       contextMenu: ['undo','redo','remove_row']
-      fixedColumnsLeft: 2
+      # fixedColumnsLeft: 2
       autoWrapRow: true
       autoWrapCol: true
       beforeKeyDown: (e)->
@@ -72,19 +72,19 @@ $ ->
   #   $(document).on "click", "#copy_mass_entry", (e)->
   #     e.preventDefault()
   
-  $(document).on "click", "#new_mass_entry", (e)->
+  $(document).on "click", ".new_mass_entry", (e)->
     e.preventDefault()
     row = $("#mass_entry_table").handsontable("countRows")-1
     $("#mass_entry_table").handsontable("selectCell", row, 0)
     $(document).scrollTop(9999)
       
-  $(document).on "click", "#reload_mass_entry", (e)->
+  $(document).on "click", ".reload_mass_entry", (e)->
     e.preventDefault()
     if $("body").data("has_changes") == "true"
       if(confirm('Warning! Reloading the Mass Entry table will not save your changes. Save changes before reloading page.'))
         $.fn.load_answers()
   
-  $(document).on "click", "#save_mass_entry", (e)->
+  $(document).on "click", ".save_mass_entry", (e)->
     e.preventDefault()
     $(".saving-loader").show()
     $("#mass_entry_table").hide()
