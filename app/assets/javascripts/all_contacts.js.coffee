@@ -79,42 +79,67 @@ $ ->
   $('#labels_popup_save_button').live 'click', (e)->
     e.preventDefault()
 
-    checked_label_ids = $('.label_checkbox:checked:not(:disabled)').map ->
+    arr_checked_label_ids = $('.label_checkbox:checked:not(:disabled)').map ->
       return $(this).val()
-    if checked_label_ids.size() > 1
-      checked_label_ids = checked_label_ids.get().join(',')
+    checked_label_ids = ""
+    if arr_checked_label_ids.length == 1
+      checked_label_ids = arr_checked_label_ids[0]
     else
-      checked_label_ids = checked_label_ids[0]
+      if arr_checked_label_ids.length > 1
+        checked_label_ids = arr_checked_label_ids.get().join(',')
 
-    unchecked_label_ids = $('.label_checkbox:not(:checked):not(:disabled)').map ->
+    arr_unchecked_label_ids = $('.label_checkbox:not(:checked):not(:disabled)').map ->
       return $(this).val()
-    if unchecked_label_ids.size() > 1
-      unchecked_label_ids = unchecked_label_ids.get().join(',')
+    unchecked_label_ids = ""
+    if arr_unchecked_label_ids.length == 1
+      unchecked_label_ids = arr_unchecked_label_ids[0]
     else
-      unchecked_label_ids = unchecked_label_ids[0]
+      if arr_unchecked_label_ids.length > 1
+        unchecked_label_ids = arr_unchecked_label_ids.get().join(',')
 
-    unchanged_label_ids = $('.label_checkbox:indeterminate').map ->
+    arr_unchanged_label_ids = $('.label_checkbox:indeterminate').map ->
       return $(this).val()
-    if unchanged_label_ids .size() > 1
-      unchanged_label_ids = unchanged_label_ids.get().join(',')
+    unchanged_label_ids = ""
+    if arr_unchanged_label_ids.length == 1
+      unchanged_label_ids = arr_unchanged_label_ids[0]
     else
-      unchanged_label_ids = unchanged_label_ids[0]
+      if arr_unchanged_label_ids.length > 1
+        unchanged_label_ids = arr_unchanged_label_ids.get().join(',')
 
-    people_ids = $('.contact_checkbox:checked').map ->
+    arr_people_ids = $('.contact_checkbox:checked').map ->
       return $(this).attr('data-id')
-    if people_ids.size() > 1
-      people_ids = people_ids.get().join(',')
+    people_ids = ""
+    if arr_people_ids.length == 1
+      people_ids = arr_people_ids[0]
     else
-      people_ids = people_ids[0]
+      if arr_people_ids.length > 1
+        people_ids = arr_people_ids.get().join(',')
 
     $.hideDialog($("#profile_labels_dialog"))
-    $.toggleLoader('profile_name','Applying Changes...')
-    $.toggleLoader('ac_button_bar','Applying Changes...')
-    $.ajax
-      type: 'POST',
-      url: "/organizational_labels/set_labels?people_ids=" + people_ids + "&label_ids=" + checked_label_ids + "&remove_label_ids=" + unchecked_label_ids + "&unchanged_label_ids=" + unchanged_label_ids
-      complete: ->
-        $.fn.listCheckboxes()
+    from_all_contacts = $(".contact_listing").length
+    if from_all_contacts > 0
+      $.fn.filterLoader("show", "Saving changes")
+    else
+      $.toggleLoader('profile_name','Applying Changes...')
+
+    labels_processed = 0
+    $.each arr_people_ids, (index, person_id) ->
+      $.ajax(
+        type: "POST"
+        url: "/contacts/set_labels"
+        data:
+          people_ids: person_id
+          label_ids: checked_label_ids
+          remove_label_ids: unchecked_label_ids
+          unchanged_label_ids: unchanged_label_ids
+          from_all_contacts: from_all_contacts
+      ).done (data) ->
+        labels_processed += 1
+        if arr_people_ids.length == labels_processed
+          $.fn.filterLoader("force")
+          $.fn.listCheckboxes()
+        else
+          $.fn.filterLoader("show", "Labels: #{labels_processed} out of #{arr_people_ids.length} contacts were updated.")
 
   $('#labels_add_new_button').live 'click', (e)->
     e.preventDefault()

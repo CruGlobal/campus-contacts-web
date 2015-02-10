@@ -1,0 +1,19 @@
+if($('#profile_label_box').length > 0){
+  $('#profile_label_box').html("")
+  <% if @labels.present? %>
+    <% @labels.each do |label| %>
+      $('#profile_label_box').append("<div class='profile_label'><%= label.name %></div>")
+    <% end %>
+  <% else %>
+    $('#profile_label_box').append("<div class='no_labels'>No labels assigned.</div>")
+  <% end %>
+  $.toggleLoader('profile_name','')
+}
+
+<% if @from_all_contacts.present? %>
+  $("#sidebar_lists").html("<%= escape_javascript(render partial: 'search/sidebar') %>")
+  $("#ac_pagination_top").html("<%= escape_javascript(render partial: 'contacts/pagination') %>")
+  $("#ac_contact_list").html("<%= escape_javascript(render partial: 'contacts/contact_list') %>")
+  $(".pagination_space #per_page").attr("disabled", false)
+  $(".scroll_table").doubleScroll()
+<% end %>
