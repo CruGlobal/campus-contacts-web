@@ -908,7 +908,7 @@ class Organization < ActiveRecord::Base
       .group(:title).having("count(id) > 1")
   end
 
-  def merge_duplicate_surveys_by_title(array_titles)
+  def merge_duplicate_surveys_by_title(array_titles, from_org)
     return false unless array_titles.present?
     puts "Survey Title with duplicate data: #{array_titles.to_sentence}"
     array_titles.each do |title|
@@ -993,7 +993,7 @@ class Organization < ActiveRecord::Base
                 puts "#{answer_sheet_log}: Person's Answer is already existing on the original survey"
                 duplicate_answer.destroy
               else
-                puts "#{answer_sheet_log}: Updated the answer (AnswerID: #{duplicate_answer.id})from the duplicate answer sheet."
+                puts "#{answer_sheet_log}: Updated the answer (AnswerID: #{duplicate_answer.id}) from the duplicate answer sheet."
                 duplicate_answer.update(answer_sheet_id: existing_answer_sheet.id)
               end
             end
@@ -1016,6 +1016,16 @@ class Organization < ActiveRecord::Base
 
         puts "#{survey_log}: Duplicate Survey was DELETED"
         duplicate_survey.destroy if duplicate_survey.present?
+      end
+    end
+
+    # Unique surveys from org, get the reference survey organization
+    self.surveys.each do |survey|
+      puts "~ Finding match survey:#{survey.title} from involved organization ~"
+      if existing_survey_from_org = from_org.surveys.find_by_title(survey.title)
+        puts "~ Found was matched: referencing copy_from_survey_id: #{existing_survey_from_org.id}~"
+        survey.copy_from_survey_id = existing_survey_from_org.id
+        survey.save(:validate => false)
       end
     end
   end
