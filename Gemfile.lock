@@ -529,7 +529,7 @@ DEPENDENCIES
   oj (~> 2.1.7)
   omniauth (~> 1.1.1)
   omniauth-cas
-  omniauth-facebook (= 1.4.0)
+  omniauth-facebook
   paper_trail (~> 2.7.2)
   paperclip!
   quiet_assets (~> 1.0.2)
