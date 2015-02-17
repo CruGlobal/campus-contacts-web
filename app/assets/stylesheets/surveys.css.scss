@@ -215,3 +215,12 @@ body.mass_entry {
 .mass_entry_buttons.bottom {
   padding: 15px 0 0;
 }
+
+.htMobileEditorContainer {
+  .inputs textarea {
+    width: auto;
+  }
+  .positionControls {
+    display: none;
+  }
+}
