@@ -11,6 +11,9 @@ $.fn.load_answers = () ->
     $("#mass_entry_table").show()
     $(".mass_entry_buttons").show()
     $("#mass_entry_table").handsontable
+      width: $(window).width()
+      height: $(window).height()
+      autoColumnSize: true
       data: response['data']
       columns: response['settings']
       colHeaders: response['headers']
@@ -26,6 +29,7 @@ $.fn.load_answers = () ->
       # fixedColumnsLeft: 2
       autoWrapRow: true
       autoWrapCol: true
+      fillHandle: false
       beforeKeyDown: (e)->
         if e.which == 9
           cell = $('#mass_entry_table').handsontable('getSelected')

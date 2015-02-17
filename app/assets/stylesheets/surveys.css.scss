@@ -11,6 +11,7 @@ body.mass_entry {
   }
   #outer {
     margin: 133px auto 0px;
+    min-width: inherit;
     .ht_clone_top, .ht_clone_corner {
       display: none;
     }
