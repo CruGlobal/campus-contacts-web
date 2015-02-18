@@ -908,7 +908,7 @@ class Organization < ActiveRecord::Base
       .group(:title).having("count(id) > 1")
   end
 
-  def merge_duplicate_surveys_by_title(array_titles, from_org)
+  def merge_duplicate_surveys_by_title(array_titles, from_org, check_same_elements_by_label = false)
     return false unless array_titles.present?
     puts "Survey Title with duplicate data: #{array_titles.to_sentence}"
     array_titles.each do |title|
@@ -930,24 +930,28 @@ class Organization < ActiveRecord::Base
         duplicate_survey.survey_elements.each do |duplicate_survey_element|
           survey_element_log = "#{survey_log}: Duplicate Survey Element ID ##{duplicate_survey_element.id}"
           puts survey_element_log
-          # Recall orignal survey elements
-          original_survey_elements = original.survey_elements
-
-          # Recall original custom element labels
-          original_custom_element_labels = original.custom_element_labels
 
           puts "#{survey_element_log}: Processing question rules..."
           # Call question_rules from duplicate survey element
           duplicate_question_rules = duplicate_survey_element.question_rules
+
           # Secure to have same question to the original survey
           existing_question = original.survey_elements.find_by_element_id(duplicate_survey_element.element_id)
+
+          # Find same label of elements if exists
+          if check_same_elements_by_label
+            unless existing_question.present?
+              existing_question = original.elements.find_by_label(duplicate_survey_element.element.label)
+            end
+          end
+
           if existing_question.present?
             puts "#{survey_element_log}: Survey element is already exists."
             duplicate_question_rules.destroy_all if duplicate_question_rules.present?
             puts "#{survey_element_log}: Duplicate question rules were DELETED"
           else
             puts "#{survey_element_log}: Survey element is not existing in the original survey, copying data."
-            new_survey_element = original_survey_elements.new(duplicate_survey_element.attributes)
+            new_survey_element = original.survey_elements.new(duplicate_survey_element.attributes)
             new_survey_element.save(:validate => false)
 
             # Update the duplicate question rules to newly merged survey element
@@ -960,10 +964,10 @@ class Organization < ActiveRecord::Base
           duplicate_custom_labels = duplicate_survey.custom_element_labels.where("question_id = ?", duplicate_survey_element.element_id)
           duplicate_custom_labels.each do |duplicate_custom_label|
             # Secure to have same custom element label for the original survey element
-            existing_custom_label = original_custom_element_labels.find_by_question_id(duplicate_custom_label.question_id)
+            existing_custom_label = original.custom_element_labels.find_by_question_id(duplicate_custom_label.question_id)
             unless existing_custom_label.present?
               puts "#{survey_element_log}: Custom Element Label is not existing in the original survey, copying data."
-              new_custom_label = original_custom_element_labels.new(duplicate_custom_label.attributes)
+              new_custom_label = original.custom_element_labels.new(duplicate_custom_label.attributes)
               new_custom_label.save(:validate => false)
             end
           end
