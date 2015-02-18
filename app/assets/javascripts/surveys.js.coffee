@@ -34,7 +34,7 @@ $.fn.load_answers = () ->
       rowHeaders: true
       outsideClickDeselects: true
       removeRowPlugin: true
-      enterBeginsEditing: false
+      enterBeginsEditing: true
       enterMoves: {row: 0, col: 1}
       fillHandle: false
       # minSpareRows: 1
@@ -43,7 +43,7 @@ $.fn.load_answers = () ->
       stretchH: 'all'
       columnSorting: true
       wordWrap: true
-      # allowInvalid: true
+      allowInvalid: true
       contextMenu: ['undo','redo','remove_row']
       # # fixedColumnsLeft: 2
       autoWrapRow: true
@@ -68,8 +68,6 @@ $.fn.load_answers = () ->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
         cellProperties = {}
-        if response['multi_col'].indexOf(col) >= 0
-          cellProperties.renderer = Handsontable.renderers.AutocompleteRenderer;
         id = $("#mass_entry_table").handsontable("getDataAtCell", row, 0)
         val = $("#mass_entry_table").handsontable("getDataAtCell", row, col)
         if id == "" || id == null || id == undefined
@@ -86,6 +84,20 @@ $ ->
   # $(document).on "keyup", "body", (e)->
   #   if e.which == 13
   #     $("#mass_entry_table").handsontable("deselectCell")
+  
+  $(document).on "keypress", ".handsontableInput", (e)->
+    if e.which == 13
+      mass_entry = $("#mass_entry_table")
+
+      cell = mass_entry.handsontable('getSelected')
+      max_row_index = mass_entry.handsontable("countRows") - 1
+      max_column_index = mass_entry.handsontable("countCols") - 1
+      console.log (cell[1] + 1) > max_column_index
+      if (cell[1] + 1) > max_column_index
+        mass_entry.handsontable("selectCell", cell[0] + 1, 0)
+      else
+        mass_entry.handsontable("selectCell", cell[0], cell[1] + 1)
+      return false
           
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
