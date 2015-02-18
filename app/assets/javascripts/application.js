@@ -14,7 +14,6 @@
 //= require jquery.doubleScroll
 //= require jquery.qtip2
 //= require jquery.handsontable.full.min
-//= require jquery.handsontable.multiselect
 //= require jquery.zeroclipboard
 //= require jquery-ui-timepicker-addon_mh
 //= require colorpicker.js

@@ -85,7 +85,7 @@ $ ->
   #   if e.which == 13
   #     $("#mass_entry_table").handsontable("deselectCell")
   
-  $(document).on "keypress", ".handsontableInput", (e)->
+  $(document).on "keypress", ".handsontableInput, .htSelectEditor", (e)->
     if e.which == 13
       mass_entry = $("#mass_entry_table")
 
