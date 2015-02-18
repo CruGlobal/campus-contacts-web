@@ -328,7 +328,8 @@
 }
 
 .htSelectEditor {
-  -webkit-appearance: menulist-button !important;
+/*  -webkit-appearance: menulist-button !important;*/
+  height: 75px !important;
   position: absolute;
   width: auto;
 }
@@ -906,6 +907,7 @@ thead .htCollapseButton:after {
   position: absolute;
   top: 0;
   width: 70%;
+  max-width: 300px;
   height: 54pt;
   background: #f8f8f8;
   border-radius: 20px;

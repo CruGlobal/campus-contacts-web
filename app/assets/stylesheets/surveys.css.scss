@@ -217,10 +217,20 @@ body.mass_entry {
 }
 
 .htMobileEditorContainer {
-  .inputs textarea {
-    width: auto;
+  .inputs {
+    width: 75%;
+    textarea {
+      width: 100%;
+    }
   }
   .positionControls {
     display: none;
+  }
+}
+
+.htContainer {
+  .topLeftSelectionHandle,
+  .bottomRightSelectionHandle {
+    display: none !important;
   }
 }

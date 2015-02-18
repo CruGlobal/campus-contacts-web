@@ -47,7 +47,7 @@ class SurveysController < ApplicationController
           setting["source"] = question.options_with_blank
         else
           multi_col << i
-          setting["editor"] = "multiselect"
+          setting["editor"] = "select"
           setting["strict"] = "false"
           setting["selectOptions"] = question.options_with_blank
         end

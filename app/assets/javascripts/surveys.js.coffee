@@ -23,7 +23,6 @@ $.fn.load_answers = () ->
     $(".saving-loader").hide()
     $("#mass_entry_table").show()
     $(".mass_entry_buttons").show()
-    console.log response['settings']
     $("#mass_entry_table").handsontable
       width: $(window).width()
       height: $(window).height()
@@ -44,10 +43,11 @@ $.fn.load_answers = () ->
       columnSorting: true
       wordWrap: true
       allowInvalid: true
-      contextMenu: ['undo','redo','remove_row']
-      # # fixedColumnsLeft: 2
+      # contextMenu: ['undo','redo','remove_row']
+      # fixedColumnsLeft: 2
       autoWrapRow: true
       autoWrapCol: true
+      multiSelect: false
       # fillHandle: false
       beforeKeyDown: (e)->
         mass_entry = $("#mass_entry_table")
