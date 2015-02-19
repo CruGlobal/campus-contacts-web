@@ -1,3 +1,4 @@
+<%- protocol = Rails.env.development? ? 'http' : 'https' %>
 <tr>
   <td><%= survey %></td>
   <% if current_organization.show_sub_orgs? %>
@@ -5,7 +6,7 @@
   <% end %>
   <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
   <td>
-    <%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: 'https'), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: 'https'), target: '_blank')%>
+    <%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: protocol), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: protocol), target: '_blank')%>
   </td>
   <td class="controls" align="right">
     <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>

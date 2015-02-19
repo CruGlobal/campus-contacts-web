@@ -9,13 +9,14 @@ class SurveyResponsesController < ApplicationController
 
   def new
     unless mhub? || Rails.env.test?
-      redirect_to new_survey_response_url(params.merge(protocol: 'https', host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+      protocol = Rails.env.development? ? 'http' : 'https'
+      redirect_to new_survey_response_url(params.merge(protocol: protocol, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
       return false
     end
 
     # If they haven't skipped facebook already, send them to the login page
     # Also skip login if we're in survey mode
-    unless cookies[:survey_mode].present? || params[:nologin] == 'true' || (@sms && @sms.sms_keyword.survey.login_option == Survey::NO_LOGIN)
+    unless params[:nologin] == 'true' || (@sms && @sms.sms_keyword.survey.login_option == Survey::NO_LOGIN)
       return unless authenticate_user!
     end
     # If they texted in, save their phone number
@@ -90,7 +91,7 @@ class SurveyResponsesController < ApplicationController
       if @survey.redirect_url.to_s =~ /https?:\/\//
         redirect_to @survey.redirect_url and return false
       else
-        @current_person = @eperson
+        @current_person = @person
         respond_to do |wants|
           wants.html { render :thanks, layout: 'mhub'}
           wants.mobile { render :thanks }

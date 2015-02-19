@@ -275,7 +275,6 @@ $.mh.logout = (url) ->
     #  )
     #catch err
     document.location = next
-
   else
     document.location = next
 
