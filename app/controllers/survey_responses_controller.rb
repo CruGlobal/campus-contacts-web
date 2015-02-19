@@ -123,15 +123,20 @@ class SurveyResponsesController < ApplicationController
 
       form_email_address = params[:person][:email]
       form_phone_number = params[:person][:phone_number]
+
       if form_email_address.present?
         # See if we can match someone by email
         existing_person = Person.find_existing_person_by_email(form_email_address)
-      elsif form_phone_number.present? || (form_phone_number.blank? && @sms.present?)
-        form_phone_number = @sms.phone_number if @sms.present?
-        # See if we can match someone by name and phone number
-        existing_person = Person.find_existing_person_by_name_and_phone(number: form_phone_number,
-                                                                        first_name: params[:person][:first_name],
-                                                                        last_name: params[:person][:last_name])
+      end
+
+      unless existing_person.present?
+        if form_phone_number.present? || (form_phone_number.blank? && @sms.present?)
+          form_phone_number = @sms.phone_number if @sms.present?
+          # See if we can match someone by name and phone number
+          existing_person = Person.find_existing_person_by_name_and_phone(number: form_phone_number,
+                                                                          first_name: params[:person][:first_name],
+                                                                          last_name: params[:person][:last_name])
+        end
       end
 
       if faculty_element = @survey.questions.where(attribute_name: 'faculty').first

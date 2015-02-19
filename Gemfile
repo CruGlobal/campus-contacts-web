@@ -91,7 +91,7 @@ group :development do
   gem 'railroady', '~> 1.1.1'
   #gem 'localeapp'
   gem "better_errors", ">= 0.7.2"
-  #gem "binding_of_caller"
+  gem "binding_of_caller"
 end
 
 group :performance do
