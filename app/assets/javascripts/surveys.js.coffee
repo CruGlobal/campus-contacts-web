@@ -77,6 +77,7 @@ $.fn.load_answers = () ->
         # else if (val != "" && val != null) && (col == 1 || col == 2 || col == 3)
         #   cellProperties.readOnly = true
         return cellProperties
+    $.fn.add_row()
 
       
 $ ->
