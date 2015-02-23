@@ -12,13 +12,13 @@ body.mass_entry {
   #outer {
     margin: 133px auto 0px;
     min-width: inherit;
-    .ht_clone_top, .ht_clone_corner {
+    .ht_clone_corner {
       display: none;
     }
   }
   #fixed_header {
     height: 65px;
-    #globalNav, #menu_search, .sf-menu, .ht_clone_top {
+    #globalNav, #menu_search, .sf-menu {
       display: none;
     }
   }

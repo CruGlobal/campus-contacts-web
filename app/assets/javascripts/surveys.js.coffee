@@ -25,7 +25,6 @@ $.fn.load_answers = () ->
     $(".mass_entry_buttons").show()
     $("#mass_entry_table").handsontable
       width: $(window).width()
-      height: $(window).height()
       autoColumnSize: true
       data: response['data']
       columns: response['settings']
@@ -38,7 +37,7 @@ $.fn.load_answers = () ->
       fillHandle: false
       # minSpareRows: 1
       # manualColumnResize: true
-      nativeScrollbars: true
+      # nativeScrollbars: true
       stretchH: 'all'
       columnSorting: true
       wordWrap: true
