@@ -13,15 +13,15 @@ class SurveysController < ApplicationController
     authorize! :manage, @organization
     @surveys = @organization.surveys.includes(:keyword)
   end
-  
+
   def mass_entry
     render 'mass_entry', layout: 'mass_entry'
   end
-  
+
   def mass_entry_data
     @people = current_organization.not_archived_people.who_answered(@survey.id)
     questions = @survey.questions.order(:position)
-    
+
     # Collect survey settings
     settings = Array.new
     multi_col = Array.new
@@ -58,7 +58,7 @@ class SurveysController < ApplicationController
       end
       settings << setting
     end
-    
+
     # Collect survey questions & answers
     data = Array.new
     @people.each do |person|
@@ -92,7 +92,7 @@ class SurveysController < ApplicationController
     response['data'] = data
     render json: response.to_json
   end
-  
+
   def mass_entry_save
     @msg = Array.new
     return false unless params["values"].present?
@@ -223,15 +223,7 @@ class SurveysController < ApplicationController
       if @receiving_org.surveys.where(title: @survey.title).present?
         @status = 'duplicate'
       else
-        new_survey = @receiving_org.surveys.new(@survey.attributes)
-        if new_survey.save
-          @survey.survey_elements.each do |q|
-            if element = q.element
-              new_element = element.kind.constantize.create(element.attributes.except("id","kind"))
-              new_question = new_survey.survey_elements.new(q.attributes.merge("element_id" => new_element.id))
-              new_question.save
-            end
-          end
+        if @survey.duplicate_to_org(@receiving_org)
           @status = 'copied'
         end
       end
