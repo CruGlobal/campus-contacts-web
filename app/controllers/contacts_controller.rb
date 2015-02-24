@@ -39,9 +39,9 @@ class ContactsController < ApplicationController
           remove_labels = remove_labels.where("label_id NOT IN (?)", label_ids)
         end
       else
-         remove_labels = remove_labels.where("label_id IN (?)", remove_label_ids - unchanged_label_ids)
+        remove_labels = remove_labels.where("label_id IN (?)", remove_label_ids - unchanged_label_ids)
       end
-      remove_labels.destroy_all if remove_labels.present?
+      remove_labels.update_all(:removed_date => Time.now) if remove_labels.present?
     end
 
     if @from_all_contacts == "0"
