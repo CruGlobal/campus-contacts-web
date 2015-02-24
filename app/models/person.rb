@@ -147,7 +147,7 @@ class Person < ActiveRecord::Base
     :joins => "JOIN organizational_permissions ON people.id = organizational_permissions.person_id AND  organizational_permissions.organization_id = #{org.id}",
     :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   }}
-  
+
   scope :order_by_all_followup_status, lambda { |order| {
     :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
   }}
@@ -160,8 +160,8 @@ class Person < ActiveRecord::Base
     :joins => "JOIN addresses ON people.id = addresses.person_id AND addresses.address_type = 'current'",
     :order => "#{order}"
   }}
-  
-  
+
+
 
 
   # Start of custom sorting for meta_search
@@ -258,7 +258,7 @@ class Person < ActiveRecord::Base
   scope :non_staff, -> { where(is_staff: false) }
   scope :faculty, -> { non_staff.where(faculty: true) }
   scope :students, -> { non_staff.where(faculty: false) }
-  
+
   def ensure_one_primary_email
     email_addresses = EmailAddress.where(person_id: id)
     if email_addresses.present? && email_addresses.where(primary: 1).count != 1
@@ -279,11 +279,11 @@ class Person < ActiveRecord::Base
       end
     end
   end
-  
+
   def ensure_one_primary_number
     phone_numbers = PhoneNumber.where(person_id: id)
     if phone_numbers.present? && phone_numbers.where(primary: 1).count != 1
-      
+
       phone_numbers.where(number: "").destroy_all
       phone_numbers.where(number: nil).destroy_all
       if phone_numbers.where(primary: 1)
@@ -553,9 +553,9 @@ class Person < ActiveRecord::Base
 
   def filtered_interactions(viewer, current_org)
     if self.initiated_interaction_ids.present?
-      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id})"
+      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL)"
     else
-      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id})"
+      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL)"
     end
     q = Array.new
 
