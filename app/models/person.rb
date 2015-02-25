@@ -316,9 +316,27 @@ class Person < ActiveRecord::Base
           end
         end
       else
-        answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
-        if answer.value != answers[question.id.to_s]
-          answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
+        # answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
+        # if answer.value != answers[question.id.to_s]
+        #   answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
+        # end
+        if question.style == "checkbox"
+          checkbox_answers = answers[question.id.to_s].split(",  ") # intentional 2 spaces delimiter
+          if checkbox_answers.present?
+            checkbox_answer_ids = []
+            checkbox_answers.each do |ans|
+              answer_record = answer_sheet.answers.find_or_create_by_question_id_and_value_and_short_value(question.id, ans, ans)
+              checkbox_answer_ids << answer_record.id
+            end
+            answer_sheet.answers.where("answers.question_id = ? AND answers.id NOT IN (?)", question.id,  checkbox_answer_ids).destroy_all
+          else
+            answer_sheet.answers.where("answers.question_id = ?", question.id).destroy_all
+          end
+        else
+          answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
+          if answer.value != answers[question.id.to_s] && answers[question.id.to_s].strip.present?
+            answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
+          end
         end
       end
     end

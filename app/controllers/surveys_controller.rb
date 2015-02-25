@@ -76,10 +76,14 @@ class SurveysController < ApplicationController
             values[question.id] = person.send(question.attribute_name) || ""
           end
         else
-          if answer = answer_sheet.answers.where(question_id: question.id).first
-            values[question.id] = answer.value || ""
+          if question.style == "checkbox"
+            values[question.id] = answer_sheet.answers.where(question_id: question.id).collect(&:value).join(",  ")
           else
-            values[question.id] = ""
+            if answer = answer_sheet.answers.where(question_id: question.id).first
+              values[question.id] = answer.value || ""
+            else
+              values[question.id] = ""
+            end
           end
         end
       end

@@ -1,3 +1,16 @@
+$.fn.stop_editing = (move_row) ->
+  mass_entry = $("#mass_entry_table")
+  cell = mass_entry.handsontable('getSelected')
+  max_row_index = mass_entry.handsontable("countRows") - 1
+  max_column_index = mass_entry.handsontable("countCols") - 1
+  if cell[0] == max_row_index && cell[1] == max_column_index
+    $.fn.add_row()
+  else if cell[1] == max_column_index
+    if move_row
+      mass_entry.scrollLeft(0)
+      selected = mass_entry.handsontable('getSelected')
+      mass_entry.handsontable("selectCell", selected[0], selected[1], true)
+
 $.fn.add_row = () ->
   mass_entry = $("#mass_entry_table")
   mass_entry.handsontable("alter", "insert_row")
@@ -49,20 +62,11 @@ $.fn.load_answers = () ->
       multiSelect: false
       # fillHandle: false
       beforeKeyDown: (e)->
-        mass_entry = $("#mass_entry_table")
         # if e.which == 9
         #   cell = $('#mass_entry_table').handsontable('getSelected')
         #   $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
         if e.which == 13 || e.which == 9
-          cell = mass_entry.handsontable('getSelected')
-          max_row_index = mass_entry.handsontable("countRows") - 1
-          max_column_index = mass_entry.handsontable("countCols") - 1
-          if cell[0] == max_row_index && cell[1] == max_column_index
-            $.fn.add_row()
-          else if cell[1] = max_column_index
-            mass_entry.scrollLeft(0)
-            selected = mass_entry.handsontable('getSelected')
-            mass_entry.handsontable("selectCell", selected[0], selected[1], true)
+          $.fn.stop_editing(true)
       beforeChange: ()->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
@@ -80,6 +84,15 @@ $.fn.load_answers = () ->
 
       
 $ ->
+  
+  $(document).on "keydown", ".handsontableInput, .htSelectEditor", (e)->
+    # Save value on tab press
+    if e.which == 9
+      $.fn.stop_editing(false)
+      # e = jQuery.Event("keypress")
+      # e.which = 13
+      # e.keyCode = 13
+      # $(this).trigger(e)
   
   # $(document).on "keyup", "body", (e)->
   #   if e.which == 13
