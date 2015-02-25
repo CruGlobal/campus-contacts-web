@@ -334,7 +334,7 @@ class Person < ActiveRecord::Base
           end
         else
           answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
-          if answer.value != answers[question.id.to_s] && answers[question.id.to_s].strip.present?
+          if answer.value != answers[question.id.to_s] && answers[question.id.to_s].present?
             answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
           end
         end
