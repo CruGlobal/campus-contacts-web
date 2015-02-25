@@ -85,18 +85,17 @@ $.fn.load_answers = () ->
       
 $ ->
   
+  # Add new row in Mass Entry after entering data to the current last row
+  $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
+    mass_entry = $("#mass_entry_table")
+    max_row_index = mass_entry.handsontable("countRows") - 1
+    if mass_entry.handsontable("getDataAtCell", max_row_index, 0) != ""
+      $.fn.add_row()
+  
   $(document).on "keydown", ".handsontableInput, .htSelectEditor", (e)->
     # Save value on tab press
     if e.which == 9
       $.fn.stop_editing(false)
-      # e = jQuery.Event("keypress")
-      # e.which = 13
-      # e.keyCode = 13
-      # $(this).trigger(e)
-  
-  # $(document).on "keyup", "body", (e)->
-  #   if e.which == 13
-  #     $("#mass_entry_table").handsontable("deselectCell")
   
   $(document).on "keypress", ".handsontableInput, .htSelectEditor", (e)->
     if e.which == 13
