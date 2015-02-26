@@ -30,16 +30,16 @@ $ ->
         url: "/load_organization_tree?id=#{org_id}"
       $(this).addClass('tree_open')
 
-  $('.org_star').live 'click', ->
+  $(document).on 'click', '.org_star', (e)->
     document.location = $(this).attr('url')
 
-  $('.import .manage_labels #use_labels').live 'click', ->
+  $(document).on 'click', '.import .manage_labels #use_labels', (e)->
     if $(this).is(':checked')
       $(this).siblings('.label_space').slideDown()
     else
       $(this).siblings('.label_space').slideUp()
 
-  $('#new_label_button').live 'click', ->
+  $(document).on 'click', '#new_label_button', (e)->
     if $.trim($(this).siblings('#new_label_field').val()) != ""
       $(this).attr('disabled',true)
       $(this).siblings('#new_label_field').addClass('loading')
@@ -50,7 +50,7 @@ $ ->
         data: 'name='+$(this).siblings('#new_label_field').val()
     false
 
-  $('.action_dropdown').live 'click', ->
+  $(document).on 'click', '.action_dropdown', (e)->
     link = $(this)
     link.toggleClass('active')
     link.next('ul').toggle()
@@ -59,12 +59,12 @@ $ ->
       link.next('ul').hide()
     false
 
-  $('input[type=checkbox].primary').live 'click', ->
+  $(document).on 'click', 'input[type=checkbox].primary', (e)->
     fieldset = $(this).closest('.fieldset')
     $('input[type=checkbox].primary', fieldset).prop('checked', false)
     $(this).prop('checked', true)
 
-  $('a.remove_field').live 'click', (e)->
+  $(document).on 'click', 'a.remove_field', (e)->
     e.preventDefault()
     group_name = $(this).parents('.sfield').attr("data-group")
     if group_name == 'address' || $(".sfield[data-group=" + group_name + "]:visible").size() > 0
@@ -99,24 +99,24 @@ $ ->
       $('span', this).html('<strong>+</strong> Show More')
     false
 
-  $('a.disabled').live 'click', ->
+  $(document).on 'click', 'a.disabled', (e)->
     false
 
-  $('[data-method=delete]:not(.dont_hide)').live 'ajax:before', ->
+  $(document).on 'ajax:before', '[data-method=delete]:not(.dont_hide)', (e)->
     delete_link = $(this)
     delete_link.parent().fadeOut "slow", ->
       $(this).remove()
       if delete_link.hasClass("delete_saved_search")
         $("#saved_searches_group").hide() if $("#saved_searches_group .delete_saved_search").size() == 0
 
-  $('#check_all').live 'click', ->
+  $(document).on 'click', '#check_all', (e)->
     if $(this).attr('data-target')
       form = $($(this).attr('data-target'))
     else
       form = $(this).closest('form')
     $('input[type=checkbox]', form).prop('checked', $(this).prop('checked'))
 
-  $('.drag').live 'click', ->
+  $(document).on 'click', '.drag', (e)->
     false
 
   sortable_options =
