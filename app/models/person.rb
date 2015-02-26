@@ -321,7 +321,8 @@ class Person < ActiveRecord::Base
         #   answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
         # end
         if question.style == "checkbox"
-          checkbox_answers = answers[question.id.to_s].split(",  ") # intentional 2 spaces delimiter
+          checkbox_answers = answer.split(",  ") # intentional 2 spaces delimiter
+          answers[question.id.to_s] = checkbox_answers
           if checkbox_answers.present?
             checkbox_answer_ids = []
             checkbox_answers.each do |ans|
