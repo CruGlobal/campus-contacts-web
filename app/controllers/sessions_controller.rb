@@ -34,8 +34,8 @@ class SessionsController < Devise::SessionsController
       session.clear
       redirect_to "https://thekey.me/cas/logout?service="+CGI::escape(root_url)
     else
-      super
       flash[:facebook_logout] = true
+      super
     end
   end
 
