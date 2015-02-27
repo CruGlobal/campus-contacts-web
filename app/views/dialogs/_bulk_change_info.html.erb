@@ -113,11 +113,13 @@
                   <div class="option" data-id="" data-name="Select Status">
                     Select Group
                   </div>
-                  <% current_organization.groups.collect{|x| [x.id, x.name]}.each do |group| %>
-                    <div class="option" data-id="<%= group[0] %>" data-name="<%= group[1] %>">
-                      <%= group[1] %>
-                    </div>
-                  <% end %>
+                  <div class="scrollable_options">
+                    <% current_organization.groups.collect{|x| [x.id, x.name]}.each do |group| %>
+                      <div class="option" data-id="<%= group[0] %>" data-name="<%= group[1] %>">
+                        <%= group[1] %>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             </div>
