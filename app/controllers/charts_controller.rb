@@ -4,35 +4,26 @@ class ChartsController < ApplicationController
   end
 
   def snapshot
-    get_snapshot_chart
-    refresh_snapshot_data
-    get_movement_stages
-    get_changed_lives
+    if params[:id].present? && @snapshot = current_person.saved_visual_tools.find_by_id(params[:id])
+      params[:all] = "false"
+      params[:movements] = @snapshot.movement_ids
+      @snapshot_movements = Organization.where(id: @snapshot.movement_ids)
+    end
+    update_snapshot_movements
   end
   
   def save_snapshot
-    @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
-  end
-  
-  def delete_snapshot
-    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
-    @saved_visual_tool.delete if @saved_visual_tool.present?
-  end
-  
-  def save_trend
-    @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:trend_name], group: Chart::TREND)
-    @saved_visual_tool.more_info[:start_date] = params[:start_date]
-    @saved_visual_tool.more_info[:end_date] = params[:end_date]
-    @saved_visual_tool.save
-  end
-  
-  def delete_trend
-    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
-    @saved_visual_tool.delete if @saved_visual_tool.present?
+    if params[:snapshot_id].present?
+      @saved_visual_tool = current_user.person.saved_visual_tools.find_by_id(params[:snapshot_id])
+      @saved_visual_tool.update_attributes(movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
+    else
+      @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
+    end
   end
 
   def update_snapshot_movements
     get_snapshot_chart
+    @load_saved_search = params[:saved_search] != "0"
     @chart.snapshot_all_movements = params[:all]
     @chart.save
 
@@ -45,22 +36,13 @@ class ChartsController < ApplicationController
     get_changed_lives
   end
   
-  def load_snapshot
-    @snapshot = current_person.saved_visual_tools.find_by_id(params[:id])
-    if @snapshot.present?
-      params[:all] = "false"
-      params[:movements] = @snapshot.movement_ids
-      @snapshot_movements = Organization.where(id: @snapshot.movement_ids)
-      update_snapshot_movements
-      render 'snapshot'
-    else
-      redirect_to snapshot_charts_path
-    end
+  def delete_snapshot
+    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
+    @saved_visual_tool.delete if @saved_visual_tool.present?
   end
-  
-  def load_trend
-    @trend = current_person.saved_visual_tools.find_by_id(params[:id])
-    if @trend.present?
+
+  def trend
+    if params[:id].present? && @trend = current_person.saved_visual_tools.find_by_id(params[:id])
       params[:all] = "false"
       params[:movements] = @trend.movement_ids
       @trend_movements = Organization.where(id: @trend.movement_ids)
@@ -68,11 +50,57 @@ class ChartsController < ApplicationController
         params["start_date"] = @trend.more_info[:start_date] if @trend.more_info[:start_date].present?
         params["end_date"] = @trend.more_info[:end_date] if @trend.more_info[:end_date].present?
       end
-      update_trend_movements
-      render 'trend'
-    else
-      redirect_to trend_charts_path
     end
+    update_trend_movements
+  end
+  
+  def save_trend
+    if params[:trend_id].present?
+      @saved_visual_tool = current_user.person.saved_visual_tools.find_by_id(params[:trend_id])
+      @saved_visual_tool.update_attributes(movement_ids: params[:movement_ids], name: params[:trend_name])
+      @saved_visual_tool.more_info[:start_date] = params[:start_date]
+      @saved_visual_tool.more_info[:end_date] = params[:end_date]
+      @saved_visual_tool.save
+    else
+      @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:trend_name], group: Chart::TREND)
+      @saved_visual_tool.more_info[:start_date] = params[:start_date]
+      @saved_visual_tool.more_info[:end_date] = params[:end_date]
+      @saved_visual_tool.save
+    end
+  end
+
+  def update_trend_movements
+    get_trend_chart
+    @load_saved_search = params[:saved_search] != "0"
+    @chart.trend_all_movements = params[:all]
+    @chart.save
+
+    if !@chart.trend_all_movements
+      @chart.update_trend_movements_displayed(params[:movements])
+    end
+
+    begin
+      start_date = Date.parse(params["start_date"]) if params["start_date"].present?
+    rescue
+      start_date = nil
+    end
+
+    begin
+      end_date = Date.parse(params["end_date"]) if params["end_date"].present?
+    rescue
+      end_date = nil
+    end
+
+    @chart.trend_start_date = start_date
+    @chart.trend_end_date = end_date
+    @chart.save
+
+    refresh_trend_data
+  end
+  
+  def delete_trend
+    @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
+    @saved_visual_tool.delete if @saved_visual_tool.present?
   end
 
   def update_snapshot_range
@@ -168,39 +196,6 @@ class ChartsController < ApplicationController
     end
   end
 
-  def trend
-    get_trend_chart
-    refresh_trend_data
-  end
-
-  def update_trend_movements
-    get_trend_chart
-    @chart.trend_all_movements = params[:all]
-    @chart.save
-
-    if !@chart.trend_all_movements
-      @chart.update_trend_movements_displayed(params[:movements])
-    end
-
-    begin
-      start_date = Date.parse(params["start_date"]) if params["start_date"].present?
-    rescue
-      start_date = nil
-    end
-
-    begin
-      end_date = Date.parse(params["end_date"]) if params["end_date"].present?
-    rescue
-      end_date = nil
-    end
-
-    @chart.trend_start_date = start_date
-    @chart.trend_end_date = end_date
-    @chart.save
-
-    refresh_trend_data
-  end
-
   def update_trend_field
     get_trend_chart
 
@@ -251,6 +246,7 @@ class ChartsController < ApplicationController
 
     if orgs
       @movements = current_person.all_organization_and_children
+      # @movements = current_person.organizations
       unless all_orgs
         @movements = @movements.where("importable_type = 'Ccc::MinistryActivity'")
       end

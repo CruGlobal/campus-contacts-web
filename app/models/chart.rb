@@ -11,39 +11,40 @@ class Chart < ActiveRecord::Base
   TREND_MAX_FIELDS = 4
   
   def update_movements(orgs)
-    corg_ids = chart_organizations.all.collect(&:organization_id)
-    orgs.each do |org|
-      unless corg_ids.include?(org.id)
-        ChartOrganization.create(chart_id: self.id, organization_id: org.id)
-      end
-    end
+    chart_org_ids = chart_organizations.pluck(:organization_id)
+    new_org_ids = orgs.where("id NOT IN (?)", chart_org_ids).pluck(:id)
+    new_org_ids.each do |new_org_id|
+      ChartOrganization.where(chart_id: self.id, organization_id: new_org_id).first_or_create
+    end if new_org_ids.present?
   end
 
   def update_movements_displayed(selections)
     if selections
-      chart_organizations.each do |movement|
-        movement.snapshot_display = selections.include?(movement.organization_id.to_s)
-        movement.save
-      end
+      # Display selected snapshots
+      not_displayed = chart_organizations.where("snapshot_display = 0 AND organization_id IN (?)", selections)
+      not_displayed.update_all(snapshot_display: true) if not_displayed.present?
+      # Hide non-selected snapshots
+      displayed = chart_organizations.where("snapshot_display = 1 AND organization_id NOT IN (?)", selections)
+      displayed.update_all(snapshot_display: false) if displayed.present?
     else
-      chart_organizations.each do |movement|
-        movement.snapshot_display = false
-        movement.save
-      end
+      # Hide all snapshots
+      displayed = chart_organizations.where("snapshot_display = 1")
+      displayed.update_all(snapshot_display: false) if displayed.present?
     end
   end
 
   def update_trend_movements_displayed(selections)
     if selections
-      chart_organizations.each do |movement|
-        movement.trend_display = selections.include?(movement.organization_id.to_s)
-        movement.save
-      end
+      # Display selected trends
+      not_displayed = chart_organizations.where("trend_display = 0 AND organization_id IN (?)", selections)
+      not_displayed.update_all(trend_display: true) if not_displayed.present?
+      # Hide non-selected trends
+      displayed = chart_organizations.where("trend_display = 1 AND organization_id NOT IN (?)", selections)
+      displayed.update_all(trend_display: false) if displayed.present?
     else
-      chart_organizations.each do |movement|
-        movement.trend_display = false
-        movement.save
-      end
+      # Hide all trends
+      displayed = chart_organizations.where("trend_display = 1")
+      displayed.update_all(trend_display: false) if displayed.present?
     end
   end
 
