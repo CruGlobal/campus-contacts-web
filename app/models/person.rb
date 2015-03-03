@@ -23,8 +23,9 @@ class Person < ActiveRecord::Base
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
   has_many :organizational_labels, dependent: :destroy, conditions: ["organizational_labels.removed_date IS NULL"]
+  has_many :all_organizational_labels, dependent: :destroy, class_name: 'OrganizationalLabel'
   has_many :labels, through: :organizational_labels
-  has_many :created_organizational_labels, class_name: 'OrgnizationalLabel', foreign_key: 'added_by_id'
+  has_many :created_organizational_labels, class_name: 'OrganizationalLabel', foreign_key: 'added_by_id'
   has_many :group_memberships
   has_many :groups, through: :group_memberships
   has_many :charts
@@ -302,7 +303,28 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false)
+  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false)
+    if update_labels && answers['labels'] != self.labels_for_org_id(1).collect(&:name).join(", ")
+      new_label_ids = []
+      new_labels = answers['labels'].split(", ")
+      new_labels.each do |new_label|
+        label_record = organization.labels.where(name: new_label).first
+        if existing_label_record = self.all_organizational_labels.where(label_id: label_record.id).first
+          if existing_label_record.removed_date.present?
+            existing_label_record.update_attributes(removed_date: nil, start_date: Date.now, added_by_id: current_person.id)
+          end
+          new_label_ids << existing_label_record.id
+        else
+          new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
+          new_label_ids << new_label_record.id
+        end
+      end
+      if new_label_ids.present?
+        self.organizational_labels.where("id NOT IN (?)", new_label_ids).update_all(removed_date: Date.today)
+      else
+        self.organizational_labels.update_all(removed_date: Date.today)
+      end
+    end
     organization.add_permission_to_person(self, Permission.no_permissions.id, current_person.id)
     answer_sheet = self.answer_sheet_for_survey(survey.id)
     questions.each do |question|
