@@ -6,22 +6,41 @@ body.mass_entry {
   #gandalfthewhite {
     height: 65px;
   }
-  #outer {
-    margin: 140px auto 0px;
+  #fixed_footer {
+    display: none;
   }
-  #ac_button_bar {
-    margin-left: 15px;
+  #outer {
+    margin: 133px auto 0px;
+    min-width: inherit;
+    .ht_clone_corner {
+      display: none;
+    }
+  }
+  #fixed_header {
+    height: 65px;
+    #globalNav, #menu_search, .sf-menu {
+      display: none;
+    }
   }
   .titlebar {
     z-index: 999;
     position: fixed;
     background-color: #fff;
-    top: 95px;
+    top: 60px;
     left: 0;
     width: 100%;
+    padding: 0;
+    h1 {
+      padding: 10px 10px 0;
+      overflow: hidden;
+      display: block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin: 0px auto;
+    }
     #ac_button_bar {
-      float: right;
-      margin: 2px 20px 0 0;
+      display: block;
+      margin: 5px 10px;
       z-index: 9999999;
     }
   }
@@ -195,4 +214,23 @@ body.mass_entry {
 
 .mass_entry_buttons.bottom {
   padding: 15px 0 0;
+}
+
+.htMobileEditorContainer {
+  .inputs {
+    width: 75%;
+    textarea {
+      width: 100%;
+    }
+  }
+  .positionControls {
+    display: none;
+  }
+}
+
+.htContainer {
+  .topLeftSelectionHandle,
+  .bottomRightSelectionHandle {
+    display: none !important;
+  }
 }

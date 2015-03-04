@@ -140,7 +140,7 @@ class ContactsController < ApplicationController
     permissions_for_assign
     fetch_contacts
     @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
-    @answers = generate_answers(@people, @organization, @questions, @surveys)
+    @answers = generate_answers(@people, @organization, @questions, @survey_scope || @surveys)
 
     respond_to do |format|
       format.js
@@ -186,13 +186,13 @@ class ContactsController < ApplicationController
 
         @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
-        @answers = generate_answers(@people, @organization, @questions, @surveys)
+        @answers = generate_answers(@people, @organization, @questions, @survey_scope || @surveys)
       end
 
       wants.csv do
         fetch_contacts(true)
         @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
-        @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
+        @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
         @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?

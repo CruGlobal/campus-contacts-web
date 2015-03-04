@@ -160,6 +160,8 @@ class QuestionSet
       values = param.values.map {|v| CGI.unescape(v)}.select {|v| v.to_s.strip.present?}
     elsif param.kind_of?(String)
       values = param.strip.present? ? [CGI.unescape(param)] : []
+    elsif param.kind_of?(Array)
+      values = param
     end
 
     # Hash may contain empty string to force post for no checkboxes

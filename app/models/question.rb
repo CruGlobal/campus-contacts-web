@@ -284,7 +284,7 @@ class Question < Element
   end
 
   def multiple_answers_allowed?
-    false
+    style == "checkbox"
   end
 
   def email_should_be_unique_msg

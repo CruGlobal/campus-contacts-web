@@ -1,3 +1,29 @@
+$.fn.stop_editing = (move_row) ->
+  mass_entry = $("#mass_entry_table")
+  cell = mass_entry.handsontable('getSelected')
+  max_row_index = mass_entry.handsontable("countRows") - 1
+  max_column_index = mass_entry.handsontable("countCols") - 1
+  if cell[0] == max_row_index && cell[1] == max_column_index
+    $.fn.add_row()
+  else if cell[1] == max_column_index
+    if move_row
+      mass_entry.scrollLeft(0)
+      selected = mass_entry.handsontable('getSelected')
+      mass_entry.handsontable("selectCell", selected[0], selected[1], true)
+
+$.fn.add_row = () ->
+  mass_entry = $("#mass_entry_table")
+  mass_entry.handsontable("alter", "insert_row")
+  max_row_index = mass_entry.handsontable("countRows") - 1
+  max_column_index = mass_entry.handsontable("countCols") - 1
+  x = 0
+  while x <= max_column_index
+    mass_entry.handsontable('setDataAtCell', max_row_index, x, '')
+    x++
+  mass_entry.scrollLeft(0)
+  selected = mass_entry.handsontable('getSelected')
+  mass_entry.handsontable("selectCell", selected[0], selected[1], true)
+  
 $.fn.load_answers = () ->
   survey_id = $("#mass_entry_table").data("survey-id")
   $(".fetching-loader").show()
@@ -11,31 +37,40 @@ $.fn.load_answers = () ->
     $("#mass_entry_table").show()
     $(".mass_entry_buttons").show()
     $("#mass_entry_table").handsontable
+      width: $(window).width()
+      autoColumnSize: true
       data: response['data']
       columns: response['settings']
       colHeaders: response['headers']
       rowHeaders: true
-      manualColumnResize: true
-      nativeScrollbars: true
+      outsideClickDeselects: true
+      removeRowPlugin: true
+      enterBeginsEditing: true
+      enterMoves: {row: 0, col: 1}
+      fillHandle: false
+      # minSpareRows: 1
+      # manualColumnResize: true
+      # nativeScrollbars: true
       stretchH: 'all'
       columnSorting: true
       wordWrap: true
       allowInvalid: true
-      minSpareRows: true
-      contextMenu: ['undo','redo','remove_row']
-      fixedColumnsLeft: 2
+      # contextMenu: ['undo','redo','remove_row']
+      # fixedColumnsLeft: 2
       autoWrapRow: true
       autoWrapCol: true
+      multiSelect: false
+      # fillHandle: false
       beforeKeyDown: (e)->
-        if e.which == 9
-          cell = $('#mass_entry_table').handsontable('getSelected')
-          $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
+        # if e.which == 9
+        #   cell = $('#mass_entry_table').handsontable('getSelected')
+        #   $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
+        if e.which == 13 || e.which == 9
+          $.fn.stop_editing(true)
       beforeChange: ()->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
         cellProperties = {}
-        if response['multi_col'].indexOf(col) >= 0
-          cellProperties.renderer = Handsontable.renderers.AutocompleteRenderer;
         id = $("#mass_entry_table").handsontable("getDataAtCell", row, 0)
         val = $("#mass_entry_table").handsontable("getDataAtCell", row, col)
         if id == "" || id == null || id == undefined
@@ -44,14 +79,37 @@ $.fn.load_answers = () ->
           cellProperties.readOnly = false
         # else if (val != "" && val != null) && (col == 1 || col == 2 || col == 3)
         #   cellProperties.readOnly = true
-        cellProperties
+        return cellProperties
+    $.fn.add_row()
 
       
 $ ->
   
-  $(document).on "keyup", "body", (e)->
+  # Add new row in Mass Entry after entering data to the current last row
+  $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
+    mass_entry = $("#mass_entry_table")
+    max_row_index = mass_entry.handsontable("countRows") - 1
+    if mass_entry.handsontable("getDataAtCell", max_row_index, 0) != ""
+      $.fn.add_row()
+  
+  $(document).on "keydown", ".handsontableInput, .htSelectEditor", (e)->
+    # Save value on tab press
+    if e.which == 9
+      $.fn.stop_editing(false)
+  
+  $(document).on "keypress", ".handsontableInput, .htSelectEditor", (e)->
     if e.which == 13
-      $("#mass_entry_table").handsontable("deselectCell")
+      mass_entry = $("#mass_entry_table")
+
+      cell = mass_entry.handsontable('getSelected')
+      max_row_index = mass_entry.handsontable("countRows") - 1
+      max_column_index = mass_entry.handsontable("countCols") - 1
+      console.log (cell[1] + 1) > max_column_index
+      if (cell[1] + 1) > max_column_index
+        mass_entry.handsontable("selectCell", cell[0] + 1, 0)
+      else
+        mass_entry.handsontable("selectCell", cell[0], cell[1] + 1)
+      return false
           
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
@@ -72,19 +130,18 @@ $ ->
   #   $(document).on "click", "#copy_mass_entry", (e)->
   #     e.preventDefault()
   
-  $(document).on "click", "#new_mass_entry", (e)->
+  $(document).on "click", ".new_mass_entry", (e)->
     e.preventDefault()
-    row = $("#mass_entry_table").handsontable("countRows")-1
-    $("#mass_entry_table").handsontable("selectCell", row, 0)
-    $(document).scrollTop(9999)
+    $.fn.add_row()
+    $("#mass_entry_table").handsontable("selectCell", $("#mass_entry_table").handsontable("countRows") - 1, 0)
       
-  $(document).on "click", "#reload_mass_entry", (e)->
+  $(document).on "click", ".reload_mass_entry", (e)->
     e.preventDefault()
     if $("body").data("has_changes") == "true"
       if(confirm('Warning! Reloading the Mass Entry table will not save your changes. Save changes before reloading page.'))
         $.fn.load_answers()
   
-  $(document).on "click", "#save_mass_entry", (e)->
+  $(document).on "click", ".save_mass_entry", (e)->
     e.preventDefault()
     $(".saving-loader").show()
     $("#mass_entry_table").hide()

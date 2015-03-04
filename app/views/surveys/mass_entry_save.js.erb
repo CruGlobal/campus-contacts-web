@@ -4,7 +4,7 @@ $("#mass_entry_table").show()
 $(".mass_entry_buttons").show()
 <% if @msg == [] %>
   $("body").data('has_changes','false')
-  $("#reload_mass_entry").click()
+  $.fn.load_answers()
 <% else %>
   $.a("Failed to save changes, please try again! <br/> <%= @msg.join('<br/>')%>")
 <% end %>
