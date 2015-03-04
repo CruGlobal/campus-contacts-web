@@ -329,7 +329,7 @@
 
 .htSelectEditor {
 /*  -webkit-appearance: menulist-button !important;*/
-  height: 75px !important;
+  height: 150px !important;
   position: absolute;
   width: auto;
 }

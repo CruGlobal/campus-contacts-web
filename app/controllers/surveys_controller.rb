@@ -35,7 +35,7 @@ class SurveysController < ApplicationController
     setting["data"] = "labels"
     setting["allowInvalid"] = false
     setting["readOnly"] = false
-    setting["editor"] = "multiselect"
+    setting["editor"] = "select"
     setting["strict"] = "false"
     setting["selectOptions"] = [""] + current_organization.labels.collect(&:name)
     settings << setting
@@ -79,7 +79,7 @@ class SurveysController < ApplicationController
       values["first_name"] = person.first_name
       values["last_name"] = person.last_name
       values["phone_number"] = person.pretty_phone_number
-      values["labels"] = person.labels_for_org_id(1).collect(&:name).join(", ")
+      values["labels"] = person.labels_for_org_id(current_organization.id).collect(&:name).join(",  ")
       questions.each do |question|
         if question.predefined?
           if ['faculty'].include?(question.attribute_name)
@@ -170,7 +170,7 @@ class SurveysController < ApplicationController
         end
       else
         person = @people.find(value["id"])
-        person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true)
+        person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true)
       end
       updated_ids << person.id if person.present?
     end
