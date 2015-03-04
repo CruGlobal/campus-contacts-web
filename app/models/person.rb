@@ -305,22 +305,28 @@ class Person < ActiveRecord::Base
 
   def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false)
     if update_labels && answers['labels'] != self.labels_for_org_id(organization.id).collect(&:name).join(",  ")
-      real_labels = []
-      new_labels = answers['labels'].split(",  ")
-      new_labels.each do |new_label|
-        label_record = organization.labels.where(name: new_label).first
-        if existing_label_record = self.all_organizational_labels.where(label_id: label_record.id).first
-          if existing_label_record.removed_date.present?
-            existing_label_record.update_attributes(removed_date: nil, start_date: Date.today, added_by_id: current_person.id)
+      if answers['labels'].present?
+        real_labels = []
+        new_labels = answers['labels'].split(",  ")
+        new_labels.each do |new_label|
+          label_record = organization.labels.where(name: new_label).first
+          if label_record.present?
+            if existing_label_record = self.all_organizational_labels.where(label_id: label_record.id).first
+              if existing_label_record.removed_date.present?
+                existing_label_record.update_attributes(removed_date: nil, start_date: Date.today, added_by_id: current_person.id)
+              end
+              real_labels << existing_label_record
+            else
+              new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
+              real_labels << new_label_record
+            end
           end
-          real_labels << existing_label_record
-        else
-          new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
-          real_labels << new_label_record
         end
-      end
-      if real_labels.present?
-        self.all_organizational_labels.where("organizational_labels.id NOT IN (?) AND organizational_labels.organization_id = ?", real_labels.collect(&:id), organization.id).update_all(removed_date: Date.today)
+        if real_labels.present?
+          self.all_organizational_labels.where("organizational_labels.id NOT IN (?) AND organizational_labels.organization_id = ?", real_labels.collect(&:id), organization.id).update_all(removed_date: Date.today)
+        else
+          self.organizational_labels.where("organizational_labels.organization_id = ?", organization.id).update_all(removed_date: Date.today)
+        end
       else
         self.organizational_labels.where("organizational_labels.organization_id = ?", organization.id).update_all(removed_date: Date.today)
       end
