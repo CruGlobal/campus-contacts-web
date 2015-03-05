@@ -37,7 +37,7 @@ class SurveysController < ApplicationController
     setting["readOnly"] = false
     setting["editor"] = "select"
     setting["strict"] = "false"
-    setting["selectOptions"] = [""] + current_organization.labels.collect(&:name)
+    setting["selectOptions"] = current_organization.labels.collect(&:name)
     settings << setting
     
     questions.each_with_index do |question, index|
@@ -51,16 +51,16 @@ class SurveysController < ApplicationController
         if question.style == "radio"
           setting["type"] = "dropdown"
           setting["strict"] = "false"
-          setting["source"] = question.options_with_blank
+          setting["source"] = question.options
         elsif question.style == "drop-down"
           setting["type"] = "dropdown"
           setting["strict"] = "false"
-          setting["source"] = question.options_with_blank
+          setting["source"] = question.options
         else
           multi_col << i
           setting["editor"] = "select"
           setting["strict"] = "false"
-          setting["selectOptions"] = question.options_with_blank
+          setting["selectOptions"] = question.options
         end
       when "DateField"
         setting["type"] = "date"
