@@ -54,7 +54,9 @@ class QuestionSet
             triggers = question_rule.trigger_keywords
             if triggers.present?
               trigger_words = triggers.split(',').try(:compact)
-              if trigger_words.map{|x| x.downcase.strip}.include?(answer.value.downcase.strip)
+              answer_value = answer.value.downcase.strip
+              if trigger_words.map{|x| x.downcase.strip}.include?(answer_value)
+                keyword_found = answer_value
                 code = question_rule.rule.rule_code
 
                 case code
