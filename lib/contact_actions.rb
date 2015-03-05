@@ -161,9 +161,6 @@ module ContactActions
           end
         end
 
-        # Save survey answers
-        save_survey_answers
-
         # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
@@ -187,6 +184,9 @@ module ContactActions
 		      @group_membership.role = params[:add_to_group_role]
 		      @group_membership.save
 				end
+
+        # Save survey answers
+        save_survey_answers
 
         respond_to do |wants|
           wants.html { redirect_to :back }
