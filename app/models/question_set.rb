@@ -52,11 +52,10 @@ class QuestionSet
         if answer.present? && question_rules.present?
           question_rules.each do |question_rule|
             triggers = question_rule.trigger_keywords
-            if triggers.present?
+            answer_value = answer.value
+            if triggers.present? && answer_value.present?
               trigger_words = triggers.split(',').try(:compact)
-              answer_value = answer.value.downcase.strip
-              if trigger_words.map{|x| x.downcase.strip}.include?(answer_value)
-                keyword_found = answer_value
+              if trigger_words.map{|x| x.downcase.strip}.include?(answer_value.downcase.strip)
                 code = question_rule.rule.rule_code
 
                 case code
@@ -64,7 +63,7 @@ class QuestionSet
                   # Do the process
                   leaders = Person.find(question_rule.extra_parameters['leaders'])
                   recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                  PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, keyword_found, answer.id)
+                  PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
                 when 'AUTOASSIGN'
                   # Do the process
                   person =  @answer_sheet.person
