@@ -7,21 +7,21 @@
   </h1>
 </div>
 
-<%= render 'people/fb_name_search_dialog' %>  
+<%= render 'people/fb_name_search_dialog' %>
 
 <div class="pad">
-  
+
   <div class="contact_leftcol">
     <div>
       <%# if @person.fb_uid.present? %>
-        <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
+        <%= image_tag("https://graph.facebook.com/v2.2/#{@person.fb_uid}/picture?type=large", alt: '') %>
       <%# else %>
         <!-- No Image because they don't have facebook connected -->
       <%# end %>
     </div>
   </div>
-  
-  <div class="contact_rightbody">  
+
+  <div class="contact_rightbody">
     <%= render 'form' %>
   </div>
 

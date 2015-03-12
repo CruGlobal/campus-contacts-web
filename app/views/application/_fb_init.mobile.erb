@@ -40,11 +40,11 @@
       <% end %>
     };
   });
-  (function(d, s, id) {
+  (function(d, s, id){
     var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
+    if (d.getElementById(id)) {return;}
     js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js#version=v2.0&xfbml=1&appId=<%= APP_CONFIG['fb_app_id_mhub'] %>";
+    js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 </script>

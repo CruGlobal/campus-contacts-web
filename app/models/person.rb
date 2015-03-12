@@ -506,7 +506,7 @@ class Person < ActiveRecord::Base
     if self.avatar_file_name.present?
       return self.avatar.url(:medium)
     elsif self.fb_uid.present?
-      return "https://graph.facebook.com/#{self.fb_uid}/picture?width=200&height=200"
+      return "https://graph.facebook.com/v2.2/#{self.fb_uid}/picture?width=200&height=200"
     else
       return "no_image.png"
     end
@@ -1581,7 +1581,7 @@ class Person < ActiveRecord::Base
     if self.avatar_file_name.present?
       self.avatar.url(:thumb)
     elsif self.fb_uid.present?
-      "https://graph.facebook.com/#{self.fb_uid}/picture"
+      "https://graph.facebook.com/v2.2/#{self.fb_uid}/picture"
     end
   end
 

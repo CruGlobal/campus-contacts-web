@@ -253,7 +253,7 @@ class PeopleController < ApplicationController
       else
         leader_ids = params[:assigned_to_id].split(",")
         @person.assigned_tos.where("contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)", current_organization.id, leader_ids).delete_all
-        
+
         leader_ids.each do |leader_id|
           if leader = current_organization.leaders.where(id: leader_id).try(:first)
             leader.assign_contacts([@person.id], current_organization, current_person)
@@ -477,7 +477,7 @@ class PeopleController < ApplicationController
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
-      url = URI.escape("https://graph.facebook.com/#{id}")
+      url = URI.escape("https://graph.facebook.com/v2.2/#{id}")
 
       begin
         @json = JSON.parse(RestClient.get(url, { accept: :json}))
@@ -500,7 +500,7 @@ class PeopleController < ApplicationController
       if url.nil?
         # else, this is an initial search so we construct the url
         term = "\"#{params[:term]}\""
-        url = URI.escape("https://graph.facebook.com/search?q=#{term}&type=user&limit=5000&access_token=#{session[:fb_token]}")
+        url = URI.escape("https://graph.facebook.com/v2.2/search?q=#{term}&type=user&limit=5000&access_token=#{session[:fb_token]}")
       end
 
       begin

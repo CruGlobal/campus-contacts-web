@@ -18,7 +18,7 @@
 <div class="pad_profile">
   <div class="contact_leftcol">
     <div>
-      <%= image_tag("https://graph.facebook.com/#{@person.fb_uid}/picture?type=large", alt: '') %>
+      <%= image_tag("https://graph.facebook.com/v2.2/#{@person.fb_uid}/picture?type=large", alt: '') %>
     </div>
     <div class="other_details">
       <% if @person.phone_number.present? %>
@@ -121,7 +121,7 @@
       <% friends.each do |friend_uid| %>
         <div style="float:left; margin-right: 5px;">
           <% Person.find_by_fb_uid(friend_uid).tap do |person| %>
-            <%= link_to image_tag("https://graph.facebook.com/#{friend_uid}/picture?type=square", alt: ''), person_path(person), target: '_blank', :title => person %>
+            <%= link_to image_tag("https://graph.facebook.com/v2.2/#{friend_uid}/picture?type=square", alt: ''), person_path(person), target: '_blank', :title => person %>
           <% end %>
         </div>
       <% end %>

@@ -4,7 +4,7 @@
   <div class="info leader_confirmation">
     <center>
       <% if current_person.fb_uid.present? %>
-        <%= image_tag("https://graph.facebook.com/#{current_person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
+        <%= image_tag("https://graph.facebook.com/v2.2/#{current_person.fb_uid}/picture?width=200&height=200", alt: '', width: '200', height: '200', id: 'profile_image') %>
       <% else %>
         <%= image_tag("no_image.png", alt: '', width: '200', height: '200', id: 'profile_image') %>
       <% end %>
