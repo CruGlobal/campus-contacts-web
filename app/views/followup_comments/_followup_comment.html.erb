@@ -1,10 +1,10 @@
 <li id="<%= dom_id(followup_comment) %>">
-	<div class="profilepic left">				
+	<div class="profilepic left">
 		<% if followup_comment.commenter.fb_uid.present? && followup_comment.present? && followup_comment.commenter.present? %>
-	    <%= image_tag("https://graph.facebook.com/#{followup_comment.commenter.fb_uid}/picture")  %>
+	    <%= image_tag("https://graph.facebook.com/v2.2/#{followup_comment.commenter.fb_uid}/picture")  %>
 		<% else %>
 			<%= image_tag("noimage.png") %>
-		<% end %>    
+		<% end %>
   </div>
   <div class="commentcontent">
     <div class="meta">

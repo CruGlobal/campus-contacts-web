@@ -51,7 +51,7 @@ $.facebook_autocomplete = (facebook_field) ->
       source: '/people/facebook_search.json'
     .data("autocomplete")
     ._renderItem = ( ul, item )->
-      image_src = 'http://graph.facebook.com/' + item.id + '/picture'
+      image_src = 'http://graph.facebook.com/v2.2/' + item.id + '/picture'
       if item.id == null
         resp = $("<li class='facebook_search_no_result'>Couldn't find facebook user with that name</li>")
       else

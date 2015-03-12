@@ -153,7 +153,7 @@
       	<div id="fb_friends_thumbs">
           <% @friends.each do |friend| %>
       			<div class="fb_thumb">
-              <%= link_to image_tag("https://graph.facebook.com/#{friend.fb_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "#{friend.name}" %>
+              <%= link_to image_tag("https://graph.facebook.com/v2.2/#{friend.fb_uid}/picture?type=square"), profile_path(friend.id), target: "_blank", title: "#{friend.name}" %>
       			</div>
           <% end %>
       	</div>

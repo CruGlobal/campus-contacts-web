@@ -39,7 +39,7 @@
   <% @changed_lives.each do |person| %>
     <div class="changed_life">
       <% if person.fb_uid.present? %>
-        <%= image_tag("https://graph.facebook.com/#{person.fb_uid}/picture?width=50&height=50", alt: '', width: '50', height: '50', id: 'profile_image') %>
+        <%= image_tag("https://graph.facebook.com/v2.2/#{person.fb_uid}/picture?width=50&height=50", alt: '', width: '50', height: '50', id: 'profile_image') %>
       <% else %>
         <%= image_tag("no_image.png", alt: '', width: '50', height: '50', id: 'profile_image') %>
       <% end %>

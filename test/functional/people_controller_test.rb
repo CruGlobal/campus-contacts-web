@@ -277,33 +277,33 @@ class PeopleControllerTest < ActionController::TestCase
 
 
     should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
-      stub_request(:get, "https://graph.facebook.com/nmfdelacruz").
+      stub_request(:get, "https://graph.facebook.com/v2.2/nmfdelacruz").
         to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
     should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      stub_request(:get, "https://graph.facebook.com/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      stub_request(:get, "https://graph.facebook.com/v2.2/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
     should "unsuccessfully search for facebook users when url does not exist" do
-      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").to_return(status: 404)
+      stub_request(:get, "https://graph.facebook.com/v2.2/nm34523fdelacruz").to_return(status: 404)
       get :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
       assert_equal(1, assigns(:data).length)
     end
 
 =begin
     should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
-      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
+      stub_request(:get, "https://graph.facebook.com/v2.2/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       get :facebook_search, { :term =>"9gag"}
       assert_equal(1, assigns(:data).length)
     end
 
     should "unsuccessfully search for facebook users when name does not exist" do
-      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
+      stub_request(:get, "https://graph.facebook.com/v2.2/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
       get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
       assert_equal(0, assigns(:data).length)
     end
@@ -540,7 +540,7 @@ class PeopleControllerTest < ActionController::TestCase
       end
       assert_equal "You've just merged #{ids.length} people", flash[:notice]
     end
-    
+
     should "merge received interactions" do
       @interaction_type = Factory(:interaction_type, organization_id: 0, i18n: "Comment")
       Factory(:interaction, receiver: @person1, creator: @person, organization: @org, interaction_type_id: @interaction_type.id)
@@ -550,7 +550,7 @@ class PeopleControllerTest < ActionController::TestCase
       end
       assert_equal "You've just merged 2 people", flash[:notice]
     end
-    
+
     should "merge created interactions" do
       @interaction_type = Factory(:interaction_type, organization_id: 0, i18n: "Comment")
       Factory(:interaction, receiver: @person3, creator: @person1, organization: @org, interaction_type_id: @interaction_type.id)
