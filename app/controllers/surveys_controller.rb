@@ -108,6 +108,25 @@ class SurveysController < ApplicationController
     response['data'] = data
     render json: response.to_json
   end
+  
+  def create_label
+    @status = "false"
+    if params[:name].present?
+      if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
+        @msg_alert = t('contacts.index.add_label_exists2')
+      else
+        @new_label = Label.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
+        if @new_label.present?
+          @status = "true"
+          @msg_alert = t('contacts.index.add_label_success')
+        else
+          @msg_alert = t('contacts.index.add_label_failed')
+        end
+      end
+    else
+      @msg_alert = t('contacts.index.add_label_empty')
+    end
+  end
 
   def mass_entry_save
     @msg = Array.new
@@ -117,6 +136,11 @@ class SurveysController < ApplicationController
     updated_ids = []
     params["values"].values.each_with_index do |value, i|
       value.keys.each{|k| value[k] = nil if value[k] == "null"}
+      if params["new_label"].present?
+        labels = value["labels"].split(",  ")
+        labels += [params['new_label']]
+        value["labels"] = labels.join(",  ")
+      end
       if value["id"].nil?
         # Try to create new record
         if value["first_name"].present? || value["last_name"].present?

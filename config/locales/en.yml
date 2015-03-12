@@ -168,6 +168,7 @@ en:
       add_contact: Add a Contact to %{org}
       add_label_empty: Cannot save blank label. Please try again.
       add_label_exists: Label is already in the list!
+      add_label_exists2: Label is already existing!
       add_label_failed: Failed to save label. Please try again.
       add_label_success: New label successfully added!
       add_question_back: Click on a question to add it back to the page

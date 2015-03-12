@@ -7,9 +7,12 @@
         Creating new label will save your current changes and reload the Mass Entry table.
       </div>
   		<div class="labels_add_new" id="labels_add_new">
-        <%= text_field_tag :label_new_input, "", id: "labels_new_input", placeholder: "Type a new label name..."%>
+        <%= text_field_tag :new_label_text_field, "", id: "new_label_input", placeholder: "Type a new label name..."%>
+        <div class="apply_new_label">
+          <%= check_box_tag :apply_new_label_checkbox %> Apply this new label to all contacts in Mass Entry?
+        </div>
+        <div class="labels_notice" id="labels_notice">&nbsp;</div>
   		</div>
-      <div class="labels_notice" id="labels_notice">&nbsp;</div>
     	<div class="labels_save" id="labels_save">
     		<button class="red_accent" id="mass_entry_new_label_save_button">Create Label</button>
     		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>

@@ -88,7 +88,20 @@ $ ->
   # New Label button in mass entry
   $(document).on 'click', '.new_label_in_mass_entry', (e)->
     e.preventDefault()
+    $('#new_label_input').val("")
+    $("#apply_new_label_checkbox").prop("checked", false)
     $.showDialog($("#mass_entry_new_label_dialog"))
+    
+  # Save new Label from mass entry
+  $(document).on 'click', '#mass_entry_new_label_save_button', (e)->
+    e.preventDefault()
+    new_label_name = $.trim($('#new_label_input').val())
+    if new_label_name != ""
+      $('#labels_notice').text("")
+      $.toggleLoader('labels_notice','Creating new Label...')
+      $.ajax
+        type: 'POST',
+        url: "/surveys/create_label?name=" + escape(new_label_name)
   
   # Add new row in Mass Entry after entering data to the current last row
   $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
@@ -153,10 +166,15 @@ $ ->
     $(".mass_entry_buttons").hide()
     survey_id = $("#mass_entry_table").data("survey-id")
     table_val = $("#mass_entry_table").handsontable("getData")
+    
+    new_label = ""
+    if $(this).hasClass("save_new_label")
+      new_label = $.trim($('#new_label_input').val())
+        
     $.ajax
       type: "POST"
       url: "/surveys/#{survey_id}/mass_entry_save"
-      data: {values: table_val}
+      data: {values: table_val, new_label: new_label}
   
   if $("#mass_entry_table").size() > 0
     $.fn.load_answers()

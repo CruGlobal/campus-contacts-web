@@ -260,6 +260,7 @@ Mh::Application.routes.draw do
     collection do
       get :index_admin
       get :stop
+      post :create_label
       post :remove_logo
     end
     resources :questions, controller: "surveys/questions" do
