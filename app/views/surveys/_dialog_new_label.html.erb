@@ -1,0 +1,19 @@
+<div id="mass_entry_new_label_dialog" style="display:none;" class="custom_mh_popup_box">
+  <div class="ui-widget-overlay pop_box_overlay_container"></div>
+  <div class="pop_box_container">
+    <div class="mh_popup_box labels_popup_box">
+    	<div class="mh_popup_box_top"><span class="mh_popup_heading">New Label</span></div>
+    	<div class="fancy">
+        Creating new label will save your current changes and reload the Mass Entry table.
+      </div>
+  		<div class="labels_add_new" id="labels_add_new">
+        <%= text_field_tag :label_new_input, "", id: "labels_new_input", placeholder: "Type a new label name..."%>
+  		</div>
+      <div class="labels_notice" id="labels_notice">&nbsp;</div>
+    	<div class="labels_save" id="labels_save">
+    		<button class="red_accent" id="mass_entry_new_label_save_button">Create Label</button>
+    		<button class="large_lightgray mh_popup_cancel_button" id="">Cancel</button>
+    	</div>
+    </div>
+  </div>
+</div>

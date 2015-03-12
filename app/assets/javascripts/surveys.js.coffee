@@ -85,6 +85,11 @@ $.fn.load_answers = () ->
       
 $ ->
   
+  # New Label button in mass entry
+  $(document).on 'click', '.new_label_in_mass_entry', (e)->
+    e.preventDefault()
+    $.showDialog($("#mass_entry_new_label_dialog"))
+  
   # Add new row in Mass Entry after entering data to the current last row
   $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
     mass_entry = $("#mass_entry_table")

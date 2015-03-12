@@ -3,6 +3,26 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body.mass_entry {
+  #mass_entry_new_label_dialog {
+    .mh_popup_box {
+      margin-top: 90px !important;
+      height: 230px !important;
+      min-height: 230px !important;
+    }
+    .fancy {
+      font-size: 16px;
+      text-align: center;
+    }
+    .labels_add_new {
+      text-align: center;
+      input {
+        float: none;
+        text-align: center;
+        font-size: 13px;
+        padding: 3px
+      }
+    }
+  }
   #gandalfthewhite {
     height: 65px;
   }
