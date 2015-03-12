@@ -47,7 +47,7 @@ class QuestionSet
       @questions.each do |question|
         question.save_response(@answer_sheet, question)
         answer = @answer_sheet.answers.find_by_question_id(question.id)
-        question_rules = SurveyElement.find_by_element_id(question.id).question_rules
+        question_rules = @answer_sheet.survey.survey_elements.find_by_element_id(question.id).question_rules
 
         if answer.present? && question_rules.present?
           question_rules.each do |question_rule|
