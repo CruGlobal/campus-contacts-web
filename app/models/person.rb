@@ -302,35 +302,45 @@ class Person < ActiveRecord::Base
       end
     end
   end
-
-  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false)
-    if update_labels && answers['labels'] != self.labels_for_org_id(organization.id).collect(&:name).join(",  ")
-      if answers['labels'].present?
-        real_labels = []
-        new_labels = answers['labels'].split(",  ")
-        new_labels.each do |new_label|
-          label_record = organization.labels.where(name: new_label).first
-          if label_record.present?
-            if existing_label_record = self.all_organizational_labels.where(label_id: label_record.id).first
-              if existing_label_record.removed_date.present?
-                existing_label_record.update_attributes(removed_date: nil, start_date: Date.today, added_by_id: current_person.id)
-              end
-              real_labels << existing_label_record
-            else
-              new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
-              real_labels << new_label_record
+  
+  def set_labels_for_organization(labels_str, organization, current_person)
+    if labels_str.present?
+      real_labels = []
+      new_labels = labels_str.split(",").map{|x| x.strip}
+      new_labels.each do |new_label|
+        label_record = organization.labels.where(name: new_label).first
+        if label_record.present?
+          if existing_label_record = self.all_organizational_labels.where(label_id: label_record.id).first
+            if existing_label_record.removed_date.present?
+              existing_label_record.update_attributes(removed_date: nil, start_date: Date.today, added_by_id: current_person.id)
             end
+            real_labels << existing_label_record
+          else
+            new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
+            real_labels << new_label_record
           end
-        end
-        if real_labels.present?
-          self.all_organizational_labels.where("organizational_labels.id NOT IN (?) AND organizational_labels.organization_id = ?", real_labels.collect(&:id), organization.id).update_all(removed_date: Date.today)
         else
-          self.organizational_labels.where("organizational_labels.organization_id = ?", organization.id).update_all(removed_date: Date.today)
+          raise new_label.inspect
+          label_record = organization.labels.create(name: new_label)
+          new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
+          real_labels << new_label_record
         end
+      end
+      if real_labels.present?
+        self.all_organizational_labels.where("organizational_labels.id NOT IN (?) AND organizational_labels.organization_id = ?", real_labels.collect(&:id), organization.id).update_all(removed_date: Date.today)
       else
         self.organizational_labels.where("organizational_labels.organization_id = ?", organization.id).update_all(removed_date: Date.today)
       end
+    else
+      self.organizational_labels.where("organizational_labels.organization_id = ?", organization.id).update_all(removed_date: Date.today)
     end
+  end
+
+  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false)
+    if update_labels && answers['labels'] != self.labels_for_org_id(organization.id).collect(&:name).join(",  ")
+      self.set_labels_for_organization(answers['labels'], organization, current_person)
+    end
+    
     organization.add_permission_to_person(self, Permission.no_permissions.id, current_person.id)
     answer_sheet = self.answer_sheet_for_survey(survey.id)
     questions.each do |question|
