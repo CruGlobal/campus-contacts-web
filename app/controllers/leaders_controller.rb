@@ -15,7 +15,11 @@ class LeadersController < ApplicationController
           if current_user.person.has_email?(@user.username)
             current_user.merge(@user)
             @user.destroy
-            redirect_to '/mycontacts'
+            if current_user.person.present?
+              redirect_to all_contacts_path(assigned_to: current_user.person.id)
+            else
+              redirect_to '/mycontacts'
+            end
           else
             @valid_token = true
             render layout: 'mhub'
@@ -41,7 +45,11 @@ class LeadersController < ApplicationController
         else
           current_user.merge(@user)
           @user.destroy
-          redirect_to '/mycontacts'
+          if current_user.person.present?
+            redirect_to all_contacts_path(assigned_to: current_user.person.id)
+          else
+            redirect_to '/mycontacts'
+          end
         end
       else
         @valid_token = false
