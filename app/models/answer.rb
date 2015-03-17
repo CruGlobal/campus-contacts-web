@@ -60,7 +60,7 @@ class Answer < ActiveRecord::Base
   end
 
   def person_id
-    answer_sheet.person_id
+    answer_sheet.person_id if answer_sheet.present?
   end
 
   def for_birth_date_question
