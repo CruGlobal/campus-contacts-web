@@ -5,9 +5,13 @@
   <% notify_leaders = @auto_notify.present? ? @auto_notify.extra_parameters['leaders'] : [] %>
   <% notify_triggers = @auto_notify.present? ? @auto_notify.trigger_keywords : '' %>
 
-  <% assign_contact_to_type = @auto_assign.present? ? @auto_assign.extra_parameters['type'] : 'Leader' %>
-  <% assignment_trigger_words = @auto_assign.present? ? @auto_assign.trigger_keywords : '' %>
-  <% autoassign_selected_id = @auto_assign.present? ? @auto_assign.extra_parameters['id'] : '' %>
+  <% assignment_trigger_words = @auto_assign.trigger_keywords %>
+  <% assign_contact_to_type = "Leader" %>
+  <% autoassign_selected_id = "" %>
+  <% if @auto_assign.present? && @auto_assign.extra_parameters.present? %>
+    <% assign_contact_to_type = @auto_assign.extra_parameters['type'] %>
+    <% autoassign_selected_id = @auto_assign.extra_parameters['id'] %>
+  <% end %>
 
   <div class="rule_form" id="AUTONOTIFY">
     <div class="title">▶ Automatic Notification for Admins </div>

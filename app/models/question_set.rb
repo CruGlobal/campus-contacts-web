@@ -66,34 +66,34 @@ class QuestionSet
                   PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
                 when 'AUTOASSIGN'
                   # Do the process
-                  person =  @answer_sheet.person
+                  if extra_parameters = question_rule.extra_parameters
+                    type = extra_parameters["type"]
+                    extra_id = extra_parameters["id"]
 
-                  organization = @answer_sheet.survey.organization
-                  extra_parameters = question_rule.extra_parameters
+                    person =  @answer_sheet.person
+                    organization = @answer_sheet.survey.organization
 
-                  type = extra_parameters["type"]
-                  extra_id = extra_parameters["id"]
-
-                  if type.present?
-                    case type.downcase
-                    when 'leader'
-                      person.assign_to_leader(organization, extra_id)
-                    when 'ministry'
-                      ministry = person.all_organization_and_children.find_by_id(extra_id)
-                      ministry.add_contact(person) if ministry.present?
-                    when 'group'
-                      group = organization.groups.find_by_id(extra_id)
-                      person.add_to_group(organization, group) if group.present?
-                    when 'label'
-                      label = organization.labels.find_by_id(extra_id)
-                      person.add_to_label(organization, label) if label.present?
-                    end
-                  else
-                    # To consider all the old data in the database
-                    leaders = extra_parameters["leaders"]
-                    if leaders.present?
-                      leaders.each do |leader_id|
-                        person.assign_to_leader(organization, leader_id)
+                    if type.present?
+                      case type.downcase
+                      when 'leader'
+                        person.assign_to_leader(organization, extra_id)
+                      when 'ministry'
+                        ministry = person.all_organization_and_children.find_by_id(extra_id)
+                        ministry.add_contact(person) if ministry.present?
+                      when 'group'
+                        group = organization.groups.find_by_id(extra_id)
+                        person.add_to_group(organization, group) if group.present?
+                      when 'label'
+                        label = organization.labels.find_by_id(extra_id)
+                        person.add_to_label(organization, label) if label.present?
+                      end
+                    else
+                      # To consider all the old data in the database
+                      leaders = extra_parameters["leaders"]
+                      if leaders.present?
+                        leaders.each do |leader_id|
+                          person.assign_to_leader(organization, leader_id)
+                        end
                       end
                     end
                   end
