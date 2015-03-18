@@ -201,23 +201,24 @@ class Surveys::QuestionsController < ApplicationController
       end
       triggers = triggers_array.join(", ")
 
-      survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
-      question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
-      if triggers.present? && parameters['id'].present? && parameters['name'].present?
-        if question_rule.present?
-          question_rule.update_attribute('trigger_keywords',triggers)
-          question_rule.update_attribute('extra_parameters',parameters)
-        else
-          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id,
-            trigger_keywords: triggers, extra_parameters: parameters)
-        end
-      else
-        if question_rule.present?
-          if triggers.blank?
-            question_rule.update_attribute(:trigger_keywords, nil)
+      if survey_element = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id])
+        question_rule = survey_element.question_rules.find_by_rule_id(rule.id) if rule.present?
+
+        if triggers.present? && parameters['id'].present? && parameters['name'].present?
+          if question_rule.present?
+            question_rule.update_attributes({trigger_keywords: triggers, extra_parameters: parameters})
+          else
+            question_rule = QuestionRule.create(survey_element_id: survey_element.id, rule_id: rule.id,
+              trigger_keywords: triggers, extra_parameters: parameters)
           end
-          if parameters['id'].blank? || parameters['name'].blank?
-            question_rule.update_attribute(:extra_parameters, nil)
+        else
+          if question_rule.present?
+            if triggers.blank?
+              question_rule.update_attribute(:trigger_keywords, nil)
+            end
+            if parameters['id'].blank? || parameters['name'].blank?
+              question_rule.update_attribute(:extra_parameters, nil)
+            end
           end
         end
       end

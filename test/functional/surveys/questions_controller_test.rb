@@ -200,16 +200,6 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       assert_response :success
     end
 
-    should "update question with trigger words and autoassign" do
-      rule = Factory(:rule, rule_code: "AUTONOTIFY")
-      rule = Factory(:rule, rule_code: "AUTOASSIGN")
-      Factory(:question_rule, rule: rule, survey_element: @survey.survey_elements.where(element_id: @question.id).first)
-      assert_no_difference "Question.count" do
-        xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :leaders => [@user_2.person.id], :trigger_words => "Yes", :assign_contact_to => "Leader", :autoassign_keyword =>"#{@user_2.person.name} (#{@user_2.person.email})", :autoassign_selected_id =>"#{@user_2.person.id}", :assignment_trigger_words =>"trigger, happy", :survey_id => @survey.id, :id => @question.id}
-        assert_response :success
-      end
-    end
-
     should "not update with the wrong question kind" do
       xhr :put, :update, {:choice_field => {:label => "Favorite color?", :slug => "", :content => "Verge\r\nBarge\r\nTarge", :notify_via => "SMS", :web_only => "0", :hidden => "0"}, :survey_id => @survey.id, :id => @question.id}
       #assert_equal @question.label, Element.find(@question.id).label
