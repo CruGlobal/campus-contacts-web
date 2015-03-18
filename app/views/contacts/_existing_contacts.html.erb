@@ -3,6 +3,13 @@
     <td><%= person.first_name %></td>
     <td><%= person.last_name %></td>
     <td>
+      <% if person.email_addresses.present? %>
+        <%== person.email_addresses.order("email_addresses.primary DESC").collect(&:email).join(", <br/>") %>
+      <% else %>
+        <%== "&nbsp;"%>
+      <% end %>
+    </td>
+    <td>
       <%= link_to "Add", "#", class: "add_existing_link", title: "Add as a contact", data: { email: @email, id: person.id, first_name: person.first_name, last_name: person.last_name, confirm_message: t('application.add_contact.confirm_existing_contact', name: "#{person.first_name} #{person.last_name}")} %>
     </td>
   </tr>
