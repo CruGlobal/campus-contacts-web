@@ -94,6 +94,8 @@ $ ->
   $(document).on 'click', '.new_label_in_mass_entry', (e)->
     e.preventDefault()
     $('#new_label_input').val("")
+    $(".save_mass_entry").removeClass("save_label_to_all")
+    $(".save_mass_entry").removeClass("save_label_to_new")
     $("#apply_label_to_all_checkbox").prop("checked", false)
     $("#apply_label_to_new_checkbox").prop("checked", false)
     $.showDialog($("#mass_entry_new_label_dialog"))
