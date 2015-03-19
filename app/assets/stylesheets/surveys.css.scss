@@ -6,8 +6,8 @@ body.mass_entry {
   #mass_entry_new_label_dialog {
     .mh_popup_box {
       margin-top: 90px !important;
-      height: 250px !important;
-      min-height: 250px !important;
+      height: 270px !important;
+      min-height: 270px !important;
     }
     .fancy {
       font-size: 16px;
@@ -22,7 +22,7 @@ body.mass_entry {
         padding: 3px
       }
     }
-    .apply_new_label {
+    .apply_label_to_all, .apply_label_to_new {
       margin: 5px;
       color: #888;
       input {

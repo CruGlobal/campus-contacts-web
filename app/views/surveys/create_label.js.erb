@@ -1,10 +1,13 @@
 $.toggleLoader('labels_notice','')
 <% if @new_label.present? %>
-  if($("#apply_new_label_checkbox").is(":checked")){
-    $(".save_mass_entry").addClass("save_new_label")
+  if($("#apply_label_to_all_checkbox").is(":checked")){
+    $(".save_mass_entry").addClass("save_label_to_all")
+    $(".save_mass_entry").trigger("click")
+  }else if($("#apply_label_to_new_checkbox").is(":checked")){
+    $(".save_mass_entry").addClass("save_label_to_new")
     $(".save_mass_entry").trigger("click")
   }else{
-    $(".save_mass_entry").removeClass("save_new_label")
+    $(".save_mass_entry").removeClass("save_label_to_all")
     $(".save_mass_entry").trigger("click")
   }
   $.hideDialog($("#mass_entry_new_label_dialog"))

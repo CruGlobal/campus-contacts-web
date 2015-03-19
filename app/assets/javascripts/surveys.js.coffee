@@ -84,12 +84,18 @@ $.fn.load_answers = () ->
 
       
 $ ->
+  $(document).on "click", "#apply_label_to_all_checkbox", (e)->
+    $("#apply_label_to_new_checkbox").prop("checked", false) if $(this).is(":checked")
+    
+  $(document).on "click", "#apply_label_to_new_checkbox", (e)->
+    $("#apply_label_to_all_checkbox").prop("checked", false) if $(this).is(":checked")
   
   # New Label button in mass entry
   $(document).on 'click', '.new_label_in_mass_entry', (e)->
     e.preventDefault()
     $('#new_label_input').val("")
-    $("#apply_new_label_checkbox").prop("checked", false)
+    $("#apply_label_to_all_checkbox").prop("checked", false)
+    $("#apply_label_to_new_checkbox").prop("checked", false)
     $.showDialog($("#mass_entry_new_label_dialog"))
     
   # Save new Label from mass entry
@@ -167,14 +173,17 @@ $ ->
     survey_id = $("#mass_entry_table").data("survey-id")
     table_val = $("#mass_entry_table").handsontable("getData")
     
-    new_label = ""
-    if $(this).hasClass("save_new_label")
-      new_label = $.trim($('#new_label_input').val())
-        
+    new_label_to_all = ""
+    if $(this).hasClass("save_label_to_all")
+      new_label_to_all = $.trim($('#new_label_input').val())
+    new_label_to_new = ""
+    if $(this).hasClass("save_label_to_new")
+      new_label_to_new = $.trim($('#new_label_input').val())
+      
     $.ajax
       type: "POST"
       url: "/surveys/#{survey_id}/mass_entry_save"
-      data: {values: table_val, new_label: new_label}
+      data: {values: table_val, new_label_to_all: new_label_to_all, new_label_to_new: new_label_to_new}
   
   if $("#mass_entry_table").size() > 0
     $.fn.load_answers()

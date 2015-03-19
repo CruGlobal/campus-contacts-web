@@ -8,8 +8,11 @@
       </div>
   		<div class="labels_add_new" id="labels_add_new">
         <%= text_field_tag :new_label_text_field, "", id: "new_label_input", placeholder: "Type a new label name..."%>
-        <div class="apply_new_label">
-          <%= check_box_tag :apply_new_label_checkbox %> Apply this new label to all contacts in Mass Entry?
+        <div class="apply_label_to_all">
+          <%= check_box_tag :apply_label_to_all_checkbox %> Apply to ALL contacts in Mass Entry
+        </div>
+        <div class="apply_label_to_new">
+          <%= check_box_tag :apply_label_to_new_checkbox %> Apply to NEW contacts in Mass Entry
         </div>
         <div class="labels_notice" id="labels_notice">&nbsp;</div>
   		</div>

@@ -136,13 +136,18 @@ class SurveysController < ApplicationController
     updated_ids = []
     params["values"].values.each_with_index do |value, i|
       value.keys.each{|k| value[k] = nil if value[k] == "null"}
-      if params["new_label"].present?
+      if params["new_label_to_all"].present?
         labels = value["labels"].split(",  ")
-        labels += [params['new_label']]
+        labels += [params['new_label_to_all']]
         value["labels"] = labels.join(",  ")
       end
       if value["id"].nil?
         # Try to create new record
+        if params["new_label_to_new"].present?
+          labels = value["labels"].split(",  ")
+          labels += [params['new_label_to_new']]
+          value["labels"] = labels.join(",  ")
+        end
         if value["first_name"].present? || value["last_name"].present?
           if value["first_name"] && value["last_name"].present?
             # Create record
