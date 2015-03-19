@@ -15,6 +15,7 @@ body.mass_entry {
     }
     .labels_add_new {
       text-align: center;
+      margin-bottom: 5px;
       input {
         float: none;
         text-align: center;
@@ -22,12 +23,16 @@ body.mass_entry {
         padding: 3px
       }
     }
+    
     .apply_label_to_all, .apply_label_to_new {
-      margin: 5px;
+      margin: 0 5px;
       color: #888;
       input {
         width: auto;
       }
+    }
+    .labels_notice {
+      margin: 5px 0 !important;
     }
   }
   #gandalfthewhite {
