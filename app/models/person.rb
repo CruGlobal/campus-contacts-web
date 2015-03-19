@@ -320,7 +320,6 @@ class Person < ActiveRecord::Base
             real_labels << new_label_record
           end
         else
-          raise new_label.inspect
           label_record = organization.labels.create(name: new_label)
           new_label_record = self.organizational_labels.create(label_id: label_record.id, organization_id: organization.id, start_date: Date.today, added_by_id: current_person.id)
           real_labels << new_label_record
@@ -345,6 +344,7 @@ class Person < ActiveRecord::Base
     answer_sheet = self.answer_sheet_for_survey(survey.id)
     questions.each do |question|
       answer = answers[question.id.to_s]
+      next unless answer.present?
       if question.predefined?
         if save_predefined_questions
           if ['faculty'].include?(question.attribute_name)
