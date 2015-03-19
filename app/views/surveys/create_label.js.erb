@@ -8,6 +8,7 @@ $.toggleLoader('labels_notice','')
     $(".save_mass_entry").trigger("click")
   }else{
     $(".save_mass_entry").removeClass("save_label_to_all")
+    $(".save_mass_entry").removeClass("save_label_to_new")
     $(".save_mass_entry").trigger("click")
   }
   $.hideDialog($("#mass_entry_new_label_dialog"))
