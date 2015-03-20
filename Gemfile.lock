@@ -121,8 +121,6 @@ GEM
     better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     bitly (0.9.0)
       httparty (>= 0.7.6)
       multi_json (~> 1.3)
@@ -180,7 +178,6 @@ GEM
     daemons (1.1.6)
     dalli (2.6.4)
     deadlock_retry (1.2.0)
-    debug_inspector (0.0.2)
     default_value_for (2.0.3)
     delegate_presenter (0.0.2)
       rails
@@ -444,6 +441,11 @@ GEM
     thor (0.19.1)
     tilt (1.4.1)
     timers (1.1.0)
+    transaction_isolation (1.0.3)
+      activerecord (>= 3.0.11)
+    transaction_retry (1.0.2)
+      activerecord (>= 3.0.11)
+      transaction_isolation (>= 1.0.2)
     travis-lint (1.7.0)
       hashr (~> 0.0.22)
     treetop (1.4.15)
@@ -489,7 +491,6 @@ DEPENDENCIES
   awesome_print (~> 1.2.0)
   aws-sdk (= 1.8.1.3)
   better_errors (>= 0.7.2)
-  binding_of_caller
   bitly (~> 0.9.0)
   bluepill (= 0.0.60)
   bootstrap-sass (~> 3.1.0)
@@ -560,6 +561,7 @@ DEPENDENCIES
   strip_attributes (~> 1.4.4)
   susy (~> 1.0.9)
   therubyracer (~> 0.11.4)
+  transaction_retry
   travis-lint (~> 1.7.0)
   trumant-rack-oauth2-server!
   twilio-rb!

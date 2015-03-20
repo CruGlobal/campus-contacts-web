@@ -62,6 +62,7 @@ gem 'wiser_timezone', '~> 0.1.9'
 gem 'infobase', '~> 1.0.0'
 gem 'multi_json', '~> 1.8.2'
 gem 'sp_client', '~> 1.0.2'
+gem 'transaction_retry'
 
 
 group :development, :test do
@@ -91,7 +92,7 @@ group :development do
   gem 'railroady', '~> 1.1.1'
   #gem 'localeapp'
   gem "better_errors", ">= 0.7.2"
-  gem "binding_of_caller"
+  # gem "binding_of_caller"
 end
 
 group :performance do
