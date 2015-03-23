@@ -34,7 +34,11 @@ class ContactsController < ApplicationController
       unchanged_label_ids = unchanged_label_ids.present? ? unchanged_label_ids.split(',') : []
 
       remove_labels = person.organizational_labels_for_org(current_organization).where("label_id IN (?)", remove_label_ids - unchanged_label_ids)
-      remove_labels.update_all(:removed_date => Time.now) if remove_labels.present?
+
+      # This might be resolve the MySQL deadlock issue
+      remove_labels.each do |remove_label|
+        remove_label.update_attribute(:removed_date, Time.now) if remove_label.removed_date.nil?
+      end if remove_labels.present?
     end
 
     if @from_all_contacts == "0"
