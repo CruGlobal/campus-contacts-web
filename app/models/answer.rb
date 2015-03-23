@@ -68,4 +68,7 @@ class Answer < ActiveRecord::Base
     question.attribute_name == 'birth_date'
   end
 
+  def changed_today?
+    self.created_at.to_date == Date.today || (self.updated_at.present? && self.updated_at.to_date == Date.today)
+  end
 end

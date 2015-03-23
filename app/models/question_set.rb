@@ -63,7 +63,9 @@ class QuestionSet
                   # Do the process
                   leaders = Person.find(question_rule.extra_parameters['leaders'])
                   recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                  PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
+                  if answer.changed_today?
+                    PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
+                  end
                 when 'AUTOASSIGN'
                   # Do the process
                   if extra_parameters = question_rule.extra_parameters
