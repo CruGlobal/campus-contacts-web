@@ -3,6 +3,7 @@
     <div id="upper_sidebar_lists">
     	<button class="red_accent full_width_button" id="allcontacts_add_contact_button">Add a Contact</button>
       <%= link_to raw("<button class='action_gray full_width_button' id='allcontacts_import_contacts_button'>#{t('contacts.index.import_contacts')}</button>"), new_import_path %>
+      <%= link_to(raw("<button class='action_gray full_width_button'>#{t('nav.my_contacts')}</button>"), all_contacts_path(assigned_to: current_person.id, advanced_search: 1)) %>
     </div>
   	<div id="sidebar_lists" class="leftmenu">
       <%= render partial: 'search/sidebar' %>

@@ -10,14 +10,6 @@
     </li>
     <li class="<%= 'current' if request.path =~ care_pattern %>">
       <%= link_to(t('nav.people'), "/allcontacts") %>
-      <ul style='display:none;'>
-        <li class="<%= 'current' if request.fullpath == '/mycontacts' %>">
-          <%= link_to(t('nav.my_contacts'), "/mycontacts", :class => "topset mycontacts") %>
-        </li>
-        <li class="<%= 'current' if  params[:controller] == 'contacts' && params[:action] == 'index' %>">
-          <%= link_to(t('nav.all_contacts'), "/allcontacts", :class => "topset allcontacts") %>
-        </li>
-      </ul>
     </li>
     <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">

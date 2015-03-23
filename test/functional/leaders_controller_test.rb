@@ -66,9 +66,12 @@ class LeadersControllerTest < ActionController::TestCase
      end
     should "redirect to user root if the current_user not triggered when visiting the merge_leader_link" do
       @user = Factory(:user_with_auxs)
+      @user = Factory(:user_with_auxs)
+      @person = @user.person
+
       sign_in @user
       get :merge_leader_accounts, user_id: @leader_user.id, token: @leader_user.remember_token
-      assert_redirected_to "/mycontacts"
+      assert_redirected_to all_contacts_path(assigned_to: @person.id)
     end
     should "destroy session and redirect to login page when do user do not want to merge accounts" do
       @user = Factory(:user_with_auxs)
