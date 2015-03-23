@@ -441,11 +441,6 @@ GEM
     thor (0.19.1)
     tilt (1.4.1)
     timers (1.1.0)
-    transaction_isolation (1.0.3)
-      activerecord (>= 3.0.11)
-    transaction_retry (1.0.2)
-      activerecord (>= 3.0.11)
-      transaction_isolation (>= 1.0.2)
     travis-lint (1.7.0)
       hashr (~> 0.0.22)
     treetop (1.4.15)
@@ -561,7 +556,6 @@ DEPENDENCIES
   strip_attributes (~> 1.4.4)
   susy (~> 1.0.9)
   therubyracer (~> 0.11.4)
-  transaction_retry
   travis-lint (~> 1.7.0)
   trumant-rack-oauth2-server!
   twilio-rb!
