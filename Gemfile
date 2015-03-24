@@ -61,7 +61,7 @@ gem 'wiser_date', '~> 0.3.0'
 gem 'wiser_timezone', '~> 0.1.9'
 gem 'infobase', '~> 1.0.0'
 gem 'multi_json', '~> 1.8.2'
-gem 'sp_client', '~> 1.0.2'
+gem 'sp_client', '~> 1.0.3'
 
 group :development, :test do
   gem 'guard', '~> 1.8.2'
