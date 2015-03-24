@@ -67,8 +67,4 @@ class Answer < ActiveRecord::Base
     return false unless question_id.present? && question = Element.find(question_id)
     question.attribute_name == 'birth_date'
   end
-
-  def changed_today?
-    self.created_at.to_date == Date.today || (self.updated_at.present? && self.updated_at.to_date == Date.today)
-  end
 end
