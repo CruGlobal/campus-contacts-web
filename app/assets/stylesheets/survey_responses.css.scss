@@ -1,7 +1,31 @@
 // Place all the styles related to the group_labels controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
+.answer_survey_container{
+  .answer_survey_content{
+    .completed_survey_title{
+      font-weight: bold;
+    }
+    .survey_title{
+      font-size: 16px !important;
+      margin:0 !important;
+    }
+    padding: 6px;
+    label {
+      color: #000 !important;
+      font-size: 12px;
+      &.question_title{
+        font-weight:bold;
+      }
+    }
+    &:nth-child(odd) {
+      background-color: #eee;
+    }
+    &:nth-child(even) {
+      background-color: #eaf1f6;
+    }
+  }
+}
 #sessions_controller {
   #login_paragraph h1 {
     color: #808284;

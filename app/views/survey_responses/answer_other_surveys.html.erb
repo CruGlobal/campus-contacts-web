@@ -14,35 +14,47 @@
   <% end %>
   <div class="user_defined_contact_fields survey_edit">
     <% has_survey = 0 %>
-    <% current_organization.surveys.each do |survey| %>
-      <% @survey = survey %>
-      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
-      <% all_questions = survey.questions %>
-      <% if all_questions.count > 0 && (answer_sheet.blank? || (answer_sheet.present? && answer_sheet.completed_at.blank?))%>
-        <% has_survey += 1 %>
-        <% all_questions.each_with_index do |question, index| %>
-          <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
-          <% answer = question.display_response(answer_sheet, @person) %>
-          <% if answer.blank? %>
-            <% if index < 1 %>
-              <div class="survey_title">
-                <%= link_to survey.title, "##{'s_'+survey.id.to_s}", "name"=>'s_'+survey.id.to_s %>
-              </div>
+    <% visible_survey_ids = [] %>
+    <div class="answer_survey_container">
+      <% current_organization.surveys.each do |survey| %>
+        <% @survey = survey %>
+        <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+        <% all_questions = survey.questions %>
+        <% if all_questions.count > 0 && (answer_sheet.blank? || (answer_sheet.present? && answer_sheet.completed_at.blank?))%>
+          <div class="answer_survey_content">
+            <% has_survey += 1 %>
+            <% answered_all_questions = true %>
+            <% all_questions.each do |question| %>
+              <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
+              <% answer = question.display_response(answer_sheet, @person) %>
+              <% if answer.blank? %>
+                <% answered_all_questions = false %>
+                <% unless visible_survey_ids.include?(survey.id) %>
+                  <% visible_survey_ids << survey.id %>
+                  <div class="survey_title">
+                    <%= link_to survey.title, "##{'s_'+survey.id.to_s}", "name"=>'s_'+survey.id.to_s %>
+                  </div>
+                <% end %>
+                <div class="field">
+                	<label class="question_title"><%= raw question.label %></label>
+                	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
+                </div>
+              <% end %>
             <% end %>
-            <div class="field">
-            	<label><%= raw question.label %></label>
-            	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
-            </div>
-          <% end %>
+            <% if answered_all_questions %>
+              <span class="completed_survey_title">
+                <%= "#{survey.title}: " %>
+              </span>
+              All questions have already been answered.
+            <% end %>
+          </div>
         <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 
   <% if has_survey > 0 %>
-    <div class="formactions">
-      <%= submit_tag t('general.save') %>
-    </div>
+    <%= submit_tag t('general.save') %>
   <% else %>
     <div class="feed_box notice">
       <%= t('survey_responses.no_surveys') %>

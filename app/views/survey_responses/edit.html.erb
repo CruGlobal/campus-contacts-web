@@ -14,31 +14,36 @@
   <% end %>
   <div class="user_defined_contact_fields survey_edit">
     <% has_survey = 0 %>
-    <% current_organization.surveys.each do |survey| %>
-      <% @survey = survey %>
-      <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
-      <% all_questions = survey.questions %>
-      <% if all_questions.count > 0 && answer_sheet.present? %>
-        <% has_survey += 1 %>
-        <% all_questions.each_with_index do |question, index| %>
-          <% if index < 1 %>
-            <div class="survey_title">
-              <%= link_to survey.title, "##{'s_'+survey.id.to_s}", "name"=>'s_'+survey.id.to_s %>
-            </div>
-          <% end %>
-          <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
-          <div class="field">
-          	<label><%= raw question.label %></label>
-          	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
+    <% visible_survey_ids = [] %>
+    <div class="answer_survey_container">
+      <% current_organization.surveys.each do |survey| %>
+        <% @survey = survey %>
+        <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} %>
+        <% all_questions = survey.questions %>
+        <% if all_questions.count > 0 && answer_sheet.present? %>
+          <div class="answer_survey_content">
+            <% has_survey += 1 %>
+            <% all_questions.each do |question| %>
+              <% unless visible_survey_ids.include?(survey.id) %>
+                <% visible_survey_ids << survey.id %>
+                <div class="survey_title">
+                  <%= link_to survey.title, "##{'s_'+survey.id.to_s}", "name"=>'s_'+survey.id.to_s %>
+                </div>
+              <% end %>
+              <% next if ['email', 'phone_number'].include?(question.attribute_name) %>
+              <div class="field">
+              	<label><%= raw question.label %></label>
+              	<%= render :partial => 'survey/' + question.ptemplate, object: question, locals: {col: nil, answer_sheet: answer_sheet, survey: survey, person: @person} %>
+              </div>
+            <% end %>
           </div>
         <% end %>
       <% end %>
-    <% end %>
-  </div>
-  <% if has_survey > 0 %>
-    <div class="formactions">
-      <%= submit_tag t('general.save') %>
     </div>
+  </div>
+
+  <% if has_survey > 0 %>
+    <%= submit_tag t('general.save') %>
   <% else %>
     <div class="feed_box notice">
       <%= t('survey_responses.no_surveys') %>
