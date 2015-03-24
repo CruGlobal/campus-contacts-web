@@ -1,4 +1,5 @@
 class Apis::V3::BaseController < ApplicationController
+  # skip_before_filter :verify_authenticity_token
   skip_before_filter :set_login_cookie
   skip_before_filter :check_su
   skip_before_filter :check_valid_subdomain

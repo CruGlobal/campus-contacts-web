@@ -14,9 +14,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def create
-    params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
-    params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
-    params[:person][:addresses_attributes] = params[:person].delete(:addresses) if params[:person][:addresses]
+    clean_attr
     person = Person.find_existing_person(Person.new(params[:person]))
 
     if person.save
@@ -40,6 +38,8 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def update
+    clean_attr
+    
     # add permissions in current org
     if params[:permissions]
       params[:permissions].split(',').each do |permission_id|
@@ -103,6 +103,12 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   private
+  
+  def clean_attr
+    params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
+    params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
+    params[:person][:addresses_attributes] = params[:person].delete(:addresses) if params[:person][:addresses]
+  end
 
   def people
     current_organization.people
