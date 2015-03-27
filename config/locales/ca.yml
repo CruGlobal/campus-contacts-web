@@ -41,14 +41,14 @@ ca:
   application:
     add_contact:
       add_contact: Add a contact to %{org}
-      confirm_existing_contact:
-      existing_contact:
-      existing_person_email:
-      loading_description:
+      confirm_existing_contact: Are you sure %{name} is who you are looking for?
+      existing_contact: Existing contacts with the same email
+      existing_person_email: This email address already exists in the Missionhub database. Please select the appropriate contact from the list below.
+      loading_description: Validating email address.. Please wait...
       save_and_add: Save and add another
       save_and_close: Save and close
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
-      system_is_still_busy:
+      system_is_still_busy: The system is still processing the form, please wait for a moment.
       title_bio: Bio
       title_label: Labels
       title_optional: (Optional)
@@ -65,10 +65,10 @@ ca:
     assign_search:
       assign_explanation: 'You can assign a contact using any of the options below:'
       assign_to_user_note: This will add an assignment to any other assignments already in place.
-      copy_confirm_message:
+      copy_confirm_message: Are you sure you want to transfer ~SELECTED~ contact/s to %{org}?
       copy_interactions: Copy Interactions with Contact
       copy_interactions_help: 'Privacy settings will be respected: Share with everyone here = share with everyone there, share with our admins = share with their admins, share with only me means share with only me.'
-      copy_show_orgs_guide:
+      copy_show_orgs_guide: Showing %{number_of_orgs} of %{total_orgs}, keep typing to narrow search
       copy_survey_answers: Copy Survey Answers with Contact
       keep_contact: Leave a copy of the Contact in the Organization
       me: Me
@@ -76,6 +76,14 @@ ca:
       type_to_find_label: Type to find a label then click on the label's name
       type_to_find_leader: Type to find a leader then click on the leader's name.
       type_to_find_org: Type to find a %{terminology} then click on the %{terminology}'s name
+    interaction_types:
+      comment:
+      faculty_on_mission:
+      gospel_presentation:
+      graduating_on_mission:
+      holy_spirit_presentation:
+      prayed_to_receive_christ:
+      spiritual_conversation:
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   batch:
@@ -87,11 +95,13 @@ ca:
     snapshot:
       key_leader: We have found a key leader on this campus.
       launched: We have 3 Multiplying Disciples on this campus.
-      movement_stages:
+      movement_stages: The number of movements in each stage correspond to the movements checked in the box at left. To update your movement stages, go to your team page in the Infobase.
       multiplying:
       pioneering:
+      save_snapshot:
       title: The graphs on this page pull from data that has been submitted to the Infobase, and thus will only be as up to date as the most recent submission of Movement Indicators for these movements.  Click on each category name to hide or display it on the graph.
     trend:
+      save_trend:
       year_ago: This is only available if the Start Date and End Date are less than one year apart.
   contacts:
     add_contact: Add Contact
@@ -107,15 +117,15 @@ ca:
       title: All Contacts
     assign: Assign
     contact_list:
-      first_name:
-      followup_status:
-      gender:
-      labels:
-      last_name:
-      last_survey:
-      phone_number:
-      status:
-      surveys:
+      first_name: First Name
+      followup_status: Status
+      gender: Gender
+      labels: Labels
+      last_name: Last Name
+      last_survey: Last Survey
+      phone_number: Phone
+      status: Status
+      surveys: Surveys
     create:
       email_taken: Oops! This email address is already being used. Please email support@missionhub.com with the EMAIL address and NAME of the person whom you want to add the email to.
       success: Succesfully updated %{name}'s profile
@@ -161,7 +171,7 @@ ca:
       add_question_back: Click on a question to add it back to the page
       all: All
       all_responses: All Contacts
-      already_selected_an_existing_contact:
+      already_selected_an_existing_contact: You have already selected an existing contact. You cannot allow to change the email address of '%{name}'
       archived: Archived
       assign_contact:
         one: Assign 1 contact
@@ -190,7 +200,7 @@ ca:
       edit_saved_search: Edit this search
       edit_this_search: Edit this search
       edit_true: '&edit=true'
-      email_is_already_exists:
+      email_is_already_exists: Email address currently in the database
       export: Export CSV
       filter: Search
       first_name: First
@@ -209,7 +219,7 @@ ca:
       import_step3_body2: Just select any labels from the list below that you would like to apply to these new contacts, and then click Import Now.
       in_progress: Assigned
       in_progress_responses: All Contacts - Assigned
-      invalid_existing_contact:
+      invalid_existing_contact: Invalid existing contact, please try again later.
       last_name: Last
       last_survey: Last Survey
       leaders: Multiplying Disciples
@@ -247,7 +257,7 @@ ca:
       search_saved: This search has been saved
       send_reminder: Send Reminder
       show_all: Show 'In Progress' contacts
-      status_header_guide:
+      status_header_guide: Status is visible only for contacts with No Permissions. Contacts with User or Admin permissions will not have a Status entry
       surveys: Surveys
       type_above_field: Start typing in the field above to search for somewhere to transfer these people to.
       unassign_contact: Unassign contact
@@ -273,13 +283,13 @@ ca:
     menu:
       add_question_back: Click on a question to add it back to the page
       answered_surveys: Surveys
-      column_header_guide:
+      column_header_guide: Column headers are what appear in the All Contacts view. You can update column headers by editing specific survey questions as needed.
     mine:
       all: All
       comments: My Comments
       completed: Completed
       detailed: Detailed
-      details:
+      details: Details
       email: Email
       first_name: First Name
       in_progress: In Progress
@@ -459,41 +469,41 @@ ca:
       year: Year
   dialogs:
     advanced_search:
-      header:
-      search_any:
-      search_any_guide:
+      header: Matching the criteria for Filtered Search
+      search_any: 'Search for a Person:'
+      search_any_guide: '... by first name, last name, phone number or email address'
       search_filter:
         contact_data:
-          assigned:
-          faculty:
-          gender:
-          status:
-          title:
+          assigned: Assigned
+          faculty: Faculty
+          gender: Gender
+          status: Status
+          title: Contact Data
         label_and_group_data:
-          groups:
-          labels:
-          title:
+          groups: Groups
+          labels: Labels
+          title: Label and Group Data
         survey_questions:
-          loader:
-          no_questions:
-          title:
+          loader: Updating Survey Questions
+          no_questions: There are no questions in this survey.
+          title: Survey Responses
         surveys:
-          range:
-          range_guide:
-          scope:
-          scope_guide:
-          title:
-        title:
+          range: Survey Date Range
+          range_guide: 'Include only survey responses given between:'
+          scope: Survey List
+          scope_guide: 'Include these survey titles:'
+          title: Surveys to include in Search
+        title: 'Filtered Search:'
     dialog_avatar:
-      browse_computer:
-      change_avatar:
-      confirm_remove:
-      dialog_title:
-      facebook_search_guide:
-      invalid_format:
-      remove_avatar:
+      browse_computer: Browse Computer
+      change_avatar: Change
+      confirm_remove: Do you want to remove this picture?
+      dialog_title: Profile Picture
+      facebook_search_guide: Some Facebook users may not appear because of their privacy settings.
+      invalid_format: Invalid picture format, please upload .jpg, .jpeg, .png, or .gif file
+      remove_avatar: Remove
     dialog_labels:
-      guide:
+      guide: A dash means only some of the selected contacts have the label. A check mark means all selected contacts have the label. An empty box means no one has the label. Click the box to change to checked or empty. Remember to click save changes.
     search_people_filters:
       advanced_search: Toggle Advanced Search
       advanced_search_link: Advanced Search
@@ -554,7 +564,7 @@ ca:
     alert: Alert
     archive: Archive
     archived: Archived
-    assign_to:
+    assign_to: Assign To
     assigned_to: Assigned to
     assigned_to_both_option: Both
     assigned_to_first_option: Assigned
@@ -568,7 +578,7 @@ ca:
     contact_location: Contact Location
     contacts_updated_from: Contacts Updated From
     country: Country
-    cru_status:
+    cru_status: P2C Role
     dash: ' - '
     default_email_from: do-not-reply@mhub.cc
     delete: Delete
@@ -580,12 +590,12 @@ ca:
     export_csv_help: Export spreadsheet
     export_vcard_help: Export to contacts list (email or phone)
     faculty: Faculty
-    'false':
-    faq_redirect_link:
+    'false': false
+    faq_redirect_link: http://help.missionhub.com/article/34-faqs-frequently-asked-questions
     female: Female
     first_name: First Name
     gender: Gender
-    group:
+    group: Group
     group_name: Group
     help_redirect_link: http://help.missionhub.com
     help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
@@ -636,7 +646,7 @@ ca:
     sms_preview_title: 'Your recipient without email will receive the following text message:'
     state: Province
     status: Status
-    student_status:
+    student_status: Enrollment
     subject: 'Subject:'
     survey: Survey
     survey_help_desc: ' To begin your survey, '
@@ -645,7 +655,8 @@ ca:
     survey_web_tip_html: For the web version of the survey, send people to <strong>%{link}/</strong>
     to: To
     transfer: Transfer
-    'true':
+    'true': true
+    type:
     unassign: Unassign
     work: Work
     zip: Postal Code
@@ -701,7 +712,7 @@ ca:
     new:
       new_group: Create a New Group
     new_label_prompt: Please enter a new label name
-    no_group_found:
+    no_group_found: Group was not found
     person:
       remove_confirm: Are you sure you want to remove %{name} from your group?
     see_all: All Groups
@@ -767,13 +778,14 @@ ca:
       default_post_survey_message: Thank you for your time!
   interactions:
     add_comment_title: Add comment
+    addresses_limit:
     answer_other_surveys: Answer Other Surveys
     comment_field_title: Comment
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
     profile_info:
       email_contact_info: Email Me This Contact Info
-      opt_in_help:
+      opt_in_help: If you would like to receive text messages, text 'ON' to 85005 to opt back in.
     profile_interactions_edit:
       confirm_delete_interaction: Are you sure you want to delete this interaction?
   keyword_request_mailer:
@@ -857,9 +869,9 @@ ca:
     index:
       fetching: Fetching suggestions (this might take a while)
       guide:
-      list_heading:
+      list_heading: Suggested Movement Indicator Actions
       show_old: Click here to show old suggestions
-      title:
+      title: Report Movement Indicators for %{org_name}
     reasons:
       engaged_disciple: <b>%{name}</b> was labeled as a ministering disciple. Also apply the "<b>%{label}</b>" label?
       gospel_presentation: <b>%{name}</b> has helped at least one person understand the gospel.  Apply the "<b>%{label}</b>" label?
@@ -871,7 +883,7 @@ ca:
     remove_suggestion_html: <b>%{name}</b> look like they may no longer be %{label_sentence}. Remove the <b>%{label}</b> label?
   movement_indicators:
     index:
-      list_heading:
+      list_heading: Confirm Movement Indicators
   nav:
     all_contacts: All Contacts
     all_surveys: All Surveys
@@ -886,7 +898,7 @@ ca:
     enter_survey_mode: Enter Survey Mode
     exit_survey_mode: Exit Survey Mode
     go_to: go to
-    goal:
+    goal: Goal Tracker
     groups: Groups
     help: Resources and Help
     hide: Hide
@@ -903,7 +915,7 @@ ca:
     permissions: Labels
     privacy: Privacy Policy
     profile: My Profile
-    report_movement_indicators:
+    report_movement_indicators: Report Movement Indicators
     roles: Labels
     settings: Settings
     snapshot: Snapshot View
@@ -911,7 +923,7 @@ ca:
     surveys: Surveys
     terms: Terms and Conditions
     transfer: Graduating on Mission
-    trend:
+    trend: Trend Tracker
     use_keyword: 'Use Keyword: %{keyword}'
     view_details: View details
     visual_tools: Visual Tools
@@ -1082,7 +1094,7 @@ ca:
       cannot_delete_admin_error: You cannot delete <b>%{names}</b> since you are going to delete all the admins in this organization!
       deleting_people_success: People were successfully deleted!
     bulk_sms:
-      sms_footer_message:
+      sms_footer_message: Reply STOP to opt out of text messages
     create:
       email_error: <font color='red'>Invalid email address</font>
       email_taken: <font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>
@@ -1221,40 +1233,40 @@ ca:
     assignments:
       title: Assigned To
     faculty:
-      'false':
-      title:
-      'true':
+      'false': 'No'
+      title: Faculty
+      'true': 'Yes'
     gender:
-      female:
-      male:
-      title:
+      female: Female
+      male: Male
+      title: Gender
     groups:
-      title:
+      title: Groups
     included_surveys:
-      title:
+      title: Survey List
     interactions:
-      title:
+      title: Interactions
     labels:
-      title:
+      title: Labels
     permissions:
-      title:
+      title: Permissions
     sidebar:
-      friends_only:
-      include_archived:
-      saved_hide:
-      saved_search_title:
-      saved_show:
-      search_any_placeholder:
-      standard_hide:
-      standard_show:
-      standard_title:
-      survey_hide:
-      survey_show:
-      survey_title:
+      friends_only: My Friends
+      include_archived: Include archived contacts
+      saved_hide: Hide Saved Searches
+      saved_search_title: Saved Searches
+      saved_show: Show Saved Searches
+      search_any_placeholder: Search
+      standard_hide: Hide Standard Filters
+      standard_show: Show Standard Filters
+      standard_title: Standard Filters
+      survey_hide: Hide Survey Filters
+      survey_show: Show Survey Filters
+      survey_title: Survey Filters
     status:
-      title:
+      title: Status
     triggers:
-      title:
+      title: Filter Results
   sessions:
     destroy:
       signed_out: You've been signed out.
@@ -1269,9 +1281,9 @@ ca:
       login_paragraph_mhub: To start the survey, please login with Facebook so we can know who you really are.<br/>This will save time completing your survey.
       login_with_facebook: Please login with Facebook to get started
       no_facebook: Don't like Facebook? Click here to skip Facebook login
-      no_ticket_error:
-      not_allowed_to_use_cas:
-      not_allowed_to_use_key:
+      no_ticket_error: Authentication failed. Please try again later. For additional help please email support@missionhub.com
+      not_allowed_to_use_cas: We're not able to retrieve your login information at this time. Please use the Facebook login.
+      not_allowed_to_use_key: You do not have an existing account in Missionhub. Please use the Facebook login.
       skip_facebook: Click here to skip Facebook login
       start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       waiting_for_logout: Waiting for previous user to be logged out of Facebook. If this message doesn't go away within 15 seconds, try reloading the page.
@@ -1281,11 +1293,11 @@ ca:
     email_should_be_unique_msg: Email already used, try another email address.
     keyword_inactive: The keyword you have just texted is not active. Please check your spelling and try again.
     no_survey: There isn't a survey associated with that keyword
-    sms_help_guide:
-    sms_subscribed_with_org:
-    sms_subscribed_without_org:
-    sms_unsubscribed_with_org:
-    sms_unsubscribed_without_org:
+    sms_help_guide: MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to https://mhub.cc/terms for more help. Msg frequency depends on user.
+    sms_subscribed_with_org: You have been subscribed from MHub text alerts. You can now receive text messages from %{org}.
+    sms_subscribed_without_org: You have been subscribed from MHub text alerts. You can now receive text messages.
+    sms_unsubscribed_with_org: You have been unsubscribed from MHub text alerts for %{org}. You will receive no more messages. To opt back in, reply ON.
+    sms_unsubscribed_without_org: You have been unsubscribed from MHub text alerts. You will receive no more messages. To opt back in, reply ON.
   sms_keywords:
     all_keywords: All Keywords
     default_rejection_email: Your keyword request has been denied
@@ -1375,8 +1387,8 @@ ca:
     new:
       greeting_no_name: Hi!
       greeting_with_name: Hi %{name}!
-    no_completed_surveys:
-    no_surveys:
+    no_completed_surveys: No completed surveys yet.
+    no_surveys: No surveys yet.
     phone_number: What is your phone number?
     room: Room Number
     select_language: Select Language
@@ -1405,15 +1417,15 @@ ca:
       login_paragraph: Login Paragraph
       login_paragraph_tip: This is what people will see as they reach the Facebook login page for a survey
       logo: 'Logo (we will wrap this in a div with the class "logo"):'
-      logo_valid_format:
+      logo_valid_format: Upload .jpg, .jpeg, .png, or .gif file
       no_fb_login_option: No login
       post_survey_message: What message would you like to show after the person has completed the survey?
       post_survey_placeholder: 'Example: Thank you for your time! If you''re interested in P2C, we meet at Round Tree Theatre every Thursday @ 8PM'
       redirect_url: If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here. (This will bypass the thank you response.)
-      remove_logo_cofirmation:
-      remove_logo_failed:
-      remove_logo_link:
-      remove_logo_success:
+      remove_logo_cofirmation: Do you want to remove this logo?
+      remove_logo_failed: Invalid survey. Please try again later.
+      remove_logo_link: Click to remove logo
+      remove_logo_success: You have successfully removed the logo.
       skip_fb_login_option: Present an option at the end of the survey to connect via Facebook
       survey_associated_with: This survey will be associated with %{org}.
       terminology: If you'd like this to be referred to as something other than a 'Survey', enter that here
@@ -1431,16 +1443,16 @@ ca:
       delete_survey: Delete this survey
       edit_survey: Edit this survey
       link: Link
-      manual_entry:
+      manual_entry: Mass Entry
       new: New Survey
       no_keywords: Sorry, there are no keywords here.
       no_surveys: Sorry, there are no surveys here.
       preview_survey: Preview this survey
     mass_entry:
-      help:
-      loading:
-      saving:
-      title:
+      help: Answers to predefined questions will appear in grey text once entered. These answers cannot be changed.
+      loading: Loading survey answers, this could take a while...
+      saving: Saving changes, this could take a while...
+      title: Mass Entry - %{survey}
     new:
       choose_keyword_explanation_html: 'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.  <strong>They will text your keyword to the number %{number}</strong> and your survey questions will appear on their device.  Note: The process of acquiring new keywords requires manual intervention. Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.'
       create_a_survey: Create a Survey
@@ -1452,7 +1464,7 @@ ca:
         autonotify_guide: This option will notify the selected leaders if the answer contains the listed keywords.
         autonotify_keywords_label: List the words that will trigger the notification:<br/>(must be separated with commas)
         autonotify_leader_label: 'Select one or more leaders to be notified:'
-        autonotify_tip:
+        autonotify_tip: To select multiple admins, hold Control (Windows) or Command (Mac) and click their names.
         hidden: Don't show this question on the survey
         leaders: Select one or more leaders to be notified when this question is answered in a certain way
         trigger_words: List one or more words or phrases that will trigger this notification if they appear in the answer.<br/>(separate words and phrases with commas)
@@ -1489,7 +1501,7 @@ ca:
         predefined: Predefined Questions
         predefined_help: Predefined questions are commonly used but will NOT be included in your survey unless you click 'use'. For reporting accuracy please do not reword predefined questions. Just use what is provided.
         previously_used: Previously Used Custom Questions
-        your_custom_question_help:
+        your_custom_question_help: If you want to modify a locked, predefined question, please email support@missionhub.com with the name of the organization, survey title and changes to the question.
         your_questions: Your Questions (drag to sort)
         your_questions_help: Only 'Your Questions' will show on your survey. Try to LIMIT SURVEY to 4 questions (not including first and last name). Too many questions can be slow for those using Interactive Texting which typically takes 10-15 seconds/question depending on phone service.
       multiple_choice_form:

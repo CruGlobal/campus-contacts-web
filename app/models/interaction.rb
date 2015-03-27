@@ -38,7 +38,7 @@ class Interaction < ActiveRecord::Base
   end
 
   def type
-    interaction_type.name
+    interaction_type.title
   end
 
   def icon

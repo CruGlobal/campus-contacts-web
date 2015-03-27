@@ -78,6 +78,14 @@ fr-CA:
       type_to_find_label: Tapez afin de trouver une étiquette, puis cliquez sur le nom de l'étiquette.
       type_to_find_leader: Tapez afin de trouver un leader, puis cliquez sur le nom du leader.
       type_to_find_org: Tapez afin de trouver un(e) %{terminology}, puis cliquez sur le nom du (de la) %{terminology}.
+    interaction_types:
+      comment: 
+      faculty_on_mission: 
+      gospel_presentation: 
+      graduating_on_mission: 
+      holy_spirit_presentation: 
+      prayed_to_receive_christ: 
+      spiritual_conversation: 
     messages:
       question_too_long: 'AVERTISSEMENT : Cette question dépasse la limite de longueur d''un message texte unique et pourrait être divisée en plusieurs messages.  '
   batch:
@@ -92,8 +100,10 @@ fr-CA:
       movement_stages: 
       multiplying: 
       pioneering: 
+      save_snapshot: 
       title: Les graphiques sur cette page extraient des données ayant été soumises à la base de données, donc ils seront aussi à jour que les données les plus récentes soumises par les différents mouvements. Cliquez sur le nom de chaque catégorie pour la masquer ou l'afficher dans le graphique.
     trend:
+      save_trend: 
       year_ago: Ceci est seulement disponible si l'intervalle entre la date de début et la date de fin est de moins de 12 mois.
   contacts:
     add_contact: Ajouter un contact
@@ -335,15 +345,15 @@ fr-CA:
     button_assign: ATTRIBUER
     button_assign_sub: POUR LE SUIVI
     button_email: COURRIEL
-    button_email_sub: ENVOYER
+    button_email_sub: ENVOYER UN
     button_import: IMPORTER
-    button_import_sub: CONTACTS
+    button_import_sub: DES CONTACTS
     button_label: ÉTIQUETTES
     button_label_sub: CRÉER DES LISTES
     button_sent: ENVOYÉ
     button_sent_sub: MESSAGES
     button_text: TEXTE
-    button_text_sub: ENVOYER
+    button_text_sub: ENVOYER UN
     button_view: AFFICHER
     button_view_sub: TOUS LES CONTACTS
     close: Fermer
@@ -582,7 +592,7 @@ fr-CA:
     help_redirect_link: http://help.missionhub.com
     help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
     hide: masquer
-    home: Accueil
+    home: Domicile
     keyword: Mot-clé
     label_clear_selected: Annuler la sélection des étiquettes
     label_search_help: Si vous sélectionnez deux étiquettes, par exemple « Admin » et « Leader », <b>"ANY"</b> vous indiquerait des personnes ayant L'UNE OU L'AUTRE des étiquettes, tandis que <b>"ALL"</b> réduirait la recherche en vous indiquant seulement les personnes ayant LES DEUX étiquettes. <br/><br/><b>"ANY"</b> utilise la logique booléenne "OU" pour élargir la recherche. <br/><br/><b>"ALL"</b> utilise la logique booléenne "ET" pour réduire la recherche.
@@ -638,6 +648,7 @@ fr-CA:
     to: À
     transfer: Transférer
     'true': 
+    type: 
     unassign: Retirer
     work: Bureau
     zip: Code postal
@@ -759,6 +770,7 @@ fr-CA:
       default_post_survey_message: Merci de votre temps!
   interactions:
     add_comment_title: Ajouter un commentaire
+    addresses_limit: 
     answer_other_surveys: Répondre à d'autres sondages
     comment_field_title: Commentaire
     edit_survey_results: Modifier les résultats du sondage
@@ -1339,7 +1351,7 @@ fr-CA:
     address1: Adresse
     answer_other_surveys:
       title: '%{name} : Répondre à d''autres sondages'
-    birth_date: Quelle est votre date de naissance?
+    birth_date: Quelle est ta date de naissance?
     campus: Campus
     country: Pays
     dorm: Résidence
@@ -1351,12 +1363,12 @@ fr-CA:
     facebook:
       facebook_login: Vous pouvez connecter votre compte à Facebook afin que nous puissions vous identifier correctement.
       pick_keyword: Choisir un mot-clé
-    faculty: Êtes-vous professeur?
-    first_name: Quel est votre prénom?
+    faculty: Es-tu professeur?
+    first_name: Quel est ton prénom?
     form:
       frozen: Désolé. Le sondage '%{survey}' est actuellement en attente.
-    gender: Quel est votre sexe?
-    graduation_date: Quelle est votre date de fin d'études?
+    gender: Quel est ton sexe?
+    graduation_date: Quelle est ta date de fin d'études?
     iso_bs: Bosnien
     iso_de: Allemand
     iso_en: Anglais
@@ -1364,9 +1376,9 @@ fr-CA:
     iso_fr: Français
     iso_ru: Russe
     iso_zh: Chinois
-    last_name: Quel est votre nom de famille?
-    major: Quel est/était votre majeure?
-    nationality: Quelle est votre nationalité?
+    last_name: Quel est ton nom de famille?
+    major: Quelle est/était ta majeure?
+    nationality: Quelle est ta nationalité?
     new:
       greeting_no_name: Salut!
       greeting_with_name: Salut %{name}!
