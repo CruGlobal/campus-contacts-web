@@ -1138,14 +1138,14 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "not display contacts multiple times when by searching phone_numbers" do
-      @phone_number1 = Factory(:phone_number, person: @contact1, number: "09167788881", primary: true) # included
-      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788882", primary: false)
-      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788883", primary: true)
-      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09177788884", primary: false)
-      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09167788885", primary: true) # included
-      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788886", primary: true) # included
-      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788887", primary: false)
-      @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", primary: false) # included
+      @phone_number1 = Factory(:phone_number, person: @contact1, number: "09167788881", location: "home", primary: true) # included
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788882", location: "home", primary: false)
+      @phone_number2 = Factory(:phone_number, person: @contact2, number: "09177788883", location: "office", primary: true)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09177788884", location: "home", primary: false)
+      @phone_number3 = Factory(:phone_number, person: @contact3, number: "09167788885", location: "office", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788886", location: "home", primary: true) # included
+      @phone_number4 = Factory(:phone_number, person: @contact4, number: "09167788887", location: "office", primary: false)
+      @phone_number4 = Factory(:phone_number, person: @contact5, number: "09167788888", location: "home", primary: false) # included
 
       xhr :get, :index, {:do_search => "1", :phone_number => '0916'}
       assert_equal 1, assigns(:people).where(id: @contact1.id).count
@@ -1219,11 +1219,11 @@ class ContactsControllerTest < ActionController::TestCase
 
     context "by phone_numbers" do
       setup do
-        @phone_number1 = Factory(:phone_number, person: @person1, number: "09167788881", primary: true)
-        @phone_number2 = Factory(:phone_number, person: @person2, number: "09167788882", primary: true)
-        @phone_number3 = Factory(:phone_number, person: @person3, number: "09167788883", primary: true)
-        @phone_number4 = Factory(:phone_number, person: @person3, number: "09167788884", primary: false)
-        @phone_number5 = Factory(:phone_number, person: @person3, number: "09167788885", primary: false)
+        @phone_number1 = Factory(:phone_number, person: @person1, location: "home", number: "09167788881", primary: true)
+        @phone_number2 = Factory(:phone_number, person: @person2, location: "home", number: "09167788882", primary: true)
+        @phone_number3 = Factory(:phone_number, person: @person3, location: "home", number: "09167788883", primary: true)
+        @phone_number4 = Factory(:phone_number, person: @person3, location: "office", number: "09167788884", primary: false)
+        @phone_number5 = Factory(:phone_number, person: @person3, location: "mobile", number: "09167788885", primary: false)
       end
 
       should "sort by phone_number should include person without primary_phone_numbers" do
