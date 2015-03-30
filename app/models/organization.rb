@@ -595,8 +595,9 @@ class Organization < ActiveRecord::Base
     # Ensure single permission
     person = Person.where(id: person_id).first
     person.ensure_single_permission_for_org_id(id) if person.present?
-
-    if person.present? && permission = Permission.where(id: permission_id).first
+    permission = Permission.where(id: permission_id).first
+    
+    if person.present? && permission.present?
       org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, id)
 
       if org_permission.permission_id == permission.id
@@ -604,10 +605,7 @@ class Organization < ActiveRecord::Base
           org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
       else
-        new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).try(:first)
-        unless new_org_permission.present?
-          new_org_permission = OrganizationalPermission.create(permission_id: permission.id, person_id: person.id, organization_id: id)
-        end
+        new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).first_or_create
         if new_org_permission.archive_date.present? || new_org_permission.deleted_at.present?
           new_org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
