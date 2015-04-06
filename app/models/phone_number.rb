@@ -3,6 +3,7 @@ require 'async'
 class PhoneNumber < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
+	TYPES = {"Mobile" => "mobile", "Home" => "home", "Work" => "work"}
 
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
@@ -11,12 +12,15 @@ class PhoneNumber < ActiveRecord::Base
   belongs_to :person, touch: true
 
   validate do |value|
+    # Handle number format
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      unless (phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
+      person = Person.find(value.person_id)
+      formatted_number = PhoneNumber.strip_us_country_code(phone_number)
+      if !(phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
       else
-        self[:number] = PhoneNumber.strip_us_country_code(phone_number)
+        self[:number] = formatted_number
       end
     else
       errors.add(:number, "can't be blank")
