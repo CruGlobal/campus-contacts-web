@@ -1,20 +1,21 @@
 class Address < ActiveRecord::Base
 	TYPES = {"Current" => "current", "Permanent" => "permanent", "Emergency 1" => "emergency1", "Emergency 2" => "emergency2"}
 	validates_presence_of :address_type
-  
+
   validate do |value|
     # Handle dupicate address_type
     address_type = value.address_type_before_type_cast || value.address_type || nil
     if address_type.present?
-      person = Person.find(value.person_id)
-      if address = person.addresses.find_by_address_type(address_type)
-        available_types = TYPES.values - person.addresses.pluck(:address_type)
-        if available_types.present?
-          # Select other types
-          self[:address_type] = available_types.first
-        else
-          # Replace if all types are taken
-          # refer to remove_address_with_same_type
+      if person = Person.find_by_id(value.person_id)
+        if address = person.addresses.find_by_address_type(address_type)
+          available_types = TYPES.values - person.addresses.pluck(:address_type)
+          if available_types.present?
+            # Select other types
+            self[:address_type] = available_types.first
+          else
+            # Replace if all types are taken
+            # refer to remove_address_with_same_type
+          end
         end
       end
     else
@@ -24,7 +25,7 @@ class Address < ActiveRecord::Base
 
 	belongs_to :person, touch: true
   before_create :remove_address_with_same_type
-  
+
   def remove_address_with_same_type
     Address.where("addresses.person_id = ? AND addresses.address_type = ?", self.person_id, self.address_type).destroy_all
   end
