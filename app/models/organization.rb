@@ -605,7 +605,11 @@ class Organization < ActiveRecord::Base
           org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
       else
-        new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).first_or_create
+        begin
+          new_org_permission = OrganizationalPermission.where(permission_id: permission.id, person_id: person.id, organization_id: id).first_or_create
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
         if new_org_permission.archive_date.present? || new_org_permission.deleted_at.present?
           new_org_permission.update_attributes(archive_date: nil, deleted_at: nil, added_by_id: added_by_id)
         end
