@@ -76,6 +76,14 @@ hu:
       type_to_find_label: 
       type_to_find_leader: 
       type_to_find_org: 
+    interaction_types:
+      comment: 
+      faculty_on_mission: 
+      gospel_presentation: 
+      graduating_on_mission: 
+      holy_spirit_presentation: 
+      prayed_to_receive_christ: 
+      spiritual_conversation: 
     messages:
       question_too_long: 
   batch:
@@ -90,8 +98,10 @@ hu:
       movement_stages: 
       multiplying: 
       pioneering: 
+      save_snapshot: 
       title: 
     trend:
+      save_trend: 
       year_ago: 
   contacts:
     add_contact: 
@@ -569,6 +579,7 @@ hu:
     to: 
     transfer: 
     'true': 
+    type: 
     unassign: 
     work: 
     zip: 
@@ -688,6 +699,7 @@ hu:
       default_post_survey_message: 
   interactions:
     add_comment_title: 
+    addresses_limit: 
     answer_other_surveys: 
     comment_field_title: 
     edit_survey_results: 

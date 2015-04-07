@@ -116,7 +116,7 @@
       <% param_interaction_type = (params[:interaction_type].is_a?(Array)) ? (params[:interaction_type].include?(interaction_type.id.to_s)) : (params[:interaction_type].to_i == interaction_type.id) if params[:interaction_type].present?  %>
 
       <li class="entry interaction <%= 'selected_entry' if param_interaction_type.present? && param_interaction_type %>" data-id="<%= interaction_type.id %>" style="display:<%= count > 0 ? 'block' : 'none' %>">
-        <%= link_to interaction_type.name, link %>&nbsp;(<span class="count"><%= count %></span>)
+        <%= link_to interaction_type.title, link %>&nbsp;(<span class="count"><%= count %></span>)
       </li>
     <% end %>
     <li class="ac_include_archived">

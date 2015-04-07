@@ -36,8 +36,8 @@
         <div id="selected"></div>
         <div id="togglable">
           <% current_organization.interaction_types.each do |type| %>
-            <div class="option" data-id="<%= type.id %>" data-name="<%= type.name %>">
-              <%= type.name %>
+            <div class="option" data-id="<%= type.id %>" data-name="<%= type.title %>">
+              <%= type.title %>
             </div>
           <% end %>
         </div>

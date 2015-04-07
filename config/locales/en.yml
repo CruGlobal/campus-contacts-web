@@ -78,6 +78,14 @@ en:
       type_to_find_label: Type to find a label then click on the label's name
       type_to_find_leader: Type to find a leader then click on the leader's name.
       type_to_find_org: Type to find a %{terminology} then click on the %{terminology}'s name
+    interaction_types:
+      comment: Comment Only
+      faculty_on_mission: Faculty on Mission
+      gospel_presentation: Personal Evangelism
+      graduating_on_mission: Graduating on Mission
+      holy_spirit_presentation: Holy Spirit Presentation
+      prayed_to_receive_christ: Personal Evangelism Decisions
+      spiritual_conversation: Spiritual Conversation
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   batch:
@@ -92,8 +100,8 @@ en:
       movement_stages: The number of movements in each stage correspond to the movements checked in the box at left. To update your movement stages, go to your team page in the Infobase.
       multiplying: A Movement of 50 or more students involved, or 1% of the student body.
       pioneering: We are actively doing something to start a ministry at this ministry location—prayer, seeking a key contact, evangelism.
-      title: The graphs on this page pull from data that has been submitted to the Infobase, and thus will only be as up to date as the most recent submission of Movement Indicators for these movements.  Click on each category name to hide or display it on the graph.
       save_snapshot: Save Snapshot
+      title: The graphs on this page pull from data that has been submitted to the Infobase, and thus will only be as up to date as the most recent submission of Movement Indicators for these movements.  Click on each category name to hide or display it on the graph.
     trend:
       save_trend: Save Trend Tracker
       year_ago: This is only available if the Start Date and End Date are less than one year apart.
@@ -374,7 +382,7 @@ en:
     - Fri
     - Sat
     abbr_month_names:
-    -
+    - 
     - Jan
     - Feb
     - Mar
@@ -401,7 +409,7 @@ en:
       short: '%b %d'
       time: '%l:%M %p'
     month_names:
-    -
+    - 
     - January
     - February
     - March
@@ -568,7 +576,6 @@ en:
     back: Back
     both: Both
     city: City
-    type: Type
     comment_is_blank: Please enter your comment.
     contact_location: Contact Location
     contacts_updated_from: Contacts Updated From
@@ -651,6 +658,7 @@ en:
     to: To
     transfer: Transfer
     'true': true
+    type: Type
     unassign: Unassign
     work: Work
     zip: Zip
@@ -772,11 +780,11 @@ en:
       default_post_survey_message: Thank you for your time!
   interactions:
     add_comment_title: Add comment
+    addresses_limit: Only 4 different addresses can be added
     answer_other_surveys: Answer Other Surveys
     comment_field_title: Comment
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
-    addresses_limit: Only 4 different addresses can be added
     profile_info:
       email_contact_info: Email Me This Contact Info
       opt_in_help: If you would like to receive text messages, text 'ON' to 85005 to opt back in.
@@ -946,9 +954,9 @@ en:
           quadrillion: Quadrillion
           thousand: Thousand
           trillion: Trillion
-          unit:
+          unit: 
       format:
-        delimiter:
+        delimiter: 
         precision: 3
         significant: true
         strip_insignificant_zeros: true
@@ -964,10 +972,10 @@ en:
           tb: TB
     percentage:
       format:
-        delimiter:
+        delimiter: 
     precision:
       format:
-        delimiter:
+        delimiter: 
   org_membership:
     confirm_delete: Are you sure you want to dissociate yourself from %{org}
   organization_mailer:

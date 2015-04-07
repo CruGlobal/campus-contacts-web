@@ -14,7 +14,7 @@ class InteractionType < ActiveRecord::Base
   scope :exclude_comment, where("i18n <> 'comment'")
 
   def title
-    i18n || name
+    I18n.t("application.interaction_types.#{self.i18n}", self.name)
   end
 
   def self.old_rejoicable_ids
