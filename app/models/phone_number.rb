@@ -15,12 +15,13 @@ class PhoneNumber < ActiveRecord::Base
     # Handle number format
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      person = Person.find(value.person_id)
-      formatted_number = PhoneNumber.strip_us_country_code(phone_number)
-      if !(phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
-        errors.add(:number, "must be numeric")
-      else
-        self[:number] = formatted_number
+      if person = Person.find_by_id(value.person_id)
+        formatted_number = PhoneNumber.strip_us_country_code(phone_number)
+        if !(phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
+          errors.add(:number, "must be numeric")
+        else
+          self[:number] = formatted_number
+        end
       end
     else
       errors.add(:number, "can't be blank")
@@ -33,7 +34,7 @@ class PhoneNumber < ActiveRecord::Base
   before_save :clear_carrier_if_number_changed
   #after_commit :async_update_carrier
   after_destroy :set_new_primary
-  
+
   def not_mobile!(value = true)
     update_attribute(:not_mobile, value)
     return self
@@ -56,7 +57,7 @@ class PhoneNumber < ActiveRecord::Base
   def pretty_number
     PhoneNumber.prettify(number)
   end
-  
+
   def self.prettify(number)
     case number
     # Hungary
