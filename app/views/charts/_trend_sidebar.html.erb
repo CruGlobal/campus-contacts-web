@@ -1,61 +1,66 @@
-<%- trend = params[:action] == "load_trend" && params[:id].present? %>
-<%- trend_id = trend ? params[:id] : 0 %>
-<div id="trend_sidebar" class="<%= 'load_trend' if trend %>">
-  <%= form_tag update_trend_movements_charts_path, remote: true do %>
-      <div id="trend_radio">
-        <div id="trend_radio_buttons">
-          <div id="trend_radio_button_all">
-            <%= radio_button_tag 'all', 'true', @chart.trend_all_movements, :id => "trend_all_true" %> All
-          </div>
-          <div id="trend_radio_button_custom">
-            <%= radio_button_tag 'all', 'false', !@chart.trend_all_movements, :id => "trend_all_false" %> Custom
-          </div>
-          <div id="trend_radio_button_saved">
-            <%= radio_button_tag 'all', 'saved', false, :id => "saved_visual_tool_radio" %> Saved
-          </div>
-        </div>
+<%- trend_id = @trend.present? ? params[:id] : 0 %>
 
-        <div id="trend_movements" class="<%= 'hidden' if trend && @trend.present? %>">
-          <% @movements.each do |movement| %>
-              <div class="trend_movement_line">
-                <%= check_box_tag "movements[]", movement.id, @chart.chart_organizations.where("organization_id = ?", movement.id).first.trend_display, disabled: @chart.trend_all_movements, class: 'trend_movement' %>
-                <span><%= movement.name %></span>
-              </div>
-          <% end %>
+<% if @trend.present? %>
+  <%- load_type = 'saved' %>
+<% elsif @chart.snapshot_all_movements %>
+  <%- load_type = 'all' %>
+<% else %>
+  <%- load_type = 'custom' %>
+<% end %>
+
+<div id="trend_sidebar" data-type="<%= load_type %>">
+  <%= form_tag update_trend_movements_charts_path, remote: true do %>
+    <%= hidden_field_tag 'saved_search', '0'%>
+    
+    <div id="trend_radio">
+      <div id="trend_radio_buttons">
+        <div id="trend_radio_button_all" class="visual_tool_tab_parent">
+          <%= radio_button_tag 'all', 'true', load_type == "all", id: "trend_all_true", class: "visual_tool_tab #{'current' if load_type == 'all'}", data: {type: "all"} %>
+          All
         </div>
-        <div id="saved_visual_tools">
-          <% if @saved_visual_tools.present? %>
-            <% @saved_visual_tools.each do |saved_visual_tool| %>
-              <%= render "charts/saved_trend", saved_visual_tool: saved_visual_tool, current_trend_id: trend_id %>
-            <% end %>
-          <% else %>
-            No saved trend.
-          <% end %>
+        <div id="trend_radio_button_custom" class="visual_tool_tab_parent">
+          <%= radio_button_tag 'all', 'false', load_type == "custom", id: "trend_all_false", class: "visual_tool_tab #{'current' if load_type == 'custom'}", data: {type: "custom"} %>
+          Custom
         </div>
-        <% if trend && @trend.present? %>
-          <div id="current_movements">
-            <% @trend_movements.each do |trend_movement| %>
-              <div><%= trend_movement.name %></div>
-            <% end %>
-          </div>
+        <div id="trend_radio_button_saved" class="visual_tool_tab_parent <%= 'active_search' if @trend.present? %>">
+          <%= radio_button_tag 'all', 'saved', load_type == "saved", id: "saved_visual_tool_radio", class: "visual_tool_tab #{'current' if load_type == 'saved'}", data: {type: "saved"} %>
+          Saved
+        </div>
+      </div>
+
+      <div id="trend_movements" class="movements_container" data-selected="<%= @chart.chart_organizations.where(trend_display: true).collect{|x| x.organization_id}.join(',')%>">
+
+        <%= select_tag("movements[]", options_for_select(@movements.collect{|x| [x.name, x.id]}, selected: @chart.chart_organizations.where(trend_display: true).pluck(:organization_id)), class: "movements_select", multiple: "multiple", style: "width: 100%") %>
+        
+      </div>
+      <div id="saved_visual_tools">
+        <% if @saved_visual_tools.present? %>
+          <% @saved_visual_tools.each do |saved_visual_tool| %>
+            <%= render "charts/saved_trend", saved_visual_tool: saved_visual_tool, current_trend_id: trend_id %>
+          <% end %>
+        <% else %>
+          No saved trend.
         <% end %>
       </div>
+    </div>
 
-      <div id="trend_date_select" class="<%= 'hidden' if trend && @trend.present? %>">
-        <br/>
-        Start Date:<br/>
-        <%= text_field_tag "start_date", @chart.trend_start_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
-        End Date:<br/>
-        <%= text_field_tag "end_date", @chart.trend_end_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
-      </div>
+    <div id="trend_date_select">
+      <br/>
+      Start Date:<br/>
+      <%= text_field_tag "start_date", @chart.trend_start_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
+      End Date:<br/>
+      <%= text_field_tag "end_date", @chart.trend_end_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
+    </div>
 
-      <div id="trend_movements_submit" class="<%= 'hidden' if trend && @trend.present? %>">
-        <%= submit_tag 'Update Chart', class: 'large_gray', id: "update_chart" %>
-      </div>
+    <div id="trend_movements_submit">
+      <%= submit_tag 'Apply Changes', class: 'large_gray chart_button', id: "update_chart" %>
+    </div>
   <% end %>
-  <%= render 'dialogs/save_trend' %>
-  <div id="snapshot_actions" class="<%= 'hidden' if trend && @trend.present? %>">
-    <%= button_tag 'Save Selected', class: 'large_gray', id: 'save_trend_button' %>
-    <%= button_tag 'Uncheck All', class: 'large_gray', id: 'trend_uncheck_all_movements' %>
+  <div id="snapshot_actions">
+    <%= button_tag 'Reset', class: "large_gray chart_button", id: 'reset_chart' %>
+    <%= button_tag 'Save Changes', class: "large_gray chart_button", id: 'update_trend_button' %>
+    <%= button_tag 'Unselect All', class: "large_gray chart_button", id: 'clear_chart' %>
+    <%= button_tag 'Save New Trend', class: 'large_gray chart_button', id: 'save_trend_button' %>
   </div>
 </div>
+<%= render 'dialogs/save_trend' %>

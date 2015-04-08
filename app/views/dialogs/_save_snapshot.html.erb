@@ -8,8 +8,9 @@
         </span>
       </div>
       <div class="mh_popup_box_content" id="mh_popup_box_content" align="center">
+        <%= hidden_field_tag "saved_search_id", "", id: "snapshot_id", data: {value: @snapshot.try(:id)} %>
         <br/>
-        <%= text_field_tag "visual_tool", "", placeholder: "Enter snapshot name here...", id: "snapshot_name" %>
+        <%= text_field_tag "visual_tool", "", placeholder: "Enter snapshot name here...", id: "snapshot_name", data: {value: @snapshot.try(:name)} %>
       </div>
     	<div class="assign_save">
     		<button class="red_accent assign_button" id="submit_save_snapshot">Submit</button>

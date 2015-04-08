@@ -1,0 +1,57 @@
+<%- snapshot_id = @snapshot.present? ? params[:id] : 0 %>
+
+<% if @snapshot.present? %>
+  <%- load_type = 'saved' %>
+<% elsif @chart.snapshot_all_movements %>
+  <%- load_type = 'all' %>
+<% else %>
+  <%- load_type = 'custom' %>
+<% end %>
+
+<div id="snapshot_sidebar" data-type="<%= load_type %>">
+  <%= form_tag update_snapshot_movements_charts_path, remote: true do %>
+    <%= hidden_field_tag 'saved_search', '0'%>
+    
+    <div id="snapshot_radio">
+      <div id="snapshot_radio_buttons">
+        <div id="snapshot_radio_button_all" class="visual_tool_tab_parent">
+          <%= radio_button_tag 'all', 'true', load_type == "all", id: "snap_all_true", class: "visual_tool_tab #{'current' if load_type == 'all'}", data: {type: "all"} %>
+          All
+        </div>
+        <div id="snapshot_radio_button_custom" class="visual_tool_tab_parent">
+          <%= radio_button_tag 'all', 'false', load_type == "custom", id: "snap_all_false", class: "visual_tool_tab #{'current' if load_type == 'custom'}", data: {type: "custom"} %>
+          Custom
+        </div>
+        <div id="snapshot_radio_button_saved" class="visual_tool_tab_parent <%= 'active_search' if @snapshot.present? %>">
+          <%= radio_button_tag 'all', 'saved', load_type == "saved", id: "saved_visual_tool_radio", class: "visual_tool_tab #{'current' if load_type == 'saved'}", data: {type: "saved"} %>
+          Saved
+        </div>
+      </div>
+      
+      <div id="snapshot_movements" class="movements_container" data-selected="<%= @chart.chart_organizations.where(snapshot_display: true).collect{|x| x.organization_id}.join(',')%>">
+        <%= select_tag("movements[]", options_for_select(@movements.collect{|x| [x.name, x.id]}, selected: @chart.chart_organizations.where(snapshot_display: true).pluck(:organization_id)), class: "movements_select", multiple: "multiple", style: "width: 100%") %>
+      </div>
+      
+      <div id="saved_visual_tools">
+        <% if @saved_visual_tools.present? %>
+          <% @saved_visual_tools.each do |saved_visual_tool| %>
+            <%= render "charts/saved_snapshot", saved_visual_tool: saved_visual_tool, current_snapshot_id: snapshot_id %>
+          <% end %>
+        <% else %>
+          No saved snapshots.
+        <% end %>
+      </div>
+    </div>
+    
+    <div id="snapshot_movements_submit">
+      <%= submit_tag 'Apply Changes', class: 'large_gray chart_button', id: "update_chart" %>
+    </div>
+  <% end %>
+  <div id="snapshot_actions">
+    <%= button_tag 'Reset', class: "large_gray chart_button", id: 'reset_chart' %>
+    <%= button_tag 'Save Changes', class: "large_gray chart_button", id: 'update_snapshot_button' %>
+    <%= button_tag 'Unselect All', class: "large_gray chart_button", id: 'clear_chart' %>
+    <%= button_tag 'Save New Snapshot', class: "large_gray chart_button", id: 'save_snapshot_button' %>
+  </div>
+</div>
+<%= render 'dialogs/save_snapshot' %>

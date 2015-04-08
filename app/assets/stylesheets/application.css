@@ -17,6 +17,7 @@
  *= require movement_indicators
  *= require jquery.qtip2
  *= require jquery.chosen
+ *= require jquery.select2.min
  *= require superfish
  *= require superfish-navbar
  *= require superscroll

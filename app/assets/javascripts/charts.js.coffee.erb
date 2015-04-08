@@ -1,74 +1,247 @@
-$(document).ready ->
-  $(document).on "click", "button#save_trend_button", ->
-    $.showDialog($("#save_trend_div"))
-    $("#trend_name").val("")
+$.fn.cleanField = () ->
+  $(".select2-search__field").attr("placeholder", "Select more organizations")
+  $(".select2-search__field").attr("style", "width: 175px;")
+
+$.fn.toggleVisualToolButtons = () ->
+  current_tab = $(".visual_tool_tab.current").data("type")
+  active_tab = $(".visual_tool_tab:checked").data("type")
+  old_sel = $(".movements_container").data("selected").toString()
+  if old_sel == ""
+    old_sel = null
+  else  
+    old_sel = old_sel.split(",")
+  new_sel = $(".movements_select").val()
+    
+  if active_tab == "all"
+    # All Snapshot is selected
+    if current_tab == "all"
+      # All Snapshot is already loaded
+      $("#update_chart").hide()
+      $("#reset_chart").hide()
+      $("#clear_chart").hide()
+      $("#save_snapshot_button").hide()
+      $("#save_trend_button").hide()
+      $("#update_snapshot_button").hide()
+      $("#update_trend_button").hide()
+      $(".movements_container").hide()
+      $("#saved_visual_tools").hide()
+      $("#trend_date_select").show()
+    else
+      # All Snapshot is not loaded yet
+      $("#update_chart").show()
+      $("#reset_chart").hide()
+      $("#clear_chart").hide()
+      $("#save_snapshot_button").hide()
+      $("#save_trend_button").hide()
+      $("#update_snapshot_button").hide()
+      $("#update_trend_button").hide()
+      $(".movements_container").hide()
+      $("#saved_visual_tools").hide()
+      $("#trend_date_select").show()
+  else if active_tab == "custom"
+    # Custom Snapshot is selected
+    if current_tab == "custom" || current_tab == "saved"
+      # Custom Snapshot is already loaded
+      if $(old_sel).not(new_sel).length == 0 && $(new_sel).not(old_sel).length == 0
+        $("#update_chart").hide()
+        $("#reset_chart").hide()
+        $("#clear_chart").show()
+        $("#save_snapshot_button").show()
+        $("#save_trend_button").show()
+        $("#update_snapshot_button").hide()
+        $("#update_trend_button").hide()
+        $(".movements_container").show()
+        $("#saved_visual_tools").hide()
+        $("#trend_date_select").show()
+      else
+        $("#update_chart").show()
+        $("#reset_chart").show()
+        $("#clear_chart").hide()
+        $("#save_snapshot_button").hide()
+        $("#save_trend_button").hide()
+        $("#update_snapshot_button").hide()
+        $("#update_trend_button").hide()
+        $(".movements_container").show()
+        $("#saved_visual_tools").hide()
+        $("#trend_date_select").show()
+    else
+      # Custom Snapshot is not loaded yet
+      $("#update_chart").show()
+      $("#reset_chart").hide()
+      $("#clear_chart").hide()
+      $("#save_snapshot_button").hide()
+      $("#save_trend_button").hide()
+      $("#update_snapshot_button").hide()
+      $("#update_trend_button").hide()
+      $(".movements_container").show()
+      $("#saved_visual_tools").hide()  
+      $("#trend_date_select").show()    
+    # Hide clear button if no movement is selected
+    if new_sel == null
+      $("#clear_chart").hide()
+      $("#save_snapshot_button").hide()
+    else
+      $("#clear_chart").show()
+  else if active_tab == "saved"
+    # Saved Search is selected
+    if current_tab == "saved"
+      # Saved Search is already loded
+      if $(old_sel).not(new_sel).length == 0 && $(new_sel).not(old_sel).length == 0
+        $("#update_chart").hide()
+        $("#reset_chart").hide()
+        $("#clear_chart").hide()
+        $("#save_snapshot_button").hide()
+        $("#save_trend_button").hide()
+        $("#update_snapshot_button").hide()
+        $("#update_trend_button").hide()
+        $(".movements_container").show()
+        $("#saved_visual_tools").show()
+        $("#trend_date_select").show()
+      else
+        $("#update_chart").hide()
+        $("#reset_chart").show()
+        $("#clear_chart").hide()
+        $("#save_snapshot_button").hide()
+        $("#save_trend_button").hide()
+        $("#update_snapshot_button").show()
+        $("#update_trend_button").show()
+        $(".movements_container").show()
+        $("#saved_visual_tools").show()
+        $("#trend_date_select").show()
+    else
+      # Saved Search is not loded yet
+      $(".saved_visual_tool_line").removeClass("active")
+      $("#update_chart").hide()
+      $("#reset_chart").hide()
+      $("#clear_chart").hide()
+      $("#save_snapshot_button").hide()
+      $("#save_trend_button").hide()
+      $("#update_snapshot_button").hide()
+      $("#update_trend_button").hide()
+      $(".movements_container").hide()
+      $("#saved_visual_tools").show()
+      $("#trend_date_select").hide()
+        
+    
+$(document).on "select2:select", ".movements_select", ->
+  $.fn.toggleVisualToolButtons()
+  $.fn.cleanField()
+
+$(document).on "select2:unselect", ".movements_select", ->
+  $.fn.toggleVisualToolButtons()
+  $.fn.cleanField()
+
+$(document).on "click", "#update_chart", ->
+  new_sel = $(".movements_select").val()
+  if new_sel == null
+    $(".movements_container").data("selected", "")
+  else
+    $(".movements_container").data("selected", new_sel.join(","))
+  $(".visual_tool_tab.current").removeClass("current")
+  $(".visual_tool_tab:checked").addClass("current")
+  $.fn.toggleVisualToolButtons()
+  $.fn.cleanField()
   
-  $(document).on "click", "button#save_snapshot_button", ->
-    $.showDialog($("#save_snapshot_div"))
-    $("#snapshot_name").val("")
+$(document).on "click", "button#reset_chart", ->
+  old_sel = $(".movements_container").data("selected").toString()
+  if old_sel == ""
+    old_sel = null
+  else
+    old_sel = old_sel.split(",")
+  $(".movements_select").val(old_sel).trigger("change")
+  $.fn.toggleVisualToolButtons()
+  $.fn.cleanField()
+  
+$(document).on "click", "button#clear_chart", ->
+  $(".movements_select").val(null).trigger("change")
+  $.fn.toggleVisualToolButtons()
+  $.fn.cleanField()
+  
+  
+
+$(document).on "click", "button#save_trend_button", ->
+  $.showDialog($("#save_trend_div"))
+  $("#trend_id").val("")
+  $("#trend_name").val("")
+  
+$(document).on "click", "button#update_trend_button", ->
+  $.showDialog($("#save_trend_div"))
+  $("#trend_id").val($("#trend_id").data("value"))
+  $("#trend_name").val($("#trend_name").data("value"))
+
+$(document).on "click", "button#save_snapshot_button", ->
+  $.showDialog($("#save_snapshot_div"))
+  $("#snapshot_id").val("")
+  $("#snapshot_name").val("")
+  
+$(document).on "click", "button#update_snapshot_button", ->
+  $.showDialog($("#save_snapshot_div"))
+  $("#snapshot_id").val($("#snapshot_id").data("value"))
+  $("#snapshot_name").val($("#snapshot_name").data("value"))
+  
+$(document).on "click", "#submit_save_snapshot", ->
+  snapshot_id = $("#snapshot_id").val()
+  snapshot_name = $.trim($("#snapshot_name").val())
+  if snapshot_name != ""
+    selected_ids = $(".movements_select").val()
+    $.ajax
+      url: "/charts/save_snapshot"
+      type: "POST"
+      data:
+        snapshot_id: snapshot_id
+        snapshot_name: snapshot_name 
+        movement_ids: selected_ids
+  else
+    $.a("Please enter the snapshot name before saving.")
+  
+$(document).on "click", "#submit_save_trend", ->
+  trend_id = $("#trend_id").val()
+  trend_name = $.trim($("#trend_name").val())
+  if trend_name != ""
+    selected_ids = $(".movements_select").val()
+    start = $("#trend_date_select #start_date").val()
+    end = $("#trend_date_select #end_date").val()
+    $.ajax
+      url: "/charts/save_trend"
+      type: "POST"
+      data:
+        trend_id: trend_id
+        start_date: start
+        end_date: end
+        trend_name: trend_name 
+        movement_ids: selected_ids
+  else
+    $.a("Please enter the trend tracker name before saving.")
+
+# Snapshot all movements tab
+$(document).on "click", "input#snap_all_true", (e) ->
+  $.fn.toggleVisualToolButtons()
+
+# Snapshot custom movements tab
+$(document).on "click", "input#snap_all_false", (e) ->
+  $.fn.toggleVisualToolButtons()
+
+# Saved Visual Tool tab
+$(document).on "click", "input#saved_visual_tool_radio", (e) ->
+  $.fn.toggleVisualToolButtons()
+
+$(document).on "click", "input#trend_all_true", (e) ->
+  $.fn.toggleVisualToolButtons()
+
+$(document).on "click", "input#trend_all_false", (e) ->
+  $.fn.toggleVisualToolButtons()
+  
+
+$(document).ready ->
+  $("form input[type=radio]:checked").click()
     
-  $(document).on "click", "#submit_save_trend", ->
-    trend_name = $.trim($("#trend_name").val())
-    if trend_name != ""
-      selected_ids = $(".trend_movement_line .trend_movement:checked").map(->
-        $(this).val()
-      )
-      start = $("#trend_date_select #start_date").val()
-      end = $("#trend_date_select #end_date").val()
-      $.ajax
-        url: "/charts/save_trend"
-        type: "POST"
-        data:
-          start_date: start
-          end_date: end
-          trend_name: trend_name 
-          movement_ids: selected_ids.get()
-    else
-      $.a("Please enter the trend tracker name before saving.")
+  $(".movements_select").select2
+    placeholder: "Select more organizations"
+    allowClear: false
     
-  $(document).on "click", "#submit_save_snapshot", ->
-    snapshot_name = $.trim($("#snapshot_name").val())
-    if snapshot_name != ""
-      selected_ids = $(".movement_line .snap_movement:checked").map(->
-        $(this).val()
-      )
-      $.ajax
-        url: "/charts/save_snapshot"
-        type: "POST"
-        data:
-          snapshot_name: snapshot_name 
-          movement_ids: selected_ids.get()
-    else
-      $.a("Please enter the snapshot name before saving.")
-
-  $("button#uncheck_all_movements").bind "click", ->
-    $("div#snapshot_movements input.snap_movement").prop
-      disabled: false
-      checked: false
-
-    $("input#snap_all_false").prop "checked", true
-
-  $("input#snap_all_true").bind "click", ->
-    $("#saved_visual_tools").hide()
-    $("#current_movements").hide()
-    $("#snapshot_movements").show()
-    $("#update_chart, #snapshot_actions").show()
-    $("input.snap_movement").prop disabled: true
-
-  $("input#snap_all_false").bind "click", ->
-    $("#saved_visual_tools").hide()
-    $("#current_movements").hide()
-    $("#snapshot_movements").show()
-    $("#update_chart, #snapshot_actions").show()
-    $("input.snap_movement").prop disabled: false
-
-  $("input#saved_visual_tool_radio").bind "click", ->
-    $("#snapshot_movements").hide()
-    $("#trend_movements").hide()
-    $("#trend_date_select").hide()
-    $("#update_chart, #snapshot_actions").hide()
-    $("#saved_visual_tools").show()
-    $("#current_movements").show()
+  # $(".movements_select").select2("val", $("#snapshot_movements").data("selected").split(","))
+  $(".select2-search__field").attr("placeholder", "Select more organizations")
+  $(".select2-search__field").attr("style", "width: 175px;")
 
   $("div#snapshot_movements_submit input.large_gray").bind "click", ->
     $("div#snap_container1, div#snap_container2, div#snap_container3, div#snap_numbers").hide()
@@ -100,29 +273,6 @@ $(document).ready ->
       type: "POST"
       data:
         org_id: $("select#goal_org_select option:selected").val()
-
-  $("button#trend_uncheck_all_movements").bind "click", ->
-    $("div#trend_movements input.trend_movement").prop
-      disabled: false
-      checked: false
-
-    $("input#trend_all_false").prop "checked", true
-
-  $("input#trend_all_true").bind "click", ->
-    $("#saved_visual_tools").hide()
-    $("#current_movements").hide()
-    $("#trend_movements").show()
-    $("#trend_date_select").show()
-    $("#update_chart, #snapshot_actions").show()
-    $("input.trend_movement").prop disabled: true
-
-  $("input#trend_all_false").bind "click", ->
-    $("#saved_visual_tools").hide()
-    $("#current_movements").hide()
-    $("#trend_movements").show()
-    $("#trend_date_select").show()
-    $("#update_chart, #snapshot_actions").show()
-    $("input.trend_movement").prop disabled: false
 
   $("div#trend_movements_submit input.large_gray").bind "click", ->
     $("div#trend_container").hide()
