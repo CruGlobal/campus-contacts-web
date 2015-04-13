@@ -45,9 +45,18 @@ module ImportMethods
       attributes.slice!(*mh_person_attributes)
 
       mh_person = Person.create(attributes)
-      mh_person.user = user ||
-                       User.find_by_username(ccc_user['username']) ||
-                       User.create(username: ccc_user['username'], password: Devise.friendly_token[0,20])
+      if user.present?
+        mh_person.user = user
+      else
+        begin
+          user_found = User.where(username: ccc_user['username']).first_or_initialize
+          user_found.password = Devise.friendly_token[0,20] unless user_found.id.present?
+          user_found.save
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+        mh_person.user = user_found
+      end
 
       # copy over email and phone data
       person['email_addresses'].each do |email_address|
