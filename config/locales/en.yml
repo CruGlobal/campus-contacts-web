@@ -1479,6 +1479,7 @@ en:
         notice: Question was successfully created.
       edit:
         edit_question: Edit this question
+        advanced_options: Advanced options
         leader_invalid_email: Chosen leader has an invalid email.
         leader_invalid_email_with_name: Chosen leader/s '%{leader_names}' have invalid email.
       form:

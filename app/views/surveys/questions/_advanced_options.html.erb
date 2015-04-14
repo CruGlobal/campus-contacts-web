@@ -1,7 +1,9 @@
-<%= link_to t('surveys.questions.form.show_advanced_options'), '#', id: 'advanced_toggle' %>
-<br/>
-<br/>
-<div class="notify_advanced_options advanced_options hidden">
+<% unless q.predefined? %>
+  <%= link_to t('surveys.questions.form.show_advanced_options'), '#', id: 'advanced_toggle' %>
+  <br/>
+  <br/>
+<% end %>
+<div class="notify_advanced_options advanced_options <%= 'hidden' unless q.predefined? %>">
   <% notify_leaders = @auto_notify.present? ? @auto_notify.extra_parameters['leaders'] : [] %>
   <% notify_triggers = @auto_notify.present? ? @auto_notify.trigger_keywords : '' %>
 
