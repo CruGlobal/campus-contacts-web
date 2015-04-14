@@ -154,6 +154,13 @@ class ContactsController < ApplicationController
 
   def clean_params(clean_all = false)
     params[:assigned_to] = 'all' unless params[:assigned_to].present?
+    if params[:paginate] == "true"
+      unless params[:page].present?
+        session[:filters][:page] = 1
+        params[:page] = 1
+      end
+    end
+
     if search? && clean_all
       session[:filters] = params
       redirect_to all_contacts_path

@@ -277,7 +277,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       @contact2.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: chosen_date})
       @contact1.organizational_permissions.where(permission_id: Permission::NO_PERMISSIONS_ID, organization_id: @org.id).first.update_attributes({archive_date: chosen_date})
       post :archive_contacts, { :archive_contacts_before => Date.today.strftime("%Y-%m-%d") }
-      assert_equal 3, @org.all_people_with_archived.where("DATE(archive_date) = ?", chosen_date).archived(@org.id).count
+      assert_equal 3, @org.all_people_with_archived.where("DATE(archive_date) <= ?", chosen_date).archived(@org.id).count
     end
   end
 
