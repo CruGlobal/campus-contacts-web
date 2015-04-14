@@ -167,7 +167,8 @@ en:
       add_already_registered_email: 'The Email address highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. '
       add_contact: Add a Contact to %{org}
       add_label_empty: Cannot save blank label. Please try again.
-      add_label_exists: Label is already in the list!
+      add_label_exists: Label already exists in the list!
+      add_label_exists2: Label already exists in this organization!
       add_label_failed: Failed to save label. Please try again.
       add_label_success: New label successfully added!
       add_question_back: Click on a question to add it back to the page

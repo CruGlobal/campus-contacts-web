@@ -3,6 +3,38 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body.mass_entry {
+  #mass_entry_new_label_dialog {
+    .mh_popup_box {
+      margin-top: 90px !important;
+      height: 270px !important;
+      min-height: 270px !important;
+    }
+    .fancy {
+      font-size: 16px;
+      text-align: center;
+    }
+    .labels_add_new {
+      text-align: center;
+      margin-bottom: 5px;
+      input {
+        float: none;
+        text-align: center;
+        font-size: 13px;
+        padding: 3px
+      }
+    }
+    
+    .apply_label_to_all, .apply_label_to_new {
+      margin: 0 5px;
+      color: #888;
+      input {
+        width: auto;
+      }
+    }
+    .labels_notice {
+      margin: 5px 0 !important;
+    }
+  }
   #gandalfthewhite {
     height: 65px;
   }

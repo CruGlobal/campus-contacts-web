@@ -74,8 +74,8 @@ class SurveysControllerTest < ActionController::TestCase
         headers = json["headers"]
 
         assert_response :success
-        assert_equal 5, headers.count
-        assert_equal ["First Name", "Last Name", "Phone Number", "Question1", "Question2"], headers
+        assert_equal 6, headers.count
+        assert_equal ["First Name", "Last Name", "Phone Number", "Labels", "Question1", "Question2"], headers
       end
       
       should "return settings correctly" do
