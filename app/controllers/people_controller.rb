@@ -477,7 +477,7 @@ class PeopleController < ApplicationController
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
-      url = URI.escape("https://graph.facebook.com/v2.2/#{id}")
+      url = URI.escape("https://graph.facebook.com/#{id}")
 
       begin
         @json = JSON.parse(RestClient.get(url, { accept: :json}))
