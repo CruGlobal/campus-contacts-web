@@ -1423,7 +1423,7 @@ en:
       logo_valid_format: Upload .jpg, .jpeg, .png, or .gif file
       no_fb_login_option: No login
       post_survey_message: What message would you like to show after the person has completed the survey?
-      post_survey_placeholder: 'Example: Thank you for your time! If you''re interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM'
+      post_survey_placeholder: 'Example: Thanks! You’re invited to Cru, 7pm Thursdays, at Edwin Hall. And, for Qs about life or God, check out http://EveryStudent.com.'
       redirect_url: If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here. (This will bypass the thank you response.)
       remove_logo_cofirmation: Do you want to remove this logo?
       remove_logo_failed: Invalid survey. Please try again later.
