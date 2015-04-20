@@ -51,10 +51,10 @@ $.facebook_autocomplete = (facebook_field) ->
       source: '/people/facebook_search.json'
     .data("autocomplete")
     ._renderItem = ( ul, item )->
-      image_src = 'http://graph.facebook.com/v2.2/' + item.id + '/picture'
-      if item.id == null
+      if item.id == null && $(".facebook_search_result").length == 0
         resp = $("<li class='facebook_search_no_result'>Couldn't find facebook user with that name</li>")
       else
+        image_src = 'http://graph.facebook.com/v2.2/' + item.id + '/picture'
         resp = $( "<li class='facebook_search_result' data-id='" + item.id + "'></li>" ).data("item.autocomplete", item)
         resp.attr("data-for", search_field.attr("id"))
         resp.append("<div><img class='picture' src='" + image_src + "'/><span class='facebook_result_name'>" + item.name + "</span></div>")
