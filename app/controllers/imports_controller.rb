@@ -145,7 +145,9 @@ class ImportsController < ApplicationController
             post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
             terminology: 'Survey'
           )
-          @import.update_attributes(survey_id: @survey.id)
+          @import.survey_ids = Array.new unless @import.survey_ids.present?
+          @import.survey_ids << @survey.id
+          @import.save
         else
           @survey = Survey.find(params[:select_survey_field].to_i)
           authorize! :manage, @survey
