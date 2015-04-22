@@ -11,7 +11,7 @@
 <div id="trend_sidebar" data-type="<%= load_type %>">
   <%= form_tag update_trend_movements_charts_path, remote: true do %>
     <%= hidden_field_tag 'saved_search', '0'%>
-    
+
     <div id="trend_radio">
       <div id="trend_radio_buttons">
         <div id="trend_radio_button_all" class="visual_tool_tab_parent">
@@ -31,7 +31,7 @@
       <div id="trend_movements" class="movements_container" data-selected="<%= @chart.chart_organizations.where(trend_display: true).collect{|x| x.organization_id}.join(',')%>">
 
         <%= select_tag("movements[]", options_for_select(@movements.collect{|x| [x.name, x.id]}, selected: @chart.chart_organizations.where(trend_display: true).pluck(:organization_id)), class: "movements_select", multiple: "multiple", style: "width: 100%") %>
-        
+
       </div>
       <div id="saved_visual_tools">
         <% if @saved_visual_tools.present? %>
@@ -48,7 +48,8 @@
       <br/>
       Start Date:<br/>
       <%= text_field_tag "start_date", @chart.trend_start_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
-      End Date:<br/>
+      <br/>
+      End Date: <div class="icon help tipitright help_bubble_keyword" title="<%= t('charts.trend.end_date_help') %>"></div><br/>
       <%= text_field_tag "end_date", @chart.trend_end_date, class: 'datepicker', placeholder: 'yyyy-mm-dd' %><br/>
     </div>
 
