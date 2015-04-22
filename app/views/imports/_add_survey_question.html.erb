@@ -1,6 +1,6 @@
 <div id="import_survey_question">
   <div id='import_error_message'></div>
-  <%= form_for 'imports', url: create_survey_question_imports_path, html: {remote: true, id: 'import_survey_form'} do |f| %>
+  <%= form_for 'imports', url: create_survey_question_import_path(import), html: {remote: true, id: 'import_survey_form'} do |f| %>
   	<div id="survey_info">
   		<div id="survey_header" class="info_header">
   			Survey Info:

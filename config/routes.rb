@@ -48,8 +48,10 @@ Mh::Application.routes.draw do
   resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
     collection do
       get :download_sample_contacts_csv
-      post :create_survey_question
       post :import
+    end
+    member do
+      post :create_survey_question
     end
   end
 

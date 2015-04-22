@@ -13,6 +13,7 @@ class Import < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :organization
+  belongs_to :survey
 
   has_attached_file :upload, s3_credentials: 'config/s3.yml', s3_permissions: :private, storage: :s3,
                              path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
@@ -116,6 +117,7 @@ class Import < ActiveRecord::Base
         ImportMailer.import_successful(current_user, table).deliver
       end
     end
+    self.survey.destroy if self.survey.present? && import_errors.present?
   end
 
   def create_contact_from_row(row, current_organization)

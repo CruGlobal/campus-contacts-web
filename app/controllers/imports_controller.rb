@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
+  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import, :create_survey_question]
   before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
   rescue_from Import::InvalidCSVFormat, with: :invalid_csv_format
@@ -145,6 +145,7 @@ class ImportsController < ApplicationController
             post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
             terminology: 'Survey'
           )
+          @import.update_attributes(survey_id: @survey.id)
         else
           @survey = Survey.find(params[:select_survey_field].to_i)
           authorize! :manage, @survey
