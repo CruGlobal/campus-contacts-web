@@ -1,8 +1,5 @@
 <% if mhub? %>
   <% if @survey %>
-    <% provide :head do %>
-      <%= render 'survey_responses/survey_head' %>
-    <% end %>
     <% if @survey.logo_file_name.present? %>
       <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
     <% end %>
