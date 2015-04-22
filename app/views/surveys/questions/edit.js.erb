@@ -7,7 +7,11 @@ $.fn.tip()
 
 //Instantiate search if has data for Automatic Assignment of Contacts
 $(document).ready(function() {
-  <% name = @auto_assign.present? ? @auto_assign.extra_parameters['name'] : "" %>
-  <% id = @auto_assign.present? ? @auto_assign.extra_parameters['id'] : "" %>
+  <% name = "" %>
+  <% id = "" %>
+  <% if @auto_assign.present? && @auto_assign.extra_parameters.present? %>
+    <% name = @auto_assign.extra_parameters['name'] %>
+    <% id = @auto_assign.extra_parameters['id'] %>
+  <% end %>
 	autoassign_search("<%= id %>", "<%= name %>");
 });

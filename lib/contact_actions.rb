@@ -161,9 +161,6 @@ module ContactActions
           end
         end
 
-        # Save survey answers
-        save_survey_answers
-
         # Record that this person was created so we can notify leaders/admins
         NewPerson.create(person_id: @person.id, organization_id: @organization.id)
 
@@ -187,6 +184,9 @@ module ContactActions
 		      @group_membership.role = params[:add_to_group_role]
 		      @group_membership.save
 				end
+
+        # Save survey answers
+        save_survey_answers
 
         respond_to do |wants|
           wants.html { redirect_to :back }
@@ -229,9 +229,8 @@ module ContactActions
         survey_id = answer[0]
         if survey = @organization.surveys.find(survey_id)
           @answer_sheet = get_answer_sheet(survey, @person)
-          question_set = QuestionSet.new(survey.questions, @answer_sheet)
-          question_set.post(fields, @answer_sheet)
-          question_set.save
+          # Save survey answers and manage question rules
+          @answer_sheet.save_survey(fields)
           @answer_sheet.person.save
           @answer_sheets << @answer_sheet
         end
@@ -243,9 +242,10 @@ module ContactActions
         # Save predefined survey answers
         @organization.surveys.each do |survey|
           @answer_sheet = get_answer_sheet(survey, @person)
-          question_set = QuestionSet.new(survey.questions, @answer_sheet)
-          question_set.post(answers, @answer_sheet)
-          question_set.save
+
+          # Save survey answers and manage question rules
+          @answer_sheet.save_survey(answers)
+
           @answer_sheet.person.save
           @answer_sheets << @answer_sheet
         end
@@ -271,10 +271,12 @@ module ContactActions
       fields = answer[1]
       if survey = @organization.surveys.find(survey_id)
         @answer_sheet = get_answer_sheet(survey, @person)
-        question_set = QuestionSet.new(survey.questions, @answer_sheet)
-        question_set.post(fields, @answer_sheet)
-        question_set.save
+
+        # Save survey answers and manage question rules
+        @answer_sheet.save_survey(fields)
+
         @answer_sheet.person.save
+
         @answer_sheets << @answer_sheet
       end
     end
@@ -286,8 +288,6 @@ module ContactActions
         @answer_sheets -= [as]
       end
     end
-
-
   end
 
 end

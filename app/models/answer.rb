@@ -67,5 +67,4 @@ class Answer < ActiveRecord::Base
     return false unless question_id.present? && question = Element.find(question_id)
     question.attribute_name == 'birth_date'
   end
-
 end

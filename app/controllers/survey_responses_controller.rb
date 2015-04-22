@@ -72,7 +72,10 @@ class SurveyResponsesController < ApplicationController
     @title = @survey.terminology if @survey
     redirect_to :back and return false unless @person.id == params[:id].to_i
 
-    save_survey
+    # Update person record
+    @person.update_attributes(params[:person])
+
+    @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
 
     ['birth_date','graduation_date'].each do |attr_name|
       if date_element = @survey.questions.where(attribute_name: attr_name)
@@ -84,10 +87,11 @@ class SurveyResponsesController < ApplicationController
     end
 
     if @person.valid? && @answer_sheet.person.valid?
-      unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
-        create_contact_at_org(@person, @survey.organization)
-      end
+      # Save survey answers and manage question rules
+      @answer_sheet.save_survey(params[:answers])
+
       destroy_answer_sheet_when_answers_are_all_blank
+
       if @survey.redirect_url.to_s =~ /https?:\/\//
         redirect_to @survey.redirect_url and return false
       else
@@ -162,16 +166,21 @@ class SurveyResponsesController < ApplicationController
       if @person.valid?
         @org = @survey.organization
         NewPerson.create(person_id: @person.id, organization_id: @org.id)
-        save_survey
+
+        @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
+
         session[:person_id] = @person.id
         session[:survey_id] = @survey.id
         if @person.valid? && @answer_sheet.person.valid?
           # Do not change the permission if there's an existing permission (add_contact method handles it)
           @org.add_contact(@person)
 
-          unless @answer_sheet.survey.has_assign_rule_applied(@answer_sheet, 'ministry')
-            FollowupComment.create_from_survey(@survey.organization, @person, @survey.questions, @answer_sheet)
-          end
+          # Update person record
+          @person.update_attributes(params[:person])
+
+          # Save survey answers and manage question rules
+          @answer_sheet.save_survey(params[:answers])
+
           destroy_answer_sheet_when_answers_are_all_blank
           respond_to do |wants|
             if @survey.login_option == 2

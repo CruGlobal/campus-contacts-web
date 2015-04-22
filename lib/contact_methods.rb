@@ -5,9 +5,9 @@ module ContactMethods
     raise 'no org' unless organization
     organization.add_contact(person)
   end
-  
+
   def get_answer_sheet(survey, person)
-    answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first || 
+    answer_sheet = AnswerSheet.where(person_id: person.id, survey_id: survey.id).first ||
                    AnswerSheet.create!(person_id: person.id, survey_id: survey.id)
     answer_sheet.reload
     answer_sheet

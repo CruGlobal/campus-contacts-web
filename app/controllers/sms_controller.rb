@@ -88,6 +88,9 @@ class SmsController < ApplicationController
           # Mark answer_sheet as complete
           @answer_sheet.update_attribute(:completed_at, Time.now)
           @sms_session.update_attributes(ended: true)
+
+          # Manage question rules
+          @answer_sheet.save_survey
         end
       else
         @msg = I18n.t('sms.keyword_inactive')
@@ -183,6 +186,7 @@ class SmsController < ApplicationController
   end
 
   def save_survey_question(survey, person, answer)
+    @answer_sheet = get_answer_sheet(survey, person)
     begin
       case
       when person.first_name.blank?
@@ -191,7 +195,6 @@ class SmsController < ApplicationController
         person.update_attribute(:last_name, answer)
       else
         question = next_question(survey, person)
-        @answer_sheet = get_answer_sheet(survey, person)
         if question
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter

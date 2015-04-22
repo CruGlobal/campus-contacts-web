@@ -47,86 +47,56 @@ class QuestionSet
       @questions.each do |question|
         question.save_response(@answer_sheet, question)
         answer = @answer_sheet.answers.find_by_question_id(question.id)
-        question_rules = SurveyElement.find_by_element_id(question.id).question_rules
+        question_rules = @answer_sheet.survey.survey_elements.find_by_element_id(question.id).question_rules
 
         if answer.present? && question_rules.present?
           question_rules.each do |question_rule|
-            triggers = question_rule.trigger_keywords.gsub(' ','').split(',')
-            code = question_rule.rule.rule_code
+            triggers = question_rule.trigger_keywords
+            answer_value = answer.value
+            if triggers.present? && answer_value.present?
+              trigger_words = triggers.split(',').try(:compact)
+              if trigger_words.map{|x| x.downcase.strip}.include?(answer_value.downcase.strip)
+                code = question_rule.rule.rule_code
 
-            case code
-            when 'AUTONOTIFY'
-              keyword_found = ''
+                case code
+                when 'AUTONOTIFY'
+                  # Do the process
+                  leaders = Person.find(question_rule.extra_parameters['leaders'])
+                  recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
+                  unless answer.auto_notify_sent?
+                    PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
+                    answer.update_attributes(auto_notify_sent: true)
+                  end
+                when 'AUTOASSIGN'
+                  # Do the process
+                  if extra_parameters = question_rule.extra_parameters
+                    type = extra_parameters["type"]
+                    extra_id = extra_parameters["id"]
 
-              # Check if triggers exists
-              triggers.each do |t|
-                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
-              end
+                    person =  @answer_sheet.person
+                    organization = @answer_sheet.survey.organization
 
-              # Do the process
-              unless keyword_found.blank?
-                leaders = Person.find(question_rule.extra_parameters['leaders'])
-                recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, keyword_found, answer.id)
-              end
-
-            when 'AUTOASSIGN'
-              keyword_found = ''
-
-              # Check if triggers exists
-              triggers.each do |t|
-                keyword_found = t unless answer.value.downcase.index(t.downcase) == nil
-              end
-
-              # Do the process
-              unless keyword_found.blank?
-                organization = @answer_sheet.survey.organization
-                type = question_rule.extra_parameters['type'].downcase
-                assign_to_id = question_rule.extra_parameters['id']
-                person =  @answer_sheet.person
-
-                if type.present? && assign_to_id.present?
-                  case type
-                  when 'leader'
-                    Rails.logger.info "Running Leader Process"
-                    if Person.exists?(assign_to_id)
-                      @assign_to = Person.find(assign_to_id)
-                      ContactAssignment.where(
-                        person_id: person.id,
-                        organization_id: organization.id).destroy_all
-                      ContactAssignment.create(
-                        person_id: person.id,
-                        organization_id: organization.id,
-                        assigned_to_id: @assign_to.id)
-                    end
-                  when 'ministry'
-                    if Organization.exists?(assign_to_id)
-                      @assign_to = Organization.find(assign_to_id)
-                      @assign_to.add_contact(person)
-                    end
-                  when 'group'
-                    if Group.exists?(assign_to_id)
-                      @assign_to = Group.find(assign_to_id)
-                      group_membership = @assign_to.group_memberships.find_or_create_by_person_id(person.id)
-                      group_membership.role = 'member'
-                      group_membership.save
-                    end
-                  when 'label'
-                    if Label.exists?(assign_to_id)
-
-                      new_labels = [assign_to_id]
-                      old_labels = person.organizational_labels.where(organization_id: organization.id).collect { |label| label.label_id }
-                      labels_to_add = new_labels - old_labels
-                      labels_to_remove = old_labels - new_labels
-
-                      person.organizational_labels.where(organization_id: organization.id, label_id: labels_to_remove).destroy_all
-
-                      all_labels = labels_to_add | (new_labels & old_labels)
-                      all_labels.sort!.each do |label_id|
-                        OrganizationalLabel.find_or_create_by_person_id(
-                          person_id: person.id,
-                          label_id: label_id,
-                          organization_id: organization.id) if labels_to_add.include?(label_id)
+                    if type.present?
+                      case type.downcase
+                      when 'leader'
+                        person.assign_to_leader(organization, extra_id)
+                      when 'ministry'
+                        ministry = person.all_organization_and_children.find_by_id(extra_id)
+                        ministry.add_contact(person) if ministry.present?
+                      when 'group'
+                        group = organization.groups.find_by_id(extra_id)
+                        person.add_to_group(organization, group) if group.present?
+                      when 'label'
+                        label = organization.labels.find_by_id(extra_id)
+                        person.add_to_label(organization, label) if label.present?
+                      end
+                    else
+                      # To consider all the old data in the database
+                      leaders = extra_parameters["leaders"]
+                      if leaders.present?
+                        leaders.each do |leader_id|
+                          person.assign_to_leader(organization, leader_id)
+                        end
                       end
                     end
                   end
@@ -138,7 +108,6 @@ class QuestionSet
       end
     end
   end
-
 
   private
 
