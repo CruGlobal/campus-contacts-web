@@ -50,9 +50,18 @@ class QuestionSet
         question_rules = @answer_sheet.survey.survey_elements.find_by_element_id(question.id).question_rules
 
         if answer.present? && question_rules.present?
+          if question.predefined?
+            begin
+              answer_value = @answer_sheet.person.send(question.attribute_name)
+            rescue
+              answer_value = ""
+            end
+          else
+            answer_value = answer.value
+          end
+
           question_rules.each do |question_rule|
             triggers = question_rule.trigger_keywords
-            answer_value = answer.value
             if triggers.present? && answer_value.present?
               trigger_words = triggers.split(',').try(:compact)
               if trigger_words.map{|x| x.downcase.strip}.include?(answer_value.downcase.strip)
@@ -64,7 +73,7 @@ class QuestionSet
                   leaders = Person.find(question_rule.extra_parameters['leaders'])
                   recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
                   unless answer.auto_notify_sent?
-                    PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
+                    PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
                     answer.update_attributes(auto_notify_sent: true)
                   end
                 when 'AUTOASSIGN'
