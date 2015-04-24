@@ -57,6 +57,12 @@ class ProfileController < ApplicationController
     redirect_to :back
   end
 
+  def remove_facebook
+    @person = Person.find(params[:id])
+    @person.update_attributes(fb_uid: nil) if @person.present? && @person.fb_uid.present?
+    redirect_to :back, notice: I18n.t('interactions.profile_info.success_remove_facebook')
+  end
+
   protected
   def authorize
     authorize! :manage_contacts, current_organization

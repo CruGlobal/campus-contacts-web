@@ -21,6 +21,7 @@ Mh::Application.routes.draw do
       get :show, as: 'profile'
       post :change_avatar
       post :remove_avatar
+      post :remove_facebook
     end
   end
 

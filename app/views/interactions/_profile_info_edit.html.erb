@@ -63,11 +63,18 @@
   	</div>
 
   	<div class="feed_box info_edit">
-  		<div class="fb_link col_left">Facebook URL:</div>
+  		<div class="fb_link col_left">Facebook:</div>
   		<div class="fb_link col_right">
-        <%= text_field_tag :profile_facebook_search, "", placeholder: "Search Facebook name", autocomplete: "off" %>
+        <%= text_field_tag :profile_facebook_search, "", placeholder: "Search Facebook Name / URL", autocomplete: "off" %>
   			<%= pf.hidden_field :fb_uid, class: "facebook_uid" %>
   		</div>
+
+      <% if @person.fb_uid.present? %>
+    		<div class="fb_link col_left"></div>
+    		<div class="fb_link col_right">
+          <%= link_to(raw("Remove #{@person.first_name}'s Facebook from profile <span class='remove_field'></span>"), remove_facebook_profile_path(@person), method: :post, data:{confirm: t("interactions.profile_info.confirm_remove_facebook")}, class: "tip") %>
+    		</div>
+      <% end %>
   	</div>
   <% end %>
 <% end %>
