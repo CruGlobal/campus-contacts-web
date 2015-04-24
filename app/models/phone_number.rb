@@ -15,12 +15,12 @@ class PhoneNumber < ActiveRecord::Base
     # Handle number format
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      if person = Person.find_by_id(value.person_id)
-        formatted_number = PhoneNumber.strip_us_country_code(phone_number)
-        if !(phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
-          errors.add(:number, "must be numeric")
-        else
-          self[:number] = formatted_number
+      unless (phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
+        errors.add(:number, "must be numeric")
+      else
+        person = Person.find_by_id(value.person_id)
+        if person.present?
+          self[:number] = PhoneNumber.strip_us_country_code(phone_number)
         end
       end
     else

@@ -256,7 +256,7 @@ class OrganizationsController < ApplicationController
       raise CanCan::AccessDenied
     end
   end
-  
+
   def key_value_in_nested_hash(obj, key)
     if obj.respond_to?(:key?) && obj.key?(key)
       obj[key]
