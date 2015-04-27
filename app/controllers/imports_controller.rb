@@ -1,5 +1,5 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import, :create_survey_question]
+  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
   before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
   rescue_from Import::InvalidCSVFormat, with: :invalid_csv_format
@@ -123,6 +123,7 @@ class ImportsController < ApplicationController
   end
 
   def create_survey_question
+    @import = Import.where(organization_id: current_organization.id, id: params[:id]).first if params[:id].present?
     if !params[:question_id].present? || params[:question_id] == 'new_question'
       @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
       @message ||= "Select an existing survey." if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
@@ -145,9 +146,11 @@ class ImportsController < ApplicationController
             post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
             terminology: 'Survey'
           )
-          @import.survey_ids = Array.new unless @import.survey_ids.present?
-          @import.survey_ids << @survey.id
-          @import.save
+          if @import.present?
+            @import.survey_ids = Array.new unless @import.survey_ids.present?
+            @import.survey_ids << @survey.id
+            @import.save
+          end
         else
           @survey = Survey.find(params[:select_survey_field].to_i)
           authorize! :manage, @survey
