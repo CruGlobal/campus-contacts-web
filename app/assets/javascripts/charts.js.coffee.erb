@@ -8,10 +8,10 @@ $.fn.toggleVisualToolButtons = () ->
   old_sel = $(".movements_container").data("selected").toString()
   if old_sel == ""
     old_sel = null
-  else  
+  else
     old_sel = old_sel.split(",")
   new_sel = $(".movements_select").val()
-    
+
   if active_tab == "all"
     # All Snapshot is selected
     if current_tab == "all"
@@ -74,8 +74,8 @@ $.fn.toggleVisualToolButtons = () ->
       $("#update_snapshot_button").hide()
       $("#update_trend_button").hide()
       $(".movements_container").show()
-      $("#saved_visual_tools").hide()  
-      $("#trend_date_select").show()    
+      $("#saved_visual_tools").hide()
+      $("#trend_date_select").show()
     # Hide clear button if no movement is selected
     if new_sel == null
       $("#clear_chart").hide()
@@ -121,8 +121,11 @@ $.fn.toggleVisualToolButtons = () ->
       $(".movements_container").hide()
       $("#saved_visual_tools").show()
       $("#trend_date_select").hide()
-        
-    
+
+
+$(document).on "change", "#start_date.datepicker, #end_date.datepicker", (e)->
+  $("#update_chart").show()
+
 $(document).on "select2:select", ".movements_select", ->
   $.fn.toggleVisualToolButtons()
   $.fn.cleanField()
@@ -141,7 +144,7 @@ $(document).on "click", "#update_chart", ->
   $(".visual_tool_tab:checked").addClass("current")
   $.fn.toggleVisualToolButtons()
   $.fn.cleanField()
-  
+
 $(document).on "click", "button#reset_chart", ->
   old_sel = $(".movements_container").data("selected").toString()
   if old_sel == ""
@@ -151,19 +154,17 @@ $(document).on "click", "button#reset_chart", ->
   $(".movements_select").val(old_sel).trigger("change")
   $.fn.toggleVisualToolButtons()
   $.fn.cleanField()
-  
+
 $(document).on "click", "button#clear_chart", ->
   $(".movements_select").val(null).trigger("change")
   $.fn.toggleVisualToolButtons()
   $.fn.cleanField()
-  
-  
 
 $(document).on "click", "button#save_trend_button", ->
   $.showDialog($("#save_trend_div"))
   $("#trend_id").val("")
   $("#trend_name").val("")
-  
+
 $(document).on "click", "button#update_trend_button", ->
   $.showDialog($("#save_trend_div"))
   $("#trend_id").val($("#trend_id").data("value"))
@@ -173,12 +174,12 @@ $(document).on "click", "button#save_snapshot_button", ->
   $.showDialog($("#save_snapshot_div"))
   $("#snapshot_id").val("")
   $("#snapshot_name").val("")
-  
+
 $(document).on "click", "button#update_snapshot_button", ->
   $.showDialog($("#save_snapshot_div"))
   $("#snapshot_id").val($("#snapshot_id").data("value"))
   $("#snapshot_name").val($("#snapshot_name").data("value"))
-  
+
 $(document).on "click", "#submit_save_snapshot", ->
   snapshot_id = $("#snapshot_id").val()
   snapshot_name = $.trim($("#snapshot_name").val())
@@ -189,11 +190,11 @@ $(document).on "click", "#submit_save_snapshot", ->
       type: "POST"
       data:
         snapshot_id: snapshot_id
-        snapshot_name: snapshot_name 
+        snapshot_name: snapshot_name
         movement_ids: selected_ids
   else
     $.a("Please enter the snapshot name before saving.")
-  
+
 $(document).on "click", "#submit_save_trend", ->
   trend_id = $("#trend_id").val()
   trend_name = $.trim($("#trend_name").val())
@@ -208,7 +209,7 @@ $(document).on "click", "#submit_save_trend", ->
         trend_id: trend_id
         start_date: start
         end_date: end
-        trend_name: trend_name 
+        trend_name: trend_name
         movement_ids: selected_ids
   else
     $.a("Please enter the trend tracker name before saving.")
@@ -230,15 +231,15 @@ $(document).on "click", "input#trend_all_true", (e) ->
 
 $(document).on "click", "input#trend_all_false", (e) ->
   $.fn.toggleVisualToolButtons()
-  
+
 
 $(document).ready ->
   $("form input[type=radio]:checked").click()
-    
+
   $(".movements_select").select2
     placeholder: "Select more organizations"
     allowClear: false
-    
+
   # $(".movements_select").select2("val", $("#snapshot_movements").data("selected").split(","))
   $(".select2-search__field").attr("placeholder", "Select more organizations")
   $(".select2-search__field").attr("style", "width: 175px;")
@@ -281,9 +282,9 @@ $(document).ready ->
   $("input.datepicker").datepicker
     dateFormat: "yy-mm-dd"
     minDate: "<%= (Date.today - 3.years).to_s %>"
-    
+
   if $("#snapshot_sidebar").hasClass("load_snapshot")
     $("#snapshot_radio_button_saved input").click()
-    
+
   if $("#trend_sidebar").hasClass("load_trend")
     $("#trend_radio_button_saved input").click()
