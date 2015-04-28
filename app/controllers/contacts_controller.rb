@@ -208,7 +208,7 @@ class ContactsController < ApplicationController
         filename = @organization.to_s
         @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
         csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
-        send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'application/csv' )
+        send_data(csv, :filename => "#{filename} - Contacts.csv", :type => 'text/csv; charset=utf-8; header=present' )
       end
     end
   end

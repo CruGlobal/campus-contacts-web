@@ -246,7 +246,7 @@ $ ->
     else
       $.a(t('contacts.index.none_checked'))
 
-  $("#sent_messages_link").live 'click', (e)->
+  $(document).on 'click', "#sent_messages_link", (e)->
     e.preventDefault()
     $("#sent_messages_div").dialog("option", "position", ['middle',30])
     $("#sent_messages_div").dialog('open')
@@ -258,7 +258,7 @@ $ ->
       type: 'GET',
       url: '/sent_messages'
 
-  $('#bulk_export_link').live 'click', (e)->
+  $(document).on 'click', "#bulk_export_link", (e)->
     e.preventDefault()
     ids = []
     $('.id_checkbox:checked').each ->
@@ -268,7 +268,7 @@ $ ->
       href = href+"?"
     document.location = href+"&only_ids="+ids.join(',')
 
-  $('#contacts_controller #include_archived_interactions').live 'click', ->
+  $(document).on 'click', "#contacts_controller #include_archived_interactions", (e)->
     params = $(this).attr("data-params")
     attr_url = "include_archived_interactions=true"
     if $(this).is(':checked')
@@ -276,7 +276,7 @@ $ ->
     else
       document.location = "/allcontacts?"+params.replace(attr_url, "")
 
-  $('#contacts_controller #include_archived_labels').live 'click', ->
+  $(document).on 'click', "#contacts_controller #include_archived_labels", (e)->
     params = $(this).attr("data-params")
     attr_url = "include_archived_labels=true"
     if $(this).is(':checked')
@@ -284,14 +284,16 @@ $ ->
     else
       document.location = "/allcontacts?"+params.replace(attr_url, "")
 
-  $('.friends_count').live 'click', ->
-    false
-  $('.to_list a.delete').live 'click', ->
+  $(document).on 'click', ".friends_count", (e)->
+    e.preventDefault()
+
+  $(document).on 'click', ".to_list a.delete", (e)->
+    e.preventDefault()
     li = $(this).closest('li')
     li.remove()
-    false
 
-  $('#send_reminder_link').live 'click', ->
+  $(document).on 'click', "#send_reminder_link", (e)->
+    e.preventDefault()
     $('.to_list').html('')
     ids = []
     $('#leaders .leader').each ->
@@ -307,7 +309,6 @@ $ ->
       buttons:
         Cancel: ->
           $(this).dialog('destroy')
-    false
 
   $('#reminder_email form').live 'submit', ->
     ids = []
