@@ -10,6 +10,8 @@ class Label < ActiveRecord::Base
   DEFAULT_LABELS = ["involved", "leader"] # in DSC ORDER by SUPERIORITY
   DEFAULT_CRU_LABELS = ["involved", "engaged_disciple", "leader"]
   DEFAULT_BRIDGE_LABELS = DEFAULT_CRU_LABELS + ["seeker"]
+  DEFAULT_POWER_TO_CHANGE_LABELS = ["knows_and_trusts_christian", "became_curious", "became_open_to_change",
+    "seeking_god", "made_decision", "growing_disciple", "ministering_disciple", "multiplying_disciple"]
 
   has_many :people, through: :organizational_labels
   has_many :organizational_labels, dependent: :destroy
@@ -32,6 +34,10 @@ class Label < ActiveRecord::Base
   scope :default_bridge_labels, lambda { {
     :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}",
     :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}"
+  }}
+  scope :default_power_to_change_labels, lambda { {
+    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}",
+    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}"
   }}
   scope :non_default_labels, lambda { {
     :conditions => "i18n IS NULL",

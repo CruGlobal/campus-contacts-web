@@ -105,6 +105,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def is_power_to_change?
+    has_parent?(APP_CONFIG['power_to_change_org_id'])
+  end
+
   def is_bridge?
     (name =~ /^Bridges at/) != nil
   end
@@ -389,6 +393,8 @@ class Organization < ActiveRecord::Base
       all_labels.default_bridge_labels
     elsif is_cru?
       all_labels.default_cru_labels
+    elsif is_power_to_change?
+      all_labels.default_power_to_change_labels
     else
       all_labels.default_labels
     end
@@ -596,7 +602,7 @@ class Organization < ActiveRecord::Base
     person = Person.where(id: person_id).first
     person.ensure_single_permission_for_org_id(id) if person.present?
     permission = Permission.where(id: permission_id).first
-    
+
     if person.present? && permission.present?
       org_permission = OrganizationalPermission.find_or_create_by_person_id_and_organization_id(person.id, id)
 
