@@ -19,9 +19,14 @@ class AnswerSheet < ActiveRecord::Base
   def save_survey(answers = nil)
     question_set = QuestionSet.new(survey.questions, self)
     question_set.post(answers, self) if answers
-    question_set.save
-    person.save
-    update_attribute(:completed_at, Time.now)
+    if question_set.save
+      person.save
+      update_attribute(:completed_at, Time.now)
+
+      # Ensure that the user/contact will be added as contact in organization after taking survey
+      org = self.survey.organization
+      org.add_contact(person) if org.present?
+    end
   end
 
   # def has_answer_for?(question_id)
