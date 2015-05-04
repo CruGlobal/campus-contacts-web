@@ -44,7 +44,6 @@ class QuestionSet
   def save(notify_on_predefined_questions = false)
     AnswerSheet.transaction do
       @questions.each_with_index do |question, i|
-        next if i == 0
         question.save_response(@answer_sheet, question)
         question_rules = @answer_sheet.survey.survey_elements.find_by_element_id(question.id).question_rules
 
