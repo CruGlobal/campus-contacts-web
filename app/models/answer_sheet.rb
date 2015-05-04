@@ -16,10 +16,10 @@ class AnswerSheet < ActiveRecord::Base
     self.answers.group_by { |answer| answer.question_id }
   end
 
-  def save_survey(answers = nil)
+  def save_survey(answers = nil, notify_on_predefined_questions = true)
     question_set = QuestionSet.new(survey.questions, self)
     question_set.post(answers, self) if answers
-    if question_set.save
+    if question_set.save(notify_on_predefined_questions)
       person.save
       update_attribute(:completed_at, Time.now)
 

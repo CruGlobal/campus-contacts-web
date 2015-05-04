@@ -335,7 +335,7 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false)
+  def update_from_survey_answers(survey, organization, questions, answers, current_person, save_predefined_questions = false, update_labels = false, notify_on_predefined_questions = false)
     if update_labels && answers['labels'] != self.labels_for_org_id(organization.id).collect(&:name).join(",  ")
       self.set_labels_for_organization(answers['labels'], organization, current_person)
     end
@@ -380,7 +380,7 @@ class Person < ActiveRecord::Base
       end
     end
 
-    answer_sheet.save_survey(answers)
+    answer_sheet.save_survey(answers, notify_on_predefined_questions)
     self.save
   end
 
