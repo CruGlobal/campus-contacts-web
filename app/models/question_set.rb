@@ -55,7 +55,11 @@ class QuestionSet
           end
         else
           answer = @answer_sheet.answers.find_by_question_id(question.id)
-          answer_value = answer.value
+          if answer.present?
+            answer_value = answer.value
+          else
+            answer_value = ""
+          end
         end
         if answer_value.present? && question_rules.present?
           question_rules.each do |question_rule|
