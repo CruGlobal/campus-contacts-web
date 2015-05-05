@@ -168,6 +168,7 @@ qb:
       add_contact: Ajouter un contact à %{org}
       add_label_empty: Une étiquette vide ne peut pas être enregistrée. Veuillez réessayer.
       add_label_exists: L'étiquette est déjà comprise dans la liste!
+      add_label_exists2:
       add_label_failed: L'étiquette n'a pas été enregistrée. Veuillez réessayer.
       add_label_success: La nouvelle étiquette a été ajoutée!
       add_question_back: Cliquez sur une question pour l'ajouter à nouveau à la page.
@@ -776,8 +777,10 @@ qb:
     edit_survey_results: Modifier les résultats du sondage
     edit_this_survey: Modifier ce sondage
     profile_info:
+      confirm_remove_facebook:
       email_contact_info: Envoyez-moi ces renseignements sur le contact
       opt_in_help: Si vous désirez recevoir des messages textes, textez « ACTIVER » au 85005.
+      success_remove_facebook:
     profile_interactions_edit:
       confirm_delete_interaction: Êtes-vous sûr de vouloir supprimer cette interaction?
   keyword_request_mailer:

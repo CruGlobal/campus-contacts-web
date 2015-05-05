@@ -77,13 +77,13 @@ en-CA:
       type_to_find_leader: Type to find a leader then click on the leader's name.
       type_to_find_org: Type to find a %{terminology} then click on the %{terminology}'s name
     interaction_types:
-      comment: 
-      faculty_on_mission: 
-      gospel_presentation: 
-      graduating_on_mission: 
-      holy_spirit_presentation: 
-      prayed_to_receive_christ: 
-      spiritual_conversation: 
+      comment: Comment Only
+      faculty_on_mission: Faculty on Mission
+      gospel_presentation: I’ve Shared the Gospel
+      graduating_on_mission: Graduating on Mission
+      holy_spirit_presentation: Holy Spirit Presentation
+      prayed_to_receive_christ: Prayed to Receive Christ
+      spiritual_conversation: Gospel-Themed Conversation
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   batch:
@@ -166,6 +166,7 @@ en-CA:
       add_contact: Add a Contact to %{org}
       add_label_empty: Cannot save blank label. Please try again.
       add_label_exists: Label is already in the list!
+      add_label_exists2: 
       add_label_failed: Failed to save label. Please try again.
       add_label_success: New label successfully added!
       add_question_back: Click on a question to add it back to the page
@@ -778,14 +779,16 @@ en-CA:
       default_post_survey_message: Thank you for your time!
   interactions:
     add_comment_title: Add comment
-    addresses_limit: 
+    addresses_limit: Only 4 different addresses can be added
     answer_other_surveys: Answer Other Surveys
     comment_field_title: Comment
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
     profile_info:
+      confirm_remove_facebook: 
       email_contact_info: Email Me This Contact Info
       opt_in_help: If you would like to receive text messages, text 'ON' to 85005 to opt back in.
+      success_remove_facebook: 
     profile_interactions_edit:
       confirm_delete_interaction: Are you sure you want to delete this interaction?
   keyword_request_mailer:

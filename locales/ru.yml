@@ -168,6 +168,7 @@ ru:
       add_contact: 
       add_label_empty: 
       add_label_exists: 
+      add_label_exists2: 
       add_label_failed: 
       add_label_success: 
       add_question_back: Click on a question to add it back to the page
@@ -784,8 +785,10 @@ ru:
     edit_survey_results: 
     edit_this_survey: 
     profile_info:
+      confirm_remove_facebook: 
       email_contact_info: 
       opt_in_help: 
+      success_remove_facebook: 
     profile_interactions_edit:
       confirm_delete_interaction: 
   keyword_request_mailer:

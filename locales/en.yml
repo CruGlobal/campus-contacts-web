@@ -167,7 +167,8 @@ en:
       add_already_registered_email: 'The Email address highlighted below is already used by another person in MissionHub or possibly there is a duplicate record in the system for this individual - contact support@missionhub.com if you need help. '
       add_contact: Add a Contact to %{org}
       add_label_empty: Cannot save blank label. Please try again.
-      add_label_exists: Label is already in the list!
+      add_label_exists: Label already exists in the list!
+      add_label_exists2: Label already exists in this organization!
       add_label_failed: Failed to save label. Please try again.
       add_label_success: New label successfully added!
       add_question_back: Click on a question to add it back to the page
@@ -786,8 +787,10 @@ en:
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
     profile_info:
+      confirm_remove_facebook: Do you want to remove this Facebook URL from this profile?
       email_contact_info: Email Me This Contact Info
       opt_in_help: If you would like to receive text messages, text 'ON' to 85005 to opt back in.
+      success_remove_facebook: You have successfully removed the Facebook URL from this profile.
     profile_interactions_edit:
       confirm_delete_interaction: Are you sure you want to delete this interaction?
   keyword_request_mailer:
@@ -1422,7 +1425,7 @@ en:
       logo_valid_format: Upload .jpg, .jpeg, .png, or .gif file
       no_fb_login_option: No login
       post_survey_message: What message would you like to show after the person has completed the survey?
-      post_survey_placeholder: 'Example: Thank you for your time! If you''re interested in Cru, we meet at Moore Auditorium every Thursday @ 8PM'
+      post_survey_placeholder: 'Example: Thanks! You’re invited to Cru, 7pm Thursdays, at Edwin Hall. And, for Qs about life or God, check out http://EveryStudent.com.'
       redirect_url: If you would like the survey to redirect back to your site when it is completed, put the full url you would like to redirect to in here. (This will bypass the thank you response.)
       remove_logo_cofirmation: Do you want to remove this logo?
       remove_logo_failed: Invalid survey. Please try again later.

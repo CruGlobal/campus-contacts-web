@@ -166,6 +166,7 @@ fr:
       add_contact: 
       add_label_empty: 
       add_label_exists: 
+      add_label_exists2: 
       add_label_failed: 
       add_label_success: 
       add_question_back: Cliquez sur une question pour l&#39;ajouter à nouveau à la page
@@ -707,8 +708,10 @@ fr:
     edit_survey_results: 
     edit_this_survey: 
     profile_info:
+      confirm_remove_facebook: 
       email_contact_info: 
       opt_in_help: 
+      success_remove_facebook: 
     profile_interactions_edit:
       confirm_delete_interaction: 
   keyword_request_mailer:
