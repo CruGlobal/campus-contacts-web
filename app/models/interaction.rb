@@ -117,6 +117,9 @@ class Interaction < ActiveRecord::Base
     duplicate_initiators.delete_all if duplicate_initiators.present?
   end
 
+  def comment_only?
+    self.interaction_type_id == InteractionType::COMMENT
+  end
   private
 
   def ensure_timestamp
