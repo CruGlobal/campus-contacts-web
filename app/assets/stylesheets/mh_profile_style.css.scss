@@ -756,6 +756,9 @@ ul#panel_nav :hover {
 .address input[type=text], .email input[type=text], .phone input[type=text], .fb_link input[type=text] {
   width: 180px;
 }
+.fb_link.col_right {
+  padding: 3px;
+}
 
 .address {
   .city input[type=text] {
