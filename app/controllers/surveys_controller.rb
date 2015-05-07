@@ -29,7 +29,7 @@ class SurveysController < ApplicationController
     settings << {data: "first_name", type: "text", readOnly: true}
     settings << {data: "last_name", type: "text", readOnly: true}
     settings << {data: "phone_number", type: "text", readOnly: true}
-    
+
     multi_col << 3
     setting = Hash.new
     setting["data"] = "labels"
@@ -39,7 +39,7 @@ class SurveysController < ApplicationController
     setting["strict"] = "false"
     setting["selectOptions"] = current_organization.labels.collect(&:name)
     settings << setting
-    
+
     questions.each_with_index do |question, index|
       i = index + 4
       setting = Hash.new
@@ -108,7 +108,7 @@ class SurveysController < ApplicationController
     response['data'] = data
     render json: response.to_json
   end
-  
+
   def create_label
     @status = "false"
     if params[:name].present?
@@ -164,7 +164,7 @@ class SurveysController < ApplicationController
                 else
                   # New person
                   person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email)
-                  person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true)
+                  person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true, true)
                 end
                 person.phone_number = number
                 person.save
@@ -182,7 +182,7 @@ class SurveysController < ApplicationController
                   else
                     # New person
                     person = Person.create(first_name: value['first_name'], last_name: value['last_name'], email: email, phone_number: number)
-                    person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true)
+                    person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true, true)
                   end
                 else
                   @msg << " - Row##{i + 1}: Invalid phone number."
@@ -190,7 +190,7 @@ class SurveysController < ApplicationController
               else
                 # Save w/o email
                 person = Person.create(first_name: value['first_name'], last_name: value['last_name'])
-                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true)
+                person.update_from_survey_answers(@survey, current_organization, questions, value, current_person, true, true, true)
               end
             end
           else

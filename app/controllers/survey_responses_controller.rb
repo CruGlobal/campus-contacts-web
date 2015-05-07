@@ -88,7 +88,7 @@ class SurveyResponsesController < ApplicationController
 
     if @person.valid? && @answer_sheet.person.valid?
       # Save survey answers and manage question rules
-      @answer_sheet.save_survey(params[:answers])
+      @answer_sheet.save_survey(params[:answers], false)
 
       destroy_answer_sheet_when_answers_are_all_blank
 
@@ -111,6 +111,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def create
+    @new_person = false
     @title = @survey.terminology
     Person.transaction do
       @person = current_person # first try for a logged in person
@@ -160,6 +161,7 @@ class SurveyResponsesController < ApplicationController
       else
         # Do not create a new person data when there's an existing to avoid duplicate data
         @person = Person.create(params[:person])
+        @new_person = true
       end
 
       @current_person = @person
@@ -179,7 +181,7 @@ class SurveyResponsesController < ApplicationController
           @person.update_attributes(params[:person])
 
           # Save survey answers and manage question rules
-          @answer_sheet.save_survey(params[:answers])
+          @answer_sheet.save_survey(params[:answers], @new_person)
 
           destroy_answer_sheet_when_answers_are_all_blank
           respond_to do |wants|
@@ -225,7 +227,7 @@ class SurveyResponsesController < ApplicationController
   def save_survey
     @person.update_attributes(params[:person]) if params[:person]
     @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
-    @answer_sheet.save_survey(params[:answers])
+    @answer_sheet.save_survey(params[:answers], false)
   end
 
   def destroy_answer_sheet_when_answers_are_all_blank

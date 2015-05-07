@@ -10,12 +10,11 @@ class PeopleMailer < ActionMailer::Base
   #
 
 
-  def notify_on_survey_answer(to, question_rule_id, keyword, answer_id)
+  def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet_id, question_id)
     @keyword = keyword
-    @answer = Answer.find(answer_id)
-    @answer_sheet = @answer.answer_sheet
-    @person = @answer_sheet.person #Person.last
-    @question = @answer.question
+    @answer_sheet = AnswerSheet.find(answer_sheet_id)
+    @person = @answer_sheet.person
+    @question = Element.find(question_id)
     @question_rule = QuestionRule.find(question_rule_id)
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
@@ -28,7 +27,7 @@ class PeopleMailer < ActionMailer::Base
       mail to: to, from: from, subject: subject, content_type: "text/html"
     end
   end
-  
+
   def notify_on_bulk_sms_failure(person, results, bulk_message, message)
     @person = person
     @results = results

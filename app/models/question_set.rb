@@ -12,7 +12,6 @@ class QuestionSet
     @questions = elements.select { |e| e.question? }
 
     # answers = @answer_sheet.answers_by_question
-
     @questions.each do |question|
       question.answers = question.responses(answer_sheet) #answers[question.id]
     end
@@ -42,30 +41,49 @@ class QuestionSet
     @questions.length > 0
   end
 
-  def save
+  def save(notify_on_predefined_questions = false)
     AnswerSheet.transaction do
-      @questions.each do |question|
+      @questions.each_with_index do |question, i|
         question.save_response(@answer_sheet, question)
-        answer = @answer_sheet.answers.find_by_question_id(question.id)
         question_rules = @answer_sheet.survey.survey_elements.find_by_element_id(question.id).question_rules
 
-        if answer.present? && question_rules.present?
+        if question.predefined?
+          begin
+            answer_value = @answer_sheet.person.send(question.attribute_name)
+          rescue
+            answer_value = ""
+          end
+        else
+          answer = @answer_sheet.answers.find_by_question_id(question.id)
+          if answer.present?
+            answer_value = answer.value
+          else
+            answer_value = ""
+          end
+        end
+        if answer_value.present? && question_rules.present?
           question_rules.each do |question_rule|
             triggers = question_rule.trigger_keywords
-            answer_value = answer.value
             if triggers.present? && answer_value.present?
-              trigger_words = triggers.split(',').try(:compact)
-              if trigger_words.map{|x| x.downcase.strip}.include?(answer_value.downcase.strip)
+              trigger_words = triggers.downcase.split(',').try(:compact)
+              answer_words = answer_value.downcase.split(" ").try(:compact)
+              if (trigger_words & answer_words).present?
                 code = question_rule.rule.rule_code
-
                 case code
                 when 'AUTONOTIFY'
-                  # Do the process
-                  leaders = Person.find(question_rule.extra_parameters['leaders'])
-                  recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
-                  unless answer.auto_notify_sent?
-                    PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, answer.id)
-                    answer.update_attributes(auto_notify_sent: true)
+                  if question.predefined? || !answer.auto_notify_sent?
+                    leaders = Person.find(question_rule.extra_parameters['leaders'])
+                    recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
+                    if question.predefined?
+                      if notify_on_predefined_questions
+                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
+                      end
+                    elsif answer.present?
+                      unless !answer.auto_notify_sent?
+                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
+                        answer.update_attributes(auto_notify_sent: true)
+                      end
+                    end
                   end
                 when 'AUTOASSIGN'
                   # Do the process

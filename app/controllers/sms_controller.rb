@@ -90,7 +90,7 @@ class SmsController < ApplicationController
           @sms_session.update_attributes(ended: true)
 
           # Manage question rules
-          @answer_sheet.save_survey
+          @answer_sheet.save_survey(nil, true)
         end
       else
         @msg = I18n.t('sms.keyword_inactive')
