@@ -5,9 +5,11 @@ class Address < ActiveRecord::Base
   validate do |value|
     # Handle dupicate address_type
     address_type = value.address_type_before_type_cast || value.address_type || nil
+    address1_value = value.address1_before_type_cast || value.address1 || nil
     if address_type.present?
       if person = Person.find_by_id(value.person_id)
-        if address = person.addresses.find_by_address_type(address_type)
+        address = person.addresses.find_by_address_type(address_type)
+        if address.present? && (address.address1.present? && address.address1 == address1_value)
           available_types = TYPES.values - person.addresses.pluck(:address_type)
           if available_types.present?
             # Select other types
