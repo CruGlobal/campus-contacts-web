@@ -7,6 +7,7 @@ class Import < ActiveRecord::Base
   include Sidekiq::Worker
   include ContactMethods
 
+  serialize :survey_ids, Array
   serialize :headers
   serialize :preview
   serialize :header_mappings
@@ -115,6 +116,9 @@ class Import < ActiveRecord::Base
         table = create_table(new_person_ids, get_new_people)
         ImportMailer.import_successful(current_user, table).deliver
       end
+    end
+    if self.survey_ids.present? && import_errors.present?
+      Survey.where(id: self.survey_ids).destroy_all
     end
   end
 
