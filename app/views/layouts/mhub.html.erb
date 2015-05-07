@@ -3,23 +3,39 @@
 <head>
   <%= render 'shared/head' %>
   <%= stylesheet_link_tag 'plain' %>
-  <%= yield :head %>
+  <% if @survey.present? %>
+    <style>
+      <% if @survey.background_color.present? %>
+        body {background: <%= '#' unless @survey.background_color.first == '#' %><%= @survey.background_color %>}
+      <% end %>
+
+      <% if @survey.background_color.present? %>
+        body {color: <%= '#' unless @survey.text_color.first == '#' %><%= @survey.text_color %>}
+      <% end %>
+
+      <%= @survey.css if @survey.css.present? %>
+    </style>
+
+    <% if @survey.css_file_file_name.present? %>
+      <link href="<%= @survey.css_file.url %>" media="screen" rel="stylesheet" type="text/css" />
+    <% end %>
+  <% end %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
   <%= render 'fb_init' %>
   <div id="outer" class="plain">
     <% if user_signed_in? %>
-      <div id="global">
-        <div class="gmwrap">
-          <ul class="sf-menu">
-            <li class="item">
-              <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
+      <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
+        <div id="global">
+          <div class="gmwrap">
+            <ul class="sf-menu">
+              <li class="item">
                 <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])))  %>
-              <% end %>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
 
     <div class="<%= params[:action] %>">

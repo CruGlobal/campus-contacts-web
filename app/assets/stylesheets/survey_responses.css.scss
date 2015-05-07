@@ -61,7 +61,6 @@
     padding-top: 20px;
   }
   h2 {
-    color: #808284;
     display: block;
     font-family: Georgia;
     font-size: 34px;
@@ -69,7 +68,6 @@
     font-weight: normal;
   }
   h4 {
-    color: #808284;
     display: block;
     font-family: Georgia;
     font-size: 22px;
@@ -99,15 +97,11 @@
   }
   form {
     .desc {
-      color: #808284;
       cursor: default;
       display: block;
       font-family: Georgia, serif;
       font-style: italic;
       font-weight: normal !important;
-    }
-    label {
-      color: #808284;
     }
     input:not([type=submit]) {
       border: 1px solid #ccc !important;
@@ -156,10 +150,10 @@
       height: 32px;
       min-width: 85px;
       padding: 0 9px;
-      display: block;
+      display: inline-block;
       cursor: pointer;
       width: 100px !important;
-      margin-top: 20px !important;
+      margin: 20px 15px 0 0 !important;
       &:hover {
         background: #f6f6f6;
       }
