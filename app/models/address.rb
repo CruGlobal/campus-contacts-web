@@ -9,7 +9,7 @@ class Address < ActiveRecord::Base
     if address_type.present?
       if person = Person.find_by_id(value.person_id)
         address = person.addresses.find_by_address_type(address_type)
-        if address.present? && (address.address1.present? && address.address1 == address1_value)
+        if address.present? && (address.address1.present? && address.address1 != address1_value)
           available_types = TYPES.values - person.addresses.pluck(:address_type)
           if available_types.present?
             # Select other types
