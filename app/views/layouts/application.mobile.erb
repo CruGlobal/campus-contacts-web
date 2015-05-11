@@ -1,7 +1,9 @@
-<% if mhub? %>
-  <!DOCTYPE html>
-  <html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
   <head>
+    <title><%= h(yield(:title) || "Cru") %></title>
+
     <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'plain' %>
     <% if @survey.present? %>
@@ -16,11 +18,15 @@
 
         <%= @survey.css if @survey.css.present? %>
       </style>
-
       <% if @survey.css_file_file_name.present? %>
         <link href="<%= @survey.css_file.url %>" media="screen" rel="stylesheet" type="text/css" />
       <% end %>
     <% end %>
+    <%= yield(:head) %>
+    <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
   </head>
   <body id="<%= controller.controller_name %>_controller">
     <%= render 'fb_init' %>
@@ -38,55 +44,10 @@
           </div>
         <% end %>
       <% end %>
-
       <div class="<%= params[:action] %>">
         <%= yield %>
       </div>
     </div>
+    <%= render 'google_analytics' %>
   </body>
-  </html>
-<% else %>
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-  <html>
-    <head>
-      <title><%= h(yield(:title) || "Cru") %></title>
-  		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
-
-      <%= stylesheet_link_tag 'mobile' %>
-
-      <%= yield(:head) %>
-      <script type="text/javascript">if (window.location.hash == '#_=_')window.location.hash = '';</script>
-
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-    </head>
-    <body>
-      <%= render 'fb_init' %>
-      <div date-role="page">
-        <%- unless params[:simple] == 'true' -%>
-          <div date-role="header">
-            <div class="current" id="home">
-
-                <div date-role="header" role="banner" data-backbtn="false">
-                <h1 class="ui-title" tabindex="0" role="heading"><%=h yield(:title) %></h1>
-                  <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
-                    <%= link_to(t('nav.logout'), sign_out_url(next: start_survey_url(cookies[:survey_id])), "date-role" => "button", rel: "external")  %>
-                  <% end %>
-                </div>
-            </div>
-          </div>
-        <%- end -%>
-        <div date-role="content">
-          <%= yield %>
-        </div>
-      </div>
-      <script src="http://code.jquery.com/jquery-1.9.1.min.js" ></script>
-      <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" ></script>
-      <%#= javascript_include_tag 'rails-validations' %>
-      <%#= javascript_include_tag 'mh' %>
-      <%= render 'google_analytics' %>
-    </body>
-  </html>
-<% end %>
+</html>
