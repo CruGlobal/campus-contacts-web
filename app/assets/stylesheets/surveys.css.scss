@@ -23,7 +23,7 @@ body.mass_entry {
         padding: 3px
       }
     }
-    
+
     .apply_label_to_all, .apply_label_to_new {
       margin: 0 5px;
       color: #888;
@@ -265,4 +265,8 @@ body.mass_entry {
   .bottomRightSelectionHandle {
     display: none !important;
   }
+}
+.advanced_options_question {
+  font-size: 18px;
+  margin-bottom: 10px;
 }
