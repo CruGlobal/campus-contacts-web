@@ -1364,6 +1364,7 @@ en:
       title: '%{name} - Answer Other Surveys'
     birth_date: What is your birth date?
     campus: Campus
+    city: City
     country: Country
     dorm: Dorm Building
     edit:
