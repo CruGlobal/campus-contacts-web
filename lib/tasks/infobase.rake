@@ -20,6 +20,7 @@ namespace :infobase do
       "GK" => "Greek",
       "VL" => "Valor",
       "SV" => "Cru",
+      "CHS" => "Cru",
       "OT" => "Other"
     }
 

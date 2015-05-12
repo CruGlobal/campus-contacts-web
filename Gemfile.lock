@@ -277,8 +277,6 @@ GEM
     mime-types (1.25.1)
     mini_fb (2.0.0)
       hashie
-      hashie
-      rest-client
       rest-client
     mini_portile (0.6.0)
     mocha (1.1.0)
