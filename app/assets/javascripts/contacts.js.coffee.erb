@@ -17,6 +17,20 @@ $ ->
         else $.fn.moveToCompleted ui.draggable  if $(this).hasClass("completed")
     $.fn.tip()
 
+  $(document).on 'click', '#hidden_questions_save_button', (e)->
+    e.preventDefault()
+    if $('.hidden_question_checkbox:checked').length > 0
+      $.hideDialog($("#hidden_questions_dialog"))
+      $.fn.filterLoader('show', "Displaying hidden questions")
+      selected_ids = $(".hidden_question_checkbox:checked").map ->
+        return $(this).val()
+      .get().join(",")
+      $.ajax
+        type: 'POST',
+        url: '/contacts/unhide_questions'
+        data:
+          question_ids: selected_ids
+
   $(document).on 'click', '#bulk_change_info_save_button', (e)->
     selected = $('.id_checkbox:checked')
     if selected.length > 1
@@ -856,24 +870,22 @@ $ ->
       $('#check_all').prop('checked', false)
     else
       $.a(t('contacts.index.none_checked'))
+
   $('#contacts_controller .index a.hide, #contacts_controller .all_contacts a.hide').live 'click', ->
     $(".field.user_defined#search_question_field_"+$(this).attr('data-id')).hide()
     $('#hidden_questions_div').hide()
     $('.' + $(this).attr('data-class')).hide()
     $('.doubleScroll-scroll').width($('.scroll_table table').width())
 
-  $('#hidden_questions_link').live 'click', (e)->
+  $(document).on 'click', '#hidden_questions_link', (e)->
     e.preventDefault
     $('#hidden_questions_div').show()
     $.showDialog($("#hidden_questions_dialog"))
-    if $('#hidden_questions_dialog').is(':visible')
-      $.ajax
-        type: 'GET',
-        url: '/show_hidden_questions'
-    else
-      $('#hidden_questions_div #hidden_questions_loader').show()
-      $('#hidden_questions_div #hidden_questions_content').html('')
-    false
+    $('#hidden_questions_div #hidden_questions_loader').show()
+    $('#hidden_questions_div #hidden_questions_content').html('')
+    $.ajax
+      type: 'GET',
+      url: '/show_hidden_questions'
 
   $("#search_clear_selected_labels").live "click", ->
     $(".search_label_checkbox").removeAttr("checked")

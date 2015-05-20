@@ -548,6 +548,35 @@ class ContactsController < ApplicationController
     render nothing: true
   end
 
+  def unhide_questions
+    @predefined_questions = current_organization.predefined_survey_questions
+    @selected_question_ids = params[:question_ids].split(",")
+
+    @selected_question_ids.each do |question_id|
+      if question_id == "visible_surveys_column"
+        current_organization.settings[:visible_surveys_column] = true
+        current_organization.save!
+      else
+        question_id = question_id.to_i
+        if @predefined_questions.collect(&:id).include?(question_id)
+    	    if @question = @predefined_questions.find(question_id)
+            settings = current_organization.settings
+            if settings[:visible_predefined_questions].nil?
+              settings[:visible_predefined_questions] = Array.new
+            end
+            settings[:visible_predefined_questions] << @question.id
+            current_organization.save(validate: false)
+          end
+        else
+          if survey_element = current_organization.survey_elements.where(element_id: question_id).first
+            survey_element.update_attributes(hidden: false)
+            @question = survey_element.element
+          end
+        end
+      end
+    end
+  end
+
   def unhide_question_column
   	@selected_survey_id = params[:survey_id].to_i
   	@selected_question_id = params[:question_id]

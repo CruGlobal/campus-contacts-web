@@ -564,3 +564,7 @@ input.text.validate-date {
 #existing_contacts_container{
   padding: 0px 10px;
 }
+#hidden_questions_list li {
+  list-style: none;
+  margin-left: -10px !important;
+}
