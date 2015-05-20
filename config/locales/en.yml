@@ -172,7 +172,7 @@ en:
       add_label_exists2: Label already exists in this organization!
       add_label_failed: Failed to save label. Please try again.
       add_label_success: New label successfully added!
-      add_question_back: Click on a question to add it back to the page
+      add_question_back: Select questions to add them back to the page
       all: All
       all_responses: All Contacts
       already_selected_an_existing_contact: You have already selected an existing contact. You cannot allow to change the email address of '%{name}'
@@ -285,8 +285,8 @@ en:
       vcard_email_content: Attached in this email is a vcard containing the contact you selected.
       vcard_email_subject: 'Contact information: %{name} from Mission Hub'
     menu:
-      add_question_back: Click on a question to add it back to the page
-      answered_surveys: Surveys
+      add_question_back: Select questions to add them back to the page
+      answered_surveys: Answered Surveys
       column_header_guide: Column headers are what appear in the All Contacts view. You can update column headers by editing specific survey questions as needed.
     mine:
       all: All

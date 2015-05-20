@@ -2,7 +2,8 @@
   <ul id="hidden_questions">
     <% if current_organization.settings[:visible_surveys_column] == false %>
 			<li>
-				<%= link_to(t('contacts.menu.answered_surveys'), unhide_question_column_contacts_path(survey_id: 0, question_id: 'visible_surveys_column'), method: :post, remote: true, class: 'show_hidden_question_link') %>
+        <%= check_box_tag :hidden_question, "visible_surveys_column", false, class: "hidden_question_checkbox" %>
+        <%= t('contacts.menu.answered_surveys') %>
 			</li>
 		<% end %>
     <%= render partial: 'contacts/hidden_question', collection: @hidden_questions %>

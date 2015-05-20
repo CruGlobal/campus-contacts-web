@@ -301,6 +301,7 @@ Mh::Application.routes.draw do
   match "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
   resources :contacts do
     collection do
+      post :unhide_questions
       get :filter
       get :update_advanced_search_surveys
       post :bulk_update
