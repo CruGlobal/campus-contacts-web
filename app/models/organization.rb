@@ -337,7 +337,7 @@ class Organization < ActiveRecord::Base
   def to_s() name; end
 
   def parent_organization
-    @parent_organization ||= Organization.find(ancestry.split('/').last) if ancestry.present?
+    Organization.find(ancestry.split('/').last) if ancestry.present?
   end
 
   def parent_organization=(new_parent)
