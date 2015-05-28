@@ -79,7 +79,7 @@ class QuestionSet
                         PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
                       end
                     elsif answer.present?
-                      unless !answer.auto_notify_sent?
+                      unless answer.auto_notify_sent?
                         PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
                         answer.update_attributes(auto_notify_sent: true)
                       end
