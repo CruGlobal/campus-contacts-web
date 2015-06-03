@@ -49,7 +49,13 @@ class User < ActiveRecord::Base
       if person.present?
         user = person.user
         unless user
-          user = create!(username: username, password: Devise.friendly_token[0,20])
+          begin
+            user = User.where(username: username).first_or_initialize
+            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.save
+          rescue ActiveRecord::RecordNotUnique
+            retry
+          end
         end
       else
         raise NotAllowedToUseCASError
