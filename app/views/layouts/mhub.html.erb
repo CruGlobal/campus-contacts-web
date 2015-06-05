@@ -9,7 +9,7 @@
         body {background: <%= '#' unless @survey.background_color.first == '#' %><%= @survey.background_color %>}
       <% end %>
 
-      <% if @survey.background_color.present? %>
+      <% if @survey.text_color.present? %>
         body {color: <%= '#' unless @survey.text_color.first == '#' %><%= @survey.text_color %>}
       <% end %>
 
