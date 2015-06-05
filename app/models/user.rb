@@ -74,7 +74,15 @@ class User < ActiveRecord::Base
       person = Person.find_existing_person_by_email(email)
       if person.present?
         user = person.user
-        user = create!(username: email, password: Devise.friendly_token[0,20]) unless user
+        unless user
+          begin
+            user = User.where(username: email).first_or_initialize
+            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.save
+          rescue ActiveRecord::RecordNotUnique
+            retry
+          end
+        end
       else
         raise NotAllowedToUseKeyError
       end
@@ -133,7 +141,9 @@ class User < ActiveRecord::Base
         # If all else fails, create a user
         unless user
           begin
-            user = create!(username: data["email"], password: Devise.friendly_token[0,20])
+            user = User.where(username: data["email"]).first_or_initialize
+            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.save
           rescue
             sleep(1)
             user = find_by_username(data['email'])
