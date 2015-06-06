@@ -20,9 +20,11 @@
                 <% current_organization.surveys.each do |survey| %>
                   <li>
                     <div>
-                      <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : "" %>
+                      <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : nil %>
                       <%- protocol = Rails.env.development? ? 'http' : 'https' %>
-                      <%= link_to(t('nav.use_keyword', keyword: survey.title), start_survey_url(survey, host: port, protocol: protocol), id: 'select_keyword', class: "signout_fb")%>
+                      <%= link_to start_survey_url(survey, host: APP_CONFIG['public_host'], port: port, protocol: protocol), id: 'select_keyword', class: "signout_fb" do %>
+                        <%= t('nav.use_keyword', keyword: survey.title) %>
+                      <%- end %>
                     </div>
                   </li>
                 <% end %>
