@@ -1,4 +1,3 @@
-<%- protocol = Rails.env.development? ? 'http' : 'https' %>
 <div id="globalNav">
 	<% unless user_signed_in? %>
 	<div id="logo_container">&nbsp;</div>
@@ -19,7 +18,15 @@
               <% end %>
               <ul class="survey_listing">
                 <% current_organization.surveys.each do |survey| %>
-                  <li><div><%= link_to(t('nav.use_keyword', keyword: survey.title), start_survey_url(survey, host: APP_CONFIG['public_host'], protocol: protocol), id: 'select_keyword', class: "signout_fb")%></div></li>
+                  <li>
+                    <div>
+                      <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : nil %>
+                      <%- protocol = Rails.env.development? ? 'http' : 'https' %>
+                      <%= link_to start_survey_url(survey, host: APP_CONFIG['public_host'], port: port, protocol: protocol), id: 'select_keyword', class: "signout_fb" do %>
+                        <%= t('nav.use_keyword', keyword: survey.title) %>
+                      <%- end %>
+                    </div>
+                  </li>
                 <% end %>
                 <% if cookies[:survey_mode].present? %>
                   <li>

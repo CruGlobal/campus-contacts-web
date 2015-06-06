@@ -2,24 +2,55 @@
   <div id="ac_sidebar">
     <div id="upper_sidebar_lists">
     <% if @survey.present? %>
-      <%= link_to raw("<button class='red_accent full_width_button'>#{t('nav.all_surveys')}  (#{current_organization.surveys.count})</button>"), index_admin_surveys_path %>
+
+      <%= link_to index_admin_surveys_path do %>
+        <button class='red_accent full_width_button'>
+          <%= "#{t('nav.all_surveys')}  (#{current_organization.surveys.count})" %>
+        </button>
+      <%- end %>
+
       <% unless @survey.new_record? %>
-         <!-- Buttons for Edit Survey page -->
-        <%= link_to raw("<button class='action_gray full_width_button'>#{t('surveys.index_admin.preview_survey')}</button>"),
-          new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']),
-          target: "_blank" %>
-        <%= link_to raw("<button class='action_gray full_width_button'>#{t('surveys.index_admin.delete_survey')}</button>"),
-          survey_path(@survey), method: :delete, confirm: t('surveys.index_admin.confirm_delete_survey') %>
+        <!-- Buttons for Edit Survey page -->
+
+        <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : "" %>
+        <%- protocol = Rails.env.development? ? 'http' : 'https' %>
+        <%= link_to new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: port, protocol: protocol), target: "_blank" do %>
+          <button class='action_gray full_width_button'>
+            <%= "#{t('surveys.index_admin.preview_survey')}" %>
+          </button>
+        <%- end %>
+
+        <%= link_to survey_path(@survey), method: :delete, confirm: t('surveys.index_admin.confirm_delete_survey') do %>
+          <button class='action_gray full_width_button'>
+            <%= "#{t('surveys.index_admin.delete_survey')}" %>
+          </button>
+        <%- end %>
+
       <% else %>
+
          <!-- Buttons for New Survey page -->
-         <%= link_to raw("<button class='action_gray full_width_button'>#{t('sms_keywords.index.request_keyword')}</button>"),
-            new_sms_keyword_path %>
+         <%= link_to new_sms_keyword_path do %>
+           <button class='action_gray full_width_button'>
+             <%= "#{t('sms_keywords.index.request_keyword')}" %>
+           </button>
+         <%- end %>
+
       <% end %>
     <% else %>
+
        <!-- Buttons For Surveys List-->
-      <%= link_to raw("<button class='red_accent full_width_button'>#{t('nav.create_a_survey')}</button>"), new_survey_path %>
-      <%= link_to raw("<button class='action_gray full_width_button'>#{t('sms_keywords.index.request_keyword')}</button>"),
-          new_sms_keyword_path %>
+      <%= link_to new_survey_path do %>
+        <button class='red_accent full_width_button'>
+          <%= "#{t('nav.create_a_survey')}" %>
+        </button>
+      <%- end %>
+
+      <%= link_to new_sms_keyword_path do %>
+        <button class='action_gray full_width_button'>
+          <%= "#{t('sms_keywords.index.request_keyword')}" %>
+        </button>
+      <%- end %>
+
     <% end %>
     </div>
   </div>
