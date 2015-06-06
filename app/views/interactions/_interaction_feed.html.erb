@@ -1,5 +1,5 @@
 <div class="feed_box interaction_display interaction_feed" id="interaction_feed_<%= interaction.id %>">
-  <% unless interaction.comment_only? || interaction.icon.blank? %>
+  <% unless interaction.icon.blank? %>
     <div class="feed_icon"><%= image_tag(interaction.icon, class: "tip", title: interaction.type) %></div>
   <% end %>
 	<div class="feed_item_header">
