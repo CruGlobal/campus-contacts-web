@@ -4,9 +4,9 @@
     window.fbAsyncInit = function() {
     FB.init({
       <% if mhub? %>
-        appId      : '<%= APP_CONFIG['fb_app_id_mhub'] %>', // App ID
+        appId      : '<%= ENV.fetch('FB_APP_ID_MHUB') %>', // App ID
       <% else %>
-        appId      : '<%= APP_CONFIG['fb_app_id'] %>', // App ID
+        appId      : '<%= ENV.fetch('FB_APP_ID') %>', // App ID
       <% end %>
       version    : 'v2.2'
       channelURL : '//<%= request.host_with_port %>/channel.html', // Channel File

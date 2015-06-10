@@ -12,7 +12,7 @@
       <% unless @survey.new_record? %>
         <!-- Buttons for Edit Survey page -->
 
-        <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : "" %>
+        <%- port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : "" %>
         <%- protocol = Rails.env.development? ? 'http' : 'https' %>
         <%= link_to new_survey_response_url(preview: 'true', survey_id: @survey.id, port: port, protocol: protocol) do %>
           <button class='action_gray full_width_button'>

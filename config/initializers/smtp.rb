@@ -1,10 +1,10 @@
 require Rails.root.join('config','initializers','load_config').to_s
 ActionMailer::Base.smtp_settings = {
-  :user_name => APP_CONFIG['smtp_user_name'],
-  :password => APP_CONFIG['smtp_password'],
+  :user_name => ENV.fetch('SMTP_USER_NAME'),
+  :password => ENV.fetch('SMTP_PASSWORD'),
   :domain => "missionhub.com",
-  :address => APP_CONFIG['smtp_address'],
-  :authentication => (APP_CONFIG['smtp_authentication'] || :none),
-  :enable_starttls_auto => (APP_CONFIG['smtp_enable_starttls_auto']),
-  :port => APP_CONFIG['smtp_port'] || 25
+  :address => ENV.fetch('SMTP_ADDRESS'),
+  :authentication => (ENV['SMTP_AUTHENTICATION'] || :none),
+  :enable_starttls_auto => (ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO')),
+  :port => ENV['SMTP_PORT'] || 25
 }

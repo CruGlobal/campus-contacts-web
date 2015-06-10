@@ -9,7 +9,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     FactoryGirl.create(:approved_keyword, organization: @org, user: @user)
     @survey = @org.surveys.first
     @predefined_survey = FactoryGirl.create(:survey, organization: @org)
-    APP_CONFIG['predefined_survey'] = @predefined_survey.id
+    ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
 
   end
 

@@ -4,7 +4,7 @@
   <ul>
     <% @surveys.each do |survey| %>
       <li>
-        <%= link_to(survey, start_survey_url(survey.id, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])) %>
+        <%= link_to(survey, start_survey_url(survey.id, host: ENV.fetch('PUBLIC_HOST'), port: ENV.fetch('PUBLIC_PORT'))) %>
       </li>
     <% end %>
   </ul>

@@ -6,7 +6,7 @@
   <% end %>
   <td><%= link_to(survey.keyword, edit_sms_keyword_path(survey.keyword)) if survey.keyword %></td>
   <td>
-    <%= link_to(short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: protocol), short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: protocol), target: '_blank')%>
+    <%= link_to(short_survey_url(survey.id, host: ENV.fetch('PUBLIC_HOST'), port: (ENV.fetch('PUBLIC_PORT') == 80 ? nil : ENV.fetch('PUBLIC_PORT')), protocol: protocol), short_survey_url(survey.id, host: ENV.fetch('PUBLIC_HOST'), port: (ENV.fetch('PUBLIC_PORT') == 80 ? nil : ENV.fetch('PUBLIC_PORT')), protocol: protocol), target: '_blank')%>
   </td>
   <td class="controls" align="right">
     <%= link_to t("welcome.home.manage_questions"), survey_questions_path(survey) %>

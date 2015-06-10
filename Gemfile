@@ -1,6 +1,9 @@
 source 'http://rubygems.org'
+source 'https://gems.contribsys.com/' do
+  gem 'sidekiq-pro'
+end
 
-gem 'rails', '4.2.0' #'~> 3.2.15'
+gem 'rails', '4.2.0'
 gem 'default_value_for'#, '~> 2.0.3'
 gem 'devise', '3.5.1'#, '~> 2.1.0' #, git: 'http://github.com/plataformatec/devise.git'
 gem 'paperclip', '4.2.1'
@@ -18,11 +21,9 @@ gem 'bluepill'#, '0.0.60', require: false
 gem 'cancancan'#, '~> 1.6.10'
 gem 'capistrano'#, '~> 3.0.0'
 gem 'carmen', git: 'http://github.com/twinge/carmen.git'
-# gem 'client_side_validations'#, '~> 3.2.6'
 gem 'client_side_validations', github: 'DavyJonesLocker/client_side_validations', branch: '4-2-stable'
-gem 'copycopter_client'#, '~> 2.0.1'
+
 gem 'crack'#, '~> 0.3.2'
-gem 'dalli'#, '~> 2.6.4'
 gem 'deadlock_retry'#, '~> 1.2.0'
 gem 'delegate_presenter'#, '~> 0.0.2'
 gem 'dynamic_form'#, '~> 1.1.4'
@@ -31,8 +32,7 @@ gem 'foreigner'#, '~> 1.5.0'
 gem 'http_accept_language'#, '~> 2.0.0'
 gem 'i18n-js' #, git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'kaminari'#, '~> 0.14.1'
-# gem 'libv8', '3.11.8.17'#, '3.16.14.7'#, '=3.11.8.17'
-# gem 'libv8', git: 'git://github.com/cowboyd/libv8.git', submodules: true
+
 gem 'mini_fb'#, '~> 2.0.0'
 gem 'mysql2'#, '~> 0.3.11'
 gem 'newrelic_rpm'#, '>= 3.5.3.25'
@@ -42,22 +42,21 @@ gem 'omniauth'#, '~> 1.1.1'
 gem 'omniauth-cas'
 gem 'omniauth-facebook'
 gem 'paper_trail'#, '~> 2.7.2'
-gem 'rack-offline'#, '~> 0.6.4'
-gem 'rails_autolink'#, '~> 1.1.4'
-gem 'redis'#, '~> 3.0.5'
-gem 'sidekiq'#, '~> 2.15.2'
+gem 'puma'
+gem 'rack-offline', '~> 0.6.4'
+gem 'rails_autolink', '~> 1.1.4'
+gem 'redis', '~> 3.0.5'
+gem 'redis-rails'
+gem 'redis-namespace'
+gem 'sidekiq-unique-jobs'
 gem 'sidekiq-failures'#, '~> 0.3.0'
-gem 'sinatra', :require => nil#, '>= 1.3.0'
-gem 'rest-client'#, '~> 1.6.7'
+gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'rest-client'#, '~> 1.6.7'                                     # to make FB api requests
 gem 'retryable-rb'#, '~> 1.1.0'
-gem 'trumant-rack-oauth2-server',
-  git: 'http://github.com/twinge/rack-oauth2-server.git',
-  branch: 'active_record'
-gem 'twilio-rb' #, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
-gem 'unicorn'#, '~> 4.6.3'
-# gem 'valium'#, '~> 0.5.0'
+gem 'trumant-rack-oauth2-server', git: 'http://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
+gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
 gem 'versionist'#, '~> 1.0.0'
-gem 'vpim', git: 'http://github.com/twinge/vpim.git'
+gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'#, '~> 0.8.4'
 gem 'wiser_date'#, '~> 0.3.0'
 gem 'wiser_timezone'#, '~> 0.1.9'
@@ -66,18 +65,17 @@ gem 'multi_json'#, '~> 1.8.2'
 gem 'sp_client'#, '~> 1.0.3'
 gem 'responders', '~> 2.0'
 gem 'protected_attributes'
-
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'guard'#, '~> 1.8.2'
   gem 'guard-minitest'
-  # gem 'guard-test'#, '~> 1.0.0'
   gem 'awesome_print'#, '~> 1.2.0'
   gem 'quiet_assets'#, '~> 1.0.2'
 end
 
 group :test do
   gem 'minitest-rails'
-  # gem 'minitest-spec-rails'
+
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl_rails'#,'~> 2.0.0.rc4'
   gem 'simplecov', require: false#, '>= 0.3.5'
@@ -101,7 +99,7 @@ group :performance do
 end
 
 # Assets
-gem 'therubyracer'
+  gem 'execjs'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-script'#, '~> 2.2.0'

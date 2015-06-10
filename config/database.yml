@@ -1,0 +1,30 @@
+development: &dev
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  pool: <%= ENV['DB_ENV_MYSQL_POOL'] || 25 %>
+  database: <%= ENV['DB_ENV_MYSQL_DB'] || 'missionhub' %>
+  username: <%= ENV.fetch('DB_ENV_MYSQL_USER') %>
+  password: <%= ENV.fetch('DB_ENV_MYSQL_PASS') %>
+  host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') %>
+
+production:
+  <<: *dev
+
+staging:
+  <<: *dev
+
+peoplesoft:
+  <<: *dev
+
+simpd:
+  <<: *dev
+  database: simpd
+
+uscm:
+  <<: *dev
+  database: prod
+
+test:
+  <<: *dev
+  database: <%= ENV['DB_ENV_MYSQL_DB_TEST'] || 'missionhub_test' %>

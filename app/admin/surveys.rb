@@ -17,7 +17,7 @@ ActiveAdmin.register Survey do
     column :organization
     column :terminology
     column "Link" do |survey|
-      short_url = short_survey_url(survey.id, host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']), protocol: 'http')
+      short_url = short_survey_url(survey.id, host: ENV.fetch('PUBLIC_HOST'), port: (ENV.fetch('PUBLIC_PORT') == 80 ? nil : ENV.fetch('PUBLIC_PORT')), protocol: 'http')
       link_to(short_url, short_url, target: '_blank')
     end
     column "Actions" do |survey|

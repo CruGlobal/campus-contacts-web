@@ -509,7 +509,7 @@ class ContactsController < ApplicationController
   def show_hidden_questions
     @organization = current_organization
     @all_questions = @organization.questions
-    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    @predefined_survey = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
     @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
     @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq

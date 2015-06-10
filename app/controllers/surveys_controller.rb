@@ -297,7 +297,7 @@ class SurveysController < ApplicationController
   def start
     protocol = Rails.env.development? ? 'http' : 'https'
     unless mhub? #|| Rails.env.test?
-      redirect_to start_survey_url(@survey, protocol: protocol, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port'])
+      redirect_to start_survey_url(@survey, protocol: protocol, host: ENV.fetch('PUBLIC_HOST'), port: ENV.fetch('PUBLIC_PORT'))
       return false
     end
     cookies[:survey_mode] = "1"

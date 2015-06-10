@@ -133,7 +133,7 @@ class Import < ActiveRecord::Base
     person.save
 
     unless @surveys_for_import
-      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [APP_CONFIG['predefined_survey']]
+      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [ENV.fetch('PREDEFINED_SURVEY')]
       @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
     end
 
@@ -149,7 +149,7 @@ class Import < ActiveRecord::Base
 		new_phone_numbers = []
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person: person)
-    predefined = Survey.find(APP_CONFIG['predefined_survey'])
+    predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     predefined.elements.where('object_name is not null').each do |question|
     	answer = row[:answers][question.id]
     	if answer.present?

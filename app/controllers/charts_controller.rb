@@ -299,7 +299,7 @@ class ChartsController < ApplicationController
     }
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+      resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json = JSON.parse(resp)
     rescue
       raise resp.inspect
@@ -318,7 +318,7 @@ class ChartsController < ApplicationController
     }
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+      resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json = JSON.parse(resp)
     rescue
       raise resp.inspect
@@ -365,7 +365,7 @@ class ChartsController < ApplicationController
 
     if MovementIndicator.all.include?(@current_criteria)
       begin
-        resp = RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+        resp = RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
         json = JSON.parse(resp)
       rescue
         raise resp.inspect
@@ -450,7 +450,7 @@ class ChartsController < ApplicationController
       }
 
       begin
-        resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+        resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
         json = JSON.parse(resp)
       rescue
         raise resp.inspect
@@ -497,7 +497,7 @@ class ChartsController < ApplicationController
         }
 
         begin
-          resp = RestClient.post(APP_CONFIG['infobase_url'] + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+          resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
           json = JSON.parse(resp)
         rescue
           raise resp.inspect

@@ -9,10 +9,10 @@ class SurveyResponsesController < ApplicationController
 
   def new
     unless mhub? || Rails.env.test?
-      port = Rails.env.development? ? APP_CONFIG['public_port'] : ""
+      port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : ""
       protocol = Rails.env.development? ? 'http' : 'https'
 
-      redirect_to new_survey_response_url(survey_id: params[:survey_id], preview: params[:preview], host: APP_CONFIG['public_host'], protocol: protocol, port: port)
+      redirect_to new_survey_response_url(survey_id: params[:survey_id], preview: params[:preview], host: ENV.fetch('PUBLIC_HOST'), protocol: protocol, port: port)
       return false
     end
 

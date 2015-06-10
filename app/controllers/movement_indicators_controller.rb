@@ -1,7 +1,7 @@
 class MovementIndicatorsController < ApplicationController
   def index
     begin
-      resp = RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{current_organization.importable_id}&begin_date=#{Date.today - 3.years}&end_date=#{Date.today}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+      resp = RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{current_organization.importable_id}&begin_date=#{Date.today - 3.years}&end_date=#{Date.today}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json = JSON.parse(resp)
     rescue
       if resp.present?

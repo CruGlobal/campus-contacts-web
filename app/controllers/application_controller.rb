@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
   end
 
   def mhub?
-    @mhub = request.host.include?(APP_CONFIG['public_host'] || 'mhub') if @mhub.nil?
+    @mhub = request.host.include?(ENV['PUBLIC_HOST'] || 'mhub') if @mhub.nil?
     @mhub
   end
   helper_method :mhub?
@@ -471,7 +471,7 @@ class ApplicationController < ActionController::Base
     @surveys = @organization.surveys
     @all_questions = @organization.questions
     excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
-    @predefined_survey = Survey.find(APP_CONFIG['predefined_survey'])
+    @predefined_survey = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
     @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
   end

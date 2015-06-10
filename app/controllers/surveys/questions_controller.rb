@@ -180,7 +180,7 @@ class Surveys::QuestionsController < ApplicationController
     end
 
     def get_predefined
-      @predefined = Survey.find(APP_CONFIG['predefined_survey'])
+      @predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     end
 
     def get_leaders

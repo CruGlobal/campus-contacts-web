@@ -103,9 +103,9 @@ class SentSms < ActiveRecord::Base
 
   def to_smseco
     result = true
-    url = APP_CONFIG['smseco_url']
-    login = APP_CONFIG['smseco_username']
-    password = APP_CONFIG['smseco_password']
+    url = ENV.fetch('SMSECO_URL')
+    login = ENV.fetch('SMSECO_USERNAME')
+    password = ENV.fetch('SMSECO_PASSWORD')
     numero = recipient
     expediteur = "0"
 
@@ -181,9 +181,9 @@ class SentSms < ActiveRecord::Base
     when 'smseco'
       return to_smseco
     when 'bulksms'
-      return to_bulksms(APP_CONFIG['bulksms_url'], APP_CONFIG['bulksms_username'], APP_CONFIG['bulksms_password'])
+      return to_bulksms(ENV.fetch('BULKSMS_URL'), ENV.fetch('BULKSMS_USERNAME'), ENV.fetch('BULKSMS_PASSWORD'))
     when 'bulksms1'
-      return to_bulksms(APP_CONFIG['bulksms_url1'], APP_CONFIG['bulksms_username1'], APP_CONFIG['bulksms_password1'])
+      return to_bulksms(ENV.fetch('BULKSMS_URL1'), ENV.fetch('BULKSMS_USERNAME1'), ENV.fetch('BULKSMS_PASSWORD1'))
     else
       # Twilio
       if received_sms

@@ -1,3 +1,3 @@
 Twilio::Config.setup \
-  :account_sid  => APP_CONFIG['twilio_id'],
-  :auth_token   => APP_CONFIG['twilio_token']
+  :account_sid  => ENV.fetch('TWILIO_ID'),
+  :auth_token   => ENV.fetch('TWILIO_TOKEN')

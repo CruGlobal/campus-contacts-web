@@ -1,6 +1,6 @@
 require 'summer_project'
 
 SummerProject.configure do |config|
-  config.access_token = APP_CONFIG['summer_project_token']
-  config.base_url = APP_CONFIG['summer_project_url']
+  config.access_token = ENV.fetch('SUMMER_PROJECT_TOKEN')
+  config.base_url = ENV.fetch('SUMMER_PROJECT_URL')
 end

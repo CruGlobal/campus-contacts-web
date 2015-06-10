@@ -1,6 +1,6 @@
 class RemoveDuplicatePredefinedQuestions < ActiveRecord::Migration
   def up
-    survey = Survey.where(id: APP_CONFIG['predefined_survey']).first
+    survey = Survey.find_by_id(ENV.fetch('PREDEFINED_SURVEY'))
     if survey.present?
       duplicate = 0
       puts "Start Migration: Remove Duplicate Predefined Questions"

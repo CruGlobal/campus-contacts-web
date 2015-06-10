@@ -26,13 +26,6 @@ Mh::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
-  if File.exist?(Rails.root.join('config','memcached.yml'))
-    cache_servers = YAML.load_file(Rails.root.join('config','memcached.yml'))[Rails.env]['host']
-  else
-    cache_servers = ['10.180.4.101', '10.180.4.111']
-  end
-
-  config.cache_store = :dalli_store, cache_servers,  { :namespace => 'MissionHubCache', :expire_after => 1.day, :compress => true }
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this

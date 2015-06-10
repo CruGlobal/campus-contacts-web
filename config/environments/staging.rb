@@ -69,17 +69,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Old config
-
-  if File.exist?(Rails.root.join('config','memcached.yml'))
-    cache_servers = YAML.load_file(Rails.root.join('config','memcached.yml'))[Rails.env]['host']
-  else
-    cache_servers = ['127.0.0.1']
-  end
-
-  config.cache_store = :dalli_store, cache_servers, { :namespace => 'MissionHubStagingCache', :expire_after => 1.day, :compress => true }
-
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
   config.serve_static_files = false

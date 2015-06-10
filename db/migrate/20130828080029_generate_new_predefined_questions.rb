@@ -9,13 +9,13 @@ class GenerateNewPredefinedQuestions < ActiveRecord::Migration
     # Connect faculty to predefined questions
     faculty_question = Element.where(attribute_name: 'faculty').first
     if faculty_question.present?
-      SurveyElement.create(survey_id: APP_CONFIG['predefined_survey'], element_id: faculty_question.id)
+      SurveyElement.create(survey_id: ENV.fetch('PREDEFINED_SURVEY'), element_id: faculty_question.id)
     end
 
     # Connect nationality to predefined questions
     nationality_question = Element.where(attribute_name: 'nationality').first
     if nationality_question.present?
-      SurveyElement.create(survey_id: APP_CONFIG['predefined_survey'], element_id: nationality_question.id)
+      SurveyElement.create(survey_id: ENV.fetch('PREDEFINED_SURVEY'), element_id: nationality_question.id)
     end
 
   end
@@ -25,7 +25,7 @@ class GenerateNewPredefinedQuestions < ActiveRecord::Migration
     elements = Element.where("attribute_name IN (?)", ['faculty','nationality'])
 
     # Clean survey elements
-    SurveyElement.where(survey_id: APP_CONFIG['predefined_survey'], element_id: elements.collect(&:id)).delete_all
+    SurveyElement.where(survey_id: ENV.fetch('PREDEFINED_SURVEY'), element_id: elements.collect(&:id)).delete_all
 
     # Clean elements
     elements.delete_all

@@ -1,4 +1,7 @@
-redis_config = YAML.load_file(Rails.root.join('config','redis.yml'))
-server, port = redis_config[Rails.env].split(':')
 
-$redis = Redis.new(:host => server, :port => port)
+require 'redis'
+require 'redis/namespace'
+
+redis_config = YAML.load(ERB.new(File.read(Rails.root.join('config', 'redis.yml').to_s)).result)
+host, port = redis_config[Rails.env].split(':')
+Redis.current = Redis::Namespace.new("infobase:#{Rails.env}", redis: Redis.new(host: host, port: port))

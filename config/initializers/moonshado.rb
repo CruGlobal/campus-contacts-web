@@ -1,3 +1,3 @@
 require Rails.root.join('lib', 'moonshado-mass', 'moonshado-mass')
-SMS = Moonshado::Sms.new(APP_CONFIG['sms_short_code'], APP_CONFIG['sms_api_key'], APP_CONFIG['sms_default_keyword'], APP_CONFIG['sms_enabled'])
+SMS = Moonshado::Sms.new(ENV.fetch('SMS_SHORT_CODE'), ENV.fetch('SMS_API_KEY'), ENV.fetch('SMS_DEFAULT_KEYWORD'), ENV.fetch('SMS_ENABLED'))
 SMS.logger = Rails.logger

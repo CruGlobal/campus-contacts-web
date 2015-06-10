@@ -12,7 +12,7 @@
 <div id="ac_button_bar">
 	<ul class="button_bar">
 		<li class="inlinehelp">
-      <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, protocol: 'https', host: APP_CONFIG['public_host'], port: (APP_CONFIG['public_port'] == 80 ? nil : APP_CONFIG['public_port']))) %>
+      <%= t('general.survey_web_tip_html', link: short_survey_url(@survey.id, protocol: 'https', host: ENV.fetch('PUBLIC_HOST'), port: (ENV.fetch('PUBLIC_PORT') == 80 ? nil : ENV.fetch('PUBLIC_PORT')))) %>
 		</li>
 	</ul>
 </div>

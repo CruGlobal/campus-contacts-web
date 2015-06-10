@@ -121,7 +121,7 @@ class Organization < ActiveRecord::Base
   end
 
   def is_power_to_change?
-    has_parent?(APP_CONFIG['power_to_change_org_id'])
+    has_parent?(ENV.fetch('POWER_TO_CHANGE_ORG_ID'))
   end
 
   def is_bridge?
@@ -248,7 +248,7 @@ class Organization < ActiveRecord::Base
     json = {statistics: periods}.to_json
 
     begin
-      resp = RestClient.post(APP_CONFIG['infobase_url'] + '/statistics', json, content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}")
+      resp = RestClient.post(ENV.fetch('INFOBASE_URL') + '/statistics', json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json_resp = JSON.parse(resp)
     rescue
       return false
@@ -260,7 +260,7 @@ class Organization < ActiveRecord::Base
   def last_push_to_infobase
     # check infobase for a stat entry
     begin
-      stats = JSON.parse(RestClient.get(APP_CONFIG['infobase_url'] + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{APP_CONFIG['infobase_token']}"))
+      stats = JSON.parse(RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}"))
       @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
       update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
     rescue
@@ -288,13 +288,13 @@ class Organization < ActiveRecord::Base
     ancestors.reverse.each do |org|
       return org.settings[:sms_gateway] if org.settings[:sms_gateway].present?
     end
-    if APP_CONFIG['bulksms_gateway_orgs'].present? && APP_CONFIG['bulksms_gateway_orgs'].include?(id)
+    if ENV['BULKSMS_GATEWAY_ORGS'].present? && ENV['BULKSMS_GATEWAY_ORGS'].include?(id)
       return 'bulksms'
-    elsif APP_CONFIG['bulksms_gateway_orgs1'].present? && APP_CONFIG['bulksms_gateway_orgs1'].include?(id)
+    elsif ENV['BULKSMS_GATEWAY_ORGS1'].present? && ENV['BULKSMS_GATEWAY_ORGS1'].include?(id)
       return 'bulksms1'
-    elsif APP_CONFIG['smseco_gateway_orgs'].present? && APP_CONFIG['smseco_gateway_orgs'].include?(id)
+    elsif ENV['SMSECO_GATEWAY_ORGS'].present? && ENV['SMSECO_GATEWAY_ORGS'].include?(id)
       return 'smseco'
-    elsif has_parent?(APP_CONFIG['power_to_change_org_id'])
+    elsif has_parent?(ENV.fetch('POWER_TO_CHANGE_ORG_ID'))
       return 'twilio_power2change'
     else
       return 'twilio'
@@ -302,11 +302,11 @@ class Organization < ActiveRecord::Base
   end
 
   def sms_code
-    has_parent?(APP_CONFIG['power_to_change_org_id']) ? SmsKeyword::LONG_POWER2CHANGE : SmsKeyword::SHORT
+    has_parent?(ENV.fetch('POWER_TO_CHANGE_ORG_ID')) ? SmsKeyword::LONG_POWER2CHANGE : SmsKeyword::SHORT
   end
 
   def predefined_survey_questions
-    questions = Survey.find(APP_CONFIG['predefined_survey']).questions
+    questions = Survey.find(ENV.fetch('PREDEFINED_SURVEY')).questions
     if is_bridge? #bridges
       return questions.where("attribute_name <> 'faculty'")
     elsif has_parent?(1) #cru

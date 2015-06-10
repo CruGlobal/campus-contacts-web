@@ -256,9 +256,9 @@ class Question < Element
   end
 
   def shorten_link(id)
-    host = APP_CONFIG['bitly_host'] || 'www.missionhub.com'
-    port = APP_CONFIG['bitly_port'] || 80
-    url = Rails.application.routes.url_helpers.person_url(id, url, host: host , port: port , only_path: false)
+    host = ENV['BITLY_HOST'] || 'www.missionhub.com'
+    port = ENV['BITLY_PORT'] || 80
+    url = Rails.application.routes.url_helpers.person_url(id, url, host: host , port: port, only_path: false)
     short_profile_link = Bitly.client.shorten(url).short_url
   end
 

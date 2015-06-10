@@ -17,7 +17,7 @@ class SmsControllerTest < ActionController::TestCase
       @q3 = FactoryGirl.create(:survey_element, survey: @survey, element: element, position: 3)
 
       @phone_number = '16304182108'
-      @post_params = {message: @keyword.keyword, device_address: @phone_number, phone_number: @phone_number, inbound_address: APP_CONFIG['sms_short_code'], country: 'US', carrier: @carrier.moonshado_name}
+      @post_params = {message: @keyword.keyword, device_address: @phone_number, phone_number: @phone_number, inbound_address: ENV.fetch('SMS_SHORT_CODE'), country: 'US', carrier: @carrier.moonshado_name}
     end
 
     context "from a known carrier" do
@@ -34,7 +34,7 @@ class SmsControllerTest < ActionController::TestCase
         @person = FactoryGirl.build(:person_without_name)
         @person.save(validate: false)
         @sms_session = FactoryGirl.create(:sms_session, person: @person, sms_keyword: @keyword, phone_number: @phone_number)
-        @sms_params = @post_params.slice(:message, :carrier, :country).merge(phone_number: @phone_number, shortcode: APP_CONFIG['sms_short_code'], sms_keyword_id: @keyword.id, person: @person)
+        @sms_params = @post_params.slice(:message, :carrier, :country).merge(phone_number: @phone_number, shortcode: ENV.fetch('SMS_SHORT_CODE'), sms_keyword_id: @keyword.id, person: @person)
         @person2 = FactoryGirl.create(:person, email: "person2@email.com") #existing email
       end
 
