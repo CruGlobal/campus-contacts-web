@@ -6,6 +6,7 @@
   <% else %>
     <%= error_messages_for person %>
   <% end %>
+  <%= hidden_field_tag :preview, params[:preview] %>
   <%= hidden_field_tag :survey_id, @survey.id %>
   <%= hidden_field_tag :received_sms_id, params[:received_sms_id] if params[:received_sms_id] %>
   <%= hidden_field_tag :button, false if mobile_device? %>

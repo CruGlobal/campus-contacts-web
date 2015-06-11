@@ -9,14 +9,16 @@ class SurveyResponsesController < ApplicationController
 
   def new
     unless mhub? || Rails.env.test?
+      port = Rails.env.development? ? APP_CONFIG['public_port'] : ""
       protocol = Rails.env.development? ? 'http' : 'https'
-      redirect_to new_survey_response_url(params.merge(protocol: protocol, host: APP_CONFIG['public_host'], port: APP_CONFIG['public_port']))
+
+      redirect_to new_survey_response_url(survey_id: params[:survey_id], preview: params[:preview], host: APP_CONFIG['public_host'], protocol: protocol, port: port)
       return false
     end
 
     # If they haven't skipped facebook already, send them to the login page
     # Also skip login if we're in survey mode
-    unless params[:nologin] == 'true' || (@sms && @sms.sms_keyword.survey.login_option == Survey::NO_LOGIN)
+    unless params[:preview] == 'true' || params[:nologin] == 'true' || (@sms && @sms.sms_keyword.survey.login_option == Survey::NO_LOGIN)
       return unless authenticate_user!
     end
     # If they texted in, save their phone number
@@ -36,9 +38,9 @@ class SurveyResponsesController < ApplicationController
     if @survey
       @title = @survey.terminology
       @answer_sheet = get_answer_sheet(@survey, @person)
-      respond_to do |wants|
-        wants.html { render :layout => 'mhub'}
-        wants.mobile
+      respond_to do |format|
+        format.html { render :layout => 'mhub'}
+        format.mobile
       end
     else
       render_404 and return
@@ -94,16 +96,16 @@ class SurveyResponsesController < ApplicationController
         redirect_to @survey.redirect_url and return false
       else
         @current_person = @person
-        respond_to do |wants|
-          wants.html { render :thanks, layout: 'mhub'}
-          wants.mobile { render :thanks }
+        respond_to do |format|
+          format.html { render :thanks, layout: 'mhub'}
+          format.mobile { render :thanks }
         end
       end
     else
       @answer_sheet = get_answer_sheet(@survey, @person)
-      respond_to do |wants|
-        wants.html { render :new, layout: 'mhub'}
-        wants.mobile { render :new }
+      respond_to do |format|
+        format.html { render :new, layout: 'mhub'}
+        format.mobile { render :new }
       end
     end
   end
@@ -111,105 +113,115 @@ class SurveyResponsesController < ApplicationController
   def create
     @new_person = false
     @title = @survey.terminology
-    Person.transaction do
-      @person = current_person # first try for a logged in person
+    if params[:preview] != "true"
+      Person.transaction do
+        @person = current_person # first try for a logged in person
 
-      # Ensure that there's a person hash
-      params[:person] = Hash.new unless params[:person]
+        # Ensure that there's a person hash
+        params[:person] = Hash.new unless params[:person]
 
-      ['birth_date','graduation_date', 'email'].each do |attr_name|
-        if element = @survey.questions.find_by_attribute_name(attr_name)
-          if element.predefined? && params[:answers]["#{element.id}"].present?
-            params[:person][:"#{attr_name}"] = params[:answers]["#{element.id}"]
+        ['birth_date','graduation_date', 'email'].each do |attr_name|
+          if element = @survey.questions.find_by_attribute_name(attr_name)
+            if element.predefined? && params[:answers]["#{element.id}"].present?
+              params[:person][:"#{attr_name}"] = params[:answers]["#{element.id}"]
+            end
           end
         end
-      end
 
-      form_email_address = params[:person][:email]
-      form_phone_number = params[:person][:phone_number]
+        form_email_address = params[:person][:email]
+        form_phone_number = params[:person][:phone_number]
 
-      if form_email_address.present?
-        # See if we can match someone by email
-        existing_person = Person.find_existing_person_by_email(form_email_address)
-      end
-
-      unless existing_person.present?
-        if form_phone_number.present? || (form_phone_number.blank? && @sms.present?)
-          form_phone_number = @sms.phone_number if @sms.present?
-          # See if we can match someone by name and phone number
-          existing_person = Person.find_existing_person_by_name_and_phone(number: form_phone_number,
-                                                                          first_name: params[:person][:first_name],
-                                                                          last_name: params[:person][:last_name])
+        if form_email_address.present?
+          # See if we can match someone by email
+          existing_person = Person.find_existing_person_by_email(form_email_address)
         end
-      end
 
-      if faculty_element = @survey.questions.where(attribute_name: 'faculty').first
-        is_faculty = params[:answers]["#{faculty_element.id}"]
-        if faculty_element.present? && is_faculty.present?
-          params[:answers]["#{faculty_element.id}"] = is_faculty.downcase == "yes" ? true : false
+        unless existing_person.present?
+          if form_phone_number.present? || (form_phone_number.blank? && @sms.present?)
+            form_phone_number = @sms.phone_number if @sms.present?
+            # See if we can match someone by name and phone number
+            existing_person = Person.find_existing_person_by_name_and_phone(number: form_phone_number,
+                                                                            first_name: params[:person][:first_name],
+                                                                            last_name: params[:person][:last_name])
+          end
         end
-      end
 
-      if existing_person
-        if @person
-          @person = existing_person.smart_merge(@person) unless @person == existing_person
+        if faculty_element = @survey.questions.where(attribute_name: 'faculty').first
+          is_faculty = params[:answers]["#{faculty_element.id}"]
+          if faculty_element.present? && is_faculty.present?
+            params[:answers]["#{faculty_element.id}"] = is_faculty.downcase == "yes" ? true : false
+          end
+        end
+
+        if existing_person
+          if @person
+            @person = existing_person.smart_merge(@person) unless @person == existing_person
+          else
+            @person = existing_person
+          end
         else
-          @person = existing_person
+          # Do not create a new person data when there's an existing to avoid duplicate data
+          @person = Person.create(params[:person])
+          @new_person = true
         end
-      else
-        # Do not create a new person data when there's an existing to avoid duplicate data
-        @person = Person.create(params[:person])
-        @new_person = true
-      end
 
-      @current_person = @person
-      if @person.valid?
-        @org = @survey.organization
-        NewPerson.create(person_id: @person.id, organization_id: @org.id)
+        @current_person = @person
+        if @person.valid?
+          @org = @survey.organization
+          NewPerson.create(person_id: @person.id, organization_id: @org.id)
 
-        @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
+          @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
 
-        session[:person_id] = @person.id
-        session[:survey_id] = @survey.id
-        if @person.valid? && @answer_sheet.person.valid?
-          # Do not change the permission if there's an existing permission (add_contact method handles it)
-          @org.add_contact(@person)
+          session[:person_id] = @person.id
+          session[:survey_id] = @survey.id
+          if @person.valid? && @answer_sheet.person.valid?
+            # Do not change the permission if there's an existing permission (add_contact method handles it)
+            @org.add_contact(@person)
 
-          # Update person record
-          @person.update_attributes(params[:person])
+            # Update person record
+            @person.update_attributes(params[:person])
 
-          # Save survey answers and manage question rules
-          @answer_sheet.save_survey(params[:answers], @new_person)
+            # Save survey answers and manage question rules
+            @answer_sheet.save_survey(params[:answers], @new_person)
 
-          respond_to do |wants|
-            if @survey.login_option == 2
-              wants.html { render :facebook, layout: 'mhub' }
-              wants.mobile { render :facebook, layout: 'mhub' }
-            else
-              # If we saved successfully, destroy the session
-              session[:person_id] = nil
-              session[:survey_id] = nil
-              if @survey.redirect_url.to_s =~ /https?:\/\//
-                redirect_to @survey.redirect_url and return false
+            destroy_answer_sheet_when_answers_are_all_blank
+            respond_to do |format|
+              if @survey.login_option == 2
+                format.html { render :facebook, layout: 'mhub' }
+                format.mobile { render :facebook, layout: 'mhub' }
               else
-                wants.html { render :thanks, layout: 'mhub'}
-                wants.mobile { render :thanks }
+                # If we saved successfully, destroy the session
+                session[:person_id] = nil
+                session[:survey_id] = nil
+                if @survey.redirect_url.to_s =~ /https?:\/\//
+                  redirect_to @survey.redirect_url and return false
+                else
+                  format.html { render :thanks, layout: 'mhub'}
+                  format.mobile { render :thanks }
+                end
               end
+            end
+          else
+            @answer_sheet = get_answer_sheet(@survey, @person)
+            respond_to do |format|
+              format.html { render :new, layout: 'mhub'}
+              format.mobile { render :new }
             end
           end
         else
           @answer_sheet = get_answer_sheet(@survey, @person)
-          respond_to do |wants|
-            wants.html { render :new, layout: 'mhub'}
-            wants.mobile { render :new }
+          respond_to do |format|
+            format.html { render :new, layout: 'mhub'}
+            format.mobile { render :new }
           end
         end
-      else
-        @answer_sheet = get_answer_sheet(@survey, @person)
-        respond_to do |wants|
-          wants.html { render :new, layout: 'mhub'}
-          wants.mobile { render :new }
-        end
+      end
+    else
+      # Preview Only
+      @preview = true
+      respond_to do |format|
+        format.html { render :thanks, layout: 'mhub'}
+        format.mobile { render :thanks }
       end
     end
   end

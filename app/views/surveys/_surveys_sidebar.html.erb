@@ -14,7 +14,7 @@
 
         <%- port = Rails.env.development? ? APP_CONFIG['public_port'] : "" %>
         <%- protocol = Rails.env.development? ? 'http' : 'https' %>
-        <%= link_to new_survey_response_url(survey_id: @survey.id, host: APP_CONFIG['public_host'], port: port, protocol: protocol), target: "_blank" do %>
+        <%= link_to new_survey_response_url(preview: 'true', survey_id: @survey.id, port: port, protocol: protocol) do %>
           <button class='action_gray full_width_button'>
             <%= "#{t('surveys.index_admin.preview_survey')}" %>
           </button>

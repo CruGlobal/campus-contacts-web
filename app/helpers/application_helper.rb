@@ -66,6 +66,7 @@ module ApplicationHelper
   end
 
   def give_link(text)
+    return nil unless current_person.present?
     if text.include?('Desig')
       extra_params = { 'Prefix' => current_person.gender == 'Male' ? 'Mr' : 'Ms',
                        'FirstName' => current_person.first_name,
