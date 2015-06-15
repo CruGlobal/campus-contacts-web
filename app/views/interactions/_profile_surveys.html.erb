@@ -8,8 +8,6 @@
   </div>
 <% else %>
   <% @completed_answer_sheets.each do |answer_sheet| %>
-    <% if answer_sheet.answers.count > 0 %>
-      <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: answer_sheet} %>
-    <% end %>
+    <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: answer_sheet} %>
   <% end %>
 <% end %>

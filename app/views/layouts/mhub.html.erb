@@ -24,8 +24,8 @@
 <body id="<%= controller.controller_name %>_controller">
   <%= render 'fb_init' %>
   <div id="outer" class="plain">
-    <% if user_signed_in? %>
-      <% if cookies[:survey_mode].present? && cookies[:survey_id].present? %>
+    <% if @survey.present? %>
+      <% if user_signed_in? && cookies[:survey_mode].present? %>
         <div id="global">
           <div class="gmwrap">
             <ul class="sf-menu">

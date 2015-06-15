@@ -184,6 +184,26 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       @survey2 = Factory(:survey, organization: @organization)
     end
 
+    # Survey identification wheather a user answers a survey
+    should "create an answer sheet when a surveyee answered just predefined question fields" do
+      assert_difference "AnswerSheet.count", 1 do
+        xhr :get, :new, {:survey_id => @survey.id}
+      end
+      assert_difference "AnswerSheet.count" do
+        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:first_name => "Karl", :last_name => "Pilkington"}}
+        assert_response(:success)
+      end
+    end
+
+    # Survey identification wheather a user answers a survey
+    should "there should have an answer sheet when a surveyee updated the predefined or non-predefined survey question fields" do
+      assert_difference "AnswerSheet.count", 1 do
+        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => ""}, :id => @user.person.id, :person => {:first_name => "Dante", :last_name => "Santos"}}
+        assert_response(:success)
+      end
+    end
+
+=begin
     should "not create an answer sheet when a surveyee answered just blanks in the survey question fields" do
       assert_difference "AnswerSheet.count", 1 do
         xhr :get, :new, {:survey_id => @survey.id}
@@ -213,6 +233,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       end
 
     end
+=end
 
     should "be able to update phone number to correct phone number when first input is wrong" do
 

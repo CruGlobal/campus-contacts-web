@@ -90,8 +90,6 @@ class SurveyResponsesController < ApplicationController
       # Save survey answers and manage question rules
       @answer_sheet.save_survey(params[:answers], false)
 
-      destroy_answer_sheet_when_answers_are_all_blank
-
       if @survey.redirect_url.to_s =~ /https?:\/\//
         redirect_to @survey.redirect_url and return false
       else
@@ -183,7 +181,6 @@ class SurveyResponsesController < ApplicationController
           # Save survey answers and manage question rules
           @answer_sheet.save_survey(params[:answers], @new_person)
 
-          destroy_answer_sheet_when_answers_are_all_blank
           respond_to do |wants|
             if @survey.login_option == 2
               wants.html { render :facebook, layout: 'mhub' }

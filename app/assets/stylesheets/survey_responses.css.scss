@@ -48,6 +48,10 @@
 }
 
 #survey_responses_controller {
+  #global {
+    padding: 0 0 0 5px;
+    margin: 0 !important;
+  }
   .new{
     padding: 0px 10px;
   }
