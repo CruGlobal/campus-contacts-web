@@ -4,6 +4,7 @@ branches:
   only:
     - master
     - dev
+    - MH-978v2
 services:
   - redis-server
 
