@@ -21,7 +21,7 @@ class Organization < ActiveRecord::Base
   has_many :group_labels
   has_many :activities, dependent: :destroy
   has_many :target_areas, through: :activities, class_name: 'TargetArea'
-  has_many :people, through: :organizational_permissions, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
+  has_many :people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :not_archived_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :not_deleted_people, through: :organizational_permissions, source: :person, conditions: ["organizational_permissions.deleted_at IS NULL"], uniq: true
   has_many :contact_assignments
