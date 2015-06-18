@@ -1,4 +1,7 @@
-# MissionHub
+MissionHub
+==========
+
+###Overview
 
 MissionHub is an online tool that makes it easier than ever for you to connect, communicate and track ministry relationships.
 
@@ -6,59 +9,11 @@ We're an open source project and always looking for more developers to help us e
 
 http://missionhub.com
 
-## Getting Started
+### Getting Started
 
-### Requirements
+We use a universal rails setup for all of our web apps. To start with MissionHub as a developer, [follow our getting started tutorial here](https://github.com/CruGlobal/wmd-team-norms/wiki/Rails-Onboarding-Steps)
 
-* MySQL
-* Redis
-* Memcached
-
-### Setup
-
-Copy the example configuration files to active configuration files:
-
-```bash
-$ cd config
-$ cp database.example.yml database.yml
-$ cp config.example.yml config.yml
-$ cp s3.travis.yml s3.yml
-$ cp memcached.example.yml memcached.yml
-```
-
-### Install Gems
-
-```bash
-$ bundle install
-```
-
-### Create databases
-
-```bash
-$ bundle exec rake db:create:all
-```
-
-### Run migrations
-
-```bash
-$ bundle exec rake db:migrate
-```
-
-### Start Servers
-
-```bash
-$ redis-server
-$ memcached
-$ bundle exec rails s
-```
-
-## Running Tests
-
-```bash
-$ bundle exec rake test
-```
-
-## License
+### License
 
 MissionHub is released under the MIT license:  http://www.opensource.org/licenses/MIT
 
