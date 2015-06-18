@@ -1396,6 +1396,7 @@ en:
       greeting_with_name: Hi %{name}!
     no_completed_surveys: No completed surveys yet.
     no_surveys: No surveys yet.
+    all_predefined_have_answered: All predefined questions have been answered on this survey.
     phone_number: What is your phone number?
     room: Room Number
     select_language: Select Language
