@@ -110,6 +110,7 @@ class PersonFilter
                  @filters[:gender]
                end
 
+      gender = nil if gender.blank?
       filtered_people = filtered_people.where(gender: gender)
     end
 
