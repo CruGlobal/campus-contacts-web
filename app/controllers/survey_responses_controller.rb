@@ -184,7 +184,6 @@ class SurveyResponsesController < ApplicationController
             # Save survey answers and manage question rules
             @answer_sheet.save_survey(params[:answers], @new_person)
 
-            destroy_answer_sheet_when_answers_are_all_blank
             respond_to do |format|
               if @survey.login_option == 2
                 format.html { render :facebook, layout: 'mhub' }
