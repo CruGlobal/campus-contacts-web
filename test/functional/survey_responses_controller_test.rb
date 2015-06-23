@@ -190,7 +190,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
         xhr :get, :new, {:survey_id => @survey.id}
       end
       assert_difference "AnswerSheet.count" do
-        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => ""}, :person => {:first_name => "Karl", :last_name => "Pilkington"}}
+        xhr :put, :create, {:survey_id => @survey.id, :answers => { @question.id => "ans"}, :person => {:first_name => "Karl", :last_name => "Pilkington"}}
         assert_response(:success)
       end
     end
@@ -198,7 +198,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
     # Survey identification wheather a user answers a survey
     should "there should have an answer sheet when a surveyee updated the predefined or non-predefined survey question fields" do
       assert_difference "AnswerSheet.count", 1 do
-        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => ""}, :id => @user.person.id, :person => {:first_name => "Dante", :last_name => "Santos"}}
+        xhr :put, :update, {:survey_id => @survey.id, :answers => { @question.id => "ans"}, :id => @user.person.id, :person => {:first_name => "Dante", :last_name => "Santos"}}
         assert_response(:success)
       end
     end
