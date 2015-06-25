@@ -5,32 +5,32 @@ namespace :sp do
 
   def import_ministry(ministry_hash, parent_org)
     org = Organization.where(importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry').first
-    org ||= parent_org.children.create!(name: ministry_hash['name'], terminology: 'Ministry', importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry')
+    org ||= parent_org.children.where(name: ministry_hash['name'], terminology: 'Ministry', importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry').first_or_create
     return org
   end
 
   def import_mission(year, parent_org)
     org = parent_org.children.where(name: ["Summer Mission #{year}","Summer Missions #{year}"], terminology: 'Mission').first
     org.update_attribute(:name, "Summer Missions #{year}") if org.present? && org.name == "Summer Mission #{year}"
-    org ||= parent_org.children.create!(name: "Summer Missions #{year}", terminology: 'Mission')
+    org ||= parent_org.children.where(name: "Summer Missions #{year}", terminology: 'Mission').first_or_create
     return org
   end
 
   def import_region(region_hash, parent_org)
     org = Organization.where(importable_id: region_hash['id'], importable_type: 'Ccc::Region').first
-    org ||= parent_org.children.create!(name: region_hash['name'], terminology: 'Region', importable_id: region_hash['id'], importable_type: 'Ccc::Region')
+    org ||= parent_org.children.where(name: region_hash['name'], terminology: 'Region', importable_id: region_hash['id'], importable_type: 'Ccc::Region').first_or_create
     return org
   end
 
   def import_team(team_hash, parent_org)
     org = Organization.where(importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel').first
-    org ||= parent_org.children.create!(name: team_hash['name'], terminology: 'Missional Team', importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel')
+    org ||= parent_org.children.where(name: team_hash['name'], terminology: 'Missional Team', importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel').first_or_create
     return org
   end
 
   def import_project(project_hash, parent_org)
     org = Organization.where(importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first
-    org ||= parent_org.children.create!(name: project_hash['name'], terminology: 'Project', importable_id: project_hash['id'], importable_type: 'Ccc::SpProject')
+    org ||= parent_org.children.where(name: project_hash['name'], terminology: 'Project', importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first_or_create
 
     ImportMethods.person_from_api(project_hash['pd'], org, 'admin') if project_hash['pd'].present?
     ImportMethods.person_from_api(project_hash['apd'], org, 'admin') if project_hash['apd'].present?
@@ -72,7 +72,7 @@ namespace :sp do
   # Main Task
   task sync: :environment do
     imported_partner = Array.new
-    root = Organization.find_or_create_by_name "Cru"
+    root = Organization.where(name: "Cru").first_or_create
 
     # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
     ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
@@ -140,7 +140,7 @@ namespace :sp do
 
     # Fetch Non-SP Projects
     non_sp = root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first
-    non_sp ||= root.children.create!(name: "Other Summer Projects", terminology: 'Other Summer Projects')
+    non_sp ||= root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first_or_create
     imported_partner << "Bridges" # skip bridges
     puts "-- Checking Other Summer Projects - #{ministry['name']}"
     (2014..Date.today.year).each do |year|

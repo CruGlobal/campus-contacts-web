@@ -12,7 +12,8 @@ module Mh
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+    I18n.enforce_available_locales = false
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/app/presenters)
@@ -48,13 +49,18 @@ module Mh
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    # config.filter_parameters += [:password]
 
     # Enable IdentityMap for Active Record, to disable set to false or remove the line below.
     # config.active_record.identity_map = true
 
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    #
+    config.generators do |g|
+      g.factory_girl false
+    end
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
@@ -80,6 +86,8 @@ module Mh
       Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
       Rack::OAuth2::Server::Admin.set :scope, %w{read write}
     end
+
+    config.compass.require "susy"
   end
 
 end

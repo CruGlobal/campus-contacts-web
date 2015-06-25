@@ -7,11 +7,11 @@ class MergeDuplicateSurveysInOrganization5499 < ActiveRecord::Migration
     # to_org_id is the organization where they transfer the contacts
     # Which has duplicate surveys
     to_org_id = 5499
-    to_org = Organization.find_by_id(to_org_id)
+    to_org = Organization.where(id: to_org_id).first
 
     # from_org_id is the organization where they get the contacts
     from_org_id = 1415
-    from_org = Organization.find_by_id(from_org_id)
+    from_org = Organization.where(id: from_org_id).first
 
     puts "Start Migration: Merge Duplicate Surveys in Organization id: #{to_org_id}"
     if to_org.present?

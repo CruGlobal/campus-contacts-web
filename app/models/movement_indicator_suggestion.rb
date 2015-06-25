@@ -116,7 +116,7 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
   end
 
   def self.generate_suggestion(org, person, label, reason, action = 'add')
-    org.movement_indicator_suggestions.find_or_create_by_person_id_and_label_id_and_reason_and_action(person.id, label.id, reason, action)
+    org.movement_indicator_suggestions.where(person_id: person.id, label_id: label.id, reason: reason, action: action).first_or_create
   end
 
   #def self.check_for_remove(person, org, label)

@@ -10,8 +10,10 @@ class Answer < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
 
+  attr_accessible :answer_sheet_id, :question_id, :value, :short_value, :auto_notify_sent, :attachment
+
   belongs_to :answer_sheet, inverse_of: :answers, touch: true
-  belongs_to :question, :class_name => "Element", :foreign_key => "question_id"
+  belongs_to :question, class_name: "Element", foreign_key: "question_id"
 
 #  validates_presence_of :value
   validates_length_of :short_value, :maximum => 255, :allow_nil => true

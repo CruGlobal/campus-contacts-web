@@ -1,5 +1,8 @@
 class FollowupComment < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
+
+  attr_accessible :contact_id, :commenter_id, :comment, :status, :organization_id, :deleted_at
+
   belongs_to :contact, class_name: "Person", foreign_key: "contact_id"
   belongs_to :commenter, class_name: "Person", foreign_key: "commenter_id"
   belongs_to :organization
@@ -7,7 +10,7 @@ class FollowupComment < ActiveRecord::Base
   accepts_nested_attributes_for :rejoicables, reject_if: proc { |attributes| attributes[:what].blank? }, :allow_destroy => true
   after_create :update_followup_status
 
-  default_scope where(:deleted_at => nil)
+  default_scope ->{where(:deleted_at => nil)}
 
   def to_hash
     hash = {}

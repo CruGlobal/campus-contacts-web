@@ -4,7 +4,7 @@ class LeadersController < ApplicationController
   def leader_sign_in
     # Reconcile the person comeing from a leader link with the link itself.
     # This is for the case where the person gets entered with one email, but has a different email for FB
-    if params[:token] && params[:user_id]
+    if params[:token].present? && params[:user_id].present?
       @token = params[:token]
       @user = User.find(params[:user_id])
       if @user.remember_token == @token && @user.remember_token_expires_at >= Time.now
@@ -35,7 +35,7 @@ class LeadersController < ApplicationController
   end
 
   def merge_leader_accounts
-    if params[:token] && params[:user_id]
+    if params[:token].present? && params[:user_id].present?
       @token = params[:token]
       @user = User.find(params[:user_id])
       if @user.remember_token == @token && @user.remember_token_expires_at >= Time.now
@@ -95,7 +95,7 @@ class LeadersController < ApplicationController
 
   def destroy
     @person = Person.find(params[:id])
-    permissions = OrganizationalPermission.find_all_by_person_id_and_organization_id_and_permission_id_and_archive_date_and_deleted_at(@person.id, current_organization.id, Permission.user_ids, nil, nil)
+    permissions = OrganizationalPermission.where(person_id: @person.id, organization_id: current_organization.id, permission_id: Permission.user_ids, archive_date: nil, deleted_at: nil)
     if permissions
       permissions.each do |r|
         r.archive
@@ -137,10 +137,10 @@ class LeadersController < ApplicationController
       email_attributes = params[:person].delete(:email_address) || {}
       phone_attributes = params[:person].delete(:phone_number) || {}
       if email_attributes[:email].present?
-        @email = @person.email_addresses.find_or_create_by_email(email_attributes[:email])
+        @email = @person.email_addresses.where(email: email_attributes[:email]).first_or_create
       end
       if phone_attributes[:phone].present?
-        @phone = @person.phone_numbers.find_or_create_by_number(PhoneNumber.strip_us_country_code(phone_attributes[:phone]))
+        @phone = @person.phone_numbers.where(number: PhoneNumber.strip_us_country_code(phone_attributes[:phone])).first_or_create
       end
       @person.save
       @person.update_attributes(params[:person])

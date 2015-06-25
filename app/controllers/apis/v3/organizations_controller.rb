@@ -19,7 +19,10 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
     if current_person.is_user_for_org?(current_organization)
       render_unauthorized_call
     else
+      parent_id = params[:organization][:parent_id]
+      parent = Organization.find(parent_id) if parent_id
       organization = organizations.new(params[:organization])
+      organization.parent = parent if parent
 
       if organization.save
         token = organization.generate_api_secret

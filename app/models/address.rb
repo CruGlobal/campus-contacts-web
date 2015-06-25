@@ -1,5 +1,6 @@
 class Address < ActiveRecord::Base
 	TYPES = {"Current" => "current", "Permanent" => "permanent", "Emergency 1" => "emergency1", "Emergency 2" => "emergency2"}
+  attr_accessible :address1, :address2, :address3, :address4, :city, :state, :zip, :country, :address_type, :person_id, :start_date, :end_date, :dorm, :room
 	validates_presence_of :address_type
 
   validate do |value|

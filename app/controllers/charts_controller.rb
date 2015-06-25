@@ -4,17 +4,17 @@ class ChartsController < ApplicationController
   end
 
   def snapshot
-    if params[:id].present? && @snapshot = current_person.saved_visual_tools.find_by_id(params[:id])
+    if params[:id].present? && @snapshot = current_person.saved_visual_tools.where(id: params[:id]).first
       params[:all] = "false"
       params[:movements] = @snapshot.movement_ids
       @snapshot_movements = Organization.where(id: @snapshot.movement_ids)
     end
     update_snapshot_movements
   end
-  
+
   def save_snapshot
     if params[:snapshot_id].present?
-      @saved_visual_tool = current_user.person.saved_visual_tools.find_by_id(params[:snapshot_id])
+      @saved_visual_tool = current_user.person.saved_visual_tools.where(id: params[:snapshot_id]).first
       @saved_visual_tool.update_attributes(movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
     else
       @saved_visual_tool = current_user.person.saved_visual_tools.create(organization_id: current_organization.id, movement_ids: params[:movement_ids], name: params[:snapshot_name], group: Chart::SNAPSHOT)
@@ -35,14 +35,14 @@ class ChartsController < ApplicationController
     get_movement_stages
     get_changed_lives
   end
-  
+
   def delete_snapshot
     @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
     @saved_visual_tool.delete if @saved_visual_tool.present?
   end
 
   def trend
-    if params[:id].present? && @trend = current_person.saved_visual_tools.find_by_id(params[:id])
+    if params[:id].present? && @trend = current_person.saved_visual_tools.where(id: params[:id]).first
       params[:all] = "false"
       params[:movements] = @trend.movement_ids
       @trend_movements = Organization.where(id: @trend.movement_ids)
@@ -53,10 +53,10 @@ class ChartsController < ApplicationController
     end
     update_trend_movements
   end
-  
+
   def save_trend
     if params[:trend_id].present?
-      @saved_visual_tool = current_user.person.saved_visual_tools.find_by_id(params[:trend_id])
+      @saved_visual_tool = current_user.person.saved_visual_tools.where(id: params[:trend_id]).first
       @saved_visual_tool.update_attributes(movement_ids: params[:movement_ids], name: params[:trend_name])
       @saved_visual_tool.more_info[:start_date] = params[:start_date]
       @saved_visual_tool.more_info[:end_date] = params[:end_date]
@@ -97,7 +97,7 @@ class ChartsController < ApplicationController
 
     refresh_trend_data
   end
-  
+
   def delete_trend
     @saved_visual_tool = current_user.person.saved_visual_tools.find(params[:id])
     @saved_visual_tool.delete if @saved_visual_tool.present?

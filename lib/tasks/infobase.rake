@@ -3,7 +3,7 @@ namespace :infobase do
 
   desc "pulls the ministry_* table info into missionhub tables"
   task sync: :environment do
-    root = Organization.find_or_create_by_name "Cru"
+    root = Organization.where(name: "Cru").first_or_create
     puts "Insert strategies"
     # First set up the strategies
     strategies = {
@@ -57,9 +57,9 @@ namespace :infobase do
         # Import teams
         puts "-- Importing teams..."
         includes = 'people,phone_numbers,email_addresses'
-        team_json = Infobase::Team.get(include: includes)
+        team_json = Infobase::Team.get(include: includes)['teams']
         loop do
-          team_json['teams'].each do |team|
+          team_json.each do |team|
             puts "---- Import Team - #{team['name']}"
             attribs = {name: team['name'], terminology: 'Missional Team', importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
 
@@ -85,7 +85,8 @@ namespace :infobase do
 
             puts "------ Importing activity rows..."
             i = 0
-            Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)['activities'].each do |activity|
+            activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)['activities']
+            activity_json.each do |activity|
               if activity['target_area'].present?
                 i += 1
                 puts i if i % 1000 == 0

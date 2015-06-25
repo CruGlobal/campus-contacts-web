@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
       end
     end
     filename = current_organization.to_s
-    filename += " - #{Permission.find_by_id(params[:permission_id]).to_s.pluralize}" if params[:permission_id].present?
+    filename += " - #{Permission.where(id: params[:permission_id]).first.to_s.pluralize}" if params[:permission_id].present?
     send_data(out, :filename => "#{filename}.csv", :type => 'application/csv' )
   end
 
@@ -95,11 +95,11 @@ class PeopleController < ApplicationController
   end
 
   def merge
-    @people = 1.upto(4).collect {|i| Person.find_by_id(params["person#{i}"]) if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect {|i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present?}.compact
   end
 
   def confirm_merge
-    @people = 1.upto(4).collect {|i| Person.find_by_id(params["person#{i}"]) if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect {|i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present?}.compact
 
     unless @people.length >= 2
       redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You must select at least 2 people to merge"
@@ -122,7 +122,7 @@ class PeopleController < ApplicationController
 
   def merge_preview
     render :nothing => true and return false unless params[:id].to_i > 0
-    @person = Person.find_by_id(params[:id])
+    @person = Person.where(id: params[:id]).first
     respond_to do |wants|
       wants.js {  }
     end
@@ -139,7 +139,6 @@ class PeopleController < ApplicationController
 
   def create
     authorize! :create, Person
-
     Person.transaction do
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
@@ -154,7 +153,7 @@ class PeopleController < ApplicationController
       if @person.save
 
         if params[:permissions].present?
-          permission_ids = params[:permissions].keys.map(&:to_i)
+          permission_ids = params[:permissions].values.map(&:to_i)
           # we need a valid email address to make a leader
           if permission_ids.include?(Permission::USER_ID) || permission_ids.include?(Permission::ADMIN_ID)
             @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
@@ -305,7 +304,7 @@ class PeopleController < ApplicationController
     end
 
     if ids.present?
-      current_organization.people.where('people.id' => ids).each do |person|
+      current_organization.people.where(id: ids).each do |person|
         current_organization.delete_person(person)
       end
     end
@@ -362,7 +361,7 @@ class PeopleController < ApplicationController
 			ids = to_ids.split(',').uniq
 			ids.each do |id|
 				if id.upcase =~ /GROUP-/
-					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
+					group = Group.where(id: id.gsub("GROUP-",""), organization_id: current_organization.id).first
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
 					permission = Permission.find(id.gsub("ROLE-",""))
@@ -379,7 +378,7 @@ class PeopleController < ApplicationController
 		end
 
     person_ids.uniq.each do |id|
-      person = Person.find_by_id(id)
+      person = Person.where(id: id).first
       if person.present? && person.email.present?
         # This will be the default 'from' value to avoid the DMARC policy or not being store the emails in SPAM Folder
         from = "do-not-reply@mhub.cc"

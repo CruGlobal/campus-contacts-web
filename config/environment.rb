@@ -3,7 +3,7 @@ require File.expand_path('../application', __FILE__)
 require "rack/oauth2/server/railtie"
 
 # Initialize the rails application
-Mh::Application.initialize!
+Rails.application.initialize!
 
 # if defined?(PhusionPassenger)
 #   PhusionPassenger.on_event(:starting_worker_process) do |forked|

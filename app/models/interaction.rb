@@ -1,5 +1,5 @@
 class Interaction < ActiveRecord::Base
-  attr_accessible :comment, :created_by_id, :updated_by_id, :deleted_at, :interaction_type_id, :organization_id, :privacy_setting, :receiver_id, :timestamp, :created_at, :updated_at
+  attr_accessible :comment, :created_by_id, :updated_by_id, :deleted_at, :interaction_type_id, :organization_id, :privacy_setting, :receiver_id, :timestamp, :created_at, :updated_at, :receiver, :creator, :organization
 
   has_many :interaction_initiators
   has_many :initiators, through: :interaction_initiators, source: :person
@@ -8,8 +8,8 @@ class Interaction < ActiveRecord::Base
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id', touch: true
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id', touch: true
 
-  scope :sorted, order('interactions.created_at DESC')
-  scope :limited, limit(5)
+  scope :sorted, ->{order('interactions.created_at DESC')}
+  scope :limited, ->{limit(5)}
   after_save :ensure_timestamp
 
   DEFAULT_PRIVACY = "organization"
@@ -106,7 +106,7 @@ class Interaction < ActiveRecord::Base
   def set_initiators(initiator_ids)
     initiator_ids = (initiator_ids.is_a?(Array)) ? initiator_ids : [initiator_ids]
     initiator_ids.uniq.each do |person_id|
-      self.interaction_initiators.find_or_create_by_person_id(person_id.to_i)
+      self.interaction_initiators.where(person_id: person_id.to_i).first_or_create
     end
     # delete removed
     removed_initiators = self.interaction_initiators.where("person_id NOT IN (?)", initiator_ids)

@@ -9,8 +9,10 @@ class Ccc::Person < ActiveRecord::Base
   belongs_to :user, class_name: 'Ccc::SimplesecuritymanagerUser', foreign_key: 'fk_ssmUserId'
   has_many :phone_numbers, autosave: true
   has_many :email_addresses, autosave: true
-  has_one :primary_phone_number, class_name: 'Ccc::PhoneNumber', foreign_key: 'person_id', conditions: {primary: true}
-  has_one :current_address, class_name: "Ccc::MinistryNewaddress", foreign_key: "fk_PersonID", conditions: {addressType: 'current'}
+  has_one :primary_phone_number,
+    ->{where(primary: true)}, class_name: 'Ccc::PhoneNumber', foreign_key: 'person_id'
+  has_one :current_address,
+    ->{where(addressType: 'current')}, class_name: "Ccc::MinistryNewaddress", foreign_key: "fk_PersonID"
 
 
   def email

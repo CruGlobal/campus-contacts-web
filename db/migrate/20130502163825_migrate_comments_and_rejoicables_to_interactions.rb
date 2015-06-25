@@ -10,7 +10,7 @@ class InteractionInitiator < ActiveRecord::Base
 end
 class MigrateCommentsAndRejoicablesToInteractions < ActiveRecord::Migration
   def up
-    comment_interaction_type = InteractionType.find_by_i18n("comment")
+    comment_interaction_type = InteractionType.where(i18n: "comment").first
     FollowupComment.order('id').each do |comment|
       interaction = Interaction.new(
         interaction_type_id: comment_interaction_type.id,
@@ -30,7 +30,7 @@ class MigrateCommentsAndRejoicablesToInteractions < ActiveRecord::Migration
         any_rejoicables.where("followup_comment_id = ?", comment.id).each do |rejoicable|
           if rejoicable.what.present?
             interaction_i18n = rejoicable.what == "prayed_to_receive" ? "prayed_to_receive_christ" : rejoicable.what
-            interaction_type = InteractionType.find_by_i18n(interaction_i18n)
+            interaction_type = InteractionType.where(i18n: interaction_i18n).first
 
             interaction = Interaction.create(
               interaction_type_id: interaction_type.id,

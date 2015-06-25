@@ -1,5 +1,7 @@
 class Group < ActiveRecord::Base
-  
+  attr_accessible :name, :location, :meets, :meeting_day, :start_time, :end_time, :organization_id, :list_publicly, :approve_join_requests
+
+
   has_many :group_labelings, dependent: :destroy
   has_many :group_labels, through: :group_labelings
   has_many :group_memberships, dependent: :destroy
@@ -7,13 +9,13 @@ class Group < ActiveRecord::Base
   has_many :members, through: :group_memberships, source: :member
   has_many :leaders, through: :group_memberships, source: :leader
   belongs_to :organization
-  
+
   validates_presence_of :name, :location, :meets
-  
+
   def to_s
     name
   end
-  
+
   def public_signup?
     list_publicly? && !approve_join_requests?
   end

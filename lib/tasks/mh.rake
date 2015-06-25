@@ -20,7 +20,7 @@ task "carriers" => :environment do
     begin
       email = xml.xpath('.//sms_address').text
       carrier_name = xml.xpath('.//carrier_name').text
-      carrier = SmsCarrier.find_or_create_by_data247_name(carrier_name)
+      carrier = SmsCarrier.where(data247_name: carrier_name).first_or_create
       PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
     rescue => e
       raise xml.inspect + "\n" + e.inspect
@@ -37,13 +37,13 @@ task "phone_numbers" => :environment do
   # Copy phone numbers from ministry_newaddress to phone_numbers table
   sql = "select homePhone, cellPhone, workPhone, person_id from ministry_newaddress a where a.address_type = 'current'"
   ActiveRecord::Base.connection.select_all(sql).each do |row|
-    person = Person.find_by_id(row['person_id'])
+    person = Person.where(id: row['person_id']).first
     if person
       {'homePhone' => 'home', 'cellPhone' => 'mobile', 'workPhone' => 'work'}.each do |column, location|
         num = row[column]
         stripped_num = num.to_s.gsub(/[^\d]/, '')
         if stripped_num.length == 10
-          person.phone_numbers.find_by_number(stripped_num) || person.phone_numbers.create(number: stripped_num, location: location)
+          person.phone_numbers.where(number: stripped_num).first || person.phone_numbers.create(number: stripped_num, location: location)
         end
       end
     end

@@ -15,7 +15,7 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test "spinner" do
-    assert_equal "<img alt=\"Spinner\" class=\"spinner\" id=\"spinner\" src=\"/images/spinner.gif\" style=\"display:none\" />", spinner
+    assert_equal "<img id=\"spinner\" style=\"display:none\" class=\"spinner\" src=\"/images/spinner.gif\" alt=\"Spinner\" />", spinner
   end
 
   test "add params" do

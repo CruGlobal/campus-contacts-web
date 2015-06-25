@@ -12,9 +12,9 @@ class InteractionInitiator < ActiveRecord::Base
 end
 class MigrateSentLabelsToInteractions < ActiveRecord::Migration
   def up
-    sent_label = Label.find_by_i18n('sent')
+    sent_label = Label.where(i18n: 'sent').first
     if sent_label.present?
-      graduating_on_mission_id = InteractionType.find_by_i18n('graduating_on_mission').try(:id)
+      graduating_on_mission_id = InteractionType.where(i18n: 'graduating_on_mission').first.try(:id)
       if graduating_on_mission_id.present?
         transfers = OrganizationalLabel.where(label_id: sent_label.id)
         puts "Migrating #{transfers.count} records"
@@ -32,7 +32,7 @@ class MigrateSentLabelsToInteractions < ActiveRecord::Migration
           puts "#{i} - Moving OrganizatioanlLabel##{org_label.id} to Interaction"
           if interaction.save
             if org_label.added_by_id.present?
-              InteractionInitiator.find_or_create_by_interaction_id_and_person_id(interaction.id, org_label.added_by_id)
+              InteractionInitiator.where(interaction_id: interaction.id, person_id: org_label.added_by_id).first_or_create
             end
             puts "#{i} - OrganizatioanlLabel##{org_label.id} deleted" if org_label.destroy
           end

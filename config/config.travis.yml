@@ -16,6 +16,8 @@ test:
   smseco_username: test
   smseco_password: test
   smseco_url: test
+  bitly_username: vincentpaca
+  bitly_key: R_1b6fbe0b4987dc3801ddb9f812d60f84
   access_key_id: test
   secret_access_key: test
   bucket: staging.missionhub.com

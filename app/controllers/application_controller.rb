@@ -108,11 +108,11 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404(nologin = false)
-    if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
+    if cookies[:keyword] && SmsKeyword.where(keyword: cookies[:keyword]).first
       url = "/c/#{cookies[:keyword]}"
       url += '?nologin=true' if nologin
       redirect_to url
-    elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
+    elsif cookies[:survey_id] && Survey.where(id: cookies[:survey_id]).first
       url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
       url += '&nologin=true' if nologin
       redirect_to url
@@ -210,7 +210,7 @@ class ApplicationController < ActionController::Base
 
   def current_person
     @current_person ||= current_user.person if current_user
-    @current_person ||= Person.find_by_id(session[:person_id]) if session[:person_id]
+    @current_person ||= Person.where(id: session[:person_id]).first if session[:person_id]
     @current_person
   end
   helper_method :current_person
@@ -316,9 +316,9 @@ class ApplicationController < ActionController::Base
 
   def user_root_path
     if mhub?
-      if cookies[:keyword] && SmsKeyword.find_by_keyword(cookies[:keyword])
+      if cookies[:keyword] && SmsKeyword.where(keyword: cookies[:keyword]).first
         url = "/c/#{cookies[:keyword]}"
-      elsif cookies[:survey_id] && Survey.find_by_id(cookies[:survey_id])
+      elsif cookies[:survey_id] && Survey.where(id: cookies[:survey_id]).first
         url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
       else
         url = "/users/sign_in"
@@ -368,13 +368,13 @@ class ApplicationController < ActionController::Base
       @survey = @keyword ? @keyword.survey : Survey.find(params[:keyword])
     elsif params[:received_sms_id]
       sms_id = Base62.decode(params[:received_sms_id])
-      @sms = SmsSession.find_by_id(sms_id)
+      @sms = SmsSession.where(id: sms_id).first
       if @sms
         @keyword ||= @sms.sms_keyword
         @survey = @keyword.survey if @keyword
       end
     elsif params[:survey_id] || params[:id] || cookies[:survey_id]
-      @survey = Survey.find_by_id(params[:survey_id] || params[:id] || cookies[:survey_id])
+      @survey = Survey.where(id: params[:survey_id] || params[:id] || cookies[:survey_id]).first
     end
     if params[:keyword] || params[:received_sms_id] || params[:survey_id] || params[:id]
       unless @survey
@@ -408,12 +408,12 @@ class ApplicationController < ActionController::Base
     current_user_permissions = current_person
                                      .organizational_permissions
                                      .where(:organization_id => current_organization.self_and_parents.collect(&:id))
-                                     .collect { |r| Permission.find_by_id(r.permission_id) }.compact
+                                     .collect { |r| Permission.where(id: r.permission_id).first }.compact
 
     if current_user_permissions.include?(Permission.admin)
       @permissions_for_assign = current_organization.permissions
     else
-      @permissions_for_assign = current_organization.permissions.delete_if { |permission| permission == Permission.admin }
+      @permissions_for_assign = current_organization.permissions.select{|permission| permission != Permission.admin}
     end
   end
 

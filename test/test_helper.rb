@@ -1,25 +1,19 @@
 ENV["RAILS_ENV"] = "test"
-# require 'simplecov'
-# SimpleCov.start 'rails' do
-#  add_filter "vendor"
-#  add_filter 'app/controllers/api'
-#  merge_timeout 36000
-# end
-
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path("../../config/environment", __FILE__)
+require "rails/test_help"
+require "minitest/rails"
+require 'mocha/mini_test'
+# require 'webmock/minitest'
 require 'rack/oauth2/server'
-require 'rails/test_help'
 require 'shoulda'
-# require 'ephemeral_response'
-require 'factory_girl'
 require 'api_test_helper'
-require File.dirname(__FILE__) + "/factories"
-require 'webmock/test_unit'
-require "strip_attributes/shoulda"
-require 'test/unit'
-require 'mocha/test_unit'
-
 require 'sidekiq/testing'
+
+require "strip_attributes/matchers"
+class MiniTest::Spec
+  include StripAttributes::Matchers
+end
+
 #Sidekiq::Testing.inline!
 # EphemeralResponse.activate
 #
@@ -28,15 +22,23 @@ require 'sidekiq/testing'
 #   config.white_list = 'localhost'
 # end
 
-#Devise::OmniAuth.test_mode!
-OmniAuth.config.test_mode = true
-OmniAuth.config.add_mock(:facebook, {"provider"=>"facebook", "uid"=>"690860831", "credentials"=>{"token"=>"164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"}, "user_info"=>{"nickname"=>"mattrw89", "email"=>"mattrw89@gmail.com", "first_name"=>"Matt", "last_name"=>"Webb", "name"=>"Matt Webb", "image"=>"http://graph.facebook.com/v2.2/690860831/picture?type=square", "urls"=>{"Facebook"=>"http://www.facebook.com/mattrw89", "Website"=>nil}}, "extra"=>{"user_hash"=>{"id"=>"690860831", "name"=>"Matt Webb", "first_name"=>"Matt", "last_name"=>"Webb", "link"=>"http://www.facebook.com/mattrw89", "username"=>"mattrw89", "birthday"=>"12/18/1989", "location"=>{"id"=>"108288992526695", "name"=>"Orlando, Florida"}, "education"=>[{"school"=>{"id"=>"115045251844283", "name"=>"Niceville Senior High"}, "year"=>{"id"=>"141778012509913", "name"=>"2008"}, "type"=>"High School"}, {"school"=>{"id"=>"35078114590", "name"=>"University of Central Florida"}, "year"=>{"id"=>"118118634930920", "name"=>"2012"}, "concentration"=>[{"id"=>"124764794262413", "name"=>"Electrical Engineering"}], "type"=>"College"}], "gender"=>"male", "email"=>"mattrw89@gmail.com", "timezone"=>-4, "locale"=>"en_US", "languages"=>[{"id"=>"137946929599946", "name"=>"FORTRAN 66,77"}, {"id"=>"133255596736945", "name"=>"ruby"}, {"id"=>"189887071024044", "name"=>"Objective C"}], "verified"=>true, "updated_time"=>"2011-05-23T12:07:56+0000"}}})
+
+# To add Capybara feature tests add `gem "minitest-rails-capybara"`
+# to the test group in the Gemfile and uncomment the following:
+# require "minitest/rails/capybara"
+
+# Uncomment for awesome colorful output
+require "minitest/pride"
+
 class ActiveSupport::TestCase
+  ActiveRecord::Migration.check_pending!
+
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
-  # fixtures :all
+  fixtures :all
+
   # Add more helper methods to be used by all tests here...
   Permission.admin
   Permission.user
@@ -47,18 +49,22 @@ class ActiveSupport::TestCase
   Label.seeker
 end
 
-class Test::Unit::TestCase
-  extend StripAttributes::Shoulda::Macros
-end
-
 class ActionController::TestCase
   include Devise::TestHelpers
 end
 
-unless defined?(Test::Unit::AssertionFailedError)
-  class Test::Unit::AssertionFailedError < ActiveSupport::TestCase::Assertion
-  end
-end
+#Devise::OmniAuth.test_mode!
+OmniAuth.config.test_mode = true
+OmniAuth.config.add_mock(:facebook, {"provider"=>"facebook", "uid"=>"690860831", "credentials"=>{"token"=>"164949660195249|bd3f24d52b4baf9412141538.1-690860831|w79R36CalrEAY-9e9kp8fDWJ69A"}, "user_info"=>{"nickname"=>"mattrw89", "email"=>"mattrw89@gmail.com", "first_name"=>"Matt", "last_name"=>"Webb", "name"=>"Matt Webb", "image"=>"http://graph.facebook.com/v2.2/690860831/picture?type=square", "urls"=>{"Facebook"=>"http://www.facebook.com/mattrw89", "Website"=>nil}}, "extra"=>{"user_hash"=>{"id"=>"690860831", "name"=>"Matt Webb", "first_name"=>"Matt", "last_name"=>"Webb", "link"=>"http://www.facebook.com/mattrw89", "username"=>"mattrw89", "birthday"=>"12/18/1989", "location"=>{"id"=>"108288992526695", "name"=>"Orlando, Florida"}, "education"=>[{"school"=>{"id"=>"115045251844283", "name"=>"Niceville Senior High"}, "year"=>{"id"=>"141778012509913", "name"=>"2008"}, "type"=>"High School"}, {"school"=>{"id"=>"35078114590", "name"=>"University of Central Florida"}, "year"=>{"id"=>"118118634930920", "name"=>"2012"}, "concentration"=>[{"id"=>"124764794262413", "name"=>"Electrical Engineering"}], "type"=>"College"}], "gender"=>"male", "email"=>"mattrw89@gmail.com", "timezone"=>-4, "locale"=>"en_US", "languages"=>[{"id"=>"137946929599946", "name"=>"FORTRAN 66,77"}, {"id"=>"133255596736945", "name"=>"ruby"}, {"id"=>"189887071024044", "name"=>"Objective C"}], "verified"=>true, "updated_time"=>"2011-05-23T12:07:56+0000"}}})
+
+# class Test::Unit::TestCase
+#   extend StripAttributes::Matchers
+# end
+
+# unless defined?(Test::Unit::AssertionFailedError)
+#   class Test::Unit::AssertionFailedError < ActiveSupport::TestCase::Assertion
+#   end
+# end
 
 class TestFBResponses
   FULL = Hashie::Mash.new(ActiveSupport::JSON.decode('{"id":"690860831","name":"Matt Webb","first_name":"Matt","last_name":"Webb","link":"http:\/\/www.facebook.com\/mattrw89","username":"mattrw89","birthday":"12\/18\/1989","location":{"id":"108288992526695","name":"Orlando, Florida"},"education":[{"school":{"id":"1150452518442831","name":"Niceville Senior High"},"year":{"id":"141778012509913","name":"2008"},"type":"High School"},{"school":{"id":"350781145901","name":"University of Central Florida"},"year":{"id":"118118634930920","name":"2012"},"degree":{"id":"12312","name":"Masters"},"concentration":[{"id":"124764794262413","name":"Electrical Engineering"},{"id":"123124124","name":"Underwater Basket Weaving"},{"id":"131212512","name":"Chick Fil A Consumption"}],"type":"College"}],"gender":"male","email":"mattrw89\u0040gmail.com","timezone":-4,"locale":"en_US","languages":[{"id":"137946929599946","name":"FORTRAN 66,77"},{"id":"133255596736945","name":"ruby"},{"id":"189887071024044","name":"Objective C"}],"verified":true,"updated_time":"2011-05-23T12:07:56+0000"}'))
@@ -73,7 +79,7 @@ end
 
 
 def admin_user_login_with_org
-  @user = Factory(:user_with_auxs)
+  @user = FactoryGirl.create(:user_with_auxs)
   @org = @user.person.organizations.first
   @request.session[:current_organization_id] = @org.id
 

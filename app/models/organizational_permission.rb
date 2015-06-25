@@ -4,36 +4,30 @@ class OrganizationalPermission < ActiveRecord::Base
                              person_id: :person_id }
 
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
+  attr_accessible :person_id, :permission_id, :start_date, :organization_id, :cru_status_id, :followup_status, :added_by_id, :archive_date, :deleted_at
+
+  attr_accessible :person_id, :permission_id, :start_date, :organization_id, :cru_status_id, :followup_status, :added_by_id, :archive_date, :deleted_at
+
+  before_create :set_start_date, :set_contact_uncontacted
+  before_save :notify_new_leader, :if => :permission_is_leader_or_admin
+
   belongs_to :cru_status
   belongs_to :person, :touch => true
   belongs_to :permission
   belongs_to :organization
 
-  scope :active, where("organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at is NULL")
-  scope :contact, where("permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")
-  # scope :not_dnc, where("followup_status <> 'do_not_contact' AND permission_id = #{Permission::NO_PERMISSIONS_ID}")
-  scope :dnc, where("followup_status = 'do_not_contact' AND permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")
-  scope :completed, where("followup_status = 'completed' AND permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")
-  # scope :uncontacted, where("followup_status = 'uncontacted' AND permission_id = #{Permission::NO_PERMISSIONS_ID}")
-  before_create :set_start_date, :set_contact_uncontacted
-  before_save :notify_new_leader, :if => :permission_is_leader_or_admin
-  #before_destroy :check_if_only_remaining_admin_permission_in_a_root_org, :check_if_admin_is_destroying_own_admin_permission
-  #attr_accessor :destroyer #temporary variable to remember which Person is about to destroy this permission
-
-  scope :find_non_admin_and_non_leader_permissions, {
-    :conditions => ["permission_id != ? AND permission_id != ?", Permission::ADMIN_ID, Permission::USER_ID]
-  }
-
-  scope :find_admin_or_leader, {
-    :conditions => ["permission_id = ? OR permission_id = ?", Permission::ADMIN_ID, Permission::USER_ID]
-  }
-
-  #after_create :clear_person_org_cache
-  #after_destroy :clear_person_org_cache
-
-  #def clear_person_org_cache
-    #person.clear_org_cache if person
-  #end
+  scope :active,
+    ->{where("organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at is NULL")}
+  scope :contact,
+    ->{where("permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")}
+  scope :dnc,
+    ->{where("followup_status = 'do_not_contact' AND permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")}
+  scope :completed,
+    ->{where("followup_status = 'completed' AND permission_id = #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.deleted_at is NULL")}
+  scope :find_non_admin_and_non_leader_permissions,
+    ->{where("permission_id != ? AND permission_id != ?", Permission::ADMIN_ID, Permission::USER_ID)}
+  scope :find_admin_or_leader,
+    ->{where("permission_id = ? OR permission_id = ?", Permission::ADMIN_ID, Permission::USER_ID)}
 
   validate do |value|
     # if person have email
@@ -70,6 +64,13 @@ class OrganizationalPermission < ActiveRecord::Base
     end
   end
 
+  def self.get_permission_hash(org, people)
+    permission_hash = Hash.new
+    self.active.where(organization_id: org.id, person_id: people.collect(&:id)).each do |op|
+      permission_hash[op.id] = op if op.permission_id == Permission::NO_PERMISSIONS_ID
+    end
+  end
+
   def permission_is_leader_or_admin
     leader_permission = permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID
     is_new = self.new_record?
@@ -99,15 +100,15 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   def delete
-    update_attributes({deleted_at: Date.today})
+    update_attributes(deleted_at: Date.today)
   end
 
   def archive
-    update_attributes({:archive_date => Date.today})
+    update_attributes(archive_date: Date.today)
   end
 
   def unarchive
-    update_attributes({:archive_date => nil})
+    update_attributes(archive_date: nil)
   end
 
   def self.is_archived?(organization)

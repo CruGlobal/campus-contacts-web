@@ -3,7 +3,7 @@ class MergeDuplicateSurveysInOrganization3523 < ActiveRecord::Migration
     # Reported in Jira MH-1058
     # Duplicates were created because of bug in transfer contacts with survey answers in all contacts page.
     org_id = 3523
-    org = Organization.find_by_id(org_id)
+    org = Organization.where(id: org_id).first
     puts "Start Migration: Merge Duplicate Surveys in Organization id: #{org_id}"
     if org.present?
       puts "Checking if there's a duplicate"

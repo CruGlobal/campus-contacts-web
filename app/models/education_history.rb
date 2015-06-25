@@ -1,4 +1,6 @@
 class EducationHistory < ActiveRecord::Base
+  attr_accessible :year_id, :year_name, :degree_id, :degree_name, :school_id, :school_name, :provider, :school_type
+
   belongs_to :person
   validates_presence_of :person_id, :school_id, :school_name, :provider, :school_type, on: :create, message: "can't be blank"
 
@@ -16,10 +18,10 @@ class EducationHistory < ActiveRecord::Base
     hash['provider'] = provider
     hash
   end
-  
+
   def self.get_education_history_hash(person_id)
     eh = EducationHistory.where("person_id = ?", person_id)
     eh.collect(&:to_hash)
   end
-  
+
 end

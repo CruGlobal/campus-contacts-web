@@ -21,7 +21,7 @@ class InteractionsController < ApplicationController
     end
 
     @group_ids.each do |group_id|
-      group = @person.group_memberships.find_or_create_by_group_id(group_id.to_i)
+      group = @person.group_memberships.where(group_id: group_id.to_i).first_or_create
       group.update_attribute(:role, 'member') unless ['leader','member'].include?(group.role)
     end
     @groups = @person.groups_for_org_id(current_organization.id)
@@ -135,9 +135,9 @@ class InteractionsController < ApplicationController
   end
 
   def remove_address
-    person = Person.find_by_id(params[:person_id])
+    person = Person.where(id: params[:person_id]).first
     if person.present?
-      address = person.addresses.find_by_address_type(params[:address_type])
+      address = person.addresses.where(address_type: params[:address_type]).first
       address.destroy if address.present?
     end
     render :nothing => true

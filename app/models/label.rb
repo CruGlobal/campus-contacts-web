@@ -21,49 +21,55 @@ class Label < ActiveRecord::Base
   validates :name, presence: true, :if => Proc.new { |label| organization_id != 0 }
   validates :organization_id, presence: true
 
-  scope :default, where(organization_id: 0)
-
-  scope :default_labels, lambda { {
-    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_LABELS)}",
-    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_LABELS)}"
-  }}
-  scope :default_cru_labels, lambda { {
-    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}",
-    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}"
-  }}
-  scope :default_bridge_labels, lambda { {
-    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}",
-    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}"
-  }}
-  scope :default_power_to_change_labels, lambda { {
-    :conditions => "i18n IN #{self.default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}",
-    :order => "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}"
-  }}
-  scope :non_default_labels, lambda { {
-    :conditions => "i18n IS NULL",
-    :order => "labels.name ASC"
-  }}
-  scope :arrange_all, lambda {{
-    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} DESC, name"
-  }}
-  scope :arrange_all_desc, lambda {{
-    order: "FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC"
-  }}
+  scope :default, ->{where(organization_id: 0)}
+  scope :default_labels,
+    ->{
+      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_LABELS)}").
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_LABELS)}")
+    }
+  scope :default_cru_labels,
+    ->{
+      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}").
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}")
+    }
+  scope :default_bridge_labels,
+    ->{
+      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}").
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}")
+    }
+  scope :default_power_to_change_labels,
+    ->{
+      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}").
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}")
+    }
+  scope :non_default_labels,
+    ->{
+      where("i18n IS NULL").
+      order("labels.name ASC")
+    }
+  scope :arrange_all,
+    ->{
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} DESC, name")
+    }
+  scope :arrange_all_desc,
+    ->{
+      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC")
+    }
 
   def self.involved
-    @involved ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Involved', 'involved', 0)
+    @involved ||= Label.where(name: 'Involved', i18n: 'involved', organization_id: 0).first_or_create
   end
 
   def self.engaged_disciple
-    @engaged_disciple ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Engaged Disciple', 'engaged_disciple', 0)
+    @engaged_disciple ||= Label.where(name: 'Engaged Disciple', i18n: 'engaged_disciple', organization_id: 0).first_or_create
   end
 
   def self.leader
-    @leader ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Leader', 'leader', 0)
+    @leader ||= Label.where(name: 'Leader', i18n: 'leader', organization_id: 0).first_or_create
   end
 
   def self.seeker
-    @seeker ||= Label.find_or_create_by_name_and_i18n_and_organization_id('Seeker', 'seeker', 0)
+    @seeker ||= Label.where(name: 'Seeker', i18n: 'seeker', organization_id: 0).first_or_create
   end
 
   def self.default_labels_for_field_string(labels)

@@ -6,7 +6,7 @@ class AddDefaultSeekerLabel < ActiveRecord::Migration
   end
 
   def down
-    seeker_label = Label.find_by_i18n('seeker')
+    seeker_label = Label.where(i18n: 'seeker').first
     seeker_label.destroy if seeker_label.present?
   end
 end

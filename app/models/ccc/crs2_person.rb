@@ -5,7 +5,8 @@ class Ccc::Crs2Person < ActiveRecord::Base
   has_one :profile, class_name: 'Ccc::Crs2Profile'
   has_many :email_addresses, class_name: 'Ccc::Crs2EmailAddress', foreign_key: :person_id
   has_many :phone_numbers, class_name: 'Ccc::Crs2PhoneNumber', foreign_key: :person_id
-  has_one :primary_email_address, class_name: "Ccc::Crs2EmailAddress", foreign_key: "person_id", conditions: {primary: true}
+  has_one :primary_email_address,
+    ->{where(primary: true)}, class_name: "Ccc::Crs2EmailAddress", foreign_key: "person_id"
 
   def email
     @email = primary_email_address.try(:email)

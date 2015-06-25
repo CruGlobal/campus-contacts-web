@@ -75,7 +75,7 @@ class Apis::V3::BaseController < ApplicationController
   end
 
   def current_client
-    @current_client ||= Rack::OAuth2::Server::Client.find_by_secret(params[:secret])
+    @current_client ||= Rack::OAuth2::Server::Client.where(secret: params[:secret]).first
   end
 
   def current_organization

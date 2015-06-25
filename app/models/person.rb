@@ -6,6 +6,9 @@ class Person < ActiveRecord::Base
 
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
+
+  attr_accessible :accountNo, :last_name, :first_name, :middle_name, :gender, :student_status, :campus, :year_in_school, :major, :minor, :greek_affiliation, :user_id, :birth_date, :date_became_christian, :graduation_date, :level_of_school, :staff_notes, :primary_campus_involvement_id, :mentor_id, :fb_uid, :date_attributes_updated, :crs_profile_id, :sp_person_id, :si_person_id, :pr_person_id, :faculty, :is_staff, :infobase_person_id, :nationality, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :email, :phone_number, :email_addresses_attributes, :phone_numbers_attributes, :addresses_attributes
+
   after_save :ensure_one_primary_email, :ensure_one_primary_number
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
@@ -18,11 +21,13 @@ class Person < ActiveRecord::Base
     :content_type => { :content_type => ["image/jpeg", "image/jpg", "image/gif", "image/png"] }
 
   belongs_to :interaction_initiator
-  has_many :interactions, class_name: "Interaction", foreign_key: "receiver_id", conditions: ["interactions.deleted_at IS NULL"]
+  has_many :interactions,
+    ->{where("interactions.deleted_at IS NULL")}, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :bulk_messages
   has_many :interactions_with_deleted, class_name: "Interaction", foreign_key: "receiver_id"
   has_many :created_interactions, class_name: "Interaction", foreign_key: "created_by_id"
-  has_many :organizational_labels, dependent: :destroy, conditions: ["organizational_labels.removed_date IS NULL"]
+  has_many :organizational_labels,
+    ->{where("organizational_labels.removed_date IS NULL")}, dependent: :destroy
   has_many :all_organizational_labels, dependent: :destroy, class_name: 'OrganizationalLabel'
   has_many :labels, through: :organizational_labels
   has_many :created_organizational_labels, class_name: 'OrganizationalLabel', foreign_key: 'added_by_id'
@@ -38,39 +43,51 @@ class Person < ActiveRecord::Base
   has_many :new_people
   has_one :transferred_by, class_name: "PersonTransfer", foreign_key: "transferred_by_id"
   belongs_to :user, class_name: 'User', foreign_key: 'user_id'
-  has_many :phone_numbers, autosave: true, group: "number"
-  has_one :primary_phone_number, class_name: "PhoneNumber", foreign_key: "person_id", conditions: {primary: true}
+  has_many :phone_numbers,
+    ->{group("number")}, autosave: true
+  has_one :primary_phone_number,
+    ->{where(primary: true)}, class_name: "PhoneNumber", foreign_key: "person_id"
   has_many :locations
-  has_one :latest_location, order: "updated_at DESC", class_name: 'Location'
+  has_one :latest_location,
+    ->{order("updated_at DESC")}, class_name: 'Location'
   has_many :interests
   has_many :education_histories
-  has_many :email_addresses, autosave: true, dependent: :destroy, group: "email"
-  has_one :primary_email_address, class_name: "EmailAddress", foreign_key: "person_id", conditions: {primary: true}
-  has_one :primary_org_permission, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: {primary: true}
+  has_many :email_addresses,
+    ->{group("email")}, autosave: true, dependent: :destroy
+  has_one :primary_email_address,
+    ->{where(primary: true)}, class_name: "EmailAddress", foreign_key: "person_id"
+  has_one :primary_org_permission,
+    ->{where(primary: true)}, class_name: "OrganizationalPermission", foreign_key: "person_id"
   has_one :primary_org, through: :primary_org_permission, source: :organization
   has_many :answer_sheets
-  has_many :contact_assignments, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy, conditions: ["contact_assignments.person_id IS NOT NULL"]
+  has_many :contact_assignments,
+    ->{where("contact_assignments.person_id IS NOT NULL")}, class_name: "ContactAssignment", foreign_key: "assigned_to_id", dependent: :destroy
   has_many :assigned_tos, class_name: "ContactAssignment", foreign_key: "person_id"
   has_many :assigned_contacts, through: :contact_assignments, source: :assigned_to
-  has_one :current_address, class_name: "Address", foreign_key: "person_id", conditions: {address_type: 'current'}, autosave: true
+  has_one :current_address,
+    ->{where(address_type: 'current')}, class_name: "Address", foreign_key: "person_id", autosave: true
   has_many :addresses, class_name: 'Address', foreign_key: :person_id, dependent: :destroy
   has_many :rejoicables, inverse_of: :person
 
   has_many :organization_memberships, inverse_of: :person
   has_many :all_organizational_permissions, class_name: "OrganizationalPermission", foreign_key: "person_id"
-  has_many :organizational_permissions, conditions: {archive_date: nil, deleted_at: nil}
-  has_many :organizational_permissions_including_archived, class_name: "OrganizationalPermission", foreign_key: "person_id", conditions: ["organizational_permissions.deleted_at IS NULL"]
+  has_many :organizational_permissions,
+    ->{where(archive_date: nil, deleted_at: nil)}
+  has_many :organizational_permissions_including_archived,
+    ->{where("organizational_permissions.deleted_at IS NULL")}, class_name: "OrganizationalPermission", foreign_key: "person_id"
   has_one :contact_permission, class_name: 'OrganizationalPermission'
   has_many :permissions, through: :organizational_permissions
   has_many :permissions_including_archived, through: :organizational_permissions_including_archived, source: :permission
 
   if Permission.table_exists? # added for travis testing
-    has_many :organizations, through: :organizational_permissions, conditions: ["organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}"], uniq: true
-    has_many :active_organizations, through: :organizational_permissions, source: :organization, conditions: ["organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL"], uniq: true
+    has_many :organizations,
+      ->{where("organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID}").uniq}, through: :organizational_permissions
+    has_many :active_organizations,
+      ->{where("organizations.status = 'active' AND organizational_permissions.permission_id <> #{Permission::NO_PERMISSIONS_ID} AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL").uniq}, through: :organizational_permissions, source: :organization
   end
 
-  has_many :followup_comments, :class_name => "FollowupComment", :foreign_key => "commenter_id"
-  has_many :comments_on_me, :class_name => "FollowupComment", :foreign_key => "contact_id"
+  has_many :followup_comments, class_name: "FollowupComment", foreign_key: "commenter_id"
+  has_many :comments_on_me, class_name: "FollowupComment", foreign_key: "contact_id"
 
   has_many :received_sms, class_name: "ReceivedSms", foreign_key: "person_id"
   has_many :sms_sessions, inverse_of: :person
@@ -79,9 +96,11 @@ class Person < ActiveRecord::Base
 
   has_one :person_photo
 
-  scope :contacts, lambda {|organization| includes(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", organization.id, Permission::NO_PERMISSIONS_ID)}
+  scope :contacts,
+    ->(organization){includes(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", organization.id, Permission::NO_PERMISSIONS_ID)}
 
-  scope :who_answered, lambda {|survey_id| includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
+  scope :who_answered,
+    ->(survey_id){includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
   validates_presence_of :first_name
   #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
@@ -116,149 +135,158 @@ class Person < ActiveRecord::Base
     (!mock.valid?) && (!mock.errors.has_key?(attr.class == Symbol ? attr : attr.to_sym))
   end
 
-  accepts_nested_attributes_for :email_addresses, :reject_if => lambda { |a| a[:email].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :phone_numbers, :reject_if => lambda { |a| a[:number].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :addresses, :reject_if => lambda { |a| a[:address1].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :email_addresses, reject_if: lambda { |a| a[:email].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :phone_numbers, reject_if: lambda { |a| a[:number].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :addresses, reject_if: lambda { |a| a[:address1].blank? }, allow_destroy: true
   accepts_nested_attributes_for :current_address, allow_destroy: true
 
-  scope :find_by_person_updated_by_daterange, lambda { |date_from, date_to| {
-    :conditions => ["date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to]
-  }}
-
-  scope :find_by_last_login_date_before_date_given, lambda { |after_date| {
-    :select => "people.*",
-    :joins => "JOIN users AS ssm ON ssm.id = people.user_id",
-    :conditions => ["ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date]
-  }}
-
-  scope :find_by_date_created_before_date_given, lambda { |before_date| {
-    :select => "people.*",
-    :joins => "LEFT JOIN organizational_permissions AS ors ON people.id = ors.person_id",
-    :conditions => ["ors.permission_id = ? AND ors.created_at <= ? AND (ors.archive_date IS NULL AND ors.deleted_at IS NULL)", Permission::NO_PERMISSIONS_ID, before_date]
-  }}
-
-  scope :order_by_highest_default_permission, lambda { |order, tables_already_joined = false| {
-    :select => "people.*",
-    :joins => "#{'JOIN organizational_permissions ON people.id = organizational_permissions.person_id JOIN permissions ON organizational_permissions.permission_id = permissions.id' unless tables_already_joined}",
-    :conditions => "permissions.i18n IN #{Permission.default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}",
-    :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
-  } }
-
-  scope :order_by_followup_status, lambda { |org, order| {
-    :joins => "JOIN organizational_permissions ON people.id = organizational_permissions.person_id AND  organizational_permissions.organization_id = #{org.id}",
-    :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, ISNULL(organizational_permissions.archive_date) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
-  }}
-
-  scope :order_by_all_followup_status, lambda { |order| {
-    :order => "organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}"
-  }}
-
-  scope :order_by_any_column, lambda { |order| {
-    :order => "#{order}"
-  }}
-
-  scope :order_by_address_column, lambda { |order| {
-    :joins => "JOIN addresses ON people.id = addresses.person_id AND addresses.address_type = 'current'",
-    :order => "#{order}"
-  }}
-
-
-
+  scope :find_by_person_updated_by_daterange,
+    ->(date_from, date_to){
+      where("date_attributes_updated >= ? AND date_attributes_updated <= ? ", date_from, date_to)
+    }
+  scope :find_by_last_login_date_before_date_given,
+    ->(after_date){
+      select("people.*").
+      joins("JOIN users AS ssm ON ssm.id = people.user_id").
+      where("ssm.current_sign_in_at <= ? OR (ssm.current_sign_in_at IS NULL AND ssm.created_at <= ?)", after_date, after_date)
+    }
+  scope :find_by_date_created_before_date_given,
+    ->(before_date){
+      select("people.*").
+      joins("LEFT JOIN organizational_permissions AS ors ON people.id = ors.person_id").
+      where("ors.permission_id = ? AND ors.created_at <= ? AND (ors.archive_date IS NULL AND ors.deleted_at IS NULL)", Permission::NO_PERMISSIONS_ID, before_date)
+    }
+  scope :order_by_highest_default_permission,
+    ->(order, tables_already_joined = false){
+      select("people.*").
+      joins("#{'JOIN organizational_permissions ON people.id = organizational_permissions.person_id JOIN permissions ON organizational_permissions.permission_id = permissions.id' unless tables_already_joined}").
+      where("permissions.i18n IN #{Permission.default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}").
+      order("FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}")
+    }
+  scope :order_by_followup_status,
+    ->(org, order){
+      joins("JOIN organizational_permissions ON people.id = organizational_permissions.person_id AND  organizational_permissions.organization_id = #{org.id}").
+      order("organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, ISNULL(organizational_permissions.archive_date) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}")
+    }
+  scope :order_by_all_followup_status,
+    ->(order){
+      order("organizational_permissions.permission_id NOT IN (#{Permission::ADMIN_AND_USER_ID}) #{order.include?("asc") ? 'ASC' : 'DESC'}, organizational_permissions.#{order}")
+    }
+  scope :order_by_any_column,
+    ->(order){
+      order(order)
+    }
+  scope :order_by_address_column,
+    ->(order){
+      joins("JOIN addresses ON people.id = addresses.person_id AND addresses.address_type = 'current'").
+      order(order)
+    }
 
   # Start of custom sorting for meta_search
 
   scope :sort_by_followup_status_asc,
-    order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status ASC")
-
+    ->{
+      order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status ASC")
+    }
   scope :sort_by_followup_status_desc,
-    order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status DESC")
-
+    ->{
+      order("ISNULL(organizational_permissions.followup_status), organizational_permissions.followup_status DESC")
+    }
   scope :sort_by_phone_number_asc,
-    order("phone_numbers.number ASC")
-
+    ->{
+      order("phone_numbers.number ASC")
+    }
   scope :sort_by_phone_number_desc,
-    order("phone_numbers.number DESC")
-
+    ->{
+      order("phone_numbers.number DESC")
+    }
   scope :sort_by_labels_asc,
-    where("id <> 0")
-
+    ->{
+      where("id <> 0")
+    }
   scope :sort_by_labels_desc,
-    where("id <> 0")
-
+    ->{
+      where("id <> 0")
+    }
   scope :sort_by_last_survey_asc,
-    order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
-
+    ->{
+      order("ISNULL(ass.updated_at), MAX(ass.updated_at) DESC")
+    }
   scope :sort_by_last_survey_desc,
-    order("ISNULL(ass.updated_at), MAX(ass.updated_at) ASC")
+    ->{
+      order("ISNULL(ass.updated_at), MAX(ass.updated_at) ASC")
+    }
 
   # End of custom sorting for meta_search
 
-  scope :order_by_primary_phone_number, lambda { |order| {
-    :select => "people.*, `phone_numbers`.number",
-    :joins => "LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1",
-    :order => "ISNULL(`phone_numbers`.number), `phone_numbers`.number #{order.include?("asc") ? 'ASC' : 'DESC'}"
-  } }
-
-  scope :order_by_primary_email_address, lambda { |order| {
-      :select => "people.*, `email_addresses`.email",
-      :joins => "LEFT JOIN `email_addresses` ON `email_addresses`.`person_id` = `people`.`id` AND `email_addresses`.`primary` = 1",
-      :order => "ISNULL(`email_addresses`.email), `email_addresses`.email #{order.include?("asc") ? 'ASC' : 'DESC'}"
-  } }
-
-  scope :order_by_permission, lambda { |order| {
-      :select => "people.*",
-      :joins => 'JOIN permissions ON organizational_permissions.permission_id = permissions.id',
-      :conditions => "permissions.i18n IN #{Permission.default_permissions_for_field_string(Permission::DEFAULT_PERMISSIONS)}",
-      :order => "FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}"
-  } }
-
-  scope :find_friends_with_fb_uid, lambda { |person| { conditions: {fb_uid: Friend.followers(person)} } }
-
-  scope :search_by_name_or_email, lambda { |keyword, org_id| {
-    :select => "people.*",
-    :conditions => ["(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id"
-  }}
-
-  scope :email_search, lambda { |keyword, org_id| {
-    :select => "people.*",
-    :conditions => ["(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id",
-    :limit => 5
-  }}
-
-  scope :phone_search, lambda { |keyword, org_id| {
-    :select => "people.*",
-    :conditions => ["(org_permissions.organization_id = ? AND (concat(first_name,' ',last_name) LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.not_mobile = 0", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%"],
-    :joins => "LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id",
-    :limit => 5
-  }}
-
-  scope :get_and_order_by_label, lambda { |order, org_id| {
-    :joins => "LEFT JOIN (SELECT org_labels.person_id, org_labels.id as org_label_id, labels.name as lbl_name, labels.i18n as lbl_i18n, labels.id as lbl_id FROM organizational_labels org_labels INNER JOIN labels ON labels.id = org_labels.label_id WHERE org_labels.id IS NOT NULL AND org_labels.organization_id = '#{org_id}' AND org_labels.removed_date IS NULL ORDER BY FIELD#{Label.i18n_field_plus_default_labels_for_field_string(Label::DEFAULT_CRU_LABELS.reverse)} DESC, labels.name) new_i18n ON new_i18n.person_id = people.id",
-    :group => "people.id",
-    :order => "ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} #{order.include?('desc') ? 'ASC' : 'DESC'}, new_i18n.lbl_name #{order.include?('desc') ? 'DESC' : 'ASC'}"
-  }}
-
-  scope :get_and_order_by_latest_answer_sheet_answered, lambda { |order, org_id| {
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
-    :group => "people.id",
-    :order => "ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'ASC' : 'DESC'}"
-  }}
-
-  scope :find_by_survey_updated_by_daterange, lambda { |date_from, date_to, org_id| {
-    :joins => "LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id",
-    :group => "people.id",
-    :having => ["DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to]
-  }}
-
-  scope :with_label, lambda { |label, org|
-    joins(:organizational_labels).where('organizational_labels.label_id' => label.id, 'organizational_labels.organization_id' => org.id, 'organizational_labels.removed_date' => nil)
-  }
-
-  scope :non_staff, -> { where(is_staff: false) }
-  scope :faculty, -> { non_staff.where(faculty: true) }
-  scope :students, -> { non_staff.where(faculty: false) }
+  scope :order_by_primary_phone_number,
+    ->(order){
+      select("people.*, `phone_numbers`.number").
+      joins("LEFT JOIN `phone_numbers` ON `phone_numbers`.`person_id` = `people`.`id` AND `phone_numbers`.`primary` = 1").
+      order("ISNULL(`phone_numbers`.number), `phone_numbers`.number #{order.include?("asc") ? 'ASC' : 'DESC'}")
+    }
+  scope :order_by_primary_email_address,
+    ->(order){
+      select("people.*, `email_addresses`.email").
+      joins("LEFT JOIN `email_addresses` ON `email_addresses`.`person_id` = `people`.`id` AND `email_addresses`.`primary` = 1").
+      order("ISNULL(`email_addresses`.email), `email_addresses`.email #{order.include?("asc") ? 'ASC' : 'DESC'}")
+    }
+  scope :order_by_permission,
+    ->(order){
+      joins("JOIN permissions ON organizational_permissions.permission_id = permissions.id").
+      where("permissions.i18n IN #{Permission.default_permissions_for_field_string(Permission::DEFAULT_PERMISSIONS)}").
+      order("FIELD#{Permission.i18n_field_plus_default_permissions_for_field_string(order.include?("asc") ? Permission::DEFAULT_PERMISSIONS : Permission::DEFAULT_PERMISSIONS.reverse)}")
+    }
+  scope :find_friends_with_fb_uid,
+    ->(person){
+      where(fb_uid: Friend.followers(person))
+    }
+  scope :search_by_name_or_email,
+    ->(keyword, org_id){
+      joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id").
+      where("(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?))", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")
+    }
+  scope :email_search,
+    ->(keyword, org_id){
+      joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON people.id = org_permissions.person_id").
+      where("(org_permissions.organization_id = #{org_id} AND (concat(first_name,' ',last_name) LIKE ? OR concat(last_name, ' ',first_name) LIKE ? OR emails.email LIKE ?)) AND emails.email IS NOT NULL", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%").
+      limit(5)
+    }
+  scope :phone_search,
+    ->(keyword, org_id){
+      joins("LEFT JOIN phone_numbers ON phone_numbers.person_id = people.id LEFT JOIN organizational_permissions AS org_permissions ON org_permissions.person_id = people.id").
+      where("(org_permissions.organization_id = ? AND (concat(first_name,' ',last_name) LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone_numbers.number LIKE ?)) AND phone_numbers.number IS NOT NULL AND phone_numbers.not_mobile = 0", org_id, "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%").
+      limit(5)
+    }
+  scope :get_and_order_by_label,
+    ->(order, org_id){
+      joins("LEFT JOIN (SELECT org_labels.person_id, org_labels.id as org_label_id, labels.name as lbl_name, labels.i18n as lbl_i18n, labels.id as lbl_id FROM organizational_labels org_labels INNER JOIN labels ON labels.id = org_labels.label_id WHERE org_labels.id IS NOT NULL AND org_labels.organization_id = '#{org_id}' AND org_labels.removed_date IS NULL ORDER BY FIELD#{Label.i18n_field_plus_default_labels_for_field_string(Label::DEFAULT_CRU_LABELS.reverse)} DESC, labels.name) new_i18n ON new_i18n.person_id = people.id").
+      group("people.id").
+      order("ISNULL(new_i18n.lbl_id), FIELD#{Label.custom_field_plus_default_labels_for_field_string('new_i18n.lbl_i18n',Label::DEFAULT_CRU_LABELS.reverse)} #{order.include?('desc') ? 'ASC' : 'DESC'}, new_i18n.lbl_name #{order.include?('desc') ? 'DESC' : 'ASC'}")
+    }
+  scope :get_and_order_by_latest_answer_sheet_answered,
+    ->(order, org_id){
+      joins("LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id").
+      group("people.id").
+      order("ISNULL(ass.updated_at), MAX(ass.updated_at) #{order.include?("asc") ? 'ASC' : 'DESC'}")
+    }
+  scope :find_by_survey_updated_by_daterange,
+    ->(date_from, date_to, org_id){
+      joins("LEFT JOIN (SELECT ass.updated_at, ass.person_id FROM answer_sheets ass INNER JOIN surveys ms ON ms.id = ass.survey_id WHERE ms.organization_id = '#{org_id}' ORDER BY ass.updated_at DESC) ass ON ass.person_id = people.id").
+      group("people.id").
+      having("DATE(MAX(ass.updated_at)) >= ? AND DATE(MAX(ass.updated_at)) <= ? ", date_from, date_to)
+    }
+  scope :with_label,
+    ->(label, org){
+      joins(:organizational_labels).
+      where('organizational_labels.label_id' => label.id, 'organizational_labels.organization_id' => org.id, 'organizational_labels.removed_date' => nil)
+    }
+  scope :non_staff,
+    ->{where(is_staff: false)}
+  scope :faculty,
+    ->{non_staff.where(faculty: true)}
+  scope :students,
+    ->{non_staff.where(faculty: false)}
 
   def ensure_one_primary_email
     email_addresses = EmailAddress.where(person_id: id)
@@ -354,7 +382,7 @@ class Person < ActiveRecord::Base
           end
         end
       else
-        # answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
+        # answer = answer_sheet.answers.where(question_id: question.id).first_or_initialize
         # if answer.value != answers[question.id.to_s]
         #   answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
         # end
@@ -364,7 +392,7 @@ class Person < ActiveRecord::Base
           if checkbox_answers.present?
             checkbox_answer_ids = []
             checkbox_answers.each do |ans|
-              answer_record = answer_sheet.answers.find_or_create_by_question_id_and_value_and_short_value(question.id, ans, ans)
+              answer_record = answer_sheet.answers.where(question_id: question.id, value: ans, short_value: ans).first_or_create
               checkbox_answer_ids << answer_record.id
             end
             answer_sheet.answers.where("answers.question_id = ? AND answers.id NOT IN (?)", question.id,  checkbox_answer_ids).destroy_all
@@ -372,7 +400,7 @@ class Person < ActiveRecord::Base
             answer_sheet.answers.where("answers.question_id = ?", question.id).destroy_all
           end
         else
-          answer = answer_sheet.answers.find_or_initialize_by_question_id(question.id)
+          answer = answer_sheet.answers.where(question_id: question.id).first_or_initialize
           if answer.value != answers[question.id.to_s] && answers[question.id.to_s].present?
             answer.update_attributes(value: answers[question.id.to_s], short_value: answers[question.id.to_s])
           end
@@ -633,7 +661,7 @@ class Person < ActiveRecord::Base
 
     query = q.join(" OR ") # combine queries
 
-    return Interaction.joins(:organization).where("#{base_q} AND (#{query})").sorted
+    return Interaction.joins(:organization).where("#{base_q} AND (#{query})").try(:sorted) || []
   end
 
   def labeled_in_org(label, org)
@@ -737,26 +765,34 @@ class Person < ActiveRecord::Base
   end
 
   def latest_answer_sheet(organization)
-  	answer_sheets.includes(:survey).where("surveys.organization_id = ?",organization.id).order("answer_sheets.updated_at DESC").first
+  	answer_sheets.includes(:survey).where(surveys: {organization_id: organization.id}).order("answer_sheets.updated_at DESC").first
   end
 
-  scope :get_archived, lambda { |org_id| {
-    :conditions => "(organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL)",
-    :group => "people.id",
-    :having => "COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_permissions orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})"
-  } }
+  scope :get_archived,
+    ->(org_id){
+      where("(organizational_permissions.archive_date IS NOT NULL AND organizational_permissions.deleted_at IS NULL)").
+      group("people.id").
+      having("COUNT(*) = (SELECT COUNT(*) FROM people AS mpp JOIN organizational_permissions orss ON mpp.id = orss.person_id WHERE mpp.id = people.id AND orss.organization_id = #{org_id})")
+    }
+  scope :get_from_group,
+    ->(group_id){
+      joins("LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id").
+      where("gm.group_id = ?", group_id) # AND gm.role = 'leader'
+    }
 
-  scope :get_from_group, lambda { |group_id| {
-    :select => "people.*",
-    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id",
-    :conditions => ["gm.group_id = ?", group_id]
-  } }
+  scope :get_leaders_from_group,
+    ->(group_id){
+      joins("LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id").
+      where("gm.group_id = ? AND gm.role = 'leader'", group_id)
+    }
+  scope :get_archived_included,
+    ->{group("people.id")}
 
-  scope :get_leaders_from_group, lambda { |group_id| {
-    :select => "people.*",
-    :joins => "LEFT JOIN #{GroupMembership.table_name} AS gm ON gm.person_id = people.id",
-    :conditions => ["gm.group_id = ? AND gm.role = 'leader'", group_id]
-  } }
+  scope :get_archived_not_included,
+    ->{
+      where("(organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL)").
+      group("people.id")
+    }
 
   def self.archived(org_id)
     self.get_archived(org_id).collect()
@@ -766,18 +802,9 @@ class Person < ActiveRecord::Base
     Person.where('organizational_permissions.organization_id' => org.id).includes(:organizational_permissions)
   end
 
-  scope :get_archived_included, lambda { {
-    :group => "people.id"
-  } }
-
   def self.archived_included
     self.get_archived_included.collect()
   end
-
-  scope :get_archived_not_included, lambda { {
-    :conditions => "(organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL)",
-    :group => "people.id"
-  } }
 
   def self.archived_not_included
     self.get_archived_not_included.collect()
@@ -792,7 +819,7 @@ class Person < ActiveRecord::Base
   end
 
   def set_as_sent
-    SentPerson.find_or_create_by_person_id(id)
+    SentPerson.where(person_id: id).first_or_create
   end
 
   def self.deleted
@@ -840,7 +867,7 @@ class Person < ActiveRecord::Base
 
   def add_to_label(organization, label, added_by_id = nil)
     label_id = label.is_a?(String) ? label : label.id
-    get_label = self.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id, organization.id)
+    get_label = self.organizational_labels.where(label_id: label_id, organization_id: organization.id).first_or_create
     get_label.added_by_id = added_by_id if get_label.added_by_id.nil?
     get_label.save
     get_label
@@ -875,13 +902,13 @@ class Person < ActiveRecord::Base
 
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
-    return scope.where('1 = 0') unless name.present?
     scope ||= Person
+    return scope.where('1 = 0') unless name.present?
 
     conditions = ["LOWER(CONCAT(first_name, ' ' , last_name)) LIKE ?", "%#{name.downcase}%"]
 
     scope = scope.where(conditions)
-    scope = scope.where('organizational_permissions.organization_id IN(?)', organization_ids).includes(:organizational_permissions) if organization_ids
+    scope = scope.joins(:organizational_permissions).where('organizational_permissions.organization_id IN(?)', organization_ids) if organization_ids
     scope
   end
 
@@ -1026,7 +1053,7 @@ class Person < ActiveRecord::Base
       else
         org.show_sub_orgs? ? [org] + org.children : [org]
       end
-    }.flatten.uniq_by{ |o| o.id }
+    }.flatten.uniq
   end
 
   def phone_number
@@ -1146,7 +1173,7 @@ class Person < ActiveRecord::Base
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
         begin
-          email_addresses.find_or_create_by_email(data['email'].strip) if data['email'].present?
+          email_addresses.where(email: data['email'].strip).first_or_create if data['email'].present?
         rescue ActiveRecord::RecordNotUnique
           return self
         end
@@ -1192,7 +1219,6 @@ class Person < ActiveRecord::Base
       org = self.organization_from_id(user.primary_organization_id) if user && user.primary_organization_id.present?
       unless org
         org = self.organizations.first
-
         # save this as the primary org
         self.primary_organization = org
       end
@@ -1285,16 +1311,17 @@ class Person < ActiveRecord::Base
     begin
       if response.nil?
         @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
-      else @interests = response
+      else
+        @interests = response
       end
+
       @interests["data"].each do |interest|
-        interests.find_or_initialize_by_interest_id_and_person_id_and_provider(interest['id'], id.to_i, "facebook") do |i|
-          i.provider = "facebook"
-          i.category = interest['category']
-          i.name = interest['name']
-          i.interest_created_time = interest['created_time']
-        end
-        save
+        i = interests.where(interest_id: interest['id'], person_id: id.to_i, provider: "facebook").first_or_initialize
+        i.provider = "facebook"
+        i.category = interest['category']
+        i.name = interest['name']
+        i.interest_created_time = interest['created_time']
+        i.save
       end
       interests.count
     rescue
@@ -1307,7 +1334,7 @@ class Person < ActiveRecord::Base
       @location = MiniFB.get(authentication['token'], authentication['uid']).location
     else @location = response.location
     end
-    Location.find_or_create_by_location_id_and_name_and_person_id_and_provider(@location['id'], @location['name'], id.to_i,"facebook") unless @location.nil?
+    Location.where(location_id: @location['id'], name: @location['name'], person_id: id.to_i, provider: "facebook").first_or_create unless @location.nil?
   end
 
   def get_education_history(authentication, response = nil)
@@ -1317,23 +1344,22 @@ class Person < ActiveRecord::Base
     end
     unless @education.nil?
       @education.each do |education|
-        education_histories.find_or_initialize_by_school_id_and_person_id_and_provider(education.school.try(:id), id.to_i, "facebook") do |e|
-          e.year_id = education.year.try(:id) ? education.year.id : e.year_id
-          e.year_name = education.year.try(:name) ? education.year.name : e.year_name
-          e.school_type = education.try(:type) ? education.type : e.school_type
-          e.school_name = education.school.try(:name) ? education.school.name : e.school_name
-          unless education.try(:concentration).nil?
-            0.upto(education.concentration.length-1) do |c|
-              e["concentration_id#{c+1}"] = education.concentration[c].try(:id) ? education.concentration[c].id : e["concentration_id#{c+1}"]
-              e["concentration_name#{c+1}"] = education.concentration[c].try(:name) ? education.concentration[c].name : e["concentration_name#{c+1}"]
-            end
+        e = education_histories.where(school_id: education.school.try(:id), person_id: id.to_i, provider: "facebook").first_or_initialize
+        e.year_id = education.year.try(:id) ? education.year.id : e.year_id
+        e.year_name = education.year.try(:name) ? education.year.name : e.year_name
+        e.school_type = education.try(:type) ? education.type : e.school_type
+        e.school_name = education.school.try(:name) ? education.school.name : e.school_name
+        unless education.try(:concentration).nil?
+          0.upto(education.concentration.length-1) do |c|
+            e["concentration_id#{c+1}"] = education.concentration[c].try(:id) ? education.concentration[c].id : e["concentration_id#{c+1}"]
+            e["concentration_name#{c+1}"] = education.concentration[c].try(:name) ? education.concentration[c].name : e["concentration_name#{c+1}"]
           end
-          unless education.try(:degree).nil?
-            e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
-            e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
-          end
-          save(validate: false)
         end
+        unless education.try(:degree).nil?
+          e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
+          e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
+        end
+        e.save(validate: false)
       end
     end
   end
@@ -1746,7 +1772,7 @@ class Person < ActiveRecord::Base
   end
 
   def friends_in_orgnization(org)
-    friends.includes(:organizational_permissions).where('organizational_permissions.organization_id = ?',org.id)
+    friends.includes(:organizational_permissions).where(organizational_permissions: {organization_id: org.id})
   end
 
   def assigned_organizational_labels(organization_id)
@@ -1864,7 +1890,7 @@ class Person < ActiveRecord::Base
       privacy_setting: Interaction::DEFAULT_PRIVACY
     )
     if interaction.save
-      interaction.interaction_initiators.find_or_create_by_person_id(added_by_person_id)
+      interaction.interaction_initiators.where(person_id: added_by_person_id).first_or_create
       return interaction
     end
   end

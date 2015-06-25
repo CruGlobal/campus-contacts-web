@@ -121,7 +121,7 @@ class SurveyResponsesController < ApplicationController
         params[:person] = Hash.new unless params[:person]
 
         ['birth_date','graduation_date', 'email'].each do |attr_name|
-          if element = @survey.questions.find_by_attribute_name(attr_name)
+          if element = @survey.questions.where(attribute_name: attr_name).first
             if element.predefined? && params[:answers]["#{element.id}"].present?
               params[:person][:"#{attr_name}"] = params[:answers]["#{element.id}"]
             end

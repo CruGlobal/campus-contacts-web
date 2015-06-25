@@ -2,16 +2,18 @@ require 'async'
 class BulkMessage < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
-  
+
+  attr_accessible :person_id, :organization_id, :status, :results
+
   serialize :results
   belongs_to :person
   belongs_to :organization
   has_many :messages
-  
+
   def do_process
     async(:process)
   end
-  
+
   def process
     bulk_message = BulkMessage.find_by_id(id)
     if bulk_message.present? && bulk_message.messages.present?

@@ -219,6 +219,7 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
+  config.secret_key = '151ad0cf1f9cfbef1e2f7cf1df1594ee219e4a99b8dadc4022bba7c0f35badfb0fc5fbe8eea94f947923aa66870049ae0ab29e9b1bd719b6dda9d34c0fe27002'
 
   Warden::Manager.before_failure do |env,opts|
     request = Rack::Request.new(env)

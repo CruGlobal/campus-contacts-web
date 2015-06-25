@@ -3,6 +3,8 @@ require 'open-uri'
 require 'contact_methods'
 require 'async'
 class Import < ActiveRecord::Base
+  attr_accessible :user_id, :organization_id, :survey_ids, :upload, :headers, :header_mappings, :preview
+
   include Async
   include Sidekiq::Worker
   include ContactMethods
@@ -15,8 +17,9 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  has_attached_file :upload, s3_credentials: 'config/config.yml', s3_permissions: :private, storage: :s3,
-                             path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
+  has_attached_file :upload, s3_credentials: 'config/config.yml', s3_permissions: :private, storage: :s3, path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
+
+  validates_attachment_file_name :upload, :matches => [/csv\Z/]
 
   validates :upload, attachment_presence: true
 
@@ -29,7 +32,7 @@ class Import < ActiveRecord::Base
   def get_new_people # generates array of Person hashes
     new_people = Array.new
     first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
-    email_question = Element.where( :attribute_name => "email").first.id.to_s
+    email_question = Element.where(attribute_name: "email").first.id.to_s
 
     file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
     content = CSV.new(file, :headers => :first_row)
@@ -95,7 +98,7 @@ class Import < ActiveRecord::Base
         else
         	labels.each do |label_id|
 						if label_id.to_i == 0
-							label = Label.find_or_create_by_organization_id_and_name(current_organization.id, label_name)
+							label = Label.where(organization_id: current_organization.id, name: label_name).first_or_create
 							label_id = label.id
 						elsif label_id.to_i == Label::LEADER_ID
 							import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
@@ -155,9 +158,10 @@ class Import < ActiveRecord::Base
 
 	    	#create unique phone number but not a primary
 	    	if question.attribute_name == "phone_number"
-	    		numbers = person.phone_numbers
-	    		if numbers.find_by_primary(true).present?
-    				new_phone_numbers << person.phone_numbers.new(number: answer, primary: false) unless numbers.where("number = ?", answer).present?
+	    		if person.phone_numbers.where(phone_numbers: {primary: true}).present?
+    				new_phone_numbers << person.phone_numbers.new(number: answer, primary: false) unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
+          else
+            new_phone_numbers << person.phone_numbers.new(number: answer, primary: true) unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
 	    		end
 	    	end
 	   	end

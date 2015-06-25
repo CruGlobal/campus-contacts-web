@@ -1,7 +1,7 @@
 class SmsKeywordsController < ApplicationController
   before_filter :check_org_and_authorize
   before_filter :find_keyword, :only => [:edit, :update, :destroy]
-  
+
   def index
     authorize! :manage, current_organization
     @keywords = current_organization.self_and_children_keywords
@@ -66,12 +66,12 @@ class SmsKeywordsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   def accept_twilio
     current_organization.keywords.update_all("gateway = 'twilio'")
     redirect_to :back
   end
-  
+
   private
     def check_org_and_authorize
       unless current_organization
@@ -81,7 +81,7 @@ class SmsKeywordsController < ApplicationController
       end
       authorize! :manage, current_organization
     end
-    
+
     def find_keyword
       @sms_keyword = SmsKeyword.find(params[:id])
       authorize! :manage, @sms_keyword

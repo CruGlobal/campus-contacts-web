@@ -10,6 +10,14 @@ Mh::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  root to: "welcome#index"
+
+  resources :saved_contact_searches, only: [:index, :create, :destroy] do
+    collection do
+      post :update
+    end
+  end
+
   resources :bulk_messages, only: [] do
     collection do
       post :sms
@@ -45,7 +53,7 @@ Mh::Application.routes.draw do
 
   get "dashboard/index"
 
-  resources :imports, :only => [:show, :new, :create, :update, :destroy, :edit] do
+  resources :imports, :except => [:show] do
     collection do
       get :download_sample_contacts_csv
       post :import
@@ -73,28 +81,28 @@ Mh::Application.routes.draw do
     end
   end
 
-  match 'imports/:id/labels' => 'imports#labels'
-  match 'show_assign_search' => 'contacts#show_assign_search'
-  match 'show_hidden_questions' => 'contacts#show_hidden_questions'
-  match 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
-  match 'display_sidebar' => 'contacts#display_sidebar'
-  match 'display_new_sidebar' => 'contacts#display_new_sidebar'
-  match 'show_other_orgs' => 'surveys#show_other_orgs'
-  match 'copy_survey' => 'surveys#copy_survey'
-  match 'sent_messages' => 'messages#sent_messages'
-  match 'search_locate_contact' => 'contacts#search_locate_contact'
+  get 'imports/:id/labels' => 'imports#labels'
+  get 'show_assign_search' => 'contacts#show_assign_search'
+  get 'show_hidden_questions' => 'contacts#show_hidden_questions'
+  get 'show_search_hidden_questions' => 'contacts#show_search_hidden_questions'
+  get 'display_sidebar' => 'contacts#display_sidebar'
+  get 'display_new_sidebar' => 'contacts#display_new_sidebar'
+  get 'show_other_orgs' => 'surveys#show_other_orgs'
+  get 'copy_survey' => 'surveys#copy_survey'
+  get 'sent_messages' => 'messages#sent_messages'
+  get 'search_locate_contact' => 'contacts#search_locate_contact'
 
   resources :group_labels, :only => [:create, :destroy]
 
-  ActiveAdmin.routes(self)
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!
-      unless user_signed_in? && SuperAdmin.find_by_user_id_and_site(current_user.id, 'MissionHub')
+      unless user_signed_in? && SuperAdmin.where(user_id: current_user.id, site: 'MissionHub').first
         render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
         false
       end
     end
   end
+  ActiveAdmin.routes(self)
 
   resources :groups do
     resources :group_labelings, :only => [:create, :destroy]
@@ -104,8 +112,13 @@ Mh::Application.routes.draw do
       end
     end
   end
+  resources :group_memberships, :only => [:create, :destroy] do
+    collection do
+      get :search
+    end
+  end
 
-  match 'survey_responses/:id/answer_other_surveys' => 'survey_responses#answer_other_surveys', as: "answer_other_surveys"
+  get 'survey_responses/:id/answer_other_surveys' => 'survey_responses#answer_other_surveys', as: "answer_other_surveys"
   resources :survey_responses do
     collection do
       get :thanks
@@ -139,9 +152,6 @@ Mh::Application.routes.draw do
   end
 
   # resources :rejoicables
-
-  resources :saved_contact_searches
-
   resources :followup_comments, :only => [:index, :create, :destroy]
 
   resources :contact_assignments, :only => [:create] do
@@ -158,10 +168,10 @@ Mh::Application.routes.draw do
     end
   end
 
-  match "/people" => "contacts#all_contacts"
-  match "/allcontacts?assigned_to=unassigned" => "contacts#all_contacts", as: "unassigned_contacts"
+  get "/people" => "contacts#all_contacts"
+  get "/allcontacts?assigned_to=unassigned" => "contacts#all_contacts", as: "unassigned_contacts"
   get "/contacts" => redirect("/allcontacts")
-  match "/old_directory" => "people#index"
+  get "/old_directory" => "people#index"
   resources :people, :only => [:show, :create, :edit, :update, :destroy] do
     collection do
       get :export
@@ -203,7 +213,7 @@ Mh::Application.routes.draw do
   #   resources :organizations
   # end
 
-  match "load_organization_tree" => "organizations#load_tree"
+  get "load_organization_tree" => "organizations#load_tree"
   resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
@@ -273,32 +283,26 @@ Mh::Application.routes.draw do
     end
   end
 
-  match "/dashboard" => "dashboard#index"
-  get "welcome/index"
-  get "welcome/duplicate"
-  match 'tutorials' => "welcome#tutorials"
-  get "/test" => "welcome#test"
-
   devise_for :users, controllers: { sessions: "sessions" }
 
   devise_scope :user do
-    match "/sign_in", to: "sessions#new"
-    match "/sign_out", to: "sessions#destroy"
-    match '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
-    match '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
-    match '/users/auth/relay/callback', to: 'users/omniauth_callbacks#relay'
-    match '/users/auth/key/callback', to: 'users/omniauth_callbacks#key'
+    get "/sign_in", to: "sessions#new"
+    get "/sign_out", to: "sessions#destroy"
+    get '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
+    get '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
+    get '/users/auth/relay/callback', to: 'users/omniauth_callbacks#relay'
+    get '/users/auth/key/callback', to: 'users/omniauth_callbacks#key'
   end
-  match '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
+  get '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
 
-  match "/application.manifest" => OFFLINE
+  get "/application.manifest" => OFFLINE
 
   post "sms/mo"
   get "sms/mo"
 
-  match "/allcontacts" => "contacts#all_contacts", as: "all_contacts"
-  match "/mycontacts" => "contacts#my_contacts", as: "my_contacts"
-  match "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
+  get "/allcontacts" => "contacts#all_contacts", as: "all_contacts"
+  get "/mycontacts" => "contacts#my_contacts", as: "my_contacts"
+  get "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
   resources :contacts do
     collection do
       post :unhide_questions
@@ -411,44 +415,47 @@ Mh::Application.routes.draw do
     end
   end
 
-  root to: "welcome#index"
-#  match 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
-  match 'wizard' => 'welcome#wizard', as: 'wizard'
-  match 'terms' => 'welcome#terms', as: 'terms'
-  match 'privacy' => 'welcome#privacy', as: 'privacy'
-  match "welcome/tour" => 'welcome#tutorials'
+#  get 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
+  get 'dashboard' => 'dashboard#index'
+  get 'wizard' => 'welcome#wizard', as: 'wizard'
+  get 'terms' => 'welcome#terms', as: 'terms'
+  get 'privacy' => 'welcome#privacy', as: 'privacy'
+  get 'tutorials' => 'welcome#tutorials'
+  get 'test' => 'welcome#test'
+  get 'welcome/index'
+  get 'welcome/duplicate'
 
   # SMS keyword state transitions
-  match '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
-  match '/admin/sms_keywords/approve'
+  get '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
+  get '/admin/sms_keywords/approve'
 
-  match '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
-  match '/admin/organizations/approve'
+  get '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
+  get '/admin/organizations/approve'
 
   # Map keyword responses with phone numbers
-  match 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
-  match 'm/:received_sms_id' => 'survey_responses#new'
-  match 'l/:token/:user_id' => 'leaders#leader_sign_in', as: 'leader_link'
-  match 'l/:token/:user_id/merge' => 'leaders#merge_leader_accounts', as: 'merge_leader_link'
-  match 'l/:token/:user_id/signout' => 'leaders#sign_out_and_leader_sign_in', as: 'sign_out_and_leader_sign_in'
+  get 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
+  get 'm/:received_sms_id' => 'survey_responses#new'
+  get 'l/:token/:user_id' => 'leaders#leader_sign_in', as: 'leader_link'
+  get 'l/:token/:user_id/merge' => 'leaders#merge_leader_accounts', as: 'merge_leader_link'
+  get 'l/:token/:user_id/signout' => 'leaders#sign_out_and_leader_sign_in', as: 'sign_out_and_leader_sign_in'
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get "/surveys/:keyword" => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
-  match 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
-  match 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
+  get 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
+  get 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   #mount Resque::Server.new, at: "/resque"
 
   #other oauth calls
-  match "oauth/authorize" => "oauth#authorize"
-  match "oauth/grant" => "oauth#grant"
-  match "oauth/deny" => "oauth#deny"
-  match "oauth/done" => "oauth#done"
+  get "oauth/authorize" => "oauth#authorize"
+  get "oauth/grant" => "oauth#grant"
+  get "oauth/deny" => "oauth#deny"
+  get "oauth/done" => "oauth#done"
   #make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
 
   # Monitor
-  match "monitor/:action", controller: 'monitor'
+  get "monitor/:action", controller: 'monitor'
 end

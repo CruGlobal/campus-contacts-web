@@ -28,7 +28,7 @@ ActiveAdmin.register Survey do
   end
 
   member_action :questions do
-    if @survey = Survey.find_by_id(params[:id])
+    if @survey = Survey.where(id: params[:id]).first
       @page_title = "All Questions for '#{@survey.title}'"
       @questions = Array.new
       locked_questions = Element.where(attribute_name: ["first_name", "last_name", "phone_number"])

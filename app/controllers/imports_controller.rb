@@ -35,7 +35,7 @@ class ImportsController < ApplicationController
 
   def labels
     @import_count =  @import.get_new_people.count
-    email_element = Element.find_by_attribute_name('email')
+    email_element = Element.where(attribute_name: 'email').first
     @block_admin_label = !@import.header_mappings.has_value?(email_element.id.to_s)
     @permissions = current_organization.permissions
   end
@@ -44,7 +44,7 @@ class ImportsController < ApplicationController
     columns_without_question = params[:import][:header_mappings].reject{|x,y| y.present? }
     if columns_without_question.count > 0
       survey_title = "Import-#{@import.created_at.strftime('%Y-%m-%d')}"
-      unless @survey = current_organization.surveys.find_by_title(survey_title)
+      unless @survey = current_organization.surveys.where(title: survey_title).first
         @survey = current_organization.surveys.create(
           login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
           title: survey_title,
@@ -54,11 +54,11 @@ class ImportsController < ApplicationController
       end
       columns_without_question.each do |column|
         question_label = @import.headers[column[0].to_i]
-        unless @question = @survey.elements.find_by_label(question_label)
+        unless @question = @survey.elements.where(label: question_label).first
           @question = TextField.create!(style: 'short', label: question_label, content: params[:options], slug: '')
           @survey.elements << @question
         end
-        @survey.survey_elements.find_by_element_id(@question.id).update_attribute(:hidden, true)
+        @survey.survey_elements.where(element_id: @question.id).first.update_attribute(:hidden, true)
         params[:import][:header_mappings][column[0]] = @question.id.to_s
       end
     end
@@ -167,7 +167,7 @@ class ImportsController < ApplicationController
         else
           begin
             @survey.elements << @question
-            @survey.survey_elements.find_by_element_id(@question.id).update_attribute(:hidden, true)
+            @survey.survey_elements.where(element_id: @question.id).first.update_attribute(:hidden, true)
             @message = "SUCCESS"
           rescue ActiveRecord::RecordInvalid => e
             @message = I18n.t('surveys.questions.create.duplicate_error')

@@ -25,7 +25,7 @@ class ContactsController < ApplicationController
       if label_ids.present?
         label_ids = label_ids.split(',')
         label_ids.each do |label_id|
-          label = person.organizational_labels.find_or_create_by_label_id_and_organization_id(label_id.to_i, current_organization.id)
+          label = person.organizational_labels.where(label_id: label_id.to_i, organization_id: current_organization.id).first_or_create
           label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
         end
       end
@@ -84,7 +84,7 @@ class ContactsController < ApplicationController
     people_to_update.each do |person|
       if params[:group_id].present?
         group = current_organization.groups.find(params[:group_id])
-        group_membership = group.group_memberships.find_or_initialize_by_person_id(person.id)
+        group_membership = group.group_memberships.where(person_id: person.id).first_or_initialize
         group_membership.save
       end
 
@@ -269,7 +269,8 @@ class ContactsController < ApplicationController
 
       wants.csv do
         fetch_contacts(true)
-        @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
+        @permissions = OrganizationalPermission.get_permission_hash(@organization, @all_people)
+        # @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
         @all_answers = generate_answers(@all_people, @organization, @questions, @surveys)
         @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
         filename = @organization.to_s
@@ -284,8 +285,8 @@ class ContactsController < ApplicationController
     @people = params[:include_archived] ?
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq :
       current_organization.people.search_by_name_or_email(params[:term].strip, current_organization.id).uniq.archived_not_included
-    respond_to do |wants|
-      wants.json { render text: @people.collect{|person| {"label" => person.name, "email" => person.email.downcase, "id" => person.id}}.to_json }
+    respond_to do |format|
+      format.json { render json: @people.collect{|person| {"label" => person.name, "email" => person.email.downcase, "id" => person.id}}.to_json }
     end
   end
 
@@ -350,7 +351,6 @@ class ContactsController < ApplicationController
 		people_results = people.collect{|p| {name: "#{p.name} - #{p.pretty_text_phone_number}", id: p.id.to_s}}
 
 		@results = all_contacts + permissions_results + labels_results + groups_results + people_results
-
 		respond_to do |format|
 		  format.json { render json: @results.to_json }
 		end
@@ -362,7 +362,7 @@ class ContactsController < ApplicationController
       @person_ids = EmailAddress.where("email LIKE ?", "%#{@email}%").group("person_id").collect(&:person_id)
       @people = Person.where("id IN (?)", @person_ids)
       @people = @people.reject do |person|
-        person if person.organizational_permissions.find_by_organization_id(current_organization.id)
+        person if person.organizational_permissions.where(organization_id: current_organization.id).first
       end
     end
   end
@@ -408,7 +408,7 @@ class ContactsController < ApplicationController
     if params[:answers]
       params[:answers].each do |survey,answers|
         answers.each do |key,val|
-          if val.present? && date_question = Element.find_by_id(key.to_i)
+          if val.present? && date_question = Element.where(id: key.to_i).first
             @person.birth_date = val if date_question.attribute_name == 'birth_date'
             @person.graduation_date = val if date_question.attribute_name == 'graduation_date'
             @person.save if ['birth_date','graduation_date'].include?(date_question.attribute_name)
@@ -453,7 +453,7 @@ class ContactsController < ApplicationController
       if fields.is_a?(Hash)
         # Read birth_date question from non-predefined survey
         answers.each do |key,val|
-          if val.present? && date_question = Element.find_by_id(key.to_i)
+          if val.present? && date_question = Element.where(id: key.to_i).first
             @person.birth_date = val if date_question.attribute_name == 'birth_date'
             @person.graduation_date = val if date_question.attribute_name == 'graduation_date'
             break unless @person.valid?
@@ -462,7 +462,7 @@ class ContactsController < ApplicationController
       else
         # Read birth_date question from predefined survey
         question_id = answers[0]
-        if fields.present? && date_question = Element.find_by_id(question_id.to_i)
+        if fields.present? && date_question = Element.where(id: question_id.to_i).first
           @person.birth_date = fields if date_question.attribute_name == 'birth_date'
           @person.graduation_date = fields if date_question.attribute_name == 'graduation_date'
           break unless @person.valid?
@@ -599,7 +599,7 @@ class ContactsController < ApplicationController
       else
         @survey = Survey.find(params[:survey_id])
         @organization = @survey.organization
-        @survey_element = @organization.survey_elements.find_by_element_id(@selected_question_id)
+        @survey_element = @organization.survey_elements.where(element_id: @selected_question_id).first
         @survey_element.update_attribute(:hidden, false)
         @question = @survey_element.element
       end

@@ -5,6 +5,8 @@ class SentSms < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
 
+  attr_accessible :message_id, :message, :recipient, :reports, :moonshado_claimcheck, :sent_via, :status, :received_sms_id, :twilio_sid, :twilio_uri, :separator, :question_id
+
   belongs_to :received_sms
   # belongs_to :message
 
@@ -78,16 +80,16 @@ class SentSms < ActiveRecord::Base
           response_code = response_hash.first.to_i
           self.update_attribute('reports', response_hash)
           if response_code == 0
-            puts "Success (#{response_code})"
+            # puts "Success (#{response_code})"
             self.update_attributes(reports: response_hash, status: "sent")
           else
-            puts "Failed (#{response_code})"
+            # puts "Failed (#{response_code})"
             self.update_attributes(reports: response_hash, status: "failed")
             result = false
           end
         rescue
           msg = "Connection to #{url} failed!"
-          puts msg
+          # puts msg
           self.update_attributes(reports: msg, status: "failed")
           result = false
         end
@@ -111,7 +113,7 @@ class SentSms < ActiveRecord::Base
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
         self.update_attributes(status: "sending")
-      
+
         msgid = URI.encode("#{id}-#{i+1}")
         msg = URI.encode(message.strip)
 
@@ -125,16 +127,16 @@ class SentSms < ActiveRecord::Base
           response_code = response_hash['REPONSE']['statut'].to_i
           self.update_attribute('reports', response_hash)
           if response_code == 0
-            puts "Success (#{response_code})"
+            # puts "Success (#{response_code})"
             self.update_attributes(reports: response_hash['REPONSE'], status: "sent")
           else
-            puts "Failed (#{response_code})"
+            # puts "Failed (#{response_code})"
             self.update_attributes(reports: response_hash['REPONSE'], status: "failed")
             result = false
           end
         rescue
           msg = "Connection to #{url} failed!"
-          puts msg
+          # puts msg
           self.update_attributes(reports: msg, status: "failed")
           result = false
         end
@@ -145,7 +147,7 @@ class SentSms < ActiveRecord::Base
     end
     return result
   end
-  
+
   def send_to_twilio(from)
     result = true
     phone_number = PhoneNumber.find_by_number(recipient)

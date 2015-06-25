@@ -1,4 +1,6 @@
 class Interest < ActiveRecord::Base
+  attr_accessible :name, :interest_id, :provider, :category, :person_id, :interest_created_time
+
   belongs_to :person
   validates_presence_of :person_id, :name, :provider, :interest_id, :category, on: :create, message: "can't be blank"
 
@@ -10,7 +12,7 @@ class Interest < ActiveRecord::Base
     @hash['provider'] = provider
     @hash
   end
-  
+
   def self.get_interests_hash(person_id)
     eh = Interest.where("person_id = ?", person_id)
     eh.collect(&:to_hash)

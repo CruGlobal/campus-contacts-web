@@ -5,45 +5,45 @@ module ApiTestHelper
 ######################################
 
 def setup_api_env
-  @temp_org = Factory(:organization)
+  @temp_org = FactoryGirl.create(:organization)
 
-  @user = Factory.create(:user_no_org_with_facebook)
-  Factory.create(:authentication, user: @user)
+  @user = FactoryGirl.create(:user_no_org_with_facebook)
+  FactoryGirl.create(:authentication, user: @user)
   #@user.person.organization_memberships.create(organization_id: @temp_org.id, person_id: @user.person.id, primary: true)
   #@user.person.organizational_permissions.create(organization_id: @temp_org.id, person_id: @user.person.id, permission_id: Permission::NO_PERMISSIONS_ID)
   @temp_org.add_contact(@user.person)
   @temp_org.add_label_to_person(@user.person, Label::LEADER_ID)
 
-  @user2 = Factory.create(:user_no_org_with_facebook)
-  Factory.create(:authentication, user: @user2, uid: "1234")
+  @user2 = FactoryGirl.create(:user_no_org_with_facebook)
+  FactoryGirl.create(:authentication, user: @user2, uid: "1234")
   @temp_org.add_contact(@user2.person)
   @temp_org.add_label_to_person(@user2.person, Label::ENGAGED_DISCIPLE)
   @user2.person.update_attributes(first_name: "Test", last_name: "Useroo")
 
-  @user3 = Factory.create(:user_no_org_with_facebook)
-  Factory.create(:authentication, user: @user3, uid: "123456")
+  @user3 = FactoryGirl.create(:user_no_org_with_facebook)
+  FactoryGirl.create(:authentication, user: @user3, uid: "123456")
   @temp_org.add_admin(@user3.person)
   @temp_org.add_label_to_person(@user3.person, Label::LEADER_ID)
   @user3.person.update_attributes(first_name: "Another Test", last_name: "Usereeeee")
 
   #create contact assignments
-  @contact_assignment1 = Factory.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
-  @contact_assignment2 = Factory.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
+  @contact_assignment1 = FactoryGirl.create(:contact_assignment, assigned_to_id: @user.person.id, person_id: @user2.person.id, organization_id: @temp_org.id)
+  @contact_assignment2 = FactoryGirl.create(:contact_assignment, assigned_to_id: @user2.person.id, person_id: @user.person.id, organization_id: @temp_org.id)
 
-  @access_token = Factory.create(:access_token, identity: @user.id)
-  @access_token2 = Factory.create(:access_token, identity: @user2.id, code: "abcdefgh")
-  @access_token3 = Factory.create(:access_token, identity: @user3.id, code: "abcdefghijklmnop")
+  @access_token = FactoryGirl.create(:access_token, identity: @user.id)
+  @access_token2 = FactoryGirl.create(:access_token, identity: @user2.id, code: 1312)
+  @access_token3 = FactoryGirl.create(:access_token, identity: @user3.id, code: "12312412")
 
   #setup question sheets, questions, and an answer sheet for user1 and user2
-  @keyword = Factory(:approved_keyword, organization: @temp_org)
+  @keyword = FactoryGirl.create(:approved_keyword, organization: @temp_org)
   @survey = @keyword.survey
-  @first_nameQ = Factory(:element)
+  @first_nameQ = FactoryGirl.create(:element)
   @survey.elements << @first_nameQ
   @questions = @survey.questions
-  @answer_sheet = Factory(:answer_sheet, survey: @survey, person: @user.person)
-  @answer_sheet2 = Factory(:answer_sheet, survey: @survey, person: @user2.person)
-  @answer_to_choice = Factory(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
-  @answer_to_choice2 = Factory(:answer_1, answer_sheet: @answer_sheet2, question: @questions.first)
+  @answer_sheet = FactoryGirl.create(:answer_sheet, survey: @survey, person: @user.person)
+  @answer_sheet2 = FactoryGirl.create(:answer_sheet, survey: @survey, person: @user2.person)
+  @answer_to_choice = FactoryGirl.create(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
+  @answer_to_choice2 = FactoryGirl.create(:answer_1, answer_sheet: @answer_sheet2, question: @questions.first)
 end
 
 

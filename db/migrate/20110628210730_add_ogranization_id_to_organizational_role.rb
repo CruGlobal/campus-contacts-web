@@ -10,9 +10,9 @@ class AddOgranizationIdToOrganizationalRole < ActiveRecord::Migration
     add_column :organizational_roles, :organization_id, :integer
 
     OrganizationalRole.delete_all
-    contact = Role.find_by_i18n('contact').id
-    admin = Role.find_by_i18n('admin').id
-    leader = Role.find_by_i18n('leader').id
+    contact = Role.where(i18n: 'contact').first.try(:id)
+    admin = Role.where(i18n: 'admin').first.try(:id)
+    leader = Role.where(i18n: 'leader').first.try(:id)
     %w[contact admin leader].each do |role|
       OrganizationMembership.where(role: role).each do |om|
         OrganizationalRole.create(role_id: eval(role), person_id: om.person_id, organization_id: om.organization_id)
