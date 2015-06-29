@@ -21,8 +21,7 @@
 //= require ba-debug-0.4.min.js
 //= require hoverIntent
 //= require jquery.touchwipe.1.1.1
-//= require superfish
-//= require superscroll
+//= require superclick
 //= require mh
 //= require questions
 //= require contacts

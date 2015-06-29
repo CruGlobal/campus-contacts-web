@@ -4,7 +4,7 @@
 
 <%= link_to("", "/", id: "logoInvert") %>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
-  <ul class="sf-menu sf-navbar mh-top">
+  <ul class="sc-init-menu sf-menu sf-navbar mh-top">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
     </li>
@@ -33,7 +33,7 @@
 
     <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
       <%= link_to(t('nav.organizations'), "/organizations") %>
-      <ul style='display:none;'>
+      <ul>
         <li class="<%= 'current' if request.path == snapshot_charts_path %> visual-menu">
           <%= link_to(t('nav.visual_tools'), charts_path) %>
           <ul>
