@@ -3,7 +3,7 @@
 	<div id="logo_container">&nbsp;</div>
 	<% end %>
   <div class="gmdrop">
-    <ul class="sf-menu mh-global">
+    <ul class="sc-init-nav sf-menu mh-global">
       <% if session[:old_user_id].present? %>
         <li><%= link_to('Exit SU Mode', '?exit=true') %></li>
       <% end %>
@@ -38,7 +38,7 @@
               </ul>
             </li>
           <% end %>
-          <li>
+          <li class="under_tree_container">
             <%= link_to current_organization, '#', class: "org_tree_link" %>
             <% if current_person.organization_objects.length > 1 %>
               <% cache(['org_nav', current_person]) do %>

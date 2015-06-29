@@ -197,8 +197,24 @@ $ ->
           helper_text = $('#drag_helper_text_other').html().replace('0', length)
         $('<div class="drag-contact">' + helper_text + '</div>').appendTo($('body'))
 
+  if $.fn.superclick?
+    $('ul.sc-init-menu').superclick({
+      speed: 0,
+      pathLevels: 0,
+      delay: 300
+    })
+
+    sc_nav = $('ul.sc-init-nav').superclick({
+      speed: 0,
+      pathLevels: 0,
+      delay: 300
+    })
+    $(document).on 'click', '.org_nav_item', (e) ->
+      e.stopPropagation()
+      sc_nav.children('li.under_tree_container').superclick('show')
+
   if $.fn.superfish?
-    $('ul.sf-menu').superfish({
+    $('ul.sf-init').superfish({
       pathClass: 'current',
       speed: 0,
       pathLevels: 0,
