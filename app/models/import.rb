@@ -15,7 +15,7 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  has_attached_file :upload, s3_credentials: 'config/s3.yml', s3_permissions: :private, storage: :s3,
+  has_attached_file :upload, s3_credentials: 'config/config.yml', s3_permissions: :private, storage: :s3,
                              path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
 
   validates :upload, attachment_presence: true

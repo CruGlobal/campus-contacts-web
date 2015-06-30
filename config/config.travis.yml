@@ -16,3 +16,6 @@ test:
   smseco_username: test
   smseco_password: test
   smseco_url: test
+  access_key_id: test
+  secret_access_key: test
+  bucket: staging.missionhub.com

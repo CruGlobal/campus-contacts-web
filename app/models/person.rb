@@ -11,7 +11,7 @@ class Person < ActiveRecord::Base
                   :meta => { person_id: :id }
 
   has_attached_file :avatar, :styles => { :medium => "200x200>", :thumb => "100x100>", big_square: "300x300#"},
-    s3_credentials: 'config/s3.yml', storage: :s3, path: 'people/:attachment/:style/:id/:filename',
+    s3_credentials: 'config/config.yml', storage: :s3, path: 'people/:attachment/:style/:id/:filename',
     s3_storage_class: :reduced_redundancy
 
   validates_attachment :avatar,

@@ -15,9 +15,9 @@ class Survey < ActiveRecord::Base
   has_many :all_questions, :through => :survey_elements, :source => :question, :order => 'position', :order => "#{SurveyElement.table_name}.position"
   has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
 
-  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: 'config/s3.yml', storage: :s3,
+  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: 'config/config.yml', storage: :s3,
                              path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
-  has_attached_file :css_file, s3_credentials: 'config/s3.yml', storage: :s3,
+  has_attached_file :css_file, s3_credentials: 'config/config.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   has_many :answer_sheets
   has_many :rules, :through => :survey_elements
