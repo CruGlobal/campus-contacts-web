@@ -10,13 +10,7 @@
         <div class="note send_text">
           <div><%=raw t('general.sms_note') %></div>
         </div>
-        <div class="note send_email">
-          <div class="reply_to_toggle">
-            <%= check_box_tag "reply_to_email", 1, id: "reply_to_email" %>
-            <span class="reply_to_info"><%=raw t('general.email_note') %></span>
-          </div>
-        </div>
-        <div class="mh_popup_box_scroller">
+        <div>
           <div class="field">
             <label><%= t('general.recipients') %></label>
             <%= hidden_field_tag :to %>

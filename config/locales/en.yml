@@ -1101,6 +1101,8 @@ en:
       deleting_people_success: People were successfully deleted!
     bulk_sms:
       sms_footer_message: Reply STOP to opt out of text messages
+    bulk_email:
+      default_body: "%{body}<br/><br/><br/><i>MissionHub is sending this message on behalf of <a href='mailto:%{user_email}'>%{user_email}</a>, do not reply to this message. To reply to the sender, click on their address, etc., OR forward your reply to the sender.</i>"
     create:
       email_error: <font color='red'>Invalid email address</font>
       email_taken: <font color='red'>Oops! This email address is already being used. Please email <b>support@missionhub.com</b> with the EMAIL address and NAME of the person whom you want to add the email to.</font>
