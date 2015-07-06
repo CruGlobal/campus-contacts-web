@@ -1,2 +1,2 @@
-FROM cruglobal/base-image-ruby:9
+FROM cruglobal/base-image-ruby:latest
 MAINTAINER cru.org <wmd@cru.org>
