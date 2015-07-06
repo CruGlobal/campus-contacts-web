@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include ContactMethods
 
   force_ssl if: :ssl_configured?
-  before_filter :authenticate_user!, :except => [:facebook_logout]
+  before_filter :authenticate_user!, :except => [:facebook_logout, :lb]
   before_filter :clear_advanced_search
   before_filter :set_login_cookie
   before_filter :check_su

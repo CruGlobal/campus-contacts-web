@@ -7,7 +7,7 @@
 		<center>
       <% if @preview %>
         <h3>
-          <%= link_to "Back to Edit Survey", survey_questions_url(@survey, host: APP_CONFIG['app_domain'])%>
+          <%= link_to "Back to Edit Survey", survey_questions_url(@survey, host: ENV.fetch('APP_DOMAIN'))%>
         </h3>
       <% else %>
         <% if cookies[:survey_mode].present? %>
