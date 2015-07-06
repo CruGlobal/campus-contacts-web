@@ -16,14 +16,14 @@ class MigrateRolesToLabels < ActiveRecord::Migration
     OrganizationalLabel.delete_all
     Role.where('name IS NULL').destroy_all
     Label.where('name IS NULL').destroy_all
-    
+
     Role.where("(i18n IS NOT NULL AND i18n NOT IN (?)) OR organization_id > 0 OR organization_id IS NULL", ['admin','contact','leader']).each do |role|
       if role.organization_id.present?
         if role.i18n == 'involved'
-          label = Label.find_by_i18n_and_organization_id('involved',0)
+          label = Label.where(i18n: 'involved', organization_id: 0).first
         else
           label = Label.create(
-            name: role.name, 
+            name: role.name,
             organization_id: role.organization_id,
             i18n: role.i18n,
             created_at: role.created_at,

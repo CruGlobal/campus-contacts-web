@@ -1,9 +1,9 @@
 class AddNewInteractionTypesForOrganization2495 < ActiveRecord::Migration
   def up
     # Bridges at University of Washington - OrganizationID 2495
-    if organization = Organization.find_by_id(2495)
+    if organization = Organization.where(id: 2495).first
       ["Basic Follow-up", "Discipleship / Leadership"].each do |new_type|
-        InteractionType.find_or_create_by_name_and_organization_id(new_type, organization.id)
+        InteractionType.where(name: new_type, organization_id: organization.id).first_or_create
       end
     end
   end

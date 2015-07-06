@@ -106,13 +106,13 @@ FactoryGirl.define do
     state "active"
     initial_response "Hi there!"
     association :user
-    after_create do |x|
-      survey = Factory(:survey, organization: x.organization)
+    after(:create) do |x|
+      survey = FactoryGirl.create(:survey, organization: x.organization)
       x.update_attribute(:survey_id, survey.id)
-      element = Factory(:choice_field, label: 'foobar')
-      Factory(:survey_element, survey: survey, element: element, position: 1, archived: true)
-      element = Factory(:choice_field)
-      Factory(:survey_element, survey: survey, element: element, position: 2)
+      element = FactoryGirl.create(:choice_field, label: 'foobar')
+      FactoryGirl.create(:survey_element, survey: survey, element: element, position: 1, archived: true)
+      element = FactoryGirl.create(:choice_field)
+      FactoryGirl.create(:survey_element, survey: survey, element: element, position: 2)
     end
   end
 
@@ -135,8 +135,8 @@ FactoryGirl.define do
     last_name 'Doe'
     gender '1'
     sequence(:fb_uid) {|n| "person_fb_uid_#{n}"}
-    after_create do |x|
-      Factory(:email_address, person: x)
+    after(:create) do |x|
+      FactoryGirl.create(:email_address, person: x)
     end
   end
 
@@ -229,30 +229,30 @@ FactoryGirl.define do
   end
 
   factory :user_with_authentication, parent: :user do
-    after_create { |a| Factory(:authentication, user: a)}
+    after(:create) { |a| FactoryGirl.create(:authentication, user: a)}
   end
 
   factory :person_with_facebook_data, parent: :person do
-    after_create do |f|
+    after(:create) do |f|
       3.times { |i| Friend.new(i, 'foo', f)}
-      Factory(:education_history_highschool, person: f)
-      Factory(:education_history_college, person: f)
-      Factory(:education_history_gradschool, person: f)
-      2.times {Factory(:interest, person: f)}
-      Factory(:location, person: f)
+      FactoryGirl.create(:education_history_highschool, person: f)
+      FactoryGirl.create(:education_history_college, person: f)
+      FactoryGirl.create(:education_history_gradschool, person: f)
+      2.times {FactoryGirl.create(:interest, person: f)}
+      FactoryGirl.create(:location, person: f)
     end
   end
 
    factory :person_with_things, parent: :person do
-     after_create do |f|
+     after(:create) do |f|
        3.times { |i| Friend.new(i, "Foo#{i}").follow!(f) }
-       Factory(:education_history_highschool, person: f)
-       Factory(:education_history_college, person: f)
-       Factory(:education_history_gradschool, person: f)
-       Factory(:interest, person: f)
-       Factory(:interest, person: f)
-       Factory(:location, person: f)
-       org = Factory(:organization)
+       FactoryGirl.create(:education_history_highschool, person: f)
+       FactoryGirl.create(:education_history_college, person: f)
+       FactoryGirl.create(:education_history_gradschool, person: f)
+       FactoryGirl.create(:interest, person: f)
+       FactoryGirl.create(:interest, person: f)
+       FactoryGirl.create(:location, person: f)
+       org = FactoryGirl.create(:organization)
        org.add_admin(f)
     end
   end
@@ -297,28 +297,28 @@ FactoryGirl.define do
   end
 
   factory :user_api, parent: :user do
-    after_create do |a|
-      Factory(:person, user: a)
+    after(:create) do |a|
+      FactoryGirl.create(:person, user: a)
     end
   end
 
   factory :user_with_auxs, parent: :user do
-    after_create do |a|
-      Factory(:person_with_things, user: a)
-      Factory(:authentication, user: a)
+    after(:create) do |a|
+      FactoryGirl.create(:person_with_things, user: a)
+      FactoryGirl.create(:authentication, user: a)
     end
   end
 
   factory :user_no_org_with_facebook, parent: :user do
-    after_create do |a|
-      Factory(:person_with_facebook_data, user: a)
+    after(:create) do |a|
+      FactoryGirl.create(:person_with_facebook_data, user: a)
     end
   end
 
   factory :user_no_org, parent: :user do
-    after_create do |a|
-      Factory(:person, user: a)
-      Factory(:authentication, user: a)
+    after(:create) do |a|
+      FactoryGirl.create(:person, user: a)
+      FactoryGirl.create(:authentication, user: a)
     end
   end
 
@@ -445,9 +445,9 @@ FactoryGirl.define do
   end
 
   factory :survey_element do
-    association   :survey
-    association   :element
-    position        1
+    association :survey
+    association :element
+    position 1
   end
 
   factory :answer do
@@ -520,6 +520,13 @@ FactoryGirl.define do
 
   factory :sent_person do
     association :person
+  end
+
+  factory :saved_contact_search do
+    sequence(:name) {|n| "search_#{n}"}
+    full_path "/allcontacts"
+    association :user
+    association :organization
   end
 
 end

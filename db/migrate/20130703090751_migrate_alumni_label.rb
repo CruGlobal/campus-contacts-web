@@ -6,7 +6,7 @@ class Person < ActiveRecord::Base
 end
 class MigrateAlumniLabel < ActiveRecord::Migration
   def up
-    alumni_label = Label.find_by_i18n('alumni')
+    alumni_label = Label.where(i18n: 'alumni').first
     if alumni_label.present?
       orgs_ids_with_alumni_label = OrganizationalLabel.where(label_id: alumni_label.id).collect(&:organization_id)
       orgs_with_alumni_label = Organization.where(id: orgs_ids_with_alumni_label)

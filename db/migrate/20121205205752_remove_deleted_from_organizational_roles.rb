@@ -1,6 +1,6 @@
 class RemoveDeletedFromOrganizationalRoles < ActiveRecord::Migration
   def up
-    OrganizationalRole.find_each do |ors|
+    OrganizationalRole.all.each do |ors|
       unless ors.archive_date
         if ors.deleted?
           ors.destroy

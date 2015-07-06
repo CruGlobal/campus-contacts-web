@@ -108,7 +108,7 @@ class SmsController < ApplicationController
       end
 
       # Look for an active keyword for this message
-      keyword = SmsKeyword.find_by_keyword(message.split(' ').first.downcase)
+      keyword = SmsKeyword.where(keyword: message.split(' ').first.downcase).first
       if !keyword || !keyword.active?
         @msg = I18n.t('sms.keyword_inactive')
       elsif !keyword.survey

@@ -3,6 +3,8 @@ class Element < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
 
+  attr_accessible :kind, :style, :label, :content, :required, :slug, :position, :object_name, :attribute_name, :source, :value_xpath, :text_xpath, :question_grid_id, :cols, :is_confidential, :total_cols, :css_id, :css_class, :related_question_sheet_id, :conditional_id, :tooltip, :hide_label, :hide_option_labels, :max_length, :web_only, :trigger_words, :notify_via, :hidden, :crs_question_id
+
   QUESTION_TYPES = %w{TextField ChoiceField DateField StateChooser ReferenceQuestion SchoolPicker AttachmentField PaymentQuestion}
   TEXTFIELD_MATCH = [["Contains","contains"], ["Is Exactly","is_exactly"], ["Does Not Contain","does_not_contain"], ["No Response","is_blank"], ["Any Response","any"]]
   CHOICEFILED_MATCH = [["Match Any","any"], ["Match All","all"]]
@@ -10,10 +12,10 @@ class Element < ActiveRecord::Base
 
   self.inheritance_column = :kind
 
-  belongs_to :choice_field, :class_name => "ChoiceField", :foreign_key => "conditional_id"
-  has_many :survey_elements, :dependent => :destroy
-  has_many :surveys, :through => :survey_elements
-  has_many :question_leaders, :dependent => :destroy
+  belongs_to :choice_field, class_name: "ChoiceField", foreign_key: "conditional_id"
+  has_many :survey_elements, dependent: :destroy
+  has_many :surveys, through: :survey_elements
+  has_many :question_leaders, dependent: :destroy
   has_many :leaders, through: :question_leaders, source: :person
   has_many :answers, foreign_key: :question_id
 
@@ -40,12 +42,12 @@ class Element < ActiveRecord::Base
   def predefined?
     object_name.present? && attribute_name.present?
   end
-  
+
   def options
     return nil unless kind == "ChoiceField"
     content.split("\n").map{|x| x.gsub("\r","")}
   end
-  
+
   def options_with_blank
     [""] + options
   end

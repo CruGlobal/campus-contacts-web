@@ -3,12 +3,12 @@ class FixDataRemoveBlankNameContactsInOrganization5606 < ActiveRecord::Migration
     # Organization that has blank name contacts
     org_id = 5606
 
-    org = Organization.find_by_id(org_id)
+    org = Organization.where(id: org_id).first
     if org.present?
       blank_name_contacts = org.all_people.where("(people.last_name IS NULL AND people.first_name IS NULL) OR (people.last_name = '' AND people.first_name = '')")
       if blank_name_contacts.present?
         blank_name_contacts.each do |contact|
-          permission = contact.all_organizational_permissions.find_by_organization_id(org.id)
+          permission = contact.all_organizational_permissions.where(organization_id: org.id).first
           permission.destroy if permission.present?
         end
       else

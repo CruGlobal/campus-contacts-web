@@ -11,7 +11,7 @@ class InteractionType < ActiveRecord::Base
 
   has_many :interactions
 
-  scope :exclude_comment, where("i18n <> 'comment'")
+  scope :exclude_comment, ->{where("i18n <> 'comment'")}
 
   def title
     if self.i18n.present?
@@ -26,11 +26,11 @@ class InteractionType < ActiveRecord::Base
   end
 
   def self.comment
-    InteractionType.where(i18n: 'comment', organization_id: 0).try(:first)
+    InteractionType.where(i18n: 'comment', organization_id: 0).first_or_create
   end
 
   def self.graduating_on_mission
-    InteractionType.where(i18n: 'graduating_on_mission', organization_id: 0).try(:first)
+    InteractionType.where(i18n: 'graduating_on_mission', organization_id: 0).first_or_create
   end
 
   def self.get_interaction_types_hash(org_id)

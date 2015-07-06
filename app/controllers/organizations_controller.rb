@@ -59,7 +59,11 @@ class OrganizationsController < ApplicationController
     unless can?(:manage, @parent) || can?(:manage, @parent.parent) || can?(:manage, @parent.root)
       raise CanCan::AccessDenied
     end
-    @organization = Organization.create(params[:organization]) # @parent.children breaks for some reason
+    if @parent.present?
+      @organization = @parent.children.create(params[:organization])
+    else
+      @organization = Organization.create(params[:organization]) # @parent.children breaks for some reason
+    end
     if @organization.new_record?
       @error = @organization.errors.full_messages.join('<br />')
     else
@@ -151,7 +155,7 @@ class OrganizationsController < ApplicationController
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
       if params[:tag_as_alumni] == '1'
-        alumni_label = Label.find_or_create_by_name_and_organization_id("Alumni", current_organization.id)
+        alumni_label = Label.where(name: "Alumni", organization_id: current_organization.id).first_or_create
         current_organization.add_label_to_person(person, alumni_label.id)
       end
       if params[:tag_as_archived] == '1'

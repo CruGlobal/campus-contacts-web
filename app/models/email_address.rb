@@ -1,10 +1,11 @@
 class EmailAddress < ActiveRecord::Base
+  attr_accessible :email, :person_id, :primary
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
 
   belongs_to :person, inverse_of: :email_addresses, touch: true
   validates_presence_of :email, on: :create, message: "can't be blank"
-  validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   before_validation :set_primary, on: :create
   after_commit :ensure_only_one_primary
   after_destroy :set_new_primary

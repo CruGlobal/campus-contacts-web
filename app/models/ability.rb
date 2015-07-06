@@ -18,7 +18,7 @@ class Ability
         can :lead, Organization, id: user_of_org_ids
 
         can :manage_contacts, Organization, id: user_of_org_ids
-        
+
         can :manage_groups, Organization, id: user_of_org_ids + admin_of_org_ids
         can :manage_locate_contact, Organization, id: user_of_org_ids + admin_of_org_ids
         can :manage_permissions, Organization, id: admin_of_org_ids

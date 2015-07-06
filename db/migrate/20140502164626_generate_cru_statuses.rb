@@ -1,11 +1,23 @@
 class GenerateCruStatuses < ActiveRecord::Migration
   def up
-    CruStatus.find_or_create_by_i18n('none', name: "None")
-    CruStatus.find_or_create_by_i18n('volunteer', name: "Volunteer")
-    CruStatus.find_or_create_by_i18n('affiliate', name: "Affiliate")
-    CruStatus.find_or_create_by_i18n('intern', name: "Intern")
-    CruStatus.find_or_create_by_i18n('part_time_staff', name: "Part Time Field Staff")
-    CruStatus.find_or_create_by_i18n('full_time_staff', name: "Full Time Supported Staff")
+    if x = CruStatus.where(i18n: 'none').first_or_create
+      x.update_attributes(name: "None")
+    end
+    if x = CruStatus.where(i18n: 'volunteer').first_or_create
+      x.update_attributes(name: "Volunteer")
+    end
+    if x = CruStatus.where(i18n: 'affiliate').first_or_create
+      x.update_attributes(name: "Affiliate")
+    end
+    if x = CruStatus.where(i18n: 'intern').first_or_create
+      x.update_attributes(name: "Intern")
+    end
+    if x = CruStatus.where(i18n: 'part_time_staff').first_or_create
+      x.update_attributes(name: "Part Time Field Staff")
+    end
+    if x = CruStatus.where(i18n: 'full_time_staff').first_or_create
+      x.update_attributes(name: "Full Time Supported Staff")
+    end
   end
 
   def down

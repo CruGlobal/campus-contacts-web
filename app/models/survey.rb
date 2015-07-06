@@ -1,26 +1,34 @@
 class Survey < ActiveRecord::Base
   NO_LOGIN = 3
 
+  attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology, :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css, :background_color, :text_color, :crs_registrant_type_id, :redirect_url
+
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
 
   belongs_to :organization
 
   has_many :custom_element_labels
-  has_many :survey_elements, :dependent => :destroy, :order => :position
-  has_many :elements, :through => :survey_elements, :order => SurveyElement.table_name + '.position', autosave: true
-  has_many :question_grid_with_totals, :through => :survey_elements, :conditions => "kind = 'QuestionGridWithTotal'", :source => :element
-  has_many :questions, :through => :survey_elements, :source => :question, :order => 'position', :conditions => "#{SurveyElement.table_name}.archived = 0", :order => "#{SurveyElement.table_name}.position"
-  has_many :archived_questions, :through => :survey_elements, :source => :question, :order => 'position', :conditions => "#{SurveyElement.table_name}.archived = 1", :order => "#{SurveyElement.table_name}.position"
-  has_many :all_questions, :through => :survey_elements, :source => :question, :order => 'position', :order => "#{SurveyElement.table_name}.position"
-  has_one :keyword, :class_name => "SmsKeyword", :foreign_key => "survey_id", :dependent => :nullify
+  has_many :survey_elements,
+    ->{order(:position)}, dependent: :destroy
+  has_many :elements,
+    ->{order(SurveyElement.table_name + '.position')}, through: :survey_elements, autosave: true, source: :question
+  has_many :question_grid_with_totals,
+    ->{where("kind = 'QuestionGridWithTotal'")}, through: :survey_elements, source: :question
+  has_many :questions,
+    ->{where("#{SurveyElement.table_name}.archived = 0").order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
+  has_many :archived_questions,
+    ->{where("#{SurveyElement.table_name}.archived = 1").order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
+  has_many :all_questions,
+    ->{order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
+  has_one :keyword, class_name: "SmsKeyword", foreign_key: "survey_id", dependent: :nullify
 
   has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: 'config/config.yml', storage: :s3,
                              path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
   has_attached_file :css_file, s3_credentials: 'config/config.yml', storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   has_many :answer_sheets
-  has_many :rules, :through => :survey_elements
+  has_many :rules, through: :survey_elements
 
   # validation
   validates_presence_of :title, :post_survey_message, :terminology

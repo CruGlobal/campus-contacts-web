@@ -151,7 +151,7 @@ class SurveysController < ApplicationController
         if value["first_name"].present? || value["last_name"].present?
           if value["first_name"] && value["last_name"].present?
             # Create record
-            email_question = Element.find_by_attribute_name("email")
+            email_question = Element.where(attribute_name: "email").first
             email = value[email_question.id.to_s] if email_question.present?
             number = PhoneNumber.strip_us_country_code(value["phone_number"].to_s)
             if email.present?
@@ -239,7 +239,7 @@ class SurveysController < ApplicationController
   end
 
   def remove_logo
-    @survey = current_organization.surveys.find_by_id(params[:id])
+    @survey = current_organization.surveys.where(id: params[:id]).first
     msg = I18n.t('surveys.form.remove_logo_failed')
     if @survey.present?
       @survey.logo.destroy if @survey.logo.exists?

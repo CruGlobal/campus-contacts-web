@@ -157,7 +157,10 @@ module ContactActions
       if @person.save
         if params[:labels].present?
           params[:labels].each do |label_id|
-            OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(@person.id, current_organization.id, label_id, added_by_id: current_person.id) if label_id.present?
+            if label_id.present?
+              org_label = OrganizationalLabel.where(person_id: @person.id, organization_id: current_organization.id, label_id: label_id).first_or_create
+              org_label.update_attributes(added_by_id: current_person.id)
+            end
           end
         end
 
@@ -180,7 +183,7 @@ module ContactActions
 
 				if @add_to_group_tag == '1'
     			@group = @organization.groups.find(params[:add_to_group])
-		      @group_membership = @group.group_memberships.find_or_initialize_by_person_id(@person.id)
+		      @group_membership = @group.group_memberships.where(person_id: @person.id).first_or_initialize
 		      @group_membership.role = params[:add_to_group_role]
 		      @group_membership.save
 				end

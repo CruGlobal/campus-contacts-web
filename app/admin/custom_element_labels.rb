@@ -9,7 +9,7 @@ ActiveAdmin.register CustomElementLabel do
     end
 
     def update
-      if @custom_element_label = CustomElementLabel.find_by_id(params[:id])
+      if @custom_element_label = CustomElementLabel.where(id: params[:id]).first
         @custom_element_label.update_attributes(params[:custom_element_label])
         redirect_to admin_survey_questions_path(@custom_element_label.survey_id), :notice => "You have successfully updated a custom label."
       else
@@ -23,7 +23,7 @@ ActiveAdmin.register CustomElementLabel do
       if survey_id.present? && question_id.present?
         label = params[:custom_element_label][:label]
         if label.present?
-          @custom_element_label = CustomElementLabel.find_or_create_by_survey_id_and_question_id(survey_id, question_id)
+          @custom_element_label = CustomElementLabel.where(survey_id: survey_id, question_id: question_id).first_or_create
           @custom_element_label.label = label
           @custom_element_label.save
           redirect_to admin_survey_questions_path(survey_id), :notice => "You have successfully created a custom label."
@@ -36,7 +36,7 @@ ActiveAdmin.register CustomElementLabel do
     end
 
     def destroy
-      if @custom_element_label = CustomElementLabel.find_by_id(params[:id])
+      if @custom_element_label = CustomElementLabel.where(id: params[:id]).first
         survey_id = @custom_element_label.survey_id
         @custom_element_label.destroy
         redirect_to admin_survey_questions_path(survey_id), :notice => "You have successfully deleted a custom label."

@@ -1,6 +1,6 @@
 class BulkMessagesController < ApplicationController
   before_filter :ensure_current_org
-  
+
   def sms
     authorize! :lead, current_organization
     to_ids = params[:to]
@@ -10,7 +10,7 @@ class BulkMessagesController < ApplicationController
 			ids = to_ids.split(',').uniq
 			ids.each do |id|
 				if id.upcase =~ /GROUP-/
-					group = Group.find_by_id_and_organization_id(id.gsub("GROUP-",""), current_organization.id)
+					group = Group.where(id: id.gsub("GROUP-",""), organization_id: current_organization.id).first
 					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
 				elsif id.upcase =~ /ROLE-/
 					permission = Permission.find(id.gsub("ROLE-",""))
@@ -29,7 +29,7 @@ class BulkMessagesController < ApplicationController
     if receiver_ids.present?
       bulk_message = current_person.bulk_messages.create(organization: current_organization)
       receiver_ids.each do |id|
-      	person = Person.find_by_id(id)
+      	person = Person.where(id: id).first
         if person.present? && primary_phone = person.primary_phone_number
           # Do not allow to send text if the phone number is not subscribed
           if is_subscribe = current_organization.is_sms_subscribe?(primary_phone.number)

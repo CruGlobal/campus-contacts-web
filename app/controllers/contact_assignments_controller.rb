@@ -21,7 +21,7 @@ class ContactAssignmentsController < ApplicationController
     if params[:assign_to].present?
       if params[:assign_to] == "do_not_contact"
         params[:ids].each do |id|
-          om = OrganizationalPermission.find_by_person_id_and_organization_id_and_permission_id(id, @organization.id, Permission::NO_PERMISSIONS_ID)
+          om = OrganizationalPermission.where(person_id: id, organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID).first
           Person.find(id).do_not_contact(om.id) if om.present?
         end if params[:ids].present?
         @reload_sidebar = true

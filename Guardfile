@@ -1,9 +1,10 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-guard 'test', keep_failed: false, all_on_start: false, all_after_pass: false do
-  watch(%r{app/models/(.+)\.rb})                     { |m| "test/unit/#{m[1]}_test.rb" }
-  watch(%r{app/controllers/(.+)\.rb})                { |m| "test/functional/#{m[1]}_test.rb" }
+guard 'minitest', keep_failed: false, all_on_start: false, all_after_pass: false do
+  watch(%r{app/models/(.+)\.rb})                     { |m| "test/models/#{m[1]}_test.rb" }
+  watch(%r{app/controllers/(.+)\.rb})                { |m| "test/controllers/#{m[1]}_test.rb" }
+  watch(%r{app/controllers/apis/v3/(.+)\.rb})        { |m| "test/controllers/apis/v3/#{m[1]}_test.rb" }
   watch(%r{app/views/.+\.rb})                        { "test/integration" }
   watch(%r{lib/(.+)\.rb})                            { |m| "test/#{m[1]}_test.rb" }
   watch(%r{test/.+_test.rb})

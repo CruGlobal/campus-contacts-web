@@ -38,7 +38,7 @@ class LabelsController < ApplicationController
     @status = false
     if @name.present? && @id.present?
       @message = t('manage_labels.add_label_failed')
-      if @update_label = Label.find_by_id_and_organization_id(@id, current_organization.id)
+      if @update_label = Label.where(id: @id, organization_id: current_organization.id).first
         if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], @name.downcase).present?
           @message = t('manage_labels.label_exists')
         else

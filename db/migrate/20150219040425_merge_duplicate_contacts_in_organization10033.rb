@@ -3,7 +3,7 @@ class MergeDuplicateContactsInOrganization10033 < ActiveRecord::Migration
     # Organization that has duplicate contacts by name
     org_id = 10033
 
-    org = Organization.find_by_id(org_id)
+    org = Organization.where(id: org_id).first
     if org.present?
       duplicate_contacts = org.people
         .group("CONCAT(people.first_name,' ', people.last_name)")

@@ -4,12 +4,12 @@
 # a question can have more than one answer (choose many) in which case ANY answer will do (find)
 
 class Condition < ActiveRecord::Base
-  
+
   belongs_to :question_sheet
-  belongs_to :trigger, :class_name => "Question", :foreign_key => "trigger_id"
+  belongs_to :trigger, class_name: "Question", foreign_key: "trigger_id"
 
   validates_presence_of :expression
-  validates_length_of :expression, :maximum => 255, :allow_nil => true  
+  validates_length_of :expression, :maximum => 255, :allow_nil => true
 
   # evaluate triggering element against expression and return match|nil
   def evaluate?
@@ -18,9 +18,9 @@ class Condition < ActiveRecord::Base
     # expression = self.expression.downcase
     # answers.find {|answer| answer = answer.downcase; eval(expression)}
   end
-  
+
   # javascript to toggle pages/elements based on the "response"
-  def trigger_js     
+  def trigger_js
     # will find the first answer (if multiple/checkboxes) where the expression evaluates to true (downcase both to be case insensitive)
     # if no match, disabled will be true, otherwise false
     js = <<-JS
@@ -29,7 +29,7 @@ class Condition < ActiveRecord::Base
       return eval("#{escape_javascript(self.expression.downcase)}");
     }) == undefined);
     JS
-    
+
     if toggle_id.nil?
       # toggling a whole page (link), which will affect final page validation
     else
@@ -41,7 +41,7 @@ class Condition < ActiveRecord::Base
       }
       JS
     end
-    
+
     js
   end
 

@@ -9,12 +9,12 @@
 # :content      - choices (one per line) for choice field
 
 class Question < Element
-  include ActionController::RecordIdentifier # dom_id
+  # include ActionController::RecordIdentifier # dom_id
 
-  has_many :sheet_answers, :class_name => "Answer", :foreign_key => "question_id", :dependent => :destroy
-  has_many :custom_labels, :class_name => "CustomElementLabel", :foreign_key => :question_id, :dependent => :destroy
+  has_many :sheet_answers, class_name: "Answer", foreign_key: "question_id", dependent: :destroy
+  has_many :custom_labels, class_name: "CustomElementLabel", foreign_key: :question_id, dependent: :destroy
 
-  belongs_to :related_question_sheet, :class_name => "QuestionSheet", :foreign_key => "related_question_sheet_id"
+  belongs_to :related_question_sheet, class_name: "QuestionSheet", foreign_key: "related_question_sheet_id"
 
   # validates_inclusion_of :required, :in => [false, true]
 
@@ -189,7 +189,7 @@ class Question < Element
           @answers << answer
         end
       else
-        answer = Answer.find_or_create_by_question_id_and_answer_sheet_id(id, app.id)
+        answer = Answer.where(question_id: id, answer_sheet_id: app.id).first_or_create
         answer.set(values.first)
         @answers << answer
       end
@@ -256,8 +256,10 @@ class Question < Element
   end
 
   def shorten_link(id)
-    short_profile_link = BITLY_CLIENT.shorten(Rails.application.routes.url_helpers.person_url(id,
-    :host => APP_CONFIG['bitly_host'] || 'www.missionhub.com', :port => APP_CONFIG['bitly_port'] || 80, :only_path => false)).short_url
+    host = APP_CONFIG['bitly_host'] || 'www.missionhub.com'
+    port = APP_CONFIG['bitly_port'] || 80
+    url = Rails.application.routes.url_helpers.person_url(id, url, host: host , port: port , only_path: false)
+    short_profile_link = Bitly.client.shorten(url).short_url
   end
 
   def generate_notification_msg(person, answer, link)

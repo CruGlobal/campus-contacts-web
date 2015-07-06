@@ -1,4 +1,6 @@
 class ReceivedSms < ActiveRecord::Base
+  attr_accessible :phone_number, :carrier, :shortcode, :message, :country, :person_id, :received_at, :sms_keyword_id, :sms_session_id, :state, :city, :zip, :twilio_sid
+
   belongs_to :person
   belongs_to :sms_keyword
 

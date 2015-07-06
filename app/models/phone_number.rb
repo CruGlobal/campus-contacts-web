@@ -8,6 +8,8 @@ class PhoneNumber < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :person_id }
 
+  attr_accessible :number, :extension, :person_id, :location, :primary, :not_mobile, :txt_to_email, :carrier_id, :email_updated_at
+
   belongs_to :carrier, class_name: 'SmsCarrier', foreign_key: 'carrier_id'
   belongs_to :person, touch: true
 
@@ -28,7 +30,7 @@ class PhoneNumber < ActiveRecord::Base
     end
   end
   #validates_uniqueness_of :number, on: :create, message: "already exists"
-  validates_uniqueness_of :number, :scope => :person_id, on: :update, message: "already exists"
+  validates_uniqueness_of :number, scope: :person_id, on: :update, message: "already exists"
 
   before_create :set_primary
   before_save :clear_carrier_if_number_changed
@@ -136,7 +138,7 @@ class PhoneNumber < ActiveRecord::Base
         begin
           email = xml.xpath('.//sms_address').text
           carrier_name = xml.xpath('.//carrier_name').text
-          carrier = SmsCarrier.find_or_create_by_data247_name(carrier_name)
+          carrier = SmsCarrier.where(data247_name: carrier_name).first_or_create
           PhoneNumber.connection.update("update phone_numbers set carrier_id = #{carrier.id}, txt_to_email = '#{email}', email_updated_at = '#{Time.now.to_s(:db)}' where number = '#{number}'")
         rescue => e
           # cloudvox didn't like the number

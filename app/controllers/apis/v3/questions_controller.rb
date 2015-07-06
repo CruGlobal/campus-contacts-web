@@ -12,7 +12,8 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   def show
     render json: @question,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {include: includes, organization: current_organization},
+           root: @question.kind.underscore
   end
 
   def create
@@ -28,7 +29,8 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
           render json: question,
                  status: :created,
                  callback: params[:callback],
-                 scope: {include: includes, organization: current_organization}
+                 scope: {include: includes, organization: current_organization},
+                 root: question.kind.underscore
         else
           render json: {errors: question.errors.full_messages},
                  status: :unprocessable_entity,
@@ -49,7 +51,8 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
       if @question.update_attributes(params[:question])
         render json: @question,
                callback: params[:callback],
-               scope: {include: includes, organization: current_organization}
+               scope: {include: includes, organization: current_organization},
+               root: @question.kind.underscore
       else
         render json: {errors: question.errors.full_messages},
                status: :unprocessable_entity,
@@ -65,7 +68,8 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
       @question.destroy
       render json: @question,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: {include: includes, organization: current_organization},
+             root: @question.kind.underscore
     end
   end
 

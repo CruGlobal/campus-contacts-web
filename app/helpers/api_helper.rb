@@ -1,5 +1,5 @@
-require 'apic.rb'
-require 'api_errors.rb'
+require 'apic'
+require 'api_errors'
 
 module ApiHelper
   include ApiErrors

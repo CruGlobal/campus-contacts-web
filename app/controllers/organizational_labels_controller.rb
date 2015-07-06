@@ -8,7 +8,7 @@ class OrganizationalLabelsController < ApplicationController
     if label_ids.present?
       label_ids.each do |label_id|
         if label_id.present?
-          org_label = OrganizationalLabel.find_or_create_by_person_id_and_organization_id_and_label_id(person.id, current_organization.id, label_id)
+          org_label = OrganizationalLabel.where(person_id: person.id, organization_id: current_organization.id, label_id: label_id).first_or_create
           org_label.update_attributes({removed_date: nil, added_by_id: current_user.person.id})
         end
       end

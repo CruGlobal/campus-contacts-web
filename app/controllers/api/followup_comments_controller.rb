@@ -24,7 +24,7 @@ class Api::FollowupCommentsController < ApiController
   end
 
   def show_1
-    contact = Person.find_by_id(params[:id]) if params[:id].present?
+    contact = Person.where(id: params[:id]).first if params[:id].present?
     comments = []
     if contact
       interactions = contact.filtered_interactions(current_person, @organization)
@@ -38,7 +38,7 @@ class Api::FollowupCommentsController < ApiController
 
   def show_2
     json_output = @api_json_header
-    contact = Person.find_by_id(params[:id]) if params[:id].present?
+    contact = Person.where(id: params[:id]).first if params[:id].present?
     comments = []
     if contact
       interactions = contact.filtered_interactions(current_person, @organization)
@@ -125,7 +125,7 @@ class Api::FollowupCommentsController < ApiController
       when 'prayed_to_receive'
         4
       else
-        type = InteractionType.find_by_i18n(what)
+        type = InteractionType.where(i18n: what).first
         if type
           type.id
         else

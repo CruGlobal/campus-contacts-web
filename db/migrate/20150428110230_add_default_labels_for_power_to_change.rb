@@ -13,7 +13,7 @@ class AddDefaultLabelsForPowerToChange < ActiveRecord::Migration
       "multiplying_disciple" => "Multiplying disciple"
     }
     new_default_labels.each do |key, val|
-      Label.find_or_create_by_name_and_i18n_and_organization_id(val, key, 0)
+      Label.where(name: val, i18n: key, organization_id: 0).first_or_create
     end
   end
 end

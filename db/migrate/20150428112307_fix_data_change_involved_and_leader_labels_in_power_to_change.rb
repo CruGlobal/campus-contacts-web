@@ -2,11 +2,11 @@ class Label < ActiveRecord::Base
 end
 class FixDataChangeInvolvedAndLeaderLabelsInPowerToChange < ActiveRecord::Migration
   def up
-    if power_to_change_org = Organization.find_by_id(APP_CONFIG['power_to_change_org_id'])
-      involved = Label.find_by_organization_id_and_i18n(0, "involved")
-      leader = Label.find_by_organization_id_and_i18n(0, "leader")
-      growing_disciple = Label.find_by_organization_id_and_i18n(0, "growing_disciple")
-      ministering_disciple = Label.find_by_organization_id_and_i18n(0, "ministering_disciple")
+    if power_to_change_org = Organization.where(id: APP_CONFIG['power_to_change_org_id']).first
+      involved = Label.where(organization_id: 0, i18n: "involved").first
+      leader = Label.where(organization_id: 0, i18n: "leader").first
+      growing_disciple = Label.where(organization_id: 0, i18n: "growing_disciple").first
+      ministering_disciple = Label.where(organization_id: 0, i18n: "ministering_disciple").first
       if involved.nil?
         raise "Cannot find Involved label." unless Rails.env.test?
       elsif leader.nil?

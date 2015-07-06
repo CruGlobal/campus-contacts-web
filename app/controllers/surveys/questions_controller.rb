@@ -35,13 +35,13 @@ class Surveys::QuestionsController < ApplicationController
 
   # GET /questions/1/edit
   def edit
-    survey_element = @survey.survey_elements.find_by_element_id(@question.id)
+    survey_element = @survey.survey_elements.where(element_id: @question.id).first
 
-    rule_notify = Rule.find_by_rule_code('AUTONOTIFY')
-    @auto_notify = survey_element.question_rules.find_by_rule_id(rule_notify.id) if survey_element
+    rule_notify = Rule.where(rule_code: 'AUTONOTIFY').first
+    @auto_notify = survey_element.question_rules.where(rule_id: rule_notify.id).first if survey_element
 
-    rule_assign = Rule.find_by_rule_code('AUTOASSIGN')
-    @auto_assign = survey_element.question_rules.find_by_rule_id(rule_assign.id) if survey_element
+    rule_assign = Rule.where(rule_code: 'AUTOASSIGN').first
+    @auto_assign = survey_element.question_rules.where(rule_id: rule_assign.id).first if survey_element
   end
 
   def add
@@ -60,7 +60,7 @@ class Surveys::QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
-    if (params[:question_id])
+    if params[:question_id].present?
       @question = Element.find(params[:question_id])
     else
       # return unless validate_then_create_chosen_leaders
@@ -193,7 +193,7 @@ class Surveys::QuestionsController < ApplicationController
       parameters['id'] = params[:autoassign_selected_id]
       parameters['name'] = params[:autoassign_keyword]
 
-      rule = Rule.find_by_rule_code("AUTOASSIGN")
+      rule = Rule.where(rule_code: "AUTOASSIGN").first
       triggers_array = Array.new
       triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
       triggers.each do |t|
@@ -201,8 +201,8 @@ class Surveys::QuestionsController < ApplicationController
       end
       triggers = triggers_array.join(", ")
 
-      if survey_element = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id])
-        question_rule = survey_element.question_rules.find_by_rule_id(rule.id) if rule.present?
+      if survey_element = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first
+        question_rule = survey_element.question_rules.where(rule_id: rule.id).first if rule.present?
 
         if triggers.present? && parameters['id'].present? && parameters['name'].present?
           if question_rule.present?
@@ -232,7 +232,7 @@ class Surveys::QuestionsController < ApplicationController
       invalid_emails = Array.new
 
       if leaders.present?
-        survey_element_id = SurveyElement.find_by_survey_id_and_element_id(params[:survey_id], params[:id]).id
+        survey_element_id = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first.id
         leaders.each do |leader|
           Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
         end
@@ -243,14 +243,14 @@ class Surveys::QuestionsController < ApplicationController
           end
           return false
         else
-          rule = Rule.find_by_rule_code("AUTONOTIFY")
+          rule = Rule.where(rule_code: "AUTONOTIFY").first
           triggers_array = Array.new
           triggers = params[:trigger_words].split(',')
           triggers.each do |t|
             triggers_array << t.strip if t.strip.present?
           end
           triggers = triggers_array.join(", ")
-          if question_rule = QuestionRule.find_by_survey_element_id_and_rule_id(survey_element_id, rule.id)
+          if question_rule = QuestionRule.where(survey_element_id: survey_element_id, rule_id: rule.id).first
             question_rule.update_attribute('trigger_keywords',triggers)
             question_rule.update_attribute('extra_parameters',parameters)
           else

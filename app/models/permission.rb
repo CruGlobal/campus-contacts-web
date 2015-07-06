@@ -2,26 +2,24 @@ class Permission < ActiveRecord::Base
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
 
+  attr_accessible :name, :i18n
+
   has_many :people, through: :organizational_permissions
   has_many :organizational_permissions, dependent: :destroy
 
   validates :i18n, uniqueness: true, allow_nil: true
   validates :name, presence: true
 
-  scope :default, where(i18n: ['admin','user','no_permissions']) if Permission.table_exists? # added for travis testing
-	scope :users, where(i18n: %w[user admin])
-
-  scope :default_permissions, lambda { {
-    :conditions => "i18n IN #{self.default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}",
-    :order => "FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}"
-  }}
-  scope :non_default_permissions, lambda { {
-    :conditions => "i18n IS NULL",
-    :order => "permissions.name ASC"
-  }}
-  scope :arrange_all, lambda {{
-    order: "#{self.order_default_permissions}"
-  }}
+  scope :default,
+    ->{where(i18n: ['admin','user','no_permissions'])} if Permission.table_exists? # added for travis testing
+	scope :users,
+    ->{where(i18n: %w[user admin])}
+  scope :default_permissions,
+    ->{where("i18n IN #{self.default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}").order("FIELD#{self.i18n_field_plus_default_permissions_for_field_string(self::DEFAULT_PERMISSIONS)}")}
+  scope :non_default_permissions,
+    ->{where("i18n IS NULL").order("permissions.name ASC")}
+  scope :arrange_all,
+    ->{order("#{self.order_default_permissions}")}
 
   def self.order_default_permissions
     str = "CASE "
@@ -41,15 +39,15 @@ class Permission < ActiveRecord::Base
   end
 
   def self.admin
-    @admin ||= Permission.find_or_create_by_name_and_i18n('Admin','admin')
+    @admin ||= Permission.where(name: 'Admin', i18n: 'admin').first_or_create
   end
 
   def self.user
-    @user ||= Permission.find_or_create_by_name_and_i18n('User','user')
+    @user ||= Permission.where(name: 'User', i18n: 'user').first_or_create
   end
 
   def self.no_permissions
-    @no_permissions ||= Permission.find_or_create_by_name_and_i18n('No Permissions','no_permissions')
+    @no_permissions ||= Permission.where(name: 'No Permissions', i18n: 'no_permissions').first_or_create
   end
 
   def to_s

@@ -1,8 +1,9 @@
 class AnswerSheet < ActiveRecord::Base
+  attr_accessible :completed_at, :person_id, :survey_id
 
   belongs_to :person
   belongs_to :survey
-  has_many :answers, :class_name => 'Answer', :foreign_key => 'answer_sheet_id'
+  has_many :answers, class_name: 'Answer', foreign_key: 'answer_sheet_id'
 
   # def complete?
   #   !completed_at.nil?
