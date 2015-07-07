@@ -65,6 +65,9 @@ gem 'multi_json'#, '~> 1.8.2'
 gem 'sp_client'#, '~> 1.0.3'
 gem 'responders', '~> 2.0'
 gem 'protected_attributes'
+gem 'silencer'
+gem 'syslog-logger'
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'guard'#, '~> 1.8.2'
