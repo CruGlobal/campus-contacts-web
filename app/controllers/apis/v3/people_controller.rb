@@ -39,7 +39,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
   def update
     clean_attr
-    
+
     # add permissions in current org
     if params[:permissions]
       params[:permissions].split(',').each do |permission_id|
@@ -103,7 +103,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   private
-  
+
   def clean_attr
     params[:person][:phone_numbers_attributes] = params[:person].delete(:phone_numbers) if params[:person][:phone_numbers]
     params[:person][:email_addresses_attributes] = params[:person].delete(:email_addresses) if params[:person][:email_addresses]
