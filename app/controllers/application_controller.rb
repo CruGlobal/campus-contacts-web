@@ -229,22 +229,18 @@ class ApplicationController < ActionController::Base
 
   def check_valid_subdomain
     return if request.subdomains.first.blank?
-    unless (available_locales + %w[www local stage aws lwi]).include?(request.subdomains.first)
-      redirect_to 'http://' + request.host_with_port.sub(request.subdomains.first, 'www') and return false
+    session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
+    unless %w[local stage aws lwi].include?(request.subdomains.first)
+      redirect_to 'http://' + request.host_with_port and return false
     end
   end
 
   def set_locale
-    # if the locale is in the subdomain, use that
-    if available_locales.include?(request.subdomains.first)
-      I18n.locale = request.subdomains.first
-    else
       if params[:locale]
-        I18n.locale = params[:locale]
+        I18n.locale = session[:locale] = params[:locale]
       else
-        I18n.locale = 'en'
+        I18n.locale = session[:locale] || 'en'
       end
-    end
   end
 
   def export_i18n_messages
