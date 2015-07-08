@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def ssl_configured?
-    !Rails.env.development? && !Rails.env.test?
+    !Rails.env.development? && !Rails.env.test? && request.subdomains.first.blank?
   end
 
   def clear_advanced_search
