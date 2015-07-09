@@ -1,4 +1,3 @@
-require Rails.root.join('config','initializers','load_config').to_s
 ActionMailer::Base.smtp_settings = {
   :user_name => ENV.fetch('SMTP_USER_NAME'),
   :password => ENV.fetch('SMTP_PASSWORD'),
