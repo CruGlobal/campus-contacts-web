@@ -288,11 +288,11 @@ class Organization < ActiveRecord::Base
     ancestors.reverse.each do |org|
       return org.settings[:sms_gateway] if org.settings[:sms_gateway].present?
     end
-    if ENV['BULKSMS_GATEWAY_ORGS'].present? && ENV['BULKSMS_GATEWAY_ORGS'].include?(id)
+    if ENV['BULKSMS_GATEWAY_ORGS'].present? && ENV['BULKSMS_GATEWAY_ORGS'].include?(id.to_s)
       return 'bulksms'
-    elsif ENV['BULKSMS_GATEWAY_ORGS1'].present? && ENV['BULKSMS_GATEWAY_ORGS1'].include?(id)
+    elsif ENV['BULKSMS_GATEWAY_ORGS1'].present? && ENV['BULKSMS_GATEWAY_ORGS1'].include?(id.to_s)
       return 'bulksms1'
-    elsif ENV['SMSECO_GATEWAY_ORGS'].present? && ENV['SMSECO_GATEWAY_ORGS'].include?(id)
+    elsif ENV['SMSECO_GATEWAY_ORGS'].present? && ENV['SMSECO_GATEWAY_ORGS'].include?(id.to_s)
       return 'smseco'
     elsif has_parent?(ENV.fetch('POWER_TO_CHANGE_ORG_ID'))
       return 'twilio_power2change'

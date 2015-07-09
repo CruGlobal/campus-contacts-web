@@ -23,7 +23,7 @@ class ContactsControllerTest < ActionController::TestCase
       @survey.questions << @question
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -65,9 +65,9 @@ class ContactsControllerTest < ActionController::TestCase
 
       @assignment1 = FactoryGirl.create(:contact_assignment, organization: @org, person: @contact1, assigned_to: @person)
 
-      @predefined_survey = Factory(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
-      @predefined_survey.questions << Factory(:year_in_school_element)
+      @predefined_survey = FactoryGirl.create(:survey, organization: @org)
+      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
+      @predefined_survey.questions << FactoryGirl.create(:year_in_school_element)
     end
 
     context "combined filters" do
@@ -258,9 +258,9 @@ class ContactsControllerTest < ActionController::TestCase
         @child_org = FactoryGirl.create(:organization, ancestry: @org.id)
         FactoryGirl.create(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
 
-        @predefined = Factory(:survey, organization: @org)
-        ENV['PREDEFINED_SURVEY'] = @predefined.id
-        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined = FactoryGirl.create(:survey, organization: @org)
+        ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
+        @year_in_school_question = FactoryGirl.create(:year_in_school_element)
         @predefined.questions << @year_in_school_question
       end
 
@@ -280,9 +280,9 @@ class ContactsControllerTest < ActionController::TestCase
         @child_org = FactoryGirl.create(:organization, ancestry: @org.id)
         FactoryGirl.create(:organizational_permission, person: @person, organization: @org, permission: Permission.admin)
 
-        @predefined = Factory(:survey, organization: @org)
-        ENV['PREDEFINED_SURVEY'] = @predefined.id
-        @year_in_school_question = Factory(:year_in_school_element)
+        @predefined = FactoryGirl.create(:survey, organization: @org)
+        ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
+        @year_in_school_question = FactoryGirl.create(:year_in_school_element)
         @predefined.questions << @year_in_school_question
 
       end
@@ -324,7 +324,7 @@ class ContactsControllerTest < ActionController::TestCase
       @org = org
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @year_in_school_question = FactoryGirl.create(:year_in_school_element)
       @predefined.questions << @year_in_school_question
     end
@@ -628,7 +628,7 @@ class ContactsControllerTest < ActionController::TestCase
         @request.session[:current_organization_id] = org.id
 
         @predefined = FactoryGirl.create(:survey, organization: org)
-        ENV['PREDEFINED_SURVEY'] = @predefined.id
+        ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
         @predefined.questions << FactoryGirl.create(:year_in_school_element)
       end
 
@@ -658,7 +658,7 @@ class ContactsControllerTest < ActionController::TestCase
         @request.session[:current_organization_id] = org.id
 
         @predefined = FactoryGirl.create(:survey, organization: org)
-        ENV['PREDEFINED_SURVEY'] = @predefined.id
+        ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
         @predefined.questions << FactoryGirl.create(:year_in_school_element)
       end
 
@@ -799,7 +799,7 @@ class ContactsControllerTest < ActionController::TestCase
       @org.add_contact(@contact1)
 
       @predefined = FactoryGirl.create(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -857,7 +857,7 @@ class ContactsControllerTest < ActionController::TestCase
       @user, org = admin_user_login_with_org
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
 
       @contact1 = FactoryGirl.create(:person)
@@ -928,7 +928,7 @@ class ContactsControllerTest < ActionController::TestCase
       @phone_number = FactoryGirl.create(:phone_number, person: @contact1, number: "09167788889", primary: true)
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -1015,7 +1015,7 @@ class ContactsControllerTest < ActionController::TestCase
       @user, org = admin_user_login_with_org
       @org = @user.person.organizations.first
       @predefined_survey = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
+      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
       @year_in_school_question = FactoryGirl.create(:year_in_school_element)
       @predefined_survey.questions << @year_in_school_question
 
@@ -1093,7 +1093,7 @@ class ContactsControllerTest < ActionController::TestCase
       @permission3.update_attributes({followup_status: "contacted"})
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -1124,7 +1124,7 @@ class ContactsControllerTest < ActionController::TestCase
       org.add_contact(@contact5)
 
       @predefined = FactoryGirl.create(:survey, organization: org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -1169,7 +1169,7 @@ class ContactsControllerTest < ActionController::TestCase
       FactoryGirl.create(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person4)
 
       @predefined = FactoryGirl.create(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined.id
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
       @predefined.questions << FactoryGirl.create(:year_in_school_element)
     end
 
@@ -1273,7 +1273,7 @@ class ContactsControllerTest < ActionController::TestCase
       @survey.questions << @question
 
       @predefined_survey = FactoryGirl.create(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
+      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
       @campus_question = FactoryGirl.create(:campus_element, content: "SUSD\nUSD")
       @predefined_survey.questions << @campus_question
 
@@ -1316,7 +1316,7 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       @predefined_survey = FactoryGirl.create(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
+      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
     end
     should "return all contacts without paging" do
       (1..50).each do
@@ -1332,7 +1332,7 @@ class ContactsControllerTest < ActionController::TestCase
     setup do
       @user, @org = admin_user_login_with_org
       @predefined_survey = FactoryGirl.create(:survey, organization: @org)
-      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
+      ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
       @contact1 = FactoryGirl.create(:person, phone_number: '445566778', email:'abcd@email.com')
       @contact2 = FactoryGirl.create(:person, phone_number: '112233445', email:'cdef@email.com')
       @contact3 = FactoryGirl.create(:person, phone_number: '566778899', email:'efgh@email.com')

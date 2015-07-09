@@ -9,8 +9,7 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
     FactoryGirl.create(:approved_keyword, organization: @org, user: @user)
     @survey = @org.surveys.first
     @predefined_survey = FactoryGirl.create(:survey, organization: @org)
-    ENV['PREDEFINED_SURVEY'] = @predefined_survey.id
-
+    ENV['PREDEFINED_SURVEY'] = @predefined_survey.id.to_s
   end
 
   test "should get index" do

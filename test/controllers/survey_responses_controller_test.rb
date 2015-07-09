@@ -161,7 +161,7 @@ class SurveyResponsesControllerTest < ActionController::TestCase
       @answer_sheet = FactoryGirl.create(:answer_sheet, survey: @survey, person: @respondent.person)
       @answer_to_choice = FactoryGirl.create(:answer_1, answer_sheet: @answer_sheet, question: @questions.first)
 
-      stub_request(:get, "http://api.bit.ly/v3/shorten?apiKey=R_1b6fbe0b4987dc3801ddb9f812d60f84&login=vincentpaca&longUrl=http://local.missionhub.com:7888/people/#{@respondent.person.id}").to_return(:status => 200, :body => "", :headers => {})
+      stub_request(:get, "http://api.bit.ly/v3/shorten?apiKey=bitlykey&login=vincentpaca&longUrl=http://local.missionhub.com:7888/people/#{@respondent.person.id}").to_return(:status => 200, :body => "", :headers => {})
 
       post :create, { :survey_id => @survey.id, :person => { first_name: @respondent.person.first_name, last_name: @respondent.person.last_name, phone_number: "1234567890", email: @email.email}, :answers => @answer_to_choice.attributes }
       assert_response(:success)

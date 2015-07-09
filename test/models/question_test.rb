@@ -13,11 +13,11 @@ class QuestionTest < ActiveSupport::TestCase
       @person = FactoryGirl.create(:person, first_name: "Herp", last_name: "Derp", email: "herp_derp@gmail.com", phone_number: "101011011")
       @question = Question.new
 
-      # stub_request(:get, "http://api.bit.ly/shorten?apiKey=R_1b6fbe0b4987dc3801ddb9f812d60f84&history=&login=vincentpaca&longUrl=http://www.missionhub.com/people/86505&version=2.0.1").
+      # stub_request(:get, "http://api.bit.ly/shorten?apiKey=bitlykey&history=&login=vincentpaca&longUrl=http://www.missionhub.com/people/86505&version=2.0.1").
       #   with(headers: {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'api.bit.ly', 'User-Agent'=>'Ruby'}).
       #   to_return(status: 200, body: "", headers: {})
 
-      stub_request(:get, "https://api-ssl.bitly.com/v3/shorten?access_token=R_1b6fbe0b4987dc3801ddb9f812d60f84&longUrl=http://www.missionhub.com/people/#{@person.id}").
+      stub_request(:get, "https://api-ssl.bitly.com/v3/shorten?access_token=bitlykey&longUrl=http://www.missionhub.com/people/#{@person.id}").
         to_return(:body => "{\"status_code\":\"200\", \"status_txt\":\"OK\", \"data\": {\"long_url\": \"http:\/\/www.missionhub.com\/people\/7971\", \"url\": \"http:\/\/bit.ly\/QG64KU\", \"hash\": \"QG64KU\", \"global_hash\": \"QG64KV\", \"new_hash\":\"0\"}}", :status => 200)
     end
 
