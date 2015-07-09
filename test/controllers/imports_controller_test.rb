@@ -80,7 +80,7 @@ class ImportsControllerTest < ActionController::TestCase
       @question = FactoryGirl.create(:some_question)
       @survey2.questions << @question
 
-      ENV['PREDEFINED_SURVEY'] = 2
+      ENV['PREDEFINED_SURVEY'] = "2"
     end
 
     should "show edit form" do
@@ -363,7 +363,7 @@ class ImportsControllerTest < ActionController::TestCase
       contacts_file = File.open(Rails.root.join("test/fixtures/contacts_upload_csv/sample_import_1.csv"))
       file = Rack::Test::UploadedFile.new(contacts_file, "application/csv")
       predefined_survey = FactoryGirl.create(:survey)
-      ENV['PREDEFINED_SURVEY'] = predefined_survey.id
+      ENV['PREDEFINED_SURVEY'] = predefined_survey.id.to_s
       post :create, { :import => { :upload => file } }
       post :edit, { :id => Import.last.id }
       assert_template "imports/edit"
@@ -397,7 +397,8 @@ class ImportsControllerTest < ActionController::TestCase
           post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
           post :import, { :use_labels => "0", :id => Import.first.id}
           Import.last.do_import([])
-          assert_equal Person.last.answer_sheets.first.answers.first.value, "I just met you"
+          # Failing because the import creates an AnswerSheet for predefined survey
+          assert_equal Person.last.answer_sheets.last.answers.first.value, "I just met you"
         end
     end
 
