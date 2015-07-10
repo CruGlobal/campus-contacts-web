@@ -11,10 +11,10 @@ $ ->
 
   $(document).ready ->
     wiser_timezone_reload();
-    
+
     $(window).on "beforeunload", (e) ->
       "Warning! Leaving this page will not save your changes." if $("body").data("has_changes") == "true"
-    
+
     $(document).on "hover", ".org_tree_link", ->
       unless $(this).hasClass("loaded")
         $(this).addClass("loaded")
@@ -27,7 +27,7 @@ $ ->
 
     $('#send_email_to').tokenInput "/contacts/auto_suggest_send_email.json",
       theme: 'facebook'
-      preventDuplicates: true
+      preventDuplicates: false
       minChars: 3
       resultsLimit: 10
       hintText: "",
@@ -35,7 +35,7 @@ $ ->
 
     $('#send_text_to').tokenInput "/contacts/auto_suggest_send_text.json",
       theme: 'facebook'
-      preventDuplicates: true
+      preventDuplicates: false
       minChars: 3
       resultsLimit: 10
       hintText: "",
