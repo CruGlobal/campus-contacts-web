@@ -17,7 +17,7 @@ class Import < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  has_attached_file :upload, s3_credentials: {:bucket => ENV['BUCKET'], :access_key_id => ENV['ACCESS_KEY_ID'], :secret_access_key => ENV['SECRET_ACCESS_KEY']},
+  has_attached_file :upload, s3_credentials: {:bucket => ENV['AWS_BUCKET'], :access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']},
     s3_permissions: :private, storage: :s3, path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
 
   validates_attachment_file_name :upload, :matches => [/csv\Z/]

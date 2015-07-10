@@ -7,14 +7,18 @@ class Person < ActiveRecord::Base
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
 
-  attr_accessible :accountNo, :last_name, :first_name, :middle_name, :gender, :student_status, :campus, :year_in_school, :major, :minor, :greek_affiliation, :user_id, :birth_date, :date_became_christian, :graduation_date, :level_of_school, :staff_notes, :primary_campus_involvement_id, :mentor_id, :fb_uid, :date_attributes_updated, :crs_profile_id, :sp_person_id, :si_person_id, :pr_person_id, :faculty, :is_staff, :infobase_person_id, :nationality, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :email, :phone_number, :email_addresses_attributes, :phone_numbers_attributes, :addresses_attributes
+  attr_accessible :accountNo, :last_name, :first_name, :middle_name, :gender, :student_status, :campus, :year_in_school, :major, :minor, 
+    :greek_affiliation, :user_id, :birth_date, :date_became_christian, :graduation_date, :level_of_school, :staff_notes, 
+    :primary_campus_involvement_id, :mentor_id, :fb_uid, :date_attributes_updated, :crs_profile_id, :sp_person_id, :si_person_id, 
+    :pr_person_id, :faculty, :is_staff, :infobase_person_id, :nationality, :avatar_file_name, :avatar_content_type, :avatar_file_size, 
+    :avatar_updated_at, :email, :phone_number, :email_addresses_attributes, :phone_numbers_attributes, :addresses_attributes, :avatar
 
   after_save :ensure_one_primary_email, :ensure_one_primary_number
   has_paper_trail :on => [:destroy],
                   :meta => { person_id: :id }
 
   has_attached_file :avatar, :styles => { :medium => "200x200>", :thumb => "100x100>", big_square: "300x300#"},
-    s3_credentials: {:bucket => ENV['BUCKET'], :access_key_id => ENV['ACCESS_KEY_ID'], :secret_access_key => ENV['SECRET_ACCESS_KEY']},
+    s3_credentials: {:bucket => ENV['AWS_BUCKET'], :access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']},
     storage: :s3, path: 'people/:attachment/:style/:id/:filename',
     s3_storage_class: :reduced_redundancy
 
