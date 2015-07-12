@@ -8,6 +8,7 @@
   </div>
 <% else %>
   <% @completed_answer_sheets.each do |answer_sheet| %>
+    <% next if answer_sheet.survey_id == ENV['PREDEFINED_SURVEY'].to_i %>
     <%= render partial: 'interactions/survey_feed', locals: {answer_sheet: answer_sheet} %>
   <% end %>
 <% end %>
