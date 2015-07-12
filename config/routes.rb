@@ -1,11 +1,11 @@
 require 'sidekiq/web'
 Mh::Application.routes.draw do
 
-  constraint = lambda { |request| Rails.env.development? || (request.env["rack.session"] &&
+  constraint = lambda { |request| request.env["rack.session"] &&
                                   request.env["rack.session"]["warden.user.user.key"] &&
-                                  request.env["rack.session"]["warden.user.user.key"][0] &&
-                                  request.env["rack.session"]["warden.user.user.key"][1] &&
-                                  request.env["rack.session"]["warden.user.user.key"][0].constantize.find(request.env["rack.session"]["warden.user.user.key"][1].first).developer?) }
+                                  request.env["rack.session"]["warden.user.user.key"].first &&
+                                  request.env["rack.session"]["warden.user.user.key"].first.first &&
+                                  User.find(request.env["rack.session"]["warden.user.user.key"].first.first).developer? }
   constraints constraint do
     mount Sidekiq::Web => '/sidekiq'
   end

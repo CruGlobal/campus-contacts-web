@@ -33,7 +33,7 @@ class FixDataChangeInvolvedAndLeaderLabelsInPowerToChange < ActiveRecord::Migrat
         end
       end
     else
-      raise "Cannot find Power to Change organization." unless Rails.env.test?
+      puts "Cannot find Power to Change organization." unless Rails.env.test?
     end
   end
 
