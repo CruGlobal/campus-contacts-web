@@ -28,7 +28,6 @@ gem 'deadlock_retry'#, '~> 1.2.0'
 gem 'delegate_presenter'#, '~> 0.0.2'
 gem 'dynamic_form'#, '~> 1.1.4'
 gem 'enforce_schema_rules'#, '~> 0.0.17'
-gem 'foreigner'#, '~> 1.5.0'
 gem 'http_accept_language'#, '~> 2.0.0'
 gem 'i18n-js' #, git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'kaminari'#, '~> 0.14.1'
