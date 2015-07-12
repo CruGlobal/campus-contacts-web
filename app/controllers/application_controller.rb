@@ -5,11 +5,11 @@ class ApplicationController < ActionController::Base
   include ContactMethods
 
   force_ssl if: :ssl_configured?, :except => [:lb]
+  before_filter :check_valid_subdomain, :except => [:lb]
   before_filter :authenticate_user!, :except => [:facebook_logout, :lb]
   before_filter :clear_advanced_search, :except => [:lb]
   before_filter :set_login_cookie, :except => [:lb]
   before_filter :check_su, :except => [:lb]
-  before_filter :check_valid_subdomain, :except => [:lb]
   before_filter :set_locale, :except => [:lb]
   before_filter :check_url, except: [:facebook_logout, :lb]
   before_filter :export_i18n_messages, :except => [:lb]
@@ -231,7 +231,10 @@ class ApplicationController < ActionController::Base
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
     unless %w[local stage aws lwi].include?(request.subdomains.first)
-      redirect_to 'https://' + ENV['APP_DOMAIN'] and return false
+      scheme = ssl_configured? ? 'https://' : 'http://'
+      url = scheme + ENV['APP_DOMAIN'] + request.path
+      url += "?locale=#{session[:locale]}" if session[:locale].present?
+      redirect_to url and return false
     end
   end
 
