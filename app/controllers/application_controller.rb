@@ -231,7 +231,7 @@ class ApplicationController < ActionController::Base
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
     unless %w[local stage aws lwi].include?(request.subdomains.first)
-      redirect_to 'https://' + request.host_with_port and return false
+      redirect_to 'https://' + ENV['APP_DOMAIN'] and return false
     end
   end
 
