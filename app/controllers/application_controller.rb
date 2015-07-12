@@ -231,16 +231,13 @@ class ApplicationController < ActionController::Base
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
     unless %w[local stage aws lwi].include?(request.subdomains.first)
-      redirect_to 'http://' + request.host_with_port and return false
+      redirect_to 'https://' + request.host_with_port and return false
     end
   end
 
   def set_locale
-      if params[:locale]
-        I18n.locale = session[:locale] = params[:locale]
-      else
-        I18n.locale = session[:locale] || 'en'
-      end
+    I18n.locale = session[:locale] = params[:locale] if params[:locale]
+    I18n.locale = session[:locale] || 'en'
   end
 
   def export_i18n_messages
