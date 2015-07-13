@@ -8,7 +8,6 @@ require 'rack/oauth2/server'
 require 'shoulda'
 require 'api_test_helper'
 require 'sidekiq/testing'
-require 'base62'
 require "strip_attributes/matchers"
 class MiniTest::Spec
   include StripAttributes::Matchers
