@@ -72,7 +72,7 @@ class PersonFilter
         # Names don't typically have @ signs
         @filters[:email_like] = @filters.delete(:name_or_email_like)
       else
-        filtered_people = filtered_people.includes(:email_addresses)
+        filtered_people = filtered_people.joins(:email_addresses)
                                          .where("concat(first_name,' ',last_name) LIKE :search OR
                                                   first_name LIKE :search OR last_name LIKE :search OR
                                                   email_addresses.email LIKE :search",
@@ -91,12 +91,12 @@ class PersonFilter
     end
 
     if @filters[:email_like]
-      filtered_people = filtered_people.includes(:email_addresses)
+      filtered_people = filtered_people.joins(:email_addresses)
                                          .where("email_addresses.email LIKE ?", "%#{filters[:email_like]}%")
     end
 
     if @filters[:email_exact]
-      filtered_people = filtered_people.includes(:email_addresses)
+      filtered_people = filtered_people.joins(:email_addresses)
                                          .where("email_addresses.email = ?", filters[:email_exact])
     end
 
