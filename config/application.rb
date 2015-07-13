@@ -3,13 +3,13 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 require 'rack/oauth2/server/admin'
 require 'openssl'
-require 'base62'
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env, :assets) if defined?(Bundler)
 
 module Mh
   class Application < Rails::Application
+    require 'base62'
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
