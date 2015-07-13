@@ -72,11 +72,10 @@ class PersonFilter
         # Names don't typically have @ signs
         @filters[:email_like] = @filters.delete(:name_or_email_like)
       else
-        filtered_people = filtered_people.joins(:email_addresses)
-                                         .where("concat(first_name,' ',last_name) LIKE :search OR
-                                                  first_name LIKE :search OR last_name LIKE :search OR
-                                                  email_addresses.email LIKE :search",
-                                                 {:search => "#{filters[:name_or_email_like]}%"})
+        filtered_people = filtered_people
+                            .includes(:email_addresses)
+                            .where("concat(people.first_name,' ',people.last_name) LIKE :search OR people.first_name LIKE :search OR people.last_name LIKE :search OR email_addresses.email LIKE :search", {:search => "#{filters[:name_or_email_like]}%"})
+                            .references(:email_addresses)
       end
     end
 
@@ -91,13 +90,17 @@ class PersonFilter
     end
 
     if @filters[:email_like]
-      filtered_people = filtered_people.joins(:email_addresses)
-                                         .where("email_addresses.email LIKE ?", "%#{filters[:email_like]}%")
+      filtered_people = filtered_people
+                          .includes(:email_addresses)
+                          .where("email_addresses.email LIKE ?", "%#{filters[:email_like]}%")
+                          .references(:email_addresses)
     end
 
     if @filters[:email_exact]
-      filtered_people = filtered_people.joins(:email_addresses)
-                                         .where("email_addresses.email = ?", filters[:email_exact])
+      filtered_people = filtered_people
+                          .includes(:email_addresses)
+                          .where("email_addresses.email = ?", filters[:email_exact])
+                          .references(:email_addresses)
     end
 
     if @filters[:gender]

@@ -627,3 +627,6 @@ DEPENDENCIES
   whenever
   wiser_date
   wiser_timezone
+
+BUNDLED WITH
+   1.10.3

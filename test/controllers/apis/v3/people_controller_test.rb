@@ -254,5 +254,49 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
       assert_nil assigns(:people)
     end
   end
+
+  context 'filter' do
+    setup do
+      @token = @admin_token.code
+
+      @extra1 = FactoryGirl.create(:person, first_name: "Anne", last_name: "Smith")
+      FactoryGirl.create(:email_address, person: @extra1, email: "chubbybaby@email.com")
+      @org.add_contact(@extra1)
+    end
+    should 'not raise an error when searching for first name' do
+      get :index, filters: {name_or_email_like: "Anne"}, access_token: @token
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 1, json['people'].count, json.inspect
+    end
+    should 'not raise an error when searching for last name' do
+      get :index, filters: {name_or_email_like: "Smith"}, access_token: @token
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 1, json['people'].count, json.inspect
+    end
+    should 'not raise an error when searching for email' do
+      get :index, filters: {name_or_email_like: "chubbybaby@email.com"}, access_token: @token
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 1, json['people'].count, json.inspect
+    end
+    should 'not raise an error when searching for incomplete email' do
+      get :index, filters: {name_or_email_like: "chubby"}, access_token: @token
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 1, json['people'].count, json.inspect
+    end
+    should 'not raise an error when searching with multiple results' do
+
+      @extra2 = FactoryGirl.create(:person, first_name: "Chubby", last_name: "Rex")
+      @org.add_contact(@extra2)
+
+      get :index, filters: {name_or_email_like: "chubby"}, access_token: @token
+      assert_response :success
+      json = JSON.parse(response.body)
+      assert_equal 2, json['people'].count, json.inspect
+    end
+  end
 end
 
