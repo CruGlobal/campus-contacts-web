@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def ssl_configured?
-    !Rails.env.development? && !Rails.env.test? && request.subdomains.first.blank?
+    !Rails.env.development? && !Rails.env.test? && !available_locales.include?(request.subdomains.first)
   end
 
   def clear_advanced_search
@@ -230,7 +230,7 @@ class ApplicationController < ActionController::Base
   def check_valid_subdomain
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
-    unless %w[local stage aws lwi].include?(request.subdomains.first)
+    unless %w[local stage aws lwi www].include?(request.subdomains.first)
       scheme = ssl_configured? ? 'https://' : 'http://'
       url = scheme + ENV['APP_DOMAIN'] + request.path
       url += "?locale=#{session[:locale]}" if session[:locale].present?
