@@ -54,7 +54,7 @@ class Organization < ActiveRecord::Base
   has_many :leaders,
     ->{where("organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", [Permission::USER_ID, Permission::ADMIN_ID]).order("people.last_name, people.first_name").uniq }, through: :organizational_permissions, source: :person
   has_many :users,
-    ->{where("organizational_permissions.permission_id IN (?) AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID).order("people.last_name, people.first_name").uniq }, through: :organizational_permissions, source: :person
+    ->{where("organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::USER_ID).order("people.last_name, people.first_name").uniq }, through: :organizational_permissions, source: :person
   has_many :admins,
     ->{where("organizational_permissions.permission_id = ? AND organizational_permissions.archive_date IS NULL AND organizational_permissions.deleted_at IS NULL", Permission::ADMIN_ID).order("people.last_name, people.first_name").uniq }, through: :organizational_permissions, source: :person
 
