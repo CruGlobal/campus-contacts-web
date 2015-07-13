@@ -12,11 +12,11 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
 
   def self.fetch_active(org)
     create_new_suggestions(org)
-    org.movement_indicator_suggestions.active.includes(:label, :person).order(:label_id, 'people.last_name', 'people.first_name')
+    org.movement_indicator_suggestions.active.includes(:label, :person).order(:label_id, 'people.last_name', 'people.first_name').references(:person)
   end
 
   def self.fetch_declined(org)
-    org.movement_indicator_suggestions.declined.includes(:label, :person).order(:label_id)
+    org.movement_indicator_suggestions.declined.includes(:label, :person).order(:label_id).references(:person)
   end
 
   private
