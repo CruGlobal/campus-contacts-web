@@ -26,7 +26,7 @@ class PersonFilter
     end
 
     if @filters[:permissions].present?
-      filtered_people = filtered_people.where('organizational_permissions.permission_id IN (?) AND organizational_permissions.organization_id = ?', @filters[:permissions].split(','), @organization.id)
+      filtered_people = filtered_people.references(:organizational_permissions).where('organizational_permissions.permission_id IN (?) AND organizational_permissions.organization_id = ?', @filters[:permissions].split(','), @organization.id)
     end
 
     if @filters[:roles]
@@ -34,6 +34,7 @@ class PersonFilter
       label_ids = @filters[:roles].split(',').collect {|r| r.to_i > 0 ? r : Label.where(name: r).first.try(:id)}.compact
       filtered_people = filtered_people.joins(:organizational_labels)
                                        .includes(:organizational_permissions)
+                                       .references(:organizational_permissions)
                                        .where('(organizational_permissions.permission_id IN (:permission_ids)
                                                 AND organizational_permissions.organization_id = :org_id)
                                                 OR (organizational_labels.label_id IN (:label_ids)
