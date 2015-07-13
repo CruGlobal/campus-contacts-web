@@ -113,7 +113,7 @@ class Apis::V3::BaseController < ApplicationController
     # eager loading is a waste of time if the 'since' parameter is passed
     unless params[:since]
       available_includes.each do |rel|
-        resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
+        #resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
       end
     end
     resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
