@@ -44,7 +44,10 @@ class PersonFilter
     end
 
     if @filters[:interactions]
-      filtered_people = filtered_people.joins(:interactions).where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, @filters[:interactions].split(','))
+      filtered_people = filtered_people
+                          .includes(:interactions)
+                          .references(:interactions)
+                          .where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, @filters[:interactions].split(','))
     end
 
     if @filters[:first_name_like]
@@ -93,15 +96,15 @@ class PersonFilter
     if @filters[:email_like]
       filtered_people = filtered_people
                           .includes(:email_addresses)
-                          .where("email_addresses.email LIKE ?", "%#{filters[:email_like]}%")
                           .references(:email_addresses)
+                          .where("email_addresses.email LIKE ?", "%#{filters[:email_like]}%")
     end
 
     if @filters[:email_exact]
       filtered_people = filtered_people
                           .includes(:email_addresses)
-                          .where("email_addresses.email = ?", filters[:email_exact])
                           .references(:email_addresses)
+                          .where("email_addresses.email = ?", filters[:email_exact])
     end
 
     if @filters[:gender]
@@ -124,13 +127,17 @@ class PersonFilter
     end
 
     if @filters[:assigned_to]
-      filtered_people = filtered_people.includes(:assigned_tos)
-                                       .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','), 'contact_assignments.organization_id' => @organization.id)
+      filtered_people = filtered_people
+                          .includes(:assigned_tos)
+                          .references(:assigned_tos)
+                          .where('contact_assignments.assigned_to_id' => @filters[:assigned_to].split(','), 'contact_assignments.organization_id' => @organization.id)
     end
 
       if @filters[:surveys].present?
-        filtered_people = filtered_people.joins(:answer_sheets)
-                                         .where("answer_sheets.survey_id" => @filters[:surveys].split(','))
+        filtered_people = filtered_people
+                            .includes(:answer_sheets)
+                            .references(:answer_sheets)
+                            .where("answer_sheets.survey_id" => @filters[:surveys].split(','))
       end
 
     filtered_people

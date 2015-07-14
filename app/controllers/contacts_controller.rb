@@ -994,7 +994,7 @@ class ContactsController < ApplicationController
     def filter_by_search
       @header = I18n.t('contacts.index.matching_seach')
       if params[:survey].present?
-        @people_scope = @people_scope.joins(:answer_sheets).where("answer_sheets.survey_id" => params[:survey])
+        @people_scope = @people_scope.includes(:answer_sheets).where("answer_sheets.survey_id" => params[:survey]).references(:answer_sheets)
       end
 	    if params[:survey_updated_from].present? && params[:survey_updated_to].present?
 	      @people_scope = @people_scope.find_by_survey_updated_by_daterange(format_date_for_search(params[:survey_updated_from]), format_date_for_search(params[:survey_updated_to]), current_organization.id)

@@ -129,7 +129,7 @@ class Element < ActiveRecord::Base
   end
 
   def search_people_answer_textfield(people, survey, answer, option = TEXTFIELD_MATCH.first[1].underscore, range = nil)
-    all_answers = Answer.includes(:answer_sheet).where("answer_sheets.survey_id = ? AND question_id = ?", survey.id, id)
+    all_answers = Answer.includes(:answer_sheet).where("answer_sheets.survey_id = ? AND question_id = ?", survey.id, id).references(:answer_sheets)
     answer.strip!
     if range.present?
       date_from = translate_date(range.first())
@@ -160,7 +160,7 @@ class Element < ActiveRecord::Base
 
   def search_people_answer_choicefield(people, survey, field_answers, option = CHOICEFILED_MATCH.first[1].underscore, range = nil)
     field_answers = field_answers.map{|x| x.downcase.strip}
-    all_answers = Answer.includes(:answer_sheet).where("answer_sheets.survey_id = ? AND question_id = ?", survey.id, id)
+    all_answers = Answer.includes(:answer_sheet).where("answer_sheets.survey_id = ? AND question_id = ?", survey.id, id).references(:answer_sheets)
     if range.present?
       date_from = translate_date(range.first())
       date_to = translate_date(range.last())

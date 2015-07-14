@@ -559,7 +559,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.filter_by_survey_scope(people, organization, survey_scope)
-    return people.joins(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).uniq
+    return people.includes(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).references(:answer_sheets).uniq
   end
 
   def timezone
