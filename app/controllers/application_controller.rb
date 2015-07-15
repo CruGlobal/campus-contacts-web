@@ -153,6 +153,10 @@ class ApplicationController < ActionController::Base
     #session['wizard'] = nil
   end
 
+  def authenticate_admin!
+   redirect_to root_path unless is_admin?
+  end
+
   def facebook_token
     @facebook_token ||= (params[:facebook_token] || facebook_token_from_header)
   end
