@@ -6,7 +6,7 @@ class Organization < ActiveRecord::Base
   include Sidekiq::Worker
   attr_accessor :person_id
 
-  attr_accessible :name, :requires_validation, :ancestry, :terminology, :importable_id, :importable_type, :show_sub_orgs, :status, :settings, :conference_id, :last_indicator_suggestion_at, :last_push_to_infobase, :parent
+  attr_accessible :name, :requires_validation, :ancestry, :terminology, :importable_id, :importable_type, :show_sub_orgs, :status, :settings, :conference_id, :last_indicator_suggestion_at, :last_push_to_infobase, :parent, :parent_id
 
   has_ancestry
   has_paper_trail :on => [:destroy],
