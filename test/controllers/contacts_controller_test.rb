@@ -1355,4 +1355,36 @@ class ContactsControllerTest < ActionController::TestCase
       assert !results.include?(@contact3.id)
     end
   end
+
+  context "parameter su and user_id" do
+    setup do
+      @org = FactoryGirl.create(:organization)
+      @request.session[:current_organization_id] = @org.id
+
+      @user = FactoryGirl.create(:user_with_auxs)
+      @person = @user.person
+      @org.add_admin(@person)
+      sign_in @user
+
+      @other_user = FactoryGirl.create(:user_with_auxs)
+      @other_person = @other_user.person
+      @org.add_contact(@other_person)
+
+      @predefined = FactoryGirl.create(:survey, organization: @org)
+      ENV['PREDEFINED_SURVEY'] = @predefined.id.to_s
+      @predefined.questions << FactoryGirl.create(:year_in_school_element)
+    end
+    should "be ignored if the user is not developer" do
+      @user.update_attributes(developer: false)
+      get :index, user_id: @other_user.id, su: true
+      assert @user, assigns(:current_user)
+      assert_response :success
+    end
+    should "take effect if the user is a developer" do
+      @user.update_attributes(developer: true)
+      get :index, user_id: @other_user.id, su: true
+      assert @other_user, assigns(:current_user)
+      assert_response :success
+    end
+  end
 end

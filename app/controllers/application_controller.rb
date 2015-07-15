@@ -141,7 +141,7 @@ class ApplicationController < ActionController::Base
       switch_to_user(session['old_user_id'])
       redirect = true
     end
-    redirect_to params.except(:user_id, :su, :exit) and return false if redirect
+    redirect_to url_for(params.except(:user_id, :su, :exit)) and return false if redirect
   end
 
   def switch_to_user(user_id, save_old = false)
