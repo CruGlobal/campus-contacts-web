@@ -1,5 +1,5 @@
 <div class="field">
-  Action: 
+  Action:
   <% @organization.status_paths.events.each do |event| %>
     <%= link_to(event, "/admin/organizations/#{@organization.id}/t/#{event}", method: :post, class: "#{event} organization") %>
   <% end %>
@@ -11,5 +11,5 @@
     <%= f.input :terminology %>
     <%= f.input :show_sub_orgs %>
   <% end %>
-  <%= f.buttons %>
+  <%= f.actions %>
 <% end %>

@@ -2,14 +2,18 @@ ActiveAdmin.register SmsKeyword do
   filter :keyword
   filter :state, :as => :select, :collection => %w[requested active denied inactive]
   filter :gateway, :as => :select, :collection => ['', 'moonshado', 'twilio']
-  
+
   index do
     column 'User' do |keyword|
-      "#{keyword.user.person} (#{keyword.user.sms_keywords.length})"
+      if keyword.user.present?
+        "#{keyword.user.person} (#{keyword.user.sms_keywords.length})"
+      end
     end
     column :keyword
     column 'Organization' do |keyword|
-      "#{keyword.organization} (#{keyword.organization.keywords.length})"
+      if keyword.organization.present?
+        "#{keyword.organization} (#{keyword.organization.keywords.length})"
+      end
     end
     column :gateway
     column :state
@@ -25,11 +29,11 @@ ActiveAdmin.register SmsKeyword do
       ret << link_to("Delete", admin_sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure?")
       keyword.state_paths.events.each do |event|
         ret << link_to(event.to_s.titleize, "/admin/sms_keywords/#{keyword.id}/t/#{event}", method: :post, class: "#{event} keyword", confirm: "Are you sure you want to #{event} #{keyword}")
-      end 
+      end
       raw ret.join(' ')
     end
   end
-  
+
   form :partial => "form"
 
   member_action :transition, :method => :post do
@@ -37,16 +41,16 @@ ActiveAdmin.register SmsKeyword do
     keyword.send(params[:transition] + '!') if keyword.state_paths.events.include?(params[:transition].to_sym)
     redirect_to '/admin/sms_keywords', notice: "#{keyword.keyword} is now #{keyword.state}"
   end
-  
+
   collection_action :approve, :method => :post do
     keywords = SmsKeyword.find(params[:bulk_ids])
-    keywords.map do |keyword| 
+    keywords.map do |keyword|
       begin
         SmsKeyword.transaction do
           keyword.approve!
         end
       # rescue StateMachine::InvalidTransition
-        
+
       end
     end
     redirect_to :back

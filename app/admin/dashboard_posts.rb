@@ -1,7 +1,7 @@
 ActiveAdmin.register DashboardPost do
   filter :title
   filter :created_at
-  
+
   form do |f|
     f.inputs "Content" do
       f.input :title
@@ -9,10 +9,10 @@ ActiveAdmin.register DashboardPost do
       f.input :video, :label => "YouTube Video ID"
       f.input :visible
     end
-    f.buttons
+    f.actions
   end
-  
-  
+
+
   index do
     column :title
     column :video
