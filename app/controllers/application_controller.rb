@@ -157,6 +157,10 @@ class ApplicationController < ActionController::Base
    redirect_to root_path unless is_admin?
   end
 
+  def authenticate_super_admin!
+   redirect_to root_path unless current_user.super_admin.present?
+  end
+
   def facebook_token
     @facebook_token ||= (params[:facebook_token] || facebook_token_from_header)
   end

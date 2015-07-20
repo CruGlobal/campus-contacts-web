@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   store :settings, accessors: [:primary_organization_id, :time_zone]
 
   has_one :person, foreign_key: 'user_id'
+  has_one :super_admin
   has_many :authentications
   has_many :sms_keywords
   has_many :access_tokens, class_name: "Rack::OAuth2::Server::AccessToken", foreign_key: "identity"

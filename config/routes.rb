@@ -426,11 +426,11 @@ Mh::Application.routes.draw do
   get 'welcome/duplicate'
 
   # SMS keyword state transitions
-  get '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
-  get '/admin/sms_keywords/approve'
+  post '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
+  post '/admin/sms_keywords/approve'
 
-  get '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
-  get '/admin/organizations/approve'
+  post '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
+  post '/admin/organizations/approve'
 
   # Map keyword responses with phone numbers
   get 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
