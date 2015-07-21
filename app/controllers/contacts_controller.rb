@@ -362,7 +362,7 @@ class ContactsController < ApplicationController
       @person_ids = EmailAddress.where("email LIKE ?", "%#{@email}%").group("person_id").collect(&:person_id)
       @people = Person.where("id IN (?)", @person_ids)
       @people = @people.reject do |person|
-        person if person.organizational_permissions.where(organization_id: current_organization.id).first
+        person if person.organizational_permissions.find_by(organization_id: current_organization.id).present?
       end
     end
   end
