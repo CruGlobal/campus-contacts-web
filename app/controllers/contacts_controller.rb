@@ -1,5 +1,4 @@
 require 'contact_actions'
-
 class ContactsController < ApplicationController
   include ContactActions
   include ActionView::Helpers::DateHelper
@@ -1201,5 +1200,4 @@ class ContactsController < ApplicationController
       end
       answers
     end
-
 end
