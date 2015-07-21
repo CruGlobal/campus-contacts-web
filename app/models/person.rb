@@ -11,7 +11,8 @@ class Person < ActiveRecord::Base
     :greek_affiliation, :user_id, :birth_date, :date_became_christian, :graduation_date, :level_of_school, :staff_notes,
     :primary_campus_involvement_id, :mentor_id, :fb_uid, :date_attributes_updated, :crs_profile_id, :sp_person_id, :si_person_id,
     :pr_person_id, :faculty, :is_staff, :infobase_person_id, :nationality, :avatar_file_name, :avatar_content_type, :avatar_file_size,
-    :avatar_updated_at, :email, :phone_number, :email_addresses_attributes, :phone_numbers_attributes, :addresses_attributes, :avatar
+    :avatar_updated_at, :email, :phone_number, :email_addresses_attributes, :phone_numbers_attributes, :addresses_attributes, :avatar,
+    :email_address, :current_address_attributes
 
   after_save :ensure_one_primary_email, :ensure_one_primary_number
   has_paper_trail :on => [:destroy],
@@ -864,10 +865,10 @@ class Person < ActiveRecord::Base
   end
 
   def add_to_group(organization, group, role = "member")
-		group = organization.groups.find_by_id(group.id)
     return false unless group.present?
-    group_membership = group.group_memberships.find_by_person_id(self.id)
-    group.group_memberships.create(person_id: self.id, role: role) unless group_membership.present?
+    group_membership = group.group_memberships.where(person_id: self.id).first_or_create
+    group_membership = group_membership.update(role: role) unless group_membership.role.present?
+    group_membership
   end
 
   def add_to_label(organization, label, added_by_id = nil)

@@ -4,9 +4,8 @@ class OrganizationalPermission < ActiveRecord::Base
                              person_id: :person_id }
 
   FOLLOWUP_STATUSES = ['uncontacted','attempted_contact','contacted','do_not_contact','completed']
-  attr_accessible :person_id, :permission_id, :start_date, :organization_id, :cru_status_id, :followup_status, :added_by_id, :archive_date, :deleted_at
-
-  attr_accessible :person_id, :permission_id, :start_date, :organization_id, :cru_status_id, :followup_status, :added_by_id, :archive_date, :deleted_at
+  attr_accessible :person_id, :permission_id, :start_date, :organization_id, :cru_status_id, :followup_status, :added_by_id,
+    :archive_date, :deleted_at
 
   before_create :set_start_date, :set_contact_uncontacted
   before_save :notify_new_leader, :if => :permission_is_leader_or_admin
