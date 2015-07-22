@@ -44,8 +44,10 @@
         <% if current_person.leader_for_org(current_organization) %>
           <%= render partial: 'interactions/option_leader', locals: {person: current_person, current_person: current_person, leader: current_person} %>
         <% end %>
-        <% @assigned_tos.where("id <> ?", current_person.id).each do |assignment| %>
-          <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment} %>
+        <% if @assigned_tos.present? %>
+          <% @assigned_tos.where("id <> ?", current_person.id).each do |assignment| %>
+            <%= render partial: 'interactions/option_leader', locals: {person: @person, current_person: current_person, leader: assignment} %>
+          <% end %>
         <% end %>
       </div>
       <div class="search">

@@ -42,7 +42,7 @@ class ContactsController < ApplicationController
 
     if @from_all_contacts == "0"
       @person = @selected_people.first
-      @labels = @person.assigned_organizational_labels(current_organization.id).uniq
+      @labels = @person.assigned_organizational_labels(current_organization.id).uniq if @person.present?
     end
     filter
   end
