@@ -94,46 +94,55 @@ class User < ActiveRecord::Base
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
-    existing = Person.find_from_facebook(data)
-    if data["email"].blank? && existing.nil?
+    email = data['email']
+    last_name = data['last_name']
+    first_name = data['first_name']
+
+    provider = access_token['provider']
+    uid = access_token['uid']
+    token = access_token['credentials']['token']
+
+    if email.blank?
       raise NoEmailError, access_token['extra'].inspect
     end
+
     user = nil
     authentication = nil
 
+    person = Person.find_existing_person_by_email(email)
     transaction do
-      authentication = Authentication.find_by_provider_and_uid(access_token['provider'], access_token['uid'])
+      authentication = Authentication.find_by_provider_and_uid(provider, uid)
+
       #Let's also ensure that someone who has an authentication also has a user.  If not, delete the authentication and make a user
       if authentication && !authentication.user.nil?
-        authentication.update_attribute(:token, access_token['credentials']['token'])
+        authentication.update_attribute(:token, token)
         user = authentication.user
       else
         authentication.delete if authentication
-        user = signed_in_resource || User.where(username: data['email']).first
+        user = signed_in_resource || person.try(:user)
         # If we don't have a user with a matching email username, look for a match from email_addresses table
         # with the same first and last name
 
-        if user.nil? && existing.present?
-          user = existing.user
+        if user.nil? && person.present?
           unless force
-            if existing.last_name.try(:strip) != data['last_name'].strip || existing.first_name.try(:strip) != data['first_name'].strip
-              existing.last_name = data['last_name'].strip
-              existing.first_name = data['first_name'].strip
-              existing.save
-              user = existing.user
+            if person.last_name.try(:strip) != last_name.strip || person.first_name.try(:strip) != first_name.strip
+              person.last_name = last_name.strip
+              person.first_name = first_name.strip
+              person.save
             end
           end
+          user = person.user
         end
 
         # If all else fails, create a user
         unless user
           begin
-            user = User.where(username: data["email"]).first_or_initialize
+            user = User.where(username: email).first_or_initialize
             user.password = Devise.friendly_token[0,20] unless user.id.present?
             user.save
           rescue
             sleep(1)
-            user = find_by_username(data['email'])
+            user = find_by_username(email)
             if !user && attempts < 3
               find_for_facebook_oauth(access_token, signed_in_resource, attempts + 1)
             else
@@ -143,22 +152,22 @@ class User < ActiveRecord::Base
         end
         user.save
         begin
-          authentication = user.authentications.create(provider: 'facebook', uid: access_token['uid'], token: access_token['credentials']['token'])
+          authentication = user.authentications.create(provider: provider, uid: uid, token: token)
         rescue; end
       end
 
       if user.person
         user.person.update_from_facebook(data, authentication)
       else
-        existing = Person.find_from_facebook(data)
-        if existing && existing.user
-          existing.user.merge(user)
-          user = existing.user
+        if person && person.user
+          person.user.merge(user)
+          user = person.user
         else
-          user.person = existing || Person.create_from_facebook(data, authentication)
+          user.person = person || Person.create_from_facebook(data, authentication)
         end
       end
     end
+    user.person.add_email(email)
     user.person.touch
     user
   end

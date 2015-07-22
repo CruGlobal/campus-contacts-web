@@ -957,6 +957,11 @@ class Person < ActiveRecord::Base
     get_label
   end
 
+  def add_email(email)
+    self.email_addresses.find_or_create_by(email: email)
+    ensure_one_primary_email
+  end
+
   def assigned_tos_by_org(org)
     assigned_tos.where(organization_id: org.id)
   end
