@@ -382,7 +382,7 @@ class PeopleController < ApplicationController
       if person.present? && person.email.present?
         # This will be the default 'from' value to avoid the DMARC policy or not being store the emails in SPAM Folder
         from = "do-not-reply@mhub.cc"
-        message = t('people.bulk_email.default_body', body: params[:body], user_email: current_person.email)
+        message = t('people.bulk_email.default_body', body: params[:body], user_name: current_person.name, user_email: current_person.email)
         @message = current_person.sent_messages.create(
           receiver_id: person.id,
           organization_id: current_organization.id,
