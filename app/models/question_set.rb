@@ -65,8 +65,8 @@ class QuestionSet
           question_rules.each do |question_rule|
             triggers = question_rule.trigger_keywords
             if triggers.present? && answer_value.present?
-              trigger_words = triggers.downcase.split(',').try(:compact)
-              answer_words = answer_value.downcase.split(" ").try(:compact)
+              trigger_words = triggers.downcase.split(',').try(:compact).collect(&:strip)
+              answer_words = answer_value.downcase.split(" ").try(:compact).collect(&:strip)
               if (trigger_words & answer_words).present?
                 code = question_rule.rule.rule_code
                 case code
