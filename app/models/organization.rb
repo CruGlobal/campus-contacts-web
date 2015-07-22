@@ -868,11 +868,7 @@ class Organization < ActiveRecord::Base
 
   def notify_admin_of_request
     begin
-      if parent
-        update_column(:status, 'active')
-      else
-        OrganizationMailer.delay.notify_admin_of_request(self.id)
-      end
+      OrganizationMailer.delay.notify_admin_of_request(self.id)
     rescue ActiveRecord::RecordNotFound
     end
   end

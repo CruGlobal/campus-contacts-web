@@ -47,6 +47,7 @@ class OrganizationsController < ApplicationController
 
   def signup
     @organization = Organization.new(params[:organization])
+    @organization.status = 'requested'
     if @organization.save
       redirect_to thanks_organizations_path
     else
