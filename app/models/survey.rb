@@ -1,7 +1,7 @@
 class Survey < ActiveRecord::Base
   NO_LOGIN = 3
 
-  attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology, :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css, :background_color, :text_color, :crs_registrant_type_id, :redirect_url
+  attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology, :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css, :background_color, :text_color, :crs_registrant_type_id, :redirect_url, :logo
 
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }
@@ -33,6 +33,7 @@ class Survey < ActiveRecord::Base
   # validation
   validates_presence_of :title, :post_survey_message, :terminology
   validates_length_of :title, :maximum => 100, :allow_nil => true
+  validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
 
   default_value_for :terminology, "Survey"
 
