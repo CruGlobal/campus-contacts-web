@@ -32,7 +32,7 @@ gem 'http_accept_language'#, '~> 2.0.0'
 gem 'i18n-js' #, git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'kaminari'#, '~> 0.14.1'
 
-gem 'mini_fb'#, '~> 2.0.0'
+gem 'mini_fb', '~> 2.0.0'
 gem 'mysql2'#, '~> 0.3.11'
 gem 'newrelic_rpm'#, '>= 3.5.3.25'
 gem 'nokogiri'#, '~> 1.6.0'
