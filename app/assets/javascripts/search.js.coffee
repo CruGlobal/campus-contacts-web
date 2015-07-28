@@ -368,6 +368,7 @@ $ ->
       input = $(this).children('input')
       unless input.is(":disabled")
         input.prop("checked", true)
+        input.trigger("change")
         parent = input.parents(".side-search-option")
         options = parent.find(".options")
 
