@@ -77,7 +77,7 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
   private
 
   def interaction_types
-    current_organization.interaction_types
+    current_organization.interaction_types.where.not(i18n: "faculty_on_mission")
   end
 
   def get_interaction_type
