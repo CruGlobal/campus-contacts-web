@@ -1,9 +1,7 @@
 #encoding: utf-8
 require 'vpim/vcard'
 require 'vpim/book'
-
 class Person < ActiveRecord::Base
-
   STUDENT_STATUS = {'not_student' => 'Not currently a student', 'middle_school' => 'Middle School', 'high_school' => 'High School', 'collegiate' => 'Collegiate', 'masters_or_doctorate' => 'Masters/Doctorate'}
   GENDER = {"male" => 1, "female" => 0, "no_response" => "no_response"}
 
