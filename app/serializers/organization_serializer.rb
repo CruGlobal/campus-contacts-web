@@ -1,5 +1,7 @@
 class OrganizationSerializer < ActiveModel::Serializer
-  HAS_MANY = [:contacts, :admins, :users, :leaders, :people, :surveys, :groups, :keywords, :labels, :interaction_types]
+  HAS_MANY_SIMPLE = [:contacts, :admins, :users, :leaders, :people, :surveys, :groups, :keywords, :labels]
+  HAS_MANY_CUSTOM = [:interaction_types]
+  HAS_MANY = HAS_MANY_SIMPLE + HAS_MANY_CUSTOM
 
   attributes :id, :name, :terminology, :ancestry, :show_sub_orgs, :status, :created_at, :updated_at
 
@@ -11,6 +13,10 @@ class OrganizationSerializer < ActiveModel::Serializer
     hash
   end
 
+  def interaction_types
+    add_since(object.interaction_types.where.not(i18n: "faculty_on_mission"))
+  end
+
   def include_associations!
     includes = scope if scope.is_a? Array
     includes = scope[:include] if scope.is_a? Hash
@@ -19,7 +25,7 @@ class OrganizationSerializer < ActiveModel::Serializer
     end if includes
   end
 
-  HAS_MANY.each do |relationship|
+  HAS_MANY_SIMPLE.each do |relationship|
     next if relationship == :leaders
     define_method(relationship) do
       add_since(object.send(relationship))
