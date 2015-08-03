@@ -79,16 +79,17 @@ class PersonFilter
     end
 
     if @filters[:labels].present? && filtered_people.present?
-      if @filters[:option] == "all"
+      label_ids = @filters[:labels].split(',').collect(&:to_i)
+      if @filters[:option] == "all" && label_ids.count > 1
         filtered_people_ids = filtered_people.collect(&:id)
-        @filters[:labels].split(',').each do |label_id|
+        label_ids.each do |label_id|
           filtered_people_ids = OrganizationalLabel.where(label_id: label_id, removed_date: nil, organization_id: @organization.id, person_id: filtered_people_ids).collect(&:person_id)
         end
-        filtered_people = filtered_people.where('people.id IN (?)', filtered_people_ids)
+        filtered_people = filtered_people.where('people.id' => filtered_people_ids)
       else
         filtered_people = filtered_people
                             .joins(:organizational_labels)
-                            .where('organizational_labels.label_id IN (?) AND organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', @filters[:labels].split(','), @organization.id)
+                            .where('organizational_labels.label_id IN (?) AND organizational_labels.organization_id = ? AND organizational_labels.removed_date IS NULL', label_ids, @organization.id)
       end
     end
 
@@ -113,17 +114,18 @@ class PersonFilter
     end
 
     if @filters[:interactions] && filtered_people.present?
-      if @filters[:option] == "all"
+      interaction_ids = @filters[:interactions].split(',').collect(&:to_i)
+      if @filters[:option] == "all" && interaction_ids.count > 1
         filtered_people_ids = filtered_people.collect(&:id)
-        @filters[:interactions].split(',').each do |interaction_id|
+        interaction_ids.each do |interaction_id|
           filtered_people_ids = Interaction.where(interaction_type_id:  interaction_id, organization_id: @organization.id, deleted_at: nil, receiver_id: filtered_people_ids).collect(&:receiver_id)
         end
-        filtered_people = filtered_people.where('people.id IN (?)', filtered_people_ids)
+        filtered_people = filtered_people.where('people.id' => filtered_people_ids)
       else
         filtered_people = filtered_people
                             .includes(:interactions)
                             .references(:interactions)
-                            .where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, @filters[:interactions].split(','))
+                            .where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', @organization.id, interaction_ids)
       end
     end
     if @filters[:first_name_like] && filtered_people.present?
