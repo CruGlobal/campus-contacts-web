@@ -561,6 +561,83 @@ class Person < ActiveRecord::Base
     return people.includes(:answer_sheets).where("answer_sheets.survey_id IN (?)", survey_scope.collect(&:id)).references(:answer_sheets).uniq
   end
 
+  def self.filter_by_text_field_answer(people, organization, survey, element, answer, option = 'contains', range_toggle = 'off', range = nil)
+    if people.present? && answer.present?
+      if option != 'contains' || (option == 'contains' && answer.present?)
+        if element.predefined?
+          if range_toggle == "on" && range.reject(&:empty?).count == 2
+            return element.search_survey_people(people, answer, organization, option, range)
+          else
+            return element.search_survey_people(people, answer, organization, option)
+          end
+        else
+          if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
+            if range_toggle == "on" && range.reject(&:empty?).count == 2
+              return element.search_people_answer_textfield(people, survey, answer, option, range)
+            else
+              return element.search_people_answer_textfield(people, survey, answer, option)
+            end
+          end
+        end
+      end
+    else
+      return people
+    end
+  end
+
+  def self.filter_by_choice_field_answer(people, organization, survey, element, answer, option = 'any', range_toggle = 'off', range = nil)
+    if people.present? && answer.present?
+      if element.predefined?
+        if range_toggle == "on" && range.reject(&:empty?).count == 2
+          return element.search_survey_people(people, answer, organization, option, range)
+        else
+          return element.search_survey_people(people, answer, organization, option)
+        end
+      else
+        if ['all','any'].include?(option)
+          if range_toggle == "on" && params[:survey_range].reject(&:empty?).count == 2
+            return element.search_people_answer_choicefield(people, survey, answer, option, range)
+          else
+            return element.search_people_answer_choicefield(people, survey, answer, option)
+          end
+        end
+      end
+    else
+      return people
+    end
+  end
+
+  def self.filter_by_date_field_answer(people, organization, survey, element, answer, option = 'contains', range_toggle = 'off', range = nil)
+    result_ids = []
+
+    if people.present? && answer["start"].present?
+      if element.predefined?
+        if range_toggle == "on" && range.reject(&:empty?).count == 2
+          result_people = element.search_survey_people(people, answer, organization, option, range)
+        else
+          result_people = element.search_survey_people(people, answer, organization, option)
+        end
+        people_ids = result_people.present? ? result_people.pluck(:id) : []
+        result_ids += people_ids
+      else
+        if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
+          if range_toggle == "on" && range.reject(&:empty?).count == 2
+            answers = element.search_survey_answer_datefield(answer, option, range)
+          else
+            answers = element.search_survey_answer_datefield(answer, option)
+          end
+          if answers
+            people_ids = answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id}
+            result_ids += people_ids
+          end
+        end
+      end
+      return people.where(id: result_ids)
+    else
+      return people
+    end
+  end
+
   def timezone
     return nil unless user.present?
     user.settings[:time_zone]

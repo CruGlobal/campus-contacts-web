@@ -878,109 +878,43 @@ class ContactsController < ApplicationController
               questions.each do |question_id, option|
                 element = Element.find(question_id)
                 if element.kind == "TextField"
+
+                  answer = ""
                   begin
                     answer = params[:survey_answer][survey.id.to_s][question_id]
                   rescue; end
-                  answer ||= ""
+                  people = Person.filter_by_text_field_answer(people, current_organization, survey, element, answer, option, params[:survey_range_toggle], params[:survey_range])
 
-                  if option != 'contains' || (option == 'contains' && answer.present?)
-                    if element.predefined?
-                      if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                        people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
-                      else
-                        people = element.search_survey_people(people, answer, current_organization, option)
-                      end
-                    else
-                      if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
-                        if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                          people = element.search_people_answer_textfield(people, survey, answer, option, params[:survey_range])
-                        else
-                          people = element.search_people_answer_textfield(people, survey, answer, option)
-                        end
-                      end
-                    end
-                  end
                 elsif element.kind == "ChoiceField"
+
                   answer = Hash.new
                   begin
                     answer = params[:survey_answer][survey.id.to_s][question_id]
                   rescue; end
+                  people = Person.filter_by_choice_field_answer(people, current_organization, survey, element, answer, option, params[:survey_range_toggle], params[:survey_range])
 
-                  if answer.present?
-                    if element.predefined?
-                      if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                        people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
-                      else
-                        people = element.search_survey_people(people, answer, current_organization, option)
-                      end
-                    else
-                      if ['all','any'].include?(option)
-                        if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                          people = element.search_people_answer_choicefield(people, survey, answer, option, params[:survey_range])
-                        else
-                          people = element.search_people_answer_choicefield(people, survey, answer, option)
-                        end
-                      end
-                    end
-                  end
                 elsif element.kind == "DateField"
-                  result_ids = []
+
                   answer = Hash.new
                   begin
                     answer = params[:survey_answer][survey.id.to_s][question_id]
                   rescue; end
 
-                  if answer.present?
-                    if answer['start_day'].present? && answer['start_month'].present? && answer['start_year'].present?
-                      answer["start"] = "#{answer['start_year']}-#{'%02d' % answer['start_month'].to_i}-#{'%02d' % answer['start_day'].to_i}"
-                    else
-                      answer["start"] = ""
-                    end
-                    if answer['end_day'].present? && answer['end_month'].present? && answer['end_year'].present?
-                      answer["end"] = "#{answer['end_year']}-#{'%02d' % answer['end_month'].to_i}-#{'%02d' % answer['end_day'].to_i}"
-                    else
-                      answer["end"] = ""
-                    end
-                    # # start date
-                    # if answer['start']['(1i)'].present?
-                    #   answer["start"] = "#{answer['start']['(1i)']}-#{'%02d' % answer['start']['(2i)'].to_i}-#{'%02d' % answer['start']['(3i)'].to_i}"
-                    # else
-                    #   answer["start"] = ""
-                    # end
-                    # # end date
-                    # if answer['end']['(1i)'].present?
-                    #   answer["end"] = "#{answer['end']['(1i)']}-#{'%02d' % answer['end']['(2i)'].to_i}-#{'%02d' % answer['end']['(3i)'].to_i}"
-                    # else
-                    #   answer["end"] = ""
-                    # end
-                    params[:survey_answer][survey.id.to_s][question_id.to_s]['start'] = answer["start"]
-                    params[:survey_answer][survey.id.to_s][question_id.to_s]['end'] = answer["end"]
-
-                    if answer["start"].present?
-                      if element.predefined?
-                        if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                          result_people = element.search_survey_people(people, answer, current_organization, option, params[:survey_range])
-                        else
-                          result_people = element.search_survey_people(people, answer, current_organization, option)
-                        end
-                        people_ids = result_people.present? ? result_people.pluck(:id) : []
-                        result_ids += people_ids
-                      else
-                        if answer.present? || ['is_blank','is_not_blank','any'].include?(option)
-                          if params[:survey_range_toggle] == "on" && params[:survey_range].reject(&:empty?).count == 2
-                            answers = element.search_survey_answer_datefield(answer, option, params[:survey_range])
-                          else
-                            answers = element.search_survey_answer_datefield(answer, option)
-                          end
-                          if answers
-                            people_ids = answers.includes(:answer_sheet).collect{|x| x.answer_sheet.person_id}
-                            result_ids += people_ids
-                          end
-                        end
-                      end
-                      people = people.where(id: result_ids)
-                    end
+                  if answer['start_day'].present? && answer['start_month'].present? && answer['start_year'].present?
+                    answer["start"] = "#{answer['start_year']}-#{'%02d' % answer['start_month'].to_i}-#{'%02d' % answer['start_day'].to_i}"
+                  else
+                    answer["start"] = ""
                   end
+                  if answer['end_day'].present? && answer['end_month'].present? && answer['end_year'].present?
+                    answer["end"] = "#{answer['end_year']}-#{'%02d' % answer['end_month'].to_i}-#{'%02d' % answer['end_day'].to_i}"
+                  else
+                    answer["end"] = ""
+                  end
+                  params[:survey_answer][survey.id.to_s][question_id.to_s]['start'] = answer["start"]
+                  params[:survey_answer][survey.id.to_s][question_id.to_s]['end'] = answer["end"]
+
+                  people = Person.filter_by_date_field_answer(people, current_organization, survey, element, answer, option, params[:survey_range_toggle], params[:survey_range])
+
                 end
               end
             end
