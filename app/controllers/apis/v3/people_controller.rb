@@ -136,9 +136,11 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
           @filtered_people = current_organization.not_archived_people
         end
       end
+      if params[:filters]
+        @filtered_people = PersonFilter.new(params[:filters], current_organization).filter(@filtered_people)
+      end
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonOrder.new(order, current_organization).order(@filtered_people) if order
-      @filtered_people = PersonFilter.new(params[:filters], current_organization).filter(@filtered_people) if params[:filters]
     end
     @filtered_people
   end
