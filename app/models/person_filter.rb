@@ -219,18 +219,10 @@ class PersonFilter
         filtered_people = filtered_people.where.not(id: assignments)
       else
         assigned_to_ids = @filters[:assigned_to].split(',').collect(&:to_i)
-        if @filters[:option] == "all" && assigned_to_ids.count > 1
-          filtered_people_ids = filtered_people.collect(&:id)
-          assigned_to_ids.each do |assigned_to_id|
-            filtered_people_ids = @organization.contact_assignments.where(assigned_to_id: assigned_to_id, person_id: filtered_people_ids).collect(&:person_id)
-          end
-          filtered_people = filtered_people.where('people.id' => filtered_people_ids)
-        else
-          filtered_people = filtered_people
-                              .includes(:assigned_tos)
-                              .references(:assigned_tos)
-                              .where('contact_assignments.assigned_to_id' => assigned_to_ids, 'contact_assignments.organization_id' => @organization.id)
-        end
+        filtered_people = filtered_people
+                            .includes(:assigned_tos)
+                            .references(:assigned_tos)
+                            .where('contact_assignments.assigned_to_id' => assigned_to_ids, 'contact_assignments.organization_id' => @organization.id)
       end
     end
 
