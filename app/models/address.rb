@@ -73,7 +73,8 @@ class Address < ActiveRecord::Base
                       other.updated_at > updated_at ? other.attributes[k] : v
                     end
         end
-        self['changedBy'] = 'MERGE'
+        # To fix: ActiveModel::MissingAttributeError: can't write unknown attribute `changedBy`
+        #self['changedBy'] = 'MERGE'
       end
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload
