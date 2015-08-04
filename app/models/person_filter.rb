@@ -205,7 +205,8 @@ class PersonFilter
     end
 
     if @filters[:followup_status] && filtered_people.present?
-      filtered_people = filtered_people.where('organizational_permissions.followup_status' => @filters[:followup_status].split(','))
+      followup_statuses = @filters[:followup_status].split(',').collect{|x| x.gsub(" ", "").underscore}
+      filtered_people = filtered_people.where('organizational_permissions.followup_status' => followup_statuses)
       filtered_people = filtered_people.includes(:organizational_permissions) unless filtered_people.to_sql.include?('`organizational_permissions`')
     end
 
