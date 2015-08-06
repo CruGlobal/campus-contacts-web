@@ -63,10 +63,10 @@ namespace :sp do
     end
   end
 
-  def get_projects(primary_partner, year, is_not = false)
+  def get_projects(primary_partner, year, is_not = false, page = 1)
     project_includes = "pd,apd,opd,staff,volunteers,applicants"
     filter = is_not ? 'not_primary_partner' : 'primary_partner'
-    return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 100000)['projects']
+    return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 10, page: page)
   end
 
   # Main Task
@@ -75,7 +75,7 @@ namespace :sp do
     root = Organization.where(name: "Cru").first_or_create
 
     # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
-    ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
+    ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')
     ministry_json.each do |ministry|
       puts "-- Checking Ministry - #{ministry['name']}"
       mh_ministry = import_ministry(ministry, root)
@@ -84,15 +84,28 @@ namespace :sp do
       (2014..Date.today.year).each do |year|
         puts "---- Importing Projects #{year}..."
         search_name = get_search_name(ministry)
-        project_json = get_projects(search_name, year)
-        if project_json.present?
-          mh_mission = import_mission(year, mh_ministry)
-          project_json.each do |project|
-            puts "------ Checking Project - #{year} - #{project['name']}"
-            imported_partner << project['primary_partner']
-            mh_project = import_project(project, mh_mission)
+
+        page = 1
+        begin
+          api_response = get_projects(search_name, year, false, page)
+          meta = api_response['meta']
+          page = meta['page']
+          last_record = meta['to']
+          total_record = meta['total']
+          puts "------ #{meta.inspect}"
+
+          project_json = api_response['projects']
+          if project_json.present?
+            mh_mission = import_mission(year, mh_ministry)
+            project_json.each do |project|
+              puts "------ Checking Project - #{year} - #{project['name']}"
+              imported_partner << project['primary_partner']
+              mh_project = import_project(project, mh_mission)
+            end
           end
-        end
+          page += 1
+        end while last_record < total_record
+
       end
     end
 
@@ -107,15 +120,28 @@ namespace :sp do
       mh_region = import_region(region, mh_ministry)
       (2014..Date.today.year).each do |year|
         puts "-------- Importing Projects #{year}..."
-        project_json = get_projects(region['abbrv'], year)
-        if project_json.present?
-          mh_mission = import_mission(year, mh_region)
-          project_json.each do |project|
-            puts "---------- Checking Project - #{year} - #{project['name']}"
-            imported_partner << project['primary_partner']
-            mh_project = import_project(project, mh_mission)
+
+        page = 1
+        begin
+          api_response = get_projects(region['abbrv'], year, false, page)
+          meta = api_response['meta']
+          page = meta['page']
+          last_record = meta['to']
+          total_record = meta['total']
+          puts "------ #{meta.inspect}"
+
+          project_json = api_response['projects']
+          if project_json.present?
+            mh_mission = import_mission(year, mh_region)
+            project_json.each do |project|
+              puts "---------- Checking Project - #{year} - #{project['name']}"
+              imported_partner << project['primary_partner']
+              mh_project = import_project(project, mh_mission)
+            end
           end
-        end
+          page += 1
+        end while last_record < total_record
+
       end
 
       # puts "---- Importing Team..."
@@ -146,14 +172,27 @@ namespace :sp do
     (2014..Date.today.year).each do |year|
       puts "---- Importing Other Summer Projects #{year}..."
       puts "---- Not #{imported_partner.uniq}"
-      project_json = get_projects(imported_partner.uniq.join(','), year, true)
-      if project_json.present?
-        mh_mission = import_mission(year, non_sp)
-        project_json.each do |project|
-          puts "------ Checking Project - #{year} - #{project['name']}"
-          mh_project = import_project(project, mh_mission)
+
+      page = 1
+      begin
+        api_response = get_projects(imported_partner.uniq.join(','), year, true, page)
+        meta = api_response['meta']
+        page = meta['page']
+        last_record = meta['to']
+        total_record = meta['total']
+        puts "------ #{meta.inspect}"
+
+        project_json = api_response['projects']
+        if project_json.present?
+          mh_mission = import_mission(year, non_sp)
+          project_json.each do |project|
+            puts "------ Checking Project - #{year} - #{project['name']}"
+            mh_project = import_project(project, mh_mission)
+          end
         end
-      end
+        page += 1
+      end while last_record < total_record
+
     end
 
   end
