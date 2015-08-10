@@ -1,20 +1,24 @@
 require 'omniauth/strategies/facebook'
-module OmniAuth 
-  module Strategies 
-    class FacebookMhub < OmniAuth::Strategies::Facebook 
+module OmniAuth
+  module Strategies
+    class FacebookMhub < OmniAuth::Strategies::Facebook
       MOBILE_USER_AGENTS = 'palm|blackberry|nokia|phone|midp|mobi|symbian|chtml|ericsson|minimo|' +
                                'audiovox|motorola|samsung|telit|upg1|windows ce|ucweb|astel|plucker|' +
                                'x320|x240|j2me|sgh|portable|sprint|docomo|kddi|softbank|android|mmp|' +
                                'pdxgw|netfront|xiino|vodafone|portalmmm|sagem|mot-|sie-|ipod|up\\.b|' +
                                'webos|amoi|novarra|cdm|alcatel|pocket|ipad|iphone|mobileexplorer|' +
                                'mobile'
-      def name 
+
+      def name
          :facebook_mhub
-      end 
+      end
 
       def request_phase
         options[:scope] ||= "email,offline_access"
         options[:display] = mobile_request? ? 'touch' : 'page'
+
+        @request = ActionDispatch::Request.new(@env)
+        options[:locale] = @request.subdomain if @request.subdomain.present? && @request.subdomain != "www"
         super
       end
 
@@ -22,6 +26,6 @@ module OmniAuth
         ua = Rack::Request.new(@env).user_agent.to_s
         ua.downcase =~ Regexp.new(MOBILE_USER_AGENTS)
       end
-    end 
-  end 
-end 
+    end
+  end
+end
