@@ -243,7 +243,6 @@ class PeopleController < ApplicationController
       @person.reload
     end
 
-
     authorize! :edit, @person
 
     if params[:assigned_to_id].present?
@@ -263,7 +262,6 @@ class PeopleController < ApplicationController
     @assigned_tos = @person.assigned_to_people_by_org(current_organization)
 
     respond_to do |format|
-
       @person.reload if @person.readonly? # This might fix the readonly error
 
       if params[:person][:phone_numbers_attributes].present?
@@ -308,7 +306,6 @@ class PeopleController < ApplicationController
         current_organization.delete_person(person)
       end
     end
-
 
     render :text => I18n.t('people.bulk_delete.deleting_people_success')
   end
