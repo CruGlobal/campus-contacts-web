@@ -1,33 +1,33 @@
 <script>
   $(function () {
-  
+
       // Parse the data from an inline table using the Highcharts Data plugin
       $('#snap_container1').highcharts({
-  
+
           chart: {
               polar: true,
               type: 'column',
               margin: [0,0,0,0]
           },
-  
+
           title: {
               text: null
           },
-  
+
           pane: {
               center: ['90%','95%'],
               size: 500,
               startAngle: -90,
               endAngle: 0
           },
-  
+
           legend: {
               floating: true,
               align: 'left',
               verticalAlign: 'top',
               layout: 'vertical'
           },
-  
+
           xAxis: {
               labels: {
                   enabled: false
@@ -35,7 +35,7 @@
               min: 0,
               max: 2
           },
-  
+
           yAxis: {
               type: 'linear',
               min: 0,
@@ -43,18 +43,18 @@
               endOnTick: false,
               showLastLabel: true
           },
-  
+
           tooltip: {
               followPointer: true,
               headerFormat: ''
           },
-  
+
           plotOptions: {
-  
+
               column: {
                   grouping: false
               },
-  
+
               series: {
                   shadow: false,
                   groupPadding: 0,
@@ -64,57 +64,57 @@
           series: [{
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['holy_spirit_presentations']%>
+                  y: <%= @all_stats['holy_spirit_presentations'] || 0 %>
               }],
               name: "Holy Spirit Presentations",
               color: '#6BC989'
           }, {
               data: [{
                   x: 1.5,
-                  y: <%= @all_stats['spiritual_conversations']%>
+                  y: <%= @all_stats['spiritual_conversations'] || 0 %>
               }],
               name: "Spiritual Conversations",
               color: '#D2E3F1'
           }, {
               data: [{
                   x: 1.5,
-                  y: <%= @all_stats['personal_evangelism']%>
+                  y: <%= @all_stats['personal_evangelism'] || 0 %>
               }],
               name: "Personal Evangelism",
               color: '#A4C8E4'
           }, {
               data: [{
                   x: 1.5,
-                  y: <%= @all_stats['personal_decisions']%>
+                  y: <%= @all_stats['personal_decisions'] || 0 %>
               }],
               name: "Decisions",
               color: '#77ACD6'
           }]
       });
   });
-  
+
   $(function () {
-  
+
       // Parse the data from an inline table using the Highcharts Data plugin
       $('#snap_container2').highcharts({
-  
+
           chart: {
               polar: true,
               margin: [0,0,0,0],
               type: 'column'
           },
-  
+
           title: {
               text: null
           },
-  
+
           pane: {
               center: ['10%','95%'],
               size: 500,
               startAngle: 0,
               endAngle: 90
           },
-  
+
           legend: {
               floating: true,
               align: 'right',
@@ -122,7 +122,7 @@
               y: 0,
               layout: 'vertical'
           },
-  
+
           xAxis: {
               labels: {
                   enabled: false
@@ -130,7 +130,7 @@
               min: 0,
               max: 1
           },
-  
+
           yAxis: {
               type: 'linear',
               min: 0,
@@ -138,18 +138,18 @@
               endOnTick: false,
               showLastLabel: true
           },
-  
+
           tooltip: {
               followPointer: true,
               headerFormat: ''
           },
-  
+
           plotOptions: {
-  
+
               column: {
                   grouping: false
               },
-  
+
               series: {
                   shadow: false,
                   groupPadding: 0,
@@ -159,50 +159,50 @@
           series: [{
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['involved']%>
+                  y: <%= @all_stats['involved'] || 0 %>
               }],
               name: "Students and Faculty Involved",
               color: '#D2D9EB'
           }, {
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['engaged_disciples']%>
+                  y: <%= @all_stats['engaged_disciples'] || 0 %>
               }],
               name: "Engaged Disciples",
               color: '#A6B3D6'
           }, {
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['leaders']%>
+                  y: <%= @all_stats['leaders'] || 0 %>
               }],
               name: "Leaders",
               color: '#798CC2'
           }]
       });
   });
-  
+
   $(function () {
-  
+
       // Parse the data from an inline table using the Highcharts Data plugin
       $('#snap_container3').highcharts({
-  
+
           chart: {
               polar: true,
               type: 'column',
               margin: [0,0,0,0]
           },
-  
+
           title: {
               text: null
           },
-  
+
           pane: {
               center: ['90%','5%'],
               size: 500,
               startAngle: 180,
               endAngle: 270
           },
-  
+
           legend: {
               floating: true,
               align: 'left',
@@ -211,7 +211,7 @@
               y: 0,
               layout: 'vertical'
           },
-  
+
           xAxis: {
               labels: {
                   enabled: false
@@ -219,7 +219,7 @@
               min: 0,
               max: 1
           },
-  
+
           yAxis: {
               labels: {
                   align: 'left',
@@ -231,18 +231,18 @@
               endOnTick: false,
               showLastLabel: true
           },
-  
+
           tooltip: {
               followPointer: true,
               headerFormat: ''
           },
-  
+
           plotOptions: {
-  
+
               column: {
                   grouping: false
               },
-  
+
               series: {
                   shadow: false,
                   groupPadding: 0,
@@ -252,14 +252,14 @@
           series: [{
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['graduating_on_mission']%>
+                  y: <%= @all_stats['graduating_on_mission'] || 0 %>
               }],
               name: "Graduating on Mission",
               color: '#F7A37A'
           }, {
               data: [{
                   x: 0.5,
-                  y: <%= @all_stats['faculty_on_mission']%>
+                  y: <%= @all_stats['faculty_on_mission'] || 0 %>
               }],
               name: "Faculty on Mission",
               color: '#F4844E'
