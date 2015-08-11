@@ -6,7 +6,7 @@ class PersonFilter
     @organization = organization
 
     # strip extra spaces from filters
-    @filters.collect { |k, v| @filters[k] = v.to_s.strip }
+    @filters.collect { |k, v| @filters[k] = v.to_s.strip } if @filters.present?
 
   end
 
