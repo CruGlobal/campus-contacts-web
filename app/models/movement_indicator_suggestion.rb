@@ -93,7 +93,8 @@ class MovementIndicatorSuggestion < ActiveRecord::Base
   end
 
   def self.check_for_involved(person, org)
-    disqualifying_interaction_types = InteractionType.where(i18n: ['graduating_on_mission', 'faculty_on_mission']).pluck(:id)
+    #disqualifying_interaction_types = InteractionType.where(i18n: ['graduating_on_mission', 'faculty_on_mission']).pluck(:id)
+    disqualifying_interaction_types = InteractionType.where(i18n: 'graduating_on_mission').pluck(:id)
     unless person.labeled_in_org?(Label.involved, org) ||
            person.has_interaction_in_org?(disqualifying_interaction_types, org) ||
            org.movement_indicator_suggestions.where(person_id: person.id, label_id: Label.involved.id, action: 'add').present?
