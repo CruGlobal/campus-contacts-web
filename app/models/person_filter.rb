@@ -2,11 +2,11 @@ class PersonFilter
   attr_accessor :people, :filters
 
   def initialize(filters, organization = nil)
-    @filters = filters
+    @filters = filters == [""] ? {} : filters
     @organization = organization
 
     # strip extra spaces from filters
-    @filters.collect { |k, v| @filters[k] = v.to_s.strip } if @filters.present?
+    @filters.collect { |k, v| @filters[k] = v.to_s.strip }
 
   end
 
