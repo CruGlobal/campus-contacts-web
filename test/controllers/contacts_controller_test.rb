@@ -2,9 +2,8 @@ require 'test_helper'
 
 class ContactsControllerTest < ActionController::TestCase
   setup do
-    stub_request(:get, /https:\/\/graph.facebook.com\/.*/).
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => "", :headers => {})
+    stub_request(:any, "https://graph.facebook.com/v2.3/me").
+      to_return("status" => "200", "body" => "response", "headers" => {})
   end
 
   context "Before logging in" do

@@ -1229,15 +1229,13 @@ class Person < ActiveRecord::Base
     new_person = Person.create(first_name: data['first_name'].try(:strip), last_name: data['last_name'].try(:strip))
     begin
       if response.nil?
-        response = MiniFB.get(authentication['token'], authentication['uid'])
-      else
-        response = response
+        response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch
       end
       new_person.update_from_facebook(data, authentication, response)
-    rescue MiniFB::FaceBookError => e
+    rescue FbGraph2::Exception => e
       Airbrake.notify(
-        :error_class   => "MiniFB::FaceBookError",
-        :error_message => "MiniFB::FaceBookError: #{e.message}",
+        :error_class   => "FbGraph2::Exception",
+        :error_message => "FBGraph2::Unauthorized: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}
       )
     end
@@ -1246,11 +1244,15 @@ class Person < ActiveRecord::Base
 
   def update_from_facebook(data, authentication, response = nil)
     begin
-      response ||= MiniFB.get(authentication['token'], authentication['uid'])
+      if response.nil?
+        response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch
+      end
+
       begin
         self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
       rescue ArgumentError; end
-      self.gender = response.gender unless (response.gender.nil? && !gender.blank?)
+
+      self.gender = response.raw_attributes['gender'] unless (response.raw_attributes['gender'].present? && !gender.blank?)
       # save!
       unless email_addresses.detect {|e| e.email == data['email']}
         begin
@@ -1264,10 +1266,10 @@ class Person < ActiveRecord::Base
       get_location(authentication, response)
       get_education_history(authentication, response)
 
-    rescue MiniFB::FaceBookError => e
+    rescue FbGraph2::Exception => e
       Airbrake.notify(
-        :error_class   => "MiniFB::FaceBookError",
-        :error_message => "MiniFB::FaceBookError: #{e.message}",
+        :error_class   => "FbGraph2::Exception",
+        :error_message => "FbGraph2::Exception: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}
       )
     end
@@ -1358,29 +1360,33 @@ class Person < ActiveRecord::Base
   def get_friends(authentication, response = nil)
     begin
       if friends.length == 0
-        response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-        @friends = response['data']
-
+        if response.nil?
+          response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch
+        end
+        @friends = response.friends
         @friends.each do |friend|
-          Friend.new(friend['id'], friend['name'], self)
+          raw_info = friend.raw_attributes
+          Friend.new(raw_info['id'], raw_info['name'], self)
         end
         @friends.length  #return how many friend you got from facebook for testing
       end
     rescue
-      return false
+      return 0
     end
   end
 
   def update_friends(authentication, response = nil)
     begin
-      response ||= MiniFB.get(authentication['token'], authentication['uid'],type: "friends")
-      @fb_friends = response["data"]
-
+      if response.nil?
+        response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.friends
+      end
+      @fb_friends = response
       @fb_friends.each do |fb_friend|
-        Friend.new(fb_friend['id'], fb_friend['name'], self)
+        raw_info = friend.raw_attributes
+        Friend.new(raw_info['id'], raw_info['name'], self)
       end
 
-      (Friend.followers(self) - @fb_friends.collect {|f| f['id'] }).each do |uid|
+      (Friend.followers(self) - @fb_friends.collect {|f| f.raw_attributes['id'] }).each do |uid|
         Friend.unfollow(self, uid)
       end
     rescue
@@ -1391,17 +1397,17 @@ class Person < ActiveRecord::Base
   def get_interests(authentication, response = nil)
     begin
       if response.nil?
-        @interests = MiniFB.get(authentication['token'], authentication['uid'],type: "interests")
+        @interests = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.interests
       else
-        @interests = response
+        @interests = response.interests
       end
-
-      @interests["data"].each do |interest|
-        i = interests.where(interest_id: interest['id'], person_id: id.to_i, provider: "facebook").first_or_initialize
+      @interests.each do |interest|
+        raw_info = interest.raw_attributes
+        i = interests.where(interest_id: raw_info['id'], person_id: id.to_i, provider: "facebook").first_or_initialize
         i.provider = "facebook"
-        i.category = interest['category']
-        i.name = interest['name']
-        i.interest_created_time = interest['created_time']
+        i.category = raw_info['category']
+        i.name = raw_info['name']
+        i.interest_created_time = raw_info['created_time']
         i.save
       end
       interests.count
@@ -1412,35 +1418,45 @@ class Person < ActiveRecord::Base
 
   def get_location(authentication, response = nil)
     if response.nil?
-      @location = MiniFB.get(authentication['token'], authentication['uid']).location
-    else @location = response.location
+      @location = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.location
+    else
+      @location = response.location
     end
-    Location.where(location_id: @location['id'], name: @location['name'], person_id: id.to_i, provider: "facebook").first_or_create unless @location.nil?
+    raw_info = @location.try(:raw_attributes)
+    Location.where(location_id: raw_info['id'], name: raw_info['name'], person_id: id.to_i, provider: "facebook").first_or_create unless raw_info.nil?
   end
 
   def get_education_history(authentication, response = nil)
     if response.nil?
-      @education = MiniFB.get(authentication['token'], authentication['uid']).education
-    else @education = response.try(:education)
+      @education = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.education
+    else
+      @education = response.education
     end
     unless @education.nil?
       @education.each do |education|
-        e = education_histories.where(school_id: education.school.try(:id), person_id: id.to_i, provider: "facebook").first_or_initialize
-        e.year_id = education.year.try(:id) ? education.year.id : e.year_id
-        e.year_name = education.year.try(:name) ? education.year.name : e.year_name
-        e.school_type = education.try(:type) ? education.type : e.school_type
-        e.school_name = education.school.try(:name) ? education.school.name : e.school_name
-        unless education.try(:concentration).nil?
-          0.upto(education.concentration.length-1) do |c|
-            e["concentration_id#{c+1}"] = education.concentration[c].try(:id) ? education.concentration[c].id : e["concentration_id#{c+1}"]
-            e["concentration_name#{c+1}"] = education.concentration[c].try(:name) ? education.concentration[c].name : e["concentration_name#{c+1}"]
+        raw_school = education.school.raw_attributes if education.school.present?
+        raw_year = education.year.raw_attributes if education.year.present?
+
+        if raw_school.present?
+          e = education_histories.where(school_id: raw_school['id'], person_id: id.to_i, provider: "facebook").first_or_initialize
+          if raw_year.present?
+            e.year_id = raw_year['id'] if raw_year['id'].present?
+            e.year_name = raw_year['name'] if raw_year['name'].present?
           end
+          e.school_type = education.type if education.type.present?
+          e.school_name = raw_school['name'] if raw_school['name'].present?
+          unless education.concentration.nil?
+            education.concentration.each_with_index do |c, i|
+              e["concentration_id#{i+1}"] = education.concentration[i].raw_attributes['id'] if education.concentration[i].raw_attributes['id'].present?
+              e["concentration_name#{i+1}"] = education.concentration[i].raw_attributes['name'] if education.concentration[i].raw_attributes['name'].present?
+            end
+          end
+          unless education.try(:degree).nil?
+            e.degree_id = education.degree.raw_attributes['id'] if education.degree.raw_attributes['id'].present?
+            e.degree_name = education.degree.raw_attributes['name'] if education.degree.raw_attributes['name'].present?
+          end
+          e.save(validate: false)
         end
-        unless education.try(:degree).nil?
-          e.degree_id = education.degree.try(:id) ? education.degree.id : e.degree_id
-          e.degree_name = education.degree.try(:name) ? education.degree.name : e.degree_name
-        end
-        e.save(validate: false)
       end
     end
   end

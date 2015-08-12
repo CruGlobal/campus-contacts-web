@@ -564,13 +564,13 @@ class PersonTest < ActiveSupport::TestCase
       should "get friends" do
         #make sure # of friends from MiniFB = # written into DB
         existing_friends = @person.friend_uids
-        @x = @person.get_friends(@authentication, TestFBResponses::FRIENDS)
+        @x = @person.get_friends(@authentication, TestFBResponses::FULL_WITH_FRIENDS)
         assert_equal(@x, @person.friend_uids.length + existing_friends.length )
       end
 
       should "update friends" do
         friend1 = Friend.new('1', 'Test User', @person)
-        x = @person.update_friends(@authentication, TestFBResponses::FRIENDS)
+        x = @person.update_friends(@authentication, TestFBResponses::FULL_WITH_FRIENDS)
 
         # Make sure new friends get deleted
         assert(!@person.friend_uids.include?(friend1.uid))
@@ -590,7 +590,7 @@ class PersonTest < ActiveSupport::TestCase
     end
 
     should "get & update interests" do
-      x = @person.get_interests(@authentication, TestFBResponses::INTERESTS)
+      x = @person.get_interests(@authentication, TestFBResponses::FULL)
       assert(x > 0, "Make sure we now have at least one interest")
       assert(@person.interests.first.name.is_a? String)
     end
@@ -608,7 +608,7 @@ class PersonTest < ActiveSupport::TestCase
 
     should "get & update education history" do
       #real_response = MiniFB.get(@authentication.token, @authentication.uid)
-      array_of_responses = [TestFBResponses::FULL, TestFBResponses::NO_CONCENTRATION, TestFBResponses::NO_YEAR, TestFBResponses::WITH_DEGREE, TestFBResponses::WITH_DEGREE, TestFBResponses::NO_EDUCATION]
+      array_of_responses = [TestFBResponses::FULL, TestFBResponses::NO_CONCENTRATION, TestFBResponses::NO_YEAR, TestFBResponses::NO_DEGREE, TestFBResponses::NO_EDUCATION]
 
       array_of_responses.each_with_index do |response, i|
         @response = response
@@ -617,7 +617,7 @@ class PersonTest < ActiveSupport::TestCase
         @person.reload
         number_of_schools1 = @person.education_histories.length
 
-        name1 = @response.try(:education).present? ? @response.education.first.school.name : ""
+        name1 = @response.try(:education).present? ? @response.education.first.school.raw_attributes['name'] : ""
         name2 = @person.education_histories.present? ? @person.education_histories.first.school_name : ""
         assert name1 == name2, "Assure name is properly written into DB"
 
