@@ -91,7 +91,7 @@
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id, from: ids), remote: true, method: :delete, class: "icon unassign tipitleft", :title => tip, "data-assigned_to_id" => ids) %>
     </span>
     <% if params[:dnc] == 'true' %>
-      <%= link_to(t('contacts.index.delete_contact'), person_path(person), :method => :delete, :remote => true, :class => "icon delete dnc tipitleft", :title => t('contacts.index.delete_contact'), :confirm => t('contacts.index.destroy_confirm')) %>
+      <%= link_to(t('contacts.index.delete_contact'), person_path(person), method: :delete, remote: true, class: "icon delete dnc tipitleft", title: t('contacts.index.delete_contact'), data: {confirm: t('contacts.index.destroy_confirm')}) %>
     <% else %>
       <% if contact_permission %>
         <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipitleft", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>

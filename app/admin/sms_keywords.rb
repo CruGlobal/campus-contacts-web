@@ -26,7 +26,7 @@ ActiveAdmin.register SmsKeyword do
       ret = []
       ret << link_to("View", admin_sms_keyword_path(keyword))
       ret << link_to("Edit", edit_admin_sms_keyword_path(keyword))
-      ret << link_to("Delete", admin_sms_keyword_path(keyword), :method => :delete, :confirm => "Are you sure?")
+      ret << link_to("Delete", admin_sms_keyword_path(keyword), method: :delete, data:{confirm: "Are you sure?"})
       keyword.state_paths.events.each do |event|
         ret << link_to(event.to_s.titleize, "/admin/sms_keywords/#{keyword.id}/t/#{event}", method: :post, class: "#{event} keyword", confirm: "Are you sure you want to #{event} #{keyword}")
       end

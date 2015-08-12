@@ -34,7 +34,8 @@
         <%=raw t('.archive_inst', date_field: h(text_field_tag(:archive_contacts_before, @date))) %> (Date format: YYYY-MM-DD)
         <br/>
         <br/>
-        <%= submit_tag t('.archive_contacts_submit'), :confirm => t('.confirm_archive'), class: "min_width_button" %>
+
+        <%= submit_tag t('.archive_contacts_submit'), class: "min_width_button", data: {confirm: t('.confirm_archive')} %>
         <div class="icon help tip help_bubble_keyword " title="<%= t('.contact_tips') %>"></div>
       </span>
     </div>
@@ -62,7 +63,7 @@
         <%=raw t('.remove_leader_inst', date_field: h(text_field_tag(:date_leaders_not_logged_in_after, @date_leaders))) %> (Date format: YYYY-MM-DD)
         <br/>
         <br/>
-        <%= submit_tag t('.remove_leaders_submit'), :confirm => t('.confirm_remove_leaders'), class: "min_width_button" %>
+        <%= submit_tag t('.remove_leaders_submit'), class: "min_width_button", data: {confirm: t('.confirm_remove_leaders')} %>
         <div class="icon help tip help_bubble_keyword " title="<%= t('.leader_tips') %>"></div>
       </span>
     </div>
