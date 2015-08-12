@@ -1,4 +1,5 @@
 namespace :sp do
+  include Retryable
   require "import_methods"
 
   desc "pulls the ministry_* table info into missionhub tables"
@@ -66,7 +67,9 @@ namespace :sp do
   def get_projects(primary_partner, year, is_not = false, page = 1)
     project_includes = "pd,apd,opd,staff,volunteers,applicants"
     filter = is_not ? 'not_primary_partner' : 'primary_partner'
-    return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 5, page: page)
+    retryable do
+      return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 3, page: page)
+    end
   end
 
   # Main Task
