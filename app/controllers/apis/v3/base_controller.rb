@@ -27,7 +27,7 @@ class Apis::V3::BaseController < ApplicationController
                    callback: params[:callback]
           return false
         end
-      rescue MiniFB::FaceBookError => e
+      rescue FbGraph2::Exception => e
         render json: {errors: ["The facebook token you passed is invalid"], code: 'invalid_facebook_token'},
                status: :unauthorized,
                callback: params[:callback]

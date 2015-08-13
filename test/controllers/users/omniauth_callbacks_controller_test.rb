@@ -5,9 +5,8 @@ class Users::OmniauthCallbacksControllerTest < ActionController::TestCase
 
   context "Logging into facbook from mhub" do
     setup do
-      stub_request(:get, "https://graph.facebook.com/?access_token=").
-        with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-        to_return(:status => 200, :body => "{}", :headers => {})
+      stub_request(:any, "https://graph.facebook.com/v2.3/me").
+        to_return("status" => "200", "body" => "response", "headers" => {})
       request.env["devise.mapping"] = Devise.mappings[:user]
       @controller.stubs(:env).returns("omniauth.auth" => Hashie::Mash.new(uid: '5', credentials: {token: 'a', expires_at: 5}, extra: {raw_info: {first_name: 'John', last_name: 'Doe', email: 'test@example.com'}}))
     end
@@ -36,8 +35,8 @@ class Users::OmniauthCallbacksControllerTest < ActionController::TestCase
 
   context "Logging into facbook from normal MissionHub" do
     setup do
-      stub_request(:get, "https://graph.facebook.com/?access_token=")
-        .to_return(status: 200, :body => "{}", :headers => {})
+      stub_request(:any, "https://graph.facebook.com/v2.3/me").
+        to_return("status" => "200", "body" => "response", "headers" => {})
       request.env["devise.mapping"] = Devise.mappings[:user]
 
       @controller.stubs(:env).returns("omniauth.auth" => Hashie::Mash.new(uid: '5', credentials: {token: 'a', expires_at: 5}, extra: {raw_info: {first_name: 'Fred', last_name: 'Doe', email: 'test@example.com'}}))
