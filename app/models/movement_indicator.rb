@@ -9,8 +9,8 @@ class MovementIndicator
       "Media Exposures Decisions",
       "Spiritual Conversations",
       "Holy Spirit Presentations",
-      "Graduating on Mission",
-      "Faculty on Mission"
+      "Graduating on Mission"
+      #"Faculty on Mission"
     ]
   end
 
@@ -40,7 +40,7 @@ class MovementIndicator
       "Spiritual Conversations" => "spiritual_conversations",
       "Holy Spirit Presentations" => "holy_spirit_presentations",
       "Graduating on Mission" => "graduating_on_mission",
-      "Faculty on Mission" => "faculty_on_mission",
+      #"Faculty on Mission" => "faculty_on_mission",
       "Students Involved" => "students_involved",
       "Faculty Involved" => "faculty_involved",
       "Student Engaged Disciples" => "students_engaged",

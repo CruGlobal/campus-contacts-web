@@ -5,7 +5,6 @@ class InteractionType < ActiveRecord::Base
   PERSONAL_DECISION = 4
   HOLY_SPIRIT_PRESENTATION = 5
   GRADUATING_ON_MISSION = 6
-  FACULTY_ON_MISSION = 7
 
   attr_accessible :i18n, :icon, :name, :organization_id
 

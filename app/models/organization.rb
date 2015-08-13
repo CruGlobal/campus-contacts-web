@@ -195,9 +195,9 @@ class Organization < ActiveRecord::Base
                                   interactions_count('graduating_on_mission') +
                                   interactions_count('graduating_on_mission', period_begin, period_end)
 
-        faculty_on_mission = params[:faculty_on_mission].to_i -
-                                  interactions_count('faculty_on_mission') +
-                                  interactions_count('faculty_on_mission', period_begin, period_end)
+        #faculty_on_mission = params[:faculty_on_mission].to_i -
+        #                          interactions_count('faculty_on_mission') +
+        #                          interactions_count('faculty_on_mission', period_begin, period_end)
 
         stats.merge!({students_involved: students_involved,
                       faculty_involved: faculty_involved,
@@ -210,7 +210,7 @@ class Organization < ActiveRecord::Base
                       personal_evangelism: personal_evangelism,
                       personal_decisions: personal_decisions,
                       graduating_on_mission: graduating_on_mission,
-                      faculty_on_mission: faculty_on_mission,
+                      #faculty_on_mission: faculty_on_mission,
                       group_evangelism: params[:group_evangelism].to_i,
                       group_decisions: params[:group_evangelism_decision].to_i,
                       media_exposures: params[:media_exposure].to_i,
@@ -229,8 +229,8 @@ class Organization < ActiveRecord::Base
                       holy_spirit_presentations: interactions_count('holy_spirit_presentation', period_begin, period_end),
                       personal_evangelism: interactions_count('gospel_presentation', period_begin, period_end),
                       personal_decisions: interactions_count('prayed_to_receive_christ', period_begin, period_end),
-                      graduating_on_mission: interactions_count('graduating_on_mission', period_begin, period_end),
-                      faculty_on_mission: interactions_count('faculty_on_mission', period_begin, period_end)
+                      graduating_on_mission: interactions_count('graduating_on_mission', period_begin, period_end)
+                      #faculty_on_mission: interactions_count('faculty_on_mission', period_begin, period_end)
                      })
         periods << stats
       end
