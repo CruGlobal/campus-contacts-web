@@ -21,7 +21,7 @@ ActiveAdmin.register DashboardPost do
       ret = []
       ret << link_to("View", admin_dashboard_post_path(post))
       ret << link_to("Edit", edit_admin_dashboard_post_path(post))
-      ret << link_to("Delete", admin_dashboard_post_path(post), :method => :delete, :confirm => "Are you sure?")
+      ret << link_to("Delete", admin_dashboard_post_path(post), method: :delete, data:{confirm: "Are you sure?"})
       raw ret.join(' ')
     end
   end

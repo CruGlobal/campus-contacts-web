@@ -2,7 +2,7 @@
   <%= hidden_field_tag :keep_id, @keep.id %>
   <h2>
     The following person will be kept:
-    <%= submit_tag("Do the merge!", :confirm => "Are you sure? There's no going back!!!") %>
+    <%= submit_tag("Do the merge!", data:{confirm: "Are you sure? There's no going back!!!"}) %>
   </h2>
   <div class="merge person"><%= render 'merge_preview', :person => @keep %></div>
   <div class="clear">

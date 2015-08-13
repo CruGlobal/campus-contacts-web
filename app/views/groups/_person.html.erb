@@ -12,5 +12,5 @@
     <% end %>
   </td>
   <td class="controls" align="right">
-    <%= link_to(t('general.delete'), group_group_membership_path(@group, group_membership), :method => :delete, :remote => true, :class => "icon tipitleft delete", :confirm => t('.remove_confirm', name: person), :title => t('groups.delete_group_member')) %></td>
+    <%= link_to(t('general.delete'), group_group_membership_path(@group, group_membership), method: :delete, remote: true, class: "icon tipitleft delete", title: t('groups.delete_group_member'), data: {confirm: t('.remove_confirm', name: person)}) %></td>
 </tr>
