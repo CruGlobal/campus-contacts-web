@@ -230,8 +230,8 @@ class SurveyResponsesController < ApplicationController
 
     render layout: false
   end
-  protected
 
+  protected
   def save_survey
     @person.update_attributes(params[:person]) if params[:person]
     @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
