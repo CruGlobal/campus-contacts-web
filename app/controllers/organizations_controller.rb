@@ -49,6 +49,7 @@ class OrganizationsController < ApplicationController
     @organization = Organization.new(params[:organization])
     @organization.status = 'requested'
     if @organization.save
+      @organization.add_admin(current_person) unless @organization.admins.present?
       redirect_to thanks_organizations_path
     else
       render :new, layout: 'splash'
