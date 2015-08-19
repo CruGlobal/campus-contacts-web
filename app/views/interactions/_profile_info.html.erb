@@ -22,7 +22,7 @@
   	</div>
   <% end %>
 
-  <% if @assigned_tos.count >= 1 %>
+  <% if @assigned_tos.present? && @assigned_tos.count >= 1 %>
   	<div class="gender col_left">Assigned To:</div>
   	<div class="gender col_right" id="assigned_to_div">
       <% @assigned_tos.each do |assigned_to| %>
