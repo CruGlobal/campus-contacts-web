@@ -112,29 +112,15 @@ class User < ActiveRecord::Base
         user = signed_in_resource || User.where(username: data['email']).first
         # If we don't have a user with a matching email username, look for a match from email_addresses table
         # with the same first and last name
-        unless user
-          if existing
-            if existing.last_name.strip == data['last_name'].strip && existing.first_name.to_s.strip == data['first_name'].strip
+
+        if user.nil? && existing.present?
+          user = existing.user
+          unless force
+            if existing.last_name.try(:strip) != data['last_name'].strip || existing.first_name.try(:strip) != data['first_name'].strip
+              existing.last_name = data['last_name'].strip
+              existing.first_name = data['first_name'].strip
+              existing.save
               user = existing.user
-            else
-              # If first and last name don't match, there's probably some bad data
-              # If this person is logging in to fill out a survey, we want to handle this gracefully
-
-              if force
-                user = existing.user
-              else
-
-                # Start, codes changed: August 06, 2013
-                # Purpose: to consider the possibility that the existing users will change their names from Facebook and tries to login to missionhub.
-                existing.last_name = data['last_name'].strip
-                existing.first_name = data['first_name'].strip
-                existing.save
-
-                user = existing.user
-                # End, codes changed: August 06, 2013
-
-                #raise FacebookDuplicateEmailError
-              end
             end
           end
         end
