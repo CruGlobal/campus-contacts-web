@@ -540,7 +540,7 @@ GEM
       chronic (>= 0.6.3)
     wiser_date (0.3.0)
       rails (>= 3.1)
-    wiser_timezone (0.1.9)
+    wiser_timezone (0.2.0)
     yard (0.8.7.6)
 
 PLATFORMS
@@ -638,7 +638,7 @@ DEPENDENCIES
   webmock
   whenever
   wiser_date
-  wiser_timezone
+  wiser_timezone (~> 0.2.0)
 
 BUNDLED WITH
    1.10.3
