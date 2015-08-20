@@ -161,7 +161,7 @@ class Question < Element
       end
       #unless responses(app) == values
         value = values.first
-        object.send("#{attribute_name}=".to_sym, value) if object
+        object.update_attribute(attribute_name.to_sym, value) if object
       #end
     else
       @answers ||= []

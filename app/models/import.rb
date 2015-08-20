@@ -149,7 +149,7 @@ class Import < ActiveRecord::Base
 
 		new_phone_numbers = []
     # Set values for predefined questions
-    answer_sheet = AnswerSheet.new(person: person)
+    answer_sheet = AnswerSheet.new(person_id: person.id)
     predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     predefined.elements.where('object_name is not null').each do |question|
     	answer = row[:answers][question.id]
