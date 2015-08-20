@@ -1067,8 +1067,8 @@ class Person < ActiveRecord::Base
   end
 
   def labels_by_org_id(org_id)
-    unless @labels_by_org_id
-      @labels_by_org_id = Hash[OrganizationalLabel.connection.select_all("select organization_id, group_concat(label_id) as label_ids from organizational_labels where person_id = #{id} and removed_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['label_ids'].split(',').map(&:to_i) ]}]
+    if @labels_by_org_id.nil? && row['label_ids'].present?
+      @labels_by_org_id = Hash[OrganizationalLabel.connection.select_all("select organization_id, group_concat(label_id) as label_ids from organizational_labels where person_id = #{id} and removed_date is NULL group by organization_id").collect { |row| [row['organization_id'], row['label_ids'].present? ? row['label_ids'].split(',').map(&:to_i) : [] ]}]
     end
     @labels_by_org_id[org_id]
   end
