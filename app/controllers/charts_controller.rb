@@ -387,10 +387,13 @@ class ChartsController < ApplicationController
       end
     else
       end_date = Date.today if Date.today < end_date
-      label = @current_movement.labels.where(name: @current_criteria).first
-      begin_date.end_of_week(:sunday).step(end_date.end_of_week(:sunday), 7) do |date|
-        value = label.count_label_contacts_from_orgs([@current_movement.id], date)
-        @data_points[date] = value
+      if @current_movement.present?
+        if label = @current_movement.labels.where(name: @current_criteria).first
+          begin_date.end_of_week(:sunday).step(end_date.end_of_week(:sunday), 7) do |date|
+            value = label.count_label_contacts_from_orgs([@current_movement.id], date)
+            @data_points[date] = value
+          end
+        end
       end
     end
   end
