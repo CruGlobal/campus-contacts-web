@@ -13,13 +13,14 @@ $ ->
         if $(this).parents('optgroup').length != -1
           survey_title = $(this).parents('optgroup').attr('label')
           $(this).attr("data-survey-title", survey_title.replace(/\'/g,'')) if survey_title
-      $(this).children(':first').after("<option value='do_not_import'>Do Not Import</option>")
-      $(this).children(':first').after("<option value='new_question'>Create New Question</option>")
+      $(this).children(':first').before("<option value='new_question'>Create New Question</option>")
+      $(this).children(':first').before("<option value='do_not_import'>Do Not Import</option>")
+      $(this).val("do_not_import")
 
     $('#import_column_question tr:not(:first)').each ->
       select_field = $(this).find('.import_column_survey_select')
       column_header = $(this).children('.column_header').text()
-      column_header = column_header.replace(/_|-|:/g,' ') if column_header
+      column_header = column_header.replace(/\_|\-|\:|\?/g,' ') if column_header
       header = $.trim(parseCamelCase(column_header).toLowerCase())
       check_non_predefined = true
       if select_field.attr("data-saved-value") == ''
