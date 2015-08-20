@@ -105,7 +105,9 @@ class Person < ActiveRecord::Base
 
   scope :who_answered,
     ->(survey_id){includes(:answer_sheets).where(AnswerSheet.table_name + '.survey_id' => survey_id)}
+
   validates_presence_of :first_name
+  validates :first_name, :last_name, length: {maximum: 100}
   #validates_format_of :email, with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, allow_blank: true
 
   validate do |value|
