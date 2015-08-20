@@ -25,7 +25,7 @@ $ ->
       if select_field.attr("data-saved-value") == ''
 
         # Find Predefined Question Match
-        select_field.find('option:not(:first))').reverse().each ->
+        select_field.find('option:not(:first)').each ->
           if $(this).attr("data-survey-title") == 'Predefined Questions'
             match_found = find_match($(this), header)
           if match_found
@@ -34,7 +34,7 @@ $ ->
 
         # Find NonPredefined Question Match
         if check_non_predefined
-          select_field.find('option:not(:first))').reverse().each ->
+          select_field.find('option:not(:first)').each ->
             if $(this).attr("data-survey-title") != 'Predefined Questions'
               match_found = find_match($(this), header)
             select_match($(this), select_field) if match_found
