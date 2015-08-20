@@ -272,15 +272,7 @@ class PeopleController < ApplicationController
         end
       end
 
-      # This might fix the duplicate entry error
-      save_completed = false
-      begin
-        save_completed = @person.update_attributes(params[:person])
-      rescue ActiveRecord::RecordNotUnique
-        retry
-      end
-
-      if save_completed
+      if @person.update_attributes(params[:person])
         @person.update_attribute(:student_status, nil) if @person.faculty?
         @person.update_date_attributes_updated
         format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
