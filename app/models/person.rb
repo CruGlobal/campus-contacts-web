@@ -722,10 +722,11 @@ class Person < ActiveRecord::Base
 
 
   def filtered_interactions(viewer, current_org)
+    interaction_type_ids = InteractionType.all.collect(&:id)
     if self.initiated_interaction_ids.present?
-      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL)"
+      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
     else
-      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL)"
+      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
     end
     q = Array.new
 

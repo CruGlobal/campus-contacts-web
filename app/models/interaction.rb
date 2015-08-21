@@ -42,7 +42,7 @@ class Interaction < ActiveRecord::Base
   end
 
   def icon
-    return interaction_type.icon
+    interaction_type.icon
   end
 
   def privacy
