@@ -125,11 +125,6 @@ GEM
     aws-sdk-v1 (1.64.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
-    aws-ses (0.6.0)
-      builder
-      mail (> 2.2.5)
-      mime-types
-      xml-simple
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -544,7 +539,6 @@ GEM
     wiser_date (0.3.0)
       rails (>= 3.1)
     wiser_timezone (0.2.0)
-    xml-simple (1.1.5)
     yard (0.8.7.6)
 
 PLATFORMS
@@ -558,7 +552,6 @@ DEPENDENCIES
   ancestry
   awesome_print
   aws-sdk (< 2.0)
-  aws-ses (~> 0.6.0)
   better_errors
   bitly!
   bluepill

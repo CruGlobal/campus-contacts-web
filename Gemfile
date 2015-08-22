@@ -16,7 +16,6 @@ gem 'acts_as_list'#, '~> 0.3.0'
 gem 'airbrake'#, '~> 3.1.14'
 gem 'ancestry'
 gem 'aws-sdk', '< 2.0' #, '~> 1.33.0' #'1.8.1.3'
-gem 'aws-ses', '~> 0.6.0', :require => 'aws/ses'
 gem 'bitly', git: 'https://github.com/kennethjohnbalgos/bitly.git'#, '~> 0.9.0'
 gem 'bluepill'#, '0.0.60', require: false
 gem 'cancancan'#, '~> 1.6.10'
