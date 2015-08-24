@@ -105,7 +105,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   protected
-
   def after_sign_out_path_for(resource_or_scope)
     params[:next] ? params[:next] : user_root_path
   end
@@ -134,8 +133,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         raise NoEmailError
       end
     end
-
     person
   end
-
 end
