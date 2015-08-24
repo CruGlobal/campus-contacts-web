@@ -36,4 +36,4 @@ db/schema.rb
 
 
 .ruby-version
-.env.local
+.env.*
