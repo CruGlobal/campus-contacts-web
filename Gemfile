@@ -3,7 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 
-gem 'rails', '4.2.0'
+gem 'rails', '~>4.2.0'
 gem 'default_value_for'#, '~> 2.0.3'
 gem 'devise', '3.5.1'#, '~> 2.1.0' #, git: 'http://github.com/plataformatec/devise.git'
 gem 'paperclip', '4.2.1'
@@ -54,6 +54,7 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'rest-client'#, '~> 1.6.7'                                     # to make FB api requests
 gem 'retryable-rb'#, '~> 1.1.0'
 gem 'trumant-rack-oauth2-server', git: 'http://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
+#gem 'trumant-rack-oauth2-server', path: '/Users/josh/htdocs/rack-oauth2-server'
 gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
 gem 'versionist'#, '~> 1.0.0'
 gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
