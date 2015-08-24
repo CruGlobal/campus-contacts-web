@@ -94,6 +94,8 @@ class User < ActiveRecord::Base
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
+    person = Person.find_from_facebook(data)
+
     email = data['email']
     last_name = data['last_name']
     first_name = data['first_name']
@@ -102,14 +104,13 @@ class User < ActiveRecord::Base
     uid = access_token['uid']
     token = access_token['credentials']['token']
 
-    if email.blank?
+    if email.blank? && person.nil?
       raise NoEmailError, access_token['extra'].inspect
     end
 
     user = nil
     authentication = nil
 
-    person = Person.find_existing_person_by_email(email)
     transaction do
       authentication = Authentication.find_by_provider_and_uid(provider, uid)
 
@@ -119,7 +120,7 @@ class User < ActiveRecord::Base
         user = authentication.user
       else
         authentication.delete if authentication
-        user = signed_in_resource || person.try(:user)
+        user = signed_in_resource || User.find_by(username: email)
         # If we don't have a user with a matching email username, look for a match from email_addresses table
         # with the same first and last name
 
