@@ -277,10 +277,11 @@ $ ->
     ids = []
     $('.id_checkbox:checked').each ->
       ids.push($(this).attr('data-id'))
-    href = $(this).attr('href')
-    if href.indexOf('?') < 0
-      href = href+"?"
-    document.location = href+"&only_ids="+ids.join(',')
+    if ids.length > 0
+      $("#bulk_export_only_ids").val(ids.join(','))
+      $("#bulk_export_link_form").submit()
+    else
+      $.a(t('contacts.index.none_checked'))
 
   $(document).on 'click', "#contacts_controller #include_archived_interactions", (e)->
     params = $(this).attr("data-params")

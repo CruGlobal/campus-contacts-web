@@ -32,5 +32,4 @@ class ContactsCsvGenerator
   def self.t(val)
     I18n.t(val)
   end
-
 end

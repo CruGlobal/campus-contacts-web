@@ -182,6 +182,21 @@ class ContactsController < ApplicationController
     @filtered_people = @all_people - @people
   end
 
+  def export_csv
+    if params[:only_ids].present? && params[:format].present?
+      fetch_contacts(true)
+      @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
+      @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
+      @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
+      filename = @organization.to_s
+      @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
+      csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+      send_data csv, filename: "#{filename} - Contacts.csv", type: "text/csv; charset=utf-8; header=present"
+    else
+      redirect_to :back, notice: I18n.t('contacts.index.none_checked')
+    end
+  end
+
   def all_contacts
     session[:filters] = nil if params[:filters] == "clear"
     respond_to do |wants|
@@ -197,17 +212,6 @@ class ContactsController < ApplicationController
         @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
         @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions, @survey_scope || @surveys)
-      end
-
-      wants.csv do
-        fetch_contacts(true)
-        @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
-        @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
-        @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
-        filename = @organization.to_s
-        @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
-        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
-        send_data csv, filename: "#{filename} - Contacts.csv", type: "text/csv; charset=utf-8; header=present"
       end
     end
   end

@@ -332,6 +332,8 @@ Mh::Application.routes.draw do
       post :add_contact_check_email
       post :set_permissions
       post :set_labels
+
+      post :export_csv
     end
   end
 
