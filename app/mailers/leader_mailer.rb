@@ -8,7 +8,7 @@ class LeaderMailer < ActionMailer::Base
   #
   def added(person, added_by_id, org, token, permission_name)
     @person = person
-    @added_by = Person.find(added_by_id)
+    @added_by = Person.find_by(id: added_by_id)
     @org = org
     @token = token
     @permission_name = permission_name
@@ -34,7 +34,7 @@ class LeaderMailer < ActionMailer::Base
       mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
     end
   end
-  
+
   def assignments(leader, org, assignment_array)
     @assigned_to = leader
     @organization = org
