@@ -91,7 +91,7 @@ class Import < ActiveRecord::Base
     new_person_ids = []
     Person.transaction do
       get_new_people.each do |new_person|
-        person = create_contact_from_row(new_person, current_organization)
+        person = create_contact_from_row(new_person, current_organization, current_user.person.id)
         new_person_ids << person.id
         names << person.name
         if person.errors.present?
@@ -107,7 +107,7 @@ class Import < ActiveRecord::Base
 							import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
 						end
             unless import_errors.present?
-              current_organization.add_contact(person)
+              current_organization.add_contact(person, current_user.person.id)
   						current_organization.add_label_to_person(person, label_id, current_user.person.id)
             end
 					end
@@ -128,7 +128,7 @@ class Import < ActiveRecord::Base
     end
   end
 
-  def create_contact_from_row(row, current_organization)
+  def create_contact_from_row(row, current_organization, added_by_id = nil)
 		row[:person] = row[:person].each_value {|p| p.strip! if p.present? }
 		row[:answers] = row[:answers].each_value {|a| a.strip! if a.present? }
 
@@ -177,7 +177,7 @@ class Import < ActiveRecord::Base
     if person.save
       question_sets.map { |qs| qs.save }
       new_phone_numbers.map { |pn| pn.save if pn.number.present? }
-      contact_permission = create_contact_at_org(person, current_organization)
+      contact_permission = create_contact_at_org(person, current_organization, added_by_id)
       # contact_permission.update_attribute('followup_status','uncontacted') # Set default
     end
 
