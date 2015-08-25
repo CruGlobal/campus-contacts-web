@@ -302,7 +302,11 @@ class ChartsController < ApplicationController
       resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json = JSON.parse(resp)
     rescue
-      raise resp.inspect
+      if resp.present?
+        raise "Could not process infobase response: #{resp.inspect}"
+      else
+        raise "Could not connect to infobase."
+      end
     end
 
     json['involved'] = json['students_involved'].to_i + json['faculty_involved'].to_i
@@ -321,7 +325,11 @@ class ChartsController < ApplicationController
       resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/movement_stages", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
       json = JSON.parse(resp)
     rescue
-      raise resp.inspect
+      if resp.present?
+        raise "Could not process infobase response: #{resp.inspect}"
+      else
+        raise "Could not connect to infobase."
+      end
     end
 
     json["Pioneering"] ||= 0
@@ -368,7 +376,11 @@ class ChartsController < ApplicationController
         resp = RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{@current_movement.importable_id}&begin_date=#{begin_date}&end_date=#{end_date}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
         json = JSON.parse(resp)
       rescue
-        raise resp.inspect
+        if resp.present?
+          raise "Could not process infobase response: #{resp.inspect}"
+        else
+          raise "Could not connect to infobase."
+        end
       end
 
       stats = json["statistics"]
@@ -456,7 +468,11 @@ class ChartsController < ApplicationController
         resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
         json = JSON.parse(resp)
       rescue
-        raise resp.inspect
+        if resp.present?
+          raise "Could not process infobase response: #{resp.inspect}"
+        else
+          raise "Could not connect to infobase."
+        end
       end
 
       @chart_start_date.step(@chart_end_date, interval * 7) do |date| # step through dates 1 interval at a time
@@ -503,7 +519,11 @@ class ChartsController < ApplicationController
           resp = RestClient.post(ENV.fetch('INFOBASE_URL') + "/statistics/collate_stats_intervals", infobase_hash.to_json, content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}")
           json = JSON.parse(resp)
         rescue
-          raise resp.inspect
+          if resp.present?
+            raise "Could not process infobase response: #{resp.inspect}"
+          else
+            raise "Could not connect to infobase."
+          end
         end
 
         (chart_year_ago_start_date).step(chart_year_ago_end_date, interval * 7) do |date| # step through dates 1 interval at a time

@@ -5,7 +5,7 @@ class MovementIndicatorsController < ApplicationController
       json = JSON.parse(resp)
     rescue
       if resp.present?
-        raise resp.inspect
+        raise "Could not process infobase response: #{resp.inspect}"
       else
         raise "Could not connect to infobase."
       end
