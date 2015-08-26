@@ -225,4 +225,18 @@ module ApplicationHelper
     return datetime.to_datetime.strftime("%d %b %Y %H:%M:%S")
   end
 
+  # replaces MovementIndicatorSuggestionPresenter
+  def movement_indicator_suggestion_text(suggestion)
+    label_html = "<span class=\"tip\" title=\"#{I18n.t('labels.' + suggestion.label.i18n + '_definition')}\">#{I18n.t("labels.#{suggestion.label.i18n}")}</span>"
+    if suggestion.action == 'add'
+      I18n.t("movement_indicator_suggestions.reasons.#{suggestion.reason}",
+             name: link_to(suggestion.person, "/profile/#{suggestion.person.to_param}"),
+             label: label_html, label_sentence: I18n.t("labels.#{suggestion.label.i18n}_sentence"))
+    # else
+    #   I18n.t("movement_indicator_suggestions.remove_suggestion_html",
+    #          name: helpers.link_to(person, "/profile/#{person.to_param}"),
+    #          label: label_html, label_sentence: I18n.t("labels.#{label.i18n}_sentence"))
+    end
+  end
+
 end
