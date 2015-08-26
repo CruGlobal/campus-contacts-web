@@ -33,7 +33,7 @@ class Import < ActiveRecord::Base
   def get_new_people # generates array of Person hashes
     new_people = Array.new
     first_name_question = Element.where( :attribute_name => "first_name").first.id.to_s
-    last_name_question = Element.where( :attribute_name => "last_name").first.id.to_s
+    # last_name_question = Element.where( :attribute_name => "last_name").first.id.to_s
     email_question = Element.where(attribute_name: "email").first.id.to_s
 
     file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
@@ -43,7 +43,8 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question].to_i]
-      person_hash[:person][:last_name] = row[header_mappings.invert[last_name_question].to_i]
+      # The method create_contact_from_row will save the last_name
+      # person_hash[:person][:last_name] = row[header_mappings.invert[last_name_question].to_i]
       person_hash[:person][:email] = row[header_mappings.invert[email_question].to_i] if header_mappings.invert[email_question].present? && row[header_mappings.invert[email_question].to_i].present?
 
       answers = Hash.new
