@@ -1,5 +1,5 @@
 class LeaderMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"MissionHub Support\" <do-not-reply@mhub.cc>"
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
@@ -12,11 +12,10 @@ class LeaderMailer < ActionMailer::Base
     @org = org
     @token = token
     @permission_name = permission_name
-    @from = @added_by.present? && @added_by.primary_email_address.present? ? @added_by.email : 'support@missionhub.com'
 
     if @person.user.present? && @person.email.present?
       @link = leader_link_url(@token, @person.user.id)
-      mail to: @person.email, from: @from, subject: "Missionhub.com - #{@org}"
+      mail to: @person.email, subject: "Missionhub.com - #{@org}"
     end
   end
 
@@ -25,13 +24,8 @@ class LeaderMailer < ActionMailer::Base
     @assigned_to = assigned_to
     @assigned_by = assigned_by
     @organization = org
-    if @assigned_by.present? && @assigned_by.primary_email_address.present?
-      @from = @assigned_by.email
-    else
-      @from = 'support@missionhub.com'
-    end
     if @assigned_to.email.present?
-      mail to: @assigned_to.email, from: @from, subject: "Contact Assignment Notification"
+      mail to: @assigned_to.email, subject: "Contact Assignment Notification"
     end
   end
 
@@ -40,7 +34,7 @@ class LeaderMailer < ActionMailer::Base
     @organization = org
     @assignment_array = assignment_array
     if @assigned_to.email.present?
-      mail(to: @assigned_to.email, from: 'support@missionhub.com', subject: "Contact Assignments Notification")
+      mail(to: @assigned_to.email, subject: "Contact Assignments Notification")
     end
   end
 end
