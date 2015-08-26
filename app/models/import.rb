@@ -33,7 +33,6 @@ class Import < ActiveRecord::Base
   def get_new_people # generates array of Person hashes
     new_people = Array.new
     first_name_question_id = Element.where( :attribute_name => "first_name").first.id
-    last_name_question_id = Element.where( :attribute_name => "last_name").first.id
     email_question_id = Element.where(attribute_name: "email").first.id
 
     file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
@@ -43,14 +42,11 @@ class Import < ActiveRecord::Base
       person_hash = Hash.new
       person_hash[:person] = Hash.new
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question_id.to_s].to_i]
-      person_hash[:person][:last_name] = row[header_mappings.invert[last_name_question_id.to_s].to_i]
       person_hash[:person][:email] = row[header_mappings.invert[email_question_id.to_s].to_i] if header_mappings.invert[email_question_id.to_s].present? && row[header_mappings.invert[email_question_id.to_s].to_i].present?
       answers = Hash.new
 
       header_mappings.keys.each do |k|
-        unless [first_name_question_id,last_name_question_id,email_question_id].include?(header_mappings[k].to_i)
-          answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
-        end
+        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
       end
 
       person_hash[:answers] = answers
