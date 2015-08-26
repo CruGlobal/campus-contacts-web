@@ -1,4 +1,6 @@
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
+
 Mh::Application.routes.draw do
 
   constraint = lambda { |request| request.env["rack.session"] &&

@@ -50,6 +50,7 @@ gem 'redis-rails'
 gem 'redis-namespace'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-failures'#, '~> 0.3.0'
+gem 'sidekiq-cron'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'rest-client'#, '~> 1.6.7'                                     # to make FB api requests
 gem 'retryable-rb'#, '~> 1.1.0'
