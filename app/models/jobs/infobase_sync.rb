@@ -1,10 +1,11 @@
-namespace :infobase do
-  require "import_methods"
+require "import_methods"
 
-  desc "pulls the ministry_* table info into missionhub tables"
-  task sync: :environment do
+class Jobs::InfobaseSync
+  include Sidekiq::Worker
+
+  def perform
     root = Organization.where(name: "Cru").first_or_create
-    puts "Insert strategies"
+    Rails.logger.debug "Insert strategies"
     # First set up the strategies
     strategies = {
       "FS" => "Cru",
@@ -24,13 +25,13 @@ namespace :infobase do
       "OT" => "Other"
     }
 
-    chs_ministry = Infobase::Ministry.get("filters[name]" => 'Cru High School')['ministries'].first
-    chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first
+    chs_ministry = Infobase::Ministry.get("filters[name]" => 'Cru High School').first
+    chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first_or_create!(name: chs_ministry['name'], parent_id: root, terminology: 'Ministry')
 
-    ministry_json = Infobase::Ministry.get()['ministries']
+    ministry_json = Infobase::Ministry.get()
     ministry_json.each do |ministry|
       # Import ministry
-      puts "Import Ministry - #{ministry['name']}"
+      Rails.logger.debug "Import Ministry - #{ministry['name']}"
       mh_ministry = Organization.where(importable_id: ministry['id'], importable_type: 'Ccc::Ministry').first
       mh_ministry ||= root.children.create!(name: ministry['name'], terminology: 'Ministry', importable_id: ministry['id'], importable_type: 'Ccc::Ministry')
 
@@ -40,10 +41,10 @@ namespace :infobase do
       if ministry['name'] == 'Campus Field Ministry'
 
         # Import regions
-        puts "-- Importing regions..."
-        region_json = Infobase::Region.get()['regions']
+        Rails.logger.debug "-- Importing regions..."
+        region_json = Infobase::Region.get()
         region_json.each do |region|
-          puts "---- Import Region - #{region['name']}"
+          Rails.logger.debug "---- Import Region - #{region['name']}"
           attribs = {name: region['name'], terminology: 'Region', importable_id: region['id'], importable_type: 'Ccc::Region'}
           mh_region = Organization.where(importable_id: region['id'], importable_type: 'Ccc::Region').first
           if mh_region
@@ -55,12 +56,12 @@ namespace :infobase do
         end
 
         # Import teams
-        puts "-- Importing teams..."
+        Rails.logger.debug "-- Importing teams..."
         includes = 'people,phone_numbers,email_addresses'
-        team_json = Infobase::Team.get(include: includes)['teams']
+        team_json = Infobase::Team.get(include: includes)
         loop do
           team_json.each do |team|
-            puts "---- Import Team - #{team['name']}"
+            Rails.logger.debug "---- Import Team - #{team['name']}"
             attribs = {name: team['name'], terminology: 'Missional Team', importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
 
             mh_team = Organization.where(importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel').first
@@ -77,19 +78,19 @@ namespace :infobase do
             end
 
             teams[team['id']] = mh_team
-            puts "------ Importing people..."
+            Rails.logger.debug "------ Importing people..."
             team['people'].each do |ccc_person|
               ImportMethods.person_from_api(ccc_person, mh_team, 'admin')
             end
 
 
-            puts "------ Importing activity rows..."
+            Rails.logger.debug "------ Importing activity rows..."
             i = 0
-            activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)['activities']
+            activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)
             activity_json.each do |activity|
               if activity['target_area'].present?
                 i += 1
-                puts i if i % 1000 == 0
+                Rails.logger.debug i if i % 1000 == 0
                 mh_activity = Organization.where(importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity').first
                 attribs = {name: "#{strategies[activity['strategy']]} at #{activity['target_area']['name']}", terminology: 'Movement', importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity', status: 'active'}
                 if mh_activity

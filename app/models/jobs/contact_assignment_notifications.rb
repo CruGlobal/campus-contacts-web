@@ -1,6 +1,8 @@
-namespace :notify do
-  task contact_assignments: :environment do
-    puts ""
+class Jobs::ContactAssignmentNotifications
+  include Sidekiq::Worker
+  include Retryable
+
+  def perform
     assignments_array = Array.new
     contact_assignments = ContactAssignment.where(notified: false)
     org_ids = contact_assignments.collect{|x| x.organization_id}.uniq
@@ -31,9 +33,7 @@ namespace :notify do
           assignments
         end
       end
-    else
-      puts "Contact Assignments - Nothing to notify"
     end
-    puts ""
   end
+
 end
