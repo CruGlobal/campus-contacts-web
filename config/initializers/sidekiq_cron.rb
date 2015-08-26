@@ -1,12 +1,12 @@
 hash = {
   'Infobase Sync' => {
     'class' => 'Jobs::InfobaseSync',
-    'cron'  => '*/4 * * * *'
+    'cron'  => '0 */4 * * *'
   },
 
   'Summer Missions Sync' => {
     'class' => 'Jobs::SummerMissionsSync',
-    'cron'  => '*/4 * * * *'
+    'cron'  => '0 */4 * * *'
   },
 
   'Contact assignment notifications' => {
