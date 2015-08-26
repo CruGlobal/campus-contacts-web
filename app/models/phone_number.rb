@@ -3,6 +3,7 @@ require 'async'
 class PhoneNumber < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
+  sidekiq_options unique: true
 	TYPES = {"Mobile" => "mobile", "Home" => "home", "Work" => "work"}
 
   has_paper_trail :on => [:destroy],

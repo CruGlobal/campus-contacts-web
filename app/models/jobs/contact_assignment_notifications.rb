@@ -1,6 +1,7 @@
 class Jobs::ContactAssignmentNotifications
   include Sidekiq::Worker
   include Retryable
+  sidekiq_options unique: true
 
   def perform
     assignments_array = Array.new

@@ -4,6 +4,7 @@ require 'async'
 class Organization < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
+  sidekiq_options unique: true
   attr_accessor :person_id
 
   attr_accessible :name, :requires_validation, :ancestry, :terminology, :importable_id, :importable_type, :show_sub_orgs, :status, :settings, :conference_id, :last_indicator_suggestion_at, :last_push_to_infobase, :parent, :parent_id, :person_id

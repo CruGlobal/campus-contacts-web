@@ -2,6 +2,7 @@ require 'async'
 class BulkMessage < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   attr_accessible :person_id, :organization_id, :status, :results
 
