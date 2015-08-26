@@ -34,7 +34,7 @@ GIT
       sass-rails
 
 GIT
-  remote: git@github.com:mhenrixon/sidekiq-unique-jobs.git
+  remote: git://github.com/mhenrixon/sidekiq-unique-jobs.git
   revision: 7c9cf8647bf442c639d7b0783aa2b8c75bda669a
   specs:
     sidekiq-unique-jobs (3.0.14)
@@ -651,4 +651,4 @@ DEPENDENCIES
   wiser_timezone (~> 0.2.0)
 
 BUNDLED WITH
-   1.10.5
+   1.10.6
