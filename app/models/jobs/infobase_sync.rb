@@ -25,10 +25,10 @@ class Jobs::InfobaseSync
       "OT" => "Other"
     }
 
-    chs_ministry = Infobase::Ministry.get("filters[name]" => 'Cru High School').first
-    chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first_or_create!(name: chs_ministry['name'], parent_id: root, terminology: 'Ministry')
+    chs_ministry = Infobase::Ministry.get("filters[name]" => 'Cru High School')['ministries'].first
+    chs = Organization.where(importable_id: chs_ministry['id'], importable_type: 'Ccc::Ministry').first
 
-    ministry_json = Infobase::Ministry.get()
+    ministry_json = Infobase::Ministry.get()['ministries']
     ministry_json.each do |ministry|
       # Import ministry
       Rails.logger.debug "Import Ministry - #{ministry['name']}"
@@ -42,7 +42,7 @@ class Jobs::InfobaseSync
 
         # Import regions
         Rails.logger.debug "-- Importing regions..."
-        region_json = Infobase::Region.get()
+        region_json = Infobase::Region.get()['regions']
         region_json.each do |region|
           Rails.logger.debug "---- Import Region - #{region['name']}"
           attribs = {name: region['name'], terminology: 'Region', importable_id: region['id'], importable_type: 'Ccc::Region'}
@@ -58,7 +58,7 @@ class Jobs::InfobaseSync
         # Import teams
         Rails.logger.debug "-- Importing teams..."
         includes = 'people,phone_numbers,email_addresses'
-        team_json = Infobase::Team.get(include: includes)
+        team_json = Infobase::Team.get(include: includes)['teams']
         loop do
           team_json.each do |team|
             Rails.logger.debug "---- Import Team - #{team['name']}"
@@ -86,7 +86,7 @@ class Jobs::InfobaseSync
 
             Rails.logger.debug "------ Importing activity rows..."
             i = 0
-            activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)
+            activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10000)['activities']
             activity_json.each do |activity|
               if activity['target_area'].present?
                 i += 1
