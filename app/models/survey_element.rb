@@ -2,6 +2,9 @@ class SurveyElement < ActiveRecord::Base
   acts_as_list scope: :survey_id
   attr_accessible :survey_id, :element_id, :position, :hidden, :archived, :survey, :element
 
+  has_paper_trail :on => [:destroy],
+                  :meta => { organization_id: :organization_id }
+
   belongs_to :survey, touch: true
   belongs_to :element
   belongs_to :question,
