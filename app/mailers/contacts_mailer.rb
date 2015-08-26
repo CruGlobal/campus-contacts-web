@@ -8,8 +8,8 @@ class ContactsMailer < ActionMailer::Base
   #
   def reminder(to, from, subject, content)
     @content = content
-    
-    mail to: to, from: from, subject: subject
+
+    mail to: to, subject: subject
   end
-  
+
 end
