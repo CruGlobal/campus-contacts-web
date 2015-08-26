@@ -5,9 +5,8 @@
     </td>
   </tr>
   <% suggestions.each do |suggestion| %>
-    <% suggestion_presenter = Present(suggestion) %>
     <tr class="suggestion <%= 'declined_suggestion' if suggestion.accepted == false %>">
-      <td class='aleft'><%== suggestion_presenter.suggestion %></td>
+      <td class='aleft'><%== movement_indicator_suggestion_text(suggestion) %></td>
       <td><%= link_to('Yes', '#', data: {behavior: 'accept', id: suggestion.id}) %></td>
       <td>
         <% if suggestion.accepted.nil? %>
