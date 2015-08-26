@@ -4,6 +4,7 @@ require 'async'
 class SentSms < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   attr_accessible :message_id, :message, :recipient, :reports, :moonshado_claimcheck, :sent_via, :status, :received_sms_id, :twilio_sid, :twilio_uri, :separator, :question_id
 

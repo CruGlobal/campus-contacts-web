@@ -4,6 +4,7 @@ class SmsKeyword < ActiveRecord::Base
 
   include Async
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }

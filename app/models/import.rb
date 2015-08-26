@@ -8,6 +8,7 @@ class Import < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
   include ContactMethods
+  sidekiq_options unique: true
 
   serialize :survey_ids, Array
   serialize :headers
