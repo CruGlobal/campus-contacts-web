@@ -48,7 +48,7 @@ gem 'rails_autolink', '~> 1.1.4'
 gem 'redis', '~> 3.0.5'
 gem 'redis-rails'
 gem 'redis-namespace'
-gem 'sidekiq-unique-jobs', git: 'git@github.com:mhenrixon/sidekiq-unique-jobs.git'
+gem 'sidekiq-unique-jobs', github: 'mhenrixon/sidekiq-unique-jobs'
 gem 'sidekiq-failures'#, '~> 0.3.0'
 gem 'sidekiq-cron'
 gem 'sinatra', '>= 1.3.0', :require => nil
