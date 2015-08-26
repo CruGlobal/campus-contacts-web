@@ -2,6 +2,7 @@ require "import_methods"
 
 class Jobs::InfobaseSync
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   def perform
     root = Organization.where(name: "Cru").first_or_create

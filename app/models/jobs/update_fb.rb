@@ -1,5 +1,6 @@
 class Jobs::UpdateFB
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   def perform(person_id, auth, action)
     authentication = auth['authentication']
