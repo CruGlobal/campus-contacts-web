@@ -58,9 +58,9 @@ class Jobs::InfobaseSync
         # Import teams
         Rails.logger.debug "-- Importing teams..."
         includes = 'people,phone_numbers,email_addresses'
-        team_json = Infobase::Team.get(include: includes)['teams']
+        team_json = Infobase::Team.get(include: includes)
         loop do
-          team_json.each do |team|
+          team_json['teams'].each do |team|
             Rails.logger.debug "---- Import Team - #{team['name']}"
             attribs = {name: team['name'], terminology: 'Missional Team', importable_id: team['id'], importable_type: 'Ccc::MinistryLocallevel', show_sub_orgs: true, status: 'active'}
 

@@ -9,7 +9,7 @@ class Jobs::SummerMissionsSync
     root = Organization.where(name: "Cru").first_or_create
 
     # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
-    ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')
+    ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
     ministry_json.each do |ministry|
       Rails.logger.debug "-- Checking Ministry - #{ministry['name']}"
       mh_ministry = import_ministry(ministry, root)
