@@ -46,7 +46,11 @@ class Jobs::SummerMissionsSync
 
     # Fetch Regions and Teams for Campus Field Ministry
     ministry = Infobase::Ministry.get('filters[names]' => 'Campus Field Ministry')['ministries'].first
-    mh_ministry = import_ministry(ministry, root)
+    begin
+      mh_ministry = import_ministry(ministry, root)
+    rescue
+      raise "Cannot import ministry: #{ministry.inspect}"
+    end
     Rails.logger.debug "-- Checking Ministry - #{ministry['name']}"
     Rails.logger.debug "---- Importing Regions..."
     region_json = Infobase::Region.get()['regions']

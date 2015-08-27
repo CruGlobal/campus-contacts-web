@@ -22,9 +22,9 @@ class PeopleMailer < ActionMailer::Base
   def bulk_message(to, from, subject, content, reply_to = nil)
     @content = simple_format(content)
     if reply_to.present?
-      mail to: to, reply_to: reply_to, from: from, subject: subject, content_type: "text/html"
+      mail to: to, reply_to: reply_to, subject: subject, content_type: "text/html"
     else
-      mail to: to, from: from, subject: subject, content_type: "text/html"
+      mail to: to, subject: subject, content_type: "text/html"
     end
   end
 
