@@ -61,7 +61,7 @@ class Jobs::InfobaseSync
         includes = 'people,phone_numbers,email_addresses'
         page = 1
         begin
-          api_response = Infobase::Team.get(include: includes, page: page, per_page: 10)
+          api_response = Infobase::Team.get(include: includes, page: page, per_page: 3)
 
           meta = api_response['meta']
           page = meta['page']
