@@ -1,0 +1,1 @@
+RAILS_ENV=staging DISABLE_SPRING=1 env $(cat .env.staging | xargs) bundle exec rails c
