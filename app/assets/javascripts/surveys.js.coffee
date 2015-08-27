@@ -169,14 +169,16 @@ $ ->
 
   $(document).on "click", ".reload_mass_entry", (e)->
     e.preventDefault()
-    if $("body").data("has_changes") == "true"
+    if $("body").data('changed_rows') == undefined || $("body").data('changed_rows') == []
+      $.a("You do not have any changes to reload!")
+    else
       if(confirm('Warning! Reloading the Mass Entry table will not save your changes. Save changes before reloading page.'))
         $("body").data('changed_rows', [])
         $.fn.load_answers()
 
   $(document).on "click", ".save_mass_entry", (e)->
     e.preventDefault()
-    if $("body").data('changed_rows') == undefined
+    if $("body").data('changed_rows') == undefined || $("body").data('changed_rows') == []
       $.a("You do not have any changes to save!")
     else
       $(".saving-loader").show()
