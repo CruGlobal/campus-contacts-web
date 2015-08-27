@@ -203,7 +203,8 @@ class SurveysController < ApplicationController
       end
       updated_ids << person.id if person.present?
     end
-    @survey.answer_sheets.where("person_id NOT IN (?)", updated_ids).destroy_all if @msg == []
+    # Dont delete contacts for now
+    # @survey.answer_sheets.where("person_id NOT IN (?)", updated_ids).destroy_all if @msg == []
   end
 
   def index
