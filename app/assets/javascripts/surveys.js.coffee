@@ -23,7 +23,7 @@ $.fn.add_row = () ->
   mass_entry.scrollLeft(0)
   selected = mass_entry.handsontable('getSelected')
   mass_entry.handsontable("selectCell", selected[0], selected[1], true)
-  
+
 $.fn.load_answers = () ->
   survey_id = $("#mass_entry_table").data("survey-id")
   $(".fetching-loader").show()
@@ -67,7 +67,13 @@ $.fn.load_answers = () ->
         #   $('#mass_entry_table').handsontable('selectCell', cell[0], cell[1], cell[2], cell[3], scrollToSelection = true)
         if e.which == 13 || e.which == 9
           $.fn.stop_editing(true)
-      beforeChange: ()->
+      afterChange: (changes, source)->
+        current_row = changes[0][0]
+        if $("body").data('changed_rows') == undefined
+          $("body").data('changed_rows',[])
+        if $.inArray(current_row, $("body").data('changed_rows')) == -1
+          $("body").data('changed_rows').push(current_row)
+      beforeChange: ->
         $("body").data('has_changes','true')
       cells: (row, col, prop) ->
         cellProperties = {}
@@ -82,14 +88,14 @@ $.fn.load_answers = () ->
         return cellProperties
     $.fn.add_row()
 
-      
+
 $ ->
   $(document).on "click", "#apply_label_to_all_checkbox", (e)->
     $("#apply_label_to_new_checkbox").prop("checked", false) if $(this).is(":checked")
-    
+
   $(document).on "click", "#apply_label_to_new_checkbox", (e)->
     $("#apply_label_to_all_checkbox").prop("checked", false) if $(this).is(":checked")
-  
+
   # New Label button in mass entry
   $(document).on 'click', '.new_label_in_mass_entry', (e)->
     e.preventDefault()
@@ -99,7 +105,7 @@ $ ->
     $("#apply_label_to_all_checkbox").prop("checked", false)
     $("#apply_label_to_new_checkbox").prop("checked", false)
     $.showDialog($("#mass_entry_new_label_dialog"))
-    
+
   # Save new Label from mass entry
   $(document).on 'click', '#mass_entry_new_label_save_button', (e)->
     e.preventDefault()
@@ -110,19 +116,19 @@ $ ->
       $.ajax
         type: 'POST',
         url: "/surveys/create_label?name=" + escape(new_label_name)
-  
+
   # Add new row in Mass Entry after entering data to the current last row
   $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
     mass_entry = $("#mass_entry_table")
     max_row_index = mass_entry.handsontable("countRows") - 1
     if mass_entry.handsontable("getDataAtCell", max_row_index, 0) != ""
       $.fn.add_row()
-  
+
   $(document).on "keydown", ".handsontableInput, .htSelectEditor", (e)->
     # Save value on tab press
     if e.which == 9
       $.fn.stop_editing(false)
-  
+
   $(document).on "keypress", ".handsontableInput, .htSelectEditor", (e)->
     if e.which == 13
       mass_entry = $("#mass_entry_table")
@@ -136,10 +142,10 @@ $ ->
       else
         mass_entry.handsontable("selectCell", cell[0], cell[1] + 1)
       return false
-          
+
   $("#mass_entry_table").bind 'scroll', (e)->
     $(window).scroll();
-  
+
   $(document).on "click", ".htSelectEditor option", (e)->
     if $(this).attr('value') == ''
       $(".htSelectEditor").find("option").prop("selected", false)
@@ -151,46 +157,55 @@ $ ->
         $(this).prop("selected", true)
         if $(this).attr('value') != ''
           $(".htSelectEditor").find("option[value='']").prop("selected", false)
-  
+
   # if $("#copy_mass_entry").size() > 0
   #   $(document).on "click", "#copy_mass_entry", (e)->
   #     e.preventDefault()
-  
+
   $(document).on "click", ".new_mass_entry", (e)->
     e.preventDefault()
     $.fn.add_row()
     $("#mass_entry_table").handsontable("selectCell", $("#mass_entry_table").handsontable("countRows") - 1, 0)
-      
+
   $(document).on "click", ".reload_mass_entry", (e)->
     e.preventDefault()
     if $("body").data("has_changes") == "true"
       if(confirm('Warning! Reloading the Mass Entry table will not save your changes. Save changes before reloading page.'))
+        $("body").data('changed_rows', [])
         $.fn.load_answers()
-  
+
   $(document).on "click", ".save_mass_entry", (e)->
     e.preventDefault()
-    $(".saving-loader").show()
-    $("#mass_entry_table").hide()
-    $(".mass_entry_buttons").hide()
-    survey_id = $("#mass_entry_table").data("survey-id")
-    table_val = $("#mass_entry_table").handsontable("getData")
-    
-    new_label_to_all = ""
-    if $(this).hasClass("save_label_to_all")
-      new_label_to_all = $.trim($('#new_label_input').val())
-    new_label_to_new = ""
-    if $(this).hasClass("save_label_to_new")
-      new_label_to_new = $.trim($('#new_label_input').val())
-      
-    $.ajax
-      type: "POST"
-      url: "/surveys/#{survey_id}/mass_entry_save"
-      data: {values: table_val, new_label_to_all: new_label_to_all, new_label_to_new: new_label_to_new}
-  
+    if $("body").data('changed_rows') == undefined
+      $.a("You do not have any changes to save!")
+    else
+      $(".saving-loader").show()
+      $("#mass_entry_table").hide()
+      $(".mass_entry_buttons").hide()
+      survey_id = $("#mass_entry_table").data("survey-id")
+      table_val = $("#mass_entry_table").handsontable("getData")
+      valid_table_val = []
+      for row in $("body").data('changed_rows')
+        row_value = $("#mass_entry_table").handsontable("getData")[row]
+        if row_value != undefined
+          valid_table_val.push(row_value)
+
+      new_label_to_all = ""
+      if $(this).hasClass("save_label_to_all")
+        new_label_to_all = $.trim($('#new_label_input').val())
+      new_label_to_new = ""
+      if $(this).hasClass("save_label_to_new")
+        new_label_to_new = $.trim($('#new_label_input').val())
+
+      $.ajax
+        type: "POST"
+        url: "/surveys/#{survey_id}/mass_entry_save"
+        data: {values: valid_table_val, new_label_to_all: new_label_to_all, new_label_to_new: new_label_to_new}
+
   if $("#mass_entry_table").size() > 0
     $.fn.load_answers()
-    
-  
+
+
   $('#survey_background_color, #survey_text_color').excolor({root_path: '/assets/'})
   false
 
