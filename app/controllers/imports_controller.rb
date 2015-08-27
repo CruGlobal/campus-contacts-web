@@ -140,12 +140,14 @@ class ImportsController < ApplicationController
       else
         if params[:create_survey_toggle]
           @survey_status = 'NEW'
-          @survey = current_organization.surveys.create(
-            login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
-            title: params[:survey_name_field],
-            post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
-            terminology: 'Survey'
-          )
+          unless @survey = current_organization.surveys.where(title: params[:survey_name_field]).last
+            @survey = current_organization.surveys.create(
+              login_paragraph: I18n.t('.imports.update.default_login_paragraph'),
+              title: params[:survey_name_field],
+              post_survey_message: I18n.t('.imports.update.default_post_survey_message'),
+              terminology: 'Survey'
+            )
+          end
           if @import.present?
             @import.survey_ids = Array.new unless @import.survey_ids.present?
             @import.survey_ids << @survey.id
