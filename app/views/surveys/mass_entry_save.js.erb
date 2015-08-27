@@ -6,7 +6,6 @@ $(".mass_entry_buttons").show()
   $("body").data('has_changes','false')
   $(".save_mass_entry").removeClass("save_label_to_all")
   $("body").data('changed_rows', [])
-  $.fn.load_answers()
 <% else %>
   $.a("Failed to save changes, please try again! <br/> <%= @msg.join('<br/>')%>")
 <% end %>
