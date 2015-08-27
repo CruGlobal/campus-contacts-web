@@ -1,5 +1,5 @@
 <div id="goal_select_org">
-  <%= select_tag "goal_organization", options_for_select(@movements, @current_movement.id), id: "goal_org_select" %>
+  <%= select_tag "goal_organization", options_for_select(@movements, @current_movement.try(:id)), id: "goal_org_select" %>
 </div>
 <br/>
 
