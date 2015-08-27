@@ -147,19 +147,23 @@ class Import < ActiveRecord::Base
       question_sets << question_set
     end
 
-		new_phone_numbers = []
+    new_phone_numbers = []
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person_id: person.id)
     predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
     predefined.elements.where('object_name is not null').each do |question|
-    	answer = row[:answers][question.id]
-    	if answer.present?
-    		#set response
-	    	question.set_response(answer, answer_sheet)
+      answer = row[:answers][question.id]
+      if answer.present?
+        if question.attribute_name == "gender" && answer.present?
+          answer = answer.downcase.index("f") ? 0 : 1
+        end
 
-	    	#create unique phone number but not a primary
-	    	if question.attribute_name == "phone_number"
-	    		if person.phone_numbers.where(phone_numbers: {primary: true}).present?
+        #set response
+        question.set_response(answer, answer_sheet)
+
+        #create unique phone number but not a primary
+        if question.attribute_name == "phone_number"
+          if person.phone_numbers.where(phone_numbers: {primary: true}).present?
             unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
               new_phone_numbers << person.phone_numbers.new(number: answer, primary: false)
             end
@@ -167,9 +171,9 @@ class Import < ActiveRecord::Base
             unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
               new_phone_numbers << person.phone_numbers.new(number: answer, primary: true)
             end
-	    		end
-	    	end
-	   	end
+          end
+        end
+      end
     end
 
     if person.save
