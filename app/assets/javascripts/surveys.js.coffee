@@ -21,8 +21,8 @@ $.fn.add_row = () ->
     mass_entry.handsontable('setDataAtCell', max_row_index, x, '')
     x++
   mass_entry.scrollLeft(0)
-  selected = mass_entry.handsontable('getSelected')
-  mass_entry.handsontable("selectCell", selected[0], selected[1], true)
+  $(document).scrollTop(9999999)
+
 
 $.fn.load_answers = () ->
   survey_id = $("#mass_entry_table").data("survey-id")
