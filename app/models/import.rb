@@ -154,10 +154,6 @@ class Import < ActiveRecord::Base
     predefined.elements.where('object_name is not null').each do |question|
       answer = row[:answers][question.id]
       if answer.present?
-        if question.attribute_name == "gender" && answer.present?
-          answer = answer.downcase.index("f") ? 0 : 1
-        end
-
         #set response
         question.set_response(answer, answer_sheet)
 

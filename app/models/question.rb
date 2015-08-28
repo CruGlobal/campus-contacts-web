@@ -161,6 +161,18 @@ class Question < Element
       end
       #unless responses(app) == values
         value = values.first
+
+        if attribute_name == "gender" && value.present?
+          case value[0].downcase
+          when "m", "b"
+            value = 1
+          when "f", "g"
+            value = 0
+          else
+            value = nil
+          end
+        end
+
         object.update_attribute(attribute_name.to_sym, value) if object
       #end
     else
