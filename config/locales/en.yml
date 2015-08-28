@@ -235,6 +235,8 @@ en:
       no_contacts: Sorry, there are no contacts here.
       no_name_message: First Name and Last Name are required.
       none_checked: You need to select a person before this feature will work.
+      export_huge_contacts: You have requested a huge number of contacts. We will send the CSV in your email shortly.
+      cannot_find_ids: Cannot find the selected persons in this organization.
       none_email_vcard: Email is required to send this vcard.
       not_valid_leader_selected: You have selected some contacts without an email address.<br/>Admin and User permissions will be disabled.
       phone_number: Phone
