@@ -14,6 +14,10 @@ $.fn.stop_editing = (move_row) ->
 $.fn.add_row = () ->
   mass_entry = $("#mass_entry_table")
   mass_entry.handsontable("alter", "insert_row")
+  x = 0
+  while x <= (mass_entry.handsontable("countCols") - 1)
+    mass_entry.handsontable('setDataAtCell', mass_entry.handsontable("countRows") - 1, x, '')
+    x++
   mass_entry.scrollLeft(0)
   $(document).scrollTop(9999999)
 
