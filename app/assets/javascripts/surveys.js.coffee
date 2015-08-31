@@ -2,10 +2,10 @@ $.fn.stop_editing = (move_row) ->
   mass_entry = $("#mass_entry_table")
   cell = mass_entry.handsontable('getSelected')
   max_row_index = mass_entry.handsontable("countRows") - 1
-  max_column_index = mass_entry.handsontable("countCols") - 1
-  if cell[0] == max_row_index && cell[1] == max_column_index
+  max_row_index = mass_entry.handsontable("countCols") - 1
+  if cell[0] == max_row_index && cell[1] == max_row_index
     $.fn.add_row()
-  else if cell[1] == max_column_index
+  else if cell[1] == max_row_index
     if move_row
       mass_entry.scrollLeft(0)
       selected = mass_entry.handsontable('getSelected')
@@ -14,9 +14,11 @@ $.fn.stop_editing = (move_row) ->
 $.fn.add_row = () ->
   mass_entry = $("#mass_entry_table")
   mass_entry.handsontable("alter", "insert_row")
+  max_col_index = mass_entry.handsontable("countCols") - 1
+  max_row_index = mass_entry.handsontable("countRows") - 1
   x = 0
-  while x <= (mass_entry.handsontable("countCols") - 1)
-    mass_entry.handsontable('setDataAtCell', mass_entry.handsontable("countRows") - 1, x, '')
+  while x <= max_col_index
+    mass_entry.handsontable('setDataAtCell', max_row_index, x, '')
     x++
   mass_entry.scrollLeft(0)
   $(document).scrollTop(9999999)
@@ -133,9 +135,9 @@ $ ->
 
       cell = mass_entry.handsontable('getSelected')
       max_row_index = mass_entry.handsontable("countRows") - 1
-      max_column_index = mass_entry.handsontable("countCols") - 1
-      console.log (cell[1] + 1) > max_column_index
-      if (cell[1] + 1) > max_column_index
+      max_col_index = mass_entry.handsontable("countCols") - 1
+      console.log (cell[1] + 1) > max_col_index
+      if (cell[1] + 1) > max_col_index
         mass_entry.handsontable("selectCell", cell[0] + 1, 0)
       else
         mass_entry.handsontable("selectCell", cell[0], cell[1] + 1)
