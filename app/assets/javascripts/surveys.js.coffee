@@ -68,6 +68,7 @@ $.fn.load_answers = () ->
         if e.which == 13 || e.which == 9
           $.fn.stop_editing(true)
       afterChange: (changes, source)->
+        return if !changes
         current_row = changes[0][0]
         if $("body").data('changed_rows') == undefined
           $("body").data('changed_rows',[])
