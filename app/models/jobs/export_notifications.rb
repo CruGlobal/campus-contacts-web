@@ -25,7 +25,7 @@ class Jobs::ExportNotifications
               person_id: all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
             csv = ContactsCsvGenerator.generate(all_roles, all_answers, all_questions, all_people, organization)
             begin
-              ExportMailer.send_csv(csv, person, organization).deliver!
+              ExportMailer.send_csv(csv, person, organization).deliver_now
               export.update(status: "sent")
             rescue
               export.update(status: "failed")
