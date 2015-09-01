@@ -723,29 +723,34 @@ class Person < ActiveRecord::Base
 
   def filtered_interactions(viewer, current_org)
     interaction_type_ids = InteractionType.all.collect(&:id)
+
+    initiated_q = ""
     if self.initiated_interaction_ids.present?
-      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
-    else
-      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
-    end
-    q = Array.new
-
-    # filter organization
-    if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
-      q << "interactions.privacy_setting = 'organization'"
+      initiated_q = " OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})"
     end
 
+    q = "("
+    q += "(interactions.receiver_id = #{self.id} #{initiated_q})"
+    q += " AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL"
+    if interaction_type_ids.present?
+      q += " AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')})"
+    end
+    q += ")"
+
+    q += "AND ("
+    # filter me as the default
+    q += "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
     # filter admins
     if viewer.admin_of_org?(current_org)
-      q << "interactions.privacy_setting = 'admins'"
+      q += "OR (interactions.privacy_setting = 'admins')"
     end
+    # filter organization
+    if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
+      q += "OR (interactions.privacy_setting = 'organization')"
+    end
+    q += ")"
 
-    # filter me
-    q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
-
-    query = q.join(" OR ") # combine queries
-
-    return Interaction.joins(:organization).where("#{base_q} AND (#{query})").try(:sorted) || []
+    return Interaction.joins(:organization).where(q).try(:sorted) || []
   end
 
   def labeled_in_org(label, org)
