@@ -587,7 +587,7 @@ ca:
     email: Email
     email_autocomplete_description: Type to search by first name, last name, email, group name, or label name.
     email_autocomplete_description_admin: Type to search by first name, last name, email, group name, label name, or all.
-    email_note: Check this box to send your Email with an "anonymous reply to" of do-not-reply@missionhub.com. Be sure to identify yourself or your organization in the text of your email message.
+    email_note: Check this box to send your Email with an "anonymous reply to" of do-not-reply@mhub.cc. Be sure to identify yourself or your organization in the text of your email message.
     export_csv_help: Export spreadsheet
     export_vcard_help: Export to contacts list (email or phone)
     faculty: Faculty
