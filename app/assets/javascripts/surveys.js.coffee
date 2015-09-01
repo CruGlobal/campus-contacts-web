@@ -14,12 +14,6 @@ $.fn.stop_editing = (move_row) ->
 $.fn.add_row = () ->
   mass_entry = $("#mass_entry_table")
   mass_entry.handsontable("alter", "insert_row")
-  max_col_index = mass_entry.handsontable("countCols") - 1
-  max_row_index = mass_entry.handsontable("countRows") - 1
-  x = 0
-  while x <= max_col_index
-    mass_entry.handsontable('setDataAtCell', max_row_index, x, '')
-    x++
   mass_entry.scrollLeft(0)
   $(document).scrollTop(9999999)
 
@@ -122,7 +116,8 @@ $ ->
   $(document).on "change", ".handsontableInput, .htSelectEditor", (e)->
     mass_entry = $("#mass_entry_table")
     max_row_index = mass_entry.handsontable("countRows") - 1
-    if mass_entry.handsontable("getDataAtCell", max_row_index, 0) != ""
+    dataInLastCell = mass_entry.handsontable("getDataAtCell", max_row_index, 0)
+    if dataInLastCell? && dataInLastCell != ""
       $.fn.add_row()
 
   $(document).on "keydown", ".handsontableInput, .htSelectEditor", (e)->
