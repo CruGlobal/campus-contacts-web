@@ -22,6 +22,12 @@ class EmailResponsesController < ApplicationController
       extra_info  = "status: #{recp['status']}, action: #{recp['action']}, diagnosticCode: #{recp['diagnosticCode']}"
       Rails.logger.info "Creating a bounce record for #{email}"
 
+      existing = EmailResponse.find_by(email: email)
+      if existing
+        Rails.logger.info "Already suppressed"
+        return render json: {}
+      end
+
       EmailResponse.create ({ email: email, response_type: 'bounce', extra_info: extra_info})
     end
 
@@ -58,7 +64,7 @@ class EmailResponsesController < ApplicationController
   end
 
   def message
-    @message ||= JSON.parse(request.raw_post)['Message']
+    @message ||= JSON.parse JSON.parse(request.raw_post)['Message']
   end
 
   def type
