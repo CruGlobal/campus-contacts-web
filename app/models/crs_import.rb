@@ -188,13 +188,13 @@ class CrsImport
           end
         end
 
-        CrsImportMailer.completed(@org, importer_email_address).deliver if importer_email_address
+        CrsImportMailer.completed(@org, importer_email_address).deliver_now if importer_email_address
       rescue
-        CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
+        CrsImportMailer.failed(@org, importer_email_address).deliver_now if importer_email_address
         raise
       end
     else
-      CrsImportMailer.failed(@org, importer_email_address).deliver if importer_email_address
+      CrsImportMailer.failed(@org, importer_email_address).deliver_now if importer_email_address
       raise
     end
     nil
