@@ -189,7 +189,7 @@ class ContactsController < ApplicationController
       fetch_contacts(true)
       @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
       if @all_people.present?
-        if @all_people.length >= 1
+        if @all_people.length >= 1000
           options = Export.build_options([@all_people, @survey_scope || @surveys])
           Export.add(current_person, current_organization, Export::CATEGORY_CSV, Export::KIND_CONTACTS, options)
           redirect_to :back, notice: I18n.t('contacts.index.export_huge_contacts')
