@@ -1,0 +1,76 @@
+<% provide :sidebar do %>
+  <div id="ac_sidebar">
+    <div id="search-sidebar">
+      <%= form_tag signatures_organizations_path, method: :get, id: "advanced_search_form", autocomplete: "off", enforce_utf8: false do %>
+        <div id="side-search-any" class="category">
+          <%= text_field_tag :search_any, params[:search_any], class: "side-search-field smaller-font", placeholder: t("search.sidebar.search_name") %>
+        	<button class="action_gray" id="search_any_button">
+        	  <%= image_tag "icon-search.png" %>
+        	</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1><%= t("signatures.title")%></h1>
+</div>
+
+<div id="ac_contact_spread">
+  <div id="ac_contact_list">
+    <div>
+      <table class="listing contact_listing" cellpadding="0" cellspacing="0">
+        <tr id="table_header">
+          <th class="first_name">
+            <%= sort_link @q, :first_name, t("general.first_name"), params %>
+          </th>
+          <th class="last_name">
+            <%= sort_link @q, :first_name, t("general.last_name"), params %>
+          </th>
+          <th>
+            <%= sort_link @q, :kind, t("general.kind_of_signature"), params %>
+          </th>
+          <th>
+            <%= sort_link @q, :status, t("general.status_of_signature"), params %>
+          </th>
+          <th>
+            <%= sort_link @q, :organization, t("general.organization"), params %>
+          </th>
+          <th>
+            <%= sort_link @q, :created_at, t("general.date_signed_at"), params %>
+          </th>
+        </tr>
+        <tbody id="contacts_table">
+          <% if @signatures.present? %>
+            <% @signatures.includes(:person, :organization).each do |signature| %>
+              <tr>
+                <td class="cell no_wrap"><%= signature.person.first_name %></td>
+                <td class="cell no_wrap"><%= signature.person.last_name %></td>
+                <td class="cell no_wrap"><%= signature.kind.humanize %></td>
+                <td class="cell no_wrap"><%= signature.status.titleize %></td>
+                <td class="cell no_wrap"><%= signature.organization.name %></td>
+                <td class="cell no_wrap"><%= l(signature.created_at, format: :date) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @signatures.present? %>
+      <div class="pagination_area">
+        <div class="pagination_links">
+          <%= paginate(@signatures, remote: true, params: {controller: "organizations", action: "signatures", paginate: true}) %>
+        </div>
+        <div class="pagination_info">
+          <%= page_entries_info(@signatures).gsub("information","").squeeze(" ").html_safe %>
+        </div>
+      </div>
+    <% else %>
+      <div class="contentpad no_contacts">
+        <%= t("contacts.index.no_contacts") %>
+      </div>
+  	<% end %>
+  </div>
+</div>

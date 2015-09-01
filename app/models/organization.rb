@@ -341,7 +341,7 @@ class Organization < ActiveRecord::Base
   end
 
   def has_parent?(org_id)
-    return true if id == org_id
+    return true if self.id == org_id.try(:to_i)
     ancestry.present? ? ancestry.split('/').include?(org_id.to_s) : false
   end
 

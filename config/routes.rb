@@ -17,6 +17,14 @@ Mh::Application.routes.draw do
 
   root to: "welcome#index"
 
+  resources :signatures, only: [] do
+    collection do
+      get :code_of_conduct
+      get :statement_of_faith
+      post :action_for_signature
+    end
+  end
+
   resources :saved_contact_searches, only: [:index, :create, :destroy] do
     collection do
       post :update
@@ -239,6 +247,7 @@ Mh::Application.routes.draw do
       get :generate_api_secret
       get :show_hidden_questions
       get :display_sidebar
+      get :signatures
     end
     member do
       get :update_from_crs

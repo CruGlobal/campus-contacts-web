@@ -251,6 +251,14 @@ class OrganizationsController < ApplicationController
     redirect_to api_organizations_path
   end
 
+  def signatures
+    @signatures = Signature.where(organization_id: current_person.all_organization_and_children.collect(&:id))
+    @signatures = @signatures.filter(params[:search_any])
+    @signatures = @signatures.sort(params[:q])
+    @q = @signatures.where('1 <> 1').search(params[:q])
+    @signatures = @signatures.page(params[:page]).per(50)
+  end
+
   protected
   def get_organization
     if params[:id]

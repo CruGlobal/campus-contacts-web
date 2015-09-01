@@ -41,6 +41,9 @@
     color: #666;
     height: 20px;
     font-size: 13px;
+    &.smaller-font {
+      font-size:12px !important;
+    }
   }
   #side-search-any {
     #search_any {
@@ -49,6 +52,7 @@
       font-size: 18px;
     }
     #search_any_button {
+      margin-top: 2px !important;
       width: 38px;
       height: 34px;
       display: inline-block;

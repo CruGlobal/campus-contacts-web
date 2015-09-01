@@ -99,6 +99,7 @@ class Person < ActiveRecord::Base
   has_many :group_memberships
 
   has_one :person_photo
+  has_many :signatures
 
   has_many :exports
 
@@ -418,6 +419,20 @@ class Person < ActiveRecord::Base
 
     answer_sheet.save_survey(answers, notify_on_predefined_questions)
     self.save
+  end
+
+  def signed_signature?(org, kind)
+    self.signatures.find_by(organization_id: org.id, kind: kind).present?
+  end
+
+  def sign_a_signature(org, kind = Signature::SIGNATURE_CODE_OF_CONDUCT, status = Signature::SIGNATURE_STATUS_ACCEPTED)
+    return unless org.present?
+    signature = self.signatures.find_or_create_by(organization_id: org.id, kind: kind)
+    signature.update(status: status) if signature.present?
+  end
+
+  def signed_signatures(org)
+    self.signatures.where(organization_id: org.id, status: Signature::SIGNATURE_STATUS_ACCEPTED)
   end
 
   def cru_status(org)
@@ -1001,7 +1016,6 @@ class Person < ActiveRecord::Base
     self.date_attributes_updated = DateTime.now.to_s(:db)
     self.save
   end
-
 
   def self.search_by_name(name, organization_ids = nil, scope = nil)
     scope ||= Person
