@@ -108,7 +108,8 @@ class SmsController < ApplicationController
       end
 
       # Look for an active keyword for this message
-      keyword = SmsKeyword.where(keyword: message.split(' ').first.downcase).first
+      first_word = Emojimmy.emoji_to_token(message.downcase).split(' ').first
+      keyword = SmsKeyword.where(keyword: first_word).first
       if !keyword || !keyword.active?
         @msg = I18n.t('sms.keyword_inactive')
       elsif !keyword.survey
