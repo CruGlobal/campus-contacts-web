@@ -2,6 +2,7 @@ class Survey < ActiveRecord::Base
   NO_LOGIN = 3
 
   attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology, :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css, :background_color, :text_color, :crs_registrant_type_id, :redirect_url, :logo
+  stores_emoji_characters :title, :terminology, :login_paragraph
 
   has_paper_trail :on => [:destroy],
                   :meta => { organization_id: :organization_id }

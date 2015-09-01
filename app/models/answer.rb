@@ -11,6 +11,7 @@ class Answer < ActiveRecord::Base
                   :meta => { person_id: :person_id }
 
   attr_accessible :answer_sheet_id, :question_id, :value, :short_value, :auto_notify_sent, :attachment
+  stores_emoji_characters :value, :short_value
 
   belongs_to :answer_sheet, inverse_of: :answers, touch: true
   belongs_to :question, class_name: "Element", foreign_key: "question_id"

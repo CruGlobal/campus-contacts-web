@@ -1,7 +1,6 @@
 development: &dev
   adapter: mysql2
-  encoding: utf8mb4
-  collation: utf8mb4_bin
+  encoding: utf8
   reconnect: true
   pool: <%= ENV['DB_ENV_MYSQL_POOL'] || 25 %>
   database: <%= ENV['DB_ENV_MYSQL_DB'] || 'missionhub' %>

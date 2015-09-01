@@ -1,6 +1,7 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
+  stores_emoji_characters :subject, :message
 
   belongs_to :bulk_message
   belongs_to :organization

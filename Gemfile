@@ -31,6 +31,7 @@ gem 'enforce_schema_rules'#, '~> 0.0.17'
 gem 'http_accept_language'#, '~> 2.0.0'
 gem 'i18n-js' #, git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
 gem 'kaminari'#, '~> 0.14.1'
+gem 'emojimmy'
 
 # gem 'mini_fb', '~> 2.0.0'
 gem 'fb_graph2'
@@ -69,6 +70,7 @@ gem 'responders', '~> 2.0'
 gem 'protected_attributes'
 gem 'silencer'
 gem 'syslog-logger'
+
 
 group :development, :test do
   gem 'dotenv-rails'

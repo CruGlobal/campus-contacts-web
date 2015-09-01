@@ -7,6 +7,7 @@ class SentSms < ActiveRecord::Base
   sidekiq_options unique: true
 
   attr_accessible :message_id, :message, :recipient, :reports, :moonshado_claimcheck, :sent_via, :status, :received_sms_id, :twilio_sid, :twilio_uri, :separator, :question_id
+  stores_emoji_characters :message
 
   belongs_to :received_sms
   # belongs_to :message

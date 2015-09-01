@@ -4,7 +4,7 @@ class BulkMessage < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true
 
-  attr_accessible :person_id, :organization_id, :status, :results
+  attr_accessible :person_id, :organization_id, :status, :results, :organization
 
   serialize :results
   belongs_to :person
