@@ -57,9 +57,8 @@ class EmailResponsesController < ApplicationController
     Rails.logger.info request.raw_post
   end
 
-  # Weirdly, AWS double encodes the JSON.
   def message
-    @message ||= JSON.parse JSON.parse(request.raw_post)['Message']
+    @message ||= JSON.parse(request.raw_post)['Message']
   end
 
   def type
