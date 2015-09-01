@@ -3,6 +3,9 @@ require 'sidekiq/cron/web'
 
 Mh::Application.routes.draw do
 
+  post 'email_responses/bounce' => 'email_responses#bounce'
+  post 'email_responses/complaint' => 'email_responses#complaint'
+
   constraint = lambda { |request| request.env["rack.session"] &&
                                   request.env["rack.session"]["warden.user.user.key"] &&
                                   request.env["rack.session"]["warden.user.user.key"].first &&

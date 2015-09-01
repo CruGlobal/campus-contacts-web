@@ -40,7 +40,7 @@ class Message < ActiveRecord::Base
       sent_sms = SentSms.create(message_id: id, message: message, recipient: to, sent_via: organization.sms_gateway)
       return sent_sms.send_sms
     when 'email'
-      PeopleMailer.bulk_message(to, from, subject, message, reply_to).deliver!
+      PeopleMailer.bulk_message(to, from, subject, message, reply_to).deliver_now!
       return true
     end
   end
