@@ -413,7 +413,7 @@ $ ->
 
 
 
-  if $.params.answers
+  if $.params && $.params.answers
     $.each $.params.answers, (k, v) ->
       if $.isPlainObject(v)
         # Checkboxes

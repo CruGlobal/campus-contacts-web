@@ -5,7 +5,6 @@
   </head>
   <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
     <%= wiser_timezone_initialize(auto_set_guest: true) %>
-    <%= render 'fb_init' %>
     <%= render 'dialogs/alert' %>
     <%= render 'dialogs/locate_contact' %>
     <div id="outer">
@@ -38,6 +37,7 @@
 
     </div><!-- outer -->
     <div id="footnotes_holder"></div>
+    <%= render 'shared/shared_footer' %>
   </body>
 </html>
 

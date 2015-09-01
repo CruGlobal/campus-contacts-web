@@ -314,3 +314,6 @@ $.mh.readURL = (input, target_preview) ->
       return
     reader.readAsDataURL input.files[0]
   return
+
+if (window.location.hash == '#_=_')
+  window.location.hash = '';
