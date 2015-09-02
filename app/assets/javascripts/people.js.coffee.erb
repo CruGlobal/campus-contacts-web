@@ -249,6 +249,21 @@ $ ->
       $("#check_all_groups").attr('checked', true)
   false
 
+  $("#bulk_send_msg_dialog form").on 'ajax:success', ->
+    if $('.bulk-msg').hasClass('bulk-text')
+      msg = "Text successfully queued for sending"
+    else
+      $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val())
+      msg = "Email successfully queued for sending"
+    $.n(msg)
+  .on 'ajax:error', ->
+    if $('.bulk-msg').hasClass('bulk-text')
+      msg = "Text failed to send"
+    else
+      $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val())
+      msg = "Email failed to send"
+    $.n(msg)
+
 $.fn.fbNameSearch = (url)->
   prevBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[1]
   moreBtn = $("#fb_name_search_dialog").next(".ui-dialog-buttonpane").find('button')[2]
@@ -316,13 +331,10 @@ $.fn.triggerPersonLookup = ->
 $.fn.submitBulkSendTextDialog = ->
   if $('.bulk-msg').hasClass('bulk-text')
     $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_text_to').val())
-    msg = "Text Successfully Sent"
   else
     $('#bulk_send_msg_dialog #to').val($('#bulk_send_msg_dialog #send_email_to').val())
-    msg = "Email Successfully Sent"
 
   $.rails.handleRemote($("#bulk_send_msg_dialog form"))
-  $.n(msg)
   $.hideDialog($("#bulk_send_msg_dialog"))
   $('tr#all').remove()
   $.fn.listCheckboxes()
