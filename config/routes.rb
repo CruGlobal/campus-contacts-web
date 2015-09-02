@@ -1,4 +1,4 @@
-require 'sidekiq/web'
+require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Mh::Application.routes.draw do

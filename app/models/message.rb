@@ -1,5 +1,8 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
+  include Sidekiq::Worker
+  sidekiq_options unique: true, retry: false
+
   attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
   stores_emoji_characters :subject, :message
 
@@ -42,6 +45,13 @@ class Message < ActiveRecord::Base
     when 'email'
       PeopleMailer.bulk_message(to, from, subject, message, reply_to).deliver_now
       return true
+    end
+  end
+
+  def perform(msg_id)
+    msg = Message.find(msg_id)
+    if msg.sent_via == 'sms' && msg.status != 'sent'
+      msg.update(sent: true) if msg.process_message
     end
   end
 end
