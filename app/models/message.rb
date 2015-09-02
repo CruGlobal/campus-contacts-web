@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true, retry: false
 
-  attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
+  attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to, :sent
   stores_emoji_characters :subject, :message
 
   belongs_to :bulk_message
@@ -51,7 +51,7 @@ class Message < ActiveRecord::Base
   def perform(msg_id)
     msg = Message.find(msg_id)
     if msg.sent_via == 'sms' && msg.status != 'sent'
-      msg.update(sent: true) if msg.process_message
+      msg.update!(sent: true) if msg.process_message
     end
   end
 end
