@@ -29,7 +29,7 @@
                 <table>
                   <tr>
                     <td id="search_locate_contact_loading">
-                      <img src='/assets/spinner.gif'/>
+                      <%= image_tag 'spinner.gif', alt: nil %>
                     </td>
                     <td>
                       <%= submit_tag t("contacts.index.search_locate_contact_button"), :id=>"search_locate_contact_button", :remote => true%>

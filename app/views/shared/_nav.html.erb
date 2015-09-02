@@ -44,7 +44,7 @@
               <% cache(['org_nav', current_person]) do %>
                 <ul class="under_tree">
                   <div class='loader'>
-                    <img src='/assets/loader-gray.gif'>
+                    <%= image_tag('loader-gray.gif', alt: nil) %>
                     Fetching organizations
                   </div>
                 </ul>
