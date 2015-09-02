@@ -1,7 +1,7 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   include Sidekiq::Worker
-  sidekiq_options unique: true, retry: false
+  sidekiq_options unique: true
 
   attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to, :sent
   stores_emoji_characters :subject, :message
