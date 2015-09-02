@@ -10,7 +10,7 @@
       <ul class="ac_dropdown_list">
       	<li class="ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'all' %>">
           <%= link_to(t('contacts.mine.all'), my_contacts_path(status: 'all')) %>
-          (<%= current_person.assigned_contacts_limit_org(@organization).collect(&:id).count %>)
+          (<%= current_person.assigned_contacts_limit_org(@organization).count %>)
         </li>
       	<li class="my_completed ac_dropdown_list_header <%= 'selected_class' if params[:status] == 'completed' %>">
           <%= link_to(t('contacts.mine.completed'), my_contacts_path(status: 'completed')) %>

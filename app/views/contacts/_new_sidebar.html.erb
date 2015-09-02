@@ -28,10 +28,10 @@
   <div id='leader_list' class="side_list" style="<%= 'display:block;' if selected %>">
     <% @organization.leaders.each_with_index do |person| %>
       <% if params[:include_archived] %>
-        <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
+        <% count = person.assigned_contacts_limit_org_with_archived(@organization).count %>
         <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
       <% else %>
-        <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
+        <% count = person.assigned_contacts_limit_org(@organization).count %>
         <% link = all_contacts_path(assigned_to: person.id) %>
       <% end %>
 

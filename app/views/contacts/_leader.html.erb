@@ -8,11 +8,11 @@
     <span class="name tipitright" title="<%= person %>">
     	<%= link_to(truncate(person.to_s, length: 20, omission: "..."), contacts_path(assigned_to: person.id, include_archived: 'true')) %>
   	</span>
-    (<%= person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>)
+    (<%= person.assigned_contacts_limit_org_with_archived(@organization).count %>)
   <% else %>
     <span class="name tipitright" title="<%= person %>">
     	<%= link_to(truncate(person.to_s, length: 20, omission: "..."), contacts_path(assigned_to: person.id)) %>
   	</span>
-    (<%= person.assigned_contacts_limit_org(@organization).collect(&:id).count %>)
+    (<%= person.assigned_contacts_limit_org(@organization).count %>)
   <% end %>
 </li>

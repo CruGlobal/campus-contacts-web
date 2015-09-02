@@ -1,4 +1,4 @@
-<% leaders = @organization.leaders.all %>
+<% leaders = @organization.leaders.select(:id, :first_name, :last_name) %>
 <% conditions = params[:assigned_to].present? %>
 <div class="side-search-option singleton checkboxes_only" data-id="side_search_assignment" data-type="Standard" data-value="<%= params[:assigned_to] %>">
   <%= render "search/toggler" %>
@@ -7,10 +7,11 @@
   </div>
   <div class="fields">
     <% leaders.each do |leader| %>
+      <% p 'tick' %>
       <% if params[:include_archived] %>
-        <% count = leader.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
+        <% count = leader.assigned_contacts_limit_org_with_archived(@organization).count %>
       <% else %>
-        <% count = leader.assigned_contacts_limit_org(@organization).collect(&:id).count %>
+        <% count = leader.assigned_contacts_limit_org(@organization).count %>
       <% end %>
 
       <%- active = conditions && params[:assigned_to].include?(leader.id.to_s) %>
