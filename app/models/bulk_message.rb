@@ -56,7 +56,7 @@ class BulkMessage < ActiveRecord::Base
           label = Label.find(id.gsub("LABEL-",""))
           label.label_contacts_from_org(organization).collect{|p| person_ids << p.id.to_s } if label.present?
         elsif id.upcase =~ /ALL-PEOPLE/
-          organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
+          organization.all_people.collect{|p| person_ids << p.id.to_s} if person.user.has_permission?(Permission::ADMIN_ID, organization)
         else
           person_ids << id
         end
