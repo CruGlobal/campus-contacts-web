@@ -1388,22 +1388,21 @@ class Person < ActiveRecord::Base
   end
 
   def update_friends(authentication, response = nil)
-    begin
-      if response.nil?
-        response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.friends
-      end
-      @fb_friends = response
-      @fb_friends.each do |fb_friend|
-        raw_info = friend.raw_attributes
-        Friend.new(raw_info['id'], raw_info['name'], self)
-      end
-
-      (Friend.followers(self) - @fb_friends.collect {|f| f.raw_attributes['id'] }).each do |uid|
-        Friend.unfollow(self, uid)
-      end
-    rescue
-      return false
+    if response.nil?
+      response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.friends
     end
+    @fb_friends = response
+    @fb_friends.each do |fb_friend|
+      raw_info = fb_friend.raw_attributes
+      Friend.new(raw_info['id'], raw_info['name'], self)
+    end
+
+    (Friend.followers(self) - @fb_friends.collect {|f| f.raw_attributes['id'] }).each do |uid|
+      Friend.unfollow(self, uid)
+    end
+  rescue => e
+    Airbrake.notify_or_ignore(e)
+    return false
   end
 
   def get_interests(authentication, response = nil)
