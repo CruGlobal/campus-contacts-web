@@ -34,8 +34,8 @@ class PeopleMailer < ActionMailer::Base
     @status = status
     @message = message
     @bulk_message = bulk_message
-    @failed_count = status.failures
     @failed = bulk_message.messages.includes(:receiver).where(sent: false)
+    @failed_count = @failed.count
 
     mail to: @person.email, reply_to: @person.email, subject: "Failed Text Message Delivery"
   end

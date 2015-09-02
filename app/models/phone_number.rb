@@ -37,8 +37,8 @@ class PhoneNumber < ActiveRecord::Base
   before_save :clear_carrier_if_number_changed
   after_destroy :set_new_primary
 
-  def not_mobile!(value = true)
-    update_attribute(:not_mobile, value)
+  def not_mobile!
+    update_column(:not_mobile, true)
     return self
   end
 
