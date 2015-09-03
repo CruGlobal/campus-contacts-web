@@ -91,7 +91,7 @@ group :test do
 end
 
 group :development do
-  # gem 'rack-mini-profiler'
+  gem 'rack-mini-profiler'
   gem 'rails-footnotes'#, '~> 3.7.9'
   gem 'bullet'#, '~> 4.6.0'
   gem 'travis-lint'#, '~> 1.7.0'

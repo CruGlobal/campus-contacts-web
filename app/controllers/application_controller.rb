@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   before_filter :export_i18n_messages, :except => [:lb]
   before_filter :set_newrelic_params, :except => [:lb]
   before_filter :ensure_timezone, :except => [:lb]
+  before_filter :check_mini_profiler, :except => [:lb]
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
@@ -92,6 +93,11 @@ class ApplicationController < ActionController::Base
     else
       cookies['logged_in'] = nil if cookies['logged_in']
     end
+  end
+
+  def check_mini_profiler
+    return if Rails.env.production? || Rails.env.test?
+    Rack::MiniProfiler.authorize_request
   end
 
   def raise_or_hoptoad(e, options = {})
