@@ -163,12 +163,14 @@ class ContactsController < ApplicationController
     if search? && clean_all
       session[:filters] = params
       redirect_to all_contacts_path
+      true
     else
       session[:filters].each do |k, v|
         unless ['controller','action'].include?(k)
           params[k] = v
         end
       end if session[:filters].present?
+      false
     end
   end
 
@@ -201,12 +203,11 @@ class ContactsController < ApplicationController
     session[:filters] = nil if params[:filters] == "clear"
     respond_to do |wants|
       wants.html do
-        clean_params(true)
+        return if clean_params(true)
         # groups_for_assign
         # prepare_pagination
         labels_for_assign
         permissions_for_assign
-        initialize_variables
         fetch_contacts
 
         @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
