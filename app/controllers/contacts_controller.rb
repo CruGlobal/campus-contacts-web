@@ -693,7 +693,9 @@ class ContactsController < ApplicationController
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
       initialize_variables
-      update_fb_friends if current_person.friends.count == 0
+
+      # needs eval: fetch FB friends at a different time
+      # update_fb_friends if current_person.friends.count == 0
 
       # Fix old search variable from saved searches
       handle_old_search_variable if params[:search] == "1"

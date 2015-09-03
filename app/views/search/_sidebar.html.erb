@@ -18,10 +18,10 @@
     </div>
 
     <!-- Filter Friend Contacts -->
-    <div id="side-search-friends">
-      <%= check_box_tag "friends_only", "true", params[:friends_only] == 'true' %>
-      <%= t('.friends_only') %>
-    </div>
+    <!--<div id="side-search-friends">-->
+      <% #= check_box_tag "friends_only", "true", params[:friends_only] == 'true' %>
+      <% #= t('.friends_only') %>
+    <!--</div>-->
 
     <!-- Special Actions -->
     <% active = (session[:filters].present? || @survey_scope.present?) %>
