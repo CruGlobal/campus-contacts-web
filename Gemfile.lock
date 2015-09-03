@@ -472,6 +472,8 @@ GEM
       sidekiq (>= 2.17.3)
     sidekiq-failures (0.4.4)
       sidekiq (>= 2.16.0)
+    sidekiq-pro (2.0.5)
+      sidekiq (>= 3.3.2)
     silencer (0.6.0)
       railties (>= 3)
     simplecov (0.10.0)
@@ -630,6 +632,7 @@ DEPENDENCIES
   shoulda
   sidekiq-cron
   sidekiq-failures
+  sidekiq-pro!
   sidekiq-unique-jobs!
   silencer
   simplecov
@@ -649,3 +652,6 @@ DEPENDENCIES
   whenever
   wiser_date
   wiser_timezone (~> 0.2.0)
+
+BUNDLED WITH
+   1.10.6

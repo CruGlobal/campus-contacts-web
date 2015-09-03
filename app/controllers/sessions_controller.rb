@@ -1,6 +1,7 @@
 class SessionsController < Devise::SessionsController
   before_filter :prepare_for_mobile
   skip_before_filter :check_url
+  skip_before_filter :check_signature
   layout :pick_layout
 
   def new
