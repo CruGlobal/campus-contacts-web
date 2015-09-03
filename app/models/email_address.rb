@@ -57,11 +57,13 @@ class EmailAddress < ActiveRecord::Base
   def ensure_only_one_primary
     remove_duplicate_email_from_person if person.email_addresses.length > 1
 
-    primary_emails = person.email_addresses.where(primary: true)
-    if primary_emails.blank?
-      person.email_addresses.last.update_column(:primary, true)
-    elsif primary_emails.length > 1
-      primary_emails[0..-2].map {|e| e.update_column(:primary, false)}
+    if person.email_addresses.present?
+      primary_emails = person.email_addresses.where(primary: true)
+      if primary_emails.blank?
+        person.email_addresses.last.update_column(:primary, true)
+      elsif primary_emails.length > 1
+        primary_emails[0..-2].map {|e| e.update_column(:primary, false)}
+      end
     end
   end
 
