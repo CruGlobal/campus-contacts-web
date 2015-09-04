@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_timezone, :except => [:lb]
   before_filter :check_mini_profiler, :except => [:lb]
   before_filter :check_signature, :except => [:lb]
+  before_filter :check_all_signatures, :except => [:lb]
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
@@ -84,10 +85,24 @@ class ApplicationController < ActionController::Base
       if current_organization.present?
         if current_organization.is_power_to_change?
           if current_person.is_admin_for_org?(current_organization)
-            if !current_person.signed_signature?(current_organization, Signature::SIGNATURE_CODE_OF_CONDUCT)
+            if !current_person.code_of_conduct_signed?(current_organization)
               redirect_to code_of_conduct_signatures_path
-            elsif !current_person.signed_signature?(current_organization, Signature::SIGNATURE_STATEMENT_OF_FAITH)
+            elsif !current_person.statement_of_faith_signed?(current_organization)
               redirect_to statement_of_faith_signatures_path
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def check_all_signatures
+    if user_signed_in?
+      if current_organization.present?
+        if current_organization.is_power_to_change?
+          if current_person.is_admin_for_org?(current_organization)
+            if !current_person.accpeted_all_signatures?(current_organization)
+              redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
             end
           end
         end

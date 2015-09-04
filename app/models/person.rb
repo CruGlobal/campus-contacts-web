@@ -99,7 +99,7 @@ class Person < ActiveRecord::Base
   has_many :group_memberships
 
   has_one :person_photo
-  has_many :signatures
+  has_many :person_signatures
 
   has_many :exports
 
@@ -421,18 +421,51 @@ class Person < ActiveRecord::Base
     self.save
   end
 
-  def signed_signature?(org, kind)
-    self.signatures.find_by(organization_id: org.id, kind: kind).present?
+  def code_of_conduct_signed?(org, status = nil)
+    person_signature = self.person_signatures.find_by(organization_id: org.id)
+    return false unless person_signature.present?
+    if status.present?
+      person_signature.signatures.find_by(kind: Signature::SIGNATURE_CODE_OF_CONDUCT, status: status).present?
+    else
+      person_signature.code_of_conduct_signed?
+    end
   end
 
-  def sign_a_signature(org, kind = Signature::SIGNATURE_CODE_OF_CONDUCT, status = Signature::SIGNATURE_STATUS_ACCEPTED)
-    return unless org.present?
-    signature = self.signatures.find_or_create_by(organization_id: org.id, kind: kind)
-    signature.update(status: status) if signature.present?
+  def statement_of_faith_signed?(org, status = nil)
+    person_signature = self.person_signatures.find_by(organization_id: org.id)
+    return false unless person_signature.present?
+    if status.present?
+      person_signature.signatures.find_by(kind: Signature::SIGNATURE_STATEMENT_OF_FAITH, status: status).present?
+    else
+      person_signature.statement_of_faith_signed?
+    end
+  end
+
+  def sign_a_signature(org, kind = nil, status = nil)
+    person_signature = self.person_signatures.find_or_create_by(organization_id: org.id)
+    return false unless person_signature.present?
+    case kind
+    when Signature::SIGNATURE_CODE_OF_CONDUCT
+      signature = person_signature.signatures.find_or_create_by(kind: Signature::SIGNATURE_CODE_OF_CONDUCT)
+      signature.update(status: status)
+    when Signature::SIGNATURE_STATEMENT_OF_FAITH
+      signature = person_signature.signatures.find_or_create_by(kind: Signature::SIGNATURE_STATEMENT_OF_FAITH)
+      signature.update(status: status)
+    end
   end
 
   def signed_signatures(org)
-    self.signatures.where(organization_id: org.id, status: Signature::SIGNATURE_STATUS_ACCEPTED)
+    person_signature = self.person_signatures.find_by(organization_id: org.id)
+    return false unless person_signature.present?
+    person_signature.signatures.where(status: Signature::SIGNATURE_STATUS_ACCEPTED)
+  end
+
+  def accpeted_all_signatures?(org)
+    person_signature = self.person_signatures.find_by(organization_id: org.id)
+    return false unless person_signature.present?
+    return false if code_of_conduct_signed?(org, Signature::SIGNATURE_STATUS_DECLINED)
+    return false if statement_of_faith_signed?(org, Signature::SIGNATURE_STATUS_DECLINED)
+    true
   end
 
   def cru_status(org)

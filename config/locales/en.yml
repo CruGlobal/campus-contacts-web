@@ -91,12 +91,15 @@ en:
   signatures:
     title: Signatures
     signed_forms: Signed Forms
-    date_signed_at: Date Signed At
-    kind_of_signature: Kind of Signature
+    date_signed_at: Date Signed
+    download: Download CSV
+    download_guide: Download all or filterred signatures
+    clear: Clear filters
     accept: Accept
     decline: Decline
     signed_a_signature: Thank you! You may now use MissionHub.
     invalid_parameters: Invalid parameters. Please try again.
+    declined_a_signature: Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.
     code_of_conduct:
       title: Code of Conduct
       first_paragraph: "Power to Change seeks to glorify God by making a maximum contribution toward helping to fulfil the Great Commission in Canada and around the world by developing movements of evangelism and discipleship. As the person and work of Jesus Christ is central to our mission, I desire Jesus Christ to be in the center of my life and want to honour and please Him by the way I conduct myself, thus validating the gospel of Christ and contributing to the success of our mission. (Col. 1:10) As a follower of Jesus Christ I am also committed to obeying the Great Commandment to love God with all my heart, soul and mind and to love my neighbour as myself (Matt. 22:36-40). This will involve the following:"

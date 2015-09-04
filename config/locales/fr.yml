@@ -87,10 +87,10 @@ fr:
     messages:
       question_too_long:
   signatures:
-    accept: "I Agree"
-    decline: "I'm Not Agree"
-    signed_a_signature: "Thank you! You may now use MissionHub."
-    invalid_parameters: "Invalid parameters. Please try again."
+    accept:
+    decline:
+    signed_a_signature:
+    invalid_parameters:
     code_of_conduct:
       title: "Code de conduite"
       first_paragraph: "Pouvoir de Changer cherche à glorifier Dieu en contribuant le plus possible à accomplir l’Ordre missionnaire au Canada et partout dans le monde, par la création de mouvements d’évangélisation et de formation de disciples. Comme la personne et l’œuvre de Jésus-Christ sont au cœur de notre mission, je désire que Jésus-Christ soit au centre de ma vie et je veux l’honorer et lui plaire par la façon dont je me conduis. Ce faisant, je confirme l’évangile de Christ et je contribue au succès de notre mission (Colossiens 1.10). Comme disciple de Jésus-Christ, je m’engage aussi à obéir au grand commandement d’aimer Dieu de tout mon cœur, de toute mon âme et de toute ma pensée et d’aimer mon prochain comme moi-même (Matthieu 22.36-40). Cela implique ce qui suit:"

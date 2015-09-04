@@ -2,6 +2,7 @@
   <div id="ac_sidebar">
     <div id="search-sidebar">
       <%= form_tag signatures_organizations_path, method: :get, id: "advanced_search_form", autocomplete: "off", enforce_utf8: false do %>
+        <%= select_tag("movements[]", options_for_select(@movements.collect{|x| [x.name, x.id]}, selected: params[:movements]), class: "movements_select", multiple: "multiple", style: "width: 100%") %>
         <div id="side-search-any" class="category">
           <%= text_field_tag :search_any, params[:search_any], class: "side-search-field smaller-font", placeholder: t("search.sidebar.search_name") %>
         	<button class="action_gray" id="search_any_button">
@@ -18,6 +19,18 @@
 </div>
 
 <div id="ac_contact_spread">
+  <div id="ac_button_bar">
+  	<ul class="button_bar" id="menu_change_link">
+  		<li class="action_lightblue">
+  		  <%= link_to t('signatures.clear'), signatures_organizations_path%>
+  		</li>
+  	</ul>
+  	<ul class="button_bar" id="menu_change_link">
+  		<li class="action_lightblue">
+  		  <%= link_to t('signatures.download'), signatures_organizations_path(params: params.except(:action, :controller).merge(format: true)), class: "tipitmiddle", title: t('signatures.download_guide')%>
+  		</li>
+  	</ul>
+  </div>
   <div id="ac_contact_list">
     <div>
       <table class="listing contact_listing" cellpadding="0" cellspacing="0">
@@ -26,31 +39,33 @@
             <%= sort_link @q, :first_name, t("general.first_name"), params %>
           </th>
           <th class="last_name">
-            <%= sort_link @q, :first_name, t("general.last_name"), params %>
+            <%= sort_link @q, :last_name, t("general.last_name"), params %>
           </th>
           <th>
-            <%= sort_link @q, :kind, t("general.kind_of_signature"), params %>
+            <%= t("signatures.code_of_conduct.title") %>
           </th>
           <th>
-            <%= sort_link @q, :status, t("general.status_of_signature"), params %>
+            <%= t("signatures.statement_of_faith.title") %>
           </th>
           <th>
             <%= sort_link @q, :organization, t("general.organization"), params %>
           </th>
           <th>
-            <%= sort_link @q, :created_at, t("general.date_signed_at"), params %>
+            <%= sort_link @q, :date_signed_at, t("signatures.date_signed_at"), params %>
           </th>
         </tr>
         <tbody id="contacts_table">
-          <% if @signatures.present? %>
-            <% @signatures.includes(:person, :organization).each do |signature| %>
+          <% if @person_signatures.present? %>
+            <% @person_signatures.includes(:person, :organization).each do |person_signature| %>
               <tr>
-                <td class="cell no_wrap"><%= signature.person.first_name %></td>
-                <td class="cell no_wrap"><%= signature.person.last_name %></td>
-                <td class="cell no_wrap"><%= signature.kind.humanize %></td>
-                <td class="cell no_wrap"><%= signature.status.titleize %></td>
-                <td class="cell no_wrap"><%= signature.organization.name %></td>
-                <td class="cell no_wrap"><%= l(signature.created_at, format: :date) %></td>
+                <td class="cell no_wrap"><%= person_signature.person.first_name %></td>
+                <td class="cell no_wrap"><%= person_signature.person.last_name %></td>
+                <td class="cell no_wrap"><%= person_signature.signature_status(Signature::SIGNATURE_CODE_OF_CONDUCT).try(:humanize) %></td>
+                <td class="cell no_wrap"><%= person_signature.signature_status(Signature::SIGNATURE_STATEMENT_OF_FAITH).try(:humanize) %></td>
+                <td class="cell no_wrap"><%= person_signature.organization.name %></td>
+                <td class="cell no_wrap">
+                  <%= person_signature.date_signed_at.present? ? l(person_signature.date_signed_at, format: :date) : "" %>
+                </td>
               </tr>
             <% end %>
           <% end %>
@@ -58,13 +73,13 @@
       </table>
     </div>
 
-    <% if @signatures.present? %>
+    <% if @person_signatures.present? %>
       <div class="pagination_area">
         <div class="pagination_links">
-          <%= paginate(@signatures, remote: true, params: {controller: "organizations", action: "signatures", paginate: true}) %>
+          <%= paginate(@person_signatures, remote: true, params: {controller: "organizations", action: "signatures", paginate: true}) %>
         </div>
         <div class="pagination_info">
-          <%= page_entries_info(@signatures).gsub("information","").squeeze(" ").html_safe %>
+          <%= page_entries_info(@person_signatures).gsub("all","").gsub("person","").squeeze(" ").html_safe %>
         </div>
       </div>
     <% else %>

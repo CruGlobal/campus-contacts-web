@@ -252,11 +252,18 @@ class OrganizationsController < ApplicationController
   end
 
   def signatures
-    @signatures = Signature.where(organization_id: current_person.all_organization_and_children.collect(&:id))
-    @signatures = @signatures.filter(params[:search_any])
-    @signatures = @signatures.sort(params[:q])
-    @q = @signatures.where('1 <> 1').search(params[:q])
-    @signatures = @signatures.page(params[:page]).per(50)
+    @movements = current_person.all_organization_and_children
+    @person_signatures = PersonSignature.get_by_multiple_orgs(@movements.collect(&:id))
+    @person_signatures = @person_signatures.filter(params[:search_any], params[:movements])
+    @person_signatures = @person_signatures.sort(params[:q])
+
+    if params[:format].present?
+      csv = ContactsCsvGenerator.export_signatures(@person_signatures)
+      send_data csv, filename: "#{current_organization.to_s} - Signatures.csv", type: "text/csv; charset=utf-8; header=present"
+    end
+
+    @q = @person_signatures.where('1 <> 1').search(params[:q])
+    @person_signatures = @person_signatures.page(params[:page]).per(50)
   end
 
   protected

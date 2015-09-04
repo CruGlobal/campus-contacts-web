@@ -165,8 +165,12 @@
   <div class="feed_box info_display">
   	<div class="signature col_left"><%= t('signatures.signed_forms') %>:</div>
   	<div class="signature col_right">
-      <% @person.signed_signatures(current_organization).each do |signature| %>
-        <div><%= t("signatures.#{signature.kind}.title") %>, <%= signature.created_at.strftime("%B %Y")%></div>
+      <% if signatures = @person.signed_signatures(current_organization) %>
+        <% signatures.each do |signature| %>
+          <div><%= t("signatures.#{signature.kind}.title") %>, <%= signature.created_at.strftime("%B %Y")%></div>
+        <% end %>
+      <% else %>
+        <div>No signed signatures yet</div>
       <% end %>
   	</div>
   </div>
