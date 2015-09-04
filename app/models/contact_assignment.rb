@@ -17,4 +17,13 @@ class ContactAssignment < ActiveRecord::Base
       version.created_at
     end
   end
+
+  def self.assignment_counts_for(leader_ids, org_id, include_archived)
+    joins = where(assigned_to_id: leader_ids, organization_id: org_id)
+        .joins('INNER JOIN organizational_permissions ON organizational_permissions.person_id = contact_assignments.person_id '+
+                  'AND organizational_permissions.organization_id = contact_assignments.organization_id '+
+                  'AND organizational_permissions.deleted_at is null')
+    joins = joins.where(organizational_permissions: { archive_date: nil }).references('organizational_permissions') unless include_archived
+    joins.group(:assigned_to_id).count('distinct contact_assignments.person_id')
+  end
 end

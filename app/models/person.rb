@@ -976,13 +976,19 @@ class Person < ActiveRecord::Base
   end
 
   def assigned_contacts_limit_org(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
-    people = org.all_people.where(id: assigned_id_list.collect(&:person_id).uniq)
+    assigned_contact_from_list(org.all_people, org)
   end
 
   def assigned_contacts_limit_org_with_archived(org)
-    assigned_id_list = ContactAssignment.where(assigned_to_id: id, organization_id: org.id)
-    people = org.all_people_with_archived.where(id: assigned_id_list.collect(&:person_id).uniq)
+    assigned_contact_from_list(org.all_people_with_archived, org)
+  end
+
+  def assigned_contact_from_list(people, org)
+    people.where(id: ContactAssignment.where(assigned_to_id: id, organization_id: org.id).pluck(:person_id).uniq)
+    # this is what i think the request should be, but it needs testing
+    # people.joins('INNER JOIN contact_assignments ON contact_assignments.assigned_to_id = ' + id.to_s + '
+    #               AND contact_assignments.person_id = people.id
+    #               AND contact_assignments.organization_id = ' + org.id.to_s)
   end
 
   def has_similar_person_by_name_and_email?(email)
