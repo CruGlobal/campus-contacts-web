@@ -38,7 +38,7 @@ class BulkMessage < ActiveRecord::Base
   end
 
   def perform(to_ids, body, organization_id, person_id)
-    person = Person.find(person_id)
+    sender = Person.find(person_id)
     organization = Organization.find(organization_id)
     person_ids = []
     body = include_sms_footer(body)
@@ -56,7 +56,7 @@ class BulkMessage < ActiveRecord::Base
           label = Label.find(id.gsub("LABEL-",""))
           label.label_contacts_from_org(organization).collect{|p| person_ids << p.id.to_s } if label.present?
         elsif id.upcase =~ /ALL-PEOPLE/
-          organization.all_people.collect{|p| person_ids << p.id.to_s} if person.user.has_permission?(Permission::ADMIN_ID, organization)
+          organization.all_people.collect{|p| person_ids << p.id.to_s} if sender.user.has_permission?(Permission::ADMIN_ID, organization)
         else
           person_ids << id
         end
@@ -64,14 +64,14 @@ class BulkMessage < ActiveRecord::Base
     end
     receiver_ids = person_ids.uniq
     if receiver_ids.present?
-      bulk_message = person.bulk_messages.create(organization: organization)
+      bulk_message = sender.bulk_messages.create(organization: organization)
       receiver_ids.each do |id|
         person = Person.where(id: id).first
         if person.present? && primary_phone = person.primary_phone_number
           # Do not allow to send text if the phone number is not subscribed
           if organization.is_sms_subscribe?(primary_phone.number)
             # Include sms footer if it can fits to the body
-            person.sent_messages.create(
+            sender.sent_messages.create(
               bulk_message: bulk_message,
               receiver_id: person.id,
               organization_id: organization.id,
