@@ -42,7 +42,7 @@ class BulkMessage < ActiveRecord::Base
     organization = Organization.find(organization_id)
     person_ids = []
     body = include_sms_footer(body)
-    
+
     if to_ids.present?
       ids = to_ids.split(',').uniq
       ids.each do |id|
@@ -71,11 +71,11 @@ class BulkMessage < ActiveRecord::Base
           # Do not allow to send text if the phone number is not subscribed
           if organization.is_sms_subscribe?(primary_phone.number)
             # Include sms footer if it can fits to the body
-            @message = person.sent_messages.create(
+            person.sent_messages.create(
               bulk_message: bulk_message,
               receiver_id: person.id,
               organization_id: organization.id,
-              to: person.text_phone_number.number,
+              to: person.text_phone_number.number.gsub(/[^\d\+]/,''),
               sent_via: 'sms',
               message: body
             )
