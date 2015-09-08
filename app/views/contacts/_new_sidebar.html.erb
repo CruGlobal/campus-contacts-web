@@ -26,19 +26,14 @@
     </a>
   </li>
   <div id='leader_list' class="side_list" style="<%= 'display:block;' if selected %>">
+    <% counts = ContactAssignment.assignment_counts_for(@organization.leaders.pluck(:id), @organization.id, params[:include_archived]) %>
     <% @organization.leaders.each_with_index do |person| %>
-      <% if params[:include_archived] %>
-        <% count = person.assigned_contacts_limit_org_with_archived(@organization).collect(&:id).count %>
-        <% link = all_contacts_path(assigned_to: person.id, include_archived: 'true') %>
-      <% else %>
-        <% count = person.assigned_contacts_limit_org(@organization).collect(&:id).count %>
-        <% link = all_contacts_path(assigned_to: person.id) %>
-      <% end %>
+      <% link = all_contacts_path(assigned_to: person.id, include_archived: params[:include_archived] ? 'true' : nil) %>
 
       <% param_assigned_to = (params[:assigned_to].is_a?(Array)) ? (params[:assigned_to].include?(person.id.to_s)) : (params[:assigned_to].to_i == person.id) if params[:assigned_to].present?  %>
 
       <li class="entry leader <%= 'selected_entry' if param_assigned_to.present? && param_assigned_to %>" data-id="<%= person.id %>">
-        <%= link_to person, link %>&nbsp;(<span class="count"><%= count %></span>)
+        <%= link_to person, link %>&nbsp;(<span class="count"><%= counts[person.id] %></span>)
         <% if can? :manage, @organization %>
           <%= link_to(image_tag('delete.png', title: 'Remove User Permission', class: 'tip'), leader_path(person.id), method: :delete, remote: true, class: 'delete_icon', data: { confirm: t('general.remove_leader_confirm', person: person) }) %>
         <% end %>

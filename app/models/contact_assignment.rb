@@ -18,7 +18,7 @@ class ContactAssignment < ActiveRecord::Base
     end
   end
 
-  def self.assignment_counts_for(leader_ids, org_id, include_archived)
+  def self.assignment_counts_for(leader_ids, org_id, include_archived = false)
     joins = where(assigned_to_id: leader_ids, organization_id: org_id)
         .joins('INNER JOIN organizational_permissions ON organizational_permissions.person_id = contact_assignments.person_id '+
                   'AND organizational_permissions.organization_id = contact_assignments.organization_id '+
