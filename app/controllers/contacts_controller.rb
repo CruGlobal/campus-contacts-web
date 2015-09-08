@@ -187,13 +187,22 @@ class ContactsController < ApplicationController
   def export_csv
     if params[:only_ids].present? && params[:format].present?
       fetch_contacts(true)
-      @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
-      @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
-      @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
-      filename = @organization.to_s
       @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(',')) if params[:only_ids].present?
-      csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
-      send_data csv, filename: "#{filename} - Contacts.csv", type: "text/csv; charset=utf-8; header=present"
+      if @all_people.present?
+        if @all_people.length >= 1000
+          options = Export.build_options([@all_people, @survey_scope || @surveys])
+          Export.add(current_person, current_organization, Export::CATEGORY_CSV, Export::KIND_CONTACTS, options)
+          redirect_to :back, notice: I18n.t('contacts.index.export_huge_contacts')
+        else
+          @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
+          @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
+          @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
+          csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+          send_data csv, filename: "#{@organization.to_s} - Contacts.csv", type: "text/csv; charset=utf-8; header=present"
+        end
+      else
+        redirect_to :back, notice: I18n.t('contacts.index.cannot_find_ids')
+      end
     else
       redirect_to :back, notice: I18n.t('contacts.index.none_checked')
     end
