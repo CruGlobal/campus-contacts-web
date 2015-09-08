@@ -35,13 +35,13 @@
   }
 <% end %>
 
-<% unless params[:add_another] == 'true' %>
+if(!$("body").hasClass("add-more-contact")){
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
     $.hideDialog($("#add_contact_div, #member_search_div"))
   }else{
     $("#add_contact_div, #member_search").dialog("destroy")
   }
-<% end %>
+}
 
 $('#add_contact_div').removeClass('locked')
 $.blur('#add_contact_div .mh_popup_box_scroller', 'hide')
@@ -49,3 +49,4 @@ $.toggleLoader('add_contact_title','')
 
 $('#<%= dom_id(@person) %>').effect('highlight')
 $.fn.reset_add_contact_form()
+$("body").removeClass("add-more-contact")

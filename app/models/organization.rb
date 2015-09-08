@@ -83,6 +83,8 @@ class Organization < ActiveRecord::Base
   has_one :api_client, class_name: 'Rack::OAuth2::Server::Client', inverse_of: :organization
   belongs_to :conference, class_name: 'Ccc::Crs2Conference', foreign_key: 'conference_id'
 
+  has_many :exports
+
   Rejoicable::OPTIONS.each do |option|
     has_many :"#{option}_contacts",
       ->{where('rejoicables.what' => option).uniq}, through: :rejoicables, source: :person

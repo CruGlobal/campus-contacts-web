@@ -4,9 +4,9 @@ development: &dev
   reconnect: true
   pool: <%= ENV['DB_ENV_MYSQL_POOL'] || 25 %>
   database: <%= ENV['DB_ENV_MYSQL_DB'] || 'missionhub' %>
-  username: <%= ENV.fetch('DB_ENV_MYSQL_USER') %>
-  password: <%= ENV.fetch('DB_ENV_MYSQL_PASS') %>
-  host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR') %>
+  username: <%= ENV['DB_ENV_MYSQL_USER'] %>
+  password: <%= ENV['DB_ENV_MYSQL_PASS'] %>
+  host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
 
 production:
   <<: *dev
@@ -27,4 +27,8 @@ uscm:
 
 test:
   <<: *dev
+  pool: <%= ENV['DB_ENV_MYSQL_POOL_TEST'] || 25 %>
+  username: <%= ENV['DB_ENV_MYSQL_USER_TEST'] || ENV['DB_ENV_MYSQL_USER'] %>
+  password: <%= ENV['DB_ENV_MYSQL_PASS_TEST'] || ENV['DB_ENV_MYSQL_PASS'] %>
+  host: <%= ENV['DB_PORT_3306_TCP_ADDR_TEST'] || ENV['DB_PORT_3306_TCP_ADDR'] %>
   database: <%= ENV['DB_ENV_MYSQL_DB_TEST'] || 'missionhub_test' %>

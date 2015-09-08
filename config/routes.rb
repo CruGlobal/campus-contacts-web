@@ -1,7 +1,10 @@
-require 'sidekiq/web'
+require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Mh::Application.routes.draw do
+
+  post 'email_responses/bounce' => 'email_responses#bounce'
+  post 'email_responses/complaint' => 'email_responses#complaint'
 
   constraint = lambda { |request| request.env["rack.session"] &&
                                   request.env["rack.session"]["warden.user.user.key"] &&
@@ -257,6 +260,7 @@ Mh::Application.routes.draw do
       get :cancel_edit_goal
       post :update_goal
       put :update_goal
+      patch :update_goal
       get :goal_empty
       get :trend
       post :update_trend_movements

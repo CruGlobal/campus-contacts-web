@@ -100,6 +100,8 @@ class Person < ActiveRecord::Base
 
   has_one :person_photo
 
+  has_many :exports
+
   scope :contacts,
     ->(organization){includes(:organizational_permissions).references(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", organization.id, Permission::NO_PERMISSIONS_ID)}
 
@@ -723,29 +725,34 @@ class Person < ActiveRecord::Base
 
   def filtered_interactions(viewer, current_org)
     interaction_type_ids = InteractionType.all.collect(&:id)
+
+    initiated_q = ""
     if self.initiated_interaction_ids.present?
-      base_q = "((interactions.receiver_id = #{self.id} OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})) AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
-    else
-      base_q = "(interactions.receiver_id = #{self.id} AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')}))"
-    end
-    q = Array.new
-
-    # filter organization
-    if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
-      q << "interactions.privacy_setting = 'organization'"
+      initiated_q = " OR interactions.id IN (#{self.initiated_interaction_ids.join(',')})"
     end
 
+    q = "("
+    q += "(interactions.receiver_id = #{self.id} #{initiated_q})"
+    q += " AND interactions.organization_id = #{current_org.id} AND interactions.deleted_at IS NULL"
+    if interaction_type_ids.present?
+      q += " AND interactions.interaction_type_id IN (#{interaction_type_ids.join(',')})"
+    end
+    q += ")"
+
+    q += "AND ("
+    # filter me as the default
+    q += "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
     # filter admins
     if viewer.admin_of_org?(current_org)
-      q << "interactions.privacy_setting = 'admins'"
+      q += "OR (interactions.privacy_setting = 'admins')"
     end
+    # filter organization
+    if viewer.user.can?(:manage_contacts, current_org) #current_org.people.where(id: viewer.id).present?
+      q += "OR (interactions.privacy_setting = 'organization')"
+    end
+    q += ")"
 
-    # filter me
-    q << "(interactions.privacy_setting = 'me' AND interactions.created_by_id = #{viewer.id})"
-
-    query = q.join(" OR ") # combine queries
-
-    return Interaction.joins(:organization).where("#{base_q} AND (#{query})").try(:sorted) || []
+    return Interaction.joins(:organization).where(q).try(:sorted) || []
   end
 
   def labeled_in_org(label, org)
@@ -981,7 +988,9 @@ class Person < ActiveRecord::Base
   def assigned_contact_from_list(people, org)
     people.where(id: ContactAssignment.where(assigned_to_id: id, organization_id: org.id).pluck(:person_id).uniq)
     # this is what i think the request should be, but it needs testing
-    # people.joins('INNER JOIN contact_assignments ON contact_assignments.assigned_to_id = '+id.to_s+' AND contact_assignments.person_id = people.id')
+    # people.joins('INNER JOIN contact_assignments ON contact_assignments.assigned_to_id = ' + id.to_s + '
+    #               AND contact_assignments.person_id = people.id
+    #               AND contact_assignments.organization_id = ' + org.id.to_s)
   end
 
   def has_similar_person_by_name_and_email?(email)

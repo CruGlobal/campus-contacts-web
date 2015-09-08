@@ -1060,6 +1060,8 @@ $.fn.assignTo = (leader, skip_remote) ->
   $('#assign_to').val('')
 
 $.mh.saveContact = (add_more) ->
+  if add_more
+    $("body").addClass("add-more-contact")
 
   form = $('#modal_contact_form')
 

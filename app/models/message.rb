@@ -1,6 +1,9 @@
 class Message < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
-  attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to
+  include Sidekiq::Worker
+  sidekiq_options unique: true
+
+  attr_accessible :bulk_message, :from, :message, :organization_id, :person_id, :receiver_id, :sent_via, :subject, :to, :reply_to, :sent
   stores_emoji_characters :subject, :message
 
   belongs_to :bulk_message
@@ -40,8 +43,15 @@ class Message < ActiveRecord::Base
       sent_sms = SentSms.create(message_id: id, message: message, recipient: to, sent_via: organization.sms_gateway)
       return sent_sms.send_sms
     when 'email'
-      PeopleMailer.bulk_message(to, from, subject, message, reply_to).deliver!
+      PeopleMailer.bulk_message(to, from, subject, message, reply_to).deliver_now
       return true
+    end
+  end
+
+  def perform(msg_id)
+    msg = Message.find(msg_id)
+    if msg.sent_via == 'sms' && msg.status != 'sent'
+      msg.update!(sent: true) if msg.process_message
     end
   end
 end

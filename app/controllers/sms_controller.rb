@@ -141,13 +141,13 @@ class SmsController < ApplicationController
         @sms_params[:phone_number] = params['From'].sub('+','')
         @sms_params[:shortcode] = params['To']
         @sms_params[:received_at] = Time.now
-        @sms_params[:message] = params["Body"].strip.gsub(/\n/, ' ').sub(/\u0000/, '@')
+        @sms_params[:message] = Emojimmy.emoji_to_token(params["Body"].strip.gsub(/\n/, ' ')).mb_chars.to_s
       else
         @sms_params = params.slice(:country)
         @sms_params[:phone_number] = params[:device_address]
         @sms_params[:shortcode] = params[:inbound_address]
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
-        @sms_params[:message] = params[:message].strip.gsub(/\n/, ' ').sub(/\u0000/, '@')
+        @sms_params[:message] = Emojimmy.emoji_to_token(params[:message].strip.gsub(/\n/, ' ')).mb_chars.to_s
       end
     end
     @sms_params

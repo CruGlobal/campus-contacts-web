@@ -4,7 +4,7 @@ class ReceivedSms < ActiveRecord::Base
   belongs_to :person
   belongs_to :sms_keyword
 
-  after_commit :trigger_notification, if: Proc.new { self.sms_keyword.mpd? }
+  after_commit :trigger_notification, if: Proc.new { self.sms_keyword && self.sms_keyword.mpd? }
 
   def trigger_notification
     if sms_keyword.mpd? && sms_keyword.mpd_phone_number.present?

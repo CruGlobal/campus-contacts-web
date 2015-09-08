@@ -28,20 +28,15 @@ class PeopleMailer < ActionMailer::Base
     end
   end
 
-  def notify_on_bulk_sms_failure(person, results, bulk_message, message)
+  def notify_on_bulk_sms_failure(person, status, bulk_message, message)
+    Rails.logger.debug(status.data)
     @person = person
-    @results = results
+    @status = status
     @message = message
     @bulk_message = bulk_message
-    @sent_count = 0
-    @failed_count = 0
-    @results.each do |result|
-      if result[:is_sent]
-        @sent_count += 1
-      else
-        @failed_count += 1
-      end
-    end
+    @failed = bulk_message.messages.includes(:receiver).where(sent: false)
+    @failed_count = @failed.count
+
     mail to: @person.email, reply_to: @person.email, subject: "Failed Text Message Delivery"
   end
 

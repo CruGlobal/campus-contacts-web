@@ -3,7 +3,7 @@ require 'vpim/book'
 class VcardsController < ApplicationController
 
   def create
-     VcardMailer.vcard(params[:email], params[:person_id]).deliver!
+     VcardMailer.vcard(params[:email], params[:person_id]).deliver_now
   end
 
   def bulk_create
@@ -14,9 +14,9 @@ class VcardsController < ApplicationController
         wants.html do
           if params.has_key?(:email)
             if all_ids.count > 1
-              VcardMailer.bulk_vcard(params[:email], all_ids, params[:note]).deliver!
+              VcardMailer.bulk_vcard(params[:email], all_ids, params[:note]).deliver_now
             else
-              VcardMailer.vcard(params[:email], ids, params[:note]).deliver!
+              VcardMailer.vcard(params[:email], ids, params[:note]).deliver_now
             end
             render nothing: true
           else

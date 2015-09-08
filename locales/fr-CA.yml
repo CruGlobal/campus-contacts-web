@@ -579,7 +579,7 @@ fr-CA:
     email: Courriel
     email_autocomplete_description: Tapez pour rechercher par prénom, nom de famille, adresse de courriel, nom de groupe, ou nom d'étiquette.
     email_autocomplete_description_admin: Tapez pour rechercher par prénom, nom de famille, adresse de courriel, nom de groupe, nom d'étiquette, ou par tous.
-    email_note: 'Cochez cette case pour envoyer votre courriel de « l''expéditeur anonyme » do-not-reply@missionhub.com. Assurez-vous de vous identifier ou d''identifier votre organisme dans le corps de votre courriel. '
+    email_note: 'Cochez cette case pour envoyer votre courriel de « l''expéditeur anonyme » do-not-reply@mhub.cc. Assurez-vous de vous identifier ou d''identifier votre organisme dans le corps de votre courriel. '
     export_csv_help: Exporter un tableur
     export_vcard_help: Exporter vers la liste de contacts (adresse de courriel ou téléphone)
     faculty: Professeur
