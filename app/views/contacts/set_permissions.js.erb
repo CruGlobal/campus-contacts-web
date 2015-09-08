@@ -6,7 +6,7 @@ if($('#profile_label_box').size() > 0){
   <% permission = person.assigned_organizational_permissions(current_organization.id).first %>
   <% if permission.present? %>
     if($(".contact_row[data-id=<%= person.id %>]").length){
-      $(".contact_row[data-id=<%= person.id %>]").replaceWith("<%= j(render('contacts/contact', person: person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
+      $(".contact_row[data-id=<%= person.id %>]").replaceWith("<%= j(render('contacts/contact', person: person, answers: @answers, questions: @questions)) %>")
     }
     $(".contact_checkbox[data-id=<%= person.id %>]").attr('data-permissions',"<%= permission.id %>")
   <% end %>

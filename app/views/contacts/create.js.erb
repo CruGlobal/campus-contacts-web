@@ -17,7 +17,7 @@
       if($("#person_<%= @person.id %>").is(":visible")){
         $("#person_<%= @person.id %>").remove()
       }
-			$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions, assignments: @assignments)) %>")
+			$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions)) %>")
 		<% end %>
 	<% else %>
 		$.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
