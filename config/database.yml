@@ -27,4 +27,8 @@ uscm:
 
 test:
   <<: *dev
+  pool: <%= ENV['DB_ENV_MYSQL_POOL_TEST'] || 25 %>
+  username: <%= ENV.fetch('DB_ENV_MYSQL_USER_TEST') || ENV.fetch('DB_ENV_MYSQL_USER') %>
+  password: <%= ENV.fetch('DB_ENV_MYSQL_PASS_TEST') || ENV.fetch('DB_ENV_MYSQL_PASS') %>
+  host: <%= ENV.fetch('DB_PORT_3306_TCP_ADDR_TEST') || ENV.fetch('DB_PORT_3306_TCP_ADDR') %>
   database: <%= ENV['DB_ENV_MYSQL_DB_TEST'] || 'missionhub_test' %>
