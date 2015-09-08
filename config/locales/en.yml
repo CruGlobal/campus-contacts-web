@@ -849,7 +849,13 @@ en:
         <p>Hi %{name},</p>
         <p>I've just added you as %{permission_name} of %{org} on MissionHub</p>
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
-        <p>%{added_by}</p>
+        <p>%{added_by}</p>    added:
+    resend:
+      body_html: |-
+        <p>Hi %{name},</p>
+        <p>%{requested_by} requested a re-confirmation email to be sent to this email address on MissionHub</p>
+        <p>If that is you, visit %{link} to log in. Please don't share this link with anyone else.</p>
+        <p>If this message has been sent to you in error, please delete this message.</p>
   leaders:
     create:
       no_user_account: <font color='red'>Required email information missing to add this person as a User.</font>
@@ -1585,7 +1591,22 @@ en:
       leaders_header: Give access to other leaders
       leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
       next: Next
-      not_found_paragraph: <p>We weren't able to match you up with an organization currently using MissionHub.  The following steps should get you access.</p> <ol> <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub as a "user" or "admin" which will send out an automated email invitation.</li> <li>You will need go to the email address that your leader used and click on the link in the invitation.  If you can't find the email, check your spam box.  Otherwise, verify your leader used the correct email address and have them send you another invitation.</li> <li>If the above steps did NOT give you access, please email support@missionhub.com, telling them your name, email address, and the name of the organization to which you are trying to get access.</li> </ol>
+      not_found_header: We weren't able to match you up with an organization currently using MissionHub.  The following steps should get you access.
+      user_not_found:
+        ask_for_emails: Try listing some of your email addresses that we may have on file and we'll try to match them up.
+        error_searching: Error searching for your email addresses. Please try again, or one of the other steps below.
+        no_emails_found: No emails as found. Please try again, or one of the other steps below.
+        more_steps: |
+          <p>If you still are unable to access your account please try:</p>
+          <ol>
+            <li><a href="http://help.missionhub.com/article/39-promote-a-contact-to-user">A leader in your organization needs to add you to MissionHub as a "user" or "admin" which will send out an automated email invitation.</a></li>
+            <li>You need go to the email address that your leader used and click on the link in the invitation. <strong>Please check your spam box</strong>.</li>
+            <li>Verify your leader used the correct email address and have them send you another invitation.</li>
+            <li>If the above steps did NOT give you access, please email support@missionhub.com, telling them your name, email address, and the name of the organization to which you are trying to get access.</li>
+          </ol>
+        found_emails: |
+          <p>Found email addresses: <strong>%{emails}</strong>.</p>
+          <p>Please open each of the links sent to the email addresses you want associated with your account.</p>
       request_a_keyword: Request a Keyword!
       request_keyword: Request a Keyword
       request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.

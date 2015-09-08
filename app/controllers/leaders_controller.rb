@@ -187,4 +187,17 @@ class LeadersController < ApplicationController
     create and return
   end
 
+  def find_by_email_addresses
+    @matched_emails = []
+    return unless params[:find_leader_by_email]
+    params[:find_leader_by_email].each do |_k, email|
+      email = email[0] if email[0]
+      next if !email || email == ''
+      found = EmailAddress.where(email: email).includes(person: :user)
+                  .where.not(users: {id: nil}).to_a
+      @matched_emails.concat(found.collect(&:email))
+      found.each { |e| LeaderMailer.delay.resend(e, current_user) }
+    end
+  end
+
 end

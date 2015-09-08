@@ -37,4 +37,14 @@ class LeaderMailer < ActionMailer::Base
       mail(to: @assigned_to.email, subject: "Contact Assignments Notification")
     end
   end
+
+  def resend(email, requested_by)
+    @requested_by_name = requested_by.person.name
+    @person = email.person
+    user = @person.user
+    return unless user.present?
+    user.generate_new_token if user.remember_token_expires_at.nil? || user.remember_token_expires_at < Date.tomorrow
+    @link = leader_link_url(user.remember_token, user.id)
+    mail to: email.email, subject: "Missionhub.com - Email Confirmation"
+  end
 end

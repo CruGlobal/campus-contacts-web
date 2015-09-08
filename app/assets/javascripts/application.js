@@ -56,3 +56,4 @@
 //= require advanced_search
 //= require movement_indicator_suggestions
 //= require movement_indicators
+//= require dashboard
