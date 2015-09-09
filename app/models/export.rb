@@ -44,9 +44,11 @@ class Export < ActiveRecord::Base
         surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
 
         answers[answer_sheet.person_id] ||= {}
-        questions.each do |q|
-          if q.display_response(answer_sheet).present?
-            answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]
+        if questions.present?
+          questions.each do |q|
+            if q.display_response(answer_sheet).present?
+              answers[answer_sheet.person_id][q.id] = [q.display_response(answer_sheet), answer_sheet.updated_at]
+            end
           end
         end
       end
