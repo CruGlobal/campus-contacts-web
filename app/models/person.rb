@@ -100,6 +100,8 @@ class Person < ActiveRecord::Base
 
   has_one :person_photo
 
+  has_many :exports
+
   scope :contacts,
     ->(organization){includes(:organizational_permissions).references(:organizational_permissions).where("organizational_permissions.organization_id = ? AND organizational_permissions.permission_id = ?", organization.id, Permission::NO_PERMISSIONS_ID)}
 
