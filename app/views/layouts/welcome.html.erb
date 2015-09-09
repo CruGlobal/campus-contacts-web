@@ -4,7 +4,6 @@
   <%= render 'welcome/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= yield :body_classes %>">
-  <%= render 'fb_init' %>
   <%= render 'welcome/header' %>
 
   <% if content_for?(:hero) -%>
@@ -27,5 +26,6 @@
   </div>
 
   <%= render "welcome/footer" %>
+  <%= render 'fb_init' %>
 </body>
 </html>

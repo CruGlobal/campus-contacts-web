@@ -413,7 +413,7 @@ $ ->
 
 
 
-  if $.params.answers
+  if $.params && $.params.answers
     $.each $.params.answers, (k, v) ->
       if $.isPlainObject(v)
         # Checkboxes
@@ -1114,6 +1114,6 @@ $.mh.saveContact = (add_more) ->
   false
 
 $.fn.load_leader_name = (id) ->
-  $('#person_title').html('<img src="/assets/spinner.gif" />')
+  $('#person_title').html('<img src="<%= asset_path('spinner.gif') %>" />')
   $('#person_title').show().load('/profile/' + id + ' #assigned_leader')
 

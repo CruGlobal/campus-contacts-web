@@ -68,7 +68,7 @@
     </tr>
     <tbody id="contacts_table">
       <% @people.each do |person| %>
-        <%= render 'contacts/contact', person: person, questions: @questions, answers: @answers, assignments: @assignments %>
+        <%= render 'contacts/contact', person: person, questions: @questions, answers: @answers %>
       <% end %>
     </tbody>
   </table>

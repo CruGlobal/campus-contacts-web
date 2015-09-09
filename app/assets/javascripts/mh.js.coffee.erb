@@ -23,7 +23,8 @@ $ ->
         child_div.show()
         $(this).addClass('tree_open')
     else
-      child_div.html("<div class='loader left'><img src='/assets/loader-gray.gif'>&nbsp;Fetching sub-organizations</div>")
+      child_div.html('<div class="loader left"><img src="<%= asset_path('loader-gray.gif') %>">'+
+                      "&nbsp;Fetching sub-organizations</div>")
       child_div.addClass("loaded").show()
       $.ajax
         type: 'GET',
@@ -314,3 +315,6 @@ $.mh.readURL = (input, target_preview) ->
       return
     reader.readAsDataURL input.files[0]
   return
+
+if (window.location.hash == '#_=_')
+  window.location.hash = '';

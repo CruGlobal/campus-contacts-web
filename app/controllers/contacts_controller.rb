@@ -142,7 +142,6 @@ class ContactsController < ApplicationController
     clean_params
     permissions_for_assign
     fetch_contacts
-    @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
     @answers = generate_answers(@people, @organization, @questions, @survey_scope || @surveys)
 
     respond_to do |format|
@@ -220,7 +219,6 @@ class ContactsController < ApplicationController
         fetch_contacts
 
         @saved_searches = current_user.saved_contact_searches.where('organization_id = ?', current_organization.id)
-        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions, @survey_scope || @surveys)
       end
     end
@@ -276,7 +274,6 @@ class ContactsController < ApplicationController
     respond_to do |wants|
       wants.html do
         fetch_contacts(false)
-        @assignments = ContactAssignment.includes(:assigned_to).where(person_id: @people.pluck('people.id'), organization_id: @organization.id, assigned_to_id: @organization.leaders.collect(&:id)).group_by(&:person_id)
         @answers = generate_answers(@people, @organization, @questions, @surveys)
       end
 
@@ -702,8 +699,6 @@ class ContactsController < ApplicationController
     def fetch_contacts(load_all = false)
       # Load Saved Searches, Surveys & Questions
       initialize_variables
-
-      # needs eval: fetch FB friends at a different time
       # update_fb_friends if current_person.friends.count == 0
 
       # Fix old search variable from saved searches
@@ -1072,19 +1067,19 @@ class ContactsController < ApplicationController
       if params[:search].present?
         sort_query = params[:search][:meta_sort].gsub('.asc',' asc').gsub('.desc',' desc')
         if sort_query.include?('last_survey')
-	        @all_people = @all_people.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
+          @all_people = @all_people.get_and_order_by_latest_answer_sheet_answered(sort_query, current_organization.id)
         end
         if sort_query.include?('labels')
           @all_people = @all_people.get_and_order_by_label(sort_query, current_organization.id)
         end
         if sort_query.include?('followup_status')
-		    	@all_people = @all_people.order_by_followup_status(current_organization, sort_query)
+          @all_people = @all_people.order_by_followup_status(current_organization, sort_query)
         end
         if sort_query.include?('phone_number')
-		    	@all_people = @all_people.order_by_primary_phone_number(sort_query)
+          @all_people = @all_people.order_by_primary_phone_number(sort_query)
         end
         if sort_query.include?('email')
-		    	@all_people = @all_people.order_by_primary_email_address(sort_query)
+          @all_people = @all_people.order_by_primary_email_address(sort_query)
         end
         if ['dorm','zip','country','room','state','address1','city'].include?(sort_query.split(" ").first)
           sort_words = sort_query.split(" ")
@@ -1092,7 +1087,7 @@ class ContactsController < ApplicationController
           @all_people = @all_people.order_by_address_column(new_sort_query)
         end
         if ['last_name','first_name','gender'].any?{ |i| sort_query.include?(i) }
-					order_query = sort_query.gsub('first_name', 'people.first_name')
+          order_query = sort_query.gsub('first_name', 'people.first_name')
                                   .gsub('last_name', 'people.last_name')
                                   .gsub('gender','ISNULL(people.gender), people.gender')
         end
@@ -1102,7 +1097,7 @@ class ContactsController < ApplicationController
           @all_people = @all_people.order_by_any_column(new_sort_query)
         end
       else
-      	order_query = "people.last_name asc, people.first_name asc"
+        order_query = "people.last_name asc, people.first_name asc"
       end
       @all_people = @all_people.select("DISTINCT(people.id), people.*").order(order_query)
 

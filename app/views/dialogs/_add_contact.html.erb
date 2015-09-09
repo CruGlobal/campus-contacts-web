@@ -67,10 +67,9 @@
                 <% current_organization.surveys.each do |survey| %>
                   <% if survey.questions.count > 0 %>
                     <div class="survey_title add_contact_survey_title"><%= survey.title %></div>
-                    <% answer_sheet = @person.answer_sheets.detect {|as| survey.id == as.survey_id} if @person %>
+                    <% answer_sheet = @person.answer_sheets.find_by(survey_id: survey.id) if @person %>
                     <% survey.questions.each do |question| %>
                       <% next if ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'country', 'state', 'city', 'address1', 'zip'].include?(question.attribute_name) %>
-                      <% answer = question.display_response(answer_sheet) %>
                       <div class="field add_contact_survey_question_field">
                       	<label><%= raw question.label %></label>
 

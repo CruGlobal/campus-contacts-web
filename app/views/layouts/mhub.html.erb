@@ -22,7 +22,6 @@
   <% end %>
 </head>
 <body id="<%= controller.controller_name %>_controller">
-  <%= render 'fb_init' %>
   <div id="outer" class="plain">
     <% if @survey.present? %>
       <% if user_signed_in? && cookies[:survey_mode].present? %>
@@ -49,5 +48,6 @@
 
   </div><!-- outer -->
 
+  <%= render 'shared/shared_footer' %>
 </body>
 </html>
