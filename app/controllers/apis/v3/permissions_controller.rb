@@ -6,13 +6,13 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
     list = add_includes_and_order(permissions, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: {organization: current_organization, since: params[:since]}
   end
 
   def show
     render json: @permission,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: {organization: current_organization}
   end
 
   private
@@ -25,10 +25,6 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
     @permission = add_includes_and_order(permissions)
                 .find(params[:id])
 
-  end
-
-  def available_includes
-    [:email_addresses, :phone_numbers]
   end
 
 end
