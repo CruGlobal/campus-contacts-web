@@ -34,8 +34,12 @@ class Export < ActiveRecord::Base
       answers[id] = {}
     end
     surveys = {}
-    AnswerSheet.where(survey_id: survey_ids, person_id: people_ids).includes(:survey, :answers, {:person => :primary_email_address})
-      .each do |answer_sheet|
+
+    answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: people_ids)
+      .includes(:survey, :answers, {:person => :primary_email_address})
+
+    if answer_sheets.present?
+      answer_sheets.each do |answer_sheet|
         surveys[answer_sheet.person_id] ||= {}
         surveys[answer_sheet.person_id][answer_sheet.survey] = answer_sheet.completed_at
 
@@ -46,6 +50,7 @@ class Export < ActiveRecord::Base
           end
         end
       end
+    end
     answers
   end
 
