@@ -34,7 +34,7 @@ class BulkMessage < ActiveRecord::Base
     bulk_message.update_attributes(status: 'completed', results: status.failure_info)
     PeopleMailer.notify_on_bulk_sms_failure(
       bulk_message.person, status, bulk_message, options['message']
-    ).deliver_now if status.failures != 0
+    ).deliver_now if bulk_message.messages.includes(:receiver).where(sent: false).count != 0
   end
 
   def perform(to_ids, body, organization_id, person_id)
