@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_mini_profiler
-    return if (Rails.env.production? && request.subdomains.first != 'stage') || Rails.env.test?
+    return unless request.subdomains.first == 'stage' || Rails.env.development?
     Rack::MiniProfiler.authorize_request
   end
 
