@@ -70,6 +70,7 @@ gem 'responders', '~> 2.0'
 gem 'protected_attributes'
 gem 'silencer'
 gem 'syslog-logger'
+gem 'rack-mini-profiler'
 
 
 group :development, :test do
@@ -91,7 +92,6 @@ group :test do
 end
 
 group :development do
-  gem 'rack-mini-profiler'
   gem 'rails-footnotes'#, '~> 3.7.9'
   gem 'bullet'#, '~> 4.6.0'
   gem 'travis-lint'#, '~> 1.7.0'
