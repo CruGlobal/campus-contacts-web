@@ -2,13 +2,13 @@ class PeopleMailer < ActionMailer::Base
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
 
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"MissionHub Support\" <support@missionhub.com>",
+          return_path: "support@missionhub.com"
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
   #   en.people_mailer.bulk_message.subject
   #
-
 
   def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet_id, question_id)
     @keyword = keyword
@@ -22,9 +22,9 @@ class PeopleMailer < ActionMailer::Base
   def bulk_message(to, from, subject, content, reply_to = nil)
     @content = simple_format(content)
     if reply_to.present?
-      mail to: to, reply_to: reply_to, subject: subject, content_type: "text/html"
+      mail from: from, to: to, reply_to: reply_to, subject: subject
     else
-      mail to: to, subject: subject, content_type: "text/html"
+      mail from: from, to: to, subject: subject
     end
   end
 
