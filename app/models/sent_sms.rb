@@ -197,7 +197,8 @@ class SentSms < ActiveRecord::Base
           from = SmsKeyword::LONG_POWER2CHANGE
         else
           # Default Twilio
-          from = long_code ? long_code.number : SmsKeyword::SHORT
+          # from = long_code ? long_code.number : SmsKeyword::SHORT
+          from = SmsKeyword::SHORT
         end
       end
       return send_to_twilio(from)
