@@ -1,0 +1,7 @@
+<%= render 'fb_init' %>
+<%= render 'google_analytics' %>
+<script type="text/javascript" charset="utf-8">
+  I18n.defaultLocale = "<%= I18n.default_locale %>";
+  I18n.locale = "<%= I18n.locale %>";
+  $.params = <%= raw params.dup.keep_if {|_k, v| v.is_a?(String) || v.is_a?(Numeric) || v.is_a?(Enumerable)}.to_json %>;
+</script>
