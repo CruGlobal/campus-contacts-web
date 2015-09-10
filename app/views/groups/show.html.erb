@@ -3,8 +3,9 @@
 <div class="titlebar titlebarmod">
   <h1>
     <%= t(".page_title", :group_name => @group) %>
-    <div id='global_loader'>
-      <%= image_tag 'loader.gif'%>
+    <div id='global_loader' class='filter_loader'>
+      <%= image_tag 'loader.gif', height: '20'%>
+      <span class='msg'>Loading Members</span>
     </div>
   </h1>
 </div>
@@ -45,29 +46,10 @@
   	</ul>
   </div>
 
-  <table class="listing contact_listing" cellpadding="0" cellspacing="0">
-    <tr id="table_header">
-      <th class="checkbox_cell header_checkbox">
-        <%= check_box_tag 'check_all', true, false %>
-      </th>
-      <th><%= sort_link @q, :first_name, t('.name'), params %></th>
-      <th><%= t('.email') %></th>
-      <th><%= t('.phone') %></th>
-      <th>
-        <% if params[:search] && params[:search][:meta_sort].include?('asc') %>
-          <%=raw sort_link(@q, :role, t('.role'), params).gsub('asc','desc') %>
-        <% else %>
-          <%= sort_link @q, :role, t('.role'), params %>
-        <% end %>
-      </th>
-      <th>&nbsp;</th>
-    </tr>
-    <tbody id="group_table">
-      <% @people.each do |person| %>
-        <%= render 'groups/person', person: person, group_membership: person.group_memberships.where(group_id: @group.id).first %>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="group_members_list">
+    <%= render "group_member_table" %>
+  </div>
+
 
   <% if @people.blank? %>
     <div class="contentpad no_contacts">

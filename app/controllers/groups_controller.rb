@@ -39,7 +39,8 @@ class GroupsController < ApplicationController
       end
 
       @q = @people.where('1 <> 1').search(params[:search])
-      @people = @people.order(order_string)
+      @people = @people.order(order_string).page(params[:page]).per(25)
+
       @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL')
       @all_people_with_email = @people.includes(:primary_email_address).where('email_addresses.email is not NULL')
 
