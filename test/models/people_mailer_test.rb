@@ -16,22 +16,28 @@ class PeopleMailerTest < ActiveSupport::TestCase
     end
 
     should "send notification" do
-      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule.id, "Testing1", @answer_sheet.id, @element.id).deliver
+      PeopleMailer.notify_on_survey_answer("Sample <sample@email.com>", @question_rule.id, "Testing1", @answer_sheet.id, @element.id).deliver_now
       content = ActionMailer::Base.deliveries.last
       assert_equal "Someone answered \"Testing1\" in your survey", content.subject
     end
   end
 
-  test "bulk message" do
-    PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content").deliver
-    content = ActionMailer::Base.deliveries.last
-    assert_match /content/, content.body.to_s
-  end
+  context "bulk_message" do
+    setup do
+      @person = FactoryGirl.create(:person)
+    end
 
-  test "bulk message with reply_to" do
-    PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content", "vincent.paca@gmail.com").deliver
-    content = ActionMailer::Base.deliveries.last
-    assert_match /content/, content.body.to_s
+    should "send bulk message" do
+      PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content").deliver_now
+      content = ActionMailer::Base.deliveries.last
+      assert_match /content/, content.body.to_s
+    end
+
+    should "bulk message with reply_to" do
+      PeopleMailer.bulk_message("vincent.paca@gmail.com", "support@missionhub,com", "subject", "content", @person).deliver_now
+      content = ActionMailer::Base.deliveries.last
+      assert_match /content/, content.body.to_s
+    end
   end
 end
 

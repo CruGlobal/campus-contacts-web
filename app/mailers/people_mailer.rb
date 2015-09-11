@@ -19,12 +19,13 @@ class PeopleMailer < ActionMailer::Base
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
   end
 
-  def bulk_message(to, from, subject, content, reply_to = nil)
+  def bulk_message(to, from, subject, content, sender = nil)
     @content = simple_format(content)
-    if reply_to.present?
-      mail to: to, reply_to: reply_to, subject: subject, content_type: "text/html"
+    if sender.present?
+      from = "\"#{sender.name}\" <#{from}>"
+      mail from: from, to: to, reply_to: sender.email, subject: subject
     else
-      mail to: to, subject: subject, content_type: "text/html"
+      mail from: from, to: to, subject: subject
     end
   end
 
