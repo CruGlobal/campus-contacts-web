@@ -1,4 +1,9 @@
 $ ->
+
+  $(document).on "click", ".pagination_links.group_members a", (e)->
+    $.fn.filterLoader("show", "Loading Members")
+    $(".group_members_list .contact_listing").css("opacity", 0.4)
+
   $('#check_all_groups').live 'click', (e)->
     $('.id_checkbox.group_checkbox').prop('checked',$(this).is(':checked'))
     $('.id_checkbox.group_checkbox').each ->
