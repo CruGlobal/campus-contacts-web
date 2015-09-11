@@ -135,6 +135,7 @@ Mh::Application.routes.draw do
   resources :leaders, :only => [:new, :create, :update, :destroy] do
     collection do
       get :search
+      post :find_by_email_addresses
       put :add_person
     end
   end

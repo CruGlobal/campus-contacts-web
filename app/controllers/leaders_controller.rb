@@ -187,4 +187,17 @@ class LeadersController < ApplicationController
     create and return
   end
 
+  def find_by_email_addresses
+    @matched_emails = []
+    return unless params[:find_leader_by_email]
+    emails = params[:find_leader_by_email].collect{|_k,e| e[0]}.reject{ |e| e.blank? }
+    emails = EmailAddress.where(email: emails).includes(person: [:user, :organizational_permissions])
+                 .where.not(users: {id: [nil, current_user.id]}, organizational_permissions: {id: nil})
+                 .where(organizational_permissions: {deleted_at: nil, archive_date: nil})
+    emails.each do |email|
+      LeaderMailer.delay.resend(email, current_user)
+    end
+    @matched_emails = emails.collect(&:email)
+  end
+
 end

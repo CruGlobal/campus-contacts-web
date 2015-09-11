@@ -1,0 +1,22 @@
+<h1><%= t('welcome.wizard.not_found_header') %></h1>
+<%= form_tag(find_by_email_addresses_leaders_path, remote: true, class: 'customform') do %>
+  <p><%= t('welcome.wizard.user_not_found.ask_for_emails') %></p>
+  <p id="find_by_email_addresses_error" style="display: none; color: red;">
+    <%= t('welcome.wizard.user_not_found.error_searching') %>
+  </p>
+  <p id="find_by_email_addresses_no_emails" style="display: none; color: red;">
+    <%= t('welcome.wizard.user_not_found.no_emails_found') %>
+  </p>
+  <% (0..4).each do |i| %>
+    <div class="sfield">
+      <% id = "find_leader_by_email[#{i}]" %>
+      <%= label_tag(id, "#{t('contacts.form.email')} #{i+1}") %>
+      <%= email_field(id, '') %>
+    </div>
+  <% end %>
+  <%= submit_tag(t('contacts.index.filter')) %>
+<% end %>
+<div id="find_by_email_addresses_found_message"></div>
+<div id="user_not_found_more_steps" style="display: none;">
+  <%= raw t('welcome.wizard.user_not_found.more_steps') %>
+</div>

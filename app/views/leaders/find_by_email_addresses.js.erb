@@ -1,0 +1,11 @@
+$('#find_by_email_addresses_error').hide();
+<% @matched_emails = @matched_emails.uniq %>
+<% if @matched_emails.count > 0 %>
+  <% message = t('welcome.wizard.user_not_found.found_emails', emails: @matched_emails.join(', ')) %>
+  $('#find_by_email_addresses_found_message').html('<%= message.delete("\n").html_safe %>');
+  $('#dashboard_error form').hide();
+<% else %>
+  $('#dashboard_error form [type="submit"]').prop("disabled",false);
+  $('#find_by_email_addresses_no_emails').show();
+<% end %>
+$('#user_not_found_more_steps').show();

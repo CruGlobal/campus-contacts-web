@@ -236,4 +236,11 @@ class User < ActiveRecord::Base
   def email_changed?
     false
   end
+
+  def generate_new_token
+    token = SecureRandom.hex(12)
+    self.remember_token = token
+    self.remember_token_expires_at = 1.month.from_now
+    save(validate: false)
+  end
 end
