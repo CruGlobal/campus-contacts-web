@@ -12,7 +12,6 @@ class Apis::V3::BaseController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   def cors_preflight_check
-    return unless Rails.env.staging?
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PATCH'
     headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, API-VERSION, Authorization, Content-Type'
@@ -24,7 +23,6 @@ class Apis::V3::BaseController < ApplicationController
 
   # For all responses in this controller, return the CORS access control headers.
   def cors_set_access_control_headers
-    return unless Rails.env.staging?
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PATCH'
     headers['Access-Control-Allow-Headers'] = 'API-VERSION, Authorization, Content-Type'
