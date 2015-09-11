@@ -378,17 +378,16 @@ class PeopleController < ApplicationController
       person = Person.where(id: id).first
       if person.present? && person.email.present?
         # This will be the default 'from' value to avoid the DMARC policy or not being store the emails in SPAM Folder
-        from = "do-not-reply@mhub.cc"
-        message = t('people.bulk_email.default_body', body: params[:body], user_name: current_person.name, user_email: current_person.email)
+        from = "outbound@mhub.cc"
         @message = current_person.sent_messages.create(
           receiver_id: person.id,
           organization_id: current_organization.id,
           from: from,
-          reply_to: from,
+          reply_to: current_person.email,
           to: person.email,
           sent_via: 'email',
           subject: params[:subject],
-          message: message
+          message: params[:body]
         )
         @message.process_message
       end
