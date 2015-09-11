@@ -113,12 +113,12 @@ class Import < ActiveRecord::Base
       end
       if import_errors.present?
         # send failure email
-        ImportMailer.import_failed(current_user, import_errors).deliver
+        ImportMailer.import_failed(current_user, import_errors).deliver_now
         raise ActiveRecord::Rollback
       else
         # Send success email
         table = create_table(new_person_ids, get_new_people)
-        ImportMailer.import_successful(current_user, table).deliver
+        ImportMailer.import_successful(current_user, table).deliver_now
       end
     end
     if self.survey_ids.present? && import_errors.present?
