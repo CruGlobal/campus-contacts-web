@@ -91,6 +91,7 @@ class OrganizationalPermission < ActiveRecord::Base
       raise InvalidPersonAttributesError
     else
       person.user.generate_new_token
+      token = person.user.remember_token
       LeaderMailer.delay.added(person, added_by_id, self.organization, token, permission.name)
     end
   end
