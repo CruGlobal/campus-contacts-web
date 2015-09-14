@@ -1,14 +1,8 @@
-<%- group_presenter = Present(group) %>
+<%- involved = current_organization.all_people.get_from_group(group.id) %>
 <tr data-id="<%= group.id %>">
 	<td class="handle_container">
     <%= image_tag('grippy.png', class: 'handle' ) %>
 	</td>
-  <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'gids[]', group.id, false, id: "gids_#{group.id}", class: 'id_checkbox group_checkbox' %>
-    <%- current_organization.people.get_from_group(group.id).each do |person| %>
-      <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-text-number'=>person.pretty_text_phone_number, id: "ids_#{person.id}", class: "id_checkbox contact_checkbox gids_#{group.id} hidden", 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email %>
-    <% end %>
-  </td>
   <td class="group_name_column">
     <%= link_to(group.name, group) %>
   </td>
@@ -18,7 +12,7 @@
     <% end %>
   </td>
   <td>
-    <%= current_organization.all_people.get_from_group(group.id).collect(&:name).count %>
+    <%= involved.count %>
   </td>
   <td>
     <%= current_organization.all_people.get_leaders_from_group(group.id).collect(&:name).join(", ") %>
