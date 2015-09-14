@@ -12,14 +12,8 @@ class GroupsController < ApplicationController
     else
       order_query = "groups.name"
     end
-
     @groups = current_organization.groups.order(order_query)
-    @q = current_organization.groups.where('1 <> 1').search(params[:search])
-
-    people_ids = GroupMembership.where(group_id: @groups.collect(&:id)).collect(&:person_id)
-    @people = current_organization.people.where(id: people_ids)
-    @all_people_with_phone_number = @people.includes(:primary_phone_number).where('phone_numbers.number is not NULL').uniq
-    @all_people_with_email = @people.where(id: people_ids).includes(:primary_email_address).where('email_addresses.email is not NULL').uniq
+    @q = @groups.where('1 <> 1').search(params[:search])
   end
 
   def show
