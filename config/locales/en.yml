@@ -849,7 +849,7 @@ en:
         <p>Hi %{name},</p>
         <p>I've just added you as %{permission_name} of %{org} on MissionHub</p>
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
-        <p>%{added_by}</p>    added:
+        <p>%{added_by}</p>
     resend:
       body_html: |-
         <p>Hi %{name},</p>
