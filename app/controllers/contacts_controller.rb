@@ -154,6 +154,7 @@ class ContactsController < ApplicationController
     params[:assigned_to] = 'all' unless params[:assigned_to].present?
     if params[:paginate] == "true"
       unless params[:page].present?
+        session[:filters] ||= Hash.new
         session[:filters][:page] = 1
         params[:page] = 1
       end
