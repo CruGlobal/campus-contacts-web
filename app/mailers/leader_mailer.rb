@@ -15,7 +15,7 @@ class LeaderMailer < ActionMailer::Base
 
     if @person.user.present? && @person.email.present?
       @link = leader_link_url(@token, @person.user.id)
-      mail to: @person.email, subject: "Missionhub.com - #{@org}"
+      mail to: @person.email_addresses.pluck(:email), subject: "Missionhub.com - #{@org}"
     end
   end
 
