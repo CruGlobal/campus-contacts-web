@@ -1,0 +1,5 @@
+$("#bulk_export_link").removeClass("process_loading");
+$.a("<%= @msg %>");
+$.fn.filterLoader("hide");
+$('tr#all').remove()
+$.fn.listCheckboxes()
