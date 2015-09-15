@@ -157,16 +157,26 @@ class SentSms < ActiveRecord::Base
       SentSms.smart_split(message, separator).each do |message|
         self.update_attributes(status: "sending")
         begin
-          results = Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-          self.update_attributes(reports: results, status: "sent")
-        rescue Twilio::APIError => e
+          client = Twilio::REST::Client.new ENV.fetch('TWILIO_ID'), ENV.fetch('TWILIO_TOKEN')
+          twilio_request = client.messages.create(
+            from: from,
+            to: recipient,
+            body: message.strip,
+            status_callback: "https://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
+          )
+          self.reports = twilio_request
+          self.status = twilio_request.status if twilio_request.status.present?
+          self.twilio_sid = twilio_request.sid if twilio_request.sid.present?
+          self.twilio_uri = twilio_request.uri if twilio_request.uri.present?
+          self.save
+        rescue Twilio::REST::RequestError => e
           msg = e.message
           if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
             phone_number.not_mobile!
           else
             Airbrake.notify(e)
           end
-          self.update_attributes(reports: results || msg, status: "failed")
+          self.update_attributes(reports: msg, status: "failed")
           result = false
         end
       end
