@@ -43,7 +43,7 @@ class LeaderMailer < ActionMailer::Base
     @person = email.person
     user = @person.user
     return unless user.present?
-    user.generate_new_token if user.remember_token_expires_at.nil? || user.remember_token_expires_at < Date.tomorrow
+    user.generate_new_token if user.remember_token.blank? || user.remember_token_expires_at.nil? || user.remember_token_expires_at < Date.tomorrow
     @link = leader_link_url(user.remember_token, user.id)
     mail to: email.email, subject: "Missionhub.com - Email Confirmation"
   end
