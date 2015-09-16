@@ -185,19 +185,20 @@ class ContactsController < ApplicationController
   end
 
   def export_csv
-    if params[:only_ids].present?
-      fetch_contacts(true)
-      @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(','))
-
-      if @all_people.present?
-        options = Export.build_options([@all_people, @survey_scope || @surveys])
-        Export.add(current_person, current_organization, Export::CATEGORY_CSV, Export::KIND_CONTACTS, options)
-        @msg = I18n.t('contacts.index.export_huge_contacts')
+    if params[:only_ids].present? && params[:format].present?
+      if params[:only_ids].present?
+        fetch_contacts(true)
+        @all_people = @all_people.where('people.id IN (:ids)', ids: params[:only_ids].split(','))
+        @roles = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, person_id: @all_people.collect(&:id)).map {|r| [r.person_id, r] if r.permission_id == Permission::NO_PERMISSIONS_ID }]
+        @all_answers = generate_answers(@all_people, @organization, @questions, @survey_scope || @surveys)
+        @questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
+        csv = ContactsCsvGenerator.generate(@roles, @all_answers, @questions, @all_people, @organization)
+        send_data csv, filename: "#{@organization.to_s} - Contacts.csv", type: "text/csv; charset=utf-8; header=present"
       else
-        @msg = I18n.t('contacts.index.cannot_find_ids')
+        redirect_to :back, notice: I18n.t('contacts.index.cannot_find_ids')
       end
     else
-      @msg = I18n.t('contacts.index.none_checked')
+      redirect_to :back, notice: I18n.t('contacts.index.none_checked')
     end
   end
 

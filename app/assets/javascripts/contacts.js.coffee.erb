@@ -277,11 +277,7 @@ $ ->
     ids = []
     $('.id_checkbox:checked').each ->
       ids.push($(this).attr('data-id'))
-    if $(this).hasClass("process_loading")
-      $.a(t('contacts.index.system_still_on_process'))
-    else if ids.length > 0
-      $.fn.filterLoader("show", "Exporting contacts...")
-      $(this).addClass("process_loading")
+    if ids.length > 0
       $("#bulk_export_only_ids").val(ids.join(','))
       $("#bulk_export_link_form").submit()
     else
