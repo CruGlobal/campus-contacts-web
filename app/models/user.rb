@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
     data = access_token['extra']['raw_info']
     person = Person.find_from_facebook(data)
 
-    email = data['email']
+    email = data['email'] || signed_in_resource.try(:username)
     last_name = data['last_name']
     first_name = data['first_name']
 
