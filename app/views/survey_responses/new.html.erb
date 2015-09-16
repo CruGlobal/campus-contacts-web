@@ -1,4 +1,4 @@
-<% if @survey.logo_file_name.present? %>
+<% if @survey.logo.exists? %>
   <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
 <% end %>
 <div id="select_language_container">

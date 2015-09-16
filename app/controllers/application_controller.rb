@@ -267,35 +267,33 @@ class ApplicationController < ActionController::Base
     return nil unless person
     @current_organizations ||= {}
 
-    unless @current_organizations[person]
-      # Set current org based on the session, particularly uses in set_current org feature
-      if session[:current_organization_id]
-        org = person.organization_from_id(session[:current_organization_id])
-        # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
-      end
-
-      # Set current org if there's primary_organization_id in current_user's 'settings' as a default org
-      if current_user && !org
-        if default_organization_id = current_user.primary_organization_id
-          org = person.organization_from_id(default_organization_id)
-          session[:current_organization_id] = default_organization_id
-        end
-      end
-
-      unless org
-        if org = person.primary_organization
-          # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different permission
-          if !person.org_ids[org.id] || (person.org_ids[org.id]['permissions'] & Permission.user_ids).blank?
-            person.primary_organization = person.organizations.first
-          end
-          session[:current_organization_id] = person.primary_organization.id
-        else
-          session[:current_organization_id] = nil
-        end
-      end
-      @current_organizations[person] = org
+    return @current_organizations[person] if @current_organizations[person]
+    # Set current org based on the session, particularly uses in set_current org feature
+    if session[:current_organization_id]
+      org = person.organization_from_id(session[:current_organization_id])
+      # org = nil unless org && (person.organizations.include?(org) || person.organizations.include?(org.parent))
     end
-    @current_organizations[person]
+
+    # Set current org if there's primary_organization_id in current_user's 'settings' as a default org
+    if current_user && !org
+      if default_organization_id = current_user.primary_organization_id
+        org = person.organization_from_id(default_organization_id)
+        session[:current_organization_id] = default_organization_id
+      end
+    end
+
+    unless org
+      if org = person.primary_organization
+        # If they're a contact at their primary org (shouldn't happen), look for another org where they have a different permission
+        if !person.org_ids[org.id] || (person.org_ids[org.id]['permissions'] & Permission.user_ids).blank?
+          person.primary_organization = person.organizations.first
+        end
+        session[:current_organization_id] = person.primary_organization.id
+      else
+        session[:current_organization_id] = nil
+      end
+    end
+    @current_organizations[person] = org
   end
   helper_method :current_organization
 
