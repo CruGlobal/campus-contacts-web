@@ -310,7 +310,7 @@ class LeadersControllerTest < ActionController::TestCase
         assert_response :success
         assert_equal(person.id, OrganizationalPermission.last.person_id)
         assert_not_nil ActionMailer::Base.deliveries.last
-        assert_equal("super_duper_unique_email@mail.com", ActionMailer::Base.deliveries.last.to.first.to_s)
+        assert ActionMailer::Base.deliveries.last.to.include?("super_duper_unique_email@mail.com")
       end
     end
 

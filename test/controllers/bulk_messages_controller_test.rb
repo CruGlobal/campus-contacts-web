@@ -17,32 +17,41 @@ class BulkMessagesControllerTest < ActionController::TestCase
     end
 
     should "send bulk sms" do
-      assert_difference "BulkMessage.count", +1 do
-        xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-        assert_response :success
+      Sidekiq::Testing.inline! do
+        assert_difference "BulkMessage.count", +1 do
+          xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+          assert_response :success
+        end
       end
     end
 
     should "send bulk SMS via twilio (default)" do
-      assert_difference "SentSms.count", +2 do
-        assert_difference "BulkMessage.count", +1 do
-          xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+      Sidekiq::Testing.inline! do
+        assert_difference "SentSms.count", +2 do
+          assert_difference "BulkMessage.count", +1 do
+            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+          end
+          BulkMessage.last.process
         end
-        BulkMessage.last.process
+        assert_equal 'twilio', SentSms.last.sent_via
       end
-      assert_equal 'twilio', SentSms.last.sent_via
     end
 
     should "send bulk SMS via smseco" do
       @org.settings[:sms_gateway] = 'smseco'
       @org.save
-      assert_difference "SentSms.count", +2 do
-        assert_difference "BulkMessage.count", +1 do
-          xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+      stub_request(:get, /http:\/\/www.smseco.com\/.*/).
+        with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
+        to_return(:status => 200, :body => "", :headers => {})
+      Sidekiq::Testing.inline! do
+        assert_difference "SentSms.count", +2 do
+          assert_difference "BulkMessage.count", +1 do
+            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+          end
+          BulkMessage.last.process
         end
-        BulkMessage.last.process
+        assert_equal 'smseco', SentSms.last.sent_via
       end
-      assert_equal 'smseco', SentSms.last.sent_via
     end
   end
 end

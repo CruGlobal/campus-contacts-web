@@ -93,7 +93,16 @@ class Organization < ActiveRecord::Base
   default_value_for :show_sub_orgs, true
 
   validates_presence_of :name, :terminology#, :person_id
-  validates :name, name_uniqueness: true
+  # validates :name, uniqueness: {message: "is not unique"}
+  validate do |value|
+    # Handle name uniqueness
+    name = value.name_before_type_cast || value.name || nil
+    if self.parent.present?
+      if self.parent.children.where(name: name).present?
+        errors.add(:name, "is not unique")
+      end
+    end
+  end
 
   after_create :create_admin_user, :notify_admin_of_request, :touch_people
   after_destroy :touch_people

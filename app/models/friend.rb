@@ -36,7 +36,7 @@ class Friend
 
   def self.followers(person)
     begin
-      $redis.smembers(Friend.redis_key(person, :followers)) || []
+      Redis.current.smembers(Friend.redis_key(person, :followers)) || []
     rescue
       []
     end
@@ -44,14 +44,14 @@ class Friend
 
   def follow!(person)
     begin
-      $redis.sadd(Friend.redis_key(self, :following), person.id)
-      $redis.sadd(Friend.redis_key(person, :followers), self.uid)
+      Redis.current.sadd(Friend.redis_key(self, :following), person.id)
+      Redis.current.sadd(Friend.redis_key(person, :followers), self.uid)
     rescue;end
   end
 
   def following?(person)
     begin
-      $redis.sismember(Friend.redis_key(self, :following), person.id)
+      Redis.current.sismember(Friend.redis_key(self, :following), person.id)
     rescue;end
   end
 
@@ -61,8 +61,8 @@ class Friend
 
   def self.unfollow(person, uid)
     begin
-      $redis.srem(Friend.redis_key(self, :following), person.id)
-      $redis.srem(Friend.redis_key(person, :followers), uid)
+      Redis.current.srem(Friend.redis_key(self, :following), person.id)
+      Redis.current.srem(Friend.redis_key(person, :followers), uid)
     rescue;end
   end
 

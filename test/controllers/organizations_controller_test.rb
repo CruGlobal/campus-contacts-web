@@ -13,12 +13,14 @@ class OrganizationsControllerTest < ActionController::TestCase
 
     context "creating" do
       should "create a child org if it's name is unique, otherwise dont create a child org" do
-        xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "neilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
-        assert_equal 1, @org_parent.children.count
+        assert_difference "Organization.count", 0 do
+          xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "neilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+        end
 
-        xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
-        assert_equal 2, @org_parent.children.count
-        assert @org_parent.children.collect {|c| c.name }.include? "notneilmarion"
+        assert_difference "Organization.count", 1 do
+          xhr :post, :create, {:organization => {:parent_id => @org_parent.id, :name => "notneilmarion", :terminology => "Organization", :show_sub_orgs => "1"}}
+          assert @org_parent.children.collect {|c| c.name }.include? "notneilmarion"
+        end
       end
 
       # TODO: fix this

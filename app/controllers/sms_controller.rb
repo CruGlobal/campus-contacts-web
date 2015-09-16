@@ -3,12 +3,17 @@ class SmsController < ApplicationController
 
   def mo
     render xml: blank_response and return if sms_params[:message].blank?
-    begin
-      # try to save the new message
-      @received = ReceivedSms.create!(sms_params)
-    rescue ActiveRecord::RecordNotUnique
-      # the mysql index just saved us from a duplicate message
+
+    if ReceivedSms.where(sms_params).present?
       render xml: blank_response and return
+    else
+      begin
+        # try to save the new message
+        @received = ReceivedSms.create!(sms_params)
+      rescue ActiveRecord::RecordNotUnique
+        # the mysql index just saved us from a duplicate message
+        render xml: blank_response and return
+      end
     end
     # Process incoming text
     message = sms_params[:message]

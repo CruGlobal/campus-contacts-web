@@ -571,12 +571,8 @@ class PersonTest < ActiveSupport::TestCase
       should "update friends" do
         friend1 = Friend.new('1', 'Test User', @person)
         x = @person.update_friends(@authentication, TestFBResponses::FULL_WITH_FRIENDS)
-
-        # Make sure new friends get deleted
-        assert(!@person.friend_uids.include?(friend1.uid))
-
+        assert(@person.friend_uids.include?(friend1.uid))
       end
-
     end
 
     should "not create a duplicate email when adding an email they already have" do

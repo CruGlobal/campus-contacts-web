@@ -1097,12 +1097,12 @@ class ContactsControllerTest < ActionController::TestCase
     end
 
     should "sort by status asc" do
-      xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status asc"}}
+      get :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status asc"}}
       assert_equal [@user.person.id, @person2.id, @person3.id, @person1.id], assigns(:people).collect(&:id)
     end
 
     should "sort by status desc" do
-      xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status desc"}}
+      get :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "followup_status desc"}}
       assert_equal [@person1.id, @person3.id, @person2.id, @user.person.id], assigns(:people).collect(&:id)
     end
   end
@@ -1146,7 +1146,7 @@ class ContactsControllerTest < ActionController::TestCase
       @phone_number4 = FactoryGirl.create(:phone_number, person: @contact4, number: "09167788887", location: "office", primary: false)
       @phone_number4 = FactoryGirl.create(:phone_number, person: @contact5, number: "09167788888", location: "home", primary: false) # included
 
-      xhr :get, :index, {:do_search => "1", :phone_number => '0916'}
+      get :index, {:do_search => "1", :phone_number => '0916'}
       assert_equal 1, assigns(:people).where(id: @contact1.id).length
       assert_equal 1, assigns(:people).where(id: @contact3.id).length
       assert_equal 1, assigns(:people).where(id: @contact4.id).length
@@ -1226,7 +1226,7 @@ class ContactsControllerTest < ActionController::TestCase
       end
 
       should "sort by phone_number should include person without primary_phone_numbers" do
-        xhr :get, :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
+        get :all_contacts, {:assigned_to => "all", :search =>{:meta_sort => "phone_numbers.number asc"}}
         assert_equal 7, assigns(:people).size
       end
 

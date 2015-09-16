@@ -137,7 +137,7 @@ class PersonFilter
     end
 
     if @filters[:is_friends_with] && filtered_people.present?
-      friend_ids =  $redis.smembers(Friend.redis_key(@filters[:is_friends_with], :following))
+      friend_ids =  Redis.current.smembers(Friend.redis_key(@filters[:is_friends_with], :following))
       if friend_ids.present?
         filtered_people =  filtered_people.where('people.id' => friend_ids)
       else
