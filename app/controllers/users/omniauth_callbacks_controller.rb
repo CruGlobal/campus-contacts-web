@@ -109,15 +109,21 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     params[:next] ? params[:next] : user_root_path
   end
 
+  def user_from_token
+    return unless session[:user_with_token].present?
+    User.find_by(id: session[:user_with_token])
+  end
+
   def facebook_login(person = nil, force = false)
     omniauth = env["omniauth.auth"]
-    @user = User.find_for_facebook_oauth(omniauth, current_user, 0, force)
+    @user = User.find_for_facebook_oauth(omniauth, current_user || user_from_token, 0, force)
     session[:fb_token] = omniauth["credentials"]["token"]
     session["devise.facebook_data"] = omniauth
 
     person = @user.person.merge(person) if person
 
     if @user && @user.persisted?
+      session.delete(:message)
       sign_in(@user)
     else
       # There was a problem logging this person in

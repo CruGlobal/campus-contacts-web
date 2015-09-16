@@ -2,7 +2,7 @@ class LeadersController < ApplicationController
   respond_to :html, :js
 
   def leader_sign_in
-    # Reconcile the person comeing from a leader link with the link itself.
+    # Reconcile the person coming from a leader link with the link itself.
     # This is for the case where the person gets entered with one email, but has a different email for FB
     if params[:token].present? && params[:user_id].present?
       @token = params[:token]
@@ -198,6 +198,14 @@ class LeadersController < ApplicationController
       LeaderMailer.delay.resend(email, current_user)
     end
     @matched_emails = emails.collect(&:email)
+  end
+
+  def authenticate_user!
+    if action_name == 'leader_sign_in' && params[:token].present? && params[:user_id].present?
+      user = User.find_by(remember_token: params[:token], id: params[:user_id])
+      session[:user_with_token] = user.id if user
+    end
+    super
   end
 
 end
