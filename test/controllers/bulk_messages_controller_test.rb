@@ -13,7 +13,6 @@ class BulkMessagesControllerTest < ActionController::TestCase
       @org.add_contact(@person2)
       PhoneNumber.create(:number => "123129312", :person_id => @person1.id)
       PhoneNumber.create(:number => "12390900", :person_id => @person2.id, :primary => true)
-      Twilio::SMS.stubs(:create)
     end
 
     should "send bulk sms" do

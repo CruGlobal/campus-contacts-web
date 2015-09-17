@@ -156,13 +156,14 @@ class SentSms < ActiveRecord::Base
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each do |message|
         self.update_attributes(status: "sending")
+        protocol = Rails.env.production? ? 'https' : 'http'
         begin
-          client = Twilio::REST::Client.new ENV.fetch('TWILIO_ID'), ENV.fetch('TWILIO_TOKEN')
+          client = Twilio::REST::Client.new(ENV.fetch('TWILIO_ID'), ENV.fetch('TWILIO_TOKEN'))
           twilio_request = client.messages.create(
             from: from,
             to: recipient,
             body: message.strip,
-            status_callback: "https://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
+            status_callback: "#{protocol}://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
           )
           self.reports = twilio_request
           self.status = twilio_request.status if twilio_request.status.present?

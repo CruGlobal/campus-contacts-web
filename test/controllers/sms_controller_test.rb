@@ -151,7 +151,6 @@ class SmsControllerTest < ActionController::TestCase
 
     context "subscriptions WITHOUT sms_session" do
       setup do
-        Twilio::SMS.stubs(:create)
         @person = FactoryGirl.create(:person)
         FactoryGirl.create(:phone_number, number: @phone_number, person_id: @person.id)
         @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)

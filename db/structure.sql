@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.17, for osx10.9 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (x86_64)
 --
--- Host: production.ctzggtk79wff.us-east-1.rds.amazonaws.com    Database: missionhub
+-- Host: localhost    Database: missionhub_03182014_development
 -- ------------------------------------------------------
--- Server version	5.6.21-log
+-- Server version	5.6.10
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -265,7 +265,7 @@ CREATE TABLE `authentications` (
   KEY `user_id` (`user_id`),
   KEY `provider_token` (`provider`),
   CONSTRAINT `authentications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=60998 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=60999 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,6 +397,64 @@ CREATE TABLE `contact_assignments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `crs2_conference`
+--
+
+DROP TABLE IF EXISTS `crs2_conference`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crs2_conference` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `version` int(11) NOT NULL,
+  `accept_american_express` tinyint(1) DEFAULT NULL,
+  `accept_discover` tinyint(1) DEFAULT NULL,
+  `accept_master_card` tinyint(1) DEFAULT NULL,
+  `accept_scholarships` tinyint(1) DEFAULT NULL,
+  `accept_visa` tinyint(1) DEFAULT NULL,
+  `admin_password` varchar(255) NOT NULL DEFAULT '',
+  `authnet_api_login_id` varchar(255) DEFAULT NULL,
+  `authnet_transaction_key` varchar(255) DEFAULT NULL,
+  `begin_date` date NOT NULL,
+  `check_payable_to` varchar(255) DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `contact_name` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `zip` varchar(255) DEFAULT NULL,
+  `description` text,
+  `end_date` date NOT NULL,
+  `ministry_type` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `offer_families_extra_rooms` tinyint(1) DEFAULT NULL,
+  `power_user_password` varchar(255) DEFAULT NULL,
+  `region` varchar(255) DEFAULT NULL,
+  `registration_ends_at` datetime NOT NULL,
+  `registration_starts_at` datetime NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT '',
+  `theme` varchar(255) DEFAULT NULL,
+  `url_base_id` int(20) DEFAULT NULL,
+  `creator_id` int(20) NOT NULL,
+  `home_page_address` varchar(255) DEFAULT NULL,
+  `ride_share` tinyint(1) DEFAULT NULL,
+  `event_address1` varchar(255) DEFAULT NULL,
+  `event_address2` varchar(255) DEFAULT NULL,
+  `event_city` varchar(255) DEFAULT NULL,
+  `event_state` varchar(255) DEFAULT NULL,
+  `event_zip` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_name` (`name`),
+  KEY `fk_conference_url_base_id` (`url_base_id`),
+  KEY `fk_conference_creator_id` (`creator_id`),
+  CONSTRAINT `fk_conference_url_base_id` FOREIGN KEY (`url_base_id`) REFERENCES `crs2_url_base` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2833 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `cru_statuses`
 --
 
@@ -479,7 +537,7 @@ CREATE TABLE `education_histories` (
   `updated_at` datetime DEFAULT NULL,
   `school_type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76234 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76235 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -550,7 +608,7 @@ CREATE TABLE `email_addresses` (
   KEY `person_id` (`person_id`),
   KEY `email` (`email`),
   CONSTRAINT `email_addresses_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1007308 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=764484 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -614,6 +672,26 @@ CREATE TABLE `followup_comments` (
   PRIMARY KEY (`id`),
   KEY `comment_organization_id_contact_id` (`organization_id`,`contact_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=362027 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `friends_deprecated`
+--
+
+DROP TABLE IF EXISTS `friends_deprecated`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `friends_deprecated` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `uid` varchar(255) DEFAULT NULL,
+  `provider` varchar(255) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `person_uid` (`person_id`,`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=9178 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -747,6 +825,31 @@ CREATE TABLE `interaction_initiators` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `interaction_reports`
+--
+
+DROP TABLE IF EXISTS `interaction_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `interaction_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `organization_ids` text COLLATE utf8_unicode_ci,
+  `report_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'details',
+  `start_date` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `end_date` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `interaction_type_ids` text COLLATE utf8_unicode_ci,
+  `enable_filters` tinyint(1) DEFAULT '0',
+  `filters` text COLLATE utf8_unicode_ci,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_interaction_reports_on_person_id` (`person_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `interaction_types`
 --
 
@@ -851,7 +954,7 @@ CREATE TABLE `locations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30703 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30704 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -963,6 +1066,30 @@ CREATE TABLE `new_people` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `organization_memberships`
+--
+
+DROP TABLE IF EXISTS `organization_memberships`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `organization_memberships` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `organization_id` int(11) DEFAULT NULL,
+  `person_id` int(11) DEFAULT NULL,
+  `primary` tinyint(1) DEFAULT '0',
+  `validated` tinyint(1) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_organization_memberships_on_organization_id_and_person_id` (`organization_id`,`person_id`),
+  KEY `person_id` (`person_id`),
+  CONSTRAINT `organization_memberships_ibfk_2` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2191965 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `organization_memberships_deprecated`
 --
 
@@ -1060,7 +1187,7 @@ CREATE TABLE `organizational_permissions` (
   KEY `index_organizational_permissions_on_permission_id` (`permission_id`),
   KEY `index_organizational_permissions_on_organization_id` (`organization_id`),
   CONSTRAINT `organizational_permissions_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8189251 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4005996 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1092,7 +1219,7 @@ CREATE TABLE `organizations` (
   KEY `index_organizations_on_ancestry` (`ancestry`),
   KEY `index_organizations_on_name` (`name`),
   KEY `index_organizations_on_conference_id` (`conference_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11258 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10996 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1105,13 +1232,13 @@ DROP TABLE IF EXISTS `people`;
 CREATE TABLE `people` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `accountNo` varchar(11) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
   `middle_name` varchar(50) DEFAULT NULL,
   `gender` varchar(1) DEFAULT NULL,
   `student_status` varchar(255) DEFAULT NULL,
   `campus` varchar(128) DEFAULT NULL,
-  `year_in_school` varchar(50) DEFAULT NULL,
+  `year_in_school` varchar(20) DEFAULT NULL,
   `major` varchar(70) DEFAULT NULL,
   `minor` varchar(70) DEFAULT NULL,
   `greek_affiliation` varchar(50) DEFAULT NULL,
@@ -1151,7 +1278,7 @@ CREATE TABLE `people` (
   KEY `index_people_on_si_person_id` (`si_person_id`),
   KEY `index_people_on_pr_person_id` (`pr_person_id`),
   KEY `index_people_on_infobase_person_id` (`infobase_person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3560605 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3237083 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1169,7 +1296,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_permissions_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1190,6 +1317,27 @@ CREATE TABLE `person_photos` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `person_signatures`
+--
+
+DROP TABLE IF EXISTS `person_signatures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `person_signatures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_person_signatures_on_person_id` (`person_id`),
+  KEY `index_person_signatures_on_organization_id` (`organization_id`),
+  CONSTRAINT `fk_rails_6658944366` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`),
+  CONSTRAINT `fk_rails_b5d6e4f823` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1532,6 +1680,25 @@ CREATE TABLE `sent_sms` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `signatures`
+--
+
+DROP TABLE IF EXISTS `signatures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signatures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_signature_id` int(11) DEFAULT NULL,
+  `kind` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_signatures_on_person_signature_id` (`person_signature_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sms_carriers`
 --
 
@@ -1733,7 +1900,7 @@ CREATE TABLE `users` (
   `timezone` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `CK_simplesecuritymanager_user_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2360522 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2351525 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1769,7 +1936,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-16 16:32:39
+-- Dump completed on 2015-09-18 12:53:43
 INSERT INTO schema_migrations (version) VALUES ('1');
 
 INSERT INTO schema_migrations (version) VALUES ('10');
