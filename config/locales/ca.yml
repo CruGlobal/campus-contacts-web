@@ -599,7 +599,7 @@ ca:
     group: Group
     group_name: Group
     help_redirect_link: http://help.missionhub.com
-    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
+    help_redirect_link_import: http://help.missionhub.com/article/66-import-contacts---creating-or-saving-as-a-csv-file-step-1
     hide: hide
     home: Home
     keyword: Keyword
