@@ -1,10 +1,12 @@
+sudo: false
+cache: bundler
 language: ruby
-rvm: ruby-2.1.2
+rvm: 2.2.2
 branches:
   only:
     - master
-    - dev
-    - rails4.2
+    - staging
+    - fix_travis
 services:
   - redis-server
 
@@ -15,10 +17,13 @@ notifications:
     - marvindpunongbayan@gmail.com
 
 before_script:
-  - mysql -e 'create database missionhub_test;'
   - cp config/s3.travis.yml config/s3.yml
   - cp config/database.travis.yml config/database.yml
   - cp config/config.travis.yml config/config.yml
-  - bundle exec rake db:migrate RAILS_ENV=test
+  - bundle exec rake db:create RAILS_ENV=test
+  - bundle exec rake db:structure:load RAILS_ENV=test
 
 script: "bundle exec rake test"
+
+env:
+  - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379

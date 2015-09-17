@@ -154,8 +154,6 @@ class Import < ActiveRecord::Base
     predefined.elements.where('object_name is not null').each do |question|
       answer = row[:answers][question.id]
       if answer.present?
-        #set response
-        question.set_response(answer, answer_sheet)
 
         #create unique phone number but not a primary
         if question.attribute_name == "phone_number"
@@ -168,6 +166,9 @@ class Import < ActiveRecord::Base
               new_phone_numbers << person.phone_numbers.new(number: answer, primary: true)
             end
           end
+        else
+          #set response
+          question.set_response(answer, answer_sheet)
         end
       end
     end

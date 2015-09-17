@@ -750,25 +750,24 @@ class OrganizationTest < ActiveSupport::TestCase
       @org = FactoryGirl.create(:organization, name: 'TestOrg', ancestry: "#{@parent1.id}/#{@parent2.id}/#{@parent3.id}")
     end
     should "return 'twilio' if set in settings" do
-      @parent1.settings[:sms_gateway] = 'twilio'
+      @parent1.update_attribute(:settings, {sms_gateway: 'twilio'})
       assert_equal 'twilio', @parent1.sms_gateway
     end
     should "return 'smseco' if set in settings" do
-      @parent1.settings[:sms_gateway] = 'smseco'
+      @parent1.update_attribute(:settings, {sms_gateway: 'smseco'})
       assert_equal 'smseco', @parent1.sms_gateway
     end
     should "return parent2's gateway if default is not set and parent has default" do
-      @parent2.settings[:sms_gateway] = 'smseco'
-      @parent2.save
+      @parent2.update_attribute(:settings, {sms_gateway: 'smseco'})
       assert_equal 'smseco', @org.sms_gateway
     end
     should "return parent3's gateway if default is not set and parent has default" do
-      @parent3.settings[:sms_gateway] = 'smseco'
-      @parent3.save
+      @parent3.update_attribute(:settings, {sms_gateway: 'smseco'})
       assert_equal 'smseco', @org.sms_gateway
     end
     should "return 'twilio' if default is not set and all ancestors do not have defaults" do
       assert_equal 'twilio', @org.sms_gateway
     end
   end
+
 end

@@ -17,12 +17,12 @@ def create_person
 end
 
 Person.transaction do
-  if Role.all.empty?
-    Role.create(name: 'Admin', i18n: 'admin', organization_id: 0)
-    Role.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
-    Role.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
-    Role.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
-    Role.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
+  if Label.all.empty?
+    Label.create(name: 'Admin', i18n: 'admin', organization_id: 0)
+    Label.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
+    Label.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
+    Label.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
+    Label.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
 
     # Surveys
     predefined = Survey.create(title: 'Predefined Questions')
@@ -31,20 +31,22 @@ Person.transaction do
     predefined.elements << TextField.create(label: 'Email Address')
   end
 
-  # Orgs
-  top = Organization.create!(name: 'Top Level', terminology: 'Organization')
-  sub1 = Organization.create!(name: 'Second Level', terminology: 'Ministry', parent: top)
-  sub2 = Organization.create!(name: 'Third Level', terminology: 'Campus', parent: sub1)
+  unless Rails.env.test?
+    # Orgs
+    top = Organization.create!(name: 'Top Level', terminology: 'Organization')
+    sub1 = Organization.create!(name: 'Second Level', terminology: 'Ministry', parent: top)
+    sub2 = Organization.create!(name: 'Third Level', terminology: 'Campus', parent: sub1)
 
-  # Contacts
-  1000.times do |i|
-    p = create_person
-    sub2.add_contact(p)
-  end
+    # Contacts
+    1000.times do |i|
+      p = create_person
+      sub2.add_contact(p)
+    end
 
-  # leaders
-  10.times do |i|
-    p = create_person
-    sub2.add_leader(p)
+    # leaders
+    10.times do |i|
+      p = create_person
+      sub2.add_leader(p)
+    end
   end
 end

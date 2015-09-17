@@ -206,7 +206,7 @@ class ContactsController < ApplicationController
     session[:filters] = nil if params[:filters] == "clear"
     respond_to do |wants|
       wants.html do
-        return if clean_params(true)
+        clean_params(true)
         # groups_for_assign
         # prepare_pagination
         labels_for_assign

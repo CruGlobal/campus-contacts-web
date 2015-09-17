@@ -19,7 +19,7 @@ class QuestionTest < ActiveSupport::TestCase
 
       # stub_request(:get, "https://api-ssl.bitly.com/v3/shorten?access_token=bitlykey&longUrl=http://www.missionhub.com/people/#{@person.id}").
       #   to_return(:body => "{\"status_code\":\"200\", \"status_txt\":\"OK\", \"data\": {\"long_url\": \"http:\/\/www.missionhub.com\/people\/7971\", \"url\": \"http:\/\/bit.ly\/QG64KU\", \"hash\": \"QG64KU\", \"global_hash\": \"QG64KV\", \"new_hash\":\"0\"}}", :status => 200)
-      stub_request(:get, "https://api-ssl.bitly.com/v3/shorten?access_token=bitlykey&longUrl=http://www.missionhub.com/people/#{@person.id}").
+      stub_request(:get, "https://api-ssl.bitly.com/v3/shorten?access_token=#{ENV['BITLY_KEY']}&longUrl=http://www.missionhub.com/people/#{@person.id}").
         to_return(:body => "{\"status_code\":\"200\", \"status_txt\":\"OK\", \"data\": {\"long_url\": \"http:\/\/www.missionhub.com\/people\/7971\", \"url\": \"http:\/\/bit.ly\/QG64KU\", \"hash\": \"QG64KU\", \"global_hash\": \"QG64KV\", \"new_hash\":\"0\"}}", :status => 200)
     end
 

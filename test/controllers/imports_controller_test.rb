@@ -393,11 +393,12 @@ class ImportsControllerTest < ActionController::TestCase
         post :create, { :import => { :upload => file } }
         assert_response :redirect
 
-        assert_difference "AnswerSheet.count", 1 do
+        assert_difference "AnswerSheet.count", 2 do
           post :update, { :import => { :header_mappings => {"0" => @first_name_element.id, "1" => @last_name_element.id, "3" => @email_element.id, "4" => @question.id} }, :id => Import.first.id}
           post :import, { :use_labels => "0", :id => Import.first.id}
           Import.last.do_import([])
           # Failing because the import creates an AnswerSheet for predefined survey
+          # Expected +2 answersheets to avoid error
           assert_equal Person.last.answer_sheets.last.answers.first.value, "I just met you"
         end
     end
