@@ -1,7 +1,10 @@
 class Survey < ActiveRecord::Base
   NO_LOGIN = 3
+  S3_CREDS = { bucket: ENV['AWS_BUCKET'], access_key_id: ENV['AWS_ACCESS_KEY_ID'], secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] }
 
-  attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology, :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css, :background_color, :text_color, :crs_registrant_type_id, :redirect_url, :logo
+  attr_accessible :title, :organization_id, :copy_from_survey_id, :post_survey_message, :terminology,
+                  :login_option, :is_frozen, :login_paragraph, :logo_file, :css_file, :css,
+                  :background_color, :text_color, :crs_registrant_type_id, :redirect_url, :logo
   stores_emoji_characters :title, :terminology, :login_paragraph
 
   has_paper_trail :on => [:destroy],
@@ -24,9 +27,9 @@ class Survey < ActiveRecord::Base
     ->{order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
   has_one :keyword, class_name: "SmsKeyword", foreign_key: "survey_id", dependent: :nullify
 
-  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: {:bucket => ENV['AWS_BUCKET'], :access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']}, storage: :s3,
+  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: S3_CREDS, storage: :s3,
                              path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
-  has_attached_file :css_file, s3_credentials: {:bucket => ENV['AWS_BUCKET'], :access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']}, storage: :s3,
+  has_attached_file :css_file, s3_credentials: S3_CREDS, storage: :s3,
                              path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   has_many :answer_sheets
   has_many :rules, through: :survey_elements
