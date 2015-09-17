@@ -35,5 +35,4 @@ db/schema.rb
 .rvmrc
 
 
-.ruby-version
 .env.*
