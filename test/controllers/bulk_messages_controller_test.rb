@@ -21,9 +21,11 @@ class BulkMessagesControllerTest < ActionController::TestCase
 
     should "send bulk sms" do
       Sidekiq::Testing.inline! do
-        assert_difference "BulkMessage.count", +1 do
-          xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-          assert_response :success
+        assert_difference "SentSms.count", +2 do
+          assert_difference "BulkMessage.count", +1 do
+            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+            assert_response :success
+          end
         end
       end
     end
@@ -33,8 +35,8 @@ class BulkMessagesControllerTest < ActionController::TestCase
         assert_difference "SentSms.count", +2 do
           assert_difference "BulkMessage.count", +1 do
             xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+            assert_response :success
           end
-          BulkMessage.last.process
         end
         assert_equal 'twilio', SentSms.last.sent_via
       end
