@@ -20,11 +20,6 @@ class PhoneNumber < ActiveRecord::Base
     if phone_number.present?
       unless (phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
         errors.add(:number, "must be numeric")
-      else
-        person = Person.find_by_id(value.person_id)
-        if person.present?
-          self[:number] = PhoneNumber.strip_us_country_code(phone_number)
-        end
       end
     else
       errors.add(:number, "can't be blank")
@@ -34,7 +29,7 @@ class PhoneNumber < ActiveRecord::Base
   validates_uniqueness_of :number, scope: :person_id, on: :update, message: "already exists"
 
   before_create :set_primary
-  before_save :clear_carrier_if_number_changed
+  before_save :clear_carrier_if_number_changed, :strip_us_country_code
   after_destroy :set_new_primary
 
   def not_mobile!
@@ -54,6 +49,10 @@ class PhoneNumber < ActiveRecord::Base
     return unless num
     num = num.to_s.strip.gsub(/[^\d|\+]/, '')
     num.length == 11 && num.first == '1' ? num[1..-1] : num
+  end
+
+  def strip_us_country_code
+    self[:number] = PhoneNumber.strip_us_country_code(number)
   end
 
   def pretty_number
@@ -111,6 +110,10 @@ class PhoneNumber < ActiveRecord::Base
       other.destroy
       save(validate: false)
     end
+  end
+
+  def same_as(other_number)
+    PhoneNumber.strip_us_country_code(number) == PhoneNumber.strip_us_country_code(other_number)
   end
 
   protected
