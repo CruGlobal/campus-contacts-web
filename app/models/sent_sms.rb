@@ -66,7 +66,6 @@ class SentSms < ActiveRecord::Base
   def to_bulksms(url, login, password)
     result = true
 
-    phone_number = PhoneNumber.find_by_number(recipient)
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
         self.update_attributes(status: "sending")
@@ -111,7 +110,6 @@ class SentSms < ActiveRecord::Base
     numero = recipient
     expediteur = "0"
 
-    phone_number = PhoneNumber.find_by_number(recipient)
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
         self.update_attributes(status: "sending")
@@ -152,21 +150,31 @@ class SentSms < ActiveRecord::Base
 
   def send_to_twilio(from)
     result = true
-    phone_number = PhoneNumber.find_by_number(recipient)
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each do |message|
         self.update_attributes(status: "sending")
+        protocol = Rails.env.production? ? 'https' : 'http'
         begin
-          results = Twilio::SMS.create(:to => recipient, :body => message.strip, :from => from)
-          self.update_attributes(reports: results, status: "sent")
-        rescue Twilio::APIError => e
+          client = Twilio::REST::Client.new(ENV.fetch('TWILIO_ID'), ENV.fetch('TWILIO_TOKEN'))
+          twilio_request = client.messages.create(
+            from: from,
+            to: recipient,
+            body: message.strip,
+            status_callback: "#{protocol}://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
+          )
+          self.reports = twilio_request
+          self.status = twilio_request.status if twilio_request.status.present?
+          self.twilio_sid = twilio_request.sid if twilio_request.sid.present?
+          self.twilio_uri = twilio_request.uri if twilio_request.uri.present?
+          self.save
+        rescue Twilio::REST::RequestError => e
           msg = e.message
           if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
             phone_number.not_mobile!
           else
             Airbrake.notify(e)
           end
-          self.update_attributes(reports: results || msg, status: "failed")
+          self.update_attributes(reports: msg, status: "failed")
           result = false
         end
       end
@@ -176,6 +184,25 @@ class SentSms < ActiveRecord::Base
     end
     long_code.increment!(:messages_sent) if long_code
     return result
+  end
+
+  def phone_number
+    unless @phone_number
+      msg = Message.find(message_id) if message_id
+      if msg && msg.receiver
+        msg.receiver.phone_numbers.each do |pn|
+          if pn.same_as(recipient)
+            @phone_number = pn
+            break
+          end
+        end
+      else
+        @phone_number = PhoneNumber.find_by_number(PhoneNumber.strip_us_country_code(recipient))
+      end
+    end
+    raise "Number couldn't be found: #{recipient}" unless @phone_number
+    
+    @phone_number
   end
 
   def send_sms

@@ -350,6 +350,12 @@ Mh::Application.routes.draw do
     end
   end
 
+  resources :callbacks, only: [] do
+    collection do
+      post :twilio_status
+    end
+  end
+
   namespace :api do
     scope '(/:version)', version: /v\d+?/ do  #module: :api
       resources :people do

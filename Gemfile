@@ -57,7 +57,8 @@ gem 'rest-client'#, '~> 1.6.7'                                     # to make FB 
 gem 'retryable-rb'#, '~> 1.1.0'
 gem 'trumant-rack-oauth2-server', git: 'http://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
 #gem 'trumant-rack-oauth2-server', path: '/Users/josh/htdocs/rack-oauth2-server'
-gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
+#gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
+gem 'twilio-ruby', '~> 4.2.1'
 gem 'versionist'#, '~> 1.0.0'
 gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
 gem 'whenever'#, '~> 0.8.4'

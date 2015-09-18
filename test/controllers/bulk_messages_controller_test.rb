@@ -13,14 +13,22 @@ class BulkMessagesControllerTest < ActionController::TestCase
       @org.add_contact(@person2)
       PhoneNumber.create(:number => "123129312", :person_id => @person1.id)
       PhoneNumber.create(:number => "12390900", :person_id => @person2.id, :primary => true)
-      Twilio::SMS.stubs(:create)
+
+      stub_request(:post, /.*api.twilio.com\/.*/).
+        with(:headers => {'Accept'=>'application/json', 'Accept-Charset'=>'utf-8', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/x-www-form-urlencoded'}).
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {})
     end
 
     should "send bulk sms" do
       Sidekiq::Testing.inline! do
-        assert_difference "BulkMessage.count", +1 do
-          xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
-          assert_response :success
+        assert_difference "SentSms.count", +2 do
+          assert_difference "BulkMessage.count", +1 do
+            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+            assert_response :success
+          end
         end
       end
     end
@@ -30,8 +38,8 @@ class BulkMessagesControllerTest < ActionController::TestCase
         assert_difference "SentSms.count", +2 do
           assert_difference "BulkMessage.count", +1 do
             xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+            assert_response :success
           end
-          BulkMessage.last.process
         end
         assert_equal 'twilio', SentSms.last.sent_via
       end
