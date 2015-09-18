@@ -22,14 +22,18 @@ class ContactAssignmentTest < ActiveSupport::TestCase
     FactoryGirl.create(:contact_assignment, organization: @org2, person: @person1, assigned_to: @leader)
     FactoryGirl.create(:contact_assignment, organization: @org2, person: @person2, assigned_to: @leader)
 
-    results_for_org1 = ContactAssignment.assignment_counts_for([@leader.id, @leader.id + 1],@org1.id,false)
+    results_for_org1 = ContactAssignment.assignment_counts_for([@leader.id, @leader.id + 1], @org1.id, false)
     assert_equal 1, results_for_org1.count
     assert_equal 2, results_for_org1[@leader.id]
 
-    results_for_org2 = ContactAssignment.assignment_counts_for([@leader.id],@org2.id,false)
+    results_for_org2 = ContactAssignment.assignment_counts_for([@leader.id], @org2.id, false)
     assert_equal 1, results_for_org2[@leader.id]
 
-    results_for_org2 = ContactAssignment.assignment_counts_for([@leader.id],@org2.id,true)
+    results_for_org2 = ContactAssignment.assignment_counts_for([@leader.id], @org2.id, true)
     assert_equal 2, results_for_org2[@leader.id]
+
+    @person1.destroy
+    results_for_org1 = ContactAssignment.assignment_counts_for([@leader.id], @org1.id, false)
+    assert_equal 1, results_for_org1[@leader.id]
   end
 end
