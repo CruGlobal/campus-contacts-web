@@ -715,4 +715,24 @@ class PersonTest < ActiveSupport::TestCase
 
     assert_equal(person, Person.find_existing_person(Person.new(fb_uid: '5')))
   end
+
+  context "FB update" do
+    setup do
+      @user = FactoryGirl.create(:user_with_auxs)
+      @org = FactoryGirl.create(:organization)
+      @org.add_user(@user.person)
+    end
+
+    should "run if authentication is present" do
+      Sidekiq::Testing.inline! do
+        assert @user.person.async_get_or_update_friends_and_interests(@user.authentications.first)
+      end
+    end
+
+    should "not raise error even if authentication is missing" do
+      Sidekiq::Testing.inline! do
+        assert @user.person.async_get_or_update_friends_and_interests(nil)
+      end
+    end
+  end
 end

@@ -1776,10 +1776,8 @@ class Person < ActiveRecord::Base
   end
 
   def async_get_or_update_friends_and_interests(authentication)
-    begin
-      Jobs::UpdateFB.perform_async(self.id, authentication,'friends')
-      Jobs::UpdateFB.perform_async(self.id, authentication,'interests')
-    rescue;end
+    Jobs::UpdateFB.perform_async(self.id, authentication,'friends')
+    Jobs::UpdateFB.perform_async(self.id, authentication,'interests')
   end
 
   def picture
