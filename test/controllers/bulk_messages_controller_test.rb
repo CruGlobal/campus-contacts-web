@@ -16,7 +16,10 @@ class BulkMessagesControllerTest < ActionController::TestCase
 
       stub_request(:post, /.*api.twilio.com\/.*/).
         with(:headers => {'Accept'=>'application/json', 'Accept-Charset'=>'utf-8', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/x-www-form-urlencoded'}).
-        to_return(:status => 200, :body => "{\"sid\": \"#{sid = rand(36**36).to_s(36)}\", \"date_created\": \"#{timestamp = Time.now}\", \"date_updated\": \"#{timestamp}\", \"date_sent\": null, \"account_sid\": \"#{tid = ENV.fetch('TWILIO_ID')}\", \"to\": \"+1234567890\", \"from\": \"85005\", \"body\": \"This is test message, please ignore.\", \"status\": \"queued\", \"num_segments\": \"1\", \"num_media\": \"0\", \"direction\": \"outbound-api\", \"api_version\": \"2010-04-01\", \"price\": null, \"price_unit\": \"USD\", \"error_code\": null, \"error_message\": null, \"uri\": \"/2010-04-01/Accounts/#{tid}/Messages/#{sid}.json\", \"subresource_uris\": {\"media\": \"/2010-04-01/Accounts/#{tid}/Messages/#{sid}/Media.json\"}}", :headers => {})
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {}).
+        to_return(:status => 200, :body => twilio_response, :headers => {})
     end
 
     should "send bulk sms" do
