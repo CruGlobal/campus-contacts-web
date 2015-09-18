@@ -846,7 +846,7 @@ CREATE TABLE `interaction_reports` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_interaction_reports_on_person_id` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1296,7 +1296,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_permissions_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1335,9 +1335,9 @@ CREATE TABLE `person_signatures` (
   PRIMARY KEY (`id`),
   KEY `index_person_signatures_on_person_id` (`person_id`),
   KEY `index_person_signatures_on_organization_id` (`organization_id`),
-  CONSTRAINT `fk_rails_6658944366` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`),
-  CONSTRAINT `fk_rails_b5d6e4f823` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  CONSTRAINT `fk_rails_b5d6e4f823` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  CONSTRAINT `fk_rails_6658944366` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1695,7 +1695,7 @@ CREATE TABLE `signatures` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_signatures_on_person_signature_id` (`person_signature_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1936,7 +1936,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-18 12:53:43
+-- Dump completed on 2015-09-18 14:40:01
 INSERT INTO schema_migrations (version) VALUES ('1');
 
 INSERT INTO schema_migrations (version) VALUES ('10');
@@ -3007,6 +3007,12 @@ INSERT INTO schema_migrations (version) VALUES ('20150601040052');
 
 INSERT INTO schema_migrations (version) VALUES ('20150601193609');
 
+INSERT INTO schema_migrations (version) VALUES ('20150630075713');
+
+INSERT INTO schema_migrations (version) VALUES ('20150702114523');
+
+INSERT INTO schema_migrations (version) VALUES ('20150803190304');
+
 INSERT INTO schema_migrations (version) VALUES ('20150811203455');
 
 INSERT INTO schema_migrations (version) VALUES ('20150815141203');
@@ -3021,6 +3027,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150824135028');
 
 INSERT INTO schema_migrations (version) VALUES ('20150825023940');
 
+INSERT INTO schema_migrations (version) VALUES ('20150825080752');
+
 INSERT INTO schema_migrations (version) VALUES ('20150827212754');
 
 INSERT INTO schema_migrations (version) VALUES ('20150828031950');
@@ -3030,6 +3038,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150901024149');
 INSERT INTO schema_migrations (version) VALUES ('20150901124349');
 
 INSERT INTO schema_migrations (version) VALUES ('20150902031005');
+
+INSERT INTO schema_migrations (version) VALUES ('20150904043048');
+
+INSERT INTO schema_migrations (version) VALUES ('20150904043110');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
