@@ -1386,4 +1386,43 @@ class ContactsControllerTest < ActionController::TestCase
       assert_response :success
     end
   end
+
+  context 'set_labels' do
+    setup do
+      @user, org = admin_user_login_with_org
+      @person1 = FactoryGirl.create(:person)
+      @label1 = FactoryGirl.create(:label, organization: org, name: 'label')
+      @label2 = FactoryGirl.create(:label, organization: org, name: 'label2')
+      @permission1 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person1)
+      FactoryGirl.create(:organizational_label, organization: org, person: @person1, label: @label1)
+
+      @person2 = FactoryGirl.create(:person)
+      @permission2 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person2)
+      FactoryGirl.create(:organizational_label, organization: org, person: @person2, label: @label1)
+
+      @person3 = FactoryGirl.create(:person)
+      @permission3 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person3)
+
+      # annoying code that has to be added for every request
+      ENV['PREDEFINED_SURVEY'] = FactoryGirl.create(:survey, organization: @org).id.to_s
+    end
+
+    should 'add labels' do
+      xhr :post, :set_labels, {
+                   people_ids: [@person1.id, @person2.id, @person3.id],
+                   label_ids: "#{@label1.id},#{@label2.id}", remove_label_ids: '', unchanged_label_ids: ''}
+      assert_response :success
+      assert_equal @person1.labels.count, 2
+      assert_equal @person3.labels.count, 2
+    end
+
+    should 'remove labels' do
+      xhr :post, :set_labels, {
+                   people_ids: [@person1.id, @person2.id, @person3.id], label_ids: '',
+                   remove_label_ids: @label1.id, unchanged_label_ids: ''}
+      assert_response :success
+      assert_empty @person1.labels
+      assert_empty @person2.labels
+    end
+  end
 end

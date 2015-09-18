@@ -81,39 +81,19 @@ $ ->
 
     arr_checked_label_ids = $('.label_checkbox:checked:not(:disabled)').map ->
       return $(this).val()
-    checked_label_ids = ""
-    if arr_checked_label_ids.length == 1
-      checked_label_ids = arr_checked_label_ids[0]
-    else
-      if arr_checked_label_ids.length > 1
-        checked_label_ids = arr_checked_label_ids.get().join(',')
+    checked_label_ids = arr_checked_label_ids.get().join(',')
 
     arr_unchecked_label_ids = $('.label_checkbox:not(:checked):not(:disabled)').map ->
       return $(this).val()
-    unchecked_label_ids = ""
-    if arr_unchecked_label_ids.length == 1
-      unchecked_label_ids = arr_unchecked_label_ids[0]
-    else
-      if arr_unchecked_label_ids.length > 1
-        unchecked_label_ids = arr_unchecked_label_ids.get().join(',')
+    unchecked_label_ids = arr_unchecked_label_ids.get().join(',')
 
     arr_unchanged_label_ids = $('.label_checkbox:indeterminate').map ->
       return $(this).val()
-    unchanged_label_ids = ""
-    if arr_unchanged_label_ids.length == 1
-      unchanged_label_ids = arr_unchanged_label_ids[0]
-    else
-      if arr_unchanged_label_ids.length > 1
-        unchanged_label_ids = arr_unchanged_label_ids.get().join(',')
+    unchanged_label_ids = arr_unchanged_label_ids.get().join(',')
 
     arr_people_ids = $('.contact_checkbox:checked').map ->
       return $(this).attr('data-id')
-    people_ids = ""
-    if arr_people_ids.length == 1
-      people_ids = arr_people_ids[0]
-    else
-      if arr_people_ids.length > 1
-        people_ids = arr_people_ids.get().join(',')
+    people_ids = arr_people_ids.get().join(',')
 
     $.hideDialog($("#profile_labels_dialog"))
     from_all_contacts = $(".contact_listing").length
@@ -123,23 +103,18 @@ $ ->
       $.toggleLoader('profile_name','Applying Changes...')
 
     labels_processed = 0
-    $.each arr_people_ids, (index, person_id) ->
-      $.ajax(
-        type: "POST"
-        url: "/contacts/set_labels"
-        data:
-          people_ids: person_id
-          label_ids: checked_label_ids
-          remove_label_ids: unchecked_label_ids
-          unchanged_label_ids: unchanged_label_ids
-          from_all_contacts: from_all_contacts
-      ).done (data) ->
-        labels_processed += 1
-        if arr_people_ids.length == labels_processed
-          $.fn.filterLoader("force")
-          $.fn.listCheckboxes()
-        else
-          $.fn.filterLoader("show", "Labels: #{labels_processed} out of #{arr_people_ids.length} contacts were updated.")
+    $.ajax(
+      type: "POST"
+      url: "/contacts/set_labels"
+      data:
+        people_ids: people_ids
+        label_ids: checked_label_ids
+        remove_label_ids: unchecked_label_ids
+        unchanged_label_ids: unchanged_label_ids
+        from_all_contacts: from_all_contacts
+    ).done (data) ->
+      $.fn.filterLoader("force")
+      $.fn.listCheckboxes()
 
   $('#labels_add_new_button').live 'click', (e)->
     e.preventDefault()
