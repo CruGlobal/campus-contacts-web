@@ -93,7 +93,7 @@ $ ->
 
     arr_people_ids = $('.contact_checkbox:checked').map ->
       return $(this).attr('data-id')
-    people_ids = arr_people_ids.get().join(',')
+#    people_ids = arr_people_ids.get().join(',')
 
     $.hideDialog($("#profile_labels_dialog"))
     from_all_contacts = $(".contact_listing").length
@@ -103,18 +103,26 @@ $ ->
       $.toggleLoader('profile_name','Applying Changes...')
 
     labels_processed = 0
-    $.ajax(
-      type: "POST"
-      url: "/contacts/set_labels"
-      data:
-        people_ids: people_ids
-        label_ids: checked_label_ids
-        remove_label_ids: unchecked_label_ids
-        unchanged_label_ids: unchanged_label_ids
-        from_all_contacts: from_all_contacts
-    ).done (data) ->
-      $.fn.filterLoader("force")
-      $.fn.listCheckboxes()
+    people_sent = 0
+    per_loop = 500
+    while people_sent < arr_people_ids.length
+      $.ajax(
+        type: "POST"
+        url: "/contacts/set_labels"
+        data:
+          people_ids: arr_people_ids.slice(people_sent, people_sent + per_loop).get().join(',')
+          label_ids: checked_label_ids
+          remove_label_ids: unchecked_label_ids
+          unchanged_label_ids: unchanged_label_ids
+          from_all_contacts: from_all_contacts
+      ).done (data) ->
+        labels_processed += 500
+        if arr_people_ids.length <= labels_processed
+          $.fn.filterLoader("force")
+          $.fn.listCheckboxes()
+        else
+          $.fn.filterLoader("show", "Labels: #{labels_processed} out of #{arr_people_ids.length} contacts were updated.")
+      people_sent += per_loop
 
   $('#labels_add_new_button').live 'click', (e)->
     e.preventDefault()
