@@ -39,7 +39,7 @@ class LeaderMailer < ActionMailer::Base
   end
 
   def resend(email, requested_by)
-    @requested_by_name = requested_by.person.name
+    @requested_by_name = requested_by.person.try(:name) || requested_by.username
     @person = email.person
     user = @person.user
     return unless user.present?
