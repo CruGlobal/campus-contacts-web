@@ -13,5 +13,4 @@ class ReceivedSms < ActiveRecord::Base
       sms.delay.send_sms
     end
   end
-
 end
