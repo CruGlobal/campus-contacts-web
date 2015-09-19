@@ -14,30 +14,25 @@ class ContactsController < ApplicationController
 
   def set_labels
     people_ids = params[:people_ids]
-    label_ids = params[:label_ids]
-    remove_label_ids = params[:remove_label_ids]
-    unchanged_label_ids = params[:unchanged_label_ids]
+    label_ids = params[:label_ids] || ''
+    remove_label_ids = params[:remove_label_ids] || ''
+    unchanged_label_ids = params[:unchanged_label_ids] || ''
     @from_all_contacts = params[:from_all_contacts]
+    remove_label_ids = remove_label_ids.split(',') - unchanged_label_ids.split(',')
+    label_ids = label_ids.split(',')
 
     @selected_people = Person.where(id: people_ids.split(','))
     @selected_people.each do |person|
-      if label_ids.present?
-        label_ids = label_ids.split(',')
-        label_ids.each do |label_id|
-          label = person.organizational_labels.where(label_id: label_id.to_i, organization_id: current_organization.id).first_or_create
-          label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
-        end
+      label_ids.each do |label_id|
+        label = person.organizational_labels.where(label_id: label_id.to_i, organization_id: current_organization.id).first_or_create
+        label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
       end
 
-      remove_label_ids = remove_label_ids.present? ? remove_label_ids.split(',') : []
-      unchanged_label_ids = unchanged_label_ids.present? ? unchanged_label_ids.split(',') : []
-
-      remove_labels = person.organizational_labels_for_org(current_organization).where("label_id IN (?)", remove_label_ids - unchanged_label_ids)
-
+      remove_labels = person.organizational_labels_for_org(current_organization).where(label_id: remove_label_ids)
       # This might be resolve the MySQL deadlock issue
       remove_labels.each do |remove_label|
         remove_label.update_attribute(:removed_date, Time.now) if remove_label.removed_date.nil?
-      end if remove_labels.present?
+      end
     end
 
     if @from_all_contacts == "0"
