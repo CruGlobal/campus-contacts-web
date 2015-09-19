@@ -162,11 +162,15 @@ class SentSms < ActiveRecord::Base
             body: message.strip,
             status_callback: "#{protocol}://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
           )
-          self.reports = twilio_request
-          self.status = twilio_request.status if twilio_request.status.present?
-          self.twilio_sid = twilio_request.sid if twilio_request.sid.present?
-          self.twilio_uri = twilio_request.uri if twilio_request.uri.present?
-          self.save
+          if twilio_request.present? && twilio_request.sid.present?
+            self.twilio_sid = twilio_request.sid
+            self.reports = twilio_request
+            self.status = twilio_request.status if twilio_request.status.present?
+            self.twilio_uri = twilio_request.uri if twilio_request.uri.present?
+            self.save
+          else
+            raise Twilio::REST::RequestError
+          end
         rescue Twilio::REST::RequestError => e
           msg = e.message
           if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
@@ -174,7 +178,7 @@ class SentSms < ActiveRecord::Base
           else
             Airbrake.notify(e)
           end
-          self.update_attributes(reports: msg, status: "failed")
+          self.update_attributes(reports: msg.present? ? msg : twilio_request, status: "failed")
           result = false
         end
       end
@@ -201,7 +205,7 @@ class SentSms < ActiveRecord::Base
       end
     end
     raise "Number couldn't be found: #{recipient}" unless @phone_number
-    
+
     @phone_number
   end
 
