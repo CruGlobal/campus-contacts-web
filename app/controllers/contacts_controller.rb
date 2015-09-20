@@ -13,13 +13,13 @@ class ContactsController < ApplicationController
   end
 
   def set_labels
-    people_ids = params[:people_ids]
+    people_ids = (params[:people_ids] || '').split(',')
     label_ids = params[:label_ids] || ''
+    label_ids = label_ids.split(',')
     remove_label_ids = params[:remove_label_ids] || ''
     unchanged_label_ids = params[:unchanged_label_ids] || ''
-    @from_all_contacts = params[:from_all_contacts]
     remove_label_ids = remove_label_ids.split(',') - unchanged_label_ids.split(',')
-    label_ids = label_ids.split(',')
+    @from_all_contacts = params[:from_all_contacts]
 
     OrganizationalLabel.where(label_id: label_ids, organization: current_organization, person_id: people_ids).where.not(removed_date: nil)
         .update_all(removed_date: nil)
@@ -43,7 +43,7 @@ class ContactsController < ApplicationController
            created_at, updated_at, start_date) VALUES #{new_org_labels.join(', ')}")
     end
 
-    @selected_people = Person.where(id: people_ids.split(','))
+    @selected_people = Person.where(id: people_ids)
     @selected_people.each do |person|
       remove_labels = person.organizational_labels_for_org(current_organization).where(label_id: remove_label_ids)
       # This might be resolve the MySQL deadlock issue

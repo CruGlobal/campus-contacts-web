@@ -1409,8 +1409,8 @@ class ContactsControllerTest < ActionController::TestCase
 
     should 'add labels' do
       xhr :post, :set_labels, {
-                   people_ids: [@person1.id, @person2.id, @person3.id],
-                   label_ids: "#{@label1.id},#{@label2.id}", remove_label_ids: '', unchanged_label_ids: ''}
+                   people_ids: [@person1.id, @person2.id, @person3.id].join(','),
+                   label_ids: [@label1.id,@label2.id].join(','), remove_label_ids: '', unchanged_label_ids: ''}
       assert_response :success
       assert_equal 2, @person1.labels.count
       assert_equal @person1.organizational_labels.find_by(label_id: @label1.id).added_by_id, @user.person.id
@@ -1421,14 +1421,14 @@ class ContactsControllerTest < ActionController::TestCase
     should 'not duplicate labels' do
       FactoryGirl.create(:organizational_label, organization: @org, person: @person3, label: @label1, removed_date: 2.days.ago)
       xhr :post, :set_labels, {
-                   people_ids: [@person3.id],
-                   label_ids: "#{@label1.id}", remove_label_ids: '', unchanged_label_ids: ''}
+                   people_ids: @person3.id.to_s,
+                   label_ids: @label1.id.to_s, remove_label_ids: '', unchanged_label_ids: ''}
       assert_equal 3, OrganizationalLabel.count
     end
 
     should 'remove labels' do
       xhr :post, :set_labels, {
-                   people_ids: [@person1.id, @person2.id, @person3.id], label_ids: '',
+                   people_ids: [@person1.id, @person2.id, @person3.id].join(','), label_ids: '',
                    remove_label_ids: @label1.id, unchanged_label_ids: ''}
       assert_response :success
       assert_empty @person1.labels
