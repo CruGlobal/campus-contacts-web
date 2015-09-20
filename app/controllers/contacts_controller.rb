@@ -21,13 +21,30 @@ class ContactsController < ApplicationController
     remove_label_ids = remove_label_ids.split(',') - unchanged_label_ids.split(',')
     label_ids = label_ids.split(',')
 
+    OrganizationalLabel.where(label_id: label_ids, organization: current_organization, person_id: people_ids).where.not(removed_date: nil)
+        .update_all(removed_date: nil)
+    OrganizationalLabel.where(label_id: label_ids, organization: current_organization, person_id: people_ids, added_by_id: nil)
+        .update_all(added_by_id: current_person.id)
+
+    new_org_labels = []
+    label_ids.each do |label_id|
+      existing_ids = OrganizationalLabel.where(label_id: label_id, organization: current_organization, person_id: people_ids)
+                         .pluck(:person_id).map(&:to_s)
+      (people_ids - existing_ids).each do |person_id|
+        new_org_labels << "(#{current_organization.id}, #{label_id}, #{person_id}, #{current_person.id}, \
+                           '#{DateTime.now.to_s(:db)}', '#{DateTime.now.to_s(:db)}', '#{Date.today}')"
+      end
+    end
+
+    if new_org_labels.any?
+      # lets do a mass insert, because doing 1000 individual inserts is super slow
+      OrganizationalLabel.connection.execute(
+          "INSERT INTO organizational_labels (organization_id, label_id, person_id, added_by_id, \
+           created_at, updated_at, start_date) VALUES #{new_org_labels.join(', ')}")
+    end
+
     @selected_people = Person.where(id: people_ids.split(','))
     @selected_people.each do |person|
-      label_ids.each do |label_id|
-        label = person.organizational_labels.where(label_id: label_id.to_i, organization_id: current_organization.id).first_or_create
-        label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
-      end
-
       remove_labels = person.organizational_labels_for_org(current_organization).where(label_id: remove_label_ids)
       # This might be resolve the MySQL deadlock issue
       remove_labels.each do |remove_label|
@@ -1105,7 +1122,12 @@ class ContactsController < ApplicationController
     end
 
     def fetch_mine
-      @all_people = Person.references(:assigned_tos, :organizational_permissions).includes(:assigned_tos, :organizational_permissions).where('contact_assignments.organization_id' => current_organization.id, 'organizational_permissions.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_permissions.permission_id' => Permission::NO_PERMISSIONS_ID).uniq
+      @all_people = Person.references(:assigned_tos, :organizational_permissions)
+                        .includes(:assigned_tos, :organizational_permissions)
+                        .where('contact_assignments.organization_id': current_organization.id,
+                               'organizational_permissions.organization_id': current_organization.id,
+                               'contact_assignments.assigned_to_id': current_person.id,
+                               'organizational_permissions.permission_id': Permission::NO_PERMISSIONS_ID).uniq
     end
 
     def get_person

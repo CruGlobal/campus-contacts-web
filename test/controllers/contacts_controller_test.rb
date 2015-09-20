@@ -1389,19 +1389,19 @@ class ContactsControllerTest < ActionController::TestCase
 
   context 'set_labels' do
     setup do
-      @user, org = admin_user_login_with_org
+      @user, @org = admin_user_login_with_org
       @person1 = FactoryGirl.create(:person)
-      @label1 = FactoryGirl.create(:label, organization: org, name: 'label')
-      @label2 = FactoryGirl.create(:label, organization: org, name: 'label2')
-      @permission1 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person1)
-      FactoryGirl.create(:organizational_label, organization: org, person: @person1, label: @label1)
+      @label1 = FactoryGirl.create(:label, organization: @org, name: 'label')
+      @label2 = FactoryGirl.create(:label, organization: @org, name: 'label2')
+      @permission1 = FactoryGirl.create(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person1)
+      FactoryGirl.create(:organizational_label, organization: @org, person: @person1, label: @label1)
 
       @person2 = FactoryGirl.create(:person)
-      @permission2 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person2)
-      FactoryGirl.create(:organizational_label, organization: org, person: @person2, label: @label1)
+      @permission2 = FactoryGirl.create(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person2)
+      FactoryGirl.create(:organizational_label, organization: @org, person: @person2, label: @label1)
 
       @person3 = FactoryGirl.create(:person)
-      @permission3 = FactoryGirl.create(:organizational_permission, organization: org, permission: Permission.no_permissions, person: @person3)
+      @permission3 = FactoryGirl.create(:organizational_permission, organization: @org, permission: Permission.no_permissions, person: @person3)
 
       # annoying code that has to be added for every request
       ENV['PREDEFINED_SURVEY'] = FactoryGirl.create(:survey, organization: @org).id.to_s
@@ -1412,8 +1412,18 @@ class ContactsControllerTest < ActionController::TestCase
                    people_ids: [@person1.id, @person2.id, @person3.id],
                    label_ids: "#{@label1.id},#{@label2.id}", remove_label_ids: '', unchanged_label_ids: ''}
       assert_response :success
-      assert_equal @person1.labels.count, 2
-      assert_equal @person3.labels.count, 2
+      assert_equal 2, @person1.labels.count
+      assert_equal @person1.organizational_labels.find_by(label_id: @label1.id).added_by_id, @user.person.id
+      assert_equal @person1.organizational_labels.find_by(label_id: @label2.id).added_by_id, @user.person.id
+      assert_equal 2, @person3.labels.count
+    end
+
+    should 'not duplicate labels' do
+      FactoryGirl.create(:organizational_label, organization: @org, person: @person3, label: @label1, removed_date: 2.days.ago)
+      xhr :post, :set_labels, {
+                   people_ids: [@person3.id],
+                   label_ids: "#{@label1.id}", remove_label_ids: '', unchanged_label_ids: ''}
+      assert_equal 3, OrganizationalLabel.count
     end
 
     should 'remove labels' do
