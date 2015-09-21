@@ -50,12 +50,15 @@ class SentSms < ActiveRecord::Base
   end
 
   def to_twilio
+    protocol = Rails.env.production? ? 'https' : 'http'
+    url = "#{protocol}://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
+
     xml = <<-END
       <Response>
     END
     SentSms.smart_split(message, separator).each do |message|
       xml += <<-END
-        <Sms>#{CGI::escapeHTML(message.strip)}</Sms>
+        <Message statusCallback="#{url}">#{CGI::escapeHTML(message.strip)}</Message>
       END
     end
     xml += <<-END
