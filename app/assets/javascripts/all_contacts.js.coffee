@@ -104,7 +104,8 @@ $ ->
 
     labels_processed = 0
     people_sent = 0
-    per_loop = 250
+    per_loop = 400
+    add_labels_error = false
     while people_sent < arr_people_ids.length
       $.ajax(
         type: "POST"
@@ -115,13 +116,17 @@ $ ->
           remove_label_ids: unchecked_label_ids
           unchanged_label_ids: unchanged_label_ids
           from_all_contacts: from_all_contacts
-      ).done (data) ->
+      ).success (data) ->
         labels_processed += per_loop
+        return if add_labels_error
         if arr_people_ids.length <= labels_processed
           $.fn.filterLoader("force")
           $.fn.listCheckboxes()
         else
           $.fn.filterLoader("show", "Labels: #{labels_processed} out of #{arr_people_ids.length} contacts were updated.")
+      .error (xhr, textStatus, error) ->
+        add_labels_error = true
+        $.fn.filterLoader("show", "Error saving contact, please refresh the page and try again.")
       people_sent += per_loop
 
   $('#labels_add_new_button').live 'click', (e)->

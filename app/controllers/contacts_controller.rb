@@ -43,13 +43,10 @@ class ContactsController < ApplicationController
            created_at, updated_at, start_date) VALUES #{new_org_labels.join(', ')}")
     end
 
-    @selected_people = Person.where(id: people_ids)
-    @selected_people.each do |person|
-      remove_labels = person.organizational_labels_for_org(current_organization).where(label_id: remove_label_ids)
-      # This might be resolve the MySQL deadlock issue
-      remove_labels.each do |remove_label|
-        remove_label.update_attribute(:removed_date, Time.now) if remove_label.removed_date.nil?
-      end
+    Retryable.retryable times: 5 do
+      OrganizationalLabel.where(label_id: remove_label_ids, organization: current_organization,
+                                person_id: people_ids, removed_date: nil)
+          .update_all(removed_date: Time.now)
     end
 
     if @from_all_contacts == "0"
