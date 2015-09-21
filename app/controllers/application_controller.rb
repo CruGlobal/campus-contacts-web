@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
 
   def raise_or_hoptoad(e, options = {})
     if Rails.env.production?
-      Airbrake.notify(e, options)
+      Rollbar.error(e, options)
     else
       raise e
     end

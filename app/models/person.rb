@@ -1254,7 +1254,7 @@ class Person < ActiveRecord::Base
       end
       new_person.update_from_facebook(data, authentication, response)
     rescue FbGraph2::Exception => e
-      Airbrake.notify(
+      Rollbar.error(
         :error_class   => "FbGraph2::Exception",
         :error_message => "FBGraph2::Unauthorized: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}
@@ -1288,7 +1288,7 @@ class Person < ActiveRecord::Base
       get_education_history(authentication, response)
 
     rescue FbGraph2::Exception => e
-      Airbrake.notify(
+      Rollbar.error(
         :error_class   => "FbGraph2::Exception",
         :error_message => "FbGraph2::Exception: #{e.message}",
         :parameters    => {data: data, authentication: authentication, response: response}
@@ -1298,7 +1298,7 @@ class Person < ActiveRecord::Base
     begin
       save(validate: false)
     rescue => e
-      Airbrake.notify(
+      Rollbar.error(
         :error_class   => e.class,
         :error_message => e.message,
         :parameters    => {data: data, authentication: authentication, response: response}
@@ -1410,7 +1410,7 @@ class Person < ActiveRecord::Base
       Friend.unfollow(self, uid)
     end
   rescue => e
-    Airbrake.notify_or_ignore(e)
+    Rollbar.error(e)
     return false
   end
 
