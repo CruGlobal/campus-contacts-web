@@ -104,7 +104,7 @@ $ ->
 
     labels_processed = 0
     people_sent = 0
-    per_loop = 500
+    per_loop = 250
     while people_sent < arr_people_ids.length
       $.ajax(
         type: "POST"
@@ -116,7 +116,7 @@ $ ->
           unchanged_label_ids: unchanged_label_ids
           from_all_contacts: from_all_contacts
       ).done (data) ->
-        labels_processed += 500
+        labels_processed += per_loop
         if arr_people_ids.length <= labels_processed
           $.fn.filterLoader("force")
           $.fn.listCheckboxes()
