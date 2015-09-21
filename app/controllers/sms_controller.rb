@@ -240,7 +240,7 @@ class SmsController < ApplicationController
     rescue => e
       puts e.backtrace
       # Don't blow up on bad saves
-      Airbrake.notify(e)
+      Rollbar.error(e)
     end
   end
 

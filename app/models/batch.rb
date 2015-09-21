@@ -24,7 +24,7 @@ class Batch # < ActiveRecord::Base
                   formated_transferred_contacts << transfer_log
                 end
               rescue => e
-                Rails.env.production? ? Airbrake.notify(e) : (raise e)
+                Rails.env.production? ? Rollbar.error(e) : (raise e)
               end
             end
             intro = I18n.t('batch.person_transfer_message', org_name: organization.name, contacts_count: formated_transferred_contacts.size)
@@ -35,7 +35,7 @@ class Batch # < ActiveRecord::Base
           transferred_contacts.update_all(skipped: true)
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           if Rails.env.production?
-            Airbrake.notify(
+            Rollbar.error(
               :error_class   => "Batch::PersonTransferNotify",
               :error_message => "Batch::PersonTransferNotify: #{error}",
               :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
@@ -70,7 +70,7 @@ class Batch # < ActiveRecord::Base
                 end
               rescue => e
                 # something wrong with that person (probably missing)
-                Rails.env.production? ? Airbrake.notify(e) : (raise e)
+                Rails.env.production? ? Rollbar.error(e) : (raise e)
               end
             end
 
@@ -81,7 +81,7 @@ class Batch # < ActiveRecord::Base
         else
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           if Rails.env.production?
-            Airbrake.notify(
+            Rollbar.error(
               :error_class   => "Batch::NewPersonNotify",
               :error_message => "Batch::NewPersonNotify: #{error}",
               :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
