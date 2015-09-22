@@ -50,20 +50,10 @@ class SentSms < ActiveRecord::Base
   end
 
   def to_twilio
-    protocol = Rails.env.production? ? 'https' : 'http'
-    url = "#{protocol}://#{ENV.fetch('APP_DOMAIN')}/callbacks/twilio_status"
-
-    xml = <<-END
-      <Response>
-    END
-    SentSms.smart_split(message, separator).each do |message|
-      xml += <<-END
-        <Message statusCallback="#{url}">#{CGI::escapeHTML(message.strip)}</Message>
-      END
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message "#{CGI::escapeHTML(message.strip)}"
     end
-    xml += <<-END
-      </Response>
-    END
+    twiml.text
   end
 
   def to_bulksms(url, login, password)
