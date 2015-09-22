@@ -14,39 +14,14 @@ class ContactsController < ApplicationController
 
   def set_labels
     people_ids = (params[:people_ids] || '').split(',')
-    label_ids = params[:label_ids] || ''
-    label_ids = label_ids.split(',')
+    label_ids = (params[:label_ids] || '').split(',')
     remove_label_ids = params[:remove_label_ids] || ''
     unchanged_label_ids = params[:unchanged_label_ids] || ''
     remove_label_ids = remove_label_ids.split(',') - unchanged_label_ids.split(',')
     @from_all_contacts = params[:from_all_contacts]
 
-    OrganizationalLabel.where(label_id: label_ids, organization: current_organization, person_id: people_ids).where.not(removed_date: nil)
-        .update_all(removed_date: nil)
-    OrganizationalLabel.where(label_id: label_ids, organization: current_organization, person_id: people_ids, added_by_id: nil)
-        .update_all(added_by_id: current_person.id)
-
-    new_org_labels = []
-    label_ids.each do |label_id|
-      existing_ids = OrganizationalLabel.where(label_id: label_id, organization: current_organization, person_id: people_ids)
-                         .pluck(:person_id).map(&:to_s)
-      (people_ids - existing_ids).each do |person_id|
-        new_org_labels << "(#{current_organization.id}, #{label_id}, #{person_id}, #{current_person.id}, \
-                           '#{DateTime.now.to_s(:db)}', '#{DateTime.now.to_s(:db)}', '#{Date.today}')"
-      end
-    end
-
-    if new_org_labels.any?
-      # lets do a mass insert, because doing 1000 individual inserts is super slow
-      OrganizationalLabel.connection.execute(
-          "INSERT INTO organizational_labels (organization_id, label_id, person_id, added_by_id, \
-           created_at, updated_at, start_date) VALUES #{new_org_labels.join(', ')}")
-    end
-
     Retryable.retryable times: 5 do
-      OrganizationalLabel.where(label_id: remove_label_ids, organization: current_organization,
-                                person_id: people_ids, removed_date: nil)
-          .update_all(removed_date: Time.now)
+      OrganizationalLabel.mass_update(label_ids, remove_label_ids, people_ids, current_organization, current_person)
     end
 
     if @from_all_contacts == "0"
