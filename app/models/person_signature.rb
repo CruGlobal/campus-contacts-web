@@ -31,8 +31,12 @@ class PersonSignature < ActiveRecord::Base
         return all.order("people.last_name #{sort_query.include?('asc') ? "asc" : "desc"}")
       elsif sort_query.include?('organization')
         return all.order("organizations.name #{sort_query.include?('asc') ? "asc" : "desc"}")
-      elsif sort_query.include?('status')
-        return all.order("ISNULL(signatures.status), signatures.status #{sort_query.include?('asc') ? "asc" : "desc"}")
+      elsif sort_query.include?('code_of_conduct_status')
+        return all.joins("LEFT JOIN signatures ccs ON ccs.person_signature_id = person_signatures.id AND ccs.kind = 'code_of_conduct'")
+          .order("ISNULL(ccs.status), ccs.status #{sort_query.include?('asc') ? "asc" : "desc"}")
+      elsif sort_query.include?('statement_of_faith_status')
+        return all.joins("LEFT JOIN signatures sfs ON sfs.person_signature_id = person_signatures.id AND sfs.kind = 'statement_of_faith'")
+          .order("ISNULL(sfs.status), sfs.status #{sort_query.include?('asc') ? "asc" : "desc"}")
       elsif sort_query.include?('date_signed_at')
         return all.order("ISNULL(signatures.updated_at), MAX(signatures.updated_at) #{sort_query.include?('asc') ? "asc" : "desc"}")
       else
@@ -45,7 +49,7 @@ class PersonSignature < ActiveRecord::Base
 
   scope :get_by_multiple_orgs, -> (org_ids){
     joins("INNER JOIN signatures ON signatures.person_signature_id = person_signatures.id")
-    .where("signatures.status = '#{Signature::SIGNATURE_STATUS_ACCEPTED}' AND person_signatures.organization_id IN (?)", org_ids)
+    .where("person_signatures.organization_id IN (?)", org_ids)
     .group("signatures.person_signature_id")
   }
 

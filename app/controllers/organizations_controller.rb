@@ -252,9 +252,8 @@ class OrganizationsController < ApplicationController
   end
 
   def signatures
-    @movements = current_person.all_organization_and_children
-    @person_signatures = PersonSignature.get_by_multiple_orgs(@movements.collect(&:id))
-    @person_signatures = @person_signatures.filter(params[:search_any], params[:movements])
+    @person_signatures = PersonSignature.get_by_multiple_orgs([current_organization.id.to_s])
+    @person_signatures = @person_signatures.filter(params[:search_any])
     @person_signatures = @person_signatures.sort(params[:q])
 
     if params[:format].present?
