@@ -17,7 +17,6 @@ class SmsController < ApplicationController
     end
     # Process incoming text
     message = sms_params[:message]
-    twilio_sid = sms_params[:twilio_sid]
 
     @sms_session = SmsSession.where(sms_params.slice(:phone_number)).order('updated_at desc')
     # See if this is a sticky session ( prior sms in the past XX minutes )
@@ -46,7 +45,7 @@ class SmsController < ApplicationController
       @msg = I18n.t('sms.sms_unsubscribed_without_org')
       @msg = I18n.t('sms.sms_unsubscribed_with_org', org: @organization) if @organization.present?
 
-      @sent_sms = send_message(@msg, sms_params[:phone_number], nil, nil, twilio_sid)
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when 'on'
       phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
@@ -63,11 +62,11 @@ class SmsController < ApplicationController
       @msg = I18n.t('sms.sms_subscribed_without_org')
       @msg = I18n.t('sms.sms_subscribed_with_org', org: @organization) if @organization.present?
 
-      @sent_sms = send_message(@msg, sms_params[:phone_number], nil, nil, twilio_sid)
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when 'help'
       @msg = I18n.t('sms.sms_help_guide')
-      @sent_sms = send_message(@msg, sms_params[:phone_number], nil, nil, twilio_sid)
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
       render xml: @sent_sms.to_twilio and return
     when ''
       render xml: blank_response and return
@@ -87,7 +86,7 @@ class SmsController < ApplicationController
           save_survey_question(keyword.survey, @person, message)
           @person.reload
         end
-        @msg = send_next_survey_question(keyword.survey, @person, @sms_session.phone_number, twilio_sid)
+        @msg = send_next_survey_question(keyword.survey, @person, @sms_session.phone_number)
         unless @msg
           # survey is done. send final message
           @msg = survey.post_survey_message.present? ? survey.post_survey_message : t('contacts.thanks.message')
@@ -101,7 +100,7 @@ class SmsController < ApplicationController
       else
         @msg = I18n.t('sms.keyword_inactive')
       end
-      @sent_sms = send_message(@msg, @received.phone_number, nil, nil, twilio_sid)
+      @sent_sms = send_message(@msg, @received.phone_number)
 
     else
       # We're starting a new sms session
@@ -125,7 +124,7 @@ class SmsController < ApplicationController
         @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "https://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
         @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
-      @sent_sms = send_message(@msg, sms_params[:phone_number], nil, nil, twilio_sid)
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
     end
     #render text: @msg.to_s + "\n"
     render xml: @sent_sms.to_twilio
@@ -155,12 +154,11 @@ class SmsController < ApplicationController
         @sms_params[:received_at] = DateTime.strptime(params[:timestamp], '%m/%d/%Y %H:%M:%S')
         @sms_params[:message] = Emojimmy.emoji_to_token(params[:message].strip.gsub(/\n/, ' ')).mb_chars.to_s
       end
-      @sms_params[:twilio_sid] = params['MessageSid']
     end
     @sms_params
   end
 
-  def send_next_survey_question(survey, person, phone_number, twilio_sid = nil)
+  def send_next_survey_question(survey, person, phone_number)
     question = next_question(survey, person)
     if question
       #finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
@@ -188,7 +186,7 @@ class SmsController < ApplicationController
         question_no = get_question_no(survey, person)
         msg = "#{question_no} #{msg}"
       end
-      @sent_sms = send_message(msg, phone_number, separator, question.id, twilio_sid)
+      @sent_sms = send_message(msg, phone_number, separator, question.id)
     end
     msg
   end
@@ -286,8 +284,8 @@ class SmsController < ApplicationController
     end
   end
 
-  def send_message(msg, phone_number, separator = nil, question_id = nil, twilio_sid = nil)
-    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id, twilio_sid: twilio_sid)
+  def send_message(msg, phone_number, separator = nil, question_id = nil)
+    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id, status: "sent")
   end
 
   def blank_response
