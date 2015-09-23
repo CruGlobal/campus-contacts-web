@@ -474,7 +474,7 @@ class PeopleController < ApplicationController
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
-      url = URI.escape("https://graph.facebook.com/#{id}")
+      url = URI.escape("https://graph.facebook.com/#{id}?access_token=#{session[:fb_token]}")
 
       begin
         @json = JSON.parse(RestClient.get(url, { accept: :json}))
@@ -546,11 +546,14 @@ class PeopleController < ApplicationController
 
 
   def get_fb_user_id_from_url(string)
-    # e.g. https://graph.facebook.com/nmfdelacruz)
+    # e.g. https://graph.facebook.com/nmfdelacruz
+    # https://www.facebook.com/joshstarcher?fref=ts
+    # https://www.facebook.com/profile.php?id=1601070111&fref=ts
     if string.include?("id=")
-      string.split('id=').last
+      Rack::Utils.parse_query(URI(string).query)['id']
     else
-      string.split('/').last
+      # Facebook doesn't currently allow for searching by user_name, so I don't know if this is necessary
+      string.split('/').last.split('?').first
     end
   end
 

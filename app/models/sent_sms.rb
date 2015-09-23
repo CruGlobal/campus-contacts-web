@@ -50,17 +50,10 @@ class SentSms < ActiveRecord::Base
   end
 
   def to_twilio
-    xml = <<-END
-      <Response>
-    END
-    SentSms.smart_split(message, separator).each do |message|
-      xml += <<-END
-        <Sms>#{CGI::escapeHTML(message.strip)}</Sms>
-      END
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message "#{CGI::escapeHTML(message.strip)}"
     end
-    xml += <<-END
-      </Response>
-    END
+    twiml.text
   end
 
   def to_bulksms(url, login, password)
@@ -176,7 +169,7 @@ class SentSms < ActiveRecord::Base
           if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
             phone_number.not_mobile!
           else
-            Airbrake.notify(e)
+            Rollbar.error(e)
           end
           self.update_attributes(reports: msg.present? ? msg : twilio_request, status: "failed")
           result = false

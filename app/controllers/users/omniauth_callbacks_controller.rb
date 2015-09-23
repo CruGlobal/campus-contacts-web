@@ -12,7 +12,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       flash[:error] = t('sessions.new.login_cannot_create_a_user')
       redirect_to '/users/sign_in'
     rescue FacebookDuplicateEmailError => e
-      Airbrake.notify(e,
+      Rollbar.error(e,
         :parameters => env["omniauth.auth"]
       )
       redirect_to '/welcome/duplicate'
@@ -128,7 +128,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     else
       # There was a problem logging this person in
       # This usually means the data coming back from FB didn't include an email address
-      Airbrake.notify(FailedFacebookCreateError.new,
+      Rollbar.error(FailedFacebookCreateError.new,
         :error_class => "FacebookLoginError",
         :error_messsage => "Facebook Login Error",
         :parameters => omniauth

@@ -238,7 +238,7 @@ class SmsController < ApplicationController
     rescue => e
       puts e.backtrace
       # Don't blow up on bad saves
-      Airbrake.notify(e)
+      Rollbar.error(e)
     end
   end
 
@@ -285,11 +285,10 @@ class SmsController < ApplicationController
   end
 
   def send_message(msg, phone_number, separator = nil, question_id = nil)
-    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id)
+    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id, status: "sent")
   end
 
   def blank_response
     '<Response></Response>'
   end
-
 end

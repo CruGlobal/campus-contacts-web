@@ -10,12 +10,8 @@ class CallbacksController < ApplicationController
       raise "Error: cannot find message status parameter from Twilio."
     else
       sent_sms = SentSms.find_by(twilio_sid: twilio_sid)
-      if sent_sms.present?
-        sent_sms.update_attributes(status: status)
-        render nothing: true
-      else
-        raise "Error: cannot locate Twilio's message id in the database."
-      end
+      sent_sms.update_attributes(status: status) if sent_sms.present?
+      render nothing: true
     end
   end
 end
