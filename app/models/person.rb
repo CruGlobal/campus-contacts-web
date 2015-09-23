@@ -100,6 +100,8 @@ class Person < ActiveRecord::Base
 
   has_one :person_photo
   has_many :person_signatures
+  has_many :signed_signatures, ->{where("signatures.status = ?", Signature::SIGNATURE_STATUS_ACCEPTED)},
+    through: :person_signatures, source: :signatures
 
   has_many :exports
 
@@ -421,29 +423,22 @@ class Person < ActiveRecord::Base
     self.save
   end
 
-  def code_of_conduct_signed?(org, status = nil)
-    person_signature = self.person_signatures.find_by(organization_id: org.id)
+  def has_org_signature_of_kind?(org, kind, status = nil)
+    person_signature = self.person_signature_this_range(org)
     return false unless person_signature.present?
     if status.present?
-      person_signature.signatures.find_by(kind: Signature::SIGNATURE_CODE_OF_CONDUCT, status: status).present?
+      person_signature.signatures.find_by(kind: kind, status: status).present?
     else
-      person_signature.code_of_conduct_signed?
+      person_signature.has_signed_signature?(kind)
     end
   end
 
-  def statement_of_faith_signed?(org, status = nil)
-    person_signature = self.person_signatures.find_by(organization_id: org.id)
-    return false unless person_signature.present?
-    if status.present?
-      person_signature.signatures.find_by(kind: Signature::SIGNATURE_STATEMENT_OF_FAITH, status: status).present?
-    else
-      person_signature.statement_of_faith_signed?
+  def sign_a_signature(org, kind, status)
+    person_signature = self.person_signature_this_range(org)
+    unless person_signature.present?
+      person_signature = self.person_signatures.create(organization_id: org.id)
     end
-  end
 
-  def sign_a_signature(org, kind = nil, status = nil)
-    person_signature = self.person_signatures.find_or_create_by(organization_id: org.id)
-    return false unless person_signature.present?
     case kind
     when Signature::SIGNATURE_CODE_OF_CONDUCT
       signature = person_signature.signatures.find_or_create_by(kind: Signature::SIGNATURE_CODE_OF_CONDUCT)
@@ -454,18 +449,19 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def signed_signatures(org)
-    person_signature = self.person_signatures.find_by(organization_id: org.id)
+  def accepted_all_signatures?(org)
+    person_signature = self.person_signature_this_range(org)
     return false unless person_signature.present?
-    person_signature.signatures.where(status: Signature::SIGNATURE_STATUS_ACCEPTED)
+    return false if has_org_signature_of_kind?(org, Signature::SIGNATURE_CODE_OF_CONDUCT, Signature::SIGNATURE_STATUS_DECLINED)
+    return false if has_org_signature_of_kind?(org, Signature::SIGNATURE_STATEMENT_OF_FAITH, Signature::SIGNATURE_STATUS_DECLINED)
+    true
   end
 
-  def accpeted_all_signatures?(org)
-    person_signature = self.person_signatures.find_by(organization_id: org.id)
-    return false unless person_signature.present?
-    return false if code_of_conduct_signed?(org, Signature::SIGNATURE_STATUS_DECLINED)
-    return false if statement_of_faith_signed?(org, Signature::SIGNATURE_STATUS_DECLINED)
-    true
+  def person_signature_this_range(org)
+    # Get range August to July and Yearly
+    range_start_date = "#{Date.today.year}-08-01".to_date
+    range_end_date = range_start_date + 365.days
+    person_signatures.where(organization_id: org.id, created_at: range_start_date..range_end_date).first
   end
 
   def cru_status(org)

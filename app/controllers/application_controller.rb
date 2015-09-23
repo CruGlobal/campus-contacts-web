@@ -81,33 +81,24 @@ class ApplicationController < ActionController::Base
   end
 
   def check_signature
-    if user_signed_in?
-      if current_organization.present?
-        if current_organization.is_power_to_change?
-          if current_person.is_admin_for_org?(current_organization)
-            if !current_person.code_of_conduct_signed?(current_organization)
-              redirect_to code_of_conduct_signatures_path
-            elsif !current_person.statement_of_faith_signed?(current_organization)
-              redirect_to statement_of_faith_signatures_path
-            end
-          end
-        end
-      end
+    return false unless user_signed_in?
+    return false unless current_organization.present?
+    return false unless current_organization.is_power_to_change?
+    return false unless current_person.is_admin_for_org?(current_organization)
+    if !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_CODE_OF_CONDUCT)
+      redirect_to code_of_conduct_signatures_path
+    elsif !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_STATEMENT_OF_FAITH)
+      redirect_to statement_of_faith_signatures_path
     end
   end
 
   def check_all_signatures
-    if user_signed_in?
-      if current_organization.present?
-        if current_organization.is_power_to_change?
-          if current_person.is_admin_for_org?(current_organization)
-            if !current_person.accpeted_all_signatures?(current_organization)
-              redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
-            end
-          end
-        end
-      end
-    end
+    return false unless user_signed_in?
+    return false unless current_organization.present?
+    return false unless current_organization.is_power_to_change?
+    return false unless current_person.is_admin_for_org?(current_organization)
+    return false if current_person.accepted_all_signatures?(current_organization)
+    redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
   end
 
   protected

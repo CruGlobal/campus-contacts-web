@@ -22,16 +22,17 @@ class SignaturesController < ApplicationController
 
   private
   def go_to_process
-    if !current_person.code_of_conduct_signed?(current_organization)
+    if !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_CODE_OF_CONDUCT)
       redirect_to code_of_conduct_signatures_path
-    elsif !current_person.statement_of_faith_signed?(current_organization)
+    elsif !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_STATEMENT_OF_FAITH)
       redirect_to statement_of_faith_signatures_path
     else
-      if current_person.accpeted_all_signatures?(current_organization)
-        redirect_to root_path, notice: I18n.t("signatures.signed_a_signature")
+      if current_person.accepted_all_signatures?(current_organization)
+        @msg = I18n.t("signatures.signed_a_signature")
       else
-        redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
+        @msg = I18n.t("signatures.declined_a_signature")
       end
+      redirect_to root_path, notice: @msg
     end
   end
 end

@@ -53,14 +53,8 @@ class PersonSignature < ActiveRecord::Base
     .group("signatures.person_signature_id")
   }
 
-  def code_of_conduct_signed?
-    signature = self.signatures.find_by(kind: Signature::SIGNATURE_CODE_OF_CONDUCT)
-    return false unless signature.present?
-    signature.status.present?
-  end
-
-  def statement_of_faith_signed?
-    signature = self.signatures.find_by(kind: Signature::SIGNATURE_STATEMENT_OF_FAITH)
+  def has_signed_signature?(kind)
+    signature = self.signatures.find_by(kind: kind)
     return false unless signature.present?
     signature.status.present?
   end
