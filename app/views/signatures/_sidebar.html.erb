@@ -1,0 +1,6 @@
+<div id="ac_sidebar">
+  <div id="upper_sidebar_lists">
+    <%= link_to raw("<button class='red_accent full_width_button'>#{t('signatures.accept')}</button>"), action_for_signature_signatures_path(kind: kind, status: Signature::SIGNATURE_STATUS_ACCEPTED), method: :post %>
+    <%= link_to raw("<button class='action_gray full_width_button'>#{t('signatures.decline')}</button>"), action_for_signature_signatures_path(kind: kind, status: Signature::SIGNATURE_STATUS_DECLINED), method: :post %>
+  </div>
+</div>

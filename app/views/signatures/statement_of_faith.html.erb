@@ -1,0 +1,29 @@
+<% provide :sidebar do %>
+  <%= render 'signatures/sidebar', kind: Signature::SIGNATURE_STATEMENT_OF_FAITH %>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1><%= t('signatures.statement_of_faith.title')%></h1>
+</div>
+
+<div id="ac_contact_spread" class="signature_content">
+  <div>
+    <p><%== t('signatures.statement_of_faith.first_paragraph') %></p>
+    <p><%== t('signatures.statement_of_faith.second_paragraph') %></p>
+  </div>
+  <div class="items_left_and_right">
+    <div class="items_left">
+      <% (1..9).each do |i| %>
+        <p><span class="item_number"><%= i %>.</span><%== t("signatures.statement_of_faith.item#{i}_from_second_paragraph") %></p>
+      <% end %>
+    </div>
+    <div class="items_right">
+      <% (10..17).each do |i| %>
+        <p><span class="item_number"><%= i %>.</span><%== t("signatures.statement_of_faith.item#{i}_from_second_paragraph") %></p>
+      <% end %>
+    </div>
+  </div>
+  <div>
+    <p><%== t('signatures.statement_of_faith.third_paragraph') %></p>
+  </div>
+</div>

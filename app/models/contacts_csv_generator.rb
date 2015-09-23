@@ -37,4 +37,21 @@ class ContactsCsvGenerator
   def self.t(val)
     I18n.t(val)
   end
+
+  def self.export_signatures(person_signatures)
+    out = ""
+    CSV.generate(out) do |rows|
+      rows << [t("general.first_name"), t("general.last_name"), t("signatures.code_of_conduct.title"), t("signatures.statement_of_faith.title"), t("general.organization"), t("signatures.date_signed_at")]
+      person_signatures.includes(:person, :organization).each do |person_signature|
+        fname = person_signature.person.first_name
+        lname = person_signature.person.last_name
+        code_of_conduct_status = person_signature.signature_status(Signature::SIGNATURE_CODE_OF_CONDUCT).try(:humanize)
+        statement_of_faith_status = person_signature.signature_status(Signature::SIGNATURE_STATEMENT_OF_FAITH).try(:humanize)
+        org_name = person_signature.organization.name
+        date_signed = person_signature.date_signed_at.present? ? I18n.l(person_signature.date_signed_at, format: :date) : ""
+        rows << [fname, lname, code_of_conduct_status, statement_of_faith_status, org_name, date_signed]
+      end
+    end
+    out
+  end
 end
