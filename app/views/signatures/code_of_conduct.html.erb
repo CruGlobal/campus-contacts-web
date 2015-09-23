@@ -10,13 +10,9 @@
   <div>
     <p><%== t('signatures.code_of_conduct.first_paragraph') %></p>
     <ul>
-      <li><p><%== t('signatures.code_of_conduct.item1_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item2_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item3_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item4_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item5_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item6_from_first_paragraph') %></p></li>
-      <li><p><%== t('signatures.code_of_conduct.item7_from_first_paragraph') %></p></li>
+      <% (1..7).each do |i| %>
+        <li><p><%== t("signatures.code_of_conduct.item#{i}_from_first_paragraph") %></p></li>
+      <% end %>
     </ul>
     <p><%== t('signatures.code_of_conduct.second_paragraph') %></p>
   </div>

@@ -13,25 +13,14 @@
   </div>
   <div class="items_left_and_right">
     <div class="items_left">
-      <p><span class="item_number">1.</span><%== t('signatures.statement_of_faith.item1_from_second_paragraph') %></p>
-      <p><span class="item_number">2.</span><%== t('signatures.statement_of_faith.item2_from_second_paragraph') %></p>
-      <p><span class="item_number">3.</span><%== t('signatures.statement_of_faith.item3_from_second_paragraph') %></p>
-      <p><span class="item_number">4.</span><%== t('signatures.statement_of_faith.item4_from_second_paragraph') %></p>
-      <p><span class="item_number">5.</span><%== t('signatures.statement_of_faith.item5_from_second_paragraph') %></p>
-      <p><span class="item_number">6.</span><%== t('signatures.statement_of_faith.item6_from_second_paragraph') %></p>
-      <p><span class="item_number">7.</span><%== t('signatures.statement_of_faith.item7_from_second_paragraph') %></p>
-      <p><span class="item_number">8.</span><%== t('signatures.statement_of_faith.item8_from_second_paragraph') %></p>
-      <p><span class="item_number">9.</span><%== t('signatures.statement_of_faith.item9_from_second_paragraph') %></p>
+      <% (1..9).each do |i| %>
+        <p><span class="item_number"><%= i %>.</span><%== t("signatures.statement_of_faith.item#{i}_from_second_paragraph") %></p>
+      <% end %>
     </div>
     <div class="items_right">
-      <p><span class="item_number">10.</span><%== t('signatures.statement_of_faith.item10_from_second_paragraph') %></p>
-      <p><span class="item_number">11.</span><%== t('signatures.statement_of_faith.item11_from_second_paragraph') %></p>
-      <p><span class="item_number">12.</span><%== t('signatures.statement_of_faith.item12_from_second_paragraph') %></p>
-      <p><span class="item_number">13.</span><%== t('signatures.statement_of_faith.item13_from_second_paragraph') %></p>
-      <p><span class="item_number">14.</span><%== t('signatures.statement_of_faith.item14_from_second_paragraph') %></p>
-      <p><span class="item_number">15.</span><%== t('signatures.statement_of_faith.item15_from_second_paragraph') %></p>
-      <p><span class="item_number">16.</span><%== t('signatures.statement_of_faith.item16_from_second_paragraph') %></p>
-      <p><span class="item_number">17.</span><%== t('signatures.statement_of_faith.item17_from_second_paragraph') %></p>
+      <% (10..17).each do |i| %>
+        <p><span class="item_number"><%= i %>.</span><%== t("signatures.statement_of_faith.item#{i}_from_second_paragraph") %></p>
+      <% end %>
     </div>
   </div>
   <div>
