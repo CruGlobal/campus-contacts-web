@@ -544,7 +544,7 @@ class ContactsController < ApplicationController
     @selected_question_ids.each do |question_id|
       if question_id == "visible_surveys_column"
         current_organization.settings[:visible_surveys_column] = true
-        current_organization.save!
+        current_organization.save(validate: false)
       else
         question_id = question_id.to_i
         if @predefined_questions.collect(&:id).include?(question_id)
