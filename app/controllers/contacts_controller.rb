@@ -27,8 +27,9 @@ class ContactsController < ApplicationController
     if @from_all_contacts == "0"
       @person = current_organization.people.find_by(id: people_ids.first)
       @labels = @person.assigned_organizational_labels(current_organization.id).uniq if @person.present?
+    else
+      filter
     end
-    filter
   end
 
   def set_permissions
