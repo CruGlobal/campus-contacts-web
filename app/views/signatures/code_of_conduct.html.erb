@@ -1,0 +1,19 @@
+<% provide :sidebar do %>
+  <%= render 'signatures/sidebar', kind: Signature::SIGNATURE_CODE_OF_CONDUCT %>
+<% end %>
+
+<div class="titlebar titlebarmod">
+  <h1><%= t('signatures.code_of_conduct.title')%></h1>
+</div>
+
+<div id="ac_contact_spread" class="signature_content">
+  <div>
+    <p><%== t('signatures.code_of_conduct.first_paragraph') %></p>
+    <ul>
+      <% (1..7).each do |i| %>
+        <li><p><%== t("signatures.code_of_conduct.item#{i}_from_first_paragraph") %></p></li>
+      <% end %>
+    </ul>
+    <p><%== t('signatures.code_of_conduct.second_paragraph') %></p>
+  </div>
+</div>

@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_newrelic_params, :except => [:lb]
   before_filter :ensure_timezone, :except => [:lb]
   before_filter :check_mini_profiler, :except => [:lb]
+  before_filter :check_signature, :except => [:lb]
+  before_filter :check_all_signatures, :except => [:lb]
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
@@ -74,9 +76,29 @@ class ApplicationController < ActionController::Base
     return "/allcontacts?#{hash.reject{|k,v| ['action','controller'].include?(k) }.to_param}" if hash.present?
   end
 
-
   def search?
     params[:advanced_search].present? || params[:do_search].present? || params[:search].present?
+  end
+
+  def check_signature
+    return false unless user_signed_in?
+    return false unless current_organization.present?
+    return false unless current_organization.is_power_to_change?
+    return false unless current_person.is_admin_for_org?(current_organization)
+    if !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_CODE_OF_CONDUCT)
+      redirect_to code_of_conduct_signatures_path
+    elsif !current_person.has_org_signature_of_kind?(current_organization, Signature::SIGNATURE_STATEMENT_OF_FAITH)
+      redirect_to statement_of_faith_signatures_path
+    end
+  end
+
+  def check_all_signatures
+    return false unless user_signed_in?
+    return false unless current_organization.present?
+    return false unless current_organization.is_power_to_change?
+    return false unless current_person.is_admin_for_org?(current_organization)
+    return false if current_person.accepted_all_signatures?(current_organization)
+    redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
   end
 
   protected

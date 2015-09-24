@@ -13,30 +13,19 @@ class ContactsController < ApplicationController
   end
 
   def set_labels
-    people_ids = params[:people_ids]
-    label_ids = params[:label_ids] || ''
+    people_ids = (params[:people_ids] || '').split(',')
+    label_ids = (params[:label_ids] || '').split(',')
     remove_label_ids = params[:remove_label_ids] || ''
     unchanged_label_ids = params[:unchanged_label_ids] || ''
-    @from_all_contacts = params[:from_all_contacts]
     remove_label_ids = remove_label_ids.split(',') - unchanged_label_ids.split(',')
-    label_ids = label_ids.split(',')
+    @from_all_contacts = params[:from_all_contacts]
 
-    @selected_people = Person.where(id: people_ids.split(','))
-    @selected_people.each do |person|
-      label_ids.each do |label_id|
-        label = person.organizational_labels.where(label_id: label_id.to_i, organization_id: current_organization.id).first_or_create
-        label.update_attribute(:added_by_id, current_person.id) if label.added_by_id.nil?
-      end
-
-      remove_labels = person.organizational_labels_for_org(current_organization).where(label_id: remove_label_ids)
-      # This might be resolve the MySQL deadlock issue
-      remove_labels.each do |remove_label|
-        remove_label.update_attribute(:removed_date, Time.now) if remove_label.removed_date.nil?
-      end
+    Retryable.retryable times: 5 do
+      OrganizationalLabel.mass_update(label_ids, remove_label_ids, people_ids, current_organization, current_person)
     end
 
     if @from_all_contacts == "0"
-      @person = @selected_people.first
+      @person = current_organization.people.find_by(id: people_ids.first)
       @labels = @person.assigned_organizational_labels(current_organization.id).uniq if @person.present?
     end
     filter
@@ -1105,7 +1094,12 @@ class ContactsController < ApplicationController
     end
 
     def fetch_mine
-      @all_people = Person.references(:assigned_tos, :organizational_permissions).includes(:assigned_tos, :organizational_permissions).where('contact_assignments.organization_id' => current_organization.id, 'organizational_permissions.organization_id' => current_organization.id, 'contact_assignments.assigned_to_id' => current_person.id, 'organizational_permissions.permission_id' => Permission::NO_PERMISSIONS_ID).uniq
+      @all_people = Person.references(:assigned_tos, :organizational_permissions)
+                        .includes(:assigned_tos, :organizational_permissions)
+                        .where('contact_assignments.organization_id': current_organization.id,
+                               'organizational_permissions.organization_id': current_organization.id,
+                               'contact_assignments.assigned_to_id': current_person.id,
+                               'organizational_permissions.permission_id': Permission::NO_PERMISSIONS_ID).uniq
     end
 
     def get_person

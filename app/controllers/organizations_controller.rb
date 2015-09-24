@@ -251,6 +251,20 @@ class OrganizationsController < ApplicationController
     redirect_to api_organizations_path
   end
 
+  def signatures
+    @person_signatures = PersonSignature.get_by_multiple_orgs([current_organization.id.to_s])
+    @person_signatures = @person_signatures.filter(params[:search_any])
+    @person_signatures = @person_signatures.sort(params[:q])
+
+    if params[:format].present?
+      csv = ContactsCsvGenerator.export_signatures(@person_signatures)
+      send_data csv, filename: "#{current_organization.to_s} - Signatures.csv", type: "text/csv; charset=utf-8; header=present"
+    end
+
+    @q = @person_signatures.where('1 <> 1').search(params[:q])
+    @person_signatures = @person_signatures.page(params[:page]).per(50)
+  end
+
   protected
   def get_organization
     if params[:id]

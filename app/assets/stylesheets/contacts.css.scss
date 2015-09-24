@@ -77,7 +77,34 @@
 
 #contacts_controller.all_contacts, #contacts_controller.my_contacts, #labels_controller,
 #groups_controller, #surveys_controller, #questions_controller, #sms_keywords_controller,
-#organizations_controller.cleanup, #organizations_controller.index, #organizations_controller.edit, #survey_responses_controller.show, #survey_responses_controller.edit, #survey_responses_controller.answer_other_surveys {
+#organizations_controller.cleanup, #organizations_controller.index, #organizations_controller.edit, #survey_responses_controller.show, #survey_responses_controller.edit, #survey_responses_controller.answer_other_surveys, #signatures_controller, #organizations_controller.signatures {
+  .signature_content {
+    padding: 0 10px 0 0;
+    font-size: 14px;
+    line-height: 1.6em;
+    p:first-child {
+      margin-top:0;
+      padding-top:0;
+    }
+    .items_left_and_right {
+      font-size: 13px;
+      padding: 0 8px;
+      .items_left, .items_right {
+        display: inline-block;
+        width: 47%;
+      }
+      .items_left {
+        margin-right: 10px;
+      }
+      .items_right {
+        vertical-align: top;
+      }
+      .item_number{
+        margin-right: 11px;
+        font-weight:bold;
+      }
+    }
+  }
   #gandalfthewhite {
     border-bottom: none;
     margin-bottom: 5px;

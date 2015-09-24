@@ -66,6 +66,12 @@
           <li class="<%= 'current' if request.path == movement_indicator_suggestions_path %>">
             <%= link_to(t('nav.report_movement_indicators'), movement_indicator_suggestions_path, :class => "topset cleanup") %>
           </li>
+
+          <% if current_organization.is_power_to_change? %>
+            <li class="<%= 'current' if request.path == signatures_organizations_path %>">
+              <%= link_to(t('signatures.title'), signatures_organizations_path, :class => "topset") %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </li>

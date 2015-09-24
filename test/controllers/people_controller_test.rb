@@ -272,41 +272,43 @@ class PeopleControllerTest < ActionController::TestCase
     setup do
       @user = FactoryGirl.create(:user_with_auxs)  #user with a person object
       sign_in @user
+      response_body = "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\", \
+                      \"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\", \
+                      \"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}"
+
+      stub_request(:get, /^https:\/\/graph.facebook.com\/nmfdelacruz\?access_token=\w*/).to_return(body: response_body)
+      stub_request(:get, /^https:\/\/graph.facebook.com\/100000289242843\?access_token=\w*/).to_return(body: response_body)
+      stub_request(:get, /^https:\/\/graph.facebook.com\/nm34523fdelacruz\?access_token=\w*/).to_return(status: 404)
+      stub_request(:get, 'https://graph.facebook.com/v2.2/search?access_token=&limit=5000&q=%229gag%22&type=user').to_return(body: response_body)
+      stub_request(:get, 'https://graph.facebook.com/v2.2/search?access_token=&limit=5000&q=%22test%22&type=user').to_return(status: 404)
     end
 
 
     should "successfully search for facebook users when using '/http://www.facebook.com\//[a-z]' format" do
-      stub_request(:get, "https://graph.facebook.com/nmfdelacruz").
-        to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       xhr :get, :facebook_search, { :term =>"http://www.facebook.com/nmfdelacruz"}
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
     should "successfully search for facebook users when using '/http://www.facebook.com\/profile.php?id=/[0-9]'" do
-      stub_request(:get, "https://graph.facebook.com/100000289242843").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/profile.php?id=100000289242843\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
       xhr :get, :facebook_search, { :term =>"http://www.facebook.com/profile.php?id=100000289242843"}
       assert_equal(2, assigns(:data).length, "Unsuccessfully searched for a user using Facebook profile url")
     end
 
     should "unsuccessfully search for facebook users when url does not exist" do
-      stub_request(:get, "https://graph.facebook.com/nm34523fdelacruz").to_return(status: 404)
       xhr :get, :facebook_search, { :term =>"http://www.facebook.com/nm34523fdelacruz"}
       assert_equal(1, assigns(:data).length)
     end
 
-=begin
     should "successfully search for facebook users when using '/[a-z]/' (name string)  format" do
-      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=9gag").to_return(:body => "{\"id\":\"100000289242843\",\"name\":\"Neil Marion Dela Cruz\",\"first_name\":\"Neil Marion\",\"last_name\":\"Dela Cruz\",\"link\":\"http:\\/\\/www.facebook.com\\/nmfdelacruz\",\"username\":\"nmfdelacruz\",\"gender\":\"male\",\"locale\":\"en_US\"}")
-      get :facebook_search, { :term =>"9gag"}
+      xhr :get, :facebook_search, { :term => '9gag'}
       assert_equal(1, assigns(:data).length)
     end
 
     should "unsuccessfully search for facebook users when name does not exist" do
-      stub_request(:get, "https://graph.facebook.com/search?access_token=&limit=24&q=dj09345803oifjdlkjdl&type=user").to_return(status: 404)
-      get :facebook_search, { :term =>"dj09345803oifjdlkjdl"}
-      assert_equal(0, assigns(:data).length)
+      xhr :get, :facebook_search, { :term => 'test'}
+      assert_equal(1, assigns(:data).length)
+      assert_nil assigns(:data)[0][:id]
     end
-=end
   end
 
   context "Assigning a contact to leader" do
