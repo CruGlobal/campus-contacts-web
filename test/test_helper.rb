@@ -97,3 +97,16 @@ def twilio_response
   timestamp = Time.now
   return "{\"sid\": \"#{sid}\", \"date_created\": \"#{timestamp}\", \"date_updated\": \"#{timestamp}\", \"date_sent\": null, \"account_sid\": \"#{tid}\", \"to\": \"+1234567890\", \"from\": \"85005\", \"body\": \"This is test message, please ignore.\", \"status\": \"queued\", \"num_segments\": \"1\", \"num_media\": \"0\", \"direction\": \"outbound-api\", \"api_version\": \"2010-04-01\", \"price\": null, \"price_unit\": \"USD\", \"error_code\": null, \"error_message\": null, \"uri\": \"/2010-04-01/Accounts/#{tid}/Messages/#{sid}.json\", \"subresource_uris\": {\"media\": \"/2010-04-01/Accounts/#{tid}/Messages/#{sid}/Media.json\"}}"
 end
+
+def with_versioning
+  was_enabled = PaperTrail.enabled?
+  was_enabled_for_controller = PaperTrail.enabled_for_controller?
+  PaperTrail.enabled = true
+  PaperTrail.enabled_for_controller = true
+  begin
+    yield
+  ensure
+    PaperTrail.enabled = was_enabled
+    PaperTrail.enabled_for_controller = was_enabled_for_controller
+  end
+end
