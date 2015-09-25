@@ -735,4 +735,14 @@ class PersonTest < ActiveSupport::TestCase
       end
     end
   end
+
+  context "deleting person with utf character" do
+    should "work with paper trails" do
+      @person = FactoryGirl.create(:person, first_name: "Aleksić", last_name: "Milovan")
+      with_versioning do
+        @person.destroy
+        assert_equal @person.id, PaperTrail::Version.last.item_id
+      end
+    end
+  end
 end
