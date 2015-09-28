@@ -266,7 +266,7 @@ class Organization < ActiveRecord::Base
       return false
     end
 
-    update_attributes(last_push_to_infobase: last_week)
+    update_column(:last_push_to_infobase, last_week)
   end
 
   def last_push_to_infobase
