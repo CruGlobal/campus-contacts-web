@@ -98,8 +98,10 @@ class Organization < ActiveRecord::Base
     # Handle name uniqueness
     name = value.name_before_type_cast || value.name || nil
     if self.parent.present?
-      if self.parent.children.where(name: name).count > 1
-        errors.add(:name, "is not unique")
+      self.parent.children.where(name: name).each do |child|
+        unless child == self
+          errors.add(:name, "is not unique")
+        end
       end
     end
   end
