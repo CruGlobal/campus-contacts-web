@@ -662,6 +662,10 @@ class OrganizationTest < ActiveSupport::TestCase
       another_child = Organization.new(:parent => @another_org, :name => 'org', :terminology => 'org')
       assert another_child.save
     end
+
+    should 'make sure the uniqueness validation does not trip over itself' do
+      assert @child.update(terminology: 'church')
+    end
   end
 
   # end deeper tests
