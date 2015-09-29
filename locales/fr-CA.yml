@@ -53,7 +53,7 @@ fr-CA:
       system_is_still_busy: Traitement du formulaire en cours. Veuillez patienter.
       title_bio: Bio
       title_label: Étiquettes
-      title_optional: (Facultatif)
+      title_optional: (facultatif)
       title_permission: Autorisations
       title_surveys: Sondage
     assign:
@@ -79,13 +79,13 @@ fr-CA:
       type_to_find_leader: Tapez afin de trouver un leader, puis cliquez sur le nom du leader.
       type_to_find_org: Tapez afin de trouver un(e) %{terminology}, puis cliquez sur le nom du (de la) %{terminology}.
     interaction_types:
-      comment: 
-      faculty_on_mission: 
-      gospel_presentation: 
-      graduating_on_mission: 
-      holy_spirit_presentation: 
-      prayed_to_receive_christ: 
-      spiritual_conversation: 
+      comment: Commenter seulement
+      faculty_on_mission: Professeur en mission
+      gospel_presentation: J'ai partagé l'évangile
+      graduating_on_mission: Diplômé en mission
+      holy_spirit_presentation: Présentation du ministère du Saint-Esprit
+      prayed_to_receive_christ: A prié afin de recevoir Christ
+      spiritual_conversation: Conversation avec des éléments clés de l'évangile
     messages:
       question_too_long: 'AVERTISSEMENT : Cette question dépasse la limite de longueur d''un message texte unique et pourrait être divisée en plusieurs messages.  '
   batch:
@@ -97,12 +97,13 @@ fr-CA:
     snapshot:
       key_leader: Nous avons trouvé un leader clé sur ce campus.
       launched: Nous avons trois disciples multiplicateurs sur ce campus.
-      movement_stages: 
+      movement_stages: Le nombre de mouvements à chaque étape correspond aux mouvements cochés dans la case à gauche. Pour mettre à jour vos étapes de mouvement, visitez votre page d'équipe dans la base des données.
       multiplying: 
       pioneering: 
       save_snapshot: 
       title: Les graphiques sur cette page extraient des données ayant été soumises à la base de données, donc ils seront aussi à jour que les données les plus récentes soumises par les différents mouvements. Cliquez sur le nom de chaque catégorie pour la masquer ou l'afficher dans le graphique.
     trend:
+      end_date_help: 
       save_trend: 
       year_ago: Ceci est seulement disponible si l'intervalle entre la date de début et la date de fin est de moins de 12 mois.
   contacts:
@@ -168,7 +169,7 @@ fr-CA:
       add_contact: Ajouter un contact à %{org}
       add_label_empty: Une étiquette vide ne peut pas être enregistrée. Veuillez réessayer.
       add_label_exists: L'étiquette est déjà comprise dans la liste!
-      add_label_exists2: 
+      add_label_exists2: L'étiquette est déjà comprise dans cet organisme!
       add_label_failed: L'étiquette n'a pas été enregistrée. Veuillez réessayer.
       add_label_success: La nouvelle étiquette a été ajoutée!
       add_question_back: Cliquez sur une question pour l'ajouter à nouveau à la page.
@@ -188,6 +189,7 @@ fr-CA:
       bulk_vcard_dialog_title: Options pour les vCards de masse
       bulk_vcard_download_message: Un fichier .vcf contenant tous les renseignements demandés sur le contact est en cours de téléchargement.
       bulk_vcard_email_message: 'Les renseignements sur le contact ont été envoyés à '
+      cannot_find_ids: 
       clear_search_form: Effacer le formulaire de recherche
       completed: Terminé
       completed_contacts: Tous les contacts - terminé
@@ -205,6 +207,7 @@ fr-CA:
       edit_true: '&edit=true'
       email_is_already_exists: L'adresse de courriel se trouve déjà dans la base de données
       export: Exporter CSV
+      export_huge_contacts: 
       filter: Rechercher
       first_name: Prénom
       for_this_permission_email_is_required: Une adresse de courriel est requise pour l'autorisation '%{permission}'.
@@ -254,6 +257,7 @@ fr-CA:
       show_all: Voir les contacts « en cours »
       status_header_guide: L'état est seulement visible pour les contacts n'ayant aucune autorisation. Les contacts ayant une autorisation Utilisateur ou Admin n'auront pas d'entrée État.
       surveys: Sondages
+      system_still_on_process: 
       type_above_field: Commencez à taper dans le champ ci-dessus pour rechercher un endroit où transférer ces personnes.
       unassign_contact: Retirer le contact
       unassigned: Non attribué
@@ -349,7 +353,7 @@ fr-CA:
     button_email_sub: ENVOYER UN
     button_import: IMPORTER
     button_import_sub: DES CONTACTS
-    button_label: ÉTIQUETTES
+    button_label: ÉTIQUETER
     button_label_sub: CRÉER DES LISTES
     button_sent: ENVOYÉ
     button_sent_sub: MESSAGES
@@ -579,7 +583,7 @@ fr-CA:
     email: Courriel
     email_autocomplete_description: Tapez pour rechercher par prénom, nom de famille, adresse de courriel, nom de groupe, ou nom d'étiquette.
     email_autocomplete_description_admin: Tapez pour rechercher par prénom, nom de famille, adresse de courriel, nom de groupe, nom d'étiquette, ou par tous.
-    email_note: 'Cochez cette case pour envoyer votre courriel de « l''expéditeur anonyme » do-not-reply@mhub.cc. Assurez-vous de vous identifier ou d''identifier votre organisme dans le corps de votre courriel. '
+    email_note: 'Cochez cette case pour envoyer votre courriel de « l''expéditeur anonyme » do-not-reply@missionhub.com. Assurez-vous de vous identifier ou d''identifier votre organisme dans le corps de votre courriel. '
     export_csv_help: Exporter un tableur
     export_vcard_help: Exporter vers la liste de contacts (adresse de courriel ou téléphone)
     faculty: Professeur
@@ -591,7 +595,7 @@ fr-CA:
     group: Groupe
     group_name: Groupe
     help_redirect_link: http://help.missionhub.com
-    help_redirect_link_import: http://help.missionhub.com/article/66-import-contacts---creating-or-saving-as-a-csv-file-step-1
+    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
     hide: masquer
     home: Domicile
     keyword: Mot-clé
@@ -613,6 +617,7 @@ fr-CA:
     no_recipient_in_comment: Vous n'avez pas sélectionné de personne sur qui faire un commentaire.
     no_recipient_in_send_comment: Vous devez sélectionner au moins un destinataire ou une personne sur qui faire un commentaire.
     note: Note
+    organization: 
     permission: Étiquette
     permissions_applied: Des étiquettes ont été appliquées.
     phone: Téléphone
@@ -837,6 +842,8 @@ fr-CA:
         <p>Je viens de vous ajouter comme %{permission_name} pour %{org} dans MissionHub.</p>
         <p>Visitez le %{link} pour ouvrir une session. S'il vous plaît ne partagez pas ce lien avec personne.</p>
         <p>%{added_by}</p>
+    resend:
+      body_html: 
   leaders:
     create:
       no_user_account: <font color='red'>Il manque l'adresse de courriel requise pour pouvoir ajouter cette personne comme Utilisateur.</font>
@@ -913,6 +920,7 @@ fr-CA:
     report_movement_indicators: 
     roles: Étiquettes
     settings: Paramètres
+    signatures: 
     snapshot: Image instantanée
     survey_mode_tip: La mode sondage permet à une autre personne de répondre à des sondages sur votre appareil. On lui demandera d'ouvrir une session en utilisant son compte Facebook, et elle sera déconnectée après la fin du sondage. La prochaine personne qui répondra au sondage ouvrira une session en utilisant son compte Facebook, et ainsi de suite. Lorsque vous n'avez plus besoin du mode sondage, cliquez sur « Sortir du mode sondage » dans le coin supérieur gauche, et toute personne ayant terminé le sondage sera affichée sous Contacts non attribués.
     surveys: Sondages
@@ -1090,6 +1098,8 @@ fr-CA:
     bulk_delete:
       cannot_delete_admin_error: Vous ne pouvez pas supprimer <b>%{names}</b> puisque vous supprimerez tous les administrateurs de cet organisme!
       deleting_people_success: Des personnes ont été supprimées!
+    bulk_email:
+      default_body: 
     bulk_sms:
       sms_footer_message: Répondez ARRÊTER pour refuser la réception des messages textes
     create:
@@ -1254,6 +1264,7 @@ fr-CA:
       saved_search_title: Recherches enregistrées
       saved_show: Afficher les recherches enregistrées
       search_any_placeholder: Rechercher
+      search_name: 
       standard_hide: Masquer les filtres standards
       standard_show: Afficher les filtres standards
       standard_title: Filtres standards
@@ -1285,6 +1296,51 @@ fr-CA:
       start_survey: Pour commencer le sondage, ouvrez une session en utilisant votre compte Facebook afin que nous puissions vous identifier correctement. Cela vous permettra de répondre au sondage plus rapidement.
       waiting_for_logout: On attend la fermeture de session sur Facebook de l'utilisateur précédent. Si ce message ne disparaît pas dans les 15 secondes, essayez de recharger la page.
       welcome: Bienvenue!
+  signatures:
+    accept: 
+    clear: 
+    code_of_conduct:
+      first_paragraph: 
+      item1_from_first_paragraph: 
+      item2_from_first_paragraph: 
+      item3_from_first_paragraph: 
+      item4_from_first_paragraph: 
+      item5_from_first_paragraph: 
+      item6_from_first_paragraph: 
+      item7_from_first_paragraph: 
+      second_paragraph: 
+      title: 
+    date_signed_at: 
+    decline: 
+    declined_a_signature: 
+    download: 
+    download_guide: 
+    invalid_parameters: 
+    signed_a_signature: 
+    signed_forms: 
+    statement_of_faith:
+      first_paragraph: 
+      item10_from_second_paragraph: 
+      item11_from_second_paragraph: 
+      item12_from_second_paragraph: 
+      item13_from_second_paragraph: 
+      item14_from_second_paragraph: 
+      item15_from_second_paragraph: 
+      item16_from_second_paragraph: 
+      item17_from_second_paragraph: 
+      item1_from_second_paragraph: 
+      item2_from_second_paragraph: 
+      item3_from_second_paragraph: 
+      item4_from_second_paragraph: 
+      item5_from_second_paragraph: 
+      item6_from_second_paragraph: 
+      item7_from_second_paragraph: 
+      item8_from_second_paragraph: 
+      item9_from_second_paragraph: 
+      second_paragraph: 
+      third_paragraph: 
+      title: 
+    title: 
   sms:
     email_invalid_msg: L'adresse de courriel est invalide; veuillez réessayer.
     email_should_be_unique_msg: L'adresse de courriel est déjà utilisée; essayez une autre adresse de courriel.
@@ -1352,10 +1408,12 @@ fr-CA:
       content: '%{name} (%{number},%{email}) vient de répondre à un sondage avec %{answer}.'
   survey_responses:
     address1: Adresse
+    all_predefined_have_answered: 
     answer_other_surveys:
       title: '%{name} : Répondre à d''autres sondages'
     birth_date: Quelle est ta date de naissance?
     campus: Campus
+    city: 
     country: Pays
     dorm: Résidence
     edit:
@@ -1471,6 +1529,7 @@ fr-CA:
         duplicate_error: Vous avez déjà ajouté cette question. Vous ne pouvez pas attribuer la même question deux fois dans un sondage!
         notice: La question a été créée.
       edit:
+        advanced_options: 
         edit_question: Modifier cette question
         leader_invalid_email: L'adresse de courriel du leader choisi est invalide.
         leader_invalid_email_with_name: L'adresse de courriel du ou des leaders '%{leader_names}' est invalide.
@@ -1570,12 +1629,19 @@ fr-CA:
       leaders_header: Donner accès à d'autre leaders
       leaders_paragraph: 'Cette partie est facultative. Il est fort probable qu''il y ait d''autres personnes avec lesquelles vous travaillez à qui vous aimeriez donner la capacité de gérer le mot-clé que vous avez établi ainsi que les contacts qui seront générés lorsque les gens répondront à votre sondage. Cette étape vous permet d''ajouter ces personnes. Malheureusement, nous ne l''avons pas encore programmée. '
       next: Suivant
+      not_found_header: 
       not_found_paragraph: <p>Nous n'avons pas pu vous mettre en relation avec un organisme qui utilise actuellement MissionHub. Les étapes suivantes devraient vous y donner accès. </p> <ol> <li>Un leader dans votre organisme qui peut déjà ouvrir une session dans MissionHub doit vous ajouter à MissionHub comme « utilisateur » ou « admin », après quoi vous recevrez une invitation automatique par courriel. </li> <li>Vous devrez ouvrir le courriel et cliquer sur le lien fourni. Si vous n'arrivez pas à trouver le courriel, vérifiez le contenu de votre boîte de courrier indésirable. S'il ne s'y trouve pas, assurez-vous que votre leader a utilisé la bonne adresse de courriel et demandez-lui de vous envoyer une autre invitation.</li> <li>Si ces étapes NE vous ont PAS donné accès, envoyez un courriel à support@missionhub.com, et fournissez votre nom, votre adresse de courriel et le nom de l'organisme auquel vous voulez avoir accès.</li> </ol>
       request_a_keyword: Demandez un mot-clé!
       request_keyword: Demander un mot-clé
       request_keyword_link: Cliquez ici pour demander un mot-clé. Nous vous ramènerons ensuite à cet assistant.
       skip_step: Sauter cette étape
       survey_paragraph: Maintenant que vous avez demandé un mot-clé, vous pouvez créer une série de questions à poser aux gens. Il peut s'agir par exemple d'un sondage court ou d'un fichier de contact de base.
+      user_not_found:
+        ask_for_emails: 
+        error_searching: 
+        found_emails: 
+        more_steps: 
+        no_emails_found: 
       verify_identity: Confirmez votre identité
       verify_paragraph: 'Si vous avez un compte de connexion « CCC Relay », ouvrez une session pour créer un lien avec ce compte. Vous n''avez qu''à le faire une seule fois. AVERTISSEMENT : Si vous avez ouvert une session dans MissionHub en vous servant d''un compte Facebook d''une autre personne, fermez votre session maintenant! Si vous cliquez pour confirmer, vos coordonnées seront fusionnées avec celles de l''autre personne, ce qui créerait un énorme fouillis.'
       verify_with_relay: Confirmer à l'aide de Relay

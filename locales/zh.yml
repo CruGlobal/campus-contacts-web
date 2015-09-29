@@ -101,6 +101,7 @@ zh:
       save_snapshot: 
       title: 
     trend:
+      end_date_help: 
       save_trend: 
       year_ago: 
   contacts:
@@ -182,6 +183,7 @@ zh:
       bulk_vcard_dialog_title: 
       bulk_vcard_download_message: 
       bulk_vcard_email_message: 
+      cannot_find_ids: 
       clear_search_form: 
       completed: 
       completed_contacts: 
@@ -199,6 +201,7 @@ zh:
       edit_true: 
       email_is_already_exists: 
       export: 
+      export_huge_contacts: 
       filter: 
       first_name: 
       for_this_permission_email_is_required: 
@@ -248,6 +251,7 @@ zh:
       show_all: 
       status_header_guide: 
       surveys: 
+      system_still_on_process: 
       type_above_field: 
       unassign_contact: 
       unassigned: 
@@ -567,6 +571,7 @@ zh:
     no_recipient_in_comment: 
     no_recipient_in_send_comment: 
     note: 
+    organization: 
     permission: 
     permissions_applied: 
     phone: 
@@ -781,6 +786,8 @@ zh:
   leader_mailer:
     added:
       body_html: 
+    resend:
+      body_html: 
   leaders:
     create:
       no_user_account: 
@@ -857,6 +864,7 @@ zh:
     report_movement_indicators: 
     roles: 
     settings: 
+    signatures: 
     snapshot: 
     survey_mode_tip: 
     surveys: 
@@ -1028,6 +1036,8 @@ zh:
     bulk_delete:
       cannot_delete_admin_error: 
       deleting_people_success: 
+    bulk_email:
+      default_body: 
     bulk_sms:
       sms_footer_message: 
     create:
@@ -1188,6 +1198,7 @@ zh:
       saved_search_title: 
       saved_show: 
       search_any_placeholder: 
+      search_name: 
       standard_hide: 
       standard_show: 
       standard_title: 
@@ -1219,6 +1230,51 @@ zh:
       start_survey: 
       waiting_for_logout: 
       welcome: 
+  signatures:
+    accept: 
+    clear: 
+    code_of_conduct:
+      first_paragraph: 
+      item1_from_first_paragraph: 
+      item2_from_first_paragraph: 
+      item3_from_first_paragraph: 
+      item4_from_first_paragraph: 
+      item5_from_first_paragraph: 
+      item6_from_first_paragraph: 
+      item7_from_first_paragraph: 
+      second_paragraph: 
+      title: 
+    date_signed_at: 
+    decline: 
+    declined_a_signature: 
+    download: 
+    download_guide: 
+    invalid_parameters: 
+    signed_a_signature: 
+    signed_forms: 
+    statement_of_faith:
+      first_paragraph: 
+      item10_from_second_paragraph: 
+      item11_from_second_paragraph: 
+      item12_from_second_paragraph: 
+      item13_from_second_paragraph: 
+      item14_from_second_paragraph: 
+      item15_from_second_paragraph: 
+      item16_from_second_paragraph: 
+      item17_from_second_paragraph: 
+      item1_from_second_paragraph: 
+      item2_from_second_paragraph: 
+      item3_from_second_paragraph: 
+      item4_from_second_paragraph: 
+      item5_from_second_paragraph: 
+      item6_from_second_paragraph: 
+      item7_from_second_paragraph: 
+      item8_from_second_paragraph: 
+      item9_from_second_paragraph: 
+      second_paragraph: 
+      third_paragraph: 
+      title: 
+    title: 
   sms:
     email_invalid_msg: 
     email_should_be_unique_msg: 
@@ -1285,10 +1341,12 @@ zh:
       content: 
   survey_responses:
     address1: 地址
+    all_predefined_have_answered: 
     answer_other_surveys:
       title: 
     birth_date: 出生日期
     campus: 校园
+    city: 
     country: 国家
     dorm: 宿舍楼
     edit:
@@ -1404,6 +1462,7 @@ zh:
         duplicate_error: 
         notice: 
       edit:
+        advanced_options: 
         edit_question: 
         leader_invalid_email: 
         leader_invalid_email_with_name: 
@@ -1501,12 +1560,19 @@ zh:
       leaders_header: 
       leaders_paragraph: 
       next: 
+      not_found_header: 
       not_found_paragraph: 
       request_a_keyword: 
       request_keyword: 
       request_keyword_link: 
       skip_step: 
       survey_paragraph: 
+      user_not_found:
+        ask_for_emails: 
+        error_searching: 
+        found_emails: 
+        more_steps: 
+        no_emails_found: 
       verify_identity: 
       verify_paragraph: 
       verify_with_relay: 
