@@ -103,6 +103,7 @@ ru:
       save_snapshot: 
       title: 
     trend:
+      end_date_help: 
       save_trend: 
       year_ago: 
   contacts:
@@ -186,6 +187,7 @@ ru:
       bulk_vcard_dialog_title: 
       bulk_vcard_download_message: 
       bulk_vcard_email_message: 
+      cannot_find_ids: 
       clear_search_form: Clear Search Form
       completed: Completed
       completed_contacts: 
@@ -203,6 +205,7 @@ ru:
       edit_true: 
       email_is_already_exists: 
       export: Export
+      export_huge_contacts: 
       filter: Search
       first_name: First Name
       for_this_permission_email_is_required: 
@@ -260,6 +263,7 @@ ru:
       show_all: Show 'In Progress' contacts
       status_header_guide: 
       surveys: 
+      system_still_on_process: 
       type_above_field: 
       unassign_contact: Unassign contact
       unassigned: Unassigned
@@ -621,6 +625,7 @@ ru:
     no_recipient_in_comment: 
     no_recipient_in_send_comment: 
     note: 
+    organization: 
     permission: 
     permissions_applied: 
     phone: Телефон
@@ -845,6 +850,8 @@ ru:
         <p>Я только что добавил вас в качестве лидера %{org} на MissionHub</p>
         <p>Посетите %{link} чтобы войти. Пожалуйста не делитесь этой ссылкой ни с кем.</p>
         <p>%{added_by}</p>
+    resend:
+      body_html: 
   leaders:
     create:
       no_user_account: 
@@ -921,6 +928,7 @@ ru:
     report_movement_indicators: 
     roles: Роли
     settings: 
+    signatures: 
     snapshot: 
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: 
@@ -1094,6 +1102,8 @@ ru:
     bulk_delete:
       cannot_delete_admin_error: 
       deleting_people_success: 
+    bulk_email:
+      default_body: 
     bulk_sms:
       sms_footer_message: 
     create:
@@ -1254,6 +1264,7 @@ ru:
       saved_search_title: 
       saved_show: 
       search_any_placeholder: 
+      search_name: 
       standard_hide: 
       standard_show: 
       standard_title: 
@@ -1285,6 +1296,51 @@ ru:
       start_survey: 
       waiting_for_logout: 
       welcome: 
+  signatures:
+    accept: 
+    clear: 
+    code_of_conduct:
+      first_paragraph: 
+      item1_from_first_paragraph: 
+      item2_from_first_paragraph: 
+      item3_from_first_paragraph: 
+      item4_from_first_paragraph: 
+      item5_from_first_paragraph: 
+      item6_from_first_paragraph: 
+      item7_from_first_paragraph: 
+      second_paragraph: 
+      title: 
+    date_signed_at: 
+    decline: 
+    declined_a_signature: 
+    download: 
+    download_guide: 
+    invalid_parameters: 
+    signed_a_signature: 
+    signed_forms: 
+    statement_of_faith:
+      first_paragraph: 
+      item10_from_second_paragraph: 
+      item11_from_second_paragraph: 
+      item12_from_second_paragraph: 
+      item13_from_second_paragraph: 
+      item14_from_second_paragraph: 
+      item15_from_second_paragraph: 
+      item16_from_second_paragraph: 
+      item17_from_second_paragraph: 
+      item1_from_second_paragraph: 
+      item2_from_second_paragraph: 
+      item3_from_second_paragraph: 
+      item4_from_second_paragraph: 
+      item5_from_second_paragraph: 
+      item6_from_second_paragraph: 
+      item7_from_second_paragraph: 
+      item8_from_second_paragraph: 
+      item9_from_second_paragraph: 
+      second_paragraph: 
+      third_paragraph: 
+      title: 
+    title: 
   sms:
     email_invalid_msg: 
     email_should_be_unique_msg: 
@@ -1351,10 +1407,12 @@ ru:
       content: 
   survey_responses:
     address1: Улица,
+    all_predefined_have_answered: 
     answer_other_surveys:
       title: 
     birth_date: Какова Ваша дата рождения?
     campus: кампус
+    city: 
     country: страна
     dorm: здание общежития
     edit:
@@ -1470,6 +1528,7 @@ ru:
         duplicate_error: 
         notice: 
       edit:
+        advanced_options: 
         edit_question: 
         leader_invalid_email: 
         leader_invalid_email_with_name: 
@@ -1569,12 +1628,19 @@ ru:
       leaders_header: Дать доступ другим лидерам
       leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
       next: Следующий
+      not_found_header: 
       not_found_paragraph: At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out.
       request_a_keyword: 
       request_keyword: Запросить ключевое слово
       request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
       skip_step: Пропустить этот шаг
       survey_paragraph: Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a basic contact card.
+      user_not_found:
+        ask_for_emails: 
+        error_searching: 
+        found_emails: 
+        more_steps: 
+        no_emails_found: 
       verify_identity: Подтвердите вашу личность
       verify_paragraph: 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
       verify_with_relay: Verify With Relay

@@ -101,6 +101,7 @@ en-CA:
       save_snapshot: 
       title: The graphs on this page pull from data that has been submitted to the Infobase, and thus will only be as up to date as the most recent submission of Movement Indicators for these movements.  Click on each category name to hide or display it on the graph.
     trend:
+      end_date_help: 
       save_trend: 
       year_ago: This is only available if the Start Date and End Date are less than one year apart.
   contacts:
@@ -186,6 +187,7 @@ en-CA:
       bulk_vcard_dialog_title: Bulk Vcard Options
       bulk_vcard_download_message: A .vcf file now containing all the contact information you requested is being downloaded.
       bulk_vcard_email_message: 'Contacts information has been sent to '
+      cannot_find_ids: 
       clear_search_form: Clear Search Form
       completed: Completed
       completed_contacts: All Contacts - Completed
@@ -203,6 +205,7 @@ en-CA:
       edit_true: '&edit=true'
       email_is_already_exists: Email address currently in the database
       export: Export CSV
+      export_huge_contacts: 
       filter: Search
       first_name: First
       for_this_permission_email_is_required: Email is required for '%{permission}' permission.
@@ -260,6 +263,7 @@ en-CA:
       show_all: Show 'In Progress' contacts
       status_header_guide: Status is visible only for contacts with No Permissions. Contacts with User or Admin permissions will not have a Status entry
       surveys: Surveys
+      system_still_on_process: 
       type_above_field: Start typing in the field above to search for somewhere to transfer these people to.
       unassign_contact: Unassign contact
       unassigned: Unassigned
@@ -587,7 +591,7 @@ en-CA:
     email: Email
     email_autocomplete_description: Type to search by first name, last name, email, group name, or label name.
     email_autocomplete_description_admin: Type to search by first name, last name, email, group name, label name, or all.
-    email_note: Check this box to send your Email with an "anonymous reply to" of do-not-reply@mhub.cc. Be sure to identify yourself or your organization in the text of your email message.
+    email_note: Check this box to send your Email with an "anonymous reply to" of do-not-reply@missionhub.com. Be sure to identify yourself or your organization in the text of your email message.
     export_csv_help: Export spreadsheet
     export_vcard_help: Export to contacts list (email or phone)
     faculty: Faculty
@@ -599,7 +603,7 @@ en-CA:
     group: Group
     group_name: Group
     help_redirect_link: http://help.missionhub.com
-    help_redirect_link_import: http://help.missionhub.com/article/66-import-contacts---creating-or-saving-as-a-csv-file-step-1
+    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
     hide: hide
     home: Home
     keyword: Keyword
@@ -621,6 +625,7 @@ en-CA:
     no_recipient_in_comment: You didn't select any people to comment on.
     no_recipient_in_send_comment: You have to select at least 1 recipient/person to comment on.
     note: Note
+    organization: 
     permission: Label
     permissions_applied: labels have been applied.
     phone: Phone
@@ -845,6 +850,8 @@ en-CA:
         <p>I've just added you as a User for %{org} on MissionHub</p>
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
         <p>%{added_by}</p>
+    resend:
+      body_html: 
   leaders:
     create:
       no_user_account: <font color='red'>Required email information missing to add this person as a User.</font>
@@ -921,6 +928,7 @@ en-CA:
     report_movement_indicators: Report Movement Indicators
     roles: Labels
     settings: Settings
+    signatures: 
     snapshot: Snapshot View
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: Surveys
@@ -1096,6 +1104,8 @@ en-CA:
     bulk_delete:
       cannot_delete_admin_error: You cannot delete <b>%{names}</b> since you are going to delete all the admins in this organization!
       deleting_people_success: People were successfully deleted!
+    bulk_email:
+      default_body: 
     bulk_sms:
       sms_footer_message: Reply STOP to opt out of text messages
     create:
@@ -1260,6 +1270,7 @@ en-CA:
       saved_search_title: Saved Searches
       saved_show: Show Saved Searches
       search_any_placeholder: Search
+      search_name: 
       standard_hide: Hide Standard Filters
       standard_show: Show Standard Filters
       standard_title: Standard Filters
@@ -1291,6 +1302,51 @@ en-CA:
       start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       waiting_for_logout: Waiting for previous user to be logged out of Facebook. If this message doesn't go away within 15 seconds, try reloading the page.
       welcome: Welcome!
+  signatures:
+    accept: 
+    clear: 
+    code_of_conduct:
+      first_paragraph: 
+      item1_from_first_paragraph: 
+      item2_from_first_paragraph: 
+      item3_from_first_paragraph: 
+      item4_from_first_paragraph: 
+      item5_from_first_paragraph: 
+      item6_from_first_paragraph: 
+      item7_from_first_paragraph: 
+      second_paragraph: 
+      title: 
+    date_signed_at: 
+    decline: 
+    declined_a_signature: 
+    download: 
+    download_guide: 
+    invalid_parameters: 
+    signed_a_signature: 
+    signed_forms: 
+    statement_of_faith:
+      first_paragraph: 
+      item10_from_second_paragraph: 
+      item11_from_second_paragraph: 
+      item12_from_second_paragraph: 
+      item13_from_second_paragraph: 
+      item14_from_second_paragraph: 
+      item15_from_second_paragraph: 
+      item16_from_second_paragraph: 
+      item17_from_second_paragraph: 
+      item1_from_second_paragraph: 
+      item2_from_second_paragraph: 
+      item3_from_second_paragraph: 
+      item4_from_second_paragraph: 
+      item5_from_second_paragraph: 
+      item6_from_second_paragraph: 
+      item7_from_second_paragraph: 
+      item8_from_second_paragraph: 
+      item9_from_second_paragraph: 
+      second_paragraph: 
+      third_paragraph: 
+      title: 
+    title: 
   sms:
     email_invalid_msg: Email is invalid, try again.
     email_should_be_unique_msg: Email already used, try another email address.
@@ -1357,10 +1413,12 @@ en-CA:
       content: '%{name} (%{number},%{email}) just replied to a survey with %{answer}.'
   survey_responses:
     address1: Street Address
+    all_predefined_have_answered: 
     answer_other_surveys:
       title: '%{name} - Answer Other Surveys'
     birth_date: What is your birth date?
     campus: Campus
+    city: 
     country: Country
     dorm: Dorm or Residence Building
     edit:
@@ -1476,6 +1534,7 @@ en-CA:
         duplicate_error: You have already added that question. You cannot assign a question twice in a survey!
         notice: Question was successfully created.
       edit:
+        advanced_options: 
         edit_question: Edit this question
         leader_invalid_email: Chosen leader has an invalid email.
         leader_invalid_email_with_name: Chosen leader/s '%{leader_names}' have invalid email.
@@ -1575,12 +1634,19 @@ en-CA:
       leaders_header: Give access to other leaders
       leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
       next: Next
+      not_found_header: 
       not_found_paragraph: <p>We weren't able to match you up with an organization currently using MissionHub.  The following steps should get you access.</p> <ol> <li>A leader in your organization who can already log into MissionHub needs to add you to MissionHub as a "user" or "admin" which will send out an automated email invitation.</li> <li>You will need go to the email address that your leader used and click on the link in the invitation.  If you can't find the email, check your spam box.  Otherwise, verify your leader used the correct email address and have them send you another invitation.</li> <li>If the above steps did NOT give you access, please email support@missionhub.com, telling them your name, email address, and the name of the organization to which you are trying to get access.</li> </ol>
       request_a_keyword: Request a Keyword!
       request_keyword: Request a Keyword
       request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
       skip_step: Skip this step
       survey_paragraph: Now that you've requested a keyword, you're going to want to create a set of questions to ask people. Think along the lines of a short survey or a basic contact card.
+      user_not_found:
+        ask_for_emails: 
+        error_searching: 
+        found_emails: 
+        more_steps: 
+        no_emails_found: 
       verify_identity: Verify Your Identity
       verify_paragraph: 'If you have a CCC Relay login account, please sign in to link your account. You only need to do this once. WARNING: If you logged into MissionHub using someone else''s Facebook Account, Log Out now! Clicking verify will merge your information with theirs, creating a big mess.'
       verify_with_relay: Verify With Relay

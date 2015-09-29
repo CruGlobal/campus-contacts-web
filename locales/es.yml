@@ -103,6 +103,7 @@ es:
       save_snapshot: 
       title: 
     trend:
+      end_date_help: 
       save_trend: 
       year_ago: 
   contacts:
@@ -188,6 +189,7 @@ es:
       bulk_vcard_dialog_title: 
       bulk_vcard_download_message: 
       bulk_vcard_email_message: 
+      cannot_find_ids: 
       clear_search_form: Borrar la búsqueda
       completed: Completado
       completed_contacts: Todos los Contactos -- Completado
@@ -205,6 +207,7 @@ es:
       edit_true: '&edit=true'
       email_is_already_exists: 
       export: Exportar CSV
+      export_huge_contacts: 
       filter: Búsqueda
       first_name: Nombre
       for_this_permission_email_is_required: Mail está requerido para el permiso de '%{permission}'
@@ -262,6 +265,7 @@ es:
       show_all: Mostrar 'En Proceso' contactos
       status_header_guide: 
       surveys: Encuestas
+      system_still_on_process: 
       type_above_field: 
       unassign_contact: Desasignar contacto
       unassigned: Desasignado
@@ -601,7 +605,7 @@ es:
     group: 
     group_name: Grupo
     help_redirect_link: http://help.missionhub.com
-    help_redirect_link_import: http://help.missionhub.com/article/66-import-contacts---creating-or-saving-as-a-csv-file-step-1
+    help_redirect_link_import: http://help.missionhub.com/entries/23347123-Import-Contacts
     hide: Ocultar
     home: Inicio
     keyword: Palabra Clave
@@ -623,6 +627,7 @@ es:
     no_recipient_in_comment: 
     no_recipient_in_send_comment: 
     note: Nota
+    organization: 
     permission: Etiqueta
     permissions_applied: etiquetas han sido aplicadas.
     phone: Teléfono
@@ -847,6 +852,8 @@ es:
         <p>Te acabo de agregar como lider de%{org} en MissionHub</p>
         <p>Visita %{link} para iniciar sesión. Por favor no compartas este enlace con nadie.</p>
         <p>%{added_by}</p>
+    resend:
+      body_html: 
   leaders:
     create:
       no_user_account: 
@@ -923,6 +930,7 @@ es:
     report_movement_indicators: 
     roles: Roles
     settings: 
+    signatures: 
     snapshot: 
     survey_mode_tip: El modo de encuesta permite que otras personas puedan llenar las encuestas en tu dispositivo. Les pedirá iniciar sesión con su cuenta de Facebook y se cerrará la sesión al completar la encuesta. La siguiente persona que entra a la encuesta se le pedirá iniciar sesión en Facebook, etc.. etc. Cuando haya terminado con la encuesta haga clic el el modo de salir de la encuesta, en la esquina superior izquierda y todos aquellos que completaron la encuesta aparecerán en Contactos sin Asignar
     surveys: 
@@ -1096,6 +1104,8 @@ es:
     bulk_delete:
       cannot_delete_admin_error: 
       deleting_people_success: 
+    bulk_email:
+      default_body: 
     bulk_sms:
       sms_footer_message: 
     create:
@@ -1256,6 +1266,7 @@ es:
       saved_search_title: 
       saved_show: 
       search_any_placeholder: 
+      search_name: 
       standard_hide: 
       standard_show: 
       standard_title: 
@@ -1287,6 +1298,51 @@ es:
       start_survey: Para comenzar la encuesta, por favor inicia sesión con Facebook para saber quien realmente eres. Esto nos ayudará a ahorrarnos tiempo al completar la encuesta.
       waiting_for_logout: 
       welcome: Bienvenido!
+  signatures:
+    accept: 
+    clear: 
+    code_of_conduct:
+      first_paragraph: 
+      item1_from_first_paragraph: 
+      item2_from_first_paragraph: 
+      item3_from_first_paragraph: 
+      item4_from_first_paragraph: 
+      item5_from_first_paragraph: 
+      item6_from_first_paragraph: 
+      item7_from_first_paragraph: 
+      second_paragraph: 
+      title: 
+    date_signed_at: 
+    decline: 
+    declined_a_signature: 
+    download: 
+    download_guide: 
+    invalid_parameters: 
+    signed_a_signature: 
+    signed_forms: 
+    statement_of_faith:
+      first_paragraph: 
+      item10_from_second_paragraph: 
+      item11_from_second_paragraph: 
+      item12_from_second_paragraph: 
+      item13_from_second_paragraph: 
+      item14_from_second_paragraph: 
+      item15_from_second_paragraph: 
+      item16_from_second_paragraph: 
+      item17_from_second_paragraph: 
+      item1_from_second_paragraph: 
+      item2_from_second_paragraph: 
+      item3_from_second_paragraph: 
+      item4_from_second_paragraph: 
+      item5_from_second_paragraph: 
+      item6_from_second_paragraph: 
+      item7_from_second_paragraph: 
+      item8_from_second_paragraph: 
+      item9_from_second_paragraph: 
+      second_paragraph: 
+      third_paragraph: 
+      title: 
+    title: 
   sms:
     email_invalid_msg: 
     email_should_be_unique_msg: 
@@ -1353,10 +1409,12 @@ es:
       content: 
   survey_responses:
     address1: Dirección
+    all_predefined_have_answered: 
     answer_other_surveys:
       title: 
     birth_date: ¿Cuál es su fecha de nacimiento?
     campus: campus
+    city: 
     country: país
     dorm: residencia universitaria
     edit:
@@ -1472,6 +1530,7 @@ es:
         duplicate_error: 
         notice: 
       edit:
+        advanced_options: 
         edit_question: 
         leader_invalid_email: 
         leader_invalid_email_with_name: 
@@ -1571,12 +1630,19 @@ es:
       leaders_header: Dar acceso a otros líderes
       leaders_paragraph: Esta parte es opcional. Hay probabilidades de que hayan otras personas con las que trabajas a quienes te gustaría darles la capacidad de administrar la palabra clave que configuraste la palabra clave que al igual que los contactos que obtienes de las personas que respondieron a tu encuesta. Este paso te permitirá agregar esas personas. Excepto que no lo hemos programado aun.
       next: Next
+      not_found_header: 
       not_found_paragraph: En estos momentos MissionHub está siendo probado con el Ministerio Estudiantil de los Estados Unidos. Si no eres parte del Ministerio Estudiantil en Estados Unidos, no te preocupes! Tenemos el plan de lanzarlo pronto a una audiencia mayor. Si tu eres parte del Ministerio Estudiantil en Estados Unidos y estás viendo este mensaje, envíanos un correo a support@missionhub.com y te ayudaremos.
       request_a_keyword: Pedir una "Palabra Clave"!
       request_keyword: Solicita una clave
       request_keyword_link: Haz Clic aquí para solicitar una palabra clave. Te regresaremos a este asistente cuando termines.
       skip_step: Saltar este paso
       survey_paragraph: Ahora que has solicitado una palabra clave, vas a querer crear un par de preguntas para hacerle a las personas. Piensa a lo largo de las líneas en una encuesta corta o una tarjeta de contacto básico.
+      user_not_found:
+        ask_for_emails: 
+        error_searching: 
+        found_emails: 
+        more_steps: 
+        no_emails_found: 
       verify_identity: Verifica tu identidad
       verify_paragraph: 'Si ya tienes una cuenta relacionada de acceso de CCC, por favor inicie sesión para vincular su cuenta. Solo necesitarás hacer esto una vez. ADVERTENCIA: Si haz iniciado sesión en MissionHub utilizando la cuenta de Facebook de alguien más, Cierra la sesión! Al hacer clic en verificar combinará su información con la de ellos, creando un gran enredo.'
       verify_with_relay: Verificar con Relé
