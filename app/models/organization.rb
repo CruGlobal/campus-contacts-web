@@ -98,8 +98,10 @@ class Organization < ActiveRecord::Base
     # Handle name uniqueness
     name = value.name_before_type_cast || value.name || nil
     if self.parent.present?
-      if self.parent.children.where(name: name).present?
-        errors.add(:name, "is not unique")
+      self.parent.children.where(name: name).each do |child|
+        unless child == self
+          errors.add(:name, "is not unique")
+        end
       end
     end
   end
@@ -266,7 +268,7 @@ class Organization < ActiveRecord::Base
       return false
     end
 
-    update_attributes(last_push_to_infobase: last_week)
+    update(last_push_to_infobase: last_week)
   end
 
   def last_push_to_infobase
