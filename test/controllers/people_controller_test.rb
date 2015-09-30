@@ -27,7 +27,6 @@ class PeopleControllerTest < ActionController::TestCase
       put :update, id: @person.id
       assert_redirected_to '/wizard'
     end
-
   end
 
   context "After logging in a person" do
@@ -50,6 +49,17 @@ class PeopleControllerTest < ActionController::TestCase
     should "should update person" do
       put :update, id: @person.person.id, person: {first_name: 'David', last_name: 'Ang',  :current_address_attributes => { :address1 => "#41 Sgt. Esguerra Ave", :country => "Philippines"} }
       assert_redirected_to person_path(assigns(:person))
+    end
+
+    context "updating invalid person id" do
+      should "redirect to all contacts page" do
+        put :update, id: "12345", person: {first_name: 'Invalid', last_name: 'Person'}
+        assert_redirected_to all_contacts_path
+      end
+      should "not raise an error if requested as ajax" do
+        xhr :post, :update, id: "12345", person: {first_name: 'Invalid', last_name: 'Person'}
+        assert_response :success
+      end
     end
 
     context "bulk sending" do
