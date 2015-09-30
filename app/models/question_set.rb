@@ -76,11 +76,11 @@ class QuestionSet
                     recipients = leaders.collect{|p| "#{p.name} <#{p.email}>"}.join(", ")
                     if question.predefined?
                       if notify_on_predefined_questions
-                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
+                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet, question.id)
                       end
                     elsif answer.present?
                       unless answer.auto_notify_sent?
-                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet.id, question.id)
+                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet, question.id)
                         answer.update_attributes(auto_notify_sent: true)
                       end
                     end
