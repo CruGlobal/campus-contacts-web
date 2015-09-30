@@ -212,76 +212,84 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    @person = Person.find(params[:id])
-    @current_person = current_person
-    if params[:followup_status].present?
-      @new_status = params[:followup_status]
-      @contact_permission = @person.permission_for_org(current_organization)
-      if @contact_permission.present?
-        @contact_permission.followup_status = @new_status
-        @contact_permission.save!
+    @person = current_organization.all_people.find_by(id: params[:id])
+    if @person.present?
+      @current_person = current_person
+      if params[:followup_status].present?
+        @new_status = params[:followup_status]
+        @contact_permission = @person.permission_for_org(current_organization)
+        if @contact_permission.present?
+          @contact_permission.followup_status = @new_status
+          @contact_permission.save!
+        end
       end
-    end
 
-    if params[:cru_status_id].present?
-      if org_permission = @person.organizational_permission_for_org(current_organization)
-        org_permission.update_attribute(:cru_status_id, params[:cru_status_id])
+      if params[:cru_status_id].present?
+        if org_permission = @person.organizational_permission_for_org(current_organization)
+          org_permission.update_attribute(:cru_status_id, params[:cru_status_id])
+        end
       end
-    end
 
-    # Handle duplicate emails
-    emails = []
-		if params[:person][:email_address]
-      params[:person][:email_address][:email].strip!
-      emails = [params[:person][:email_address][:email]]
-		elsif params[:person][:email_addresses_attributes]
-			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email].strip!; v[:email]}
-		end
-    emails.each do |email|
-      p = @person.has_similar_person_by_name_and_email?(email)
-			@person = @person.smart_merge(p) if p
-      @person.reload
-    end
+      # Handle duplicate emails
+      emails = []
+  		if params[:person][:email_address]
+        params[:person][:email_address][:email].strip!
+        emails = [params[:person][:email_address][:email]]
+  		elsif params[:person][:email_addresses_attributes]
+  			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email].strip!; v[:email]}
+  		end
+      emails.each do |email|
+        p = @person.has_similar_person_by_name_and_email?(email)
+  			@person = @person.smart_merge(p) if p
+        @person.reload
+      end
 
-    authorize! :edit, @person
+      authorize! :edit, @person
 
-    if params[:assigned_to_id].present?
-      if params[:assigned_to_id] == 0
-        @person.assigned_tos.where("contact_assignments.organization_id = ?", current_organization.id).delete_all
-      else
-        leader_ids = params[:assigned_to_id].split(",")
-        @person.assigned_tos.where("contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)", current_organization.id, leader_ids).delete_all
+      if params[:assigned_to_id].present?
+        if params[:assigned_to_id] == 0
+          @person.assigned_tos.where("contact_assignments.organization_id = ?", current_organization.id).delete_all
+        else
+          leader_ids = params[:assigned_to_id].split(",")
+          @person.assigned_tos.where("contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)", current_organization.id, leader_ids).delete_all
 
-        leader_ids.each do |leader_id|
-          if leader = current_organization.leaders.where(id: leader_id).try(:first)
-            leader.assign_contacts([@person.id], current_organization, current_person)
+          leader_ids.each do |leader_id|
+            if leader = current_organization.leaders.where(id: leader_id).try(:first)
+              leader.assign_contacts([@person.id], current_organization, current_person)
+            end
           end
         end
       end
+      @assigned_tos = @person.assigned_to_people_by_org(current_organization)
     end
-    @assigned_tos = @person.assigned_to_people_by_org(current_organization)
 
     respond_to do |format|
-      @person.reload if @person.readonly? # This might fix the readonly error
+      if @person.present?
+        @person.reload if @person.readonly? # This might fix the readonly error
 
-      if params[:person][:phone_numbers_attributes].present?
-        params[:person][:phone_numbers_attributes].each do |phone|
-          begin
-            params[:person][:phone_numbers_attributes][phone.first[0]]["not_mobile"] = false
-          rescue; end
+        if params[:person][:phone_numbers_attributes].present?
+          params[:person][:phone_numbers_attributes].each do |phone|
+            begin
+              params[:person][:phone_numbers_attributes][phone.first[0]]["not_mobile"] = false
+            rescue; end
+          end
         end
-      end
 
-      if @person.update_attributes(params[:person])
-        @person.update_attribute(:student_status, nil) if @person.faculty?
-        @person.update_date_attributes_updated
-        format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
-        format.xml  { head :ok }
-        params[:update] = 'true'
-        format.js
+        if @person.update_attributes(params[:person])
+          @person.update_attribute(:student_status, nil) if @person.faculty?
+          @person.update_date_attributes_updated
+          format.html { redirect_to(@person, notice: 'Person was successfully updated.') }
+          format.xml  { head :ok }
+          params[:update] = 'true'
+          format.js
+        else
+          format.html { render action: "edit" }
+          format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+          format.js
+        end
       else
-        format.html { render action: "edit" }
-        format.xml  { render xml: @person.errors, status: :unprocessable_entity }
+        format.html { redirect_to all_contacts_path, alert: 'Cannot find person, please try again.' }
+        format.xml  { head :ok }
         format.js
       end
     end
