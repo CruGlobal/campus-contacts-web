@@ -10,9 +10,9 @@ class PeopleMailer < ActionMailer::Base
   #
 
 
-  def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet_id, question_id)
+  def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet, question_id)
     @keyword = keyword
-    @answer_sheet = AnswerSheet.find(answer_sheet_id)
+    @answer_sheet = answer_sheet
     @person = @answer_sheet.person
     @question = Element.find(question_id)
     @question_rule = QuestionRule.find(question_rule_id)
