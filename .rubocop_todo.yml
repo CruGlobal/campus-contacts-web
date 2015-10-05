@@ -220,7 +220,6 @@ Style/BracesAroundHashParameters:
     - 'test/controllers/contacts_controller_test.rb'
     - 'test/controllers/group_labelings_controller_test.rb'
     - 'test/controllers/group_memberships_controller_test.rb'
-    - 'test/controllers/imports_controller_test.rb'
     - 'test/controllers/leaders_controller_test.rb'
     - 'test/controllers/organizational_permissions_controller_test.rb'
     - 'test/controllers/organizations_controller_test.rb'

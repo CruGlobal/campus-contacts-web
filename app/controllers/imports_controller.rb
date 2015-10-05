@@ -195,14 +195,15 @@ class ImportsController < ApplicationController
 
   def get_survey_questions
     @survey_questions = {}
-    @predefined_questions = Survey.find(ENV.fetch('PREDEFINED_SURVEY')).questions
-    @survey_questions[I18n.t('surveys.questions.index.predefined')] = @predefined_questions.collect do |q|
-      [(q.slug || q.attribute_name || q.label).tr('_', ' ').titleize, q.id]
+    @predefined_questions = Survey.find(ENV.fetch('PREDEFINED_SURVEY')).survey_elements
+    @survey_questions[I18n.t('surveys.questions.index.predefined')] = @predefined_questions.collect do |se|
+      q = se.question
+      [(q.slug || q.attribute_name || q.label).tr('_', ' ').titleize, se.id]
     end
     current_organization.surveys.each do |survey|
       @survey_questions[survey.title] = {}
-      survey.all_questions.each do |q|
-        @survey_questions[survey.title][q.label] = q.id
+      survey.survey_elements.each do |se|
+        @survey_questions[survey.title][se.element.label] = se.id
       end
     end
   end
