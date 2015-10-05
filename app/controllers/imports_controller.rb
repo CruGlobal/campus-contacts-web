@@ -198,7 +198,9 @@ class ImportsController < ApplicationController
   def get_survey_questions
     @survey_questions = Hash.new
     @predefined_questions = Survey.find(ENV.fetch('PREDEFINED_SURVEY')).questions
-    @survey_questions[I18n.t('surveys.questions.index.predefined')] = @predefined_questions.collect { |q| [(q.slug || q.attribute_name || q.label).gsub('_',' ').titleize, q.id] }
+    @survey_questions[I18n.t('surveys.questions.index.predefined')] = @predefined_questions.collect do |q|
+      [(q.slug || q.attribute_name || q.label).gsub('_',' ').titleize, q.id]
+    end
     current_organization.surveys.each do |survey|
       @survey_questions[survey.title] = Hash.new
       survey.all_questions.each do |q|
