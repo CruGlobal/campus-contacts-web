@@ -91,8 +91,7 @@ module Mh
 
     config.compass.require "susy"
 
-    config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("missionhub-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
-    config.log_tags = [ lambda { |request| "ReqID:#{request.uuid}" } ]
+
     config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, :silence => ['/monitors/lb']
 
     config.active_record.raise_in_transactional_callbacks = true

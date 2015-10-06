@@ -96,4 +96,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.default_url_options = { host: 'missionhub.com' }
+
+  config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("missionhub-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
+  config.log_tags = [ lambda { |request| "ReqID:#{request.uuid}" } ]
 end

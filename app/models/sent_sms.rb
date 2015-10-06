@@ -101,36 +101,34 @@ class SentSms < ActiveRecord::Base
     login = ENV.fetch('SMSECO_USERNAME')
     password = ENV.fetch('SMSECO_PASSWORD')
     numero = recipient
-    expediteur = "0"
+    expediteur = 'CPC'
 
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
         self.update_attributes(status: "sending")
 
-        msgid = URI.encode("#{id}-#{i+1}")
+        msgid = "#{id}-#{i+1}"
         msg = URI.encode(message.strip)
 
-        request = "#{url}?login=#{login}&password=#{password}"
-        request += "&msgid=#{msgid}&expediteur=#{expediteur}&msg=#{msg}&numero=#{numero}"
-        request += "&flash=0&unicode=0&binaire=0"
 
-        begin
-          response = open(request).read
-          response_hash = Hash.from_xml(response)
-          response_code = response_hash['REPONSE']['statut'].to_i
-          self.update_attribute('reports', response_hash)
-          if response_code == 0
-            # puts "Success (#{response_code})"
-            self.update_attributes(reports: response_hash['REPONSE'], status: "sent")
-          else
-            # puts "Failed (#{response_code})"
-            self.update_attributes(reports: response_hash['REPONSE'], status: "failed")
-            result = false
-          end
-        rescue
-          msg = "Connection to #{url} failed!"
-          # puts msg
-          self.update_attributes(reports: msg, status: "failed")
+        request = {
+          compte: { login: login,
+                    password: password },
+          message: { expediteur: expediteur,
+                     msgid: msgid,
+                     msg: msg },
+          destinataires: [{ numero: numero }]
+        }
+
+        response = RestClient.post(url, "JSON=#{request.to_json}")
+        Rails.logger.debug(response.body)
+        response_hash = JSON.parse(response.body)
+        response_code = response_hash['statut'].to_i
+        self.update_attribute('reports', response_hash)
+        if response_code == 1
+          self.update_attributes(reports: response_hash, status: "sent")
+        else
+          self.update_attributes(reports: response_hash, status: "failed")
           result = false
         end
       end
