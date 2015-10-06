@@ -48,9 +48,8 @@ class BulkMessagesControllerTest < ActionController::TestCase
     should "send bulk SMS via smseco" do
       @org.settings[:sms_gateway] = 'smseco'
       @org.save
-      stub_request(:get, /http:\/\/www.smseco.com\/.*/).
-        with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
-        to_return(:status => 200, :body => "", :headers => {})
+      stub_request(:post, /http:\/\/www.smseco.com\/.*/).
+        to_return(:status => 200, :body => "{}", :headers => {})
       Sidekiq::Testing.inline! do
         assert_difference "SentSms.count", +2 do
           assert_difference "BulkMessage.count", +1 do
