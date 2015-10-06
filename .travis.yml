@@ -13,8 +13,6 @@ services:
 notifications:
   recipients:
     - josh.starcher@cojourners.com
-    - kennethjohnbalgos@gmail.com
-    - marvindpunongbayan@gmail.com
 
 before_script:
   - cp config/s3.travis.yml config/s3.yml
