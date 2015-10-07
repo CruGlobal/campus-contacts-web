@@ -80,9 +80,9 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'awesome_print'#, '~> 1.2.0'
   gem 'quiet_assets'#, '~> 1.0.2'
-end
+  gem 'rspec-rails'
+  gem 'rspec_api_documentation'
 
-group :test do
   gem 'minitest-rails'
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl_rails'#,'~> 2.0.0.rc4'
@@ -91,6 +91,7 @@ group :test do
   gem 'mocha', require: false
   gem 'ffaker'#, '~> 1.20.0'
   gem 'rubocop', '~> 0.34.0'
+  gem 'rack-test'
 end
 
 group :development do
