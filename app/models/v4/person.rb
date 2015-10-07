@@ -1,4 +1,6 @@
 #encoding: utf-8
-class V4::Person < ActiveRecord::Base
-  self.table_name = 'people'
+module V4
+  class Person < ActiveRecord::Base
+    belongs_to :user
+  end
 end

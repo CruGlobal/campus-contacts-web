@@ -94,5 +94,12 @@ module Mh
     config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, silence: ['/monitors/lb']
 
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
   end
 end

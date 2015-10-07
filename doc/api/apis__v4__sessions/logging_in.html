@@ -110,7 +110,7 @@ table th, table td {
 
       <div class="article">
         <h2>logging in</h2>
-        <h3>GET /apis/v4/sessions/new</h3>
+        <h3>POST /apis/v4/sessions/create</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -123,18 +123,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">type</span>
+                    <span class="name">provider</span>
                 </td>
                 <td>
-                  <span class="description">google</span>
+                  <span class="description">Service Type (google, facebook, ect)</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">token</span>
+                    <span class="name">code</span>
                 </td>
                 <td>
-                  <span class="description">asdf</span>
+                  <span class="description">One-time auth code from the service</span>
                 </td>
               </tr>
             </tbody>
@@ -151,10 +151,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">auth_token</span>
+                    <span class="name">token</span>
                 </td>
                 <td>
-                  <span class="description">User Auth Token</span>
+                  <span class="description">MH User Auth Token</span>
                 </td>
               </tr>
             </tbody>
@@ -166,14 +166,14 @@ table th, table td {
             <pre class="request headers">Accept: application/json
 Content-Type: application/json
 Host: example.org
-Cookie: 
-If-Modified-Since: 
-If-None-Match: </pre>
+Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /apis/v4/sessions/new</pre>
+          <pre class="request route highlight">POST /apis/v4/sessions/create</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">{"provider":"google","code":"asdf"}</pre>
 
 
             <h3>Response</h3>
@@ -181,24 +181,18 @@ If-None-Match: </pre>
               <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Methods: POST, GET, OPTIONS, PATCH
-Access-Control-Allow-Headers: API-VERSION, Authorization, Content-Type
-Access-Control-Max-Age: 1728000
 Content-Type: application/json; charset=utf-8
-Cache-Control: no-store, must-revalidate, private, max-age=0
-X-Request-Id: 57e1560a-196f-485f-85a5-12d1998a4e92
-X-Runtime: 0.493578
-Set-Cookie: __profilin=p%3Dt; path=/
-__profilin=p%3Dt; path=/
-__profilin=p%3Dt; path=/
-X-MiniProfiler-Ids: [&quot;5in545b0zgadx3wdsyv8&quot;,&quot;qul1ve16ppiq6kadh3wq&quot;]
-Content-Length: 20</pre>
+ETag: W/&quot;fd4fb6ed913b25a4d1420a5b90783ebf&quot;
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 3ac1e6c4-7a59-41e0-a321-7dc18e30adb6
+X-Runtime: 0.288536
+Vary: Origin
+Content-Length: 16</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;auth_token&quot;: &quot;foo&quot;
+  &quot;token&quot;: &quot;asdf&quot;
 }</pre>
       </div>
     </div>

@@ -72,6 +72,7 @@ gem 'protected_attributes'
 gem 'silencer'
 gem 'syslog-logger'
 gem 'rack-mini-profiler'
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -82,7 +83,9 @@ group :development, :test do
   gem 'quiet_assets'#, '~> 1.0.2'
   gem 'rspec-rails'
   gem 'rspec_api_documentation'
+end
 
+group :test do
   gem 'minitest-rails'
   gem 'webmock'#, '= 1.8.3'
   gem 'factory_girl_rails'#,'~> 2.0.0.rc4'
@@ -93,6 +96,7 @@ group :development, :test do
   gem 'rubocop', '~> 0.34.0'
   gem 'rack-test'
 end
+
 
 group :development do
   gem 'rails-footnotes'#, '~> 3.7.9'
