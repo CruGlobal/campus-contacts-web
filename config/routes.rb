@@ -481,6 +481,7 @@ Mh::Application.routes.draw do
   get 'oauth/done' => 'oauth#done'
   # make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin => '/oauth/admin'
+  mount Raddocs::App => '/docs'
 
   get 'monitors/lb' => 'monitors#lb'
 end
