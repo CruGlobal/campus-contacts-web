@@ -95,6 +95,7 @@ group :test do
   gem 'ffaker'#, '~> 1.20.0'
   gem 'rubocop', '~> 0.34.0'
   gem 'rack-test'
+  gem 'spring'
 end
 
 

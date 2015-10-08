@@ -4,7 +4,7 @@ resource 'Apis::V4::Sessions' do
   header "Accept", "application/json"
   header "Content-Type", "application/json"
 
-  post '/apis/v4/sessions/create' do
+  post '/apis/v4/sessions' do
 
     parameter :provider, 'Service Type (google, facebook, ect)'
     parameter :code, 'One-time auth code from the service'
