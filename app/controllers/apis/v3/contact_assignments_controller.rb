@@ -1,16 +1,16 @@
 class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
-  before_filter :get_contact_assignment, only: [:show, :update, :destroy]
+  before_action :get_contact_assignment, only: [:show, :update, :destroy]
 
   def index
     render json: filtered_contact_assignments,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @contact_assignment,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -21,9 +21,9 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
       render json: contact_assignment,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: contact_assignment.errors.full_messages},
+      render json: { errors: contact_assignment.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -33,9 +33,9 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
     if @contact_assignment.update_attributes(params[:contact_assignment])
       render json: @contact_assignment,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: contact_assignment.errors.full_messages},
+      render json: { errors: contact_assignment.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -55,38 +55,38 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
           end
           assignments << contact_assignment
         end
-        raise ActiveRecord::RecordInvalid if error_messages.present?
+        fail ActiveRecord::RecordInvalid if error_messages.present?
       end
     rescue ActiveRecord::RecordInvalid
       # Rescue the validation error we threw so we can send the error
       # messages back to the user
-      render json: {errors: error_messages},
+      render json: { errors: error_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
       return
     end
     render json: assignments,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def destroy
     @contact_assignment.destroy
     render json: @contact_assignment,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, deleted: true}
+           scope: { include: includes, organization: current_organization, deleted: true }
   end
 
   def bulk_destroy
     unless params[:filters]
-      render json: {errors: ["You must include a 'filters' parameter for specifying which contact assignments you'd like to delete"]}, status: :bad_request, callback: params[:callback]
+      render json: { errors: ["You must include a 'filters' parameter for specifying which contact assignments you'd like to delete"] }, status: :bad_request, callback: params[:callback]
       return
     end
     @contact_assignments = filtered_contact_assignments
     @contact_assignments.destroy_all
     render json: @contact_assignments,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, deleted: true}
+           scope: { include: includes, organization: current_organization, deleted: true }
   end
 
   private
@@ -103,12 +103,10 @@ class Apis::V3::ContactAssignmentsController < Apis::V3::BaseController
 
   def get_contact_assignment
     @contact_assignment = add_includes_and_order(contact_assignments)
-                .find(params[:id])
-
+                          .find(params[:id])
   end
 
   def available_includes
     [:assigned_to, :person]
   end
-
 end

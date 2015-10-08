@@ -1,7 +1,7 @@
 # unicorn_ -c /var/www/html/production/mh/current/config/unicorn.rb -E production -D
-working_directory "/var/www/html/production/mh/current"
+working_directory '/var/www/html/production/mh/current'
 
-app_path = "/var/www/html/production/mh/shared"
+app_path = '/var/www/html/production/mh/shared'
 
 rails_env = ENV['RAILS_ENV'] || 'production'
 
@@ -22,7 +22,7 @@ listen "#{app_path}/sockets/unicorn.sock", backlog: 4000, tcp_nopush: false
 
 pid "#{app_path}/pids/unicorn.pid"
 
-before_fork do |server, worker|
+before_fork do |server, _worker|
   ##
   # When sent a USR2, Unicorn will suffix its pidfile with .oldbin and
   # immediately start loading up a new version of itself (loaded with a new
@@ -35,17 +35,16 @@ before_fork do |server, worker|
   # Using this method we get 0 downtime deploys.
 
   old_pid = "#{app_path}/pids/unicorn.pid.oldbin"
-  if File.exists?(old_pid) && server.pid != old_pid
+  if File.exist?(old_pid) && server.pid != old_pid
     begin
-      Process.kill("QUIT", File.read(old_pid).to_i)
+      Process.kill('QUIT', File.read(old_pid).to_i)
     rescue Errno::ENOENT, Errno::ESRCH
       # someone else did our job for us
     end
   end
 end
 
-
-after_fork do |server, worker|
+after_fork do |_server, worker|
   ##
   # Unicorn master loads the app then forks off workers - because of the way
   # Unix forking works, we need to make sure we aren't using any of the parent's
@@ -56,14 +55,15 @@ after_fork do |server, worker|
   # Redis and Memcached would go here but their connections are established
   # on demand, so the master never opens a socket
 
-
   ##
   # Unicorn master is started as root, which is fine, but let's
   # drop the workers to git:git
 
   begin
-    uid, gid = Process.euid, Process.egid
-    user, group = 'deploy', 'www-data'
+    uid = Process.euid
+    gid = Process.egid
+    user = 'deploy'
+    group = 'www-data'
     target_uid = Etc.getpwnam(user).uid
     target_gid = Etc.getgrnam(group).gid
     worker.tmp.chown(target_uid, target_gid)

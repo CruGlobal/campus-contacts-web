@@ -1,18 +1,18 @@
 class Apis::V3::InteractionTypesController < Apis::V3::BaseController
-  before_filter :get_interaction_type, only: [:show, :update, :destroy]
+  before_action :get_interaction_type, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'created_at desc'
     list = add_includes_and_order(interaction_types, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @interaction_type,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -26,9 +26,9 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
         render json: interaction_type,
                status: :created,
                callback: params[:callback],
-               scope: {include: includes, organization: current_organization}
+               scope: { include: includes, organization: current_organization }
       else
-        render json: {errors: interaction_type.errors.full_messages},
+        render json: { errors: interaction_type.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -40,16 +40,16 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
       render_unauthorized_call
     else
       if @interaction_type.organization_id == 0
-        render json: {errors: ["You can't update default interaction_types"]},
+        render json: { errors: ["You can't update default interaction_types"] },
                status: :unprocessable_entity,
                callback: params[:callback]
       else
         if @interaction_type.update_attributes(params[:interaction_type])
           render json: @interaction_type,
                  callback: params[:callback],
-                 scope: {include: includes, organization: current_organization}
+                 scope: { include: includes, organization: current_organization }
         else
-          render json: {errors: interaction_type.errors.full_messages},
+          render json: { errors: interaction_type.errors.full_messages },
                  status: :unprocessable_entity,
                  callback: params[:callback]
         end
@@ -62,14 +62,14 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
       render_unauthorized_call
     else
       if @interaction_type.organization_id == 0
-        render json: {errors: ["You can't destroy default interaction_types"]},
+        render json: { errors: ["You can't destroy default interaction_types"] },
                status: :unprocessable_entity,
                callback: params[:callback]
       else
         @interaction_type.destroy
         render json: @interaction_type,
                callback: params[:callback],
-               scope: {include: includes, organization: current_organization}
+               scope: { include: includes, organization: current_organization }
       end
     end
   end
@@ -77,11 +77,10 @@ class Apis::V3::InteractionTypesController < Apis::V3::BaseController
   private
 
   def interaction_types
-    current_organization.interaction_types.where.not(i18n: "faculty_on_mission")
+    current_organization.interaction_types.where.not(i18n: 'faculty_on_mission')
   end
 
   def get_interaction_type
     @interaction_type = add_includes_and_order(interaction_types).find(params[:id])
   end
-
 end

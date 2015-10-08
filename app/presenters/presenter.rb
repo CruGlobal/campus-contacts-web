@@ -15,5 +15,4 @@ class Presenter
   def request
     @controller.request
   end
-
 end

@@ -17,13 +17,13 @@ class OrganizationMailer < ActionMailer::Base
   def notify_person_transfer(to, intro, transfer_logs)
     @transfer_logs = transfer_logs
     @intro = intro
-    mail to: to, subject: "Contacts Transfer Notification"
+    mail to: to, subject: 'Contacts Transfer Notification'
   end
 
   def notify_new_people(to, intro, new_people)
     @new_people = new_people
     @intro = intro
-    mail to: to, subject: "New Contact Notification"
+    mail to: to, subject: 'New Contact Notification'
   end
 
   def notify_user(org_id)
@@ -37,5 +37,4 @@ class OrganizationMailer < ActionMailer::Base
     @admin = @org.admins.first
     mail(to: @admin.email, subject: "Organization '#{@org}' was rejected.")
   end
-
 end

@@ -1,5 +1,4 @@
 module ContactActions
-
   def create_contact
     @organization ||= current_organization
     @add_to_group_tag = params[:add_to_group_tag]
@@ -9,11 +8,11 @@ module ContactActions
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
       params[:person][:phone_number] ||= {}
-      unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+      unless params[:person][:first_name].present? # && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
         respond_to do |wants|
-          wants.html { render :nothing => true }
+          wants.html { render nothing: true }
           wants.json do
-            raise ApiErrors::MissingData, "First Name is a required field but was not provided"
+            fail ApiErrors::MissingData, 'First Name is a required field but was not provided'
           end
         end
         return
@@ -24,7 +23,7 @@ module ContactActions
         fields = answer[1]
         if fields.is_a?(Hash)
           # Read birth_date & graduation_date question from non-predefined survey
-          fields.each do |key,val|
+          fields.each do |key, val|
             if val.present? && date_question = Element.find_by_id(key.to_i)
               params[:person][:birth_date] = val if date_question.attribute_name == 'birth_date'
               params[:person][:graduation_date] = val if date_question.attribute_name == 'graduation_date'
@@ -51,15 +50,15 @@ module ContactActions
       form_email_address = params[:person][:email_address][:email].to_s.strip
       form_first_name = params[:person][:first_name].to_s.strip
       form_last_name = params[:person][:last_name].to_s.strip
-      custom_errors = Array.new
+      custom_errors = []
 
       # Validation if email address has value, first name and last name should be required
       if form_email_address.present? && (form_first_name.blank? || form_last_name.blank?)
-        custom_errors << t("contacts.index.no_name_message")
+        custom_errors << t('contacts.index.no_name_message')
       end
 
       # Validation existing person email address, create duplicate person and email if name does not match
-      #if form_email_address.present? && form_first_name.present? && form_last_name.present?
+      # if form_email_address.present? && form_first_name.present? && form_last_name.present?
       #  if get_person = Person.find_existing_person_by_email(form_email_address)
       #    get_first_name = (get_person.first_name.nil?) ? "" : get_person.first_name.downcase.strip
       #    get_last_name = (get_person.last_name.nil?) ? "" : get_person.last_name.downcase.strip
@@ -74,7 +73,7 @@ module ContactActions
       #      @person.phone_number = params[:person][:phone_number]
       #    end
       #  end
-      #end
+      # end
 
       # We do not allow the duplicate person's email address
       # And we have commented/removed the process above of creating of duplicate person and email if name does not match
@@ -82,9 +81,9 @@ module ContactActions
       get_person = Person.find_existing_person_by_email(form_email_address)
       if get_person.present? && @existing_contact.blank?
         if get_person.organizational_permissions.find_by_organization_id(current_organization.id)
-          custom_errors << t("contacts.index.add_already_registered_contact")
+          custom_errors << t('contacts.index.add_already_registered_contact')
         else
-          custom_errors << t("contacts.index.email_is_already_exists")
+          custom_errors << t('contacts.index.email_is_already_exists')
         end
       end
 
@@ -98,13 +97,13 @@ module ContactActions
           if @person.present?
             @existing_contact_found = 1
             unless @person.email_addresses.find_by_email(form_email_address)
-              custom_errors << t("contacts.index.already_selected_an_existing_contact",
-                name: @person.name,
-                email: @person.email
-              )
+              custom_errors << t('contacts.index.already_selected_an_existing_contact',
+                                 name: @person.name,
+                                 email: @person.email
+                                )
             end
           else
-            custom_errors << t("contacts.index.invalid_existing_contact")
+            custom_errors << t('contacts.index.invalid_existing_contact')
           end
         end
       end
@@ -113,15 +112,15 @@ module ContactActions
       if params[:permissions_ids].present? && Permission.is_set_to_user_or_admin?(params[:permissions_ids].first.to_i)
         unless form_email_address.present?
           if permission_name = Permission.find_by_id(params[:permissions_ids])
-            custom_errors << t("contacts.index.for_this_permission_email_is_required", :permission => permission_name)
+            custom_errors << t('contacts.index.for_this_permission_email_is_required', permission: permission_name)
           else
-            custom_errors << t("contacts.index.for_this_permission_email_is_required_no_name")
+            custom_errors << t('contacts.index.for_this_permission_email_is_required_no_name')
           end
         end
       end
 
       # # validation for existing phone number
-      #if @person.phone_numbers.present?
+      # if @person.phone_numbers.present?
       #  phone_numbers = @person.phone_numbers.collect(&:number)
       #  phone_numbers.each do |number|
       #    check_person = Person.find_existing_person_by_name_and_phone({first_name: params[:person][:first_name],
@@ -131,7 +130,7 @@ module ContactActions
       #      custom_errors << "Phone number '#{number}' already in use" if PhoneNumber.find_by_number(number)
       #    end
       #  end
-      #end
+      # end
 
       @email = @person.email_addresses.first
       @phone = @person.phone_numbers.first
@@ -148,7 +147,7 @@ module ContactActions
             render 'add_contact'
           end
           wants.json do
-            raise ApiErrors::MissingData, custom_errors.join(', ')
+            fail ApiErrors::MissingData, custom_errors.join(', ')
           end
         end
         return false
@@ -181,12 +180,12 @@ module ContactActions
           ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
         end
 
-				if @add_to_group_tag == '1'
-    			@group = @organization.groups.find(params[:add_to_group])
-		      @group_membership = @group.group_memberships.where(person_id: @person.id).first_or_initialize
-		      @group_membership.role = params[:add_to_group_role]
-		      @group_membership.save
-				end
+        if @add_to_group_tag == '1'
+          @group = @organization.groups.find(params[:add_to_group])
+          @group_membership = @group.group_memberships.where(person_id: @person.id).first_or_initialize
+          @group_membership.role = params[:add_to_group_role]
+          @group_membership.save
+        end
 
         # Save survey answers
         save_survey_answers
@@ -196,7 +195,7 @@ module ContactActions
           wants.mobile { redirect_to :back }
           wants.js do
             @assignments = ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).group_by(&:person_id)
-            @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: @person).map {|r| [r.person_id, r]}]
+            @permissions = Hash[OrganizationalPermission.active.where(organization_id: @organization.id, permission_id: Permission::NO_PERMISSIONS_ID, person_id: @person).map { |r| [r.person_id, r] }]
 
             initialize_surveys_and_questions
             @answers = generate_answers(Person.where(id: @person.id), @organization, @questions)
@@ -212,7 +211,7 @@ module ContactActions
             render 'add_contact'
           end
           wants.json do
-            raise ApiErrors::MissingData, errors.join(', ')
+            fail ApiErrors::MissingData, errors.join(', ')
           end
         end
         return false
@@ -292,5 +291,4 @@ module ContactActions
       end
     end
   end
-
 end

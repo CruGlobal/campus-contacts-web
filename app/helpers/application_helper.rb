@@ -27,12 +27,12 @@ module ApplicationHelper
 
   def sortable(column, title = nil, url = {}, options = {})
     title ||= column.titleize
-    url ||= {controller: params[:controller], action: params[:action]}
-    direction = "asc"
+    url ||= { controller: params[:controller], action: params[:action] }
+    direction = 'asc'
     if session[:filters].present? && session[:filters][:search].present? && session[:filters][:search][:meta_sort].present?
-      direction = session[:filters][:search][:meta_sort].split(" ")[1] == "asc" ? "desc" : "asc"
+      direction = session[:filters][:search][:meta_sort].split(' ')[1] == 'asc' ? 'desc' : 'asc'
     end
-    link_to(title, url.merge(search: {meta_sort: "#{column} #{direction}"}, page: nil), options)
+    link_to(title, url.merge(search: { meta_sort: "#{column} #{direction}" }, page: nil), options)
   end
 
   def add_params(url, hash)
@@ -40,7 +40,7 @@ module ApplicationHelper
       url.merge(hash)
     else
       parts = url.split('?')
-      url_params = ([parts[1]] + hash.map {|k,v| "#{k}=#{v}"}).compact.join('&')
+      url_params = ([parts[1]] + hash.map { |k, v| "#{k}=#{v}" }).compact.join('&')
       [parts[0], url_params].join('?')
     end
   end
@@ -50,7 +50,7 @@ module ApplicationHelper
     org_tree.each do |org_id, children|
       org = current_person.organization_from_id(org_id)
       next unless org # Just in case there's some bad data
-      ret += render(partial: 'application/org', locals: {org: org, children: children})
+      ret += render(partial: 'application/org', locals: { org: org, children: children })
     end
     ret.html_safe
   end
@@ -60,7 +60,7 @@ module ApplicationHelper
     org_tree.each do |org_id, children|
       org = current_person.organization_from_id(org_id)
       next unless org # Just in case there's some bad data
-      ret += render(partial: 'application/new_org', locals: {org: org, children: children})
+      ret += render(partial: 'application/new_org', locals: { org: org, children: children })
     end
     ret.html_safe
   end
@@ -74,15 +74,15 @@ module ApplicationHelper
                        'id_type' => 'missionhub',
                        'id_value' => current_person.id }
       if a = current_person.current_address
-        extra_params.merge!({ 'StreetLine1' => a.address1,
-                              'StreetLine2' => a.address2,
-                              'StreetLine3' => a.address3,
-                              'City' => a.city,
-                              'State' => a.state,
-                              'PostalCode' => a.zip,
-                              'Country' => a.country })
+        extra_params.merge!('StreetLine1' => a.address1,
+                            'StreetLine2' => a.address2,
+                            'StreetLine3' => a.address3,
+                            'City' => a.city,
+                            'State' => a.state,
+                            'PostalCode' => a.zip,
+                            'Country' => a.country)
       end
-      text.sub('Desig', extra_params.collect {|k, v| "#{k}=#{v}"}.join('&') + '&Desig')
+      text.sub('Desig', extra_params.collect { |k, v| "#{k}=#{v}" }.join('&') + '&Desig')
     else
       text
     end.html_safe
@@ -102,8 +102,8 @@ module ApplicationHelper
 
   def link_to_add_fields(name, f, association)
     new_object = f.object.class.reflect_on_association(association).klass.new
-    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
-      render("people/#{association.to_s.singularize}_fields", :builder => builder, no_remove: false)
+    fields = f.fields_for(association, new_object, child_index: "new_#{association}") do |builder|
+      render("people/#{association.to_s.singularize}_fields", builder: builder, no_remove: false)
     end
     link_to_function(name, raw("addFields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"))
   end
@@ -140,7 +140,7 @@ module ApplicationHelper
   end
 
   def pretty_tag(txt)
-    txt.to_s.gsub(/\s/, "_").gsub(/(?!-)\W/, "").downcase
+    txt.to_s.gsub(/\s/, '_').gsub(/(?!-)\W/, '').downcase
   end
 
   def flatten_hash(hash = params, ancestor_names = [])
@@ -152,7 +152,7 @@ module ApplicationHelper
         flat_hash.merge!(flatten_hash(v, names))
       else
         key = flat_hash_key(names)
-        key += "[]" if v.is_a?(Array)
+        key += '[]' if v.is_a?(Array)
         flat_hash[key] = v
       end
     end
@@ -169,60 +169,60 @@ module ApplicationHelper
     name
   end
 
-  def questionnaire_engine_stylesheets(options = {})
+  def questionnaire_engine_stylesheets(_options = {})
     output = []
-    output << "qe/qe.screen"
-    return output
+    output << 'qe/qe.screen'
+    output
   end
 
   def questionnaire_engine_javascripts(options = {})
     output = []
-    output << "qe/jquery.validate.pack"
-    output << "qe/jquery.metadata"
-    output << "qe/jquery.tooltips.min"
-    output << "qe/qe.common"
+    output << 'qe/jquery.validate.pack'
+    output << 'qe/jquery.metadata'
+    output << 'qe/jquery.tooltips.min'
+    output << 'qe/qe.common'
     if options[:area] == :public
-      output << "qe/qe.public"
+      output << 'qe/qe.public'
     else
-      output << "qe/qe.admin"
-      output << "qe/ckeditor/ckeditor"
+      output << 'qe/qe.admin'
+      output << 'qe/ckeditor/ckeditor'
     end
-    output << "qe/jquery.scrollTo-min"
-    output << {:cache => true} if options[:cache]
-    return output
+    output << 'qe/jquery.scrollTo-min'
+    output << { cache: true } if options[:cache]
+    output
   end
 
   def questionnaire_engine_includes(options = {})
-    return "" if @qe_already_included
-    @qe_already_included=true
+    return '' if @qe_already_included
+    @qe_already_included = true
 
-    js = questionnaire_engine_javascripts(options).collect {|file| javascript_include_tag(file)}.join("\n")
-    css = questionnaire_engine_stylesheets(options).collect {|file| stylesheet_link_tag(file)}.join("\n")
+    js = questionnaire_engine_javascripts(options).collect { |file| javascript_include_tag(file) }.join("\n")
+    css = questionnaire_engine_stylesheets(options).collect { |file| stylesheet_link_tag(file) }.join("\n")
     "#{js}\n#{css}\n".html_safe
   end
 
   def calendar_date_select_tag(name, value = nil, options = {})
-    options.merge!({'data-calendar' => true})
-    text_field_tag(name, value, options )
+    options.merge!('data-calendar' => true)
+    text_field_tag(name, value, options)
   end
 
   def balloon_tip(t)
-    image_tag('qe/icons/question-balloon.png', :title => t, :class => 'tip')
+    image_tag('qe/icons/question-balloon.png', title: t, class: 'tip')
   end
 
   def spinner(extra = nil, display = false)
     e = extra ? "spinner_#{extra}" : 'spinner'
-    image_tag('spinner.gif', :id => e, :style => display ? '' : 'display:none', :class => 'spinner')
+    image_tag('spinner.gif', id: e, style: display ? '' : 'display:none', class: 'spinner')
   end
 
   def date_format(datetime)
     return nil unless datetime.present?
-    return datetime.to_datetime.strftime("%d %b %Y")
+    datetime.to_datetime.strftime('%d %b %Y')
   end
 
   def time_format(datetime)
     return nil unless datetime.present?
-    return datetime.to_datetime.strftime("%d %b %Y %H:%M:%S")
+    datetime.to_datetime.strftime('%d %b %Y %H:%M:%S')
   end
 
   # replaces MovementIndicatorSuggestionPresenter
@@ -232,11 +232,10 @@ module ApplicationHelper
       I18n.t("movement_indicator_suggestions.reasons.#{suggestion.reason}",
              name: link_to(suggestion.person, "/profile/#{suggestion.person.to_param}"),
              label: label_html, label_sentence: I18n.t("labels.#{suggestion.label.i18n}_sentence"))
-    # else
-    #   I18n.t("movement_indicator_suggestions.remove_suggestion_html",
-    #          name: helpers.link_to(person, "/profile/#{person.to_param}"),
-    #          label: label_html, label_sentence: I18n.t("labels.#{label.i18n}_sentence"))
+      # else
+      #   I18n.t("movement_indicator_suggestions.remove_suggestion_html",
+      #          name: helpers.link_to(person, "/profile/#{person.to_param}"),
+      #          label: label_html, label_sentence: I18n.t("labels.#{label.i18n}_sentence"))
     end
   end
-
 end

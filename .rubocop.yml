@@ -1,0 +1,18 @@
+# rubocop --format fuubar --format offenses
+inherit_from:
+  - .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'app/controllers/api/**/*'
+
+  RunRailsCops: true
+
+AndOr:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false

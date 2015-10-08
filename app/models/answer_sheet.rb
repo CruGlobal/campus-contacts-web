@@ -14,7 +14,7 @@ class AnswerSheet < ActiveRecord::Base
   end
 
   def answers_by_question
-    self.answers.group_by { |answer| answer.question_id }
+    answers.group_by(&:question_id)
   end
 
   def save_survey(answers = nil, notify_on_predefined_questions = true)
@@ -25,7 +25,7 @@ class AnswerSheet < ActiveRecord::Base
       update_attribute(:completed_at, Time.now)
 
       # Ensure that the user/contact will be added as contact in organization after taking survey
-      org = self.survey.organization
+      org = survey.organization
       org.add_contact(person) if org.present?
     end
   end
@@ -33,5 +33,4 @@ class AnswerSheet < ActiveRecord::Base
   # def has_answer_for?(question_id)
   #   answers_by_question[question_id].present?
   # end
-
 end

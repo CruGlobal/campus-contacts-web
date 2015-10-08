@@ -19,11 +19,11 @@ class Import < ActiveRecord::Base
   belongs_to :organization
 
   has_attached_file :upload, s3_permissions: :private, storage: :s3,
-                    path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy,
-                    s3_credentials: { bucket: ENV['AWS_BUCKET'], access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] }
+                             path: 'mh/imports/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy,
+                             s3_credentials: { bucket: ENV['AWS_BUCKET'], access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                               secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] }
 
-  validates_attachment_file_name :upload, :matches => [/csv\Z/]
+  validates_attachment_file_name :upload, matches: [/csv\Z/]
 
   validates :upload, attachment_presence: true
 
@@ -34,22 +34,22 @@ class Import < ActiveRecord::Base
   end
 
   def get_new_people # generates array of Person hashes
-    new_people = Array.new
-    first_name_question_id = Element.where(attribute_name: 'first_name').first.id
-    email_question_id = Element.where(attribute_name: 'email').first.id
+    new_people = []
+    first_name_question_id = Element.find_by(attribute_name: 'first_name').id
+    email_question_id = Element.find_by(attribute_name: 'email').id
 
     file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
     content = CSV.new(file, headers: :first_row)
 
     content.each do |row|
-      person_hash = Hash.new
-      person_hash[:person] = Hash.new
+      person_hash = {}
+      person_hash[:person] = {}
       person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question_id.to_s].to_i]
       if header_mappings.invert[email_question_id.to_s].present? && row[header_mappings.invert[email_question_id.to_s].to_i].present?
         person_hash[:person][:email] = row[header_mappings.invert[email_question_id.to_s].to_i]
       end
 
-      answers = Hash.new
+      answers = {}
       header_mappings.keys.each do |k|
         answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
       end
@@ -59,7 +59,6 @@ class Import < ActiveRecord::Base
     end
 
     new_people
-
   end
 
   def check_for_errors # validating csv
@@ -67,7 +66,7 @@ class Import < ActiveRecord::Base
 
     # since first name is required for every contact. Look for id of element where
     # attribute_name = 'first_name' in the header_mappings.
-    first_name_question = Element.where(attribute_name: 'first_name').first.id.to_s
+    first_name_question = Element.find_by(attribute_name: 'first_name').id.to_s
     unless header_mappings.values.include?(first_name_question)
       errors << I18n.t('contacts.import_contacts.present_first_name')
     end
@@ -101,7 +100,7 @@ class Import < ActiveRecord::Base
         names << person.name
         if person.errors.present?
           person.errors.messages.each do |error|
-            import_errors << "#{person.to_s}: #{error[0].to_s.split('.')[0].titleize} #{error[1].first}"
+            import_errors << "#{person}: #{error[0].to_s.split('.')[0].titleize} #{error[1].first}"
           end
         else
           labels.each do |label_id|
@@ -109,7 +108,7 @@ class Import < ActiveRecord::Base
               label = Label.where(organization_id: current_organization.id, name: label_name).first_or_create
               label_id = label.id
             elsif label_id.to_i == Label::LEADER_ID
-              import_errors << "#{person.to_s}: Email address is required to add Leader label" unless person.email_addresses.present?
+              import_errors << "#{person}: Email address is required to add Leader label" unless person.email_addresses.present?
             end
             unless import_errors.present?
               current_organization.add_contact(person, current_user.person.id)
@@ -121,21 +120,21 @@ class Import < ActiveRecord::Base
       if import_errors.present?
         # send failure email
         ImportMailer.import_failed(current_user, import_errors).deliver_now
-        raise ActiveRecord::Rollback
+        fail ActiveRecord::Rollback
       else
         # Send success email
         table = create_table(new_person_ids, get_new_people)
         ImportMailer.import_successful(current_user, table).deliver_now
       end
     end
-    if self.survey_ids.present? && import_errors.present?
-      Survey.where(id: self.survey_ids).destroy_all
+    if survey_ids.present? && import_errors.present?
+      Survey.where(id: survey_ids).destroy_all
     end
   end
 
   def create_contact_from_row(row, current_organization, added_by_id = nil)
-    row[:person] = row[:person].each_value {|p| p.strip! if p.present? }
-    row[:answers] = row[:answers].each_value {|a| a.strip! if a.present? }
+    row[:person] = row[:person].each_value { |p| p.strip! if p.present? }
+    row[:answers] = row[:answers].each_value { |a| a.strip! if a.present? }
 
     person = Person.find_existing_person(Person.new(row[:person]))
     person.save
@@ -158,30 +157,30 @@ class Import < ActiveRecord::Base
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person_id: person.id)
     predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
-    predefined.elements.where('object_name is not null').each do |question|
+    predefined.elements.where('object_name is not null').find_each do |question|
       answer = row[:answers][question.id]
       if answer.present?
 
-        #create unique phone number but not a primary
+        # create unique phone number but not a primary
         if question.attribute_name == 'phone_number'
-          if person.phone_numbers.where(phone_numbers: {primary: true}).present?
-            unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
+          if person.phone_numbers.where(phone_numbers: { primary: true }).present?
+            unless person.phone_numbers.where(phone_numbers: { number: answer }).present?
               new_phone_numbers << person.phone_numbers.new(number: answer, primary: false)
             end
           else
-            unless person.phone_numbers.where(phone_numbers: {number: answer}).present?
+            unless person.phone_numbers.where(phone_numbers: { number: answer }).present?
               new_phone_numbers << person.phone_numbers.new(number: answer, primary: true)
             end
           end
         else
-          #set response
+          # set response
           question.set_response(answer, answer_sheet)
         end
       end
     end
 
     if person.save
-      question_sets.map { |qs| qs.save }
+      question_sets.map(&:save)
       new_phone_numbers.map { |pn| pn.save if pn.number.present? }
       create_contact_at_org(person, current_organization, added_by_id)
     end
@@ -190,17 +189,15 @@ class Import < ActiveRecord::Base
   end
 
   class NilColumnHeader < StandardError
-
   end
 
   class InvalidCSVFormat < StandardError
-
   end
 
   private
 
   def create_table(_new_person_ids, excel_answers)
-    @answered_question_ids = header_mappings.values.reject{ |c| c.empty? || c == 'do_not_import' }.collect(&:to_i)
+    @answered_question_ids = header_mappings.values.reject { |c| c.empty? || c == 'do_not_import' }.collect(&:to_i)
 
     @table = []
     questions = []
@@ -228,7 +225,7 @@ class Import < ActiveRecord::Base
     # Since we have to encode the csv file to avoid the "invalid byte sequence in utf-8" error
     # And import has no format validation, this line is the safest and lightest format validation
     # Rather than to set the validation from model, it's too strict.
-    raise InvalidCSVFormat unless File.extname(upload.original_filename) == '.csv'
+    fail InvalidCSVFormat unless File.extname(upload.original_filename) == '.csv'
 
     unless tempfile.nil?
       ctr = 0
@@ -237,12 +234,12 @@ class Import < ActiveRecord::Base
         if ctr == 0
           begin
             # if there is a nil headers
-            raise NilColumnHeader if row && row.length - row.compact.length != 0
+            fail NilColumnHeader if row && row.length - row.compact.length != 0
             self.headers = row.compact
           rescue
             raise NilColumnHeader
           end
-          raise NilColumnHeader if headers.empty?
+          fail NilColumnHeader if headers.empty?
         elsif ctr == 1
           self.preview = row
         else
@@ -254,11 +251,10 @@ class Import < ActiveRecord::Base
   end
 
   def is_row_blank?(row)
-    #checking if a row has no entries (because of the possibility of user entering in a blank row in a csv file)
+    # checking if a row has no entries (because of the possibility of user entering in a blank row in a csv file)
     row.each do |r|
       return false unless r.nil?
     end
     true
   end
-
 end

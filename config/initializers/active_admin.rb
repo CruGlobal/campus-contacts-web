@@ -1,11 +1,10 @@
 ActiveAdmin.setup do |config|
-
   # == Site Title
   #
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "MishinHub"
+  config.site_title = 'MishinHub'
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -39,7 +38,6 @@ ActiveAdmin.setup do |config|
   # within the controller.
   config.authentication_method = :authenticate_super_admin!
 
-
   # == Current User
   #
   # Active Admin will associate actions with the current
@@ -48,7 +46,6 @@ ActiveAdmin.setup do |config|
   # This setting changes the method which Active Admin calls
   # to return the currently logged in user.
   config.current_user_method = :current_user
-
 
   # == Logging Out
   #
@@ -68,7 +65,6 @@ ActiveAdmin.setup do |config|
   # Default:
   # config.logout_link_method = :get
 
-
   # == Admin Comments
   #
   # Admin comments allow you to add comments to any model for admin use
@@ -80,14 +76,12 @@ ActiveAdmin.setup do |config|
   # Default:
   # config.allow_comments_in = [:admin]
 
-
   # == Controller Filters
   #
   # You can add before, after and around filters to all of your
   # Active Admin resources from here.
   #
   # config.before_filter :authorize_admin
-
 
   # == Register Stylesheets & Javascripts
   #

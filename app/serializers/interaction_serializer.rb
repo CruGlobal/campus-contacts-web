@@ -1,5 +1,4 @@
 class InteractionSerializer < ActiveModel::Serializer
-
   HAS_MANY = [:initiators]
   HAS_ONE = [:interaction_type, :receiver, :creator, :last_updater]
   INCLUDES = HAS_MANY + HAS_ONE
@@ -14,9 +13,7 @@ class InteractionSerializer < ActiveModel::Serializer
     includes = scope if scope.is_a? Array
     includes = scope[:include] if scope.is_a? Hash
     includes.each do |rel|
-      if INCLUDES.include?(rel.to_sym)
-        include!(rel.to_sym)
-      end
+      include!(rel.to_sym) if INCLUDES.include?(rel.to_sym)
     end if includes
   end
 
@@ -25,5 +22,4 @@ class InteractionSerializer < ActiveModel::Serializer
       add_since(object.send(relationship))
     end
   end
-
 end

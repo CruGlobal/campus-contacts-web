@@ -1,6 +1,6 @@
 class ProfileController < ApplicationController
-  before_filter :authorize
-  skip_before_filter :clear_advanced_search
+  before_action :authorize
+  skip_before_action :clear_advanced_search
 
   def show
     permissions_for_assign
@@ -14,8 +14,8 @@ class ProfileController < ApplicationController
       @interaction = Interaction.new
       @completed_answer_sheets = @person.completed_answer_sheets(current_organization).order('completed_at DESC')
 
-			@labels = @person.assigned_organizational_labels(current_organization.id).uniq
-			@permission = @person.assigned_organizational_permissions(current_organization.id).first
+      @labels = @person.assigned_organizational_labels(current_organization.id).uniq
+      @permission = @person.assigned_organizational_permissions(current_organization.id).first
       @groups = @person.groups_for_org_id(current_organization.id)
       @assigned_tos = @person.assigned_to_people_by_org(current_organization)
       @friends = @person.friends_in_orgnization(current_organization)
@@ -64,6 +64,7 @@ class ProfileController < ApplicationController
   end
 
   protected
+
   def authorize
     authorize! :manage_contacts, current_organization
   end

@@ -1,5 +1,4 @@
 class CrsImport
-
   def initialize(org, user)
     @org = org
     @conference = org.conference
@@ -13,7 +12,7 @@ class CrsImport
       begin
         questions = {}
         # create a missionhub question for each crs question
-        Ccc::Crs2Question.where("conference_id = ? OR common = 1", @conference.id).each do |crs_question|
+        Ccc::Crs2Question.where('conference_id = ? OR common = 1', @conference.id).each do |crs_question|
           case crs_question.type
           when 'integer', 'shortText', 'mediumText', 'singleCharacter', 'paragraph', 'number'
             kind = TextField
@@ -29,17 +28,17 @@ class CrsImport
             style = 'date_field'
           end
 
-          if question = Element.where(crs_question_id: crs_question.id).first
+          if question = Element.find_by(crs_question_id: crs_question.id)
             # Make sure it's the same kind of question
             unless question.is_a?(kind)
               Question.connection.update("update elements set kind = #{kind} where id = #{question.id}")
-              question = kind.where(crs_question_id: crs_question.id).first
+              question = kind.find_by(crs_question_id: crs_question.id)
             end
           else
             question = kind.new(crs_question_id: crs_question.id, label: crs_question.name)
           end
 
-          question.attributes = {style: style}
+          question.attributes = { style: style }
 
           case style
           when 'checkbox'
@@ -58,19 +57,19 @@ class CrsImport
           label = Label.where(organization_id: @org.id, name: registrant_type.name).first_or_create!
 
           # create survey
-          survey = @org.surveys.where(crs_registrant_type_id: registrant_type.id).
-                     first_or_initialize(title: registrant_type.name)
+          survey = @org.surveys.where(crs_registrant_type_id: registrant_type.id)
+                   .first_or_initialize(title: registrant_type.name)
           survey.save(validate: false)
 
           # add questions to survey
-          registrant_type.custom_questions_items.where("question_id is not null").each do |cqi|
+          registrant_type.custom_questions_items.where('question_id is not null').each do |cqi|
             survey.survey_elements.where(element_id: questions[cqi.question_id].id).first_or_create!
           end
 
           # Import registrants
           registrant_type.registrants.where(status: 'Complete').each do |registrant|
             # Find or create missionhub person
-            person = Person.where(crs_profile_id: registrant.profile_id).first
+            person = Person.find_by(crs_profile_id: registrant.profile_id)
 
             # Get the ministry_person or the crs2_person
             profile = registrant.profile
@@ -100,18 +99,18 @@ class CrsImport
             end
 
             attributes = {
-                            first_name: crs2_person.preferred_or_first,
-                            last_name: crs2_person.last_name,
-                            middle_name: crs2_person.middle_name,
-                            gender: crs2_person.gender_as_int,
-                            major: crs2_person.major,
-                            campus: crs2_person.campus,
-                            greek_affiliation: crs2_person.greek_affiliation,
-                            birth_date: crs2_person.birth_date,
-                            date_became_christian: crs2_person.date_became_christian,
-                            graduation_date: crs2_person.graduation_date,
-                            year_in_school: year_in_school_mapping(crs2_person.year_in_school),
-                            minor: crs2_person.minor
+              first_name: crs2_person.preferred_or_first,
+              last_name: crs2_person.last_name,
+              middle_name: crs2_person.middle_name,
+              gender: crs2_person.gender_as_int,
+              major: crs2_person.major,
+              campus: crs2_person.campus,
+              greek_affiliation: crs2_person.greek_affiliation,
+              birth_date: crs2_person.birth_date,
+              date_became_christian: crs2_person.date_became_christian,
+              graduation_date: crs2_person.graduation_date,
+              year_in_school: year_in_school_mapping(crs2_person.year_in_school),
+              minor: crs2_person.minor
             }
 
             if person
@@ -127,7 +126,7 @@ class CrsImport
             # Link to crs profile
             person.crs_profile_id = registrant.profile_id
 
-            #raise "Invalid Person: #{person.inspect}" unless person.valid?
+            # raise "Invalid Person: #{person.inspect}" unless person.valid?
 
             person.save(validate: false)
 
@@ -175,12 +174,11 @@ class CrsImport
               a.value = value if value
               a.save
             end
-
           end
 
           # Remove cancellations
           registrant_type.registrants.where(status: 'Cancelled').each do |registrant|
-            person = Person.where(crs_profile_id: registrant.profile_id).first
+            person = Person.find_by(crs_profile_id: registrant.profile_id)
             if person
               @org.remove_contact(person)
               @org.remove_label_from_person(person, label.id)
@@ -195,7 +193,7 @@ class CrsImport
       end
     else
       CrsImportMailer.failed(@org, importer_email_address).deliver_now if importer_email_address
-      raise
+      fail
     end
     nil
   end

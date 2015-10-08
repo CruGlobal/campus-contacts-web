@@ -4,7 +4,7 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "support@missionhub.com"
+  config.mailer_sender = 'support@missionhub.com'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
@@ -23,7 +23,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  config.authentication_keys = [ :username ]
+  config.authentication_keys = [:username]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -35,12 +35,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :username ]
+  config.case_insensitive_keys = [:username]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :username ]
+  config.strip_whitespace_keys = [:username]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -58,7 +58,7 @@ Devise.setup do |config|
   # config.http_authenticatable_on_xhr = true
 
   # The realm used in Http Basic Authentication. "Application" by default.
-  config.http_authentication_realm = "MissionHub"
+  config.http_authentication_realm = 'MissionHub'
 
   # It will change confirmation, password recovery and other workflows
   # to behave the same regardless if the e-mail provided was right or wrong.
@@ -207,8 +207,8 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  #config.omniauth :facebook, FB_APP_ID, FB_SECRET, scope: 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
-  #config.omniauth :facebook_mhub, FB_APP_ID_MHUB, FB_SECRET_MHUB, scope: 'user_birthday,email,user_interests,user_location,user_education_history'
+  # config.omniauth :facebook, FB_APP_ID, FB_SECRET, scope: 'user_birthday,email,offline_access,user_interests,user_location,user_education_history'
+  # config.omniauth :facebook_mhub, FB_APP_ID_MHUB, FB_SECRET_MHUB, scope: 'user_birthday,email,user_interests,user_location,user_education_history'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -221,9 +221,9 @@ Devise.setup do |config|
   # end
   config.secret_key = '151ad0cf1f9cfbef1e2f7cf1df1594ee219e4a99b8dadc4022bba7c0f35badfb0fc5fbe8eea94f947923aa66870049ae0ab29e9b1bd719b6dda9d34c0fe27002'
 
-  Warden::Manager.before_failure do |env,opts|
+  Warden::Manager.before_failure do |env, _opts|
     request = Rack::Request.new(env)
-    request.session[:return_to] = request.env['REQUEST_METHOD']=="GET" ? request.env['action_dispatch.request.path_parameters'] : request.env['HTTP_REFERER']
+    request.session[:return_to] = request.env['REQUEST_METHOD'] == 'GET' ? request.env['action_dispatch.request.path_parameters'] : request.env['HTTP_REFERER']
     request.session[:return_params] = request.env['action_dispatch.request.request_parameters']
   end
 end

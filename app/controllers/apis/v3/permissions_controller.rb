@@ -1,18 +1,18 @@
 class Apis::V3::PermissionsController < Apis::V3::BaseController
-  before_filter :get_permission, only: [:show, :update, :destroy]
+  before_action :get_permission, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'name'
     list = add_includes_and_order(permissions, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {organization: current_organization, since: params[:since]}
+           scope: { organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @permission,
            callback: params[:callback],
-           scope: {organization: current_organization}
+           scope: { organization: current_organization }
   end
 
   private
@@ -23,8 +23,6 @@ class Apis::V3::PermissionsController < Apis::V3::BaseController
 
   def get_permission
     @permission = add_includes_and_order(permissions)
-                .find(params[:id])
-
+                  .find(params[:id])
   end
-
 end

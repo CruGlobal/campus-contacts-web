@@ -1,12 +1,11 @@
 class SmsKeywordsController < ApplicationController
-  before_filter :check_org_and_authorize
-  before_filter :find_keyword, :only => [:edit, :update, :destroy]
+  before_action :check_org_and_authorize
+  before_action :find_keyword, only: [:edit, :update, :destroy]
 
   def index
     authorize! :manage, current_organization
     @keywords = current_organization.self_and_children_keywords
   end
-
 
   # GET /sms_keywords/new
   # GET /sms_keywords/new.xml
@@ -33,10 +32,10 @@ class SmsKeywordsController < ApplicationController
 
     respond_to do |format|
       if @sms_keyword.save
-        format.html { redirect_to(session[:wizard] && wizard_path ? wizard_path : sms_keywords_path) } #, notice: t('sms_keywords.flash.created')
+        format.html { redirect_to(session[:wizard] && wizard_path ? wizard_path : sms_keywords_path) } # , notice: t('sms_keywords.flash.created')
         format.xml  { render xml: @sms_keyword, status: :created, location: @sms_keyword }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.xml  { render xml: @sms_keyword.errors, status: :unprocessable_entity }
       end
     end
@@ -50,7 +49,7 @@ class SmsKeywordsController < ApplicationController
         format.html { redirect_to(sms_keywords_path, notice: t('sms_keywords.flash.updated')) }
         format.xml  { head :ok }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.xml  { render xml: @sms_keyword.errors, status: :unprocessable_entity }
       end
     end
@@ -73,17 +72,18 @@ class SmsKeywordsController < ApplicationController
   end
 
   private
-    def check_org_and_authorize
-      unless current_organization
-        session[:return_to] = params
-        redirect_to wizard_path || user_root_path
-        return false
-      end
-      authorize! :manage, current_organization
-    end
 
-    def find_keyword
-      @sms_keyword = SmsKeyword.find(params[:id])
-      authorize! :manage, @sms_keyword
+  def check_org_and_authorize
+    unless current_organization
+      session[:return_to] = params
+      redirect_to wizard_path || user_root_path
+      return false
     end
+    authorize! :manage, current_organization
+  end
+
+  def find_keyword
+    @sms_keyword = SmsKeyword.find(params[:id])
+    authorize! :manage, @sms_keyword
+  end
 end

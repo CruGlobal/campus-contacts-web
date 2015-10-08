@@ -1,5 +1,5 @@
 class EmailResponse < ActiveRecord::Base
-  enum response_type: [ :bounce, :complaint ]
+  enum response_type: [:bounce, :complaint]
 
   validates_presence_of :email
 

@@ -1,11 +1,9 @@
 require 'test_helper'
 
 class VcardsControllerTest < ActionController::TestCase
-
-  context "After logging in a person with orgs" do
-
+  context 'After logging in a person with orgs' do
     setup do
-      @user = FactoryGirl.create(:user_with_auxs)  #user with a person object
+      @user = FactoryGirl.create(:user_with_auxs) # user with a person object
       sign_in @user
       @keyword = FactoryGirl.create(:sms_keyword)
     end
@@ -18,7 +16,7 @@ class VcardsControllerTest < ActionController::TestCase
       assert_response :success
     end
 
-    context "create bulk vcard" do
+    context 'create bulk vcard' do
       setup do
         @contact = FactoryGirl.create(:person)
         @contact2 = FactoryGirl.create(:person)
@@ -28,13 +26,13 @@ class VcardsControllerTest < ActionController::TestCase
         @user.person.organizations.first.add_contact(@contact)
         @user.person.organizations.first.add_contact(@contact2)
         ids = "#{@contact.id}, #{@contact2.id}"
-        xhr :get, :bulk_create, ids: ids, email: @user.email, note: "Vcard"
+        xhr :get, :bulk_create, ids: ids, email: @user.email, note: 'Vcard'
         assert_response :success
       end
 
       should 'and send to single' do
         @user.person.organizations.first.add_contact(@contact)
-        xhr :get, :bulk_create, ids: [@contact.id], email: @user.email, note: "Vcard"
+        xhr :get, :bulk_create, ids: [@contact.id], email: @user.email, note: 'Vcard'
         assert_response :success
       end
 
@@ -45,6 +43,5 @@ class VcardsControllerTest < ActionController::TestCase
         assert_response :success
       end
     end
-
   end
 end

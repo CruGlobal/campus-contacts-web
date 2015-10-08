@@ -2,20 +2,21 @@ require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Mh::Application.routes.draw do
-
   post 'email_responses/bounce' => 'email_responses#bounce'
   post 'email_responses/complaint' => 'email_responses#complaint'
 
-  constraint = lambda { |request| request.env["rack.session"] &&
-                                  request.env["rack.session"]["warden.user.user.key"] &&
-                                  request.env["rack.session"]["warden.user.user.key"].first &&
-                                  request.env["rack.session"]["warden.user.user.key"].first.first &&
-                                  User.find(request.env["rack.session"]["warden.user.user.key"].first.first).developer? }
+  constraint = lambda do |request|
+    request.env['rack.session'] &&
+    request.env['rack.session']['warden.user.user.key'] &&
+    request.env['rack.session']['warden.user.user.key'].first &&
+    request.env['rack.session']['warden.user.user.key'].first.first &&
+    User.find(request.env['rack.session']['warden.user.user.key'].first.first).developer?
+  end
   constraints constraint do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  root to: "welcome#index"
+  root to: 'welcome#index'
 
   resources :signatures, only: [] do
     collection do
@@ -63,10 +64,9 @@ Mh::Application.routes.draw do
     end
   end
 
+  get 'dashboard/index'
 
-  get "dashboard/index"
-
-  resources :imports, :except => [:show] do
+  resources :imports, except: [:show] do
     collection do
       get :download_sample_contacts_csv
       post :import
@@ -105,12 +105,12 @@ Mh::Application.routes.draw do
   get 'sent_messages' => 'messages#sent_messages'
   get 'search_locate_contact' => 'contacts#search_locate_contact'
 
-  resources :group_labels, :only => [:create, :destroy]
+  resources :group_labels, only: [:create, :destroy]
 
   ActiveAdmin::ResourceController.class_eval do
     def authenticate_admin!
       unless user_signed_in? && SuperAdmin.where(user_id: current_user.id, site: 'MissionHub').first
-        render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
+        render file: Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), layout: false, status: 404
         false
       end
     end
@@ -118,20 +118,20 @@ Mh::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   resources :groups do
-    resources :group_labelings, :only => [:create, :destroy]
-    resources :group_memberships, :only => [:create, :destroy] do
+    resources :group_labelings, only: [:create, :destroy]
+    resources :group_memberships, only: [:create, :destroy] do
       collection do
         get :search
       end
     end
   end
-  resources :group_memberships, :only => [:create, :destroy] do
+  resources :group_memberships, only: [:create, :destroy] do
     collection do
       get :search
     end
   end
 
-  get 'survey_responses/:id/answer_other_surveys' => 'survey_responses#answer_other_surveys', as: "answer_other_surveys"
+  get 'survey_responses/:id/answer_other_surveys' => 'survey_responses#answer_other_surveys', as: 'answer_other_surveys'
   resources :survey_responses do
     collection do
       get :thanks
@@ -140,7 +140,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :leaders, :only => [:new, :create, :update, :destroy] do
+  resources :leaders, only: [:new, :create, :update, :destroy] do
     collection do
       get :search
       post :find_by_email_addresses
@@ -148,7 +148,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :organizational_permissions, :only => :update do
+  resources :organizational_permissions, only: :update do
     collection do
       post :move_to
       post :update_all
@@ -166,9 +166,9 @@ Mh::Application.routes.draw do
   end
 
   # resources :rejoicables
-  resources :followup_comments, :only => [:index, :create, :destroy]
+  resources :followup_comments, only: [:index, :create, :destroy]
 
-  resources :contact_assignments, :only => [:create] do
+  resources :contact_assignments, only: [:create] do
     collection do
       delete :destroy
     end
@@ -176,17 +176,17 @@ Mh::Application.routes.draw do
 
   resources :ministries
 
-  resources :sms_keywords, :only => [:new, :create, :edit, :update, :destroy, :index] do
+  resources :sms_keywords, only: [:new, :create, :edit, :update, :destroy, :index] do
     collection do
       post :accept_twilio
     end
   end
 
-  get "/people" => "contacts#all_contacts"
-  get "/allcontacts?assigned_to=unassigned" => "contacts#all_contacts", as: "unassigned_contacts"
-  get "/contacts" => redirect("/allcontacts")
-  get "/old_directory" => "people#index"
-  resources :people, :only => [:show, :create, :edit, :update, :destroy] do
+  get '/people' => 'contacts#all_contacts'
+  get '/allcontacts?assigned_to=unassigned' => 'contacts#all_contacts', as: 'unassigned_contacts'
+  get '/contacts' => redirect('/allcontacts')
+  get '/old_directory' => 'people#index'
+  resources :people, only: [:show, :create, :edit, :update, :destroy] do
     collection do
       get :export
       get :merge
@@ -210,7 +210,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :labels, :only => [:create, :update, :destroy, :index, :new, :edit] do
+  resources :labels, only: [:create, :update, :destroy, :index, :new, :edit] do
     collection do
       post :create_now
       post :add_label
@@ -220,15 +220,14 @@ Mh::Application.routes.draw do
 
   namespace :admin do
     resources :email_templates
-
   end
 
   # namespace :admin do
   #   resources :organizations
   # end
 
-  get "load_organization_tree" => "organizations#load_tree"
-  resources :organizations, :only => [:show, :new, :create, :edit, :update, :destroy, :index] do
+  get 'load_organization_tree' => 'organizations#load_tree'
+  resources :organizations, only: [:show, :new, :create, :edit, :update, :destroy, :index] do
     collection do
       get :search
       get :thanks
@@ -279,7 +278,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :surveys, :only => [:new, :create, :edit, :update, :index, :destroy] do
+  resources :surveys, only: [:new, :create, :edit, :update, :index, :destroy] do
     member do
       get :start
       get :mass_entry
@@ -292,18 +291,18 @@ Mh::Application.routes.draw do
       post :create_label
       post :remove_logo
     end
-    resources :questions, controller: "surveys/questions" do
+    resources :questions, controller: 'surveys/questions' do
       collection do
         post :reorder
       end
     end
   end
 
-  devise_for :users, controllers: { sessions: "sessions" }
+  devise_for :users, controllers: { sessions: 'sessions' }
 
   devise_scope :user do
-    get "/sign_in", to: "sessions#new"
-    get "/sign_out", to: "sessions#destroy"
+    get '/sign_in', to: 'sessions#new'
+    get '/sign_out', to: 'sessions#destroy'
     get '/users/auth/facebook/callback', to: 'users/omniauth_callbacks#facebook'
     get '/users/auth/facebook_mhub/callback', to: 'users/omniauth_callbacks#facebook_mhub'
     get '/users/auth/relay/callback', to: 'users/omniauth_callbacks#relay'
@@ -311,14 +310,14 @@ Mh::Application.routes.draw do
   end
   get '/auth/facebook/logout' => 'application#facebook_logout', as: :facebook_logout
 
-  get "/application.manifest" => OFFLINE
+  get '/application.manifest' => OFFLINE
 
-  post "sms/mo"
-  get "sms/mo"
+  post 'sms/mo'
+  get 'sms/mo'
 
-  get "/allcontacts" => "contacts#all_contacts", as: "all_contacts"
-  get "/mycontacts" => "contacts#my_contacts", as: "my_contacts"
-  get "/my_contacts_all" => "contacts#my_contacts_all", as: "my_contacts_all"
+  get '/allcontacts' => 'contacts#all_contacts', as: 'all_contacts'
+  get '/mycontacts' => 'contacts#my_contacts', as: 'my_contacts'
+  get '/my_contacts_all' => 'contacts#my_contacts_all', as: 'my_contacts_all'
   resources :contacts do
     collection do
       post :unhide_questions
@@ -353,7 +352,7 @@ Mh::Application.routes.draw do
     end
   end
 
-  resources :vcards, :only => [:create] do
+  resources :vcards, only: [:create] do
     collection do
       get :bulk_create
     end
@@ -366,7 +365,7 @@ Mh::Application.routes.draw do
   end
 
   namespace :api do
-    scope '(/:version)', version: /v\d+?/ do  #module: :api
+    scope '(/:version)', version: /v\d+?/ do # module: :api
       resources :people do
         collection do
           get :leaders
@@ -377,8 +376,8 @@ Mh::Application.routes.draw do
       resources :contacts do
         resource :photo
       end
-      get "contact_assignments/list_leaders" => "contact_assignments#list_leaders"
-      get "contact_assignments/list_organizations" => "contact_assignments#list_organizations"
+      get 'contact_assignments/list_leaders' => 'contact_assignments#list_leaders'
+      get 'contact_assignments/list_organizations' => 'contact_assignments#list_organizations'
       resources :contact_assignments
       resources :followup_comments
       resources :interactions
@@ -391,8 +390,7 @@ Mh::Application.routes.draw do
   end
 
   namespace :apis do
-
-    api_version(module: 'V3', header: {name: 'API-VERSION', value: 'v3'}, parameter: {name: "version", value: 'v3'}, path: {value: 'v3'}) do
+    api_version(module: 'V3', header: { name: 'API-VERSION', value: 'v3' }, parameter: { name: 'version', value: 'v3' }, path: { value: 'v3' }) do
       resources :contact_assignments do
         collection do
           put :bulk_update
@@ -439,7 +437,7 @@ Mh::Application.routes.draw do
     end
   end
 
-#  get 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
+  #  get 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   get 'dashboard' => 'dashboard#index'
   get 'wizard' => 'welcome#wizard', as: 'wizard'
   get 'terms' => 'welcome#terms', as: 'terms'
@@ -463,22 +461,22 @@ Mh::Application.routes.draw do
   get 'l/:token/:user_id/merge' => 'leaders#merge_leader_accounts', as: 'merge_leader_link'
   get 'l/:token/:user_id/signout' => 'leaders#sign_out_and_leader_sign_in', as: 'sign_out_and_leader_sign_in'
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
-  get "/surveys/:keyword" => 'surveys#start'
+  get '/surveys/:keyword' => 'surveys#start'
   # mount RailsAdmin::Engine => "/admin"
 
   get 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
   get 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
 
   # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-  #mount Resque::Server.new, at: "/resque"
+  # mount Resque::Server.new, at: "/resque"
 
-  #other oauth calls
-  get "oauth/authorize" => "oauth#authorize"
-  get "oauth/grant" => "oauth#grant"
-  get "oauth/deny" => "oauth#deny"
-  get "oauth/done" => "oauth#done"
-  #make admin portion of oauth2 rack accessible
-  mount Rack::OAuth2::Server::Admin =>"/oauth/admin"
+  # other oauth calls
+  get 'oauth/authorize' => 'oauth#authorize'
+  get 'oauth/grant' => 'oauth#grant'
+  get 'oauth/deny' => 'oauth#deny'
+  get 'oauth/done' => 'oauth#done'
+  # make admin portion of oauth2 rack accessible
+  mount Rack::OAuth2::Server::Admin => '/oauth/admin'
 
   get 'monitors/lb' => 'monitors#lb'
 end

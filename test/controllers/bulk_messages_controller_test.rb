@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class BulkMessagesControllerTest < ActionController::TestCase
-
-  context "bulk sending" do
+  context 'bulk sending' do
     setup do
       @user, @org = admin_user_login_with_org
       sign_in @user
@@ -11,33 +10,33 @@ class BulkMessagesControllerTest < ActionController::TestCase
       @org.add_contact(@person1)
       @person2 = FactoryGirl.create(:person_without_email)
       @org.add_contact(@person2)
-      PhoneNumber.create(:number => "123129312", :person_id => @person1.id)
-      PhoneNumber.create(:number => "12390900", :person_id => @person2.id, :primary => true)
+      PhoneNumber.create(number: '123129312', person_id: @person1.id)
+      PhoneNumber.create(number: '12390900', person_id: @person2.id, primary: true)
 
-      stub_request(:post, /.*api.twilio.com\/.*/).
-        with(:headers => {'Accept'=>'application/json', 'Accept-Charset'=>'utf-8', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/x-www-form-urlencoded'}).
-        to_return(:status => 200, :body => twilio_response, :headers => {}).
-        to_return(:status => 200, :body => twilio_response, :headers => {}).
-        to_return(:status => 200, :body => twilio_response, :headers => {}).
-        to_return(:status => 200, :body => twilio_response, :headers => {})
+      stub_request(:post, /.*api.twilio.com\/.*/)
+        .with(headers: { 'Accept' => 'application/json', 'Accept-Charset' => 'utf-8', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/x-www-form-urlencoded' })
+        .to_return(status: 200, body: twilio_response, headers: {})
+        .to_return(status: 200, body: twilio_response, headers: {})
+        .to_return(status: 200, body: twilio_response, headers: {})
+        .to_return(status: 200, body: twilio_response, headers: {})
     end
 
-    should "send bulk sms" do
+    should 'send bulk sms' do
       Sidekiq::Testing.inline! do
-        assert_difference "SentSms.count", +2 do
-          assert_difference "BulkMessage.count", +1 do
-            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        assert_difference 'SentSms.count',+2 do
+          assert_difference 'BulkMessage.count',+1 do
+            xhr :post, :sms, to: "#{@person1.id},#{@person2.id}", body: 'test sms body'
             assert_response :success
           end
         end
       end
     end
 
-    should "send bulk SMS via twilio (default)" do
+    should 'send bulk SMS via twilio (default)' do
       Sidekiq::Testing.inline! do
-        assert_difference "SentSms.count", +2 do
-          assert_difference "BulkMessage.count", +1 do
-            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        assert_difference 'SentSms.count',+2 do
+          assert_difference 'BulkMessage.count',+1 do
+            xhr :post, :sms, to: "#{@person1.id},#{@person2.id}", body: 'test sms body'
             assert_response :success
           end
         end
@@ -45,15 +44,15 @@ class BulkMessagesControllerTest < ActionController::TestCase
       end
     end
 
-    should "send bulk SMS via smseco" do
+    should 'send bulk SMS via smseco' do
       @org.settings[:sms_gateway] = 'smseco'
       @org.save
-      stub_request(:post, /http:\/\/www.smseco.com\/.*/).
-        to_return(:status => 200, :body => "{}", :headers => {})
+      stub_request(:post, /http:\/\/www.smseco.com\/.*/)
+        .to_return(status: 200, body: '{}', headers: {})
       Sidekiq::Testing.inline! do
-        assert_difference "SentSms.count", +2 do
-          assert_difference "BulkMessage.count", +1 do
-            xhr :post, :sms, { :to => "#{@person1.id},#{@person2.id}", :body => "test sms body" }
+        assert_difference 'SentSms.count', +2 do
+          assert_difference 'BulkMessage.count',+1 do
+            xhr :post, :sms, to: "#{@person1.id},#{@person2.id}", body: 'test sms body'
           end
           BulkMessage.last.process
         end

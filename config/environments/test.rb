@@ -56,5 +56,4 @@ Rails.application.configure do
   config.after_initialize do
     PaperTrail.enabled = false
   end
-
 end

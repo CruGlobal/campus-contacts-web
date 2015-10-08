@@ -1,5 +1,4 @@
 class AnswerSheetSerializer < ActiveModel::Serializer
-
   INCLUDES = [:answers, :survey]
 
   attributes :id, :survey_id, :created_at, :updated_at, :completed_at
@@ -20,7 +19,4 @@ class AnswerSheetSerializer < ActiveModel::Serializer
       add_since(object.send(relationship))
     end
   end
-
-
 end
-

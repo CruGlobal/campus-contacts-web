@@ -1,9 +1,8 @@
 require 'test_helper'
 
 class Apis::V3::PermissionsControllerTest < ActionController::TestCase
-
   setup do
-    request.env["HTTP_ACCEPT"] = "application/json"
+    request.env['HTTP_ACCEPT'] = 'application/json'
     @org = FactoryGirl.create(:organization)
     @client = FactoryGirl.create(:client, organization: @org)
 
@@ -29,76 +28,73 @@ class Apis::V3::PermissionsControllerTest < ActionController::TestCase
     @no_permission_token = FactoryGirl.create(:access_token, identity: @user3.id, client_id: @client.id)
   end
 
-
-  context ".index" do
-    context "ADMIN request" do
+  context '.index' do
+    context 'ADMIN request' do
       setup do
         @token = @admin_token.code
       end
-      should "return a list of permissions" do
+      should 'return a list of permissions' do
         get :index, access_token: @token
         assert_response :success
         json = JSON.parse(response.body)
         assert_equal 3, json['permissions'].count, json.inspect
       end
     end
-    context "USER request" do
+    context 'USER request' do
       setup do
         @token = @user_token.code
       end
-      should "return a list of permissions" do
+      should 'return a list of permissions' do
         get :index, access_token: @token
         assert_response :success
         json = JSON.parse(response.body)
         assert_equal 3, json['permissions'].count, json.inspect
       end
     end
-    context "NO_PERMISSION request" do
+    context 'NO_PERMISSION request' do
       setup do
         @token = @no_permission_token.code
       end
-      should "not return a list of permissions" do
+      should 'not return a list of permissions' do
         get :index, access_token: @token
         json = JSON.parse(response.body)
-        assert_not_nil json["errors"], json.inspect
+        assert_not_nil json['errors'], json.inspect
       end
     end
   end
 
-
-  context ".show" do
-    context "ADMIN request" do
+  context '.show' do
+    context 'ADMIN request' do
       setup do
         @token = @admin_token.code
       end
-      should "return a permission" do
+      should 'return a permission' do
         get :show, access_token: @token, id: @admin_permission.id
         assert_response :success
         json = JSON.parse(response.body)
         assert_equal @admin_permission.id, json['permission']['id'], json.inspect
       end
     end
-    context "USER request" do
+    context 'USER request' do
       setup do
         @token = @user_token.code
       end
-      should "return a permission" do
+      should 'return a permission' do
         get :show, access_token: @token, id: @admin_permission.id
         assert_response :success
         json = JSON.parse(response.body)
         assert_equal @admin_permission.id, json['permission']['id'], json.inspect
       end
     end
-    context "NO_PERMISSION request" do
+    context 'NO_PERMISSION request' do
       setup do
         @token = @no_permission_token.code
       end
-      should "not return a permission" do
+      should 'not return a permission' do
         get :index, access_token: @token
         json = JSON.parse(response.body)
-        assert_not_nil json["errors"], json.inspect
+        assert_not_nil json['errors'], json.inspect
       end
     end
   end
 end
-

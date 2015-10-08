@@ -6,7 +6,7 @@ class Ccc::Crs2Person < ActiveRecord::Base
   has_many :email_addresses, class_name: 'Ccc::Crs2EmailAddress', foreign_key: :person_id
   has_many :phone_numbers, class_name: 'Ccc::Crs2PhoneNumber', foreign_key: :person_id
   has_one :primary_email_address,
-    ->{where(primary: true)}, class_name: "Ccc::Crs2EmailAddress", foreign_key: "person_id"
+          -> { where(primary: true) }, class_name: 'Ccc::Crs2EmailAddress', foreign_key: 'person_id'
 
   def email
     @email = primary_email_address.try(:email)
@@ -43,5 +43,4 @@ class Ccc::Crs2Person < ActiveRecord::Base
   def minor
     nil
   end
-
 end

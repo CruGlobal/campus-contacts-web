@@ -13,8 +13,8 @@ class MergeDuplicateContactsInOrganization10033 < ActiveRecord::Migration
         duplicate_contacts.each do |duplicate_contact|
           records = org.people.where("
             people.first_name = ? AND people.last_name = ?",
-            duplicate_contact.first_name, duplicate_contact.last_name
-          )
+                                     duplicate_contact.first_name, duplicate_contact.last_name
+                                    )
 
           # Prioritize person record that has user record
           original_record = records.where("people.user_id IS NOT NULL").first

@@ -1,5 +1,5 @@
 class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
-  before_filter :ensure_filters
+  before_action :ensure_filters
 
   def bulk
     remove_roles(filtered_people, params[:remove_roles]) if params[:remove_roles].present?
@@ -7,7 +7,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def bulk_create
@@ -15,7 +15,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def bulk_destroy
@@ -23,9 +23,8 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
-
 
   private
 
@@ -34,7 +33,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
   end
 
   def get_person
-    if params[:id] == "me"
+    if params[:id] == 'me'
       @person = current_user.person
     else
       @person = add_includes_and_order(people).find(params[:id])
@@ -43,19 +42,19 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
 
   def ensure_filters
     unless params[:filters]
-      render json: {errors: ["The 'filters' parameter is required for bulk role actions."]},
-                 status: :bad_request,
-                 callback: params[:callback]
+      render json: { errors: ["The 'filters' parameter is required for bulk role actions."] },
+             status: :bad_request,
+             callback: params[:callback]
     end
   end
 
   def filtered_people
     unless @filtered_people
       @filtered_people = if params[:include_archived] == 'true'
-        current_organization.people
-      else
-        current_organization.not_archived_people
-      end
+                           current_organization.people
+                         else
+                           current_organization.not_archived_people
+                         end
 
       @filtered_people = add_includes_and_order(@filtered_people)
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
@@ -63,7 +62,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     @filtered_people
   end
 
-  def add_roles(people, roles)
+  def add_roles(_people, roles)
     roles.split(',').each do |role_id|
       permission = Permission.where(id: role_id).try(:first)
       current_organization.add_permissions_to_people(filtered_people, [permission.id]) if permission.present?
@@ -72,7 +71,7 @@ class Apis::V3::OrganizationalRolesController < Apis::V3::BaseController
     end
   end
 
-  def remove_roles(people, roles)
+  def remove_roles(_people, roles)
     roles.split(',').each do |role_id|
       permission = Permission.where(id: role_id).try(:first)
       current_organization.remove_permissions_from_people(filtered_people, [permission.id]) if permission.present?

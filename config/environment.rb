@@ -1,6 +1,6 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
-require "rack/oauth2/server/railtie"
+require 'rack/oauth2/server/railtie'
 
 # Initialize the rails application
 Rails.application.initialize!

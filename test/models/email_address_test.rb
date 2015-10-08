@@ -7,17 +7,17 @@ class EmailAddressTest < ActiveSupport::TestCase
   # should strip_attributes :email
   # should validate_presence_of(:person_id)
 
-  context "an email address" do
+  context 'an email address' do
     setup do
       @person = FactoryGirl.create(:person_without_email)
     end
-    should "set first email to primary" do
+    should 'set first email to primary' do
       email = @person.email_addresses.create(email: 'test@example.com')
       assert(!email.new_record?, email.errors.full_messages.join(','))
-      assert(email.primary?, "email should be primary")
+      assert(email.primary?, 'email should be primary')
     end
 
-    should "set new primary when primary email is deleted" do
+    should 'set new primary when primary email is deleted' do
       person = FactoryGirl.create(:person_without_email)
       @person.reload
       email1 = @person.email_addresses.create(email: 'test@example.com')
@@ -25,13 +25,13 @@ class EmailAddressTest < ActiveSupport::TestCase
       email2 = @person.email_addresses.create(email: 'test2@example.com')
       assert(!email2.new_record?, email2.errors.full_messages.join(','))
       assert_equal(email2.person, email1.person)
-      assert(email1.primary?, "first email should be primary")
+      assert(email1.primary?, 'first email should be primary')
       email1.destroy
       email2.reload
-      assert(email2.primary?, "second email should be primary")
+      assert(email2.primary?, 'second email should be primary')
     end
 
-    should "consider these email addresses valid" do
+    should 'consider these email addresses valid' do
       assert(EmailAddress.new(email: 'laurel.marshall.88@gmail.com').valid?)
       assert(EmailAddress.new(email: 'alex--jacob@hotmail.com').valid?)
     end

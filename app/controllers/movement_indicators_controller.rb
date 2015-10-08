@@ -7,11 +7,11 @@ class MovementIndicatorsController < ApplicationController
       if resp.present?
         raise "Could not process infobase response: #{resp.inspect}"
       else
-        raise "Could not connect to infobase."
+        raise 'Could not connect to infobase.'
       end
     end
 
-    @stats = json["statistics"].last
+    @stats = json['statistics'].last
   end
 
   def create

@@ -7,22 +7,22 @@ class GroupLabelingsControllerTest < ActionController::TestCase
     @label = FactoryGirl.create(:group_label, organization: @org)
   end
 
-  context "create" do
-    should "create" do
-      assert_difference "GroupLabeling.count", 1 do
-        xhr :post, :create, {:group_label_id => @label.id, :group_id => @group.id}
+  context 'create' do
+    should 'create' do
+      assert_difference 'GroupLabeling.count', 1 do
+        xhr :post, :create, { group_label_id: @label.id, group_id: @group.id }
       end
     end
   end
 
-  context "destroy" do
+  context 'destroy' do
     setup do
       FactoryGirl.create(:group_labeling, group: @group, group_label: @label)
     end
 
-    should "destroy" do
-      assert_difference "GroupLabeling.count", -1 do
-        xhr :post, :destroy, {:id => @label.id, :group_id => @group.id}
+    should 'destroy' do
+      assert_difference 'GroupLabeling.count', -1 do
+        xhr :post, :destroy, id: @label.id, group_id: @group.id
       end
     end
   end

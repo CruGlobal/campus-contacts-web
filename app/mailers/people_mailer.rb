@@ -9,7 +9,6 @@ class PeopleMailer < ActionMailer::Base
   #   en.people_mailer.bulk_message.subject
   #
 
-
   def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet, question_id)
     @keyword = keyword
     @answer_sheet = answer_sheet
@@ -38,10 +37,10 @@ class PeopleMailer < ActionMailer::Base
     @failed = bulk_message.messages.includes(:receiver).where(sent: false)
     @failed_count = @failed.count
 
-    mail to: @person.email, reply_to: @person.email, subject: "Failed Text Message Delivery"
+    mail to: @person.email, reply_to: @person.email, subject: 'Failed Text Message Delivery'
   end
 
   def self.queue
-      :bulk_email
+    :bulk_email
   end
 end

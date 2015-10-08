@@ -10,18 +10,18 @@ class InteractionType < ActiveRecord::Base
 
   has_many :interactions
 
-  scope :exclude_comment, ->{where("i18n <> 'comment'")}
+  scope :exclude_comment, -> { where("i18n <> 'comment'") }
 
   def title
-    if self.i18n.present?
-      I18n.t("application.interaction_types.#{self.i18n}")
+    if i18n.present?
+      I18n.t("application.interaction_types.#{i18n}")
     else
-      self.name
+      name
     end
   end
 
   def self.old_rejoicable_ids
-    InteractionType.where(i18n: ['spiritual_conversation', 'gospel_presentation', 'prayed_to_receive_christ'], organization_id: 0).collect(&:id)
+    InteractionType.where(i18n: %w(spiritual_conversation gospel_presentation prayed_to_receive_christ), organization_id: 0).collect(&:id)
   end
 
   def self.comment
@@ -33,7 +33,7 @@ class InteractionType < ActiveRecord::Base
   end
 
   def self.get_interaction_types_hash(org_id)
-    interaction_types = InteractionType.where("organization_id = 0 OR organization_id = ?", org_id).order("id")
+    interaction_types = InteractionType.where('organization_id = 0 OR organization_id = ?', org_id).order('id')
     interaction_types.collect(&:to_hash)
   end
 

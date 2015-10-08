@@ -4,14 +4,14 @@ class ApiController < ApplicationController
   extend ::Rack::OAuth2::Rails::Filters
   include ApiErrors
   include ApiHelper
-  skip_before_filter :authenticate_user!, :verify_authenticity_token
-  before_filter :force_client_update
-  after_filter :log_api_request
+  skip_before_action :authenticate_user!, :verify_authenticity_token
+  before_action :force_client_update
+  after_action :log_api_request
   rescue_from Exception, with: :render_json_error
 
-#################################################################################
-#####CODE FROM http://www.starkiller.net/2011/03/17/versioned-api-1/  ###########
-#################################################################################
+  #################################################################################
+  # ####CODE FROM http://www.starkiller.net/2011/03/17/versioned-api-1/  ###########
+  #################################################################################
   @@versions = {}
   @@registered_methods = {}
 
@@ -20,13 +20,13 @@ class ApiController < ApplicationController
     def inherited(subclass)
       original_inherited(subclass)
 
-      load File.join("#{Rails.root}", "app", "controllers",
-                     "api", "#{extract_filename(subclass)}")
+      load File.join("#{Rails.root}", 'app', 'controllers',
+                     'api', "#{extract_filename(subclass)}")
 
       subclass.action_methods.each do |method|
-        regex = Regexp.new("^(.*)_(\\d+)$")
+        regex = Regexp.new('^(.*)_(\\d+)$')
         if match = regex.match(method)
-          key = "#{subclass.to_s}##{match[1]}"
+          key = "#{subclass}##{match[1]}"
           if match[2].to_i <= Apic::STD_VERSION
             @@versions[match[2].to_i] = true
             @@registered_methods[key] ||= {}
@@ -44,7 +44,7 @@ class ApiController < ApplicationController
     def extract_filename(subclass)
       classname = subclass.to_s.split('::')[1]
       parts = classname.underscore.split('_')
-      "#{parts.reject{|c| c == 'controller'}.join('_')}_controller.rb"
+      "#{parts.reject { |c| c == 'controller' }.join('_')}_controller.rb"
     end
 
     def reset_action_methods
@@ -53,30 +53,29 @@ class ApiController < ApplicationController
     end
   end
 
-
   def versions
-    render json: @@versions.keys.sort.reverse and return
+    render(json: @@versions.keys.sort.reverse) && return
   end
 
   def no_api_method
-    render json: {"error" => "The requested method does not exist or is not\
-       enabled for the requested API version (v#{params[:version]})"},
-       status: 404 and return
+    render(json: { 'error' => "The requested method does not exist or is not\
+       enabled for the requested API version (v#{params[:version]})" },
+           status: 404) && return
   end
 
   def deprecated_api
-    render json: {"error" => "This application is using a deprecated version of API. You need to update it to its latest version."}, status: 404 and return
+    render(json: { 'error' => 'This application is using a deprecated version of API. You need to update it to its latest version.' }, status: 404) && return
   end
 
-
   private
+
   def protected_actions
-    ['versions','no_api_method']
+    %w(versions no_api_method)
   end
 
   alias_method :original_process_action, :process_action
   def process_action(method_name, *args)
-    method = "no_api_method"
+    method = 'no_api_method'
     if protected_actions.include? method_name
       method = method_name
     else
@@ -95,12 +94,12 @@ class ApiController < ApplicationController
   end
 
   def find_method(method_name, version)
-    key = "#{self.class.to_s}##{method_name}"
+    key = "#{self.class}##{method_name}"
     versions = @@registered_methods[key].keys.sort
 
     final_method = 'no_api_method'
 
-    versions.reverse.each do |v|
+    versions.reverse_each do |v|
       if v <= version
         final_method = "#{method_name}_#{v}"
         break

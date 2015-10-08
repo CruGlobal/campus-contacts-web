@@ -25,7 +25,7 @@ class LeaderMailer < ActionMailer::Base
     @assigned_by = assigned_by
     @organization = org
     if @assigned_to.email.present?
-      mail to: @assigned_to.email, subject: "Contact Assignment Notification"
+      mail to: @assigned_to.email, subject: 'Contact Assignment Notification'
     end
   end
 
@@ -34,7 +34,7 @@ class LeaderMailer < ActionMailer::Base
     @organization = org
     @assignment_array = assignment_array
     if @assigned_to.email.present?
-      mail(to: @assigned_to.email, subject: "Contact Assignments Notification")
+      mail(to: @assigned_to.email, subject: 'Contact Assignments Notification')
     end
   end
 
@@ -45,6 +45,6 @@ class LeaderMailer < ActionMailer::Base
     return unless user.present?
     user.generate_new_token if user.remember_token.blank? || user.remember_token_expires_at.nil? || user.remember_token_expires_at < Date.tomorrow
     @link = leader_link_url(user.remember_token, user.id)
-    mail to: email.email, subject: "Missionhub.com - Email Confirmation"
+    mail to: email.email, subject: 'Missionhub.com - Email Confirmation'
   end
 end

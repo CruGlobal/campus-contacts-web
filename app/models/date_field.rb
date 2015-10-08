@@ -2,9 +2,8 @@
 # - a question that provides a calendar/date picker
 
 class DateField < Question
-
   def validation_class(answer_sheet)
-    if self.style == 'mmyy'
+    if style == 'mmyy'
       'validate-selection ' + super
     else
       'validate-date ' + super
@@ -30,23 +29,21 @@ class DateField < Question
   end
 
   def display_response(app = nil, person = nil)
-    return format_date_response(app, person)
+    format_date_response(app, person)
   end
 
   def format_date_response(app = nil, person = nil)
     r = response(app, person)
-    r = r.strftime("%m/%d/%Y") unless r.blank?
+    r = r.strftime('%m/%d/%Y') unless r.blank?
     r
   end
 
   # which view to render this element?
   def ptemplate
-    if self.style == 'mmyy'
+    if style == 'mmyy'
       'date_field_mmyy'
     else
       'date_field'
     end
   end
-
 end
-

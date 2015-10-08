@@ -1,34 +1,32 @@
 class OrganizationalPermissionsController < ApplicationController
-
   def update_all
     permission_ids = params[:labels]
     person = Person.find(params[:id])
     if permission_ids.present?
-      person.organizational_permissions(current_organization.id).where('permission_id NOT IN (?)', permission_ids).update_all({archive_date: Date.today})
+      person.organizational_permissions(current_organization.id).where('permission_id NOT IN (?)', permission_ids)
+        .update_all(archive_date: Date.today)
 
       permission_ids.each do |permission_id|
         current_organization.change_person_permission(person, permission_id, current_person.id)
       end
-    else
-      # We don't want to remove all of a person's permissions using this method.
     end
     @new_label_set = (person.assigned_organizational_permissions(current_organization.id).default_permissions + person.assigned_organizational_permissions(current_organization.id).non_default_permissions).collect(&:name)
   end
 
   def update
     @organizational_permission = OrganizationalPermission.find(params[:id])
-    @organizational_permission.followup_status = params[:status] #set contact permission as "do_not_contact"
+    @organizational_permission.followup_status = params[:status] # set contact permission as "do_not_contact"
 
     if params[:status] == 'do_not_contact'
       person_id = @organizational_permission.person_id
       organization_id = @organizational_permission.organization_id
 
       Person.find(person_id).organizational_permissions.where(organization_id: current_organization.id).each do |ors|
-        if(ors.permission_id == Permission::USER_ID)
+        if (ors.permission_id == Permission::USER_ID)
           ca = Person.find(person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
-        ors.update_attributes({:followup_status => "do_not_contact"})
+        ors.update_attributes(followup_status: 'do_not_contact')
       end
 
       # Delete Contact Assignments
@@ -56,7 +54,7 @@ class OrganizationalPermissionsController < ApplicationController
     @organizational_permission.save
     respond_to do |format|
       format.html
-      format.js {render nothing: true}
+      format.js { render nothing: true }
     end
   end
 
@@ -72,31 +70,30 @@ class OrganizationalPermissionsController < ApplicationController
         ids = params[:ids].to_s.split(',')
         people = Person.find(ids)
 
-        if keep_contact == "false"
+        if keep_contact == 'false'
           if from_org.attempting_to_delete_or_archive_current_user_self_as_admin?(people.collect(&:id), current_person)
-            render :text => I18n.t('organizational_permissions.cannot_delete_self_as_admin_error')
+            render text: I18n.t('organizational_permissions.cannot_delete_self_as_admin_error')
             return
           elsif i = from_org.attempting_to_delete_or_archive_all_the_admins_in_the_org?(people.collect(&:id))
-            render :text => I18n.t('organizational_permissions.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
+            render text: I18n.t('organizational_permissions.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(', '))
             return
           end
         end
 
         people.each do |person|
-          from_org.move_contact(person, from_org, to_org, keep_contact, current_person, survey_answers == "true", interactions == "true")
+          from_org.move_contact(person, from_org, to_org, keep_contact, current_person, survey_answers == 'true', interactions == 'true')
         end
-        render :text => keep_contact == "false" ? I18n.t('organizational_permissions.moving_people_success') : I18n.t('organizational_permissions.copy_people_success')
+        render text: keep_contact == 'false' ? I18n.t('organizational_permissions.moving_people_success') : I18n.t('organizational_permissions.copy_people_success')
         return
       end
     end
 
-    render :text => I18n.t('organizational_permissions.moving_to_same_org')
+    render text: I18n.t('organizational_permissions.moving_to_same_org')
   end
-
 
   def set_current
     org = Organization.find(params[:id])
-    orgs_i_have_access_to = current_person.organizations.collect {|o| o.subtree_ids}.flatten
+    orgs_i_have_access_to = current_person.organizations.collect(&:subtree_ids).flatten
     if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end

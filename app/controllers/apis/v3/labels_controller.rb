@@ -1,18 +1,18 @@
 class Apis::V3::LabelsController < Apis::V3::BaseController
-  before_filter :get_label, only: [:show, :update, :destroy]
+  before_action :get_label, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'name'
     list = add_includes_and_order(labels, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {organization: current_organization, since: params[:since]}
+           scope: { organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @label,
            callback: params[:callback],
-           scope: {organization: current_organization}
+           scope: { organization: current_organization }
   end
 
   def create
@@ -26,9 +26,9 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
         render json: label,
                status: :created,
                callback: params[:callback],
-               scope: {organization: current_organization}
+               scope: { organization: current_organization }
       else
-        render json: {errors: label.errors.full_messages},
+        render json: { errors: label.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -40,16 +40,16 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
       render_unauthorized_call
     else
       if @label.organization_id == 0
-        render json: {errors: ["You can't update the default labels"]},
+        render json: { errors: ["You can't update the default labels"] },
                status: :unprocessable_entity,
                callback: params[:callback]
       else
         if @label.update_attributes(params[:label])
           render json: @label,
                  callback: params[:callback],
-                 scope: {organization: current_organization}
+                 scope: { organization: current_organization }
         else
-          render json: {errors: @label.errors.full_messages},
+          render json: { errors: @label.errors.full_messages },
                  status: :unprocessable_entity,
                  callback: params[:callback]
         end
@@ -62,14 +62,14 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
       render_unauthorized_call
     else
       if @label.organization_id == 0
-        render json: {errors: ["You can't delete the default labels"]},
+        render json: { errors: ["You can't delete the default labels"] },
                status: :unprocessable_entity,
                callback: params[:callback]
       else
         @label.destroy
         render json: @label,
                callback: params[:callback],
-               scope: {organization: current_organization}
+               scope: { organization: current_organization }
       end
     end
   end
@@ -83,5 +83,4 @@ class Apis::V3::LabelsController < Apis::V3::BaseController
   def get_label
     @label = add_includes_and_order(labels).find(params[:id])
   end
-
 end

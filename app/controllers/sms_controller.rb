@@ -1,18 +1,18 @@
 class SmsController < ApplicationController
-  skip_before_filter :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
+  skip_before_action :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
 
   def mo
-    render xml: blank_response and return if sms_params[:message].blank?
+    render(xml: blank_response) && return if sms_params[:message].blank?
 
     if ReceivedSms.where(sms_params).present?
-      render xml: blank_response and return
+      render(xml: blank_response) && return
     else
       begin
         # try to save the new message
         @received = ReceivedSms.create!(sms_params)
       rescue ActiveRecord::RecordNotUnique
         # the mysql index just saved us from a duplicate message
-        render xml: blank_response and return
+        render(xml: blank_response) && return
       end
     end
     # Process incoming text
@@ -46,7 +46,7 @@ class SmsController < ApplicationController
       @msg = I18n.t('sms.sms_unsubscribed_with_org', org: @organization) if @organization.present?
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
-      render xml: @sent_sms.to_twilio and return
+      render(xml: @sent_sms.to_twilio) && return
     when 'on'
       phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
       if @sms_session
@@ -63,13 +63,13 @@ class SmsController < ApplicationController
       @msg = I18n.t('sms.sms_subscribed_with_org', org: @organization) if @organization.present?
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
-      render xml: @sent_sms.to_twilio and return
+      render(xml: @sent_sms.to_twilio) && return
     when 'help'
       @msg = I18n.t('sms.sms_help_guide')
       @sent_sms = send_message(@msg, sms_params[:phone_number])
-      render xml: @sent_sms.to_twilio and return
+      render(xml: @sent_sms.to_twilio) && return
     when ''
-      render xml: blank_response and return
+      render(xml: blank_response) && return
     end
 
     # If it is, check for interactive texting
@@ -121,18 +121,18 @@ class SmsController < ApplicationController
         @msg = t('sms.no_survey')
       else
         @sms_session = SmsSession.create!(person_id: person.id, sms_keyword_id: keyword.id, phone_number: sms_params[:phone_number])
-        @msg =  keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "https://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
+        @msg = keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "https://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
         @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
       @sent_sms = send_message(@msg, sms_params[:phone_number])
     end
-    #render text: @msg.to_s + "\n"
+    # render text: @msg.to_s + "\n"
     render xml: @sent_sms.to_twilio
   end
 
   protected
-  def sent_again?
 
+  def sent_again?
   end
 
   def sms_params
@@ -143,10 +143,10 @@ class SmsController < ApplicationController
         @sms_params[:state] = params['FromState']
         @sms_params[:zip] = params['FromZip']
         @sms_params[:country] = params['FromCountry']
-        @sms_params[:phone_number] = params['From'].sub('+','')
+        @sms_params[:phone_number] = params['From'].sub('+', '')
         @sms_params[:shortcode] = params['To']
         @sms_params[:received_at] = Time.now
-        @sms_params[:message] = Emojimmy.emoji_to_token(params["Body"].strip.gsub(/\n/, ' ')).mb_chars.to_s
+        @sms_params[:message] = Emojimmy.emoji_to_token(params['Body'].strip.gsub(/\n/, ' ')).mb_chars.to_s
       else
         @sms_params = params.slice(:country)
         @sms_params[:phone_number] = params[:device_address]
@@ -161,10 +161,10 @@ class SmsController < ApplicationController
   def send_next_survey_question(survey, person, phone_number)
     question = next_question(survey, person)
     if question
-      #finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
+      # finds out whether or not the question was already asked or not yet. If already asked and the question is for email then sent a message that tells email is already taken and user must input another unexisting email
       msg = nil
       begin
-        if question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id
+        if question.attribute_name == 'email' && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id
           if !person.received_sms.last.message.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
             msg = question.email_invalid
           else
@@ -173,7 +173,7 @@ class SmsController < ApplicationController
         else
           msg = question.label_for_survey(survey)
         end
-        #msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
+        # msg = question.attribute_name == "email" && SentSms.where(received_sms_id: person.received_sms.reverse[1].id).first.question_id == question.id ? question.email_should_be_unique_msg : question.label
       rescue
         msg = question.label_for_survey(survey)
       end
@@ -205,11 +205,11 @@ class SmsController < ApplicationController
           if question.kind == 'ChoiceField'
             choices = question.choices_by_letter
             # if they typed out a full answer, use that
-            answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect {|a| choices.values.detect {|c| c.to_s.downcase == a.to_s.downcase} }.compact
+            answers = answer.gsub(/[^\w]/, '').split(/\s+/).collect { |a| choices.values.detect { |c| c.to_s.downcase == a.to_s.downcase } }.compact
             # if they used letter selections, convert the letter selections to real answers
-            answers = answer.gsub(/[^\w]/, '').split(//).collect {|a| choices[a.to_s.downcase]}.compact if answers.empty?
+            answers = answer.gsub(/[^\w]/, '').split(//).collect { |a| choices[a.to_s.downcase] }.compact if answers.empty?
 
-            answers = answers.select {|a| a.to_s.strip != ''}
+            answers = answers.select { |a| a.to_s.strip != '' }
             # only checkbox fields can have more than one answer
             answer = question.style == 'checkbox' ? answers : answers.first
           end
@@ -261,31 +261,29 @@ class SmsController < ApplicationController
   end
 
   def check_person_field_presence(person, attribute_name)
-    begin
-      Person.exists?(["id = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
-    rescue
-      false
-    end
+    Person.exists?(["id = #{person.id} AND '#{attribute_name}' IS NOT NULL"])
+  rescue
+    false
   end
 
   def try_to_extract_email_from(answer)
-    return answer.match(/\b([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+?)(\.[a-zA-Z.]*)\b/).to_s
+    answer.match(/\b([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+?)(\.[a-zA-Z.]*)\b/).to_s
   end
 
   def next_question(survey, person)
     case
     when person.first_name.blank?
-      Question.new(label: "What is your first name?")
+      Question.new(label: 'What is your first name?')
     when person.last_name.blank?
-      Question.new(label: "What is your last name?")
+      Question.new(label: 'What is your last name?')
     else
       @answer_sheet = get_answer_sheet(survey, person)
-      survey.questions.reload.where(web_only: false, hidden: false).detect {|q| q.responses(@answer_sheet).select {|a| a.present?}.blank?}
+      survey.questions.reload.where(web_only: false, hidden: false).detect { |q| q.responses(@answer_sheet).select(&:present?).blank? }
     end
   end
 
   def send_message(msg, phone_number, separator = nil, question_id = nil)
-    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id, status: "sent")
+    @sent_sms = SentSms.create!(message: msg, recipient: phone_number.strip, received_sms_id: @received.try(:id), separator: separator, question_id: question_id, status: 'sent')
   end
 
   def blank_response

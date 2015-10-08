@@ -1,18 +1,18 @@
 class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
-  before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
-  before_filter :get_organizational_permission, only: [:show, :update, :destroy, :archive]
+  before_action :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
+  before_action :get_organizational_permission, only: [:show, :update, :destroy, :archive]
 
   def index
     list = add_includes_and_order(organizational_permissions)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @organizational_permission,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -26,9 +26,9 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       render json: org_permission,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: org_permission.errors.full_messages},
+      render json: { errors: org_permission.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -42,9 +42,9 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     elsif @organizational_permission.update_attributes(params[:organizational_permission])
       render json: @organizational_permission,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: @organizational_permission.errors.full_messages},
+      render json: { errors: @organizational_permission.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -54,7 +54,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     @organizational_permission.archive
     render json: @organizational_permission,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: { include: includes, organization: current_organization, user: current_user }
   end
 
   def destroy
@@ -64,7 +64,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       @organizational_permission.delete
       render json: @organizational_permission,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     end
   end
 
@@ -74,8 +74,8 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     else
       @organizational_permission.archive
       render json: @organizational_permission,
-            callback: params[:callback],
-            scope: {include: includes, organization: current_organization}
+             callback: params[:callback],
+             scope: { include: includes, organization: current_organization }
     end
   end
 
@@ -89,7 +89,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
       render json: filtered_people,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization},
+             scope: { include: includes, organization: current_organization },
              root: 'people'
     else
       remove_permissions(filtered_people, params[:remove_permission])
@@ -97,9 +97,9 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       set_status(filtered_people, params[:followup_status]) if params[:followup_status]
 
       render json: filtered_people,
-            callback: params[:callback],
-              scope: {include: includes, organization: current_organization},
-              root: 'people'
+             callback: params[:callback],
+             scope: { include: includes, organization: current_organization },
+             root: 'people'
     end
   end
 
@@ -109,9 +109,9 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
     else
       add_permissions(filtered_people, params[:permission])
       render json: filtered_people,
-              callback: params[:callback],
-              scope: {include: includes, organization: current_organization},
-              root: 'people'
+             callback: params[:callback],
+             scope: { include: includes, organization: current_organization },
+             root: 'people'
     end
   end
 
@@ -122,7 +122,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       remove_permissions(filtered_people('bulk_destroy'))
       render json: filtered_people,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization},
+             scope: { include: includes, organization: current_organization },
              root: 'people'
     end
   end
@@ -134,11 +134,10 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       archive_permissions(filtered_people('bulk_archive'))
       render json: filtered_people,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization},
+             scope: { include: includes, organization: current_organization },
              root: 'people'
     end
   end
-
 
   private
 
@@ -148,7 +147,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
 
   def ensure_filters
     unless params[:filters]
-      render json: {errors: ["The 'filters' parameter is required for bulk permission actions."]},
+      render json: { errors: ["The 'filters' parameter is required for bulk permission actions."] },
              status: :bad_request,
              callback: params[:callback]
     end
@@ -171,7 +170,7 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
       @filtered_people = PersonOrder.new(params[:order]).order(@filtered_people) if params[:order]
       @filtered_people = PersonFilter.new(params[:filters]).filter(@filtered_people) if params[:filters]
     end
-    return @filtered_people
+    @filtered_people
   end
 
   def add_permissions(people, permissions)
@@ -179,12 +178,12 @@ class Apis::V3::OrganizationalPermissionsController < Apis::V3::BaseController
   end
 
   def remove_permissions(people, permissions = nil)
-    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    permissions = permissions.split(',').collect(&:to_i) if permissions.present?
     current_organization.remove_permissions_from_people(people, permissions)
   end
 
   def archive_permissions(people, permissions = nil)
-    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    permissions = permissions.split(',').collect(&:to_i) if permissions.present?
     current_organization.archive_permissions_from_people(people, permissions)
   end
 

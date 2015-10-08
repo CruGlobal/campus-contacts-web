@@ -7,46 +7,46 @@ class Survey < ActiveRecord::Base
                   :background_color, :text_color, :crs_registrant_type_id, :redirect_url, :logo
   stores_emoji_characters :title, :terminology, :login_paragraph
 
-  has_paper_trail :on => [:destroy],
-                  :meta => { organization_id: :organization_id }
+  has_paper_trail on: [:destroy],
+                  meta: { organization_id: :organization_id }
 
   belongs_to :organization
 
   has_many :custom_element_labels
   has_many :survey_elements,
-    ->{order(:position)}, dependent: :destroy
+           -> { order(:position) }, dependent: :destroy
   has_many :elements,
-    ->{order(SurveyElement.table_name + '.position')}, through: :survey_elements, autosave: true, source: :question
+           -> { order(SurveyElement.table_name + '.position') }, through: :survey_elements, autosave: true, source: :question
   has_many :question_grid_with_totals,
-    ->{where("kind = 'QuestionGridWithTotal'")}, through: :survey_elements, source: :question
+           -> { where("kind = 'QuestionGridWithTotal'") }, through: :survey_elements, source: :question
   has_many :questions,
-    ->{where("#{SurveyElement.table_name}.archived = 0").order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
+           -> { where("#{SurveyElement.table_name}.archived = 0").order("#{SurveyElement.table_name}.position") }, through: :survey_elements, source: :question
   has_many :archived_questions,
-    ->{where("#{SurveyElement.table_name}.archived = 1").order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
+           -> { where("#{SurveyElement.table_name}.archived = 1").order("#{SurveyElement.table_name}.position") }, through: :survey_elements, source: :question
   has_many :all_questions,
-    ->{order("#{SurveyElement.table_name}.position")}, through: :survey_elements, source: :question
-  has_one :keyword, class_name: "SmsKeyword", foreign_key: "survey_id", dependent: :nullify
+           -> { order("#{SurveyElement.table_name}.position") }, through: :survey_elements, source: :question
+  has_one :keyword, class_name: 'SmsKeyword', foreign_key: 'survey_id', dependent: :nullify
 
-  has_attached_file :logo, :styles => { :small => "300x" }, s3_credentials: S3_CREDS, storage: :s3,
-                             path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
+  has_attached_file :logo, styles: { small: '300x' }, s3_credentials: S3_CREDS, storage: :s3,
+                           path: 'surveys/:attachment/:style/:id/:filename', s3_storage_class: :reduced_redundancy
   has_attached_file :css_file, s3_credentials: S3_CREDS, storage: :s3,
-                             path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
+                               path: 'surveys/:attachment/:id/:filename', s3_storage_class: :reduced_redundancy
   has_many :answer_sheets
   has_many :rules, through: :survey_elements
 
   # validation
   validates_presence_of :title, :post_survey_message, :terminology
-  validates_length_of :title, :maximum => 100, :allow_nil => true
-  validates_attachment :logo, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+  validates_length_of :title, maximum: 100, allow_nil: true
+  validates_attachment :logo, content_type: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
 
-  default_value_for :terminology, "Survey"
+  default_value_for :terminology, 'Survey'
 
   def to_s
     title
   end
 
   def predefined_questions
-    self.questions.where("object_name IS NOT NULL AND attribute_name IS NOT NULL")
+    questions.where('object_name IS NOT NULL AND attribute_name IS NOT NULL')
   end
 
   # def questions_before_position(position)
@@ -61,7 +61,7 @@ class Survey < ActiveRecord::Base
   def questions_with_answers(app = nil, person = nil)
     question_ids = []
     all_questions.each do |q|
-      next if ['email', 'phone_number'].include?(q.attribute_name)
+      next if %w(email phone_number).include?(q.attribute_name)
       question_ids << q.id if q.display_response(app, person).present?
     end
     all_questions.where(id: question_ids)
@@ -88,7 +88,7 @@ class Survey < ActiveRecord::Base
         end
       end
     end
-    return false
+    false
   end
 
   def has_assign_rule_applied(answer_sheet, type)
@@ -104,36 +104,36 @@ class Survey < ActiveRecord::Base
         end
       end
     end
-    return false
+    false
   end
 
   def duplicate
-    new_survey = Survey.new(self.attributes)
+    new_survey = Survey.new(attributes)
     new_survey.organization_id = organization_id
-    new_survey.save(:validate => false)
-    self.elements.each do |element|
+    new_survey.save(validate: false)
+    elements.each do |element|
       if element.reuseable?
-        SurveyElement.create(:element => element, :survey => new_survey)
+        SurveyElement.create(element: element, survey: new_survey)
       else
         element.duplicate(new_survey)
       end
     end
-    return new_survey
+    new_survey
   end
 
   def duplicate_to_org(org, copy_answers = false, person = nil)
-    survey = org.surveys.find_by_copy_from_survey_id(self.id)
+    survey = org.surveys.find_by_copy_from_survey_id(id)
 
     # Copy the survey
     unless survey.present?
-      survey = org.surveys.new(self.attributes)
-      survey.copy_from_survey_id = self.id
-      survey.save(:validate => false)
+      survey = org.surveys.new(attributes)
+      survey.copy_from_survey_id = id
+      survey.save(validate: false)
     end
 
     # Copy the answer_sheet
     if copy_answers && person.present?
-      if answer_sheet = person.answer_sheets.find_by_survey_id(self.id)
+      if answer_sheet = person.answer_sheets.find_by_survey_id(id)
         new_answer_sheet = person.answer_sheets.find_by_survey_id(survey.id)
         unless new_answer_sheet.present?
           new_answer_sheet = person.answer_sheets.new(answer_sheet.attributes)
@@ -143,12 +143,12 @@ class Survey < ActiveRecord::Base
       end
     end
 
-    self.elements.each do |element|
+    elements.each do |element|
       # Copy the elements
       new_element = survey.elements.find_by_id(element.id)
       unless new_element.present?
         if element.predefined? || element.reuseable?
-          new_element = SurveyElement.create(:element => element, :survey => survey)
+          new_element = SurveyElement.create(element: element, survey: survey)
         else
           new_element = element.duplicate(survey)
         end
@@ -184,5 +184,4 @@ class Survey < ActiveRecord::Base
   end
 
   private
-
 end

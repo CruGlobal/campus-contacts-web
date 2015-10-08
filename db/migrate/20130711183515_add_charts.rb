@@ -3,9 +3,9 @@ class AddCharts < ActiveRecord::Migration
     create_table :charts do |t|
       t.integer :person_id
       t.string :chart_type
-      t.boolean :snapshot_all_movements, :default => true
-      t.integer :snapshot_evang_range, :default => 6
-      t.integer :snapshot_laborers_range, :default => 0
+      t.boolean :snapshot_all_movements, default: true
+      t.integer :snapshot_evang_range, default: 6
+      t.integer :snapshot_laborers_range, default: 0
 
       t.timestamps
     end
@@ -17,7 +17,7 @@ class AddCharts < ActiveRecord::Migration
     create_table :chart_organizations do |t|
       t.integer :chart_id
       t.integer :organization_id
-      t.boolean :snapshot_display, :default => true
+      t.boolean :snapshot_display, default: true
       
       t.timestamps
     end

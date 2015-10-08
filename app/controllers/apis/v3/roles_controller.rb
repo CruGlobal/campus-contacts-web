@@ -1,6 +1,6 @@
 class Apis::V3::RolesController < Apis::V3::BaseController
-  before_filter :get_role, only: [:show]
-  before_filter :get_label, only: [:update, :destroy]
+  before_action :get_role, only: [:show]
+  before_action :get_label, only: [:update, :destroy]
 
   def index
     order = params[:order] || 'name'
@@ -9,14 +9,13 @@ class Apis::V3::RolesController < Apis::V3::BaseController
 
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
-
-    render json: {role: @role.attributes},
+    render json: { role: @role.attributes },
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -24,12 +23,12 @@ class Apis::V3::RolesController < Apis::V3::BaseController
     label.organization_id = current_organization.id
 
     if label.save
-      render json: {role: label.attributes},
+      render json: { role: label.attributes },
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: label.errors.full_messages},
+      render json: { errors: label.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -37,22 +36,21 @@ class Apis::V3::RolesController < Apis::V3::BaseController
 
   def update
     if @label.update_attributes(params[:role])
-      render json: {role: @label.attributes},
+      render json: { role: @label.attributes },
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: role.errors.full_messages},
+      render json: { errors: role.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
-
   end
 
   def destroy
     @label.destroy
     render json: @label,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   private
@@ -77,5 +75,4 @@ class Apis::V3::RolesController < Apis::V3::BaseController
   def available_includes
     [:email_addresses, :phone_numbers]
   end
-
 end

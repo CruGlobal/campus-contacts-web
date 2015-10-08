@@ -1,5 +1,5 @@
-ActiveAdmin.register_page "Dashboard" do
-  content title: "Performance" do
+ActiveAdmin.register_page 'Dashboard' do
+  content title: 'Performance' do
     div do
       render 'newrelic'
     end

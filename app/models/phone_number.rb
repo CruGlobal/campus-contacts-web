@@ -4,10 +4,10 @@ class PhoneNumber < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: true
-	TYPES = {"Mobile" => "mobile", "Home" => "home", "Work" => "work"}
+  TYPES = { 'Mobile' => 'mobile', 'Home' => 'home', 'Work' => 'work' }
 
-  has_paper_trail :on => [:destroy],
-                  :meta => { person_id: :person_id }
+  has_paper_trail on: [:destroy],
+                  meta: { person_id: :person_id }
 
   attr_accessible :number, :extension, :person_id, :location, :primary, :not_mobile, :txt_to_email, :carrier_id, :email_updated_at
 
@@ -18,15 +18,15 @@ class PhoneNumber < ActiveRecord::Base
     # Handle number format
     phone_number = value.number_before_type_cast || value.number || nil
     if phone_number.present?
-      unless (phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/)
-        errors.add(:number, "must be numeric")
+      unless phone_number =~ /^(\d|\+|\.|\ |\/|\(|\)|\-){1,100}$/
+        errors.add(:number, 'must be numeric')
       end
     else
       errors.add(:number, "can't be blank")
     end
   end
-  #validates_uniqueness_of :number, on: :create, message: "already exists"
-  validates_uniqueness_of :number, scope: :person_id, on: :update, message: "already exists"
+  # validates_uniqueness_of :number, on: :create, message: "already exists"
+  validates_uniqueness_of :number, scope: :person_id, on: :update, message: 'already exists'
 
   before_create :set_primary
   before_save :clear_carrier_if_number_changed, :strip_us_country_code
@@ -34,7 +34,7 @@ class PhoneNumber < ActiveRecord::Base
 
   def not_mobile!
     update_column(:not_mobile, true)
-    return self
+    self
   end
 
   def active_for_org?(org)
@@ -97,7 +97,7 @@ class PhoneNumber < ActiveRecord::Base
 
   def merge(other)
     PhoneNumber.transaction do
-      %w{extension location primary}.each do |k, v|
+      %w(extension location primary).each do |k, v|
         next if v == other.attributes[k]
         self[k] = case
                   when other.attributes[k].blank? then v
@@ -126,9 +126,7 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def set_primary
-    if person
-      self.primary = (person.primary_phone_number ? false : true)
-    end
+    self.primary = (person.primary_phone_number ? false : true) if person
     true
   end
 

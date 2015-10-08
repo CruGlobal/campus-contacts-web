@@ -1,39 +1,36 @@
 class GroupMembershipsController < ApplicationController
-
   def create
     @group = current_organization.groups.where(id: params[:group_id]).first
     @inContacts = params[:render_in_contacts].present?
 
     # Profile
     @person = current_organization.people.where(id: params[:person_id].split(',').first).try(:first)
-    if @person
-      @groups = @person.groups_for_org_id(current_organization.id)
-    end
+    @groups = @person.groups_for_org_id(current_organization.id) if @person
 
     if @group.nil?
       respond_to do |wants|
-        wants.html { render :nothing => true }
+        wants.html { render nothing: true }
         wants.js { render 'failed.js.erb' }
       end
-    elsif params[:from_add_member_screen] == "true"
+    elsif params[:from_add_member_screen] == 'true'
       @persons = Person.find(params[:person_id])
       if has_role
         @group_membership = @group.group_memberships.where(person_id: @persons.id).first_or_initialize
         @group_membership.role = params[:role]
         @group_membership.save
         respond_to do |wants|
-          wants.html { render :nothing => true }
+          wants.html { render nothing: true }
           wants.js
         end
       else
         respond_to do |wants|
-          wants.html { render :nothing => true }
+          wants.html { render nothing: true }
           wants.js { render 'failed.js.erb' }
         end
         return false
       end
     else
-      @persons = Person.find(params[:person_id].split(","))
+      @persons = Person.find(params[:person_id].split(','))
       if has_role
         @persons.each do |person|
           @group_membership = @group.group_memberships.where(person_id: person.id).first_or_initialize
@@ -42,12 +39,12 @@ class GroupMembershipsController < ApplicationController
         end
 
         respond_to do |wants|
-          wants.html { render :nothing => true }
+          wants.html { render nothing: true }
           wants.js
         end
       else
         respond_to do |wants|
-          wants.html { render :nothing => true }
+          wants.html { render nothing: true }
           wants.js { render 'failed.js.erb' }
         end
         return false
@@ -80,12 +77,13 @@ class GroupMembershipsController < ApplicationController
   end
 
   protected
-    def has_role
-      return true if can?(:manage, current_organization)
-      #return true if can?(:lead, current_organization)
-      return true if @group.organization.leaders.include?(current_person)
-      return true if @group.list_publicly? && params[:role] == 'interested' && @person == current_person
-      return true if @group.public_signup? && params[:role] == 'member' && @person == current_person
-      return false
-    end
+
+  def has_role
+    return true if can?(:manage, current_organization)
+    # return true if can?(:lead, current_organization)
+    return true if @group.organization.leaders.include?(current_person)
+    return true if @group.list_publicly? && params[:role] == 'interested' && @person == current_person
+    return true if @group.public_signup? && params[:role] == 'member' && @person == current_person
+    false
+  end
 end

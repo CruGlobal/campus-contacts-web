@@ -3,7 +3,6 @@ class SurveyMailer < ActionMailer::Base
 
   def notify(to, msg)
     @msg = msg
-    mail to: to, subject: "Survey Notification"
+    mail to: to, subject: 'Survey Notification'
   end
-  
 end

@@ -1,8 +1,8 @@
 class Api::RolesController < ApiController
-  oauth_required scope: "roles"
-  before_filter :translate_role
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
-  before_filter :ensure_valid_request
+  oauth_required scope: 'roles'
+  before_action :translate_role
+  before_action :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization
+  before_action :ensure_valid_request
 
   def update_1
     @person = Person.find(params[:id])
@@ -20,16 +20,15 @@ class Api::RolesController < ApiController
 
   def translate_role
     case params[:role]
-      when 'leader'
-        params[:role] = 'user'
-      when 'contact'
-        params[:role] = 'no_permissions'
+    when 'leader'
+      params[:role] = 'user'
+    when 'contact'
+      params[:role] = 'no_permissions'
     end
   end
 
   def ensure_valid_request
-    raise InvalidRolesParamaters unless params[:id].present? && params[:role].present? && params[:org_id].present?
-    raise NoRoleChangeMade unless Permission.default.collect(&:i18n).include?(params[:role])
+    fail InvalidRolesParamaters unless params[:id].present? && params[:role].present? && params[:org_id].present?
+    fail NoRoleChangeMade unless Permission.default.collect(&:i18n).include?(params[:role])
   end
-
 end

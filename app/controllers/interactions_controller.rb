@@ -1,12 +1,12 @@
 class InteractionsController < ApplicationController
-  before_filter :authorize
-  skip_before_filter :clear_advanced_search
+  before_action :authorize
+  skip_before_action :clear_advanced_search
 
   def search_leaders
     @person = Person.find(params[:person_id])
     @current_person = current_person
-    @people = current_organization.leaders.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
-    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
+    @people = current_organization.leaders.where('first_name LIKE :key OR last_name LIKE :key', key: "%#{params[:keyword].strip}%")
+    @people = @people.where('people.id NOT IN (?)', params[:except].split(',')) if params[:except].present?
   end
 
   def set_groups
@@ -14,7 +14,7 @@ class InteractionsController < ApplicationController
     @group_ids = params[:ids].split(',')
 
     if @group_ids.present?
-      removed_groups = @person.group_memberships_for_org(current_organization).where("group_id NOT IN (?)", @group_ids)
+      removed_groups = @person.group_memberships_for_org(current_organization).where('group_id NOT IN (?)', @group_ids)
       removed_groups.delete_all if removed_groups.present?
     else
       @person.group_memberships_for_org(current_organization).delete_all
@@ -22,20 +22,20 @@ class InteractionsController < ApplicationController
 
     @group_ids.each do |group_id|
       group = @person.group_memberships.where(group_id: group_id.to_i).first_or_create
-      group.update_attribute(:role, 'member') unless ['leader','member'].include?(group.role)
+      group.update_attribute(:role, 'member') unless %w(leader member).include?(group.role)
     end
     @groups = @person.groups_for_org_id(current_organization.id)
   end
 
   def create_label
-    @status = "false"
+    @status = 'false'
     if params[:name].present?
-      if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], params[:name].downcase).present?
+      if Label.where('organization_id IN (?) AND LOWER(name) = ?', [current_organization.id, 0], params[:name].downcase).present?
         @msg_alert = t('contacts.index.add_label_exists')
       else
         @new_label = Label.create(organization_id: current_organization.id, name: params[:name]) if params[:name].present?
         if @new_label.present?
-          @status = "true"
+          @status = 'true'
           @msg_alert = t('contacts.index.add_label_success')
         else
           @msg_alert = t('contacts.index.add_label_failed')
@@ -57,7 +57,7 @@ class InteractionsController < ApplicationController
   def load_more_interactions
     @person = Person.find(params[:person_id])
     if can? :manage, @person
-      @interactions = @person.filtered_interactions(current_person, current_organization).where("interactions.id < ?",params[:last_id])
+      @interactions = @person.filtered_interactions(current_person, current_organization).where('interactions.id < ?', params[:last_id])
       @last_interaction = @interactions.last
       @interactions = @interactions.limited
     end
@@ -91,16 +91,16 @@ class InteractionsController < ApplicationController
   def search_initiators
     @person = Person.find(params[:person_id])
     @current_person = current_person
-    @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
-    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
+    @people = current_organization.people.where('first_name LIKE :key OR last_name LIKE :key', key: "%#{params[:keyword].strip}%")
+    @people = @people.where('people.id NOT IN (?)', params[:except].split(',')) if params[:except].present?
     # @people = @people.limit(5)
   end
 
   def search_receivers
     @person = Person.find(params[:person_id])
     @current_person = current_person
-    @people = current_organization.people.where("first_name LIKE :key OR last_name LIKE :key", key: "%#{params[:keyword].strip}%")
-    @people = @people.where("people.id NOT IN (?)", params[:except].split(',')) if params[:except].present?
+    @people = current_organization.people.where('first_name LIKE :key OR last_name LIKE :key', key: "%#{params[:keyword].strip}%")
+    @people = @people.where('people.id NOT IN (?)', params[:except].split(',')) if params[:except].present?
     # @people = @people.limit(5)
   end
 
@@ -140,12 +140,12 @@ class InteractionsController < ApplicationController
       address = person.addresses.where(address_type: params[:address_type]).first
       address.destroy if address.present?
     end
-    render :nothing => true
+    render nothing: true
   end
 
   protected
+
   def authorize
     authorize! :manage_contacts, current_organization
   end
-
 end

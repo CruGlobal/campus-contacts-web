@@ -1,6 +1,6 @@
 require 'emojimmy'
 namespace :emoji do
-  task :convert_to_token => :environment do
+  task convert_to_token: :environment do
     ReceivedSms.find_each do |received_sms|
       received_sms.update_column(:message, Emojimmy.emoji_to_token(received_sms.message))
     end

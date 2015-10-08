@@ -1,18 +1,18 @@
 class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
-  before_filter :get_followup_comment, only: [:show, :update, :destroy]
+  before_action :get_followup_comment, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'created_at desc'
 
     render json: custom_followup_comments,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: fake_serialize(@followup_comment),
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -33,9 +33,9 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
       render json: fake_serialize(followup_comment),
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: followup_comment.errors.full_messages},
+      render json: { errors: followup_comment.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -55,32 +55,31 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
       end
       render json: fake_serialize(@followup_comment),
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: followup_comment.errors.full_messages},
+      render json: { errors: followup_comment.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
-
   end
 
   def destroy
     @followup_comment.destroy
     render json: fake_serialize(@followup_comment),
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   private
 
   def custom_followup_comments
-    custom = Hash.new
+    custom = {}
     interactions = []
     current_organization.interactions.limit(5).each do |i|
       interactions << translate_interaction_to_followup_comment(i)
     end
     custom['followup_comments'] = interactions
-    return custom
+    custom
   end
 
   def translate_interaction_to_followup_comment(object)
@@ -94,7 +93,7 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
     followup_comment['updated_at'] = object.updated_at
     followup_comment['created_at'] = object.created_at
     followup_comment['deleted_at'] = object.deleted_at
-    return followup_comment
+    followup_comment
   end
 
   def translate_followup_comment_to_interaction(object)
@@ -105,15 +104,15 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
     interaction_hash['deleted_at'] = object['deleted_at'] if object['deleted_at'].present?
 
     interaction_hash['privacy_setting'] = object['privacy_setting']
-    unless ['me','admins','organization'].include?(interaction_hash['privacy_setting'])
+    unless %w(me admins organization).include?(interaction_hash['privacy_setting'])
       interaction_hash['privacy_setting'] = Interaction::DEFAULT_PRIVACY
     end
 
-    return interaction_hash
+    interaction_hash
   end
 
   def fake_serialize(content)
-    {'followup_comment' => translate_interaction_to_followup_comment(content)}
+    { 'followup_comment' => translate_interaction_to_followup_comment(content) }
   end
 
   def followup_comments
@@ -123,5 +122,4 @@ class Apis::V3::FollowupCommentsController < Apis::V3::BaseController
   def get_followup_comment
     @followup_comment = current_organization.interactions.find(params[:id])
   end
-
 end

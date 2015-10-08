@@ -18,7 +18,7 @@ class SentSms < ActiveRecord::Base
 
   # after_create :send_sms
 
-  def self.smart_split(text, separator=nil, char_limit=160)
+  def self.smart_split(text, separator = nil, char_limit = 160)
     return [text] if text.length <= char_limit
     new_text = ''
     remaining_text = text
@@ -51,7 +51,7 @@ class SentSms < ActiveRecord::Base
 
   def to_twilio
     twiml = Twilio::TwiML::Response.new do |r|
-      r.Message "#{CGI::escapeHTML(message.strip)}"
+      r.Message "#{CGI.escapeHTML(message.strip)}"
     end
     twiml.text
   end
@@ -61,8 +61,8 @@ class SentSms < ActiveRecord::Base
 
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
-        self.update_attributes(status: "sending")
-        msgid = URI.encode("#{id}-#{i+1}")
+        update_attributes(status: 'sending')
+        msgid = URI.encode("#{id}-#{i + 1}")
         msg = URI.encode(message.strip)
 
         request = "#{url}?username=#{login}&password=#{password}"
@@ -70,29 +70,29 @@ class SentSms < ActiveRecord::Base
 
         begin
           response = open(request).read
-          response_hash = response.split("|")
+          response_hash = response.split('|')
           response_code = response_hash.first.to_i
-          self.update_attribute('reports', response_hash)
+          update_attribute('reports', response_hash)
           if response_code == 0
             # puts "Success (#{response_code})"
-            self.update_attributes(reports: response_hash, status: "sent")
+            update_attributes(reports: response_hash, status: 'sent')
           else
             # puts "Failed (#{response_code})"
-            self.update_attributes(reports: response_hash, status: "failed")
+            update_attributes(reports: response_hash, status: 'failed')
             result = false
           end
         rescue
           msg = "Connection to #{url} failed!"
           # puts msg
-          self.update_attributes(reports: msg, status: "failed")
+          update_attributes(reports: msg, status: 'failed')
           result = false
         end
       end
     else
-      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      update_attributes(reports: 'Mobile number is not valid.', status: 'failed')
       result = false
     end
-    return result
+    result
   end
 
   def to_smseco
@@ -105,11 +105,10 @@ class SentSms < ActiveRecord::Base
 
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each_with_index do |message, i|
-        self.update_attributes(status: "sending")
+        update_attributes(status: 'sending')
 
-        msgid = "#{id}-#{i+1}"
+        msgid = "#{id}-#{i + 1}"
         msg = URI.encode(message.strip)
-
 
         request = {
           compte: { login: login,
@@ -124,26 +123,26 @@ class SentSms < ActiveRecord::Base
         Rails.logger.debug(response.body)
         response_hash = JSON.parse(response.body)
         response_code = response_hash['statut'].to_i
-        self.update_attribute('reports', response_hash)
+        update_attribute('reports', response_hash)
         if response_code == 1
-          self.update_attributes(reports: response_hash, status: "sent")
+          update_attributes(reports: response_hash, status: 'sent')
         else
-          self.update_attributes(reports: response_hash, status: "failed")
+          update_attributes(reports: response_hash, status: 'failed')
           result = false
         end
       end
     else
-      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      update_attributes(reports: 'Mobile number is not valid.', status: 'failed')
       result = false
     end
-    return result
+    result
   end
 
   def send_to_twilio(from)
     result = true
     if phone_number.present? && !phone_number.not_mobile?
       SentSms.smart_split(message, separator).each do |message|
-        self.update_attributes(status: "sending")
+        update_attributes(status: 'sending')
         protocol = Rails.env.production? ? 'https' : 'http'
         begin
           client = Twilio::REST::Client.new(ENV.fetch('TWILIO_ID'), ENV.fetch('TWILIO_TOKEN'))
@@ -158,27 +157,27 @@ class SentSms < ActiveRecord::Base
             self.reports = twilio_request
             self.status = twilio_request.status if twilio_request.status.present?
             self.twilio_uri = twilio_request.uri if twilio_request.uri.present?
-            self.save
+            save
           else
-            raise Twilio::REST::RequestError
+            fail Twilio::REST::RequestError
           end
         rescue Twilio::REST::RequestError => e
           msg = e.message
-          if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index("is not currently reachable")
+          if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index('is not currently reachable')
             phone_number.not_mobile!
           else
             Rollbar.error(e)
           end
-          self.update_attributes(reports: msg.present? ? msg : twilio_request, status: "failed")
+          update_attributes(reports: msg.present? ? msg : twilio_request, status: 'failed')
           result = false
         end
       end
     else
-      self.update_attributes(reports: "Mobile number is not valid.", status: "failed")
+      update_attributes(reports: 'Mobile number is not valid.', status: 'failed')
       result = false
     end
     long_code.increment!(:messages_sent) if long_code
-    return result
+    result
   end
 
   def phone_number
@@ -195,7 +194,7 @@ class SentSms < ActiveRecord::Base
         @phone_number = PhoneNumber.find_by_number(PhoneNumber.strip_us_country_code(recipient))
       end
     end
-    raise "Number couldn't be found: #{recipient}" unless @phone_number
+    fail "Number couldn't be found: #{recipient}" unless @phone_number
 
     @phone_number
   end
@@ -230,9 +229,8 @@ class SentSms < ActiveRecord::Base
   def long_code
     unless @long_code
       @long_code = LongCode.active.order(:messages_sent).first
-      #raise 'You need to put at least one number in the "long_codes" table' unless @long_code
+      # raise 'You need to put at least one number in the "long_codes" table' unless @long_code
     end
     @long_code
   end
-
 end

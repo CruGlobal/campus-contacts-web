@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class InterestTest < ActiveSupport::TestCase
-
   should belong_to(:person)
   should validate_presence_of(:person_id)
   should validate_presence_of(:name)
@@ -10,17 +9,17 @@ class InterestTest < ActiveSupport::TestCase
   should validate_presence_of(:person_id)
   should validate_presence_of(:category)
 
-  context "an interest" do
+  context 'an interest' do
     setup do
       @person = FactoryGirl.create(:person_with_things)
     end
 
-    should "be able to add an interest" do
-      interest1 = @person.interests.create(provider: "facebook", name: "Books", person_id: @person.id.to_i, interest_id: "1", category: "Things")
+    should 'be able to add an interest' do
+      interest1 = @person.interests.create(provider: 'facebook', name: 'Books', person_id: @person.id.to_i, interest_id: '1', category: 'Things')
       assert interest1.valid?
     end
 
-    should "convert to a hash well" do
+    should 'convert to a hash well' do
       interest = @person.interests.first
       hash = interest.to_hash
       assert_equal(hash['id'], interest.interest_id)

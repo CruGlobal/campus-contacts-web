@@ -1,8 +1,8 @@
 class Surveys::QuestionsController < ApplicationController
-  before_filter :find_survey_and_authorize, except: [:hide, :unhide]
-  before_filter :find_question, only: [:show, :edit, :update, :destroy]
-  before_filter :get_predefined
-  before_filter :get_leaders
+  before_action :find_survey_and_authorize, except: [:hide, :unhide]
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :get_predefined
+  before_action :get_leaders
 
   # GET /questions
   # GET /questions.xml
@@ -11,7 +11,7 @@ class Surveys::QuestionsController < ApplicationController
     @questions = @survey.questions
     @predefined_questions = current_organization.predefined_survey_questions.uniq - @questions
     @other_questions = current_organization.all_questions.uniq - current_organization.predefined_survey_questions.uniq - @survey.questions
-    @other_questions.uniq!{|x| x[:label].strip.gsub(/\?|\:/,"")}
+    @other_questions.uniq! { |x| x[:label].strip.gsub(/\?|\:/, '') }
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml  { render xml: @questions }
@@ -76,12 +76,12 @@ class Surveys::QuestionsController < ApplicationController
       begin
         @survey.elements << @question
       rescue ActiveRecord::RecordInvalid => e
-         params[:error] = I18n.t('surveys.questions.create.duplicate_error')
-         respond_to do |wants|
+        params[:error] = I18n.t('surveys.questions.create.duplicate_error')
+        respond_to do |wants|
           wants.js
-         end
+        end
 
-         return
+        return
       end
     end
 
@@ -92,13 +92,13 @@ class Surveys::QuestionsController < ApplicationController
     respond_to do |wants|
       if !@question.new_record?
         wants.html do
-          #flash[:notice] = t('questions.create.notice')
-          #redirect_to(:back)
+          # flash[:notice] = t('questions.create.notice')
+          # redirect_to(:back)
         end
-        wants.xml  { render xml: @question, status: :created, location: @question }
+        wants.xml { render xml: @question, status: :created, location: @question }
         wants.js
       else
-        wants.html { render action: "new" }
+        wants.html { render action: 'new' }
         wants.xml  { render xml: @question.errors, status: :unprocessable_entity }
         wants.js
       end
@@ -116,7 +116,7 @@ class Surveys::QuestionsController < ApplicationController
         wants.js {}
         wants.xml  { head :ok }
       else
-        wants.html { render action: "edit" }
+        wants.html { render action: 'edit' }
         wants.xml  { render xml: @question.errors, status: :unprocessable_entity }
       end
     end
@@ -144,152 +144,152 @@ class Surveys::QuestionsController < ApplicationController
     type = params[:type]
     keyword = params[:q]
 
-    @response = Array.new
+    @response = []
     if type.present? && keyword.present?
-   	 	keyword = keyword.strip
-		  case type
-			when 'Leader'
-		    leaders = @survey.organization.leaders.where("last_name LIKE ? OR first_name LIKE ?", "%#{keyword}%", "%#{keyword}%")
-		    @response = leaders.uniq.collect{|p| {label: "#{p.name} (#{p.email})", id: p.id}}
-			when 'Ministry'
-		    ministries = current_person.all_organization_and_children.where("name LIKE ?", "%#{keyword}%")
-		    @response = ministries.uniq.collect{|p|  {label: p.name, id: p.id}}
-			when 'Group'
-				groups = current_organization.group_search(keyword)
-				@response = groups.collect{|p| {label: "#{p.name} (#{p.location})", id: p.id}}
-			when 'Label'
-				labels = current_organization.label_search(keyword)
-				@response = labels.collect{|p| {label: p.name, id: p.id}}
-			else
-			end
-		end
+      keyword = keyword.strip
+      case type
+      when 'Leader'
+        leaders = @survey.organization.leaders.where('last_name LIKE ? OR first_name LIKE ?', "%#{keyword}%", "%#{keyword}%")
+        @response = leaders.uniq.collect { |p| { label: "#{p.name} (#{p.email})", id: p.id } }
+      when 'Ministry'
+        ministries = current_person.all_organization_and_children.where('name LIKE ?', "%#{keyword}%")
+        @response = ministries.uniq.collect { |p| { label: p.name, id: p.id } }
+      when 'Group'
+        groups = current_organization.group_search(keyword)
+        @response = groups.collect { |p| { label: "#{p.name} (#{p.location})", id: p.id } }
+      when 'Label'
+        labels = current_organization.label_search(keyword)
+        @response = labels.collect { |p| { label: p.name, id: p.id } }
+      end
+    end
 
-		respond_to do |format|
-		  format.json { render json: @response.to_json }
-		end
+    respond_to do |format|
+      format.json { render json: @response.to_json }
+    end
   end
 
   private
-    def find_question
-      @question = @survey.elements.find(params[:id])
+
+  def find_question
+    @question = @survey.elements.find(params[:id])
+  end
+
+  def find_survey_and_authorize
+    @survey = Survey.find(params[:survey_id])
+    authorize! :manage, @survey
+  end
+
+  def get_predefined
+    @predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
+  end
+
+  def get_leaders
+    @leaders = current_organization.leaders
+  end
+
+  def evaluate_option_autoassign
+    parameters = {}
+    parameters['type'] = params[:assign_contact_to]
+    parameters['id'] = params[:autoassign_selected_id]
+    parameters['name'] = params[:autoassign_keyword]
+
+    rule = Rule.where(rule_code: 'AUTOASSIGN').first
+    triggers_array = []
+    triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
+    triggers.each do |t|
+      triggers_array << t.strip if t.strip.present?
     end
+    triggers = triggers_array.join(', ')
 
-    def find_survey_and_authorize
-      @survey = Survey.find(params[:survey_id])
-      authorize! :manage, @survey
-    end
+    if survey_element = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first
+      question_rule = survey_element.question_rules.where(rule_id: rule.id).first if rule.present?
 
-    def get_predefined
-      @predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
-    end
-
-    def get_leaders
-      @leaders = current_organization.leaders
-    end
-
-    def evaluate_option_autoassign
-      parameters = Hash.new
-      parameters['type'] = params[:assign_contact_to]
-      parameters['id'] = params[:autoassign_selected_id]
-      parameters['name'] = params[:autoassign_keyword]
-
-      rule = Rule.where(rule_code: "AUTOASSIGN").first
-      triggers_array = Array.new
-      triggers = params[:assignment_trigger_words].present? ? params[:assignment_trigger_words].split(',') : []
-      triggers.each do |t|
-        triggers_array << t.strip if t.strip.present?
-      end
-      triggers = triggers_array.join(", ")
-
-      if survey_element = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first
-        question_rule = survey_element.question_rules.where(rule_id: rule.id).first if rule.present?
-
-        if triggers.present? && parameters['id'].present? && parameters['name'].present?
-          if question_rule.present?
-            question_rule.update_attributes({trigger_keywords: triggers, extra_parameters: parameters})
-          else
-            question_rule = QuestionRule.create(survey_element_id: survey_element.id, rule_id: rule.id,
-              trigger_keywords: triggers, extra_parameters: parameters)
-          end
+      if triggers.present? && parameters['id'].present? && parameters['name'].present?
+        if question_rule.present?
+          question_rule.update_attributes(trigger_keywords: triggers, extra_parameters: parameters)
         else
-          if question_rule.present?
-            if triggers.blank?
-              question_rule.update_attribute(:trigger_keywords, nil)
-            end
-            if parameters['id'].blank? || parameters['name'].blank?
-              question_rule.update_attribute(:extra_parameters, nil)
-            end
+          question_rule = QuestionRule.create(survey_element_id: survey_element.id, rule_id: rule.id,
+                                              trigger_keywords: triggers, extra_parameters: parameters)
+        end
+      else
+        if question_rule.present?
+          if triggers.blank?
+            question_rule.update_attribute(:trigger_keywords, nil)
+          end
+          if parameters['id'].blank? || parameters['name'].blank?
+            question_rule.update_attribute(:extra_parameters, nil)
           end
         end
       end
     end
+  end
 
-    def evaluate_option_autonotify
-      leaders = params[:leaders] || []
+  def evaluate_option_autonotify
+    leaders = params[:leaders] || []
 
-      parameters = Hash.new
-      parameters['leaders'] = Array.new
-      invalid_emails = Array.new
+    parameters = {}
+    parameters['leaders'] = []
+    invalid_emails = []
 
-      if leaders.present?
-        survey_element_id = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first.id
-        leaders.each do |leader|
-          Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
+    if leaders.present?
+      survey_element_id = SurveyElement.where(survey_id: params[:survey_id], element_id: params[:id]).first.id
+      leaders.each do |leader|
+        Person.find(leader).has_a_valid_email? ? parameters['leaders'] << leader.to_i : invalid_emails << leader.to_i
+      end
+
+      if invalid_emails.present?
+        respond_to do |wants|
+          wants.js { render 'update_question_error', locals: { leader_names: Person.where(id: invalid_emails).collect(&:name).join(', ') } }
         end
-
-        if invalid_emails.present?
-          respond_to do |wants|
-            wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: invalid_emails).collect{|p| p.name}.join(', ') } }
-          end
-          return false
+        return false
+      else
+        rule = Rule.where(rule_code: 'AUTONOTIFY').first
+        triggers_array = []
+        triggers = params[:trigger_words].split(',')
+        triggers.each do |t|
+          triggers_array << t.strip if t.strip.present?
+        end
+        triggers = triggers_array.join(', ')
+        if question_rule = QuestionRule.where(survey_element_id: survey_element_id, rule_id: rule.id).first
+          question_rule.update_attribute('trigger_keywords', triggers)
+          question_rule.update_attribute('extra_parameters', parameters)
         else
-          rule = Rule.where(rule_code: "AUTONOTIFY").first
-          triggers_array = Array.new
-          triggers = params[:trigger_words].split(',')
-          triggers.each do |t|
-            triggers_array << t.strip if t.strip.present?
-          end
-          triggers = triggers_array.join(", ")
-          if question_rule = QuestionRule.where(survey_element_id: survey_element_id, rule_id: rule.id).first
-            question_rule.update_attribute('trigger_keywords',triggers)
-            question_rule.update_attribute('extra_parameters',parameters)
-          else
-            question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id,
-              trigger_keywords: triggers, extra_parameters: parameters)
-          end
+          question_rule = QuestionRule.create(survey_element_id: survey_element_id, rule_id: rule.id,
+                                              trigger_keywords: triggers, extra_parameters: parameters)
         end
       end
-      true
     end
+    true
+  end
 
-    #def validate_then_create_chosen_leaders
-    #  new_leaders = params[:leaders] || []
-    #  old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
+  # def validate_then_create_chosen_leaders
+  #  new_leaders = params[:leaders] || []
+  #  old_leaders = params[:id] ? Question.find(params[:id]).question_leaders.collect{ |ql| ql.person_id.to_s} : []
 
-    #  to_add = new_leaders - old_leaders
-    #  to_remove = old_leaders - new_leaders
+  #  to_add = new_leaders - old_leaders
+  #  to_remove = old_leaders - new_leaders
 
-      #destroy question leaders
-    #  Question.find(params[:id]).question_leaders.each do |ql|
-    #    ql.destroy if to_remove.include? ql.person_id
-    #  end if params[:id]
+  # destroy question leaders
+  #  Question.find(params[:id]).question_leaders.each do |ql|
+  #    ql.destroy if to_remove.include? ql.person_id
+  #  end if params[:id]
 
-      #create question leaders
-    #  leaders_with_invalid_emails = Array.new
-    #  to_add.each do |ta|
-    #    leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
-    #  end
+  # create question leaders
+  #  leaders_with_invalid_emails = Array.new
+  #  to_add.each do |ta|
+  #    leaders_with_invalid_emails << ta unless Person.find(ta).has_a_valid_email?
+  #  end
 
-    #  unless leaders_with_invalid_emails.blank?
-    #    respond_to do |wants|
-    #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
-    #    end
-    #    return false
-    #  else
-    #    to_add.each do |ta|
-    #      QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
-    #    end
-    #  end
-    #  true
-    #end
+  #  unless leaders_with_invalid_emails.blank?
+  #    respond_to do |wants|
+  #      wants.js { render 'update_question_error', :locals => {:leader_names => Person.where(id: leaders_with_invalid_emails).collect{|p| p.name}.join(', ') } }
+  #    end
+  #    return false
+  #  else
+  #    to_add.each do |ta|
+  #      QuestionLeader.create!(:person_id => ta, :element_id => @question.id)
+  #    end
+  #  end
+  #  true
+  # end
 end

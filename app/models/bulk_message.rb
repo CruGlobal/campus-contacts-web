@@ -47,16 +47,16 @@ class BulkMessage < ActiveRecord::Base
       ids = to_ids.split(',').uniq
       ids.each do |id|
         if id.upcase =~ /GROUP-/
-          group = Group.where(id: id.gsub("GROUP-",""), organization_id: organization.id).first
-          group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
+          group = Group.find_by(id: id.gsub('GROUP-', ''), organization_id: organization.id)
+          group.group_memberships.collect { |p| person_ids << p.person_id.to_s } if group.present?
         elsif id.upcase =~ /ROLE-/
-          permission = Permission.find(id.gsub("ROLE-",""))
-          permission.members_from_permission_org(organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+          permission = Permission.find(id.gsub('ROLE-', ''))
+          permission.members_from_permission_org(organization.id).collect { |p| person_ids << p.person_id.to_s } if permission.present?
         elsif id.upcase =~ /LABEL-/
-          label = Label.find(id.gsub("LABEL-",""))
-          label.label_contacts_from_org(organization).collect{|p| person_ids << p.id.to_s } if label.present?
+          label = Label.find(id.gsub('LABEL-', ''))
+          label.label_contacts_from_org(organization).collect { |p| person_ids << p.id.to_s } if label.present?
         elsif id.upcase =~ /ALL-PEOPLE/
-          organization.all_people.collect{|p| person_ids << p.id.to_s} if sender.user.has_permission?(Permission::ADMIN_ID, organization)
+          organization.all_people.collect { |p| person_ids << p.id.to_s } if sender.user.has_permission?(Permission::ADMIN_ID, organization)
         else
           person_ids << id
         end
@@ -66,7 +66,7 @@ class BulkMessage < ActiveRecord::Base
     if receiver_ids.present?
       bulk_message = sender.bulk_messages.create(organization: organization)
       receiver_ids.each do |id|
-        person = Person.where(id: id).first
+        person = Person.find_by(id: id)
         if person.present? && primary_phone = person.primary_phone_number
           # Do not allow to send text if the phone number is not subscribed
           if organization.is_sms_subscribe?(primary_phone.number)
@@ -75,7 +75,7 @@ class BulkMessage < ActiveRecord::Base
               bulk_message: bulk_message,
               receiver_id: person.id,
               organization_id: organization.id,
-              to: person.text_phone_number.number.gsub(/[^\d\+]/,''),
+              to: person.text_phone_number.number.gsub(/[^\d\+]/, ''),
               sent_via: 'sms',
               message: body
             )

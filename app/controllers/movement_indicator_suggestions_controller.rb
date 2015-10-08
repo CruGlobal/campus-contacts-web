@@ -34,5 +34,4 @@ class MovementIndicatorSuggestionsController < ApplicationController
     end
     redirect_to :back
   end
-
 end

@@ -1,6 +1,6 @@
 class Export < ActiveRecord::Base
-  KIND_CONTACTS = "contacts"
-  CATEGORY_CSV = "csv"
+  KIND_CONTACTS = 'contacts'
+  CATEGORY_CSV = 'csv'
 
   attr_accessible :person_id, :organization_id, :category, :kind, :options, :status
 
@@ -14,15 +14,15 @@ class Export < ActiveRecord::Base
 
   def self.add(person, org, category = CATEGORY_CSV, kind = KIND_CONTACTS, options = {})
     export = org.exports.create(person_id: person.id, category: category, kind: kind, options: options)
-    #begin
-      Jobs::ExportNotifications.perform_async(export.id)
-    #rescue;end
+    # begin
+    Jobs::ExportNotifications.perform_async(export.id)
+    # rescue;end
   end
 
-  def self.build_options(args = Array.new)
-    opts = Hash.new
+  def self.build_options(args = [])
+    opts = {}
     args.each do |objects|
-      opts[objects.first.class.to_s.downcase] = objects.map {|obj| obj.id} if objects.present?
+      opts[objects.first.class.to_s.downcase] = objects.map(&:id) if objects.present?
     end if args.present?
     opts
   end
@@ -36,7 +36,7 @@ class Export < ActiveRecord::Base
     surveys = {}
 
     answer_sheets = AnswerSheet.where(survey_id: survey_ids, person_id: people_ids)
-      .includes(:survey, :answers, {:person => :primary_email_address})
+                    .includes(:survey, :answers, person: :primary_email_address)
 
     if answer_sheets.present?
       answer_sheets.each do |answer_sheet|
@@ -59,9 +59,9 @@ class Export < ActiveRecord::Base
   def self.get_all_questions(organization)
     all_questions = organization.questions
     predefined_survey = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
-    excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
-    predefined_questions = organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
-    questions = (all_questions.where("survey_elements.hidden = ?", false) + predefined_questions.where(id: organization.settings[:visible_predefined_questions])).uniq
-    questions.select! { |q| !%w{first_name last_name phone_number email}.include?(q.attribute_name) }
+    excepted_predefined_fields = %w(first_name last_name gender phone_number)
+    predefined_questions = organization.predefined_survey_questions.where('attribute_name NOT IN (?)', excepted_predefined_fields)
+    questions = (all_questions.where('survey_elements.hidden = ?', false) + predefined_questions.where(id: organization.settings[:visible_predefined_questions])).uniq
+    questions.select! { |q| !%w(first_name last_name phone_number email).include?(q.attribute_name) }
   end
 end

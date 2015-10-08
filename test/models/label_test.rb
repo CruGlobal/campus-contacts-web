@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class LabelTest < ActiveSupport::TestCase
-
   setup do
     @person1 = FactoryGirl.create(:person)
     @person2 = FactoryGirl.create(:person)
@@ -24,22 +23,22 @@ class LabelTest < ActiveSupport::TestCase
     FactoryGirl.create(:organizational_label, organization: @other_organization, person: @other_person, label: @other_label)
   end
 
-  context "label_contacts_from_org_with_archived method" do
-    should "return labeled people in an organization" do
+  context 'label_contacts_from_org_with_archived method' do
+    should 'return labeled people in an organization' do
       results = @label1.label_contacts_from_org_with_archived(@organization)
       assert_equal 1, results.count
       assert results.include?(@person1)
     end
-    should "not return labeled people in other label of an organization" do
+    should 'not return labeled people in other label of an organization' do
       results = @label1.label_contacts_from_org_with_archived(@organization)
       assert !results.include?(@person2)
     end
-    should "return default labeled people within an organization only" do
+    should 'return default labeled people within an organization only' do
       results = @label0.label_contacts_from_org_with_archived(@organization)
       assert_equal 1, results.count
       assert results.include?(@person1)
     end
-    should "not return default labeled people from other organization" do
+    should 'not return default labeled people from other organization' do
       results = @label0.label_contacts_from_org_with_archived(@organization)
       assert !results.include?(@other_person)
     end

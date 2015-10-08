@@ -1,5 +1,4 @@
 class Batch # < ActiveRecord::Base
-
   def self.person_transfer_notify
     notify_entries = get_unnotified_transfers
     receiving_orgs = notify_entries.group('new_organization_id')
@@ -11,11 +10,11 @@ class Batch # < ActiveRecord::Base
         admins = organization.all_possible_admins_with_email
         if admins.present?
           admins.each do |admin|
-            formated_transferred_contacts = Array.new
+            formated_transferred_contacts = []
             transferred_contacts.each do |contact|
               begin
                 if contact.present? && contact.person.present? && contact.transferred_by.present? && contact.old_organization.present?
-                  transfer_log = Hash.new
+                  transfer_log = {}
                   transfer_log['transferer_name'] = contact.transferred_by.name
                   transfer_log['transferer_email'] = contact.transferred_by.email
                   transfer_log['old_org_name'] = contact.old_organization.name
@@ -36,12 +35,12 @@ class Batch # < ActiveRecord::Base
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           if Rails.env.production?
             Rollbar.error(
-              :error_class   => "Batch::PersonTransferNotify",
-              :error_message => "Batch::PersonTransferNotify: #{error}",
-              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+              error_class: 'Batch::PersonTransferNotify',
+              error_message: "Batch::PersonTransferNotify: #{error}",
+              parameters: { receiving_organizations: receiving_orgs.collect(&:organization_id) }
             )
           else
-            raise error
+            fail error
           end
         end
       end
@@ -59,11 +58,11 @@ class Batch # < ActiveRecord::Base
         admins = organization.all_possible_admins_with_email
         if admins.present?
           admins.each do |admin|
-            formated_new_contacts = Array.new
+            formated_new_contacts = []
             new_contacts.each do |new_person|
               begin
                 if new_person.present? && new_person.person.present?
-                  new_contact_log = Hash.new
+                  new_contact_log = {}
                   new_contact_log['person_name'] = new_person.person.name
                   new_contact_log['person_email'] = new_person.person.email
                   formated_new_contacts << new_contact_log
@@ -82,12 +81,12 @@ class Batch # < ActiveRecord::Base
           error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
           if Rails.env.production?
             Rollbar.error(
-              :error_class   => "Batch::NewPersonNotify",
-              :error_message => "Batch::NewPersonNotify: #{error}",
-              :parameters    => {receiving_organizations: receiving_orgs.collect(&:organization_id)}
+              error_class: 'Batch::NewPersonNotify',
+              error_message: "Batch::NewPersonNotify: #{error}",
+              parameters: { receiving_organizations: receiving_orgs.collect(&:organization_id) }
             )
           else
-            raise error
+            fail error
           end
         end
       end
@@ -101,5 +100,4 @@ class Batch # < ActiveRecord::Base
   def self.get_unnotified_new_contacts
     NewPerson.where(notified: false)
   end
-
 end

@@ -48,12 +48,12 @@ Rails.application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  #config.assets.debug = true
+  # config.assets.debug = true
 
-  config.action_mailer.default_url_options = { host: 'local.missionhub.com:7888'}
+  config.action_mailer.default_url_options = { host: 'local.missionhub.com:7888' }
   config.action_mailer.delivery_method = :smtp
 
-  Paperclip.options[:command_path] = "/usr/local/bin/"
+  Paperclip.options[:command_path] = '/usr/local/bin/'
 
   # Raise exception on mass assignment protection for Active Record models
   # config.active_record.mass_assignment_sanitizer = :strict

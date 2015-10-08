@@ -4,9 +4,9 @@ class OauthController < ApplicationController
   rescue_from Exception, with: :render_json_error
   def authorize
     if current_user
-      render :action=>"authorize"
+      render action: 'authorize'
     else
-      redirect_to :action=>"login", :authorization=>oauth.authorization
+      redirect_to action: 'login', authorization: oauth.authorization
     end
   end
 
@@ -19,8 +19,8 @@ class OauthController < ApplicationController
   end
 
   def done
-    raise AccountSetupRequiredError unless current_organization
-    raise IncorrectPermissionsError unless current_user.person.leader_for_org(current_organization)
+    fail AccountSetupRequiredError unless current_organization
+    fail IncorrectPermissionsError unless current_user.person.leader_for_org(current_organization)
 
     json_output = '{"status":"done", "code":"' + params[:code] + '"}'
     render json: json_output

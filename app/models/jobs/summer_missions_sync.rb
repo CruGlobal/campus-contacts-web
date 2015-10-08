@@ -1,4 +1,4 @@
-require "import_methods"
+require 'import_methods'
 
 class Jobs::SummerMissionsSync
   include Sidekiq::Worker
@@ -6,8 +6,8 @@ class Jobs::SummerMissionsSync
   sidekiq_options unique: true
 
   def perform
-    imported_partner = Array.new
-    root = Organization.where(name: "Cru").first_or_create
+    imported_partner = []
+    root = Organization.where(name: 'Cru').first_or_create
 
     # Fetch Ministries (Cru High School, Bridges, Athletes In Action) ***Bridges is temporarily removed
     ministry_json = Infobase::Ministry.get('filters[names]' => 'Cru High School, Athletes In Action')['ministries']
@@ -40,7 +40,6 @@ class Jobs::SummerMissionsSync
           end
           page += 1
         end while last_record < total_record
-
       end
     end
 
@@ -52,8 +51,8 @@ class Jobs::SummerMissionsSync
       raise "Cannot import ministry: #{ministry.inspect}"
     end
     Rails.logger.debug "-- Checking Ministry - #{ministry['name']}"
-    Rails.logger.debug "---- Importing Regions..."
-    region_json = Infobase::Region.get()['regions']
+    Rails.logger.debug '---- Importing Regions...'
+    region_json = Infobase::Region.get['regions']
     region_json.each do |region|
       Rails.logger.debug "------ Checking Region - #{region['abbrv']} - #{region['name']}"
       mh_region = import_region(region, mh_ministry)
@@ -80,7 +79,6 @@ class Jobs::SummerMissionsSync
           end
           page += 1
         end while last_record < total_record
-
       end
 
       # Rails.logger.debug "---- Importing Team..."
@@ -104,9 +102,9 @@ class Jobs::SummerMissionsSync
     end
 
     # Fetch Non-SP Projects
-    non_sp = root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first
-    non_sp ||= root.children.where(name: "Other Summer Projects", terminology: 'Other Summer Projects').first_or_create
-    imported_partner << "Bridges" # skip bridges
+    non_sp = root.children.find_by(name: 'Other Summer Projects', terminology: 'Other Summer Projects')
+    non_sp ||= root.children.where(name: 'Other Summer Projects', terminology: 'Other Summer Projects').first_or_create
+    imported_partner << 'Bridges' # skip bridges
     Rails.logger.debug "-- Checking Other Summer Projects - #{ministry['name']}"
     (2014..Date.today.year).each do |year|
       Rails.logger.debug "---- Importing Other Summer Projects #{year}..."
@@ -131,37 +129,36 @@ class Jobs::SummerMissionsSync
         end
         page += 1
       end while last_record < total_record
-
     end
   end
 
   def import_ministry(ministry_hash, parent_org)
-    org = Organization.where(importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry').first
+    org = Organization.find_by(importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry')
     org ||= parent_org.children.where(name: ministry_hash['name'], terminology: 'Ministry', importable_id: ministry_hash['id'], importable_type: 'Ccc::Ministry').first_or_create
-    return org
+    org
   end
 
   def import_mission(year, parent_org)
-    org = parent_org.children.where(name: ["Summer Mission #{year}","Summer Missions #{year}"], terminology: 'Mission').first
+    org = parent_org.children.find_by(name: ["Summer Mission #{year}", "Summer Missions #{year}"], terminology: 'Mission')
     org.update_attribute(:name, "Summer Missions #{year}") if org.present? && org.name == "Summer Mission #{year}"
     org ||= parent_org.children.where(name: "Summer Missions #{year}", terminology: 'Mission').first_or_create
-    return org
+    org
   end
 
   def import_region(region_hash, parent_org)
-    org = Organization.where(importable_id: region_hash['id'], importable_type: 'Ccc::Region').first
+    org = Organization.find_by(importable_id: region_hash['id'], importable_type: 'Ccc::Region')
     org ||= parent_org.children.where(name: region_hash['name'], terminology: 'Region', importable_id: region_hash['id'], importable_type: 'Ccc::Region').first_or_create
-    return org
+    org
   end
 
   def import_team(team_hash, parent_org)
-    org = Organization.where(importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel').first
+    org = Organization.find_by(importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel')
     org ||= parent_org.children.where(name: team_hash['name'], terminology: 'Missional Team', importable_id: team_hash['id'], importable_type: 'Ccc::MinistryLocallevel').first_or_create
-    return org
+    org
   end
 
   def import_project(project_hash, parent_org)
-    org = Organization.where(importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first
+    org = Organization.find_by(importable_id: project_hash['id'], importable_type: 'Ccc::SpProject')
     org ||= parent_org.children.where(name: project_hash['name'], terminology: 'Project', importable_id: project_hash['id'], importable_type: 'Ccc::SpProject').first_or_create
 
     ImportMethods.person_from_api(project_hash['pd'], org, 'admin') if project_hash['pd'].present?
@@ -181,25 +178,25 @@ class Jobs::SummerMissionsSync
       ImportMethods.person_from_api(person, org, 'contact')
     end if project_hash['applicants'].present?
 
-    return org
+    org
   end
 
   def get_search_name(ministry)
     case ministry['name']
     when 'Athletes In Action'
-      return "AIA"
+      return 'AIA'
     when 'Global Missions'
-      return "WSN"
+      return 'WSN'
     else
       ministry['name']
     end
   end
 
   def get_projects(primary_partner, year, is_not = false, page = 1)
-    project_includes = "pd,apd,opd,staff,volunteers,applicants"
+    project_includes = 'pd,apd,opd,staff,volunteers,applicants'
     filter = is_not ? 'not_primary_partner' : 'primary_partner'
     retryable do
-      return SummerProject::Project.get("filters[#{filter}]" => primary_partner, "filters[year]" => year, include: project_includes, per_page: 3, page: page)
+      return SummerProject::Project.get("filters[#{filter}]" => primary_partner, 'filters[year]' => year, include: project_includes, per_page: 3, page: page)
     end
   end
 end

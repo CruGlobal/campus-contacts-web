@@ -4,12 +4,11 @@
 # a question can have more than one answer (choose many) in which case ANY answer will do (find)
 
 class Condition < ActiveRecord::Base
-
   belongs_to :question_sheet
-  belongs_to :trigger, class_name: "Question", foreign_key: "trigger_id"
+  belongs_to :trigger, class_name: 'Question', foreign_key: 'trigger_id'
 
   validates_presence_of :expression
-  validates_length_of :expression, :maximum => 255, :allow_nil => true
+  validates_length_of :expression, maximum: 255, allow_nil: true
 
   # evaluate triggering element against expression and return match|nil
   def evaluate?
@@ -26,7 +25,7 @@ class Condition < ActiveRecord::Base
     js = <<-JS
     disabled = (response.find(function(answer) {
       answer = toLowerCase(answer);
-      return eval("#{escape_javascript(self.expression.downcase)}");
+      return eval("#{escape_javascript(expression.downcase)}");
     }) == undefined);
     JS
 
@@ -34,15 +33,14 @@ class Condition < ActiveRecord::Base
       # toggling a whole page (link), which will affect final page validation
     else
       # toggling an element (form element)... if page is loaded/cached (if not, the server-side will take care of it on load)
-      js = js + <<-JS
-      if(page_handler.isPageLoaded('page_#{self.toggle_page_id}'))
+      js += <<-JS
+      if(page_handler.isPageLoaded('page_#{toggle_page_id}'))
       {
-        $('element_#{self.toggle_id}').disabled = disabled;
+        $('element_#{toggle_id}').disabled = disabled;
       }
       JS
     end
 
     js
   end
-
 end

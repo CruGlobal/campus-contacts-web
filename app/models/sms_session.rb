@@ -5,7 +5,7 @@ class SmsSession < ActiveRecord::Base
   belongs_to :sms_keyword
 
   scope :active,
-    ->{where(["updated_at > ? AND ended = ?", 10.minutes.ago, false])}
+        -> { where(['updated_at > ? AND ended = ?', 10.minutes.ago, false]) }
 
   validates_presence_of :phone_number, :person_id, :sms_keyword_id
 end
