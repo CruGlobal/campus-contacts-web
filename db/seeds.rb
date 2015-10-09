@@ -38,13 +38,13 @@ Person.transaction do
     sub2 = Organization.create!(name: 'Third Level', terminology: 'Campus', parent: sub1)
 
     # Contacts
-    1000.times do |i|
+    1000.times do |_i|
       p = create_person
       sub2.add_contact(p)
     end
 
     # leaders
-    10.times do |i|
+    10.times do |_i|
       p = create_person
       sub2.add_leader(p)
     end

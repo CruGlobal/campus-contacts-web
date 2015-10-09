@@ -1,5 +1,4 @@
 class ActiveModel::Serializer
-
   def organization_filter(relationship)
     if scope.is_a?(Hash) && organization = scope[:organization]
       object.send(relationship).where(organization_id: organization.id)
@@ -15,5 +14,4 @@ class ActiveModel::Serializer
       rel
     end
   end
-
 end

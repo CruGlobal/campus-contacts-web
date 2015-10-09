@@ -1,7 +1,7 @@
 class TwilioSidShouldBeUnique < ActiveRecord::Migration
   def up
-    add_index :sent_sms, :twilio_sid, :unique => true
-    add_index :received_sms, :twilio_sid, :unique => true
+    add_index :sent_sms, :twilio_sid, unique: true
+    add_index :received_sms, :twilio_sid, unique: true
   end
 
   def down

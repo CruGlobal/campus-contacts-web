@@ -1,12 +1,12 @@
 class Apis::V3::SurveysController < Apis::V3::BaseController
-  before_filter :get_survey, only: [:show, :update, :destroy]
+  before_action :get_survey, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'title'
     list = add_includes_and_order(surveys, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, since: params[:since]}
+           scope: { include: includes, since: params[:since] }
   end
 
   def show
@@ -26,7 +26,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
                callback: params[:callback],
                scope: includes
       else
-        render json: {errors: survey.errors.full_messages},
+        render json: { errors: survey.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -42,7 +42,7 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
                callback: params[:callback],
                scope: includes
       else
-        render json: {errors: survey.errors.full_messages},
+        render json: { errors: survey.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -73,5 +73,4 @@ class Apis::V3::SurveysController < Apis::V3::BaseController
   def available_includes
     [:keyword, :questions]
   end
-
 end

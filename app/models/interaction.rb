@@ -9,23 +9,23 @@ class Interaction < ActiveRecord::Base
   belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id', touch: true
   belongs_to :creator, class_name: 'Person', foreign_key: 'created_by_id', touch: true
 
-  scope :sorted, ->{order('interactions.created_at DESC')}
-  scope :limited, ->{limit(5)}
+  scope :sorted, -> { order('interactions.created_at DESC') }
+  scope :limited, -> { limit(5) }
   after_save :ensure_timestamp
 
-  DEFAULT_PRIVACY = "organization"
+  DEFAULT_PRIVACY = 'organization'
 
   def destroy
     run_callbacks :destroy do
-      self.update_attribute(:updated_at, DateTime.now)
-      self.update_attribute(:deleted_at, DateTime.now)
+      update_attribute(:updated_at, DateTime.now)
+      update_attribute(:deleted_at, DateTime.now)
     end
   end
 
   def delete
     run_callbacks :delete do
-      self.update_attribute(:updated_at, DateTime.now)
-      self.update_attribute(:deleted_at, DateTime.now)
+      update_attribute(:updated_at, DateTime.now)
+      update_attribute(:deleted_at, DateTime.now)
     end
   end
 
@@ -35,37 +35,35 @@ class Interaction < ActiveRecord::Base
   end
 
   def initiator
-    self.initiators.first
+    initiators.first
   end
 
   def type
     interaction_type.title
   end
 
-  def icon
-    interaction_type.icon
-  end
+  delegate :icon, to: :interaction_type
 
   def privacy
     case privacy_setting
     when 'organization'
-      return "Everyone in #{self.organization.name}"
+      return "Everyone in #{organization.name}"
     when 'admins'
-      return "Admins in #{self.organization.name}"
+      return "Admins in #{organization.name}"
     when 'me'
-      return "Me only"
+      return 'Me only'
     else
       privacy_setting.titleize
     end
   end
 
   def title
-    intiators_string = initiators.collect{|x| "<strong>#{x.name}</strong>" if x.present?}.to_sentence
+    intiators_string = initiators.collect { |x| "<strong>#{x.name}</strong>" if x.present? }.to_sentence
     creator_string = "<strong>#{creator.name if creator.present?}</strong>"
     receiver_string = "<strong>#{receiver.name if receiver.present?}</strong>"
     case interaction_type.i18n
     when 'comment'
-      return "".html_safe
+      return ''.html_safe
     when 'spiritual_conversation'
       return "#{intiators_string} initiated a spiritual conversation with #{receiver_string}.".html_safe
     when 'gospel_presentation'
@@ -99,31 +97,31 @@ class Interaction < ActiveRecord::Base
   end
 
   def self.get_interactions_hash(person_id, org_id)
-    interactions = Interaction.where(receiver_id: person_id, organization_id: org_id).order("created_at DESC")
+    interactions = Interaction.where(receiver_id: person_id, organization_id: org_id).order('created_at DESC')
     interactions.collect(&:to_hash)
   end
-
 
   def set_initiators(initiator_ids)
     initiator_ids = (initiator_ids.is_a?(Array)) ? initiator_ids : [initiator_ids]
     initiator_ids.uniq.each do |person_id|
-      self.interaction_initiators.where(person_id: person_id.to_i).first_or_create
+      interaction_initiators.where(person_id: person_id.to_i).first_or_create
     end
     # delete removed
-    removed_initiators = self.interaction_initiators.where("person_id NOT IN (?)", initiator_ids)
+    removed_initiators = interaction_initiators.where('person_id NOT IN (?)', initiator_ids)
     removed_initiators.delete_all if removed_initiators.present?
     # delete duplicates
-    interaction_initiator_ids = self.interaction_initiators.group("person_id").collect(&:id)
-    duplicate_initiators = self.interaction_initiators.where("id NOT IN (?)", interaction_initiator_ids)
+    interaction_initiator_ids = interaction_initiators.group('person_id').collect(&:id)
+    duplicate_initiators = interaction_initiators.where('id NOT IN (?)', interaction_initiator_ids)
     duplicate_initiators.delete_all if duplicate_initiators.present?
   end
 
   def comment_only?
-    self.interaction_type_id == InteractionType::COMMENT
+    interaction_type_id == InteractionType::COMMENT
   end
+
   private
 
   def ensure_timestamp
-    self.update_attribute(:timestamp, created_at) if timestamp.nil?
+    update_attribute(:timestamp, created_at) if timestamp.nil?
   end
 end

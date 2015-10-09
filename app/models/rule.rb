@@ -3,9 +3,8 @@ class Rule < ActiveRecord::Base
 
   has_many :question_rules
 
-
   def self.available_in_survey(survey)
-    rules = Array.new
+    rules = []
     all_rules = Rule.where.not(name: nil)
     if survey.rules.present?
       all_rules.each do |rule|
@@ -19,5 +18,4 @@ class Rule < ActiveRecord::Base
     end
     rules
   end
-
 end

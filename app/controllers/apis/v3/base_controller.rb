@@ -1,11 +1,11 @@
 class Apis::V3::BaseController < ApplicationController
   # skip_before_filter :verify_authenticity_token
-  skip_before_filter :set_login_cookie
-  skip_before_filter :check_su
-  skip_before_filter :check_valid_subdomain
-  skip_before_filter :set_locale
-  skip_before_filter :check_url
-  before_filter :force_client_update
+  skip_before_action :set_login_cookie
+  skip_before_action :check_su
+  skip_before_action :check_valid_subdomain
+  skip_before_action :set_locale
+  skip_before_action :check_url
+  before_action :force_client_update
   before_action :cors_preflight_check
   after_action :cors_set_access_control_headers
 
@@ -31,7 +31,7 @@ class Apis::V3::BaseController < ApplicationController
 
   def authenticate_user!
     unless params[:secret] || oauth_access_token || facebook_token
-      render json: {errors: ["You need to pass in your Organization's API secret or a user's oauth or facebook token."]},
+      render json: { errors: ["You need to pass in your Organization's API secret or a user's oauth or facebook token."] },
              status: :unauthorized,
              callback: params[:callback]
       return false
@@ -40,13 +40,13 @@ class Apis::V3::BaseController < ApplicationController
     if facebook_token
       begin
         unless @current_user = Authentication.user_from_mobile_facebook_token(facebook_token)
-          render json: {errors: ["You have not yet logged in to the web interface. Please log in to www.missionhub.com on a computer or your device's web browser."], code: 'user_not_found'},
-                   status: :unauthorized,
-                   callback: params[:callback]
+          render json: { errors: ["You have not yet logged in to the web interface. Please log in to www.missionhub.com on a computer or your device's web browser."], code: 'user_not_found' },
+                 status: :unauthorized,
+                 callback: params[:callback]
           return false
         end
       rescue FbGraph2::Exception => e
-        render json: {errors: ["The facebook token you passed is invalid"], code: 'invalid_facebook_token'},
+        render json: { errors: ['The facebook token you passed is invalid'], code: 'invalid_facebook_token' },
                status: :unauthorized,
                callback: params[:callback]
         return false
@@ -55,7 +55,7 @@ class Apis::V3::BaseController < ApplicationController
 
     if oauth_access_token
       if !current_user
-        render json: {errors: ["The oauth you sent over didn't match a user or organization on MissionHub"]},
+        render json: { errors: ["The oauth you sent over didn't match a user or organization on MissionHub"] },
                status: :unauthorized,
                callback: params[:callback]
         return false
@@ -65,20 +65,20 @@ class Apis::V3::BaseController < ApplicationController
     end
 
     if params[:secret] && !current_organization
-      render json: {errors: ["The secret you sent over didn't match a user or organization on MissionHub"]},
+      render json: { errors: ["The secret you sent over didn't match a user or organization on MissionHub"] },
              status: :unauthorized,
              callback: params[:callback]
       return false
     end
 
     unless current_user
-      render json: {errors: ["The organization associated with this API secret must have at least one admin, or you must pass in an oauth access token for a user with access to this org."]},
+      render json: { errors: ['The organization associated with this API secret must have at least one admin, or you must pass in an oauth access token for a user with access to this org.'] },
              status: :unauthorized,
              callback: params[:callback]
       return false
     end
 
-    current_organization #ensure the current organization is initialized
+    current_organization # ensure the current organization is initialized
   end
 
   def current_user
@@ -117,7 +117,7 @@ class Apis::V3::BaseController < ApplicationController
 
   # grabs access_token from header if one is present
   def oauth_access_token_from_header
-    auth_header = request.env["HTTP_AUTHORIZATION"]||""
+    auth_header = request.env['HTTP_AUTHORIZATION'] || ''
     match = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)
     return match[1] if match.present?
     false
@@ -130,8 +130,8 @@ class Apis::V3::BaseController < ApplicationController
   def add_includes_and_order(resource, options = {})
     # eager loading is a waste of time if the 'since' parameter is passed
     unless params[:since]
-      available_includes.each do |rel|
-        #resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
+      available_includes.each do |_rel|
+        # resource = resource.includes(rel.to_sym) if includes.include?(rel.to_s)
       end
     end
     resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
@@ -152,9 +152,8 @@ class Apis::V3::BaseController < ApplicationController
   end
 
   def render_unauthorized_call(msg = nil)
-    msg ||= "You do not have the correct permission level to make this call."
-    render json: {errors: [msg]}, status: :unauthorized, callback: params[:callback]
-    return false
+    msg ||= 'You do not have the correct permission level to make this call.'
+    render json: { errors: [msg] }, status: :unauthorized, callback: params[:callback]
+    false
   end
 end
-

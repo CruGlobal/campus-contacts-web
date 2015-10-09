@@ -1,7 +1,7 @@
 class EmailAddress < ActiveRecord::Base
   attr_accessible :email, :person_id, :primary
-  has_paper_trail :on => [:destroy],
-                  :meta => { person_id: :person_id }
+  has_paper_trail on: [:destroy],
+                  meta: { person_id: :person_id }
 
   belongs_to :person, inverse_of: :email_addresses, touch: true
   validates_presence_of :email, on: :create, message: "can't be blank"
@@ -9,9 +9,9 @@ class EmailAddress < ActiveRecord::Base
   before_validation :set_primary, on: :create
   after_commit :ensure_only_one_primary
   after_destroy :set_new_primary
-  #validates_uniqueness_of :email, on: :create, message: "already taken"
-  #validates_uniqueness_of :email, on: :update, message: "already taken"
-  strip_attributes :only => :email
+  # validates_uniqueness_of :email, on: :create, message: "already taken"
+  # validates_uniqueness_of :email, on: :update, message: "already taken"
+  strip_attributes only: :email
 
   def to_s
     email
@@ -20,8 +20,8 @@ class EmailAddress < ActiveRecord::Base
   def merge(other)
     EmailAddress.transaction do
       if updated_at && other.primary? && other.updated_at && other.updated_at > updated_at
-        person.email_addresses.collect {|e| e.update_attribute(:primary, false)}
-        new_primary = person.email_addresses.detect {|e| e.email == other.email}
+        person.email_addresses.collect { |e| e.update_attribute(:primary, false) }
+        new_primary = person.email_addresses.detect { |e| e.email == other.email }
         new_primary.update_attribute(:primary, true) if new_primary
       end
       begin
@@ -62,14 +62,14 @@ class EmailAddress < ActiveRecord::Base
       if primary_emails.blank?
         person.email_addresses.last.update_column(:primary, true)
       elsif primary_emails.length > 1
-        primary_emails[0..-2].map {|e| e.update_column(:primary, false)}
+        primary_emails[0..-2].map { |e| e.update_column(:primary, false) }
       end
     end
   end
 
   def remove_duplicate_email_from_person
-    person.email_addresses.order("id DESC").group(:email).uniq.each do |e|
-      person.email_addresses.where("person_id = ? AND id <> ? AND email = ?", person.id, e.id, e.to_s.downcase).try(:destroy_all)
+    person.email_addresses.order('id DESC').group(:email).uniq.each do |e|
+      person.email_addresses.where('person_id = ? AND id <> ? AND email = ?', person.id, e.id, e.to_s.downcase).try(:destroy_all)
     end
   end
 
@@ -81,5 +81,4 @@ class EmailAddress < ActiveRecord::Base
     end
     true
   end
-
 end

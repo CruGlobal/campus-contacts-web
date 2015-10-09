@@ -15,19 +15,19 @@ class ElementTest < ActiveSupport::TestCase
     @element3 = FactoryGirl.create(:element)
   end
 
-  context "position function" do
-    should "return the element position" do
+  context 'position function' do
+    should 'return the element position' do
       @survey_element1 = FactoryGirl.create(:survey_element, survey: @survey, element: @element1, position: 1)
       @survey_element2 = FactoryGirl.create(:survey_element, survey: @survey, element: @element2, position: 2)
       assert_equal 1, @element1.position(@survey)
       assert_equal 2, @element2.position(@survey)
     end
-    should "return nil when element is not added to a survey" do
+    should 'return nil when element is not added to a survey' do
       @survey_element1 = FactoryGirl.create(:survey_element, survey: @survey, element: @element1, position: 1)
       @survey_element2 = FactoryGirl.create(:survey_element, survey: @survey, element: @element2, position: 2)
       assert_nil @element3.position(@survey)
     end
-    should "return nil when survey is not lined to an element" do
+    should 'return nil when survey is not lined to an element' do
       @survey_element1 = FactoryGirl.create(:survey_element, survey: @survey, element: @element1, position: 1)
       @survey_element2 = FactoryGirl.create(:survey_element, survey: @survey, element: @element2, position: 2)
       @other_survey = FactoryGirl.create(:survey)
@@ -35,14 +35,14 @@ class ElementTest < ActiveSupport::TestCase
     end
   end
 
-  context "ptemplate function" do
-    should "return default date field template name" do
+  context 'ptemplate function' do
+    should 'return default date field template name' do
       @text_element = FactoryGirl.create(:element, kind: 'TextField', style: 'text_field')
       @date_element = FactoryGirl.create(:element, kind: 'DateField', style: 'date_field')
       @survey_element1 = FactoryGirl.create(:survey_element, survey: @survey, element: @text_element, position: 1)
       @survey_element2 = FactoryGirl.create(:survey_element, survey: @survey, element: @date_element, position: 2)
-      assert_equal "text_field", @survey.questions.first.class.to_s.underscore
-      assert_equal "date_field", @survey.questions.last.class.to_s.underscore
+      assert_equal 'text_field', @survey.questions.first.class.to_s.underscore
+      assert_equal 'date_field', @survey.questions.last.class.to_s.underscore
     end
   end
 
@@ -148,6 +148,4 @@ class ElementTest < ActiveSupport::TestCase
   #     assert_equal "element", @element.style
   #   end
   # end
-
-
 end

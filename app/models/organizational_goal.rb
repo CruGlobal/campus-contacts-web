@@ -8,7 +8,7 @@ class OrganizationalGoal < ActiveRecord::Base
 
   def date_check
     if start_date.present? && end_date.present? && start_date >= end_date
-      errors.add(:start_date, "must be before End date")
+      errors.add(:start_date, 'must be before End date')
     end
   end
 end

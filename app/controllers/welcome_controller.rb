@@ -1,13 +1,11 @@
 class WelcomeController < ApplicationController
-  skip_before_filter :authenticate_user!, only: [:index, :tutorials, :tour, :terms, :privacy, :duplicate]
-  skip_before_filter :check_url, only: [:terms, :privacy]
-  skip_before_filter :check_all_signatures, only: [:index]
+  skip_before_action :authenticate_user!, only: [:index, :tutorials, :tour, :terms, :privacy, :duplicate]
+  skip_before_action :check_url, only: [:terms, :privacy]
+  skip_before_action :check_all_signatures, only: [:index]
 
   def index
-    if user_signed_in?
-      redirect_to user_root_path and return
-    end
-    render layout: 'welcome'#, stream: true
+    redirect_to(user_root_path) && return if user_signed_in?
+    render layout: 'welcome' # , stream: true
   end
 
   def tutorials
@@ -24,9 +22,7 @@ class WelcomeController < ApplicationController
     when 'leaders'
       @redirect = true unless current_organization
     end
-    if @redirect
-      redirect_to wizard_path and return
-    end
+    redirect_to(wizard_path) && return if @redirect
   end
 
   def tour

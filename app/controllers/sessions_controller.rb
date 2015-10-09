@@ -1,8 +1,8 @@
 class SessionsController < Devise::SessionsController
-  before_filter :prepare_for_mobile
-  skip_before_filter :check_url
-  skip_before_filter :check_signature
-  skip_before_filter :check_all_signatures
+  before_action :prepare_for_mobile
+  skip_before_action :check_url
+  skip_before_action :check_signature
+  skip_before_action :check_all_signatures
   layout :pick_layout
 
   def new
@@ -23,7 +23,7 @@ class SessionsController < Devise::SessionsController
 
   def destroy
     if session[:fb_token]
-      split_token = session[:fb_token].split("|")
+      split_token = session[:fb_token].split('|')
       fb_api_key = split_token[0]
       fb_session_key = split_token[1]
       session[:fb_token] = nil
@@ -31,10 +31,10 @@ class SessionsController < Devise::SessionsController
 
     if session[:relay_login].present?
       session.clear
-      redirect_to "https://signin.relaysso.org/cas/logout?service="+CGI::escape(root_url)
+      redirect_to 'https://signin.relaysso.org/cas/logout?service=' + CGI.escape(root_url)
     elsif session[:key_ticket].present?
       session.clear
-      redirect_to "https://thekey.me/cas/logout?service="+CGI::escape(root_url)
+      redirect_to 'https://thekey.me/cas/logout?service=' + CGI.escape(root_url)
     else
       flash[:facebook_logout] = true
       super
@@ -43,7 +43,7 @@ class SessionsController < Devise::SessionsController
 
   protected
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     if mhub?
       case
       when params[:next]

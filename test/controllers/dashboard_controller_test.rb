@@ -5,7 +5,7 @@ class DashboardControllerTest < ActionController::TestCase
     @user, @org = admin_user_login_with_org
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
   end

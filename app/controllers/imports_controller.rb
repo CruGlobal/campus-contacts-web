@@ -1,6 +1,6 @@
 class ImportsController < ApplicationController
-  before_filter :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
-  before_filter :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
+  before_action :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
+  before_action :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
   rescue_from Import::InvalidCSVFormat, with: :invalid_csv_format
   rescue_from CanCan::AccessDenied, with: :import_access_denied
@@ -34,14 +34,14 @@ class ImportsController < ApplicationController
   end
 
   def labels
-    @import_count =  @import.get_new_people.count
+    @import_count = @import.get_new_people.count
     email_element = Element.where(attribute_name: 'email').first
-    @block_admin_label = !@import.header_mappings.has_value?(email_element.id.to_s)
+    @block_admin_label = !@import.header_mappings.value?(email_element.id.to_s)
     @permissions = current_organization.permissions
   end
 
   def update
-    columns_without_question = params[:import][:header_mappings].reject{|x,y| y.present? }
+    columns_without_question = params[:import][:header_mappings].reject { |_x, y| y.present? }
     if columns_without_question.count > 0
       survey_title = "Import-#{@import.created_at.strftime('%Y-%m-%d')}"
       unless @survey = current_organization.surveys.where(title: survey_title).first
@@ -71,7 +71,7 @@ class ImportsController < ApplicationController
       init_org
       render :new
     else
-      redirect_to :action => :labels
+      redirect_to action: :labels
     end
   end
 
@@ -88,21 +88,20 @@ class ImportsController < ApplicationController
     redirect_to all_contacts_path
   end
 
-
-  #def destroy
+  # def destroy
   #  @import.destroy
   #  #redirect_to contacts_path
-  #end
+  # end
 
   def download_sample_contacts_csv
     csv_string = CSV.generate do |csv|
       c = 0
-      CSV.foreach(Rails.root.to_s + "/public/files/missionhub_import_contacts_template.csv") do |row|
-        c = c + 1
+      CSV.foreach(Rails.root.to_s + '/public/files/missionhub_import_contacts_template.csv') do |row|
+        c += 1
         csv << row
       end
     end
-    send_data csv_string, :type => 'text/csv; charset=UTF-8; header=present', :disposition => "attachment; filename=missionhub_import_contacts_template.csv"
+    send_data csv_string, type: 'text/csv; charset=UTF-8; header=present', disposition: 'attachment; filename=missionhub_import_contacts_template.csv'
   end
 
   def nil_column_header
@@ -119,15 +118,15 @@ class ImportsController < ApplicationController
 
   def import_access_denied
     render 'application/import_access_denied'
-    return false
+    false
   end
 
   def create_survey_question
     @import = Import.where(organization_id: current_organization.id, id: params[:id]).first if params[:id].present?
     if !params[:question_id].present? || params[:question_id] == 'new_question'
-      @message ||= "Enter new survey name." if params[:create_survey_toggle] == "new_survey" && !params[:survey_name_field].present?
-      @message ||= "Select an existing survey." if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
-      @message ||= "Select question type." unless params[:question_category].present?
+      @message ||= 'Enter new survey name.' if params[:create_survey_toggle] == 'new_survey' && !params[:survey_name_field].present?
+      @message ||= 'Select an existing survey.' if params[:create_survey_toggle].blank? && !params[:select_survey_field].present?
+      @message ||= 'Select question type.' unless params[:question_category].present?
     end
     @message ||= "Question can't be blank" unless params[:question].present?
     @message ||= "Choices can't be blank " if params[:question_category] == 'ChoiceField' && !params[:options].present?
@@ -135,8 +134,8 @@ class ImportsController < ApplicationController
     unless @message.present?
       if params[:question_id].present? && params[:question_id] != 'new_question'
         @question = Element.find(params[:question_id])
-        @question.update_attributes({label: params[:question], content: params[:options], slug: ''})
-        @message = "UPDATE"
+        @question.update_attributes(label: params[:question], content: params[:options], slug: '')
+        @message = 'UPDATE'
       else
         if params[:create_survey_toggle]
           @survey_status = 'NEW'
@@ -149,7 +148,7 @@ class ImportsController < ApplicationController
             )
           end
           if @import.present?
-            @import.survey_ids = Array.new unless @import.survey_ids.present?
+            @import.survey_ids = [] unless @import.survey_ids.present?
             @import.survey_ids << @survey.id
             @import.save
           end
@@ -162,7 +161,7 @@ class ImportsController < ApplicationController
         @question = type.constantize.create!(style: style, label: params[:question], content: params[:options], slug: '')
       end
 
-      unless @message == "UPDATE"
+      unless @message == 'UPDATE'
         if @survey.archived_questions.include?(@question)
           survey_element = SurveyElement.where(survey_id: @survey.id, element_id: @question.id).first
           survey_element.update_attribute(:archived, false)
@@ -170,14 +169,13 @@ class ImportsController < ApplicationController
           begin
             @survey.elements << @question
             @survey.survey_elements.where(element_id: @question.id).first.update_attribute(:hidden, true)
-            @message = "SUCCESS"
+            @message = 'SUCCESS'
           rescue ActiveRecord::RecordInvalid => e
             @message = I18n.t('surveys.questions.create.duplicate_error')
           end
         end
       end
     end
-
   end
 
   protected
@@ -196,17 +194,16 @@ class ImportsController < ApplicationController
   end
 
   def get_survey_questions
-    @survey_questions = Hash.new
+    @survey_questions = {}
     @predefined_questions = Survey.find(ENV.fetch('PREDEFINED_SURVEY')).questions
     @survey_questions[I18n.t('surveys.questions.index.predefined')] = @predefined_questions.collect do |q|
-      [(q.slug || q.attribute_name || q.label).gsub('_',' ').titleize, q.id]
+      [(q.slug || q.attribute_name || q.label).tr('_', ' ').titleize, q.id]
     end
     current_organization.surveys.each do |survey|
-      @survey_questions[survey.title] = Hash.new
+      @survey_questions[survey.title] = {}
       survey.all_questions.each do |q|
         @survey_questions[survey.title][q.label] = q.id
       end
     end
   end
-
 end

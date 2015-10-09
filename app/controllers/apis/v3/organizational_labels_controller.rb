@@ -1,18 +1,18 @@
 class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
-  before_filter :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
-  before_filter :get_organizational_label, only: [:show, :update, :destroy]
+  before_action :ensure_filters, only: [:bulk, :bulk_create, :bulk_destroy]
+  before_action :get_organizational_label, only: [:show, :update, :destroy]
 
   def index
     list = add_includes_and_order(organizational_labels)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @organizational_label,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -24,9 +24,9 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
       render json: org_label,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: org_label.errors.full_messages},
+      render json: { errors: org_label.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -36,9 +36,9 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
     if @organizational_label.update_attributes(params[:organizational_label])
       render json: @organizational_label,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization}
+             scope: { include: includes, organization: current_organization }
     else
-      render json: {errors: @organizational_label.errors.full_messages},
+      render json: { errors: @organizational_label.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -48,9 +48,8 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
     @organizational_label.archive
     render json: @organizational_label,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
-
 
   def bulk
     remove_labels(filtered_people, params[:remove_labels]) if params[:remove_labels].present?
@@ -58,7 +57,7 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: 'people'
   end
 
@@ -67,7 +66,7 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: 'people'
   end
 
@@ -76,16 +75,15 @@ class Apis::V3::OrganizationalLabelsController < Apis::V3::BaseController
 
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: 'people'
   end
-
 
   private
 
   def ensure_filters
     unless params[:filters]
-      render json: {errors: ["The 'filters' parameter is required for bulk label actions."]},
+      render json: { errors: ["The 'filters' parameter is required for bulk label actions."] },
              status: :bad_request,
              callback: params[:callback]
     end

@@ -3,10 +3,10 @@ class Authentication < ActiveRecord::Base
   belongs_to :user
 
   def self.user_from_mobile_facebook_token(facebook_token)
-    user = Authentication.where(provider: 'facebook', mobile_token: facebook_token).first.try(:user)
+    user = Authentication.find_by(provider: 'facebook', mobile_token: facebook_token).try(:user)
     unless user
       fb_user = FbGraph2::User.new('me').authenticate(facebook_token).fetch.raw_attributes
-      auth = Authentication.where(provider: 'facebook', uid: fb_user['id']).first
+      auth = Authentication.find_by(provider: 'facebook', uid: fb_user['id'])
       if auth
         auth.update_attributes(mobile_token: facebook_token)
         user = auth.user

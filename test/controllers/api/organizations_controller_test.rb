@@ -3,7 +3,7 @@ require 'test_helper'
 class Api::OrganizationsControllerTest < ActionController::TestCase
   include ApiTestHelper
 
-  context "API v1" do
+  context 'API v1' do
     setup do
       setup_api_env
 
@@ -11,9 +11,9 @@ class Api::OrganizationsControllerTest < ActionController::TestCase
       request.env['oauth.access_token'] = @access_token3.code
     end
 
-    should "show an organization" do
-      get :show, :id => @temp_org.id
-      assert_not_nil JSON.parse(@response.body)["error"]
+    should 'show an organization' do
+      get :show, id: @temp_org.id
+      assert_not_nil JSON.parse(@response.body)['error']
       # assert_response :success, @response.body
     end
   end

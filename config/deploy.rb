@@ -1,9 +1,9 @@
 # require 'new_relic/recipes'
-require "bundler/capistrano"
+require 'bundler/capistrano'
 require 'airbrake/capistrano'
-#load 'deploy/assets'
-#set :whenever_command, "bundle exec whenever"
-#require "whenever/capistrano"
+# load 'deploy/assets'
+# set :whenever_command, "bundle exec whenever"
+# require "whenever/capistrano"
 # This defines a deployment "recipe" that you can feed to capistrano
 # (http://manuals.rubyonrails.com/read/book/17). It allows you to automate
 # (among other things) the deployment of your application.
@@ -16,9 +16,9 @@ require 'airbrake/capistrano'
 # correspond to. The deploy_to path must be the path on each machine that will
 # form the root of the application path.
 
-set :application, "mh"
+set :application, 'mh'
 # set :repository, "http://svn.uscm.org/#{application}/trunk"
-set :repository,  "git://github.com/thelabtech/missionhub.git"
+set :repository,  'git://github.com/thelabtech/missionhub.git'
 # set :checkout, 'co'
 set :keep_releases, '3'
 
@@ -32,10 +32,10 @@ set :keep_releases, '3'
 # primary: true.
 # set :target, ENV['target'] || ENV['TARGET'] || 'dev'
 default_run_options[:pty] = true
-set :scm, "git"
-#role :db, "hart-w025.uscm.org", primary: true
-#role :web, "hart-w025.uscm.org"
-#role :app, "hart-w025.uscm.org"
+set :scm, 'git'
+# role :db, "hart-w025.uscm.org", primary: true
+# role :web, "hart-w025.uscm.org"
+# role :app, "hart-w025.uscm.org"
 
 set :user, 'deploy'
 
@@ -43,46 +43,43 @@ task :staging do
   set :deploy_to, "/var/www/html/staging/#{application}"
   set :environment, 'staging'
   set :rails_env, 'staging'
-servers = ["108.171.185.106"]
+  servers = ['108.171.185.106']
   role :db, servers.first, primary: true
   role :web, *servers
   role :app, *servers
   set :deploy_via, :remote_cache
 end
 
-
-deploy.task :restart, :roles => [:app], :except => {:no_release => true} do
+deploy.task :restart, roles: [:app], except: { no_release: true } do
   if rails_env == 'production'
     servers = find_servers_for_task(current_task)
     servers.map do |s|
-      run "cd #{deploy_to}/current && echo '' > public/lb.html", :hosts => s.host
-      run "touch #{current_path}/tmp/restart.txt", :hosts => s.host
-      #sleep 60
-      run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", :hosts => s.host
+      run "cd #{deploy_to}/current && echo '' > public/lb.html", hosts: s.host
+      run "touch #{current_path}/tmp/restart.txt", hosts: s.host
+      # sleep 60
+      run "cd #{deploy_to}/current && echo 'ok' > public/lb.html", hosts: s.host
     end
   else
-    run "touch #{current_path}/tmp/restart.txt"#, :hosts => s.host
+    run "touch #{current_path}/tmp/restart.txt" # , :hosts => s.host
   end
 end
-
 
 before 'deploy:restart', 'deploy:bluepill'
 deploy.task :bluepill, roles: :db do
   sudo "/etc/init.d/bluepill restart mh_#{rails_env}"
 end
 
-
 # =============================================================================
 # SSH OPTIONS
 # =============================================================================
 # ssh_options[:keys] = %w(/path/to/my/key /path/to/another/key)
 ssh_options[:forward_agent] = true
-ssh_options[:port] = 40022
+ssh_options[:port] = 40_022
 
 if ENV['branch']
   set :branch, ENV['branch']
 else
-  set :branch, "master"
+  set :branch, 'master'
 end
 
 set :deploy_via, :remote_cache
@@ -97,7 +94,7 @@ set :use_sudo, false
 # must match the options given for the servers to select (like primary: true)
 
 after 'deploy:update_code', 'local_changes'
-desc "Add linked files after deploy and set permissions"
+desc 'Add linked files after deploy and set permissions'
 task :local_changes, roles: :app do
   run <<-CMD
     ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml &&
@@ -107,12 +104,11 @@ task :local_changes, roles: :app do
   CMD
 end
 
-
 # You can use "transaction" to indicate that if any of the tasks within it fail,
 # all should be rolled back (for each task that specifies an on_rollback
 # handler).
 
-desc "A task demonstrating the use of transactions."
+desc 'A task demonstrating the use of transactions.'
 task :long_deploy do
   transaction do
     deploy.update_code
@@ -125,20 +121,18 @@ task :long_deploy do
   # deploy.enable_web
 end
 # after "deploy:update", "newrelic:notice_deployment"
-after :"local_changes", :"assets:precompile";
+after :local_changes, :"assets:precompile"
 namespace :assets do
   task :precompile, roles: :web do
     run "ln -s #{shared_path}/assets #{release_path}/public/assets"
     run "cd #{release_path} && bundle exec rake assets:precompile RAILS_ENV=#{rails_env}"
   end
 
-  task :cleanup, :roles => :web do
+  task :cleanup, roles: :web do
     run "cd #{current_path} && RAILS_ENV=production bundle exec rake assets:clean"
   end
 end
 
-if rails_env == 'production'
-  after "deploy:symlink", "deploy:migrate"
-end
-after "deploy", "deploy:cleanup"
+after 'deploy:symlink', 'deploy:migrate' if rails_env == 'production'
+after 'deploy', 'deploy:cleanup'
 # require 'config/boot'

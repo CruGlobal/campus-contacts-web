@@ -4,20 +4,20 @@ class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
 
-  force_ssl if: :ssl_configured?, :except => [:lb]
-  before_filter :check_valid_subdomain, :except => [:lb]
-  before_filter :authenticate_user!, :except => [:facebook_logout, :lb]
-  before_filter :clear_advanced_search, :except => [:lb]
-  before_filter :set_login_cookie, :except => [:lb]
-  before_filter :check_su, :except => [:lb]
-  before_filter :set_locale, :except => [:lb]
-  before_filter :check_url, except: [:facebook_logout, :lb]
-  before_filter :export_i18n_messages, :except => [:lb]
-  before_filter :set_newrelic_params, :except => [:lb]
-  before_filter :ensure_timezone, :except => [:lb]
-  before_filter :check_mini_profiler, :except => [:lb]
-  before_filter :check_signature, :except => [:lb]
-  before_filter :check_all_signatures, :except => [:lb]
+  force_ssl if: :ssl_configured?, except: [:lb]
+  before_action :check_valid_subdomain, except: [:lb]
+  before_action :authenticate_user!, except: [:facebook_logout, :lb]
+  before_action :clear_advanced_search, except: [:lb]
+  before_action :set_login_cookie, except: [:lb]
+  before_action :check_su, except: [:lb]
+  before_action :set_locale, except: [:lb]
+  before_action :check_url, except: [:facebook_logout, :lb]
+  before_action :export_i18n_messages, except: [:lb]
+  before_action :set_newrelic_params, except: [:lb]
+  before_action :ensure_timezone, except: [:lb]
+  before_action :check_mini_profiler, except: [:lb]
+  before_action :check_signature, except: [:lb]
+  before_action :check_all_signatures, except: [:lb]
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
@@ -49,13 +49,13 @@ class ApplicationController < ActionController::Base
   def facebook_logout
     redirect_url = params[:next] ? params[:next] : root_url
     if session[:fb_token]
-      split_token = session[:fb_token].split("|")
+      split_token = session[:fb_token].split('|')
       fb_api_key = split_token[0]
       fb_session_key = split_token[1]
       session[:fb_token] = nil
       if mhub?
         # redirect_to "http://www.facebook.com/logout.php?api_key=#{fb_api_key}&session_key=#{fb_session_key}&confirm=1&next=#{redirect_url}"
-        redirect_to redirect_url #"http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
+        redirect_to redirect_url # "http://m.facebook.com/logout.php?confirm=1&next=#{redirect_url}"
       else
         redirect_to redirect_url
       end
@@ -66,14 +66,14 @@ class ApplicationController < ActionController::Base
   end
 
   def manage_wild_card(term)
-    term = "%"+term[0..term.size-1]+"%" unless term.last == "*" || term.first == "*"
-    term = "%"+term[1..term.size] if term.first == "*"
-    term = term[0..term.size-2]+"%" if term.last == "*"
-    return term
+    term = '%' + term[0..term.size - 1] + '%' unless term.last == '*' || term.first == '*'
+    term = '%' + term[1..term.size] if term.first == '*'
+    term = term[0..term.size - 2] + '%' if term.last == '*'
+    term
   end
 
   def convert_hash_to_url(hash)
-    return "/allcontacts?#{hash.reject{|k,v| ['action','controller'].include?(k) }.to_param}" if hash.present?
+    return "/allcontacts?#{hash.reject { |k, _v| %w(action controller).include?(k) }.to_param}" if hash.present?
   end
 
   def search?
@@ -98,14 +98,14 @@ class ApplicationController < ActionController::Base
     return false unless current_organization.is_power_to_change?
     return false unless current_person.is_admin_for_org?(current_organization)
     return false if current_person.accepted_all_signatures?(current_organization)
-    redirect_to root_path, notice: I18n.t("signatures.declined_a_signature")
+    redirect_to root_path, notice: I18n.t('signatures.declined_a_signature')
   end
 
   protected
 
   def set_newrelic_params
     if user_signed_in?
-      NewRelic::Agent.add_custom_parameters(:user_id => current_user.id, :username => current_user.username, :person_id => current_person.try(:id), :name => current_person.to_s)
+      NewRelic::Agent.add_custom_parameters(user_id: current_user.id, username: current_user.username, person_id: current_person.try(:id), name: current_person.to_s)
     end
   end
 
@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
     if Rails.env.production?
       Rollbar.error(e, options)
     else
-      raise e
+      fail e
     end
   end
   helper_method :raise_or_hoptoad
@@ -145,9 +145,9 @@ class ApplicationController < ActionController::Base
       url += '&nologin=true' if nologin
       redirect_to url
     else
-      render :file => Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), :layout => false, :status => 404
+      render file: Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), layout: false, status: 404
     end
-    return false
+    false
   end
 
   def mhub?
@@ -175,18 +175,18 @@ class ApplicationController < ActionController::Base
   def switch_to_user(user_id, save_old = false)
     session['old_user_id'] = save_old ? current_user.id : nil
     sign_in(:user, User.find(user_id))
-    #session['fb_token'] = nil
-    #session['current_organization_id'] = nil
-    #session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
-    #session['wizard'] = nil
+    # session['fb_token'] = nil
+    # session['current_organization_id'] = nil
+    # session['warden.user.user.key'] = ["User", [user_id.to_i], nil]
+    # session['wizard'] = nil
   end
 
   def authenticate_admin!
-   redirect_to root_path unless is_admin?
+    redirect_to root_path unless is_admin?
   end
 
   def authenticate_super_admin!
-   redirect_to root_path unless current_user.super_admin.present?
+    redirect_to root_path unless current_user.super_admin.present?
   end
 
   def facebook_token
@@ -195,7 +195,7 @@ class ApplicationController < ActionController::Base
 
   # grabs facebook token from header if one is present
   def facebook_token_from_header
-    auth_header = request.env["HTTP_AUTHORIZATION"]||""
+    auth_header = request.env['HTTP_AUTHORIZATION'] || ''
     match = auth_header.match(/^Facebook\s(.*)/)
     return match[1] if match.present?
     false
@@ -212,9 +212,9 @@ class ApplicationController < ActionController::Base
         organization = token.client.organization || Organization.find(params[:org_id])
         session[:current_organization_id] ||= organization.id
         if params[:user_id]
-          @current_user ||= token.client.organization.admins.where(:user_id => params[:user_id]).first.user
+          @current_user ||= token.client.organization.admins.where(user_id: params[:user_id]).first.user
         else
-          @current_user ||= token.client.organization.admins.where("user_id is not null").first.user
+          @current_user ||= token.client.organization.admins.where('user_id is not null').first.user
         end
       end
       @current_user
@@ -232,7 +232,7 @@ class ApplicationController < ActionController::Base
 
   def mobile_device?
     if session[:mobile_param]
-      session[:mobile_param] == "1"
+      session[:mobile_param] == '1'
     else
       request.user_agent =~ /Mobile|webOS|Android/
     end
@@ -252,21 +252,19 @@ class ApplicationController < ActionController::Base
   helper_method :current_person
 
   def get_guid_from_ticket(ticket)
-    begin
-      ticket.response.to_s.match(/ssoGuid>([A-Z0-9\-]*)/)[1]
-    rescue => e
-      raise e.message + ' -- ' + ticket.response.inspect
-    end
+    ticket.response.to_s.match(/ssoGuid>([A-Z0-9\-]*)/)[1]
+  rescue => e
+    raise e.message + ' -- ' + ticket.response.inspect
   end
 
   def available_locales
-    %w{en ru es fr zh bs de ca qb}
+    %w(en ru es fr zh bs de ca qb)
   end
 
   def check_valid_subdomain
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
-    unless %w[local stage aws lwi www].include?(request.subdomains.first)
+    unless %w(local stage aws lwi www).include?(request.subdomains.first)
       scheme = ssl_configured? ? 'https://' : 'http://'
       url = scheme + ENV['APP_DOMAIN'] + request.path
       url += "?locale=#{session[:locale]}" if session[:locale].present?
@@ -280,8 +278,8 @@ class ApplicationController < ActionController::Base
   end
 
   def export_i18n_messages
-     # generates the Javascript translation file
-     SimplesIdeias::I18n.export! if Rails.env.development?
+    # generates the Javascript translation file
+    SimplesIdeias::I18n.export! if Rails.env.development?
   end
 
   def current_organization(person = nil)
@@ -351,7 +349,7 @@ class ApplicationController < ActionController::Base
       elsif cookies[:survey_id] && Survey.where(id: cookies[:survey_id]).first
         url = "/survey_responses/new?survey_id=#{cookies[:survey_id]}"
       else
-        url = "/users/sign_in"
+        url = '/users/sign_in'
       end
       return url
     else
@@ -362,9 +360,7 @@ class ApplicationController < ActionController::Base
 
   def wizard_path
     step = current_user.next_wizard_step(current_organization)
-    if step
-      '/wizard?step=' + step
-    end
+    '/wizard?step=' + step if step
   end
   helper_method :wizard_path
 
@@ -373,14 +369,12 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_current_org
-    unless current_organization
-      redirect_to '/wizard' and return false
-    end
+    redirect_to '/wizard' and return false unless current_organization
   end
 
   def access_denied
     render 'application/access_denied'
-    return false
+    false
   end
 
   def is_leader?
@@ -416,9 +410,7 @@ class ApplicationController < ActionController::Base
 
   def set_keyword_cookie
     get_survey
-    if @keyword
-      cookies[:keyword] = @keyword.keyword
-    end
+    cookies[:keyword] = @keyword.keyword if @keyword
     if @survey
       cookies[:survey_id] = @survey.id
     else
@@ -436,14 +428,14 @@ class ApplicationController < ActionController::Base
 
   def permissions_for_assign
     current_user_permissions = current_person
-                                     .organizational_permissions
-                                     .where(:organization_id => current_organization.self_and_parents.collect(&:id))
-                                     .collect { |r| Permission.where(id: r.permission_id).first }.compact
+                               .organizational_permissions
+                               .where(organization_id: current_organization.self_and_parents.collect(&:id))
+                               .collect { |r| Permission.where(id: r.permission_id).first }.compact
 
     if current_user_permissions.include?(Permission.admin)
       @permissions_for_assign = current_organization.permissions
     else
-      @permissions_for_assign = current_organization.permissions.select{|permission| permission != Permission.admin}
+      @permissions_for_assign = current_organization.permissions.select { |permission| permission != Permission.admin }
     end
   end
 
@@ -457,14 +449,14 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_super_admin?
 
   def format_date_for_search(input_date)
-		if input_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][0-9]|3[01])\/(19|2\d)\d\d$/
-			begin
-				get_date = input_date.split('/')
-				new_date = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime("%Y-%m-%d")
-			rescue
-			end
-		end
-		new_date.present? ? new_date : input_date
+    if input_date =~ /^([1-9]|0[1-9]|1[012])\/([1-9]|0[1-9]|[12][0-9]|3[01])\/(19|2\d)\d\d$/
+      begin
+        get_date = input_date.split('/')
+        new_date = Date.parse("#{get_date[2]}-#{get_date[0]}-#{get_date[1]}").strftime('%Y-%m-%d')
+      rescue
+      end
+    end
+    new_date.present? ? new_date : input_date
   end
 
   def force_client_update
@@ -474,12 +466,12 @@ class ApplicationController < ActionController::Base
     if platform && version
       version = version.to_i
       if platform == 'android'
-        if version <= 6 #mh 1.x
-          render json: {error: {message: 'Your MissionHub app requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required'}},
+        if version <= 6 # mh 1.x
+          render json: { error: { message: 'Your MissionHub app requires an update. Please check for updates in your app store now.', code: 'client_update_required', title: 'Update Required' } },
                  status: :not_acceptable,
                  callback: params[:callback]
-        elsif version <= 125 #mh 2.0.x-2.4.x-snapshot
-          render json: {errors: ['Your MissionHub app requires an update. Please check for updates in your app store now.'], code: 'client_update_required'},
+        elsif version <= 125 # mh 2.0.x-2.4.x-snapshot
+          render json: { errors: ['Your MissionHub app requires an update. Please check for updates in your app store now.'], code: 'client_update_required' },
                  status: :not_acceptable,
                  callback: params[:callback]
           return false
@@ -492,10 +484,10 @@ class ApplicationController < ActionController::Base
     @organization = current_organization
     @surveys = @organization.surveys
     @all_questions = @organization.questions
-    excepted_predefined_fields = ['first_name','last_name','gender','phone_number']
+    excepted_predefined_fields = %w(first_name last_name gender phone_number)
     @predefined_survey = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
-    @predefined_questions = current_organization.predefined_survey_questions.where("attribute_name NOT IN (?)", excepted_predefined_fields)
-    @questions = (@all_questions.where("survey_elements.hidden" => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
+    @predefined_questions = current_organization.predefined_survey_questions.where('attribute_name NOT IN (?)', excepted_predefined_fields)
+    @questions = (@all_questions.where('survey_elements.hidden' => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
   end
   helper_method :initialize_surveys_and_questions
 end

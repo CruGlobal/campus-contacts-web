@@ -6,7 +6,7 @@ class CreateGroupLabelings < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :mh_group_labelings, [:group_id, :group_label_id], :unique => true
+    add_index :mh_group_labelings, [:group_id, :group_label_id], unique: true
     add_index :mh_group_labelings, :group_label_id
   end
 end

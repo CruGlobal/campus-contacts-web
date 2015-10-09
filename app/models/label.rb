@@ -1,60 +1,60 @@
 class Label < ActiveRecord::Base
-  NO_SELECTED_LABEL = ["No label",1]
-  ANY_SELECTED_LABEL = ["Any",2]
-	ALL_SELECTED_LABEL = ["All",3]
-	LABEL_SEARCH_FILTERS = [NO_SELECTED_LABEL, ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
+  NO_SELECTED_LABEL = ['No label', 1]
+  ANY_SELECTED_LABEL = ['Any', 2]
+  ALL_SELECTED_LABEL = ['All', 3]
+  LABEL_SEARCH_FILTERS = [NO_SELECTED_LABEL, ANY_SELECTED_LABEL, ALL_SELECTED_LABEL]
 
   attr_accessible :i18n, :name, :organization_id, :created_at, :updated_at
   # added :created_at and :updated_at for migration only
 
-  DEFAULT_LABELS = ["involved", "leader"] # in DSC ORDER by SUPERIORITY
-  DEFAULT_CRU_LABELS = ["involved", "engaged_disciple", "leader"]
-  DEFAULT_BRIDGE_LABELS = DEFAULT_CRU_LABELS + ["seeker"]
-  DEFAULT_POWER_TO_CHANGE_LABELS = ["knows_and_trusts_christian", "became_curious", "became_open_to_change",
-    "seeking_god", "made_decision", "growing_disciple", "ministering_disciple", "multiplying_disciple"]
+  DEFAULT_LABELS = %w(involved leader) # in DSC ORDER by SUPERIORITY
+  DEFAULT_CRU_LABELS = %w(involved engaged_disciple leader)
+  DEFAULT_BRIDGE_LABELS = DEFAULT_CRU_LABELS + ['seeker']
+  DEFAULT_POWER_TO_CHANGE_LABELS = %w(knows_and_trusts_christian became_curious became_open_to_change
+                                      seeking_god made_decision growing_disciple ministering_disciple multiplying_disciple)
 
   has_many :people, through: :organizational_labels
   has_many :organizational_labels, dependent: :destroy
   belongs_to :organization
 
   validates :i18n, uniqueness: true, allow_nil: true
-  validates :name, presence: true, :if => Proc.new { |label| organization_id != 0 }
+  validates :name, presence: true, if: proc { |_label| organization_id != 0 }
   validates :organization_id, presence: true
 
-  scope :default, ->{where(organization_id: 0)}
+  scope :default, -> { where(organization_id: 0) }
   scope :default_labels,
-    ->{
-      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_LABELS)}").
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_LABELS)}")
-    }
+        lambda {
+          where("i18n IN #{default_labels_for_field_string(self::DEFAULT_LABELS)}")
+            .order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_LABELS)}")
+        }
   scope :default_cru_labels,
-    ->{
-      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}").
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}")
-    }
+        lambda {
+          where("i18n IN #{default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}")
+            .order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS)}")
+        }
   scope :default_bridge_labels,
-    ->{
-      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}").
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}")
-    }
+        lambda {
+          where("i18n IN #{default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}")
+            .order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_BRIDGE_LABELS)}")
+        }
   scope :default_power_to_change_labels,
-    ->{
-      where("i18n IN #{self.default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}").
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}")
-    }
+        lambda {
+          where("i18n IN #{default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}")
+            .order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_POWER_TO_CHANGE_LABELS)}")
+        }
   scope :non_default_labels,
-    ->{
-      where("i18n IS NULL").
-      order("labels.name ASC")
-    }
+        lambda {
+          where('i18n IS NULL')
+            .order('labels.name ASC')
+        }
   scope :arrange_all,
-    ->{
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} DESC, name")
-    }
+        lambda {
+          order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} DESC, name")
+        }
   scope :arrange_all_desc,
-    ->{
-      order("FIELD#{self.i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC")
-    }
+        lambda {
+          order("FIELD#{i18n_field_plus_default_labels_for_field_string(self::DEFAULT_CRU_LABELS.reverse)} ASC, name DESC")
+        }
 
   def self.involved
     @involved ||= Label.where(name: 'Involved', i18n: 'involved', organization_id: 0).first_or_create
@@ -73,25 +73,25 @@ class Label < ActiveRecord::Base
   end
 
   def self.default_labels_for_field_string(labels)
-    labels_string = "("
+    labels_string = '('
     labels.each do |r|
-      labels_string = labels_string + "\"" + r + "\"" + ","
+      labels_string = labels_string + "\"" + r + "\"" + ','
     end
-    labels_string[labels_string.length-1] = ")"
+    labels_string[labels_string.length - 1] = ')'
     labels_string
   end
 
   def self.custom_field_plus_default_labels_for_field_string(custom_field, labels)
-    r = self.default_labels_for_field_string(labels)
-    r[0] = ""
+    r = default_labels_for_field_string(labels)
+    r[0] = ''
     r = "(#{custom_field}," + r
     r
   end
 
   def self.i18n_field_plus_default_labels_for_field_string(labels)
-    r = self.default_labels_for_field_string(labels)
-    r[0] = ""
-    r = "(labels.i18n," + r
+    r = default_labels_for_field_string(labels)
+    r[0] = ''
+    r = '(labels.i18n,' + r
     r
   end
 
@@ -101,8 +101,8 @@ class Label < ActiveRecord::Base
   end
 
   def count_label_contacts_from_orgs(org_ids, date)
-    people_ids = OrganizationalLabel.where(label_id: id, organization_id: org_ids).
-        where("start_date <= ?", date).where("removed_date is null or removed_date >= ?", date).collect(&:person_id).uniq
+    people_ids = OrganizationalLabel.where(label_id: id, organization_id: org_ids)
+                 .where('start_date <= ?', date).where('removed_date is null or removed_date >= ?', date).collect(&:person_id).uniq
     result = 0
     org_ids.each do |org_id|
       org = Organization.find(org_id)
@@ -126,5 +126,4 @@ class Label < ActiveRecord::Base
     ENGAGED_DISCIPLE = engaged_disciple.id
     SEEKER_ID = seeker.id
   end
-
 end

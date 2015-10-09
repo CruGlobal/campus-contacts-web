@@ -16,7 +16,7 @@ module ImportMethods
     # We'll try to match on FB authentication, then username
 
     unless mh_person = Person.where(infobase_person_id: person_hash['id']).first
-      ccc_authentication = ccc_user['authentications'].detect {|a| a['provider'] == 'facebook'}
+      ccc_authentication = ccc_user['authentications'].detect { |a| a['provider'] == 'facebook' }
       authentication = Authentication.where(ccc_authentication.slice('provider', 'uid')).first if ccc_authentication
       if authentication && authentication.user
         mh_person = authentication.user.person
@@ -50,7 +50,7 @@ module ImportMethods
       else
         begin
           user_found = User.where(username: ccc_user['username']).first_or_initialize
-          user_found.password = Devise.friendly_token[0,20] unless user_found.id.present?
+          user_found.password = Devise.friendly_token[0, 20] unless user_found.id.present?
           user_found.save
         rescue ActiveRecord::RecordNotUnique
           retry
@@ -60,13 +60,13 @@ module ImportMethods
 
       # copy over email and phone data
       person['email_addresses'].each do |email_address|
-        mh_person.email = email_address['email'] unless mh_person.email_addresses.detect {|e| email_address['email'] == e.email} || EmailAddress.where(email: email_address['email']).first
+        mh_person.email = email_address['email'] unless mh_person.email_addresses.detect { |e| email_address['email'] == e.email } || EmailAddress.where(email: email_address['email']).first
       end
 
       mh_person.save!
 
       person['phone_numbers'].each do |phone|
-        mh_person.phone_number = phone['number'] unless mh_person.phone_numbers.detect {|p| p.number == phone['number']}
+        mh_person.phone_number = phone['number'] unless mh_person.phone_numbers.detect { |p| p.number == phone['number'] }
       end
     end
 
@@ -82,6 +82,6 @@ module ImportMethods
       org.add_contact(mh_person)
     end
     puts "-------- Import Person - #{type} - #{person_hash['first_name']} #{person_hash['last_name']} - Success!"
-    return mh_person
+    mh_person
   end
 end

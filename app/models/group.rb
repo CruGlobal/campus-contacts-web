@@ -1,7 +1,6 @@
 class Group < ActiveRecord::Base
   attr_accessible :name, :location, :meets, :meeting_day, :start_time, :end_time, :organization_id, :list_publicly, :approve_join_requests
 
-
   has_many :group_labelings, dependent: :destroy
   has_many :group_labels, through: :group_labelings
   has_many :group_memberships, dependent: :destroy

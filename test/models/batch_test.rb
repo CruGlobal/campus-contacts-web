@@ -1,6 +1,6 @@
 require 'test_helper'
 class PersonTest < ActiveSupport::TestCase
-  context "get_unnotified_transfers" do
+  context 'get_unnotified_transfers' do
     setup do
       @person1 = FactoryGirl.create(:person)
       @person2 = FactoryGirl.create(:person)
@@ -11,18 +11,18 @@ class PersonTest < ActiveSupport::TestCase
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2)
       transfer3 = FactoryGirl.create(:person_transfer, person: @person3)
       results = Batch.get_unnotified_transfers
-      assert_equal(results.count, 3, "results should be 3 records")
+      assert_equal(results.count, 3, 'results should be 3 records')
     end
     should "not return person transfers with 'notified' = true" do
       transfer1 = FactoryGirl.create(:person_transfer, person: @person1, notified: true)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2)
       transfer3 = FactoryGirl.create(:person_transfer, person: @person3)
       results = Batch.get_unnotified_transfers
-      assert(!results.include?(transfer1), "transfer1 should not be returned")
-      assert_equal(results.count, 2, "results should be 2 records")
+      assert(!results.include?(transfer1), 'transfer1 should not be returned')
+      assert_equal(results.count, 2, 'results should be 2 records')
     end
   end
-  context "person_transfer_notify" do
+  context 'person_transfer_notify' do
     setup do
       @org1 = FactoryGirl.create(:organization)
       @org2 = FactoryGirl.create(:organization)
@@ -36,33 +36,33 @@ class PersonTest < ActiveSupport::TestCase
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
 
       transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
 
       results = Batch.person_transfer_notify
       transfer1.reload
       transfer2.reload
-      assert_equal(transfer1.notified, true, "notified should be true")
-      assert_equal(transfer2.notified, true, "notified should be true")
+      assert_equal(transfer1.notified, true, 'notified should be true')
+      assert_equal(transfer2.notified, true, 'notified should be true')
     end
-    should "not notify person_transfer with deleted org" do
+    should 'not notify person_transfer with deleted org' do
       @admin = FactoryGirl.create(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
 
-      transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization_id: 99999,
-        old_organization: @org1, transferred_by: @admin)
+      transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization_id: 99_999,
+                                                       old_organization: @org1, transferred_by: @admin)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2, new_organization: @org1,
-        old_organization: @org2, transferred_by: @admin)
+                                                       old_organization: @org2, transferred_by: @admin)
 
-      assert_equal(false, transfer1.notified, "notified should be false")
-      assert_equal(false, transfer2.notified, "notified should be false")
+      assert_equal(false, transfer1.notified, 'notified should be false')
+      assert_equal(false, transfer2.notified, 'notified should be false')
       results = Batch.person_transfer_notify
       transfer1.reload
       transfer2.reload
-      assert_equal(false, transfer1.notified, "notified should be false")
-      assert_equal(true, transfer2.notified, "notified should be true")
+      assert_equal(false, transfer1.notified, 'notified should be false')
+      assert_equal(true, transfer2.notified, 'notified should be true')
     end
     should "not notify person_transfer with 'notified' = true" do
       @admin = FactoryGirl.create(:person)
@@ -70,63 +70,63 @@ class PersonTest < ActiveSupport::TestCase
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
 
       transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin, notified: true)
+                                                       old_organization: @org1, transferred_by: @admin, notified: true)
 
-      assert_equal(transfer1.notified, false, "notified should be false")
-      assert_equal(transfer2.notified, true, "notified should be true")
+      assert_equal(transfer1.notified, false, 'notified should be false')
+      assert_equal(transfer2.notified, true, 'notified should be true')
       results = Batch.person_transfer_notify
       transfer1.reload
       transfer2.reload
-      assert_equal(transfer1.notified, true, "notified should be true")
-      assert_equal(transfer2.notified, true, "notified should be true")
+      assert_equal(transfer1.notified, true, 'notified should be true')
+      assert_equal(transfer2.notified, true, 'notified should be true')
     end
-    should "not notify person_transfer from org with admin without email and raise an error" do
+    should 'not notify person_transfer from org with admin without email and raise an error' do
       @admin = FactoryGirl.create(:person)
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       @admin.email_addresses.destroy_all
 
       transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
 
       exception = assert_raise RuntimeError do
         results = Batch.person_transfer_notify
       end
       transfer1.reload
       transfer2.reload
-      assert_equal(transfer1.notified, false, "notified should be false")
-      assert_equal(transfer2.notified, false, "notified should be false")
+      assert_equal(transfer1.notified, false, 'notified should be false')
+      assert_equal(transfer2.notified, false, 'notified should be false')
     end
-    should "not notify person_transfer from org without admin and raise an error" do
+    should 'not notify person_transfer from org without admin and raise an error' do
       transfer1 = FactoryGirl.create(:person_transfer, person: @person1, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
       transfer2 = FactoryGirl.create(:person_transfer, person: @person2, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
 
       exception = assert_raise RuntimeError do
         results = Batch.person_transfer_notify
       end
       transfer1.reload
       transfer2.reload
-      assert_equal(transfer1.notified, false, "notified should be false")
-      assert_equal(transfer2.notified, false, "notified should be false")
+      assert_equal(transfer1.notified, false, 'notified should be false')
+      assert_equal(transfer2.notified, false, 'notified should be false')
     end
-    should "not notify person_transfer with invalid person" do
+    should 'not notify person_transfer with invalid person' do
       @admin = FactoryGirl.create(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org2, permission: Permission.admin)
       transfer1 = FactoryGirl.create(:person_transfer, person_id: 0, new_organization: @org2,
-        old_organization: @org1, transferred_by: @admin)
+                                                       old_organization: @org1, transferred_by: @admin)
 
       results = Batch.person_transfer_notify
       transfer1.reload
-      assert_equal(transfer1.notified, true, "notified should be true without error raised")
+      assert_equal(transfer1.notified, true, 'notified should be true without error raised')
     end
   end
-  context "get_unnotified_new_contacts" do
+  context 'get_unnotified_new_contacts' do
     setup do
       @org = FactoryGirl.create(:organization)
       @person1 = FactoryGirl.create(:person)
@@ -138,18 +138,18 @@ class PersonTest < ActiveSupport::TestCase
       transfer2 = FactoryGirl.create(:new_person, person: @person2, organization: @org)
       transfer3 = FactoryGirl.create(:new_person, person: @person3, organization: @org)
       results = Batch.get_unnotified_new_contacts
-      assert_equal(results.count, 3, "results should be 3 records")
+      assert_equal(results.count, 3, 'results should be 3 records')
     end
     should "not return new person with 'notified' = true" do
       transfer1 = FactoryGirl.create(:new_person, person: @person1, organization: @org, notified: true)
       transfer2 = FactoryGirl.create(:new_person, person: @person2, organization: @org)
       transfer3 = FactoryGirl.create(:new_person, person: @person3, organization: @org)
       results = Batch.get_unnotified_new_contacts
-      assert(!results.include?(transfer1), "transfer1 should not be returned")
-      assert_equal(results.count, 2, "results should be 2 records")
+      assert(!results.include?(transfer1), 'transfer1 should not be returned')
+      assert_equal(results.count, 2, 'results should be 2 records')
     end
   end
-  context "new_person_notify" do
+  context 'new_person_notify' do
     setup do
       @org1 = FactoryGirl.create(:organization)
       @org2 = FactoryGirl.create(:organization)
@@ -168,24 +168,24 @@ class PersonTest < ActiveSupport::TestCase
       results = Batch.new_person_notify
       newperson1.reload
       newperson2.reload
-      assert_equal(newperson1.notified, true, "notified should be true")
-      assert_equal(newperson2.notified, true, "notified should be true")
+      assert_equal(newperson1.notified, true, 'notified should be true')
+      assert_equal(newperson2.notified, true, 'notified should be true')
     end
-    should "not notify new_person with deleted org" do
+    should 'not notify new_person with deleted org' do
       @admin = FactoryGirl.create(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
 
       newperson1 = FactoryGirl.create(:new_person, person: @person1, organization: @org1)
-      newperson2 = FactoryGirl.create(:new_person, person: @person2, organization_id: 99999)
+      newperson2 = FactoryGirl.create(:new_person, person: @person2, organization_id: 99_999)
 
-      assert_equal(newperson1.notified, false, "notified should be false")
-      assert_equal(newperson2.notified, false, "notified should be false")
+      assert_equal(newperson1.notified, false, 'notified should be false')
+      assert_equal(newperson2.notified, false, 'notified should be false')
       results = Batch.new_person_notify
       newperson1.reload
       newperson2.reload
-      assert_equal(newperson1.notified, true, "notified should be true")
-      assert_equal(newperson2.notified, false, "notified should be false")
+      assert_equal(newperson1.notified, true, 'notified should be true')
+      assert_equal(newperson2.notified, false, 'notified should be false')
     end
     should "not notify new_person with 'notified' = true" do
       @admin = FactoryGirl.create(:person)
@@ -195,15 +195,15 @@ class PersonTest < ActiveSupport::TestCase
       newperson1 = FactoryGirl.create(:new_person, person: @person1, organization: @org1)
       newperson2 = FactoryGirl.create(:new_person, person: @person2, organization: @org1, notified: true)
 
-      assert_equal(newperson1.notified, false, "notified should be false")
-      assert_equal(newperson2.notified, true, "notified should be true")
+      assert_equal(newperson1.notified, false, 'notified should be false')
+      assert_equal(newperson2.notified, true, 'notified should be true')
       results = Batch.new_person_notify
       newperson1.reload
       newperson2.reload
-      assert_equal(newperson1.notified, true, "notified should be true")
-      assert_equal(newperson2.notified, true, "notified should be true")
+      assert_equal(newperson1.notified, true, 'notified should be true')
+      assert_equal(newperson2.notified, true, 'notified should be true')
     end
-    should "not notify new_person from org with admin without email and raise an error" do
+    should 'not notify new_person from org with admin without email and raise an error' do
       @admin = FactoryGirl.create(:person)
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
       @admin.email_addresses.destroy_all
@@ -216,10 +216,10 @@ class PersonTest < ActiveSupport::TestCase
       end
       newperson1.reload
       newperson2.reload
-      assert_equal(newperson1.notified, false, "notified should be true")
-      assert_equal(newperson2.notified, false, "notified should be true")
+      assert_equal(newperson1.notified, false, 'notified should be true')
+      assert_equal(newperson2.notified, false, 'notified should be true')
     end
-    should "not notify new_person from org without admin and raise an error" do
+    should 'not notify new_person from org without admin and raise an error' do
       newperson1 = FactoryGirl.create(:new_person, person: @person1, organization: @org1)
       newperson2 = FactoryGirl.create(:new_person, person: @person2, organization: @org1)
 
@@ -228,10 +228,10 @@ class PersonTest < ActiveSupport::TestCase
       end
       newperson1.reload
       newperson2.reload
-      assert_equal(newperson1.notified, false, "notified should be false")
-      assert_equal(newperson2.notified, false, "notified should be false")
+      assert_equal(newperson1.notified, false, 'notified should be false')
+      assert_equal(newperson2.notified, false, 'notified should be false')
     end
-    should "not notify new_person with invalid peron" do
+    should 'not notify new_person with invalid peron' do
       @admin = FactoryGirl.create(:person)
       @admin_email = @admin.email_addresses.create(email: 'admin@email.com')
       @admin_permission = FactoryGirl.create(:organizational_permission, person: @admin, organization: @org1, permission: Permission.admin)
@@ -239,7 +239,7 @@ class PersonTest < ActiveSupport::TestCase
 
       results = Batch.new_person_notify
       newperson1.reload
-      assert_equal(newperson1.notified, true, "notified should be true without error raised")
+      assert_equal(newperson1.notified, true, 'notified should be true without error raised')
     end
   end
 end

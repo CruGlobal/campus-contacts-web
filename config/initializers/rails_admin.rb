@@ -4,7 +4,7 @@
 #   config.authorize_with do
 #     redirect_to root_path unless warden.user.developer?
 #   end
-#   
+#
 #   # config.model User do
 #   #   # object_label_method {:name_with_keyword_count}
 #   #   visible false
@@ -12,7 +12,7 @@
 #   #     field :username
 #   #   end
 #   # end
-#   
+#
 #   config.model Organization do
 #     object_label_method {:name_with_keyword_count}
 #     edit do
@@ -26,7 +26,7 @@
 #       end
 #     end
 #   end
-#   
+#
 #   config.model SmsKeyword do
 #     object_label_method {:keyword_with_state}
 #     edit do
@@ -84,16 +84,16 @@
 #   #   RailsAdmin::AbstractModel.all # rebuild model arrays
 #   # end
 # end
-# # 
+# #
 # # module RailsAdmin
 # #   module Config
 # #     class Model < RailsAdmin::Config::Base
-# # 
+# #
 # #       # monkey patch to get around stale @excluded instance variable
 # #       def excluded?
 # #         !RailsAdmin::AbstractModel.all.map(&:model).include?(abstract_model.model)
 # #       end
-# # 
+# #
 # #     end
 # #   end
 # # end

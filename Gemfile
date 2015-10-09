@@ -10,12 +10,12 @@ gem 'paperclip', '4.2.1'
 gem 'ransack'
 gem 'state_machines'#, '~> 1.1.2'
 gem 'strip_attributes'#, '~> 1.4.4'
-gem 'active_model_serializers', '0.8.3' #'0.10.0.rc1'
+gem 'active_model_serializers', '0.8.3'#'0.10.0.rc1'
 gem 'activeadmin', github: 'activeadmin'
 gem 'acts_as_list'#, '~> 0.3.0'
 gem 'rollbar', '~> 2.2.1'
 gem 'ancestry'
-gem 'aws-sdk', '< 2.0' #, '~> 1.33.0' #'1.8.1.3'
+gem 'aws-sdk', '< 2.0'
 gem 'bitly', git: 'https://github.com/kennethjohnbalgos/bitly.git'#, '~> 0.9.0'
 gem 'bluepill'#, '0.0.60', require: false
 gem 'cancancan'#, '~> 1.6.10'
@@ -29,7 +29,7 @@ gem 'delegate_presenter'#, '~> 0.0.2'
 gem 'dynamic_form'#, '~> 1.1.4'
 gem 'enforce_schema_rules'#, '~> 0.0.17'
 gem 'http_accept_language'#, '~> 2.0.0'
-gem 'i18n-js' #, git: 'http://github.com/fnando/i18n-js.git'     # allow i18n on js files
+gem 'i18n-js'#, git: 'http://github.com/fnando/i18n-js.git'    # allow i18n on js files
 gem 'kaminari'#, '~> 0.14.1'
 gem 'emojimmy'
 
@@ -52,15 +52,15 @@ gem 'redis-namespace'
 gem 'sidekiq-unique-jobs', github: 'mhenrixon/sidekiq-unique-jobs'
 gem 'sidekiq-failures'#, '~> 0.3.0'
 gem 'sidekiq-cron'
-gem 'sinatra', '>= 1.3.0', :require => nil
-gem 'rest-client'#, '~> 1.6.7'                                     # to make FB api requests
+gem 'sinatra', '>= 1.3.0', require: nil
+gem 'rest-client'#, '~> 1.6.7'                                    # to make FB api requests
 gem 'retryable-rb'#, '~> 1.1.0'
 gem 'trumant-rack-oauth2-server', git: 'http://github.com/twinge/rack-oauth2-server.git', branch: 'active_record'
-#gem 'trumant-rack-oauth2-server', path: '/Users/josh/htdocs/rack-oauth2-server'
-#gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
+# gem 'trumant-rack-oauth2-server', path: '/Users/josh/htdocs/rack-oauth2-server'
+# gem 'twilio-rb'#, git: 'http://github.com/stevegraham/twilio-rb.git', ref: 'fad1e27e2e3a3df84f6c15a42e1eab1c69deae7b'
 gem 'twilio-ruby', '~> 4.2.1'
 gem 'versionist'#, '~> 1.0.0'
-gem 'vpim', git: 'http://github.com/twinge/vpim.git'   # vcard maker
+gem 'vpim', git: 'http://github.com/twinge/vpim.git' # vcard maker
 gem 'whenever'#, '~> 0.8.4'
 gem 'wiser_date'#, '~> 0.3.0'
 gem 'wiser_timezone', '~> 0.2.0'
@@ -72,7 +72,6 @@ gem 'protected_attributes'
 gem 'silencer'
 gem 'syslog-logger'
 gem 'rack-mini-profiler'
-
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -90,16 +89,17 @@ group :test do
   gem 'shoulda', require: false
   gem 'mocha', require: false
   gem 'ffaker'#, '~> 1.20.0'
+  gem 'rubocop', '~> 0.34.0'
 end
 
 group :development do
   gem 'rails-footnotes'#, '~> 3.7.9'
-  gem 'bullet'#, '~> 4.6.0'
+  gem 'bullet' , '~> 4.6.0'
   gem 'travis-lint'#, '~> 1.7.0'
-  gem 'mailcatcher'#, '~> 0.5.12'
+  gem 'mailcatcher'# , '~> 0.5.12'
   gem 'railroady'#, '~> 1.1.1'
   gem 'better_errors'#, '>= 0.7.2'
-  #gem 'localeapp'
+ #gem 'localeapp'
 end
 
 group :performance do
@@ -107,7 +107,7 @@ group :performance do
 end
 
 # Assets
-  gem 'execjs'
+gem 'execjs'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-script'#, '~> 2.2.0'

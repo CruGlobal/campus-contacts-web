@@ -20,29 +20,29 @@ class PersonOrder
     @order.each do |key, direction|
       case key
 
-        when :first_name
-          ordered_people = ordered_people.order("people.first_name #{direction}")
+      when :first_name
+        ordered_people = ordered_people.order("people.first_name #{direction}")
 
-        when :last_name
-          ordered_people = ordered_people.order("people.last_name #{direction}")
+      when :last_name
+        ordered_people = ordered_people.order("people.last_name #{direction}")
 
-        when :gender
-          ordered_people = ordered_people.order("people.gender #{direction}")
+      when :gender
+        ordered_people = ordered_people.order("people.gender #{direction}")
 
-        when :followup_status
-          ordered_people = ordered_people.order_by_all_followup_status("followup_status #{direction}")
+      when :followup_status
+        ordered_people = ordered_people.order_by_all_followup_status("followup_status #{direction}")
 
-        when :permission
-          ordered_people = ordered_people.order_by_permission("permission_id #{direction}")
+      when :permission
+        ordered_people = ordered_people.order_by_permission("permission_id #{direction}")
 
-        when :primary_phone
-          ordered_people = ordered_people.order_by_primary_phone_number("number #{direction}")
+      when :primary_phone
+        ordered_people = ordered_people.order_by_primary_phone_number("number #{direction}")
 
-        when :primary_email
-          ordered_people = ordered_people.order_by_primary_email_address("email #{direction}")
+      when :primary_email
+        ordered_people = ordered_people.order_by_primary_email_address("email #{direction}")
 
-        else
-          ordered_people = ordered_people.order("#{key} #{direction}")
+      else
+        ordered_people = ordered_people.order("#{key} #{direction}")
 
       end
     end

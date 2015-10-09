@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class FollowupCommentsControllerTest < ActionController::TestCase
-  context "Search comments" do
-
+  context 'Search comments' do
     setup do
       @user = FactoryGirl.create(:user_with_auxs)
       sign_in @user
@@ -12,7 +11,7 @@ class FollowupCommentsControllerTest < ActionController::TestCase
       @sub_org = FactoryGirl.create(:organization, parent: @org)
     end
 
-    context "Admin searches for comments" do
+    context 'Admin searches for comments' do
       setup do
         @person1 = FactoryGirl.create(:person)
         @person2 = FactoryGirl.create(:person)
@@ -22,20 +21,20 @@ class FollowupCommentsControllerTest < ActionController::TestCase
         @person6 = FactoryGirl.create(:person)
 
         FactoryGirl.create(:followup_comment, organization: @org, contact: @person1, commenter: @user.person,
-        comment: "Hi, this is a comment.")
+                                              comment: 'Hi, this is a comment.')
         FactoryGirl.create(:followup_comment, organization: @org, contact: @person2, commenter: @user.person,
-        comment: "This is a slightly different comment.")
+                                              comment: 'This is a slightly different comment.')
         FactoryGirl.create(:followup_comment, organization: @org, contact: @person3, commenter: @user.person,
-        comment: "An entirely different comment, trying to keep it different")
+                                              comment: 'An entirely different comment, trying to keep it different')
         FactoryGirl.create(:followup_comment, organization: @sub_org, contact: @person4, commenter: @user.person,
-        comment: "Could be a different comment, but not really.")
+                                              comment: 'Could be a different comment, but not really.')
         FactoryGirl.create(:followup_comment, organization: @sub_org, contact: @person5, commenter: @user.person,
-        comment: "Slightly change this comment, but it's not that different that the other one.")
+                                              comment: "Slightly change this comment, but it's not that different that the other one.")
         FactoryGirl.create(:followup_comment, organization: @sub_org, contact: @person6, commenter: @user.person,
-        comment: "This comment doesn't really make any sense. Microwave.")
+                                              comment: "This comment doesn't really make any sense. Microwave.")
       end
 
-      should "get correct number of comments, with no parameters from top org" do
+      should 'get correct number of comments, with no parameters from top org' do
         @request.session[:current_organization_id] = @org.id
         get :index
         assert_response :success
@@ -43,7 +42,7 @@ class FollowupCommentsControllerTest < ActionController::TestCase
         assert_equal(assigns(:comments).count, 3)
       end
 
-      should "get correct number of comments, with no parameters from sub org" do
+      should 'get correct number of comments, with no parameters from sub org' do
         @request.session[:current_organization_id] = @sub_org.id
         get :index
         assert_response :success
@@ -51,78 +50,77 @@ class FollowupCommentsControllerTest < ActionController::TestCase
         assert_equal(assigns(:comments).count, 3)
       end
 
-      should "search and return the correct number of comments from top org" do
+      should 'search and return the correct number of comments from top org' do
         @request.session[:current_organization_id] = @org.id
-        get :index, { :query => "comment" }
+        get :index, query: 'comment'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 3)
 
-        get :index, { :query => "different" }
+        get :index, query: 'different'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 2)
 
-        get :index, { :query => "entirely" }
+        get :index, query: 'entirely'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 1)
       end
 
-      should "search and return the correct number of comments from top org 2" do
+      should 'search and return the correct number of comments from top org 2' do
         @request.session[:current_organization_id] = @sub_org.id
-        get :index, { :query => "comment" }
+        get :index, query: 'comment'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 3)
 
-        get :index, { :query => "different" }
+        get :index, query: 'different'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 2)
 
-        get :index, { :query => "microwave" }
+        get :index, query: 'microwave'
         assert_response :success
         assert_not_nil assigns(:comments)
         assert_equal(assigns(:comments).count, 1)
       end
     end
-
   end
 
-  should "get index" do
+  should 'get index' do
     @user, @org = admin_user_login_with_org
     get :index
   end
 
-  should "create followup comment" do
-    request.env["HTTP_REFERER"] = "localhost:3000"
+  should 'create followup comment' do
+    request.env['HTTP_REFERER'] = 'localhost:3000'
 
     @user, @org = admin_user_login_with_org
     contact = FactoryGirl.create(:person)
 
-    post :create, { :followup_comment => { :contact_id => contact.id, :commenter_id => @user.person.id, :comment => "Wat", :status => "uncontacted", :organization_id => @org.id }, :rejoicables => ["wat"] }
+    post :create, followup_comment: { contact_id: contact.id, commenter_id: @user.person.id, comment: 'Wat', status: 'uncontacted', organization_id: @org.id }, rejoicables: ['wat']
 
     assert_response :redirect
   end
 
-  should "create followup comment with rejoicable" do
-    request.env["HTTP_REFERER"] = "localhost:3000"
+  should 'create followup comment with rejoicable' do
+    request.env['HTTP_REFERER'] = 'localhost:3000'
 
     @user, @org = admin_user_login_with_org
     contact = FactoryGirl.create(:person)
 
-    post :create, { :followup_comment => { :contact_id => contact.id, :commenter_id => @user.person.id, :comment => "Wat", :status => "uncontacted", :organization_id => @org.id }, :rejoicables => ["gospel_presentation"] }
+    post :create, followup_comment: { contact_id: contact.id, commenter_id: @user.person.id, comment: 'Wat', status: 'uncontacted', organization_id: @org.id }, rejoicables: ['gospel_presentation']
 
     assert_response :redirect
   end
 
-  should "be able to destroy followup_comments" do
+  should 'be able to destroy followup_comments' do
     @user, @org = admin_user_login_with_org
     person3 = FactoryGirl.create(:person)
     comment = FactoryGirl.create(:followup_comment, organization: @org, contact: person3, commenter: @user.person)
-    assert_difference "FollowupComment.count", -1 do
-      xhr :delete, :destroy, {:id => comment.id}
+    assert_difference 'FollowupComment.count', -1 do
+      xhr :delete, :destroy, id: comment.id
     end
   end
 end

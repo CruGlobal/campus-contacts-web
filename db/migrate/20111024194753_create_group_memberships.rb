@@ -3,8 +3,8 @@ class CreateGroupMemberships < ActiveRecord::Migration
     create_table :group_memberships do |t|
       t.belongs_to :group
       t.belongs_to :person
-      t.string :role, :default => 'member'
-      t.boolean :requested, :default => false
+      t.string :role, default: 'member'
+      t.boolean :requested, default: false
 
       t.timestamps
     end

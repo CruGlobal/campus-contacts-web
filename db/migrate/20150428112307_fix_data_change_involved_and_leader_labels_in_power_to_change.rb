@@ -18,10 +18,10 @@ class FixDataChangeInvolvedAndLeaderLabelsInPowerToChange < ActiveRecord::Migrat
       else
         org_labels = OrganizationalLabel.where("
           (label_id = ? OR label_id = ?) AND organization_id IN (?)",
-            involved.id,
-            leader.id,
-            power_to_change_org.self_and_children.collect(&:id)
-        )
+                                               involved.id,
+                                               leader.id,
+                                               power_to_change_org.self_and_children.collect(&:id)
+                                              )
         if org_labels.present?
           org_labels.each do |org_label|
             if org_label.label_id == involved.id

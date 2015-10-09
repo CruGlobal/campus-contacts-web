@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ContactAssignmentTest < ActiveSupport::TestCase
-  should "return count assigned to leaders" do
+  should 'return count assigned to leaders' do
     @org1 = FactoryGirl.create(:organization, name: 'Org 1')
     @org2 = FactoryGirl.create(:organization, name: 'Org 2')
     @leader = FactoryGirl.create(:person, first_name: 'Leader')

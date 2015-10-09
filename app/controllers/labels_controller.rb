@@ -1,7 +1,7 @@
 class LabelsController < ApplicationController
-  before_filter :ensure_current_org
-  before_filter :authorize
-  before_filter :set_label, :only => [:new, :edit, :update, :destroy]
+  before_action :ensure_current_org
+  before_action :authorize
+  before_action :set_label, only: [:new, :edit, :update, :destroy]
 
   def index
     @organizational_labels = current_organization.non_default_labels
@@ -18,7 +18,7 @@ class LabelsController < ApplicationController
     @name = params[:name]
     @message = t('manage_labels.name_is_required')
     if @name.present?
-      if current_organization.labels.where("LOWER(name) = ?", @name.downcase).present?
+      if current_organization.labels.where('LOWER(name) = ?', @name.downcase).present?
         @message = t('manage_labels.label_exists')
       else
         @new_label = Label.create(organization_id: current_organization.id, name: @name)
@@ -39,7 +39,7 @@ class LabelsController < ApplicationController
     if @name.present? && @id.present?
       @message = t('manage_labels.add_label_failed')
       if @update_label = Label.where(id: @id, organization_id: current_organization.id).first
-        if Label.where("organization_id IN (?) AND LOWER(name) = ?", [current_organization.id,0], @name.downcase).present?
+        if Label.where('organization_id IN (?) AND LOWER(name) = ?', [current_organization.id, 0], @name.downcase).present?
           @message = t('manage_labels.label_exists')
         else
           @update_label.name = @name
@@ -66,7 +66,7 @@ class LabelsController < ApplicationController
   def create_now
     @status = false
     if params[:name].present?
-      if Label.where("LOWER(name) = ? AND organization_id IN (?)", params[:name].downcase, [current_organization.id,0]).present?
+      if Label.where('LOWER(name) = ? AND organization_id IN (?)', params[:name].downcase, [current_organization.id, 0]).present?
         @msg_alert = t('contacts.index.add_label_exists')
       else
         @new_label = Label.create!(name: params[:name], organization_id: current_organization.id) if params[:name].present?
@@ -95,15 +95,16 @@ class LabelsController < ApplicationController
     redirect_to labels_path
   end
 
- protected
+  protected
+
   def authorize
     authorize! :manage_labels, current_organization
   end
 
   def set_label
     @label = case action_name
-    when 'new' then Label.new
-    else Label.find(params[:id])
-    end
+             when 'new' then Label.new
+             else Label.find(params[:id])
+             end
   end
 end

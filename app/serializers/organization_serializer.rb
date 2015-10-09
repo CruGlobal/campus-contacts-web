@@ -14,7 +14,7 @@ class OrganizationSerializer < ActiveModel::Serializer
   end
 
   def interaction_types
-    add_since(object.interaction_types.where.not(i18n: "faculty_on_mission"))
+    add_since(object.interaction_types.where.not(i18n: 'faculty_on_mission'))
   end
 
   def include_associations!
@@ -35,6 +35,4 @@ class OrganizationSerializer < ActiveModel::Serializer
   def leaders
     add_since(object.send(:users))
   end
-
 end
-

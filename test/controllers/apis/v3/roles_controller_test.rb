@@ -41,8 +41,8 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
 
   context '.create' do
     should 'create and return a label' do
-      assert_difference "Label.count" do
-        post :create, role: {name: 'sample_label'}, secret: @client.secret
+      assert_difference 'Label.count' do
+        post :create, role: { name: 'sample_label' }, secret: @client.secret
       end
       json = JSON.parse(response.body)
       assert_equal 'sample_label', json['role']['name'], json.inspect
@@ -52,7 +52,7 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
 
   context '.update' do
     should 'update and return a label' do
-      put :update, id: @label.id, role: {name: 'new_label_name'}, secret: @client.secret
+      put :update, id: @label.id, role: { name: 'new_label_name' }, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 'new_label_name', json['role']['name']
     end
@@ -60,10 +60,9 @@ class Apis::V3::RolesControllerTest < ActionController::TestCase
 
   context '.destroy' do
     should 'destroy label' do
-      assert_difference "Label.count", -1 do
+      assert_difference 'Label.count', -1 do
         delete :destroy, id: @label.id, secret: @client.secret
       end
     end
   end
 end
-

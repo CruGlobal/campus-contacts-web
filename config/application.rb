@@ -32,9 +32,9 @@ module Mh
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-     config.i18n.locale = :"en"
-     config.i18n.default_locale = :"en"
-     config.i18n.fallbacks = true
+    config.i18n.locale = :en
+    config.i18n.default_locale = :en
+    config.i18n.fallbacks = true
 
     # Please note that JavaScript expansions are *ignored altogether* if the asset
     # pipeline is enabled (see config.assets.enabled below). Put your defaults in
@@ -43,11 +43,11 @@ module Mh
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(prototype prototype_ujs)
 
-    #config.rubycas.cas_base_url = 'https://signin.relaysso.org/cas'
-    #config.rubycas.logger = Rails.logger
+    # config.rubycas.cas_base_url = 'https://signin.relaysso.org/cas'
+    # config.rubycas.logger = Rails.logger
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
     config.active_record.schema_format = :sql
 
     # Configure sensitive parameters which will be filtered from the log file.
@@ -75,26 +75,24 @@ module Mh
         user.id
       end
 
-      #if evaluates to true then access_token can be granted, also required to be true for EVERY api call
+      # if evaluates to true then access_token can be granted, also required to be true for EVERY api call
       config.oauth.permissions_authenticator = lambda do |identity|
         org_memberships = User.find(identity).person.organizational_roles.leaders
-        return true if !org_memberships.empty?
+        return true unless org_memberships.empty?
         false
       end
 
       config.oauth.param_authentication = true
       # config.oauth.authorization_types = %w{code}
-      Rack::OAuth2::Server::Admin.set :client_id, "2"
-      Rack::OAuth2::Server::Admin.set :client_secret, "e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6"
-      Rack::OAuth2::Server::Admin.set :scope, %w{read write}
+      Rack::OAuth2::Server::Admin.set :client_id, '2'
+      Rack::OAuth2::Server::Admin.set :client_secret, 'e6f0bc02c1236f3d4cde6a4fd45e181569a8abf45ce17a3dba2fd88fe55722b6'
+      Rack::OAuth2::Server::Admin.set :scope, %w(read write)
     end
 
-    config.compass.require "susy"
+    config.compass.require 'susy'
 
-
-    config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, :silence => ['/monitors/lb']
+    config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, silence: ['/monitors/lb']
 
     config.active_record.raise_in_transactional_callbacks = true
   end
-
 end

@@ -5,10 +5,10 @@ require 'errors/not_allowed_to_use_cas_error'
 require 'errors/not_allowed_to_use_key_error'
 require 'errors/no_ticket_error'
 class User < ActiveRecord::Base
-  has_paper_trail :on => [:destroy],
-                  :meta => { person_id: :person_id }
+  has_paper_trail on: [:destroy],
+                  meta: { person_id: :person_id }
 
-  WIZARD_STEPS = %w[welcome verify keyword survey leaders]
+  WIZARD_STEPS = %w(welcome verify keyword survey leaders)
   self.primary_key = 'id'
 
   store :settings, accessors: [:primary_organization_id, :time_zone]
@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
   has_one :super_admin
   has_many :authentications
   has_many :sms_keywords
-  has_many :access_tokens, class_name: "Rack::OAuth2::Server::AccessToken", foreign_key: "identity"
-  has_many :access_grants, class_name: "Rack::OAuth2::Server::AccessGrant", foreign_key: "identity"
+  has_many :access_tokens, class_name: 'Rack::OAuth2::Server::AccessToken', foreign_key: 'identity'
+  has_many :access_grants, class_name: 'Rack::OAuth2::Server::AccessGrant', foreign_key: 'identity'
   has_many :saved_contact_searches
   has_many :imports
   # Include default devise modules. Others available are:
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   def ability
     @ability ||= Ability.new(self)
   end
-  delegate :can?, :cannot?, :to => :ability
+  delegate :can?, :cannot?, to: :ability
 
   def self.from_access_token(token)
     if access_token = Rack::OAuth2::Server::AccessToken.find_by_code(token)
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   def self.find_for_cas_oauth(cas_info)
     data = cas_info['extra']
     if data['username'].blank?
-      raise NoEmailError
+      fail NoEmailError
     else
       username = data['username']
       person = Person.find_existing_person_by_email(username)
@@ -52,14 +52,14 @@ class User < ActiveRecord::Base
         unless user
           begin
             user = User.where(username: username).first_or_initialize
-            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.password = Devise.friendly_token[0, 20] unless user.id.present?
             user.save
           rescue ActiveRecord::RecordNotUnique
             retry
           end
         end
       else
-        raise NotAllowedToUseCASError
+        fail NotAllowedToUseCASError
       end
 
       return user
@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
   def self.find_for_key_oauth(key_info)
     data = key_info['extra']
     if data['user'].blank?
-      raise NoEmailError
+      fail NoEmailError
     else
       email = data['user']
       person = Person.find_existing_person_by_email(email)
@@ -78,21 +78,21 @@ class User < ActiveRecord::Base
         unless user
           begin
             user = User.where(username: email).first_or_initialize
-            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.password = Devise.friendly_token[0, 20] unless user.id.present?
             user.save
           rescue ActiveRecord::RecordNotUnique
             retry
           end
         end
       else
-        raise NotAllowedToUseKeyError
+        fail NotAllowedToUseKeyError
       end
 
       return user
     end
   end
 
-  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil, attempts = 0, force = false)
+  def self.find_for_facebook_oauth(access_token, signed_in_resource = nil, attempts = 0, force = false)
     data = access_token['extra']['raw_info']
     person = Person.find_from_facebook(data)
 
@@ -105,7 +105,7 @@ class User < ActiveRecord::Base
     token = access_token['credentials']['token']
 
     if email.blank? && person.nil?
-      raise NoEmailError, access_token['extra'].inspect
+      fail NoEmailError, access_token['extra'].inspect
     end
 
     user = nil
@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
     transaction do
       authentication = Authentication.find_by_provider_and_uid(provider, uid)
 
-      #Let's also ensure that someone who has an authentication also has a user.  If not, delete the authentication and make a user
+      # Let's also ensure that someone who has an authentication also has a user.  If not, delete the authentication and make a user
       if authentication && !authentication.user.nil?
         authentication.update_attribute(:token, token)
         user = authentication.user
@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
         unless user
           begin
             user = User.where(username: email).first_or_initialize
-            user.password = Devise.friendly_token[0,20] unless user.id.present?
+            user.password = Devise.friendly_token[0, 20] unless user.id.present?
             user.save
           rescue
             sleep(1)
@@ -194,7 +194,7 @@ class User < ActiveRecord::Base
   end
 
   def name_with_keyword_count
-    "#{to_s} (#{sms_keywords.count})"
+    "#{self} (#{sms_keywords.count})"
   end
 
   def merge(other)
@@ -203,14 +203,14 @@ class User < ActiveRecord::Base
       person.merge(other.person) if person
 
       # Authentications
-      other.authentications.collect {|oa| oa.update_attribute(:user_id, id)}
+      other.authentications.collect { |oa| oa.update_attribute(:user_id, id) }
 
       # Oauth
-      other.access_tokens.collect {|at| at.update_attribute(:identity, id)}
-      other.access_grants.collect {|ag| ag.update_attribute(:identity, id)}
+      other.access_tokens.collect { |at| at.update_attribute(:identity, id) }
+      other.access_grants.collect { |ag| ag.update_attribute(:identity, id) }
 
       # Sms Keywords
-      other.sms_keywords.collect {|oa| oa.update_attribute(:user_id, id)}
+      other.sms_keywords.collect { |oa| oa.update_attribute(:user_id, id) }
 
       MergeAudit.create!(mergeable: self, merge_looser: other)
       other.reload
@@ -220,7 +220,7 @@ class User < ActiveRecord::Base
   end
 
   def has_permission?(permission_id, organization)
-    person && OrganizationalPermission.where(permission_id: permission_id, organization_id: organization.id, person_id: person.id).first.present?
+    person && OrganizationalPermission.find_by(permission_id: permission_id, organization_id: organization.id, person_id: person.id).present?
   end
 
   def person_id

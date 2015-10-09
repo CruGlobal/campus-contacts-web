@@ -1,16 +1,16 @@
 class GroupsController < ApplicationController
-  before_filter :ensure_current_org
-  before_filter :get_group
-  before_filter :leader_needed, :only => [:create, :new]
+  before_action :ensure_current_org
+  before_action :get_group
+  before_action :leader_needed, only: [:create, :new]
 
   def index
     if params[:search].present? && params[:search][:meta_sort].present?
-      sort_query = params[:search][:meta_sort].gsub('.',' ')
-    	if ['name'].any?{ |i| sort_query.include?(i) }
-  			order_query = sort_query.gsub('name','groups.name')
-  		end
+      sort_query = params[:search][:meta_sort].tr('.', ' ')
+      if ['name'].any? { |i| sort_query.include?(i) }
+        order_query = sort_query.gsub('name', 'groups.name')
+      end
     else
-      order_query = "groups.name"
+      order_query = 'groups.name'
     end
     @groups = current_organization.groups.order(order_query)
     @q = @groups.where('1 <> 1').search(params[:search])
@@ -24,12 +24,12 @@ class GroupsController < ApplicationController
       @people = current_organization.all_people.get_from_group(@group.id).uniq
 
       if params[:search].present? && params[:search][:meta_sort].present?
-        sort_query = params[:search][:meta_sort].gsub('.',' ')
+        sort_query = params[:search][:meta_sort].tr('.', ' ')
         @people = @people.includes(:group_memberships) if sort_query.include?('permission')
-  			order_string = sort_query.gsub('first_name','people.first_name')
-                                 .gsub('permission','group_memberships.permission')
+        order_string = sort_query.gsub('first_name', 'people.first_name')
+                       .gsub('permission', 'group_memberships.permission')
       else
-        order_string = "people.first_name"
+        order_string = 'people.first_name'
       end
 
       @q = @people.where('1 <> 1').search(params[:search])
@@ -79,17 +79,14 @@ class GroupsController < ApplicationController
 
   protected
 
-    def get_group
-      begin
-        @group = current_organization.groups.find(params[:id]) if params[:id]
-      rescue ActiveRecord::RecordNotFound
-        @group = nil
-        flash[:error] = I18n.t('groups.no_group_found')
-      end
-    end
+  def get_group
+    @group = current_organization.groups.find(params[:id]) if params[:id]
+  rescue ActiveRecord::RecordNotFound
+    @group = nil
+    flash[:error] = I18n.t('groups.no_group_found')
+  end
 
-    def leader_needed
-      authorize! :lead, current_organization
-    end
-
+  def leader_needed
+    authorize! :lead, current_organization
+  end
 end

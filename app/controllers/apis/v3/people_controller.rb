@@ -1,16 +1,16 @@
 class Apis::V3::PeopleController < Apis::V3::BaseController
-  before_filter :get_person, only: [:show, :update, :destroy, :archive]
+  before_action :get_person, only: [:show, :update, :destroy, :archive]
 
   def index
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since], user: current_user}
+           scope: { include: includes, organization: current_organization, since: params[:since], user: current_user }
   end
 
   def show
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: { include: includes, organization: current_organization, user: current_user }
   end
 
   def create
@@ -29,9 +29,9 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
       render json: person,
              status: :created,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization, user: current_user}
+             scope: { include: includes, organization: current_organization, user: current_user }
     else
-      render json: {errors: person.errors.full_messages},
+      render json: { errors: person.errors.full_messages },
              status: :unprocessable_entity,
              callback: params[:callback]
     end
@@ -56,7 +56,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     if params[:person]
       unless @person.update_attributes(params[:person])
-        render json: {errors: @person.errors.full_messages},
+        render json: { errors: @person.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
         return
@@ -65,28 +65,28 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
 
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: { include: includes, organization: current_organization, user: current_user }
   end
 
   def archive
     archive_permissions([@person])
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: { include: includes, organization: current_organization, user: current_user }
   end
 
   def destroy
     remove_permissions([@person])
     render json: @person,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, user: current_user}
+           scope: { include: includes, organization: current_organization, user: current_user }
   end
 
   def bulk_destroy
     remove_permissions(filtered_people('bulk_destroy'))
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: 'people'
   end
 
@@ -94,12 +94,12 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
     archive_permissions(filtered_people('bulk_archive'))
     render json: filtered_people,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: 'people'
   end
 
   def ids
-    render json: filtered_people.collect { |p| p.id }, root: 'people_ids', callback: params[:callback]
+    render json: filtered_people.collect(&:id), root: 'people_ids', callback: params[:callback]
   end
 
   private
@@ -115,7 +115,7 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def get_person
-    if params[:id] == "me"
+    if params[:id] == 'me'
       @person = current_user.person
     else
       @person = add_includes_and_order(people).find(params[:id])
@@ -146,17 +146,16 @@ class Apis::V3::PeopleController < Apis::V3::BaseController
   end
 
   def remove_permissions(people, permissions = nil)
-    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    permissions = permissions.split(',').collect(&:to_i) if permissions.present?
     current_organization.remove_permissions_from_people(people, permissions)
   end
 
   def archive_permissions(people, permissions = nil)
-    permissions = permissions.split(',').collect{|x| x.to_i} if permissions.present?
+    permissions = permissions.split(',').collect(&:to_i) if permissions.present?
     current_organization.archive_permissions_from_people(people, permissions)
   end
 
   def available_includes
     [:email_addresses, :phone_numbers, :addresses]
   end
-
 end

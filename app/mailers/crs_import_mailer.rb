@@ -4,11 +4,11 @@ class CrsImportMailer < ActionMailer::Base
 
   def failed(organization, email_address)
     @organization = organization
-    mail to: email_address, subject: "CRS Import Failed"
+    mail to: email_address, subject: 'CRS Import Failed'
   end
 
   def completed(organization, email_address)
     @organization = organization
-    mail to: email_address, subject: "CRS Import Completed"
+    mail to: email_address, subject: 'CRS Import Completed'
   end
 end

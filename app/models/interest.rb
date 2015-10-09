@@ -14,7 +14,7 @@ class Interest < ActiveRecord::Base
   end
 
   def self.get_interests_hash(person_id)
-    eh = Interest.where("person_id = ?", person_id)
+    eh = Interest.where('person_id = ?', person_id)
     eh.collect(&:to_hash)
   end
 end

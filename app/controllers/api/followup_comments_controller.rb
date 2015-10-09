@@ -1,24 +1,24 @@
 class Api::FollowupCommentsController < ApiController
-  oauth_required scope: "followup_comments"
-  before_filter :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
+  oauth_required scope: 'followup_comments'
+  before_action :valid_request_before, :organization_allowed?, :authorized_leader?, :get_organization, :get_api_json_header
 
   def create_1
-      begin
-      @json = ActiveSupport::JSON.decode(params[:json])
-    rescue
-      raise InvalidJSONError
-    end
+    begin
+    @json = ActiveSupport::JSON.decode(params[:json])
+  rescue
+    raise InvalidJSONError
+  end
 
-    raise FollowupCommentCreateParamsError if @json['rejoicables'].nil? || @json['followup_comment'].blank?
+    fail FollowupCommentCreateParamsError if @json['rejoicables'].nil? || @json['followup_comment'].blank?
     @json['followup_comment']['organization_id'] ||= @organization.id
 
-      if @json['rejoicables'].empty?
-        create_interaction(@json['followup_comment'])
-      else
-        @json['rejoicables'].each do |what|
-          create_interaction(@json['followup_comment'], what)
-        end
+    if @json['rejoicables'].empty?
+      create_interaction(@json['followup_comment'])
+    else
+      @json['rejoicables'].each do |what|
+        create_interaction(@json['followup_comment'], what)
       end
+    end
 
     render json: []
   end
@@ -28,11 +28,11 @@ class Api::FollowupCommentsController < ApiController
     comments = []
     if contact
       interactions = contact.filtered_interactions(current_person, @organization)
-      comments = interactions.collect { |interaction|
-        {followup_comment: hash_interaction_to_followup_comment(interaction) }
-      }
+      comments = interactions.collect do |interaction|
+        { followup_comment: hash_interaction_to_followup_comment(interaction) }
+      end
     end
-    final_output = Rails.env.production? ? JSON.fast_generate(comments) : JSON::pretty_generate(comments)
+    final_output = Rails.env.production? ? JSON.fast_generate(comments) : JSON.pretty_generate(comments)
     render json: final_output
   end
 
@@ -43,39 +43,39 @@ class Api::FollowupCommentsController < ApiController
     if contact
       interactions = contact.filtered_interactions(current_person, @organization)
       if params[:since].present?
-        interactions = interactions.where("interactions.updated_at >= ?", Time.at(params[:since].to_i).utc)
+        interactions = interactions.where('interactions.updated_at >= ?', Time.at(params[:since].to_i).utc)
       end
-      if (params[:until].present?)
-        interactions = interactions.where("interactions.updated_at < ?", Time.at(params[:until].to_i).utc)
+      if params[:until].present?
+        interactions = interactions.where('interactions.updated_at < ?', Time.at(params[:until].to_i).utc)
       end
-      interactions = interactions.order("created_at DESC")
-      json_output[:followup_comments] = interactions.collect { |interaction|
-        {followup_comment: hash_interaction_to_followup_comment(interaction) }
-      }
+      interactions = interactions.order('created_at DESC')
+      json_output[:followup_comments] = interactions.collect do |interaction|
+        { followup_comment: hash_interaction_to_followup_comment(interaction) }
+      end
     end
-    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON::pretty_generate(json_output)
+    final_output = Rails.env.production? ? JSON.fast_generate(json_output) : JSON.pretty_generate(json_output)
     render json: final_output
   end
 
   def destroy_1
-    raise FollowupCommentDeleteParamsError unless (params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array)))
+    fail FollowupCommentDeleteParamsError unless params[:id].present? && (is_int?(params[:id]) || (params[:id].is_a? Array))
     ids = params[:id].split(',')
 
     comments = Interaction.where(id: ids)
     permission = current_person.organizational_permissions.where(organization_id: @organization.id).collect(&:permission).collect(&:i18n)
 
-    comments.each_with_index do |comment,i|
+    comments.each_with_index do |comment, i|
       if permission[i] == 'user'
-        raise FollowupCommentPermissionsError unless comment.created_by_id == current_person.id
+        fail FollowupCommentPermissionsError unless comment.created_by_id == current_person.id
       elsif permission[i] == 'admin'
-        raise FollowupCommentPermissionsError unless comment.organization_id == @organization.id
+        fail FollowupCommentPermissionsError unless comment.organization_id == @organization.id
       else
-        raise FollowupCommentPermissionsError
+        fail FollowupCommentPermissionsError
       end
       comment.destroy
     end
 
-    render :json => '[]'
+    render json: '[]'
   end
 
   private
@@ -86,9 +86,9 @@ class Api::FollowupCommentsController < ApiController
     comment['contact_id'] = object.receiver_id
     if object.creator.present?
       comment['commenter'] = {
-          'id' => object.creator.id,
-          'name' => object.creator.name,
-          'picture' => object.creator.picture,
+        'id' => object.creator.id,
+        'name' => object.creator.name,
+        'picture' => object.creator.picture
       }
     else
       comment['commenter'] = {}
@@ -103,34 +103,34 @@ class Api::FollowupCommentsController < ApiController
 
     rejoicables = []
     if object.interaction_type_id.in?([2, 3, 4])
-      rejoicables << {'id' => object.id, 'what' => translate_type_to_what(object.interaction_type.i18n)}
+      rejoicables << { 'id' => object.id, 'what' => translate_type_to_what(object.interaction_type.i18n) }
     elsif object.interaction_type_id != 1
       comment['comment'] = "Interaction: #{object.interaction_type.name}\n#{comment['comment']}"
     end
 
-    return {comment: comment, rejoicables: rejoicables}
+    { comment: comment, rejoicables: rejoicables }
   end
 
   def translate_type_to_what(what)
     case what
-      when 'prayed_to_receive_christ'
-        'prayed_to_receive'
-      else
-        what
+    when 'prayed_to_receive_christ'
+      'prayed_to_receive'
+    else
+      what
     end
   end
 
   def translate_what_to_type_id(what)
     case what
-      when 'prayed_to_receive'
-        4
+    when 'prayed_to_receive'
+      4
+    else
+      type = InteractionType.where(i18n: what).first
+      if type
+        type.id
       else
-        type = InteractionType.where(i18n: what).first
-        if type
-          type.id
-        else
-          1
-        end
+        1
+      end
     end
   end
 
@@ -142,7 +142,7 @@ class Api::FollowupCommentsController < ApiController
     attributes[:created_by_id] = comment_json['commenter_id']
     attributes[:comment] = comment_json['comment']
     attributes[:privacy_setting] = comment_json['privacy_setting']
-    if !['me','admins','organization'].include?(attributes[:privacy_setting])
+    unless %w(me admins organization).include?(attributes[:privacy_setting])
       attributes[:privacy_setting] = Interaction::DEFAULT_PRIVACY
     end
 
@@ -151,7 +151,7 @@ class Api::FollowupCommentsController < ApiController
       if interaction.save
         interaction.set_initiators([current_person.id])
       else
-        raise FollowupCommentCreateParamsError
+        fail FollowupCommentCreateParamsError
       end
     end
 
@@ -162,5 +162,4 @@ class Api::FollowupCommentsController < ApiController
       end
     end
   end
-
 end

@@ -1,18 +1,18 @@
 class Apis::V3::OrganizationsController < Apis::V3::BaseController
-  before_filter :get_organization, only: [:show, :update, :destroy]
+  before_action :get_organization, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'name'
     list = add_includes_and_order(organizations, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @organization,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization}
+           scope: { include: includes, organization: current_organization }
   end
 
   def create
@@ -31,7 +31,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
                callback: params[:callback],
                scope: includes
       else
-        render json: {errors: organization.errors.full_messages},
+        render json: { errors: organization.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -49,7 +49,7 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
                callback: params[:callback],
                scope: includes
       else
-        render json: {errors: organization.errors.full_messages},
+        render json: { errors: organization.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -79,12 +79,10 @@ class Apis::V3::OrganizationsController < Apis::V3::BaseController
 
   def get_organization
     @organization = add_includes_and_order(organizations)
-                      .find(params[:id].to_i)
-
+                    .find(params[:id].to_i)
   end
 
   def available_includes
     [:contacts, :admins, :people, :surveys, :groups, :keywords, :labels, :users]
   end
-
 end

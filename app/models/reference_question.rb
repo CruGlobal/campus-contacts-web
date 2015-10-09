@@ -2,8 +2,7 @@
 # - a question that provides a fields to specify a reference
 
 class ReferenceQuestion < Question
-  
-  def response(app=nil)
+  def response(app = nil)
     return unless app
     # A reference is the same if the related_question_sheet corresponding to the question is the same
     reference = ReferenceSheet.find_by_applicant_answer_sheet_id_and_question_id(app.id, id)
@@ -17,26 +16,24 @@ class ReferenceQuestion < Question
     #     reference.update_attribute(:question_id, id) if reference
     #   end
     # end
-    reference || ReferenceSheet.create(:applicant_answer_sheet_id => app.id, :question_id => id) 
+    reference || ReferenceSheet.create(applicant_answer_sheet_id: app.id, question_id: id)
   end
-  
+
   def has_response?(app = nil)
     if app
       reference = response(app)
       reference && reference.valid?
     else
-      ReferenceSheet.where(:question_id => id).count > 0
+      ReferenceSheet.where(question_id: id).count > 0
     end
   end
-  
-  def display_response(app=nil)
-    return response(app).to_s
+
+  def display_response(app = nil)
+    response(app).to_s
   end
-  
+
   # which view to render this element?
   def ptemplate
     "reference_#{style}"
   end
-  
 end
-

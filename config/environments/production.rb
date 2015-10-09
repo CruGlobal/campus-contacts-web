@@ -51,7 +51,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = "https://d14jccgp2oh7kd.cloudfront.net"
+  config.action_controller.asset_host = 'https://d14jccgp2oh7kd.cloudfront.net'
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -78,7 +78,7 @@ Rails.application.configure do
   config.assets.initialize_on_precompile = true
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
-  #config.action_controller.asset_host = "https://d14jccgp2oh7kd.cloudfront.net"
+  # config.action_controller.asset_host = "https://d14jccgp2oh7kd.cloudfront.net"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
@@ -98,5 +98,5 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'missionhub.com' }
 
   config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("missionhub-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
-  config.log_tags = [ lambda { |request| "ReqID:#{request.uuid}" } ]
+  config.log_tags = [->(request) { "ReqID:#{request.uuid}" }]
 end

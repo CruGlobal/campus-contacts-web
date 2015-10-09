@@ -1,9 +1,8 @@
 require 'vpim/book'
 
 class VcardsController < ApplicationController
-
   def create
-     VcardMailer.vcard(params[:email], params[:person_id]).deliver_now
+    VcardMailer.vcard(params[:email], params[:person_id]).deliver_now
   end
 
   def bulk_create
@@ -12,7 +11,7 @@ class VcardsController < ApplicationController
       all_ids = ids.split(',')
       respond_to do |wants|
         wants.html do
-          if params.has_key?(:email)
+          if params.key?(:email)
             if all_ids.count > 1
               VcardMailer.bulk_vcard(params[:email], all_ids, params[:note]).deliver_now
             else
@@ -20,12 +19,10 @@ class VcardsController < ApplicationController
             end
             render nothing: true
           else
-            send_data Person.vcard(ids), :type => 'application/vcard', :disposition => 'attachment', :filename => "contacts.vcf"
+            send_data Person.vcard(ids), type: 'application/vcard', disposition: 'attachment', filename: 'contacts.vcf'
           end
         end
       end
     end
-
   end
-
 end

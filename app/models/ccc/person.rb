@@ -1,8 +1,6 @@
 class Ccc::Person < ActiveRecord::Base
-
   self.table_name = 'ministry_person'
   self.primary_key = 'personID'
-
 
   establish_connection :uscm
 
@@ -10,10 +8,9 @@ class Ccc::Person < ActiveRecord::Base
   has_many :phone_numbers, autosave: true
   has_many :email_addresses, autosave: true
   has_one :primary_phone_number,
-    ->{where(primary: true)}, class_name: 'Ccc::PhoneNumber', foreign_key: 'person_id'
+          -> { where(primary: true) }, class_name: 'Ccc::PhoneNumber', foreign_key: 'person_id'
   has_one :current_address,
-    ->{where(addressType: 'current')}, class_name: "Ccc::MinistryNewaddress", foreign_key: "fk_PersonID"
-
+          -> { where(addressType: 'current') }, class_name: 'Ccc::MinistryNewaddress', foreign_key: 'fk_PersonID'
 
   def email
     @email = primary_email_address.try(:email)
@@ -38,12 +35,9 @@ class Ccc::Person < ActiveRecord::Base
     if current_address && current_address.email.present?
       emails << current_address.email
     end
-    if user
-      emails << user.username
-    end
+    emails << user.username if user
     emails
   end
-
 
   def preferred_or_first
     preferredName.present? ? preferredName : firstName

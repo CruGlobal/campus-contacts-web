@@ -1,17 +1,16 @@
 ActiveAdmin.register Organization do
-
   filter :name
   filter :terminology
-  filter :status, :as => :select, :collection => %w[requested active denied inactive]
+  filter :status, as: :select, collection: %w(requested active denied inactive)
   filter :created_at
   filter :updated_at
 
-  form :partial => "form"
+  form partial: 'form'
 
   index do
     column :name
     column 'Admins' do |org|
-      raw org.admins.map {|p| p.email.present? ? mail_to(p.email, p.to_s) : p.to_s}.join(", ")
+      raw org.admins.map { |p| p.email.present? ? mail_to(p.email, p.to_s) : p.to_s }.join(', ')
     end
     column :terminology
     column :created_at
@@ -25,11 +24,11 @@ ActiveAdmin.register Organization do
         status_tag(stat.status, :important)
       end
     end
-    column "Actions" do |org|
+    column 'Actions' do |org|
       ret = []
-      ret << link_to("View", admin_organization_path(org))
-      ret << link_to("Edit", edit_admin_organization_path(org))
-      ret << link_to("Delete", admin_organization_path(org), method: :delete, data:{confirm: "Are you sure?"})
+      ret << link_to('View', admin_organization_path(org))
+      ret << link_to('Edit', edit_admin_organization_path(org))
+      ret << link_to('Delete', admin_organization_path(org), method: :delete, data: { confirm: 'Are you sure?' })
       org.status_paths.events.each do |event|
         ret << link_to(event.to_s.titleize, "/admin/organizations/#{org.id}/t/#{event}", method: :post, class: "#{event} organization", confirm: "Are you sure you want to #{event} #{org}")
       end
@@ -37,20 +36,20 @@ ActiveAdmin.register Organization do
     end
   end
 
-  member_action :transition, :method => :post do
+  member_action :transition, method: :post do
     org = Organization.find(params[:id])
     org.send(params[:transition] + '!') if org.status_paths.events.include?(params[:transition].to_sym)
     redirect_to '/admin/organizations', notice: "#{org} is now #{org.status}"
   end
 
-  collection_action :approve, :method => :post do
+  collection_action :approve, method: :post do
     orgs = Organization.find(params[:bulk_ids])
     orgs.map do |org|
       begin
         Organization.transaction do
           org.approve!
         end
-      # rescue StateMachine::InvalidTransition
+        # rescue StateMachine::InvalidTransition
 
       end
     end

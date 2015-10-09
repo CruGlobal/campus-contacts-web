@@ -21,7 +21,9 @@ before_script:
   - bundle exec rake db:create RAILS_ENV=test
   - bundle exec rake db:structure:load RAILS_ENV=test
 
-script: "bundle exec rake test"
+script:
+  - bundle exec rake test
+  - bundle exec rubocop -R
 
 env:
   - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 APP_DOMAIN=localhost.com

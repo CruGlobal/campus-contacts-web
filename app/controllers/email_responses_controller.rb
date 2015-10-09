@@ -1,9 +1,8 @@
 require 'json'
 
 class EmailResponsesController < ApplicationController
-
-  skip_before_filter :authenticate_user!
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token
 
   before_action :log_incoming_message
 
@@ -11,7 +10,7 @@ class EmailResponsesController < ApplicationController
     return render json: {} unless aws_message.authentic?
 
     if type != 'Bounce'
-      Rails.logger.info "Not a bounce - exiting"
+      Rails.logger.info 'Not a bounce - exiting'
       return render json: {}
     end
 
@@ -19,16 +18,16 @@ class EmailResponsesController < ApplicationController
     bouncerecps = bounce['bouncedRecipients']
     bouncerecps.each do |recp|
       email = recp['emailAddress']
-      extra_info  = "status: #{recp['status']}, action: #{recp['action']}, diagnosticCode: #{recp['diagnosticCode']}"
+      extra_info = "status: #{recp['status']}, action: #{recp['action']}, diagnosticCode: #{recp['diagnosticCode']}"
       Rails.logger.info "Creating a bounce record for #{email}"
 
       existing = EmailResponse.find_by(email: email)
       if existing
-        Rails.logger.info "Already suppressed"
+        Rails.logger.info 'Already suppressed'
         return render json: {}
       end
 
-      EmailResponse.create ({ email: email, response_type: 'bounce', extra_info: extra_info})
+      EmailResponse.create ({ email: email, response_type: 'bounce', extra_info: extra_info })
     end
 
     render json: {}
@@ -38,7 +37,7 @@ class EmailResponsesController < ApplicationController
     return render json: {} unless aws_message.authentic?
 
     if type != 'Complaint'
-      Rails.logger.info "Not a complaint - exiting"
+      Rails.logger.info 'Not a complaint - exiting'
       return render json: {}
     end
 
@@ -47,7 +46,7 @@ class EmailResponsesController < ApplicationController
     recipients.each do |recp|
       email = recp['emailAddress']
       extra_info = "complaintFeedbackType: #{complaint['complaintFeedbackType']}"
-      EmailResponse.create ( { email: email, response_type: 'complaint', extra_info: extra_info } )
+      EmailResponse.create ( { email: email, response_type: 'complaint', extra_info: extra_info })
     end
 
     render json: {}

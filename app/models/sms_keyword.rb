@@ -6,8 +6,8 @@ class SmsKeyword < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true
 
-  has_paper_trail :on => [:destroy],
-                  :meta => { organization_id: :organization_id }
+  has_paper_trail on: [:destroy],
+                  meta: { organization_id: :organization_id }
 
   MOONSHADO_SHORT = '75572'
   SHORT = '85005'
@@ -24,15 +24,15 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :user
   belongs_to :survey
   has_many :questions,
-    ->{order("survey_elements.position")}, through: :survey
+           -> { order('survey_elements.position') }, through: :survey
   has_many :archived_questions, through: :survey
 
   belongs_to :event, polymorphic: true
   belongs_to :organization
-  validates_presence_of :keyword, :explanation, :user_id, :organization_id#, :chartfield
+  validates_presence_of :keyword, :explanation, :user_id, :organization_id # , :chartfield
   validates_presence_of :survey_id, message: "You must associate an existing survey to this keyword. If you want to create a new survey, go to the upper left of the screen under the \"Survey\" tab, click on the \"Create Survey\" link. When finished return to this screen and associate the newly created survey."
   # validates_format_of :keyword, with: /^[\w\d]+$/, on: :create, message: "can't have spaces or punctuation"
-  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: "This keyword has already been taken by someone else. Please choose something else"
+  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: 'This keyword has already been taken by someone else. Please choose something else'
 
   state_machine :state, initial: :requested do
     state :requested
@@ -43,19 +43,19 @@ class SmsKeyword < ActiveRecord::Base
     event :approve do
       transition [:denied, :requested] => :active
     end
-    after_transition :on => :approve, :do => :notify_user
+    after_transition on: :approve, do: :notify_user
 
     event :deny do
-      transition :requested => :denied
+      transition requested: :denied
     end
-    after_transition :on => :deny, :do => :notify_user_of_denial
+    after_transition on: :deny, do: :notify_user_of_denial
 
     event :disable do
-      transition :active => :inactive
+      transition active: :inactive
     end
 
     event :activate do
-      transition :inactive => :active
+      transition inactive: :active
     end
   end
 
@@ -66,7 +66,7 @@ class SmsKeyword < ActiveRecord::Base
   end
 
   def notify_admin_of_request
-    KeywordRequestMailer.delay.new_keyword_request(self.id)
+    KeywordRequestMailer.delay.new_keyword_request(id)
   end
 
   # def questions
@@ -79,17 +79,13 @@ class SmsKeyword < ActiveRecord::Base
 
   private
 
-    def notify_user
-      if user
-        KeywordRequestMailer.delay.notify_user(self.id)
-      end
-      true
-    end
+  def notify_user
+    KeywordRequestMailer.delay.notify_user(id) if user
+    true
+  end
 
-    def notify_user_of_denial
-      if user
-        KeywordRequestMailer.delay.notify_user_of_denial(self.id)
-      end
-      true
-    end
+  def notify_user_of_denial
+    KeywordRequestMailer.delay.notify_user_of_denial(id) if user
+    true
+  end
 end

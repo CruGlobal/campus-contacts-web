@@ -8,7 +8,7 @@ class InteractionTest < ActiveSupport::TestCase
   should belong_to(:receiver)
   should belong_to(:creator)
 
-  context "Interaction feed" do
+  context 'Interaction feed' do
     setup do
       @parent1 = FactoryGirl.create(:organization, ancestry: nil)
       @parent2 = FactoryGirl.create(:organization, ancestry: "#{@parent1.id}")
@@ -51,73 +51,72 @@ class InteractionTest < ActiveSupport::TestCase
 
     context "privacy_setting = 'organization'" do
       setup do
-        @interaction1.update_attribute(:privacy_setting,'organization')
+        @interaction1.update_attribute(:privacy_setting, 'organization')
       end
-      should "be visible to other admin within the org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1admin2,@org1)
-        assert displayed_feeds.include?(@interaction1), "Interaction should be returned"
+      should 'be visible to other admin within the org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1admin2, @org1)
+        assert displayed_feeds.include?(@interaction1), 'Interaction should be returned'
       end
-      should "not be visible to admin from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2admin1,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to admin from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2admin1, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "not be visible to a contact from the same org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should be returned"
+      should 'not be visible to a contact from the same org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should be returned'
       end
-      should "not be visible to contact from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to contact from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
     end
 
     context "privacy_setting = 'admins'" do
       setup do
-        @interaction1.update_attribute(:privacy_setting,'admins')
+        @interaction1.update_attribute(:privacy_setting, 'admins')
       end
-      should "be visible to other admin within the org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1admin2,@org1)
-        assert displayed_feeds.include?(@interaction1), "Interaction should be returned"
+      should 'be visible to other admin within the org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1admin2, @org1)
+        assert displayed_feeds.include?(@interaction1), 'Interaction should be returned'
       end
-      should "not be visible to admin from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2admin1,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to admin from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2admin1, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "not be visible to a contact from the same org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to a contact from the same org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "not be visible to contact from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to contact from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
     end
 
     context "privacy_setting = 'me'" do
       setup do
-        @interaction1.update_attribute(:privacy_setting,'me')
+        @interaction1.update_attribute(:privacy_setting, 'me')
       end
-      should "be visible to the admin who created it" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1admin1,@org1)
-        assert displayed_feeds.include?(@interaction1), "Interaction should be returned"
+      should 'be visible to the admin who created it' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1admin1, @org1)
+        assert displayed_feeds.include?(@interaction1), 'Interaction should be returned'
       end
-      should "be not visible to other admin within the org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1admin2,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'be not visible to other admin within the org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1admin2, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "be not visible to admin from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2admin1,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'be not visible to admin from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2admin1, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "not be visible to a contact from the same org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org1contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to a contact from the same org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org1contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
-      should "not be visible to contact from the other org" do
-        displayed_feeds = @org1contact.filtered_interactions(@org2contact,@org1)
-        assert !displayed_feeds.include?(@interaction1), "Interaction should not be returned"
+      should 'not be visible to contact from the other org' do
+        displayed_feeds = @org1contact.filtered_interactions(@org2contact, @org1)
+        assert !displayed_feeds.include?(@interaction1), 'Interaction should not be returned'
       end
     end
   end
-
 end

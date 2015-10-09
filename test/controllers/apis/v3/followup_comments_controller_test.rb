@@ -37,16 +37,16 @@ class Apis::V3::FollowupCommentsControllerTest < ActionController::TestCase
 
   context '.create' do
     should 'create and return a followup_comment' do
-      assert_difference "Interaction.count" do
-        post :create, followup_comment: {commenter_id: @person1, contact_id: @person2}, secret: @client.secret
+      assert_difference 'Interaction.count' do
+        post :create, followup_comment: { commenter_id: @person1, contact_id: @person2 }, secret: @client.secret
       end
       json = JSON.parse(response.body)
       assert_equal @person1.id, json['followup_comment']['commenter_id'], json.inspect
       assert_equal @person2.id, json['followup_comment']['contact_id'], json.inspect
     end
     should 'create and save status' do
-      assert_difference "Interaction.count" do
-        post :create, followup_comment: {commenter_id: @person1, contact_id: @person2, status: 'new_status'}, secret: @client.secret
+      assert_difference 'Interaction.count' do
+        post :create, followup_comment: { commenter_id: @person1, contact_id: @person2, status: 'new_status' }, secret: @client.secret
       end
       json = JSON.parse(response.body)
       assert_equal 'new_status', json['followup_comment']['status'], json.inspect
@@ -58,12 +58,12 @@ class Apis::V3::FollowupCommentsControllerTest < ActionController::TestCase
   context '.update' do
     should 'update and return a followup_comment' do
       assert_equal @person1.id, @followup_comment.created_by_id, @followup_comment.inspect
-      put :update, id: @followup_comment.id, followup_comment: {commenter_id: @person2}, secret: @client.secret
+      put :update, id: @followup_comment.id, followup_comment: { commenter_id: @person2 }, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal @person2.id, json['followup_comment']['commenter_id'], json.inspect
     end
     should 'update and save status' do
-      put :update, id: @followup_comment.id, followup_comment: {commenter_id: @person2, status: 'new_status'}, secret: @client.secret
+      put :update, id: @followup_comment.id, followup_comment: { commenter_id: @person2, status: 'new_status' }, secret: @client.secret
       json = JSON.parse(response.body)
       assert_equal 'new_status', json['followup_comment']['status'], json.inspect
       assert_equal @person2.id, json['followup_comment']['commenter_id'], json.inspect
@@ -72,15 +72,11 @@ class Apis::V3::FollowupCommentsControllerTest < ActionController::TestCase
 
   context '.destroy' do
     should 'update and return a followup_comment' do
-      assert_difference "FollowupComment.count", 0 do
+      assert_difference 'FollowupComment.count', 0 do
         delete :destroy, id: @followup_comment.id, secret: @client.secret
       end
       @followup_comment.reload
       assert_not_nil @followup_comment.deleted_at, @followup_comment.inspect
     end
   end
-
-
-
 end
-

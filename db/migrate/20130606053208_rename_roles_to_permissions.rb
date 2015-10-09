@@ -4,9 +4,9 @@ class RenameRolesToPermissions < ActiveRecord::Migration
   def up
     Role.where('name IS NULL').destroy_all
     user = Role.where(i18n: 'missionhub_user').try(:first)
-    user.update_attributes({name: 'User', i18n: 'user'}) if user.present?
+    user.update_attributes(name: 'User', i18n: 'user') if user.present?
     no_permission = Role.where(i18n: 'contact').try(:first)
-    no_permission.update_attributes({name: 'No Permissions', i18n: 'no_permissions'}) if no_permission.present?
+    no_permission.update_attributes(name: 'No Permissions', i18n: 'no_permissions') if no_permission.present?
     archived = Role.where(i18n: 'archived').try(:first)
     archived.destroy if archived.present?
     

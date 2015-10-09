@@ -1,5 +1,5 @@
 namespace :crs do
-  task "recruit" => :environment do
+  task 'recruit' => :environment do
     sql = 'SELECT ministry_person.id as person_id, ministry_person.universityState, ministry_person.graduation_date, crs2_conference.name AS conference_name, crs2_conference.region AS region, crs2_question.name as interest
     FROM ((((crs2_answer
       INNER JOIN crs2_custom_questions_item ON crs2_answer.question_usage_id = crs2_custom_questions_item.id)
@@ -24,12 +24,12 @@ namespace :crs do
     contact_q = Element.find(2183)
     conference_q = Element.find(2517)
     interest_q = Element.find(2187)
-    interest_map = {'OpsOther' => 'Other',
-                    'OpsTechnology' => 'Technology',
-                    'OpsFinance' => 'Finance',
-                    'OpsMedia' => 'Media',
-                    'OpsEventPlanning' => 'Event Planning',
-                    'OpsCommunication' => 'Communication'}
+    interest_map = { 'OpsOther' => 'Other',
+                     'OpsTechnology' => 'Technology',
+                     'OpsFinance' => 'Finance',
+                     'OpsMedia' => 'Media',
+                     'OpsEventPlanning' => 'Event Planning',
+                     'OpsCommunication' => 'Communication' }
     state_q = Element.find(2182)
     # First group answers
     people = {}
@@ -54,9 +54,9 @@ namespace :crs do
           grad_answer.update_attribute(:value, answers['grad'])
         end
 
-        Answer.where(:answer_sheet_id => answer_sheet.id, :question_id => interest_q.id).delete_all
+        Answer.where(answer_sheet_id: answer_sheet.id, question_id: interest_q.id).delete_all
         answers['interest'].each do |interest|
-          interest_answer = Answer.create(:answer_sheet_id => answer_sheet.id, :question_id => interest_q.id, :value => interest || 'Other')
+          interest_answer = Answer.create(answer_sheet_id: answer_sheet.id, question_id: interest_q.id, value: interest || 'Other')
         end
 
         state_answer = Answer.where(answer_sheet_id: answer_sheet.id, question_id: state_q.id).first_or_create
@@ -74,9 +74,9 @@ namespace :crs do
     end
   end
 
-  task "phone" => :environment do
+  task 'phone' => :environment do
     # Update cell phone numbers
-    question_usage_ids = [16531, 15536, 19668, 16196, 16182, 16165, 16143, 16136]
+    question_usage_ids = [16_531, 15_536, 19_668, 16_196, 16_182, 16_165, 16_143, 16_136]
     question_usage_ids.each do |question_usage_id|
       sql = "select value_string, id from crs2_answer a left join crs2_registrant r on a.registrant_id = r.id left join crs2_profile p on r.profile_id = p.id left join ministry_person mp on p.ministry_person_id = mp.id where a.question_usage_id = #{question_usage_id} AND value_string IS NOT NULL and id is not null"
       ActiveRecord::Base.connection.select_all(sql).each do |row|

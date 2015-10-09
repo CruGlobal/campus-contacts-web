@@ -23,5 +23,4 @@ class VcardMailer < ActionMailer::Base
 
     mail to: to, subject: subject
   end
-
 end

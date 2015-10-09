@@ -1,10 +1,10 @@
 require 'csv'
 class PeopleController < ApplicationController
-  before_filter :ensure_current_org
-  before_filter :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
-  before_filter :permissions_for_assign
-  before_filter :labels_for_assign
-  skip_before_filter :clear_advanced_search
+  before_action :ensure_current_org
+  before_action :authorize_merge, only: [:merge, :confirm_merge, :do_merge, :merge_preview]
+  before_action :permissions_for_assign
+  before_action :labels_for_assign
+  skip_before_action :clear_advanced_search
 
   # GET /people
   # GET /people.xml
@@ -17,20 +17,20 @@ class PeopleController < ApplicationController
 
   def all
     fetch_people(params)
-    @filtered_people = @all_people.find_all{|person| !@people.include?(person) }
-    render :partial => 'all'
+    @filtered_people = @all_people.find_all { |person| !@people.include?(person) }
+    render partial: 'all'
   end
 
   def hide_update_notice
     person = current_user
     person.settings[:hide_update_notice] = true
     person.save
-    render nothing: true and return
+    render(nothing: true) && return
   end
 
   def export
     index
-    out = ""
+    out = ''
     CSV.generate(out) do |rows|
       rows << [t('contacts.index.first_name'), t('contacts.index.last_name'), t('people.index.gender'), t('people.index.email'), t('people.index.phone'), t('people.index.year_in_school')]
       @all_people.each do |person|
@@ -39,7 +39,7 @@ class PeopleController < ApplicationController
     end
     filename = current_organization.to_s
     filename += " - #{Permission.where(id: params[:permission_id]).first.to_s.pluralize}" if params[:permission_id].present?
-    send_data(out, :filename => "#{filename}.csv", :type => 'application/csv' )
+    send_data(out, filename: "#{filename}.csv", type: 'application/csv')
   end
 
   # GET /people/1
@@ -95,19 +95,19 @@ class PeopleController < ApplicationController
   end
 
   def merge
-    @people = 1.upto(4).collect {|i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect { |i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present? }.compact
   end
 
   def confirm_merge
-    @people = 1.upto(4).collect {|i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present?}.compact
+    @people = 1.upto(4).collect { |i| Person.where(id: params["person#{i}"]).first if params["person#{i}"].present? }.compact
 
     unless @people.length >= 2
-      redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You must select at least 2 people to merge"
+      redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: 'You must select at least 2 people to merge'
       return false
     end
     @keep = @people.delete_at(params[:keep].to_i)
     unless @keep
-      redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: "You must specify which person to keep"
+      redirect_to merge_people_path(params.slice(:person1, :person2, :person3, :person4)), alert: 'You must specify which person to keep'
       return false
     end
     # If any of the other people have users, the keeper has to have a user
@@ -117,14 +117,13 @@ class PeopleController < ApplicationController
         return false
       end
     end
-
   end
 
   def merge_preview
-    render :nothing => true and return false unless params[:id].to_i > 0
+    render nothing: true and return false unless params[:id].to_i > 0
     @person = Person.where(id: params[:id]).first
     respond_to do |wants|
-      wants.js {  }
+      wants.js {}
     end
   end
 
@@ -143,8 +142,8 @@ class PeopleController < ApplicationController
       params[:person] ||= {}
       params[:person][:email_address] ||= {}
       params[:person][:phone_number] ||= {}
-      unless params[:person][:first_name].present?# && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
-        render :nothing => true and return
+      unless params[:person][:first_name].present? # && (params[:person][:email_address][:email].present? || params[:person][:phone_number][:number].present?)
+        render(nothing: true) && return
       end
       @person = create_person(params[:person])
       @email = @person.email_addresses.first
@@ -157,18 +156,14 @@ class PeopleController < ApplicationController
           # we need a valid email address to make a leader
           if permission_ids.include?(Permission::USER_ID) || permission_ids.include?(Permission::ADMIN_ID)
             @new_person = @person.create_user! if @email.present? && @person.user.nil? # create a user account if we have an email address
-            if @new_person && @new_person.save
-              @person = @new_person
-            end
+            @person = @new_person if @new_person && @new_person.save
           end
 
           permission_ids.each do |permission_id|
             invalid_email = false
             begin
-              p =@person.organizational_permissions.new(permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
-              unless p.save
-                invalid_email = true
-              end
+              p = @person.organizational_permissions.new(permission_id: permission_id, organization_id: current_organization.id, added_by_id: current_user.person.id)
+              invalid_email = true unless p.save
             rescue OrganizationalPermission::InvalidPersonAttributesError
               invalid_email = true
             rescue ActiveRecord::RecordNotUnique
@@ -179,14 +174,14 @@ class PeopleController < ApplicationController
               flash.now[:error] = I18n.t('people.create.error_creating_leader_no_valid_email') if permission_id == Permission::USER_ID.to_s
               flash.now[:error] = I18n.t('people.create.error_creating_admin_no_valid_email') if permission_id == Permission::ADMIN_ID.to_s
               params[:error] = 'true'
-              render and return
+              render && return
             end
           end
         else
           current_organization.add_involved(@person)
         end
 
-        if params.has_key?(:add_to_group)
+        if params.key?(:add_to_group)
           render json: @person
         else
           respond_to do |wants|
@@ -197,7 +192,7 @@ class PeopleController < ApplicationController
         end
       else
         flash.now[:error] = ''
-        #flash.now[:error] += "#{t('people.create.first_name_error')}<br />" unless @person.first_name.present?
+        # flash.now[:error] += "#{t('people.create.first_name_error')}<br />" unless @person.first_name.present?
         flash.now[:error] += "#{t('people.create.phone_number_error')}<br />" if @phone && !@phone.valid?
         if @email && !@email.is_unique?
           flash.now[:error] += "#{t('people.create.email_taken')}<br />"
@@ -232,15 +227,18 @@ class PeopleController < ApplicationController
 
       # Handle duplicate emails
       emails = []
-  		if params[:person][:email_address]
+      if params[:person][:email_address]
         params[:person][:email_address][:email].strip!
         emails = [params[:person][:email_address][:email]]
-  		elsif params[:person][:email_addresses_attributes]
-  			emails = params[:person][:email_addresses_attributes].collect{|_, v| v[:email].strip!; v[:email]}
-  		end
+      elsif params[:person][:email_addresses_attributes]
+        emails = params[:person][:email_addresses_attributes].collect do |_, v|
+          v[:email].strip!
+          v[:email]
+        end
+      end
       emails.each do |email|
         p = @person.has_similar_person_by_name_and_email?(email)
-  			@person = @person.smart_merge(p) if p
+        @person = @person.smart_merge(p) if p
         @person.reload
       end
 
@@ -248,10 +246,10 @@ class PeopleController < ApplicationController
 
       if params[:assigned_to_id].present?
         if params[:assigned_to_id] == 0
-          @person.assigned_tos.where("contact_assignments.organization_id = ?", current_organization.id).delete_all
+          @person.assigned_tos.where('contact_assignments.organization_id = ?', current_organization.id).delete_all
         else
-          leader_ids = params[:assigned_to_id].split(",")
-          @person.assigned_tos.where("contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)", current_organization.id, leader_ids).delete_all
+          leader_ids = params[:assigned_to_id].split(',')
+          @person.assigned_tos.where('contact_assignments.organization_id = ? AND contact_assignments.assigned_to_id NOT IN (?)', current_organization.id, leader_ids).delete_all
 
           leader_ids.each do |leader_id|
             if leader = current_organization.leaders.where(id: leader_id).try(:first)
@@ -270,7 +268,7 @@ class PeopleController < ApplicationController
         if params[:person][:phone_numbers_attributes].present?
           params[:person][:phone_numbers_attributes].each do |phone|
             begin
-              params[:person][:phone_numbers_attributes][phone.first[0]]["not_mobile"] = false
+              params[:person][:phone_numbers_attributes][phone.first[0]]['not_mobile'] = false
             rescue; end
           end
         end
@@ -283,7 +281,7 @@ class PeopleController < ApplicationController
           params[:update] = 'true'
           format.js
         else
-          format.html { render action: "edit" }
+          format.html { render action: 'edit' }
           format.xml  { render xml: @person.errors, status: :unprocessable_entity }
           format.js
         end
@@ -300,12 +298,12 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
 
     if i = current_organization.attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
-      render :text => I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(", "))
+      render text: I18n.t('people.bulk_delete.cannot_delete_admin_error', names: Person.find(i).collect(&:name).join(', '))
       return
     end
 
     if current_organization.attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
-      render :text => I18n.t('people.index.cannot_delete_admin_error')
+      render text: I18n.t('people.index.cannot_delete_admin_error')
       return
     end
 
@@ -315,7 +313,7 @@ class PeopleController < ApplicationController
       end
     end
 
-    render :text => I18n.t('people.bulk_delete.deleting_people_success')
+    render text: I18n.t('people.bulk_delete.deleting_people_success')
   end
 
   def bulk_archive
@@ -323,18 +321,18 @@ class PeopleController < ApplicationController
     ids = params[:ids].to_s.split(',')
 
     if i = current_organization.attempting_to_delete_or_archive_all_the_admins_in_the_org?(ids)
-      render :text => I18n.t('people.bulk_archive.cannot_archive_admin_error', names: Person.find(i).collect(&:name).join(", "))
+      render text: I18n.t('people.bulk_archive.cannot_archive_admin_error', names: Person.find(i).collect(&:name).join(', '))
       return
     end
 
     if current_organization.attempting_to_delete_or_archive_current_user_self_as_admin?(ids, current_person)
-      render :text => I18n.t('people.index.cannot_archive_admin_error')
+      render text: I18n.t('people.index.cannot_archive_admin_error')
       return
     end
 
     if ids.present?
       current_organization.organizational_permissions.where(person_id: ids, archive_date: nil, deleted_at: nil).each do |ors|
-        if(ors.permission_id == Permission::USER_ID)
+        if (ors.permission_id == Permission::USER_ID)
           ca = Person.find(ors.person_id).contact_assignments.where(organization_id: current_organization.id).all
           ca.collect(&:destroy)
         end
@@ -342,8 +340,9 @@ class PeopleController < ApplicationController
       end
     end
 
-    render :text => I18n.t('people.bulk_archive.archiving_people_success')
+    render text: I18n.t('people.bulk_archive.archiving_people_success')
   end
+
   #
   # # DELETE /people/1
   # # DELETE /people/1.xml
@@ -361,32 +360,32 @@ class PeopleController < ApplicationController
     authorize! :lead, current_organization
     to_ids = params[:to]
 
-		person_ids = []
-		if to_ids.present?
-			ids = to_ids.split(',').uniq
-			ids.each do |id|
-				if id.upcase =~ /GROUP-/
-					group = Group.where(id: id.gsub("GROUP-",""), organization_id: current_organization.id).first
-					group.group_memberships.collect{|p| person_ids << p.person_id.to_s } if group.present?
-				elsif id.upcase =~ /ROLE-/
-					permission = Permission.find(id.gsub("ROLE-",""))
-					permission.members_from_permission_org(current_organization.id).collect{|p| person_ids << p.person_id.to_s } if permission.present?
+    person_ids = []
+    if to_ids.present?
+      ids = to_ids.split(',').uniq
+      ids.each do |id|
+        if id.upcase =~ /GROUP-/
+          group = Group.where(id: id.gsub('GROUP-', ''), organization_id: current_organization.id).first
+          group.group_memberships.collect { |p| person_ids << p.person_id.to_s } if group.present?
+        elsif id.upcase =~ /ROLE-/
+          permission = Permission.find(id.gsub('ROLE-', ''))
+          permission.members_from_permission_org(current_organization.id).collect { |p| person_ids << p.person_id.to_s } if permission.present?
         elsif id.upcase =~ /LABEL-/
-					label = Label.find(id.gsub("LABEL-",""))
-					label.label_contacts_from_org(current_organization).collect{|p| person_ids << p.id.to_s } if label.present?
-				elsif id.upcase =~ /ALL-PEOPLE/
-					current_organization.all_people.collect{|p| person_ids << p.id.to_s} if is_admin?
-				else
-					person_ids << id
-				end
-			end
-		end
+          label = Label.find(id.gsub('LABEL-', ''))
+          label.label_contacts_from_org(current_organization).collect { |p| person_ids << p.id.to_s } if label.present?
+        elsif id.upcase =~ /ALL-PEOPLE/
+          current_organization.all_people.collect { |p| person_ids << p.id.to_s } if is_admin?
+        else
+          person_ids << id
+        end
+      end
+    end
 
     person_ids.uniq.each do |id|
       person = Person.where(id: id).first
       if person.present? && person.email.present?
         # This will be the default 'from' value to avoid the DMARC policy or not being store the emails in SPAM Folder
-        from = "outbound@mhub.cc"
+        from = 'outbound@mhub.cc'
         @message = current_person.sent_messages.create(
           receiver_id: person.id,
           organization_id: current_organization.id,
@@ -400,7 +399,7 @@ class PeopleController < ApplicationController
         @message.process_message
       end
     end
-    render :nothing => true
+    render nothing: true
   end
 
   def bulk_comment
@@ -417,9 +416,7 @@ class PeopleController < ApplicationController
         @interaction.receiver_id = id
         @interaction.privacy_setting = Interaction::DEFAULT_PRIVACY
         @interaction.interaction_type_id = InteractionType::COMMENT
-        if @interaction.save
-          @interaction.set_initiators(current_person.id)
-        end
+        @interaction.set_initiators(current_person.id) if @interaction.save
       end
     end
   end
@@ -431,7 +428,7 @@ class PeopleController < ApplicationController
       permission.followup_status = params[:status]
       permission.save
     end
-    render :text => response
+    render text: response
   end
 
   def update_permissions
@@ -441,7 +438,7 @@ class PeopleController < ApplicationController
       authorize! :lead, current_organization
     end
 
-    data = ""
+    data = ''
     person = Person.find(params[:person_id])
     permission_ids = params[:permission_ids].split(',').map(&:to_i)
     if permission_ids.present?
@@ -451,53 +448,51 @@ class PeopleController < ApplicationController
           begin
             current_organization.change_person_permission(person, new_permission.id, current_person.id)
           rescue OrganizationalPermission::InvalidPersonAttributesError
-            render 'update_leader_error', :locals => { :person => person } if new_permission.id == Permission::USER_ID
-            render 'update_admin_error', :locals => { :person => person } if new_permission.id == Permission::ADMIN_ID
+            render 'update_leader_error', locals: { person: person } if new_permission.id == Permission::USER_ID
+            render 'update_admin_error', locals: { person: person } if new_permission.id == Permission::ADMIN_ID
             return
           rescue ActiveRecord::RecordNotUnique
 
           end
-          data << "<div id='#{person.id}_#{new_permission.id}' class='permission_label permission_#{new_permission.id}' style='margin-right:4px;'>#{new_permission.to_s}</div>"
+          data << "<div id='#{person.id}_#{new_permission.id}' class='permission_label permission_#{new_permission.id}' style='margin-right:4px;'>#{new_permission}</div>"
         end
       end
     end
 
-    render :text => data
+    render text: data
   end
 
   def delete_permission(ors)
-    begin
-      ors.check_if_only_remaining_admin_permission_in_a_root_org
-      ors.check_if_admin_is_destroying_own_admin_permission(current_person)
-      ors.update_attributes({deleted_at: Date.today})
-    rescue OrganizationalPermission::CannotDestroyPermissionError
-      render 'cannot_delete_admin_error'
-      return false
-    end
+    ors.check_if_only_remaining_admin_permission_in_a_root_org
+    ors.check_if_admin_is_destroying_own_admin_permission(current_person)
+    ors.update_attributes(deleted_at: Date.today)
+  rescue OrganizationalPermission::CannotDestroyPermissionError
+    render 'cannot_delete_admin_error'
+    return false
   end
 
   def facebook_search
     url = params[:url]
-    data = Array.new
+    data = []
 
     if uri?(params[:term]) # if term is a url ...
       id = get_fb_user_id_from_url(params[:term])
       url = URI.escape("https://graph.facebook.com/#{id}?access_token=#{session[:fb_token]}")
 
       begin
-        @json = JSON.parse(RestClient.get(url, { accept: :json}))
+        @json = JSON.parse(RestClient.get(url, accept: :json))
       rescue RestClient::ResourceNotFound
         @json = nil
         @data = []
       end
 
       if @json
-        #flash[:checker] = r.count # for testing purposes
-        @data = [{'name' => @json['name'], 'id' => @json['id']},
-                {'name' => t('general.match_found'), 'id' => nil}]
+        # flash[:checker] = r.count # for testing purposes
+        @data = [{ 'name' => @json['name'], 'id' => @json['id'] },
+                 { 'name' => t('general.match_found'), 'id' => nil }]
       else
-        #flash[:checker] = 0 # for testing purposes
-        @data = [{'name' => t('people.edit.no_results'), 'id' => nil }]
+        # flash[:checker] = 0 # for testing purposes
+        @data = [{ 'name' => t('people.edit.no_results'), 'id' => nil }]
       end
 
     else
@@ -509,7 +504,7 @@ class PeopleController < ApplicationController
       end
 
       begin
-        resp = RestClient.get url, { accept: :json}
+        resp = RestClient.get url, accept: :json
         @json = JSON.parse(resp)
         @all_data = @json['data']
       rescue
@@ -520,12 +515,12 @@ class PeopleController < ApplicationController
       if @all_data.present?
         # construct the json result - autocomplete only accepts an array
         @all_data.each do |d|
-          @data << { 'name' => d['name'] , 'id' => d['id'] }
+          @data << { 'name' => d['name'], 'id' => d['id'] }
         end
 
-        @data <<  {'name' => t('people.edit.more_facebook_matches'), 'id' => @json['paging']['next'] } if data.length == 24
+        @data << { 'name' => t('people.edit.more_facebook_matches'), 'id' => @json['paging']['next'] } if data.length == 24
       else
-        @data <<  {'name' => t('people.edit.no_results'), 'id' => nil }
+        @data << { 'name' => t('people.edit.no_results'), 'id' => nil }
       end
 
     end
@@ -539,25 +534,21 @@ class PeopleController < ApplicationController
   protected
 
   def uri?(string)
-    string.include?("http://") || string.include?("https://") ? true : false
+    string.include?('http://') || string.include?('https://') ? true : false
   end
 
-=begin
-    def uri?(string)
-      uri = URI.parse(string)
-      %w( http https ).include?(uri.scheme)
-    rescue URI::BadURIError
-      false
-    end
-=end
-
-
+  #     def uri?(string)
+  #       uri = URI.parse(string)
+  #       %w( http https ).include?(uri.scheme)
+  #     rescue URI::BadURIError
+  #       false
+  #     end
 
   def get_fb_user_id_from_url(string)
     # e.g. https://graph.facebook.com/nmfdelacruz
     # https://www.facebook.com/joshstarcher?fref=ts
     # https://www.facebook.com/profile.php?id=1601070111&fref=ts
-    if string.include?("id=")
+    if string.include?('id=')
       Rack::Utils.parse_query(URI(string).query)['id']
     else
       # Facebook doesn't currently allow for searching by user_name, so I don't know if this is necessary
@@ -565,67 +556,66 @@ class PeopleController < ApplicationController
     end
   end
 
-
   def fetch_people(search_params = {})
     org_ids = params[:subs] == 'true' ? current_organization.self_and_children_ids : current_organization.id
     @people_scope = Person.joins(:organizational_permissions_including_archived).where('organizational_permissions.organization_id' => org_ids)
     @people_scope = @people_scope.where(id: @people_scope.archived_not_included.collect(&:id)) if params[:include_archived].blank? && params[:archived].blank?
 
     @q = @people_scope.includes(:primary_phone_number, :primary_email_address).joins(:organizational_permissions_including_archived)
-    #when specific permission is selected from the directory
+    # when specific permission is selected from the directory
     @q = @q.where('organizational_permissions.permission_id = ? AND organizational_permissions.organization_id = ?', params[:permission], current_organization.id) unless params[:permission].blank?
     sort_by = ['last_name asc', 'first_name asc']
 
-    #for searching
-    if search_params[:search_type] == "basic"
+    # for searching
+    if search_params[:search_type] == 'basic'
       unless search_params[:query].blank?
-        if search_params[:search_type] == "basic"
-          @q = @q.joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
-                  .where("concat(first_name,' ',last_name) LIKE :search OR concat(last_name, ' ',first_name) LIKE :search OR emails.email LIKE :search",{:search => "%#{search_params[:query]}%"})
+        if search_params[:search_type] == 'basic'
+          @q = @q.joins('LEFT JOIN email_addresses AS emails ON emails.person_id = people.id')
+               .where("concat(first_name,' ',last_name) LIKE :search OR concat(last_name, ' ',first_name) LIKE :search OR emails.email LIKE :search", search: "%#{search_params[:query]}%")
         end
       end
     else
       unless search_params[:permission].blank?
         if params[:include_archived]
-          @q = @q.joins("INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id")
-                  .where("organizational_permissions.organization_id" => current_organization.id)
-                  .where("permissions.id = :search",{:search => "#{search_params[:permission]}"})
-                   sort_by.unshift("permissions.id")
+          @q = @q.joins('INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id')
+               .where('organizational_permissions.organization_id' => current_organization.id)
+               .where('permissions.id = :search', search: "#{search_params[:permission]}")
+          sort_by.unshift('permissions.id')
           permission_tables_joint = true
         else
-          @q = @q.joins("INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id")
-                  .where("organizational_permissions.archive_date" => nil, "organizational_permissions.deleted_at" => nil, "organizational_permissions.organization_id" => current_organization.id)
-                  .where("permissions.id = :search",{:search => "#{search_params[:permission]}"})
-                   sort_by.unshift("permissions.id")
+          @q = @q.joins('INNER JOIN permissions ON permissions.id = organizational_permissions.permission_id')
+               .where('organizational_permissions.archive_date' => nil, 'organizational_permissions.deleted_at' => nil, 'organizational_permissions.organization_id' => current_organization.id)
+               .where('permissions.id = :search', search: "#{search_params[:permission]}")
+          sort_by.unshift('permissions.id')
           permission_tables_joint = true
         end
       end
 
       unless search_params[:gender].blank?
-        @q = @q.where("gender = :search", {:search => "#{search_params[:gender]}"})
-        sort_by.unshift("gender")
+        @q = @q.where('gender = :search', search: "#{search_params[:gender]}")
+        sort_by.unshift('gender')
       end
 
       unless search_params[:email].blank?
-        @q = @q.joins("LEFT JOIN email_addresses AS emails ON emails.person_id = people.id")
-        .where("emails.email LIKE :search", {:search => "%#{search_params[:email]}%"})
-        sort_by.unshift("emails.email")
+        @q = @q.joins('LEFT JOIN email_addresses AS emails ON emails.person_id = people.id')
+             .where('emails.email LIKE :search', search: "%#{search_params[:email]}%")
+        sort_by.unshift('emails.email')
       end
 
       unless search_params[:phone].blank?
-        @q = @q.joins("LEFT JOIN phone_numbers AS phones ON phones.person_id = people.id")
-        .where("phones.number LIKE :search", {:search => "%#{search_params[:phone]}%"})
-        sort_by.unshift("phones.number")
+        @q = @q.joins('LEFT JOIN phone_numbers AS phones ON phones.person_id = people.id')
+             .where('phones.number LIKE :search', search: "%#{search_params[:phone]}%")
+        sort_by.unshift('phones.number')
       end
 
       unless search_params[:first_name].blank?
-        @q = @q.where("first_name LIKE :search", {:search => "%#{search_params[:first_name]}%"})
-        sort_by.unshift("first_name asc")
+        @q = @q.where('first_name LIKE :search', search: "%#{search_params[:first_name]}%")
+        sort_by.unshift('first_name asc')
       end
 
       unless search_params[:last_name].blank?
-        @q = @q.where("last_name LIKE :search", {:search => "%#{search_params[:last_name]}%"})
-        sort_by.unshift("last_name asc")
+        @q = @q.where('last_name LIKE :search', search: "%#{search_params[:last_name]}%")
+        sort_by.unshift('last_name asc')
       end
     end
     @q = @q.where(id: current_organization.people.archived(current_organization.id).collect(&:id)) unless params[:archived].blank?
@@ -635,19 +625,19 @@ class PeopleController < ApplicationController
 
     @all_people = @q.order(params[:search] && params[:search][:meta_sort] ? params[:search][:meta_sort] : sort_by)
 
-    if params[:search].present? && params[:search][:meta_sort].include?("permission_id")
-      order = params[:search][:meta_sort].include?("asc") ? params[:search][:meta_sort].gsub("asc", "desc") : params[:search][:meta_sort].gsub("desc", "asc")
+    if params[:search].present? && params[:search][:meta_sort].include?('permission_id')
+      order = params[:search][:meta_sort].include?('asc') ? params[:search][:meta_sort].gsub('asc', 'desc') : params[:search][:meta_sort].gsub('desc', 'asc')
       a = @q.result(distinct: false).order_by_highest_default_permission(order, permission_tables_joint)
-      if params[:search][:meta_sort].include?("asc")
+      if params[:search][:meta_sort].include?('asc')
         a = a.reverse
-        a = a.uniq_by { |a| a.id }
+        a = a.uniq_by(&:id)
         a = a.reverse
-        @all_people = @all_people.uniq_by { |a| a.id }
+        @all_people = @all_people.uniq_by(&:id)
       end
       @all_people = a + @q.result(distinct: false).order_alphabetically_by_non_default_permission(order, permission_tables_joint)
     end
 
-    @all_people = @all_people.where(id: current_organization.people.archived.where("organizational_permissions.archive_date > ? AND organizational_permissions.archive_date < ? AND organizational_permissions.deleted_at IS NULL", params[:archived_date], (params[:archived_date].to_date+1).strftime("%Y-%m-%d")).collect{|x| x.id}) unless params[:archived_date].blank?
+    @all_people = @all_people.where(id: current_organization.people.archived.where('organizational_permissions.archive_date > ? AND organizational_permissions.archive_date < ? AND organizational_permissions.deleted_at IS NULL', params[:archived_date], (params[:archived_date].to_date + 1).strftime('%Y-%m-%d')).collect(&:id)) unless params[:archived_date].blank?
     @people = Kaminari.paginate_array(@all_people).page(params[:page])
   end
 
@@ -659,15 +649,15 @@ class PeopleController < ApplicationController
     if current_user_super_admin? || (current_organization.parent_organization_admins.include? current_user.person)
       authorize! :merge, Person
     else
-      redirect_to "/people"
-      flash[:error] = "You are not permitted to access that feature"
+      redirect_to '/people'
+      flash[:error] = 'You are not permitted to access that feature'
     end
   end
 
   def current_user_permissions
     current_user.person
-    .organizational_permissions
-    .where(:organization_id => current_organization)
-    .collect { |r| Permission.find(r.permission_id) }
+      .organizational_permissions
+      .where(organization_id: current_organization)
+      .collect { |r| Permission.find(r.permission_id) }
   end
 end

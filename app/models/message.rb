@@ -8,29 +8,29 @@ class Message < ActiveRecord::Base
 
   belongs_to :bulk_message
   belongs_to :organization
-  belongs_to :sender, class_name: "Person", foreign_key: "person_id"
-  belongs_to :receiver, class_name: "Person", foreign_key: "receiver_id"
+  belongs_to :sender, class_name: 'Person', foreign_key: 'person_id'
+  belongs_to :receiver, class_name: 'Person', foreign_key: 'receiver_id'
   has_one :sent_sms
 
   # after_create :process_message
 
   def date_sent
     if ((Time.new - created_at) / 1.day).to_i < 1
-      "#{distance_of_time_in_words_to_now(created_at).gsub('about','').strip} ago"
+      "#{distance_of_time_in_words_to_now(created_at).gsub('about', '').strip} ago"
     else
       created_at.strftime('%b %d, %H:%S')
     end
   end
 
   def self.outbound_text_messages(phone_number)
-    self.where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "%#{phone_number}%")
+    where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "%#{phone_number}%")
   end
 
   def status
-    if sent_via == "sms"
-      sent_sms.present? ? sent_sms.status : "none"
+    if sent_via == 'sms'
+      sent_sms.present? ? sent_sms.status : 'none'
     else
-      "sent"
+      'sent'
     end
   end
 

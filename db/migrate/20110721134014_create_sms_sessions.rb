@@ -8,7 +8,7 @@ class CreateSmsSessions < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :sms_sessions, [:phone_number, :updated_at], :name => "session"
+    add_index :sms_sessions, [:phone_number, :updated_at], name: "session"
     remove_column :received_sms, :interactive
     add_column :received_sms, :sms_session_id, :integer
   end

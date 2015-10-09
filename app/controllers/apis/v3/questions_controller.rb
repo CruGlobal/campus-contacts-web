@@ -1,18 +1,18 @@
 class Apis::V3::QuestionsController < Apis::V3::BaseController
-  before_filter :get_question, only: [:show, :update, :destroy]
+  before_action :get_question, only: [:show, :update, :destroy]
 
   def index
     order = params[:order] || 'survey_elements.position'
     list = add_includes_and_order(questions, order: order)
     render json: list,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization, since: params[:since]}
+           scope: { include: includes, organization: current_organization, since: params[:since] }
   end
 
   def show
     render json: @question,
            callback: params[:callback],
-           scope: {include: includes, organization: current_organization},
+           scope: { include: includes, organization: current_organization },
            root: @question.kind.underscore
   end
 
@@ -29,15 +29,15 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
           render json: question,
                  status: :created,
                  callback: params[:callback],
-                 scope: {include: includes, organization: current_organization},
+                 scope: { include: includes, organization: current_organization },
                  root: question.kind.underscore
         else
-          render json: {errors: question.errors.full_messages},
+          render json: { errors: question.errors.full_messages },
                  status: :unprocessable_entity,
                  callback: params[:callback]
         end
       else
-        render json: {errors: "Your api key does not have access to the survey id you send in"},
+        render json: { errors: 'Your api key does not have access to the survey id you send in' },
                status: :unauthorized,
                callback: params[:callback]
       end
@@ -51,10 +51,10 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
       if @question.update_attributes(params[:question])
         render json: @question,
                callback: params[:callback],
-               scope: {include: includes, organization: current_organization},
+               scope: { include: includes, organization: current_organization },
                root: @question.kind.underscore
       else
-        render json: {errors: question.errors.full_messages},
+        render json: { errors: question.errors.full_messages },
                status: :unprocessable_entity,
                callback: params[:callback]
       end
@@ -68,7 +68,7 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
       @question.destroy
       render json: @question,
              callback: params[:callback],
-             scope: {include: includes, organization: current_organization},
+             scope: { include: includes, organization: current_organization },
              root: @question.kind.underscore
     end
   end
@@ -88,5 +88,4 @@ class Apis::V3::QuestionsController < Apis::V3::BaseController
   def get_question
     @question = add_includes_and_order(questions).find(params[:id])
   end
-
 end

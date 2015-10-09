@@ -5,5 +5,4 @@ class PersonTransfer < ActiveRecord::Base
   belongs_to :old_organization, class_name: 'Organization', foreign_key: 'old_organization_id'
   belongs_to :new_organization, class_name: 'Organization', foreign_key: 'new_organization_id'
   belongs_to :transferred_by, class_name: 'Person', foreign_key: 'transferred_by_id'
-
 end

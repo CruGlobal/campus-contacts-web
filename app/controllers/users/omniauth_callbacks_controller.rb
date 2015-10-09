@@ -1,26 +1,24 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_filter :authenticate_user!
-  skip_before_filter :check_url
+  skip_before_action :authenticate_user!
+  skip_before_action :check_url
   def facebook
-    begin
-      facebook_login
-      redirect_to @user ? after_sign_in_path_for(@user) : "/"
-    rescue NoEmailError
-      flash[:error] = t('sessions.new.login_no_email')
-      redirect_to '/users/sign_in'
-    rescue FailedFacebookCreateError
-      flash[:error] = t('sessions.new.login_cannot_create_a_user')
-      redirect_to '/users/sign_in'
-    rescue FacebookDuplicateEmailError => e
-      Rollbar.error(e,
-        :parameters => env["omniauth.auth"]
-      )
-      redirect_to '/welcome/duplicate'
-    end
+    facebook_login
+    redirect_to @user ? after_sign_in_path_for(@user) : '/'
+  rescue NoEmailError
+    flash[:error] = t('sessions.new.login_no_email')
+    redirect_to '/users/sign_in'
+  rescue FailedFacebookCreateError
+    flash[:error] = t('sessions.new.login_cannot_create_a_user')
+    redirect_to '/users/sign_in'
+  rescue FacebookDuplicateEmailError => e
+    Rollbar.error(e,
+                  parameters: env['omniauth.auth']
+                 )
+    redirect_to '/welcome/duplicate'
   end
 
   def facebook_mhub
-    env["omniauth.auth"]['provider'] = 'facebook'
+    env['omniauth.auth']['provider'] = 'facebook'
     begin
       if session[:person_id]
         logger.debug(session[:person_id])
@@ -35,7 +33,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       if session[:person_id]
         @survey = Survey.find(session[:survey_id])
-        render :template => "survey_responses/thanks", layout: 'mhub'
+        render template: 'survey_responses/thanks', layout: 'mhub'
         return
       end
 
@@ -61,7 +59,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           session[:relay_login] = true
           redirect_to root_path
         else
-          raise NoEmailError
+          fail NoEmailError
         end
       rescue NotAllowedToUseCASError
         flash[:error] = t('sessions.new.not_allowed_to_use_cas')
@@ -86,10 +84,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             session[:key_ticket] = ticket
             redirect_to root_path
           else
-            raise NoEmailError
+            fail NoEmailError
           end
         else
-          raise NoTicketError
+          fail NoTicketError
         end
       rescue NoTicketError
         flash[:error] = t('sessions.new.no_ticket_error')
@@ -105,7 +103,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   protected
-  def after_sign_out_path_for(resource_or_scope)
+
+  def after_sign_out_path_for(_resource_or_scope)
     params[:next] ? params[:next] : user_root_path
   end
 
@@ -115,10 +114,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def facebook_login(person = nil, force = false)
-    omniauth = env["omniauth.auth"]
+    omniauth = env['omniauth.auth']
     @user = User.find_for_facebook_oauth(omniauth, current_user || user_from_token, 0, force)
-    session[:fb_token] = omniauth["credentials"]["token"]
-    session["devise.facebook_data"] = omniauth
+    session[:fb_token] = omniauth['credentials']['token']
+    session['devise.facebook_data'] = omniauth
 
     person = @user.person.merge(person) if person
 
@@ -129,14 +128,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       # There was a problem logging this person in
       # This usually means the data coming back from FB didn't include an email address
       Rollbar.error(FailedFacebookCreateError.new,
-        :error_class => "FacebookLoginError",
-        :error_messsage => "Facebook Login Error",
-        :parameters => omniauth
-      )
+                    error_class: 'FacebookLoginError',
+                    error_messsage: 'Facebook Login Error',
+                    parameters: omniauth
+                   )
       if omniauth['extra']['raw_info']['email']
-        raise FailedFacebookCreateError
+        fail FailedFacebookCreateError
       else
-        raise NoEmailError
+        fail NoEmailError
       end
     end
     person

@@ -4,11 +4,12 @@ class ImportMailer < ActionMailer::Base
   def import_successful(user, table)
     @user = user
     @table = table
-    mail to: user.person.email, subject: "Import complete"
+    mail to: user.person.email, subject: 'Import complete'
   end
 
   def import_failed(user, errors)
-    @user, @errors = user, errors
-    mail to: user.person.email, subject: "Import failed"
+    @user = user
+    @errors = errors
+    mail to: user.person.email, subject: 'Import failed'
   end
 end

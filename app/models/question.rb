@@ -11,10 +11,10 @@
 class Question < Element
   # include ActionController::RecordIdentifier # dom_id
 
-  has_many :sheet_answers, class_name: "Answer", foreign_key: "question_id", dependent: :destroy
-  has_many :custom_labels, class_name: "CustomElementLabel", foreign_key: :question_id, dependent: :destroy
+  has_many :sheet_answers, class_name: 'Answer', foreign_key: 'question_id', dependent: :destroy
+  has_many :custom_labels, class_name: 'CustomElementLabel', foreign_key: :question_id, dependent: :destroy
 
-  belongs_to :related_question_sheet, class_name: "QuestionSheet", foreign_key: "related_question_sheet_id"
+  belongs_to :related_question_sheet, class_name: 'QuestionSheet', foreign_key: 'related_question_sheet_id'
 
   # validates_inclusion_of :required, :in => [false, true]
 
@@ -26,7 +26,6 @@ class Question < Element
 
   # @answers = nil            # one or more answers in response to this question
   # @mark_for_destroy = nil   # when something is unchecked, there are less answers to the question than before
-
 
   # a question is disabled if there is a condition, and that condition evaluates to false
   # could set multiple conditions to influence this question, in which case all must be met
@@ -57,17 +56,17 @@ class Question < Element
 
   def column_header
     slug = self.slug
-    column_header = slug.present? ? slug : self.label.capitalize
+    column_header = slug.present? ? slug : label.capitalize
     column_header.try(:titleize)
   end
 
   def get_custom_element_label(survey)
-    self.custom_labels.find_by_survey_id(survey.id)
+    custom_labels.find_by_survey_id(survey.id)
   end
 
   def label_for_survey(survey)
-    custom_label = self.custom_labels.find_by_survey_id(survey.id)
-    custom_label.present? ? custom_label.label : self.label
+    custom_label = custom_labels.find_by_survey_id(survey.id)
+    custom_label.present? ? custom_label.label : label
   end
 
   def self.get_specific_question(survey, attribute_name)
@@ -120,9 +119,9 @@ class Question < Element
   def display_response(app, person = nil)
     r = responses(app, person)
     if r.blank?
-      ""
+      ''
     else
-      r.join(", ")
+      r.join(', ')
     end
   end
 
@@ -134,12 +133,12 @@ class Question < Element
     end
     return [] unless app
     # try to find answer from external object
-    if !object_name.blank? and !attribute_name.blank?
-      obj = object_name == 'application' ? app : eval("app." + object_name)
-      if obj.nil? or eval("obj." + attribute_name + ".nil?")
+    if !object_name.blank? && !attribute_name.blank?
+      obj = object_name == 'application' ? app : eval('app.' + object_name)
+      if obj.nil? || eval('obj.' + attribute_name + '.nil?')
         []
       else
-        [eval("obj." + attribute_name)]
+        [eval('obj.' + attribute_name)]
       end
     else
       app.answers_by_question[id] || []
@@ -151,30 +150,30 @@ class Question < Element
   def set_response(values, app)
     values = Array.wrap(values)
     if object_name.present? && attribute_name.present?
-      object = object_name == 'application' ? app : eval("app." + object_name)
+      object = object_name == 'application' ? app : eval('app.' + object_name)
       unless object.present?
         if object_name.include?('.')
           objects = object_name.split('.')
-          object = eval("app." + objects[0..-2].join('.') + ".create_" + objects.last)
-          eval("app." + objects[0..-2].join('.')).reload
+          object = eval('app.' + objects[0..-2].join('.') + '.create_' + objects.last)
+          eval('app.' + objects[0..-2].join('.')).reload
         end
       end
-      #unless responses(app) == values
-        value = values.first
+      # unless responses(app) == values
+      value = values.first
 
-        if attribute_name == "gender" && value.present?
-          case value[0].downcase
-          when "m", "b"
-            value = 1
-          when "f", "g"
-            value = 0
-          else
-            value = nil
-          end
+      if attribute_name == 'gender' && value.present?
+        case value[0].downcase
+        when 'm', 'b'
+          value = 1
+        when 'f', 'g'
+          value = 0
+        else
+          value = nil
         end
+      end
 
-        object.update_attribute(attribute_name.to_sym, value) if object
-      #end
+      object.update_attribute(attribute_name.to_sym, value) if object
+      # end
     else
       @answers ||= []
       if multiple_answers_allowed?
@@ -182,9 +181,9 @@ class Question < Element
         # go through existing answers (in reverse order, as we delete)
         (@answers.length - 1).downto(0) do |index|
           # reject: skip over responses that are unchanged
-          unless values.reject! {|value| value == @answers[index].value}
+          unless values.reject! { |value| value == @answers[index].value }
             # remove any answers that don't match the posted values
-            @mark_for_destroy << @answers[index]   # destroy from database later
+            @mark_for_destroy << @answers[index] # destroy from database later
             @answers.delete_at(index)
           end
         end
@@ -192,7 +191,7 @@ class Question < Element
         # insert any new answers
         for value in values
           if @mark_for_destroy.empty?
-            answer = Answer.new(:question_id => self.id, :answer_sheet_id => app.id)
+            answer = Answer.new(question_id: id, answer_sheet_id: app.id)
           else
             # re-use marked answers (an update vs. a delete+insert)
             answer = @mark_for_destroy.pop
@@ -210,7 +209,7 @@ class Question < Element
 
   def save_file(answer_sheet, file)
     @answers.collect(&:destroy) if @answers
-    answer = Answer.create!(:question_id => self.id, :answer_sheet_id => answer_sheet.id, :attachment => file)
+    answer = Answer.create!(question_id: id, answer_sheet_id: answer_sheet.id, attachment: file)
   end
 
   # save this question's @answers to database
@@ -222,7 +221,7 @@ class Question < Element
           answer.save!
 
           if question.present? && question.trigger_words.present?
-            question.trigger_words.split(",").each do |t|
+            question.trigger_words.split(',').each do |t|
               if answer.value.include? t
                 send_notifications(question, answer_sheet.person, answer.value)
               end
@@ -247,11 +246,11 @@ class Question < Element
   def send_notifications(question, person, answer)
     msg = generate_notification_msg(person, answer, shorten_link(person.id))
 
-    if question.notify_via == "Email"
+    if question.notify_via == 'Email'
       send_email_to_leaders(question.leaders, msg)
-    elsif question.notify_via == "SMS"
+    elsif question.notify_via == 'SMS'
       send_sms_to_leaders(question.leaders, msg)
-    else #send to SMS AND Email
+    else # send to SMS AND Email
       send_sms_to_leaders(question.leaders, msg)
       send_email_to_leaders(question.leaders, msg)
     end
@@ -264,18 +263,18 @@ class Question < Element
   end
 
   def send_email_to_leaders(leaders, msg)
-    SurveyMailer.delay.notify(leaders.reject{|leader| leader unless leader.has_a_valid_email?}.collect(&:email).compact, msg)
+    SurveyMailer.delay.notify(leaders.reject { |leader| leader unless leader.has_a_valid_email? }.collect(&:email).compact, msg)
   end
 
   def shorten_link(id)
     host = ENV['BITLY_HOST'] || 'www.missionhub.com'
     port = ENV['BITLY_PORT'] || 80
-    url = Rails.application.routes.url_helpers.person_url(id, url, host: host , port: port, only_path: false)
+    url = Rails.application.routes.url_helpers.person_url(id, url, host: host, port: port, only_path: false)
     short_profile_link = Bitly.client.shorten(url).short_url
   end
 
   def generate_notification_msg(person, answer, link)
-   "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}. Profile link: #{link}"
+    "#{person.name} (#{person.phone_number}, #{person.email}) just replied to a survey with #{answer}. Profile link: #{link}"
   end
 
   # has any sort of non-empty response?
@@ -283,14 +282,14 @@ class Question < Element
     if answer_sheet.present?
       answers = responses(answer_sheet)
     else
-      answers = Answer.where(:question_id => self.id)
+      answers = Answer.where(question_id: id)
     end
     return false if answers.length == 0
-    answers.each do |answer|   # loop through Answers
+    answers.each do |answer| # loop through Answers
       value = answer.is_a?(Answer) ? answer.value : answer
       return true if (value.is_a?(FalseClass) && value === false) || value.present?
     end
-    return false
+    false
   end
 
   def required?(answer_sheet = nil)
@@ -298,7 +297,7 @@ class Question < Element
   end
 
   def multiple_answers_allowed?
-    style == "checkbox"
+    style == 'checkbox'
   end
 
   def email_should_be_unique_msg
@@ -310,11 +309,11 @@ class Question < Element
   end
 
   private
-    def all_leaders_have_valid_email?
-      leaders.each do |leader|
-        errors.add(:leaders,"mello")
-        return false unless leader.has_a_valid_email?
-      end
-    end
 
+  def all_leaders_have_valid_email?
+    leaders.each do |leader|
+      errors.add(:leaders, 'mello')
+      return false unless leader.has_a_valid_email?
+    end
+  end
 end

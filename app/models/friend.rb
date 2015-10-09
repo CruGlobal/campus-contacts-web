@@ -1,6 +1,6 @@
 class Friend
-  #belongs_to :person
-  #validates_presence_of :person_id, :name, :provider, :uid, on: :create, message: "can't be blank"
+  # belongs_to :person
+  # validates_presence_of :person_id, :name, :provider, :uid, on: :create, message: "can't be blank"
   attr_accessor :uid, :provider, :name
 
   def initialize(uid, name = nil, person = nil, provider = 'facebook')
@@ -35,24 +35,20 @@ class Friend
   end
 
   def self.followers(person)
-    begin
-      Redis.current.smembers(Friend.redis_key(person, :followers)) || []
-    rescue
-      []
-    end
+    Redis.current.smembers(Friend.redis_key(person, :followers)) || []
+  rescue
+    []
   end
 
   def follow!(person)
-    begin
-      Redis.current.sadd(Friend.redis_key(self, :following), person.id)
-      Redis.current.sadd(Friend.redis_key(person, :followers), self.uid)
-    rescue;end
+    Redis.current.sadd(Friend.redis_key(self, :following), person.id)
+    Redis.current.sadd(Friend.redis_key(person, :followers), uid)
+  rescue
   end
 
   def following?(person)
-    begin
-      Redis.current.sismember(Friend.redis_key(self, :following), person.id)
-    rescue;end
+    Redis.current.sismember(Friend.redis_key(self, :following), person.id)
+  rescue
   end
 
   def unfollow(person)
@@ -60,10 +56,9 @@ class Friend
   end
 
   def self.unfollow(person, uid)
-    begin
-      Redis.current.srem(Friend.redis_key(self, :following), person.id)
-      Redis.current.srem(Friend.redis_key(person, :followers), uid)
-    rescue;end
+    Redis.current.srem(Friend.redis_key(self, :following), person.id)
+    Redis.current.srem(Friend.redis_key(person, :followers), uid)
+  rescue
   end
 
   def ==(other)

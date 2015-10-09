@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   respond_to :html, :js
-  before_filter :get_organization, :only => [:show, :edit, :update, :destroy, :update_from_crs]
+  before_action :get_organization, only: [:show, :edit, :update, :destroy, :update_from_crs]
 
   def load_tree
     if params[:id].present?
@@ -59,7 +59,7 @@ class OrganizationsController < ApplicationController
   def create
     @parent = Organization.find(params[:organization][:parent_id])
     unless can?(:manage, @parent) || can?(:manage, @parent.parent) || can?(:manage, @parent.root)
-      raise CanCan::AccessDenied
+      fail CanCan::AccessDenied
     end
     if @parent.present?
       @organization = @parent.children.create(params[:organization])
@@ -108,7 +108,7 @@ class OrganizationsController < ApplicationController
   end
 
   def search
-    scope = Organization.subtree_of(current_organization.root_id).where("name like ?", "%#{params[:q]}%")
+    scope = Organization.subtree_of(current_organization.root_id).where('name like ?', "%#{params[:q]}%")
     @organizations = scope.order('name').limit(20)
     @total = scope.count
     respond_with @organizations
@@ -119,21 +119,21 @@ class OrganizationsController < ApplicationController
   end
 
   def cleanup
-    @date = (Date.today-1).strftime("%Y-%m-%d")
-    @date_leaders = (Date.today-91).strftime("%Y-%m-%d")
+    @date = (Date.today - 1).strftime('%Y-%m-%d')
+    @date_leaders = (Date.today - 91).strftime('%Y-%m-%d')
   end
 
   def available_for_transfer
-    @available = Array.new
+    @available = []
     sent_people = current_organization.sent
     if sent_people.present?
-      @people = current_organization.contacts.where("(people.first_name LIKE :name OR people.last_name LIKE :name) AND people.id NOT IN (:people_ids)", name: "%#{params[:term]}%", people_ids: sent_people.collect(&:id))
+      @people = current_organization.contacts.where('(people.first_name LIKE :name OR people.last_name LIKE :name) AND people.id NOT IN (:people_ids)', name: "%#{params[:term]}%", people_ids: sent_people.collect(&:id))
     else
-      @people = current_organization.contacts.where("(people.first_name LIKE :name OR people.last_name LIKE :name)", name: "%#{params[:term]}%")
+      @people = current_organization.contacts.where('(people.first_name LIKE :name OR people.last_name LIKE :name)', name: "%#{params[:term]}%")
     end
 
     @people.each do |person|
-      @available << {label: person.to_s, id: person.id}
+      @available << { label: person.to_s, id: person.id }
     end
     render json: @available.to_json
   end
@@ -157,7 +157,7 @@ class OrganizationsController < ApplicationController
       sent_record = person.set_as_sent
       sent_record.update_attribute('transferred_by_id', current_person.id)
       if params[:tag_as_alumni] == '1'
-        alumni_label = Label.where(name: "Alumni", organization_id: current_organization.id).first_or_create
+        alumni_label = Label.where(name: 'Alumni', organization_id: current_organization.id).first_or_create
         current_organization.add_label_to_person(person, alumni_label.id)
       end
       if params[:tag_as_archived] == '1'
@@ -172,13 +172,13 @@ class OrganizationsController < ApplicationController
 
     if full_date.present?
       begin
-        date = Date.parse(full_date).strftime("%Y-%m-%d")
+        date = Date.parse(full_date).strftime('%Y-%m-%d')
       rescue
-        msg = "Please enter a valid date format."
+        msg = 'Please enter a valid date format.'
       end
 
       if date.present?
-        contacts = current_organization.contacts.where("DATE(`organizational_permissions`.updated_at) <= ?", date)
+        contacts = current_organization.contacts.where('DATE(`organizational_permissions`.updated_at) <= ?', date)
         if contacts.present?
           contacts.each do |contact|
             archive = contact.archive_contact_permission(current_organization)
@@ -201,9 +201,9 @@ class OrganizationsController < ApplicationController
     total_updated = 0
     if full_date.present?
       begin
-        date = Date.parse(full_date).strftime("%Y-%m-%d")
+        date = Date.parse(full_date).strftime('%Y-%m-%d')
       rescue
-        msg = "Please enter a valid date format."
+        msg = 'Please enter a valid date format.'
       end
       if date.present?
         leaders = current_organization.users.find_by_last_login_date_before_date_given(date)
@@ -231,18 +231,17 @@ class OrganizationsController < ApplicationController
 
   def update_settings
     org = current_organization
-    org.settings[:show_year_in_school] = params[:show_year_in_school] == "on" ? true : false
+    org.settings[:show_year_in_school] = params[:show_year_in_school] == 'on' ? true : false
     if org.save
-      flash[:notice] = "Successfully updated org settings!"
+      flash[:notice] = 'Successfully updated org settings!'
     else
-      flash[:error] = "An error occurred when trying to update org settings"
+      flash[:error] = 'An error occurred when trying to update org settings'
     end
 
     redirect_to '/organizations/settings'
   end
 
   def api
-
   end
 
   def generate_api_secret
@@ -258,7 +257,7 @@ class OrganizationsController < ApplicationController
 
     if params[:format].present?
       csv = ContactsCsvGenerator.export_signatures(@person_signatures)
-      send_data csv, filename: "#{current_organization.to_s} - Signatures.csv", type: "text/csv; charset=utf-8; header=present"
+      send_data csv, filename: "#{current_organization} - Signatures.csv", type: 'text/csv; charset=utf-8; header=present'
     end
 
     @q = @person_signatures.where('1 <> 1').search(params[:q])
@@ -266,6 +265,7 @@ class OrganizationsController < ApplicationController
   end
 
   protected
+
   def get_organization
     if params[:id]
       @organization = Organization.find(params[:id])
@@ -273,7 +273,7 @@ class OrganizationsController < ApplicationController
       @organization = Organization.subtree_of(current_organization.root_id).first
     end
     unless can?(:manage, @organization) || can?(:manage, @organization.parent) || can?(:manage, @organization.root)
-      raise CanCan::AccessDenied
+      fail CanCan::AccessDenied
     end
   end
 
@@ -282,7 +282,7 @@ class OrganizationsController < ApplicationController
       obj[key]
     elsif obj.respond_to?(:each)
       r = nil
-      obj.find{ |*a| r = key_value_in_nested_hash(a.last,key) }
+      obj.find { |*a| r = key_value_in_nested_hash(a.last, key) }
       r
     end
   end

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class QuestionSetTest < ActiveSupport::TestCase
-  context "saving a question set" do
+  context 'saving a question set' do
     setup do
       @person = FactoryGirl.create(:person)
       @organization = FactoryGirl.create(:organization)
@@ -11,14 +11,14 @@ class QuestionSetTest < ActiveSupport::TestCase
       @element = FactoryGirl.create(:element)
     end
 
-    context "AUTOASSIGN" do
+    context 'AUTOASSIGN' do
       setup do
-        @extra = Hash.new
-        @rule = FactoryGirl.create(:rule, rule_code: "AUTOASSIGN")
+        @extra = {}
+        @rule = FactoryGirl.create(:rule, rule_code: 'AUTOASSIGN')
         @survey_element = FactoryGirl.create(:survey_element, survey: @survey, element: @element, position: 1)
       end
 
-      should " to group" do
+      should ' to group' do
         @extra['type'] = 'group'
         FactoryGirl.create(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
 
@@ -27,17 +27,17 @@ class QuestionSetTest < ActiveSupport::TestCase
 
         query = group.group_memberships.where(person_id: @person.id)
         assert_equal 1, query.count
-        assert_equal "member", query.first.role
+        assert_equal 'member', query.first.role
       end
 
-      should " to leader" do
+      should ' to leader' do
         @extra['type'] = 'leader'
         FactoryGirl.create(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
 
         assert ContactAssignment.count
       end
 
-      should " to ministry" do
+      should ' to ministry' do
         @extra['type'] = 'ministry'
         FactoryGirl.create(:question_rule, rule: @rule, survey_element: @survey_element, extra_parameters: @extra)
 

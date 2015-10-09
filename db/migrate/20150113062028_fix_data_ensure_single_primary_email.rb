@@ -17,9 +17,9 @@ class FixDataEnsureSinglePrimaryEmail < ActiveRecord::Migration
         fe = first_email.email.downcase if first_email.email.present?
         puts "  Fix #{fe}: New Primary (update)"
       end
-      first_email.update_attributes(email: fe.gsub(",","."))
+      first_email.update_attributes(email: fe.tr(",","."))
       emails.each do |email|
-        email.update_attributes(email: email.email.gsub(",","."))
+        email.update_attributes(email: email.email.tr(",","."))
         if email != first_email
           e = email.email.downcase
           if e == fe

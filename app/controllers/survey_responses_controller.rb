@@ -1,15 +1,15 @@
 class SurveyResponsesController < ApplicationController
-  before_filter :get_person
-  before_filter :get_survey, except: [:show, :edit, :answer_other_surveys]
-  before_filter :set_keyword_cookie, only: :new
-  before_filter :prepare_for_mobile, except: [:show, :edit, :answer_other_surveys]
-  before_filter :set_locale
-  skip_before_filter :authenticate_user!, except: [:update, :live]
-  skip_before_filter :check_url
+  before_action :get_person
+  before_action :get_survey, except: [:show, :edit, :answer_other_surveys]
+  before_action :set_keyword_cookie, only: :new
+  before_action :prepare_for_mobile, except: [:show, :edit, :answer_other_surveys]
+  before_action :set_locale
+  skip_before_action :authenticate_user!, except: [:update, :live]
+  skip_before_action :check_url
 
   def new
     unless mhub? || Rails.env.test?
-      port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : ""
+      port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : ''
       protocol = Rails.env.development? ? 'http' : 'https'
 
       redirect_to new_survey_response_url(survey_id: params[:survey_id], preview: params[:preview], host: ENV.fetch('PUBLIC_HOST'), protocol: protocol, port: port)
@@ -30,7 +30,7 @@ class SurveyResponsesController < ApplicationController
           @person.last_name = @sms.person.last_name
         end
       else
-        @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect {|p| p.number_with_country_code == @sms.phone_number}
+        @person.phone_numbers.create!(number: @sms.phone_number, location: 'mobile') unless @person.phone_numbers.detect { |p| p.number_with_country_code == @sms.phone_number }
         @sms.update_attribute(:person_id, @person.id) unless @sms.person_id
       end
     end
@@ -39,11 +39,11 @@ class SurveyResponsesController < ApplicationController
       @title = @survey.terminology
       @answer_sheet = get_answer_sheet(@survey, @person)
       respond_to do |format|
-        format.html { render :layout => 'mhub'}
+        format.html { render layout: 'mhub' }
         format.mobile
       end
     else
-      render_404 and return
+      render_404 && return
     end
   end
 
@@ -79,7 +79,7 @@ class SurveyResponsesController < ApplicationController
 
     @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
 
-    ['birth_date','graduation_date'].each do |attr_name|
+    %w(birth_date graduation_date).each do |attr_name|
       if date_element = @survey.questions.where(attribute_name: attr_name)
         if date_element.present? && params[:answers]["#{date_element.first.id}"].present?
           @person.birth_date = params[:answers]["#{date_element.first.id}"] if attr_name == 'birth_date'
@@ -97,14 +97,14 @@ class SurveyResponsesController < ApplicationController
       else
         @current_person = @person
         respond_to do |format|
-          format.html { render :thanks, layout: 'mhub'}
+          format.html { render :thanks, layout: 'mhub' }
           format.mobile { render :thanks }
         end
       end
     else
       @answer_sheet = get_answer_sheet(@survey, @person)
       respond_to do |format|
-        format.html { render :new, layout: 'mhub'}
+        format.html { render :new, layout: 'mhub' }
         format.mobile { render :new }
       end
     end
@@ -113,14 +113,14 @@ class SurveyResponsesController < ApplicationController
   def create
     @new_person = false
     @title = @survey.terminology
-    if params[:preview] != "true"
+    if params[:preview] != 'true'
       Person.transaction do
         @person = current_person # first try for a logged in person
 
         # Ensure that there's a person hash
-        params[:person] = Hash.new unless params[:person]
+        params[:person] = {} unless params[:person]
 
-        ['birth_date','graduation_date', 'email'].each do |attr_name|
+        %w(birth_date graduation_date email).each do |attr_name|
           if element = @survey.questions.where(attribute_name: attr_name).first
             if element.predefined? && params[:answers]["#{element.id}"].present?
               params[:person][:"#{attr_name}"] = params[:answers]["#{element.id}"]
@@ -149,7 +149,7 @@ class SurveyResponsesController < ApplicationController
         if faculty_element = @survey.questions.where(attribute_name: 'faculty').first
           is_faculty = params[:answers]["#{faculty_element.id}"]
           if faculty_element.present? && is_faculty.present?
-            params[:answers]["#{faculty_element.id}"] = is_faculty.downcase == "yes" ? true : false
+            params[:answers]["#{faculty_element.id}"] = is_faculty.downcase == 'yes' ? true : false
           end
         end
 
@@ -195,7 +195,7 @@ class SurveyResponsesController < ApplicationController
                 if @survey.redirect_url.to_s =~ /https?:\/\//
                   redirect_to @survey.redirect_url and return false
                 else
-                  format.html { render :thanks, layout: 'mhub'}
+                  format.html { render :thanks, layout: 'mhub' }
                   format.mobile { render :thanks }
                 end
               end
@@ -203,14 +203,14 @@ class SurveyResponsesController < ApplicationController
           else
             @answer_sheet = get_answer_sheet(@survey, @person)
             respond_to do |format|
-              format.html { render :new, layout: 'mhub'}
+              format.html { render :new, layout: 'mhub' }
               format.mobile { render :new }
             end
           end
         else
           @answer_sheet = get_answer_sheet(@survey, @person)
           respond_to do |format|
-            format.html { render :new, layout: 'mhub'}
+            format.html { render :new, layout: 'mhub' }
             format.mobile { render :new }
           end
         end
@@ -219,7 +219,7 @@ class SurveyResponsesController < ApplicationController
       # Preview Only
       @preview = true
       respond_to do |format|
-        format.html { render :thanks, layout: 'mhub'}
+        format.html { render :thanks, layout: 'mhub' }
         format.mobile { render :thanks }
       end
     end
@@ -232,6 +232,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   protected
+
   def save_survey
     @person.update_attributes(params[:person]) if params[:person]
     @answer_sheet = @person.answer_sheet_for_survey(@survey.id)
@@ -239,7 +240,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def destroy_answer_sheet_when_answers_are_all_blank
-    @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject{|x| [true,false].include?(x) || x.nil? || x.empty?}.blank?) # if a person has blank answers in a survey, destroy!
+    @answer_sheet.destroy if !params[:answers].present? || (params[:answers] && params[:answers].values.reject { |x| [true, false].include?(x) || x.nil? || x.empty? }.blank?) # if a person has blank answers in a survey, destroy!
   end
 
   def get_person

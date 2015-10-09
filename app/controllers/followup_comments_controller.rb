@@ -1,5 +1,4 @@
 class FollowupCommentsController < ApplicationController
-
   def index
     get_comments
 
@@ -33,15 +32,15 @@ class FollowupCommentsController < ApplicationController
   def get_comments
     @q = Person.where('1 <> 1').search(params[:q])
     @comments = current_user.person
-                            .followup_comments
-                            .joins(:contact)
-                            .where(:organization_id => current_organization.id)
+                .followup_comments
+                .joins(:contact)
+                .where(organization_id: current_organization.id)
 
-    if !params[:query].blank?
-      @comments = @comments.where("comment LIKE ?", "%#{params[:query]}%")
+    unless params[:query].blank?
+      @comments = @comments.where('comment LIKE ?', "%#{params[:query]}%")
     end
 
     @comments = @comments.order(params[:q] && params[:q][:s] ? params[:q][:s] : ['created_at'])
-                         .page(params[:page])
+                .page(params[:page])
   end
 end

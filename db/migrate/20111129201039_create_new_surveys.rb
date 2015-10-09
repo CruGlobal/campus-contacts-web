@@ -2,11 +2,11 @@ class CreateNewSurveys < ActiveRecord::Migration
   def change
 
     create_table :surveys do |t|
-      t.string   "title",                  :limit => 100,  :default => "",       :null => false
+      t.string   "title",                  limit: 100,  default: "",       null: false
       t.integer  "organization_id"
       t.text     "post_survey_message"
-      t.string   "terminology",                            :default => "Survey"
-      t.integer  "login_option",                           :default => 0
+      t.string   "terminology",                            default: "Survey"
+      t.integer  "login_option",                           default: 0
       t.boolean  "is_frozen"
       t.text     "login_paragraph"
       t.string   "logo_file_name"
@@ -21,7 +21,7 @@ class CreateNewSurveys < ActiveRecord::Migration
       t.string   "background_color"
       t.string   "text_color"
       t.integer  "crs_registrant_type_id"
-      t.string   "redirect_url",           :limit => 2000
+      t.string   "redirect_url",           limit: 2000
       t.timestamps
     end
   end
