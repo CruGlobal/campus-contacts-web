@@ -15,10 +15,10 @@ class Omniauth::Facebook
   #   Retrieve access_token from authorization_code
   #   Retrieve User_Info hash from access_token
   def self.authenticate(code)
-    provider = self.new
+    provider = new
     access_token = provider.get_access_token(code)
     user_info    = provider.get_user_profile(access_token)
-    return user_info, access_token
+    [user_info, access_token]
   end
 
   # Used to revoke the application permissions and login if a user
@@ -30,7 +30,7 @@ class Omniauth::Facebook
   #   Send DELETE /me/permissions?access_token=XXX
   def self.deauthorize(access_token)
     options  = { query: { access_token: access_token } }
-    response = self.delete('/me/permissions', options)
+    response = delete('/me/permissions', options)
 
     # Something went wrong most propably beacuse of the connection.
     unless response.success?
@@ -72,12 +72,12 @@ class Omniauth::Facebook
   # https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.3#confirm
   def query(code)
     {
-        query: {
-            code: code,
-            redirect_uri: "http://localhost:3000/",
-            client_id: ENV['FB_APP_ID'],
-            client_secret: ENV['FB_SECRET']
-        }
+      query: {
+        code: code,
+        redirect_uri: 'http://localhost:3000/',
+        client_id: ENV['FB_APP_ID'],
+        client_secret: ENV['FB_SECRET']
+      }
     }
   end
 end

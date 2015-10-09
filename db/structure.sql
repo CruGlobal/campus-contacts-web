@@ -1830,6 +1830,7 @@ CREATE TABLE `users` (
   `locale` varchar(255) DEFAULT NULL,
   `settings` text,
   `timezone` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `CK_simplesecuritymanager_user_username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2333986 DEFAULT CHARSET=utf8;
@@ -2976,6 +2977,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150904043048');
 INSERT INTO schema_migrations (version) VALUES ('20150904043110');
 
 INSERT INTO schema_migrations (version) VALUES ('20150925143003');
+
+INSERT INTO schema_migrations (version) VALUES ('20151009143553');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 

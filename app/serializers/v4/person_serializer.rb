@@ -1,8 +1,7 @@
 class V4::PersonSerializer < ActiveModel::Serializer
-
   HAS_MANY_SIMPLE = [:addresses, :phone_numbers, :email_addresses, :person_transfers, :assigned_tos, :all_organization_and_children, :organizational_labels]
   HAS_MANY_CUSTOM = [:contact_assignments, :interactions, :all_organizational_permissions]
-  HAS_MANY = HAS_MANY_SIMPLE + HAS_MANY_CUSTOM;
+  HAS_MANY = HAS_MANY_SIMPLE + HAS_MANY_CUSTOM
 
   HAS_ONE_SIMPLE = [:user, :current_address]
   HAS_ONE_CUSTOM = [:organizational_permission]
@@ -25,9 +24,7 @@ class V4::PersonSerializer < ActiveModel::Serializer
     includes = scope if scope.is_a? Array
     includes = scope[:include] if scope.is_a? Hash
     includes.each do |rel|
-      if INCLUDES.include?(rel.to_sym)
-        include!(rel.to_sym)
-      end
+      include!(rel.to_sym) if INCLUDES.include?(rel.to_sym)
     end if includes
   end
 
@@ -46,7 +43,6 @@ class V4::PersonSerializer < ActiveModel::Serializer
   def interactions
     add_since(object.filtered_interactions(scope[:user].person, scope[:organization]))
   end
-
 
   def contact_assignments
     active_people_ids = scope[:organization].all_people.collect(&:id)
@@ -76,7 +72,7 @@ class V4::PersonSerializer < ActiveModel::Serializer
     end
     hash
   end
-  
+
   def get_person_answers(object, answer_sheet)
     answers = []
     answer_sheet.survey.questions.each do |question|
@@ -92,12 +88,12 @@ class V4::PersonSerializer < ActiveModel::Serializer
         question_id: question.id,
         id: answer_id,
         question: question.label,
-        value: answer_value || ""
+        value: answer_value || ''
       }
     end
-    return answers
+    answers
   end
-  
+
   def backported_answer_sheets(org_id)
     surveys = Organization.find(org_id).surveys
     answer_sheets = []
@@ -175,7 +171,7 @@ class V4::PersonSerializer < ActiveModel::Serializer
     end
 
     organizational_roles = organizational_permissions_array + organizational_labels_array
-    return organizational_roles
+    organizational_roles
   end
 
   def serialize_organizational_permission(organizational_permission)
@@ -214,7 +210,7 @@ class V4::PersonSerializer < ActiveModel::Serializer
     if interaction.receiver.present?
       followup_comment['status'] = interaction.receiver.organizational_permission_for_org(scope[:organization]).try(:followup_status)
     else
-      followup_comment['status'] = ""
+      followup_comment['status'] = ''
     end
     followup_comment['organization_id'] = interaction.organization_id
     followup_comment['updated_at'] = interaction.updated_at
@@ -222,6 +218,4 @@ class V4::PersonSerializer < ActiveModel::Serializer
     followup_comment['deleted_at'] = interaction.deleted_at
     followup_comment
   end
-
 end
-
