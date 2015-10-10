@@ -94,12 +94,12 @@ end
 
 group :development do
   gem 'rails-footnotes'#, '~> 3.7.9'
-  gem 'bullet' , '~> 4.6.0'
+  gem 'bullet'#, '~> 4.6.0'
   gem 'travis-lint'#, '~> 1.7.0'
   gem 'mailcatcher'# , '~> 0.5.12'
   gem 'railroady'#, '~> 1.1.1'
   gem 'better_errors'#, '>= 0.7.2'
- #gem 'localeapp'
+  # gem 'localeapp'
 end
 
 group :performance do
