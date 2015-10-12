@@ -3,7 +3,6 @@ require 'httparty'
 # http://stackoverflow.com/a/30419460/879524
 class Omniauth::Facebook
   include HTTParty
-  debug_output $stdout
 
   # The base uri for facebook graph API
   base_uri 'https://graph.facebook.com/v2.3'
