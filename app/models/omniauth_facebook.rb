@@ -73,7 +73,7 @@ class Omniauth::Facebook
     {
       query: {
         code: code,
-        redirect_uri: 'http://localhost:3001/',
+        redirect_uri: ENV['FB_REDIRECT_URI'],
         client_id: ENV['FB_APP_ID'],
         client_secret: ENV['FB_SECRET']
       }

@@ -10,7 +10,7 @@ class Apis::V4::SessionsController < Apis::V4::BaseController
     if user
       user.ensure_has_token
 
-      payload = {token: user.token}.dup
+      payload = { token: user.token }
       payload['exp'] = 48.hours.from_now.to_i
       token = JWT.encode(payload, ENV['JSON_WEB_TOKEN_SECRET'], 'HS256')
 
