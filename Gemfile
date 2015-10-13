@@ -77,6 +77,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'guard'#, '~> 1.8.2'
   gem 'guard-minitest'
+  gem 'guard-rubocop'
   gem 'awesome_print'#, '~> 1.2.0'
   gem 'quiet_assets'#, '~> 1.0.2'
 end

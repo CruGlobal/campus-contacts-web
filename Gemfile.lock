@@ -252,6 +252,9 @@ GEM
     guard-minitest (2.4.4)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
+    guard-rubocop (1.2.0)
+      guard (~> 2.0)
+      rubocop (~> 0.20)
     has_scope (0.6.0)
       actionpack (>= 3.2, < 5)
       activesupport (>= 3.2, < 5)
@@ -606,6 +609,7 @@ DEPENDENCIES
   ffaker
   guard
   guard-minitest
+  guard-rubocop
   http_accept_language
   i18n-js
   infobase (~> 1.1.1)
