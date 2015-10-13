@@ -2,7 +2,7 @@ class Apis::V4::PeopleController < Apis::V4::BaseController
   before_action :get_person, only: [:show, :update, :destroy, :archive]
 
   def index
-    render json: filtered_people,
+    render json: people,
            callback: params[:callback],
            scope: { include: includes, organization: current_organization, user: current_user }
   end
