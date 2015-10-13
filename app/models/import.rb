@@ -33,10 +33,23 @@ class Import < ActiveRecord::Base
     created_at.strftime('Import-%Y-%m-%d')
   end
 
+  def first_name_question_id
+    Element.find_by(attribute_name: 'first_name')
+      .survey_elements.find_by(survey_id: ENV['PREDEFINED_SURVEY']).id.to_s
+  end
+
   def get_new_people # generates array of Person hashes
     new_people = []
-    first_name_question_id = Element.find_by(attribute_name: 'first_name').id
-    email_question_id = Element.find_by(attribute_name: 'email').id
+    first_name_col = nil
+    header_mappings.each do |col, se_id|
+      first_name_col = col.to_i if se_id == first_name_question_id
+    end
+    email_question_id = Element.find_by(attribute_name: 'email')
+                        .survey_elements.find_by(survey_id: ENV['PREDEFINED_SURVEY']).id.to_s
+    email_col = nil
+    header_mappings.each do |col, se_id|
+      email_col = col.to_i if se_id == email_question_id
+    end
 
     file = URI.parse(upload.expiring_url).read.encode('utf-8', 'iso-8859-1')
     content = CSV.new(file, headers: :first_row)
@@ -44,14 +57,12 @@ class Import < ActiveRecord::Base
     content.each do |row|
       person_hash = {}
       person_hash[:person] = {}
-      person_hash[:person][:first_name] = row[header_mappings.invert[first_name_question_id.to_s].to_i]
-      if header_mappings.invert[email_question_id.to_s].present? && row[header_mappings.invert[email_question_id.to_s].to_i].present?
-        person_hash[:person][:email] = row[header_mappings.invert[email_question_id.to_s].to_i]
-      end
+      person_hash[:person][:first_name] = row[first_name_col]
+      person_hash[:person][:email] = row[email_col] if row[email_col].present?
 
       answers = {}
-      header_mappings.keys.each do |k|
-        answers[header_mappings[k].to_i] = row[k.to_i] unless header_mappings[k] == '' || header_mappings[k] == 'do_not_import'
+      header_mappings.each do |col, se|
+        answers[se.to_i] = row[col.to_i] unless se == '' || se == 'do_not_import'
       end
       person_hash[:answers] = answers
 
@@ -66,10 +77,10 @@ class Import < ActiveRecord::Base
 
     # since first name is required for every contact. Look for id of element where
     # attribute_name = 'first_name' in the header_mappings.
-    first_name_question = Element.find_by(attribute_name: 'first_name').id.to_s
-    unless header_mappings.values.include?(first_name_question)
-      errors << I18n.t('contacts.import_contacts.present_first_name')
+    has_header = header_mappings.any? do |_col, se|
+      se == first_name_question_id
     end
+    errors << I18n.t('contacts.import_contacts.present_first_name') unless has_header
 
     a = header_mappings.values
     a.delete('')
@@ -140,7 +151,7 @@ class Import < ActiveRecord::Base
     person.save
 
     unless @surveys_for_import
-      @survey_ids ||= SurveyElement.where(element_id: row[:answers].keys).pluck(:survey_id) - [ENV.fetch('PREDEFINED_SURVEY')]
+      @survey_ids ||= SurveyElement.where(id: row[:answers].keys).pluck(:survey_id) - [ENV.fetch('PREDEFINED_SURVEY')]
       @surveys_for_import = current_organization.surveys.where(id: @survey_ids.uniq)
     end
 
@@ -149,16 +160,17 @@ class Import < ActiveRecord::Base
     @surveys_for_import.each do |survey|
       answer_sheet = get_answer_sheet(survey, person)
       question_set = QuestionSet.new(survey.questions, answer_sheet)
-      question_set.post(row[:answers], answer_sheet)
+      element_responses = row[:answers].map { |k, v| [SurveyElement.find(k).element_id, v] }
+      question_set.post(element_responses, answer_sheet)
       question_sets << question_set
     end
 
     new_phone_numbers = []
     # Set values for predefined questions
     answer_sheet = AnswerSheet.new(person_id: person.id)
-    predefined = Survey.find(ENV.fetch('PREDEFINED_SURVEY'))
-    predefined.elements.where('object_name is not null').find_each do |question|
-      answer = row[:answers][question.id]
+    SurveyElement.where(survey_id: ENV.fetch('PREDEFINED_SURVEY')).joins(:element).where.not(elements: { object_name: nil }).each do |se|
+      question = se.element
+      answer = row[:answers][se.id]
       if answer.present?
 
         # create unique phone number but not a primary
@@ -202,15 +214,15 @@ class Import < ActiveRecord::Base
     @table = []
     questions = []
     @answered_question_ids.each do |a|
-      questions << Element.find(a).label
+      questions << SurveyElement.find(a).element.label
     end
     @table << questions
 
     if excel_answers.present?
       excel_answers.each do |new_person|
         all_answers = []
-        @answered_question_ids.each do |q|
-          all_answers << new_person[:answers][q]
+        @answered_question_ids.each do |se|
+          all_answers << new_person[:answers][se]
         end
         @table << all_answers
       end
