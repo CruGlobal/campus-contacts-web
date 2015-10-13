@@ -653,6 +653,7 @@ DEPENDENCIES
   i18n-js
   infobase (~> 1.1.1)
   jquery-rails
+  jwt
   kaminari
   mailcatcher
   minitest-rails
