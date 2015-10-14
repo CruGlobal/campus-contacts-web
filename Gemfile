@@ -72,6 +72,9 @@ gem 'protected_attributes'
 gem 'silencer'
 gem 'syslog-logger'
 gem 'rack-mini-profiler'
+gem 'rack-cors', require: 'rack/cors'
+gem 'has_secure_token'
+gem 'jwt'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -80,6 +83,8 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'awesome_print'#, '~> 1.2.0'
   gem 'quiet_assets'#, '~> 1.0.2'
+  gem 'rspec-rails'
+  gem 'rspec_api_documentation'
 end
 
 group :test do
@@ -91,7 +96,10 @@ group :test do
   gem 'mocha', require: false
   gem 'ffaker'#, '~> 1.20.0'
   gem 'rubocop', '~> 0.34.0'
+  gem 'rack-test'
+  gem 'spring'
 end
+
 
 group :development do
   gem 'rails-footnotes'#, '~> 3.7.9'
@@ -122,3 +130,4 @@ gem 'compass-rails', github: 'Compass/compass-rails', branch: 'master'
 gem 'compass-normalize'#, '~> 1.4.3'
 gem 'susy'#, '~> 1.0.9'
 gem 'bootstrap-sass'#, '~> 3.1.0'
+gem 'raddocs'

@@ -7,6 +7,7 @@ require 'errors/no_ticket_error'
 class User < ActiveRecord::Base
   has_paper_trail on: [:destroy],
                   meta: { person_id: :person_id }
+  has_secure_token
 
   WIZARD_STEPS = %w(welcome verify keyword survey leaders)
   self.primary_key = 'id'
