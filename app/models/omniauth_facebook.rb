@@ -61,7 +61,6 @@ class Omniauth::Facebook
       Rails.logger.error 'Omniauth::Facebook.get_user_profile Failed'
       fail 'errors.auth.facebook.user_profile'
     end
-    p response
     response.parsed_response
   end
 

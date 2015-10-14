@@ -15,7 +15,7 @@ resource 'Apis::V4::Sessions' do
 
     let(:raw_post) { params.to_json }
     example 'logging in' do
-      person = FactoryGirl.create(:v4_person)
+      person = create(:v4_person)
       person.create_user!
       user = person.user
       stub_request(:get, "https://graph.facebook.com/v2.3/oauth/access_token?client_id=#{ENV['FB_APP_ID']}&client_secret=#{ENV['FB_SECRET']}&code=asdf&redirect_uri=#{ENV['FB_REDIRECT_URI']}")

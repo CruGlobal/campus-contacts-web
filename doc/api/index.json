@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "name": "Apis::V4::Sessions",
+      "examples": [
+        {
+          "description": "logging in",
+          "link": "apis::v4::sessions/logging_in.json",
+          "groups": "all",
+          "route": "/apis/v4/sessions",
+          "method": "post"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "resource": "Apis::V4::Sessions",
+  "http_method": "POST",
+  "route": "/apis/v4/sessions",
+  "description": "logging in",
+  "explanation": null,
+  "parameters": [
+    {
+      "name": "provider",
+      "description": "Service Type (google, facebook, ect)"
+    },
+    {
+      "name": "code",
+      "description": "One-time auth code from the service"
+    }
+  ],
+  "response_fields": [
+    {
+      "name": "token",
+      "description": "MH User Auth Token"
+    }
+  ],
+  "requests": [
+    {
+      "request_method": "POST",
+      "request_path": "/apis/v4/sessions",
+      "request_body": "{\"provider\":\"google\",\"code\":\"asdf\"}",
+      "request_headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Host": "example.org",
+        "Cookie": ""
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlE5eFh2NXRoaHlMQUtwOG92RHJUNXNtUyIsImV4cCI6MTQ0NTAwMzc2Mn0.pknXXfQCnWWs71Asb1TnKNAdA7yIww0_o5QbxAP41bU\"\n}",
+      "response_headers": {
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Type": "application/json; charset=utf-8",
+        "ETag": "W/\"4a5c54c35618d1cc82b81166307be1e1\"",
+        "Cache-Control": "max-age=0, private, must-revalidate",
+        "X-Request-Id": "920fa934-311d-4d7e-baf2-6eb37bfbc50a",
+        "X-Runtime": "0.249636",
+        "Vary": "Origin",
+        "Content-Length": "164"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}
