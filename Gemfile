@@ -73,7 +73,6 @@ gem 'silencer'
 gem 'syslog-logger'
 gem 'rack-mini-profiler'
 gem 'rack-cors', require: 'rack/cors'
-gem 'has_secure_token'
 gem 'jwt'
 
 group :development, :test do

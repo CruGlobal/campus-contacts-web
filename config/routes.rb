@@ -391,7 +391,6 @@ Mh::Application.routes.draw do
 
   namespace :apis do
     api_version(module: 'V4', header: { name: 'API-VERSION', value: 'v4' }, parameter: { name: 'version', value: 'v4' }, path: { value: 'v4' }) do
-      resources :sessions
       resources :people
     end
 

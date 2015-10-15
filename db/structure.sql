@@ -1830,7 +1830,6 @@ CREATE TABLE `users` (
   `locale` varchar(255) DEFAULT NULL,
   `settings` text,
   `timezone` varchar(255) DEFAULT NULL,
-  `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `CK_simplesecuritymanager_user_username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2333986 DEFAULT CHARSET=utf8;
@@ -1869,7 +1868,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-13 22:45:40
+-- Dump completed on 2015-10-14 16:03:56
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2377,4 +2376,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150925143003');
 INSERT INTO schema_migrations (version) VALUES ('20151009143553');
 
 INSERT INTO schema_migrations (version) VALUES ('20151013235509');
+
+INSERT INTO schema_migrations (version) VALUES ('20151014200129');
 
