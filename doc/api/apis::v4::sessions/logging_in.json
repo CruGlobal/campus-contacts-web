@@ -1,0 +1,59 @@
+{
+  "resource": "Apis::V4::Sessions",
+  "http_method": "POST",
+  "route": "/apis/v4/sessions",
+  "description": "logging in",
+  "explanation": null,
+  "parameters": [
+    {
+      "name": "provider",
+      "description": "Service Type (google, facebook, ect)"
+    },
+    {
+      "name": "code",
+      "description": "One-time auth code from the service"
+    }
+  ],
+  "response_fields": [
+    {
+      "name": "token",
+      "description": "MH JSON Web Token that will contain a user_id and an expires at"
+    }
+  ],
+  "requests": [
+    {
+      "request_method": "POST",
+      "request_path": "/apis/v4/sessions",
+      "request_body": "{\"provider\":\"facebook\",\"code\":\"asdfasdfasdf\"}",
+      "request_headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Host": "example.org",
+        "Cookie": "",
+        "If-Modified-Since": "",
+        "If-None-Match": ""
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo5LCJleHAiOjE0NDUxODM3ODF9.Nz0mKBNSKgtqDs4Qy7eBE1k7Oe5nqSsJee8Q_EEdNYc\"\n}",
+      "response_headers": {
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store, must-revalidate, private, max-age=0",
+        "X-Request-Id": "7a0e421b-bc66-42f7-9df3-d9e5450732e5",
+        "X-Runtime": "0.279372",
+        "Vary": "Origin",
+        "Set-Cookie": "__profilin=p%3Dt; path=/\n__profilin=p%3Dt; path=/\n__profilin=p%3Dt; path=/",
+        "X-MiniProfiler-Ids": "[\"yg5jf2u6na4vxxgf6ffj\",\"cu5lngj2wpnl5npk6bic\",\"49b4mc2kidtbzhyvxg99\",\"ylyeswc5ajxmyufr49nf\",\"1nr4vypu1ch69vx5ti8q\"]",
+        "Content-Length": "133"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}
