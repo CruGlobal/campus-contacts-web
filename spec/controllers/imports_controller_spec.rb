@@ -196,13 +196,20 @@ RSpec.describe ImportsController, type: :controller do
       it_behaves_like 'failed import', 'sample_import_3.csv'
     end
 
-    # it 'creates an import if trailing blank headers' do
-    #   expect do
-    #     stub_s3_with_file('sample_import_10.csv')
-    #     post_create_with_file('sample_import_10.csv')
-    #     assert_response :redirect
-    #   end.to change { Import.count }.by(1)
-    # end
+    it 'creates an import if trailing blank headers' do
+      expect do
+        stub_s3_with_file('sample_import_10.csv')
+        post_create_with_file('sample_import_10.csv')
+        assert_response :redirect
+        post :update, import: {
+          header_mappings: {
+            '0' => @first_name_element.id, '1' => @last_name_element.id,
+            '2' => @phone_element.id, '3' => @email_element.id }
+        },
+                      id: Import.first.id
+        Import.last.do_import([])
+      end.to change { Import.count }.by(1).and change { Person.count }.by(1)
+    end
 
     def post_update_with_predefined_headers
       stub_s3_with_file('sample_import_1.csv')
