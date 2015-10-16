@@ -239,25 +239,23 @@ class Import < ActiveRecord::Base
     # Rather than to set the validation from model, it's too strict.
     fail InvalidCSVFormat unless File.extname(upload.original_filename) == '.csv'
 
-    unless tempfile.nil?
-      ctr = 0
-      CSV.foreach(tempfile.path, 'r:iso-8859-1:utf-8') do |row|
-        Rails.logger.info "---COLLECT#{ctr}---"
-        if ctr == 0
-          begin
-            # if there is a nil headers
-            fail NilColumnHeader if row && row.length - row.compact.length != 0
-            self.headers = row.compact
-          rescue
-            raise NilColumnHeader
-          end
-          fail NilColumnHeader if headers.empty?
-        elsif ctr == 1
-          self.preview = row
-        else
-          break
+    return if tempfile.nil?
+
+    CSV.foreach(tempfile.path, 'r:iso-8859-1:utf-8').each_with_index do |row, index|
+      Rails.logger.info "---COLLECT#{index}---"
+      break if index > 1
+      if index == 0
+        begin
+          row.pop while row.length > 0 && row.last.blank?
+          # if there is a nil headers
+          fail NilColumnHeader if row && row.length - row.compact.length != 0
+          self.headers = row.compact
+        rescue
+          raise NilColumnHeader
         end
-        ctr += 1
+        fail NilColumnHeader if headers.empty?
+      elsif index == 1
+        self.preview = row
       end
     end
   end

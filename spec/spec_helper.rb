@@ -23,6 +23,8 @@ require 'factory_girl'
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+  config.include Devise::TestHelpers, type: :controller
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -95,8 +97,11 @@ end
 
 FactoryGirl.reload
 
-# RspecApiDocumentation.configure do |config|
-#   # Set the application that Rack::Test uses
-#   config.app = Rails.application
-#   config.format = :json
-# end
+def admin_user_login_with_org
+  user = FactoryGirl.create(:user_with_auxs)
+  org = user.person.organizations.first
+  @request.session[:current_organization_id] = org.id
+
+  sign_in user
+  [user, org]
+end
