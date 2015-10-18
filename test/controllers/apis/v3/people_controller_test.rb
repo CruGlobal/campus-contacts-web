@@ -81,6 +81,16 @@ class Apis::V3::PeopleControllerTest < ActionController::TestCase
         assert_not_nil json['errors'], json.inspect
       end
     end
+    context 'P2C request' do
+      setup do
+        @org.update_attribute(:ancestry, ENV['POWER_TO_CHANGE_ORG_ID'].to_s)
+        @token = @user_token.code
+      end
+      should 'return a list of people' do
+        get :index, access_token: @token
+        assert_response :success
+      end
+    end
   end
 
   context '.show' do
