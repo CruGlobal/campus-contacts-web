@@ -560,12 +560,12 @@ input.text.validate-date {
     padding-left: 20px;
   }
   .note {
-		margin: 10px 0 15px;
-		font-family: Georgia;
-		font-size: 13px;
-		font-style: italic;
-		font-weight: normal;
-		color: #808284;
+    margin: 10px 0 15px;
+    font-family: Georgia;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: normal;
+    color: #808284;
     .reply_to_toggle {
       vertical-align: top;
       .reply_to_info {
@@ -577,9 +577,11 @@ input.text.validate-date {
   }
   .mh_popup_box{
     width:733px;
+    max-height: 90%;
+    overflow: auto;
   }
   .mh_popup_buttons {
-  	width:721px;
+    width:721px;
   }
 
 }
