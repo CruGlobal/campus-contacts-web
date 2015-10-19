@@ -5,6 +5,8 @@ class Apis::V3::BaseController < ApplicationController
   skip_before_action :check_valid_subdomain
   skip_before_action :set_locale
   skip_before_action :check_url
+  skip_before_action :check_signature
+  skip_before_action :check_all_signatures
   before_action :force_client_update
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
