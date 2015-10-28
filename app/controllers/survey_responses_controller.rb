@@ -4,6 +4,7 @@ class SurveyResponsesController < ApplicationController
   before_action :set_keyword_cookie, only: :new
   before_action :prepare_for_mobile, except: [:show, :edit, :answer_other_surveys]
   before_action :set_locale
+  before_action :remove_frame_header
   skip_before_action :authenticate_user!, except: [:update, :live]
   skip_before_action :check_url
 
@@ -245,5 +246,10 @@ class SurveyResponsesController < ApplicationController
 
   def get_person
     @person = current_person || Person.new
+  end
+
+  def remove_frame_header
+    # we want users to be able to embed surveys in iframes
+    response.headers.delete('X-Frame-Options')
   end
 end
