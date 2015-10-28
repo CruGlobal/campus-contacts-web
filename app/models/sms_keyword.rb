@@ -1,6 +1,8 @@
 require 'async'
 class SmsKeyword < ActiveRecord::Base
-  attr_accessible :keyword, :event_id, :organization_id, :chartfield, :user_id, :explanation, :state, :initial_response, :post_survey_message_deprecated, :event_type, :gateway, :survey_id, :mpd, :mpd_phone_number
+  attr_accessible :keyword, :event_id, :organization_id, :chartfield, :user_id, :explanation, :state,
+                  :initial_response, :post_survey_message_deprecated, :event_type, :gateway,
+                  :survey_id, :mpd, :mpd_phone_number, :organization
 
   include Async
   include Sidekiq::Worker
@@ -30,9 +32,13 @@ class SmsKeyword < ActiveRecord::Base
   belongs_to :event, polymorphic: true
   belongs_to :organization
   validates_presence_of :keyword, :explanation, :user_id, :organization_id # , :chartfield
-  validates_presence_of :survey_id, message: "You must associate an existing survey to this keyword. If you want to create a new survey, go to the upper left of the screen under the \"Survey\" tab, click on the \"Create Survey\" link. When finished return to this screen and associate the newly created survey."
+  validates_presence_of :survey_id, message:
+    "You must associate an existing survey to this keyword. If you want to create a new survey, go "\
+    "to the upper left of the screen under the \"Survey\" tab, click on the \"Create Survey\" link. "\
+    "When finished return to this screen and associate the newly created survey."
   # validates_format_of :keyword, with: /^[\w\d]+$/, on: :create, message: "can't have spaces or punctuation"
-  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message: 'This keyword has already been taken by someone else. Please choose something else'
+  validates_uniqueness_of :keyword, on: :create, case_sensitive: false, message:
+    'This keyword has already been taken by someone else. Please choose something else'
 
   state_machine :state, initial: :requested do
     state :requested
