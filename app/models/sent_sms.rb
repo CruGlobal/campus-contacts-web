@@ -6,7 +6,8 @@ class SentSms < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true
 
-  attr_accessible :message_id, :message, :recipient, :reports, :moonshado_claimcheck, :sent_via, :status, :received_sms_id, :twilio_sid, :twilio_uri, :separator, :question_id
+  attr_accessible :message_id, :message, :recipient, :reports, :moonshado_claimcheck, :sent_via,
+                  :status, :received_sms_id, :twilio_sid, :twilio_uri, :separator, :question_id
   stores_emoji_characters :message
 
   belongs_to :received_sms
@@ -51,7 +52,7 @@ class SentSms < ActiveRecord::Base
 
   def to_twilio
     twiml = Twilio::TwiML::Response.new do |r|
-      r.Message "#{CGI.escapeHTML(message.strip)}"
+      r.Message message.strip
     end
     twiml.text
   end
@@ -163,7 +164,8 @@ class SentSms < ActiveRecord::Base
           end
         rescue Twilio::REST::RequestError => e
           msg = e.message
-          if msg.index('is not a mobile number') || msg.index('is not a valid phone number') || msg.index('is not currently reachable')
+          if msg.index('is not a mobile number') || msg.index('is not a valid phone number') ||
+             msg.index('is not currently reachable')
             phone_number.not_mobile!
           else
             Rollbar.error(e)
