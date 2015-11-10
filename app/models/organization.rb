@@ -821,27 +821,10 @@ class Organization < ActiveRecord::Base
 
   def move_contact(person, from_org, to_org, keep_contact, current_admin = nil,
                    copy_survey_answers = false, copy_interactions = false)
-    @followup_comments = followup_comments.where(contact_id: person.id)
-    @rejoicables = rejoicables.where(person_id: person.id)
 
     to_org.add_contact(person)
 
-    if keep_contact == 'false'
-      # move call followup comments
-      @followup_comments.update_all(organization_id: to_org.id)
-      @rejoicables.update_all(organization_id: to_org.id)
-      delete_person(person)
-    else
-      # copy followup comments
-      @followup_comments.each do |fc|
-        to_org.followup_comments.create(fc.attributes.slice(:contact_id, :commenter_id, :status,
-                                                            :comment, :updated_at, :created_at, :deleted_at))
-        @rejoicables.where(followup_comment_id: fc.id).each do |r|
-          to_org.rejoicables.create(r.attributes.slice(:person_id, :created_by_id, :what,
-                                                       :updated_at, :created_at, :deleted_at))
-        end
-      end
-    end
+    delete_person(person) if keep_contact == 'false'
 
     # Copy Survey Questions
     if copy_survey_answers

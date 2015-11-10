@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
                   meta: { person_id: :person_id }
 
   ACCESSIBLE_ATTRS = [:answer_sheet_id, :question_id, :value, :short_value, :auto_notify_sent, :attachment]
-  attr_accessible *ACCESSIBLE_ATTRS
+  attr_accessible(*ACCESSIBLE_ATTRS)
   stores_emoji_characters :value, :short_value
 
   belongs_to :answer_sheet, inverse_of: :answers, touch: true
@@ -72,7 +72,7 @@ class Answer < ActiveRecord::Base
   end
 
   def dup
-    attributes_to_clone = self.attributes.slice(*ACCESSIBLE_ATTRS.map(&:to_s))
+    attributes_to_clone = attributes.slice(*ACCESSIBLE_ATTRS.map(&:to_s))
     Answer.new(attributes_to_clone)
   end
 end
