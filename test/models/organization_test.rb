@@ -467,12 +467,9 @@ class OrganizationTest < ActiveSupport::TestCase
     org2 = FactoryGirl.create(:organization)
     org1.add_contact(contact)
     org1.add_admin(person)
-    FollowupComment.create(contact_id: contact.id, commenter_id: person.id, organization_id: org1.id, comment: 'test', status: 'contacted')
     org1.move_contact(contact, org1, org2, 'false', person, false)
     assert_equal(0, org1.contacts.length)
     assert_equal(1, org2.contacts.length)
-    assert_equal(0, FollowupComment.where(contact_id: contact.id, organization_id: org1.id).count)
-    assert_equal(1, FollowupComment.where(contact_id: contact.id, organization_id: org2.id).count)
   end
 
   test 'move contact with survey answers' do
@@ -551,6 +548,23 @@ class OrganizationTest < ActiveSupport::TestCase
     assert org2.people.include?(contact)
 
     assert_equal 1, contact.interactions.where(organization_id: org2.id).count
+  end
+
+  test 'copy contact with interactions' do
+    person = FactoryGirl.create(:person_with_things)
+    contact = FactoryGirl.create(:person)
+    org1 = FactoryGirl.create(:organization)
+    org2 = FactoryGirl.create(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+
+    interaction_type = FactoryGirl.create(:interaction_type, organization_id: 0, i18n: 'Interaction 1')
+    FactoryGirl.create(:interaction, receiver: contact, creator: person, organization: org1, interaction_type_id: interaction_type.id)
+
+    org1.move_contact(contact, org1, org2, 'true', person, false, true)
+
+    assert_equal 1, contact.interactions.where(organization_id: org2.id).count
+    assert_equal 1, contact.interactions.where(organization_id: org1.id).count
   end
 
   test 'create_admin_user' do

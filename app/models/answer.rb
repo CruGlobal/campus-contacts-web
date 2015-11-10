@@ -10,7 +10,8 @@ class Answer < ActiveRecord::Base
   has_paper_trail on: [:destroy],
                   meta: { person_id: :person_id }
 
-  attr_accessible :answer_sheet_id, :question_id, :value, :short_value, :auto_notify_sent, :attachment
+  ACCESSIBLE_ATTRS = [:answer_sheet_id, :question_id, :value, :short_value, :auto_notify_sent, :attachment]
+  attr_accessible(*ACCESSIBLE_ATTRS)
   stores_emoji_characters :value, :short_value
 
   belongs_to :answer_sheet, inverse_of: :answers, touch: true
@@ -68,5 +69,10 @@ class Answer < ActiveRecord::Base
   def for_birth_date_question
     return false unless question_id.present? && question = Element.find(question_id)
     question.attribute_name == 'birth_date'
+  end
+
+  def dup
+    attributes_to_clone = attributes.slice(*ACCESSIBLE_ATTRS.map(&:to_s))
+    Answer.new(attributes_to_clone)
   end
 end

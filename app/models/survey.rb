@@ -160,8 +160,8 @@ class Survey < ActiveRecord::Base
           new_answer = new_answer_sheet.answers.find_by_question_id(new_element.id)
           unless new_answer.present?
             answers.each do |answer|
-              new_answer = new_answer_sheet.answers.new(answer.attributes, question_id: new_element.id)
-              new_answer.save
+              new_answer = answer.dup
+              new_answer.update(question_id: new_element.element_id, answer_sheet_id: new_answer_sheet.id)
             end
           end
         end
