@@ -19,4 +19,10 @@ Sidekiq.configure_server do |config|
   config.failures_default_mode = :exhausted
 end
 
-Sidekiq.default_worker_options = { backtrace: true }
+Sidekiq.default_worker_options = {
+  backtrace: true,
+
+  # By default the uniqueness lock only lasts for 30 minutes. Make it last
+  # for 23 days (Sidekiq jobs are dead after 22 days of retries typically).
+  unique_job_expiration: 23.days
+}
