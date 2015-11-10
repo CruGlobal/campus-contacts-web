@@ -553,6 +553,23 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal 1, contact.interactions.where(organization_id: org2.id).count
   end
 
+  test 'copy contact with interactions' do
+    person = FactoryGirl.create(:person_with_things)
+    contact = FactoryGirl.create(:person)
+    org1 = FactoryGirl.create(:organization)
+    org2 = FactoryGirl.create(:organization)
+    org1.add_contact(contact)
+    org1.add_admin(person)
+
+    interaction_type = FactoryGirl.create(:interaction_type, organization_id: 0, i18n: 'Interaction 1')
+    FactoryGirl.create(:interaction, receiver: contact, creator: person, organization: org1, interaction_type_id: interaction_type.id)
+
+    org1.move_contact(contact, org1, org2, 'true', person, false, true)
+
+    assert_equal 1, contact.interactions.where(organization_id: org2.id).count
+    assert_equal 1, contact.interactions.where(organization_id: org1.id).count
+  end
+
   test 'create_admin_user' do
     org1 = FactoryGirl.create(:organization)
     person1 = FactoryGirl.create(:person)

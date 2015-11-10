@@ -819,7 +819,8 @@ class Organization < ActiveRecord::Base
     person.remove_assigned_contacts(self)
   end
 
-  def move_contact(person, from_org, to_org, keep_contact, current_admin = nil, copy_survey_answers = false, copy_interactions = false)
+  def move_contact(person, from_org, to_org, keep_contact, current_admin = nil,
+                   copy_survey_answers = false, copy_interactions = false)
     @followup_comments = followup_comments.where(contact_id: person.id)
     @rejoicables = rejoicables.where(person_id: person.id)
 
@@ -833,9 +834,11 @@ class Organization < ActiveRecord::Base
     else
       # copy followup comments
       @followup_comments.each do |fc|
-        to_org.followup_comments.create(fc.attributes.slice(:contact_id, :commenter_id, :status, :comment, :updated_at, :created_at, :deleted_at))
+        to_org.followup_comments.create(fc.attributes.slice(:contact_id, :commenter_id, :status,
+                                                            :comment, :updated_at, :created_at, :deleted_at))
         @rejoicables.where(followup_comment_id: fc.id).each do |r|
-          to_org.rejoicables.create(r.attributes.slice(:person_id, :created_by_id, :what, :updated_at, :created_at, :deleted_at))
+          to_org.rejoicables.create(r.attributes.slice(:person_id, :created_by_id, :what,
+                                                       :updated_at, :created_at, :deleted_at))
         end
       end
     end
@@ -848,11 +851,11 @@ class Organization < ActiveRecord::Base
     end
 
     # Copy Interactions
+    to_org_people_ids = to_org.all_people.pluck(:id)
     if copy_interactions
       person.interactions.where(organization_id: from_org.id).each do |interaction|
-        new_interaction = interaction.clone
+        new_interaction = interaction.dup
         new_interaction.organization_id = to_org.id
-        to_org_people_ids = to_org.all_people.pluck(:id)
 
         new_interaction.created_by_id = nil unless to_org_people_ids.include?(interaction.created_by_id)
         new_interaction.updated_by_id = nil unless to_org_people_ids.include?(interaction.updated_by_id)
@@ -864,7 +867,8 @@ class Organization < ActiveRecord::Base
     # Save transfer log
     val_copy = keep_contact == 'false' ? false : true
     val_transferred_by = current_admin.id if current_admin.present?
-    PersonTransfer.create(person_id: person.id, old_organization_id: id, new_organization_id: to_org.id, transferred_by_id: val_transferred_by, copy: val_copy)
+    PersonTransfer.create(person_id: person.id, old_organization_id: id, new_organization_id: to_org.id,
+                          transferred_by_id: val_transferred_by, copy: val_copy)
   end
 
   def create_admin_user
