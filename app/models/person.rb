@@ -460,8 +460,8 @@ class Person < ActiveRecord::Base
   def person_signature_this_range(org)
     # Get range August to July and Yearly
     range_start_date = "#{Date.today.year}-08-01".to_date
-    range_end_date = range_start_date + 365.days
-    person_signatures.find_by(organization_id: org.id, created_at: range_start_date..range_end_date)
+    range_start_date -= 1.year if Date.today.month < 8
+    person_signatures.where('created_at > ?', range_start_date).find_by(organization: org)
   end
 
   def cru_status(org)
