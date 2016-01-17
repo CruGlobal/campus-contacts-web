@@ -118,8 +118,8 @@ class SmsController < ApplicationController
       if !keyword || !keyword.active?
         # See if they're responding to an outbound text
         outbound_message = Message.includes(:sender)
-                    .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]), sent: true)
-                    .order('created_at desc').first
+                           .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]), sent: true)
+                           .order('created_at desc').first
         if outbound_message
           # Forward this reply on to the sender
           send_message(person.name + ': ' + message, outbound_message.sender.phone_number).send_sms
