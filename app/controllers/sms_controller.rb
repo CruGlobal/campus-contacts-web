@@ -116,6 +116,15 @@ class SmsController < ApplicationController
       first_word = Emojimmy.emoji_to_token(message.downcase).split(' ').first
       keyword = SmsKeyword.where(keyword: first_word).first
       if !keyword || !keyword.active?
+        # See if they're responding to an outbound text
+        outbound_message = Message.includes(:sender)
+                    .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]), sent: true)
+                    .order('created_at desc').first
+        if outbound_message
+          # Forward this reply on to the sender
+          send_message(person.name + ': ' + message, outbound_message.sender.phone_number).send_sms
+          render(xml: blank_response) && return
+        end
         @msg = I18n.t('sms.keyword_inactive')
       elsif !keyword.survey
         @msg = t('sms.no_survey')
