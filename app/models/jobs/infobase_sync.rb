@@ -2,7 +2,11 @@ require 'import_methods'
 
 class Jobs::InfobaseSync
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: true, retry: 4
+
+  sidekiq_retry_in do |_count|
+    1.hours.to_i
+  end
 
   def perform
     root = Organization.where(name: 'Cru').first_or_create
