@@ -94,31 +94,34 @@ class Jobs::InfobaseSync
               end
 
               Rails.logger.debug '------ Importing activity rows...'
-              i = 0
-              activity_json = Infobase::Activity.get('filters[team_id]' => team['id'], 'include' => 'target_area', per_page: 10_000)['activities']
-              activity_json.each do |activity|
-                if activity['target_area'].present?
-                  i += 1
-                  Rails.logger.debug i if i % 1000 == 0
-                  mh_activity = Organization.find_by(importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity')
-                  attribs = { name: "#{strategies[activity['strategy']]} at #{activity['target_area']['name']}", terminology: 'Movement', importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity', status: 'active' }
-                  if mh_activity
-                    mh_activity.update_attributes(attribs)
+              activity_json = Infobase::Activity.get('filters[team_id]' => team['id'],
+                                                     'include' => 'target_area',
+                                                     per_page: 10_000)['activities']
+              activity_json.each_with_index do |activity, i|
+                next unless activity['target_area'].present?
+                Rails.logger.debug i if i % 1000 == 0
+                mh_activity = Organization.find_by(importable_id: activity['id'], importable_type: 'Ccc::MinistryActivity')
+                attribs = { name: "#{strategies[activity['strategy']]} at #{activity['target_area']['name']}",
+                            terminology: 'Movement', importable_id: activity['id'],
+                            importable_type: 'Ccc::MinistryActivity', status: 'active' }
+                # find a child org with the same name
+                mh_activity ||= mh_team.children.find_by(name: attribs[:name])
+                if mh_activity
+                  mh_activity.update_attributes(attribs)
 
-                    if mh_activity.parent_organization != mh_team
-                      mh_activity.parent_organization = mh_team
-                    end
+                  if mh_activity.parent_organization != mh_team
+                    mh_activity.parent_organization = mh_team
+                  end
 
-                    # Ensure that the parents are synchronized
-                    mh_activity.fix_ancestry
-                  else
-                    next unless mh_team
-                    mh_activity = mh_team.children.create!(attribs)
-                    begin
-                      mh_activity.save!
-                    rescue => e
-                      Rails.logger.info e.inspect
-                    end
+                  # Ensure that the parents are synchronized
+                  mh_activity.fix_ancestry
+                else
+                  next unless mh_team
+                  mh_activity = mh_team.children.create!(attribs)
+                  begin
+                    mh_activity.save!
+                  rescue => e
+                    Rails.logger.info e.inspect
                   end
                 end
               end
