@@ -3,7 +3,7 @@ require 'import_methods'
 class Jobs::SummerMissionsSync
   include Sidekiq::Worker
   include Retryable
-  sidekiq_options unique: true
+  sidekiq_options unique: true, retry: false
 
   def perform
     imported_partner = []
