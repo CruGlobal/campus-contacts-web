@@ -11,7 +11,7 @@ module Async
       send(method, *args)
     end
   rescue => e
-    Airbrake.notify(e)
+    Rollbar.error e
     raise
   end
 
