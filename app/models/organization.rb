@@ -267,15 +267,16 @@ class Organization < ActiveRecord::Base
   end
 
   def last_push_to_infobase
+    return @last_push_to_infobase if @last_push_to_infobase
     # check infobase for a stat entry
-    begin
-      stats = JSON.parse(RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}"))
-      @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
-      update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
-    rescue
-      @last_push_to_infobase = created_at.to_date.end_of_week(:sunday)
-    end
+    stats = JSON.parse(RestClient.get(ENV.fetch('INFOBASE_URL') + "/statistics/activity?activity_id=#{importable_id}&begin_date=#{created_at.to_date.to_s(:db)}&end_date=#{Date.today.to_s(:db)}", content_type: :json, accept: :json, authorization: "Bearer #{ENV.fetch('INFOBASE_TOKEN')}"))
+    @last_push_to_infobase = Date.parse(stats['statistics'].last['period_end'])
+    update_column(:last_push_to_infobase, @last_push_to_infobase) if @last_push_to_infobase
     @last_push_to_infobase
+  rescue
+    # use two weeks before so that they can put stats in right away after creating if
+    # there is nothing in infobase
+    @last_push_to_infobase = (created_at - 2.weeks).to_date.end_of_week(:sunday)
   end
 
   def last_week
