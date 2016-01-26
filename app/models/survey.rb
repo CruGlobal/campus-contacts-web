@@ -126,7 +126,8 @@ class Survey < ActiveRecord::Base
 
     # Copy the survey
     unless survey.present?
-      survey = org.surveys.new(attributes)
+      survey = dup
+      survey.organization = org
       survey.copy_from_survey_id = id
       survey.save(validate: false)
     end
@@ -136,7 +137,8 @@ class Survey < ActiveRecord::Base
       if answer_sheet = person.answer_sheets.find_by_survey_id(id)
         new_answer_sheet = person.answer_sheets.find_by_survey_id(survey.id)
         unless new_answer_sheet.present?
-          new_answer_sheet = person.answer_sheets.new(answer_sheet.attributes)
+          new_answer_sheet = answer_sheet.dup
+          new_answer_sheet.completed_at = answer_sheet.completed_at
           new_answer_sheet.survey_id = survey.id
           new_answer_sheet.save
         end
@@ -148,7 +150,8 @@ class Survey < ActiveRecord::Base
       new_element = survey.elements.find_by_id(element.id)
       unless new_element.present?
         if element.predefined? || element.reuseable?
-          new_element = SurveyElement.create(element: element, survey: survey)
+          SurveyElement.create(element: element, survey: survey)
+          new_element = element
         else
           new_element = element.duplicate(survey)
         end
@@ -161,7 +164,7 @@ class Survey < ActiveRecord::Base
           unless new_answer.present?
             answers.each do |answer|
               new_answer = answer.dup
-              new_answer.update(question_id: new_element.element_id, answer_sheet_id: new_answer_sheet.id)
+              new_answer.update(question_id: new_element.id, answer_sheet_id: new_answer_sheet.id)
             end
           end
         end

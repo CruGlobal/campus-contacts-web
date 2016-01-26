@@ -70,9 +70,4 @@ class Answer < ActiveRecord::Base
     return false unless question_id.present? && question = Element.find(question_id)
     question.attribute_name == 'birth_date'
   end
-
-  def dup
-    attributes_to_clone = attributes.slice(*ACCESSIBLE_ATTRS.map(&:to_s))
-    Answer.new(attributes_to_clone)
-  end
 end
