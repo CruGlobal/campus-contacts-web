@@ -2,7 +2,7 @@
 require Rails.root.join('config', 'initializers', 'redis').to_s
 
 redis_settings = { url: Redis.current.client.id,
-                   namespace: "sidekiq:#{Rails.env}" }
+                   namespace: "#{ENV['SIDEKIQ_NAMESPACE'] || 'production'}:#{Rails.env}" }
 
 Sidekiq.configure_client do |config|
   config.redis = redis_settings

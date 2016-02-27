@@ -25,7 +25,7 @@ Person.transaction do
     Label.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
 
     # Surveys
-    predefined = Survey.create(title: 'Predefined Questions')
+    predefined = Survey.create!(title: 'Predefined Questions', post_survey_message: 'Thanks!')
     predefined.elements << TextField.create(label: 'First Name')
     predefined.elements << TextField.create(label: 'Last Name')
     predefined.elements << TextField.create(label: 'Email Address')
