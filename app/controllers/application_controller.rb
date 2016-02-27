@@ -264,7 +264,7 @@ class ApplicationController < ActionController::Base
   def check_valid_subdomain
     return if request.subdomains.first.blank?
     session[:locale] = request.subdomains.first if available_locales.include?(request.subdomains.first)
-    unless %w(local stage aws lwi www).include?(request.subdomains.first)
+    unless %w(local stage aws lwi www pact-hr-production-502563678).include?(request.subdomains.first)
       scheme = ssl_configured? ? 'https://' : 'http://'
       url = scheme + ENV['APP_DOMAIN'] + request.path
       url += "?locale=#{session[:locale]}" if session[:locale].present?
