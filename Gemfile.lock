@@ -462,7 +462,8 @@ GEM
     rest-client (1.6.9)
       mime-types (~> 1.16)
     retryable-rb (1.1.0)
-    rollbar (2.2.1)
+    rollbar (2.7.1)
+      multi_json
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -684,7 +685,7 @@ DEPENDENCIES
   responders (~> 2.0)
   rest-client
   retryable-rb
-  rollbar (~> 2.2.1)
+  rollbar (~> 2.7.1)
   rspec-rails
   rspec_api_documentation
   rubocop (~> 0.34.0)
