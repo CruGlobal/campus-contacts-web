@@ -1,5 +1,5 @@
 class LeaderMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:

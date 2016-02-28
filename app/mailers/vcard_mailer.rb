@@ -1,7 +1,7 @@
 require 'vpim/vcard'
 
 class VcardMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
 
   def vcard(to, person_id, note = nil)
     @other_note = note

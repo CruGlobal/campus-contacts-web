@@ -1,5 +1,5 @@
 class ImportMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
 
   def import_successful(user, table)
     @user = user

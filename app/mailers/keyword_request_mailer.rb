@@ -1,5 +1,5 @@
 class KeywordRequestMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
   layout 'email'
 
   def new_keyword_request(keyword_id)

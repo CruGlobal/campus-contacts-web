@@ -89,7 +89,7 @@ module ApplicationHelper
   end
 
   def site_name
-    mhub? ? '' : 'MissionHub'
+    mhub? ? '' : ENV['SITE_TITLE']
   end
 
   def site_email

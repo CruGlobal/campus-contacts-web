@@ -1,4 +1,4 @@
-<h2>MissionHub API Access</h2>
+<h2><%= ENV['SITE_TITLE'] %> API Access</h2>
 <% if client = current_organization.api_client %>
   <strong>Client ID:</strong> <%= client.id %><br />
   <!-- <strong>Code:</strong> <%= client.code %><br /> -->
