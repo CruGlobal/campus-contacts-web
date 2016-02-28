@@ -2,7 +2,7 @@
 <% care_pattern = /people|contacts|followup_comments/ %>
 <% group_pattern = /groups/ %>
 
-<%= link_to("", "/", id: "logoInvert") %>
+<%= link_to("", "/", id: "logoInvert") if branded? %>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
   <ul class="sc-init-menu sf-menu sf-navbar mh-top">
     <li class="<%= 'current' if request.path == '/dashboard' %>">

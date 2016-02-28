@@ -1,5 +1,5 @@
 class CrsImportMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>"
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
   layout 'email'
 
   def failed(organization, email_address)

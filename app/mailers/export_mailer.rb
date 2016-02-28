@@ -1,5 +1,5 @@
 class ExportMailer < ActionMailer::Base
-  default from: "\"MissionHub Support\" <support@missionhub.com>",
+  default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>",
           content_type: 'multipart/alternative',
           parts_order: ['text/html', 'text/enriched', 'text/csv']
 

@@ -1,6 +1,6 @@
 <h1>Contact Assignments Notification</h1>
 <p>
-  <%= "There are new assigned contacts to you in <b>#{@organization.name}</b> of <a href='https://www.missionhub.com' target='_blank'>MissionHub</a>. Please login as soon as possible to followup the contacts. Below is the list of #{@assignment_array.count} new contact assignments:".html_safe %>
+  <%= "There are new assigned contacts to you in <b>#{@organization.name}</b> of <a href='https://#{ENV['APP_DOMAIN']}' target='_blank'>#{ENV['SITE_TITLE']}</a>. Please login as soon as possible to followup the contacts. Below is the list of #{@assignment_array.count} new contact assignments:".html_safe %>
   <br/>
 </p>
 <p>
