@@ -490,4 +490,9 @@ class ApplicationController < ActionController::Base
     @questions = (@all_questions.where('survey_elements.hidden' => false) + @predefined_questions.where(id: current_organization.settings[:visible_predefined_questions])).uniq
   end
   helper_method :initialize_surveys_and_questions
+
+  def branded?
+    !ENV['UNBRANDED']
+  end
+  helper_method :branded?
 end

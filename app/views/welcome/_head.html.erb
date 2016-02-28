@@ -10,7 +10,7 @@
   <meta http-equiv="cleartype" content="on">
 <![endif]-->
 
-<title><%= @title || (mhub? ? 'Take a Survey' : 'MissionHub') %></title>
+<title><%= @title || (mhub? ? 'Take a Survey' : branded? ? 'MissionHub' : '') %></title>
 
 <% if Rails.env.development? %>
   <%= javascript_include_tag 'jquery-1.7.2.min.js' %>

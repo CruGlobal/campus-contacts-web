@@ -9,7 +9,7 @@
     <% if mhub? %>
   	  <%= link_to 'Get Started', "/users/auth/facebook_mhub" %>
   	<% else %>
-  	  <%= link_to 'Get Started', new_user_session_path %>
+  	  <%= link_to 'Get Started', branded? ? new_user_session_path : '/users/auth/key' %>
   	<% end %>
   </div>
 <% end %>

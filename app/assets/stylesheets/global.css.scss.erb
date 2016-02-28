@@ -393,6 +393,7 @@ a.headerlink:hover {
   .item:first-child {
     border-left: none;
   }
+  <% unless ENV['UNBRANDED'] == 'true' %>
   #logo_container{
   	margin-top:4px;
   	margin-left:8px;
@@ -400,6 +401,7 @@ a.headerlink:hover {
   	width: 92px;
   	background: url("<%= asset_path('splash/mh_logo_90px.png') %>") no-repeat;
   }
+  <% end %>
 }
 
 /*
@@ -485,6 +487,7 @@ img.tmenu {
   margin-left: 15px;
 }
 
+<% unless ENV['UNBRANDED'] == 'true' %>
 #logoInvert {
   background: url("<%= asset_path('logoInvert.png') %>") no-repeat;
   float: left;
@@ -493,6 +496,7 @@ img.tmenu {
   margin-top: 0.7em;
   margin-left: 22px;
 }
+<% end %>
 
 .block {
   /* border-bottom: 1px solid $blue; */
@@ -2402,7 +2406,8 @@ span.all_text {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
   border: 1px solid #8a9daa;
   background-color: #b8d1e2;
-  /* background: #b8d1e2 url("<%= image_path('notice.png') %>") no-repeat 10px center;*/ }
+  /* background: #b8d1e2 url("<%= image_path('notice.png') %>") no-repeat 10px center; */
+}
 .flash .error-list {
   text-align: left; }
   .flash .error-list h2 {
@@ -2662,7 +2667,7 @@ textarea, input[type=text], input[type=password] {
   text-decoration: none;
 }
 
-.import_from_crs_link, .org_new, org_big_add{
+.import_from_crs_link, .org_new, .org_big_add {
  color: rgb(3, 121, 174);
   a {
     color: rgb(3, 121, 174);

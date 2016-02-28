@@ -1,47 +1,55 @@
-<% if mhub? %>
-  <% if @survey %>
-    <% if @survey.logo_file_name.present? %>
-      <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
-    <% end %>
-  <% end %>
-  <center>
-    <% if !@survey || [0, 1].include?(@survey.login_option) %>
-      <div id="login_paragraph"><h1><%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
-      <br><br>
-      <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook_mhub', id: 'facebook_button', rel: 'external', style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
-      <% if cookies[:survey_mode].present? %>
-        <span id="waiting"><%= t('.waiting_for_logout') %></span>
+<% if branded? %>
+  <% if mhub? %>
+    <% if @survey %>
+      <% if @survey.logo_file_name.present? %>
+        <%= image_tag(@survey.logo.url(:small), class: 'logo') %>
       <% end %>
-      <br/>
-      <% if @survey && @survey.login_option == 0 %>
-        <div class="info"><br/><br/>
-          <center>
-            <%= t('.dont_like_facebook') %>
-            <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) :
-                        "/s/#{@survey.id}?nologin=true") %>
-          </center>
+    <% end %>
+    <center>
+      <% if !@survey || [0, 1].include?(@survey.login_option) %>
+        <div id="login_paragraph"><h1><%=raw @survey && @survey.login_paragraph.present? ?  @survey.login_paragraph : t('.login_paragraph_mhub') %></h1></div>
+        <br><br>
+        <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook_mhub', id: 'facebook_button', rel: 'external', style: cookies[:survey_mode].present? ? 'display:none' : '' ) %>
+        <% if cookies[:survey_mode].present? %>
+          <span id="waiting"><%= t('.waiting_for_logout') %></span>
+        <% end %>
+        <br/>
+        <% if @survey && @survey.login_option == 0 %>
+          <div class="info"><br/><br/>
+            <center>
+              <%= t('.dont_like_facebook') %>
+              <%= link_to(t('.skip_facebook'), session[:return_to] ? add_params(session[:return_to], :nologin => true) :
+                          "/s/#{@survey.id}?nologin=true") %>
+            </center>
+          </div>
+        <% end %>
+      <% end %>
+    </center>
+  <% else %>
+    <div class="splash login">
+      <div class="left width30">
+        <div class="loginscreen" style="text-align: center;">
+          <p class="error_container"><%= raw(flash[:error]) %></p>
+          <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook', rel: 'external') %>
+          <p><a href="/"><%= t('.back') %></a></p>
         </div>
-      <% end %>
-    <% end %>
-  </center>
-<% else %>
-  <div class="splash login">
-    <div class="left width30">
-      <div class="loginscreen" style="text-align: center;">
-        <p class="error_container"><%= raw(flash[:error]) %></p>
-        <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook', rel: 'external') %>
-        <p><a href="/"><%= t('.back') %></a></p>
       </div>
+
+      <div class="right width68 instruct">
+        <h3 style="margin: 10px 0 0;"><%= t('.instructions') %>:</h3>
+        <p style="margin: 6px 0px 0 0;">
+        <%= t('.login_paragraph_html') %>
+        </p>
+      </div>
+
+      <div class="clear"></div>
+
     </div>
-
-    <div class="right width68 instruct">
-      <h3 style="margin: 10px 0 0;"><%= t('.instructions') %>:</h3>
-      <p style="margin: 6px 0px 0 0;">
-      <%= t('.login_paragraph_html') %>
-      </p>
-    </div>
-
-    <div class="clear"></div>
-
+  <% end %>
+<% else %>
+  <div class="loginscreen" style="text-align: center;">
+    <p class="error_container"><%= raw(flash[:error]) %></p>
+    <%= link_to(image_tag('key_logo.png'), '/users/auth/key', rel: 'external') %>
+    <p><a href="/"><%= t('.back') %></a></p>
   </div>
 <% end %>

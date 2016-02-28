@@ -1,4 +1,4 @@
-<%= render 'fb_init' %>
+<%= render 'fb_init' if branded? %>
 <%= render 'google_analytics' %>
 <script type="text/javascript" charset="utf-8">
   I18n.defaultLocale = "<%= I18n.default_locale %>";

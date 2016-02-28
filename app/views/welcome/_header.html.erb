@@ -1,6 +1,6 @@
 <header role="global">
   <div class="container">
-    <h1><%= link_to "Mission Hub", root_path %></h1>
+    <h1><%= link_to("Mission Hub", root_path) if branded? %></h1>
 
     <nav class="primary">
       <ul>
@@ -8,19 +8,25 @@
           <li><%= link_to('Exit SU Mode', '?exit=true') %></li>
         <% end %>
 
-        <li>
-          <%= link_to('Support', t('general.help_redirect_link'), :class => "navlink") %>
-        </li>
-        <li>
-          <%= link_to('FAQ', t('general.faq_redirect_link'), :class => "navlink") %>
-        </li>
-        <li>
-          <% if mhub? %>
-            <%= link_to(t('nav.login'), "/users/auth/facebook_mhub", :class => "loginbt") %>
-          <% else %>
-            <%= link_to(image_tag('fb_button.png'), '/users/auth/facebook', id: 'fb_button', rel: 'external') %>
-          <% end %>
-        </li>
+        <% if branded? %>
+          <li>
+            <%= link_to('Support', t('general.help_redirect_link'), :class => "navlink") %>
+          </li>
+          <li>
+            <%= link_to('FAQ', t('general.faq_redirect_link'), :class => "navlink") %>
+          </li>
+          <li>
+            <% if mhub? %>
+              <%= link_to(t('nav.login'), "/users/auth/facebook_mhub", :class => "loginbt") %>
+            <% else %>
+              <%= link_to(image_tag('fb_button.png'), '/users/auth/facebook', id: 'fb_button', rel: 'external') %>
+            <% end %>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to(t('nav.login'), '/users/auth/key', rel: 'external') %>
+          </li>
+        <% end %>
       </ul>
     </nav>
   </div>

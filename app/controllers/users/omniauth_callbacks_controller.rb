@@ -82,21 +82,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           if @user.present?
             sign_in(@user)
             session[:key_ticket] = ticket
-            redirect_to root_path
+            redirect_to '/dashboard'
           else
             fail NoEmailError
           end
         else
           fail NoTicketError
         end
-      rescue NoTicketError
-        flash[:error] = t('sessions.new.no_ticket_error')
-        redirect_to "#{root_url}sign_in"
       rescue NotAllowedToUseKeyError
         flash[:error] = t('sessions.new.not_allowed_to_use_key')
-        redirect_to "#{root_url}sign_in"
-      rescue NoEmailError
-        flash[:error] = t('sessions.new.login_no_email')
         redirect_to "#{root_url}sign_in"
       end
     end
