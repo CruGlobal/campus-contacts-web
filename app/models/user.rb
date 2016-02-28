@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
       fail NotAllowedToUseKeyError
     end
 
-    return user
+    user
   end
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource = nil, attempts = 0, force = false)
