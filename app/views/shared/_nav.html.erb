@@ -1,5 +1,5 @@
 <div id="globalNav">
-	<% unless user_signed_in? %>
+	<% unless user_signed_in? || !branded? %>
 	<div id="logo_container">&nbsp;</div>
 	<% end %>
   <div class="gmdrop">
