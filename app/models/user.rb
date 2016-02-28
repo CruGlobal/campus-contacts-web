@@ -68,28 +68,28 @@ class User < ActiveRecord::Base
 
   def self.find_for_key_oauth(key_info)
     data = key_info['extra']
-    if data['user'].blank?
-      fail NoEmailError
-    else
-      email = data['user']
-      person = Person.find_existing_person_by_email(email)
-      if person.present?
-        user = person.user
-        unless user
-          begin
-            user = User.where(username: email).first_or_initialize
-            user.password = Devise.friendly_token[0, 20] unless user.id.present?
-            user.save
-          rescue ActiveRecord::RecordNotUnique
-            retry
-          end
-        end
-      else
-        fail NotAllowedToUseKeyError
-      end
+    auth = Authentication.find_by(provider: 'key', uid: data['ssoGuid'])
+    return auth.user if auth
 
-      return user
+    email = data['user']
+    person = Person.find_existing_person_by_email(email)
+    if person.present?
+      user = person.user
+      unless user
+        begin
+          user = User.where(username: email).first_or_initialize
+          user.password = Devise.friendly_token[0, 20] unless user.id.present?
+          user.save!
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+      end
+      user.authentications.create!(provider: 'key', uid: data['ssoGuid'])
+    else
+      fail NotAllowedToUseKeyError
     end
+
+    return user
   end
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource = nil, attempts = 0, force = false)
