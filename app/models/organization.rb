@@ -474,8 +474,10 @@ class Organization < ActiveRecord::Base
       api_client.assign_code_and_secret
       api_client.save!
     else
-      create_api_client(link: "/organizations/#{id}",
-                        display_name: to_s)
+      client = create_api_client
+      client.link = "/organizations/#{id}"
+      client.display_name = to_s
+      client.save
     end
   end
 
