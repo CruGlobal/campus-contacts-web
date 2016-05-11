@@ -59,13 +59,13 @@ module Mh
     # Enable the asset pipeline
     config.assets.enabled = true
 
-    #
     config.generators do |g|
       g.factory_girl false
     end
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    config.assets.paths << "#{Rails.root}/node_modules"
 
     config.after_initialize do
       # integrate with devise

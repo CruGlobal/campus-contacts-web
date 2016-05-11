@@ -1,18 +1,20 @@
 sudo: false
-cache: bundler
+cache:
+  bundler: true
+  directories:
+    - node_modules
+    - cache
 language: ruby
 rvm: 2.2.2
 branches:
   only:
     - master
     - staging
-    - fix_travis
 services:
   - redis-server
 
-notifications:
-  recipients:
-    - josh.starcher@cojourners.com
+before_install:
+- npm install
 
 before_script:
   - cp config/s3.travis.yml config/s3.yml

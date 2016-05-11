@@ -17,6 +17,19 @@
 //= require jquery.zeroclipboard
 //= require jquery.select2.min
 //= require jquery-ui-timepicker-addon_mh
+//= require jquery.notifications-1.1
+//= require jquery.simplyCountable.js
+
+//angular
+//= require angular/angular
+//= require lodash/lodash
+//= require angular/missionhubApp
+//= require_tree ./angular/components
+//= require_tree ./angular/controllers
+//= require_tree ./angular/directives
+//= require_tree ./angular/services
+//= require_tree ./angular/filters
+
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
 //= require hoverIntent
@@ -32,8 +45,6 @@
 //= require rails.validations.callbacks
 //= require sms_keywords.js.coffee
 //= require people.js.coffee
-//= require jquery.notifications-1.1
-//= require jquery.simplyCountable.js
 //= require touch-scroll.min.js
 //= require nicEditMinimal.js
 //= require groups

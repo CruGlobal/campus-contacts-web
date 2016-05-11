@@ -485,4 +485,6 @@ Mh::Application.routes.draw do
   mount Raddocs::App => '/docs'
 
   get 'monitors/lb' => 'monitors#lb'
+
+  get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
 end
