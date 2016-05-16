@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "angular": "~1.5.5",
+    "jsonapi-datastore": "^0.4.0-beta",
     "lodash": "^4.11.1"
   }
 }

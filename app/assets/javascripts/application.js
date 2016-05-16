@@ -23,6 +23,7 @@
 //angular
 //= require angular/angular
 //= require lodash/lodash
+//= require jsonapi-datastore/dist/jsonapi-datastore
 //= require angular/missionhubApp
 //= require_tree ./angular/components
 //= require_tree ./angular/controllers

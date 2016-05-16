@@ -18,8 +18,10 @@
         function activate() {
             $http.get('http://localhost:3001/apis/v4/people?access_token=' + state.v4_access_token)
                  .then(function (request) {
-                     vm.contacts = request.data.data;
-                     console.log(request.data.data);
+                     var store = new JsonApiDataStore();
+                     store.sync(request.data);
+                     vm.contacts = store.findAll('person');
+                     console.log(vm.contacts);
                      vm.loading = false;
                  })
         }
