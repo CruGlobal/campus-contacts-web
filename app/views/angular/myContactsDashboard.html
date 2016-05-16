@@ -1,0 +1,6 @@
+<div class="my-contacts-dashboard">
+  <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">Loading Contacts</h1>
+  <ul>
+    <li ng-repeat="contact in $ctrl.contacts">{{contact.attributes.full_name}}</li>
+  </ul>
+</div>
