@@ -3,7 +3,8 @@
   <head>
     <%= render 'shared/head' %>
   </head>
-  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>">
+  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>"
+        ng-app="missionhubApp">
     <%= wiser_timezone_initialize(auto_set_guest: true) %>
     <%= render 'dialogs/alert' %>
     <%= render 'dialogs/locate_contact' %>

@@ -69,4 +69,11 @@ Rails.application.configure do
   config.assets.logger = false
   config.action_mailer.show_previews
   config.assets.initialize_on_precompile = true
+
+  if ENV['NG_FORCE'] == 'true'
+    config.assets.compress = true
+    config.assets.compile = false
+    config.assets.digest = true
+    config.assets.debug = false
+  end
 end
