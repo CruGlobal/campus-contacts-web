@@ -24,23 +24,24 @@
             return $http
                 .get('http://localhost:3001/apis/v4/people', {
                     params: {
-                        access_token: state.v4_access_token, limit: 100
+                        access_token: state.v4_access_token, limit: 50,
+                        include: 'person.id,person.first_name,person.last_name,person.email_addresses,' +
+                                 'person.organizational_permissions,emailAddresses.id,emailAddresses.email,' +
+                                 'organizationalPermissions.organization_id'
                     }
                 })
                 .then(function (request) {
                     var store = new JsonApiDataStore();
                     store.sync(request.data);
                     vm.contacts = store.findAll('person');
-                    vm.loading = false;
-
-                })
+                });
         }
 
         function loadOrganizations() {
             return $http
                 .get('http://localhost:3001/apis/v4/organizations', {
                     params: {
-                        access_token: state.v4_access_token,
+                        access_token: state.v4_access_token, limit: 100,
                         include : 'organization.name,organization.id'
                     }
                 })
@@ -48,10 +49,11 @@
                     var store = new JsonApiDataStore();
                     store.sync(request.data);
                     vm.organizations = store;
-                })
+                });
         }
 
         function contactsLoaded() {
+            vm.loading = false;
             vm.organization_contacts = {};
             angular.forEach(vm.contacts, function (contact) {
                 angular.forEach(contact.organizational_permissions, function(op) {
