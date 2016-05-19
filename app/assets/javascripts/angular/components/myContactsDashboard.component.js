@@ -1,12 +1,14 @@
 (function(){
+    'use strict';
+
     angular
         .module('missionhubApp')
         .component('myContactsDashboard', {
-            controller: angularTestController,
+            controller: myContactsDashboardController,
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function angularTestController($http, $q, state) {
+    function myContactsDashboardController($http, $q, state) {
         var vm = this;
         vm.contacts = [];
         vm.organization_contacts = {};
