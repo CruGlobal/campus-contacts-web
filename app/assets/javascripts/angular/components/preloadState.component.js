@@ -17,11 +17,11 @@
         activate();
 
         function activate() {
-            if(vm.data === 'true' || vm.data === 'false')
+            if(vm.data === 'true' || vm.data === 'false') {
                 state[vm.name] = vm.data === 'true';
-            else
+            } else {
                 state[vm.name] = vm.data;
-            console.log(state)
+            }
         }
     }
 })();
