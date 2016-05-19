@@ -7,6 +7,7 @@ development: &dev
   username: <%= ENV['DB_ENV_MYSQL_USER'] %>
   password: <%= ENV['DB_ENV_MYSQL_PASS'] %>
   host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
+  port: <%= ENV['DB_PORT_3306_TCP_PORT'] %>
 
 production:
   <<: *dev
@@ -32,3 +33,4 @@ test:
   password: <%= ENV['DB_ENV_MYSQL_PASS_TEST'] || ENV['DB_ENV_MYSQL_PASS'] %>
   host: <%= ENV['DB_PORT_3306_TCP_ADDR_TEST'] || ENV['DB_PORT_3306_TCP_ADDR'] %>
   database: <%= ENV['DB_ENV_MYSQL_DB_TEST'] || 'missionhub_test' %>
+  port: <%= ENV['DB_PORT_3306_TCP_PORT_TEST'] || ENV['DB_PORT_3306_TCP_PORT'] %>

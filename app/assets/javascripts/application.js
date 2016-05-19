@@ -24,12 +24,11 @@
 //= require angular/angular
 //= require lodash/lodash
 //= require jsonapi-datastore/dist/jsonapi-datastore
-//= require angular/missionhubApp
-//= require_tree ./angular/components
-//= require_tree ./angular/controllers
-//= require_tree ./angular/directives
-//= require_tree ./angular/services
-//= require_tree ./angular/filters
+//= require angular/missionhubApp.module
+//= require angular/missionhubApp.constants
+//= require angular/missionhubApp.config
+//= require angular/missionhubApp.run
+//= require_tree ./angular
 
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
