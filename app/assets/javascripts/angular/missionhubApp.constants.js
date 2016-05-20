@@ -4,7 +4,8 @@
 
     angular
         .module('missionhubApp')
-        .constant('_', window._);
+        .constant('_', window._)
+        .constant('Rx', window.Rx);
 
 
 })();

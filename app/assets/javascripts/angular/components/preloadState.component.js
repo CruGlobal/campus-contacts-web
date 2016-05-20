@@ -11,7 +11,7 @@
             }
         });
 
-    function preloadStateController(state) {
+    function preloadStateController(state, $http) {
         var vm = this;
 
         activate();
@@ -21,6 +21,13 @@
                 state[vm.name] = vm.data === 'true';
             } else {
                 state[vm.name] = vm.data;
+            }
+            addAuthHeader();
+        }
+
+        function addAuthHeader(){
+            if(vm.name === 'v4AccessToken'){
+                $http.defaults.headers.common.Authorization = 'Bearer ' + state.v4AccessToken;
             }
         }
     }

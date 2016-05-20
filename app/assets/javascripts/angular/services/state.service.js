@@ -5,7 +5,7 @@
 
     function stateService(){
         var service = {
-            v4_access_token: ''
+            v4AccessToken: ''
         };
         return service;
     }
