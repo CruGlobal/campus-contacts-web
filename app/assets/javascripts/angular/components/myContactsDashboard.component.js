@@ -8,7 +8,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, $q, state) {
+    function myContactsDashboardController($http, $q, state, JsonApiDataStore) {
         var vm = this;
         vm.contacts = [];
         vm.organization_contacts = {};
@@ -33,8 +33,8 @@
                     }
                 })
                 .then(function (request) {
-                    var store = new JsonApiDataStore();
-                    store.sync(request.data);
+                    var store = JsonApiDataStore.store;
+                    JsonApiDataStore.store.sync(request.data);
                     vm.contacts = store.findAll('person');
                 });
         }
@@ -48,7 +48,7 @@
                     }
                 })
                 .then(function(request) {
-                    var store = new JsonApiDataStore();
+                    var store = JsonApiDataStore.store;
                     store.sync(request.data);
                     vm.organizations = store;
                 });
@@ -60,18 +60,20 @@
             angular.forEach(vm.contacts, function (contact) {
                 angular.forEach(contact.organizational_permissions, function(op) {
                     var org_id = op.organization_id;
-                    if(vm.organization_contacts[org_id] === undefined)
+                    if(vm.organization_contacts[org_id] === undefined) {
                         vm.organization_contacts[org_id] = [contact];
-                    else
+                    } else {
                         vm.organization_contacts[org_id].push(contact);
+                    }
                 })
             })
         }
 
         function org_name(org_id) {
             var org = vm.organizations.find('organization', org_id);
-            if(org)
+            if(org) {
                 return org.name;
+            }
             return org_id;
         }
     }

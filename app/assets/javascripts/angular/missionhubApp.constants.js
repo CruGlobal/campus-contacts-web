@@ -1,5 +1,6 @@
 (function() {
     'use strict';
+    /* eslint angular/window-service: "off" */
 
     angular
         .module('missionhubApp')

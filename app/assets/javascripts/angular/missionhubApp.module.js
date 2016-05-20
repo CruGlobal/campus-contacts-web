@@ -2,6 +2,8 @@
     'use strict';
 
     angular
-        .module('missionhubApp', []);
+        .module('missionhubApp', [
+            'beauby.jsonApiDataStore'
+        ]);
 
 })();

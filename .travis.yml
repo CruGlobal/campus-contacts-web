@@ -24,6 +24,7 @@ before_script:
   - bundle exec rake db:structure:load RAILS_ENV=test
 
 script:
+  - ./node_modules/.bin/eslint app/assets/javascripts/angular
   - bundle exec rake test
   - bundle exec rake spec
   - bundle exec rubocop -R
