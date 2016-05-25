@@ -1,0 +1,14 @@
+organization-people{
+  .header{
+    background: $blue;
+    color: $white;
+    padding: 20px 10px;
+    h2{
+      margin: 0;
+    }
+  }
+  .people-list{
+    display: flex;
+    flex-direction: column;
+  }
+}

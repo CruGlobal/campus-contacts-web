@@ -1,11 +1,9 @@
 <div class="my-contacts-dashboard">
   <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">Loading Contacts</h1>
-  <div ng-repeat="(org_id, contacts) in $ctrl.organization_contacts">
-    <h2>{{ $ctrl.org_name(org_id) }}</h2>
-    <ul>
-      <li ng-repeat="contact in contacts track by contact.id | orderBy: 'last_name'">
-        {{ contact.full_name }}
-      </li>
-    </ul>
-  </div>
+  <organization-people
+          id="{{ orgId }}"
+          name="{{ $ctrl.getOrgName(orgId) }}"
+          people="people"
+          ng-repeat="(orgId, people) in $ctrl.organizationPeople">
+  </organization-people>
 </div>
