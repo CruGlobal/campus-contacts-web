@@ -32,7 +32,7 @@
                     params: {
                         limit: 50,
                         include: 'person.id,person.email_addresses,' +
-                                 'person.organizational_permissions,person.phone_number'
+                                 'person.organizational_permissions,person.phone_numbers'
                     }
                 })
                 .then(function (request) {
