@@ -14,7 +14,7 @@
         });
 
     function organizationPeopleController() {
-        var vm = this;
+        // var vm = this;
 
         activate();
 

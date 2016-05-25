@@ -12,7 +12,7 @@
         });
 
     function personController() {
-        var vm = this;
+        // var vm = this;
 
         activate();
 
