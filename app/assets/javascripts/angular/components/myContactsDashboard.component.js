@@ -8,7 +8,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, JsonApiDataStore, Rx, $log) {
+    function myContactsDashboardController($http, $log, $q, JsonApiDataStore) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = {};
@@ -23,36 +23,40 @@
         }
 
         function loadAndSyncData(){
-            Rx.Observable.merge(loadPeople(), loadOrganizations())
-                .subscribe(
-                    function(payload){
-                        JsonApiDataStore.store.sync(payload.data);
-                    },
-                    function(error){
-                        $log.error('Error loading people and orgs', error);
-                    },
-                    dataLoaded
-                );
+            $q.all([loadPeople(), loadOrganizations()]).then(dataLoaded);
         }
 
         function loadPeople() {
-            return Rx.Observable.from($http.get('http://localhost:3001/apis/v4/people', {
-                params: {
-                    limit: 50,
-                    include: 'person.id,person.first_name,person.last_name,person.email_addresses,person.phone_numbers,' +
-                    'person.organizational_permissions,email_addresses.id,email_addresses.email,' +
-                    'organizationalPermissions.organization_id'
-                }
-            }));
+            return $http
+                .get('http://localhost:3001/apis/v4/people', {
+                    params: {
+                        limit: 50,
+                        include: 'person.id,person.email_addresses,' +
+                                 'person.organizational_permissions,person.phone_number'
+                    }
+                })
+                .then(function (request) {
+                        JsonApiDataStore.store.sync(request.data);
+                    },
+                    function(error){
+                        $log.error('Error loading people', error);
+                    });
         }
 
         function loadOrganizations() {
-            return Rx.Observable.from($http.get('http://localhost:3001/apis/v4/organizations', {
-                params: {
-                    limit: 100,
-                    include : 'organization.name,organization.id'
-                }
-            }));
+            return $http
+                .get('http://localhost:3001/apis/v4/organizations', {
+                    params: {
+                        limit: 100,
+                        include : 'organization.name,organization.id'
+                    }
+                })
+                .then(function(request) {
+                        JsonApiDataStore.store.sync(request.data);
+                    },
+                    function(error){
+                        $log.error('Error loading orgs', error);
+                    });
         }
 
         function dataLoaded() {

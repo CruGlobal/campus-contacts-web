@@ -2,7 +2,6 @@
   "name": "missionhub",
   "version": "1.0.0",
   "dependencies": {
-    "@reactivex/rxjs": "^5.0.0-beta.7",
     "angular": "~1.5.5",
     "jsonapi-datastore": "^0.4.0-beta",
     "lodash": "^4.11.1"

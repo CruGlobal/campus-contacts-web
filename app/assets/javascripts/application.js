@@ -23,7 +23,6 @@
 //angular
 //= require angular/angular
 //= require lodash/lodash
-//= require @reactivex/rxjs/dist/global/Rx.umd
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants
