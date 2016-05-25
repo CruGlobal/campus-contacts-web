@@ -1,0 +1,16 @@
+person{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $gray;
+  margin-top: 2px;
+  & > div{
+    overflow: hidden;
+    padding: 20px 10px;
+    flex: 1 1 10%;
+    &.stat{
+      flex: 1 1 15px;
+      text-align: center;
+    }
+  }
+}
