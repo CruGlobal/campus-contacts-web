@@ -24,6 +24,7 @@
 //= require angular/angular
 //= require lodash/lodash
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
+//= require angular-environment/dist/angular-environment
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants
 //= require angular/missionhubApp.config

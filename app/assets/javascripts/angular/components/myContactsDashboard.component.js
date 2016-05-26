@@ -8,7 +8,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, $log, $q, JsonApiDataStore, v4ApiURL) {
+    function myContactsDashboardController($http, $log, $q, JsonApiDataStore, envService) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = {};
@@ -28,7 +28,7 @@
 
         function loadPeople() {
             return $http
-                .get(v4ApiURL + '/people', {
+                .get(envService.read('apiUrl') + '/people', {
                     params: {
                         limit: 50,
                         include: 'person.id,person.email_addresses,' +
@@ -45,7 +45,7 @@
 
         function loadOrganizations() {
             return $http
-                .get(v4ApiURL + '/organizations', {
+                .get(envService.read('apiUrl') + '/organizations', {
                     params: {
                         limit: 100,
                         include : 'organization.name,organization.id'

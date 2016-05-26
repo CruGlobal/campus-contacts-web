@@ -4,6 +4,5 @@
 
     angular
         .module('missionhubApp')
-        .constant('_', window._)
-        .constant('v4ApiURL', '<%= ENV['V4_API_URL'] %>');
+        .constant('_', window._);
 })();
