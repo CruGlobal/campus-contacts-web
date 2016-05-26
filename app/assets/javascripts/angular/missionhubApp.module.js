@@ -3,7 +3,8 @@
 
     angular
         .module('missionhubApp', [
-            'beauby.jsonApiDataStore'
+            'beauby.jsonApiDataStore',
+            'environment'
         ]);
 
 })();
