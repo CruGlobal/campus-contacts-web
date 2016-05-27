@@ -38,9 +38,6 @@ body.mass_entry {
   #gandalfthewhite {
     height: 65px;
   }
-  #fixed_footer {
-    display: none;
-  }
   #outer {
     margin: 133px auto 0px;
     min-width: inherit;
@@ -50,9 +47,12 @@ body.mass_entry {
   }
   #fixed_header {
     height: 65px;
-    #globalNav, #menu_search, .sf-menu {
-      display: none;
-    }
+  }
+  #fixed_footer, #globalNav, #menu_search {
+    display: none;
+  }
+  #primary_nav {
+    visibility: hidden;
   }
   .titlebar {
     z-index: 999;

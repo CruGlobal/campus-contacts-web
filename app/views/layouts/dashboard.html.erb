@@ -10,20 +10,15 @@
     <%= render 'dialogs/locate_contact' %>
     <%= render 'shared/jwt_preload_state' %>
     <div id="outer">
-
-      <%= render 'shared/nav' %>
-
-      <div id="">
-        <div id="menutop" class="topmenu">
-          <%= render 'shared/menu' %>
-        </div>
-
-        <div id="dashboard_main">
-          <%= render "shared/main" %>
-        </div><!-- main -->
-
-        <div class="clear"></div>
+      <div id="menutop" class="topmenu">
+        <%= render 'shared/menu' %>
       </div>
+
+      <div id="dashboard_main">
+        <%= render "shared/main" %>
+      </div><!-- main -->
+
+      <div class="clear"></div>
 
       <div class="footer">
         <%= render 'shared/footer' %>

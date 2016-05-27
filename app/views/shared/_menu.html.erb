@@ -4,7 +4,7 @@
 
 <%= link_to("", "/", id: "logoInvert") if branded? %>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
-  <ul class="sc-init-menu sf-menu sf-navbar mh-top">
+  <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
     </li>
@@ -80,5 +80,19 @@
   <div id="menu_search">
     <%= render 'contacts/search_top_right' %>
   </div>
+
+  <ul id="profile_dropdown_nav" class="sc-init-menu sf-menu mh-top">
+    <li>
+      <%= link_to(current_user.to_s, '#')  %>
+      <ul>
+        <li>
+          <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %>
+        </li>
+        <li>
+          <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
+        </li>
+      </ul>
+    </li>
+  </ul>
 
 <% end %>
