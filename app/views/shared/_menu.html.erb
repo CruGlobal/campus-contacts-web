@@ -8,6 +8,19 @@
     <li class="<%= 'current' if request.path == '/dashboard' %>">
       <%= link_to(t('nav.dashboard'), "/dashboard") %>
     </li>
+
+    <li class="org_tree_link">
+      <%= link_to(current_organization, "#") %>
+      <ul>
+        <li class="under_tree">
+          <div class='loader'>
+            <%= image_tag('loader-gray.gif', alt: nil) %>
+            Fetching organizations
+          </div>
+        </li>
+      </ul>
+    </li>
+
     <li class="<%= 'current' if request.path =~ care_pattern %>">
       <%= link_to(t('nav.people'), "/allcontacts") %>
     </li>
@@ -27,12 +40,25 @@
           <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>">
             <%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %>
           </li>
+          <% if current_organization && current_organization.surveys.to_a.any? %>
+            <li class="sf-divider"></li>
+            <% current_organization.surveys.each do |survey| %>
+              <li>
+                <% port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : nil %>
+                <% protocol = Rails.env.development? ? 'http' : 'https' %>
+                <% link = start_survey_url(survey, host: ENV.fetch('PUBLIC_HOST'), port: port, protocol: protocol) %>
+                <%= link_to link, id: 'select_keyword', class: "signout_fb" do %>
+                  <%= t('nav.use_keyword', keyword: survey.title) %>
+                <% end %>
+              </li>
+            <% end %>
+          <% end %>
         </ul>
       </li>
     <% end %>
 
     <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
-      <%= link_to(t('nav.organizations'), "/organizations") %>
+      <%= link_to(t('nav.tools'), "/organizations") %>
       <ul>
         <li class="<%= 'current' if request.path == snapshot_charts_path %> visual-menu">
           <%= link_to(t('nav.visual_tools'), charts_path) %>

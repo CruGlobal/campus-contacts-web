@@ -1067,6 +1067,9 @@ ul.pillmenu {
 #profile_dropdown_nav {
   color: #fff;
   flex: inherit;
+  li:first-child {
+    margin-left: 0;
+  }
 }
 
 #filter_box,
@@ -2923,18 +2926,32 @@ ul.sf-menu {
         text-decoration: none;
       }
     }
+    .sf-divider {
+      height: 3px;
+      background: #fff;
+    }
   }
 }
 
 ul.under_tree {
   right: 1px;
+  border: 1px solid #d9d9d9;
+  background: #f0f0f0;
+  .org_nav_item {
+    background: #f0f0f0;
+  }
+  .org_nav_children {
+    background: #f0f0f0;
+  }
+}
+
+ul.under_tree, li li.under_tree {
   width: 350px;
+  height: initial;
   max-height: 450px;
   min-height: 20px;
   overflow-x: hidden;
   overflow-y: auto;
-  border: 1px solid #d9d9d9;
-  background: #f0f0f0;
   .loader {
     margin: 10px 0 10px;
     width: 100%;
@@ -2950,7 +2967,6 @@ ul.under_tree {
   }
   .org_nav_item {
     padding: 5px 5px;
-    background: #f0f0f0;
     text-align: left;
     vertical-align: top;
     line-height: 16px;
@@ -2998,9 +3014,15 @@ ul.under_tree {
   }
   .org_nav_children {
     padding-left: 20px;
-    background: #f0f0f0;
-    text-align: left;
   }
+}
+#menutop .mh-top li li.under_tree a {
+  line-height: normal;
+}
+#menutop .org_tree_link a {
+  overflow: hidden;
+  /*white-space: nowrap;*/
+  text-overflow: ellipsis;
 }
 
 #global_loader {
