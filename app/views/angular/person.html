@@ -3,7 +3,10 @@
     <div class="stats" ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible}">
         <div ng-repeat="index in [0,1,2,3,4,5,6,7,8,9]">{{ index + 100 }}</div>
     </div>
-    <div class="phone">{{ $ctrl.person.phone_numbers[0].number | phone }}</div>
+    <div class="phone" ng-hide="$ctrl.person.phone_numbers.length == 0">
+      {{ $ctrl.person.phone_numbers[0].number | phone }}
+    </div>
+    <div class="phone gray-text" ng-show="$ctrl.person.phone_numbers.length == 0">No Phone Number</div>
     <round-button><ng-md-icon icon="textsms"></ng-md-icon></round-button>
     <round-button><ng-md-icon icon="email"></ng-md-icon></round-button>
     <round-button ng-click="$ctrl.toggleInteractionBtns()" ng-switch="$ctrl.addInteractionBtnsVisible">
