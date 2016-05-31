@@ -1,16 +1,79 @@
-person{
+person {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: $gray;
-  margin-top: 2px;
-  & > div{
-    overflow: hidden;
-    padding: 20px 10px;
-    flex: 1 1 10%;
-    &.stat{
-      flex: 1 1 15px;
-      text-align: center;
+  flex-direction: column;
+  & > .person-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 66px;
+    background: $gray-4;
+    margin-top: 2px;
+    .common-margin {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    & > .name {
+      @extend .common-margin;
+      flex: 0 0 150px;
+    }
+    & > .stats {
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      flex: 1 1 100px;
+      min-width: 0px;
+      overflow: hidden;
+      &.stats-collapsed{
+        background: linear-gradient(to left, #d6d6d6, rgba(0, 0, 0, 0) 5px);
+      }
+      & > div{
+        @extend .common-margin;
+        flex: 1 0 19px;
+      }
+    }
+    & > .phone {
+      @extend .common-margin;
+      flex: 0 0 85px;
+    }
+    & > .addInteractionButtons {
+      flex: 1 1 170px;
+      align-self: stretch;
+      display: flex;
+      align-items: stretch;
+      & > square-button{
+        margin-left: 1px;
+        padding: 20px 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background: $gray-1;
+        fill: $white;
+        &:hover, &.open{
+          background: $gray-2;
+        }
+        &:active{
+          background: $gray-3;
+        }
+      }
+    }
+  }
+  & > .addInteractionPanel{
+    padding: 10px;
+    background: $gray-2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & > textarea{
+      display: flex;
+      flex-grow: 1;
+      height: 1.3em;
+      margin-right: 10px;
+    }
+    .icon-btn{
+      cursor: pointer;
+      &:hover{
+        opacity: .6;
+      }
     }
   }
 }

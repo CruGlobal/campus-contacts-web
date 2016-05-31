@@ -3,6 +3,7 @@
 
     angular
         .module('missionhubApp', [
+            'ngMdIcons',
             'beauby.jsonApiDataStore',
             'environment'
         ]);
