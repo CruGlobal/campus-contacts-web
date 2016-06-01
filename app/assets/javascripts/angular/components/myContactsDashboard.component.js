@@ -31,7 +31,8 @@
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
                         limit: 50,
-                        include: 'organizational_permissions,phone_numbers'
+                        include: 'organizational_permissions,phone_numbers',
+                        'filters[assigned_tos]': 'me'
                     }
                 })
                 .then(function (request) {
