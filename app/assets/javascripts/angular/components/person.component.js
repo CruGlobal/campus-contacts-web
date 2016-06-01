@@ -11,11 +11,12 @@
             }
         });
 
-    function personController() {
+    function personController($timeout, $animate) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
         vm.openPanelName = '';
+        vm.closingInteractionButtons = false;
 
         vm.toggleInteractionBtns = toggleInteractionBtns;
         vm.openAddInteractionPanel = openAddInteractionPanel;
@@ -29,7 +30,12 @@
 
         function toggleInteractionBtns(){
             vm.addInteractionBtnsVisible = !vm.addInteractionBtnsVisible;
-            if(!vm.addInteractionBtnsVisible){
+            if(!vm.addInteractionBtnsVisible) {
+                $animate.on('leave', angular.element('.addInteractionButtons'),
+                    function callback(element, phase) {
+                        vm.closingInteractionButtons = phase === 'start';
+                    }
+                );
                 closeAddInteractionPanel();
             }
         }
