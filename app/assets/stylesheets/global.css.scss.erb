@@ -3016,13 +3016,21 @@ ul.under_tree, li li.under_tree {
     padding-left: 20px;
   }
 }
-#menutop .mh-top li li.under_tree a {
-  line-height: normal;
-}
-#menutop .org_tree_link a {
-  overflow: hidden;
-  /*white-space: nowrap;*/
-  text-overflow: ellipsis;
+#menutop {
+  .mh-top {
+    min-width: 0;
+    .under_tree a {
+      line-height: normal;
+    }
+  }
+  .org_tree_link  {
+    overflow: hidden;
+    a {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 #global_loader {
