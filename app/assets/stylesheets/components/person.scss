@@ -40,6 +40,23 @@ person {
       align-self: stretch;
       display: flex;
       align-items: stretch;
+      flex: .00001;
+      overflow: hidden;
+      animation: flexGrow 500ms ease forwards;
+      &.ng-leave{
+        flex: 1 0 245px;
+        animation: flexShrink 500ms ease forwards;
+      }
+      @keyframes flexGrow {
+        to {
+          flex: 1 0 245px;
+        }
+      }
+      @keyframes flexShrink {
+        to {
+          flex: .00001;
+        }
+      }
       & > square-button{
         margin-left: 1px;
         padding: 20px 10px;
