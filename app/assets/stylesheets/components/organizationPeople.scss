@@ -21,6 +21,7 @@ organization-people{
     background: $gray-2;
     color: $white;
     fill: $white;
+    margin-left: 10px;
     margin-right: 10px;
     cursor: pointer;
     &:hover{
@@ -31,6 +32,9 @@ organization-people{
     }
     & > ng-md-icon{
       display: inherit;
+    }
+    & + round-button{
+      margin-left: 0;
     }
   }
 }

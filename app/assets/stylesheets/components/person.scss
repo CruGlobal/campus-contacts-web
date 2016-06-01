@@ -34,9 +34,9 @@ person {
     & > .phone {
       @extend .common-margin;
       flex: 0 0 85px;
+      text-align: center;
     }
     & > .addInteractionButtons {
-      flex: 1 1 170px;
       align-self: stretch;
       display: flex;
       align-items: stretch;
