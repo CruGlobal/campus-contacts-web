@@ -31,7 +31,7 @@ person {
         flex: 1 0 19px;
       }
     }
-    & > .phone {
+    & .phone {
       @extend .common-margin;
       flex: 0 0 85px;
       text-align: center;
@@ -40,21 +40,21 @@ person {
       align-self: stretch;
       display: flex;
       align-items: stretch;
-      flex: .00001;
       overflow: hidden;
+      width: 0;
       animation: flexGrow 500ms ease forwards;
       &.ng-leave{
-        flex: 1 0 245px;
+        width: 270px;
         animation: flexShrink 500ms ease forwards;
       }
       @keyframes flexGrow {
         to {
-          flex: 1 0 245px;
+          width: 270px;
         }
       }
       @keyframes flexShrink {
         to {
-          flex: .00001;
+          width: 0;
         }
       }
       & > square-button{
