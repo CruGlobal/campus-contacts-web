@@ -1,6 +1,6 @@
 organization-people{
   .header{
-    background: $blue;
+    background: $blue-1;
     color: $white;
     padding: 20px 10px;
     h2{
@@ -10,5 +10,31 @@ organization-people{
   .people-list{
     display: flex;
     flex-direction: column;
+  }
+  round-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: $gray-2;
+    color: $white;
+    fill: $white;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    &:hover{
+      background: $gray-1;
+    }
+    &:active{
+      background: $gray-3;
+    }
+    & > ng-md-icon{
+      display: inherit;
+    }
+    & + round-button{
+      margin-left: 0;
+    }
   }
 }

@@ -1,4 +1,40 @@
-<div>{{ $ctrl.person.full_name }}</div>
-<div>2 days ago</div>
-<div class="stat" ng-repeat="index in [0,1,2,3,4,5,6,7,8,9]">1</div>
-<div>{{ $ctrl.person.phone_numbers[0].number | phone }}</div>
+<div class="person-info">
+    <div class="name">{{ $ctrl.person.full_name }}</div>
+    <div class="stats" ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
+        <div ng-repeat="index in [0,1,2,3,4,5,6,7,8,9]">{{ index + 100 }}</div>
+        <span class="phone" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
+    </div>
+    <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
+        {{ $ctrl.person.phone_numbers[0].number | phone }}
+    </div>
+    <round-button><ng-md-icon icon="textsms"></ng-md-icon></round-button>
+    <round-button><ng-md-icon icon="email"></ng-md-icon></round-button>
+    <div class="addInteractionButtons" ng-if="$ctrl.addInteractionBtnsVisible">
+        <square-button ng-click="$ctrl.openAddInteractionPanel('spiritualConversation')" ng-class="{'open': $ctrl.openPanelName === 'spiritualConversation'}">
+            <ng-md-icon icon="free_breakfast"></ng-md-icon>
+        </square-button>
+        <square-button ng-click="$ctrl.openAddInteractionPanel('gospelPresentation')" ng-class="{'open': $ctrl.openPanelName === 'gospelPresentation'}">
+            <ng-md-icon icon="multiline_chart"></ng-md-icon>
+        </square-button>
+        <square-button ng-click="$ctrl.openAddInteractionPanel('prayedToReceiveChrist')" ng-class="{'open': $ctrl.openPanelName === 'prayedToReceiveChrist'}">
+            <ng-md-icon icon="spa"></ng-md-icon>
+        </square-button>
+        <square-button ng-click="$ctrl.openAddInteractionPanel('holySpiritPresentation')" ng-class="{'open': $ctrl.openPanelName === 'holySpiritPresentation'}">
+            <ng-md-icon icon="whatshot"></ng-md-icon>
+        </square-button>
+        <square-button ng-click="$ctrl.openAddInteractionPanel('groupConversation')" ng-class="{'open': $ctrl.openPanelName === 'groupConversation'}">
+            <ng-md-icon icon="people"></ng-md-icon>
+        </square-button>
+        <square-button ng-click="$ctrl.openAddInteractionPanel('note')" ng-class="{'open': $ctrl.openPanelName === 'note'}">
+            <ng-md-icon icon="event_note"></ng-md-icon>
+        </square-button>
+    </div>
+    <round-button ng-click="$ctrl.toggleInteractionBtns()" ng-switch="$ctrl.addInteractionBtnsVisible">
+      <ng-md-icon icon="add" ng-switch-when="false"></ng-md-icon>
+      <ng-md-icon icon="close" ng-switch-when="true"></ng-md-icon>
+    </round-button>
+</div>
+<div class="addInteractionPanel" ng-if="$ctrl.openPanelName">
+    <textarea placeholder="Notes"></textarea>
+    <ng-md-icon icon="save" size="30" class="icon-btn" ng-click="$ctrl.saveInteraction()"></ng-md-icon>
+</div>
