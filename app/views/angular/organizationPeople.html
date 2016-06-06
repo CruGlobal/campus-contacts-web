@@ -2,7 +2,7 @@
     <h2>{{ $ctrl.name }}</h2>
 </div>
 <div class="people-list">
-    <person person="person"
+    <person person="person" organization-id="$ctrl.id"
             ng-repeat="person in $ctrl.people track by person.id | orderBy: 'last_name'">
     </person>
 </div>
