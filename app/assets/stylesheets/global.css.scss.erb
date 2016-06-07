@@ -228,6 +228,9 @@ $light-blue: #eaf1f6;
 $light-gray: #F2F2F2;
 $white: #fff;
 
+$pivot-dark-blue: #1E495A;
+$pivot-muted-blue: #D3E0E3;
+
 /* Divs */
 $maxpagewidth: 11000px;
 $minpagewidth: 978px;
@@ -445,7 +448,7 @@ a.headerlink:hover {
 .topmenu {
   margin-bottom: 40px;
   height: 64px;
-  background: #0379AE;
+  background: $pivot-dark-blue;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -482,10 +485,11 @@ img.tmenu {
 }
 
 #logoInvert {
-  background: url("<%= asset_path('logoInvert.png') %>") no-repeat;
-  background-position-x: -110px;
-  width: 19px;
-  height: 47px;
+  background: url("<%= asset_path('missionhub-logo-h-white.png') %>") no-repeat;
+  -webkit-background-size: 22px;
+  background-size: 22px;
+  width: 22px;
+  height: 48px;
   margin-top: 0.7em;
   margin-left: 22px;
 }
@@ -1155,12 +1159,12 @@ span.title {
 }
 
 .footer {
-  border-top: 1px solid #0379ae;
+  border-top: 1px solid $pivot-dark-blue;
   text-align: center;
   color: #808284;
   margin: 0px;
   padding: 15px;
-  background: #eaf1f6;
+  background: $pivot-muted-blue;
   border-radius: 0;
 }
 
