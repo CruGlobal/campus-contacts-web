@@ -6,7 +6,9 @@
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
   <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
-      <%= link_to(t('nav.dashboard'), "/dashboard") %>
+      <%= link_to '/dashboard', title: t('nav.dashboard') do %>
+        <ng-md-icon icon='dashboard' color="white"></ng-md-icon>
+      <% end %>
     </li>
 
     <li class="org_tree_link">
