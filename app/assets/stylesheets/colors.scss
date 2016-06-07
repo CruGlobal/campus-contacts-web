@@ -1,3 +1,10 @@
+/* !important
+* This is a file that should only have scss abstracts (variable and mix-in definitions)!
+* If you add anything else that results in real code, it will imported into the processed file
+* many times and that will be bad. So don't do it!
+*/
+
+
 /* Colors */
 $blue-1: #0379AE;
 $blue-2: #3594BE;
@@ -10,3 +17,8 @@ $gray-2: #808284;
 $gray-3: #C0C0C0;
 $gray-4: #F2F2F2;
 $gray-5: #F8F8F8;
+
+$pivot-dark-blue: #1E495A;
+$pivot-muted-blue: #D3E0E3;
+$pivot-teal: #58C6B9;
+$pivot-orange: #F06B0C;

@@ -6,7 +6,7 @@ person {
     justify-content: space-between;
     align-items: center;
     min-height: 66px;
-    background: $gray-4;
+    background: $pivot-muted-blue;
     margin-top: 2px;
     .common-margin {
       margin-left: 10px;
@@ -24,7 +24,7 @@ person {
       min-width: 0px;
       overflow: hidden;
       &.stats-collapsed{
-        background: linear-gradient(to left, #d6d6d6, rgba(0, 0, 0, 0) 5px);
+        background: linear-gradient(to left, #a1a1a1, rgba(0, 0, 0, 0) 5px);
       }
       & > div{
         @extend .common-margin;
@@ -63,7 +63,7 @@ person {
         cursor: pointer;
         display: flex;
         align-items: center;
-        background: $gray-1;
+        background: $pivot-orange;
         fill: $white;
         &:hover, &.open{
           background: $gray-2;
