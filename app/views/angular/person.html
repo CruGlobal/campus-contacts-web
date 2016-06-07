@@ -1,5 +1,9 @@
 <div class="person-info">
-    <div class="name">{{ $ctrl.person.full_name }}</div>
+    <div class="name">
+      <a href="/profile/{{$ctrl.person.id}}?organization_id={{$ctrl.organizationId}}">
+        {{ $ctrl.person.full_name }}
+      </a>
+    </div>
     <div class="stats" ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
         <div ng-repeat="index in [0,1,2,3,4,5,6,7,8,9]">{{ index + 100 }}</div>
         <span class="phone" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>

@@ -1,5 +1,5 @@
 <div class="header">
-    <h2>{{ $ctrl.name }}</h2>
+    <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
 </div>
 <div class="people-list">
     <person person="person" organization-id="$ctrl.id"

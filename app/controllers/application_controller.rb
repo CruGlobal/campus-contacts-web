@@ -495,4 +495,11 @@ class ApplicationController < ActionController::Base
     !ENV['UNBRANDED']
   end
   helper_method :branded?
+
+  def check_new_current_organization
+    if params[:organization_id].present? && current_person.org_ids.key?(params[:organization_id].to_i)
+      session[:current_organization_id] = params[:organization_id].to_i
+      @current_organizations[current_person] = Organization.find(params[:organization_id])
+    end
+  end
 end

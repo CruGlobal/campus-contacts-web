@@ -8,6 +8,9 @@ organization-people{
       font-weight: normal;
       font-size: 14px;
       font-family: 'Titillium Web', sans-serif;
+      a:visited {
+        color: inherit;
+      }
     }
   }
   .people-list{

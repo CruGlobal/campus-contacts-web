@@ -181,6 +181,8 @@ class ContactsController < ApplicationController
   end
 
   def all_contacts
+    check_new_current_organization
+
     session[:filters] = nil if params[:filters] == 'clear'
     respond_to do |wants|
       wants.html do

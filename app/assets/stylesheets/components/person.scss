@@ -15,6 +15,9 @@ person {
     & > .name {
       @extend .common-margin;
       flex: 0 0 150px;
+      a:visited {
+        color: inherit;
+      }
     }
     & > .stats {
       align-self: stretch;
