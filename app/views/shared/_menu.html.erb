@@ -111,7 +111,9 @@
 
   <ul id="profile_dropdown_nav" class="sc-init-menu sf-menu mh-top">
     <li>
-      <%= link_to(current_user.to_s, '#')  %>
+      <%= link_to '#' do %>
+        <%= image_tag(@current_person.picture, class: 'user-avatar') %>
+      <% end %>
       <ul>
         <li>
           <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %>
