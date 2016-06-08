@@ -99,5 +99,14 @@ module Mh
         resource '/apis/*', headers: :any, methods: [:get, :post, :options]
       end
     end
+
+    require Rails.root.join('config', 'initializers', 'redis')
+    config.cache_store = :redis_store, {
+      host: Redis.current.client.host,
+      port: Redis.current.client.port,
+      db: 1,
+      namespace: 'missionhub:cache:',
+      expires_in: 1.day
+    }
   end
 end
