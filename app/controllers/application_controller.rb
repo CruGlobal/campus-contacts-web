@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   before_action :export_i18n_messages, except: [:lb]
   before_action :set_newrelic_params, except: [:lb]
   before_action :ensure_timezone, except: [:lb]
-  before_action :check_mini_profiler, except: [:lb]
   before_action :check_signature, except: [:lb]
   before_action :check_all_signatures, except: [:lb]
   # around_filter :set_user_time_zone
@@ -115,11 +114,6 @@ class ApplicationController < ActionController::Base
     else
       cookies['logged_in'] = nil if cookies['logged_in']
     end
-  end
-
-  def check_mini_profiler
-    return unless request.subdomains.first == 'stage' || Rails.env.development?
-    Rack::MiniProfiler.authorize_request
   end
 
   def raise_or_hoptoad(e, options = {})
