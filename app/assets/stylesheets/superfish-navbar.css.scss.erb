@@ -1,28 +1,33 @@
 /*** adding the class mh-top in addition to sf-menu creates an all-horizontal nav-bar menu ***/
 
 .mh-top {
-	/*background:		url("<%= asset_path("topmenubgtall.png") %>") repeat-x 0 0 #eaf1f6;*/
-	height:			88px;
-	padding-bottom:	0em;
-	position:		relative;
-	float: 			left;
-	border-radius: 	0;
-	font-family: 	Tahoma, Arial;
-	font-size: 		12px;
-	margin-bottom: 	0px;
-	z-index: 		2;
+  height:			88px;
+  padding-bottom:	0em;
+  position:		relative;
+  border-radius: 	0;
+  font-family: 'Titillium Web', sans-serif;
+  margin-bottom: 	0px;
+  z-index: 		2;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
-.mh-top li {
+.mh-top li, #profile_dropdown_nav {
 	background: none;
 	position:		static;
 	border: none;
 	height: 64px;
 	line-height: 64px;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 .mh-top li:first-child {
-  margin-left: 32px;
+  margin-left: 10px;
 }
 
 /*
@@ -46,7 +51,6 @@
 	position:		relative;
 	height: 30px;
 	line-height: 30px;
-	font-size: 12px;
 }
 
 .mh-top li li ul {
@@ -108,14 +112,6 @@ ul.mh-top ul li.sfHover li,
 	z-index: 100;
 }
 
-.mh-top ul a:focus, .mh-top ul a:hover, .mh-top ul a:active {
-	background:		inherit;
-	background-repeat: no-repeat;
-	background-color: #fff;
-	font-size: 12px;
-	font-weight: normal;
-}
-
 ul.mh-top li li li:hover,
 ul.mh-top li li li.sfHover,
 .mh-top li li.current li.current,
@@ -166,6 +162,15 @@ ul.mh-top .current ul ul {
 
 .mh-top .sf-sub-indicator {display: none;}
 
+.mh-top.sf-arrows {
+  & > li > .sf-with-ul:focus:after,
+  & > li:hover > .sf-with-ul:after,
+  & > .sfHover > .sf-with-ul:after,
+  & > li > .sf-with-ul:after {
+    border-top-color: #fff;
+  }
+}
+
 /*** remove shadow on first submenu ***/
 .mh-top > li > ul {
 	background: transparent;
@@ -180,7 +185,7 @@ ul.mh-top .current ul ul {
 	float: none;
 }
 
-.mh-top li.sfHover {
+#primary_nav li.sfHover {
   background-image: url("<%= asset_path("whitebar.png") %>");
   background-repeat: no-repeat;
   /*background-repeat: repeat-x;*/

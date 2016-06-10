@@ -12,7 +12,8 @@ $ ->
     else
       window.location.href = "?locale="+language
 
-  $(document).on 'click', '.org_control', () ->
+  org_control_click_handler = (event) ->
+    event.stopPropagation()
     org_id = $(this).data('id')
     child_div = $(this).parents(".org_nav_item").last().siblings('.' + $(this).attr('child_div'))
     if child_div.hasClass("loaded")
@@ -30,6 +31,8 @@ $ ->
         type: 'GET',
         url: "/load_organization_tree?id=#{org_id}"
       $(this).addClass('tree_open')
+  $(document).on 'click', '#globalNav .org_control', org_control_click_handler
+  $('#menutop').on 'click', '.org_control', org_control_click_handler
 
   $(document).on 'click', '.org_star', (e)->
     document.location = $(this).attr('url')

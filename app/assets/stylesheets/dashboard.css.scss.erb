@@ -1,37 +1,47 @@
-// Place all the styles related to the dashboard controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "colors.scss";
 
-#dashboard_main {
-	padding: 0;
+.topmenu.topmenu-with-sub {
+  margin-bottom: 0;
+}
 
-	h1 {
-		margin-bottom: 40px;
-		font-family: Georgia;
-		font-size: 21px;
-		font-style: italic;
-		font-weight: normal;
-		color: #808284;
-	}
+.dashboard-subnav {
+  background: $pivot-muted-blue;
+  margin-bottom: 40px;
+  height: 48px;
+  line-height: 48px;
 
-	#dashboard_panels {
-		width: 843px;
-		margin: 0 auto;
-
-    #dashboard_error {
-      text-align: left;
-      width: 750px;
-      margin: 50px auto;
-			font-family: Georgia;
-			font-size: 14px;
-			color: #666;
-      h1 {
-        font-style: normal;
-        margin-bottom: 1em;
-      }
-      [disabled] {
-        color: gray;
-      }
+  a, a:visited {
+    color: $pivot-muted-dark-blue;
+    display: inline-block;
+    &.active {
+      cursor: default;
+      color: $pivot-dark-blue;
     }
-	}
+  }
+
+  .dashboard-mode-toggle, .dashboard-timeframe-toggle {
+    display: inline-block;
+  }
+
+  .dashboard-mode-toggle {
+    font-size: 20px;
+    a {
+      padding: 0 13px;
+    }
+  }
+
+  .dashboard-timeframe-toggle {
+    float: right;
+    a {
+      padding: 0 4px;
+    }
+  }
+}
+
+#dashboard_panels, .dashboard-subnav .inner {
+  margin: 0 auto;
+  width: 948px;
+  font-family: "Titillium Web", sans-serif;
+  color: $pivot-dark-blue;
+  font-size: 14px;
 }
