@@ -1,7 +1,11 @@
-<div class="header">
+<div class="header" ng-class="{'collapsed': $ctrl.collapsed}">
+    <span ng-if="$ctrl.collapsible" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
+      <ng-md-icon icon="expand_less" class="chevron" size="32">
+      </ng-md-icon>
+    </span>
     <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
 </div>
-<div class="people-list">
+<div class="people-list" ng-hide="$ctrl.collapsed">
     <person person="person" organization-id="$ctrl.id"
             ng-repeat="person in $ctrl.people track by person.id | orderBy: 'last_name'">
     </person>

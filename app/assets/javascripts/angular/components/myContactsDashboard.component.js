@@ -52,6 +52,9 @@
                     }
                 })
             });
+
+            vm.collapsible = people.length > 5 && _.keys(vm.organizationPeople).length > 2;
+
             vm.loading = false;
         }
 

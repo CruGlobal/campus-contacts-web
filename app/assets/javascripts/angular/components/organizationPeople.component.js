@@ -9,6 +9,7 @@
             bindings: {
                 'id': '@',
                 'name': '@',
+                'collapsible': '<',
                 'people': '<'
             }
         });

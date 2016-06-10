@@ -4,6 +4,7 @@
           id="{{ orgId }}"
           name="{{ $ctrl.getOrgName(orgId) }}"
           people="people"
-          ng-repeat="(orgId, people) in $ctrl.organizationPeople">
+          ng-repeat="(orgId, people) in $ctrl.organizationPeople"
+          collapsible="$ctrl.collapsible">
   </organization-people>
 </div>
