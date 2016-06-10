@@ -14,7 +14,7 @@ person {
     }
     & > .name {
       @extend .common-margin;
-      flex: 0 0 150px;
+      flex: 0 0 205px;
       a:visited {
         color: inherit;
       }
@@ -36,7 +36,7 @@ person {
     }
     & .phone {
       @extend .common-margin;
-      flex: 0 0 85px;
+      flex: 0 0 95px;
       text-align: center;
     }
     & > .addInteractionButtons {
