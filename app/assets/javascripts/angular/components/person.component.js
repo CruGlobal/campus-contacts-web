@@ -24,10 +24,10 @@
 
         vm.interactionTypes = [
             {id: 2, icon: 'free_breakfast', title: 'Spiritual Conversation'},
-            {id: 3, icon: 'multiline_chart', title: 'Personal Evangelism'},
-            {id: 4, icon: 'spa', title: 'Personal Evangelism Decisions'},
-            {id: 5, icon: 'whatshot', title: 'Holy Spirit Presentation'},
-            {id: 9, icon: 'free_breakfast', title: 'Discipleship / Leadership'},
+            {id: 3, icon: 'evangelism', title: 'Personal Evangelism'},
+            {id: 4, icon: 'personalDecision', title: 'Personal Evangelism Decisions'},
+            {id: 5, icon: 'holySpirit', title: 'Holy Spirit Presentation'},
+            {id: 9, icon: 'discipleship', title: 'Discipleship / Leadership'},
             {id: 1, icon: 'event_note', title: 'Comment Only'}
         ];
 
