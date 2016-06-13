@@ -21,10 +21,9 @@
             <ng-md-icon icon="{{type.icon}}"></ng-md-icon>
         </square-button>
     </div>
-    <round-button ng-click="$ctrl.toggleInteractionBtns()" ng-switch="$ctrl.addInteractionBtnsVisible">
-      <ng-md-icon icon="add" ng-switch-when="false"></ng-md-icon>
-      <ng-md-icon icon="close" ng-switch-when="true"></ng-md-icon>
-    </round-button>
+    <ng-md-icon icon="add" class="add-new-interaction" size="40" ng-click="$ctrl.toggleInteractionBtns()"
+                ng-class="{'close': $ctrl.addInteractionBtnsVisible}">
+    </ng-md-icon>
 </div>
 <div class="addInteractionPanel" ng-if="$ctrl.openPanelType">
     <textarea placeholder="Notes for new {{$ctrl.openPanelType.title}}" ng-model="$ctrl.interactionComment" class="auto-grow"></textarea>
