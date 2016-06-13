@@ -5,39 +5,47 @@ person {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 66px;
+    min-height: 50px;
     background: $pivot-muted-blue;
     margin-top: 2px;
     .common-margin {
       margin-left: 10px;
       margin-right: 10px;
     }
+    .no-data {
+      color: $pivot-teal;
+    }
     & > .name {
       @extend .common-margin;
-      flex: 0 0 205px;
+      width: 288px;
       a:visited {
         color: inherit;
       }
     }
     & > .stats {
-      align-self: stretch;
-      display: flex;
-      align-items: center;
       flex: 1 1 100px;
       min-width: 0px;
       overflow: hidden;
+      white-space: nowrap;
       &.stats-collapsed{
         background: linear-gradient(to left, #a1a1a1, rgba(0, 0, 0, 0) 5px);
       }
       & > div{
         @extend .common-margin;
-        flex: 1 0 19px;
+        text-align: center;
+        width: 30px;
+        line-height: 50px;
+        display: inline-block;
       }
     }
     & .phone {
       @extend .common-margin;
-      flex: 0 0 95px;
+      width: 100px;
       text-align: center;
+      display: inline-block;
+      &.no-data {
+        padding-left: 32px;
+      }
     }
     & > .addInteractionButtons {
       align-self: stretch;
@@ -62,7 +70,7 @@ person {
       }
       & > square-button{
         margin-left: 1px;
-        padding: 20px 10px;
+        padding: 4px 10px 0;
         cursor: pointer;
         display: flex;
         align-items: center;

@@ -5,8 +5,8 @@
       </a>
     </div>
     <div class="stats" ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
-        <div ng-repeat="index in [0,1,2,3,4,5,6,7,8,9]">{{ index + 100 }}</div>
-        <span class="phone" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
+        <div ng-repeat="index in [0,1,2,3,4,5,6]" class="no-data">-</div>
+        <span class="phone no-data" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
     </div>
     <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
         {{ $ctrl.person.phone_numbers[0].number | phone }}
