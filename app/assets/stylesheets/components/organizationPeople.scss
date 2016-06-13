@@ -18,6 +18,8 @@ organization-people{
         display: flex;
         align-items: center;
         padding: 0 13px;
+        width: 24px;
+        transition: width 200ms;
         svg {
           fill: $pivot-muted-dark-blue;
         }
@@ -48,6 +50,9 @@ organization-people{
         -ms-transform: rotate(180deg);
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
+      }
+      ng-md-icon {
+        width: 0;
       }
     }
   }
