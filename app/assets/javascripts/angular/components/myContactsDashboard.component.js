@@ -44,7 +44,7 @@
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
                         limit: 100,
-                        include: 'phone_numbers,reverse_contact_assignments.organization',
+                        include: 'phone_numbers,reverse_contact_assignments.organization,organizational_permissions',
                         'filters[assigned_tos]': 'me'
                     }
                 })
@@ -60,11 +60,17 @@
             var people = JsonApiDataStore.store.findAll('person');
             vm.organizationPeople = {};
             angular.forEach(people, function (person) {
+                if(person.id == vm.myPersonId) {
+                    return;
+                }
                 angular.forEach(person.reverse_contact_assignments, function(ca) {
-                    if(ca.assigned_to.id != vm.myPersonId) {
+                    var orgId = ca.organization.id;
+                    // make sure they have an assignment to me and they have an active permission
+                    // on the same organization
+                    if(ca.assigned_to.id != vm.myPersonId ||
+                       _.findIndex(person.organizational_permissions, { organization_id: orgId}) == -1) {
                         return;
                     }
-                    var orgId = ca.organization.id;
                     if(vm.organizationPeople[orgId] === undefined) {
                         vm.organizationPeople[orgId] = [person];
                     } else {
