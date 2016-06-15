@@ -8,7 +8,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, $log, JsonApiDataStore, envService, _) {
+    function myContactsDashboardController($http, $log, $q, JsonApiDataStore, envService, _) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = {};
@@ -19,7 +19,24 @@
         activate();
 
         function activate() {
-            loadPeople().then(dataLoaded);
+            loadAndSyncData();
+        }
+
+        function loadAndSyncData(){
+            $q.all([loadMe(), loadPeople()]).then(dataLoaded);
+        }
+
+        function loadMe() {
+            return $http
+                .get(envService.read('apiUrl') + '/people/me', {
+                    params: { include: '' }
+                })
+                .then(function (request) {
+                        vm.myPersonId = request.data.data.id;
+                    },
+                    function(error){
+                        $log.error('Error loading profile', error);
+                    });
         }
 
         function loadPeople() {
@@ -44,6 +61,9 @@
             vm.organizationPeople = {};
             angular.forEach(people, function (person) {
                 angular.forEach(person.reverse_contact_assignments, function(ca) {
+                    if(ca.assigned_to.id != vm.myPersonId) {
+                        return;
+                    }
                     var orgId = ca.organization.id;
                     if(vm.organizationPeople[orgId] === undefined) {
                         vm.organizationPeople[orgId] = [person];
