@@ -12,7 +12,7 @@
             }
         });
 
-    function personController($animate, $http, $log, envService, JsonApiDataStore) {
+    function personController($animate, $http, $log, $scope, envService, JsonApiDataStore) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -43,6 +43,7 @@
                 $animate.on('leave', angular.element('.addInteractionButtons'),
                     function callback(element, phase) {
                         vm.closingInteractionButtons = phase === 'start';
+                        $scope.$apply();
                     }
                 );
                 closeAddInteractionPanel();
