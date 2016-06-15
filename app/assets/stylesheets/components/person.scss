@@ -50,6 +50,7 @@ person {
     .add-new-interaction {
       fill: $pivot-teal;
       transition: transform 200ms;
+      cursor: pointer;
       &.close {
         -ms-transform: translateX(-2px) rotate(45deg);
         -webkit-transform: translateX(-2px) rotate(45deg);
