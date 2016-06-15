@@ -9,6 +9,10 @@ organization-people{
     .org-name {
       width: 294px;
       padding: 0 8px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
     }
     .stats-icons {
       flex: 1;
@@ -27,11 +31,18 @@ organization-people{
     }
 
     h2{
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
       margin: 0;
       font-weight: normal;
       font-size: 14px;
       font-family: 'Titillium Web', sans-serif;
       display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       a:visited {
         color: inherit;
       }
