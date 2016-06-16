@@ -11,10 +11,10 @@
     function myContactsDashboardController($http, $log, $q, JsonApiDataStore, envService, _) {
         var vm = this;
         vm.contacts = [];
-        vm.organizationPeople = {};
+        vm.organizationPeople = [];
         vm.loading = true;
 
-        vm.getOrgName = getOrgName;
+        vm.ancestryComparator = ancestryComparator;
 
         activate();
 
@@ -58,7 +58,7 @@
 
         function dataLoaded() {
             var people = JsonApiDataStore.store.findAll('person');
-            vm.organizationPeople = {};
+            vm.organizationPeople = [];
             angular.forEach(people, function (person) {
                 if(person.id == vm.myPersonId) {
                     return;
@@ -71,11 +71,13 @@
                        _.findIndex(person.organizational_permissions, { organization_id: orgId}) == -1) {
                         return;
                     }
-                    if(vm.organizationPeople[orgId] === undefined) {
-                        vm.organizationPeople[orgId] = [person];
-                    } else {
-                        vm.organizationPeople[orgId] = _.union(vm.organizationPeople[orgId],[person]);
+                    var org = _.find(vm.organizationPeople, { id: orgId });
+                    if(org === undefined) {
+                        org = JsonApiDataStore.store.find('organization', orgId);
+                        org.people = [];
+                        vm.organizationPeople.push(org)
                     }
+                    org.people = _.union(org.people,[person]);
                 })
             });
 
@@ -84,12 +86,13 @@
             vm.loading = false;
         }
 
-        function getOrgName(orgId) {
-            var org = JsonApiDataStore.store.find('organization', orgId);
-            if(org) {
-                return org.name;
+        function ancestryComparator(org1, org2) {
+            org1 = JsonApiDataStore.store.find('organization', org1);
+            org2 = JsonApiDataStore.store.find('organization', org2);
+            if(org1.ancestry != org2.ancestry) {
+                return (org2.ancestry < org1.ancestry) ? -1 : 1;
             }
-            return orgId;
+            return (org2.name < org1.name) ? -1 : 1;
         }
     }
 })();

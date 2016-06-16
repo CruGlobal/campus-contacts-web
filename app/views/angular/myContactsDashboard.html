@@ -1,10 +1,10 @@
 <div class="my-contacts-dashboard">
   <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">Loading Contacts</h1>
   <organization-people
-          id="{{ orgId }}"
-          name="{{ $ctrl.getOrgName(orgId) }}"
-          people="people"
-          ng-repeat="(orgId, people) in $ctrl.organizationPeople"
+          id="{{ org.id }}"
+          name="{{ org.name }}"
+          people="org.people"
+          ng-repeat="org in $ctrl.organizationPeople | orderBy:'id':false:ancestryComparator"
           collapsible="$ctrl.collapsible">
   </organization-people>
 </div>
