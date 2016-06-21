@@ -279,8 +279,15 @@ class ApplicationController < ActionController::Base
   def current_organization(person = nil)
     person ||= current_person if user_signed_in?
     return nil unless person
-    @current_organizations ||= {}
 
+    if params[:temp_current_organization_id].present?
+      return @temp_current_organization if @temp_current_organization.present?
+      if current_person.org_ids.key?(params[:temp_current_organization_id].to_i)
+        return @temp_current_organization = Organization.find(params[:temp_current_organization_id])
+      end
+    end
+
+    @current_organizations ||= {}
     return @current_organizations[person] if @current_organizations[person]
     # Set current org based on the session, particularly uses in set_current org feature
     if session[:current_organization_id]
