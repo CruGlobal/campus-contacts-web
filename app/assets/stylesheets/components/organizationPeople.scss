@@ -29,6 +29,15 @@ organization-people{
         }
       }
     }
+    .right-buttons {
+      a {
+        display: inline-block;
+        padding: 9px 11px;
+      }
+      ng-md-icon svg {
+        fill: $pivot-teal;
+      }
+    }
 
     h2{
       -webkit-box-flex: 1;

@@ -638,6 +638,15 @@ class ContactsController < ApplicationController
     end
   end
 
+  def new
+    check_new_current_organization
+    permissions_for_assign
+    @person = Person.new
+    respond_to do |format|
+      format.js
+    end
+  end
+
   protected
 
   def prepare_pagination

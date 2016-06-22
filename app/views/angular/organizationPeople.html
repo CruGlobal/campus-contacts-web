@@ -7,15 +7,18 @@
     <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
   </div>
   <div class="stats-icons">
-    <ng-md-icon icon="assigned_people"></ng-md-icon>
-    <ng-md-icon icon="questionable_people"></ng-md-icon>
+    <ng-md-icon icon="assignedPeople"></ng-md-icon>
+    <ng-md-icon icon="questionablePeople"></ng-md-icon>
     <ng-md-icon icon="free_breakfast"></ng-md-icon>
     <ng-md-icon icon="evangelism"></ng-md-icon>
     <ng-md-icon icon="personalDecision"></ng-md-icon>
     <ng-md-icon icon="holySpirit"></ng-md-icon>
     <ng-md-icon icon="discipleship"></ng-md-icon>
   </div>
-  <div>
+  <div class="right-buttons">
+    <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}" data-remote="true" title="Add Contact">
+      <ng-md-icon icon="addContact"></ng-md-icon>
+    </a>
   </div>
 </div>
 <div class="people-list" ng-hide="$ctrl.collapsed">

@@ -21,6 +21,7 @@
                   </div>
                 <% end %>
 
+                <%= hidden_field_tag :temp_current_organization_id, current_organization.id %>
                 <%= hidden_field_tag :add_another %>
         				<%= hidden_field_tag :add_to_group_tag, 0 %>
                 <%= hidden_field_tag :add_to_group %>
@@ -64,8 +65,8 @@
               </div>
 
               <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group" style="<%= @from_group %>">
-                <% current_organization.surveys.each do |survey| %>
-                  <% if survey.questions.count > 0 %>
+                <% current_organization.surveys.includes(:questions).each do |survey| %>
+                  <% if survey.questions.to_a.count > 0 # do to_a because we have them preloaded %>
                     <div class="survey_title add_contact_survey_title"><%= survey.title %></div>
                     <% answer_sheet = @person.answer_sheets.find_by(survey_id: survey.id) if @person %>
                     <% survey.questions.each do |question| %>

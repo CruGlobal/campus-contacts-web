@@ -43,7 +43,7 @@
             return $http
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
-                        limit: 100,
+                        'page[limit]': 100,
                         include: 'phone_numbers,reverse_contact_assignments.organization,organizational_permissions',
                         'filters[assigned_tos]': 'me'
                     }
