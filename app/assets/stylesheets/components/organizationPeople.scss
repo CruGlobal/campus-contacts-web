@@ -81,6 +81,7 @@ organization-people{
     flex-direction: column;
     margin-bottom: 24px;
   }
+
   round-button{
     display: flex;
     align-items: center;
@@ -105,6 +106,16 @@ organization-people{
     }
     & + round-button{
       margin-left: 0;
+    }
+    &.disabled {
+      cursor: initial;
+      opacity: 0.3;
+      &:hover {
+        background: $pivot-teal;
+      }
+      &:active{
+        background: $pivot-teal;
+      }
     }
   }
 }
