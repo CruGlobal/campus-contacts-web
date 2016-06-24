@@ -44,7 +44,8 @@
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
                         'page[limit]': 100,
-                        include: 'phone_numbers,reverse_contact_assignments.organization,organizational_permissions',
+                        include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
+                                 'organizational_permissions',
                         'filters[assigned_tos]': 'me'
                     }
                 })
