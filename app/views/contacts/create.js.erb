@@ -1,5 +1,5 @@
 <% if @add_to_group_tag == '1' %>
-	$('#group_table').prepend("<%= j(render('groups/person', person: @person, group_membership: @group_membership)) %>")
+  $('#group_table').prepend("<%= j(render('groups/person', person: @person, group_membership: @group_membership)) %>")
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
     $.hideDialog($("#add_contact_div"))
     $("#add_contact_div").replaceWith("<%= j(render('dialogs/add_contact', person: Person.new)) %>")
@@ -10,20 +10,20 @@
   $(".remove_add_new_person_to_group, .explain").hide()
   $.n("<%= t('groups.add_group_member_success') %>")
 <% else %>
-	<% unless params[:update] %>
-		<% if params[:assign_to_me] == 'true' %>
-			$('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
-		<% else %>
+  <% unless params[:update] %>
+    <% if params[:assign_to_me] == 'true' %>
+      $('#contacts_table').prepend("<%= j(render('contacts/my_contact', :person => @person)) %>")
+    <% else %>
       if($("#person_<%= @person.id %>").is(":visible")){
         $("#person_<%= @person.id %>").remove()
       }
-			$('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions)) %>")
-		<% end %>
-	<% else %>
-		$.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
-		window.location = "/people/" + <%= params[:id] %>
-	<% end %>
-	$('.no_contacts').hide()
+      $('#contacts_table').prepend("<%= j(render('contacts/contact', person: @person, answers: @answers, questions: @questions)) %>")
+    <% end %>
+  <% else %>
+    $.a("<%= t('contacts.create.success', name: Person.find(params[:id]).name) %>")
+    window.location = "/people/" + <%= params[:id] %>
+  <% end %>
+  $('.no_contacts').hide()
   <% @email = EmailAddress.new %>
   <% @phone = PhoneNumber.new %>
   if($("#add_contact_div .mh_popup_box_scroller").size() > 0){
@@ -50,3 +50,5 @@ $.toggleLoader('add_contact_title','')
 $('#<%= dom_id(@person) %>').effect('highlight')
 $.fn.reset_add_contact_form()
 $("body").removeClass("add-more-contact")
+
+document.dispatchEvent(new Event('contacts::contactAdded'));

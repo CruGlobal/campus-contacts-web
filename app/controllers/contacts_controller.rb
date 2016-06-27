@@ -455,6 +455,7 @@ class ContactsController < ApplicationController
       end
     end if params[:answers]
 
+    @assign_to_me = ['1', 'true', true].include?(params[:assign_to_me])
     @organization = current_organization
     create_contact
   end
@@ -642,6 +643,7 @@ class ContactsController < ApplicationController
     check_new_current_organization
     permissions_for_assign
     @person = Person.new
+    @assign_to_me = ['1', 'true', true].include?(params[:assign_to_me])
     respond_to do |format|
       format.js
     end

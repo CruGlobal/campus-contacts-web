@@ -8,7 +8,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, $log, $q, JsonApiDataStore, envService, _) {
+    function myContactsDashboardController($http, $log, $q, $document, JsonApiDataStore, envService, _) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -17,9 +17,15 @@
         vm.ancestryComparator = ancestryComparator;
 
         activate();
+        vm.$onDestroy = cleanUp;
 
         function activate() {
             loadAndSyncData();
+            angular.element($document).on('contacts::contactAdded', loadAndSyncData);
+        }
+
+        function cleanUp() {
+            angular.element($document).off('contacts::contactAdded', loadAndSyncData);
         }
 
         function loadAndSyncData(){

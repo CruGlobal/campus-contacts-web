@@ -6,10 +6,15 @@
         <span class="mh_popup_heading" id="add_contact_title"><%= t('application.add_contact.add_contact', org: current_organization) %></span>
       </div>
       <div class="mh_popup_box_content">
-        <div class="fancy"><%= t('application.add_contact.survey_mode_instructions') %></div>
         <div class="mh_popup_box_scroller">
           <% @from_group = flash[:add_to_group_tag].present? && flash[:add_to_group_tag] != '0' ? 'display:none;' : nil %>
           <%= form_for person, url: contacts_path, method: :post, remote: true, html: {id: 'modal_contact_form'} do |f| %>
+            <div class="fancy"><%= t('application.add_contact.survey_mode_instructions') %></div>
+            <% if @assign_to_me %>
+              <div class="fancy info">
+                <%= t('application.add_contact.will_be_assigned_to_you') %>
+              </div>
+            <% end %>
             <div id="add_contact_form">
               <div class="form_group_label">
                 <%= t('application.add_contact.title_bio') %>
@@ -26,7 +31,7 @@
         				<%= hidden_field_tag :add_to_group_tag, 0 %>
                 <%= hidden_field_tag :add_to_group %>
                 <%= hidden_field_tag :add_to_group_role %>
-                <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
+                <%= hidden_field_tag :assign_to_me, !!@assign_to_me, id: 'assign_new_contact_to_me' %>
                 <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
                 <%= hidden_field_tag :dnc, params[:dnc] %>
                 <%= hidden_field_tag :existing_contact, @existing_contact %>

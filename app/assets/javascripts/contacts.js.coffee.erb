@@ -1066,7 +1066,8 @@ $.mh.saveContact = (add_more) ->
   form = $('#modal_contact_form')
 
   #For My Contacts Page
-  $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
+  if($('#mine_assign_to')[0])
+    $('#assign_new_contact_to_me').val($('#mine_assign_to').val())
 
   #For add a new contact record in Group Members Page
   group_tag = $("#add_to_group_id").val()

@@ -1,3 +1,5 @@
+@import "colors.scss";
+
 /*
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
@@ -392,6 +394,17 @@
 }
 .add_contact_survey_title {
   margin: 10px 0px;
+}
+#add_contact_div .mh_popup_box_content .fancy {
+  display: inline-block;
+  margin: -5px -20px 5px;
+  padding: 8px 20px;
+  width: 560px; // magic numbers work here because the modal is currently fixed width
+  border-bottom: 1px solid #a2a2a2;
+  &.info {
+    background: $pivot-muted-blue;
+    color: $pivot-dark-blue;
+  }
 }
 #add_contact_form {
   .form_group_label {
