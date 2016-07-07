@@ -1,13 +1,13 @@
 person {
   display: flex;
   flex-direction: column;
+  &:nth-child(even) > .person-info { background: #F0F0F0 }
   & > .person-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 50px;
-    background: $pivot-muted-blue;
-    margin-top: 2px;
+    background: $white;
     .common-margin {
       margin-left: 10px;
       margin-right: 10px;
@@ -48,7 +48,7 @@ person {
       }
     }
     .add-new-interaction {
-      fill: $pivot-teal;
+      fill: $pivot-dark-blue;
       transition: transform 200ms;
       cursor: pointer;
       &.close {
@@ -79,25 +79,30 @@ person {
         }
       }
       & > square-button{
-        margin-left: 1px;
         padding: 4px 10px 0;
         cursor: pointer;
         display: flex;
         align-items: center;
-        background: $pivot-orange;
         fill: $white;
+        &:nth-child(1) { background: tint($pivot-dark-blue, 10%); }
+        &:nth-child(2) { background: tint($pivot-dark-blue, 20%); }
+        &:nth-child(3) { background: tint($pivot-dark-blue, 30%); }
+        &:nth-child(4) { background: tint($pivot-dark-blue, 40%); }
+        &:nth-child(5) { background: tint($pivot-dark-blue, 50%); }
+        &:nth-child(6) { background: tint($pivot-dark-blue, 60%); }
+        &:nth-child(7) { background: tint($pivot-dark-blue, 70%); }
         &:hover, &.open{
-          background: $gray-2;
+          background: $pivot-dark-blue;
         }
         &:active{
-          background: $gray-3;
+          background: lighten($pivot-dark-blue, 5%);
         }
       }
     }
   }
   & > .addInteractionPanel{
     padding: 10px;
-    background: $gray-2;
+    background: $pivot-dark-blue;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -447,7 +447,9 @@ a.headerlink:hover {
 .topmenu {
   margin-bottom: 40px;
   height: 64px;
-  background: $pivot-dark-blue;
+  background: $pivot-gradient-light;
+  background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
+  background: linear-gradient(to bottom, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

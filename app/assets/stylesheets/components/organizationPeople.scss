@@ -1,6 +1,8 @@
 organization-people{
   .header{
-    background: $pivot-dark-blue;
+    background: $pivot-gradient-light;
+    background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
+    background: linear-gradient(to bottom, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
     color: $white;
     display: flex;
     height: 48px;
@@ -25,7 +27,7 @@ organization-people{
         width: 24px;
         transition: width 200ms;
         svg {
-          fill: $pivot-muted-dark-blue;
+          fill: $white;
         }
       }
     }
@@ -35,7 +37,7 @@ organization-people{
         padding: 9px 11px;
       }
       ng-md-icon svg {
-        fill: $pivot-teal;
+        fill: $white;
       }
     }
 
@@ -88,18 +90,14 @@ organization-people{
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    background: $pivot-teal;
-    color: $white;
-    fill: $white;
+    color: $pivot-dark-blue;
+    fill: $pivot-dark-blue;
     margin-left: 12px;
     margin-right: 6px;
     cursor: pointer;
     &:hover{
-      background: $gray-1;
     }
     &:active{
-      background: $gray-3;
     }
     & > ng-md-icon{
       display: inherit;
@@ -110,11 +108,8 @@ organization-people{
     &.disabled {
       cursor: initial;
       opacity: 0.3;
-      &:hover {
-        background: $pivot-teal;
-      }
-      &:active{
-        background: $pivot-teal;
+      &:hover, &:active{
+        background: none;
       }
     }
   }
