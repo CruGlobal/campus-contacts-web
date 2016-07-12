@@ -5,6 +5,7 @@
           name="{{ org.name }}"
           people="org.people"
           ng-repeat="org in $ctrl.organizationPeople | orderBy:'id':false:ancestryComparator"
+          period="$ctrl.period"
           collapsible="$ctrl.collapsible">
   </organization-people>
 </div>

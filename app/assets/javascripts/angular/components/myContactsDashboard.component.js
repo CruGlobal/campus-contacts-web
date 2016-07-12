@@ -1,10 +1,13 @@
-(function(){
+(function () {
     'use strict';
 
     angular
         .module('missionhubApp')
         .component('myContactsDashboard', {
             controller: myContactsDashboardController,
+            bindings: {
+                period: '<'
+            },
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
@@ -18,6 +21,7 @@
 
         activate();
         vm.$onDestroy = cleanUp;
+        vm.$onChanges = bindingsChanged;
 
         function activate() {
             loadAndSyncData();
@@ -28,19 +32,25 @@
             angular.element($document).off('contacts::contactAdded', loadAndSyncData);
         }
 
-        function loadAndSyncData(){
+        function loadAndSyncData() {
             $q.all([loadMe(), loadPeople()]).then(dataLoaded);
+        }
+
+        function bindingsChanged(changesObj) {
+            if(changesObj.period && !vm.loading) {
+                loadReports();
+            }
         }
 
         function loadMe() {
             return $http
                 .get(envService.read('apiUrl') + '/people/me', {
-                    params: { include: '' }
+                    params: {include: ''}
                 })
                 .then(function (request) {
                         vm.myPersonId = request.data.data.id;
                     },
-                    function(error){
+                    function (error) {
                         $log.error('Error loading profile', error);
                     });
         }
@@ -51,40 +61,69 @@
                     params: {
                         'page[limit]': 100,
                         include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
-                                 'organizational_permissions',
+                        'organizational_permissions',
                         'filters[assigned_tos]': 'me'
                     }
                 })
                 .then(function (request) {
                         JsonApiDataStore.store.sync(request.data);
                     },
-                    function(error){
+                    function (error) {
                         $log.error('Error loading people', error);
                     });
         }
 
+        function loadReports() {
+            var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
+                organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
+
+            $http.get(envService.read('apiUrl') + '/reports/organizations', {
+                params: {
+                    period: vm.period,
+                    organization_ids: organization_ids
+                }
+            }).then(function (request) {
+                JsonApiDataStore.store.sync(request.data);
+            }, function (error) {
+                $log.error('Error loading organization reports', error);
+            });
+
+            $http.get(envService.read('apiUrl') + '/reports/people', {
+                params: {
+                    period: vm.period,
+                    organization_ids: organization_ids,
+                    people_ids: people_ids
+                }
+            }).then(function (request) {
+                JsonApiDataStore.store.sync(request.data);
+            }, function (error) {
+                $log.error('Error loading people reports', error);
+            });
+        }
+
         function dataLoaded() {
+            loadReports();
             var people = JsonApiDataStore.store.findAll('person');
             vm.organizationPeople = [];
             angular.forEach(people, function (person) {
-                if(person.id == vm.myPersonId) {
+                if (person.id == vm.myPersonId) {
                     return;
                 }
-                angular.forEach(person.reverse_contact_assignments, function(ca) {
+                angular.forEach(person.reverse_contact_assignments, function (ca) {
                     var orgId = ca.organization.id;
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
-                    if(ca.assigned_to.id != vm.myPersonId ||
-                       _.findIndex(person.organizational_permissions, { organization_id: orgId}) == -1) {
+                    if (ca.assigned_to.id != vm.myPersonId ||
+                        _.findIndex(person.organizational_permissions, {organization_id: orgId}) == -1) {
                         return;
                     }
-                    var org = _.find(vm.organizationPeople, { id: orgId });
-                    if(org === undefined) {
+                    var org = _.find(vm.organizationPeople, {id: orgId});
+                    if (org === undefined) {
                         org = JsonApiDataStore.store.find('organization', orgId);
                         org.people = [];
                         vm.organizationPeople.push(org)
                     }
-                    org.people = _.union(org.people,[person]);
+                    org.people = _.union(org.people, [person]);
                 })
             });
 
@@ -96,7 +135,7 @@
         function ancestryComparator(org1, org2) {
             org1 = JsonApiDataStore.store.find('organization', org1);
             org2 = JsonApiDataStore.store.find('organization', org2);
-            if(org1.ancestry != org2.ancestry) {
+            if (org1.ancestry != org2.ancestry) {
                 return (org2.ancestry < org1.ancestry) ? -1 : 1;
             }
             return (org2.name < org1.name) ? -1 : 1;
