@@ -6,7 +6,9 @@
     </div>
     <div class="stats"
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
-        <div ng-repeat="index in [0,1,2,3,4,5,6]" class="no-data">-</div>
+        <div>{{$ctrl.report.contact_count || '-'}}</div>
+        <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
+        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
         <span class="phone no-data" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
     </div>
     <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">

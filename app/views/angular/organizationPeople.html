@@ -7,13 +7,16 @@
     <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
   </div>
   <div class="stats-icons">
-    <ng-md-icon icon="assignedPeople"></ng-md-icon>
-    <ng-md-icon icon="questionablePeople"></ng-md-icon>
-    <ng-md-icon icon="free_breakfast"></ng-md-icon>
-    <ng-md-icon icon="evangelism"></ng-md-icon>
-    <ng-md-icon icon="personalDecision"></ng-md-icon>
-    <ng-md-icon icon="holySpirit"></ng-md-icon>
-    <ng-md-icon icon="discipleship"></ng-md-icon>
+      <div>{{$ctrl.report.contact_count || '-'}}</div>
+      <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
+      <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
+    <!--<ng-md-icon icon="assignedPeople"></ng-md-icon>-->
+    <!--<ng-md-icon icon="questionablePeople"></ng-md-icon>-->
+    <!--<ng-md-icon icon="free_breakfast"></ng-md-icon>-->
+    <!--<ng-md-icon icon="evangelism"></ng-md-icon>-->
+    <!--<ng-md-icon icon="personalDecision"></ng-md-icon>-->
+    <!--<ng-md-icon icon="holySpirit"></ng-md-icon>-->
+    <!--<ng-md-icon icon="discipleship"></ng-md-icon>-->
   </div>
   <div class="right-buttons">
     <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1" data-remote="true" title="Add Contact">
@@ -22,7 +25,7 @@
   </div>
 </div>
 <div class="people-list" ng-hide="$ctrl.collapsed">
-    <person person="person" organization-id="$ctrl.id"
+    <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
             ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
     </person>
 </div>
