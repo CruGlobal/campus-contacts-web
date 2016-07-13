@@ -42,7 +42,7 @@
 
         function bindingChanges(changesObj) {
             if (changesObj.period) {
-                updateReport()
+                updateReport();
             }
         }
 
