@@ -24,6 +24,7 @@
 //= require angular/angular
 //= require angular-animate/angular-animate
 //= require lodash/lodash
+//= require lscache/lscache
 //= require angular-material-icons/angular-material-icons
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
 //= require angular-environment/dist/angular-environment

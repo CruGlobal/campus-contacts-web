@@ -15,10 +15,12 @@
             }
         });
 
-    function organizationPeopleController(JsonApiDataStore, _) {
-        var vm = this;
+    function organizationPeopleController(JsonApiDataStore, lscache, _) {
+        var vm = this,
+            UNASSIGNED_VISIBLE = 'unassignedVisible';
 
         vm.reportInteractions = reportInteractions;
+        vm.unassignedVisible = unassignedVisible;
 
         vm.$onChanges = bindingsChanged;
 
@@ -47,5 +49,14 @@
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
 
+        function unassignedVisible(value) {
+            var key = [UNASSIGNED_VISIBLE, vm.id].join(':'),
+                val = lscache.get(key);
+            if (angular.isDefined(value)) {
+                val = !!value;
+                lscache.set(key, val, 24 * 60 * 60); // 24 hour expiry
+            }
+            return val === null ? true : val;
+        }
     }
 })();
