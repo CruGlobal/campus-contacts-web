@@ -15,7 +15,7 @@
             }
         });
 
-    function organizationPeopleController(JsonApiDataStore) {
+    function organizationPeopleController(JsonApiDataStore, _) {
         var vm = this;
 
         vm.reportInteractions = reportInteractions;

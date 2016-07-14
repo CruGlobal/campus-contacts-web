@@ -13,7 +13,7 @@
             }
         });
 
-    function personController($animate, $http, $log, $scope, envService, JsonApiDataStore) {
+    function personController($animate, $http, $log, $scope, envService, JsonApiDataStore, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
