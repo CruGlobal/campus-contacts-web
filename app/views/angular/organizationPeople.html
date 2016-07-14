@@ -18,10 +18,10 @@
         </a>
     </div>
 </div>
-<div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible()">
+<div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible">
     <div>{{$ctrl.report.unassigned_count}} Unassigned</div>
     <a title="Snooze for 24hrs">
-        <div class="snooze" ng-click="$ctrl.unassignedVisible(false)">
+        <div class="snooze" ng-click="$ctrl.setUnassignedVisible(false)">
             <ng-md-icon icon="snooze"></ng-md-icon>
         </div>
     </a>

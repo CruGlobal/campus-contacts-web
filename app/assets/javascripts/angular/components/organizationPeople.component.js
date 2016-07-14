@@ -20,9 +20,16 @@
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
         vm.reportInteractions = reportInteractions;
-        vm.unassignedVisible = unassignedVisible;
+        vm.setUnassignedVisible = setUnassignedVisible;
 
+        vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;
+
+        function activate() {
+            var key = [UNASSIGNED_VISIBLE, vm.id].join(':'),
+                val = lscache.get(key);
+            vm.unassignedVisible = (val === null) ? true : val;
+        }
 
         function bindingsChanged(changesObj) {
             if (changesObj.period) {
@@ -49,14 +56,10 @@
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
 
-        function unassignedVisible(value) {
-            var key = [UNASSIGNED_VISIBLE, vm.id].join(':'),
-                val = lscache.get(key);
-            if (angular.isDefined(value)) {
-                val = !!value;
-                lscache.set(key, val, 24 * 60 * 60); // 24 hour expiry
-            }
-            return val === null ? true : val;
+        function setUnassignedVisible(value) {
+            var key = [UNASSIGNED_VISIBLE, vm.id].join(':');
+            vm.unassignedVisible = !!value;
+            lscache.set(key, vm.unassignedVisible, 24 * 60); // 24 hour expiry
         }
     }
 })();
