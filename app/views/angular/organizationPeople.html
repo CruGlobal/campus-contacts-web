@@ -32,7 +32,7 @@
     </a>
 </div>
 <div class="people-list" ng-hide="$ctrl.collapsed || $ctrl.editMode">
-    <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
+    <person person="person" organization-id="$ctrl.id" period="$ctrl.period" my-person-id="$ctrl.myPersonId"
             ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
     </person>
 </div>

@@ -9,7 +9,8 @@
             bindings: {
                 person: '<',
                 organizationId: '<',
-                period: '<'
+                period: '<',
+                myPersonId: '<'
             }
         });
 
@@ -93,8 +94,15 @@
                             data: {id: vm.person.id, type: 'person'}
                         }
                     }
-                }
+                },
+                included: [{
+                    type: 'interaction_initiator',
+                    attributes: {
+                        person_id: vm.myPersonId
+                    }
+                }]
             });
+            //TODO: newInteraction is missing 'included' interaction_initiator
             $log.log(newInteraction);
             $http
                 .post(envService.read('apiUrl') + '/interactions', newInteraction.serialize())
