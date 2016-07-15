@@ -1,26 +1,27 @@
-organization-people{
-  .header{
+organization-people {
+  .header {
     background: $pivot-gradient-light;
     background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
     background: linear-gradient(to bottom, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
     color: $white;
     display: flex;
+    align-items: center;
     height: 48px;
-    line-height: 48px;
+
+    ng-md-icon {
+      display: flex;
+    }
 
     .org-name {
       width: 294px;
       padding: 0 8px;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: -ms-flexbox;
       display: flex;
     }
+
     .stats-icons {
       flex: 1;
       display: flex;
-      div
-      {
+      div {
         display: flex;
         align-items: center;
         padding: 0 14px;
@@ -38,7 +39,7 @@ organization-people{
       }
     }
 
-    h2{
+    h2 {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
       -ms-flex: 1;
@@ -75,13 +76,13 @@ organization-people{
       }
     }
   }
-  .people-list{
+  .people-list {
     display: flex;
     flex-direction: column;
     margin-bottom: 24px;
   }
 
-  round-button{
+  round-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,21 +93,38 @@ organization-people{
     margin-left: 12px;
     margin-right: 6px;
     cursor: pointer;
-    &:hover{
+    &:hover {
     }
-    &:active{
+    &:active {
     }
-    & > ng-md-icon{
+    & > ng-md-icon {
       display: inherit;
     }
-    & + round-button{
+    & + round-button {
       margin-left: 0;
     }
     &.disabled {
       cursor: initial;
       opacity: 0.3;
-      &:hover, &:active{
+      &:hover, &:active {
         background: none;
+      }
+    }
+  }
+
+  .unassigned {
+    background-color: $pivot-orange;
+    color: $white;
+    padding: 6px 11px 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .snooze {
+      color: $white;
+      fill: $white;
+      cursor: pointer;
+      & > ng-md-icon {
+        display: flex;
       }
     }
   }

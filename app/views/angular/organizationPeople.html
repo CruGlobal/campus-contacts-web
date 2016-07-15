@@ -1,28 +1,30 @@
 <div class="header" ng-class="{'collapsed': $ctrl.collapsed}">
-  <div class="org-name">
+    <div class="org-name">
     <span ng-if="$ctrl.collapsible" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
       <ng-md-icon icon="expand_less" class="chevron" size="32">
       </ng-md-icon>
     </span>
-    <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
-  </div>
-  <div class="stats-icons">
-      <div>{{$ctrl.report.contact_count || '-'}}</div>
-      <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
-      <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
-    <!--<ng-md-icon icon="assignedPeople"></ng-md-icon>-->
-    <!--<ng-md-icon icon="questionablePeople"></ng-md-icon>-->
-    <!--<ng-md-icon icon="free_breakfast"></ng-md-icon>-->
-    <!--<ng-md-icon icon="evangelism"></ng-md-icon>-->
-    <!--<ng-md-icon icon="personalDecision"></ng-md-icon>-->
-    <!--<ng-md-icon icon="holySpirit"></ng-md-icon>-->
-    <!--<ng-md-icon icon="discipleship"></ng-md-icon>-->
-  </div>
-  <div class="right-buttons">
-    <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1" data-remote="true" title="Add Contact">
-      <ng-md-icon icon="addContact"></ng-md-icon>
+        <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
+    </div>
+    <div class="stats-icons">
+        <div>{{$ctrl.report.contact_count || '-'}}</div>
+        <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
+        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
+    </div>
+    <div class="right-buttons">
+        <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1" data-remote="true"
+           title="Add Contact">
+            <ng-md-icon icon="addContact"></ng-md-icon>
+        </a>
+    </div>
+</div>
+<div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible">
+    <div>{{$ctrl.report.unassigned_count}} Unassigned</div>
+    <a title="Snooze for 24hrs">
+        <div class="snooze" ng-click="$ctrl.setUnassignedVisible(false)">
+            <ng-md-icon icon="snooze"></ng-md-icon>
+        </div>
     </a>
-  </div>
 </div>
 <div class="people-list" ng-hide="$ctrl.collapsed">
     <person person="person" organization-id="$ctrl.id" period="$ctrl.period"

@@ -4,5 +4,6 @@
 
     angular
         .module('missionhubApp')
-        .constant('_', window._);
+        .constant('_', window._)
+        .constant('lscache', window.lscache);
 })();

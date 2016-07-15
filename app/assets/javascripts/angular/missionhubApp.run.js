@@ -1,10 +1,10 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('missionhubApp')
-        .run(function () {
-
+        .run(function (lscache) {
+            lscache.setBucket('missionhub:');
         });
 
 })();

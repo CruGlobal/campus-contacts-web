@@ -15,12 +15,21 @@
             }
         });
 
-    function organizationPeopleController(JsonApiDataStore, _) {
-        var vm = this;
+    function organizationPeopleController(JsonApiDataStore, lscache, _) {
+        var vm = this,
+            UNASSIGNED_VISIBLE = 'unassignedVisible';
 
         vm.reportInteractions = reportInteractions;
+        vm.setUnassignedVisible = setUnassignedVisible;
 
+        vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;
+
+        function activate() {
+            var key = [UNASSIGNED_VISIBLE, vm.id].join(':'),
+                val = lscache.get(key);
+            vm.unassignedVisible = (val === null) ? true : val;
+        }
 
         function bindingsChanged(changesObj) {
             if (changesObj.period) {
@@ -47,5 +56,10 @@
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
 
+        function setUnassignedVisible(value) {
+            var key = [UNASSIGNED_VISIBLE, vm.id].join(':');
+            vm.unassignedVisible = !!value;
+            lscache.set(key, vm.unassignedVisible, 24 * 60); // 24 hour expiry
+        }
     }
 })();
