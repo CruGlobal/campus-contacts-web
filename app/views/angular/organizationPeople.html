@@ -1,9 +1,8 @@
 <div class="header" ng-class="{'collapsed': $ctrl.collapsed}">
     <div class="org-name">
-    <span ng-if="$ctrl.collapsible" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
-      <ng-md-icon icon="expand_less" class="chevron" size="32">
-      </ng-md-icon>
-    </span>
+        <span ng-if="$ctrl.collapsible && !$ctrl.editMode" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
+            <ng-md-icon icon="expand_less" class="chevron" size="32"></ng-md-icon>
+        </span>
         <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
     </div>
     <div class="stats-icons">
@@ -12,10 +11,16 @@
         <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
     </div>
     <div class="right-buttons">
-        <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1" data-remote="true"
-           title="Add Contact">
+        <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1"
+           data-remote="true" title="Add Contact" ng-hide="$ctrl.editMode">
             <ng-md-icon icon="addContact"></ng-md-icon>
         </a>
+        <div ng-if="$ctrl.editMode">
+            <ng-md-icon icon="visibilityOn" size="22"></ng-md-icon>
+            <span class="sort-orgs-handle">
+                <ng-md-icon icon="dragHandle" size="22"></ng-md-icon>
+            </span>
+        </div>
     </div>
 </div>
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible">
@@ -26,7 +31,7 @@
         </div>
     </a>
 </div>
-<div class="people-list" ng-hide="$ctrl.collapsed">
+<div class="people-list" ng-hide="$ctrl.collapsed || $ctrl.editMode">
     <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
             ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
     </person>

@@ -11,7 +11,8 @@
                 'name': '@',
                 'collapsible': '<',
                 'people': '<',
-                'period': '<'
+                'period': '<',
+                'editMode': '<'
             }
         });
 

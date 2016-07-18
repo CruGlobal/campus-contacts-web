@@ -1,4 +1,6 @@
 organization-people {
+  display: block;
+  margin-bottom: 20px;
   .header {
     background: $pivot-gradient-light;
     background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
@@ -30,12 +32,28 @@ organization-people {
       }
     }
     .right-buttons {
-      a {
+      a, ng-md-icon {
         display: inline-block;
-        padding: 9px 11px;
+        line-height: normal;
       }
-      ng-md-icon svg {
-        fill: $white;
+      a {
+        padding: 0 4px;
+      }
+      ng-md-icon {
+        height: 24px;
+        width: 24px;
+        padding: 12px 4px;
+        svg {
+          fill: $white;
+        }
+      }
+      .sort-orgs-handle {
+        display: inline-block;
+        height: 48px;
+        ng-md-icon {
+          padding-top: 16px;
+          padding-bottom: 0;
+        }
       }
     }
 
@@ -79,7 +97,6 @@ organization-people {
   .people-list {
     display: flex;
     flex-direction: column;
-    margin-bottom: 24px;
   }
 
   round-button {

@@ -6,7 +6,8 @@
             'ngAnimate',
             'ngMdIcons',
             'beauby.jsonApiDataStore',
-            'environment'
+            'environment',
+            'ui.sortable'
         ]);
 
 })();

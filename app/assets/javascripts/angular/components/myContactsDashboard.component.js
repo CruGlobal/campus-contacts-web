@@ -6,7 +6,8 @@
         .component('myContactsDashboard', {
             controller: myContactsDashboardController,
             bindings: {
-                period: '<'
+                period: '<',
+                'editMode': '<'
             },
             templateUrl: '/templates/myContactsDashboard.html'
         });
@@ -17,8 +18,6 @@
         vm.organizationPeople = [];
         vm.loading = true;
 
-        vm.ancestryComparator = ancestryComparator;
-
         activate();
         vm.$onDestroy = cleanUp;
         vm.$onChanges = bindingsChanged;
@@ -26,6 +25,11 @@
         function activate() {
             loadAndSyncData();
             angular.element($document).on('contacts::contactAdded', loadAndSyncData);
+
+            vm.sortableOptions = {
+                handle: '.sort-orgs-handle',
+                stop: organizationOrderChange
+            }
         }
 
         function cleanUp() {
@@ -45,10 +49,11 @@
         function loadMe() {
             return $http
                 .get(envService.read('apiUrl') + '/people/me', {
-                    params: {include: ''}
+                    params: { include: 'user' }
                 })
                 .then(function (request) {
                         vm.myPersonId = request.data.data.id;
+                        vm.orgOrderPreference = request.data.included[0].attributes.organization_order;
                     },
                     function (error) {
                         $log.error('Error loading profile', error);
@@ -126,19 +131,44 @@
                     org.people = _.union(org.people, [person]);
                 })
             });
+            orderOrganizations();
 
             vm.collapsible = people.length > 5 && _.keys(vm.organizationPeople).length > 2;
 
             vm.loading = false;
         }
 
-        function ancestryComparator(org1, org2) {
-            org1 = JsonApiDataStore.store.find('organization', org1);
-            org2 = JsonApiDataStore.store.find('organization', org2);
-            if (org1.ancestry != org2.ancestry) {
-                return (org2.ancestry < org1.ancestry) ? -1 : 1;
+        function orderOrganizations() {
+            if(!vm.orgOrderPreference) {
+                vm.organizationPeople = _.orderBy(vm.organizationPeople, ['ancestry', 'name']);
+                return;
             }
-            return (org2.name < org1.name) ? -1 : 1;
+            var oldArray = _.clone(vm.organizationPeople);
+            var newArray = [];
+            _.each(vm.orgOrderPreference, function (org) {
+                var found = _.remove(oldArray, {id: org})[0];
+                if(found) {
+                    newArray.push(found);
+                }
+            });
+            oldArray = _.orderBy(oldArray, ['ancestry', 'name']);
+            _.each(oldArray, function(org) {
+                newArray.push(org);
+            });
+            vm.organizationPeople = newArray;
+        }
+
+        function organizationOrderChange() {
+            var orgOrder = _.map(vm.organizationPeople, 'id');
+            var userData = {
+                data: {
+                    type: 'user',
+                    attributes: {
+                        organization_order: orgOrder
+                    }
+                }
+            };
+            $http.put(envService.read('apiUrl') + '/users/me', userData)
         }
     }
 })();

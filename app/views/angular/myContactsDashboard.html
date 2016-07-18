@@ -1,11 +1,12 @@
-<div class="my-contacts-dashboard">
+<div class="my-contacts-dashboard" ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.organizationPeople">
   <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">Loading Contacts</h1>
   <organization-people
           id="{{ org.id }}"
           name="{{ org.name }}"
           people="org.people"
-          ng-repeat="org in $ctrl.organizationPeople | orderBy:'id':false:ancestryComparator"
+          ng-repeat="org in $ctrl.organizationPeople"
           period="$ctrl.period"
-          collapsible="$ctrl.collapsible">
+          collapsible="$ctrl.collapsible"
+          edit-mode="$ctrl.editMode">
   </organization-people>
 </div>

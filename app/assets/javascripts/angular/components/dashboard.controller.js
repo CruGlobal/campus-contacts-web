@@ -7,6 +7,7 @@
 
     function DashboardController($window) {
         var vm = this;
+        vm.edit_organizations = false;
 
         vm.updatePeriod = updatePeriod;
 
