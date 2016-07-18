@@ -3034,6 +3034,13 @@ ul.under_tree, li li.under_tree {
   }
 }
 #menutop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 0 10px $gray-2;
+
   .mh-top {
     min-width: 0;
     .under_tree a {
@@ -3056,6 +3063,10 @@ ul.under_tree, li li.under_tree {
     padding-top: 6px;
     fill: white;
   }
+}
+
+#menutop.topmenu-with-sub {
+  box-shadow: none;
 }
 
 #global_loader {
