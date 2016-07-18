@@ -177,7 +177,7 @@ RSpec.describe ImportsController, type: :controller do
       assert_response :redirect
       post :update, import: {
         header_mappings: {
-          '0' => @first_name_element.id, '1' => @last_name_element.id, '2' => ''
+          '0' => @first_name_element.id, '1' => @last_name_element.id, '2' => 'new_question'
         }
       }, id: Import.first.id
       expect(Survey.last.title).to eq "Import-#{assigns(:import).created_at.strftime('%Y-%m-%d')}"
