@@ -9,7 +9,8 @@
             bindings: {
                 person: '<',
                 organizationId: '<',
-                period: '<'
+                period: '<',
+                myPersonId: '<'
             }
         });
 
@@ -95,9 +96,15 @@
                     }
                 }
             });
-            $log.log(newInteraction);
+            var createJson = newInteraction.serialize();
+            createJson.included = [{
+                type: 'interaction_initiator',
+                attributes: {
+                    person_id: vm.myPersonId
+                }
+            }];
             $http
-                .post(envService.read('apiUrl') + '/interactions', newInteraction.serialize())
+                .post(envService.read('apiUrl') + '/interactions', createJson)
                 .then(function () {
                         $log.log('posted interaction successfully');
                         closeAddInteractionPanel();

@@ -12,6 +12,7 @@
                 'collapsible': '<',
                 'people': '<',
                 'period': '<',
+                'myPersonId': '<',
                 'editMode': '<'
             }
         });
