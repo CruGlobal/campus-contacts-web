@@ -1,11 +1,11 @@
 <div class="header" ng-class="{'collapsed': $ctrl.collapsed}">
     <div class="org-name">
         <span ng-if="$ctrl.collapsible && !$ctrl.editMode" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
-            <ng-md-icon icon="expand_less" class="chevron" size="32"></ng-md-icon>
+          <ng-md-icon icon="play_arrow" class="chevron" size="20"></ng-md-icon>
         </span>
         <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
     </div>
-    <div class="stats-icons">
+    <div class="organization-stats">
         <div>{{$ctrl.report.contact_count || '-'}}</div>
         <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
         <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
@@ -23,7 +23,7 @@
         </div>
     </div>
 </div>
-<div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible">
+<div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
     <div>{{$ctrl.report.unassigned_count}} Unassigned</div>
     <a title="Snooze for 24hrs">
         <div class="snooze" ng-click="$ctrl.setUnassignedVisible(false)">

@@ -18,17 +18,17 @@
             <div class="dashboard-mode-toggle">
               <a href="#" class="active">People</a> <a href="#">Ministries</a>
             </div>
-            <!--<div class="stats-icons">-->
-              <!--<ng-md-icon icon="assignedPeople"></ng-md-icon>-->
-              <!--<ng-md-icon icon="questionablePeople"></ng-md-icon>-->
-              <!--<ng-md-icon icon="free_breakfast"></ng-md-icon>-->
-              <!--<ng-md-icon icon="evangelism"></ng-md-icon>-->
-              <!--<ng-md-icon icon="personalDecision"></ng-md-icon>-->
-              <!--<ng-md-icon icon="holySpirit"></ng-md-icon>-->
-              <!--<ng-md-icon icon="discipleship"></ng-md-icon>-->
-            <!--</div>-->
-            <a ng-click="$ctrl.edit_organizations = !$ctrl.edit_organizations"
-               class="dashboard-edit-toggle" ng-class="{'active': $scope.edit_organizations}"
+            <div class="dashboard-stats-icons">
+              <ng-md-icon icon="assignedPeople" class="tipitmiddle" title="Total Contacts"></ng-md-icon>
+              <ng-md-icon icon="uncontactedPerson" class="tipitmiddle" title="Uncontacted Contacts"></ng-md-icon>
+              <ng-md-icon icon="spiritualConversation" class="tipitmiddle" title="Spiritual Conversations"></ng-md-icon>
+              <ng-md-icon icon="evangelism" class="tipitmiddle" title="Personal Evangelism"></ng-md-icon>
+              <ng-md-icon icon="personalDecision" class="tipitmiddle" title="Personal Decision"></ng-md-icon>
+              <ng-md-icon icon="holySpirit" class="tipitmiddle" title="Holy Spirit Presentation"></ng-md-icon>
+              <ng-md-icon icon="discipleship" class="tipitmiddle" title="Discipleship"></ng-md-icon>
+            </div>
+            <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+               class="dashboard-edit-toggle" ng-class="{'active': $ctrl.editOrganizations}"
                href="" title="Edit Organization Order">
               <ng-md-icon icon="editOrder"></ng-md-icon>
             </a>

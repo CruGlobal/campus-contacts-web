@@ -15,20 +15,19 @@ organization-people {
     }
 
     .org-name {
-      width: 294px;
+      width: 293px;
       padding: 0 8px;
       display: flex;
     }
 
-    .stats-icons {
+    .organization-stats {
       flex: 1;
       display: flex;
       div {
         display: flex;
-        align-items: center;
-        padding: 0 14px;
-        width: 24px;
-        transition: width 200ms;
+        justify-content: center;
+        padding: 0 10px;
+        width: 31px;
       }
     }
     .right-buttons {
@@ -70,27 +69,34 @@ organization-people {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      a {
+        padding: 13px 0;
+        display: inline-block;
+      }
       a:visited {
         color: inherit;
       }
     }
     .chevron {
-      fill: #78919C;
+      fill: $white;
+      padding: 14px 8px;
+      margin-left: -8px;
+      height: 19px;
+      align-items: center;
       svg {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
         transition: transform 200ms;
         margin: -10px 0;
       }
     }
 
     &.collapsed {
-      margin-bottom: 12px;
       .chevron svg {
-        -ms-transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-        transform: rotate(180deg);
-      }
-      ng-md-icon {
-        width: 0;
+        -ms-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
       }
     }
   }
