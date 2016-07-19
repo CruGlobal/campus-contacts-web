@@ -37,6 +37,11 @@ person {
         line-height: 50px;
         display: inline-block;
       }
+      a {
+        &.red, &:hover, &:active {
+          color: $pivot-orange;
+        }
+      }
     }
     .phone {
       @extend .common-margin;

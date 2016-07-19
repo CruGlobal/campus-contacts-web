@@ -584,19 +584,25 @@ class Person < ActiveRecord::Base
   end
 
   def self.filter_by_interaction(people, organization, interactions, filter = 'any')
-    ids = interactions.is_a?(Array) ? interactions : [interactions]
-    interactions = organization.interaction_types.where('id IN (?)', ids)
+    ids = Array.wrap(interactions)
+    if ids.include?('none')
+      people_ids = InteractionType.uncontacted_from_org(organization, false).pluck(:person_id)
+      people = people.where(id: people_ids).distinct
+    else
+      interactions = organization.interaction_types.where('id IN (?)', ids)
 
-    if interactions.present?
-      people = people.joins(:interactions)
-      if filter == 'any'
-        people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', organization.id, interactions.collect(&:id))
-      else
-        interactions.each do |interaction_type|
-          people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id = ?', organization.id, interaction_type)
+      if interactions.present?
+        people = people.joins(:interactions)
+        if filter == 'any'
+          people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', organization.id, interactions.collect(&:id))
+        else
+          interactions.each do |interaction_type|
+            people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id = ?', organization.id, interaction_type)
+          end
         end
       end
     end
+    people
   end
 
   def self.build_survey_scope(organization, surveys)

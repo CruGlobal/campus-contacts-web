@@ -7,7 +7,13 @@
     <div class="stats"
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
         <div>{{$ctrl.report.contact_count || '-'}}</div>
-        <div>{{$ctrl.report.uncontacted_count || '-'}}</div>
+        <div>
+            <a class="red" href="/allcontacts?organization_id={{$ctrl.organizationId}}&interaction_type[]=none&assigned_to[]={{$ctrl.person.id}}"
+               ng-if="$ctrl.report.uncontacted_count">
+                {{$ctrl.report.uncontacted_count}}
+            </a>
+            <span ng-if="!$ctrl.report.uncontacted_count">-</span>
+        </div>
         <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
         <span class="phone no-data" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
     </div>
