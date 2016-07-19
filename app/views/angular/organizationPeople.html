@@ -24,7 +24,11 @@
     </div>
 </div>
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
-    <div>{{$ctrl.report.unassigned_count}} Unassigned</div>
+    <div>
+        <a href="/allcontacts?organization_id={{$ctrl.id}}&assigned_to=unassigned">
+            {{$ctrl.report.unassigned_count}} Unassigned
+        </a>
+    </div>
     <a title="Snooze for 24hrs">
         <div class="snooze" ng-click="$ctrl.setUnassignedVisible(false)">
             <ng-md-icon icon="snooze"></ng-md-icon>
