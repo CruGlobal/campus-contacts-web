@@ -1081,8 +1081,11 @@ ul.pillmenu {
     border-radius: 18px;
     margin-top: 14px;
   }
-  & > li > a::after {
-    border: 0;
+  & > li > a {
+    height: 100%;
+    &::after {
+      border: 0;
+    }
   }
   ul {
     right: 15px;
