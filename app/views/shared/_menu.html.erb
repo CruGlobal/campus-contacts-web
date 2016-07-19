@@ -24,7 +24,7 @@
     </li>
 
     <li class="<%= 'current' if request.path =~ care_pattern %>">
-      <%= link_to(t('nav.people'), "/allcontacts") %>
+      <%= link_to(t('nav.contacts'), "/allcontacts") %>
     </li>
     <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">
