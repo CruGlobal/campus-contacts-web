@@ -60,13 +60,13 @@ class InteractionType < ActiveRecord::Base
     permission = OrganizationalPermission.arel_table
     interaction = Interaction.arel_table
     query = OrganizationalPermission
-      .where(deleted_at: nil, organization_id: org.id)
-      .joins(permission
+            .where(deleted_at: nil, organization_id: org.id)
+            .joins(permission
                .outer_join(interaction)
                .on(permission[:organization_id].eq(interaction[:organization_id])
                      .and(permission[:person_id].eq(interaction[:receiver_id])))
                .join_sources)
-      .where(interaction[:id].eq(nil))
+            .where(interaction[:id].eq(nil))
     query = query.where(archive_date: nil) unless archived
     query
   end

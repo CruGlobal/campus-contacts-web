@@ -20,19 +20,19 @@
   <div class="fields">
     <% @organization.interaction_types.each do |interaction_type| %>
       <% if params[:include_archived_interactions] %>
-        <% count = interaction_type.interaction_receivers_from_org_with_archived(@organization).collect(&:id).count %>
+        <% count = interaction_type.interaction_receivers_from_org_with_archived(@organization).count %>
       <% else %>
-        <% count = interaction_type.interaction_receivers_from_org(@organization).collect(&:id).count %>
+        <% count = interaction_type.interaction_receivers_from_org(@organization).count %>
       <% end %>
-      <%- active = conditions && params[:interaction_type].include?(interaction_type.id.to_s) %>
+      <% active = conditions && params[:interaction_type].include?(interaction_type.id.to_s) %>
       <div class="option checkbox <%= 'active' if active %>">
         <%= check_box_tag "interaction_type[]", interaction_type.id, active, id: "search_interaction_type_#{interaction_type.id}", class: "search_interaction_type_checkbox" %>
         <div class="sidebar-label"><%= interaction_type.title %></div>
         <span class="info">(<span class="count"><%= count %></span>)</span>
       </div>
     <% end %>
-    <%- uncontacted_count = InteractionType.uncontacted_from_org(@organization, params[:include_archived_interactions]).collect(&:id).count %>
-    <%- uncontacted_active = conditions && params[:interaction_type].include?('none') %>
+    <% uncontacted_count = InteractionType.uncontacted_from_org(@organization, params[:include_archived_interactions]).count %>
+    <% uncontacted_active = conditions && params[:interaction_type].include?('none') %>
     <div class="option checkbox <%= 'active' if uncontacted_active %>">
       <%= check_box_tag "interaction_type[]", 'none', uncontacted_active, id: "search_interaction_type_none", class: "search_interaction_type_checkbox" %>
       <div class="sidebar-label"><%= 'No Interactions' %></div>

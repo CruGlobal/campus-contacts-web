@@ -585,20 +585,16 @@ class Person < ActiveRecord::Base
 
   def self.filter_by_interaction(people, organization, interactions, filter = 'any')
     ids = Array.wrap(interactions)
-    if ids.include?('none')
-      people_ids = InteractionType.uncontacted_from_org(organization, false).pluck(:person_id)
-      people = people.where(id: people_ids).distinct
-    else
-      interactions = organization.interaction_types.where('id IN (?)', ids)
+    return people.where(id: InteractionType.uncontacted_from_org(organization, false).pluck(:person_id)) if ids.include?('none')
+    interactions = organization.interaction_types.where('id IN (?)', ids)
 
-      if interactions.present?
-        people = people.joins(:interactions)
-        if filter == 'any'
-          people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', organization.id, interactions.collect(&:id))
-        else
-          interactions.each do |interaction_type|
-            people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id = ?', organization.id, interaction_type)
-          end
+    if interactions.present?
+      people = people.joins(:interactions)
+      if filter == 'any'
+        people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id IN (?)', organization.id, interactions.collect(&:id))
+      else
+        interactions.each do |interaction_type|
+          people = people.where('interactions.organization_id = ? AND interactions.deleted_at IS NULL AND interactions.interaction_type_id = ?', organization.id, interaction_type)
         end
       end
     end
