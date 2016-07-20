@@ -30,7 +30,8 @@
       <div class="left width30">
         <div class="loginscreen" style="text-align: center;">
           <p class="error_container"><%= raw(flash[:error]) %></p>
-          <%= link_to(image_tag('facebookconnect.png'), '/users/auth/facebook', rel: 'external') %>
+          <p><%= link_to(image_tag('fb_button.png'), '/users/auth/facebook', rel: 'external') %></p>
+          <p><%= link_to(image_tag('key_button.png'), '/users/auth/key', rel: 'external') %></p>
           <p><a href="/"><%= t('.back') %></a></p>
         </div>
       </div>
