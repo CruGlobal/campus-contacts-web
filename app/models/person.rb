@@ -584,7 +584,8 @@ class Person < ActiveRecord::Base
   end
 
   def self.filter_by_interaction(people, organization, interactions, filter = 'any')
-    ids = interactions.is_a?(Array) ? interactions : [interactions]
+    ids = Array.wrap(interactions)
+    return people.where(id: InteractionType.uncontacted_from_org(organization, false).pluck(:person_id)) if ids.include?('none')
     interactions = organization.interaction_types.where('id IN (?)', ids)
 
     if interactions.present?
@@ -597,6 +598,7 @@ class Person < ActiveRecord::Base
         end
       end
     end
+    people
   end
 
   def self.build_survey_scope(organization, surveys)

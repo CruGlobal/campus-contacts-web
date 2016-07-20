@@ -28,6 +28,18 @@ organization-people {
         justify-content: center;
         padding: 0 10px;
         width: 31px;
+        align-items: center;
+        a {
+          color: $white;
+          &:hover, &:active {
+            color: $white;
+          }
+          &.red {
+            background-color: $pivot-orange;
+            border-radius: 40%;
+            padding: 0 7px;
+          }
+        }
       }
     }
     .right-buttons {
