@@ -4,7 +4,7 @@
   <%= render 'welcome/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= yield :body_classes %>">
-  <%= render 'welcome/header' %>
+  <%= render 'welcome/header' unless params.has_key?('no-chrome') %>
 
   <% if content_for?(:hero) -%>
     <div class="hero">
@@ -17,7 +17,7 @@
       <section role="global">
         <%= yield %>
       </section>
-      <% if content_for?(:aside) -%>
+      <% if content_for?(:aside) && !params.has_key?('no-chrome') -%>
         <aside role="global">
           <%= yield :aside %>
         </aside>
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <%= render "welcome/footer" %>
+  <%= render 'welcome/footer' unless params.has_key?('no-chrome') %>
   <%= render 'fb_init' %>
 </body>
 </html>
