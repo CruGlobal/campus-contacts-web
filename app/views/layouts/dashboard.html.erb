@@ -13,28 +13,30 @@
         <div id="menutop" class="topmenu topmenu-with-sub">
           <%= render 'shared/menu' %>
         </div>
-        <div class="dashboard-subnav">
-          <div class="inner">
-            <div class="dashboard-mode-toggle">
-              <a href="#" class="active">People</a> <a href="#">Ministries</a>
+        <% if current_organization %>
+          <div class="dashboard-subnav">
+            <div class="inner">
+              <div class="dashboard-mode-toggle">
+                <a href="#" class="active">People</a> <a href="#">Ministries</a>
+              </div>
+              <div class="dashboard-stats-icons">
+                <ng-md-icon icon="assignedPeople" class="tipitmiddle" title="Total Contacts"></ng-md-icon>
+                <ng-md-icon icon="uncontactedPerson" class="tipitmiddle" title="Uncontacted Contacts"></ng-md-icon>
+                <ng-md-icon icon="spiritualConversation" class="tipitmiddle" title="Spiritual Conversations"></ng-md-icon>
+                <ng-md-icon icon="evangelism" class="tipitmiddle" title="Personal Evangelism"></ng-md-icon>
+                <ng-md-icon icon="personalDecision" class="tipitmiddle" title="Personal Decision"></ng-md-icon>
+                <ng-md-icon icon="holySpirit" class="tipitmiddle" title="Holy Spirit Presentation"></ng-md-icon>
+                <ng-md-icon icon="discipleship" class="tipitmiddle" title="Discipleship"></ng-md-icon>
+              </div>
+              <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+                 class="dashboard-edit-toggle" ng-class="{'active': $ctrl.editOrganizations}"
+                 href="" title="Edit Organization Order">
+                <ng-md-icon icon="editOrder"></ng-md-icon>
+              </a>
+              <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
             </div>
-            <div class="dashboard-stats-icons">
-              <ng-md-icon icon="assignedPeople" class="tipitmiddle" title="Total Contacts"></ng-md-icon>
-              <ng-md-icon icon="uncontactedPerson" class="tipitmiddle" title="Uncontacted Contacts"></ng-md-icon>
-              <ng-md-icon icon="spiritualConversation" class="tipitmiddle" title="Spiritual Conversations"></ng-md-icon>
-              <ng-md-icon icon="evangelism" class="tipitmiddle" title="Personal Evangelism"></ng-md-icon>
-              <ng-md-icon icon="personalDecision" class="tipitmiddle" title="Personal Decision"></ng-md-icon>
-              <ng-md-icon icon="holySpirit" class="tipitmiddle" title="Holy Spirit Presentation"></ng-md-icon>
-              <ng-md-icon icon="discipleship" class="tipitmiddle" title="Discipleship"></ng-md-icon>
-            </div>
-            <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
-               class="dashboard-edit-toggle" ng-class="{'active': $ctrl.editOrganizations}"
-               href="" title="Edit Organization Order">
-              <ng-md-icon icon="editOrder"></ng-md-icon>
-            </a>
-            <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
           </div>
-        </div>
+        <% end %>
 
         <div id="dashboard_main">
           <%= render "shared/main" %>

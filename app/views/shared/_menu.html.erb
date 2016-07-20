@@ -124,5 +124,10 @@
       </ul>
     </li>
   </ul>
-
+<% elsif current_user %>
+  <ul class="sf-menu mh-top" id="primary_nav">
+    <li style="margin-left: auto;">
+      <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
+    </li>
+  </ul>
 <% end %>
