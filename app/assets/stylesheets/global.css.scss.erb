@@ -1075,11 +1075,30 @@ ul.pillmenu {
   li:first-child {
     margin-left: 0;
   }
-  .user-avatar {
+  .user-avatar-wrap {
     width: 36px;
     height: 36px;
-    border-radius: 18px;
+    border-radius: 50%;
     margin-top: 14px;
+    background: $pivot-dark-blue;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: bold;
+    font-size: 120%;
+  }
+  .user-avatar-wrap img[src=''], .user-avatar-wrap img:not([src]) {
+    opacity: 0;
+  }
+  .user-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: transparent;
   }
   & > li > a {
     height: 100%;
