@@ -1348,6 +1348,7 @@ class Person < ActiveRecord::Base
   end
 
   def primary_organization=(org)
+    return org if org == self[:primary_organization]
     if org.present? && user
       user.primary_organization_id = org.id
       user.save!
