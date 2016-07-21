@@ -36,7 +36,7 @@
         <square-button ng-repeat="type in $ctrl.interactionTypes"
                        ng-click="$ctrl.openAddInteractionPanel(type)"
                        ng-class="{'open': $ctrl.openPanelType === type}"
-                       title="{{type.title}}">
+                       title="{{type.title | t}}">
             <ng-md-icon icon="{{type.icon}}"></ng-md-icon>
         </square-button>
     </div>
@@ -45,7 +45,8 @@
     </ng-md-icon>
 </div>
 <div class="addInteractionPanel" ng-if="$ctrl.openPanelType">
-    <textarea placeholder="Notes for new {{$ctrl.openPanelType.title}}" ng-model="$ctrl.interactionComment"
+    <textarea placeholder="{{'dashboard.notes_for_new_interaction' | t}} {{$ctrl.openPanelType.title | t}}"
+              ng-model="$ctrl.interactionComment"
               class="auto-grow"></textarea>
     <ng-md-icon icon="check" size="30" class="icon-btn" ng-click="$ctrl.saveInteraction()"></ng-md-icon>
 </div>

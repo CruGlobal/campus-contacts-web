@@ -17,7 +17,7 @@
     </div>
     <div class="right-buttons">
         <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.id}}&assign_to_me=1"
-           data-remote="true" title="Add Contact" ng-hide="$ctrl.editMode">
+           data-remote="true" title="{{'contacts.add_contact' | t}}" ng-hide="$ctrl.editMode" class="tipitmiddle">
             <ng-md-icon icon="addContact"></ng-md-icon>
         </a>
         <div ng-if="$ctrl.editMode">
@@ -31,10 +31,10 @@
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
     <div>
         <a href="/allcontacts?organization_id={{$ctrl.id}}&assigned_to=unassigned">
-            {{$ctrl.report.unassigned_count}} Unassigned
+            {{$ctrl.report.unassigned_count}} {{'contacts.statuses.uncontacted' | t}}
         </a>
     </div>
-    <a title="Snooze for 24hrs">
+    <a title="{{'dashboard.snooze_for_24_hours' | t}}" class="tipitmiddle">
         <div class="snooze" ng-click="$ctrl.setUnassignedVisible(false)">
             <ng-md-icon icon="snooze"></ng-md-icon>
         </div>

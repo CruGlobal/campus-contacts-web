@@ -20,12 +20,36 @@
         vm.addInteractionBtnsVisible = false;
         vm.closingInteractionButtons = false;
         vm.interactionTypes = [
-            {id: 2, icon: 'free_breakfast', title: 'Spiritual Conversation'},
-            {id: 3, icon: 'evangelism', title: 'Personal Evangelism'},
-            {id: 4, icon: 'personalDecision', title: 'Personal Evangelism Decisions'},
-            {id: 5, icon: 'holySpirit', title: 'Holy Spirit Presentation'},
-            {id: 9, icon: 'discipleship', title: 'Discipleship / Leadership'},
-            {id: 1, icon: 'event_note', title: 'Comment Only'}
+            {
+                id: 2,
+                icon: 'free_breakfast',
+                title: 'application.interaction_types.spiritual_conversation'
+            },
+            {
+                id: 3,
+                icon: 'evangelism',
+                title: 'application.interaction_types.gospel_presentation'
+            },
+            {
+                id: 4,
+                icon: 'personalDecision',
+                title: 'application.interaction_types.prayed_to_receive_christ'
+            },
+            {
+                id: 5,
+                icon: 'holySpirit',
+                title: 'application.interaction_types.holy_spirit_presentation'
+            },
+            {
+                id: 9,
+                icon: 'discipleship',
+                title: 'application.interaction_types.discipleship'
+            },
+            {
+                id: 1,
+                icon: 'event_note',
+                title: 'application.interaction_types.comment'
+            }
         ];
 
         vm.toggleInteractionBtns = toggleInteractionBtns;

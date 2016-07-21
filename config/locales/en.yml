@@ -87,6 +87,7 @@ en:
       holy_spirit_presentation: Holy Spirit Presentation
       prayed_to_receive_christ: Personal Evangelism Decisions
       spiritual_conversation: Spiritual Conversation
+      discipleship: Discipleship Meeting
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   signatures:
@@ -423,6 +424,10 @@ en:
     panel_storing: Storing Contacts
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
+    edit_org_order: Edit Organization Order
+    snooze_for_24_hours: Snooze reminder for 24 hours
+    notes_for_new_interaction: Notes for new
+    loading_contacts: Loading Contacts
   date:
     abbr_day_names:
     - Sun
@@ -992,6 +997,7 @@ en:
     signatures: Signatures
     tools: Tools
     contacts: Contacts
+    ministries: Ministries
   number:
     currency:
       format:

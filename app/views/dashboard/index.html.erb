@@ -1,6 +1,8 @@
 <div id="dashboard_panels">
   <% if current_organization %>
-    <my-contacts-dashboard period="$ctrl.period" edit-mode="$ctrl.editOrganizations"></my-contacts-dashboard>
+    <my-contacts-dashboard period="$ctrl.period" edit-mode="$ctrl.editOrganizations">
+      <h1><%= t('dashboard.loading_contacts') %></h1>
+    </my-contacts-dashboard>
   <% else %>
     <div id="dashboard_error">
       <%= render 'not_found' %>

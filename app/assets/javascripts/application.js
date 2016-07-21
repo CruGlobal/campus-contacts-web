@@ -25,6 +25,8 @@
 //= require angular-animate/angular-animate
 //= require lodash/lodash
 //= require lscache/lscache
+//= require i18n
+//= require i18n/translations
 //= require angular-material-icons/angular-material-icons
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
 //= require angular-environment/dist/angular-environment
@@ -56,8 +58,6 @@
 //= require group_labels
 //= require organizations
 //= require charts
-//= require i18n
-//= require i18n/translations
 //= require followup_comments
 //= require clearform
 //= require survey

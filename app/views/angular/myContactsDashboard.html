@@ -1,5 +1,5 @@
 <div class="my-contacts-dashboard" ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.organizationPeople">
-  <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">Loading Contacts</h1>
+  <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
   <organization-people
           id="{{ org.id }}"
           name="{{ org.name }}"
