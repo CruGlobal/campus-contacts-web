@@ -113,7 +113,9 @@
     <li>
       <%= link_to '#' do %>
         <div class="user-avatar-wrap">
-          <div class="user-initials"><%= @current_person.first_name&.first&.upcase %><%= @current_person.last_name&.first&.upcase %></div>
+          <div class="user-initials">
+            <%= @current_person.first_name&.first&.upcase %><%= @current_person.last_name&.first&.upcase %>
+          </div>
           <%= image_tag(@current_person.picture, class: 'user-avatar') %>
         </div>
       <% end %>
