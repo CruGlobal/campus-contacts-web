@@ -2,7 +2,6 @@ require 'errors/no_email_error'
 require 'errors/failed_facebook_create_error'
 require 'errors/facebook_duplicate_email_error'
 require 'errors/not_allowed_to_use_cas_error'
-require 'errors/not_allowed_to_use_key_error'
 require 'errors/no_ticket_error'
 class User < ActiveRecord::Base
   has_paper_trail on: [:destroy],
@@ -73,22 +72,20 @@ class User < ActiveRecord::Base
 
     email = data['user']
     person = Person.find_existing_person_by_email(email)
-    if person.present?
-      user = person.user
-      unless user
-        begin
-          user = User.where(username: email).first_or_initialize
-          user.password = Devise.friendly_token[0, 20] unless user.id.present?
-          user.save!
-        rescue ActiveRecord::RecordNotUnique
-          retry
-        end
-      end
-      user.authentications.create!(provider: 'key', uid: data['ssoGuid'])
-    else
-      fail NotAllowedToUseKeyError
-    end
+    person ||= Person.create_from_key(data)
 
+    user = person.user
+    unless user
+      begin
+        user = User.where(username: email).first_or_initialize
+        user.password = Devise.friendly_token[0, 20] unless user.id.present?
+        person.update(user: user)
+        user.save!
+      rescue ActiveRecord::RecordNotUnique
+        retry
+      end
+    end
+    user.authentications.create!(provider: 'key', uid: data['ssoGuid'])
     user
   end
 

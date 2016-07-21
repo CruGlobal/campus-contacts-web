@@ -76,23 +76,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       redirect_to root_path
     else
       omniauth = request.env['omniauth.auth']
-      begin
-        if ticket = omniauth['credentials']['ticket']
-          @user = User.find_for_key_oauth(omniauth)
-          if @user.present?
-            sign_in(@user)
-            session[:key_ticket] = ticket
-            redirect_to '/dashboard'
-          else
-            fail NoEmailError
-          end
-        else
-          fail NoTicketError
-        end
-      rescue NotAllowedToUseKeyError
-        flash[:error] = t('sessions.new.not_allowed_to_use_key')
-        redirect_to "#{root_url}sign_in"
-      end
+      ticket = omniauth['credentials']['ticket']
+
+      fail NoTicketError unless ticket
+
+      @user = User.find_for_key_oauth(omniauth)
+      fail NoEmailError unless @user.present?
+
+      sign_in(@user)
+      session[:key_ticket] = ticket
+      redirect_to '/dashboard'
     end
   end
 

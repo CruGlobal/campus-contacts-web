@@ -288,7 +288,7 @@ class ApplicationController < ActionController::Base
     end
 
     @current_organizations ||= {}
-    return @current_organizations[person] if @current_organizations[person]
+    return @current_organizations[person] if @current_organizations.key?(person)
     # Set current org based on the session, particularly uses in set_current org feature
     if session[:current_organization_id]
       org = person.organization_from_id(session[:current_organization_id])

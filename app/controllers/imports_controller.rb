@@ -41,7 +41,7 @@ class ImportsController < ApplicationController
   end
 
   def update
-    columns_without_question = params[:import][:header_mappings].reject { |_x, y| y.present? }
+    columns_without_question = params[:import][:header_mappings].select { |_x, y| y == 'new_question' }
     if columns_without_question.count > 0
       survey_title = "Import-#{@import.created_at.strftime('%Y-%m-%d')}"
       unless @survey = current_organization.surveys.where(title: survey_title).first

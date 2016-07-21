@@ -1342,7 +1342,15 @@ class Person < ActiveRecord::Base
     self
   end
 
+  def self.create_from_key(key_auth_hash)
+    new_person = Person.create(first_name: key_auth_hash['firstName'].try(:strip),
+                               last_name: key_auth_hash['lastName'].try(:strip))
+    new_person.email_addresses.create(email: key_auth_hash[:user])
+    new_person
+  end
+
   def primary_organization=(org)
+    return org if org == self[:primary_organization]
     if org.present? && user
       user.primary_organization_id = org.id
       user.save!

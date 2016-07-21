@@ -1,2 +1,0 @@
-class NotAllowedToUseKeyError < StandardError
-end
