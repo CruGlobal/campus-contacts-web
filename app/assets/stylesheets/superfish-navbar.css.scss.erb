@@ -83,18 +83,11 @@
 	margin-top: 0;
 }
 
-.mh-top li.current {
-	background-image: url("<%= asset_path("whitebar.png") %>");
-	background-repeat: no-repeat;
-	/*background-repeat: repeat-x;*/
-	background-position: 50% 0%;
-}
-
-.mh-top li.current:hover {
-	background-image: url("<%= asset_path("whitebar.png") %>");
-	background-repeat: no-repeat;
-	/*background-repeat: repeat-x;*/
-	background-position: 50% 0%;
+.mh-top li.current, .mh-top li.current:hover {
+  background-image: url("<%= asset_path("whitebar.png") %>");
+  background-repeat: no-repeat;
+  background-position: 50% 0%;
+  background-size: 16px;
 }
 
 .mh-top li:hover,

@@ -428,6 +428,7 @@ en:
     snooze_for_24_hours: Snooze reminder for 24 hours
     notes_for_new_interaction: Notes for new
     loading_contacts: Loading Contacts
+    people_assigned_to_you: People Assigned to You
   date:
     abbr_day_names:
     - Sun

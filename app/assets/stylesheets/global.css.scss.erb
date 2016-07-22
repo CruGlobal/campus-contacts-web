@@ -490,9 +490,19 @@ img.tmenu {
   -webkit-background-size: 22px;
   background-size: 22px;
   width: 22px;
-  height: 48px;
-  margin-top: 0.7em;
+  height: 100%;
   margin-left: 22px;
+  background-position-y: 8px;
+}
+
+@media only screen and (min-width: 1100px) {
+  #logoInvert {
+    background: url("<%= asset_path('missionhub-pivot-logo.png') %>") no-repeat;
+    -webkit-background-size: 124px;
+    background-size: 124px;
+    background-position-y: 15px;
+    width: 124px;
+  }
 }
 
 .block {
