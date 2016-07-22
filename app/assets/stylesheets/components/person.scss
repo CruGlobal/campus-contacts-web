@@ -75,7 +75,7 @@ person {
       }
       @keyframes flexGrow {
         to {
-          width: 270px;
+          width: 308px;
         }
       }
       @keyframes flexShrink {
@@ -96,6 +96,7 @@ person {
         &:nth-child(5) { background: tint($pivot-dark-blue, 50%); }
         &:nth-child(6) { background: tint($pivot-dark-blue, 60%); }
         &:nth-child(7) { background: tint($pivot-dark-blue, 70%); }
+        &:nth-child(8) { background: tint($pivot-dark-blue, 80%); }
         &:hover, &.open{
           background: $pivot-dark-blue;
         }
@@ -115,13 +116,21 @@ person {
       display: flex;
       flex-grow: 1;
       height: 1.3em;
-      margin-right: 10px;
     }
     .icon-btn{
       cursor: pointer;
       &:hover{
         opacity: .6;
       }
+    }
+    a, a:visited {
+      color: white;
+      font-size: 16px;
+      padding-left: 10px;
+      line-height: 32px;
+    }
+    a:active {
+      color: #CCCCCC;
     }
   }
   .auto-grow {

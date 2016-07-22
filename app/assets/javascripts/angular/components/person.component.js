@@ -22,7 +22,7 @@
         vm.interactionTypes = [
             {
                 id: 2,
-                icon: 'free_breakfast',
+                icon: 'spiritualConversation',
                 title: 'application.interaction_types.spiritual_conversation'
             },
             {
@@ -47,8 +47,13 @@
             },
             {
                 id: 1,
-                icon: 'event_note',
+                icon: 'note',
                 title: 'application.interaction_types.comment'
+            },
+            {
+                id: -1,
+                icon: 'archive',
+                title: 'general.archive'
             }
         ];
 
@@ -99,7 +104,16 @@
         }
 
         function openAddInteractionPanel (type) {
-            vm.openPanelType = type;
+            if(type.id == -1) {
+                archivePerson()
+            }
+            else {
+                vm.openPanelType = type;
+            }
+        }
+        
+        function archivePerson () {
+
         }
 
         function saveInteraction () {
