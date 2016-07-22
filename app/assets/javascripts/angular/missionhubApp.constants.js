@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
     /* eslint angular/window-service: "off" */
 

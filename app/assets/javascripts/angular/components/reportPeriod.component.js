@@ -12,7 +12,7 @@
             templateUrl: '/templates/reportPeriod.html'
         });
 
-    function reportPeriodController() {
+    function reportPeriodController () {
         var vm = this;
         vm.periods = [
             {label: '1w', period: 'P1W'},

@@ -1,4 +1,4 @@
-(function(){
+(function () {
     'use strict';
 
     angular
@@ -11,12 +11,12 @@
             }
         });
 
-    function preloadStateController(state, $http) {
+    function preloadStateController (state, $http) {
         var vm = this;
 
         activate();
 
-        function activate() {
+        function activate () {
             if(vm.data === 'true' || vm.data === 'false') {
                 state[vm.name] = vm.data === 'true';
             } else {
@@ -25,8 +25,8 @@
             addAuthHeader();
         }
 
-        function addAuthHeader(){
-            if(vm.name === 'v4AccessToken'){
+        function addAuthHeader () {
+            if(vm.name === 'v4AccessToken') {
                 $http.defaults.headers.common.Authorization = 'Bearer ' + state.v4AccessToken;
             }
         }

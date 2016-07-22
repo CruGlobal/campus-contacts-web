@@ -17,7 +17,7 @@
             }
         });
 
-    function organizationPeopleController(JsonApiDataStore, lscache, _) {
+    function organizationPeopleController (JsonApiDataStore, lscache, _) {
         var vm = this,
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
@@ -27,19 +27,19 @@
         vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;
 
-        function activate() {
+        function activate () {
             var key = [UNASSIGNED_VISIBLE, vm.id].join(':'),
                 val = lscache.get(key);
             vm.unassignedVisible = (val === null) ? true : val;
         }
 
-        function bindingsChanged(changesObj) {
+        function bindingsChanged (changesObj) {
             if (changesObj.period) {
                 loadReport();
             }
         }
 
-        function loadReport() {
+        function loadReport () {
             var id = [vm.id, vm.period].join('-');
             vm.report = JsonApiDataStore.store.find('organization_report', id);
             if (vm.report === null) {
@@ -53,12 +53,12 @@
             }
         }
 
-        function reportInteractions(interaction_type_id) {
+        function reportInteractions (interaction_type_id) {
             var interaction = _.find(vm.report.interactions, {interaction_type_id: interaction_type_id});
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
 
-        function setUnassignedVisible(value) {
+        function setUnassignedVisible (value) {
             var key = [UNASSIGNED_VISIBLE, vm.id].join(':');
             vm.unassignedVisible = !!value;
             lscache.set(key, vm.unassignedVisible, 24 * 60); // 24 hour expiry

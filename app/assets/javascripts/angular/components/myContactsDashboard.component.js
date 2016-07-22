@@ -12,7 +12,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController($http, $log, $q, $document, JsonApiDataStore, envService, _) {
+    function myContactsDashboardController ($http, $log, $q, $document, JsonApiDataStore, envService, _) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -22,7 +22,7 @@
         vm.$onDestroy = cleanUp;
         vm.$onChanges = bindingsChanged;
 
-        function activate() {
+        function activate () {
             loadAndSyncData();
             angular.element($document).on('contacts::contactAdded', loadAndSyncData);
 
@@ -32,21 +32,21 @@
             }
         }
 
-        function cleanUp() {
+        function cleanUp () {
             angular.element($document).off('contacts::contactAdded', loadAndSyncData);
         }
 
-        function loadAndSyncData() {
+        function loadAndSyncData () {
             $q.all([loadMe(), loadPeople()]).then(dataLoaded);
         }
 
-        function bindingsChanged(changesObj) {
+        function bindingsChanged (changesObj) {
             if(changesObj.period && !vm.loading) {
                 loadReports();
             }
         }
 
-        function loadMe() {
+        function loadMe () {
             return $http
                 .get(envService.read('apiUrl') + '/people/me', {
                     params: { include: 'user' }
@@ -60,7 +60,7 @@
                     });
         }
 
-        function loadPeople() {
+        function loadPeople () {
             return $http
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
@@ -78,7 +78,7 @@
                     });
         }
 
-        function loadReports() {
+        function loadReports () {
             var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
 
@@ -106,7 +106,7 @@
             });
         }
 
-        function dataLoaded() {
+        function dataLoaded () {
             loadReports();
             var people = JsonApiDataStore.store.findAll('person');
             vm.organizationPeople = [];
@@ -138,7 +138,7 @@
             vm.loading = false;
         }
 
-        function orderOrganizations() {
+        function orderOrganizations () {
             if(!vm.orgOrderPreference) {
                 vm.organizationPeople = _.orderBy(vm.organizationPeople, ['ancestry', 'name']);
                 return;
@@ -152,13 +152,13 @@
                 }
             });
             oldArray = _.orderBy(oldArray, ['ancestry', 'name']);
-            _.each(oldArray, function(org) {
+            _.each(oldArray, function (org) {
                 newArray.push(org);
             });
             vm.organizationPeople = newArray;
         }
 
-        function organizationOrderChange() {
+        function organizationOrderChange () {
             var orgOrder = _.map(vm.organizationPeople, 'id');
             var userData = {
                 data: {

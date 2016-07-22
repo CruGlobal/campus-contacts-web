@@ -5,14 +5,14 @@
         .module('missionhubApp')
         .controller('DashboardController', DashboardController);
 
-    function DashboardController($window) {
+    function DashboardController ($window) {
         var vm = this;
 
         vm.updatePeriod = updatePeriod;
 
         vm.$onInit = activate;
 
-        function activate() {
+        function activate () {
             if($window.localStorage) {
                 var value = $window.localStorage.getItem('reportPeriod');
                 vm.period = (!value) ? 'P3M' : value;
@@ -21,7 +21,7 @@
             }
         }
 
-        function updatePeriod(period) {
+        function updatePeriod (period) {
             vm.period = period;
             if($window.localStorage) {
                 $window.localStorage.setItem('reportPeriod', period);

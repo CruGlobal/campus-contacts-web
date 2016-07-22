@@ -14,7 +14,7 @@
             }
         });
 
-    function personController($animate, $http, $log, $scope, envService, JsonApiDataStore, _) {
+    function personController ($animate, $http, $log, $scope, envService, JsonApiDataStore, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -61,17 +61,17 @@
         vm.$onChanges = bindingChanges;
 
 
-        function activate() {
+        function activate () {
             closeAddInteractionPanel();
         }
 
-        function bindingChanges(changesObj) {
+        function bindingChanges (changesObj) {
             if (changesObj.period) {
                 updateReport();
             }
         }
 
-        function updateReport() {
+        function updateReport () {
             var id = [vm.organizationId, vm.person.id, vm.period].join('-');
             vm.report = JsonApiDataStore.store.find('person_report', id);
             if (vm.report === null) {
@@ -85,11 +85,11 @@
             }
         }
 
-        function toggleInteractionBtns() {
+        function toggleInteractionBtns () {
             vm.addInteractionBtnsVisible = !vm.addInteractionBtnsVisible;
             if (!vm.addInteractionBtnsVisible) {
                 $animate.on('leave', angular.element('.addInteractionButtons'),
-                    function callback(element, phase) {
+                    function callback (element, phase) {
                         vm.closingInteractionButtons = phase === 'start';
                         $scope.$apply();
                     }
@@ -98,11 +98,11 @@
             }
         }
 
-        function openAddInteractionPanel(type) {
+        function openAddInteractionPanel (type) {
             vm.openPanelType = type;
         }
 
-        function saveInteraction() {
+        function saveInteraction () {
             var newInteraction = JsonApiDataStore.store.sync({
                 data: {
                     type: 'interaction',
@@ -138,12 +138,12 @@
                     });
         }
 
-        function closeAddInteractionPanel() {
+        function closeAddInteractionPanel () {
             vm.openPanelType = '';
             vm.interactionComment = '';
         }
 
-        function reportInteractions(interaction_type_id) {
+        function reportInteractions (interaction_type_id) {
             var interaction = _.find(vm.report.interactions, {interaction_type_id: interaction_type_id});
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
