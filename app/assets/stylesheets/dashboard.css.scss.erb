@@ -64,6 +64,8 @@
     ng-md-icon {
       display: inline-block;
       width: 25px;
+      height: 36px;
+      margin-top: -3px;
     }
     svg {
       fill: $pivot-dark-blue;
@@ -83,6 +85,14 @@
   }
 }
 
+report-period {
+  flex: 1;
+}
+
+.dashboard-subnav .inner {
+  display: flex;
+}
+
 #dashboard_panels, .dashboard-subnav .inner {
   margin: 0 auto;
   width: 948px;
@@ -93,4 +103,7 @@
 
 #dashboard_main {
   margin-top: 140px;
+  min-height: calc(100vh - 185px);
+  display: inline-block;
+  width: 100%;
 }

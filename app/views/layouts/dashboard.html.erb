@@ -35,12 +35,12 @@
                 <ng-md-icon icon="discipleship" class="tipitmiddle"
                             title="<%= t('application.interaction_types.discipleship') %>"></ng-md-icon>
               </div>
+              <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
               <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
                  class="dashboard-edit-toggle tipitmiddle" ng-class="{'active': $ctrl.editOrganizations}"
                  href="" title="<%= t('dashboard.edit_org_order') %>">
                 <ng-md-icon icon="editOrder"></ng-md-icon>
               </a>
-              <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
             </div>
           </div>
         <% end %>
