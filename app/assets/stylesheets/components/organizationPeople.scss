@@ -43,27 +43,62 @@ organization-people {
       }
     }
     .right-buttons {
-      a, ng-md-icon {
-        display: inline-block;
-        line-height: normal;
-      }
-      a {
-        padding: 0 4px;
-      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       ng-md-icon {
         height: 24px;
         width: 24px;
-        padding: 12px 4px;
+        padding: 12px 10px;
         svg {
           fill: $white;
         }
       }
-      .sort-orgs-handle {
-        display: inline-block;
-        height: 48px;
+      .add-anonymous-interaction {
+        cursor: pointer;
+        &.closed {
+          transition: transform 200ms;
+          -ms-transform: translateX(-2px) rotate(45deg);
+          -webkit-transform: translateX(-2px) rotate(45deg);
+          transform: translateX(-2px) rotate(45deg);
+        }
+      }
+      .add-anonymous-interaction-buttons {
+        display: flex;
+        align-self: stretch;
+        align-items: stretch;
+        overflow: hidden;
+        width: 0;
+        animation: anonymous-interactions-show 500ms ease forwards;
+        &.ng-leave {
+          width: 176px;
+          animation: anonymous-interactions-hide 500ms ease forwards;
+        }
+        @keyframes anonymous-interactions-show {
+          to {
+            width: 176px;
+          }
+        }
+        @keyframes anonymous-interactions-hide {
+          to {
+            width: 0;
+          }
+        }
+
         ng-md-icon {
-          padding-top: 16px;
-          padding-bottom: 0;
+          cursor: pointer;
+        }
+        > ng-md-icon {
+          &:nth-child(1) { background-color: tint($pivot-dark-blue, 20%); }
+          &:nth-child(2) { background-color: tint($pivot-dark-blue, 30%); }
+          &:nth-child(3) { background-color: tint($pivot-dark-blue, 40%); }
+          &:nth-child(4) { background-color: tint($pivot-dark-blue, 50%); }
+          &:hover, &.opened {
+            background-color: $pivot-dark-blue;
+          }
+          &:active {
+            background-color: lighten($pivot-dark-blue, 5%);
+          }
         }
       }
     }
@@ -143,6 +178,28 @@ organization-people {
       opacity: 0.3;
       &:hover, &:active {
         background: none;
+      }
+    }
+  }
+
+  .add-anonymous-interaction-panel {
+    background-color: $pivot-dark-blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    textarea {
+      display: flex;
+      flex-grow: 1;
+      resize: none;
+    }
+    a {
+      color: $white;
+      font-size: 16px;
+      padding-left: 10px;
+      line-height: 32px;
+      &:visited, &:active {
+        color: white;
       }
     }
   }

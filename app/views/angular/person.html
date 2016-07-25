@@ -40,7 +40,7 @@
             <ng-md-icon icon="{{type.icon}}"></ng-md-icon>
         </square-button>
     </div>
-    <ng-md-icon icon="add" class="add-new-interaction" size="40" ng-click="$ctrl.toggleInteractionBtns()"
+    <ng-md-icon icon="add" class="add-new-interaction" ng-click="$ctrl.toggleInteractionBtns()"
                 ng-class="{'close': $ctrl.addInteractionBtnsVisible}">
     </ng-md-icon>
 </div>
@@ -48,5 +48,5 @@
     <textarea placeholder="{{'dashboard.notes_for_new_interaction' | t}} {{$ctrl.openPanelType.title | t}}"
               ng-model="$ctrl.interactionComment"
               class="auto-grow"></textarea>
-    <a href="#" ng-click="$ctrl.saveInteraction()">Done</a>
+    <a href="#" ng-click="$ctrl.saveInteraction()">{{'dashboard.done' |t}}</a>
 </div>

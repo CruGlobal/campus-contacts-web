@@ -20,18 +20,37 @@
            data-remote="true" title="{{'contacts.add_contact' | t}}" ng-hide="$ctrl.editMode" class="tipitmiddle">
             <ng-md-icon icon="addContact"></ng-md-icon>
         </a>
-        <div ng-if="$ctrl.editMode">
-            <ng-md-icon icon="visibilityOn" size="22"></ng-md-icon>
-            <span class="sort-orgs-handle">
-                <ng-md-icon icon="dragHandle" size="22"></ng-md-icon>
-            </span>
+        <div class="add-anonymous-interaction-buttons"
+             ng-if="$ctrl.addAnonymousInteractionButtonsVisible">
+            <ng-md-icon ng-repeat="type in $ctrl.anonymousInteractionTypes"
+                        ng-class="{opened: type.id == $ctrl.addAnonymousInteractionType.id}"
+                        ng-click="$ctrl.addAnonymousInteraction(type)"
+                        title="{{type.title | t}}"
+                        icon="{{type.icon}}">
+            </ng-md-icon>
         </div>
+        <ng-md-icon icon="add"
+                    class="add-anonymous-interaction"
+                    title="{{'dashboard.anonymous.add' | t}}"
+                    ng-class="{closed: $ctrl.addAnonymousInteractionButtonsVisible}"
+                    ng-click="$ctrl.toggleAnonymousInteractionButtons()"
+                    ng-hide="$ctrl.editMode">
+        </ng-md-icon>
+        <ng-md-icon icon="visibilityOn" ng-if="$ctrl.editMode"></ng-md-icon>
+        <ng-md-icon class="sort-orgs-handle" icon="dragHandle" ng-if="$ctrl.editMode"></ng-md-icon>
     </div>
+</div>
+<div class="add-anonymous-interaction-panel" ng-if="$ctrl.addAnonymousInteractionType">
+    <textarea ng-model="$ctrl.anonymousInteractionComment"
+              placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.addAnonymousInteractionType.title | t}}"
+              class="auto-grow"
+              style="height: 24px;"></textarea>
+    <a href="#" ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
 </div>
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
     <div>
         <a href="/allcontacts?organization_id={{$ctrl.id}}&assigned_to=unassigned">
-            {{$ctrl.report.unassigned_count}} {{'contacts.statuses.uncontacted' | t}}
+            {{$ctrl.report.unassigned_count}} {{'contacts.index.unassigned' | t}}
         </a>
     </div>
     <a title="{{'dashboard.snooze_for_24_hours' | t}}" class="tipitmiddle">
