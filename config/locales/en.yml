@@ -429,6 +429,10 @@ en:
     notes_for_new_interaction: Notes for new
     loading_contacts: Loading Contacts
     people_assigned_to_you: People Assigned to You
+    done: Done
+    anonymous:
+      add: Add an Anonymous Interaction
+      note: Notes for New Anonymous
   date:
     abbr_day_names:
     - Sun
