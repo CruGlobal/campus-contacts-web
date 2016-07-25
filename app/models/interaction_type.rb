@@ -55,19 +55,4 @@ class InteractionType < ActiveRecord::Base
     contacts_with_permission = org.all_people_with_archived.includes(:organizational_permissions).where('organizational_permissions.organization_id' => org.id, 'organizational_permissions.person_id' => people_with_interaction)
     contacts_with_permission
   end
-
-  def self.uncontacted_from_org(org, archived = false)
-    permission = OrganizationalPermission.arel_table
-    interaction = Interaction.arel_table
-    query = OrganizationalPermission
-            .where(deleted_at: nil, organization_id: org.id)
-            .joins(permission
-               .outer_join(interaction)
-               .on(permission[:organization_id].eq(interaction[:organization_id])
-                     .and(permission[:person_id].eq(interaction[:receiver_id])))
-               .join_sources)
-            .where(interaction[:id].eq(nil))
-    query = query.where(archive_date: nil) unless archived
-    query
-  end
 end

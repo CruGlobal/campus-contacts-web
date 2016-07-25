@@ -31,12 +31,5 @@
         <span class="info">(<span class="count"><%= count %></span>)</span>
       </div>
     <% end %>
-    <% uncontacted_count = InteractionType.uncontacted_from_org(@organization, params[:include_archived_interactions]).count %>
-    <% uncontacted_active = conditions && params[:interaction_type].include?('none') %>
-    <div class="option checkbox <%= 'active' if uncontacted_active %>">
-      <%= check_box_tag "interaction_type[]", 'none', uncontacted_active, id: "search_interaction_type_none", class: "search_interaction_type_checkbox" %>
-      <div class="sidebar-label"><%= 'No Interactions' %></div>
-      <span class="info">(<span class="count"><%= uncontacted_count %></span>)</span>
-    </div>
   </div>
 </div>
