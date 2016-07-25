@@ -17,7 +17,7 @@ class MailChimpSyncWorker
   private
 
   def active_users_not_subscribed
-    User.includes(person: :primary_email_address).where('sign_in_count > 0')
+    User.includes(person: [:primary_email_address, :organizational_permissions]).where('sign_in_count > 0')
       .where('current_sign_in_at > ?', CURRENT_USER_RANGE)
       .where(organizational_permissions: { permission_id: Permission::ADMIN_ID },
              subscribed_to_updates: nil)
