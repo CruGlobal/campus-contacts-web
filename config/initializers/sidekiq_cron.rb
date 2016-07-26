@@ -19,11 +19,10 @@ hash = {
     'cron'  => '0 0 * * *'
   },
 
-  # don't auto run the Mailchimp sync until we have done it once as a test
-  # 'Mailchimp sync' => {
-  #   'class' => 'MailChimpSyncWorker',
-  #   'cron'  => '0 10 * * *',
-  # }
+  'Mailchimp sync' => {
+    'class' => 'MailChimpSyncWorker',
+    'cron'  => '0 10 * * *'
+  }
 }
 
 Sidekiq::Cron::Job.load_from_hash! hash if Rails.env.production?
