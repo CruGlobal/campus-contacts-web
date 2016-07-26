@@ -62,7 +62,8 @@
     </a>
 </div>
 <div class="people-list" ng-hide="$ctrl.collapsed || $ctrl.editMode">
-    <person person="person" organization-id="$ctrl.id" period="$ctrl.period" my-person-id="$ctrl.myPersonId"
+    <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
+            my-person-id="$ctrl.myPersonId" on-archive="$ctrl.archivePerson(person)"
             ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
     </person>
 </div>

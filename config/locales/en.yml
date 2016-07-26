@@ -430,6 +430,7 @@ en:
     loading_contacts: Loading Contacts
     people_assigned_to_you: People Assigned to You
     done: Done
+    error_archiving_person: Error archiving person! Please try again or contact support.
     anonymous:
       add: Add an Anonymous Interaction
       note: Notes for New Anonymous

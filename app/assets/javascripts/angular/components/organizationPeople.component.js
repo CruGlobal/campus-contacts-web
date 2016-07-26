@@ -17,7 +17,8 @@
             }
         });
 
-    function organizationPeopleController ($log, $http, envService, JsonApiDataStore, lscache, _) {
+    function organizationPeopleController ($filter, $http, $log, JsonApiDataStore, lscache, _,
+                                           confirm, envService, jQuery) {
         var vm = this,
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
@@ -51,6 +52,7 @@
         vm.toggleAnonymousInteractionButtons = toggleAnonymousInteractionButtons;
         vm.addAnonymousInteraction = addAnonymousInteraction;
         vm.saveAnonymousInteraction = saveAnonymousInteraction;
+        vm.archivePerson = archivePerson;
 
         vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;
@@ -150,8 +152,41 @@
             if (angular.isDefined(interaction)) {
                 interaction.interaction_count++;
             } else {
-                vm.report.interactions.push({interaction_type_id: interaction_type_id, interaction_count: 1});
+                vm.report.interactions.push({
+                    interaction_type_id: interaction_type_id,
+                    interaction_count: 1
+                });
             }
+        }
+
+        function archivePerson (person) {
+            var really = confirm($filter('t')('organizations.cleanup.confirm_archive'));
+            if (!really) {
+                return;
+            }
+            var updateJson = {
+                data: {
+                    type: 'person',
+                    attributes: {}
+                },
+                included: [
+                    {
+                        type: 'organizational_permission',
+                        id: _.find(person.organizational_permissions, { organization_id: vm.id }).id,
+                        attributes: {
+                            archive_date: (new Date()).toUTCString()
+                        }
+                    }
+                ]
+            };
+            $http
+                .put(envService.read('apiUrl') + '/people/' + person.id, updateJson)
+                .then(function () {
+                    $log.info('contact archived');
+                    _.remove(vm.people, { id: person.id })
+                }, function () {
+                    jQuery.e($filter('t')('dashboard.error_archiving_person'));
+                })
         }
     }
 })();

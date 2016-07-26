@@ -10,7 +10,8 @@
                 person: '<',
                 organizationId: '<',
                 period: '<',
-                myPersonId: '<'
+                myPersonId: '<',
+                onArchive: '&'
             }
         });
 
@@ -105,15 +106,11 @@
 
         function openAddInteractionPanel (type) {
             if(type.id == -1) {
-                archivePerson()
+                vm.onArchive({ person: vm.person });
             }
             else {
                 vm.openPanelType = type;
             }
-        }
-        
-        function archivePerson () {
-
         }
 
         function saveInteraction () {
