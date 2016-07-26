@@ -22,6 +22,23 @@ describe User::MailChimpManager do
       expect(user.reload.subscribed_to_updates).to be false
       expect(create_request).to have_been_made
     end
+
+    it 'does not error on a 400 message about an invalid email address' do
+      user = create(:user_api, subscribed_to_updates: true)
+      user.person.primary_email_address.update(email: '1@@test.com')
+      email = user.person.email
+      url = 'https://apikey:asdf-us6@us6.api.mailchimp.com/3.0/'\
+        'lists/asdf/members/5da2be0729f136b0e2d57193fdad9f7c'
+
+      err = 'An email address must contain a single @'
+      create_request = stub_request(:put, url)
+                       .to_return(status: 400, body: { detail: err }.to_json)
+
+      User::MailChimpManager.new(user).subscribe
+
+      expect(user.reload.subscribed_to_updates).to be false
+      expect(create_request).to have_been_made
+    end
   end
 
   context '#unsubscribe' do

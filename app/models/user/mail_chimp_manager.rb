@@ -33,6 +33,7 @@ User::MailChimpManager = Struct.new(:user) do
     e.status_code == 400 &&
     (e.message =~ /looks fake or invalid, please enter a real email/ ||
       e.message =~ /username portion of the email address is invalid/ ||
+      e.message =~ /An email address must contain a single @/ ||
       e.message =~ /domain portion of the email address is invalid/)
   end
 
