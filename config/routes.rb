@@ -479,7 +479,8 @@ Mh::Application.routes.draw do
   mount Rack::OAuth2::Server::Admin => '/oauth/admin'
   mount Raddocs::App => '/docs'
 
-  get 'monitors/lb' => 'monitors#lb'
+  get 'monitors/lb'
+  get 'monitors/commit'
 
   get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
 end

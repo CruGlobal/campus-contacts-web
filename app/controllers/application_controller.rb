@@ -4,20 +4,20 @@ class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
 
-  force_ssl if: :ssl_configured?, except: [:lb]
-  before_action :check_valid_subdomain, except: [:lb]
-  before_action :authenticate_user!, except: [:facebook_logout, :lb]
-  before_action :clear_advanced_search, except: [:lb]
-  before_action :set_login_cookie, except: [:lb]
-  before_action :check_su, except: [:lb]
-  before_action :set_locale, except: [:lb]
-  before_action :check_url, except: [:facebook_logout, :lb]
-  before_action :export_i18n_messages, except: [:lb]
-  before_action :set_newrelic_params, except: [:lb]
-  before_action :ensure_timezone, except: [:lb]
-  before_action :check_mini_profiler, except: [:lb]
-  before_action :check_signature, except: [:lb]
-  before_action :check_all_signatures, except: [:lb]
+  force_ssl if: :ssl_configured?
+  before_action :check_valid_subdomain
+  before_action :authenticate_user!, except: [:facebook_logout]
+  before_action :clear_advanced_search
+  before_action :set_login_cookie
+  before_action :check_su
+  before_action :set_locale
+  before_action :check_url, except: [:facebook_logout]
+  before_action :export_i18n_messages
+  before_action :set_newrelic_params
+  before_action :ensure_timezone
+  before_action :check_mini_profiler
+  before_action :check_signature
+  before_action :check_all_signatures
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
