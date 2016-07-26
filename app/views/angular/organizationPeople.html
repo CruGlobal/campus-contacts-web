@@ -8,7 +8,9 @@
     <div class="organization-stats">
         <div>{{$ctrl.report.contact_count || '-'}}</div>
         <div>
-            <a class="red" href="/allcontacts?organization_id={{$ctrl.id}}&interaction_type[]=none" ng-if="$ctrl.report.uncontacted_count">
+            <a class="red"
+               href="/allcontacts?organization_id={{$ctrl.id}}&status[]=uncontacted"
+               ng-if="$ctrl.report.uncontacted_count">
                 {{$ctrl.report.uncontacted_count}}
             </a>
             <span ng-if="!$ctrl.report.uncontacted_count">-</span>
