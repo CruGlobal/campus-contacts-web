@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   extend DelegatePresenter::ApplicationController
   include ContactMethods
 
-  force_ssl if: :ssl_configured?
+  force_ssl if: :ssl_configured?, except: [:lb]
   before_action :check_valid_subdomain
   before_action :authenticate_user!, except: [:facebook_logout]
   before_action :clear_advanced_search
