@@ -27,18 +27,17 @@
 	<div class="feed_panel" id="profile_feed">
 		<div class="feed_panel_top">
 			<ul id="panel_nav">
-				<li id="info" class="current">Info</li>
+        <li id="all" class="current">All</li>
 				<li id="interactions">Interactions</li>
         <li id="surveys">Surveys</li>
         <li id="messages">Messages</li>
-				<li id="all">All</li>
+        <li id="info">Info</li>
 			</ul>
 		</div>
 
 		<div class="feed_content">
-      <div class="tab_content profile_info current">
-        <div class="edit_space"><%= render partial: "interactions/profile_info_edit" %></div>
-        <div class="view_space"><%= render partial: "interactions/profile_info" %></div>
+      <div class="tab_content profile_all current">
+        <%= render partial: "interactions/profile_all" %>
       </div>
       <div class="tab_content profile_interactions">
         <div class="edit_space"><%= render partial: "interactions/profile_interactions_edit" %></div>
@@ -50,8 +49,9 @@
       <div class="tab_content profile_surveys">
         <%= render partial: "interactions/profile_surveys" %>
       </div>
-      <div class="tab_content profile_all">
-        <%= render partial: "interactions/profile_all" %>
+      <div class="tab_content profile_info">
+        <div class="edit_space"><%= render partial: "interactions/profile_info_edit" %></div>
+        <div class="view_space"><%= render partial: "interactions/profile_info" %></div>
       </div>
   	</div>
   </div>
