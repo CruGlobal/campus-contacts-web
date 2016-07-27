@@ -96,8 +96,8 @@ class Label < ActiveRecord::Base
   end
 
   def label_contacts_from_org(org)
-    people_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id, removed_date: nil).collect(&:person_id).uniq
-    people = org.all_people.where(id: people_ids)
+    people_ids = OrganizationalLabel.where(label_id: id, organization_id: org.id, removed_date: nil).pluck(:person_id).uniq
+    org.all_people.where(id: people_ids)
   end
 
   def count_label_contacts_from_orgs(org_ids, date)

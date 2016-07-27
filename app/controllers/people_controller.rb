@@ -360,33 +360,33 @@ class PeopleController < ApplicationController
     authorize! :lead, current_organization
     to_ids = params[:to]
 
-    person_ids = []
-    if to_ids.present?
-      ids = to_ids.split(',').uniq
-      ids.each do |id|
-        if id.upcase =~ /GROUP-/
-          group = Group.where(id: id.gsub('GROUP-', ''), organization_id: current_organization.id).first
-          group.group_memberships.collect { |p| person_ids << p.person_id.to_s } if group.present?
-        elsif id.upcase =~ /ROLE-/
-          permission = Permission.find(id.gsub('ROLE-', ''))
-          permission.members_from_permission_org(current_organization.id).collect { |p| person_ids << p.person_id.to_s } if permission.present?
-        elsif id.upcase =~ /LABEL-/
-          label = Label.find(id.gsub('LABEL-', ''))
-          label.label_contacts_from_org(current_organization).collect { |p| person_ids << p.id.to_s } if label.present?
-        elsif id.upcase =~ /ALL-PEOPLE/
-          current_organization.all_people.collect { |p| person_ids << p.id.to_s } if is_admin?
-        else
-          person_ids << id
-        end
+    person_ids = to_ids.to_s.split(',').uniq.map do |id|
+      if id.upcase =~ /GROUP-/
+        group = Group.find_by(id: id.gsub('GROUP-', ''), organization_id: current_organization.id)
+        next nil unless group
+        group.group_memberships.pluck(:person_id)
+      elsif id.upcase =~ /ROLE-/
+        permission = Permission.find(id.gsub('ROLE-', ''))
+        next nil unless permission
+        permission.members_from_permission_org(current_organization.id).pluck(:person_id)
+      elsif id.upcase =~ /LABEL-/
+        OrganizationalLabel.where(label_id: id.gsub('LABEL-', ''),
+                                  organization_id: current_organization.id,
+                                  removed_date: nil).pluck(:person_id)
+      elsif id.upcase =~ /ALL-PEOPLE/
+        next nil unless is_admin?
+        current_organization.all_people.pluck(:id)
+      else
+        id
       end
-    end
+    end.flatten.compact
 
-    person_ids.uniq.each do |id|
-      person = Person.where(id: id).first
-      if person.present? && person.email.present?
+    Message.transaction do
+      Person.where(id: person_ids).includes(:primary_email_address).each do |person|
+        next unless person.email.present?
         # This will be the default 'from' value to avoid the DMARC policy or not being store the emails in SPAM Folder
         from = 'outbound@mhub.cc'
-        @message = current_person.sent_messages.create(
+        @message = current_person.sent_messages.new(
           receiver_id: person.id,
           organization_id: current_organization.id,
           from: from,
@@ -396,6 +396,7 @@ class PeopleController < ApplicationController
           subject: params[:subject],
           message: params[:body]
         )
+        @message.save(validate: false) # no validation to do in the first-place, so we can skip it
         @message.process_message
       end
     end

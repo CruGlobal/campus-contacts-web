@@ -17,6 +17,11 @@ hash = {
   'Transfer notifications' => {
     'class' => 'Jobs::PersonTransferNotifications',
     'cron'  => '0 0 * * *'
+  },
+
+  'Mailchimp sync' => {
+    'class' => 'MailChimpSyncWorker',
+    'cron'  => '0 10 * * *'
   }
 }
 
