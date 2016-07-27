@@ -16,7 +16,7 @@
                         apiUrl: '//localhost:3001/apis/v4'
                     },
                     staging: {
-                        apiUrl: 'https://api.stage.missionhub.com/apis/v4'
+                        apiUrl: 'https://api-stage.missionhub.com/apis/v4'
                     },
                     production: {
                         apiUrl: 'https://api.missionhub.com/apis/v4'
