@@ -114,6 +114,9 @@
                 if (person.id == vm.myPersonId) {
                     return;
                 }
+                if (person.last_name == null || person.last_name) {
+                    person.last_name = '';
+                }
                 angular.forEach(person.reverse_contact_assignments, function (ca) {
                     var orgId = ca.organization.id;
                     // make sure they have an assignment to me and they have an active permission
