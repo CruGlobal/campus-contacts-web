@@ -1096,9 +1096,13 @@ $.mh.saveContact = (add_more) ->
         $("#existing_contacts_loader").show()
         $("#existing_contacts_table").hide()
         $("#existing_contact_content").html("")
+        temp_org = $('#temp_current_organization_id').val()
+        existing_contact_url = "/contacts/add_contact_check_email"
+        if temp_org
+          existing_contact_url += "?temp_current_organization_id=" + temp_org
         $.ajax(
           type: "POST"
-          url: "/contacts/add_contact_check_email"
+          url: existing_contact_url
           data:
             email: email
         )
