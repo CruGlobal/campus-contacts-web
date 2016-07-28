@@ -1,15 +1,38 @@
-<% body_classes("welcome index") %>
+<% body_classes("welcome") %>
 
 <% content_for(:hero) do %>
-  <h1>Never lose a contact again.</h1>
-
-  <h4>We&#39;re here to make it easier for you to care for the people who need you most.</h4>
-
-  <div class="call_to_action">
-    <% if mhub? %>
-  	  <%= link_to 'Get Started', "/users/auth/facebook_mhub" %>
-  	<% else %>
-  	  <%= link_to 'Get Started', branded? ? new_user_session_path : '/users/auth/key' %>
-  	<% end %>
-  </div>
+    <h2><%= t('welcome.index.stay_on_mission') %></h2>
+    <p><%= t('welcome.index.stay_on_mission_text') %></p>
 <% end %>
+
+<div class="intro">
+  <h3><%= t('welcome.index.all_new_dashboard') %></h3>
+  <%= image_tag('welcome/screen-macbook.png', alt: '', width: '100%') %>
+  <p><%= t('welcome.index.all_new_dashboard_text') %></p>
+</div>
+
+<div class="features">
+  <h3><%= t('welcome.index.all_new_mobile') %></h3>
+
+  <div class="cols-3">
+    <div class="col">
+      <%= image_tag('welcome/mobile-quickinteractions-1x.png', alt: '') %>
+      <div class="icon icon-interactions"></div>
+      <h4><%= t('welcome.index.quick_interactions') %></h4>
+      <p><%= t('welcome.index.quick_interactions_text') %></p>
+    </div>
+    <div class="col">
+      <%= image_tag('welcome/mobile-knowyourhistory-1x.png', alt: '') %>
+      <div class="icon icon-history"></div>
+      <h4><%= t('welcome.index.know_your_history') %></h4>
+      <p><%= t('welcome.index.know_your_history_text') %></p>
+    </div>
+    <div class="col">
+      <%= image_tag('welcome/mobile-activityat-a-glance-1x.png', alt: '') %>
+      <div class="icon icon-activity"></div>
+      <h4><%= t('welcome.index.activity') %></h4>
+      <p><%= t('welcome.index.activity_text') %></p>
+    </div>
+  </div>
+
+</div>

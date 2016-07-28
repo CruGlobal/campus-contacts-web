@@ -202,12 +202,6 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:organization)
   end
 
-  should 'get new' do
-    get :new
-    assert_not_nil assigns(:organization)
-    assert_template 'layouts/splash'
-  end
-
   should 'get thanks' do
     get :thanks
     assert_template 'layouts/splash'

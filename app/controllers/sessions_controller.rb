@@ -15,6 +15,11 @@ class SessionsController < Devise::SessionsController
       end
     end
 
+    # Show sign up page instead on log in if return_to action is set as leader_sign_in
+    @show_sign_up = session.key?('return_to') &&
+                    session['return_to'].is_a?(Hash) &&
+                    session['return_to'][:action] == 'leader_sign_in'
+
     if user_signed_in?
       @facebook_logout = true
       sign_out
@@ -59,6 +64,6 @@ class SessionsController < Devise::SessionsController
   end
 
   def pick_layout
-    mhub? ? 'mhub' : 'login'
+    mhub? ? 'mhub' : 'welcome'
   end
 end

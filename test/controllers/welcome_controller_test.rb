@@ -64,4 +64,10 @@ class WelcomeControllerTest < ActionController::TestCase
     get :duplicate
     assert_template 'layouts/splash'
   end
+
+  should 'get request_access' do
+    get :request_access
+    assert_not_nil assigns(:request_access)
+    assert_template 'layouts/welcome'
+  end
 end

@@ -4,28 +4,22 @@
   <%= render 'welcome/head' %>
 </head>
 <body id="<%= controller.controller_name %>_controller" class="<%= yield :body_classes %>">
-  <%= render 'welcome/header' unless params.has_key?('no-chrome') %>
+<% if params[:action] != 'index' %>
+    <div class="top">
+<% end %>
+<%= render 'welcome/header' unless params.has_key?('no-chrome') %>
 
-  <% if content_for?(:hero) -%>
+<% if content_for?(:hero) -%>
     <div class="hero">
       <%= yield :hero %>
     </div>
-  <% end -%>
+<% end -%>
 
-  <div class="<%= params[:action] %>">
-    <div class="container">
-      <section role="global">
-        <%= yield %>
-      </section>
-      <% if content_for?(:aside) && !params.has_key?('no-chrome') -%>
-        <aside role="global">
-          <%= yield :aside %>
-        </aside>
-      <% end -%>
+<%= yield %>
+<% if params[:action] != 'index' %>
     </div>
-  </div>
-
-  <%= render 'welcome/footer' unless params.has_key?('no-chrome') %>
-  <%= render 'fb_init' %>
+<% end %>
+<%= render 'welcome/footer' unless params.has_key?('no-chrome') %>
+<%= render 'fb_init' %>
 </body>
 </html>

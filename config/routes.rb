@@ -446,6 +446,9 @@ Mh::Application.routes.draw do
   get 'test' => 'welcome#test'
   get 'welcome/index'
   get 'welcome/duplicate'
+  get 'request_access' => 'welcome#request_access', as: 'request_access'
+  post 'requested_access' => 'welcome#requested_access', as: 'requested_access'
+  get 'thank_you' => 'welcome#thank_you', as: 'thank_you'
 
   # SMS keyword state transitions
   post '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
