@@ -143,8 +143,8 @@
                 .post(envService.read('apiUrl') + '/interactions', createJson)
                 .then(function () {
                         $log.log('posted interaction successfully');
-                        closeAddInteractionPanel();
                         vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
+                        toggleInteractionBtns();
                     },
                     function (error) {
                         $log.error('Error saving interaction', error);

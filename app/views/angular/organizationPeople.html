@@ -48,7 +48,7 @@
               placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.addAnonymousInteractionType.title | t}}"
               class="auto-grow"
               style="height: 24px;"></textarea>
-    <a href="#" ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
+    <a href ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
 </div>
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
     <div>

@@ -49,5 +49,5 @@
     <textarea placeholder="{{'dashboard.notes_for_new_interaction' | t}} {{$ctrl.openPanelType.title | t}}"
               ng-model="$ctrl.interactionComment"
               class="auto-grow"></textarea>
-    <a href="#" ng-click="$ctrl.saveInteraction()">{{'dashboard.done' |t}}</a>
+    <a href ng-click="$ctrl.saveInteraction()">{{'dashboard.done' |t}}</a>
 </div>
