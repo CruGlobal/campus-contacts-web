@@ -24,6 +24,8 @@ class SessionsController < Devise::SessionsController
       @facebook_logout = true
       sign_out
     end
+    # Force HTML rendering
+    render formats: [:html]
   end
 
   def destroy
