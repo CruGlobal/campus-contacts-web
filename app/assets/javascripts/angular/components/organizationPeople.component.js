@@ -56,6 +56,7 @@
         vm.saveAnonymousInteraction = saveAnonymousInteraction;
         vm.archivePerson = archivePerson;
         vm.toggleVisibility = toggleVisibility;
+        vm.incrementReportInteraction = incrementReportInteraction;
 
         vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;

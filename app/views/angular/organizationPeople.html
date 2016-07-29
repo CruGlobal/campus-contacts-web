@@ -65,6 +65,7 @@
 <div class="people-list" ng-hide="$ctrl.collapsed || $ctrl.editMode">
     <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
             my-person-id="$ctrl.myPersonId" on-archive="$ctrl.archivePerson(person)"
-            ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
+            ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id"
+            on-new-interaction="$ctrl.incrementReportInteraction(interaction_type_id)">
     </person>
 </div>

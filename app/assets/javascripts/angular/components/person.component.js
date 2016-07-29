@@ -11,7 +11,8 @@
                 organizationId: '<',
                 period: '<',
                 myPersonId: '<',
-                onArchive: '&'
+                onArchive: '&',
+                onNewInteraction: '&'
             }
         });
 
@@ -143,6 +144,7 @@
                 .then(function () {
                         $log.log('posted interaction successfully');
                         closeAddInteractionPanel();
+                        vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
                     },
                     function (error) {
                         $log.error('Error saving interaction', error);
