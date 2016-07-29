@@ -9,6 +9,9 @@
           collapsible="$ctrl.collapsible"
           my-person-id="$ctrl.myPersonId"
           collapsible="$ctrl.collapsible"
-          edit-mode="$ctrl.editMode">
+          edit-mode="$ctrl.editMode"
+          visible="org.visible"
+          ng-if="org.visible || $ctrl.editMode"
+          on-change-visibility="$ctrl.orgChangeVisibility(organization_id)">
   </organization-people>
 </div>

@@ -9,6 +9,11 @@ organization-people {
     display: flex;
     align-items: center;
     height: 48px;
+    &.hidden-org {
+      background: gray;
+      background: -webkit-linear-gradient(down, #9F999B 0%, #666062 100%);
+      background: linear-gradient(to bottom, #9F999B 0%, #666062 100%);
+    }
 
     ng-md-icon {
       display: flex;

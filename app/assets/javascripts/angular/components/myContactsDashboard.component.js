@@ -22,6 +22,8 @@
         vm.$onDestroy = cleanUp;
         vm.$onChanges = bindingsChanged;
 
+        vm.orgChangeVisibility = orgChangeVisibility;
+
         function activate () {
             loadAndSyncData();
             angular.element($document).on('contacts::contactAdded', loadAndSyncData);
@@ -54,6 +56,7 @@
                 .then(function (request) {
                         vm.myPersonId = request.data.data.id;
                         vm.orgOrderPreference = request.data.included[0].attributes.organization_order;
+                        vm.orgHiddenPreference = request.data.included[0].attributes.hidden_organizations || [];
                     },
                     function (error) {
                         $log.error('Error loading profile', error);
@@ -135,6 +138,7 @@
                 })
             });
             orderOrganizations();
+            hideOrganizations();
 
             vm.collapsible = people.length > 15 || _.keys(vm.organizationPeople).length > 2;
 
@@ -161,14 +165,40 @@
             vm.organizationPeople = newArray;
         }
 
+        function hideOrganizations () {
+            _.each(vm.organizationPeople, function (org) {
+                var hidden = vm.orgHiddenPreference.indexOf(org.id.toString());
+                org.visible = hidden == -1;
+            })
+        }
+
         function organizationOrderChange () {
             var orgOrder = _.map(vm.organizationPeople, 'id');
+            updateUserPreference({
+                organization_order: orgOrder
+            })
+        }
+
+        function orgChangeVisibility (organization_id) {
+            var org = _.find(vm.organizationPeople, {id: organization_id});
+            var hidding = org.visible;
+            org.visible = !org.visible;
+            if (hidding) {
+                vm.orgHiddenPreference.push(organization_id);
+            }
+            else {
+                vm.orgHiddenPreference = _.remove(vm.orgHiddenPreference, organization_id);
+            }
+            updateUserPreference({
+                hidden_organizations: vm.orgHiddenPreference
+            });
+        }
+
+        function updateUserPreference (prefHash) {
             var userData = {
                 data: {
                     type: 'user',
-                    attributes: {
-                        organization_order: orgOrder
-                    }
+                    attributes: prefHash
                 }
             };
             $http.put(envService.read('apiUrl') + '/users/me', userData)

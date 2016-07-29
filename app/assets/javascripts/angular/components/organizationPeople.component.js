@@ -13,7 +13,9 @@
                 'people': '<',
                 'period': '<',
                 'myPersonId': '<',
-                'editMode': '<'
+                editMode: '<',
+                visible: '<',
+                onChangeVisibility: '&'
             }
         });
 
@@ -53,6 +55,7 @@
         vm.addAnonymousInteraction = addAnonymousInteraction;
         vm.saveAnonymousInteraction = saveAnonymousInteraction;
         vm.archivePerson = archivePerson;
+        vm.toggleVisibility = toggleVisibility;
 
         vm.$onInit = activate;
         vm.$onChanges = bindingsChanged;
@@ -187,6 +190,10 @@
                 }, function () {
                     jQuery.e($filter('t')('dashboard.error_archiving_person'));
                 })
+        }
+
+        function toggleVisibility () {
+            vm.onChangeVisibility({ organization_id: vm.id });
         }
     }
 })();

@@ -1,4 +1,4 @@
-<div class="header" ng-class="{'collapsed': $ctrl.collapsed}">
+<div class="header" ng-class="{'collapsed': $ctrl.collapsed, 'hidden-org': !$ctrl.visible}">
     <div class="org-name">
         <span ng-if="$ctrl.collapsible && !$ctrl.editMode" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
           <ng-md-icon icon="play_arrow" class="chevron" size="20"></ng-md-icon>
@@ -38,7 +38,8 @@
                     ng-click="$ctrl.toggleAnonymousInteractionButtons()"
                     ng-hide="$ctrl.editMode">
         </ng-md-icon>
-        <ng-md-icon icon="visibilityOn" ng-if="$ctrl.editMode"></ng-md-icon>
+        <ng-md-icon icon="visibilityOn" ng-if="$ctrl.editMode && $ctrl.visible" ng-click="$ctrl.toggleVisibility()"></ng-md-icon>
+        <ng-md-icon icon="visibilityOff" ng-if="$ctrl.editMode && !$ctrl.visible" ng-click="$ctrl.toggleVisibility()"></ng-md-icon>
         <ng-md-icon class="sort-orgs-handle" icon="dragHandle" ng-if="$ctrl.editMode"></ng-md-icon>
     </div>
 </div>
