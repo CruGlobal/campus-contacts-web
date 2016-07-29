@@ -14,4 +14,8 @@ class MonitorsController < ApplicationController
   def commit
     render text: ENV['GIT_COMMIT']
   end
+
+  def paper_trail_enabled_for_controller
+    false
+  end
 end
