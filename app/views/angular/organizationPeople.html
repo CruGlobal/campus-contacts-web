@@ -48,7 +48,7 @@
               placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.addAnonymousInteractionType.title | t}}"
               class="auto-grow"
               style="height: 24px;"></textarea>
-    <a href="#" ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
+    <a href ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
 </div>
 <div class="unassigned" ng-if="$ctrl.report.unassigned_count && $ctrl.unassignedVisible && !$ctrl.editMode">
     <div>
@@ -65,6 +65,7 @@
 <div class="people-list" ng-hide="$ctrl.collapsed || $ctrl.editMode">
     <person person="person" organization-id="$ctrl.id" period="$ctrl.period"
             my-person-id="$ctrl.myPersonId" on-archive="$ctrl.archivePerson(person)"
-            ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id">
+            ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id"
+            on-new-interaction="$ctrl.incrementReportInteraction(interaction_type_id)">
     </person>
 </div>
