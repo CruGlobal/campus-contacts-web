@@ -12,17 +12,21 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($http, $log, $q, $document, JsonApiDataStore, envService, _) {
+    function myContactsDashboardController ($http, $log, $q, $document, $sce, JsonApiDataStore, envService, _, I18n) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
         vm.loading = true;
+        vm.noContacts = false;
 
         activate();
         vm.$onDestroy = cleanUp;
         vm.$onChanges = bindingsChanged;
 
         vm.orgChangeVisibility = orgChangeVisibility;
+
+        vm.noContactsMessage = $sce.trustAsHtml(I18n.t('dashboard.no_contacts.people_will_appear_here'));
+        vm.noContactsWelcome = '';
 
         function activate () {
             loadAndSyncData();
@@ -55,6 +59,9 @@
                 })
                 .then(function (request) {
                         vm.myPersonId = request.data.data.id;
+                        vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
+                            name: request.data.data.attributes.first_name.toUpperCase()
+                        });
                         vm.orgOrderPreference = request.data.included[0].attributes.organization_order;
                         vm.orgHiddenPreference = request.data.included[0].attributes.hidden_organizations || [];
                     },
@@ -109,6 +116,22 @@
             });
         }
 
+        function loadOrganizations () {
+            return $http
+                .get(envService.read('apiUrl') + '/organizations', {
+                    params: {
+                        'page[limit]': 100,
+                        include: ''
+                    }
+                })
+                .then(function (request) {
+                        JsonApiDataStore.store.sync(request.data);
+                    },
+                    function (error) {
+                        $log.error('Error loading organizations', error);
+                    });
+        }
+
         function dataLoaded () {
             loadReports();
             var people = JsonApiDataStore.store.findAll('person');
@@ -140,7 +163,11 @@
             orderOrganizations();
             hideOrganizations();
 
-            vm.collapsible = people.length > 15 || _.keys(vm.organizationPeople).length > 2;
+            vm.collapsible = people.length > 10 || _.keys(vm.organizationPeople).length > 1;
+
+            if(_.keys(vm.organizationPeople).length == 0) {
+                noContacts();
+            }
 
             vm.loading = false;
         }
@@ -169,6 +196,16 @@
             _.each(vm.organizationPeople, function (org) {
                 var hidden = vm.orgHiddenPreference.indexOf(org.id.toString());
                 org.visible = hidden == -1;
+            })
+        }
+
+        function noContacts () {
+            vm.noContacts = true;
+            loadOrganizations().then(function () {
+                vm.organizationPeople = JsonApiDataStore.store.findAll('organization');
+                orderOrganizations();
+                hideOrganizations();
+                loadReports();
             })
         }
 

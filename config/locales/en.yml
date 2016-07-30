@@ -434,6 +434,9 @@ en:
     anonymous:
       add: Add an Anonymous Interaction
       note: Notes for New Anonymous
+    no_contacts:
+      welcome: 'WELCOME %{name}!'
+      people_will_appear_here: When you add a new person or someone gets assigned to you, <br>they will show up here.
   date:
     abbr_day_names:
     - Sun
