@@ -58,8 +58,9 @@ class ImportsController < ApplicationController
           @question = TextField.create!(style: 'short', label: question_label, content: params[:options], slug: '')
           @survey.elements << @question
         end
-        @survey.survey_elements.where(element_id: @question.id).first.update_attribute(:hidden, true)
-        params[:import][:header_mappings][column[0]] = @question.id.to_s
+        survey_element = @survey.survey_elements.where(element_id: @question.id).first
+        survey_element.update_attribute(:hidden, true)
+        params[:import][:header_mappings][column[0]] = survey_element.id.to_s
       end
     end
 
