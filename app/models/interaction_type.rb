@@ -5,6 +5,13 @@ class InteractionType < ActiveRecord::Base
   PERSONAL_DECISION = 4
   HOLY_SPIRIT_PRESENTATION = 5
   GRADUATING_ON_MISSION = 6
+  DISCIPLESHIP = 9
+
+  CORE_INTERACTIONS = [SPIRITUAL_CONVERSATION,
+                       PERSONAL_EVANGELISM,
+                       PERSONAL_DECISION,
+                       HOLY_SPIRIT_PRESENTATION,
+                       DISCIPLESHIP].freeze
 
   attr_accessible :i18n, :icon, :name, :organization_id
 

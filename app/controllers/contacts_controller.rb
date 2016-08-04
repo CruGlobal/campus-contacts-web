@@ -181,6 +181,8 @@ class ContactsController < ApplicationController
   end
 
   def all_contacts
+    check_new_current_organization
+
     session[:filters] = nil if params[:filters] == 'clear'
     respond_to do |wants|
       wants.html do
@@ -453,6 +455,7 @@ class ContactsController < ApplicationController
       end
     end if params[:answers]
 
+    @assign_to_me = ['1', 'true', true].include?(params[:assign_to_me])
     @organization = current_organization
     create_contact
   end
@@ -633,6 +636,16 @@ class ContactsController < ApplicationController
         end
         @filtered_contact = get_all_people.joins(:email_addresses).where(query) if query.length > 0
       end
+    end
+  end
+
+  def new
+    check_new_current_organization
+    permissions_for_assign
+    @person = Person.new
+    @assign_to_me = ['1', 'true', true].include?(params[:assign_to_me])
+    respond_to do |format|
+      format.js
     end
   end
 

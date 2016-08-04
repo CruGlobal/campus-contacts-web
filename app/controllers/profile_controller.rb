@@ -7,7 +7,9 @@ class ProfileController < ApplicationController
     groups_for_assign
     labels_for_assign
 
-    @person = current_person.id == params[:id].to_i ? current_person : current_organization.people.where(id: params[:id]).first
+    check_new_current_organization
+
+    @person = current_person.id == params[:id].to_i ? current_person : current_organization.people.find_by(id: params[:id])
     if @person.present?
       # Ensure single permission
       @person.ensure_single_permission_for_org_id(current_organization.id)

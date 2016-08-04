@@ -29,4 +29,9 @@
  *= require advanced_search
  *= require date_time_picker_style
  *= require token-input-facebook
+
+ *= require_self
 */
+
+@import "colors.scss";
+@import "components/**/*";

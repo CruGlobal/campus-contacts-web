@@ -1,19 +1,7 @@
 <footer role="global">
-  <div class="container">
-    <% if branded? %>
-      <div class="stores">
-        <%= link_to "App Store", "http://www.itunes.com/app/MissionHub", class: "apple", target: "_blank" %>
-        <%= link_to "Google Play", "https://market.android.com/details?id=com.missionhub", class: "google", target: "_blank" %>
-      </div>
-
-      <nav>
-        <%= link_to(t('nav.terms'), '/terms') %> | <%= link_to(t('nav.privacy'), '/privacy') %> | Powered by <%= link_to('Cru', 'http://cru.org') %>
-        </ul>
-      </nav>
-    <% end %>
-
-    <div class="copyright">
-      &copy; Copyright <%= Time.now.year %>
-    </div>
-  </div>
+  <div class="copyright"><%= t('general.copyright', year: Time.now.year) %></div>
+  <nav>
+    <%= link_to(t('nav.terms'), '/terms') %>
+    <%= link_to(t('nav.privacy'), '/privacy') %>
+  </nav>
 </footer>

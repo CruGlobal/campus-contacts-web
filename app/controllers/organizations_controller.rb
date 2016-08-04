@@ -1,6 +1,7 @@
 class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_action :get_organization, only: [:show, :edit, :update, :destroy, :update_from_crs]
+  skip_before_action :authenticate_user!, only: [:new]
 
   def load_tree
     if params[:id].present?
@@ -37,8 +38,7 @@ class OrganizationsController < ApplicationController
   end
 
   def new
-    @organization = Organization.new(person_id: current_person.id)
-    render layout: 'splash'
+    redirect_to request_access_path
   end
 
   def thanks

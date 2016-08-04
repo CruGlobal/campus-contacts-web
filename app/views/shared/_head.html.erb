@@ -7,10 +7,10 @@
 <%= stylesheet_link_tag 'no_left_sidebar' if no_left_sidebar %>
 
 <% unless Rails.env.development? %>
-  <%= stylesheet_link_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" %>
+  <%= stylesheet_link_tag 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css' %>
   <%#= stylesheet_link_tag '/stylesheets/smoothness/jquery-ui-1.8.7.custom.css' %>
 <% end %>
-
+<%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Montserrat:400,700|Titillium+Web' %>
 
 <% if Rails.env.development? %>
   <%= javascript_include_tag 'jquery-1.7.2.min.js' %>

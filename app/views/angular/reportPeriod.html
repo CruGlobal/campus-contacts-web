@@ -1,0 +1,6 @@
+<div class="dashboard-timeframe-toggle">
+    <a ng-repeat="p in $ctrl.periods"
+       href
+       ng-click="$ctrl.onUpdate({period: p.period})"
+       ng-class="{active: p.period === $ctrl.period}">{{p.label}}</a>
+</div>

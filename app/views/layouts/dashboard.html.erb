@@ -9,28 +9,53 @@
     <%= render 'dialogs/alert' %>
     <%= render 'dialogs/locate_contact' %>
     <%= render 'shared/jwt_preload_state' %>
-    <div id="outer">
-
-      <%= render 'shared/nav' %>
-
-      <div id="">
-        <div id="menutop" class="topmenu">
+      <div id="outer" ng-controller="DashboardController as $ctrl">
+        <div id="menutop" class="topmenu topmenu-with-sub">
           <%= render 'shared/menu' %>
         </div>
+        <% if current_organization %>
+          <div class="dashboard-subnav">
+            <div class="inner">
+              <div class="dashboard-mode-toggle">
+                <%= t('dashboard.people_assigned_to_you') %>
+              </div>
+              <div class="dashboard-stats-icons">
+                <ng-md-icon icon="assignedPeople" class="tipitmiddle"
+                            title="<%= t('contacts.all_contacts.title') %>"></ng-md-icon>
+                <ng-md-icon icon="uncontactedPerson" class="tipitmiddle"
+                            title="<%= t('contacts.statuses.uncontacted') %>"></ng-md-icon>
+                <ng-md-icon icon="spiritualConversation" class="tipitmiddle"
+                            title="<%= t('application.interaction_types.spiritual_conversation') %>"></ng-md-icon>
+                <ng-md-icon icon="evangelism" class="tipitmiddle"
+                            title="<%= t('application.interaction_types.gospel_presentation') %>"></ng-md-icon>
+                <ng-md-icon icon="personalDecision" class="tipitmiddle"
+                            title="<%= t('application.interaction_types.prayed_to_receive_christ') %>"></ng-md-icon>
+                <ng-md-icon icon="holySpirit" class="tipitmiddle"
+                            title="<%= t('application.interaction_types.holy_spirit_presentation') %>"></ng-md-icon>
+                <ng-md-icon icon="discipleship" class="tipitmiddle"
+                            title="<%= t('application.interaction_types.discipleship') %>"></ng-md-icon>
+              </div>
+              <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
+              <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+                 class="dashboard-edit-toggle tipitmiddle" ng-class="{'active': $ctrl.editOrganizations}"
+                 href="" title="<%= t('dashboard.edit_org_order') %>">
+                <ng-md-icon icon="editOrder"></ng-md-icon>
+              </a>
+            </div>
+          </div>
+        <% end %>
 
         <div id="dashboard_main">
           <%= render "shared/main" %>
         </div><!-- main -->
 
         <div class="clear"></div>
-      </div>
 
-      <div class="footer">
-        <%= render 'shared/footer' %>
-      </div>
+        <div class="footer">
+          <%= render 'shared/footer' %>
+        </div>
 
-    </div><!-- outer -->
-
+      </div><!-- outer -->
     <%= render 'shared/shared_footer' %>
   </body>
 </html>

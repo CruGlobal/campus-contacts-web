@@ -4,12 +4,27 @@
 
 <%= link_to("", "/", id: "logoInvert") if branded? %>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
-  <ul class="sc-init-menu sf-menu sf-navbar mh-top">
+  <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
     <li class="<%= 'current' if request.path == '/dashboard' %>">
-      <%= link_to(t('nav.dashboard'), "/dashboard") %>
+      <%= link_to '/dashboard', title: t('nav.dashboard') do %>
+        <ng-md-icon icon='dashboard' color="white"></ng-md-icon>
+      <% end %>
     </li>
+
+    <li class="org_tree_link">
+      <%= link_to(current_organization, "#") %>
+      <ul>
+        <li class="under_tree">
+          <div class='loader'>
+            <%= image_tag('loader-gray.gif', alt: nil) %>
+            Fetching organizations
+          </div>
+        </li>
+      </ul>
+    </li>
+
     <li class="<%= 'current' if request.path =~ care_pattern %>">
-      <%= link_to(t('nav.people'), "/allcontacts") %>
+      <%= link_to(t('nav.contacts'), "/allcontacts") %>
     </li>
     <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">
@@ -27,12 +42,25 @@
           <li class="<%= 'current' if params[:controller] == 'sms_keywords' %>">
             <%= link_to(t('nav.keywords'), sms_keywords_path, :class => "topset surveys") %>
           </li>
+          <% if current_organization && current_organization.surveys.to_a.any? %>
+            <li class="sf-divider"></li>
+            <% current_organization.surveys.each do |survey| %>
+              <li>
+                <% port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : nil %>
+                <% protocol = Rails.env.development? ? 'http' : 'https' %>
+                <% link = start_survey_url(survey, host: ENV.fetch('PUBLIC_HOST'), port: port, protocol: protocol) %>
+                <%= link_to link, id: 'select_keyword', class: "signout_fb" do %>
+                  <%= t('nav.use_keyword', keyword: survey.title) %>
+                <% end %>
+              </li>
+            <% end %>
+          <% end %>
         </ul>
       </li>
     <% end %>
 
     <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
-      <%= link_to(t('nav.organizations'), "/organizations") %>
+      <%= link_to(t('nav.tools'), "/organizations") %>
       <ul>
         <li class="<%= 'current' if request.path == snapshot_charts_path %> visual-menu">
           <%= link_to(t('nav.visual_tools'), charts_path) %>
@@ -81,4 +109,30 @@
     <%= render 'contacts/search_top_right' %>
   </div>
 
+  <ul id="profile_dropdown_nav" class="sc-init-menu sf-menu mh-top">
+    <li>
+      <%= link_to '#' do %>
+        <div class="user-avatar-wrap">
+          <div class="user-initials">
+            <%= @current_person.first_name&.first&.upcase %><%= @current_person.last_name&.first&.upcase %>
+          </div>
+          <%= image_tag(@current_person.picture, class: 'user-avatar') %>
+        </div>
+      <% end %>
+      <ul>
+        <li>
+          <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %>
+        </li>
+        <li>
+          <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
+        </li>
+      </ul>
+    </li>
+  </ul>
+<% elsif current_user %>
+  <ul class="sf-menu mh-top" id="primary_nav">
+    <li style="margin-left: auto;">
+      <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
+    </li>
+  </ul>
 <% end %>

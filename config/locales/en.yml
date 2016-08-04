@@ -50,6 +50,7 @@ en:
       save_and_add: Save and add another
       save_and_close: Save and close
       survey_mode_instructions: If the person you are adding is standing next to you, click "Enter Survey Mode" from the top right corner of your screen.
+      will_be_assigned_to_you: This contact will be assigned to you.
       system_is_still_busy: The system is still processing the form, please wait for a moment.
       title_bio: Bio
       title_label: Labels
@@ -86,6 +87,7 @@ en:
       holy_spirit_presentation: Holy Spirit Presentation
       prayed_to_receive_christ: Personal Evangelism Decisions
       spiritual_conversation: Spiritual Conversation
+      discipleship: Discipleship Meeting
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   signatures:
@@ -422,6 +424,19 @@ en:
     panel_storing: Storing Contacts
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
+    edit_org_order: Edit Organization Order
+    snooze_for_24_hours: Snooze reminder for 24 hours
+    notes_for_new_interaction: Notes for new
+    loading_contacts: Loading Contacts
+    people_assigned_to_you: People Assigned to You
+    done: Done
+    error_archiving_person: Error archiving person! Please try again or contact support.
+    anonymous:
+      add: Add an Anonymous Interaction
+      note: Notes for New Anonymous
+    no_contacts:
+      welcome: 'WELCOME %{name}!'
+      people_will_appear_here: When you add a new person or someone gets assigned to you, <br>they will show up here.
   date:
     abbr_day_names:
     - Sun
@@ -629,6 +644,7 @@ en:
     comment_is_blank: Please enter your comment.
     contact_location: Contact Location
     contacts_updated_from: Contacts Updated From
+    copyright: Copyright %{year} Cru. All Rights Reserved.
     country: Country
     cru_status: Cru Role
     dash: ' - '
@@ -639,6 +655,7 @@ en:
     email_autocomplete_description: Type to search by first name, last name, email, group name, or label name.
     email_autocomplete_description_admin: Type to search by first name, last name, email, group name, label name, or all.
     email_note: Check this box to send your Email with an "anonymous reply to" of do-not-reply@mhub.cc. Be sure to identify yourself or your organization in the text of your email message.
+    exit_su: Exit SU Mode
     export_csv_help: Export spreadsheet
     export_vcard_help: Export to contacts list (email or phone)
     faculty: Faculty
@@ -650,6 +667,7 @@ en:
     group: Group
     group_name: Group
     help_redirect_link: http://help.missionhub.com
+    support: Support
     help_redirect_link_import: http://help.missionhub.com/article/66-import-contacts---creating-or-saving-as-a-csv-file-step-1
     hide: hide
     home: Home
@@ -667,6 +685,7 @@ en:
     male: Male
     match_found: Match found
     message: 'Message:'
+    missionhub: Mission Hub
     mobile: Cell
     nationality: Nationality
     no_recipient_in_comment: You didn't select any people to comment on.
@@ -970,25 +989,30 @@ en:
     manage: Organizations
     my_comments: My Comments
     my_contacts: My Contacts
-    my_profile: '%{name} Profile'
+    my_profile: My Profile
     organizations: Organizations
     people: People
     permissions: Labels
     privacy: Privacy Policy
     profile: My Profile
     report_movement_indicators: Report Movement Indicators
+    eequest_access: Request Access
     roles: Labels
     settings: Settings
     snapshot: Snapshot View
+    support: Support
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: Surveys
-    terms: Terms and Conditions
+    terms: Terms of Service
     transfer: Graduating on Mission
     trend: Trend Tracker
     use_keyword: 'Use Keyword: %{keyword}'
     view_details: View details
     visual_tools: Visual Tools
     signatures: Signatures
+    tools: Tools
+    contacts: Contacts
+    ministries: Ministries
   number:
     currency:
       format:
@@ -1353,6 +1377,13 @@ en:
       start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       waiting_for_logout: Waiting for previous user to be logged out of facebook. If this message doesn't go away within 15 seconds, try reloading the page.
       welcome: Welcome!
+      log_in: Log In
+      log_in_with_key: Log In with The Key
+      log_in_with_facebook: Log In with Facebook
+      sign_up: Sign Up
+      sign_up_with_key: Sign Up with The Key
+      sign_up_with_facebook: Sign Up with Facebook
+      agreement_html: By signing up you agree to our %{privacy} and %{terms}.
   sms:
     email_invalid_msg: Email is invalid, try again.
     email_should_be_unique_msg: Email already used, try another email address.
@@ -1626,6 +1657,17 @@ en:
       title_top_mobile: Survey
       video_headline_html: Got questions?
       video_subheadline_html: We can help!
+      stay_on_mission: Stay On Mission
+      stay_on_mission_text: As your ministry grows, you need help keeping track of and organizing information, so you don’t miss a beat. With MissionHub, you can easily stay connected to the people within your ministry, by efficiently keeping track of the important details that help you serve them well.
+      all_new_dashboard: All-New Dashboard
+      all_new_dashboard_text: The new dashboard interface lets you do more than ever before. The moment you sign in you'll see all of your contacts in one place, even if you are in multiple ministries.
+      all_new_mobile: All-New Mobile Experience
+      quick_interactions: Quick Interactions
+      quick_interactions_text: On the dashboard, connecting with your contacts and recording interactions is fast and easy.
+      know_your_history: Know Your History
+      know_your_history_text: Never forget an important moment or detail. Record interactions and notes for the next time you get together.
+      activity: Activity At-A-Glance
+      activity_text: Never miss an opportunity with in-app notifications and follow the health of your ministry with real-time stats.
     tutorials:
       get_started: Get Started!
       video_headline_html: Got questions?
@@ -1666,3 +1708,17 @@ en:
       verify_with_relay: Verify With Relay
       welcome: Welcome!
       welcome_paragraph: Welcome to MissionHub!<br><br> This setup wizard will help you get started and set up a keyword, which is an essential part of getting contacts into the system.
+    request:
+      request_access_title: Request Access
+      description_1: MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.
+      description_2: Request access and our spectacular support team will help you get started.
+      first_name: First Name
+      last_name: Last Name
+      org_name: Organization Name
+      email: Email
+      request_access_verb: Request Access
+    thank_you:
+      thank_you: Thank You
+      contact_soon: We received your request and will contact you soon.
+      other_apps: Check out Cru’s other apps that help you connect and share your faith with the people you care about most.
+      visit: Visit our Website

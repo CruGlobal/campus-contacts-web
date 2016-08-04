@@ -1,0 +1,32 @@
+<div class="my-contacts-dashboard" ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.organizationPeople">
+  <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
+  <div ng-if="$ctrl.noContacts" class="no-contacts-message ng-cloak">
+    <h1>{{ $ctrl.noContactsWelcome }}</h1>
+    <p ng-bind-html="$ctrl.noContactsMessage"></p>
+  </div>
+  <organization-people
+          id="{{ org.id }}"
+          name="{{ org.name }}"
+          people="org.people"
+          ng-repeat="org in $ctrl.organizationPeople | limitTo : $ctrl.numberOfOrgsToShow track by org.id"
+          period="$ctrl.period"
+          collapsible="$ctrl.collapsible"
+          my-person-id="$ctrl.myPersonId"
+          collapsible="$ctrl.collapsible"
+          edit-mode="$ctrl.editMode"
+          visible="org.visible"
+          ng-if="org.visible || $ctrl.editMode"
+          on-change-visibility="$ctrl.orgChangeVisibility(organization_id)">
+  </organization-people>
+  <div class="no-contacts-extras">
+    <a href ng-click="$ctrl.numberOfOrgsToShow = 100" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit" class="show-more">
+      Show more
+    </a>
+    <br>
+    <a href ng-click="$ctrl.editMode = true" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit" class="edit-mode">
+      Want to customize your view? Press
+      <ng-md-icon icon="editOrder"></ng-md-icon>
+      above to reorder and hide ministries.
+    </a>
+  </div>
+</div>

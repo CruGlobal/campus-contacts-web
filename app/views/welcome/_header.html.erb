@@ -1,31 +1,30 @@
 <header role="global">
   <div class="container">
-    <h1><%= link_to("Mission Hub", root_path) if branded? %></h1>
+    <h1>
+      <%= link_to(t('general.missionhub'), root_path, title: t('general.missionhub')) %>
+    </h1>
 
     <nav class="primary">
       <ul>
         <% if session[:old_user_id].present? %>
-          <li><%= link_to('Exit SU Mode', '?exit=true') %></li>
+            <li><%= link_to(t('nav.exit_su'), '?exit=true', title: t('nav.exit_su')) %></li>
         <% end %>
-
-        <% if branded? %>
-          <li>
-            <%= link_to('Support', t('general.help_redirect_link'), :class => "navlink") %>
-          </li>
-          <li>
-            <%= link_to('FAQ', t('general.faq_redirect_link'), :class => "navlink") %>
-          </li>
-          <li>
-            <% if mhub? %>
-              <%= link_to(t('nav.login'), "/users/auth/facebook_mhub", :class => "loginbt") %>
-            <% else %>
-              <%= link_to(image_tag('fb_button.png'), '/users/auth/facebook', id: 'fb_button', rel: 'external') %>
-            <% end %>
-          </li>
-        <% else %>
-          <li>
-            <%= link_to(t('nav.login'), '/users/auth/key', rel: 'external') %>
-          </li>
+        <li>
+          <%= link_to(t('nav.support'), t('general.help_redirect_link'), title: t('nav.support')) %>
+        </li>
+        <% if !@show_sign_up %>
+            <li>
+              <%= link_to(t('nav.login'),
+                          '/users/sign_in',
+                          title: t('nav.login'),
+                          class: params[:controller] == 'sessions' && params[:action] == 'new' ? 'active' : '') %>
+            </li>
+            <li>
+              <%= link_to(t('nav.eequest_access'),
+                          request_access_path,
+                          title: t('nav.eequest_access'),
+                          class: @request_access.present? ? 'active' : '') %>
+            </li>
         <% end %>
       </ul>
     </nav>

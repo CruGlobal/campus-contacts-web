@@ -1,11 +1,11 @@
-(function() {
+(function () {
     angular
         .module('missionhubApp')
         .factory('state', stateService);
 
-    function stateService(){
+    function stateService () {
         var service = {
-            v4_access_token: ''
+            v4AccessToken: ''
         };
         return service;
     }

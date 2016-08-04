@@ -22,13 +22,20 @@
 
 //angular
 //= require angular/angular
+//= require angular-animate/angular-animate
 //= require lodash/lodash
-//= require angular/missionhubApp
-//= require_tree ./angular/components
-//= require_tree ./angular/controllers
-//= require_tree ./angular/directives
-//= require_tree ./angular/services
-//= require_tree ./angular/filters
+//= require lscache/lscache
+//= require i18n
+//= require i18n/translations
+//= require angular-material-icons/angular-material-icons
+//= require jsonapi-datastore/dist/ng-jsonapi-datastore
+//= require angular-environment/dist/angular-environment
+//= require angular-ui-sortable/dist/sortable
+//= require angular/missionhubApp.module
+//= require angular/missionhubApp.constants
+//= require angular/missionhubApp.config
+//= require angular/missionhubApp.run
+//= require_tree ./angular
 
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
@@ -51,8 +58,6 @@
 //= require group_labels
 //= require organizations
 //= require charts
-//= require i18n
-//= require i18n/translations
 //= require followup_comments
 //= require clearform
 //= require survey

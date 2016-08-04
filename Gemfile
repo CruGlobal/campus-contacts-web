@@ -70,7 +70,7 @@ gem 'sp_client'#, '~> 1.0.3'
 gem 'responders', '~> 2.0'
 gem 'protected_attributes'
 gem 'syslog-logger'
-gem 'rack-mini-profiler'
+gem 'rack-mini-profiler', require: false
 gem 'rack-cors', require: 'rack/cors'
 gem 'jwt'
 gem 'ngannotate-rails'

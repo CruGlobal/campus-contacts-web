@@ -1,4 +1,6 @@
-(function(){
+(function () {
+    'use strict';
+
     angular
         .module('missionhubApp')
         .component('preloadState', {
@@ -9,17 +11,24 @@
             }
         });
 
-    function preloadStateController(state) {
+    function preloadStateController (state, $http) {
         var vm = this;
 
         activate();
 
-        function activate() {
-            if(vm.data === 'true' || vm.data === 'false')
+        function activate () {
+            if(vm.data === 'true' || vm.data === 'false') {
                 state[vm.name] = vm.data === 'true';
-            else
+            } else {
                 state[vm.name] = vm.data;
-            console.log(state)
+            }
+            addAuthHeader();
+        }
+
+        function addAuthHeader () {
+            if(vm.name === 'v4AccessToken') {
+                $http.defaults.headers.common.Authorization = 'Bearer ' + state.v4AccessToken;
+            }
         }
     }
 })();

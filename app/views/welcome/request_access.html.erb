@@ -1,0 +1,48 @@
+<div class="content">
+  <div class="container">
+    <div class="cols-2 request-access">
+      <div class="col request-access-content">
+        <h2><%= t('welcome.request.request_access_title') %></h2>
+        <p><%= t('welcome.request.description_1') %></p>
+        <p><%= t('welcome.request.description_2') %></p>
+      </div>
+      <div class="col request-access-form">
+        <%= form_for @request_access, url: requested_access_path, method: :post, validate: true do |f| %>
+            <div class="form">
+              <div class="form-group">
+                <%= f.label :first_name, t('welcome.request.first_name') %>
+                <%= f.text_field :first_name, class: 'form-control', placeholder: t('welcome.request.first_name') %>
+                <% if @request_access.errors.key? :first_name %>
+                    <div class="error-block"><%= @request_access.errors.get(:first_name).join('; ') %></div>
+                <% end %>
+              </div>
+              <div class="form-group">
+                <%= f.label :last_name, t('welcome.request.last_name') %>
+                <%= f.text_field :last_name, class: 'form-control', placeholder: t('welcome.request.last_name') %>
+                <% if @request_access.errors.key? :last_name %>
+                    <div class="error-block"><%= @request_access.errors.get(:last_name).join('; ') %></div>
+                <% end %>
+              </div>
+              <div class="form-group">
+                <%= f.label :org_name, t('welcome.request.org_name') %>
+                <%= f.text_field :org_name, class: 'form-control', placeholder: t('welcome.request.org_name') %>
+                <% if @request_access.errors.key? :org_name %>
+                    <div class="error-block"><%= @request_access.errors.get(:org_name).join('; ') %></div>
+                <% end %>
+              </div>
+              <div class="form-group">
+                <%= f.label :email, t('welcome.request.email') %>
+                <%= f.text_field :email, class: 'form-control', placeholder: t('welcome.request.email'), type: 'email' %>
+                <% if @request_access.errors.key? :email %>
+                    <div class="error-block"><%= @request_access.errors.get(:email).join('; ') %></div>
+                <% end %>
+              </div>
+              <div class="form-group">
+                <%= f.submit t('welcome.request.request_access_verb'), class: 'btn' %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

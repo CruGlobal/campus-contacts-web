@@ -6,10 +6,15 @@
         <span class="mh_popup_heading" id="add_contact_title"><%= t('application.add_contact.add_contact', org: current_organization) %></span>
       </div>
       <div class="mh_popup_box_content">
-        <div class="fancy"><%= t('application.add_contact.survey_mode_instructions') %></div>
         <div class="mh_popup_box_scroller">
           <% @from_group = flash[:add_to_group_tag].present? && flash[:add_to_group_tag] != '0' ? 'display:none;' : nil %>
           <%= form_for person, url: contacts_path, method: :post, remote: true, html: {id: 'modal_contact_form'} do |f| %>
+            <div class="fancy"><%= t('application.add_contact.survey_mode_instructions') %></div>
+            <% if @assign_to_me %>
+              <div class="fancy info">
+                <%= t('application.add_contact.will_be_assigned_to_you') %>
+              </div>
+            <% end %>
             <div id="add_contact_form">
               <div class="form_group_label">
                 <%= t('application.add_contact.title_bio') %>
@@ -21,11 +26,12 @@
                   </div>
                 <% end %>
 
+                <%= hidden_field_tag :temp_current_organization_id, current_organization.id %>
                 <%= hidden_field_tag :add_another %>
         				<%= hidden_field_tag :add_to_group_tag, 0 %>
                 <%= hidden_field_tag :add_to_group %>
                 <%= hidden_field_tag :add_to_group_role %>
-                <%= hidden_field_tag :assign_to_me, false, id: 'assign_new_contact_to_me' %>
+                <%= hidden_field_tag :assign_to_me, !!@assign_to_me, id: 'assign_new_contact_to_me' %>
                 <%= hidden_field_tag :assigned_to, params[:assigned_to] %>
                 <%= hidden_field_tag :dnc, params[:dnc] %>
                 <%= hidden_field_tag :existing_contact, @existing_contact %>
@@ -64,8 +70,8 @@
               </div>
 
               <div class="form_group_fields user_defined_contact_fields remove_add_new_person_to_group" style="<%= @from_group %>">
-                <% current_organization.surveys.each do |survey| %>
-                  <% if survey.questions.count > 0 %>
+                <% current_organization.surveys.includes(:questions).each do |survey| %>
+                  <% if survey.questions.to_a.count > 0 # do to_a because we have them preloaded %>
                     <div class="survey_title add_contact_survey_title"><%= survey.title %></div>
                     <% answer_sheet = @person.answer_sheets.find_by(survey_id: survey.id) if @person %>
                     <% survey.questions.each do |question| %>

@@ -3,6 +3,17 @@
   "version": "1.0.0",
   "dependencies": {
     "angular": "~1.5.5",
-    "lodash": "^4.11.1"
+    "angular-animate": "^1.5.6",
+    "angular-environment": "^1.0.4",
+    "angular-material-icons": "^0.7.0",
+    "angular-ui-sortable": "^0.14.3",
+    "jsonapi-datastore": "^0.4.0-beta",
+    "lodash": "^4.11.1",
+    "lscache": "1.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^2.8.0",
+    "eslint-config-angular": "^0.5.0",
+    "eslint-plugin-angular": "^1.0.0"
   }
 }
