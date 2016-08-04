@@ -18,6 +18,8 @@
         vm.organizationPeople = [];
         vm.loading = true;
         vm.noContacts = false;
+        vm.numberOfOrgsToShow = 1000;
+        vm.noPeopleShowLimit = 4;
 
         activate();
         vm.$onDestroy = cleanUp;
@@ -121,6 +123,7 @@
                 .get(envService.read('apiUrl') + '/organizations', {
                     params: {
                         'page[limit]': 100,
+                        order: 'active_people_count',
                         include: ''
                     }
                 })
@@ -201,8 +204,11 @@
 
         function noContacts () {
             vm.noContacts = true;
+            vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
             loadOrganizations().then(function () {
-                vm.organizationPeople = JsonApiDataStore.store.findAll('organization');
+                vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
+                                                  'active_people_count',
+                                                  'desc');
                 orderOrganizations();
                 hideOrganizations();
                 loadReports();
