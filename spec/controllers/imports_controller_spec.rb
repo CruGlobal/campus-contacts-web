@@ -182,6 +182,7 @@ RSpec.describe ImportsController, type: :controller do
       }, id: Import.first.id
       expect(Survey.last.title).to eq "Import-#{assigns(:import).created_at.strftime('%Y-%m-%d')}"
       expect(assigns(:import).headers[2]).to eq Element.last.label
+      expect(Import.first.header_mappings['2'].to_i).to eq SurveyElement.last.id
     end
 
     describe 'with empty file' do
