@@ -2,7 +2,10 @@
   <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
   <div ng-if="$ctrl.noContacts" class="no-contacts-message ng-cloak">
     <h1>{{ $ctrl.noContactsWelcome }}</h1>
-    <p ng-bind-html="$ctrl.noContactsMessage"></p>
+    <p>
+      When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br>
+      they will show up here.
+    </p>
   </div>
   <organization-people
           id="{{ org.id }}"

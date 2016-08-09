@@ -87,7 +87,7 @@ en:
       holy_spirit_presentation: Holy Spirit Presentation
       prayed_to_receive_christ: Personal Evangelism Decisions
       spiritual_conversation: Spiritual Conversation
-      discipleship: Discipleship Meeting
+      discipleship: Discipleship Conversation
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   signatures:
@@ -436,7 +436,6 @@ en:
       note: Notes for New Anonymous
     no_contacts:
       welcome: 'WELCOME %{name}!'
-      people_will_appear_here: When you add a new person or someone gets assigned to you, <br>they will show up here.
   date:
     abbr_day_names:
     - Sun

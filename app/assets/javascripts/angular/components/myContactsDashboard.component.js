@@ -12,7 +12,7 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($http, $log, $q, $document, $sce, JsonApiDataStore, envService, _, I18n) {
+    function myContactsDashboardController ($http, $log, $q, $document, JsonApiDataStore, envService, _, I18n) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -27,7 +27,6 @@
 
         vm.orgChangeVisibility = orgChangeVisibility;
 
-        vm.noContactsMessage = $sce.trustAsHtml(I18n.t('dashboard.no_contacts.people_will_appear_here'));
         vm.noContactsWelcome = '';
 
         function activate () {

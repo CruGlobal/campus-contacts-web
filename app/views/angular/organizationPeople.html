@@ -1,7 +1,7 @@
 <div class="header" ng-class="{'collapsed': $ctrl.collapsed, 'hidden-org': !$ctrl.visible}">
     <div class="org-name">
         <span ng-if="$ctrl.collapsible && !$ctrl.editMode" ng-click="$ctrl.collapsed = !$ctrl.collapsed">
-          <ng-md-icon icon="play_arrow" class="chevron" size="20"></ng-md-icon>
+          <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
         </span>
         <h2><a href="/allcontacts?organization_id={{$ctrl.id}}">{{ $ctrl.name }}</a></h2>
     </div>
