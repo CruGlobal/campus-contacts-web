@@ -7,7 +7,7 @@
     <nav class="primary">
       <ul>
         <% if session[:old_user_id].present? %>
-            <li><%= link_to(t('nav.exit_su'), '?exit=true', title: t('nav.exit_su')) %></li>
+            <li><%= link_to(t('general.exit_su'), '?exit=true', title: t('general.exit_su')) %></li>
         <% end %>
         <li>
           <%= link_to(t('nav.support'), t('general.help_redirect_link'), title: t('nav.support')) %>
