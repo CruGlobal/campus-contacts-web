@@ -9,7 +9,7 @@
                 domains: {
                     development: ['localhost', 'missionhub.local'],
                     staging: ['stage.missionhub.com'],
-                    production: ['missionhub.com']
+                    production: ['missionhub.com', 'www.missionhub.com']
                 },
                 vars: {
                     development: {
