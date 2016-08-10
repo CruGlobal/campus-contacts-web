@@ -45,15 +45,8 @@ class WelcomeController < ApplicationController
 
   def requested_access
     @request_access = RequestAccess.new(params[:request_access])
-    if @request_access.valid?
-      person = Person.new_from_params(@request_access.person_params)
-      organization = Organization.new(@request_access.organization_params.merge(status: 'requested',
-                                                                                terminology: 'Organization'))
-      if person.save && organization.save
-        organization.add_admin(person) unless organization.admins.present?
-        redirect_to thank_you_path
-        return
-      end
+    if @request_access.valid? && @request_access.save
+      redirect_to thank_you_path and return
     end
     render :request_access, layout: 'welcome'
   end
