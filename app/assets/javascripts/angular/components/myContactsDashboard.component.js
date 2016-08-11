@@ -142,7 +142,7 @@
                 if (person.id == vm.myPersonId) {
                     return;
                 }
-                if (person.last_name == null || person.last_name) {
+                if (angular.isUndefined(person.last_name) || person.last_name === null) {
                     person.last_name = '';
                 }
                 angular.forEach(person.reverse_contact_assignments, function (ca) {
@@ -154,7 +154,7 @@
                         return;
                     }
                     var org = _.find(vm.organizationPeople, {id: orgId});
-                    if (org === undefined) {
+                    if (angular.isUndefined(org)) {
                         org = JsonApiDataStore.store.find('organization', orgId);
                         org.people = [];
                         vm.organizationPeople.push(org)
@@ -203,13 +203,18 @@
 
         function noContacts () {
             vm.noContacts = true;
-            vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
             loadOrganizations().then(function () {
                 vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
                                                   'active_people_count',
                                                   'desc');
                 orderOrganizations();
                 hideOrganizations();
+                if (vm.organizationPeople.length <= vm.noPeopleShowLimit) {
+                    vm.numberOfOrgsToShow = 100;
+                }
+                else {
+                    vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
+                }
                 loadReports();
             })
         }
