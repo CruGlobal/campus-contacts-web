@@ -762,7 +762,8 @@ CREATE TABLE `interaction_initiators` (
   `interaction_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_interaction_initiators_on_interaction_id` (`interaction_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1127,6 +1128,7 @@ CREATE TABLE `organizational_permissions` (
   KEY `index_organizational_permissions_on_person_id` (`person_id`),
   KEY `index_organizational_permissions_on_permission_id` (`permission_id`),
   KEY `index_organizational_permissions_on_organization_id` (`organization_id`),
+  KEY `index_organizational_permissions_ids` (`permission_id`,`organization_id`,`archive_date`,`deleted_at`),
   CONSTRAINT `organizational_permissions_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1895,7 +1897,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-10 17:13:19
+-- Dump completed on 2016-08-12 12:18:24
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2413,4 +2415,8 @@ INSERT INTO schema_migrations (version) VALUES ('20151014200129');
 INSERT INTO schema_migrations (version) VALUES ('20160722224633');
 
 INSERT INTO schema_migrations (version) VALUES ('20160810205649');
+
+INSERT INTO schema_migrations (version) VALUES ('20160812161101');
+
+INSERT INTO schema_migrations (version) VALUES ('20160812161138');
 
