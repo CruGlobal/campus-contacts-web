@@ -550,7 +550,7 @@ CREATE TABLE `email_addresses` (
   KEY `person_id` (`person_id`),
   KEY `email` (`email`),
   CONSTRAINT `email_addresses_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `people` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -612,7 +612,8 @@ CREATE TABLE `followup_comments` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `comment_organization_id_contact_id` (`organization_id`,`contact_id`)
+  KEY `comment_organization_id_contact_id` (`organization_id`,`contact_id`),
+  KEY `index_followup_comments_on_commenter_id` (`commenter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -834,9 +835,9 @@ CREATE TABLE `interactions` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_interactions_on_created_at` (`created_at`),
-  KEY `index_interactions_on_interaction_type_id` (`interaction_type_id`),
   KEY `index_interactions_on_receiver_id` (`receiver_id`),
-  KEY `index_interactions_on_organization_id` (`organization_id`)
+  KEY `index_interactions_on_organization_id` (`organization_id`),
+  KEY `index_interactions_ids` (`interaction_type_id`,`organization_id`,`deleted_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1221,7 +1222,7 @@ CREATE TABLE `people` (
   KEY `index_people_on_si_person_id` (`si_person_id`),
   KEY `index_people_on_pr_person_id` (`pr_person_id`),
   KEY `index_people_on_infobase_person_id` (`infobase_person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1897,7 +1898,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-12 12:18:24
+-- Dump completed on 2016-08-15 13:29:03
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2419,4 +2420,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160810205649');
 INSERT INTO schema_migrations (version) VALUES ('20160812161101');
 
 INSERT INTO schema_migrations (version) VALUES ('20160812161138');
+
+INSERT INTO schema_migrations (version) VALUES ('20160815165035');
+
+INSERT INTO schema_migrations (version) VALUES ('20160815165046');
 
