@@ -109,7 +109,7 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   def self.is_archived?(organization)
-    where('organizational_permissions.organization_id' => organization.id).blank?
+    where('organizational_permissions.organization_id' => organization.id).empty?
   end
 
   class InvalidPersonAttributesError < StandardError

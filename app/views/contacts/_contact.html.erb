@@ -1,16 +1,23 @@
 <% labels = person.assigned_organizational_labels(current_organization.id).uniq %>
 <% permission = person.assigned_organizational_permissions(current_organization.id).first %>
 <% contact_permission = person.contact_permission_for_org(current_organization) %>
+
 <tr id="<%= dom_id(person) %>" data-id="<%= person.id %>" class="contact_row <%= extra if defined?(extra) %>" data-name="<%= person.name %>" data-email="<%= person.email %>">
 	<td class="handle_container">
     <% if contact_permission %>
-      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id, 'data-dnc-url' => organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact') ) %>
+      <%= image_tag('grippy.png', class: 'handle', 'data-row-id' => dom_id(person), 'data-id' => person.id,
+                    'data-dnc-url' => organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact')) %>
     <% else %>
-      <%= image_tag('grippy.png', class: 'handle' ) %>
+      <%= image_tag('grippy.png', class: 'handle') %>
     <% end %>
 	</td>
   <td nowrap="nowrap" class="checkbox_cell">
-    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id, 'data-number'=>person.pretty_phone_number, 'data-text-number'=> person.pretty_text_phone_number, id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox', 'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email, 'data-permissions' => "#{permission.id if permission.present?}", 'data-labels'=>"#{labels.collect(&:id).join(',')}"%>
+    <%= check_box_tag 'ids[]', person.id, false, 'data-id'=>person.id,
+                      'data-number'=>person.pretty_phone_number, 'data-text-number'=> person.pretty_text_phone_number,
+                      id: "ids_#{person.id}", class: 'id_checkbox contact_checkbox all_contact_checkbox',
+                      'data-name' => "#{person.first_name} #{person.last_name}", 'data-email'=>person.email,
+                      'data-permissions' => "#{permission.id if permission.present?}",
+                      'data-labels'=>"#{labels.pluck(:id).join(',')}"%>
   </td>
   <td class="cell firstName no_wrap"><%= person.first_name %></td>
   <td class="cell lastName no_wrap"><%= person.last_name %></td>
@@ -41,7 +48,7 @@
     </div>
   </td>
 
-  <% if questions.present? %>
+  <% if questions %>
     <% questions.uniq.each do |q| %>
       <td class="cell <%= dom_id(q) %> no_wrap">
         <% if q.slug == 'email' %>
@@ -63,9 +70,7 @@
   <% get_surveys = person.completed_answer_sheets(current_organization) %>
   <% if current_organization.settings[:visible_surveys_column].nil? || (current_organization.settings[:visible_surveys_column].present? && current_organization.settings[:visible_surveys_column]) %>
   <td class="cell visible_surveys_column survey no_wrap">
-    <% last_answer_sheet = "" %>
     <% get_surveys.each_with_index do |answer_sheet, i| %>
-      <% last_answer_sheet = answer_sheet if i == 0 %>
       <span title="<%= l(answer_sheet.updated_at, format: :date) %>" class="tipit"><%= answer_sheet.survey.title %></span><br/>
     <% end %>
   </td>
@@ -91,10 +96,15 @@
       <%= link_to(t('contacts.unassign'), contact_assignments_path(ids: person.id, from: ids), remote: true, method: :delete, class: "icon unassign tipitleft", :title => tip, "data-assigned_to_id" => ids) %>
     </span>
     <% if params[:dnc] == 'true' %>
-      <%= link_to(t('contacts.index.delete_contact'), person_path(person), method: :delete, remote: true, class: "icon delete dnc tipitleft", title: t('contacts.index.delete_contact'), data: {confirm: t('contacts.index.destroy_confirm')}) %>
+      <%= link_to(t('contacts.index.delete_contact'), person_path(person), method: :delete,
+                  remote: true, class: "icon delete dnc tipitleft",
+                  title: t('contacts.index.delete_contact'), data: {confirm: t('contacts.index.destroy_confirm')}) %>
     <% else %>
       <% if contact_permission %>
-        <%= link_to(t('contacts.index.delete_contact'), organizational_permission_path(:id => contact_permission.id, :status => 'do_not_contact'), :method => :put, :remote => true, :class => "icon delete tipitleft", :title => t('contacts.index.delete_contact'), data: { confirm: t('contacts.index.delete_confirm') }) %>
+        <%= link_to(t('contacts.index.delete_contact'),
+                    organizational_permission_path(id: contact_permission.id, status: 'do_not_contact'),
+                    method: :put, remote: true, class: "icon delete tipitleft",
+                    title: t('contacts.index.delete_contact'), data: {confirm: t('contacts.index.delete_confirm') }) %>
       <% end %>
     <% end %>
   </td>
