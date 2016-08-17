@@ -442,7 +442,7 @@ Mh::Application.routes.draw do
   get 'wizard' => 'welcome#wizard', as: 'wizard'
   get 'terms' => 'welcome#terms', as: 'terms'
   get 'privacy' => 'welcome#privacy', as: 'privacy'
-  get 'tutorials' => 'welcome#tutorials'
+  get 'tutorials', to: redirect('http://help.missionhub.com/')
   get 'test' => 'welcome#test'
   get 'welcome/index'
   get 'welcome/duplicate'

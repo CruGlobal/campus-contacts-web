@@ -9,10 +9,6 @@ class WelcomeController < ApplicationController
     render layout: 'welcome' # , stream: true
   end
 
-  def tutorials
-    render layout: 'splash'
-  end
-
   def wizard
     session[:wizard] = nil
     case params[:step]
