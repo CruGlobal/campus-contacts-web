@@ -75,7 +75,7 @@
             return $http
                 .get(envService.read('apiUrl') + '/people', {
                     params: {
-                        'page[limit]': 100,
+                        'page[limit]': 250,
                         include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
                         'organizational_permissions',
                         'filters[assigned_tos]': 'me'
