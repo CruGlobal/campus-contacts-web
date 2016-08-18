@@ -258,7 +258,7 @@ CREATE TABLE `authentications` (
   `uid` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `token` varchar(255) DEFAULT NULL,
+  `token` text,
   `mobile_token` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid_provider` (`uid`,`provider`),
@@ -1905,7 +1905,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-17 15:05:58
+-- Dump completed on 2016-08-18  8:51:30
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2443,4 +2443,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160817180310');
 INSERT INTO schema_migrations (version) VALUES ('20160817180339');
 
 INSERT INTO schema_migrations (version) VALUES ('20160817185155');
+
+INSERT INTO schema_migrations (version) VALUES ('20160818124248');
 
