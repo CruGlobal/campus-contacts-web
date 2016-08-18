@@ -159,8 +159,9 @@ CREATE TABLE `answer_sheets` (
   `updated_at` datetime DEFAULT NULL,
   `survey_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `person_id_survey_id` (`person_id`,`survey_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `person_id_survey_id` (`person_id`,`survey_id`),
+  KEY `index_answer_sheets_on_survey_id` (`survey_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -613,7 +614,8 @@ CREATE TABLE `followup_comments` (
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `comment_organization_id_contact_id` (`organization_id`,`contact_id`),
-  KEY `index_followup_comments_on_commenter_id` (`commenter_id`)
+  KEY `index_followup_comments_on_commenter_id` (`commenter_id`),
+  KEY `index_followup_comments_on_deleted_at_and_contact_id` (`deleted_at`,`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -764,8 +766,9 @@ CREATE TABLE `interaction_initiators` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_interaction_initiators_on_interaction_id` (`interaction_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `index_interaction_initiators_on_interaction_id` (`interaction_id`),
+  KEY `index_interaction_initiators_on_person_id` (`person_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -837,8 +840,9 @@ CREATE TABLE `interactions` (
   KEY `index_interactions_on_created_at` (`created_at`),
   KEY `index_interactions_on_receiver_id` (`receiver_id`),
   KEY `index_interactions_on_organization_id` (`organization_id`),
-  KEY `index_interactions_ids` (`interaction_type_id`,`organization_id`,`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `index_interactions_ids` (`interaction_type_id`,`organization_id`,`deleted_at`),
+  KEY `index_interactions_on_created_by_id` (`created_by_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -963,7 +967,8 @@ CREATE TABLE `messages` (
   `updated_at` datetime NOT NULL,
   `sent` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `index_messages_on_bulk_message_id` (`bulk_message_id`)
+  KEY `index_messages_on_bulk_message_id` (`bulk_message_id`),
+  KEY `index_messages_on_to_sent_created_at` (`to`,`sent`,`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1240,7 +1245,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_permissions_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1458,7 +1463,8 @@ CREATE TABLE `received_sms` (
   `twilio_sid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_received_sms_on_twilio_sid` (`twilio_sid`),
-  KEY `person_id` (`person_id`)
+  KEY `person_id` (`person_id`),
+  KEY `index_received_sms_on_city_and_state_and_zip_and_country` (`city`,`state`,`zip`,`country`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1619,7 +1625,8 @@ CREATE TABLE `sent_sms` (
   `question_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_sent_sms_on_twilio_sid` (`twilio_sid`),
-  KEY `index_sent_sms_on_message_id` (`message_id`)
+  KEY `index_sent_sms_on_message_id` (`message_id`),
+  KEY `index_sent_sms_on_received_sms_id_id` (`received_sms_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1898,7 +1905,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-15 13:29:03
+-- Dump completed on 2016-08-17 15:05:58
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2424,4 +2431,16 @@ INSERT INTO schema_migrations (version) VALUES ('20160812161138');
 INSERT INTO schema_migrations (version) VALUES ('20160815165035');
 
 INSERT INTO schema_migrations (version) VALUES ('20160815165046');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817180122');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817180226');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817180248');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817180310');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817180339');
+
+INSERT INTO schema_migrations (version) VALUES ('20160817185155');
 
