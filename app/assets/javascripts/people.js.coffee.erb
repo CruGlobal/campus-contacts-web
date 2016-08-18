@@ -873,6 +873,25 @@ change_all_permission_checkboxes = (check) ->
       permission_labels = get_permission_labels($(this))
       change_permission_checkboxes(permission_labels, check)
 
+show_loader = ->
+  $('#global_loader').show()
+
+hide_loader = ->
+  $('#global_loader').hide()
+
+# I'm pretty sure this isn't used anymore, but I was wrong before so ¯\_(ツ)_/¯
+send_message_guide_more = ->
+  custom_buttons = {}
+
+  custom_buttons[t('dashboard.close')] = ->
+    $(this).dialog 'destroy'
+
+  $('#send_message_guide').dialog
+    height: 530
+    buttons: custom_buttons
+  $('#send_message_guide').dialog position: 'center'
+  $('#send_message_guide_video').fadeIn()
+
 update_checkbox_checkmark = (permission_checkbox) ->
   if permission_checkbox.is ':checked'
     permission_checkbox.attr checked: false
