@@ -627,7 +627,10 @@ class Organization < ActiveRecord::Base
     permission = Permission.find_by(id: permission_id)
 
     if person.present? && permission.present?
-      org_permission = OrganizationalPermission.where(person_id: person.id, organization_id: id).first_or_create
+      org_permission = OrganizationalPermission.find_or_create_by(person_id: person.id, organization_id: id) do |op|
+        op.added_by_id = added_by_id
+        op.permission_id = permission.id
+      end
 
       if org_permission.permission_id == permission.id
         if org_permission.archive_date.present? || org_permission.deleted_at.present?
