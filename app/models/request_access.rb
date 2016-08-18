@@ -3,6 +3,7 @@ class RequestAccess
 
   attr_accessor :first_name, :last_name, :email, :org_name
   validates :first_name, :last_name, :email, :org_name, presence: true
+  validate :reserved_names
   validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :first_name, :last_name, :org_name, length: { minimum: 2 }
 
@@ -29,5 +30,21 @@ class RequestAccess
       status: 'requested',
       terminology: 'Organization'
     }
+  end
+
+  def reserved_names
+    basic_name = org_name.downcase.split(' at ')[0].strip
+    reserved_names = {
+      'Cru': ['cru', 'campus crusade', 'campus crusade for christ', 'ccc'],
+      'Bridges': ['bridges'],
+      'Power to Change': ['power to change', 'power 2 change', 'power2change', 'p2c'],
+      'Athletes in Action': ['athletes in action', 'aia']
+    }
+    reserved_names.each do |name, options|
+      next unless options.include? basic_name
+      errors.add(:org_name, "Many of #{name}'s ministries already exist in MissionHub. Ask one of "\
+                            "your leaders at #{name} to send you an invite.")
+      break
+    end
   end
 end
