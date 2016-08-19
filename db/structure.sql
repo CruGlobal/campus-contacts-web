@@ -479,7 +479,8 @@ CREATE TABLE `education_histories` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `school_type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_education_histories_on_person_id` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1724,7 +1725,8 @@ CREATE TABLE `sms_sessions` (
   `updated_at` datetime DEFAULT NULL,
   `ended` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `session` (`phone_number`,`updated_at`)
+  KEY `session` (`phone_number`,`updated_at`),
+  KEY `index_sms_sessions_on_person_id` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1905,7 +1907,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-18  8:51:30
+-- Dump completed on 2016-08-18 17:10:42
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2445,4 +2447,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160817180339');
 INSERT INTO schema_migrations (version) VALUES ('20160817185155');
 
 INSERT INTO schema_migrations (version) VALUES ('20160818124248');
+
+INSERT INTO schema_migrations (version) VALUES ('20160818210814');
+
+INSERT INTO schema_migrations (version) VALUES ('20160818210829');
 
