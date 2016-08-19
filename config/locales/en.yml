@@ -912,9 +912,17 @@ en:
     added:
       body_html: |-
         <p>Hi %{name},</p>
-        <p>I've just added you as %{permission_name} of %{org} on MissionHub</p>
-        <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
+        <p>This is your invitation to begin using MissionHub for your personal ministry. I added you
+            to %{org}.</p>
+        <p>MissionHub is designed to help you organize, track, and grow the relationships you have with others.</p>
+        %{invite_button}
+        <p>If the button above does not work copy this link into your browser: %{link}</p>
+        <p>Please do not share this link; it is the connection to your personal space within MissionHub.
+            This invitation will expire in one week</p>
+        <p>I am looking forward to serving with you to help reach the world for Christ.</p>
         <p>%{added_by}</p>
+      youre_invited: YOU'RE INVITED
+      get_the_mobile_app: GET THE MOBILE APP
     resend:
       body_html: |-
         <p>Hi %{name},</p>

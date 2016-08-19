@@ -1,1 +1,35 @@
-<%= t('.body_html', link: link_to(@link, @link), name: @person.first_name, org: @org, added_by: @added_by, permission_name: @permission_name) %>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"
+       style="background-color: #E0DFE0; font-family: 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif; text-align: center;">
+  <tr><td align="center" valign="top" style="padding: 10px;">
+    <div style="max-width: 600px; background-color: white;">
+      <div style="padding: 10px">
+        <%= email_image_tag('email/missionhub.png', alt: 'MissionHub', title: 'MissionHub', style: 'height: 40px;') %>
+      </div>
+      <div style="background-color: #007398; padding: 30px 6px;">
+        <%= email_image_tag('email/invite.png', style: 'height: 60px;') %>
+        <h1 style="color: #60D9F2; font-size: 28px; margin: 0; font-weight: 300; padding-top: 6px;">
+          <%= t('.youre_invited') %>
+        </h1>
+      </div>
+      <div style="max-width: 360px; display: inline-block; text-align: left; padding: 20px 6px; font-size: 14px;">
+        <% invite_button = '<div style="text-align: center; padding: 10px 4px;">' +
+              "<a href='#{@link}' style='background-color: #66D9F0; color: white; padding: 9px 36px; text-decoration: none;'>" +
+                t('welcome.index.get_started').upcase +
+              '</a>' +
+            '</div>' %>
+        <%= t('.body_html', link: @link, name: @person.first_name, org: @org, added_by: @added_by, invite_button: invite_button.html_safe) %>
+      </div>
+      <div style="background-color: #007398; padding: 20px 6px;">
+        <%= link_to 'https://itunes.apple.com/us/app/missionhub/id447869440' do %>
+          <%= email_image_tag('email/app-store.png', alt: 'iPhone App', style: 'height: 28px; padding: 0 3px;') %>
+        <% end %>
+        <%= link_to 'https://play.google.com/store/apps/details?id=com.missionhub' do %>
+          <%= email_image_tag('email/google-play.png', alt: 'Android App', style: 'height: 28px; padding: 0 3px;') %>
+        <% end %>
+        <h1 style="color: #60D9F2; font-size: 28px; margin: 0; font-weight: 300;">
+          <%= t('.get_the_mobile_app') %>
+        </h1>
+      </div>
+    </div>
+  </td></tr>
+</table>

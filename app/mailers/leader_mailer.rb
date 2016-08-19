@@ -1,5 +1,6 @@
 class LeaderMailer < ActionMailer::Base
   default from: "\"#{ENV['SITE_TITLE']} Support\" <support@missionhub.com>"
+  add_template_helper(EmailHelper)
 
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
@@ -15,7 +16,7 @@ class LeaderMailer < ActionMailer::Base
 
     if @person.user.present? && @person.email.present?
       @link = leader_link_url(@token, @person.user.id)
-      mail to: @person.email_addresses.pluck(:email), subject: "Missionhub.com - #{@org}"
+      mail to: @person.email_addresses.pluck(:email), subject: "#{@added_by} has invited you to MissionHub"
     end
   end
 
