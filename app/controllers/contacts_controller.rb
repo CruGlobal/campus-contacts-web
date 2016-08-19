@@ -342,10 +342,10 @@ class ContactsController < ApplicationController
   end
 
   def add_contact_check_email
-    @email = params[:email]
-    if @email.present?
-      @person_ids = EmailAddress.where('email LIKE ?', "%#{@email}%").group('person_id').collect(&:person_id)
-      @people = Person.where('id IN (?)', @person_ids)
+    @email = params[:email].strip
+    if @email.present? && @email.include?('@')
+      @people = Person.includes(:email_addresses).where(email_addresses: { email: @email })
+      @people_ids = @people.collect(&:id)
       @people = @people.reject do |person|
         person if person.organizational_permissions.find_by(organization_id: current_organization.id).present?
       end
