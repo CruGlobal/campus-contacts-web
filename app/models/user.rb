@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
 
   def self.find_for_key_oauth(key_info)
     data = key_info['extra']
-    auth = Authentication.find_by(provider: 'key', uid: data['ssoGuid'])
+    auth = Authentication.find_by(provider: %w(thekey key), uid: data['ssoGuid'])
     return auth.user if auth
 
     email = data['user']
@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
         retry
       end
     end
-    user.authentications.create!(provider: 'key', uid: data['ssoGuid'])
+    user.authentications.create!(provider: 'thekey', uid: data['ssoGuid'])
     user
   end
 
