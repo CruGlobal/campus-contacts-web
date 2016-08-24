@@ -33,6 +33,7 @@ class RequestAccess
   end
 
   def reserved_names
+    return unless org_name.present?
     basic_name = org_name.downcase.split(' at ')[0].strip
     reserved_names = {
       'Cru': ['cru', 'campus crusade', 'campus crusade for christ', 'ccc'],

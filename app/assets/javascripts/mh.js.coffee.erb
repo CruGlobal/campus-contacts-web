@@ -229,6 +229,14 @@ $ ->
     if $('.sf-scrolling')[0]
       $('.sf-scrolling').superscroll()
 
+  hide_loader()
+
+window.show_loader = ->
+  $('#global_loader').show()
+
+window.hide_loader = ->
+  $('#global_loader').hide()
+
 window.t = (s) -> I18n.translate(s)
 
 $.blur = (selector, hide) ->
