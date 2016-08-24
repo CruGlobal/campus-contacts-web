@@ -37,6 +37,7 @@
               </div>
               <report-period period="$ctrl.period" on-update="$ctrl.updatePeriod(period)"></report-period>
               <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+                 analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
                  class="dashboard-edit-toggle tipitmiddle" ng-class="{'active': $ctrl.editOrganizations}"
                  href="" title="<%= t('dashboard.edit_org_order') %>">
                 <ng-md-icon icon="editOrder"></ng-md-icon>

@@ -24,7 +24,8 @@
 
     <!-- Email -->
     <a ng-href="mailto:{{$ctrl.person.email_addresses[0].email}}"
-       ng-if="$ctrl.person.email_addresses.length > 0">
+       ng-if="$ctrl.person.email_addresses.length > 0"
+       analytics-on="click" analytics-category="Dashboard" analytics-event="Send Email">
         <round-button>
             <ng-md-icon icon="email"></ng-md-icon>
         </round-button>
@@ -37,11 +38,15 @@
         <square-button ng-repeat="type in $ctrl.interactionTypes"
                        ng-click="$ctrl.openAddInteractionPanel(type)"
                        ng-class="{'open': $ctrl.openPanelType === type}"
+                       analytics-on="click" analytics-category="Dashboard"
+                       analytics-event="Select Interaction" analytics-label="{{type.title}}"
                        title="{{type.title | t}}">
             <ng-md-icon icon="{{type.icon}}"></ng-md-icon>
         </square-button>
     </div>
     <ng-md-icon icon="add" class="add-new-interaction" ng-click="$ctrl.toggleInteractionBtns()"
+                analytics-on="click" analytics-category="Dashboard"
+                analytics-event="Open Interaction Types" analytics-if="$ctrl.addInteractionBtnsVisible"
                 ng-class="{'close': $ctrl.addInteractionBtnsVisible}">
     </ng-md-icon>
 </div>
@@ -49,5 +54,8 @@
     <textarea placeholder="{{'dashboard.notes_for_new_interaction' | t}} {{$ctrl.openPanelType.title | t}}"
               ng-model="$ctrl.interactionComment"
               class="auto-grow"></textarea>
-    <a href ng-click="$ctrl.saveInteraction()">{{'dashboard.done' |t}}</a>
+    <a href ng-click="$ctrl.saveInteraction()"
+       analytics-on="click" analytics-category="Dashboard" analytics-event="Save New {{$ctrl.openPanelType.title}}">
+      {{'dashboard.done' | t}}
+    </a>
 </div>

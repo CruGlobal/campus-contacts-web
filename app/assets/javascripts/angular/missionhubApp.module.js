@@ -7,7 +7,9 @@
             'ngMdIcons',
             'beauby.jsonApiDataStore',
             'environment',
-            'ui.sortable'
+            'ui.sortable',
+            'angulartics',
+            'angulartics.google.analytics'
         ]);
 
 })();

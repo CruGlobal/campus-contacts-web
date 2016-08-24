@@ -7,6 +7,8 @@
     "angular-environment": "^1.0.4",
     "angular-material-icons": "^0.7.0",
     "angular-ui-sortable": "^0.14.3",
+    "angulartics": "^1.1.2",
+    "angulartics-google-analytics": "^0.2.1",
     "jsonapi-datastore": "^0.4.0-beta",
     "lodash": "^4.11.1",
     "lscache": "1.0.6"

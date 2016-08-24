@@ -3,7 +3,7 @@
 
     angular
         .module('missionhubApp')
-        .config(function (envServiceProvider, ngMdIconServiceProvider, I18n) {
+        .config(function (envServiceProvider, ngMdIconServiceProvider, I18n, $analyticsProvider) {
             //TODO: Remove eslint comment when bug is fixed. See https://github.com/Gillespie59/eslint-plugin-angular/issues/223
             envServiceProvider.config({ // eslint-disable-line angular/module-getter
                 domains: {
@@ -84,6 +84,8 @@
                 });
 
             I18n.fallbacks = true;
+
+            $analyticsProvider.virtualPageviews(false);
         });
 
 })();

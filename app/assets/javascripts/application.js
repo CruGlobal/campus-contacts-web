@@ -31,6 +31,8 @@
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
 //= require angular-environment/dist/angular-environment
 //= require angular-ui-sortable/dist/sortable
+//= require angulartics/dist/angulartics.min
+//= require angulartics-google-analytics/lib/angulartics-ga
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants
 //= require angular/missionhubApp.config
