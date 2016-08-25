@@ -23,7 +23,7 @@ class Message < ActiveRecord::Base
   end
 
   def self.outbound_text_messages(phone_number)
-    where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "%#{phone_number}%")
+    where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "#{phone_number}%")
   end
 
   def status

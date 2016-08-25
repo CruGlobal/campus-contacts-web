@@ -969,7 +969,8 @@ CREATE TABLE `messages` (
   `sent` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_messages_on_bulk_message_id` (`bulk_message_id`),
-  KEY `index_messages_on_to_sent_created_at` (`to`,`sent`,`created_at`)
+  KEY `index_messages_on_to_sent_created_at` (`to`,`sent`,`created_at`),
+  KEY `index_messages_on_reply_to_sent_via` (`reply_to`,`sent_via`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2455,4 +2456,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160818210829');
 INSERT INTO schema_migrations (version) VALUES ('20160818214034');
 
 INSERT INTO schema_migrations (version) VALUES ('20160823152936');
+
+INSERT INTO schema_migrations (version) VALUES ('20160824144038');
 
