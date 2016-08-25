@@ -11,8 +11,14 @@ class PeopleMailer < ActionMailer::Base
 
   def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet, question_id)
     @keyword = keyword
-    @answer_sheet = answer_sheet
+    begin
+      @answer_sheet = answer_sheet.reload
+    rescue ActiveRecord::RecordNotFound
+      # don't notify leader about a answer sheet that doesn't exist
+      return
+    end
     @person = @answer_sheet.person
+    return unless @person
     @question = Element.find(question_id)
     @question_rule = QuestionRule.find(question_rule_id)
     mail to: to, subject: "Someone answered \"#{@keyword.titleize}\" in your survey"
