@@ -979,11 +979,12 @@ en:
     back_to_wizard: I'm done. Take me back to the Wizard
     cleanup: Cleanup
     create_a_survey: Add a Survey
-    cru: Cru
     dashboard: Dashboard
     directory: Directory
+    email_us: Email Us
     enter_survey_mode: Enter Survey Mode
     exit_survey_mode: Exit Survey Mode
+    faq: FAQ
     go_to: go to
     goal: Goal Tracker
     groups: Groups
@@ -1000,10 +1001,11 @@ en:
     organizations: Organizations
     people: People
     permissions: Labels
+    powered_by_cru: Powered by Cru
     privacy: Privacy Policy
     profile: My Profile
     report_movement_indicators: Report Movement Indicators
-    eequest_access: Request Access
+    request_access: Request Access
     roles: Labels
     settings: Settings
     snapshot: Snapshot View
@@ -1384,9 +1386,9 @@ en:
       start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       waiting_for_logout: Waiting for previous user to be logged out of facebook. If this message doesn't go away within 15 seconds, try reloading the page.
       welcome: Welcome!
-      log_in: Log In
-      log_in_with_key: Log In with The Key
-      log_in_with_facebook: Log In with Facebook
+      log_in: Log in
+      log_in_with_key: Log in with The Key
+      log_in_with_facebook: Log in with Facebook
       sign_up: Sign Up
       sign_up_with_key: Sign Up with The Key
       sign_up_with_facebook: Sign Up with Facebook

@@ -20,9 +20,9 @@
                           class: params[:controller] == 'sessions' && params[:action] == 'new' ? 'active' : '') %>
             </li>
             <li>
-              <%= link_to(t('nav.eequest_access'),
+              <%= link_to(t('nav.request_access'),
                           request_access_path,
-                          title: t('nav.eequest_access'),
+                          title: t('nav.request_access'),
                           class: @request_access.present? ? 'active' : '') %>
             </li>
         <% end %>

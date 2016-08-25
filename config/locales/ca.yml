@@ -78,6 +78,7 @@ ca:
       type_to_find_org: Type to find a %{terminology} then click on the %{terminology}'s name
     interaction_types:
       comment: Comment Only
+      discipleship: Discipleship Conversation
       faculty_on_mission: Faculty on Mission
       gospel_presentation: I’ve Shared the Gospel
       graduating_on_mission: Graduating on Mission
@@ -368,11 +369,13 @@ ca:
     button_view: VIEW
     button_view_sub: ALL CONTACTS
     close: Close
+    edit_org_order: Edit Organization Order
     header_text: Make It Easier To Care For The People Who Need You Most
     learn_more: Learn More
     panel_managing: Managing Contacts
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
+    people_assigned_to_you: People Assigned to You
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
   date:
@@ -901,12 +904,14 @@ ca:
     back_to_dashboard: Back To My Contacts
     back_to_wizard: I'm done. Take me back to the Wizard
     cleanup: Cleanup
+    contacts: Contacts
     create_a_survey: Add a Survey
-    cru: P2C
     dashboard: Dashboard
     directory: Directory
+    email_us: Email Us
     enter_survey_mode: Enter Survey Mode
     exit_survey_mode: Exit Survey Mode
+    faq: FAQ
     go_to: go to
     goal: Goal Tracker
     groups: Groups
@@ -923,6 +928,7 @@ ca:
     organizations: Organizations
     people: People
     permissions: Labels
+    powered_by_cru: Powered by Cru
     privacy: Privacy Policy
     profile: My Profile
     report_movement_indicators: Report Movement Indicators
@@ -930,9 +936,11 @@ ca:
     settings: Settings
     signatures:
     snapshot: Snapshot View
+    support: Support
     survey_mode_tip: Survey mode allows for other people to fill out surveys on your device. They will be asked to login with Facebook and will be logged out upon completion.  The next person to enter a survey will be asked to login with Facebook, and so forth.  When you are done with survey mode click ‘Exit Survey Mode’ in the upper left corner and all those who completed the survey will appear under Unassigned Contacts.
     surveys: Surveys
-    terms: Terms and Conditions
+    terms: Terms of Service
+    tools: Tools
     transfer: Graduating on Mission
     trend: Trend Tracker
     use_keyword: 'Use Keyword: %{keyword}'
@@ -1288,6 +1296,8 @@ ca:
       back: Back Home
       dont_like_facebook: Don't like Facebook?
       instructions: Instructions
+      log_in_with_facebook: Log in with Facebook
+      log_in_with_key: Log in with The Key
       login: Login
       login_cannot_create_a_user: We're not able to create your user data. Please try again later. For additional help please email support@missionhub.com
       login_no_email: We're not able to retrieve your login information at this time. Please try again later. For additional help please email support@missionhub.com
@@ -1608,18 +1618,37 @@ ca:
       title_top: Welcome to MissionHub!
       your_orgs: Your Organizational Involvements
     index:
+      activity: Activity At-A-Glance
+      activity_text: Never miss an opportunity with in-app notifications and follow the health of your ministry with real-time stats.
+      all_new_dashboard: All-New Dashboard
+      all_new_dashboard_text: 'The new dashboard interface lets you do more than ever before. The moment you sign in you''ll see all of your contacts in one place, even if you are in multiple ministries.'
+      all_new_mobile: All-New Mobile Experience
       get_details_html: Get the Details & <a href="/welcome/tour" class="learnmore">Learn More</a> or %{link}
       get_started: Get Started
       go_home: Go to My Contacts
       headline_html: Making it easy to <span class="babyblue">care</span> for the people that need you most.
+      know_your_history: Know Your History
+      know_your_history_text: Never forget an important moment or detail. Record interactions and notes for the next time you get together.
       learn_more: 'Learn More '
+      quick_interactions: Quick Interactions
+      quick_interactions_text: 'On the dashboard, connecting with your contacts and recording interactions is fast and easy.'
       request_key: Click here to request a keyword
       request_key_help: A Keyword is both the name of the survey and what the person would text to fill out the survey questions. For example, you would say, 'Text MACP2C to the number 85005.' MACP2C is the keyword.
+      stay_on_mission: Stay On Mission
+      stay_on_mission_text: 'As your ministry grows, you need help keeping track of and organizing information, so you don’t miss a beat. With MissionHub, you can easily stay connected to the people within your ministry, by efficiently keeping track of the important details that help you serve them well.'
       subheadline_html: Easier Connections. Easier Communication. Easier Tracking.
       title_top: Welcome to MissionHub!
       title_top_mobile: Survey
       video_headline_html: Got questions?
       video_subheadline_html: We can help!
+    request:
+      description_1: 'MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.'
+      description_2: Request access and our spectacular support team will help you get started.
+      email: Email
+      first_name: First Name
+      last_name: Last Name
+      org_name: Organization Name
+      request_access_verb: Request Access
     tutorials:
       get_started: Get Started!
       video_headline_html: Got questions?
