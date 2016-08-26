@@ -370,8 +370,10 @@ ca:
     button_view_sub: ALL CONTACTS
     close: Close
     edit_org_order: Edit Organization Order
+    edit_org_order_help: Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.
     header_text: Make It Easier To Care For The People Who Need You Most
     learn_more: Learn More
+    no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
     panel_managing: Managing Contacts
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
@@ -384,6 +386,7 @@ ca:
       one_year: 1y
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
+    show_more: Show more
   date:
     abbr_day_names:
     - Sun

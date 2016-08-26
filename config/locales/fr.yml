@@ -364,8 +364,10 @@ fr:
     button_view_sub: TOUS LES CONTACTS
     close: Fermer
     edit_org_order: Modifier l’ordre des organismes
+    edit_org_order_help: Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.
     header_text: Prendre soin plus facilement des personnes qui ont le plus besoin de vous
     learn_more: En savoir plus
+    no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
     panel_managing: Gérer les contacts
     panel_messaging: Envoyer des messages aux contacts
     panel_storing: Conserver des contacts
@@ -378,6 +380,7 @@ fr:
       one_year: 1a
     send_message_guide: Pour envoyer un texte ou un courriel, cliquez sur la boîte à côté des contacts avec lesquels vous voulez communiquer. Vous pouvez aussi utiliser la fonction de recherche pour trouver des contacts rapidement.  <br/><br/>Après avoir sélectionné les contacts, cliquez sur le bouton « Envoyer » pour composer le message.
     send_message_video_guide: Cliquez sur la vidéo ci-dessous pour voir comment faire.
+    show_more: Show more
   date:
     abbr_day_names:
     - dim.
