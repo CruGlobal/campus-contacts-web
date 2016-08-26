@@ -15,11 +15,11 @@
     function reportPeriodController () {
         var vm = this;
         vm.periods = [
-            {label: '1w', period: 'P1W'},
-            {label: '1m', period: 'P1M'},
-            {label: '3m', period: 'P3M'},
-            {label: '6m', period: 'P6M'},
-            {label: '1y', period: 'P1Y'}
+            {label: 'dashboard.report_periods.one_week', period: 'P1W'},
+            {label: 'dashboard.report_periods.one_month', period: 'P1M'},
+            {label: 'dashboard.report_periods.three_months', period: 'P3M'},
+            {label: 'dashboard.report_periods.six_months', period: 'P6M'},
+            {label: 'dashboard.report_periods.one_year', period: 'P1Y'}
         ];
     }
 })();

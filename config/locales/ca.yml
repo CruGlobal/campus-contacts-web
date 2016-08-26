@@ -376,6 +376,12 @@ ca:
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
     people_assigned_to_you: People Assigned to You
+    report_periods:
+      one_week: 1w
+      one_month: 1m
+      three_months: 3m
+      six_months: 6m
+      one_year: 1y
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
   date:

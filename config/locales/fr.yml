@@ -370,6 +370,12 @@ fr:
     panel_messaging: Envoyer des messages aux contacts
     panel_storing: Conserver des contacts
     people_assigned_to_you: Personnes qui vous sont attribuées
+    report_periods:
+      one_week: 7j
+      one_month: 1m
+      three_months: 3m
+      six_months: 6m
+      one_year: 1a
     send_message_guide: Pour envoyer un texte ou un courriel, cliquez sur la boîte à côté des contacts avec lesquels vous voulez communiquer. Vous pouvez aussi utiliser la fonction de recherche pour trouver des contacts rapidement.  <br/><br/>Après avoir sélectionné les contacts, cliquez sur le bouton « Envoyer » pour composer le message.
     send_message_video_guide: Cliquez sur la vidéo ci-dessous pour voir comment faire.
   date:
