@@ -131,3 +131,6 @@ gem 'susy'#, '~> 1.0.9'
 gem 'bootstrap-sass'#, '~> 3.1.0'
 gem 'raddocs'
 gem 'gibbon'
+
+# check_digit added so we can do some integrity checking on survey response ids that will be user editable
+gem 'check_digit'
