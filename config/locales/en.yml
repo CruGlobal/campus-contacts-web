@@ -417,14 +417,23 @@ en:
     button_view: VIEW
     button_view_sub: ALL CONTACTS
     close: Close
+    edit_org_order: Edit Organization Order
+    edit_org_order_help: Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.
     header_text: Make It Easier To Care For The People Who Need You Most
     learn_more: Learn More
+    no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
     panel_managing: Managing Contacts
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
+    report_periods:
+      one_week: 1w
+      one_month: 1m
+      three_months: 3m
+      six_months: 6m
+      one_year: 1y
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
-    edit_org_order: Edit Organization Order
+    show_more: Show more
     snooze_for_24_hours: Snooze reminder for 24 hours
     notes_for_new_interaction: Notes for new
     loading_contacts: Loading Contacts
@@ -979,11 +988,12 @@ en:
     back_to_wizard: I'm done. Take me back to the Wizard
     cleanup: Cleanup
     create_a_survey: Add a Survey
-    cru: Cru
     dashboard: Dashboard
     directory: Directory
+    email_us: Email Us
     enter_survey_mode: Enter Survey Mode
     exit_survey_mode: Exit Survey Mode
+    faq: FAQ
     go_to: go to
     goal: Goal Tracker
     groups: Groups
@@ -1000,10 +1010,11 @@ en:
     organizations: Organizations
     people: People
     permissions: Labels
+    powered_by_cru: Powered by Cru
     privacy: Privacy Policy
     profile: My Profile
     report_movement_indicators: Report Movement Indicators
-    eequest_access: Request Access
+    request_access: Request Access
     roles: Labels
     settings: Settings
     snapshot: Snapshot View
@@ -1384,9 +1395,9 @@ en:
       start_survey: To start the survey, please login with Facebook so we can know who you really are. This will save time completing your survey.
       waiting_for_logout: Waiting for previous user to be logged out of facebook. If this message doesn't go away within 15 seconds, try reloading the page.
       welcome: Welcome!
-      log_in: Log In
-      log_in_with_key: Log In with The Key
-      log_in_with_facebook: Log In with Facebook
+      log_in: Log in
+      log_in_with_key: Log in with The Key
+      log_in_with_facebook: Log in with Facebook
       sign_up: Sign Up
       sign_up_with_key: Sign Up with The Key
       sign_up_with_facebook: Sign Up with Facebook

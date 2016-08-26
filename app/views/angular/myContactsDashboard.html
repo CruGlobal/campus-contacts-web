@@ -2,10 +2,7 @@
   <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
   <div ng-if="$ctrl.noContacts" class="no-contacts-message ng-cloak">
     <h1>{{ $ctrl.noContactsWelcome }}</h1>
-    <p>
-      When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br>
-      they will show up here.
-    </p>
+    <p bind-dynamic="'dashboard.no_contacts_help' | t"></p>
   </div>
   <organization-people
           id="{{ org.id }}"
@@ -22,14 +19,10 @@
           on-change-visibility="$ctrl.orgChangeVisibility(organization_id)">
   </organization-people>
   <div class="no-contacts-extras">
-    <a href ng-click="$ctrl.numberOfOrgsToShow = 100" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit" class="show-more">
-      Show more
-    </a>
+    <a href ng-click="$ctrl.numberOfOrgsToShow = 100" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit"
+       class="show-more">{{ 'dashboard.show_more' | t }}</a>
     <br>
-    <a href ng-click="$ctrl.editMode = true" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit" class="edit-mode">
-      Want to customize your view? Press
-      <ng-md-icon icon="editOrder"></ng-md-icon>
-      above to reorder and hide ministries.
-    </a>
+    <a href ng-click="$ctrl.editMode = true" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit"
+       class="edit-mode" bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
   </div>
 </div>
