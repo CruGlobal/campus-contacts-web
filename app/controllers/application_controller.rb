@@ -252,7 +252,7 @@ class ApplicationController < ActionController::Base
   end
 
   def available_locales
-    %w(en ru es fr zh bs de ca qb)
+    %w(en ru es fr zh bs de ca qb qc)
   end
 
   def check_valid_subdomain
@@ -268,6 +268,7 @@ class ApplicationController < ActionController::Base
 
   def set_locale
     I18n.locale = session[:locale] = params[:locale] if params[:locale]
+    session[:locale] = 'qb' if session[:locale] == 'qc'
     I18n.locale = session[:locale] || 'en'
   end
 
