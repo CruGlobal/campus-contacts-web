@@ -381,6 +381,7 @@ qb:
     send_message_guide: Pour envoyer un texte ou un courriel, cliquez sur la boîte à côté des contacts avec lesquels vous voulez communiquer. Vous pouvez aussi utiliser la fonction de recherche pour trouver des contacts rapidement.  <br/><br/>Après avoir sélectionné les contacts, cliquez sur le bouton « Envoyer » pour composer le message.
     send_message_video_guide: Cliquez sur la vidéo ci-dessous pour voir comment faire.
     show_more: Show more
+    uncontacted: Uncontacted
   date:
     abbr_day_names:
     - dim.

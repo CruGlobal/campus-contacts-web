@@ -70,6 +70,13 @@
 
         function activate () {
             closeAddInteractionPanel();
+
+            // This person is considered uncontacted if their organizational permission for this organization
+            // has a follow-up status of uncontacted
+            var organizationalPermission = _.find(vm.person.organizational_permissions, {
+                organization_id: vm.organizationId
+            });
+            vm.uncontacted = organizationalPermission && organizationalPermission.followup_status === 'uncontacted';
         }
 
         function bindingChanges (changesObj) {
@@ -144,6 +151,7 @@
                 .then(function () {
                         $log.log('posted interaction successfully');
                         vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
+                        vm.uncontacted = false;
                         toggleInteractionBtns();
                     },
                     function (error) {
