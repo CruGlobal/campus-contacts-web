@@ -64,7 +64,6 @@
 //= require clearform
 //= require survey
 //= require global
-//= require welcome
 //= require tour
 //= require surveys
 //= require imports
