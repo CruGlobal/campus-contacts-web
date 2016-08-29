@@ -41,6 +41,19 @@ class AnswerSheet < ActiveRecord::Base
     i
   end
 
+  def existing_note?
+    if person.interactions.loaded?
+      person.interactions.any? do |interaction|
+        interaction.interaction_type_id == InteractionType.comment.id &&
+          interaction.organization_id == survey.organization_id &&
+          interaction.comment.ends_with?(note_signature)
+      end
+    else
+      Interaction.where(created_by_id: as.person_id, receiver_id: as.person_id)
+        .where('comment like ?', "%#{note_signature}").any?
+    end
+  end
+
   private
 
   def answers_as_string
@@ -48,7 +61,11 @@ class AnswerSheet < ActiveRecord::Base
       answer = answer_for(question)
       next unless answer.present?
       "#{question.label}:\r\n#{answer}\r\n\r\n"
-    end.compact.join + "-- Survey Response #{id_with_check} --"
+    end.compact.join + note_signature
+  end
+
+  def note_signature
+    "-- Survey Response #{id_with_check} --"
   end
 
   def answer_for(question)
