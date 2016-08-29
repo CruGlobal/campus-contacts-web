@@ -80,6 +80,7 @@ qb:
       type_to_find_org: Tapez afin de trouver un(e) %{terminology}, puis cliquez sur le nom du (de la) %{terminology}.
     interaction_types:
       comment: Commenter seulement
+      discipleship: Conversation de formation de disciple
       faculty_on_mission: Professeur en mission
       gospel_presentation: J'ai partagé l'évangile
       graduating_on_mission: Diplômé en mission
@@ -362,13 +363,24 @@ qb:
     button_view: AFFICHER
     button_view_sub: TOUS LES CONTACTS
     close: Fermer
+    edit_org_order: Modifier l’ordre des organismes
+    edit_org_order_help: Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.
     header_text: Prendre soin plus facilement des personnes qui ont le plus besoin de vous
     learn_more: En savoir plus
+    no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
     panel_managing: Gérer les contacts
     panel_messaging: Envoyer des messages aux contacts
     panel_storing: Conserver des contacts
+    people_assigned_to_you: Personnes qui vous sont attribuées
+    report_periods:
+      one_week: 7j
+      one_month: 1m
+      three_months: 3m
+      six_months: 6m
+      one_year: 1a
     send_message_guide: Pour envoyer un texte ou un courriel, cliquez sur la boîte à côté des contacts avec lesquels vous voulez communiquer. Vous pouvez aussi utiliser la fonction de recherche pour trouver des contacts rapidement.  <br/><br/>Après avoir sélectionné les contacts, cliquez sur le bouton « Envoyer » pour composer le message.
     send_message_video_guide: Cliquez sur la vidéo ci-dessous pour voir comment faire.
+    show_more: Show more
   date:
     abbr_day_names:
     - dim.
@@ -559,7 +571,7 @@ qb:
     address2: Adresse 2
     adv_search: Recherche avancée
     alert: Alerte
-    archive: Archive
+    archive: Archiver
     archived: Archivé
     assign_to: Attribuer à
     assigned_to: Attribué à
@@ -576,6 +588,7 @@ qb:
     contacts_updated_from: Contacts mis à jour à partir de
     country: Pays
     cru_status:
+    copyright: Copyright %{year} Cru. Tous droits réservés.
     dash: '-'
     default_email_from: do-not-reply@mhub.cc
     delete: Supprimer
@@ -893,14 +906,16 @@ qb:
     back_to_dashboard: Retourner à mes contacts
     back_to_wizard: J'ai fini. Ramenez-moi à l'Assistant de projet.
     cleanup: Nettoyage
+    contacts: Contacts
     create_a_survey: Ajouter un sondage
-    cru: P2C
     dashboard: Tableau de bord
     directory: Répertoire
+    email_us: Écrivez-nous
     enter_survey_mode: Entrer en mode sondage
     exit_survey_mode: Sortir du mode sondage
+    faq: FAQ
     go_to: aller à
-    goal:
+    goal: Suivi de l’objectif
     groups: Groupes
     help: Ressources et aide
     hide: Masquer
@@ -915,18 +930,22 @@ qb:
     organizations: Organismes
     people: Personnes
     permissions: Étiquettes
+    powered_by_cru: Géré par Cru
     privacy: Politique de confidentialité
     profile: Mon profil
     report_movement_indicators:
+    request_access: Demander l’accès
     roles: Étiquettes
     settings: Paramètres
     signatures:
     snapshot: Image instantanée
+    support: Aide
     survey_mode_tip: La mode sondage permet à une autre personne de répondre à des sondages sur votre appareil. On lui demandera d'ouvrir une session en utilisant son compte Facebook, et elle sera déconnectée après la fin du sondage. La prochaine personne qui répondra au sondage ouvrira une session en utilisant son compte Facebook, et ainsi de suite. Lorsque vous n'avez plus besoin du mode sondage, cliquez sur « Sortir du mode sondage » dans le coin supérieur gauche, et toute personne ayant terminé le sondage sera affichée sous Contacts non attribués.
     surveys: Sondages
-    terms: Conditions
+    terms: Conditions d’utilisation
+    tools: Outils
     transfer: Finissant en mission
-    trend:
+    trend: Suivi de la tendance
     use_keyword: 'Utiliser le mot-clé : %{keyword}'
     view_details: Afficher les détails
     visual_tools: Outils visuels
@@ -1282,6 +1301,8 @@ qb:
       back: Retourner à l'accueil
       dont_like_facebook: Vous n'aimez pas Facebook?
       instructions: Instructions
+      log_in_with_facebook: Se connecter avec Facebook
+      log_in_with_key: Se connecter avec The Key
       login: Ouvrir une session
       login_cannot_create_a_user: Nous n'avons pas pu créer vos données d'utilisateur. Veuillez réessayer plus tard. Pour toute aide supplémentaire, veuillez envoyer un courriel à support@missionhub.com.
       login_no_email: Nous ne pouvons pas récupérer vos informations de connexion pour le moment. Veuillez réessayer plus tard. Pour toute aide supplémentaire, veuillez envoyer un courriel à support@missionhub.com.
@@ -1603,18 +1624,37 @@ qb:
       title_top: Bienvenue à MissionHub!
       your_orgs: Votre implication dans l'organisme
     index:
+      activity: Activités d’un coup d’oeil
+      activity_text: Ne ratez jamais une occasion grâce à des alertes intégrées et surveillez la santé de votre ministère à l’aide de statistiques en temps réel.
+      all_new_dashboard: Nouveau tableau de bord
+      all_new_dashboard_text: 'Le nouveau tableau de bord vous permet de faire plus que jamais auparavant. Aussitôt que vous ouvrez une session, vous voyez tous vos contacts en un seul endroit, même si vous faites partie de multiples ministères.'
+      all_new_mobile: Nouvelle expérience mobile
       get_details_html: Connaître les détails et <a href="/welcome/tour" class="learnmore">en apprendre davantage</a> or %{link}
       get_started: Commencer
       go_home: Aller à Mes contacts
       headline_html: ' <span class="babyblue">Prendre soin</span> plus facilement des personnes qui ont le plus besoin de vous'
+      know_your_history: Historique au bout des doigts
+      know_your_history_text: N’oubliez jamais une information ou un moment important. Consignez vos interactions et vos notes pour votre prochain rendez-vous.
       learn_more: Apprendre davantage
+      quick_interactions: Interactions rapides
+      quick_interactions_text: 'Sur le tableau de bord, il est rapide et facile de communiquer avec vos contacts et de consigner les interactions.'
       request_key: Cliquez ici pour demander un mot-clé
       request_key_help: 'Un mot-clé est à la fois le nom du sondage et ce que la personne texterait pour répondre aux questions du sondage. Par exemple, vous diriez : « Textez P2CUQAM au numéro 85005 ». P2CUQAM est le mot-clé. '
+      stay_on_mission: Cap Sur la Mission
+      stay_on_mission_text: 'À mesure que votre ministère grandit, vous avez besoin d’aide pour consigner et organiser l’information afin de ne rien manquer. Grâce à MissionHub, vous pouvez facilement rester en contact avec les personnes dans votre ministère en consignant de façon efficace les renseignements importants qui vous aident à bien servir ces personnes.'
       subheadline_html: Créer des liens plus facilement. Communiquer plus facilement. Suivre plus facilement.
       title_top: Bienvenue à MissionHub!
       title_top_mobile: Sondage
       video_headline_html: Avez-vous des questions?
       video_subheadline_html: Nous pouvons vous aider!
+    request:
+      description_1: 'MissionHub a été conçu par Cru pour aider les ministères sans but lucratif à rester en contact avec tous leurs leaders, leurs membres et les personnes qu’ils cherchent à atteindre.'
+      description_2: Demandez l’accès et notre fabuleuse équipe de soutien vous aidera à commencer.
+      email: Adresse courriel
+      first_name: Prénom
+      last_name: Nom de famille
+      org_name: Nom de l’organisme
+      request_access_verb: Demander l’accès
     tutorials:
       get_started: Commencez dès maintenant!
       video_headline_html: Avez-vous des questions?
