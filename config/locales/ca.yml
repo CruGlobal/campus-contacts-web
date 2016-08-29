@@ -1659,6 +1659,9 @@ ca:
       last_name: Last Name
       org_name: Organization Name
       request_access_verb: Request Access
+      submitting: Submitting...
+      matched_organization_message: You requested a new ministry called %{orgName}. Many of %{orgName}’s ministries already exist in MissionHub. Ask one of your leaders at %{orgName} to send you an invite to MissionHub.
+      ok: OK
     tutorials:
       get_started: Get Started!
       video_headline_html: Got questions?

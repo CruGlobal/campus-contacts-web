@@ -1736,6 +1736,9 @@ en:
       org_name: Organization Name
       email: Email
       request_access_verb: Request Access
+      submitting: Submitting...
+      matched_organization_message: You requested a new ministry called %{orgName}. Many of %{orgName}’s ministries already exist in MissionHub. Ask one of your leaders at %{orgName} to send you an invite to MissionHub.
+      ok: OK
     thank_you:
       thank_you: Thank You
       contact_soon: We received your request and will contact you soon.

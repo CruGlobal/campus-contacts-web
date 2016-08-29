@@ -1,3 +1,5 @@
+//= require i18n
+//= require i18n/translations
 //= require vex-js/dist/vex.combined.min
 
 $(document).ready(function () {
@@ -26,16 +28,17 @@ $(document).ready(function () {
         var $form = $(this);
         var matchedOrganization = findOrganizationMatches($form.find('#request_access_org_name').val());
         if (matchedOrganization) {
-            var message = 'You requested a new ministry called ' + matchedOrganization.name + '. Many of ' +
-                matchedOrganization.name + '’s ministries already exist in MissionHub. Ask one of your leaders at ' +
-                matchedOrganization.name + ' to send you an invite to MissionHub.';
+            var message = I18n.t('welcome.request.matched_organization_message', {
+                orgName: matchedOrganization.name
+            });
+
             var dialog = vex.open({
                 unsafeContent:
                   '<div class="dialog-icon-container">' +
-                      '<img src="<%= image_url('info-icon.png') %>" width="48" height="48" class="dialog-icon" />' +
+                      '<img src="<%= image_url("info-icon.png") %>" width="48" height="48" class="dialog-icon" />' +
                   '</div>' +
                   '<p class="message">' + message + '</p>' +
-                  '<input type="button" value="OK" class="btn">',
+                  '<input type="button" value="' + I18n.t('welcome.request.ok') + '" class="btn">',
                 className: 'vex-theme-default existing-organization',
                 showCloseButton: false,
                 afterOpen: function () {
@@ -51,7 +54,7 @@ $(document).ready(function () {
         } else {
             // Mark it so that the next submit can be ignored
             $form.data('submitted', true);
-            $form.find('[type=submit]').val('Submitting...');
+            $form.find('[type=submit]').val(I18n.t('welcome.request.submitting'));
         }
     });
 });
