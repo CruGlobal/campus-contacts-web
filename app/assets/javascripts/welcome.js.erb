@@ -31,6 +31,9 @@ $(document).ready(function () {
                 matchedOrganization.name + ' to send you an invite to MissionHub.';
             var dialog = vex.open({
                 unsafeContent:
+                  '<div class="dialog-icon-container">' +
+                      '<img src="<%= image_url('info-icon.png') %>" width="48" height="48" class="dialog-icon" />' +
+                  '</div>' +
                   '<p class="message">' + message + '</p>' +
                   '<input type="button" value="OK" class="btn">',
                 className: 'vex-theme-default existing-organization',
