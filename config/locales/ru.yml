@@ -1569,8 +1569,7 @@ ru:
       leaders_header: Дать доступ другим лидерам
       leaders_paragraph: This part is optional. Odds are decent that there are other people you work with who you'd like to give the ability to manage the keyword you set up as well as the contacts that will come from people responding to your survey. This step lets you add those people. Except we haven't programmed it quite yet.
       next: Следующий
-      not_found_paragraph: At the current time MissionHub is being field tested with the US Campus Ministry. If you're not a part of the US Campus Ministry, sit tight! We plan to release to a larger audience soon. If you are part of the US Campus Ministry and are seeing this message, send us an email at support@missionhub.com and we'll help you out.
-      request_a_keyword: 
+      request_a_keyword:
       request_keyword: Запросить ключевое слово
       request_keyword_link: Click here to request a keyword. We'll return you to this wizard when you're done.
       skip_step: Пропустить этот шаг

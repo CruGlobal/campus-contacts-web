@@ -107,7 +107,6 @@ group :development do
   gem 'mailcatcher'# , '~> 0.5.12'
   gem 'railroady'#, '~> 1.1.1'
   gem 'better_errors'#, '>= 0.7.2'
-  # gem 'localeapp'
 end
 
 group :performance do
