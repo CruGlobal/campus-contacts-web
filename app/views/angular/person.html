@@ -3,6 +3,7 @@
         <a href="/profile/{{$ctrl.person.id}}?organization_id={{$ctrl.organizationId}}">
             {{ $ctrl.person.full_name }}
         </a>
+        <span class="uncontacted" ng-if="$ctrl.uncontacted">({{'dashboard.uncontacted' | t}})</span>
     </div>
     <div class="stats"
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">

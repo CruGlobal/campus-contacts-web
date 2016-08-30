@@ -387,6 +387,7 @@ ca:
     send_message_guide: To send a text or email, click the box next to the contacts you'd like to message. You can also use the search function to find contacts quickly. <br/><br/>After selecting the contacts, click the "Send" button to compose your message.
     send_message_video_guide: Click on the video below see how to do this.
     show_more: Show more
+    uncontacted: Uncontacted
   date:
     abbr_day_names:
     - Sun
