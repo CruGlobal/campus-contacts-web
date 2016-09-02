@@ -3,6 +3,4 @@ class InteractionInitiator < ActiveRecord::Base
 
   belongs_to :interaction
   belongs_to :person
-
-  validates :interaction_id, :person_id, presence: true
 end

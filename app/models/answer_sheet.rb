@@ -56,7 +56,7 @@ class AnswerSheet < ActiveRecord::Base
         interaction.comment.ends_with?(note_signature)
       end
     else
-      @existing_note = Interaction.where(created_by_id: as.person_id, receiver_id: as.person_id)
+      @existing_note = Interaction.where(created_by_id: person_id, receiver_id: person_id)
                        .find_by('comment like ?', "%#{note_signature}")
     end
   end

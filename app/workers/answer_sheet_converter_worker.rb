@@ -3,8 +3,8 @@ class AnswerSheetConverterWorker
   sidekiq_options unique: true, retry: false
 
   def perform(answer_sheet_id)
-    as = AnswerSheet.includes({ person: [:interactions] }, :answers).find(answer_sheet_id)
-    return if as.person.blank? || as.answers.none? || as.existing_note.present?
+    as = AnswerSheet.includes({ person: [:interactions] }, :answers).find_by(id: answer_sheet_id)
+    return if as.blank? || as.person.blank? || as.answers.none? || as.existing_note.present?
     note = as.to_note
     note.save! if note.comment_changed?
   end
