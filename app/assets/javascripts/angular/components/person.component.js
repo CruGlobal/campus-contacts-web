@@ -16,7 +16,7 @@
             }
         });
 
-    function personController ($animate, $http, $log, $scope, envService, JsonApiDataStore, _) {
+    function personController ($animate, $log, $scope, peopleService, JsonApiDataStore, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -146,17 +146,17 @@
                     person_id: vm.myPersonId
                 }
             }];
-            $http
-                .post(envService.read('apiUrl') + '/interactions', createJson)
-                .then(function () {
-                        $log.log('posted interaction successfully');
-                        vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
-                        vm.uncontacted = false;
-                        toggleInteractionBtns();
-                    },
-                    function (error) {
-                        $log.error('Error saving interaction', error);
-                    });
+
+            var promise = peopleService.saveInteraction(createJson);
+            promise.then(function () {
+                $log.log('posted interaction successfully');
+                vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
+                vm.uncontacted = false;
+                toggleInteractionBtns();
+            },
+            function (error) {
+                $log.error('Error saving interaction', error);
+            });
         }
 
         function closeAddInteractionPanel () {

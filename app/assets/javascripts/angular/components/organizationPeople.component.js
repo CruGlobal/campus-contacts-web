@@ -19,8 +19,8 @@
             }
         });
 
-    function organizationPeopleController ($filter, $http, $log, JsonApiDataStore, lscache, _,
-                                           confirm, envService, jQuery) {
+    function organizationPeopleController ($filter, $log, JsonApiDataStore, lscache, _,
+                                           confirm, jQuery, organizationalPeopleService) {
         var vm = this,
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
@@ -133,9 +133,9 @@
                     person_id: vm.myPersonId
                 }
             }];
-            $http
-                .post(envService.read('apiUrl') + '/interactions', createJson)
-                .then(function () {
+
+            var promise = organizationalPeopleService.saveAnonymousInteraction(createJson);
+            promise.then(function () {
                         $log.log('posted interaction successfully');
                         incrementReportInteraction(vm.addAnonymousInteractionType.id);
                         closeAnonymousInteractions();
@@ -183,9 +183,9 @@
                     }
                 ]
             };
-            $http
-                .put(envService.read('apiUrl') + '/people/' + person.id, updateJson)
-                .then(function () {
+
+            var promise = organizationalPeopleService.updatePeople(person.id, updateJson);
+            promise.then(function () {
                     $log.info('contact archived');
                     _.remove(vm.people, { id: person.id })
                 }, function () {
