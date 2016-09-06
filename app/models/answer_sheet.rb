@@ -7,9 +7,11 @@ class AnswerSheet < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, class_name: 'Answer', foreign_key: 'answer_sheet_id'
 
-  # def complete?
-  #   !completed_at.nil?
-  # end
+  after_commit :update_note, on: [:create, :update]
+
+  def update_note
+    AnswerSheetConverterWorker.perform_async(id)
+  end
 
   def valid_person?
     (person.valid? && (!person.primary_phone_number || person.primary_phone_number.valid?))
@@ -33,6 +35,10 @@ class AnswerSheet < ActiveRecord::Base
   end
 
   def to_note
+    if existing_note
+      existing_note.comment = answers_as_string
+      return existing_note
+    end
     i = Interaction.new(interaction_type_id: InteractionType.comment.id, privacy_setting: 'organization',
                         organization_id: survey.organization_id, receiver_id: person_id,
                         created_by_id: person_id, updated_by_id: person_id, comment: answers_as_string,
@@ -41,16 +47,17 @@ class AnswerSheet < ActiveRecord::Base
     i
   end
 
-  def existing_note?
+  def existing_note
+    return @existing_note if @existing_note
     if person.interactions.loaded?
-      person.interactions.any? do |interaction|
+      @existing_note = person.interactions.detect do |interaction|
         interaction.interaction_type_id == InteractionType.comment.id &&
-          interaction.organization_id == survey.organization_id &&
-          interaction.comment.ends_with?(note_signature)
+        interaction.organization_id == survey.organization_id &&
+        interaction.comment.ends_with?(note_signature)
       end
     else
-      Interaction.where(created_by_id: as.person_id, receiver_id: as.person_id)
-        .where('comment like ?', "%#{note_signature}").any?
+      @existing_note = Interaction.where(created_by_id: person_id, receiver_id: person_id)
+                       .find_by('comment like ?', "%#{note_signature}")
     end
   end
 

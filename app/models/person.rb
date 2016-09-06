@@ -470,7 +470,7 @@ class Person < ActiveRecord::Base
   end
 
   def initiated_interaction_ids
-    InteractionInitiator.where(person_id: id).collect(&:interaction_id).uniq
+    InteractionInitiator.where(person_id: id).uniq.pluck(:interaction_id).compact
   end
 
   def assign_contacts(ids, org, assigned_by = nil)
