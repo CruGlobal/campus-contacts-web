@@ -31,7 +31,7 @@
                 });
             },
 
-            loadPeopleReports: function(model) {
+            loadPeopleReports: function (model) {
                 return httpProxy.get (apiEndPoint.reports.people, {
                     period: model.period,
                     organization_ids: model.organization_ids,
@@ -39,7 +39,7 @@
                 });
             },
 
-            loadOrganizationReports: function(model) {
+            loadOrganizationReports: function (model) {
                 return httpProxy.get (apiEndPoint.reports.organizations,
                     {
                         period: model.period,
@@ -47,7 +47,7 @@
                     });
             },
 
-            loadOrganizations: function() {
+            loadOrganizations: function () {
                 return httpProxy
                     .get (apiEndPoint.organizations.index, {
                         'page[limit]': 100,
@@ -56,7 +56,7 @@
                     });
             },
 
-            updateUserPreference: function(model) {
+            updateUserPreference: function (model) {
                 httpProxy.put (apiEndPoint.users.me, null, model);
             }
         };

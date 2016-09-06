@@ -99,7 +99,7 @@
                 JsonApiDataStore.store.sync(request);
             }, function (error) {
                 $log.error('Error loading organization reports', error);
-            }).then(function(){
+            }).then(function () {
                 myContactsDashboardService.loadPeopleReports(peopleReportModel)
                     .then(function (request) {
                         JsonApiDataStore.store.sync(request);
@@ -151,10 +151,10 @@
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
                     if (ca.assigned_to.id != vm.myPersonId ||
-                        _.findIndex(person.organizational_permissions, {organization_id: orgId}) == -1) {
+                        _.findIndex(person.organizational_permissions, { organization_id: orgId }) == -1) {
                         return;
                     }
-                    var org = _.find(vm.organizationPeople, {id: orgId});
+                    var org = _.find(vm.organizationPeople, { id: orgId });
                     if (angular.isUndefined(org)) {
                         org = JsonApiDataStore.store.find('organization', orgId);
                         org.people = [];
@@ -209,7 +209,7 @@
 
         function organizationOrderChange () {
             var orgOrder = _.map(vm.organizationPeople, 'id');
-            updateUserPreference({
+            updateUserPreference( {
                 organization_order: orgOrder
             })
         }
