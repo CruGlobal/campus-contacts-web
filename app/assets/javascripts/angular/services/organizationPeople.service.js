@@ -1,7 +1,3 @@
-/**
- * Created by eijeh on 9/6/16.
- */
-
 
 /**
  * Created by eijeh on 9/2/16.
