@@ -12,7 +12,7 @@
 
     proxyService.$inject = ['$http', '$q', '$timeout', '$log', 'envService'];
 
-    function proxyService($http, $q, $timeout, $log, envService) {
+    function proxyService ($http, $q, $timeout, $log, envService) {
         var proxy = {
 
             callHttp: function (method, url, params, data) {

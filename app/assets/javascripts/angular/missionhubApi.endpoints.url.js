@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('missionhubApp')
-        .service('apiEndPoint', apiEndPointService);
+        .factory('apiEndPoint', apiEndPointService);
 
     function apiEndPointService () {
         var endpoints = {
