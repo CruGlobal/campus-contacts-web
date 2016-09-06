@@ -10,7 +10,7 @@
 
     angular
         .module('missionhubApp')
-        .service('organizationalPeopleService', organizationalPeopleService);
+        .factory('organizationalPeopleService', organizationalPeopleService);
 
 
     organizationalPeopleService.$inject = ['httpProxy', 'apiEndPoint'];

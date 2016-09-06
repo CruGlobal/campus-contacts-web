@@ -9,7 +9,7 @@
 
     angular
         .module('missionhubApp')
-        .service('peopleService', peopleService);
+        .factory('peopleService', peopleService);
 
 
     peopleService.$inject = ['httpProxy', 'apiEndPoint'];

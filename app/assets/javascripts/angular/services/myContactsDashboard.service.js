@@ -9,7 +9,7 @@
 
     angular
         .module('missionhubApp')
-        .service('myContactsDashboardService', myContactsDashboardService);
+        .factory('myContactsDashboardService', myContactsDashboardService);
 
 
     myContactsDashboardService.$inject = ['httpProxy', 'apiEndPoint'];

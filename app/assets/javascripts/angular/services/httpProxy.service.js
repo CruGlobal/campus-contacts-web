@@ -7,14 +7,15 @@
 
     angular
         .module('missionhubApp')
-        .service('httpProxy', proxyService);
+        .factory('httpProxy', proxyService);
 
 
     proxyService.$inject = ['$http', '$q', '$timeout', '$log', 'envService'];
 
     function proxyService($http, $q, $timeout, $log, envService) {
+        var proxy = {
 
-        function callHttp(method, url, params, data) {
+            callHttp: function (method, url, params, data) {
             var task = $q.defer();
 
             var config = {
@@ -37,23 +38,27 @@
             }, 2000);
 
             return task.promise;
+        },
+
+            get: function (url, params) {
+                return this.callHttp("GET", url, params);
+            },
+
+            post: function (url, params, data) {
+                return this.callHttp("POST", url, params, data);
+            },
+
+            put: function (url, params, data) {
+                return this.callHttp("PUT", url, params, data);
+            },
+
+            delete: function (url, params) {
+                return this.callHttp("DELETE", url, params);
+            }
         }
 
-        this.get = function (url, params) {
-            return callHttp("GET", url, params);
-        };
 
-        this.post = function (url, params, data) {
-            return callHttp("POST", url, params, data);
-        };
-
-        this.put = function (url, params, data) {
-            return callHttp("PUT", url, params, data);
-        };
-
-        this.delete = function (url, params) {
-            return callHttp("DELETE", url, params);
-        };
+        return proxy;
     }
 
 })();
