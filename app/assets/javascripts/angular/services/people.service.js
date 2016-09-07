@@ -18,7 +18,7 @@
 
         return {
             saveInteraction: function (model) {
-                return httpProxy.post (apiEndPoint.interactions.post, null, model);
+                return httpProxy.post(apiEndPoint.interactions.post, null, model);
             }
         };
     }

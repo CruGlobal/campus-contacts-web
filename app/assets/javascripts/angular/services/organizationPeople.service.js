@@ -20,10 +20,10 @@
         return {
 
             updatePeople: function (personId, model) {
-                return httpProxy.put (apiEndPoint.people.update + personId, model);
+                return httpProxy.put(apiEndPoint.people.update + personId, model);
             },
             saveAnonymousInteraction: function (model) {
-                return httpProxy.post (apiEndPoint.interactions.post, null, model);
+                return httpProxy.post(apiEndPoint.interactions.post, null, model);
             }
         };
     }
