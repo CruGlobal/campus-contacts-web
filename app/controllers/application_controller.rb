@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
   before_action :export_i18n_messages
   before_action :set_newrelic_params
   before_action :ensure_timezone
-  before_action :check_signature
-  before_action :check_all_signatures
+  before_action :check_signature, except: [:set_timezone]
+  before_action :check_all_signatures, except: [:set_timezone]
   # around_filter :set_user_time_zone
 
   rescue_from CanCan::AccessDenied, with: :access_denied
