@@ -154,7 +154,6 @@
     "eqeqeq": "off",
     "func-names": "off",
     "func-style": "off",
-    "func-call-spacing": ["error", "never"],
     "generator-star-spacing": "off",
     "global-require": "off",
     "guard-for-in": "off",
