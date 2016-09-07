@@ -150,7 +150,7 @@
     "default-case": "off",
     "dot-location": "off",
     "dot-notation": "off",
-    "eol-last": "off",
+    "eol-last": "error",
     "eqeqeq": "off",
     "func-names": "off",
     "func-style": "off",
