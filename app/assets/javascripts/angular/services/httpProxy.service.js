@@ -10,9 +10,9 @@
         .factory('httpProxy', proxyService);
 
 
-    proxyService.$inject = ['$http', '$q', '$timeout', '$log', 'envService'];
+    proxyService.$inject = ['$http', '$q', '$log', 'envService'];
 
-    function proxyService ($http, $q, $timeout, $log, envService) {
+    function proxyService ($http, $q, $log, envService) {
         var proxy = {
 
             callHttp: function (method, url, params, data) {
@@ -25,17 +25,14 @@
                 params: params
             };
 
-            $timeout(function () {
-                $http(config)
-                    .success(function (response) {
-                        task.resolve(response);
-                    })
-                    .error(function (error) {
-                        //We can redirect to some error page if that's better
-                        $log.error(error + " - Something has gone terribly wrong.");
-                        task.reject();
-                    });
-            }, 2000);
+            $http(config)
+            .then(function (response) {
+                task.resolve(response.data);
+            }, (function (error) {
+                //We can redirect to some error page if that's better
+                $log.error(error + " - Something has gone terribly wrong.");
+                task.reject();
+            }));
 
             return task.promise;
         },

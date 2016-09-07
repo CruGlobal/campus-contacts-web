@@ -14,7 +14,7 @@
 
     myContactsDashboardService.$inject = ['httpProxy', 'apiEndPoint'];
 
-    function myContactsDashboardService (httpProxy, apiEndPoint) {
+    function myContactsDashboardService (httpProxy, apiEndPoint){
 
         return {
 

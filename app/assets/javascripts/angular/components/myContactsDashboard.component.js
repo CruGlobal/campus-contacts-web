@@ -1,4 +1,3 @@
-
 (function () {
     'use strict';
 
@@ -13,8 +12,8 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($log, $q, $document, JsonApiDataStore, _, I18n
-                                            , myContactsDashboardService) {
+    function myContactsDashboardController ($log, $q, $document, JsonApiDataStore, _, I18n,
+                                            myContactsDashboardService) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -84,29 +83,29 @@
             var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
 
-            var organizationsReportModel = {
+            var organizationsReportParams= {
                 period: vm.period,
                 organization_ids: organization_ids
             };
-            var peopleReportModel = {
+            var peopleReportParams = {
                 period: vm.period,
                 organization_ids: organization_ids,
                 people_ids: people_ids
             };
 
-            var promise = myContactsDashboardService.loadOrganizationReports(organizationsReportModel);
-            promise.then(function (request) {
+            var organizationReportPromise = myContactsDashboardService.loadOrganizationReports(organizationsReportParams);
+            organizationReportPromise.then(function (request) {
                 JsonApiDataStore.store.sync(request);
             }, function (error) {
                 $log.error('Error loading organization reports', error);
-            }).then(function () {
-                myContactsDashboardService.loadPeopleReports(peopleReportModel)
-                    .then(function (request) {
-                        JsonApiDataStore.store.sync(request);
-                    }, function (error) {
-                        $log.error('Error loading people reports', error);
-                    });
             });
+
+            var peopleReportPromise = myContactsDashboardService.loadPeopleReports(peopleReportParams);
+            peopleReportPromise.then(function (request) {
+                    JsonApiDataStore.store.sync(request);
+                }, function (error) {
+                    $log.error('Error loading people reports', error);
+                });
         }
 
         function loadOrganizations () {
@@ -128,7 +127,6 @@
                         vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
                     }
                     loadReports();
-
                 },
                 function (error) {
                     $log.error('Error loading organizations', error);
@@ -209,7 +207,7 @@
 
         function organizationOrderChange () {
             var orgOrder = _.map(vm.organizationPeople, 'id');
-            updateUserPreference( {
+            updateUserPreference({
                 organization_order: orgOrder
             })
         }
