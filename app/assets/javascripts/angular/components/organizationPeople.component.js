@@ -20,7 +20,7 @@
         });
 
     function organizationPeopleController ($filter, $log, JsonApiDataStore, lscache, _,
-                                           confirm, jQuery, organizationalPeopleService ) {
+                                           confirm, jQuery, organizationalPeopleService) {
         var vm = this,
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
