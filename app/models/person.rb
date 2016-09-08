@@ -16,6 +16,8 @@ class Person < ActiveRecord::Base
   has_paper_trail on: [:destroy],
                   meta: { person_id: :id }
 
+  stores_emoji_characters :first_name, :last_name
+
   has_attached_file :avatar, styles: { medium: '200x200>', thumb: '100x100>', big_square: '300x300#' },
                              s3_credentials: { bucket: ENV['AWS_BUCKET'], access_key_id: ENV['AWS_ACCESS_KEY_ID'], secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] },
                              storage: :s3, path: 'people/:attachment/:style/:id/:filename',
