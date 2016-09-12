@@ -12,8 +12,6 @@
         .factory('myContactsDashboardService', myContactsDashboardService);
 
 
-    myContactsDashboardService.$inject = ['httpProxy', 'apiEndPoint'];
-
     function myContactsDashboardService (httpProxy, apiEndPoint) {
 
         return {
