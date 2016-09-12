@@ -12,7 +12,8 @@
             templateUrl: '/templates/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($http, $log, $q, $document, JsonApiDataStore, envService, _, I18n) {
+    function myContactsDashboardController ($log, $q, $document, JsonApiDataStore, _, I18n,
+                                            myContactsDashboardService) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -54,84 +55,82 @@
         }
 
         function loadMe () {
-            return $http
-                .get(envService.read('apiUrl') + '/people/me', {
-                    params: { include: 'user' }
-                })
-                .then(function (request) {
-                        vm.myPersonId = request.data.data.id;
-                        vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
-                            name: request.data.data.attributes.first_name.toUpperCase()
-                        });
-                        vm.orgOrderPreference = request.data.included[0].attributes.organization_order;
-                        vm.orgHiddenPreference = request.data.included[0].attributes.hidden_organizations || [];
-                    },
-                    function (error) {
-                        $log.error('Error loading profile', error);
-                    });
+            var promise = myContactsDashboardService.loadMe();
+            promise.then(function (request) {
+                vm.myPersonId = request.data.id;
+                vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
+                    name: request.data.attributes.first_name.toUpperCase()
+                });
+                vm.orgOrderPreference = request.included[0].attributes.organization_order;
+                vm.orgHiddenPreference = request.included[0].attributes.hidden_organizations || [];
+            },
+            function (error) {
+                $log.error('Error loading profile', error);
+            });
         }
 
         function loadPeople () {
-            return $http
-                .get(envService.read('apiUrl') + '/people', {
-                    params: {
-                        'page[limit]': 250,
-                        include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
-                        'organizational_permissions',
-                        'filters[assigned_tos]': 'me'
-                    }
-                })
-                .then(function (request) {
-                        JsonApiDataStore.store.sync(request.data);
-                    },
-                    function (error) {
-                        $log.error('Error loading people', error);
-                    });
+            var promise = myContactsDashboardService.loadPeople();
+            return promise.then(function (request) {
+                    JsonApiDataStore.store.sync(request);
+                },
+                function (error) {
+                    $log.error('Error loading people', error);
+                });
         }
 
         function loadReports () {
             var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
 
-            $http.get(envService.read('apiUrl') + '/reports/organizations', {
-                params: {
-                    period: vm.period,
-                    organization_ids: organization_ids
-                }
-            }).then(function (request) {
-                JsonApiDataStore.store.sync(request.data);
+            var organizationsReportParams= {
+                period: vm.period,
+                organization_ids: organization_ids
+            };
+            var peopleReportParams = {
+                period: vm.period,
+                organization_ids: organization_ids,
+                people_ids: people_ids
+            };
+
+            var organizationReportPromise = myContactsDashboardService.loadOrganizationReports(organizationsReportParams);
+            organizationReportPromise.then(function (request) {
+                JsonApiDataStore.store.sync(request);
             }, function (error) {
                 $log.error('Error loading organization reports', error);
             });
 
-            $http.get(envService.read('apiUrl') + '/reports/people', {
-                params: {
-                    period: vm.period,
-                    organization_ids: organization_ids,
-                    people_ids: people_ids
-                }
-            }).then(function (request) {
-                JsonApiDataStore.store.sync(request.data);
-            }, function (error) {
-                $log.error('Error loading people reports', error);
-            });
+            var peopleReportPromise = myContactsDashboardService.loadPeopleReports(peopleReportParams);
+            peopleReportPromise.then(function (request) {
+                    JsonApiDataStore.store.sync(request);
+                }, function (error) {
+                    $log.error('Error loading people reports', error);
+                });
         }
 
         function loadOrganizations () {
-            return $http
-                .get(envService.read('apiUrl') + '/organizations', {
-                    params: {
-                        'page[limit]': 100,
-                        order: 'active_people_count',
-                        include: ''
+            var promise = myContactsDashboardService.loadOrganizations();
+            promise.then(function (request) {
+                    JsonApiDataStore.store.sync(request);
+
+                    vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
+                        'active_people_count',
+                        'desc');
+
+                    orderOrganizations();
+                    hideOrganizations();
+
+                    if (vm.organizationPeople.length <= vm.noPeopleShowLimit) {
+                        vm.numberOfOrgsToShow = 100;
                     }
-                })
-                .then(function (request) {
-                        JsonApiDataStore.store.sync(request.data);
-                    },
-                    function (error) {
-                        $log.error('Error loading organizations', error);
-                    });
+                    else {
+                        vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
+                    }
+                    loadReports();
+                },
+                function (error) {
+                    $log.error('Error loading organizations', error);
+                });
         }
 
         function dataLoaded () {
@@ -150,10 +149,10 @@
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
                     if (ca.assigned_to.id != vm.myPersonId ||
-                        _.findIndex(person.organizational_permissions, {organization_id: orgId}) == -1) {
+                        _.findIndex(person.organizational_permissions, { organization_id: orgId }) == -1) {
                         return;
                     }
-                    var org = _.find(vm.organizationPeople, {id: orgId});
+                    var org = _.find(vm.organizationPeople, { id: orgId });
                     if (angular.isUndefined(org)) {
                         org = JsonApiDataStore.store.find('organization', orgId);
                         org.people = [];
@@ -203,20 +202,7 @@
 
         function noContacts () {
             vm.noContacts = true;
-            loadOrganizations().then(function () {
-                vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
-                                                  'active_people_count',
-                                                  'desc');
-                orderOrganizations();
-                hideOrganizations();
-                if (vm.organizationPeople.length <= vm.noPeopleShowLimit) {
-                    vm.numberOfOrgsToShow = 100;
-                }
-                else {
-                    vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
-                }
-                loadReports();
-            })
+            loadOrganizations();
         }
 
         function organizationOrderChange () {
@@ -248,7 +234,8 @@
                     attributes: prefHash
                 }
             };
-            $http.put(envService.read('apiUrl') + '/users/me', userData)
+
+            myContactsDashboardService.updateUserPreference(userData);
         }
     }
 })();
