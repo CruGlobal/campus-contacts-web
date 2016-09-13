@@ -65,9 +65,11 @@ class ReportMailer < ActionMailer::Base
     @changed = report.status_changed_count
     @interaction_counts = report.interaction_counts
     @new_contacts = report.new_contacts
+    report
   end
 
   def subject(org)
+    # there are emojis in here, even if rubymine doesn't show it
     "Missionhub - #{org} Organizations Farmers Almanac 🐣🐮🚜"
   end
 

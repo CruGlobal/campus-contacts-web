@@ -6,7 +6,7 @@ describe ReportMailer do
 
   context '#all' do
     with_versioning do
-      it 'gives success because we have a valid database connection' do
+      it 'sends all report with data' do
         travel_to 2.days.ago do
           person = create(:person)
           receiver = create(:person)
@@ -38,6 +38,24 @@ describe ReportMailer do
         expect(source).to include '1</strong> new contacts'
         expect(source).to include '1 user had 2 Spiritual Conversations with 2 contacts'
       end
+    end
+  end
+
+  context '#cru' do
+    it 'successfully sends' do
+      expect do
+        ReportMailer.cru.body.raw_source
+      end.to_not raise_exception
+    end
+  end
+
+  context '#p2c' do
+    it 'successfully sends' do
+      Label.find_or_create_by(i18n: 'made_decision', organization_id: 0)
+
+      expect do
+        ReportMailer.p2c.body.raw_source
+      end.to_not raise_exception
     end
   end
 end
