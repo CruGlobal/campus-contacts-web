@@ -15,6 +15,10 @@ class OrganizationalPermission < ActiveRecord::Base
   belongs_to :permission
   belongs_to :organization
 
+  # until we can find a way to write papertrail versions without the V4 namespace on the new api
+  has_many :real_versions, -> { where(item_type: ['OrganizationalPermission', 'V4::OrganizationalPermission']) },
+           class_name: 'PaperTrail::Version', foreign_key: :item_id
+
   scope :active,
         -> { where('organizational_permissions.archive_date is NULL AND organizational_permissions.deleted_at is NULL') }
   scope :contact,
