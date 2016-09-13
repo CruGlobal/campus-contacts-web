@@ -1,4 +1,5 @@
 <% if branded? %>
+  <div style="width: 100%; position: absolute; left: 0;">
     <% if mhub? %>
         <% if @survey %>
             <% if @survey.logo_file_name.present? %>
@@ -77,6 +78,7 @@
           </div>
         </div>
     <% end %>
+  </div>
 <% else %>
     <div class="loginscreen" style="text-align: center;">
       <p class="error_container"><%= raw(flash[:error]) %></p>
