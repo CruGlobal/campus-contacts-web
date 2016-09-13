@@ -30,7 +30,12 @@ module.exports = function(config) {
           './app/assets/javascripts/angular/missionhubApp.constants.js',
           './app/assets/javascripts/angular/missionhubApp.run.js',
           './app/assets/javascripts/angular/services/httpProxy.service.js',
-          './app/assets/javascripts/angular/services/test/httpProxy.service.spec.js'
+          './app/assets/javascripts/angular/services/myContactsDashboard.service.js',
+          './app/assets/javascripts/angular/missionhubApi.endpoints.url.js',
+          './app/assets/javascripts/angular/services/people.service.js',
+          './app/assets/javascripts/test/httpProxy.service.spec.js',
+          './app/assets/javascripts/test/myContactsDashboard.service.spec.js',
+          './app/assets/javascripts/test/people.service.spec.js'
       ],
 
       // list of files to exclude
