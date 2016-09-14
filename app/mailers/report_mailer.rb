@@ -11,7 +11,7 @@ class ReportMailer < ActionMailer::Base
 
     ###
     # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org Spencer.Oberstadt@cru.org)
+    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org Paul.Alexander@cru.org Spencer.Oberstadt@cru.org)
     ###
 
     mail to: to,
@@ -29,7 +29,7 @@ class ReportMailer < ActionMailer::Base
 
     ###
     # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org Spencer.Oberstadt@cru.org)
+    to = %w(Matthew.Watts@cru.org ryan.mcreynolds@cru.org joseph.chau@cru.org Spencer.Oberstadt@cru.org)
     ###
 
     mail to: to,
@@ -50,7 +50,7 @@ class ReportMailer < ActionMailer::Base
 
     ###
     # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org Spencer.Oberstadt@cru.org)
+    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org paul.hildebrand@p2c.com Spencer.Oberstadt@cru.org)
     ###
 
     mail to: to,
