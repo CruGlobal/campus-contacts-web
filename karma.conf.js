@@ -34,9 +34,13 @@ module.exports = function(config) {
           './app/assets/javascripts/angular/services/myContactsDashboard.service.js',
           './app/assets/javascripts/angular/missionhubApi.endpoints.url.js',
           './app/assets/javascripts/angular/services/people.service.js',
-          './app/assets/javascripts/test/httpProxy.service.spec.js',
-          './app/assets/javascripts/test/myContactsDashboard.service.spec.js',
-          './app/assets/javascripts/test/people.service.spec.js'
+          './app/assets/javascripts/angular/services/organizationPeople.service.js',
+          './app/assets/javascripts/angular/components/myContactsDashboard.component.js',
+          './app/assets/javascripts/test/service/httpProxy.service.spec.js',
+          './app/assets/javascripts/test/service/myContactsDashboard.service.spec.js',
+          './app/assets/javascripts/test/service/people.service.spec.js',
+          './app/assets/javascripts/test/service/organizationPeople.service.spec.js',
+          './app/assets/javascripts/test/components/myContactsDashboard.component.spec.js'
       ],
 
       // list of files to exclude

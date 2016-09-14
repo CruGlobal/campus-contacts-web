@@ -19,7 +19,7 @@
             peopleService = _peopleService_;
             apiEndPoint = _apiEndPoint_;
 
-            spyOn(peopleService, 'saveInteraction').and.callFake(function(){
+            spyOn(peopleService, 'saveInteraction').and.callFake( function () {
                 var deferred = $q.defer();
                 deferred.resolve('success');
                 return deferred.promise;
@@ -35,7 +35,7 @@
             expect(peopleService.saveInteraction).toBeDefined();
         });
 
-        it('should save Interaction', function(){
+        it('should save Interaction', function () {
 
             var model = {
                 data: {
@@ -64,11 +64,11 @@
 
             var request  = peopleService.saveInteraction(model);
 
-            var response = request.then(function(response){
+            var response = request.then( function (response) {
                 return response;
             });
 
-            var expectedResponse = request.then(function(response){
+            var expectedResponse = request.then( function (response) {
                 return response;
             });
 
