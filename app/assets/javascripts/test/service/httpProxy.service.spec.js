@@ -63,11 +63,7 @@
                 return response;
             });
 
-            var expectedResponse = request.then(function(response){
-                    return response;
-                });
-
-            expect(response).toEqual(expectedResponse);
+            expect(httpProxy.callHttp).toHaveBeenCalled();
         }));
 
     });
