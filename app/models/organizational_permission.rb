@@ -8,7 +8,7 @@ class OrganizationalPermission < ActiveRecord::Base
                   :archive_date, :deleted_at
 
   before_create :set_start_date, :set_contact_uncontacted
-  before_save :notify_new_leader, if: :permission_is_leader_or_admin
+  before_save :notify_new_leader, if: :should_notify_leader?
 
   belongs_to :cru_status
   belongs_to :person, touch: true
@@ -74,30 +74,9 @@ class OrganizationalPermission < ActiveRecord::Base
     end
   end
 
-  def permission_is_leader_or_admin
-    leader_permission = permission_id == Permission::USER_ID || permission_id == Permission::ADMIN_ID
-    is_new = self.new_record?
-    is_updated = (self.permission_id_changed? || self.archive_date_changed? || self.deleted_at_changed?)
-    is_active = archive_date.nil? && deleted_at.nil?
-    new_or_updated = is_new || (is_updated && is_active)
-    has_added_by_id = added_by_id.present?
-    leader_permission && has_added_by_id && new_or_updated
-  end
-
   def create_user_for_person_if_not_existing
     return person.create_user! if person && person.user.nil?
     person
-  end
-
-  def notify_new_leader
-    person = create_user_for_person_if_not_existing
-    if person.blank? || person.user.blank?
-      fail InvalidPersonAttributesError
-    else
-      person.user.generate_new_token
-      token = person.user.remember_token
-      LeaderMailer.delay.added(person, added_by_id, organization, token, permission.name)
-    end
   end
 
   def delete
@@ -131,6 +110,35 @@ class OrganizationalPermission < ActiveRecord::Base
   end
 
   private
+
+  def notify_new_leader
+    return unless should_notify_leader?
+    person = create_user_for_person_if_not_existing
+    if person.blank? || person.user.blank?
+      fail InvalidPersonAttributesError
+    else
+      person.user.generate_new_token
+      token = person.user.remember_token
+      LeaderMailer.delay.added(person, added_by_id, organization, token, permission.name)
+    end
+  end
+
+  def should_notify_leader?
+    # make sure its not archived and has added_by_id
+    return false unless archive_date.nil? && deleted_at.nil? && added_by_id.present?
+    # don't notify someone who's not a user
+    return false unless [Permission::USER_ID, Permission::ADMIN_ID].include?(permission_id)
+    # don't notify someone who changed their own permissions
+    return false if person_id == added_by_id
+    # notify if it is new or un-archived
+    return true if new_record? || self.archive_date_changed? || self.deleted_at_changed?
+    # don't notify if their permissions are updating
+    permission_id_changed? && !previously_leader_or_admin
+  end
+
+  def previously_leader_or_admin
+    [Permission::USER_ID, Permission::ADMIN_ID].include?(permission_id_was)
+  end
 
   def set_start_date
     self.start_date = Date.today
