@@ -1,3 +1,4 @@
+/*eslint-disable no-alert no-console */
 'use strict';
 
 // Under Karma, module is defined, so lscache defines its export as a CommonJS module on module.exports instead of
@@ -5,3 +6,4 @@
 if (!window.lscache) {
     window.lscache = window.module.exports;
 }
+/*eslint-enable no-alert */
