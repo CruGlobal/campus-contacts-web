@@ -13,14 +13,12 @@
         .factory('organizationalPeopleService', organizationalPeopleService);
 
 
-    organizationalPeopleService.$inject = ['httpProxy', 'apiEndPoint'];
-
     function organizationalPeopleService (httpProxy, apiEndPoint) {
 
         return {
 
             updatePeople: function (personId, model) {
-                return httpProxy.put(apiEndPoint.people.update + personId, model);
+                return httpProxy.put(apiEndPoint.people.update + personId, null, model);
             },
             saveAnonymousInteraction: function (model) {
                 return httpProxy.post(apiEndPoint.interactions.post, null, model);

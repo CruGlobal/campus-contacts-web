@@ -13,11 +13,13 @@ $(document).ready(function () {
             { name: 'Athletes in Action', aliases: ['athletes in action', 'aia'] }
         ];
 
-        var basicName = organization.toLowerCase().split(' at ')[0].trim();
+        var organizationName = organization.toLowerCase();
 
         // Return the first reserved organization with an alias that matches the checked organization name
         var matchedOrganizations = reservedOrganizations.filter(function (organization) {
-            return organization.aliases.indexOf(basicName) !== -1;
+            return organization.aliases.some(function (alias) {
+                return organizationName.indexOf(alias) !== -1;
+            });
         });
 
         // Will be undefined if no organizations matched

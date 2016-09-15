@@ -10,8 +10,6 @@
         .factory('httpProxy', proxyService);
 
 
-    proxyService.$inject = ['$http', '$q', '$log', 'envService'];
-
     function proxyService ($http, $q, $log, envService) {
         var proxy = {
 

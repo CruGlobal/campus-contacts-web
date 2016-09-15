@@ -3,7 +3,7 @@
     <div class="feed_icon"><%= image_tag(interaction.icon, class: "tip", title: interaction.type) %></div>
   <% end %>
 	<div class="feed_item_header">
-    <span class="feed_item_date"><%= wiser_date(interaction.timestamp, custom_class: 'tip') %></span>
+    <span class="feed_item_date"><%= much_wiser_date(interaction.timestamp, custom_class: 'tip') %></span>
     <span class="feed_item_privacy">
       <%= link_to image_tag("edit_sprite.png"), "#menutop", class: "edit_feed_icon tip", "data-id" => interaction.id, "data-person-id" => @person.id, title: "Edit Interaction" %>
     </span>

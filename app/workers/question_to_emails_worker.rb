@@ -1,4 +1,4 @@
-class AnswerSheetConverterWorker
+class QuestionToEmailsWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 

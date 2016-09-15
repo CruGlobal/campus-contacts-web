@@ -177,7 +177,10 @@ module ContactActions
 
         if params[:assign_to_me] == 'true'
           ContactAssignment.where(person_id: @person.id, organization_id: @organization.id).destroy_all
-          ContactAssignment.create!(person_id: @person.id, organization_id: @organization.id, assigned_to_id: current_person.id)
+          ContactAssignment.create!(person_id: @person.id,
+                                    organization_id: @organization.id,
+                                    assigned_to_id: current_person.id,
+                                    notified: true)
         end
 
         if @add_to_group_tag == '1'

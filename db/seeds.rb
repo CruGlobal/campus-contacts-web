@@ -17,13 +17,13 @@ def create_person
 end
 
 Person.transaction do
-  if Label.all.empty?
-    Label.create(name: 'Admin', i18n: 'admin', organization_id: 0)
-    Label.create(name: 'Contact', i18n: 'contact',  organization_id: 0)
-    Label.create(name: 'Involved', i18n: 'involved',  organization_id: 0)
-    Label.create(name: 'Leader', i18n: 'leader',  organization_id: 0)
-    Label.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0)
+  Label.create(name: 'Admin', i18n: 'admin', organization_id: 0) unless Label.find_by(i18n: 'admin')
+  Label.create(name: 'Contact', i18n: 'contact',  organization_id: 0) unless Label.find_by(i18n: 'contact')
+  Label.create(name: 'Involved', i18n: 'involved',  organization_id: 0) unless Label.find_by(i18n: 'involved')
+  Label.create(name: 'Leader', i18n: 'leader',  organization_id: 0) unless Label.find_by(i18n: 'leader')
+  Label.create(name: 'Alumni', i18n: 'alumni',  organization_id: 0) unless Label.find_by(i18n: 'alumni')
 
+  if Label.all.empty?
     # Surveys
     predefined = Survey.create!(title: 'Predefined Questions', post_survey_message: 'Thanks!')
     predefined.elements << TextField.create(label: 'First Name')
@@ -49,4 +49,12 @@ Person.transaction do
       sub2.add_leader(p)
     end
   end
+end
+
+%w(COMMENT SPIRITUAL_CONVERSATION PERSONAL_EVANGELISM PERSONAL_DECISION
+   HOLY_SPIRIT_PRESENTATION DISCIPLESHIP).each do |interaction_type|
+  id = InteractionType.const_get(interaction_type)
+  next if InteractionType.find_by(id: id)
+  InteractionType.create({ id: id, organization_id: 0, name: interaction_type.titleize, i18n: interaction_type.downcase },
+                         without_protection: true)
 end

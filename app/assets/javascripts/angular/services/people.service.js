@@ -12,8 +12,6 @@
         .factory('peopleService', peopleService);
 
 
-    peopleService.$inject = ['httpProxy', 'apiEndPoint'];
-
     function peopleService (httpProxy, apiEndPoint) {
 
         return {

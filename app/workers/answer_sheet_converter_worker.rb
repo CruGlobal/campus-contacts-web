@@ -1,6 +1,6 @@
 class AnswerSheetConverterWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true, retry: false
+  sidekiq_options retry: false
 
   def perform(answer_sheet_id)
     as = AnswerSheet.includes({ person: [:interactions] }, :answers).find_by(id: answer_sheet_id)

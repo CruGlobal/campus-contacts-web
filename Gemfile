@@ -84,6 +84,7 @@ group :development, :test do
   gem 'quiet_assets'#, '~> 1.0.2'
   gem 'rspec-rails'
   gem 'rspec_api_documentation'
+  gem 'spring-commands-rspec'
 end
 
 group :test do
