@@ -19,8 +19,8 @@ before_install:
 - npm install
 - npm install karma --save-dev
 - npm install karma-jasmine --save-dev
-- npm install phnatomjs --save-dev
-- npm install karma-PhantomJS-launcher --save-dev
+- npm install phantomjs --save-dev
+- npm install karma-phantomjs-launcher --save-dev
 
 before_script:
   - cp config/s3.travis.yml config/s3.yml
