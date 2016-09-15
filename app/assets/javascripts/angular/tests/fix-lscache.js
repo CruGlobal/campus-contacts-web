@@ -6,4 +6,4 @@
 if (!window.lscache) {
     window.lscache = window.module.exports;
 }
-/*eslint-enable angular/window-service */
+/* eslint-disable eol-last */
