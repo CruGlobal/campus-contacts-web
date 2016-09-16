@@ -21,7 +21,7 @@ module.exports = function(config) {
           './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
           './vendor/assets/javascripts/i18n.js',
           './node_modules/lscache/lscache.js',
-          './app/assets/javascripts/angular/tests/fix-lscache.js',
+          './app/assets/javascripts/test/patch/fix-lscache.js',
           './node_modules/angular-mocks/angular-mocks.js',
           './app/assets/javascripts/angular/missionhubApp.module.js',
           './app/assets/javascripts/angular/missionhubApp.config.js',
