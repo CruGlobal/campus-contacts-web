@@ -484,6 +484,4 @@ Mh::Application.routes.draw do
 
   get 'monitors/lb'
   get 'monitors/commit'
-
-  get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
 end
