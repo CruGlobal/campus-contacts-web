@@ -34,7 +34,7 @@ module.exports = function (config) {
         ],
 
         preprocessors: {
-          './app/assets/javascripts/angular/**/*.js': ['coverage']
+            './app/assets/javascripts/angular/**/*.js': ['coverage']
         },
 
         // test results reporter to use
@@ -43,9 +43,9 @@ module.exports = function (config) {
         reporters: ['spec', 'coverage'],
 
         coverageReporter : {
-          type : 'html',
-          dir : 'coverage/',
-          file : 'coverage.html'
+            type : 'html',
+            dir : 'coverage/',
+            file : 'coverage.html'
         },
 
 
