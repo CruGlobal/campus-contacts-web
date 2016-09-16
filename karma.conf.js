@@ -33,10 +33,20 @@ module.exports = function (config) {
             './app/assets/javascripts/test/**/*.spec.js'
         ],
 
+        preprocessors: {
+            './app/assets/javascripts/angular/**/*.js': ['coverage']
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec'],
+        reporters: ['spec', 'coverage'],
+
+        coverageReporter : {
+            type : 'html',
+            dir : 'coverage/',
+            file : 'coverage.html'
+        },
 
 
         // start these browsers
