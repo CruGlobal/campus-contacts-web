@@ -21,14 +21,8 @@
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_httpProxy_, $q) {
+        beforeEach(inject(function (_httpProxy_) {
             httpProxy = _httpProxy_;
-
-            spyOn(httpProxy, 'callHttp').and.callFake(function(){
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
 
         }));
 
@@ -56,14 +50,26 @@
             expect(httpProxy.callHttp).toBeDefined();
         });
 
-        it('http proxy can make async call', inject(function () {
-            var request = httpProxy.callHttp(config.method, config.url, config.params, config.data);
-
-            var response = request.then(function(response){
-                return response;
+        it('http proxy can make fake async call', inject(function ($q) {
+            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){
+                var deferred = $q.defer();
+                deferred.resolve('success');
+                return deferred.promise;
             });
 
-            expect(httpProxy.callHttp).toHaveBeenCalled();
+            httpProxy.callHttp();
+            expect(spy).toHaveBeenCalled();
+        }));
+
+        it('http proxy can make async call', inject(function ($q) {
+            var spy = spyOn(httpProxy, 'callHttp').and.callThrough(function(){
+                var deferred = $q.defer();
+                deferred.resolve('success');
+                return deferred.promise;
+            });
+
+            httpProxy.callHttp();
+            expect(spy).toHaveBeenCalled();
         }));
 
     });
