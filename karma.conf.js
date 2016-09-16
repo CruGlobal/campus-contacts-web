@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Thu Sep 08 2016 18:14:18 GMT-0500 (CDT)
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
 
         // frameworks to use
@@ -47,5 +47,5 @@ module.exports = function(config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         //We can other browsers later if we intend to test on them as well ['Chrome', 'Firefox', 'IE', 'Safari', 'ChromeCanary']
         browsers: ['PhantomJS']
-    })
-}
+    });
+};
