@@ -13,7 +13,7 @@
         });
 
     function myContactsDashboardController ($log, $q, $document, JsonApiDataStore, _, I18n,
-                                            myContactsDashboardService) {
+                                            myContactsDashboardService, loggedInPerson) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -38,6 +38,10 @@
                 handle: '.sort-orgs-handle',
                 stop: organizationOrderChange
             }
+
+            vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
+                name: loggedInPerson.person.first_name.toUpperCase()
+            });
         }
 
         function cleanUp () {
@@ -45,28 +49,13 @@
         }
 
         function loadAndSyncData () {
-            $q.all([loadMe(), loadPeople()]).then(dataLoaded);
+            loadPeople().then(dataLoaded);
         }
 
         function bindingsChanged (changesObj) {
             if(changesObj.period && !vm.loading) {
                 loadReports();
             }
-        }
-
-        function loadMe () {
-            var promise = myContactsDashboardService.loadMe();
-            promise.then(function (request) {
-                vm.myPersonId = request.data.id;
-                vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
-                    name: request.data.attributes.first_name.toUpperCase()
-                });
-                vm.orgOrderPreference = request.included[0].attributes.organization_order;
-                vm.orgHiddenPreference = request.included[0].attributes.hidden_organizations || [];
-            },
-            function (error) {
-                $log.error('Error loading profile', error);
-            });
         }
 
         function loadPeople () {
@@ -138,7 +127,7 @@
             var people = JsonApiDataStore.store.findAll('person');
             vm.organizationPeople = [];
             angular.forEach(people, function (person) {
-                if (person.id == vm.myPersonId) {
+                if (person.id == loggedInPerson.person.id) {
                     return;
                 }
                 if (angular.isUndefined(person.last_name) || person.last_name === null) {
@@ -148,7 +137,7 @@
                     var orgId = ca.organization.id;
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
-                    if (ca.assigned_to.id != vm.myPersonId ||
+                    if (ca.assigned_to.id != loggedInPerson.person.id ||
                         _.findIndex(person.organizational_permissions, { organization_id: orgId }) == -1) {
                         return;
                     }
@@ -174,13 +163,14 @@
         }
 
         function orderOrganizations () {
-            if(!vm.orgOrderPreference) {
+            var orgOrderPreference = loggedInPerson.person.user.organization_order;
+            if(!orgOrderPreference) {
                 vm.organizationPeople = _.orderBy(vm.organizationPeople, ['ancestry', 'name']);
                 return;
             }
             var oldArray = _.clone(vm.organizationPeople);
             var newArray = [];
-            _.each(vm.orgOrderPreference, function (org) {
+            _.each(orgOrderPreference, function (org) {
                 var found = _.remove(oldArray, {id: org})[0];
                 if(found) {
                     newArray.push(found);
@@ -194,8 +184,9 @@
         }
 
         function hideOrganizations () {
+            var orgHiddenPreference = loggedInPerson.person.user.hidden_organizations || [];
             _.each(vm.organizationPeople, function (org) {
-                var hidden = vm.orgHiddenPreference.indexOf(org.id.toString());
+                var hidden = orgHiddenPreference.indexOf(org.id.toString());
                 org.visible = hidden == -1;
             })
         }
@@ -213,17 +204,18 @@
         }
 
         function orgChangeVisibility (organization_id) {
+            var orgHiddenPreference = loggedInPerson.person.user.hidden_organizations || [];
             var org = _.find(vm.organizationPeople, {id: organization_id});
             var hidding = org.visible;
             org.visible = !org.visible;
             if (hidding) {
-                vm.orgHiddenPreference.push(organization_id);
+                orgHiddenPreference.push(organization_id);
             }
             else {
-                vm.orgHiddenPreference = _.remove(vm.orgHiddenPreference, organization_id);
+                orgHiddenPreference = _.remove(orgHiddenPreference, organization_id);
             }
             updateUserPreference({
-                hidden_organizations: vm.orgHiddenPreference
+                hidden_organizations: orgHiddenPreference
             });
         }
 

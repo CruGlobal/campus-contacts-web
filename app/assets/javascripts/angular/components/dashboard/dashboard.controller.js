@@ -5,11 +5,12 @@
         .module('missionhubApp')
         .controller('DashboardController', DashboardController);
 
-    function DashboardController ($window) {
+    function DashboardController ($window, loggedInPerson) {
         var vm = this;
 
         vm.updatePeriod = updatePeriod;
 
+        vm.loggedInPerson = loggedInPerson;
         vm.$onInit = activate;
 
         function activate () {
