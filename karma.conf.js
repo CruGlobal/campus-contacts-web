@@ -30,11 +30,7 @@ module.exports = function (config) {
             './app/assets/javascripts/angular/services/*.js',
             './app/assets/javascripts/angular/components/*.js',
             './app/assets/javascripts/angular/missionhubApi.endpoints.url.js',
-            './app/assets/javascripts/test/service/httpProxy.service.spec.js',
-            './app/assets/javascripts/test/service/myContactsDashboard.service.spec.js',
-            './app/assets/javascripts/test/service/people.service.spec.js',
-            './app/assets/javascripts/test/service/organizationPeople.service.spec.js',
-            './app/assets/javascripts/test/components/myContactsDashboard.component.spec.js'
+            './app/assets/javascripts/test/**/*.spec.js'
         ],
 
         // test results reporter to use
