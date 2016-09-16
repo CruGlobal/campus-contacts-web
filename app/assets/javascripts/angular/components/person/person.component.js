@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .component('person', {
             controller: personController,
-            templateUrl: '/templates/person.html',
+            templateUrl: '/assets/angular/components/person/person.html',
             bindings: {
                 person: '<',
                 organizationId: '<',
