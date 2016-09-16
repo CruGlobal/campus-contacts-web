@@ -440,6 +440,8 @@ Mh::Application.routes.draw do
     end
   end
 
+  resources :preferences, only: :index
+
   #  get 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   get 'dashboard' => 'dashboard#index'
   get 'wizard' => 'welcome#wizard', as: 'wizard'
