@@ -20,6 +20,8 @@
             } else {
                 vm.period = 'P3M';
             }
+
+            loggedInPerson.load();
         }
 
         function updatePeriod (period) {
