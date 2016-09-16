@@ -33,7 +33,6 @@ module.exports = function (config) {
             './app/assets/javascripts/test/**/*.spec.js'
         ],
 
-<<<<<<< HEAD
       preprocessors: {
           './app/assets/javascripts/angular/**/*.js': ['coverage']
       },
@@ -48,17 +47,11 @@ module.exports = function (config) {
           dir : 'coverage/',
           file : 'coverage.html'
       },
-=======
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec'],
->>>>>>> master
 
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         //We can other browsers later if we intend to test on them as well ['Chrome', 'Firefox', 'IE', 'Safari', 'ChromeCanary']
-        browsers: ['PhantomJS']
+        browsers: ['phantomjs']
     });
 };
