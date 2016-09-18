@@ -7,14 +7,6 @@
 
     describe('HttpProxyService Tests', function () {
 
-
-        var config = {
-            method: 'GET',
-            url: '',
-            data: {},
-            params: {}
-        };
-
         beforeEach(angular.mock.module('ngAnimate'));
         beforeEach(angular.mock.module('ngMdIcons'));
 
@@ -23,7 +15,6 @@
 
         beforeEach(inject(function (_httpProxy_) {
             httpProxy = _httpProxy_;
-
         }));
 
         it('http proxy should exist', function () {
@@ -50,26 +41,25 @@
             expect(httpProxy.callHttp).toBeDefined();
         });
 
-        it('http proxy can make fake async call', inject(function ($q) {
-            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
+        it('http proxy can make fake async call', inject(function () {
+            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){});
 
             httpProxy.callHttp();
             expect(spy).toHaveBeenCalled();
         }));
 
-        it('http proxy can make async call', inject(function ($q) {
-            var spy = spyOn(httpProxy, 'callHttp').and.callThrough(function(){
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
+        it('http proxy to have been called with arguments', inject(function ($q) {
+            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){});
 
-            httpProxy.callHttp();
-            expect(spy).toHaveBeenCalled();
+            httpProxy.callHttp('POST', 'http://missionhub.com', null, {userId: 1, organizationId: 5});
+            expect(spy).toHaveBeenCalledWith('POST', 'http://missionhub.com', null, {userId: 1, organizationId: 5});
+        }));
+
+        it('http proxy to have been called with proper arguments', inject(function ($q) {
+            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){});
+
+            httpProxy.callHttp('POST', 'http://missionhub.com', null, {userId: 2, organizationId: 5});
+            expect(spy).not.toHaveBeenCalledWith('POST', 'http://missionhub.com', null, {userId: 1, organizationId: 5});
         }));
 
     });
