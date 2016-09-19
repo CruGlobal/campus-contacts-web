@@ -25,12 +25,6 @@
                 return deferred.promise;
             });
 
-            spyOn(myContactsDashboardService, 'loadMe').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
             spyOn(myContactsDashboardService, 'loadPeople').and.callFake( function () {
                 var deferred = $q.defer();
                 deferred.resolve('success');
@@ -53,10 +47,6 @@
 
         it('myContactsDashboardService should exist', function () {
             expect(myContactsDashboardService).toBeDefined();
-        });
-
-        it('myContactsDashboardService should contain loadMe', function () {
-            expect(myContactsDashboardService.loadMe).toBeDefined();
         });
 
         it('myContactsDashboardService should contain loadPeople', function () {
@@ -82,22 +72,6 @@
         it('should load organizations', function () {
 
             var request  = myContactsDashboardService.loadOrganizations();
-
-            var response = request.then( function (response) {
-                return response;
-            });
-
-            var expectedResponse = request.then( function (response) {
-                return response;
-            });
-
-            expect(response).toEqual(expectedResponse);
-
-        });
-
-        it('should load person', function () {
-
-            var request  = myContactsDashboardService.loadMe();
 
             var response = request.then( function (response) {
                 return response;
