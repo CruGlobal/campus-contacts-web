@@ -1,8 +1,6 @@
 class MegaFarmerReportWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true
-
-  CURRENT_USER_RANGE = 180.days.ago
+  sidekiq_options retry: false
 
   def perform(*)
     ReportMailer.all.deliver
