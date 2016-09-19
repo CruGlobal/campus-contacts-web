@@ -57,9 +57,9 @@
   </ul>
   <div>
     <div data-role="fieldcontain">
-      <%= f.submit "Submit" %>
+      <%= f.submit t('survey_responses.submit') %>
       <% if params[:nologin] %>
-        <%= link_to "Cancel", short_survey_url(@survey.id) %>
+        <%= link_to t('survey_responses.cancel'), short_survey_url(@survey.id) %>
       <% end %>
     </div>
   </div>

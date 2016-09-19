@@ -55,7 +55,7 @@
 
   	<ul class="button_bar">
   		<li class="action_lightblue">
-        <%= link_to('Export ▾', '#', class: 'action_dropdown') %>
+        <%= link_to(t('people.index.export_options') + ' ▾', '#', class: 'action_dropdown') %>
         <ul style="display:none" id="all_contacts_export_menu">
           <li>
             <%= form_tag export_csv_contacts_path(params: params.except(:advanced_search, :action, :controller).merge(format: "csv")), id: 'bulk_export_link_form', method: :post do %>
