@@ -3,7 +3,20 @@
     'use strict';
 
     // Constants
-    var organizationalPeopleService, httpProxy, apiEndPoint;
+    var organizationalPeopleService, httpProxy, $q, $rootScope, JsonApiDataStore, httpResponse;
+
+    function asynchronous (fn) {
+        return function (done) {
+            var returnValue = fn.call(this, done);
+            returnValue.then(function () {
+                done();
+            }).catch(function (err) {
+                done.fail(err);
+            });
+            $rootScope.$apply();
+            return returnValue;
+        };
+    }
 
     describe('organizationalPeopleService Tests', function () {
 
@@ -13,75 +26,17 @@
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function ($q, $log, _organizationalPeopleService_, _httpProxy_, _apiEndPoint_) {
+        beforeEach(inject(function (_organizationalPeopleService_, _httpProxy_, _$q_, _$rootScope_, _JsonApiDataStore_) {
+
+            var _this = this;
 
             httpProxy = _httpProxy_;
             organizationalPeopleService = _organizationalPeopleService_;
-            apiEndPoint = _apiEndPoint_;
+            $q = _$q_;
+            $rootScope = _$rootScope_;
+            JsonApiDataStore = _JsonApiDataStore_;
 
-            spyOn(organizationalPeopleService, 'updatePeople').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
-            spyOn(organizationalPeopleService, 'saveAnonymousInteraction').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
-        }));
-
-        it('organizationalPeopleService should exist', function () {
-            expect(organizationalPeopleService).toBeDefined();
-        });
-
-        it('organizationalPeopleService should contain updatePeople', function () {
-            expect(organizationalPeopleService.updatePeople).toBeDefined();
-        });
-
-        it('organizationalPeopleService should contain saveAnonymousInteraction', function () {
-            expect(organizationalPeopleService.saveAnonymousInteraction).toBeDefined();
-        });
-
-        it('should save updatePeople', function () {
-
-            var model = {
-                data: {
-                    type: 'person',
-                    attributes: {}
-                },
-                included: [
-                    {
-                        type: 'organizational_permission',
-                        id: 1,
-                        attributes: {
-                            archive_date: (new Date()).toUTCString()
-                        }
-                    }
-                ]
-            };
-
-            model.personId = 20;
-
-            var request  = organizationalPeopleService.updatePeople(model.personId, model);
-
-            var response = request.then( function (response) {
-                return response;
-            });
-
-            var expectedResponse = request.then( function (response) {
-                return response;
-            });
-
-            expect(response).toEqual(expectedResponse);
-
-        });
-
-        it('should save saveAnonymousInteraction', function () {
-
-            var model = {
+            this.interaction = {
                 data: {
                     type: 'interaction',
                     attributes: {
@@ -99,24 +54,56 @@
                 }
             };
 
-            model.included = [{
+            this.interaction.included = [{
                 type: 'interaction_initiator',
                 attributes: {
                     person_id: 20
                 }
             }];
 
-            var request  = organizationalPeopleService.saveAnonymousInteraction(model);
+            this.updateParams = {
+                data: {
+                    type: 'person',
+                    attributes: {}
+                },
+                included: [
+                    {
+                        type: 'organizational_permission',
+                        id: 123,
+                        attributes: {
+                            archive_date: (new Date()).toUTCString()
+                        }
+                    }
+                ]
+            };
 
-            var response = request.then( function (response) {
-                return response;
+            spyOn(httpProxy, 'callHttp').and.callFake(function () {
+                return _this.httpResponse;
             });
 
-            var expectedResponse = request.then( function (response) {
-                return response;
+            spyOn(JsonApiDataStore.store, 'sync').and.returnValue(this.httpResponse);
+
+        }));
+
+        describe('organizationalPeople Service', function () {
+
+            it('service should exist', function () {
+                expect(organizationalPeopleService).toBeDefined();
             });
 
-            expect(response).toEqual(expectedResponse);
+        });
+
+        describe('organizationalPeople Service', function () {
+            it('should PUT a URL', function () {
+                organizationalPeopleService.updatePeople(this.interaction.person_id, this.updateParams);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    this.updateParams
+                );
+            });
+
 
         });
 

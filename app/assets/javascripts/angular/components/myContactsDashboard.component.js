@@ -56,13 +56,13 @@
 
         function loadMe () {
             var promise = myContactsDashboardService.loadMe();
-            promise.then(function (request) {
-                vm.myPersonId = request.data.id;
+            promise.then(function (response) {
+                vm.myPersonId = response.data.id;
                 vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
-                    name: request.data.attributes.first_name.toUpperCase()
+                    name: response.data.attributes.first_name.toUpperCase()
                 });
-                vm.orgOrderPreference = request.included[0].attributes.organization_order;
-                vm.orgHiddenPreference = request.included[0].attributes.hidden_organizations || [];
+                vm.orgOrderPreference = response.included[0].attributes.organization_order;
+                vm.orgHiddenPreference = response.included[0].attributes.hidden_organizations || [];
             },
             function (error) {
                 $log.error('Error loading profile', error);
@@ -71,8 +71,8 @@
 
         function loadPeople () {
             var promise = myContactsDashboardService.loadPeople();
-            return promise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
+            return promise.then(function (response) {
+                    JsonApiDataStore.store.sync(response);
                 },
                 function (error) {
                     $log.error('Error loading people', error);
@@ -94,15 +94,15 @@
             };
 
             var organizationReportPromise = myContactsDashboardService.loadOrganizationReports(organizationsReportParams);
-            organizationReportPromise.then(function (request) {
-                JsonApiDataStore.store.sync(request);
+            organizationReportPromise.then(function (response) {
+                JsonApiDataStore.store.sync(response);
             }, function (error) {
                 $log.error('Error loading organization reports', error);
             });
 
             var peopleReportPromise = myContactsDashboardService.loadPeopleReports(peopleReportParams);
-            peopleReportPromise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
+            peopleReportPromise.then(function (response) {
+                    JsonApiDataStore.store.sync(response);
                 }, function (error) {
                     $log.error('Error loading people reports', error);
                 });
@@ -110,8 +110,8 @@
 
         function loadOrganizations () {
             var promise = myContactsDashboardService.loadOrganizations();
-            promise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
+            promise.then(function (response) {
+                    JsonApiDataStore.store.sync(response);
 
                     vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
                         'active_people_count',
