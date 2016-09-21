@@ -5,18 +5,17 @@
         .module('missionhubApp')
         .component('person', {
             controller: personController,
-            templateUrl: '/templates/person.html',
+            templateUrl: '/assets/angular/components/person/person.html',
             bindings: {
                 person: '<',
                 organizationId: '<',
                 period: '<',
-                myPersonId: '<',
                 onArchive: '&',
                 onNewInteraction: '&'
             }
         });
 
-    function personController ($animate, $log, $scope, peopleService, JsonApiDataStore, _) {
+    function personController ($animate, $log, $scope, peopleService, JsonApiDataStore, loggedInPerson, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -143,7 +142,7 @@
             createJson.included = [{
                 type: 'interaction_initiator',
                 attributes: {
-                    person_id: vm.myPersonId
+                    person_id: loggedInPerson.person.id
                 }
             }];
 

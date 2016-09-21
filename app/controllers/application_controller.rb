@@ -355,7 +355,7 @@ class ApplicationController < ActionController::Base
       end
       return url
     else
-      return '/dashboard'
+      return '/'
     end
   end
   helper_method :user_root_path

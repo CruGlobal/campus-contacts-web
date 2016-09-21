@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1>Weekly Report for <%= @org_message %></h1>
-  <h3><%= @start_date.strftime('%b %e, %Y') %> - <%= @end_date.strftime('%b %e, %Y') %></h3>
+  <h3><%= @start_date.strftime('%b %e, %Y') %> - <%= (@end_date - 1.second).strftime('%b %e, %Y') %></h3>
   <p>
     <strong><%= @new_contacts %></strong> new contacts.
   </p>
@@ -31,7 +31,7 @@
   <% end %>
   <% if @gained_decision %>
     <p>
-      <%= pluralize(@gained_decision, 'contact') %> gained the
+      <%= pluralize(@gained_decision, 'contact') %> gained the 'Made Decision' label.
     </p>
   <% end %>
 </body>

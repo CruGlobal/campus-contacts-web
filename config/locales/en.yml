@@ -1235,6 +1235,7 @@ en:
       error_message_update_admin_without_person: 'Error: Person does not have valid email to be admin'
       error_message_update_leader_without_person: 'Error: Person does not have valid email to be leader'
       export: CSV
+      export_options: Export
       filter: Search
       gender: Gender
       group_comment: Add Comment
@@ -1518,6 +1519,8 @@ en:
       thanks: Thanks!
     year_in_school: What is your year in school?
     zip: What is your zip code?
+    submit: Submit
+    cancel: Cancel
   surveys:
     edit:
       edit_survey: 'Edit Survey: "%{survey}"'

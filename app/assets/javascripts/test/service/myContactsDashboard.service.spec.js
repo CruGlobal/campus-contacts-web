@@ -35,6 +35,7 @@
             myContactsDashboardService = _myContactsDashboardService_;
 
 
+<<<<<<< HEAD
             this.person = {
                 personId: 123
             };
@@ -51,6 +52,13 @@
             this.peopleReports = {
                 reportId: 123
             };
+=======
+            spyOn(myContactsDashboardService, 'loadPeople').and.callFake( function () {
+                var deferred = $q.defer();
+                deferred.resolve('success');
+                return deferred.promise;
+            });
+>>>>>>> master
 
             this.organizationReports = {
               reportId: 123
@@ -82,11 +90,17 @@
         }));
 
 
+<<<<<<< HEAD
         describe('Contact Dashboard Service', function () {
 
             it('service should exist', function () {
                 expect(myContactsDashboardService).toBeDefined();
             });
+=======
+        it('myContactsDashboardService should contain loadPeople', function () {
+            expect(myContactsDashboardService.loadPeople).toBeDefined();
+        });
+>>>>>>> master
 
         });
 
@@ -162,6 +176,7 @@
 
         });
 
+<<<<<<< HEAD
         describe('People Reports Tests', function () {
             it('should contain loadPeopleReports', function () {
                 expect(myContactsDashboardService.loadPeopleReports).toBeDefined();
@@ -194,6 +209,9 @@
                 this.httpResponse = $q.resolve(
                     this.peopleReports
                 );
+=======
+        it('should load people', function () {
+>>>>>>> master
 
                 var _this = this;
                 JsonApiDataStore.store.sync('peopleReports', this.peopleReports);
