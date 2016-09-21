@@ -58,7 +58,6 @@
             }
         }
 
-<<<<<<< HEAD:app/assets/javascripts/angular/components/myContactsDashboard.component.js
         function loadMe () {
             var promise = myContactsDashboardService.loadMe();
             promise.then(function (response) {
@@ -74,8 +73,6 @@
             });
         }
 
-=======
->>>>>>> master:app/assets/javascripts/angular/components/myContactsDashboard/myContactsDashboard.component.js
         function loadPeople () {
             var promise = myContactsDashboardService.loadPeople();
             return promise.then(function (response) {
