@@ -16,10 +16,6 @@
 
         return {
 
-            loadMe: function () {
-                return httpProxy.get(apiEndPoint.people.me, { include: 'user' });
-            },
-
             loadPeople: function () {
                 return httpProxy.get(apiEndPoint.people.index, {
                     'page[limit]': 250,

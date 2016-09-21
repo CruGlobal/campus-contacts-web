@@ -1155,6 +1155,7 @@ qb:
       error_message_update_admin_without_person: 'Erreur : cette personne n''a pas d''adresse de courriel valide pour être administrateur'
       error_message_update_leader_without_person: 'Erreur : cette personne n''a pas d''adresse de courriel valide pour être leader'
       export: CSV
+      export_options: Exporter
       filter: Rechercher
       gender: Sexe
       group_comment: Ajouter un commentaire
@@ -1479,6 +1480,8 @@ qb:
       thanks: Merci!
     year_in_school: Quelle est votre année d'études?
     zip: Quel est votre code postal?
+    submit: Soumettre
+    cancel: Annuler
   surveys:
     edit:
       edit_survey: 'Modifier le sondage : "%{survey}"'

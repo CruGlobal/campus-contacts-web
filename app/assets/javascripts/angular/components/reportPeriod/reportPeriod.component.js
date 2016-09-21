@@ -9,7 +9,7 @@
                 period: '<',
                 onUpdate: '&'
             },
-            templateUrl: '/templates/reportPeriod.html'
+            templateUrl: '/assets/angular/components/reportPeriod/reportPeriod.html'
         });
 
     function reportPeriodController () {

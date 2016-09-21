@@ -1,7 +1,7 @@
 top_of_every_hour = '0 0 * * *'
 every_15_minutes = '0 */4 * * *'
 ten_minutes_past_the_hour = '0 10 * * *'
-sunday_morning = '0 10 7 ? * SUN'
+sunday_morning = '10 7 * * 7'
 
 hash = {
   'Infobase Sync' => {

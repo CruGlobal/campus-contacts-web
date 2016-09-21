@@ -5,14 +5,13 @@
         .module('missionhubApp')
         .component('organizationPeople', {
             controller: organizationPeopleController,
-            templateUrl: '/templates/organizationPeople.html',
+            templateUrl: '/assets/angular/components/organizationPeople/organizationPeople.html',
             bindings: {
                 'id': '@',
                 'name': '@',
                 'collapsible': '<',
                 'people': '<',
                 'period': '<',
-                'myPersonId': '<',
                 editMode: '<',
                 visible: '<',
                 onChangeVisibility: '&'
@@ -20,7 +19,7 @@
         });
 
     function organizationPeopleController ($filter, $log, JsonApiDataStore, lscache, _,
-                                           confirm, jQuery, organizationalPeopleService) {
+                                           confirm, jQuery, organizationalPeopleService, loggedInPerson) {
         var vm = this,
             UNASSIGNED_VISIBLE = 'unassignedVisible';
 
@@ -130,7 +129,7 @@
             createJson.included = [{
                 type: 'interaction_initiator',
                 attributes: {
-                    person_id: vm.myPersonId
+                    person_id: loggedInPerson.person.id
                 }
             }];
 
