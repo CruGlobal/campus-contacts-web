@@ -16,8 +16,6 @@ Mh::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  root to: 'welcome#index'
-
   resources :signatures, only: [] do
     collection do
       get :code_of_conduct
@@ -299,6 +297,11 @@ Mh::Application.routes.draw do
   end
 
   devise_for :users, controllers: { sessions: 'sessions' }
+
+  authenticated :user do
+    root 'dashboard#index', as: :authenticated_root
+  end
+  root 'welcome#index'
 
   devise_scope :user do
     get '/sign_in', to: 'sessions#new'

@@ -37,12 +37,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         return
       end
 
-      location = stored_location_for(:user)
-      if location.present?
-        redirect_to location
-      else
-        render_404
-      end
+      post_sign_in_redirect
     rescue NoEmailError, FailedFacebookCreateError
       render_404(true)
     end
@@ -57,7 +52,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         if @user.present?
           sign_in(@user)
           session[:relay_login] = true
-          redirect_to root_path
+          post_sign_in_redirect
         else
           fail NoEmailError
         end
@@ -85,11 +80,20 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       sign_in(@user)
       session[:key_ticket] = ticket
-      redirect_to '/dashboard'
+      post_sign_in_redirect
     end
   end
 
   protected
+
+  def post_sign_in_redirect
+    location = stored_location_for(:user)
+    if location.present?
+      redirect_to location
+    else
+      redirect_to authenticated_root_path
+    end
+  end
 
   def after_sign_out_path_for(_resource_or_scope)
     params[:next] ? params[:next] : user_root_path

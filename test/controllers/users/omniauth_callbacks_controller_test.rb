@@ -74,7 +74,7 @@ class Users::OmniauthCallbacksControllerTest < ActionController::TestCase
         get :facebook
       end
 
-      assert_redirected_to 'http://test.host/dashboard'
+      assert_redirected_to 'http://test.host/'
     end
   end
 end

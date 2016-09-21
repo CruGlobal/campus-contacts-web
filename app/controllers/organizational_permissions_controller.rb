@@ -97,7 +97,7 @@ class OrganizationalPermissionsController < ApplicationController
     if orgs_i_have_access_to.include?(org.id)
       session[:current_organization_id] = params[:id]
     end
-    redirect_to '/dashboard'
+    redirect_to '/'
   end
 
   def set_primary
