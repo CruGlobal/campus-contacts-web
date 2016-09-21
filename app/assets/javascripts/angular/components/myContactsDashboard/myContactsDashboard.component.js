@@ -58,21 +58,6 @@
             }
         }
 
-        function loadMe () {
-            var promise = myContactsDashboardService.loadMe();
-            promise.then(function (response) {
-                vm.myPersonId = response.data.id;
-                vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
-                    name: response.data.attributes.first_name.toUpperCase()
-                });
-                vm.orgOrderPreference = response.included[0].attributes.organization_order;
-                vm.orgHiddenPreference = response.included[0].attributes.hidden_organizations || [];
-            },
-            function (error) {
-                $log.error('Error loading profile', error);
-            });
-        }
-
         function loadPeople () {
             var promise = myContactsDashboardService.loadPeople();
             return promise.then(function (response) {
