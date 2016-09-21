@@ -5,32 +5,47 @@
     // Constants
     var $controller, myContactsDashboardService, $scope;
 
-    describe('myContactsDashboardController Tests', function () {
+
+    describe('myContactsDashboard Components Tests', function () {
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(function () {
-            myContactsDashboardService = jasmine.createSpyObj('myContactsDashboardService', [
-                'loadMe'
-            ]);
 
-            module(function ($provide) {
-                $provide.value('myContactsDashboardService', myContactsDashboardService);
-            });
-        });
+        beforeEach(inject(function($rootScope, $componentController){
 
-        beforeEach(inject(function(_$controller_, $rootScope) {
             $scope = $rootScope.$new();
+            $controller = $componentController('myContactsDashboard', {$scope: $scope}, {myBinding: { period: '<',
+                'editMode': '<'}});
 
-            $controller = _$controller_('myContactsDashboardController', {
-                $scope: $scope
-            });
+            myContactsDashboardService = jasmine.createSpyObj('myContactsDashboardService', [
+                'loadMe',
+                'loadPeople',
+                'loadReports',
+                'loadOrganizations'
+            ]);
         }));
 
-        describe('Contact Dashboard Controller', function () {
+        beforeEach(inject(function() {
 
-            it('myContactsDashboardController should exist', function () {
+        }));
+
+        describe('Contact Dashboard Component controller', function () {
+
+            it('should exist', function () {
                 expect($controller).toBeDefined();
+            });
+
+        });
+
+        describe('Components.Controller', function () {
+            it('loadMe should have been called', function () {
+                myContactsDashboardService.loadMe();
+                expect(myContactsDashboardService.loadMe).toHaveBeenCalled();
+            });
+
+            it('loadPeople should have been called', function () {
+                myContactsDashboardService.loadPeople();
+                expect(myContactsDashboardService.loadPeople).toHaveBeenCalled();
             });
 
         });
