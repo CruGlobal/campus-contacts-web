@@ -29,15 +29,11 @@
             ]);
 
 
-            describe('Component controller', function () {
+            describe('Components.Controller', function () {
 
                 it('should exist', function () {
                     expect($controller).toBeDefined();
                 });
-
-            });
-
-            describe('Components.Controller', function () {
 
                 it('loadPeople should have been called', function () {
                     myContactsDashboardService.loadPeople();
