@@ -80,57 +80,55 @@
             spyOn(JsonApiDataStore.store, 'sync').and.returnValue(_this.httpResponse);
 
         }));
-
-
-        describe('Load Me Tests', function () {
-
-            describe('People Tests', function () {
-                it('should contain loadPeople', function () {
-                    expect(myContactsDashboardService.loadPeople).toBeDefined();
-                });
-
-                it('should call GET loadPeople URL', function () {
-                    var params = {
-                        'page[limit]': 250,
-                        include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
-                        'organizational_permissions',
-                        'filters[assigned_tos]': 'me'
-                    };
-                    myContactsDashboardService.loadPeople(params);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                        'GET',
-                        jasmine.any(String),
-                        params
-                    );
-                });
-
-                it('should load people', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.people
-                    );
-
-                    var _this = this;
-                    return myContactsDashboardService.loadPeople().then(function (loadedPeople) {
-                        expect(loadedPeople).toEqual(_this.people);
-                    });
-                }));
-
-                it('should sync people JsonApiDataStore', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.people
-                    );
-
-                    var _this = this;
-                    JsonApiDataStore.store.sync('people', this.people);
-                    return myContactsDashboardService.loadPeople().then(function () {
-                        expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('people', _this.people);
-                    });
-                }));
-
+        describe('People Tests', function () {
+            it('should contain loadPeople', function () {
+                expect(myContactsDashboardService.loadPeople).toBeDefined();
             });
 
+            it('should call GET loadPeople URL', function () {
+                var params = {
+                    'page[limit]': 250,
+                    include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
+                    'organizational_permissions',
+                    'filters[assigned_tos]': 'me'
+                };
+                myContactsDashboardService.loadPeople(params);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'GET',
+                    jasmine.any(String),
+                    params
+                );
+            });
 
-            describe('People Reports Tests', function () {
+            it('should load people', async(function () {
+                this.httpResponse = $q.resolve(
+                    this.people
+                );
+
+                var _this = this;
+                return myContactsDashboardService.loadPeople().then(function (loadedPeople) {
+                    expect(loadedPeople).toEqual(_this.people);
+                });
+            }));
+
+            it('should sync people JsonApiDataStore', async(function () {
+                this.httpResponse = $q.resolve(
+                    this.people
+                );
+
+                var _this = this;
+                JsonApiDataStore.store.sync('people', this.people);
+                return myContactsDashboardService.loadPeople().then(function () {
+                    expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('people', _this.people);
+                });
+            }));
+
+        });
+
+
+        describe('Reports Tests', function () {
+
+            describe('People Reports', function () {
                 it('should contain loadPeopleReports', function () {
                     expect(myContactsDashboardService.loadPeopleReports).toBeDefined();
                 });
@@ -170,63 +168,62 @@
                     });
 
                 }));
-
-                describe('Organization Reports', function () {
-                    it('should contain loadOrganizationReports', function () {
-                        expect(myContactsDashboardService.loadOrganizationReports).toBeDefined();
-                    });
-
-                    it('should call GET load OrganizationReports URL', function () {
-                        myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams);
-                        expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                            'GET',
-                            jasmine.any(String),
-                            this.loadOrganizationReportsParams
-                        );
-                    });
-
-                    it('should load OrganizationReports', async(function () {
-                        this.httpResponse = $q.resolve(
-                            this.organizationReports
-                        );
-
-                        var _this = this;
-
-                        return myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams)
-                            .then(function (loadedOrganizationReports) {
-                                expect(loadedOrganizationReports).toEqual(_this.organizationReports);
-                            });
-                    }));
-
-                    it('should contain load Organization', function () {
-                        expect(myContactsDashboardService.loadOrganizations).toBeDefined();
-                    });
-
-                    it('should call GET loadOrganization URL', function () {
-                        myContactsDashboardService.loadOrganizations(this.loadOrganizationParams);
-                        expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                            'GET',
-                            jasmine.any(String),
-                            this.loadOrganizationParams
-                        );
-                    });
-
-                    it('should load Organization', async(function () {
-                        this.httpResponse = $q.resolve(
-                            this.organizationReports
-                        );
-
-                        var _this = this;
-
-                        return myContactsDashboardService.loadOrganizations(this.loadOrganizationParams)
-                            .then(function (loadedOrganization) {
-                                expect(loadedOrganization).toEqual(_this.organizationReports);
-                            });
-                    }));
-                })
-
-
             });
+
+            describe('Organization Reports', function () {
+                it('should contain loadOrganizationReports', function () {
+                    expect(myContactsDashboardService.loadOrganizationReports).toBeDefined();
+                });
+
+                it('should call GET load OrganizationReports URL', function () {
+                    myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                        'GET',
+                        jasmine.any(String),
+                        this.loadOrganizationReportsParams
+                    );
+                });
+
+                it('should load OrganizationReports', async(function () {
+                    this.httpResponse = $q.resolve(
+                        this.organizationReports
+                    );
+
+                    var _this = this;
+
+                    return myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams)
+                        .then(function (loadedOrganizationReports) {
+                            expect(loadedOrganizationReports).toEqual(_this.organizationReports);
+                        });
+                }));
+
+                it('should contain load Organization', function () {
+                    expect(myContactsDashboardService.loadOrganizations).toBeDefined();
+                });
+
+                it('should call GET loadOrganization URL', function () {
+                    myContactsDashboardService.loadOrganizations(this.loadOrganizationParams);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                        'GET',
+                        jasmine.any(String),
+                        this.loadOrganizationParams
+                    );
+                });
+
+                it('should load Organization', async(function () {
+                    this.httpResponse = $q.resolve(
+                        this.organizationReports
+                    );
+
+                    var _this = this;
+
+                    return myContactsDashboardService.loadOrganizations(this.loadOrganizationParams)
+                        .then(function (loadedOrganization) {
+                            expect(loadedOrganization).toEqual(_this.organizationReports);
+                        });
+                }));
+            })
+
 
         });
     });
