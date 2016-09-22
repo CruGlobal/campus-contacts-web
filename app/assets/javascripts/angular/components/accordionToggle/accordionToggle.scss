@@ -1,0 +1,16 @@
+accordion-toggle {
+  .chevron {
+    svg {
+      -ms-transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+      transition: transform 200ms;
+    }
+
+    &.collapsed svg {
+      -ms-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+  }
+}

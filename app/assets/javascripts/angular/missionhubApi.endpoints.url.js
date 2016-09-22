@@ -17,6 +17,12 @@
                 people: '/reports/people',
                 organizations: '/reports/organizations'
             },
+            groups: {
+                index: '/groups'
+            },
+            surveys: {
+                index: '/surveys'
+            },
             users: {
                 me: '/users/me'
             },

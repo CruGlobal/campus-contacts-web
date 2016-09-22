@@ -1,0 +1,19 @@
+my-organizations-dashboard {
+  .organizations-nav {
+    &, a {
+      color: black;
+    }
+
+    .current-org a {
+      color: $pivot-dark-blue;
+    }
+
+    margin-bottom: 10px;
+  }
+
+  .suborganizations {
+    organization {
+      margin-top: 20px;
+    }
+  }
+}

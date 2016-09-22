@@ -1,8 +1,10 @@
 <div id="dashboard_panels" ng-if="$ctrl.loggedInPerson.person">
   <% if current_organization %>
-    <my-contacts-dashboard period="$ctrl.period" edit-mode="$ctrl.editOrganizations">
+    <my-contacts-dashboard period="$ctrl.getPeriod()" edit-mode="$ctrl.editOrganizations" ng-if="$ctrl.mode === 'people'">
       <h1><%= t('dashboard.loading_contacts') %></h1>
     </my-contacts-dashboard>
+    <my-organizations-dashboard period="$ctrl.getPeriod()" edit-mode="$ctrl.editOrganizations" ng-if="$ctrl.mode === 'organizations'">
+    </my-organizations-dashboard>
   <% else %>
     <div id="dashboard_error">
       <%= render 'not_found' %>

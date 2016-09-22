@@ -12,8 +12,6 @@
                 include: 'user,organizational_permissions.organization'
             })
             .then(function (response) {
-                JsonApiDataStore.store.sync(response);
-
                 // Lookup the user associated with the returned person
                 var personId = response.data.id;
                 return JsonApiDataStore.store.find('person', personId);

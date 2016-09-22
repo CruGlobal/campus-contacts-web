@@ -83,30 +83,6 @@
 
 
         describe('Load Me Tests', function () {
-            xit('should call GET person URL', function () {
-                myContactsDashboardService.loadMe();
-                expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                    'GET',
-                    jasmine.any(String),
-                    {include: jasmine.any(String)}
-                );
-            });
-
-            xit('should contain loadMe', function () {
-                expect(myContactsDashboardService.loadMe).toBeDefined();
-            });
-
-            xit('should return a person', async(function () {
-                this.httpResponse = $q.resolve(
-                    this.person
-                );
-
-                var _this = this;
-                return myContactsDashboardService.loadMe().then(function (loadedPerson) {
-                    expect(loadedPerson).toEqual(_this.person);
-                });
-            }));
-
 
             describe('People Tests', function () {
                 it('should contain loadPeople', function () {
@@ -120,7 +96,7 @@
                         'organizational_permissions',
                         'filters[assigned_tos]': 'me'
                     };
-                    myContactsDashboardService.loadPeople();
+                    myContactsDashboardService.loadPeople(params);
                     expect(httpProxy.callHttp).toHaveBeenCalledWith(
                         'GET',
                         jasmine.any(String),

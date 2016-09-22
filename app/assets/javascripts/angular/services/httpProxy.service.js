@@ -10,12 +10,10 @@
         .factory('httpProxy', proxyService);
 
 
-    function proxyService ($http, $q, $log, envService) {
+    function proxyService ($http, $log, envService, JsonApiDataStore) {
         var proxy = {
 
             callHttp: function (method, url, params, data) {
-                var task = $q.defer();
-
                 var config = {
                     method: method,
                     url: envService.read('apiUrl') + url,
@@ -23,16 +21,15 @@
                     params: params
                 };
 
-                $http(config)
-                .then(function (response) {
-                    task.resolve(response.data);
-                }, (function (error) {
+                return $http(config).then(function (res) {
+                    var response = res.data;
+                    JsonApiDataStore.store.sync(response);
+                    return response;
+                }).catch(function (error) {
                     //We can redirect to some error page if that's better
                     $log.error(error + " - Something has gone terribly wrong.");
-                    task.reject();
-                }));
-
-                return task.promise;
+                    throw error;
+                });
             },
 
             get: function (url, params) {
