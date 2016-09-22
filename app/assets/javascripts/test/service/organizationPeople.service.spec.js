@@ -31,7 +31,7 @@
             var _this = this;
 
             httpProxy = _httpProxy_;
-            peopleService = _peopleService_;
+            organizationalPeopleService = _peopleService_;
             $rootScope = _$rootScope_;
 
             this.updateParams = {
