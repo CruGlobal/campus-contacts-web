@@ -90,6 +90,13 @@ en:
       discipleship: Discipleship Conversation
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
+  ministries:
+    admins: Team
+    contacts: Contacts
+    groups: Groups
+    roots: Ministries
+    suborgs: Ministries
+    surveys: Surveys
   signatures:
     title: Signatures
     signed_forms: Signed Forms
@@ -422,9 +429,11 @@ en:
     header_text: Make It Easier To Care For The People Who Need You Most
     learn_more: Learn More
     no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
+    organizations_assigned_to_you: Ministries
     panel_managing: Managing Contacts
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
+    people_assigned_to_you: People
     report_periods:
       one_week: 1w
       one_month: 1m
@@ -438,7 +447,7 @@ en:
     uncontacted: Uncontacted
     notes_for_new_interaction: Notes for new
     loading_contacts: Loading Contacts
-    people_assigned_to_you: People Assigned to You
+    loading_organizations: Loading Ministries
     done: Done
     error_archiving_person: Error archiving person! Please try again or contact support.
     anonymous:

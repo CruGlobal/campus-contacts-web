@@ -9,13 +9,12 @@
             bindings: {
                 person: '<',
                 organizationId: '<',
-                period: '<',
-                onArchive: '&',
-                onNewInteraction: '&'
+                period: '<'
             }
         });
 
-    function personController ($animate, $log, $scope, peopleService, JsonApiDataStore, loggedInPerson, _) {
+    function personController ($animate, $filter, $scope, confirm, jQuery,
+                               personService, reportsService, interactionsService, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -80,21 +79,7 @@
 
         function bindingChanges (changesObj) {
             if (changesObj.period) {
-                updateReport();
-            }
-        }
-
-        function updateReport () {
-            var id = [vm.organizationId, vm.person.id, vm.period].join('-');
-            vm.report = JsonApiDataStore.store.find('person_report', id);
-            if (vm.report === null) {
-                vm.report = JsonApiDataStore.store.sync({
-                    data: [{
-                        type: 'person_report',
-                        id: id,
-                        attributes: {interactions: []}
-                    }]
-                })[0];
+                vm.report = reportsService.lookupPersonReport(vm.organizationId, vm.person.id, vm.period);
             }
         }
 
@@ -113,7 +98,7 @@
 
         function openAddInteractionPanel (type) {
             if(type.id == -1) {
-                vm.onArchive({ person: vm.person });
+                archivePerson();
             }
             else {
                 vm.openPanelType = type;
@@ -121,40 +106,11 @@
         }
 
         function saveInteraction () {
-            var newInteraction = JsonApiDataStore.store.sync({
-                data: {
-                    type: 'interaction',
-                    attributes: {
-                        comment: vm.interactionComment,
-                        interaction_type_id: vm.openPanelType.id
-                    },
-                    relationships: {
-                        organization: {
-                            data: {id: vm.organizationId, type: 'organization'}
-                        },
-                        receiver: {
-                            data: {id: vm.person.id, type: 'person'}
-                        }
-                    }
-                }
-            });
-            var createJson = newInteraction.serialize();
-            createJson.included = [{
-                type: 'interaction_initiator',
-                attributes: {
-                    person_id: loggedInPerson.person.id
-                }
-            }];
-
-            var promise = peopleService.saveInteraction(createJson);
-            promise.then(function () {
-                $log.log('posted interaction successfully');
-                vm.onNewInteraction({interaction_type_id: vm.openPanelType.id});
+            var interaction = { id: vm.openPanelType.id, comment: vm.interactionComment };
+            interactionsService.recordInteraction(interaction, vm.organizationId, vm.person.id).then(function () {
                 vm.uncontacted = false;
+                $scope.$emit('newInteraction', interaction.id);
                 toggleInteractionBtns();
-            },
-            function (error) {
-                $log.error('Error saving interaction', error);
             });
         }
 
@@ -166,6 +122,17 @@
         function reportInteractions (interaction_type_id) {
             var interaction = _.find(vm.report.interactions, {interaction_type_id: interaction_type_id});
             return angular.isDefined(interaction) ? interaction.interaction_count : '-';
+        }
+
+        function archivePerson () {
+            var really = confirm($filter('t')('organizations.cleanup.confirm_archive'));
+            if (!really) {
+                return;
+            }
+            personService.archivePerson(vm.person, vm.organizationId)
+                .catch(function () {
+                    jQuery.e($filter('t')('dashboard.error_archiving_person'));
+                });
         }
     }
 })();

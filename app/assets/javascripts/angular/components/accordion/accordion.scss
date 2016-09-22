@@ -1,0 +1,11 @@
+accordion {
+  display: block;
+
+  accordion-header {
+    display: block;
+  }
+
+  & > .uncollapsible accordion-toggle {
+    visibility: hidden;
+  }
+}

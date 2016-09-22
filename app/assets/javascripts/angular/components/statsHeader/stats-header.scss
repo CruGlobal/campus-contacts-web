@@ -1,0 +1,26 @@
+stats-header {
+  display: flex;
+  align-items: center;
+  background-color: darken($pivot-dark-blue, 5%);
+
+  .stats-title {
+    padding-left: 10px;
+    width: 310px;
+    color: white;
+  }
+
+  .stats-icons {
+    display: inline-flex;
+    width: 332px;
+    height: 50px;
+    justify-content: space-between;
+    align-items: center;
+    ng-md-icon {
+      display: inline-block;
+      width: 25px;
+    }
+    svg {
+      fill: $pivot-bright-blue;
+    }
+  }
+}

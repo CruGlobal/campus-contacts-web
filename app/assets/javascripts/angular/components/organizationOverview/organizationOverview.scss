@@ -1,0 +1,32 @@
+organization-overview {
+  display: block;
+  margin-bottom: 20px;
+
+  .header {
+    background-color: $pivot-dark-blue;
+
+    .org-name {
+      cursor: pointer;
+    }
+  }
+
+  .org-name {
+    padding: 10px;
+    color: $pivot-bright-blue;
+    font-size: 2em;
+  }
+
+  .tabs {
+    display: flex;
+
+    .tab {
+      padding: 10px;
+      color: white;
+      cursor: pointer;
+      &.active {
+        color: $pivot-bright-blue;
+        border-bottom: 3px solid $pivot-bright-blue;
+      }
+    }
+  }
+}
