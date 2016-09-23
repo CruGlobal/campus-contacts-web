@@ -9,6 +9,7 @@ $(document).ready(function () {
         var reservedOrganizations = [
             { name: 'Cru', aliases: ['cru', 'campus crusade', 'campus crusade for christ', 'ccc'] },
             { name: 'Bridges', aliases: ['bridges'] },
+            { name: 'Destino', aliases: ['destino'] },
             { name: 'Power to Change', aliases: ['power to change', 'power 2 change', 'power2change', 'p2c'] },
             { name: 'Athletes in Action', aliases: ['athletes in action', 'aia'] }
         ];
@@ -18,7 +19,8 @@ $(document).ready(function () {
         // Return the first reserved organization with an alias that matches the checked organization name
         var matchedOrganizations = reservedOrganizations.filter(function (organization) {
             return organization.aliases.some(function (alias) {
-                return organizationName.indexOf(alias) !== -1;
+                // Look for the alias at word boundaries
+                return new RegExp('\\b' + alias + '\\b').test(organizationName);
             });
         });
 
