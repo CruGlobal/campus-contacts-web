@@ -3,7 +3,7 @@
     'use strict';
 
     // Constants
-    var myContactsDashboardService, httpProxy, $rootScope, $q, JsonApiDataStore, httpResponse;
+    var myContactsDashboardService, httpProxy, $rootScope, $q, JsonApiDataStore, periodService, _;
 
     function async (fn) {
         return function (done) {
@@ -24,7 +24,7 @@
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_$q_, _$rootScope_, _myContactsDashboardService_,
-                                    _httpProxy_, _JsonApiDataStore_) {
+                                    _httpProxy_, _JsonApiDataStore_, _periodService_, ___) {
 
             var _this = this;
 
@@ -32,7 +32,9 @@
             $rootScope = _$rootScope_;
             httpProxy = _httpProxy_;
             JsonApiDataStore = _JsonApiDataStore_;
+            periodService = _periodService_;
             myContactsDashboardService = _myContactsDashboardService_;
+            _ = ___;
 
 
             this.person = {
@@ -57,13 +59,11 @@
             };
 
             this.peopleReportsParams = {
-                period: 1,
                 organization_ids: 123,
                 people_ids: 456
             };
 
             this.loadOrganizationReportsParams = {
-                period: 123,
                 organization_ids: 456
             };
 
@@ -135,11 +135,12 @@
 
                 it('should call GET loadPeopleReports URL', function () {
 
+                    spyOn(periodService, 'getPeriod').and.returnValue('period');
                     myContactsDashboardService.loadPeopleReports(this.peopleReportsParams);
                     expect(httpProxy.callHttp).toHaveBeenCalledWith(
                         'GET',
                         jasmine.any(String),
-                        this.peopleReportsParams
+                        _.extend(this.peopleReportsParams, { period: 'period' })
                     );
                 });
 
@@ -176,11 +177,12 @@
                 });
 
                 it('should call GET load OrganizationReports URL', function () {
+                    spyOn(periodService, 'getPeriod').and.returnValue('period');
                     myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams);
                     expect(httpProxy.callHttp).toHaveBeenCalledWith(
                         'GET',
                         jasmine.any(String),
-                        this.loadOrganizationReportsParams
+                        _.extend(this.loadOrganizationReportsParams, { period: 'period' })
                     );
                 });
 

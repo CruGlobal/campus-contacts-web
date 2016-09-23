@@ -4,9 +4,10 @@
         .factory('periodService', periodService);
 
     // This service contains action logic that is shared across components
-    function periodService ($window) {
+    function periodService ($window, $rootScope) {
         var defaultPeriod = 'P3M';
         var period = null;
+        var changeEventName = 'periodService.period-change';
 
         // Load the report period from localStorage
         function loadPeriod () {
@@ -37,7 +38,14 @@
             // Set the current report period
             setPeriod: function (newPeriod) {
                 period = newPeriod;
+                $rootScope.$emit(changeEventName, newPeriod);
                 savePeriod();
+            },
+
+            // Request that a callback be called withenver the period changes
+            subscribe: function ($scope, callback) {
+                var unsubscribe = $rootScope.$on(changeEventName, callback);
+                $scope.$on('$destroy', unsubscribe);
             }
         };
     }

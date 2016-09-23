@@ -6,13 +6,12 @@
         .component('myOrganizationsDashboard', {
             controller: myOrganizationsDashboardController,
             bindings: {
-                editMode: '<',
-                period: '<'
+                editMode: '<'
             },
             templateUrl: '/assets/angular/components/myOrganizationsDashboard/myOrganizationsDashboard.html'
         });
 
-    function myOrganizationsDashboardController (JsonApiDataStore, loggedInPerson, orgSorter,
+    function myOrganizationsDashboardController (JsonApiDataStore, loggedInPerson, orgSorter, periodService,
                                                  myContactsDashboardService, myOrganizationsDashboardService, _) {
         var vm = this;
         vm.currentOrg = null;
@@ -79,7 +78,7 @@
         function loadReports () {
             var organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
             myContactsDashboardService.loadOrganizationReports({
-                period: vm.period,
+                period: periodService.getPeriod(),
                 organization_ids: organization_ids
             });
         }

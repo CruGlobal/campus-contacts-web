@@ -7,11 +7,11 @@
   <organization
         ng-repeat="org in $ctrl.organizationPeople | limitTo : $ctrl.numberOfOrgsToShow track by org.id"
         ng-if="org.visible || $ctrl.editMode"
-        org="org" period="$ctrl.period" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
+        org="org" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
         options="{ anonymousInteractions: true, reorderable: true }">
       <div class="people-list" ng-if="!$ctrl.editMode">
         <unassigned-contacts></unassigned-contacts>
-        <person person="person" organization-id="org.id" period="$ctrl.period"
+        <person person="person" organization-id="org.id"
                 ng-repeat="person in org.people | orderBy: 'last_name' track by person.id"
                 ng-class="{'alternate-color': $odd}">
         </person>

@@ -10,14 +10,13 @@
                 collapsed: '<?',
                 collapsible: '<?',
                 editMode: '<',
-                org: '<',
-                period: '<'
+                org: '<'
             },
             templateUrl: '/assets/angular/components/organization/organization.html',
             transclude: true
         });
 
-    function organizationController ($scope, JsonApiDataStore, loggedInPerson,
+    function organizationController ($scope, JsonApiDataStore, loggedInPerson, periodService,
                                      reportsService, interactionsService, organizationService,
                                      myContactsDashboardService, _) {
         var vm = this;
@@ -57,7 +56,6 @@
         ];
 
         vm.$onInit = activate;
-        vm.$onChanges = bindingsChanged;
         vm.getInteractionCount = getInteractionCount;
         vm.toggleAnonymousInteractionButtons = toggleAnonymousInteractionButtons;
         vm.toggleVisibility = toggleVisibility;
@@ -69,12 +67,13 @@
             $scope.$on('newInteraction', function (event, interactionId) {
                 organizationService.incrementReportInteraction(vm.report, interactionId);
             });
+
+            periodService.subscribe($scope, lookupReport);
+            lookupReport();
         }
 
-        function bindingsChanged (changesObj) {
-            if (changesObj.period) {
-                vm.report = reportsService.lookupOrganizationReport(vm.org.id, vm.period);
-            }
+        function lookupReport () {
+            vm.report = reportsService.lookupOrganizationReport(vm.org.id);
         }
 
         function getInteractionCount (interactionTypeId) {

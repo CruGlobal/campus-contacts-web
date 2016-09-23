@@ -7,8 +7,7 @@
             controller: organizationOverviewController,
             bindings: {
                 onNavigation: '<',
-                org: '<',
-                period: '<'
+                org: '<'
             },
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });

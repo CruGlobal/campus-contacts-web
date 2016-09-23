@@ -12,7 +12,7 @@
         .factory('myContactsDashboardService', myContactsDashboardService);
 
 
-    function myContactsDashboardService (httpProxy, apiEndPoint, loggedInPerson, _) {
+    function myContactsDashboardService (httpProxy, apiEndPoint, loggedInPerson, periodService, _) {
 
         var myContactsDashboardService = {
 
@@ -22,7 +22,7 @@
 
             loadPeopleReports: function (model) {
                 return httpProxy.get(apiEndPoint.reports.people, {
-                    period: model.period,
+                    period: periodService.getPeriod(),
                     organization_ids: model.organization_ids,
                     people_ids: model.people_ids
                 });
@@ -30,7 +30,7 @@
 
             loadOrganizationReports: function (model) {
                 return httpProxy.get(apiEndPoint.reports.organizations, {
-                    period: model.period,
+                    period: periodService.getPeriod(),
                     organization_ids: model.organization_ids
                 });
             },

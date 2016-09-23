@@ -6,14 +6,13 @@
         .component('myContactsDashboard', {
             controller: myContactsDashboardController,
             bindings: {
-                period: '<',
                 'editMode': '<'
             },
             templateUrl: '/assets/angular/components/myContactsDashboard/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($log, $document, JsonApiDataStore, _, I18n,
-                                            myContactsDashboardService, loggedInPerson) {
+    function myContactsDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,
+                                            myContactsDashboardService, periodService, loggedInPerson) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -24,7 +23,6 @@
 
         activate();
         vm.$onDestroy = cleanUp;
-        vm.$onChanges = bindingsChanged;
 
         vm.toggleOrgVisibility = myContactsDashboardService.toggleOrganizationVisibility;
 
@@ -42,6 +40,9 @@
             vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
                 name: loggedInPerson.person.first_name.toUpperCase()
             });
+
+            loadReports();
+            periodService.subscribe($scope, loadReports);
         }
 
         function cleanUp () {
@@ -50,12 +51,6 @@
 
         function loadAndSyncData () {
             loadPeople().then(dataLoaded);
-        }
-
-        function bindingsChanged (changesObj) {
-            if (changesObj.period && !vm.loading) {
-                loadReports();
-            }
         }
 
         function loadPeople () {
@@ -75,11 +70,9 @@
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
 
             var organizationsReportParams= {
-                period: vm.period,
                 organization_ids: organization_ids
             };
             var peopleReportParams = {
-                period: vm.period,
                 organization_ids: organization_ids,
                 people_ids: people_ids
             };

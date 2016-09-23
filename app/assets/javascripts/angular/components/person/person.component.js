@@ -8,13 +8,12 @@
             templateUrl: '/assets/angular/components/person/person.html',
             bindings: {
                 person: '<',
-                organizationId: '<',
-                period: '<'
+                organizationId: '<'
             }
         });
 
     function personController ($animate, $filter, $scope, confirm, jQuery,
-                               personService, reportsService, interactionsService, _) {
+                               periodService, personService, reportsService, interactionsService, _) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -63,8 +62,6 @@
         vm.reportInteractions = reportInteractions;
 
         vm.$onInit = activate;
-        vm.$onChanges = bindingChanges;
-
 
         function activate () {
             closeAddInteractionPanel();
@@ -75,12 +72,13 @@
                 organization_id: vm.organizationId
             });
             vm.uncontacted = organizationalPermission && organizationalPermission.followup_status === 'uncontacted';
+
+            periodService.subscribe($scope, lookupReport);
+            lookupReport();
         }
 
-        function bindingChanges (changesObj) {
-            if (changesObj.period) {
-                vm.report = reportsService.lookupPersonReport(vm.organizationId, vm.person.id, vm.period);
-            }
+        function lookupReport () {
+            vm.report = reportsService.lookupPersonReport(vm.organizationId, vm.person.id);
         }
 
         function toggleInteractionBtns () {

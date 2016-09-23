@@ -21,7 +21,7 @@
     <div ng-if="$ctrl.tab === 'admins'">
         <person ng-repeat="person in $ctrl.admins | orderBy: 'last_name' track by person.id"
                 ng-class="{'alternate-color': $even}"
-                period="$ctrl.period" person="person" organization-id="$ctrl.org.id">
+                person="person" organization-id="$ctrl.org.id">
         </person>
     </div>
     <div ng-if="$ctrl.tab === 'groups'">
@@ -33,7 +33,7 @@
     <div ng-if="$ctrl.tab === 'contacts'">
         <person ng-repeat="person in $ctrl.contacts | orderBy: 'last_name' track by person.id"
                 ng-class="{'alternate-color': $even}"
-                period="$ctrl.period" person="person" organization-id="$ctrl.org.id">
+                person="person" organization-id="$ctrl.org.id">
         </person>
     </div>
     <div ng-if="$ctrl.tab === 'surveys'">

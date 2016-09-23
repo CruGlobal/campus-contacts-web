@@ -14,6 +14,6 @@
 
 <div class="suborganizations">
     <organization-overview ng-repeat="org in ($ctrl.currentOrg ? [$ctrl.currentOrg] : $ctrl.rootOrgs)"
-                           on-navigation="$ctrl.onNavigation" org="org" period="$ctrl.period">
+                           on-navigation="$ctrl.onNavigation" org="org">
     </organization-overview>
 </div>
