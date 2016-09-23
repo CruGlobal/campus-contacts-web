@@ -3,41 +3,37 @@
     'use strict';
 
     // Constants
-    var peopleService, httpProxy, apiEndPoint;
+    var peopleService, httpProxy, $q, $rootScope;
 
-    describe('peopleService Tests', function () {
+     function async (fn) {
+        return function (done) {
+            var returnValue = fn.call(this, done);
+            returnValue.then(function () {
+                done();
+            }).catch(function (err) {
+                done.fail(err);
+            });
+            $rootScope.$apply();
+            return returnValue;
+        };
+    }
 
-        beforeEach(angular.mock.module('ngAnimate'));
-        beforeEach(angular.mock.module('ngMdIcons'));
-
+    describe('People Service Tests', function () {
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function ($q, $log, _peopleService_, _httpProxy_, _apiEndPoint_) {
 
-            httpProxy = _httpProxy_;
+
+        beforeEach(inject(function (_peopleService_, _$q_, _$rootScope_, _httpProxy_) {
+
+            var _this = this;
+
             peopleService = _peopleService_;
-            apiEndPoint = _apiEndPoint_;
+            $q = _$q_;
+            $rootScope = _$rootScope_;
+            httpProxy = _httpProxy_;
 
-            spyOn(peopleService, 'saveInteraction').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
-        }));
-
-        it('peopleService should exist', function () {
-            expect(peopleService).toBeDefined();
-        });
-
-        it('peopleService should contain saveInteraction', function () {
-            expect(peopleService.saveInteraction).toBeDefined();
-        });
-
-        it('should save Interaction', function () {
-
-            var model = {
+            this.interaction = {
                 data: {
                     type: 'interaction',
                     attributes: {
@@ -55,24 +51,50 @@
                 }
             };
 
-            model.included = [{
+            this.interaction.included = [{
                 type: 'interaction_initiator',
                 attributes: {
                     person_id: 20
                 }
             }];
 
-            var request  = peopleService.saveInteraction(model);
+            this.newInteraction = { interaction_type_id: 123 };
 
-            var response = request.then( function (response) {
-                return response;
+            this.httpResponse = $q.resolve(
+                this.newInteraction
+            );
+
+
+            spyOn(httpProxy, 'callHttp').and.callFake(function () {
+                return _this.httpResponse;
             });
 
-            var expectedResponse = request.then( function (response) {
-                return response;
+        }));
+
+        describe('Save interaction', function(){
+            it('should POST a Url', function(){
+                peopleService.saveInteraction(this.interaction);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'POST',
+                    jasmine.any(String),
+                    null,
+                    this.interaction
+                )
             });
 
-            expect(response).toEqual(expectedResponse);
+            it('should return a promise', async(function () {
+                var _this = this;
+                return peopleService.saveInteraction(_this.interaction).then(function (newInteraction) {
+                    expect(newInteraction).toEqual(_this.newInteraction);
+                });
+            }));
+
+        });
+
+        describe('People service', function(){
+            it('should be defined', function () {
+                expect(peopleService).toBeDefined();
+            });
 
         });
 

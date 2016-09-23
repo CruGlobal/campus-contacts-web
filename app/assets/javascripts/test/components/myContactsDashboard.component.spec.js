@@ -3,33 +3,46 @@
     'use strict';
 
     // Constants
-    var $controller, myContactsDashboardController;
+    var $controller, myContactsDashboardService, $scope, loggedInPerson;
 
-    describe('myContactsDashboardController Tests', function () {
 
-        beforeEach(angular.mock.module('ngAnimate'));
-        beforeEach(angular.mock.module('ngMdIcons'));
-
+    describe('myContactsDashboard Components Tests', function () {
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_$controller_) {
 
-            $controller = _$controller_;
-            myContactsDashboardController = $controller;
+        beforeEach(inject(function($rootScope, $componentController, _loggedInPerson_){
+
+            $scope = $rootScope.$new();
+            loggedInPerson = _loggedInPerson_;
+
+            spyOn(loggedInPerson, 'person').andReturn({first_name: 'John'});
+
+            $controller = $componentController('myContactsDashboard', {$scope: $scope}, {myBinding: { period: '<',
+                'editMode': '<'}}, loggedInPerson);
+
+
+            myContactsDashboardService = jasmine.createSpyObj('myContactsDashboardService', [
+                'loadPeople',
+                'loadReports',
+                'loadOrganizations'
+            ]);
+
+
+            describe('Components.Controller', function () {
+
+                it('should exist', function () {
+                    expect($controller).toBeDefined();
+                });
+
+                it('loadPeople should have been called', function () {
+                    myContactsDashboardService.loadPeople();
+                    expect(myContactsDashboardService.loadPeople).toHaveBeenCalled();
+                });
+
+            });
 
         }));
-
-        it('myContactsDashboardController should exist', function () {
-            expect(myContactsDashboardController).toBeDefined();
-        });
-
-        /*
-            This fails so I'll just park this for now.
-            it('myContactsDashboardController should contain activate', function () {
-                expect(myContactsDashboardController.noContacts).toBeDefined();
-            });
-        */
 
     });
 
