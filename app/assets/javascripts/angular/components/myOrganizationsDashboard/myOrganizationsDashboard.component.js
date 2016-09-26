@@ -11,7 +11,7 @@
             templateUrl: '/assets/angular/components/myOrganizationsDashboard/myOrganizationsDashboard.html'
         });
 
-    function myOrganizationsDashboardController (JsonApiDataStore, loggedInPerson, orgSorter, periodService,
+    function myOrganizationsDashboardController (JsonApiDataStore, orgSorter, periodService,
                                                  myContactsDashboardService, myOrganizationsDashboardService, _) {
         var vm = this;
         vm.currentOrg = null;
@@ -28,16 +28,7 @@
         function activate () {
             navigateToChild(null);
 
-            loadRootOrganizations().then(function () {
-                // Find all of the organizations that the user is an admin of
-                vm.rootOrgs = orgSorter.sort(_(JsonApiDataStore.store.findAll('organizational_permission'))
-                    .filter({
-                        person_id: loggedInPerson.person.id,
-                        permission_id: 1 // 1 is the admin permission
-                    })
-                    .map('organization')
-                    .value());
-            });
+            vm.rootOrgs = myOrganizationsDashboardService.getRootOrganizations();
 
             loadReports();
         }
@@ -81,10 +72,6 @@
                 period: periodService.getPeriod(),
                 organization_ids: organization_ids
             });
-        }
-
-        function loadRootOrganizations () {
-            return myContactsDashboardService.loadOrganizations({});
         }
     }
 })();
