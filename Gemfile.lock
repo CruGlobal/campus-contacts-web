@@ -207,6 +207,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    doorkeeper (4.2.0)
+      railties (>= 4.2)
     dotenv (2.0.2)
     dotenv-rails (2.0.2)
       dotenv (= 2.0.2)
@@ -646,6 +648,7 @@ DEPENDENCIES
   default_value_for
   delegate_presenter
   devise (= 3.5.1)
+  doorkeeper (~> 4.2.0)
   dotenv-rails
   dynamic_form
   emojimmy

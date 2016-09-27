@@ -134,3 +134,4 @@ gem 'gibbon'
 
 # check_digit added so we can do some integrity checking on survey response ids that will be user editable
 gem 'check_digit'
+gem 'doorkeeper', '~> 4.2.0'

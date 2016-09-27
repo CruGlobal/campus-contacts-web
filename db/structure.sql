@@ -1016,6 +1016,78 @@ CREATE TABLE `new_people` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `oauth_access_grants`
+--
+
+DROP TABLE IF EXISTS `oauth_access_grants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_access_grants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resource_owner_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `expires_in` int(11) NOT NULL,
+  `redirect_uri` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `revoked_at` datetime DEFAULT NULL,
+  `scopes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_oauth_access_grants_on_token` (`token`),
+  KEY `fk_rails_b4b53e07b8` (`application_id`),
+  CONSTRAINT `fk_rails_b4b53e07b8` FOREIGN KEY (`application_id`) REFERENCES `oauth_applications` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oauth_access_tokens`
+--
+
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_access_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resource_owner_id` int(11) DEFAULT NULL,
+  `application_id` int(11) DEFAULT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `refresh_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `expires_in` int(11) DEFAULT NULL,
+  `revoked_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `scopes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `previous_refresh_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_oauth_access_tokens_on_token` (`token`),
+  UNIQUE KEY `index_oauth_access_tokens_on_refresh_token` (`refresh_token`),
+  KEY `index_oauth_access_tokens_on_resource_owner_id` (`resource_owner_id`),
+  KEY `fk_rails_732cb83ab7` (`application_id`),
+  CONSTRAINT `fk_rails_732cb83ab7` FOREIGN KEY (`application_id`) REFERENCES `oauth_applications` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oauth_applications`
+--
+
+DROP TABLE IF EXISTS `oauth_applications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_applications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `secret` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `redirect_uri` text COLLATE utf8_unicode_ci NOT NULL,
+  `scopes` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_oauth_applications_on_uid` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `organization_memberships`
 --
 
@@ -1908,7 +1980,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-23 11:37:02
+-- Dump completed on 2016-09-23 10:19:08
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2458,4 +2530,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160818214034');
 INSERT INTO schema_migrations (version) VALUES ('20160823152936');
 
 INSERT INTO schema_migrations (version) VALUES ('20160824144038');
+
+INSERT INTO schema_migrations (version) VALUES ('20160922211250');
 

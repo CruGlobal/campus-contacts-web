@@ -481,6 +481,9 @@ Mh::Application.routes.draw do
   get 'oauth/grant' => 'oauth#grant'
   get 'oauth/deny' => 'oauth#deny'
   get 'oauth/done' => 'oauth#done'
+  scope 'v4' do
+    use_doorkeeper
+  end
   # make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin => '/oauth/admin'
   mount Raddocs::App => '/docs'
