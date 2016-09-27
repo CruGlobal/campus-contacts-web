@@ -197,7 +197,11 @@ class User < ActiveRecord::Base
   def merge(other)
     User.connection.execute('SET foreign_key_checks = 0')
     User.transaction do
-      person.merge(other.person) if person
+      if person.present?
+        person.merge(other.person)
+      elsif other.person
+        update(person: other.person)
+      end
 
       # Authentications
       other.authentications.collect { |oa| oa.update_attribute(:user_id, id) }
