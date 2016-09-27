@@ -7,6 +7,7 @@
             'ngMdIcons',
             'beauby.jsonApiDataStore',
             'environment',
+            'ui.router',
             'ui.sortable',
             'angulartics',
             'angulartics.google.analytics'

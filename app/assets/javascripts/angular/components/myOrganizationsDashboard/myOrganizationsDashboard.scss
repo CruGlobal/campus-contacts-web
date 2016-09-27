@@ -1,19 +1,21 @@
 my-organizations-dashboard {
-  .organizations-nav {
-    &, a {
-      color: black;
-    }
-
-    .current-org a {
-      color: $pivot-dark-blue;
-    }
-
-    margin-bottom: 10px;
-  }
-
   .suborganizations {
     organization {
       margin-top: 20px;
+    }
+
+    /* Hide the individual organization-overview breadcrumbs when viewing the root orgs */
+    &.root-orgs {
+      organization-overview organization-breadcrumbs {
+        display: none;
+      }
+    }
+
+    /* Hide the root organization breadcrumb when viewing an individual org */
+    &:not(.root-orgs) {
+      organization-breadcrumbs.root-org {
+        display: none;
+      }
     }
   }
 }

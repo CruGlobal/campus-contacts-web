@@ -1,19 +1,10 @@
 <div class="dashboard-subnav">
     <div class="inner">
-        <div class="organizations-nav">
-            <span ng-repeat="org in $ctrl.orgHierarchy" ng-class="{'current-org': $last}">
-                <a href="#" ng-click="$ctrl.navigateToParent(org); $event.preventDefault();">
-                    {{ org ? org.name : ('ministries.roots' | t) }}
-                </a>
-                <span ng-if="!$last">></span>
-            </span>
-        </div>
         <report-period></report-period>
     </div>
 </div>
 
-<div class="suborganizations">
-    <organization-overview ng-repeat="org in ($ctrl.currentOrg ? [$ctrl.currentOrg] : $ctrl.rootOrgs)"
-                           on-navigation="$ctrl.onNavigation" org="org">
-    </organization-overview>
+<div class="suborganizations" ng-class="{ 'root-orgs': ('app.ministries.root' | isState) }">
+    <organization-breadcrumbs class="root-org" org="null"></organization-breadcrumbs>
+    <ui-view></ui-view>
 </div>

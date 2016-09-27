@@ -5,21 +5,14 @@
         .module('missionhubApp')
         .controller('DashboardController', DashboardController);
 
-    function DashboardController ($window, $location, $scope, loggedInPerson, periodService) {
+    function DashboardController ($window, loggedInPerson, periodService) {
         var vm = this;
 
-        $scope.$on('$locationChangeSuccess', function () {
-            var path = $location.path();
-            if (path === '/ministries') {
-                vm.mode = 'organizations';
-            } else if (path === '/people') {
-                vm.mode = 'people';
-            }
-        });
-
-        vm.mode = 'people';
-        vm.loggedInPerson = loggedInPerson;
+        vm.editOrganizations = false;
         vm.getPeriod = periodService.getPeriod;
+        // Look for a query-string parameter called "beta"
+        vm.showSecretNavigation = $window.localStorage.getItem('beta') !== null ||
+            $window.location.search.slice(1).split('&').some(function (part) { return /^beta=/.test(part) });
         vm.$onInit = activate;
 
         function activate () {

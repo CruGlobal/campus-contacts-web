@@ -1,45 +1,15 @@
+<organization-breadcrumbs org="$ctrl.org"></organization-breadcrumbs>
 <div class="header">
-    <div class="org-name" ng-click="$ctrl.onNavigation($ctrl.org, null)">{{$ctrl.org.name}}</div>
+    <div class="org-name">{{$ctrl.org.name}}</div>
     <div class="tabs">
-        <div class="tab" ng-class="{ active: $ctrl.tab === tabName }"
-             ng-repeat="tabName in $ctrl.tabs" ng-click="$ctrl.tab = tabName">
+        <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
+             ui-state="'app.ministries.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }">
             {{'ministries.' + tabName | t}}
             <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
         </div>
     </div>
 </div>
-<div class="content">
+<div class="content" ng-if="!('app.ministries.root' | isState)">
     <stats-header title="'Ministry'"></stats-header>
-    <div ng-if="$ctrl.tab === 'suborgs'">
-        <div ng-repeat="org in $ctrl.suborgs | orderBy: 'name' track by org.id"
-             ng-class="{'alternate-color': $even}" class="suborg row">
-            <div class="content padded">
-                <a href="#" ng-click="$ctrl.onNavigation($ctrl.org, org); $event.preventDefault();">{{org.name}}</a>
-            </div>
-        </div>
-    </div>
-    <div ng-if="$ctrl.tab === 'admins'">
-        <person ng-repeat="person in $ctrl.admins | orderBy: 'last_name' track by person.id"
-                ng-class="{'alternate-color': $even}"
-                person="person" organization-id="$ctrl.org.id">
-        </person>
-    </div>
-    <div ng-if="$ctrl.tab === 'groups'">
-        <div ng-repeat="group in $ctrl.groups | orderBy: 'name' track by group.id"
-             ng-class="{'alternate-color': $even}" class="group row">
-            <div class="content padded">{{group.name}}</div>
-        </div>
-    </div>
-    <div ng-if="$ctrl.tab === 'contacts'">
-        <person ng-repeat="person in $ctrl.contacts | orderBy: 'last_name' track by person.id"
-                ng-class="{'alternate-color': $even}"
-                person="person" organization-id="$ctrl.org.id">
-        </person>
-    </div>
-    <div ng-if="$ctrl.tab === 'surveys'">
-        <div ng-repeat="survey in $ctrl.surveys | orderBy: 'title' track by survey.id"
-             ng-class="{'alternate-color': $even}" class="survey row">
-            <div class="content padded">{{survey.title}}</div>
-        </div>
-    </div>
+    <ui-view></ui-view>
 </div>

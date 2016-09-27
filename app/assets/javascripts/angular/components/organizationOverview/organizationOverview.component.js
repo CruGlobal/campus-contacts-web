@@ -6,18 +6,17 @@
         .component('organizationOverview', {
             controller: organizationOverviewController,
             bindings: {
-                onNavigation: '<',
                 org: '<'
             },
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });
 
-    function organizationOverviewController (JsonApiDataStore, organizationOverviewService,
-                                             myContactsDashboardService, myOrganizationsDashboardService, _) {
+    function organizationOverviewController (JsonApiDataStore,
+                                             ministryViewTabs, ministryViewFirstTab, organizationOverviewService, _) {
         var vm = this;
 
-        vm.tabs = ['suborgs', 'admins', 'groups', 'contacts', 'surveys'];
-        vm.tab = vm.tabs[0];
+        vm.tabNames = ministryViewTabs;
+        vm.firstTab = ministryViewFirstTab;
         vm.$onInit = activate;
 
         function activate () {

@@ -23,6 +23,7 @@
 //angular
 //= require angular/angular
 //= require angular-animate/angular-animate
+//= require angular-ui-router/release/angular-ui-router
 //= require lodash/lodash
 //= require lscache/lscache
 //= require i18n

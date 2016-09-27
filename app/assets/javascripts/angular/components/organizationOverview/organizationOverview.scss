@@ -4,10 +4,6 @@ organization-overview {
 
   .header {
     background-color: $pivot-dark-blue;
-
-    .org-name {
-      cursor: pointer;
-    }
   }
 
   .org-name {
@@ -23,9 +19,10 @@ organization-overview {
       padding: 10px;
       color: white;
       cursor: pointer;
+      border-bottom: 3px solid transparent;
       &.active {
         color: $pivot-bright-blue;
-        border-bottom: 3px solid $pivot-bright-blue;
+        border-bottom-color: $pivot-bright-blue;
       }
     }
   }

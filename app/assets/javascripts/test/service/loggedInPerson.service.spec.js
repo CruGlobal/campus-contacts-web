@@ -101,5 +101,12 @@
             });
         });
 
+        describe('loggedInPerson.loadingPromise', function () {
+            it('should be the return value of loggedInPerson.load()', function () {
+                var loadingPromise = loggedInPerson.load();
+                expect(loggedInPerson.loadingPromise).toBe(loadingPromise);
+            });
+        });
+
     });
 })();

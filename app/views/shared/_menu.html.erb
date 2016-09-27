@@ -26,11 +26,11 @@
     <li class="<%= 'current' if request.path =~ care_pattern %>">
       <%= link_to(t('nav.contacts'), "/allcontacts") %>
     </li>
-    <li class="secret hidden">
-      <%= link_to(t('dashboard.people_assigned_to_you'), "#/people") %>
+    <li ng-if="$ctrl.showSecretNavigation" ui-sref-active="current">
+      <%= link_to(t('dashboard.people_assigned_to_you'), '', { data: { ui_sref: 'app.people' } }) %>
     </li>
-    <li class="secret hidden">
-      <%= link_to(t('dashboard.organizations_assigned_to_you'), "#/ministries") %>
+    <li ng-if="$ctrl.showSecretNavigation" ui-sref-active="current">
+      <%= link_to(t('dashboard.organizations_assigned_to_you'), '', { data: { ui_sref: 'app.ministries.root' } }) %>
     </li>
     <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">
