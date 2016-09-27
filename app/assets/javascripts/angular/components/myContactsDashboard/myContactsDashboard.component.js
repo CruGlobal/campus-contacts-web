@@ -12,7 +12,7 @@
             templateUrl: '/assets/angular/components/myContactsDashboard/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($log, $q, $document, JsonApiDataStore, _, I18n,
+    function myContactsDashboardController ($log, $document, JsonApiDataStore, _, I18n,
                                             myContactsDashboardService, loggedInPerson) {
         var vm = this;
         vm.contacts = [];

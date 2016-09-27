@@ -9,13 +9,15 @@
             bindings: {}
         });
 
-    function preferencesPageController (preferencesPageService) {
+    function preferencesPageController (preferencesPageService, languageService, loggedInPerson) {
         var vm = this;
+        vm.supportedLanguages = [];
 
         vm.$onInit = activate;
 
         function activate () {
             readPreferences();
+            vm.supportedLanguages = loadLanguages();
         }
 
         function readPreferences() {
@@ -24,6 +26,10 @@
 
         function updatePreferences() {
             preferencesPageService.updatePreferences(vm.preferences);
+        }
+
+        function loadLanguages () {
+            return languageService.loadLanguages();
         }
     }
 })();

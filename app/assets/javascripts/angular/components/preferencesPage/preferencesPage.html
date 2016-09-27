@@ -1,10 +1,25 @@
 <ul>
-  <li>Language</li>
+  <li>
+      <div>
+          <select ng-model="$ctrl.selectedLanguage" ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
+              <option value="">Select Language</option>
+          </select>
+      </div>
+  </li>
   <li>Timezone (currently read only, set by browser)</li>
   <li>
     Notifications (Enabled by default)
     <ul>
-      <li>Contact Moved</li>
+      <li>
+          <div>Contact Moved</div>
+          <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+              <label class="onoffswitch-label" for="myonoffswitch">
+                  <span class="onoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+          </div>
+      </li>
       <li>Contact Assigned To You</li>
       <li>Weekly Digest</li>
     </ul>
