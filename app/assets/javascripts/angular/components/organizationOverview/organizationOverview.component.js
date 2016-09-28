@@ -51,11 +51,12 @@
                     // Start with the user's organizational permissions, then restrict that list to permissions for
                     // this organization, and determine whether any of those permissions have a permission_id of
                     // either 1 or 4
-                    return !_(person.organizational_permissions)
+                    return !_.chain(person.organizational_permissions)
                         .filter({ organization_id: vm.org.id })
                         .map('permission_id')
                         .intersection([1, 4])
-                        .isEmpty();
+                        .isEmpty()
+                        .value();
                 });
             });
         }
