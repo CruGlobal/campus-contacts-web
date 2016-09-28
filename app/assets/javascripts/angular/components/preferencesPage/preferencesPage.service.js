@@ -8,11 +8,17 @@
     function preferencesPageService (httpProxy, apiEndPoint, loggedInPerson) {
 
         return {
+
             updatePreferences: function (model) {
+                console.log(model);
                 return httpProxy.put(apiEndPoint.users.me, null, model);
             },
+
             readPreferences: function () {
-                return loggedInPerson.person.user.organization_order;;
+
+                return loggedInPerson.load().then(function (user) {
+                    return user;
+                })
             }
         };
     }
