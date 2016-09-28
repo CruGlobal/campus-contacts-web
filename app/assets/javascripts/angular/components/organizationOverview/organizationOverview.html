@@ -4,8 +4,11 @@
     <div class="tabs">
         <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
              ui-state="'app.ministries.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }">
-            {{'ministries.' + tabName | t}}
-            <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+            <span>
+                {{'ministries.' + tabName | t}}
+                <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+            </span>
+            <img ng-if="!$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
         </div>
     </div>
 </div>

@@ -16,6 +16,8 @@ organization-overview {
     display: flex;
 
     .tab {
+      display: flex;
+      align-items: center;
       padding: 10px;
       color: white;
       cursor: pointer;
@@ -23,6 +25,10 @@ organization-overview {
       &.active {
         color: $pivot-bright-blue;
         border-bottom-color: $pivot-bright-blue;
+      }
+      .loading {
+        height: 20px;
+        padding-left: 10px;
       }
     }
   }
