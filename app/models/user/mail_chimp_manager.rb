@@ -1,7 +1,6 @@
 User::MailChimpManager = Struct.new(:user) do
   def subscribe
-    return unless user.person.present? && user_email.present? &&
-                  user.person.first_name.present? && user.person.last_name.present?
+    return unless user_email.present? && user.person.first_name.present? && user.person.last_name.present?
     gb.lists(ENV.fetch('MAILCHIMP_LIST')).members(email_hash).upsert(body: subscribe_params)
     user.update_column(:subscribed_to_updates, true)
   rescue Gibbon::MailChimpError => e
@@ -53,7 +52,7 @@ User::MailChimpManager = Struct.new(:user) do
   end
 
   def user_email
-    user.person.email
+    user&.person&.email
   end
 
   def email_hash
