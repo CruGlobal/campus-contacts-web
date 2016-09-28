@@ -14,7 +14,7 @@
   transition: margin 0.3s ease-in 0s;
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-  display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+  display: block; float: left; width: 50%; height: 15px; padding: 0; line-height: 15px;
   font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
   box-sizing: border-box;
 }
@@ -42,4 +42,28 @@
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px;
+}
+
+.left{
+  width:140px;
+  float:left;
+  height:100%;
+}
+
+.space {
+  margin-bottom: 10px;
+}
+
+.right{
+  margin-left:140px;
+}
+
+ul
+{
+  list-style: none;
+}
+
+
+div.span{
+  margin-bottom:15px;
 }

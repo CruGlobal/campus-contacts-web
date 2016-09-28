@@ -1,27 +1,88 @@
-<ul>
-  <li>
-      <div>
-          <select ng-model="$ctrl.selectedLanguage" ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
-              <option value="">Select Language</option>
-          </select>
-      </div>
-  </li>
-  <li>Timezone (currently read only, set by browser)</li>
-  <li>
-    Notifications (Enabled by default)
-    <ul>
-      <li>
-          <div>Contact Moved</div>
-          <div class="onoffswitch">
-              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-              <label class="onoffswitch-label" for="myonoffswitch">
-                  <span class="onoffswitch-inner"></span>
-                  <span class="onoffswitch-switch"></span>
-              </label>
-          </div>
-      </li>
-      <li>Contact Assigned To You</li>
-      <li>Weekly Digest</li>
-    </ul>
-  </li>
-</ul>
+<div class="show carea">
+
+    <div class="titlebar titlebarmod">
+        <h1>User Preferences</h1>
+    </div>
+
+    <div>
+        <div class="space">
+            <span>Language</span>
+            <select ng-model="$ctrl.selectedLanguage"
+                    ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
+                <option value="">Select Language</option>
+            </select>
+        </div>
+
+        <div class="space">
+            <span>Timezone (currently read only, set by browser)</span>
+        </div>
+
+        <div>
+        <span>
+            Notifications (Enabled by default)
+        </span>
+
+            <div>
+                <ul>
+                    <li>
+                        <div class="space">
+                            <div>
+                                <span>Contact Moved</span>
+                            </div>
+                            <div>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                           id="contactMoved" ng-model="$ctrl.contactMoved">
+                                    <label class="onoffswitch-label" for="contactMoved">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space">
+                            <div>
+                                <span>Contact Assigned To You</span>
+                            </div>
+                            <div>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                           id="contactAssigned" ng-model="$ctrl.contactAssigned">
+                                    <label class="onoffswitch-label" for="contactAssigned">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="space">
+                            <div>
+                                <span>Weekly Digest</span>
+                            </div>
+                            <div>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                           id="weeklyDigest" ng-model="$ctrl.weeklyDigest">
+                                    <label class="onoffswitch-label" for="weeklyDigest">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="space">
+            <button id="save-user-preferences" class="red_accent" ng-click="$ctrl.saveUserPreferences()">Save Changes</button>
+        </div>
+
+    </div>
+</div>
+

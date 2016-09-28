@@ -5,14 +5,14 @@
         .module('missionhubApp')
         .factory('preferencesPageService', preferencesPageService);
 
-    function preferencesPageService (httpProxy, apiEndPoint) {
+    function preferencesPageService (httpProxy, apiEndPoint, loggedInPerson) {
 
         return {
             updatePreferences: function (model) {
                 return httpProxy.put(apiEndPoint.users.me, null, model);
             },
             readPreferences: function () {
-                // something with loggedInPerson
+                return loggedInPerson.person.user.organization_order;;
             }
         };
     }
