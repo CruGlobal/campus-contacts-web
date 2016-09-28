@@ -95,7 +95,7 @@ group :test do
   gem 'shoulda', require: false
   gem 'mocha', require: false
   gem 'ffaker'#, '~> 1.20.0'
-  gem 'rubocop', '~> 0.34.0'
+  gem 'rubocop', '~> 0.39.0'
   gem 'rack-test'
   gem 'spring'
 end
