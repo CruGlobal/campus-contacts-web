@@ -7,7 +7,7 @@
     <div>
         <div class="space">
             <span>Language</span>
-            <select ng-model="$ctrl.selectedLanguage"
+            <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
                     ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
                 <option value="">Select Language</option>
             </select>
@@ -32,7 +32,8 @@
                             <div>
                                 <div class="onoffswitch">
                                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="contactMoved" ng-model="$ctrl.contactMoved">
+                                           id="contactMoved" ng-model="$ctrl.contactMoved"
+                                           ng-change="$ctrl.saveUserPreferences()">
                                     <label class="onoffswitch-label" for="contactMoved">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
@@ -49,7 +50,8 @@
                             <div>
                                 <div class="onoffswitch">
                                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="contactAssigned" ng-model="$ctrl.contactAssigned">
+                                           id="contactAssigned" ng-model="$ctrl.contactAssigned"
+                                           ng-change="$ctrl.saveUserPreferences()">
                                     <label class="onoffswitch-label" for="contactAssigned">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
@@ -66,7 +68,8 @@
                             <div>
                                 <div class="onoffswitch">
                                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="weeklyDigest" ng-model="$ctrl.weeklyDigest">
+                                           id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
+                                           ng-change="$ctrl.saveUserPreferences()">
                                     <label class="onoffswitch-label" for="weeklyDigest">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
@@ -78,11 +81,6 @@
                 </ul>
             </div>
         </div>
-
-        <div class="space">
-            <button id="save-user-preferences" class="red_accent" ng-click="$ctrl.saveUserPreferences()">Save Changes</button>
-        </div>
-
     </div>
 </div>
 

@@ -33,31 +33,39 @@
         function readPreferences() {
              preferencesPageService.readPreferences().then(function (me) {
                  vm.preferences = me;
+                 mapUserPreferences(vm.preferences);
             });
+        }
+
+        function mapUserPreferences(userPreferences) {
+            if(userPreferences.user.language !== null) {
+                angular.forEach(vm.supportedLanguages, function (value) {
+                    if(value.abbreviation === userPreferences.user.language)
+                        vm.selectedLanguage = value;
+                });
+            }
+
+            if(userPreferences.user.notification_Settings !== null)
+            {
+                var notificationPreferences = JSON.parse(userPreferences.user.notification_settings);
+                vm.contactMoved = notificationPreferences.contactMoved;
+                vm.contactAssigned = notificationPreferences.contactAssigned;
+                vm.weeklyDigest = notificationPreferences.weeklyDigest;
+            }
         }
 
         vm.saveUserPreferences = function updatePreferences() {
 
-            var preferences = {
+            var notificationPreferences = {
                 contactMoved: vm.contactMoved,
                 contactAssigned: vm.contactAssigned,
                 weeklyDigest: vm.weeklyDigest
             };
 
-            vm.preferences.user.notification_settings = JSON.stringify(preferences);
-            vm.preferences.user.terms_acceptance_date = new Date();
+            vm.preferences.user.notification_settings = JSON.stringify(notificationPreferences);
+            vm.preferences.user.language = vm.selectedLanguage !== null ? vm.selectedLanguage.abbreviation : null;
 
-            if(vm.selectedLanguage !== null)
-                vm.preferences.user.language = vm.selectedLanguage.abbreviation;
-
-            var userData = {
-                data: {
-                    type: 'user',
-                    attributes: vm.preferences.user
-                }
-            };
-
-            preferencesPageService.updatePreferences(userData);
+            preferencesPageService.updatePreferences(vm.preferences.user.serialize());
         }
 
         function loadLanguages () {
