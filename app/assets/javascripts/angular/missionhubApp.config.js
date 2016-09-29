@@ -5,6 +5,7 @@
         .module('missionhubApp')
         .config(function (envServiceProvider, ngMdIconServiceProvider, I18n, $analyticsProvider, $locationProvider) {
 
+            //This block was added to enable $location.search() work.
             $locationProvider.html5Mode({
                 enabled: true,
                 requireBase: false
