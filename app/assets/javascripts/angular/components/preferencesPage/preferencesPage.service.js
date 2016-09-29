@@ -10,7 +10,6 @@
         return {
 
             updatePreferences: function (model) {
-                console.log(model);
                 return httpProxy.put(apiEndPoint.users.me, null, model);
             },
 

@@ -12,7 +12,7 @@
             }
         });
 
-    function preferencesPageController (preferencesPageService, languageService) {
+    function preferencesPageController (preferencesPageService, languageService, $location) {
 
         var vm = this;
 
@@ -30,14 +30,23 @@
             vm.supportedLanguages = loadLanguages();
         }
 
-        function readPreferences() {
+        function unsubscribeWeeklyDigest (){
+             if($location.search()["ministry-digest-unsubscribe"] === true)
+             {
+                 vm.weeklyDigest = false;
+                 vm.saveUserPreferences();
+             }
+        }
+
+        function readPreferences () {
              preferencesPageService.readPreferences().then(function (me) {
                  vm.preferences = me;
                  mapUserPreferences(vm.preferences);
+                 unsubscribeWeeklyDigest();
             });
         }
 
-        function mapUserPreferences(userPreferences) {
+        function mapUserPreferences (userPreferences) {
             if(userPreferences.user.language !== null) {
                 angular.forEach(vm.supportedLanguages, function (value) {
                     if(value.abbreviation === userPreferences.user.language)
@@ -54,7 +63,7 @@
             }
         }
 
-        vm.saveUserPreferences = function updatePreferences() {
+        vm.saveUserPreferences = function updatePreferences () {
 
             var notificationPreferences = {
                 contactMoved: vm.contactMoved,
