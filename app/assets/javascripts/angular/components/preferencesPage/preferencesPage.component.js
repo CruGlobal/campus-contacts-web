@@ -30,7 +30,7 @@
             vm.supportedLanguages = loadLanguages();
         }
 
-        function unsubscribeWeeklyDigest (){
+        function unsubscribeWeeklyDigest () {
              if($location.search()["ministry-digest-unsubscribe"] === true)
              {
                  vm.weeklyDigest = false;
@@ -47,6 +47,7 @@
         }
 
         function mapUserPreferences (userPreferences) {
+            vm.timeZone = userPreferences.user.time_zone;
             if(userPreferences.user.language !== null) {
                 angular.forEach(vm.supportedLanguages, function (value) {
                     if(value.abbreviation === userPreferences.user.language)

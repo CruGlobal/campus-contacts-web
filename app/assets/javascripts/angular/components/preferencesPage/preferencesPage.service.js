@@ -14,7 +14,6 @@
             },
 
             readPreferences: function () {
-
                 return loggedInPerson.load().then(function (user) {
                     return user;
                 })
