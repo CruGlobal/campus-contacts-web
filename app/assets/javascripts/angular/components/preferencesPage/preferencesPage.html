@@ -10,77 +10,72 @@
             <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
                     ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
                 <option value="">Select Language</option>
-            </select>
+            </select> <button ng-click="$ctrl.readPreferences()">Refresh</button>
         </div>
 
         <div class="space">
             <span>Time zone: {{$ctrl.timeZone}}</span>
         </div>
 
-        <div>
         <span>
             Notifications (Enabled by default)
         </span>
-
-            <div>
-                <ul>
-                    <li>
-                        <div class="space">
-                            <div>
-                                <span>Contact Moved</span>
-                            </div>
-                            <div>
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="contactMoved" ng-model="$ctrl.contactMoved"
-                                           ng-change="$ctrl.saveUserPreferences()">
-                                    <label class="onoffswitch-label" for="contactMoved">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
+        <ul>
+            <li>
+                <div class="space">
+                    <div>
+                        <span>Contact Moved</span>
+                    </div>
+                    <div>
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                   id="contactMoved" ng-model="$ctrl.contactMoved"
+                                   ng-change="$ctrl.saveUserPreferences()">
+                            <label class="onoffswitch-label" for="contactMoved">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
                         </div>
-                    </li>
-                    <li>
-                        <div class="space">
-                            <div>
-                                <span>Contact Assigned To You</span>
-                            </div>
-                            <div>
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="contactAssigned" ng-model="$ctrl.contactAssigned"
-                                           ng-change="$ctrl.saveUserPreferences()">
-                                    <label class="onoffswitch-label" for="contactAssigned">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="space">
+                    <div>
+                        <span>Contact Assigned To You</span>
+                    </div>
+                    <div>
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                   id="contactAssigned" ng-model="$ctrl.contactAssigned"
+                                   ng-change="$ctrl.saveUserPreferences()">
+                            <label class="onoffswitch-label" for="contactAssigned">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
                         </div>
-                    </li>
-                    <li>
-                        <div class="space">
-                            <div>
-                                <span>Weekly Digest</span>
-                            </div>
-                            <div>
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                           id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
-                                           ng-change="$ctrl.saveUserPreferences()">
-                                    <label class="onoffswitch-label" for="weeklyDigest">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="space">
+                    <div>
+                        <span>Weekly Digest</span>
+                    </div>
+                    <div>
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                   id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
+                                   ng-change="$ctrl.saveUserPreferences()">
+                            <label class="onoffswitch-label" for="weeklyDigest">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 

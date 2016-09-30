@@ -5,11 +5,7 @@
         .module('missionhubApp')
         .component('preferencesPage', {
             controller: preferencesPageController,
-            templateUrl: '/assets/angular/components/preferencesPage/preferencesPage.html',
-            bindings: {
-                period: '<',
-                onUpdate: '&'
-            }
+            templateUrl: '/assets/angular/components/preferencesPage/preferencesPage.html'
         });
 
     function preferencesPageController (preferencesPageService, languageService, $location) {
@@ -26,19 +22,18 @@
         vm.$onInit = activate;
 
         function activate () {
-            readPreferences();
-            vm.supportedLanguages = loadLanguages();
+            vm.readPreferences();
+            vm.supportedLanguages = languageService.loadLanguages();;
         }
 
         function unsubscribeWeeklyDigest () {
-             if($location.search()["ministry-digest-unsubscribe"] === true)
-             {
+             if($location.search()["ministry-digest-unsubscribe"] === true){
                  vm.weeklyDigest = false;
                  vm.saveUserPreferences();
              }
         }
 
-        function readPreferences () {
+        vm.readPreferences = function readPreferences () {
              preferencesPageService.readPreferences().then(function (me) {
                  vm.preferences = me;
                  mapUserPreferences(vm.preferences);
@@ -55,8 +50,7 @@
                 });
             }
 
-            if(userPreferences.user.notification_Settings !== null)
-            {
+            if(userPreferences.user.notification_settings !== null){
                 var notificationPreferences = JSON.parse(userPreferences.user.notification_settings);
                 vm.contactMoved = notificationPreferences.contactMoved;
                 vm.contactAssigned = notificationPreferences.contactAssigned;
@@ -76,10 +70,6 @@
             vm.preferences.user.language = vm.selectedLanguage !== null ? vm.selectedLanguage.abbreviation : null;
 
             preferencesPageService.updatePreferences(vm.preferences.user.serialize());
-        }
-
-        function loadLanguages () {
-            return languageService.loadLanguages();
         }
 
     }
