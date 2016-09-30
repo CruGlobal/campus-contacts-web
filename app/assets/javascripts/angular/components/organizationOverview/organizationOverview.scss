@@ -4,6 +4,10 @@ organization-overview {
 
   .header {
     background-color: $pivot-dark-blue;
+    color: $white;
+    svg {
+      fill: $white;
+    }
   }
 
   .org-name {

@@ -66,12 +66,7 @@
         function activate () {
             closeAddInteractionPanel();
 
-            // This person is considered uncontacted if their organizational permission for this organization
-            // has a follow-up status of uncontacted
-            var organizationalPermission = _.find(vm.person.organizational_permissions, {
-                organization_id: vm.organizationId
-            });
-            vm.uncontacted = organizationalPermission && organizationalPermission.followup_status === 'uncontacted';
+            vm.uncontacted = personService.getFollowupStatus(vm.person, vm.organizationId) === 'uncontacted';
 
             periodService.subscribe($scope, lookupReport);
             lookupReport();

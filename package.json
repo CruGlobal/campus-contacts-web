@@ -14,7 +14,7 @@
     "angulartics": "^1.1.2",
     "angulartics-google-analytics": "^0.2.1",
     "jsonapi-datastore": "^0.4.0-beta",
-    "lodash": "^4.11.1",
+    "lodash": "^4.16.2",
     "lscache": "1.0.6",
     "vex-js": "^3.0.0"
   },
