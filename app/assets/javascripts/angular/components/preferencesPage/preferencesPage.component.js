@@ -18,6 +18,7 @@
         vm.weeklyDigest = true;
         vm.preferences = null;
         vm.selectedLanguage = null;
+        vm.selectedLanguageChanged = false;
 
         vm.$onInit = activate;
 
@@ -38,6 +39,7 @@
                  vm.preferences = me;
                  mapUserPreferences(vm.preferences);
                  unsubscribeWeeklyDigest();
+                 vm.selectedLanguageChanged = false;
             });
         }
 
@@ -70,6 +72,7 @@
             vm.preferences.user.language = vm.selectedLanguage !== null ? vm.selectedLanguage.abbreviation : null;
 
             preferencesPageService.updatePreferences(vm.preferences.user.serialize());
+            vm.selectedLanguageChanged = true;
         }
 
     }
