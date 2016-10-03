@@ -17,6 +17,9 @@
         vm.weeklyDigest = true;
         vm.selectedLanguageChanged = false;
 
+        vm.reload = reload;
+        vm.saveUserPreferences = updatePreferences;
+
         vm.$onInit = activate;
 
         function activate () {
@@ -27,7 +30,9 @@
         function unsubscribeWeeklyDigest () {
              if(nativeLocation.search === "?ministry-digest-unsubscribe") {
                  vm.weeklyDigest = false;
-                 vm.saveUserPreferences();
+                 updatePreferences().then(function() {
+                     nativeLocation.search = '';
+                 });
              }
         }
 
@@ -52,7 +57,11 @@
             }
         }
 
-        vm.saveUserPreferences = function updatePreferences () {
+        function reload() {
+            nativeLocation.reload();
+        }
+
+        function updatePreferences () {
             vm.user.notification_settings = {
                 contact_moved: vm.contactMoved,
                 contact_assigned: vm.contactAssigned,
@@ -64,7 +73,7 @@
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }
 
-            preferencesPageService.updatePreferences(vm.user.serialize());
+            return preferencesPageService.updatePreferences(vm.user.serialize());
         }
     }
 })();

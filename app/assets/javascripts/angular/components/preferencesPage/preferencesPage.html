@@ -9,7 +9,7 @@
             required>
         <option value="">Select Language</option>
     </select>
-    <a href="/preferences" ng-if="$ctrl.selectedLanguageChanged" onclick="location.reload()">
+    <a href ng-if="$ctrl.selectedLanguageChanged" ng-click="$ctrl.reload()">
       Refresh To Show Language Changes
     </a>
 </div>
