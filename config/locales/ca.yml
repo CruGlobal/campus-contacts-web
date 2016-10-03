@@ -374,10 +374,11 @@ ca:
     header_text: Make It Easier To Care For The People Who Need You Most
     learn_more: Learn More
     no_contacts_help: When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.
+    organizations_assigned_to_you: Ministries
     panel_managing: Managing Contacts
     panel_messaging: Messaging Contacts
     panel_storing: Storing Contacts
-    people_assigned_to_you: People Assigned to You
+    people_assigned_to_you: People
     report_periods:
       one_week: 1w
       one_month: 1m
@@ -887,6 +888,13 @@ ca:
     system_labels: System Labels
     title: '%{org} Labels'
   member: Member
+  ministries:
+    admins: Team
+    contacts: Contacts
+    groups: Groups
+    roots: Ministries
+    suborgs: Ministries
+    surveys: Surveys
   monthly: Monthly
   movement_indicator_suggestions:
     index:

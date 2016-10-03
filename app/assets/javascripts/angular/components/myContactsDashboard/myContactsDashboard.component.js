@@ -6,14 +6,13 @@
         .component('myContactsDashboard', {
             controller: myContactsDashboardController,
             bindings: {
-                period: '<',
                 'editMode': '<'
             },
             templateUrl: '/assets/angular/components/myContactsDashboard/myContactsDashboard.html'
         });
 
-    function myContactsDashboardController ($log, $document, JsonApiDataStore, _, I18n,
-                                            myContactsDashboardService, loggedInPerson) {
+    function myContactsDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,
+                                            myContactsDashboardService, periodService, loggedInPerson) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -24,9 +23,8 @@
 
         activate();
         vm.$onDestroy = cleanUp;
-        vm.$onChanges = bindingsChanged;
 
-        vm.orgChangeVisibility = orgChangeVisibility;
+        vm.toggleOrgVisibility = myContactsDashboardService.toggleOrganizationVisibility;
 
         vm.noContactsWelcome = '';
 
@@ -42,6 +40,9 @@
             vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
                 name: loggedInPerson.person.first_name.toUpperCase()
             });
+
+            loadReports();
+            periodService.subscribe($scope, loadReports);
         }
 
         function cleanUp () {
@@ -52,20 +53,16 @@
             loadPeople().then(dataLoaded);
         }
 
-        function bindingsChanged (changesObj) {
-            if(changesObj.period && !vm.loading) {
-                loadReports();
-            }
-        }
-
         function loadPeople () {
-            var promise = myContactsDashboardService.loadPeople();
-            return promise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
-                },
-                function (error) {
-                    $log.error('Error loading people', error);
-                });
+            var promise = myContactsDashboardService.loadPeople({
+                'page[limit]': 250,
+                include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
+                'organizational_permissions',
+                'filters[assigned_tos]': 'me'
+            });
+            return promise.catch(function (error) {
+                $log.error('Error loading people', error);
+            });
         }
 
         function loadReports () {
@@ -73,35 +70,27 @@
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
 
             var organizationsReportParams= {
-                period: vm.period,
                 organization_ids: organization_ids
             };
             var peopleReportParams = {
-                period: vm.period,
                 organization_ids: organization_ids,
                 people_ids: people_ids
             };
 
             var organizationReportPromise = myContactsDashboardService.loadOrganizationReports(organizationsReportParams);
-            organizationReportPromise.then(function (request) {
-                JsonApiDataStore.store.sync(request);
-            }, function (error) {
+            organizationReportPromise.catch(function (error) {
                 $log.error('Error loading organization reports', error);
             });
 
             var peopleReportPromise = myContactsDashboardService.loadPeopleReports(peopleReportParams);
-            peopleReportPromise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
-                }, function (error) {
-                    $log.error('Error loading people reports', error);
-                });
+            peopleReportPromise.catch(function (error) {
+                $log.error('Error loading people reports', error);
+            });
         }
 
         function loadOrganizations () {
-            var promise = myContactsDashboardService.loadOrganizations();
-            promise.then(function (request) {
-                    JsonApiDataStore.store.sync(request);
-
+            var promise = myContactsDashboardService.loadOrganizations({ 'page[limit]': 100 });
+            promise.then(function () {
                     vm.organizationPeople = _.orderBy(JsonApiDataStore.store.findAll('organization'),
                         'active_people_count',
                         'desc');
@@ -134,6 +123,11 @@
                     person.last_name = '';
                 }
                 angular.forEach(person.reverse_contact_assignments, function (ca) {
+                    if (!ca.organization) {
+                        // Make sure that the organization relation is loaded
+                        return;
+                    }
+
                     var orgId = ca.organization.id;
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
@@ -198,36 +192,9 @@
 
         function organizationOrderChange () {
             var orgOrder = _.map(vm.organizationPeople, 'id');
-            updateUserPreference({
+            myContactsDashboardService.updateUserPreference({
                 organization_order: orgOrder
-            })
-        }
-
-        function orgChangeVisibility (organization_id) {
-            var orgHiddenPreference = loggedInPerson.person.user.hidden_organizations || [];
-            var org = _.find(vm.organizationPeople, {id: organization_id});
-            var hidding = org.visible;
-            org.visible = !org.visible;
-            if (hidding) {
-                orgHiddenPreference.push(organization_id);
-            }
-            else {
-                orgHiddenPreference = _.remove(orgHiddenPreference, organization_id);
-            }
-            updateUserPreference({
-                hidden_organizations: orgHiddenPreference
             });
-        }
-
-        function updateUserPreference (prefHash) {
-            var userData = {
-                data: {
-                    type: 'user',
-                    attributes: prefHash
-                }
-            };
-
-            myContactsDashboardService.updateUserPreference(userData);
         }
     }
 })();

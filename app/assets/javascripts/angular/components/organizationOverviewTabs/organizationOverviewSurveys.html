@@ -1,0 +1,4 @@
+<div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
+     ng-class="{'alternate-color': $even}" class="survey row">
+    <div class="content padded">{{survey.title}}</div>
+</div>

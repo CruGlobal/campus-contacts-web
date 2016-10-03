@@ -1,0 +1,10 @@
+<div class="dashboard-subnav">
+    <div class="inner">
+        <report-period></report-period>
+    </div>
+</div>
+
+<div class="suborganizations" ng-class="{ 'root-orgs': ('app.ministries.root' | isState) }">
+    <organization-breadcrumbs class="root-org" org="null"></organization-breadcrumbs>
+    <ui-view></ui-view>
+</div>

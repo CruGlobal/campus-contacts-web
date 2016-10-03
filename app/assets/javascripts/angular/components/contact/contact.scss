@@ -1,0 +1,41 @@
+contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+
+  .column {
+    padding: 0px 10px;
+  }
+
+  .normal-column {
+    flex: 1;
+  }
+  .important-column {
+    flex: 2;
+  }
+  .button-column {
+    width: 40px;
+  }
+  .gender-column {
+    width: 50px;
+  }
+  .phone-number-column {
+    width: 100px;
+  }
+
+  .warning {
+    color: $pivot-orange;
+  }
+
+  background: $white;
+  &.alternate-color {
+    background: $gray-4;
+  }
+
+  round-button {
+    margin: auto;
+  }
+
+  padding: 10px;
+}

@@ -1,0 +1,16 @@
+.row {
+  background: $white;
+  &.alternate-color {
+    background: #F0F0F0;
+  }
+
+  & > .content {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    &.padded {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+}

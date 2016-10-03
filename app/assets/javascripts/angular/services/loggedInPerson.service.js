@@ -5,6 +5,7 @@
 
     function loggedInPerson (httpProxy, apiEndPoint, JsonApiDataStore) {
         var person = null;
+        var loadingPromise = null;
 
         // Load the logged-in user's profile
         function loadMe () {
@@ -12,8 +13,6 @@
                 include: 'user,organizational_permissions.organization'
             })
             .then(function (response) {
-                JsonApiDataStore.store.sync(response);
-
                 // Lookup the user associated with the returned person
                 var personId = response.data.id;
                 return JsonApiDataStore.store.find('person', personId);
@@ -32,12 +31,17 @@
                 throw new Error('loggedInPerson.person is not settable!');
             },
 
+            get loadingPromise () {
+                return loadingPromise;
+            },
+
             // Load (or reload) the person
             load: function () {
-                return loadMe().then(function (me) {
+                loadingPromise = loadMe().then(function (me) {
                     person = me;
                     return me;
                 });
+                return loadingPromise;
             }
         };
     }

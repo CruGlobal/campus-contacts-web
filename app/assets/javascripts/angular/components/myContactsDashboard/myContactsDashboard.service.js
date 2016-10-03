@@ -12,48 +12,68 @@
         .factory('myContactsDashboardService', myContactsDashboardService);
 
 
-    function myContactsDashboardService (httpProxy, apiEndPoint) {
+    function myContactsDashboardService (httpProxy, apiEndPoint, loggedInPerson, periodService, _) {
 
-        return {
+        var myContactsDashboardService = {
 
-            loadPeople: function () {
-                return httpProxy.get(apiEndPoint.people.index, {
-                    'page[limit]': 250,
-                    include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,' +
-                    'organizational_permissions',
-                    'filters[assigned_tos]': 'me'
-                });
+            loadPeople: function (params) {
+                return httpProxy.get(apiEndPoint.people.index, params || {});
             },
 
             loadPeopleReports: function (model) {
                 return httpProxy.get(apiEndPoint.reports.people, {
-                    period: model.period,
+                    period: periodService.getPeriod(),
                     organization_ids: model.organization_ids,
                     people_ids: model.people_ids
                 });
             },
 
             loadOrganizationReports: function (model) {
-                return httpProxy.get(apiEndPoint.reports.organizations,
-                    {
-                        period: model.period,
-                        organization_ids: model.organization_ids
-                    });
+                return httpProxy.get(apiEndPoint.reports.organizations, {
+                    period: periodService.getPeriod(),
+                    organization_ids: model.organization_ids
+                });
             },
 
-            loadOrganizations: function () {
-                return httpProxy
-                    .get(apiEndPoint.organizations.index, {
-                        'page[limit]': 100,
-                        order: 'active_people_count',
-                        include: ''
-                    });
+            loadOrganizations: function (params) {
+                return httpProxy.get(apiEndPoint.organizations.index, _.extend({
+                    order: 'active_people_count',
+                    include: ''
+                }, params));
             },
 
-            updateUserPreference: function (model) {
-                httpProxy.put(apiEndPoint.users.me, null, model);
+            // Modify the user's preferences and save those changes on the server
+            updateUserPreference: function (changedPreferences) {
+                return httpProxy.put(apiEndPoint.users.me, null, {
+                    data: {
+                        type: 'user',
+                        attributes: changedPreferences
+                    }
+                });
+            },
+
+            // Toggle the organization's visibility
+            toggleOrganizationVisibility: function (organization) {
+                organization.visible = !organization.visible;
+
+                var hiddenOrgs = loggedInPerson.person.user.hidden_organizations || [];
+                if (organization.visible) {
+                    // The organization is now visible, so remove it from the user's list of hidden organizations
+                    hiddenOrgs = _.remove(hiddenOrgs, organization.id);
+                }
+                else {
+                    // The organization is now hidden, so add it to the user's list of hidden organizations
+                    hiddenOrgs.push(organization.id);
+                }
+
+                // Commit the changes
+                myContactsDashboardService.updateUserPreference({
+                    hidden_organizations: hiddenOrgs
+                });
             }
         };
+
+        return myContactsDashboardService;
     }
 
 })();

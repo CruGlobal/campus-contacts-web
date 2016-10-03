@@ -1,0 +1,12 @@
+<span ng-class="{'current-org': $ctrl.orgHierarchy.length === 0}">
+    <a ui-sref="app.ministries.root">
+        {{'ministries.roots' | t}}
+    </a>
+    <span class="arrow">></span>
+</span>
+<span ng-repeat="org in $ctrl.orgHierarchy" ng-class="{'current-org': $last}">
+    <a ui-state="'app.ministries.ministry.' + $ctrl.firstTab" ui-state-params="{orgId: org.id}">
+        {{org.name}}
+    </a>
+    <span class="arrow">></span>
+</span>

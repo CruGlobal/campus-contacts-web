@@ -8,8 +8,10 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
     - 'app/controllers/api/**/*'
+  TargetRubyVersion: 2.3
 
-  RunRailsCops: true
+Rails:
+  Enabled: true
 
 AndOr:
   Enabled: false

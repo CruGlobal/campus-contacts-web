@@ -1,0 +1,6 @@
+<div ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
+     ng-class="{'alternate-color': $even}" class="group row">
+    <div class="content padded">
+        <a ng-href="/groups/{{group.id}}?organization_id={{$ctrl.org.id}}">{{group.name}}</a>
+    </div>
+</div>

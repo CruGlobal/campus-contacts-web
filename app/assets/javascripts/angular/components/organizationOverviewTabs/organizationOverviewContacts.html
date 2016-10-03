@@ -1,0 +1,31 @@
+<div class="header">
+    <div class="column button-column">
+        <input type="checkbox" />
+    </div>
+    <div class="column important-column">
+        <span>{{'ministries.contacts.name' | t}}</span>
+    </div>
+    <div class="column gender-column">
+        <span>{{'ministries.contacts.gender' | t}}</span>
+    </div>
+    <div class="column normal-column">
+        <span>{{'ministries.contacts.assignment' | t}}</span>
+    </div>
+    <div class="column normal-column">
+        <span>{{'ministries.contacts.status' | t}}</span>
+    </div>
+    <div class="column phone-number-column">
+        <round-button class="disabled">
+            <ng-md-icon icon="phone"></ng-md-icon>
+        </round-button>
+    </div>
+    <div class="column button-column">
+        <round-button class="disabled">
+            <ng-md-icon icon="email"></ng-md-icon>
+        </round-button>
+    </div>
+</div>
+<contact ng-repeat="contact in $ctrl.organizationOverview.contacts | orderBy: 'last_name' track by contact.id"
+         ng-class="{'alternate-color': $even}"
+         contact="contact" organization-id="$ctrl.org.id">
+</contact>

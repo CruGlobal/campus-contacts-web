@@ -95,7 +95,7 @@ group :test do
   gem 'shoulda', require: false
   gem 'mocha', require: false
   gem 'ffaker'#, '~> 1.20.0'
-  gem 'rubocop', '~> 0.34.0'
+  gem 'rubocop', '~> 0.39.0'
   gem 'rack-test'
   gem 'spring'
 end
@@ -134,3 +134,4 @@ gem 'gibbon'
 
 # check_digit added so we can do some integrity checking on survey response ids that will be user editable
 gem 'check_digit'
+gem 'doorkeeper', '~> 4.2.0'

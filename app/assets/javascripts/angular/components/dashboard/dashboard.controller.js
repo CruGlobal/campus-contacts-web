@@ -5,30 +5,18 @@
         .module('missionhubApp')
         .controller('DashboardController', DashboardController);
 
-    function DashboardController ($window, loggedInPerson) {
+    function DashboardController ($window, loggedInPerson, periodService) {
         var vm = this;
 
-        vm.updatePeriod = updatePeriod;
-
-        vm.loggedInPerson = loggedInPerson;
+        vm.editOrganizations = false;
+        vm.getPeriod = periodService.getPeriod;
+        // Look for a query-string parameter called "beta"
+        vm.showSecretNavigation = $window.localStorage.getItem('beta') !== null ||
+            $window.location.search.slice(1).split('&').some(function (part) { return /^beta=/.test(part) });
         vm.$onInit = activate;
 
         function activate () {
-            if($window.localStorage) {
-                var value = $window.localStorage.getItem('reportPeriod');
-                vm.period = (!value) ? 'P3M' : value;
-            } else {
-                vm.period = 'P3M';
-            }
-
             loggedInPerson.load();
-        }
-
-        function updatePeriod (period) {
-            vm.period = period;
-            if($window.localStorage) {
-                $window.localStorage.setItem('reportPeriod', period);
-            }
         }
     }
 })();

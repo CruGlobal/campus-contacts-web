@@ -3,7 +3,20 @@
     'use strict';
 
     // Constants
-    var organizationalPeopleService, httpProxy, apiEndPoint;
+    var organizationalPeopleService, httpProxy, $rootScope;
+
+    function asynchronous (fn) {
+        return function (done) {
+            var returnValue = fn.call(this, done);
+            returnValue.then(function () {
+                done();
+            }).catch(function (err) {
+                done.fail(err);
+            });
+            $rootScope.$apply();
+            return returnValue;
+        };
+    }
 
     describe('organizationalPeopleService Tests', function () {
 
@@ -13,41 +26,15 @@
 
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function ($q, $log, _organizationalPeopleService_, _httpProxy_, _apiEndPoint_) {
+        beforeEach(inject(function (_peopleService_, _httpProxy_, _$rootScope_) {
+
+            var _this = this;
 
             httpProxy = _httpProxy_;
-            organizationalPeopleService = _organizationalPeopleService_;
-            apiEndPoint = _apiEndPoint_;
+            organizationalPeopleService = _peopleService_;
+            $rootScope = _$rootScope_;
 
-            spyOn(organizationalPeopleService, 'updatePeople').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
-            spyOn(organizationalPeopleService, 'saveAnonymousInteraction').and.callFake( function () {
-                var deferred = $q.defer();
-                deferred.resolve('success');
-                return deferred.promise;
-            });
-
-        }));
-
-        it('organizationalPeopleService should exist', function () {
-            expect(organizationalPeopleService).toBeDefined();
-        });
-
-        it('organizationalPeopleService should contain updatePeople', function () {
-            expect(organizationalPeopleService.updatePeople).toBeDefined();
-        });
-
-        it('organizationalPeopleService should contain saveAnonymousInteraction', function () {
-            expect(organizationalPeopleService.saveAnonymousInteraction).toBeDefined();
-        });
-
-        it('should save updatePeople', function () {
-
-            var model = {
+            this.updateParams = {
                 data: {
                     type: 'person',
                     attributes: {}
@@ -55,7 +42,7 @@
                 included: [
                     {
                         type: 'organizational_permission',
-                        id: 1,
+                        id: 123,
                         attributes: {
                             archive_date: (new Date()).toUTCString()
                         }
@@ -63,60 +50,23 @@
                 ]
             };
 
-            model.personId = 20;
+            spyOn(httpProxy, 'callHttp').and.callFake(function () {
+                return _this.httpResponse;
+            });
+        }));
 
-            var request  = organizationalPeopleService.updatePeople(model.personId, model);
-
-            var response = request.then( function (response) {
-                return response;
+        describe('organizationalPeople Service', function () {
+            // Emmanuel marked this to be ignored.for now. He will move it to its proper place soon.
+            xit('should PUT a URL', function () {
+                organizationalPeopleService.updatePeople(this.interaction.person_id, this.updateParams);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    this.updateParams
+                );
             });
 
-            var expectedResponse = request.then( function (response) {
-                return response;
-            });
-
-            expect(response).toEqual(expectedResponse);
-
-        });
-
-        it('should save saveAnonymousInteraction', function () {
-
-            var model = {
-                data: {
-                    type: 'interaction',
-                    attributes: {
-                        comment: 'Test data',
-                        interaction_type_id: 20
-                    },
-                    relationships: {
-                        organization: {
-                            data: {id: 1, type: 'organization'}
-                        },
-                        receiver: {
-                            data: {id: 20, type: 'person'}
-                        }
-                    }
-                }
-            };
-
-            model.included = [{
-                type: 'interaction_initiator',
-                attributes: {
-                    person_id: 20
-                }
-            }];
-
-            var request  = organizationalPeopleService.saveAnonymousInteraction(model);
-
-            var response = request.then( function (response) {
-                return response;
-            });
-
-            var expectedResponse = request.then( function (response) {
-                return response;
-            });
-
-            expect(response).toEqual(expectedResponse);
 
         });
 

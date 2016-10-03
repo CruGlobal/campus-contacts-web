@@ -1,0 +1,29 @@
+<organization-breadcrumbs org="$ctrl.org"></organization-breadcrumbs>
+<div class="header">
+    <div class="org-name"
+         ui-state="'app.ministries.ministry.' + $ctrl.firstTab" ui-state-params="{ orgId: $ctrl.org.id }">
+         {{$ctrl.org.name}}
+     </div>
+    <div class="tabs">
+        <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
+             ui-state="'app.ministries.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
+             ng-if="tabName !== 'surveys'">
+            <span>
+                {{'ministries.' + tabName + '.header' | t}}
+                <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+            </span>
+            <img ng-if="!$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+        </div>
+        <div class="tab" ng-init="tabName = 'surveys'">
+            <span>
+                <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.' + tabName + '.header' | t}}</a>
+                <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+            </span>
+            <img ng-if="!$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+        </div>
+    </div>
+</div>
+<div class="content" ng-if="!('app.ministries.root' | isState)">
+    <stats-header title="'Ministry'"></stats-header>
+    <ui-view></ui-view>
+</div>

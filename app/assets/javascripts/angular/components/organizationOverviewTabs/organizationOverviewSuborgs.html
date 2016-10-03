@@ -1,0 +1,9 @@
+<div ng-repeat="org in $ctrl.organizationOverview.suborgs | orderBy: 'name' track by org.id"
+     ng-class="{'alternate-color': $even}" class="suborg row">
+    <div class="content padded">
+        <a ui-state="'app.ministries.ministry.' + $ctrl.organizationOverview.firstTab"
+           ui-state-params="{ orgId: org.id }">
+            {{org.name}}
+        </a>
+    </div>
+</div>

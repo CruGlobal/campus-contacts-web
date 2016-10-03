@@ -52,7 +52,7 @@ User::MailChimpManager = Struct.new(:user) do
   end
 
   def user_email
-    user.person.email
+    user&.person&.email
   end
 
   def email_hash
