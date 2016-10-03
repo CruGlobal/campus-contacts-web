@@ -8,7 +8,7 @@
             templateUrl: '/assets/angular/components/preferencesPage/preferencesPage.html'
         });
 
-    function preferencesPageController (preferencesPageService, languageService, $location, _) {
+    function preferencesPageController (preferencesPageService, languageService, _, nativeLocation) {
         var vm = this;
 
         vm.supportedLanguages = [];
@@ -25,7 +25,7 @@
         }
 
         function unsubscribeWeeklyDigest () {
-             if($location.search()["ministry-digest-unsubscribe"] === true) {
+             if(nativeLocation.search == "?ministry-digest-unsubscribe") {
                  vm.weeklyDigest = false;
                  vm.saveUserPreferences();
              }
