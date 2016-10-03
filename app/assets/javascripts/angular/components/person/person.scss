@@ -1,18 +1,19 @@
+%common-margin {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 person {
   @extend .row;
   display: flex;
   flex-direction: column;
   & > .person-info {
     justify-content: space-between;
-    .common-margin {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
     .no-data {
       color: $pivot-teal;
     }
     & > .name {
-      @extend .common-margin;
+      @extend %common-margin;
       width: 288px;
       a:visited {
         color: inherit;
@@ -31,7 +32,7 @@ person {
         background: linear-gradient(to left, #a1a1a1, rgba(0, 0, 0, 0) 5px);
       }
       & > div{
-        @extend .common-margin;
+        @extend %common-margin;
         text-align: center;
         width: 30px;
         line-height: 50px;
@@ -44,7 +45,7 @@ person {
       }
     }
     .phone {
-      @extend .common-margin;
+      @extend %common-margin;
       width: 100px;
       text-align: center;
       display: inline-block;
