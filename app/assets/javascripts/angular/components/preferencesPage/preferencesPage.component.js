@@ -25,7 +25,7 @@
         }
 
         function unsubscribeWeeklyDigest () {
-             if(nativeLocation.search == "?ministry-digest-unsubscribe") {
+             if(nativeLocation.search === "?ministry-digest-unsubscribe") {
                  vm.weeklyDigest = false;
                  vm.saveUserPreferences();
              }
@@ -60,7 +60,7 @@
             };
 
             if(vm.selectedLanguage) {
-                vm.selectedLanguageChanged = vm.user.language != vm.selectedLanguage.abbreviation;
+                vm.selectedLanguageChanged = vm.user.language !== vm.selectedLanguage.abbreviation;
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }
 
