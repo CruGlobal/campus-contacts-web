@@ -2,7 +2,7 @@
     <input type="checkbox" />
 </div>
 <div class="column important-column">
-    <span>{{$ctrl.contact.full_name}}</span>
+    <a ng-href="/profile/{{$ctrl.contact.id}}?organization_id={{$ctrl.organizationId}}">{{$ctrl.contact.full_name}}</a>
 </div>
 <div class="column gender-column">
     <span ng-if="$ctrl.contact.gender">{{('ministries.contacts.' + $ctrl.contact.gender.toLowerCase()) | t}}</span>

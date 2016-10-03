@@ -4,7 +4,9 @@ organization-overview {
 
   .header {
     background-color: $pivot-dark-blue;
-    color: $white;
+    &, a {
+      color: $white;
+    }
     svg {
       fill: $white;
     }
