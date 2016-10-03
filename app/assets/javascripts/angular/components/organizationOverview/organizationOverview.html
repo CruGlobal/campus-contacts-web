@@ -12,7 +12,7 @@
                 {{'ministries.' + tabName + '.header' | t}}
                 <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
             </span>
-            <img ng-if="!$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+            <img ng-if="$ctrl.loadDetails && !$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
         </div>
         <div class="tab" ng-init="tabName = 'surveys'">
             <span>

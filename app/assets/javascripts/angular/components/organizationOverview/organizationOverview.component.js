@@ -6,7 +6,8 @@
         .component('organizationOverview', {
             controller: organizationOverviewController,
             bindings: {
-                org: '<'
+                org: '<',
+                loadDetails: '<?'
             },
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });
@@ -15,11 +16,20 @@
                                              ministryViewTabs, ministryViewFirstTab, organizationOverviewService, _) {
         var vm = this;
 
+        _.defaults(vm, {
+            loadDetails: true
+        });
+
         vm.tabNames = ministryViewTabs;
         vm.firstTab = ministryViewFirstTab;
         vm.$onInit = activate;
 
         function activate () {
+            if (!vm.loadDetails) {
+                // Abort before loading org details
+                return;
+            }
+
             organizationOverviewService.loadOrgRelations(vm.org).then(function () {
                 // Find all of the groups related to the org
                 vm.groups = vm.org.groups;
