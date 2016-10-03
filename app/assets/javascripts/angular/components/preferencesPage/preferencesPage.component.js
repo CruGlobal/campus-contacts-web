@@ -16,15 +16,15 @@
         vm.contactMoved = true;
         vm.contactAssigned = true;
         vm.weeklyDigest = true;
-        vm.preferences = null;
+        vm.user = null;
         vm.selectedLanguage = null;
         vm.selectedLanguageChanged = false;
 
         vm.$onInit = activate;
 
         function activate () {
-            vm.readPreferences();
-            vm.supportedLanguages = languageService.loadLanguages();;
+            readPreferences();
+            vm.supportedLanguages = languageService.loadLanguages();
         }
 
         function unsubscribeWeeklyDigest () {
@@ -34,46 +34,48 @@
              }
         }
 
-        vm.readPreferences = function readPreferences () {
+        function readPreferences () {
              preferencesPageService.readPreferences().then(function (me) {
-                 vm.preferences = me;
-                 mapUserPreferences(vm.preferences);
+                 vm.user = me.user;
+                 mapUserPreferences(vm.user);
                  unsubscribeWeeklyDigest();
-                 vm.selectedLanguageChanged = false;
             });
         }
 
-        function mapUserPreferences (userPreferences) {
-            vm.timeZone = userPreferences.user.time_zone;
-            if(userPreferences.user.language !== null) {
+        function mapUserPreferences (user) {
+            vm.timeZone = user.time_zone;
+            if(user.language !== null) {
                 angular.forEach(vm.supportedLanguages, function (value) {
-                    if(value.abbreviation === userPreferences.user.language)
+                    if(value.abbreviation === user.language)
                         vm.selectedLanguage = value;
                 });
             }
 
-            if(userPreferences.user.notification_settings !== null){
-                var notificationPreferences = JSON.parse(userPreferences.user.notification_settings);
-                vm.contactMoved = notificationPreferences.contactMoved;
-                vm.contactAssigned = notificationPreferences.contactAssigned;
-                vm.weeklyDigest = notificationPreferences.weeklyDigest;
+            if(user.notification_settings !== null){
+                var notificationPreferences = user.notification_settings;
+                vm.contactMoved = notificationPreferences.contact_moved;
+                vm.contactAssigned = notificationPreferences.contact_assigned;
+                vm.weeklyDigest = notificationPreferences.weekly_digest;
             }
         }
 
         vm.saveUserPreferences = function updatePreferences () {
-
             var notificationPreferences = {
-                contactMoved: vm.contactMoved,
-                contactAssigned: vm.contactAssigned,
-                weeklyDigest: vm.weeklyDigest
+                contact_moved: vm.contactMoved,
+                contact_assigned: vm.contactAssigned,
+                weekly_digest: vm.weeklyDigest
             };
+            var languageChanging = false;
 
-            vm.preferences.user.notification_settings = JSON.stringify(notificationPreferences);
-            vm.preferences.user.language = vm.selectedLanguage !== null ? vm.selectedLanguage.abbreviation : null;
+            vm.user.notification_settings = notificationPreferences;
+            if(vm.selectedLanguage) {
+                languageChanging = vm.user.language != vm.selectedLanguage.abbreviation;
+                vm.user.language = vm.selectedLanguage.abbreviation;
+            }
 
-            preferencesPageService.updatePreferences(vm.preferences.user.serialize());
-            vm.selectedLanguageChanged = true;
+            preferencesPageService.updatePreferences(vm.user.serialize());
+            if(languageChanging)
+                vm.selectedLanguageChanged = true;
         }
-
     }
 })();
