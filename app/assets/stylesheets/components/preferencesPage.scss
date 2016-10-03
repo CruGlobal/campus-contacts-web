@@ -1,3 +1,7 @@
+$on-off-gray: #999999;
+$on-off-light-gray: #EEE;
+$on-off-enabled-color: $pivot-dark-blue;
+
 .onoffswitch {
   position: relative;
   width: 90px;
@@ -12,7 +16,7 @@
   display: block;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #999999;
+  border: 2px solid $on-off-gray;
   border-radius: 20px;
 }
 .onoffswitch-inner {
@@ -37,25 +41,25 @@
 .onoffswitch-inner:before {
   content: "ON";
   padding-left: 10px;
-  background-color: #34A7C1;
-  color: #FFFFFF;
+  background-color: $on-off-enabled-color;
+  color: white;
 }
 .onoffswitch-inner:after {
   content: "OFF";
   padding-right: 10px;
-  background-color: #EEEEEE;
-  color: #999999;
+  background-color: $on-off-light-gray;
+  color: $on-off-gray;
   text-align: right;
 }
 .onoffswitch-switch {
   display: block;
   width: 18px;
   margin: 6px;
-  background: #FFFFFF;
+  background: white;
   position: absolute;
   top: 0; bottom: 0;
   right: 56px;
-  border: 2px solid #999999;
+  border: 1px solid $on-off-gray;
   border-radius: 20px;
   transition: all 0.3s ease-in 0s;
 }
@@ -66,26 +70,10 @@
   right: 0px;
 }
 
-.left{
-  width:140px;
-  float:left;
-  height:100%;
-}
-
 .space {
   margin-bottom: 10px;
 }
 
-.right{
-  margin-left:140px;
-}
-
-ul
-{
+ul {
   list-style: none;
-}
-
-
-div.span{
-  margin-bottom:15px;
 }

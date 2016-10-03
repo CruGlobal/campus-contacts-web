@@ -8,16 +8,13 @@
             templateUrl: '/assets/angular/components/preferencesPage/preferencesPage.html'
         });
 
-    function preferencesPageController (preferencesPageService, languageService, $location) {
-
+    function preferencesPageController (preferencesPageService, languageService, $location, _) {
         var vm = this;
 
         vm.supportedLanguages = [];
         vm.contactMoved = true;
         vm.contactAssigned = true;
         vm.weeklyDigest = true;
-        vm.user = null;
-        vm.selectedLanguage = null;
         vm.selectedLanguageChanged = false;
 
         vm.$onInit = activate;
@@ -28,7 +25,7 @@
         }
 
         function unsubscribeWeeklyDigest () {
-             if($location.search()["ministry-digest-unsubscribe"] === true){
+             if($location.search()["ministry-digest-unsubscribe"] === true) {
                  vm.weeklyDigest = false;
                  vm.saveUserPreferences();
              }
@@ -43,39 +40,31 @@
         }
 
         function mapUserPreferences (user) {
-            vm.timeZone = user.time_zone;
+            vm.timeZone = user.timezone;
             if(user.language !== null) {
-                angular.forEach(vm.supportedLanguages, function (value) {
-                    if(value.abbreviation === user.language)
-                        vm.selectedLanguage = value;
-                });
+                vm.selectedLanguage = _.find(vm.supportedLanguages, { abbreviation: user.language });
             }
 
-            if(user.notification_settings !== null){
-                var notificationPreferences = user.notification_settings;
-                vm.contactMoved = notificationPreferences.contact_moved;
-                vm.contactAssigned = notificationPreferences.contact_assigned;
-                vm.weeklyDigest = notificationPreferences.weekly_digest;
+            if(user.notification_settings !== null) {
+                vm.contactMoved = user.notification_settings.contact_moved;
+                vm.contactAssigned = user.notification_settings.contact_assigned;
+                vm.weeklyDigest = user.notification_settings.weekly_digest;
             }
         }
 
         vm.saveUserPreferences = function updatePreferences () {
-            var notificationPreferences = {
+            vm.user.notification_settings = {
                 contact_moved: vm.contactMoved,
                 contact_assigned: vm.contactAssigned,
                 weekly_digest: vm.weeklyDigest
             };
-            var languageChanging = false;
 
-            vm.user.notification_settings = notificationPreferences;
             if(vm.selectedLanguage) {
-                languageChanging = vm.user.language != vm.selectedLanguage.abbreviation;
+                vm.selectedLanguageChanged = vm.user.language != vm.selectedLanguage.abbreviation;
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }
 
             preferencesPageService.updatePreferences(vm.user.serialize());
-            if(languageChanging)
-                vm.selectedLanguageChanged = true;
         }
     }
 })();

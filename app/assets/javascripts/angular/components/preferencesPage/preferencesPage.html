@@ -1,81 +1,60 @@
-<div class="show carea">
-
-    <div class="titlebar titlebarmod">
-        <h1>User Preferences</h1>
-    </div>
-
-    <div>
-        <div class="space">
-            <span>Language</span>
-            <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
-                    ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation" required>
-                <option value="">Select Language</option>
-            </select> <button ng-click="$ctrl.readPreferences()" ng-if="$ctrl.selectedLanguageChanged" class="animate-if">Refresh</button>
-        </div>
-
-        <div class="space">
-            <span>Time zone: {{$ctrl.timeZone}}</span>
-        </div>
-
-        <span>
-            Notifications (Enabled by default)
-        </span>
-        <ul>
-            <li>
-                <div class="space">
-                    <div>
-                        <span>Contact Moved</span>
-                    </div>
-                    <div>
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                   id="contactMoved" ng-model="$ctrl.contactMoved"
-                                   ng-change="$ctrl.saveUserPreferences()">
-                            <label class="onoffswitch-label" for="contactMoved">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="space">
-                    <div>
-                        <span>Contact Assigned To You</span>
-                    </div>
-                    <div>
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                   id="contactAssigned" ng-model="$ctrl.contactAssigned"
-                                   ng-change="$ctrl.saveUserPreferences()">
-                            <label class="onoffswitch-label" for="contactAssigned">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="space">
-                    <div>
-                        <span>Weekly Digest</span>
-                    </div>
-                    <div>
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                   id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
-                                   ng-change="$ctrl.saveUserPreferences()">
-                            <label class="onoffswitch-label" for="weeklyDigest">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+<div class="titlebar titlebarmod">
+    <h1>User Preferences</h1>
 </div>
+
+<div class="space">
+    <span>Language</span>
+    <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
+            ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation"
+            required>
+        <option value="">Select Language</option>
+    </select>
+    <a href="/preferences" ng-if="$ctrl.selectedLanguageChanged" onclick="location.reload()">
+      Refresh To Show Language Changes
+    </a>
+</div>
+
+<div class="space">
+    <span>Time zone: {{$ctrl.timeZone}}</span>
+</div>
+
+<span>Notifications (Enabled by default)</span>
+<ul>
+    <li class="space">
+        <span>Contact Moved</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="contactMoved" ng-model="$ctrl.contactMoved"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="contactMoved">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+    <li class="space">
+        <span>Contact Assigned To You</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="contactAssigned" ng-model="$ctrl.contactAssigned"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="contactAssigned">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+    <li class="space">
+        <span>Weekly Digest</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="weeklyDigest">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+</ul>
 

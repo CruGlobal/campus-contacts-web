@@ -9,7 +9,7 @@
 
     function languageService () {
         var service = {
-            loadLanguages: function(){
+            loadLanguages: function () {
                 return[
                         {
                             abbreviation: 'en',
