@@ -944,19 +944,22 @@ en:
   leader: Group Leader
   leader_mailer:
     added:
+      greeting: Hello %{name}!
+      header: Welcome to MissionHub, let's get this party started.
       body_html: |-
-        <p>Hi %{name},</p>
-        <p>This is your invitation to begin using MissionHub for your personal ministry. I added you
-            to %{org}.</p>
-        <p>MissionHub is designed to help you organize, track, and grow the relationships you have with others.</p>
-        %{invite_button}
-        <p>If the button above does not work copy this link into your browser: %{link}</p>
-        <p>Please do not share this link; it is the connection to your personal space within MissionHub.
-            This invitation will expire in one week</p>
-        <p>I am looking forward to serving with you to help reach the world for Christ.</p>
-        <p>%{added_by}</p>
-      youre_invited: YOU'RE INVITED
-      get_the_mobile_app: GET THE MOBILE APP
+        <p>You've been invited by %{added_by}. If you haven't already, connect with them to hear
+          more about how your team is using MissionHub.</p>
+        <p>We help you stay connected to the people within your ministry by efficiently keeping
+          track of the important details that help you serve them well.</p>
+      invite_button_text: Let's go to my account
+      paste_link: 'If the button above does not work copy this link into your browser:'
+      mobile_ad_header: On the go? So are we!
+      mobile_ad_body: Follow the health of your ministry with real-time information, record interactions and notes.
+      closing_html: |-
+        <p>If you get stuck at all, be sure to visit our extensive %{helpsite_link}helpsite</a>. And
+          remember, you can %{contact_us_link}contact us</a> anytime, we're always happy to help!</p>
+        <p>We’re genuinely glad you’re here,<br/>
+           Your MissionHub Team</p>
     resend:
       body_html: |-
         <p>Hi %{name},</p>
