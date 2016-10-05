@@ -18,10 +18,11 @@
     <span>Time zone: {{$ctrl.timeZone}}</span>
 </div>
 
-<span>Notifications (Enabled by default)</span>
+<h3>When would you like us to let you know?</h3>
+<span>(Enabled by default)</span>
 <ul>
     <li class="space">
-        <span>Contact Moved</span>
+        <span>When a contact is transferred to your organization</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="contactMoved" ng-model="$ctrl.contactMoved"
@@ -33,7 +34,7 @@
         </div>
     </li>
     <li class="space">
-        <span>Contact Assigned To You</span>
+        <span>When a contact is assigned to you</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="contactAssigned" ng-model="$ctrl.contactAssigned"
@@ -45,7 +46,7 @@
         </div>
     </li>
     <li class="space">
-        <span>Weekly Digest</span>
+        <span>Weekly Ministry Digest</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
