@@ -33,7 +33,8 @@
                     name: 'app.ministries.root',
                     url: '/root',
                     template:
-                        '<organization-overview ng-repeat="org in $ctrl.rootOrgs" org="org"></organization-overview>',
+                        '<organization-overview ng-repeat="org in $ctrl.rootOrgs" org="org" load-details="false">' +
+                        '</organization-overview>',
                     controller: function (rootOrgs) {
                         this.rootOrgs = rootOrgs;
                     },
