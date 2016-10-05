@@ -19,11 +19,10 @@
                 // Load the missing relations, if any
                 if (include.length === 0) {
                     return $q.resolve();
-                } else {
-                    return httpProxy.get(apiEndPoint.organizations.index + '/' + org.id, {
-                        include: include.join(',')
-                    });
                 }
+                return httpProxy.get(apiEndPoint.organizations.index + '/' + org.id, {
+                    include: include.join(',')
+                });
             },
 
             // Load an organization's sub-orgs

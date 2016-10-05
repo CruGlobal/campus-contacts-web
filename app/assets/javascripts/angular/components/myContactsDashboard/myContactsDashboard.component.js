@@ -116,7 +116,7 @@
             var people = JsonApiDataStore.store.findAll('person');
             vm.organizationPeople = [];
             angular.forEach(people, function (person) {
-                if (person.id == loggedInPerson.person.id) {
+                if (person.id === loggedInPerson.person.id) {
                     return;
                 }
                 if (angular.isUndefined(person.last_name) || person.last_name === null) {
@@ -131,8 +131,8 @@
                     var orgId = ca.organization.id;
                     // make sure they have an assignment to me and they have an active permission
                     // on the same organization
-                    if (ca.assigned_to.id != loggedInPerson.person.id ||
-                        _.findIndex(person.organizational_permissions, { organization_id: orgId }) == -1) {
+                    if (ca.assigned_to.id !== loggedInPerson.person.id ||
+                        _.findIndex(person.organizational_permissions, { organization_id: orgId }) === -1) {
                         return;
                     }
                     var org = _.find(vm.organizationPeople, { id: orgId });
@@ -149,7 +149,7 @@
 
             vm.collapsible = people.length > 10 || _.keys(vm.organizationPeople).length > 1;
 
-            if(_.keys(vm.organizationPeople).length == 0) {
+            if(_.keys(vm.organizationPeople).length === 0) {
                 noContacts();
             }
 
@@ -181,7 +181,7 @@
             var orgHiddenPreference = loggedInPerson.person.user.hidden_organizations || [];
             _.each(vm.organizationPeople, function (org) {
                 var hidden = orgHiddenPreference.indexOf(org.id.toString());
-                org.visible = hidden == -1;
+                org.visible = hidden === -1;
             })
         }
 
