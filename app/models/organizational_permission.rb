@@ -119,7 +119,7 @@ class OrganizationalPermission < ActiveRecord::Base
     else
       person.user.generate_new_token
       token = person.user.remember_token
-      LeaderMailer.delay.added(person, added_by_id, organization, token, permission.name)
+      LeaderMailer.delay.added(person, added_by_id, token)
     end
   end
 
