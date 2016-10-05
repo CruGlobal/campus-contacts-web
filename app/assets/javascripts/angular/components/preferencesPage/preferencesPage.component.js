@@ -30,7 +30,7 @@
         function unsubscribeWeeklyDigest () {
              if(nativeLocation.search === "?ministry-digest-unsubscribe") {
                  vm.weeklyDigest = false;
-                 updatePreferences().then(function() {
+                 updatePreferences().then(function () {
                      nativeLocation.search = '';
                  });
              }
@@ -57,7 +57,7 @@
             }
         }
 
-        function reload() {
+        function reload () {
             nativeLocation.reload();
         }
 
