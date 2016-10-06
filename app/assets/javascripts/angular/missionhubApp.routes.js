@@ -1,6 +1,11 @@
 (function () {
     'use strict';
 
+    if (location.pathname !== '/') {
+        // Only set up client-side routing on the single-page app page
+        return;
+    }
+
     angular
         .module('missionhubApp')
         .config(function ($stateProvider, $urlRouterProvider, ministryViewTabs, _) {
