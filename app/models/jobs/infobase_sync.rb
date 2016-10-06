@@ -23,7 +23,7 @@ class Jobs::InfobaseSync
       'VL' => 'Valor',
       'SV' => 'Cru',
       'CHS' => 'Cru',
-      'GS' => 'Graduate Students',
+      'GS' => 'Graduate Student',
       'OT' => 'Other'
     }
 
