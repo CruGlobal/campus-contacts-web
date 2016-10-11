@@ -20,7 +20,9 @@ organization-overview {
       display: flex;
       align-items: center;
       padding: 10px;
-      color: white;
+      &, a {
+        color: white;
+      }
       cursor: pointer;
       border-bottom: 3px solid transparent;
       &.active {
