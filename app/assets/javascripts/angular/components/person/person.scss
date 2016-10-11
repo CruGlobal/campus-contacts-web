@@ -5,8 +5,7 @@
 
 person {
   @extend .row;
-  display: flex;
-  flex-direction: column;
+  display: block;
   & > .person-info {
     justify-content: space-between;
     .no-data {

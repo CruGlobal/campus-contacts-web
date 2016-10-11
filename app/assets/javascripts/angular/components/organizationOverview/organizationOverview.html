@@ -19,11 +19,11 @@
                 <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.' + tabName + '.header' | t}}</a>
                 <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
             </span>
-            <img ng-if="!$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+            <img ng-if="$ctrl.loadDetails && !$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
         </div>
     </div>
 </div>
-<div class="content" ng-if="!('app.ministries.root' | isState)">
+<div class="row-content" ng-if="!('app.ministries.root' | isState)">
     <stats-header title="'Ministry'"></stats-header>
-    <ui-view></ui-view>
+    <ui-view class="grid"></ui-view>
 </div>

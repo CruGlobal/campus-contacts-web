@@ -25,7 +25,9 @@
         </round-button>
     </div>
 </div>
-<contact ng-repeat="contact in $ctrl.organizationOverview.contacts | orderBy: 'last_name' track by contact.id"
-         ng-class="{'alternate-color': $even}"
-         contact="contact" organization-id="$ctrl.org.id">
-</contact>
+<div class="grid-content">
+    <contact ng-repeat="contact in $ctrl.organizationOverview.contacts | orderBy: 'last_name' track by contact.id"
+             ng-class="{'alternate-color': $odd}"
+             contact="contact" organization-id="$ctrl.org.id">
+    </contact>
+</div>

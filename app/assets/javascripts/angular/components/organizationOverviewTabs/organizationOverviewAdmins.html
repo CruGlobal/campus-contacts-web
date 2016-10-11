@@ -1,4 +1,6 @@
-<person ng-repeat="person in $ctrl.organizationOverview.admins | orderBy: 'last_name' track by person.id"
-        ng-class="{'alternate-color': $even}"
-        person="person" organization-id="$ctrl.org.id">
-</person>
+<div class="grid-content">
+    <person ng-repeat="person in $ctrl.organizationOverview.admins | orderBy: 'last_name' track by person.id"
+            ng-class="{'alternate-color': $odd}"
+            person="person" organization-id="$ctrl.org.id">
+    </person>
+</div>
