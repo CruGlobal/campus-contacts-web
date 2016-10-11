@@ -1,0 +1,16 @@
+.grid .grid-content .row {
+  background: $white;
+  &.alternate-color {
+    background: $gray-4;
+  }
+
+  & > .row-content {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    &.padded {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+}

@@ -1,16 +1,15 @@
 .row {
-  background: $white;
-  &.alternate-color {
-    background: #F0F0F0;
-  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-  & > .content {
-    min-height: 50px;
-    display: flex;
-    align-items: center;
-    &.padded {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
+  .column {
+    padding: 0px 10px;
+  }
+  .normal-column {
+    flex: 1;
+  }
+  .important-column {
+    flex: 2;
   }
 }

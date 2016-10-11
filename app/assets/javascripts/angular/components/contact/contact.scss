@@ -1,19 +1,7 @@
 contact {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  @extend .row;
   height: 30px;
 
-  .column {
-    padding: 0px 10px;
-  }
-
-  .normal-column {
-    flex: 1;
-  }
-  .important-column {
-    flex: 2;
-  }
   .button-column {
     width: 40px;
   }
@@ -26,11 +14,6 @@ contact {
 
   .warning {
     color: $pivot-orange;
-  }
-
-  background: $white;
-  &.alternate-color {
-    background: $gray-4;
   }
 
   round-button {

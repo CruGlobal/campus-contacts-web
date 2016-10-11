@@ -2,14 +2,8 @@ organization-overview {
   display: block;
   margin-bottom: 20px;
 
-  .header {
-    background-color: $pivot-dark-blue;
-    &, a {
-      color: $white;
-    }
-    svg {
-      fill: $white;
-    }
+  & > .header {
+    height: auto;
   }
 
   .org-name {

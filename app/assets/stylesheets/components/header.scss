@@ -1,0 +1,16 @@
+@mixin header($background-color) {
+  height: 50px;
+  background-color: $background-color;
+  color: $white;
+  svg {
+    fill: $white;
+  }
+}
+
+.header {
+  @include header($pivot-dark-blue);
+}
+
+.subheader {
+  @include header(darken($pivot-dark-blue, 5%));
+}
