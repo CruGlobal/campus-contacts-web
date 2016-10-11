@@ -1,0 +1,61 @@
+<div class="titlebar titlebarmod">
+    <h1>User Preferences</h1>
+</div>
+
+<div class="space">
+    <span>Language</span>
+    <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
+            ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation"
+            required>
+        <option value="">Select Language</option>
+    </select>
+    <a href ng-if="$ctrl.selectedLanguageChanged" ng-click="$ctrl.reload()">
+      Refresh To Show Language Changes
+    </a>
+</div>
+
+<div class="space">
+    <span>Time zone: {{$ctrl.timeZone}}</span>
+</div>
+
+<h3>When would you like us to let you know?</h3>
+<span>(Enabled by default)</span>
+<ul>
+    <li class="space">
+        <span>When a contact is transferred to your organization</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="contactMoved" ng-model="$ctrl.contactMoved"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="contactMoved">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+    <li class="space">
+        <span>When a contact is assigned to you</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="contactAssigned" ng-model="$ctrl.contactAssigned"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="contactAssigned">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+    <li class="space">
+        <span>Weekly Ministry Digest</span>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                   id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
+                   ng-change="$ctrl.saveUserPreferences()">
+            <label class="onoffswitch-label" for="weeklyDigest">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </li>
+</ul>
+

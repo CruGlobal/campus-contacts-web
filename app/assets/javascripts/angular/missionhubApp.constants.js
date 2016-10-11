@@ -8,5 +8,6 @@
         .constant('lscache', window.lscache)
         .constant('I18n', window.I18n)
         .constant('confirm', window.confirm)
-        .constant('jQuery', window.jQuery);
+        .constant('jQuery', window.jQuery)
+        .constant('nativeLocation', window.location);
 })();

@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   WIZARD_STEPS = %w(welcome verify keyword survey leaders)
   self.primary_key = 'id'
 
-  store :settings, accessors: [:primary_organization_id, :time_zone]
+  store :settings, accessors: [:primary_organization_id, :time_zone, :language, :notification_settings]
 
   has_one :person, foreign_key: 'user_id'
   has_one :super_admin
@@ -26,7 +26,8 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable, :omniauthable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :remember_me, :password, :username, :remember_token_expires_at
+  attr_accessible :remember_me, :password, :username, :remember_token_expires_at, :time_zone,
+                  :language, :notification_settings
 
   def ability
     @ability ||= Ability.new(self)

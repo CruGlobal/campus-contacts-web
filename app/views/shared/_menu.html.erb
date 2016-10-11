@@ -130,6 +130,9 @@
           <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %>
         </li>
         <li>
+          <%= link_to(t('nav.settings'), preferences_path) %>
+        </li>
+        <li>
           <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
         </li>
       </ul>
