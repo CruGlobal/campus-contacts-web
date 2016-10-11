@@ -24,14 +24,13 @@ class AnswerSheet < ActiveRecord::Base
   def save_survey(answers = nil, notify_on_predefined_questions = true)
     question_set = QuestionSet.new(survey.questions, self)
     question_set.post(answers, self) if answers
-    if question_set.save(notify_on_predefined_questions)
-      person.save
-      update_attribute(:completed_at, Time.now)
+    return unless question_set.save(notify_on_predefined_questions)
 
-      # Ensure that the user/contact will be added as contact in organization after taking survey
-      org = survey.organization
-      org.add_contact(person) if org.present?
-    end
+    person&.touch
+    update_attribute(:completed_at, Time.now)
+
+    # Ensure that the user/contact will be added as contact in organization after taking survey
+    survey.organization&.add_contact(person)
   end
 
   def to_note
