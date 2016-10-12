@@ -367,6 +367,12 @@ Mh::Application.routes.draw do
     end
   end
 
+  resources :report_emails do
+    collection do
+      get :leader_digest
+    end
+  end
+
   namespace :api do
     scope '(/:version)', version: /v\d+?/ do # module: :api
       resources :people do

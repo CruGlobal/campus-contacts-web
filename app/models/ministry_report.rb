@@ -19,14 +19,14 @@ class MinistryReport
     changed_permissions.count
   end
 
-  def interaction_counts
+  def interaction_counts(all_core = true)
     interactions = Interaction.where(timestamp: @start_date..@end_date).where.not(interaction_type_id: InteractionType::COMMENT)
     if @parent_org
       interactions = interactions.includes(:organization).where(parent_conditions).references(:organizations)
     end
     interaction_counts = interactions.group(:interaction_type_id).count
     receiver_counts = receiver_sum_counts(interactions)
-    combine_interaction_counts(interaction_counts, receiver_counts, initiator_counts)
+    combine_interaction_counts(interaction_counts, receiver_counts, initiator_counts, all_core)
   end
 
   def receiver_sum_counts(interactions)
@@ -79,9 +79,10 @@ class MinistryReport
 
   private
 
-  def combine_interaction_counts(total, receiver, initiators = {})
+  def combine_interaction_counts(total, receiver, initiators, all_core)
     combined = {}
-    types = InteractionType.where(id: InteractionType::CORE_INTERACTIONS)
+    type_ids = all_core ? InteractionType::CORE_INTERACTIONS : total.keys
+    types = InteractionType.where(id: type_ids)
     types.each do |type|
       name = type.name
       combined[name] = {

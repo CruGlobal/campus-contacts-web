@@ -32,7 +32,7 @@ describe ReportMailer do
         end
 
         mail = ReportMailer.all
-        source = mail.body.raw_source
+        source = mail.body.parts.first.body
 
         expect(source).to include '2</strong> contacts changed'
         expect(source).to include '1</strong> new contacts'
