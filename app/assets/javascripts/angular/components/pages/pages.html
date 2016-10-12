@@ -1,0 +1,37 @@
+<div class="subheader row" ng-show="$ctrl.pageCount > 1">
+    <div class="column normal-column">
+        <span>{{'general.show' | t}}</span>
+        <select ng-options="pageSize for pageSize in $ctrl.pageSizeOptions" ng-model="$ctrl.pageSize"></select>
+    </div>
+    <div class="column normal-column">
+        <div class="row">
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isFirstPage() }"
+                 ng-click="$ctrl.gotoPage(0)">
+                <<
+            </div>
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isFirstPage() }"
+                 ng-click="$ctrl.gotoPage($ctrl.page - 1)">
+                <
+            </div>
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isFirstPage() }"
+                 ng-click="$ctrl.gotoPage($ctrl.page - 1)">
+                {{$ctrl.page}}
+            </div>
+            <div class="column nav-item active-page">
+                {{$ctrl.page + 1}}
+            </div>
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isLastPage() }"
+                 ng-click="$ctrl.gotoPage($ctrl.page + 1)">
+                {{$ctrl.page + 2}}
+            </div>
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isLastPage() }"
+                 ng-click="$ctrl.gotoPage($ctrl.page + 1)">
+                >
+            </div>
+            <div class="column nav-item" ng-class="{ unavailable: $ctrl.isLastPage() }"
+                 ng-click="$ctrl.gotoPage($ctrl.pageCount - 1)">
+                >>
+            </div>
+        </div>
+    </div>
+</div>

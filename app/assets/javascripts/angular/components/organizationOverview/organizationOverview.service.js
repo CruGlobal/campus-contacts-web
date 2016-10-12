@@ -30,19 +30,6 @@
                 return httpProxy.get(apiEndPoint.organizations.index, {
                     'filters[parent_ids]': org.id
                 });
-            },
-
-            // Load an organization's people
-            loadOrgPeople: function (org) {
-                return httpProxy.get(apiEndPoint.people.index, {
-                    include: [
-                        'phone_numbers',
-                        'email_addresses',
-                        'organizational_permissions.organization',
-                        'reverse_contact_assignments.assigned_to'
-                    ].join(','),
-                    organization_id: org.id
-                });
             }
         };
     }

@@ -1,0 +1,13 @@
+pages {
+  .nav-item {
+    width: 0.5em;
+  }
+
+  .nav-item.unavailable {
+    visibility: hidden;
+  }
+
+  .active-page {
+    color: $pivot-bright-blue;
+  }
+}

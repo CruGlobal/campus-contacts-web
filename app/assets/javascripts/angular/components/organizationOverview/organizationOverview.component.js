@@ -12,8 +12,9 @@
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });
 
-    function organizationOverviewController (JsonApiDataStore,
-                                             ministryViewTabs, ministryViewFirstTab, organizationOverviewService, _) {
+    function organizationOverviewController (JsonApiDataStore, ministryViewTabs, ministryViewFirstTab,
+                                             organizationOverviewContactsService, organizationOverviewAdminsService,
+                                             organizationOverviewService, _) {
         var vm = this;
 
         _.defaults(vm, {
@@ -45,29 +46,15 @@
                 });
             });
 
-            organizationOverviewService.loadOrgPeople(vm.org).then(function () {
-                // Find all of the people in the org
-                vm.contacts = JsonApiDataStore.store.findAll('person').filter(function (person) {
-                    // Include the person if they are part of this organization
-                    return _.filter(person.organizational_permissions, {
-                        organization_id: vm.org.id
-                    }).length > 0;
-                });
+            // The contacts and admins are loaded by their respective tab components, not this component.
+            // However, this component does need to know how many contacts and admins there are, so set the contacts
+            // and admins to a sparse array of the appropriate length.
+            organizationOverviewContactsService.loadOrgContacts(vm.org, { limit: 0, offset: 0 }).then(function (response) {
+                vm.contacts = new Array(response.meta.total);
+            });
 
-                // Find all of the admins in the org
-                vm.admins = vm.contacts.filter(function (person) {
-                    // Include the person if they are an admin (permission_id = 1) or user (permission_id = 4)
-                    // of this organization
-                    // Start with the user's organizational permissions, then restrict that list to permissions for
-                    // this organization, and determine whether any of those permissions have a permission_id of
-                    // either 1 or 4
-                    return !_.chain(person.organizational_permissions)
-                        .filter({ organization_id: vm.org.id })
-                        .map('permission_id')
-                        .intersection([1, 4])
-                        .isEmpty()
-                        .value();
-                });
+            organizationOverviewAdminsService.loadOrgAdmins(vm.org, { limit: 0, offset: 0 }).then(function (response) {
+                vm.admins = new Array(response.meta.total);
             });
         }
     }

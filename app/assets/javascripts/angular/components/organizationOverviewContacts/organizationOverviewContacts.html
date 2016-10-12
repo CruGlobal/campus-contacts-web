@@ -1,3 +1,4 @@
+<pages load-page="$ctrl.loadContactPage" on-new-data="$ctrl.contacts = newData"></pages>
 <div class="header">
     <div class="column button-column">
         <input type="checkbox" />
@@ -26,7 +27,7 @@
     </div>
 </div>
 <div class="grid-content">
-    <contact ng-repeat="contact in $ctrl.organizationOverview.contacts | orderBy: 'last_name' track by contact.id"
+    <contact ng-repeat="contact in $ctrl.contacts | orderBy: 'last_name' track by contact.id"
              ng-class="{'alternate-color': $odd}"
              contact="contact" organization-id="$ctrl.org.id">
     </contact>
