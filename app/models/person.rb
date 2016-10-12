@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
   has_attached_file :avatar, styles: { medium: '200x200>', thumb: '100x100>', big_square: '300x300#' },
                              s3_credentials: { bucket: ENV['AWS_BUCKET'], access_key_id: ENV['AWS_ACCESS_KEY_ID'], secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] },
                              storage: :s3, path: 'people/:attachment/:style/:id/:filename',
-                             s3_storage_class: :reduced_redundancy
+                             s3_storage_class: :reduced_redundancy, s3_protocol: :https
 
   validates_attachment :avatar,
                        content_type: { content_type: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'] }
