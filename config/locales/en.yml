@@ -1781,3 +1781,9 @@ en:
     intern: Intern
     part_time_staff: Part Time Field Staff
     full_time_staff: Full Time Supported Staff
+  student_status:
+    not_student: Not currently a student
+    middle_school: Middle School
+    high_school: High School
+    collegiate: Collegiate
+    masters_or_doctorate: Masters/Doctorate
