@@ -95,8 +95,9 @@ class MinistryReport
   end
 
   def parent_conditions
-    parent_org = @parent_org.is_a?(Organization) ? @parent_org.id : @parent_org
+    parent_org = @parent_org.is_a?(Organization) ? @parent_org : Organization.find(@parent_org)
+    parent_ancestry = [parent_org.ancestry, parent_org.id].compact.join('/')
     ['organizations.ancestry like ? OR organizations.ancestry = ? OR organizations.id = ?',
-     "#{parent_org}/%", parent_org, parent_org]
+     "#{parent_ancestry}/%", parent_ancestry, parent_org.id]
   end
 end

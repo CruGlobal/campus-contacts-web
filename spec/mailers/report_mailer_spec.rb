@@ -43,6 +43,8 @@ describe ReportMailer do
 
   context '#cru' do
     it 'successfully sends' do
+      create(:organization, id: 1)
+
       expect do
         ReportMailer.cru.body.raw_source
       end.to_not raise_exception
@@ -51,6 +53,8 @@ describe ReportMailer do
 
   context '#p2c' do
     it 'successfully sends' do
+      create(:organization, id: ENV['POWER_TO_CHANGE_ORG_ID'])
+
       Label.find_or_create_by(i18n: 'made_decision', organization_id: 0)
 
       expect do
