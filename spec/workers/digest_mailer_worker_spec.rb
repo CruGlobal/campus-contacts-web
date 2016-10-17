@@ -13,6 +13,6 @@ describe DigestMailerWorker, '#perform' do
 
     expect do
       DigestMailerWorker.new.perform
-    end.to change(Sidekiq::Extensions::DelayedClass.jobs, :size).by(2)
+    end.to change(ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper.jobs, :size).by(2)
   end
 end

@@ -5,12 +5,8 @@ class DigestMailerWorker
   def perform(*)
     active_admins.each do |admin|
       next if admin.notification_settings&.dig('weekly_digest') == false
-      DigestMailerWorker.delay.send_digest(admin.person.id)
+      ReportMailer.leader_digest(admin.person.id).deliver_later!
     end
-  end
-
-  def self.send_digest(person_id)
-    ReportMailer.leader_digest(person_id).deliver
   end
 
   private
