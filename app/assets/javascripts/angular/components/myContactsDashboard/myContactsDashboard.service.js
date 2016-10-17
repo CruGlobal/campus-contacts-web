@@ -28,13 +28,6 @@
                 });
             },
 
-            loadOrganizationReports: function (model) {
-                return httpProxy.get(apiEndPoint.reports.organizations, {
-                    period: periodService.getPeriod(),
-                    organization_ids: model.organization_ids
-                });
-            },
-
             loadOrganizations: function (params) {
                 return httpProxy.get(apiEndPoint.organizations.index, _.extend({
                     order: 'active_people_count',

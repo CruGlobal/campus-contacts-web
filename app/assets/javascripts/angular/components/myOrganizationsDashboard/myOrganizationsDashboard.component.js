@@ -11,8 +11,7 @@
             templateUrl: '/assets/angular/components/myOrganizationsDashboard/myOrganizationsDashboard.html'
         });
 
-    function myOrganizationsDashboardController (JsonApiDataStore, periodService,
-                                                 myContactsDashboardService, _) {
+    function myOrganizationsDashboardController (JsonApiDataStore, periodService, reportsService, _) {
         var vm = this;
         vm.numberOfOrgsToShow = 1000;
 
@@ -23,8 +22,8 @@
         }
 
         function loadReports () {
-            var organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
-            myContactsDashboardService.loadOrganizationReports({
+            var organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
+            reportsService.loadOrganizationReports({
                 period: periodService.getPeriod(),
                 organization_ids: organization_ids
             });

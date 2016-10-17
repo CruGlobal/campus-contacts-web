@@ -12,7 +12,8 @@
         });
 
     function myContactsDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,
-                                            myContactsDashboardService, periodService, loggedInPerson) {
+                                            myContactsDashboardService, periodService, loggedInPerson,
+                                            reportsService) {
         var vm = this;
         vm.contacts = [];
         vm.organizationPeople = [];
@@ -67,17 +68,14 @@
 
         function loadReports () {
             var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
-                organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id').join(',');
+                organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
 
-            var organizationsReportParams= {
-                organization_ids: organization_ids
-            };
             var peopleReportParams = {
                 organization_ids: organization_ids,
                 people_ids: people_ids
             };
 
-            var organizationReportPromise = myContactsDashboardService.loadOrganizationReports(organizationsReportParams);
+            var organizationReportPromise = reportsService.loadOrganizationReports(organization_ids);
             organizationReportPromise.catch(function (error) {
                 $log.error('Error loading organization reports', error);
             });

@@ -5,18 +5,7 @@
             <div class="org-name">
                 <h2><a href="/allcontacts?organization_id={{$ctrl.org.id}}">{{ $ctrl.org.name }}</a></h2>
             </div>
-            <div class="organization-stats">
-                <div>{{$ctrl.report.contact_count || '-'}}</div>
-                <div>
-                    <a class="red"
-                       href="/allcontacts?organization_id={{$ctrl.org.id}}&status[]=uncontacted"
-                       ng-if="$ctrl.report.uncontacted_count">
-                        {{$ctrl.report.uncontacted_count}}
-                    </a>
-                    <span ng-if="!$ctrl.report.uncontacted_count">-</span>
-                </div>
-                <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.getInteractionCount(i)"></div>
-            </div>
+            <organizational-stats org="$ctrl.org"></organizational-stats>
             <div class="right-buttons">
                 <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.org.id}}&assign_to_me=1"
                    analytics-on="click" analytics-category="Dashboard" analytics-event="Add Contact Click"

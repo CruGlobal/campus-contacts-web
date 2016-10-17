@@ -170,63 +170,35 @@
 
                 }));
             });
-
-            describe('Organization Reports', function () {
-                it('should contain loadOrganizationReports', function () {
-                    expect(myContactsDashboardService.loadOrganizationReports).toBeDefined();
-                });
-
-                it('should call GET load OrganizationReports URL', function () {
-                    spyOn(periodService, 'getPeriod').and.returnValue('period');
-                    myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                        'GET',
-                        jasmine.any(String),
-                        _.extend(this.loadOrganizationReportsParams, { period: 'period' })
-                    );
-                });
-
-                it('should load OrganizationReports', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.organizationReports
-                    );
-
-                    var _this = this;
-
-                    return myContactsDashboardService.loadOrganizationReports(this.loadOrganizationReportsParams)
-                        .then(function (loadedOrganizationReports) {
-                            expect(loadedOrganizationReports).toEqual(_this.organizationReports);
-                        });
-                }));
-
-                it('should contain load Organization', function () {
-                    expect(myContactsDashboardService.loadOrganizations).toBeDefined();
-                });
-
-                it('should call GET loadOrganization URL', function () {
-                    myContactsDashboardService.loadOrganizations(this.loadOrganizationParams);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                        'GET',
-                        jasmine.any(String),
-                        this.loadOrganizationParams
-                    );
-                });
-
-                it('should load Organization', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.organizationReports
-                    );
-
-                    var _this = this;
-
-                    return myContactsDashboardService.loadOrganizations(this.loadOrganizationParams)
-                        .then(function (loadedOrganization) {
-                            expect(loadedOrganization).toEqual(_this.organizationReports);
-                        });
-                }));
-            })
-
-
         });
+
+        describe('Organization loading', function () {
+            it('should contain load Organization', function () {
+                expect(myContactsDashboardService.loadOrganizations).toBeDefined();
+            });
+
+            it('should call GET loadOrganization URL', function () {
+                myContactsDashboardService.loadOrganizations(this.loadOrganizationParams);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'GET',
+                    jasmine.any(String),
+                    this.loadOrganizationParams
+                );
+            });
+
+            it('should load Organization', async(function () {
+                this.httpResponse = $q.resolve(
+                    this.organizationReports
+                );
+
+                var _this = this;
+
+                return myContactsDashboardService.loadOrganizations(this.loadOrganizationParams)
+                    .then(function (loadedOrganization) {
+                        expect(loadedOrganization).toEqual(_this.organizationReports);
+                    });
+            }));
+        })
+
     });
 })();

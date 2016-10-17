@@ -56,7 +56,6 @@
         ];
 
         vm.$onInit = activate;
-        vm.getInteractionCount = getInteractionCount;
         vm.toggleAnonymousInteractionButtons = toggleAnonymousInteractionButtons;
         vm.toggleVisibility = toggleVisibility;
         vm.addAnonymousInteraction = addAnonymousInteraction;
@@ -67,18 +66,6 @@
             $scope.$on('newInteraction', function (event, interactionId) {
                 organizationService.incrementReportInteraction(vm.report, interactionId);
             });
-
-            periodService.subscribe($scope, lookupReport);
-            lookupReport();
-        }
-
-        function lookupReport () {
-            vm.report = reportsService.lookupOrganizationReport(vm.org.id);
-        }
-
-        function getInteractionCount (interactionTypeId) {
-            var interaction = _.find(vm.report.interactions, { interaction_type_id: interactionTypeId });
-            return angular.isDefined(interaction) ? interaction.interaction_count : '-';
         }
 
         function toggleAnonymousInteractionButtons () {
