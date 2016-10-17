@@ -28,10 +28,12 @@ organization-overview {
       &.active {
         color: $pivot-bright-blue;
         border-bottom-color: $pivot-bright-blue;
+        .loading svg {
+          fill: $pivot-bright-blue;
+        }
       }
       .loading {
-        height: 20px;
-        padding-left: 10px;
+        padding-left: 3px;
       }
     }
   }

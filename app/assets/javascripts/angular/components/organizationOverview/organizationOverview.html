@@ -12,14 +12,16 @@
                 {{'ministries.' + tabName + '.header' | t}}
                 <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
             </span>
-            <img ng-if="$ctrl.loadDetails && !$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+            <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
+            </loading-spinner>
         </div>
         <div class="tab" ng-init="tabName = 'surveys'">
             <span>
                 <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.' + tabName + '.header' | t}}</a>
                 <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
             </span>
-            <img ng-if="$ctrl.loadDetails && !$ctrl[tabName]" src="/assets/loading.gif" class="loading" />
+            <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
+            </loading-spinner>
         </div>
     </div>
 </div>
