@@ -1,6 +1,10 @@
+$contact-height: 50px;
+
 contact {
+  $contact-padding: 10px;
+
   @extend .row;
-  height: 30px;
+  height: $contact-height - $contact-padding * 2;
 
   .button-column {
     width: 40px;
@@ -12,13 +16,9 @@ contact {
     width: 100px;
   }
 
-  .warning {
-    color: $pivot-orange;
-  }
-
   round-button {
     margin: auto;
   }
 
-  padding: 10px;
+  padding: $contact-padding;
 }

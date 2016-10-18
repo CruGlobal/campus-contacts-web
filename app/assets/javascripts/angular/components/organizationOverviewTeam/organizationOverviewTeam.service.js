@@ -15,9 +15,9 @@
                         'phone_numbers',
                         'email_addresses'
                     ].join(','),
-                    organization_id: org.id,
                     'page[limit]': page.limit,
                     'page[offset]': page.offset,
+                    'filters[organization_ids]': org.id,
                     'filters[permissions]': 'admin,user'
                 });
             }

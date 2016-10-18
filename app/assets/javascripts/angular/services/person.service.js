@@ -4,15 +4,26 @@
         .factory('personService', personService);
 
     function personService (httpProxy, apiEndPoint, _) {
-        return {
-            // Return the follow-up status of the person in a particular organization
-            getFollowupStatus: function (person, organizationId) {
+        var personService = {
+            // Find and return a person's organizational permission for a particular organization
+            getOrgPermission: function (person, organizationId) {
                 return _.chain(person.organizational_permissions)
                     .filter({ organization_id: organizationId })
-                    .map('followup_status')
                     .first()
                     .defaultTo(null)
                     .value();
+            },
+
+            // Return the follow-up status of the person in a particular organization
+            getFollowupStatus: function (person, organizationId) {
+                var orgPermission = personService.getOrgPermission(person, organizationId);
+                return orgPermission && orgPermission.followup_status;
+            },
+
+            // Return the Cru status of the person in a particular organization
+            getCruStatus: function (person, organizationId) {
+                var orgPermission = personService.getOrgPermission(person, organizationId);
+                return orgPermission && orgPermission.cru_status;
             },
 
             // Given a person in a particular organization, return the person that that person is assigned to
@@ -23,6 +34,16 @@
                     .first()
                     .defaultTo(null)
                     .value();
+            },
+
+            // Return the person's primary phone number
+            getPhoneNumber: function (person) {
+                return _.chain(person.phone_numbers).find({ primary: true }).defaultTo(null).value();
+            },
+
+            // Return the person's primary email address
+            getEmailAddress: function (person) {
+                return _.chain(person.email_addresses).find({ primary: true }).defaultTo(null).value();
             },
 
             archivePerson: function (person, organizationId) {
@@ -51,6 +72,8 @@
                         _.remove(organizationalPermission.organization.people, { id: person.id });
                     });
             }
-        }
+        };
+
+        return personService;
     }
 })();

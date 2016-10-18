@@ -17,7 +17,7 @@
         vm.loadContactPage = loadContactPage;
 
         function loadContactPage (page) {
-            return organizationOverviewContactsService.loadOrgContacts(vm.org, page);
+            return organizationOverviewContactsService.loadOrgContacts(vm.org.id, page);
         }
     }
 })();

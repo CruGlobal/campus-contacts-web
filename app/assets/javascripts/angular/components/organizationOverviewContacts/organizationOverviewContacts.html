@@ -1,34 +1,40 @@
 <pages load-page="$ctrl.loadContactPage" on-new-data="$ctrl.contacts = newData"></pages>
-<div class="header">
-    <div class="column button-column">
-        <input type="checkbox" />
+<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.contacts.contact' | isState)}">
+    <div class="contacts-list">
+        <div class="header">
+            <div class="column button-column">
+                <input type="checkbox" />
+            </div>
+            <div class="column important-column">
+                <span>{{'ministries.contacts.name' | t}}</span>
+            </div>
+            <div class="column detail-column gender-column">
+                <span>{{'ministries.contacts.gender' | t}}</span>
+            </div>
+            <div class="column detail-column normal-column">
+                <span>{{'ministries.contacts.assignment' | t}}</span>
+            </div>
+            <div class="column detail-column normal-column">
+                <span>{{'ministries.contacts.status' | t}}</span>
+            </div>
+            <div class="column detail-column phone-number-column">
+                <round-button class="disabled">
+                    <ng-md-icon icon="phone"></ng-md-icon>
+                </round-button>
+            </div>
+            <div class="column detail-column button-column">
+                <round-button class="disabled">
+                    <ng-md-icon icon="email"></ng-md-icon>
+                </round-button>
+            </div>
+        </div>
+        <div class="grid-content">
+            <contact ng-repeat="contact in $ctrl.contacts | orderBy: 'last_name' track by contact.id"
+                     ng-class="{'alternate-color': $odd,
+                                collapsed: ('app.ministries.ministry.contacts.contact' | isState)}"
+                     contact="contact" organization-id="$ctrl.org.id">
+            </contact>
+        </div>
     </div>
-    <div class="column important-column">
-        <span>{{'ministries.contacts.name' | t}}</span>
-    </div>
-    <div class="column gender-column">
-        <span>{{'ministries.contacts.gender' | t}}</span>
-    </div>
-    <div class="column normal-column">
-        <span>{{'ministries.contacts.assignment' | t}}</span>
-    </div>
-    <div class="column normal-column">
-        <span>{{'ministries.contacts.status' | t}}</span>
-    </div>
-    <div class="column phone-number-column">
-        <round-button class="disabled">
-            <ng-md-icon icon="phone"></ng-md-icon>
-        </round-button>
-    </div>
-    <div class="column button-column">
-        <round-button class="disabled">
-            <ng-md-icon icon="email"></ng-md-icon>
-        </round-button>
-    </div>
-</div>
-<div class="grid-content">
-    <contact ng-repeat="contact in $ctrl.contacts | orderBy: 'last_name' track by contact.id"
-             ng-class="{'alternate-color': $odd}"
-             contact="contact" organization-id="$ctrl.org.id">
-    </contact>
+    <ui-view></ui-view>
 </div>

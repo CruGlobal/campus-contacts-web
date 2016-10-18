@@ -1,0 +1,30 @@
+organization-overview-contact {
+  display: block;
+  padding: 10px;
+  background-color: $white;
+
+  round-button {
+    margin-left: initial;
+  }
+
+  .close-button {
+    float: right;
+  }
+
+  .name-row .warning {
+    padding: 0 5px;
+  }
+
+  .name {
+    font-size: 2em;
+  }
+
+  form {
+    width: 75%;
+    margin: auto;
+
+    .input-group {
+      padding-bottom: 10px;
+    }
+  }
+}

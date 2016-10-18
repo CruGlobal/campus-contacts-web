@@ -12,11 +12,11 @@
             }
         });
 
-    function contactController (personService, _) {
+    function contactController (personService) {
         var vm = this;
         vm.uncontacted = personService.getFollowupStatus(vm.contact, vm.organizationId) === 'uncontacted';
         vm.assignedTo = personService.getAssignedTo(vm.contact, vm.organizationId);
-        vm.phoneNumber = _.chain(vm.contact.phone_numbers).map('number').first().defaultTo(null).value();
-        vm.emailAddress = _.chain(vm.contact.email_addresses).map('email').first().defaultTo(null).value();
+        vm.phoneNumber = personService.getPhoneNumber(vm.contact);
+        vm.emailAddress = personService.getEmailAddress(vm.contact);
     }
 })();

@@ -56,13 +56,11 @@
                     component: 'organizationOverview',
                     abstract: true,
                     resolve: {
-                        org: function ($state, $stateParams, JsonApiDataStore) {
-                            var org = JsonApiDataStore.store.find('organization', $stateParams.orgId);
-                            if (!org) {
-                                // Go to the root organization if the organization could not be found
+                        org: function ($state, $stateParams, routesService) {
+                            return routesService.getOrganization($stateParams.orgId).catch(function () {
+                                // Go to the root organization if the organization could not be loaded
                                 $state.go('app.ministries.root');
-                            }
-                            return org;
+                            });
                         }
                     }
                 });
@@ -73,6 +71,24 @@
                     url: '/' + tab,
                     component: 'organizationOverview' + _.capitalize(tab)
                 });
+            });
+
+            $stateProvider.state({
+                name: 'app.ministries.ministry.contacts.contact',
+                url: '/:contactId',
+                component: 'organizationOverviewContact',
+                resolve: {
+                    contact: function ($state, $stateParams, routesService) {
+                        return routesService.getPerson($stateParams.contactId).catch(function () {
+                            // Go back to the parents list if the contact could not be found
+                            $state.go('app.ministries.ministry.contacts', { orgId: $stateParams.orgId });
+                        });
+                    },
+
+                    organizationId: function ($stateParams) {
+                        return $stateParams.orgId;
+                    }
+                }
             });
 
             // This is the default URL if the URL does not match any routes

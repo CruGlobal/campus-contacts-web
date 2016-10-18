@@ -175,6 +175,17 @@ en:
       end_date_help: "Please note, due to the Infobase, the Trend Tracker tool will display the nearest Sunday after the selected end date."
       save_trend: Save Trend Tracker
       year_ago: This is only available if the Start Date and End Date are less than one year apart.
+  contact:
+    assigned_to: Assigned To
+    cru_status: Role
+    email_address: Email
+    first_name: First
+    followup_status: Status
+    last_name: Last
+    phone_number: Phone
+    primary_email: Primary
+    primary_phone: Primary
+    student_status: Enrollment
   contacts:
     add_contact: Add Contact
     all_contacts:
@@ -1781,6 +1792,12 @@ en:
     intern: Intern
     part_time_staff: Part Time Field Staff
     full_time_staff: Full Time Supported Staff
+  followup_status:
+    attempted_contact: Attempted Contact
+    completed: Completed
+    contacted: Contacted
+    do_not_contact: Do Not Contact
+    uncontacted: Uncontacted
   student_status:
     not_student: Not currently a student
     middle_school: Middle School
