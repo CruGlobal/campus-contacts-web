@@ -2,7 +2,10 @@
     <input type="checkbox" />
 </div>
 <div class="column important-column">
-    <a ui-sref=".contact({ contactId: $ctrl.contact.id })">{{$ctrl.contact.full_name}}</a>
+    <a ui-state="'app.ministries.ministry.contacts.contact.' + $ctrl.contactFirstTab"
+       ui-state-params="{ contactId: $ctrl.contact.id }">
+        {{$ctrl.contact.full_name}}
+    </a>
 </div>
 <div class="column detail-column gender-column">
     <span ng-if="$ctrl.contact.gender">{{('ministries.contacts.' + $ctrl.contact.gender.toLowerCase()) | t}}</span>

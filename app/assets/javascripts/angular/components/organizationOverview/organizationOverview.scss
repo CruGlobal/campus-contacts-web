@@ -13,28 +13,14 @@ organization-overview {
     cursor: pointer;
   }
 
-  .tabs {
-    display: flex;
-
-    .tab {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      &, a {
-        color: white;
+  .tabs .tab {
+    &.active {
+      .loading svg {
+        fill: $pivot-bright-blue;
       }
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      &.active {
-        color: $pivot-bright-blue;
-        border-bottom-color: $pivot-bright-blue;
-        .loading svg {
-          fill: $pivot-bright-blue;
-        }
-      }
-      .loading {
-        padding-left: 3px;
-      }
+    }
+    .loading {
+      padding-left: 3px;
     }
   }
 }

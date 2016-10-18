@@ -1,5 +1,5 @@
 <pages load-page="$ctrl.loadContactPage" on-new-data="$ctrl.contacts = newData"></pages>
-<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.contacts.contact' | isState)}">
+<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.contacts.contact' | includedByState)}">
     <div class="contacts-list">
         <div class="header">
             <div class="column button-column">
@@ -31,7 +31,7 @@
         <div class="grid-content">
             <contact ng-repeat="contact in $ctrl.contacts | orderBy: 'last_name' track by contact.id"
                      ng-class="{'alternate-color': $odd,
-                                collapsed: ('app.ministries.ministry.contacts.contact' | isState)}"
+                                collapsed: ('app.ministries.ministry.contacts.contact' | includedByState)}"
                      contact="contact" organization-id="$ctrl.org.id">
             </contact>
         </div>

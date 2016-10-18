@@ -4,9 +4,9 @@
 
     angular
         .module('missionhubApp')
-        .factory('organizationOverviewContactService', organizationOverviewContactService);
+        .factory('contactProfileService', contactProfileService);
 
-    function organizationOverviewContactService (httpProxy, apiEndPoint, _) {
+    function contactProfileService (httpProxy, apiEndPoint, _) {
         function updatePerson (personId, payload) {
             return httpProxy.put(apiEndPoint.people.index + '/' + personId, null, payload);
         }

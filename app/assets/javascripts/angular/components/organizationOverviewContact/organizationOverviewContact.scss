@@ -1,7 +1,23 @@
 organization-overview-contact {
   display: block;
-  padding: 10px;
   background-color: $white;
+
+  header {
+    padding: 10px;
+    padding-bottom: 0;
+    margin-bottom: 20px;
+    background: $gray-4;
+
+    .tabs .tab {
+      &, a {
+        color: $pivot-dark-blue;
+      }
+      &.active {
+        color: $pivot-dark-blue;
+        border-bottom-color: $pivot-dark-blue;
+      }
+    }
+  }
 
   round-button {
     margin-left: initial;
@@ -17,14 +33,5 @@ organization-overview-contact {
 
   .name {
     font-size: 2em;
-  }
-
-  form {
-    width: 75%;
-    margin: auto;
-
-    .input-group {
-      padding-bottom: 10px;
-    }
   }
 }

@@ -103,6 +103,14 @@ en:
       status: Status
       unassigned: Unassigned
       uncontacted: Uncontacted
+      activity:
+        header: Activity
+      assigned:
+        header: Assigned
+      history:
+        header: History
+      profile:
+        header: Profile
     groups:
       header: Groups
     roots: Ministries

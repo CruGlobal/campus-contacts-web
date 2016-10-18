@@ -8,7 +8,7 @@
 
     angular
         .module('missionhubApp')
-        .config(function ($stateProvider, $urlRouterProvider, ministryViewTabs, _) {
+        .config(function ($stateProvider, $urlRouterProvider, ministryViewTabs, contactTabs, _) {
             $stateProvider
                 .state({
                     name: 'app',
@@ -77,6 +77,7 @@
                 name: 'app.ministries.ministry.contacts.contact',
                 url: '/:contactId',
                 component: 'organizationOverviewContact',
+                abstract: true,
                 resolve: {
                     contact: function ($state, $stateParams, routesService) {
                         return routesService.getPerson($stateParams.contactId).catch(function () {
@@ -89,6 +90,14 @@
                         return $stateParams.orgId;
                     }
                 }
+            });
+
+            contactTabs.forEach(function (tab) {
+                $stateProvider.state({
+                    name: 'app.ministries.ministry.contacts.contact.' + tab,
+                    url: '/' + tab,
+                    component: 'contact' + _.capitalize(tab)
+                });
             });
 
             // This is the default URL if the URL does not match any routes
