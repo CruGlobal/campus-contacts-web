@@ -580,12 +580,6 @@ class PersonTest < ActiveSupport::TestCase
       end
     end
 
-    should 'get & update interests' do
-      x = @person.get_interests(@authentication, TestFBResponses::FULL)
-      assert(x > 0, 'Make sure we now have at least one interest')
-      assert(@person.interests.first.name.is_a? String)
-    end
-
     should 'get & update location' do
       # @response = MiniFB.get(@authentication.token, @authentication.uid)
       x = @person.get_location(@authentication, TestFBResponses::FULL)

@@ -2,20 +2,15 @@ class Jobs::UpdateFB
   include Sidekiq::Worker
   sidekiq_options unique: true
 
-  def perform(person_id, auth, action)
+  def perform(person_id, auth, _action)
     return false unless auth.present?
     authentication = auth['authentication']
     person = Person.find_by_id(person_id)
     if person && authentication
-      case action
-      when 'friends'
-        if person.friends.count > 0
-          person.update_friends(authentication)
-        else
-          person.get_friends(authentication)
-        end
-      when 'interests'
-        person.get_interests(authentication)
+      if person.friends.count > 0
+        person.update_friends(authentication)
+      else
+        person.get_friends(authentication)
       end
     end
   end

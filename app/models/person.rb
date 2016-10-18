@@ -1305,10 +1305,6 @@ class Person < ActiveRecord::Base
         response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch
       end
 
-      begin
-        self.birth_date = DateTime.strptime(data['birthday'], '%m/%d/%Y') if birth_date.blank? && data['birthday'].present?
-      rescue ArgumentError; end
-
       self.gender = response.raw_attributes['gender'] unless response.raw_attributes['gender'].present? && !gender.blank?
       # save!
       unless email_addresses.detect { |e| e.email == data['email'] }
@@ -1453,26 +1449,6 @@ class Person < ActiveRecord::Base
     end
   rescue => e
     Rollbar.error(e)
-    return false
-  end
-
-  def get_interests(authentication, response = nil)
-    if response.nil?
-      @interests = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.interests
-    else
-      @interests = response.interests
-    end
-    @interests.each do |interest|
-      raw_info = interest.raw_attributes
-      i = interests.where(interest_id: raw_info['id'], person_id: id.to_i, provider: 'facebook').first_or_initialize
-      i.provider = 'facebook'
-      i.category = raw_info['category']
-      i.name = raw_info['name']
-      i.interest_created_time = raw_info['created_time']
-      i.save
-    end
-    interests.count
-  rescue
     return false
   end
 
@@ -1813,7 +1789,6 @@ class Person < ActiveRecord::Base
 
   def async_get_or_update_friends_and_interests(authentication)
     Jobs::UpdateFB.perform_async(id, authentication, 'friends')
-    Jobs::UpdateFB.perform_async(id, authentication, 'interests')
   end
 
   def picture
