@@ -91,8 +91,6 @@ en:
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   ministries:
-    admins:
-      header: Team
     contacts:
       assigned: Assigned
       assignment: Assigned to
@@ -112,6 +110,8 @@ en:
       header: Ministries
     surveys:
       header: Surveys
+    team:
+      header: Team
   signatures:
     title: Signatures
     signed_forms: Signed Forms

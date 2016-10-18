@@ -13,7 +13,7 @@
         });
 
     function organizationOverviewController (JsonApiDataStore, ministryViewTabs, ministryViewFirstTab,
-                                             organizationOverviewContactsService, organizationOverviewAdminsService,
+                                             organizationOverviewContactsService, organizationOverviewTeamService,
                                              organizationOverviewService, _) {
         var vm = this;
 
@@ -46,15 +46,15 @@
                 });
             });
 
-            // The contacts and admins are loaded by their respective tab components, not this component.
-            // However, this component does need to know how many contacts and admins there are, so set the contacts
-            // and admins to a sparse array of the appropriate length.
+            // The contacts and team are loaded by their respective tab components, not this component.
+            // However, this component does need to know how many contacts and team members there are, so set the
+            // contacts and team to a sparse array of the appropriate length.
             organizationOverviewContactsService.loadOrgContacts(vm.org, { limit: 0, offset: 0 }).then(function (response) {
                 vm.contacts = new Array(response.meta.total);
             });
 
-            organizationOverviewAdminsService.loadOrgAdmins(vm.org, { limit: 0, offset: 0 }).then(function (response) {
-                vm.admins = new Array(response.meta.total);
+            organizationOverviewTeamService.loadOrgTeam(vm.org, { limit: 0, offset: 0 }).then(function (response) {
+                vm.team = new Array(response.meta.total);
             });
         }
     }

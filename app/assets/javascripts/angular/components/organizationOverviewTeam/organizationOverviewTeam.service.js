@@ -4,12 +4,12 @@
 
     angular
         .module('missionhubApp')
-        .factory('organizationOverviewAdminsService', organizationOverviewAdminsService);
+        .factory('organizationOverviewTeamService', organizationOverviewTeamService);
 
-    function organizationOverviewAdminsService (httpProxy, apiEndPoint) {
+    function organizationOverviewTeamService (httpProxy, apiEndPoint) {
         return {
-            // Load an organization's admins
-            loadOrgAdmins: function (org, page) {
+            // Load an organization's team members
+            loadOrgTeam: function (org, page) {
                 return httpProxy.get(apiEndPoint.people.index, {
                     include: [
                         'phone_numbers',

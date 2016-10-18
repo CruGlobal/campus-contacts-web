@@ -11,7 +11,7 @@
         return {
             // Return an array of all loaded root organizations
             getRootOrganizations: function () {
-                // Find all of the organizations that the user is an admin of
+                // Find all of the organizations that the user is a team member of
                 return _.chain(JsonApiDataStore.store.findAll('organizational_permission'))
                     .filter(function (permission) {
                         // 1 is the admin permission, and 4 is the user permission

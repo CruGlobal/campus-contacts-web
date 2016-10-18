@@ -1,7 +1,0 @@
-<pages load-page="$ctrl.loadAdminPage" on-new-data="$ctrl.admins = newData"></pages>
-<div class="grid-content">
-    <person ng-repeat="person in $ctrl.admins | orderBy: 'last_name' track by person.id"
-            ng-class="{'alternate-color': $odd}"
-            person="person" organization-id="$ctrl.org.id">
-    </person>
-</div>
