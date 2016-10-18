@@ -1,55 +1,80 @@
-<form>
-    <div class="input-group">
-        <div class="input-label">{{'contact.followup_status' | t}}</div>
-        <select ng-options="('followup_status.' + statusId | t) for statusId in $ctrl.followupStatusIds"
-                ng-model="$ctrl.contactTab.orgPermission.followup_status"
-                ng-change="$ctrl.saveAttribute($ctrl.contactTab.orgPermission, 'followup_status')">
-        </select>
-    </div>
-    <div class="input-group">
-        <div class="input-label">{{'contact.assigned_to' | t}}</div>
-        <span>{{$ctrl.contactTab.assignedTo.full_name}}</span>
-    </div>
-    <div class="input-group">
-        <div class="input-label">{{'contact.cru_status' | t}}</div>
-        <select ng-options="('cru_status.' + cruStatusId | t) for cruStatusId in $ctrl.cruStatusIds"
-                ng-model="$ctrl.contactTab.orgPermission.cru_status"
-                ng-change="$ctrl.saveAttribute($ctrl.contactTab.orgPermission, 'cru_status')">
-        </select>
-    </div>
-    <div class="input-group">
-        <div class="input-label">{{'contact.student_status' | t}}</div>
-        <select ng-options="('student_status.' + enrollmentId | t) for enrollmentId in $ctrl.enrollmentIds"
-                ng-model="$ctrl.contactTab.contact.student_status"
-                ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'student_status')">
-        </select>
-    </div>
-    <div class="input-group">
-        <div class="input-label">{{'contact.first_name' | t}}</div>
-        <input type="text" ng-model="$ctrl.contactTab.contact.first_name" ng-model-options="{ updateOn: 'blur' }"
-               ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'first_name')">
-    </div>
-    <div class="input-group">
-        <div class="input-label">{{'contact.last_name' | t}}</div>
-        <input type="text" ng-model="$ctrl.contactTab.contact.last_name" ng-model-options="{ updateOn: 'blur' }"
-               ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'last_name')">
-    </div>
-    <div class="input-group" ng-repeat="emailAddress in $ctrl.emailAddresses">
-        <div class="input-label">{{'contact.email_address' | t}}</div>
-        <input type="email" ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
-               ng-change="$ctrl.saveAttribute(emailAddress, 'email')">
-        <label>
-            <input type="radio" name="primary-email" ng-model="$ctrl.contactTab.primaryEmail" ng-value="emailAddress">
-            {{'contact.primary_email' | t}}
-        </label>
-    </div>
-    <div class="input-group" ng-repeat="phoneNumber in $ctrl.phoneNumbers">
-        <div class="input-label">{{'contact.phone_number' | t}}</div>
-        <input type="tel" ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
-               ng-change="$ctrl.saveAttribute(phoneNumber, 'number')">
-        <label>
-            <input type="radio" name="primary-phone" ng-model="$ctrl.contactTab.primaryPhone" ng-value="phoneNumber">
-            {{'contact.primary_phone' | t}}
-        </label>
-    </div>
-</form>
+
+<div class="contact-profileTab form">
+  <div class="form-group">
+    <label class="form-control-select">
+      {{'contact.followup_status' | t}}
+      <select ng-options="('followup_status.' + statusId | t) for statusId in $ctrl.followupStatusIds"
+              ng-model="$ctrl.contactTab.orgPermission.followup_status"
+              ng-change="$ctrl.saveAttribute($ctrl.contactTab.orgPermission, 'followup_status')"
+              class="form-control">
+      </select>
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      {{'contact.assigned_to' | t}}
+    </label>
+    <span>{{$ctrl.contactTab.assignedTo.full_name}}</span>
+  </div>
+  <div class="form-group">
+    <label class="form-control-select">
+      {{'contact.cru_status' | t}}
+      <select ng-options="('cru_status.' + cruStatusId | t) for cruStatusId in $ctrl.cruStatusIds"
+              ng-model="$ctrl.contactTab.orgPermission.cru_status"
+              ng-change="$ctrl.saveAttribute($ctrl.contactTab.orgPermission, 'cru_status')"
+              class="form-control">
+      </select>
+    </label>
+  </div>
+  <div class="form-group">
+    <label class="form-control-select">
+      {{'contact.student_status' | t}}
+      <select ng-options="('student_status.' + enrollmentId | t) for enrollmentId in $ctrl.enrollmentIds"
+              ng-model="$ctrl.contactTab.contact.student_status"
+              ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'student_status')"
+              class="form-control">
+      </select>
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      {{'contact.first_name' | t}}
+      <input type="text" ng-model="$ctrl.contactTab.contact.first_name" ng-model-options="{ updateOn: 'blur' }"
+             ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'first_name')"
+             class="form-control">
+    </label>
+  </div>
+  <div class="form-group">
+    <label>
+      {{'contact.last_name' | t}}
+      <input type="text" ng-model="$ctrl.contactTab.contact.last_name" ng-model-options="{ updateOn: 'blur' }"
+             ng-change="$ctrl.saveAttribute($ctrl.contactTab.contact, 'last_name')"
+             class="form-control">
+    </label>
+  </div>
+  <div class="form-group" ng-repeat="emailAddress in $ctrl.emailAddresses">
+    <label>
+      {{'contact.email_address' | t}}
+    </label>
+    <input type="email" ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
+           ng-change="$ctrl.saveAttribute(emailAddress, 'email')"
+           class="form-control">
+    <label class="label-addon">
+      {{'contact.primary_email' | t}}
+      <input type="radio" name="primary-email" ng-model="$ctrl.contactTab.primaryEmail"
+             ng-value="emailAddress">
+    </label>
+  </div>
+  <div class="form-group" ng-repeat="phoneNumber in $ctrl.phoneNumbers">
+    <label>
+      {{'contact.phone_number' | t}}
+    </label>
+    <input type="tel" ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
+           ng-change="$ctrl.saveAttribute(phoneNumber, 'number')"
+           class="form-control">
+    <label class="label-addon">
+      {{'contact.primary_phone' | t}}
+      <input type="radio" name="primary-phone" ng-model="$ctrl.contactTab.primaryPhone" ng-value="phoneNumber">
+    </label>
+  </div>
+</div>

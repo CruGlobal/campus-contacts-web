@@ -1,0 +1,90 @@
+.pivot_theme {
+  font-family: 'Titillium Web', sans-serif;
+
+  textarea,
+  input[type="text"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="radio"],
+  input[type="checkbox"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid $gray-3;
+    border-radius: 0;
+    background-color: $white;
+    color: $pivot-dark-blue;
+  }
+
+  input[type="radio"] {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-clip: content-box;
+    padding: 2px;
+    position: absolute;
+    &:checked {
+      background-color: $pivot-dark-blue;
+    }
+  }
+
+  input[type="checkbox"] {
+    height: 14px;
+    width: 14px;
+    &:checked {
+      background-color: $pivot-dark-blue;
+      background-image: url('data:image/svg+xml;utf8,<svg width="8px" height="8px" viewBox="0 0 8 8" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-409, -448)" fill="%23FFF"><path d="M412.250024,456.000761 C412.062019,456.000761 411.879014,455.930759 411.74001,455.800755 L409.239939,453.48169 C408.936931,453.200682 408.91793,452.726669 409.199938,452.42266 C409.480946,452.118651 409.95796,452.101651 410.259968,452.382659 L412.09002,454.079707 L415.611119,448.356545 C415.828125,448.005535 416.291138,447.893532 416.643148,448.111538 C416.996158,448.328545 417.105161,448.790558 416.889155,449.143568 L412.889042,455.643751 C412.771039,455.834756 412.574033,455.96376 412.352027,455.993761 C412.317026,455.998761 412.284025,456.000761 412.250024,456.000761"></path></g></svg>');
+      background-repeat: no-repeat;
+      background-position: 3px 3px;
+      border: 0;
+    }
+  }
+
+  .form {
+    .form-group {
+      margin-bottom: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: $gray-3;
+      position: relative;
+    }
+
+    .form-control {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      height:32px;
+      border: 1px solid $gray-3;
+      border-radius: 0;
+      background-color: $white;
+      color: $pivot-dark-blue;
+      padding: 0 8px;
+      font-size: 14px;
+    }
+
+    .form-control-select {
+      position: relative;
+      select {
+        padding-right: 30px;
+      }
+      &::after {
+        content: " ";
+        position: absolute;
+        top: 64%;
+        right: 1em;
+        z-index: 2;
+        pointer-events: none;
+        display: block;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid $pivot-dark-blue;
+      }
+    }
+  }
+}

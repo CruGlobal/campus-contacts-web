@@ -8,21 +8,12 @@
 @import 'colors';
 
 body {
-  font-family: 'Titillium Web', sans-serif;
   font-size: 18px;
   font-weight: normal;
   line-height: 1.78em;
   text-align: center;
   color: #524c4e;
   background-color: #ffffff;
-}
-
-textarea,
-input[type="text"],
-input[type="button"],
-input[type="submit"] {
-  -webkit-appearance: none;
-  border-radius: 0;
 }
 
 body.welcome {
