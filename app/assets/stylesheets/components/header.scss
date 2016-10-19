@@ -12,5 +12,5 @@
 }
 
 .subheader {
-  @include header(darken($pivot-dark-blue, 5%));
+  @include header($pivot-darker-blue);
 }

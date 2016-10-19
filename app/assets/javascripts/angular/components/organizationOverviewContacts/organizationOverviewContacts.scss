@@ -31,5 +31,19 @@ organization-overview-contacts {
 
   .header {
     @extend contact;
+
+    input[type="checkbox"] {
+      background-color: $pivot-darker-blue;
+      border: 0;
+      &:checked {
+        background-color: $pivot-darker-blue;
+        border: 1px solid white;
+      }
+    }
+  }
+
+  input[type="checkbox"] {
+    position: relative;
+    top: 2px;
   }
 }

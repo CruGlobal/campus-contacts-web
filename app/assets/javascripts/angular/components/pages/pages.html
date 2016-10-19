@@ -1,7 +1,9 @@
-<div class="subheader row" ng-show="$ctrl.pageCount > 1">
+<div class="subheader row pivot_theme" ng-show="$ctrl.pageCount > 1">
     <div class="column normal-column">
-        <span>{{'general.show' | t}}</span>
-        <select ng-options="pageSize for pageSize in $ctrl.pageSizeOptions" ng-model="$ctrl.pageSize"></select>
+        <label>
+          {{'general.show' | t}}
+          <select ng-options="pageSize for pageSize in $ctrl.pageSizeOptions" ng-model="$ctrl.pageSize"></select>
+        </label>
     </div>
     <div class="column normal-column">
         <div class="row">
