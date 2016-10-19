@@ -1,3 +1,4 @@
+<stats-header></stats-header>
 <pages load-page="$ctrl.loadTeamPage" on-new-data="$ctrl.team = newData"></pages>
 <div class="grid-content">
     <person ng-repeat="person in $ctrl.team | orderBy: 'last_name' track by person.id"
