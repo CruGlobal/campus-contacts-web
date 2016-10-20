@@ -27,10 +27,10 @@
             vm.onNewData(null);
             vm.gotoPage(0);
 
-            // Update the page whenever the page size changes to ensure that as much of the same data as possible is
-            // still shown
+            // Update the page whenever the page size changes to ensure
+            // that as much of the same data as possible is still shown
             $scope.$watch('$ctrl.pageSize', function (newPageSize, oldPageSize) {
-                if (newPageSize) {
+                if (newPageSize !== oldPageSize) {
                     vm.gotoPage(Math.floor(vm.page * oldPageSize / newPageSize));
                 }
             });

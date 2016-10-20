@@ -120,6 +120,8 @@ en:
       header: Surveys
     team:
       header: Team
+    tools:
+      header: Tools
   signatures:
     title: Signatures
     signed_forms: Signed Forms
@@ -1033,7 +1035,7 @@ en:
     archive: Archived
     back_to_dashboard: Back To My Contacts
     back_to_wizard: I'm done. Take me back to the Wizard
-    cleanup: Cleanup
+    cleanup: Organization Cleanup
     create_a_survey: Add a Survey
     dashboard: Dashboard
     directory: Directory
@@ -1050,7 +1052,7 @@ en:
     login: Log In
     logout: Sign Out
     make_default: make default
-    manage: Organizations
+    manage: Manage Organizations
     my_comments: My Comments
     my_contacts: My Contacts
     my_profile: My Profile

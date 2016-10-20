@@ -10,6 +10,9 @@
         return {
             // Load an organization's team members
             loadOrgTeam: function (org, page) {
+                if (org.id) {
+                    org = org.id;
+                }
                 return httpProxy.get(apiEndPoint.people.index, {
                     include: [
                         'phone_numbers',
@@ -17,7 +20,7 @@
                     ].join(','),
                     'page[limit]': page.limit,
                     'page[offset]': page.offset,
-                    'filters[organization_ids]': org.id,
+                    'filters[organization_ids]': org,
                     'filters[permissions]': 'admin,user'
                 });
             }

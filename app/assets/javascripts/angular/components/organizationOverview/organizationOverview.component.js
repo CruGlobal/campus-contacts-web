@@ -14,7 +14,7 @@
 
     function organizationOverviewController (JsonApiDataStore, ministryViewTabs, ministryViewFirstTab,
                                              organizationOverviewContactsService, organizationOverviewTeamService,
-                                             organizationOverviewService, _) {
+                                             organizationOverviewService, loggedInPerson, _) {
         var vm = this;
 
         _.defaults(vm, {
@@ -24,6 +24,8 @@
         vm.tabNames = ministryViewTabs;
         vm.firstTab = ministryViewFirstTab;
         vm.$onInit = activate;
+        vm.adminPrivileges = true;
+        vm.cruOrg = false;
 
         function activate () {
             if (!vm.loadDetails) {
@@ -56,6 +58,10 @@
             organizationOverviewTeamService.loadOrgTeam(vm.org.id, page).then(function (response) {
                 vm.team = new Array(response.meta.total);
             });
+
+            vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
+
+            vm.cruOrg = vm.org.id === '1' || vm.org.ancestry === '1' || vm.org.ancestry.indexOf('1/') === 0
         }
     }
 })();

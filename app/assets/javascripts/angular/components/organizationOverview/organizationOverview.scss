@@ -4,6 +4,8 @@ organization-overview {
 
   & > .header {
     height: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .org-name {
@@ -21,6 +23,41 @@ organization-overview {
     }
     .loading {
       padding-left: 3px;
+    }
+    &.dropdown {
+      position: relative;
+      display: inline-block;
+      .chevron {
+        transform: rotate(90deg);
+        display: inline-block;
+      }
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: $pivot-dark-blue;
+      min-width: 200px;
+      list-style: none;
+      margin: 13px 0 0 0;
+      padding: 0;
+      z-index: 1;
+      li {
+        padding: 6px 10px;
+        &:nth-child(even) {
+          background: darken($pivot-dark-blue, 3%);
+        }
+        &:hover {
+          background: $pivot-darker-blue;
+        }
+      }
+      .divider {
+        border-bottom: 2px solid $pivot-bright-blue;
+      }
+    }
+
+    &.dropdown:hover .dropdown-content {
+      display: block;
     }
   }
 }

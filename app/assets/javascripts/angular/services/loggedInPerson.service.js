@@ -3,7 +3,7 @@
         .module('missionhubApp')
         .factory('loggedInPerson', loggedInPerson);
 
-    function loggedInPerson (httpProxy, apiEndPoint, JsonApiDataStore) {
+    function loggedInPerson (httpProxy, apiEndPoint, JsonApiDataStore, _) {
         var person = null;
         var loadingPromise = null;
 
@@ -42,6 +42,17 @@
                     return me;
                 });
                 return loadingPromise;
+            },
+
+            // check if you have admin access on the org or any above it
+            isAdminAt: function (org) {
+                var adminOrgIds = _.chain(person.organizational_permissions)
+                                   .filter({ permission_id: 1 })
+                                   .map('organization_id')
+                                   .value();
+                var orgAndAncestry = org.ancestry.split('/');
+                orgAndAncestry.push(org.id);
+                return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
             }
         };
     }

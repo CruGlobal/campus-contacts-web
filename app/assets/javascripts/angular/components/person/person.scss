@@ -13,7 +13,7 @@ person {
     }
     & > .name {
       @extend %common-margin;
-      width: 288px;
+      width: 336px;
       a:visited {
         color: inherit;
       }
