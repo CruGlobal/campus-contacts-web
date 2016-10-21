@@ -3,8 +3,10 @@ organization-overview-contact {
   background-color: $white;
   border-left: 1px solid $pivot-dark-blue;
 
+  $inner-padding: 10%;
+
   header {
-    padding: 10px;
+    padding: 10px $inner-padding;
     padding-bottom: 0;
     margin-bottom: 20px;
     background: $gray-4;
@@ -34,5 +36,10 @@ organization-overview-contact {
 
   .name {
     font-size: 2em;
+  }
+
+  ui-view {
+    display: block;
+    padding: 0 $inner-padding;
   }
 }
