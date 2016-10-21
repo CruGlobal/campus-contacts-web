@@ -28,7 +28,8 @@
             // Load an organization's sub-orgs
             loadOrgSuborgs: function (org) {
                 return httpProxy.get(apiEndPoint.organizations.index, {
-                    'filters[parent_ids]': org.id
+                    'filters[parent_ids]': org.id,
+                    include: 'groups,surveys'
                 });
             }
         };
