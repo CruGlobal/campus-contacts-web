@@ -241,11 +241,8 @@ class Element < ActiveRecord::Base
   # copy an item and all it's children
   def duplicate(survey, parent = nil)
     new_element = self.class.new(attributes)
-    case parent.class.to_s
-    when ChoiceField
+    if parent.class.to_s == "ChoiceField"
       new_element.conditional_id = parent.id
-    when QuestionGrid, QuestionGridWithTotal
-      new_element.question_grid_id = parent.id
     end
     new_element.save(validate: false)
     SurveyElement.create(element: new_element, survey: survey) unless parent
