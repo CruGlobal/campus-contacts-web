@@ -1,4 +1,3 @@
-
 <div class="contact-profileTab form">
   <div class="form-group">
     <label class="form-control-select">
@@ -52,29 +51,48 @@
              class="form-control">
     </label>
   </div>
-  <div class="form-group" ng-repeat="emailAddress in $ctrl.emailAddresses">
+  <div class="form-group" ng-repeat="emailAddress in $ctrl.getEmailAddresses()"
+       ng-init="isPending = emailAddress === $ctrl.pendingEmailAddress">
     <label>
       {{'contact.email_address' | t}}
     </label>
-    <input type="email" ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
-           ng-change="$ctrl.saveAttribute(emailAddress, 'email')"
-           class="form-control">
+    <div class="row">
+        <input type="email" ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
+               ng-change="$ctrl.saveAttribute(emailAddress, 'email')"
+               class="form-control">
+        <button ng-if="$last && !$ctrl.pendingEmailAddress" ng-click="$ctrl.addEmailAddress()">
+            {{'contact.add' | t}}
+        </button>
+        <button ng-if="!isPending" ng-click="$ctrl.deleteEmailAddress(emailAddress)">
+            {{'contact.delete' | t}}
+        </button>
+    </div>
     <label class="label-addon">
       {{'contact.primary_email' | t}}
-      <input type="radio" name="primary-email" ng-model="$ctrl.contactTab.primaryEmail"
-             ng-value="emailAddress">
+      <input type="radio" name="primary-email" ng-if="!isPending"
+             ng-model="$ctrl.contactTab.primaryEmail" ng-value="emailAddress">
     </label>
   </div>
-  <div class="form-group" ng-repeat="phoneNumber in $ctrl.phoneNumbers">
+  <div class="form-group" ng-repeat="phoneNumber in $ctrl.getPhoneNumbers()"
+       ng-init="isPending = phoneNumber === $ctrl.pendingPhoneNumber">
     <label>
       {{'contact.phone_number' | t}}
     </label>
-    <input type="tel" ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
-           ng-change="$ctrl.saveAttribute(phoneNumber, 'number')"
-           class="form-control">
+    <div class="row">
+        <input type="tel" ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
+               ng-change="$ctrl.saveAttribute(phoneNumber, 'number')"
+               class="form-control">
+        <button ng-if="$last && !$ctrl.pendingPhoneNumber" ng-click="$ctrl.addPhoneNumber()">
+            {{'contact.add' | t}}
+        </button>
+        <button ng-if="!isPending" ng-click="$ctrl.deletePhoneNumber(phoneNumber)">
+            {{'contact.delete' | t}}
+        </button>
+    </div>
     <label class="label-addon">
       {{'contact.primary_phone' | t}}
-      <input type="radio" name="primary-phone" ng-model="$ctrl.contactTab.primaryPhone" ng-value="phoneNumber">
+      <input type="radio" name="primary-phone" ng-if="!isPending"
+             ng-model="$ctrl.contactTab.primaryPhone" ng-value="phoneNumber">
     </label>
   </div>
 </div>

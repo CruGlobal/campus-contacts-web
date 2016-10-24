@@ -1,2 +1,7 @@
 contact-profile {
+  .row button {
+    $padding: 10px;
+    margin-left: $padding;
+    padding-right: $padding;
+  }
 }

@@ -11,9 +11,17 @@
             templateUrl: '/assets/angular/components/contactProfile/contactProfile.html'
         });
 
-    function contactProfileController ($scope, contactProfileService) {
+    function contactProfileController ($scope, contactProfileService, _) {
         var vm = this;
         vm.saveAttribute = saveAttribute;
+        vm.pendingEmailAddress = null;
+        vm.pendingPhoneNumber = null;
+        vm.getEmailAddresses = getEmailAddresses;
+        vm.getPhoneNumbers = getPhoneNumbers;
+        vm.addEmailAddress = addEmailAddress;
+        vm.addPhoneNumber = addPhoneNumber;
+        vm.deleteEmailAddress = deleteEmailAddress;
+        vm.deletePhoneNumber = deletePhoneNumber;
         vm.$onInit = activate;
 
         // Each of these arrays contains all possible values for a partiuclar contact attribute
@@ -42,9 +50,6 @@
         ];
 
         function activate () {
-            vm.emailAddresses = vm.contactTab.contact.email_addresses;
-            vm.phoneNumbers = vm.contactTab.contact.phone_numbers;
-
             // Save the changes on the server whenever the primary email or primary phone changes
             $scope.$watch('$ctrl.contactTab.primaryEmail', updatePrimary);
             $scope.$watch('$ctrl.contactTab.primaryPhone', updatePrimary);
@@ -63,7 +68,55 @@
         }
 
         function saveAttribute (model, attribute) {
-            contactProfileService.saveAttribute(vm.contactTab.contact.id, model, attribute);
+            contactProfileService.saveAttribute(vm.contactTab.contact.id, model, attribute).then(function () {
+                if (model === vm.pendingEmailAddress) {
+                    vm.pendingEmailAddress = null;
+                } else if (model === vm.pendingPhoneNumber) {
+                    vm.pendingPhoneNumber = null;
+                }
+            });
+        }
+
+        function getEmailAddresses () {
+            var emailAddresses = vm.contactTab.contact.email_addresses;
+            return vm.pendingEmailAddress ? emailAddresses.concat(vm.pendingEmailAddress) : emailAddresses;
+        }
+
+        function getPhoneNumbers () {
+            var phoneNumbers = vm.contactTab.contact.phone_numbers;
+            return vm.pendingPhoneNumber ? phoneNumbers.concat(vm.pendingPhoneNumber) : phoneNumbers;
+        }
+
+        // Add a new email address to the contact
+        // The email address is not actually saved to the server until the call to saveAttribute
+        function addEmailAddress () {
+            vm.pendingEmailAddress = {
+                _type: 'email_address',
+                person_id: vm.contactTab.contact.id
+            };
+        }
+
+        // Add a new phone number to the contact
+        // The phone number is not actually saved to the server until the call to saveAttribute
+        function addPhoneNumber () {
+            vm.pendingPhoneNumber = {
+                _type: 'phone_number',
+                person_id: vm.contactTab.contact.id
+            };
+        }
+
+        function deleteEmailAddress (emailAddress) {
+            return contactProfileService.deleteModel(emailAddress).then(function () {
+                // Remove the deleted email address
+                _.pull(vm.contactTab.contact.email_addresses, emailAddress);
+            });
+        }
+
+        function deletePhoneNumber (phoneNumber) {
+            return contactProfileService.deleteModel(phoneNumber).then(function () {
+                // Remove the deleted phone number
+                _.pull(vm.contactTab.contact.phone_numbers, phoneNumber);
+            });
         }
     }
 })();

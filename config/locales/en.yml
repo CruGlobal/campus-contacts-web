@@ -186,8 +186,10 @@ en:
       save_trend: Save Trend Tracker
       year_ago: This is only available if the Start Date and End Date are less than one year apart.
   contact:
+    add: Add
     assigned_to: Assigned To
     cru_status: Role
+    delete: Delete
     email_address: Email
     first_name: First
     followup_status: Status
