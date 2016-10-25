@@ -152,7 +152,7 @@ class Survey < ActiveRecord::Base
       # Copy the elements
       new_element = survey.elements.find_by_id(element.id)
       unless new_element.present?
-        if element.predefined? || element.reuseable?
+        if element.predefined?
           SurveyElement.create(element: element, survey: survey)
           new_element = element
         else
