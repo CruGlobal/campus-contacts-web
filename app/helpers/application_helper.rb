@@ -238,4 +238,13 @@ module ApplicationHelper
       #          label: label_html, label_sentence: I18n.t("labels.#{label.i18n}_sentence"))
     end
   end
+
+  def locale_image_tag(source, options = {})
+    locale = options[:locale] || I18n.locale
+    unless locale == 'en'
+      localized_name = source.split('.').insert(-2, locale).join('.')
+      source = localized_name if Rails.application.assets.find_asset(localized_name)
+    end
+    image_tag(source, options)
+  end
 end
