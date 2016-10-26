@@ -149,7 +149,7 @@
                 });
 
                 it('should not make a network request when the model is already loaded', asynchronous(function () {
-                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(null, this.model);
+                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
                     spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue([]);
 
                     var _this = this;
@@ -160,8 +160,23 @@
                 }));
 
                 it('should make a network request when the model is not already loaded', asynchronous(function () {
+                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(null, this.model);
+                    spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue([]);
+
+                    var _this = this;
+                    return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)
+                        .then(function (model) {
+                            expect(model).toBe(_this.model);
+                            expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
+                                key: 'value',
+                                include: ''
+                            });
+                        });
+                }));
+
+                it('should make a network request when the model relationships are not already loaded', asynchronous(function () {
                     spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
-                    spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(['a', 'b', 'c']);
+                    spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
 
                     var _this = this;
                     return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)

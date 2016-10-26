@@ -87,7 +87,7 @@
                 var model = JsonApiDataStore.store.find(type, id);
                 var unloadedRelationships = proxy.getUnloadedRelationships(model, relationships);
                 return $q.resolve().then(function () {
-                    if (unloadedRelationships.length === 0) {
+                    if (proxy.isLoaded(model) && unloadedRelationships.length === 0) {
                         // All of the necessary data is already loaded
                         return;
                     }
