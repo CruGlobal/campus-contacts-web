@@ -1,36 +1,41 @@
-top_of_every_hour = '0 0 * * *'
-every_15_minutes = '0 */4 * * *'
-ten_minutes_past_the_hour = '0 10 * * *'
+daily = '0 0 * * *'
+every_6_hours = '0 */4 * * *'
+just_after_midnight = '0 10 * * *'
 sunday_morning = '10 7 * * 7'
 
 hash = {
   'Infobase Sync' => {
     'class' => 'Jobs::InfobaseSync',
-    'cron'  => every_15_minutes
+    'cron'  => every_6_hours
   },
 
   'Summer Missions Sync' => {
     'class' => 'Jobs::SummerMissionsSync',
-    'cron'  => every_15_minutes
+    'cron'  => every_6_hours
   },
 
   'Contact assignment notifications' => {
     'class' => 'Jobs::ContactAssignmentNotifications',
-    'cron'  => top_of_every_hour
+    'cron'  => daily
   },
 
   'Transfer notifications' => {
     'class' => 'Jobs::PersonTransferNotifications',
-    'cron'  => top_of_every_hour
+    'cron'  => daily
   },
 
   'Mailchimp sync' => {
     'class' => 'MailChimpSyncWorker',
-    'cron'  => ten_minutes_past_the_hour
+    'cron'  => just_after_midnight
   },
 
   'Mega farmer report' => {
     'class' => 'MegaFarmerReportWorker',
+    'cron'  => sunday_morning
+  },
+
+  'Weekly digest report' => {
+    'class' => 'DigestMailerWorker',
     'cron'  => sunday_morning
   }
 }
