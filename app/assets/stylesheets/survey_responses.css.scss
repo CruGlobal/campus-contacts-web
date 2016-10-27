@@ -108,8 +108,8 @@
       font-weight: normal !important;
     }
     input:not([type=submit]) {
-      border: 1px solid #ccc !important;
-      box-shadow: none !important;
+      border: 1px solid #ccc;
+      box-shadow: none;
       font-size: 14px;
     }
     .field_with_errors {
