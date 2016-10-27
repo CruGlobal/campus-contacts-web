@@ -11,3 +11,4 @@ Rails.application.config.assets.version = '1.0'
 # Rails.application.config.assets.precompile += %w( search.js )
 Rails.application.config.assets.precompile += %w( jquery-1.7.2.min.js jquery-ui-1.8.12.js welcome.css bootstrap.js qe/icons/* highcharts.js highcharts-more.js no_left_sidebar.css plain.css)
 Rails.application.config.assets.precompile += %w( welcome.js )
+Rails.application.config.assets.precompile += %w( bootstrap.css )

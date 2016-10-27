@@ -13,6 +13,7 @@
     "angular-ui-sortable": "^0.14.3",
     "angulartics": "^1.1.2",
     "angulartics-google-analytics": "^0.2.1",
+    "bootstrap": "^4.0.0-alpha.5",
     "jsonapi-datastore": "^0.4.0-beta",
     "lodash": "^4.16.2",
     "lscache": "1.0.6",

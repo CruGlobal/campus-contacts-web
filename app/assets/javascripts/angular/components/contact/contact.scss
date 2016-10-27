@@ -4,16 +4,16 @@ contact {
   $contact-padding: 10px;
 
   @extend .row;
-  height: $contact-height - $contact-padding * 2;
+  height: $contact-height;
 
   .button-column {
-    width: 40px;
+    width: 56px;
   }
   .gender-column {
     width: 50px;
   }
   .phone-number-column {
-    width: 100px;
+    width: 120px;
   }
 
   round-button {

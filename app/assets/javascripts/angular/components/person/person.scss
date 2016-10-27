@@ -13,7 +13,7 @@ person {
     }
     & > .name {
       @extend %common-margin;
-      width: 336px;
+      width: 335px;
       a:visited {
         color: inherit;
       }
@@ -23,7 +23,7 @@ person {
       color: $pivot-orange;
     }
     & > .stats {
-      flex: 1 1 100px;
+      flex: 1 1 0;
       min-width: 0px;
       overflow: hidden;
       white-space: nowrap;
@@ -45,7 +45,7 @@ person {
     }
     .phone {
       @extend %common-margin;
-      width: 100px;
+      width: 120px;
       text-align: center;
       display: inline-block;
       &.no-data {
@@ -58,6 +58,7 @@ person {
       cursor: pointer;
       padding: 8px;
       &.close {
+        opacity: 1;
         -ms-transform: translateX(-2px) rotate(45deg);
         -webkit-transform: translateX(-2px) rotate(45deg);
         transform: translateX(-2px) rotate(45deg);
@@ -141,5 +142,8 @@ person {
     -moz-transition: 0.05s;
     -webkit-transition: 0.05s;
     -o-transition: 0.05s;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
   }
 }

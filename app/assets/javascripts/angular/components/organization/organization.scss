@@ -23,7 +23,7 @@ organization {
     }
 
     .org-name {
-      width: 271px;
+      width: 287px;
       padding: 0 8px;
       display: flex;
     }
@@ -33,8 +33,8 @@ organization {
       align-items: center;
       justify-content: space-between;
       ng-md-icon {
-        height: 24px;
-        width: 24px;
+        height: 48px;
+        width: 44px;
         padding: 12px 10px;
         svg {
           fill: $white;
@@ -122,6 +122,9 @@ organization {
       display: flex;
       flex-grow: 1;
       resize: none;
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
     }
     a {
       color: $white;
