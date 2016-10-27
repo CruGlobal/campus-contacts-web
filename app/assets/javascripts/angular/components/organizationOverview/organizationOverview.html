@@ -1,9 +1,6 @@
 <organization-breadcrumbs org="$ctrl.org"></organization-breadcrumbs>
 <div class="header">
-    <div class="org-name"
-         ui-state="'app.ministries.ministry.' + $ctrl.firstTab" ui-state-params="{ orgId: $ctrl.org.id }">
-         {{$ctrl.org.name}}
-     </div>
+    <div class="org-name" ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
     <div class="tabs">
         <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
              ui-state="'app.ministries.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"

@@ -3,10 +3,7 @@
     <div ng-repeat="org in $ctrl.organizationOverview.suborgs | orderBy: 'name' track by org.id"
        ng-class="{'alternate-color': $odd}" class="suborg row">
         <div class="row-content padded">
-            <a ui-state="'app.ministries.ministry.' + $ctrl.organizationOverview.firstTab"
-               ui-state-params="{ orgId: org.id }" class="suborg-name">
-                {{org.name}}
-            </a>
+            <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="suborg-name">{{org.name}}</a>
             <organizational-stats org="org"></organizational-stats>
         </div>
     </div>

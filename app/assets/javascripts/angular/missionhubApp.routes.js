@@ -8,7 +8,8 @@
 
     angular
         .module('missionhubApp')
-        .config(function ($stateProvider, $urlRouterProvider, ministryViewTabs, contactTabs, _) {
+        .config(function ($stateProvider, $urlRouterProvider,
+                          ministryViewTabs, ministryViewDefaultTab, contactTabs, contactDefaultTab, _) {
             $stateProvider
                 .state({
                     name: 'app',
@@ -63,6 +64,10 @@
                             });
                         }
                     }
+                })
+                .state({
+                    name: 'app.ministries.ministry.defaultTab',
+                    redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab
                 });
 
             ministryViewTabs.forEach(function (tab) {
@@ -90,6 +95,10 @@
                         return $stateParams.orgId;
                     }
                 }
+            })
+            .state({
+                name: 'app.ministries.ministry.contacts.contact.defaultTab',
+                redirectTo: 'app.ministries.ministry.contacts.contact.' + contactDefaultTab
             });
 
             contactTabs.forEach(function (tab) {

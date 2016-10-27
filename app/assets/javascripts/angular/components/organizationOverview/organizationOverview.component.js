@@ -12,7 +12,7 @@
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });
 
-    function organizationOverviewController (JsonApiDataStore, ministryViewTabs, ministryViewFirstTab,
+    function organizationOverviewController (JsonApiDataStore, ministryViewTabs,
                                              organizationOverviewContactsService, organizationOverviewTeamService,
                                              organizationOverviewService, loggedInPerson, _) {
         var vm = this;
@@ -22,7 +22,6 @@
         });
 
         vm.tabNames = ministryViewTabs;
-        vm.firstTab = ministryViewFirstTab;
         vm.$onInit = activate;
         vm.adminPrivileges = true;
         vm.cruOrg = false;

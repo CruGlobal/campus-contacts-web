@@ -4,5 +4,5 @@
     var ministryViewTabs = ['suborgs', 'team', 'groups', 'contacts', 'surveys'];
     angular.module('missionhubApp')
         .constant('ministryViewTabs', ministryViewTabs)
-        .constant('ministryViewFirstTab', ministryViewTabs[0]);
+        .constant('ministryViewDefaultTab', ministryViewTabs[0]);
 })();

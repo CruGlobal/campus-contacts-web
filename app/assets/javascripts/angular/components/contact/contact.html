@@ -2,8 +2,7 @@
     <input type="checkbox" />
 </div>
 <div class="column important-column">
-    <a ui-state="'app.ministries.ministry.contacts.contact.' + $ctrl.contactFirstTab"
-       ui-state-params="{ contactId: $ctrl.contact.id }">
+    <a ui-sref="app.ministries.ministry.contacts.contact.defaultTab({ contactId: $ctrl.contact.id })">
         {{$ctrl.contact.full_name}}
     </a>
 </div>

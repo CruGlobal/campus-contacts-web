@@ -4,5 +4,5 @@
     var contactTabs = ['profile', 'history', 'assigned', 'activity'];
     angular.module('missionhubApp')
         .constant('contactTabs', contactTabs)
-        .constant('contactFirstTab', contactTabs[0]);
+        .constant('contactDefaultTab', contactTabs[0]);
 })();

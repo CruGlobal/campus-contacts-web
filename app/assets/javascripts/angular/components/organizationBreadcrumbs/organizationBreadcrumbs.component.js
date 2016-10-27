@@ -11,9 +11,8 @@
             templateUrl: '/assets/angular/components/organizationBreadcrumbs/organizationBreadcrumbs.html'
         });
 
-    function organizationBreadcrumbsController (ministryViewFirstTab, organizationBreadcrumbsService) {
+    function organizationBreadcrumbsController (organizationBreadcrumbsService) {
         var vm = this;
-        vm.firstTab = ministryViewFirstTab;
         vm.orgHierarchy = null;
 
         vm.$onInit = activate;
