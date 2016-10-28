@@ -5,6 +5,7 @@
         .module('missionhubApp', [
             'ngAnimate',
             'ngMdIcons',
+            'angularMoment',
             'beauby.jsonApiDataStore',
             'environment',
             'ui.router',

@@ -1,0 +1,78 @@
+contact-history {
+  .filters {
+    margin-bottom: 30px;
+
+    .filter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 5px;
+      width: 6em;
+      height: 1.5em;
+      border: 1px solid $gray-3;
+      border-radius: 20px;
+      background-color: $gray-3;
+      color: $white;
+      &.active {
+        background-color: $white;
+        color: $gray-3;
+      }
+    }
+  }
+
+  .history-item {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $gray-3;
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  answer-sheet {
+    .qa-pair {
+      margin-bottom: 10px;
+    }
+
+    .question {
+      color: $gray-3;
+      font-size: 12px;
+    }
+
+    .answer {
+      color: $gray-2;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  .add-interaction {
+    padding: 20px 0;
+  }
+
+  .new-interaction {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 40px;
+    padding-bottom: 20px;
+
+    textarea {
+      width: 100%;
+      height: 2em;
+    }
+
+    button {
+      display: flex;
+      width: auto;
+      border: none;
+      &:hover {
+        background: none;
+        border: none;
+      }
+    }
+
+    .icon-chip {
+      background-color: $pivot-dark-blue;
+    }
+  }
+}

@@ -32,28 +32,8 @@
 
         vm.addAnonymousInteractionButtonsVisible = false;
         vm.pendingAnonymousInteraction = null;
-        vm.anonymousInteractionTypes = [
-            {
-                id: 2,
-                icon: 'spiritualConversation',
-                title: 'application.interaction_types.spiritual_conversation'
-            },
-            {
-                id: 3,
-                icon: 'evangelism',
-                title: 'application.interaction_types.gospel_presentation'
-            },
-            {
-                id: 4,
-                icon: 'personalDecision',
-                title: 'application.interaction_types.prayed_to_receive_christ'
-            },
-            {
-                id: 5,
-                icon: 'holySpirit',
-                title: 'application.interaction_types.holy_spirit_presentation'
-            }
-        ];
+        // Restrict to the interactions that can be anonymous
+        vm.anonymousInteractionTypes = _.filter(interactionsService.getInteractionTypes(), { anonymous: true });
 
         vm.$onInit = activate;
         vm.toggleAnonymousInteractionButtons = toggleAnonymousInteractionButtons;
@@ -89,7 +69,7 @@
 
         function saveAnonymousInteraction () {
             var interaction = {
-                id: vm.pendingAnonymousInteraction.type.id,
+                interactionTypeId: vm.pendingAnonymousInteraction.type.id,
                 comment: vm.pendingAnonymousInteraction.comment
             };
             interactionsService.recordInteraction(interaction, vm.org.id, null).then(function () {

@@ -1,0 +1,13 @@
+<div class="column icon-column flush-column">
+    <ng-md-icon class="icon-chip" icon="survey" size="20"></ng-md-icon>
+</div>
+<div class="column normal-column">
+    <div class="subtitle">
+        <span am-time-ago="$ctrl.answerSheet.completed_at"></span>
+    </div>
+    <div class="title">{{$ctrl.answerSheet.survey.title}}</div>
+    <div class="qa-pair" ng-repeat="answer in $ctrl.answerSheet.answers">
+        <div class="question">{{answer.question.label}}</div>
+        <div class="answer">{{answer.value}}</div>
+    </div>
+</div>

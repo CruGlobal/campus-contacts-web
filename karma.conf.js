@@ -20,6 +20,8 @@ module.exports = function (config) {
             './node_modules/angular-ui-sortable/src/sortable.js',
             './node_modules/angulartics/src/angulartics.js',
             './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
+            './node_modules/moment/moment.js',
+            './node_modules/angular-moment/angular-moment.js',
             './vendor/assets/javascripts/i18n.js',
             './node_modules/lscache/lscache.js',
             './node_modules/lodash/lodash.js',

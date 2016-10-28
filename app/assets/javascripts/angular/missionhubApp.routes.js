@@ -105,7 +105,12 @@
                 $stateProvider.state({
                     name: 'app.ministries.ministry.contacts.contact.' + tab,
                     url: '/' + tab,
-                    component: 'contact' + _.capitalize(tab)
+                    component: 'contact' + _.capitalize(tab),
+                    resolve: {
+                        history: function ($stateParams, routesService) {
+                            return routesService.getHistory($stateParams.contactId);
+                        }
+                    }
                 });
             });
 

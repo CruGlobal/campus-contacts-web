@@ -1,0 +1,19 @@
+<div class="column icon-column flush-column">
+    <ng-md-icon class="icon-chip" icon="{{$ctrl.interactionType.icon}}" size="20"></ng-md-icon>
+</div>
+<div class="column normal-column">
+    <div class="subtitle">
+        <span ng-repeat="initiator in $ctrl.interaction.initiators">
+            <span ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, contactId: initiator.id })">{{
+                initiator === $ctrl.contactTab.contact ?
+                    ('ministries.contacts.history.me' | t) :
+                    initiator.full_name
+            }}</span><span ng-if="!$last">,</span>
+        </span>
+        <span ng-if="$ctrl.interaction.initiators.length === 0">{{'ministries.contacts.history.anonymous' | t}}</span>
+        >>
+        <span am-time-ago="$ctrl.interaction.timestamp"></span>
+    </div>
+    <div class="title">{{$ctrl.interactionType.title | t}}</div>
+    <div class="comment" ng-if="$ctrl.interaction.comment">{{$ctrl.interaction.comment}}</div>
+</div>

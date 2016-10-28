@@ -9,3 +9,35 @@
 .medium-spacing {
   padding: 0 10px;
 }
+
+[ui-sref], [ui-state] {
+  @extend .nav-item;
+}
+
+.title {
+  font-size: 18px;
+}
+
+.subtitle {
+  color: $gray-3;
+  font-size: 12px;
+}
+
+.icon-chip {
+  display: block;
+  background-color: $gray-2;
+  padding: 10px;
+  border-radius: 100%;
+  svg {
+    display: block;
+    fill: white;
+  }
+}
+
+.primary-action {
+  background-color: $pivot-bright-blue;
+}
+
+.actionable {
+  cursor: pointer;
+}

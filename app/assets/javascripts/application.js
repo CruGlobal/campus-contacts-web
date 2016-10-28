@@ -34,6 +34,8 @@
 //= require angular-ui-sortable/dist/sortable
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
+//= require moment/moment
+//= require angular-moment/angular-moment
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants
 //= require angular/missionhubApp.config

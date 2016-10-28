@@ -6,7 +6,7 @@
     // This service contains logic used by the routes
     function routesService (httpProxy, apiEndPoint) {
         return {
-            // Return a promise that resolved to the specified person in the specified organization, loading that
+            // Return a promise that resolves to the specified person in the specified organization, loading that
             // person if necessary
             getPerson: function (personId) {
                 var url = apiEndPoint.people.index + '/' + personId;
@@ -18,10 +18,19 @@
                 ]);
             },
 
-            // Return a promise that resolved to the specified organization, loading that organization if necessary
+            // Return a promise that resolves to the specified organization, loading that organization if necessary
             getOrganization: function (organizationId) {
                 var url = apiEndPoint.organizations.index + '/' + organizationId;
                 return httpProxy.getModel(url, 'organization', organizationId, []);
+            },
+
+            // Load a person's interaction history (which consists of interactions as well as survey responses)
+            getHistory: function (personId) {
+                var url = apiEndPoint.people.index + '/' + personId;
+                return httpProxy.getModel(url, 'person', personId, [
+                    'interactions',
+                    'answer_sheets.answers.question'
+                ]);
             }
         };
     }

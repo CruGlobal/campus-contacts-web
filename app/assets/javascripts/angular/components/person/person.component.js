@@ -18,43 +18,11 @@
 
         vm.addInteractionBtnsVisible = false;
         vm.closingInteractionButtons = false;
-        vm.interactionTypes = [
-            {
-                id: 2,
-                icon: 'spiritualConversation',
-                title: 'application.interaction_types.spiritual_conversation'
-            },
-            {
-                id: 3,
-                icon: 'evangelism',
-                title: 'application.interaction_types.gospel_presentation'
-            },
-            {
-                id: 4,
-                icon: 'personalDecision',
-                title: 'application.interaction_types.prayed_to_receive_christ'
-            },
-            {
-                id: 5,
-                icon: 'holySpirit',
-                title: 'application.interaction_types.holy_spirit_presentation'
-            },
-            {
-                id: 9,
-                icon: 'discipleship',
-                title: 'application.interaction_types.discipleship'
-            },
-            {
-                id: 1,
-                icon: 'note',
-                title: 'application.interaction_types.comment'
-            },
-            {
-                id: -1,
-                icon: 'archive',
-                title: 'general.archive'
-            }
-        ];
+        vm.interactionTypes = interactionsService.getInteractionTypes().concat({
+            id: -1,
+            icon: 'archive',
+            title: 'general.archive'
+        });
 
         vm.toggleInteractionBtns = toggleInteractionBtns;
         vm.openAddInteractionPanel = openAddInteractionPanel;
@@ -99,7 +67,7 @@
         }
 
         function saveInteraction () {
-            var interaction = { id: vm.openPanelType.id, comment: vm.interactionComment };
+            var interaction = { interactionTypeId: vm.openPanelType.id, comment: vm.interactionComment };
             interactionsService.recordInteraction(interaction, vm.organizationId, vm.person.id).then(function () {
                 vm.uncontacted = false;
                 $scope.$emit('newInteraction', interaction.id);

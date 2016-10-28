@@ -8,7 +8,10 @@
   }
 
   .column {
-    @extend .medium-spacing
+    @extend .medium-spacing;
+  }
+  .flush-column {
+    padding-left: 0;
   }
   .normal-column {
     flex: 1;

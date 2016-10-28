@@ -108,7 +108,13 @@ en:
       assigned:
         header: Assigned
       history:
+        all: All
+        anonymous: Anonymous
         header: History
+        me: Me
+        note_for_interaction: Note for %{interaction}
+        notes: Notes
+        surveys: Surveys
       profile:
         header: Profile
     groups:

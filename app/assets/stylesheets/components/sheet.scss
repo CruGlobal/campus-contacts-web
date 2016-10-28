@@ -1,0 +1,22 @@
+.sheet {
+  background-color: $pivot-dark-blue;
+  border-radius: 10px;
+  color: $white;
+  svg {
+    fill: $white;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid $pivot-bright-blue;
+    &:last-of-type {
+      border-bottom-style: none;
+    }
+
+    ng-md-icon {
+      margin: 0 15px;
+    }
+  }
+}
