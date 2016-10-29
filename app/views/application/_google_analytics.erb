@@ -1,13 +1,12 @@
-<script type="text/javascript">
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-<% if Rails.env.production? %>
-  ga('create', 'UA-325725-21', 'auto', {'legacyCookieDomain': 'missionhub.com', 'allowLinker': true, 'sampleRate': 100});
-<% else %>
-  ga('create', 'UA-325725-21', 'none');
-<% end %>
-//  ga('send', 'pageview');
-</script>
+    var ga_extra = {'legacyCookieDomain': 'missionhub.com', 'allowLinker': true, 'sampleRate': 100};
+    <% if current_user && current_user.key_auth %>
+      ga_extra.userId = "<%= current_user.key_auth.uid %>";
+    <% end %>
+    ga('create', 'UA-325725-21', 'auto', ga_extra);
+  </script>

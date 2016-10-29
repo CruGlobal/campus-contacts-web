@@ -171,6 +171,10 @@ class User < ActiveRecord::Base
     user
   end
 
+  def key_auth
+    authentications.key.first
+  end
+
   def next_wizard_step(org)
     case
     when org.nil? then ''
