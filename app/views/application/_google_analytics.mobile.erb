@@ -1,6 +1,6 @@
-<%= render 'google_analytics' %>
-
 <% if Rails.env.production? %>
+  <%= render 'google_analytics.erb' %>
+
   <script type="text/javascript">
     ga('send', 'pageview');
   </script>
