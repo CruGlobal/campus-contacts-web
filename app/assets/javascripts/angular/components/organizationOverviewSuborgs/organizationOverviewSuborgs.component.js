@@ -17,13 +17,15 @@
         vm.$onInit = activate;
 
         function activate () {
-            loadReports();
             periodService.subscribe($scope, loadReports);
+            $scope.$watch('$ctrl.organizationOverview.suborgs', function () {
+                loadReports();
+            });
         }
 
         function loadReports () {
-            var organization_ids = _.map(vm.organizationOverview.suborgs, 'id');
-            reportsService.loadOrganizationReports(organization_ids)
+            var organizationIds = _.map(vm.organizationOverview.suborgs, 'id');
+            reportsService.loadOrganizationReports(organizationIds)
                 .catch(function (error) {
                     $log.error('Error loading organization reports', error);
                 });
