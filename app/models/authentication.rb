@@ -1,5 +1,6 @@
 class Authentication < ActiveRecord::Base
   attr_accessible :provider, :uid, :token, :mobile_token
+  scope :key, -> { where(provider: 'thekey') }
   belongs_to :user
 
   def self.user_from_mobile_facebook_token(facebook_token)

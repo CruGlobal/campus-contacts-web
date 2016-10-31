@@ -3,8 +3,12 @@
 
     angular
         .module('missionhubApp')
-        .run(function (lscache) {
+        .run(function (lscache, nativeLocation, $analytics) {
             lscache.setBucket('missionhub:');
+
+            if(nativeLocation.pathname !== '/') {
+                $analytics.pageTrack(nativeLocation.pathname);
+            }
         });
 
 })();
