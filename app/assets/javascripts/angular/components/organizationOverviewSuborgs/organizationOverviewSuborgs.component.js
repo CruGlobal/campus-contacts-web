@@ -17,8 +17,10 @@
         vm.$onInit = activate;
 
         function activate () {
-            loadReports();
             periodService.subscribe($scope, loadReports);
+            $scope.$watch('$ctrl.organizationOverview.suborgs', function () {
+                loadReports();
+            });
         }
 
         function loadReports () {
