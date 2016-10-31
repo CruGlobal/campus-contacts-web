@@ -3,7 +3,7 @@
     'use strict';
 
     // Constants
-    var $q, $rootScope, reportsSerivce, httpProxy, periodService;
+    var $q, $rootScope, reportsService, httpProxy, periodService;
 
     function async (fn) {
         return function (done) {
@@ -28,45 +28,80 @@
 
             $q = _$q_;
             $rootScope = _$rootScope_;
-            reportsSerivce = _reportsService_;
+            reportsService = _reportsService_;
             httpProxy = _httpProxy_;
             periodService = _periodService_;
 
-            this.loadOrganizationReportsParams = {
-                organization_ids: '456'
-            };
+            this.period = '1d';
+            this.orgIds = [123, 456, 789];
+            this.report1 = { id: '123-1d' };
+            this.report2 = { id: '456-1d' };
+            this.report3 = { id: '789-1d' };
 
-            spyOn(httpProxy, 'callHttp').and.callFake(function () {
-                return _this.httpResponse;
-            });
+            spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
         }));
 
 
-        describe('Organization Reports', function () {
-            it('should contain loadOrganizationReports', function () {
-                expect(reportsSerivce.loadOrganizationReports).toBeDefined();
+        describe('loadOrganizationReports', function () {
+            beforeEach(function () {
+                spyOn(periodService, 'getPeriod').and.returnValue(this.period);
             });
 
-            it('should call GET load OrganizationReports URL', function () {
-                spyOn(periodService, 'getPeriod').and.returnValue('period');
-                reportsSerivce.loadOrganizationReports([456]);
-                expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                    'GET',
-                    '/reports/organizations',
-                    _.extend(this.loadOrganizationReportsParams, { period: 'period' })
+            it('should GET the organization reports URL', function () {
+                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                    null, null, null
                 );
+                reportsService.loadOrganizationReports(this.orgIds);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
+                    organization_ids: '123,456,789',
+                    period: this.period
+                });
             });
 
-            it('should load OrganizationReports', async(function () {
-                this.httpResponse = $q.resolve(
-                    this.organizationReports
+            it('should only load reports that are not already loaded', function () {
+                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                    null, this.report2, null
                 );
+                var promise = reportsService.loadOrganizationReports(this.orgIds);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
+                    organization_ids: '123,789',
+                    period: this.period
+                });
+            });
 
+            it('should not make a network request when all reports are already loaded', function () {
+                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                    this.report1, this.report2, this.report3
+                );
+                reportsService.loadOrganizationReports(this.orgIds);
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
+            });
+
+            it('should return a promise that resolves to an array of organization reports ' +
+               'when a network request is required', async(function () {
                 var _this = this;
+                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                    null, null, null,
+                    this.report1, this.report2, this.report3
+                );
 
-                return reportsSerivce.loadOrganizationReports([456])
+                return reportsService.loadOrganizationReports(this.orgIds)
                     .then(function (loadedOrganizationReports) {
-                        expect(loadedOrganizationReports).toEqual(_this.organizationReports);
+                        expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
+                    });
+            }));
+
+            it('should return a promise that resolves to an array of organization reports ' +
+               'when a network request is not required', async(function () {
+                var _this = this;
+                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                    this.report1, this.report2, this.report3,
+                    this.report1, this.report2, this.report3
+                );
+
+                return reportsService.loadOrganizationReports(this.orgIds)
+                    .then(function (loadedOrganizationReports) {
+                        expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
                     });
             }));
         });

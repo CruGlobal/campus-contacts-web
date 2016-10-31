@@ -22,8 +22,8 @@
         }
 
         function loadReports () {
-            var organization_ids = _.map(vm.organizationOverview.suborgs, 'id');
-            reportsService.loadOrganizationReports(organization_ids)
+            var organizationIds = _.map(vm.organizationOverview.suborgs, 'id');
+            reportsService.loadOrganizationReports(organizationIds)
                 .catch(function (error) {
                     $log.error('Error loading organization reports', error);
                 });
