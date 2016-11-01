@@ -1,0 +1,12 @@
+<div class="grid">
+    <div class="grid-content">
+        <div class="row assignment" ng-class="{ 'alternate-color': $odd }" ng-repeat="assignment in $ctrl.assignments">
+            <span class="normal-column name">
+                {{assignment.full_name}}
+            </span>
+            <span class="normal-column status" ng-class="{warning: assignment.followup_status === 'uncontacted'}">
+                {{'followup_status.' + assignment.followup_status | t}}
+            </span>
+        </div>
+    </div>
+</div>
