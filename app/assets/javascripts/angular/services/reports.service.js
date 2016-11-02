@@ -50,7 +50,9 @@
 
                 // Determine which organization reports have not been loaded yet and actually need to be loaded
                 var unloadedOrgIds = organizationIds.filter(function (organizationId) {
-                    return !reportsService.lookupOrganizationReport(organizationId);
+                    var report = reportsService.lookupOrganizationReport(organizationId);
+                    // if there is no data we need to check if it is just a placeholder
+                    return !report || (report.interactions && report.interactions.length === 0);
                 });
 
                 if (unloadedOrgIds.length === 0) {

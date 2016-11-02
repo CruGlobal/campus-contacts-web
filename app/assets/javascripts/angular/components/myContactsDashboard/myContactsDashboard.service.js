@@ -23,8 +23,8 @@
             loadPeopleReports: function (model) {
                 return httpProxy.get(apiEndPoint.reports.people, {
                     period: periodService.getPeriod(),
-                    organization_ids: model.organization_ids,
-                    people_ids: model.people_ids
+                    organization_ids: model.organization_ids.join(','),
+                    people_ids: model.people_ids.join(',')
                 });
             },
 

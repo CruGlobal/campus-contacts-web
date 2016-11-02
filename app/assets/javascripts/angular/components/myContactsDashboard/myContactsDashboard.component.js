@@ -42,7 +42,6 @@
                 name: loggedInPerson.person.first_name.toUpperCase()
             });
 
-            loadReports();
             periodService.subscribe($scope, loadReports);
         }
 
@@ -55,7 +54,7 @@
         }
 
         function loadReports () {
-            var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id').join(','),
+            var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id'),
                 organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
 
             var peopleReportParams = {

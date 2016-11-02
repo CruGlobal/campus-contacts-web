@@ -59,8 +59,8 @@
             };
 
             this.peopleReportsParams = {
-                organization_ids: 123,
-                people_ids: 456
+                organization_ids: [123],
+                people_ids: [456]
             };
 
             this.loadOrganizationReportsParams = {
@@ -131,12 +131,15 @@
 
                 it('should call GET loadPeopleReports URL', function () {
 
+                    var joinedParams = _.clone(this.peopleReportsParams);
+                    joinedParams.organization_ids = joinedParams.organization_ids.join(',');
+                    joinedParams.people_ids = joinedParams.people_ids.join(',');
                     spyOn(periodService, 'getPeriod').and.returnValue('period');
                     myContactsDashboardService.loadPeopleReports(this.peopleReportsParams);
                     expect(httpProxy.callHttp).toHaveBeenCalledWith(
                         'GET',
                         jasmine.any(String),
-                        _.extend(this.peopleReportsParams, { period: 'period' })
+                        _.extend(joinedParams, { period: 'period' })
                     );
                 });
 
