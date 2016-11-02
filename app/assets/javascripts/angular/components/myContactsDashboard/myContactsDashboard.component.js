@@ -75,26 +75,22 @@
         }
 
         function loadOrganizations () {
-            var promise = myContactsDashboardService.loadOrganizations({ 'page[limit]': 100 });
-            promise.then(function () {
-                    vm.organizations = _.orderBy(JsonApiDataStore.store.findAll('organization'),
-                        'active_people_count',
-                        'desc');
+            myContactsDashboardService.loadOrganizations({ 'page[limit]': 100 }).then(function (organizations) {
+                vm.organizations = _.orderBy(organizations, 'active_people_count', 'desc');
 
-                    orderOrganizations();
-                    hideOrganizations();
+                orderOrganizations();
+                hideOrganizations();
 
-                    if (vm.organizations.length <= vm.noPeopleShowLimit) {
-                        vm.numberOfOrgsToShow = 100;
-                    }
-                    else {
-                        vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
-                    }
-                    loadReports();
-                },
-                function (error) {
-                    $log.error('Error loading organizations', error);
-                });
+                if (vm.organizations.length <= vm.noPeopleShowLimit) {
+                    vm.numberOfOrgsToShow = 100;
+                }
+                else {
+                    vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
+                }
+                loadReports();
+            }).catch(function (error) {
+                $log.error('Error loading organizations', error);
+            });
         }
 
         function dataLoaded (assignmentsToMe) {

@@ -74,7 +74,7 @@
             }
 
             spyOn(httpProxy, 'callHttp').and.callFake(function () {
-                return _this.httpResponse;
+                return $q.resolve(_this.httpResponse);
             });
 
             spyOn(JsonApiDataStore.store, 'sync').and.returnValue(_this.httpResponse);
@@ -101,9 +101,7 @@
             });
 
             it('should load people', async(function () {
-                this.httpResponse = $q.resolve(
-                    this.people
-                );
+                this.httpResponse = this.people;
 
                 var _this = this;
                 return myContactsDashboardService.loadPeople().then(function (loadedPeople) {
@@ -112,9 +110,7 @@
             }));
 
             it('should sync people JsonApiDataStore', async(function () {
-                this.httpResponse = $q.resolve(
-                    this.people
-                );
+                this.httpResponse = this.people;
 
                 var _this = this;
                 JsonApiDataStore.store.sync('people', this.people);
@@ -145,9 +141,7 @@
                 });
 
                 it('should load people reports', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.peopleReports
-                    );
+                    this.httpResponse = this.peopleReports;
 
                     var _this = this;
 
@@ -158,9 +152,7 @@
                 }));
 
                 it('should sync people Reports JsonApiDataStore', async(function () {
-                    this.httpResponse = $q.resolve(
-                        this.peopleReports
-                    );
+                    this.httpResponse = this.peopleReports;
 
                     var _this = this;
                     JsonApiDataStore.store.sync('peopleReports', this.peopleReports);
@@ -187,9 +179,7 @@
             });
 
             it('should load Organization', async(function () {
-                this.httpResponse = $q.resolve(
-                    this.organizationReports
-                );
+                this.httpResponse = { data: this.organizationReports };
 
                 var _this = this;
 

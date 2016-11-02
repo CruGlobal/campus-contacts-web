@@ -12,7 +12,7 @@
             templateUrl: '/assets/angular/components/pages/pages.html'
         });
 
-    function pagesController ($scope, JsonApiDataStore) {
+    function pagesController ($scope) {
         var vm = this;
         vm.page = null;
         vm.pageCount = 1;
@@ -54,11 +54,7 @@
                 offset: vm.page * vm.pageSize
             }).then(function (response) {
                 vm.pageCount = Math.ceil(response.meta.total / vm.pageSize);
-                vm.onNewData({
-                    newData: response.data.map(function (person) {
-                        return JsonApiDataStore.store.find(person.type, person.id);
-                    })
-                });
+                vm.onNewData({ newData: response.data });
             });
         }
     }

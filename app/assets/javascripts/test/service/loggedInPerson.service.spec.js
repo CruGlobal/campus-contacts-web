@@ -60,13 +60,6 @@
                 );
             });
 
-            it('should search JsonApiDataStore', asynchronous(function () {
-                var _this = this;
-                return loggedInPerson.load().then(function () {
-                    expect(JsonApiDataStore.store.find).toHaveBeenCalledWith('person', _this.person.id);
-                });
-            }));
-
             it('should return a promise', asynchronous(function () {
                 var _this = this;
                 return loggedInPerson.load().then(function (loadedPerson) {

@@ -89,7 +89,7 @@
                     'filters[assigned_tos]': person.id,
                     'filters[organizations_id]': _.isNil(organization) ? '' : organization.id,
                     'page[limit]': 1000
-                }).then(function (response) {
+                }).then(httpProxy.extractModels).then(function (assignedPeople) {
                     // Determine whether the assignment
                     function isRelevantAssignment (assignment, assignedPerson) {
                         // Make sure that the person is assigned to the person in question
@@ -102,11 +102,10 @@
                             (_.isNil(organization) || assignment.organization.id === organization.id);
                     }
 
-                    // Start with the array of person model info items from the API response, map it to an array of
-                    // contact assignment arrays, then flatten it into a one-dimensional array
-                    return _.flatten(response.data.map(function (modelInfo) {
+                    // Start with the array of assigned people, map it to an array of contact assignment arrays,
+                    // then flatten it into a one-dimensional array
+                    return _.flatten(assignedPeople.map(function (assignedPerson) {
                         // Include only the relevant contact assigments
-                        var assignedPerson = JsonApiDataStore.store.find(modelInfo.type, modelInfo.id);
                         return assignedPerson.reverse_contact_assignments.filter(function (assignment) {
                             return isRelevantAssignment(assignment, assignedPerson);
                         });

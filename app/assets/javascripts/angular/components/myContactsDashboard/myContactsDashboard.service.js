@@ -32,7 +32,7 @@
                 return httpProxy.get(apiEndPoint.organizations.index, _.extend({
                     order: 'active_people_count',
                     include: ''
-                }, params));
+                }, params)).then(httpProxy.extractModels);
             },
 
             // Modify the user's preferences and save those changes on the server

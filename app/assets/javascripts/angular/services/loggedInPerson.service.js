@@ -11,12 +11,7 @@
         function loadMe () {
             return httpProxy.get(apiEndPoint.people.me, {
                 include: 'user,organizational_permissions.organization'
-            })
-            .then(function (response) {
-                // Lookup the user associated with the returned person
-                var personId = response.data.id;
-                return JsonApiDataStore.store.find('person', personId);
-            });
+            }).then(httpProxy.extractModel);
         }
 
         // This service exposes an object with a person property that will be set to person model, or null if it has

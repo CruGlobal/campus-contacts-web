@@ -11,6 +11,11 @@
 
 
     function proxyService ($http, $log, $q, envService, JsonApiDataStore, _) {
+        // Extract and return the data portion of a JSON API payload
+        function extractData (response) {
+            return response.data;
+        }
+
         var proxy = {
 
             callHttp: function (method, url, params, data) {
@@ -22,9 +27,7 @@
                 };
 
                 return $http(config).then(function (res) {
-                    var response = res.data;
-                    JsonApiDataStore.store.sync(response);
-                    return response;
+                    return JsonApiDataStore.store.syncWithMeta(res.data);
                 }).catch(function (error) {
                     //We can redirect to some error page if that's better
                     $log.error(error + " - Something has gone terribly wrong.");
@@ -47,6 +50,15 @@
             delete: function (url, params) {
                 return this.callHttp("DELETE", url, params);
             },
+
+            // Extract the model(s) from a JSON API response
+            // These methods are intended to be used as the "then" callback in the promise returned by callHttp, e.g.
+            //
+            //     httpProxy.get(url, params).then(httpProxy.extractModels).then(function (models) {});
+            //
+            // extractModel and extractModels are aliases for one another.
+            extractModel: extractData,
+            extractModels: extractData,
 
             // Determine whether a model has been loaded
             isLoaded: function (model) {

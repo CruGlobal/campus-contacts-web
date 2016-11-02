@@ -82,10 +82,7 @@
                         person_id: loggedInPerson.person.id
                     }
                 }];
-                return httpProxy.post(apiEndPoint.interactions.post, null, createJson).then(function (response) {
-                    // Make the promise resolve to the newly-created interaction
-                    return JsonApiDataStore.store.find(response.data.type, response.data.id);
-                });
+                return httpProxy.post(apiEndPoint.interactions.post, null, createJson).then(httpProxy.extractModel);
             }
         };
     }
