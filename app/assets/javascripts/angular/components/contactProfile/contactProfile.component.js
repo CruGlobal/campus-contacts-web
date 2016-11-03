@@ -53,6 +53,19 @@
             // Save the changes on the server whenever the primary email or primary phone changes
             $scope.$watch('$ctrl.contactTab.primaryEmail', updatePrimary);
             $scope.$watch('$ctrl.contactTab.primaryPhone', updatePrimary);
+
+            // Whenever the contact has no email addresses or phone numbers, show the add email address or add phone
+            // number form
+            $scope.$watch('$ctrl.contactTab.contact.email_addresses.length', function (newLength) {
+                if (newLength === 0) {
+                    vm.addEmailAddress();
+                }
+            });
+            $scope.$watch('$ctrl.contactTab.contact.phone_numbers.length', function (newLength) {
+                if (newLength === 0) {
+                    vm.addPhoneNumber();
+                }
+            });
         }
 
         function updatePrimary (newPrimary, oldPrimary) {
@@ -61,10 +74,14 @@
                 return;
             }
 
-            newPrimary.primary = true;
-            saveAttribute(newPrimary, 'primary');
+            if (newPrimary && !newPrimary.primary) {
+                newPrimary.primary = true;
+                saveAttribute(newPrimary, 'primary');
+            }
 
-            oldPrimary.primary = false;
+            if (oldPrimary) {
+                oldPrimary.primary = false;
+            }
         }
 
         function saveAttribute (model, attribute) {
