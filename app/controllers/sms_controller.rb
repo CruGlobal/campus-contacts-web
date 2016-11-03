@@ -1,6 +1,8 @@
 class SmsController < ApplicationController
   skip_before_action :authenticate_user!, :verify_authenticity_token, :check_valid_subdomain
 
+  SMS_REPLY_TIMEOUT_DAYS = 7
+
   def mo
     render(xml: blank_response) && return if sms_params[:message].blank?
 
@@ -118,7 +120,8 @@ class SmsController < ApplicationController
       if !keyword || !keyword.active?
         # See if they're responding to an outbound text
         outbound_message = Message.includes(:sender)
-                           .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]), sent: true)
+                           .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]),
+                                  sent: true, created_at: SMS_REPLY_TIMEOUT_DAYS.days.ago..DateTime.current)
                            .order('created_at desc').first
         if outbound_message
           # Forward this reply on to the sender
