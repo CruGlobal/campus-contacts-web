@@ -61,7 +61,7 @@ class SmsKeyword < ActiveRecord::Base
     end
 
     event :activate do
-      transition inactive: :active
+      transition all => :active
     end
   end
 
