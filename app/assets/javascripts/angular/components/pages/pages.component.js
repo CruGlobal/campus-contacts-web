@@ -5,14 +5,17 @@
         .module('missionhubApp')
         .component('pages', {
             bindings: {
+                bottom: '=?',
+                top: '=?',
                 loadPage: '<',
                 onNewData: '&'
             },
             controller: pagesController,
-            templateUrl: '/assets/angular/components/pages/pages.html'
+            templateUrl: '/assets/angular/components/pages/pages.html',
+            transclude: true
         });
 
-    function pagesController ($scope) {
+    function pagesController ($scope, _) {
         var vm = this;
         vm.page = null;
         vm.pageCount = 1;
@@ -22,6 +25,11 @@
         vm.isFirstPage = isFirstPage;
         vm.isLastPage = isLastPage;
         vm.gotoPage = gotoPage;
+
+        _.defaults(vm, {
+            top: true,
+            bottom: false
+        });
 
         function activate () {
             vm.onNewData(null);
