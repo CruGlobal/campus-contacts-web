@@ -21,6 +21,16 @@
             });
         }
 
+        // Calculate the id of the report for the specified organization
+        function calculateOrganizationReportId (organizationId) {
+            return [organizationId, periodService.getPeriod()].join('-');
+        }
+
+        // Calculate the id of the report for the specified person in the specified organization
+        function calculatePersonReportId (organizationId, personId) {
+            return [organizationId, personId, periodService.getPeriod()].join('-');
+        }
+
         // Create an empty report for the specified report type and id
         function findReport (type, reportId) {
             return JsonApiDataStore.store.find(type, reportId);
@@ -33,14 +43,34 @@
         var reportsService = {
             // Find and return the report for the given organization
             lookupOrganizationReport: function (organizationId) {
-                var reportId = [organizationId, periodService.getPeriod()].join('-');
-                return findOrCreateReport('organization_report', reportId);
+                return findOrCreateReport('organization_report', calculateOrganizationReportId(organizationId));
             },
 
-            // Find and return the report for the given organization
+            // Find and return the report for the given person
             lookupPersonReport: function (organizationId, personId) {
-                var reportId = [organizationId, personId, periodService.getPeriod()].join('-');
-                return findOrCreateReport('person_report', reportId);
+                return findOrCreateReport('person_report', calculatePersonReportId(organizationId, personId));
+            },
+
+            // Load the person report for the given person
+            loadPersonReport: function (organizationId, personId) {
+                // Try to find the report
+                var reportId = calculatePersonReportId(organizationId, personId);
+                var report = findReport('person_report', reportId);
+
+                if (report) {
+                    // The report is already loaded, so simply return it
+                    return $q.resolve(report);
+                }
+
+                // Load the report and return it
+                return httpProxy.get(modelsService.getModelMetadata('person_report').url.all, {
+                    period: periodService.getPeriod(),
+                    organization_ids: organizationId.toString(),
+                    people_ids: personId.toString()
+                }).then(function (response) {
+                    var reports = response.data;
+                    return reports[0];
+                });
             },
 
             // Load organization reports for the given organizations

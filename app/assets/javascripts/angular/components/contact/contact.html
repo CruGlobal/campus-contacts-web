@@ -10,10 +10,10 @@
     <span ng-if="$ctrl.contact.gender">{{('ministries.contacts.' + $ctrl.contact.gender.toLowerCase()) | t}}</span>
 </div>
 <div class="column detail-column normal-column" ng-class="{warning: $ctrl.assignedTo === null}">
-    <span>{{$ctrl.assignedTo.full_name || ('ministries.contacts.unassigned' | t)}}</span>
+    <span>{{$ctrl.assignedTo.full_name || ('assignments.unassigned' | t)}}</span>
 </div>
 <div class="column detail-column normal-column" ng-class="{warning: $ctrl.uncontacted}">
-    <span>{{($ctrl.uncontacted ? 'ministries.contacts.uncontacted' : 'ministries.contacts.contacted') | t}}</span>
+    <span>{{($ctrl.uncontacted ? 'followup_status.uncontacted' : 'followup_status.contacted') | t}}</span>
 </div>
 <div class="column detail-column phone-number-column">
     <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>

@@ -92,17 +92,12 @@ en:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   ministries:
     contacts:
-      assigned: Assigned
-      assignment: Assigned to
-      contacted: Contacted
       female: F
       gender: M/F
       header: Contacts
       male: M
       name: Name
       status: Status
-      unassigned: Unassigned
-      uncontacted: Uncontacted
       activity:
         header: Activity
       assigned:
@@ -1803,6 +1798,10 @@ en:
       contact_soon: We received your request and will contact you soon.
       other_apps: Check out Cru’s other apps that help you connect and share your faith with the people you care about most.
       visit: Visit our Website
+  assignments:
+    assigned: Assigned
+    assignment: Assigned to
+    unassigned: Unassigned
   cru_status:
     none: None
     volunteer: Volunteer

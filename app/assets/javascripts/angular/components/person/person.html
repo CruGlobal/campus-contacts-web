@@ -9,7 +9,7 @@
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
         <div>{{$ctrl.report.contact_count || '-'}}</div>
         <div>
-            <a class="red"
+            <a class="warning-highlight"
                href="/allcontacts?organization_id={{$ctrl.organizationId}}&status[]=uncontacted&assigned_to[]={{$ctrl.person.id}}"
                ng-if="$ctrl.report.uncontacted_count">
                 {{$ctrl.report.uncontacted_count}}

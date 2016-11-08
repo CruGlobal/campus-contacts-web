@@ -1,6 +1,6 @@
 <div>{{$ctrl.report.contact_count || '-'}}</div>
 <div>
-  <a class="red"
+  <a class="warning-highlight"
      href="/allcontacts?organization_id={{$ctrl.org.id}}&status[]=uncontacted"
      ng-if="$ctrl.report.uncontacted_count">
     {{$ctrl.report.uncontacted_count}}

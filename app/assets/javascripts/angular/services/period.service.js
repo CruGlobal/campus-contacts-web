@@ -42,6 +42,17 @@
                 savePeriod();
             },
 
+            // Return an array of the possible periods
+            getPeriods: function () {
+                return [
+                    { label: 'dashboard.report_periods.one_week', period: 'P1W' },
+                    { label: 'dashboard.report_periods.one_month', period: 'P1M' },
+                    { label: 'dashboard.report_periods.three_months', period: 'P3M' },
+                    { label: 'dashboard.report_periods.six_months', period: 'P6M' },
+                    { label: 'dashboard.report_periods.one_year', period: 'P1Y' }
+                ];
+            },
+
             // Request that a callback be called withenver the period changes
             subscribe: function ($scope, callback) {
                 var unsubscribe = $rootScope.$on(changeEventName, callback);

@@ -77,17 +77,17 @@
             // particular person
             // If organization is null, return all contact assignments, otherwise filter the returned assignments to
             // those related to a particular organization
-            getContactAssignments: function (person, organization) {
+            getContactAssignments: function (person, organizationId) {
                 return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: [
                         // When we have an organization, we do not need to load the contact assignments' organizations
-                        _.isNil(organization) ?
+                        _.isNil(organizationId) ?
                             'reverse_contact_assignments.organization' :
                             'reverse_contact_assignments',
                         'organizational_permissions'
                     ].join(','),
                     'filters[assigned_tos]': person.id,
-                    'filters[organizations_id]': _.isNil(organization) ? '' : organization.id,
+                    'filters[organizations_id]': _.isNil(organizationId) ? '' : organizationId,
                     'page[limit]': 1000
                 }).then(httpProxy.extractModels).then(function (assignedPeople) {
                     // Determine whether the assignment
@@ -99,7 +99,7 @@
                                 organization_id: assignment.organization.id
                             }) &&
                             // Make sure that the assignment is related to the specified organization
-                            (_.isNil(organization) || assignment.organization.id === organization.id);
+                            (_.isNil(organizationId) || assignment.organization.id === organizationId);
                     }
 
                     // Start with the array of assigned people, map it to an array of contact assignment arrays,

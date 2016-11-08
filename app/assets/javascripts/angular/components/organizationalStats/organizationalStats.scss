@@ -11,12 +11,6 @@ organizational-stats {
       &, &:hover, &:active {
         color: $white;
       }
-      &.red {
-        background-color: $pivot-orange;
-        border-radius: 40%;
-        padding: 4px 7px;
-        color: $white;
-      }
     }
   }
 }
