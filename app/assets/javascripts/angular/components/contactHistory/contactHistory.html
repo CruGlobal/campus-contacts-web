@@ -19,7 +19,8 @@
     <div class="column normal-column">
         <textarea type="text" placeholder="{{ 'ministries.contacts.history.note_for_interaction'
                                            | t:{ interaction: ($ctrl.newInteractionType.title | t)} }}"
-                  ng-model="$ctrl.newInteractionComment" ng-required="$ctrl.newInteractionType.id === 1">
+                  ng-model="$ctrl.newInteractionComment" ng-required="$ctrl.newInteractionType.id === 1"
+                  ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()">
         </textarea>
     </div>
     <button type="submit" class="column icon-column">

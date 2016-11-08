@@ -48,14 +48,19 @@
 
   .form {
     .form-group {
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      font-size: 12px;
-      color: $gray-3;
       position: relative;
+
+      .label {
+        display: block;
+        padding-bottom: 3px;
+        font-size: 12px;
+        color: $gray-3;
+      }
     }
 
     .form-control {

@@ -8,7 +8,7 @@ organization-overview-contacts {
   }
 
   .contacts-list, ui-view {
-    overflow: scroll;
+    overflow: auto;
   }
 
   .contacts-list {

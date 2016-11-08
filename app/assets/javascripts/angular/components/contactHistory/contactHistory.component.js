@@ -22,6 +22,7 @@
         vm.interactionTypes = interactionsService.getInteractionTypes();
         vm.createInteraction = createInteraction;
         vm.saveInteraction = saveInteraction;
+        vm.clearInteraction = clearInteraction;
         vm.$onInit = activate;
 
         function activate () {
@@ -62,10 +63,14 @@
                 // so that the $watch on interactions changes will trigger
                 vm.contactTab.contact.interactions = vm.contactTab.contact.interactions.concat(newInteraction);
 
-                // Hide the new interaction form
-                vm.newInteractionType = null;
-                vm.newInteractionComment = null;
+                vm.clearInteraction();
             });
+        }
+
+        // Hide the new interaction form
+        function clearInteraction () {
+            vm.newInteractionType = null;
+            vm.newInteractionComment = null;
         }
     }
 })();
