@@ -6,11 +6,11 @@
         .module('missionhubApp')
         .factory('organizationOverviewContactsService', organizationOverviewContactsService);
 
-    function organizationOverviewContactsService (httpProxy, apiEndPoint) {
+    function organizationOverviewContactsService (httpProxy, modelsService) {
         return {
             // Load an organization's contacts
             loadOrgContacts: function (orgId, page) {
-                return httpProxy.get(apiEndPoint.people.index, {
+                return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: [
                         'phone_numbers',
                         'email_addresses',

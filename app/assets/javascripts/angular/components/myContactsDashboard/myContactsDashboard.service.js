@@ -12,16 +12,16 @@
         .factory('myContactsDashboardService', myContactsDashboardService);
 
 
-    function myContactsDashboardService (httpProxy, apiEndPoint, loggedInPerson, periodService, _) {
+    function myContactsDashboardService (httpProxy, modelsService, loggedInPerson, periodService, _) {
 
         var myContactsDashboardService = {
 
             loadPeople: function (params) {
-                return httpProxy.get(apiEndPoint.people.index, params || {});
+                return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {});
             },
 
             loadPeopleReports: function (model) {
-                return httpProxy.get(apiEndPoint.reports.people, {
+                return httpProxy.get(modelsService.getModelMetadata('person_report').url.all, {
                     period: periodService.getPeriod(),
                     organization_ids: model.organization_ids.join(','),
                     people_ids: model.people_ids.join(',')
@@ -29,7 +29,7 @@
             },
 
             loadOrganizations: function (params) {
-                return httpProxy.get(apiEndPoint.organizations.index, _.extend({
+                return httpProxy.get(modelsService.getModelMetadata('organization').url.all, _.extend({
                     order: 'active_people_count',
                     include: ''
                 }, params)).then(httpProxy.extractModels);
@@ -37,7 +37,7 @@
 
             // Modify the user's preferences and save those changes on the server
             updateUserPreference: function (changedPreferences) {
-                return httpProxy.put(apiEndPoint.users.me, null, {
+                return httpProxy.put(modelsService.getModelMetadata('user').url.single('me'), null, {
                     data: {
                         type: 'user',
                         attributes: changedPreferences

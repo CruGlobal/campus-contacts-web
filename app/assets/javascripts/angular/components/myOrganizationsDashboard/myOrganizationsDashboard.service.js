@@ -7,7 +7,7 @@
         .factory('myOrganizationsDashboardService', myOrganizationsDashboardService);
 
 
-    function myOrganizationsDashboardService (httpProxy, apiEndPoint, JsonApiDataStore, loggedInPerson, _) {
+    function myOrganizationsDashboardService (httpProxy, JsonApiDataStore, loggedInPerson, _) {
         return {
             // Return an array of all loaded root organizations
             getRootOrganizations: function () {

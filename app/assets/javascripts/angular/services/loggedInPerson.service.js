@@ -3,13 +3,13 @@
         .module('missionhubApp')
         .factory('loggedInPerson', loggedInPerson);
 
-    function loggedInPerson (httpProxy, apiEndPoint, JsonApiDataStore, _) {
+    function loggedInPerson (httpProxy, modelsService, JsonApiDataStore, _) {
         var person = null;
         var loadingPromise = null;
 
         // Load the logged-in user's profile
         function loadMe () {
-            return httpProxy.get(apiEndPoint.people.me, {
+            return httpProxy.get(modelsService.getModelMetadata('person').url.single('me'), {
                 include: 'user,organizational_permissions.organization'
             }).then(httpProxy.extractModel);
         }

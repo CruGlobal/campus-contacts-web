@@ -4,7 +4,7 @@
         .factory('reportsService', reportsService);
 
     // This service contains action logic that is shared across components
-    function reportsService ($q, JsonApiDataStore, periodService, httpProxy, apiEndPoint) {
+    function reportsService ($q, httpProxy, modelsService, JsonApiDataStore, periodService) {
         // Create an empty report for the specified report type and id
         function createReport (type, reportId) {
             return JsonApiDataStore.store.sync({
@@ -60,7 +60,7 @@
                     return $q.resolve(lookupReports());
                 }
 
-                return httpProxy.get(apiEndPoint.reports.organizations, {
+                return httpProxy.get(modelsService.getModelMetadata('organization_report').url.all, {
                     period: periodService.getPeriod(),
                     organization_ids: unloadedOrgIds.join(',')
                 }).then(function () {

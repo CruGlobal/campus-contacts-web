@@ -12,11 +12,11 @@
         .factory('peopleService', peopleService);
 
 
-    function peopleService (httpProxy, apiEndPoint) {
+    function peopleService (httpProxy, modelsService) {
 
         return {
             saveInteraction: function (model) {
-                return httpProxy.post(apiEndPoint.interactions.post, null, model);
+                return httpProxy.post(modelsService.getModelMetadata('interaction').url.root, null, model);
             }
         };
     }

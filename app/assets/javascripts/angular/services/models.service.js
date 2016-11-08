@@ -24,6 +24,10 @@
                 include: 'people',
                 url: generateUrls('/people')
             },
+            user: {
+                include: 'users',
+                url: generateUrls('/users')
+            },
             email_address: {
                 include: 'email_addresses',
                 url: generateUrls('/email_addresses')
@@ -31,6 +35,22 @@
             phone_number: {
                 include: 'phone_numbers',
                 url: generateUrls('/phone_numbers')
+            },
+            organization: {
+                include: 'organizations',
+                url: generateUrls('/organizations')
+            },
+            person_report: {
+                include: 'person_reports',
+                url: generateUrls('/reports/people')
+            },
+            organization_report: {
+                include: 'organization_reports',
+                url: generateUrls('/reports/organizations')
+            },
+            interaction: {
+                include: 'interactions',
+                url: generateUrls('/interactions')
             }
         };
 

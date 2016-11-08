@@ -4,7 +4,7 @@
         .factory('interactionsService', interactionsService);
 
     // This service contains action logic that is shared across components
-    function interactionsService (httpProxy, apiEndPoint, JsonApiDataStore, loggedInPerson) {
+    function interactionsService (httpProxy, modelsService, JsonApiDataStore, loggedInPerson) {
         return {
             // Return an array containing information about the available interaction types
             // Fields:
@@ -82,7 +82,8 @@
                         person_id: loggedInPerson.person.id
                     }
                 }];
-                return httpProxy.post(apiEndPoint.interactions.post, null, createJson).then(httpProxy.extractModel);
+                return httpProxy.post(modelsService.getModelMetadata('interactions').url.root, null, createJson)
+                    .then(httpProxy.extractModel);
             }
         };
     }

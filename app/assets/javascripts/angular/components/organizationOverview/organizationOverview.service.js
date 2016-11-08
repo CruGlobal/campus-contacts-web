@@ -6,7 +6,7 @@
         .module('missionhubApp')
         .factory('organizationOverviewService', organizationOverviewService);
 
-    function organizationOverviewService ($q, httpProxy, apiEndPoint, _) {
+    function organizationOverviewService ($q, httpProxy, modelsService, _) {
         return {
             // Load an organization's relationships (groups and surveys)
             loadOrgRelations: function (org) {
@@ -20,14 +20,14 @@
                 if (include.length === 0) {
                     return $q.resolve();
                 }
-                return httpProxy.get(apiEndPoint.organizations.index + '/' + org.id, {
+                return httpProxy.get(modelsService.getModelMetadata('organization').url.single(org.id), {
                     include: include.join(',')
                 });
             },
 
             // Load an organization's sub-orgs
             loadOrgSuborgs: function (org) {
-                return httpProxy.get(apiEndPoint.organizations.index, {
+                return httpProxy.get(modelsService.getModelMetadata('organization').url.all, {
                     'filters[parent_ids]': org.id,
                     include: 'groups,surveys'
                 });

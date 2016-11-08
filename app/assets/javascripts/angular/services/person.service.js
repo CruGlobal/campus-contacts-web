@@ -3,7 +3,7 @@
         .module('missionhubApp')
         .factory('personService', personService);
 
-    function personService (httpProxy, apiEndPoint, JsonApiDataStore, _) {
+    function personService (httpProxy, modelsService, JsonApiDataStore, _) {
         var personService = {
             // Find and return a person's organizational permission for a particular organization
             getOrgPermission: function (person, organizationId) {
@@ -66,7 +66,7 @@
                     ]
                 };
                 return httpProxy
-                    .put(apiEndPoint.people.update + person.id, null, updateJson)
+                    .put(modelsService.getModelMetadata('person').url.single(person.id), null, updateJson)
                     .then(function () {
                         // Remove the archived person from the organization's list of people
                         _.remove(organizationalPermission.organization.people, { id: person.id });
@@ -78,7 +78,7 @@
             // If organization is null, return all contact assignments, otherwise filter the returned assignments to
             // those related to a particular organization
             getContactAssignments: function (person, organization) {
-                return httpProxy.get(apiEndPoint.people.index, {
+                return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: [
                         // When we have an organization, we do not need to load the contact assignments' organizations
                         _.isNil(organization) ?

@@ -6,14 +6,14 @@
         .module('missionhubApp')
         .factory('organizationOverviewTeamService', organizationOverviewTeamService);
 
-    function organizationOverviewTeamService (httpProxy, apiEndPoint) {
+    function organizationOverviewTeamService (httpProxy, modelsService) {
         return {
             // Load an organization's team members
             loadOrgTeam: function (org, page) {
                 if (org.id) {
                     org = org.id;
                 }
-                return httpProxy.get(apiEndPoint.people.index, {
+                return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: [
                         'phone_numbers',
                         'email_addresses'
