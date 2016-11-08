@@ -1063,6 +1063,8 @@ class Organization < ActiveRecord::Base
   end
 
   def notify_user
+    # touch each user so that their org tree's update
+    admins.each(&:touch)
     OrganizationMailer.delay.notify_user(id) if admins
     true
   end
