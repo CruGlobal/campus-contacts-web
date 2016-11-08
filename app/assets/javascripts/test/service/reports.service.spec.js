@@ -38,6 +38,14 @@
             this.report2 = { id: '456-1d' };
             this.report3 = { id: '789-1d' };
 
+            this.report = {
+                interactions: [
+                    { interaction_type_id: 1, interaction_count: 1 },
+                    { interaction_type_id: 2, interaction_count: 5 },
+                    { interaction_type_id: 3, interaction_count: 10 }
+                ]
+            };
+
             spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
         }));
 
@@ -104,6 +112,41 @@
                         expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
                     });
             }));
+        });
+
+        describe('getInteractionCount', function () {
+            it('should return the interaction count', function () {
+                expect(reportsService.getInteractionCount(this.report, 1)).toBe(1);
+            });
+
+            it('should return no data with a report not containing interactions of a certain type', function () {
+                expect(reportsService.getInteractionCount(this.report, 5)).toBe('-');
+            });
+
+            it('should return no data with no report', function () {
+                expect(reportsService.getInteractionCount(null, 1)).toBe('-');
+            });
+        });
+
+        describe('incrementReportInteraction', function () {
+            it('increment existing interaction counts', function () {
+                reportsService.incrementReportInteraction(this.report, 1);
+                expect(this.report.interactions).toEqual([
+                    { interaction_type_id: 1, interaction_count: 2 },
+                    { interaction_type_id: 2, interaction_count: 5 },
+                    { interaction_type_id: 3, interaction_count: 10 }
+                ]);
+            });
+
+            it('create non-existent interaction counts', function () {
+                reportsService.incrementReportInteraction(this.report, 5);
+                expect(this.report.interactions).toEqual([
+                    { interaction_type_id: 1, interaction_count: 1 },
+                    { interaction_type_id: 2, interaction_count: 5 },
+                    { interaction_type_id: 3, interaction_count: 10 },
+                    { interaction_type_id: 5, interaction_count: 1 }
+                ]);
+            });
         });
     });
 

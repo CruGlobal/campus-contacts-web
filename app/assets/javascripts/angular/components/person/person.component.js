@@ -13,7 +13,7 @@
         });
 
     function personController ($animate, $filter, $scope, confirm, jQuery,
-                               periodService, personService, reportsService, interactionsService, _) {
+                               periodService, personService, reportsService, interactionsService) {
         var vm = this;
 
         vm.addInteractionBtnsVisible = false;
@@ -70,7 +70,6 @@
             var interaction = { interactionTypeId: vm.openPanelType.id, comment: vm.interactionComment };
             interactionsService.recordInteraction(interaction, vm.organizationId, vm.person.id).then(function () {
                 vm.uncontacted = false;
-                $scope.$emit('newInteraction', interaction.id);
                 toggleInteractionBtns();
             });
         }
@@ -80,9 +79,8 @@
             vm.interactionComment = '';
         }
 
-        function reportInteractions (interaction_type_id) {
-            var interaction = _.find(vm.report.interactions, {interaction_type_id: interaction_type_id});
-            return angular.isDefined(interaction) ? interaction.interaction_count : '-';
+        function reportInteractions (interactionTypeId) {
+            return reportsService.getInteractionCount(vm.report, interactionTypeId);
         }
 
         function archivePerson () {

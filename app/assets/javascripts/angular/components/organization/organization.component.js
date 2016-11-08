@@ -16,9 +16,8 @@
             transclude: true
         });
 
-    function organizationController ($scope, JsonApiDataStore, loggedInPerson, periodService,
-                                     reportsService, interactionsService, organizationService,
-                                     myContactsDashboardService, _) {
+    function organizationController (JsonApiDataStore, loggedInPerson, periodService,
+                                     reportsService, interactionsService, myContactsDashboardService, _) {
         var vm = this;
 
         _.defaultsDeep(vm, {
@@ -35,18 +34,10 @@
         // Restrict to the interactions that can be anonymous
         vm.anonymousInteractionTypes = _.filter(interactionsService.getInteractionTypes(), { anonymous: true });
 
-        vm.$onInit = activate;
         vm.toggleAnonymousInteractionButtons = toggleAnonymousInteractionButtons;
         vm.toggleVisibility = toggleVisibility;
         vm.addAnonymousInteraction = addAnonymousInteraction;
         vm.saveAnonymousInteraction = saveAnonymousInteraction;
-
-        function activate () {
-            // Listen for new interactions from the person child components
-            $scope.$on('newInteraction', function (event, interactionId) {
-                organizationService.incrementReportInteraction(vm.report, interactionId);
-            });
-        }
 
         function toggleAnonymousInteractionButtons () {
             vm.addAnonymousInteractionButtonsVisible = !vm.addAnonymousInteractionButtonsVisible;
@@ -73,7 +64,6 @@
                 comment: vm.pendingAnonymousInteraction.comment
             };
             interactionsService.recordInteraction(interaction, vm.org.id, null).then(function () {
-                $scope.$emit('newInteraction', interaction.id);
                 closeAnonymousInteractions();
             });
         }

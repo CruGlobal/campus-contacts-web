@@ -4,16 +4,21 @@
         .factory('reportsService', reportsService);
 
     // This service contains action logic that is shared across components
-    function reportsService ($q, httpProxy, modelsService, JsonApiDataStore, periodService) {
+    function reportsService ($q, httpProxy, modelsService, JsonApiDataStore, periodService, _) {
         // Create an empty report for the specified report type and id
         function createReport (type, reportId) {
             return JsonApiDataStore.store.sync({
-                data: [{
+                data: {
                     type: type,
                     id: reportId,
-                    attributes: {interactions: []}
-                }]
-            })[0];
+                    attributes: {
+                        contact_count: 0,
+                        uncontacted_count: 0,
+                        placeholder: true,
+                        interactions: []
+                    }
+                }
+            });
         }
 
         // Create an empty report for the specified report type and id
@@ -51,8 +56,8 @@
                 // Determine which organization reports have not been loaded yet and actually need to be loaded
                 var unloadedOrgIds = organizationIds.filter(function (organizationId) {
                     var report = reportsService.lookupOrganizationReport(organizationId);
-                    // if there is no data we need to check if it is just a placeholder
-                    return !report || (report.interactions && report.interactions.length === 0);
+                    // The report needs to be loaded if the report could not be found or if it is just a placeholder
+                    return !report || report.placeholder;
                 });
 
                 if (unloadedOrgIds.length === 0) {
@@ -66,6 +71,27 @@
                 }).then(function () {
                     return lookupReports();
                 });
+            },
+
+            // Return the number of interactions of a specific type in a particular report
+            getInteractionCount: function (report, interactionTypeId) {
+                var interaction = report && _.find(report.interactions, { interaction_type_id: interactionTypeId });
+                return _.isNil(interaction) ? '-' : interaction.interaction_count;
+            },
+
+            // Add a new interaction to a report
+            incrementReportInteraction: function (report, interactionTypeId) {
+                var interaction = _.find(report.interactions, {
+                    interaction_type_id: interactionTypeId
+                });
+                if (interaction) {
+                    interaction.interaction_count++;
+                } else {
+                    report.interactions.push({
+                        interaction_type_id: interactionTypeId,
+                        interaction_count: 1
+                    });
+                }
             }
         };
 

@@ -11,7 +11,7 @@
             templateUrl: '/assets/angular/components/organizationalStats/organizationalStats.html'
         });
 
-    function organizationalStatsController ($scope, periodService, reportsService, _) {
+    function organizationalStatsController ($scope, periodService, reportsService) {
         var vm = this;
 
         vm.getInteractionCount = getInteractionCount;
@@ -28,8 +28,7 @@
         }
 
         function getInteractionCount (interactionTypeId) {
-            var interaction = _.find(vm.report.interactions, { interaction_type_id: interactionTypeId });
-            return angular.isDefined(interaction) ? interaction.interaction_count : '-';
+            return reportsService.getInteractionCount(vm.report, interactionTypeId);
         }
     }
 })();

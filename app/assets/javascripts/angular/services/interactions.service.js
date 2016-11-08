@@ -4,7 +4,7 @@
         .factory('interactionsService', interactionsService);
 
     // This service contains action logic that is shared across components
-    function interactionsService (httpProxy, modelsService, JsonApiDataStore, loggedInPerson) {
+    function interactionsService (httpProxy, modelsService, JsonApiDataStore, reportsService, loggedInPerson) {
         return {
             // Return an array containing information about the available interaction types
             // Fields:
@@ -83,7 +83,18 @@
                     }
                 }];
                 return httpProxy.post(modelsService.getModelMetadata('interactions').url.root, null, createJson)
-                    .then(httpProxy.extractModel);
+                    .then(httpProxy.extractModel)
+                    .then(function (interaction) {
+                        interaction.initiators.forEach(function (initiator) {
+                            // Add the new interaction to the person report
+                            var report = reportsService.lookupPersonReport(interaction.organization.id, initiator.id);
+                            reportsService.incrementReportInteraction(report, interaction.interaction_type_id);
+                        });
+
+                        // Add the new interaction to the organization report
+                        var report = reportsService.lookupOrganizationReport(interaction.organization.id);
+                        reportsService.incrementReportInteraction(report, interaction.interaction_type_id);
+                    });
             }
         };
     }
