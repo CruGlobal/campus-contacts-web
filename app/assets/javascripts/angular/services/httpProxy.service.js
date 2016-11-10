@@ -27,6 +27,12 @@
                 };
 
                 return $http(config).then(function (res) {
+                    // store rolling access token
+                    var token = res.headers('x-mh-session');
+                    if(token) {
+                        $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+                    }
+
                     return JsonApiDataStore.store.syncWithMeta(res.data);
                 }).catch(function (error) {
                     //We can redirect to some error page if that's better
