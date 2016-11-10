@@ -43,7 +43,7 @@
             organizationOverviewService.loadOrgSuborgs(vm.org).then(function () {
                 // Find all of the organizations with org as its parent
                 vm.suborgs = _.filter(JsonApiDataStore.store.findAll('organization'), {
-                    ancestry: vm.org.ancestry + '/' + vm.org.id
+                    ancestry: (vm.org.ancestry || '').split('/').concat(vm.org.id).join('/')
                 });
             });
 
@@ -60,7 +60,8 @@
 
             vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
 
-            vm.cruOrg = vm.org.id === '1' || vm.org.ancestry === '1' || vm.org.ancestry.indexOf('1/') === 0
+            var cruOrgId = '1';
+            vm.cruOrg = vm.org.id === cruOrgId || (vm.org.ancestry || '').split('/')[0] === cruOrgId;
         }
     }
 })();

@@ -45,8 +45,7 @@
                                    .filter({ permission_id: 1 })
                                    .map('organization_id')
                                    .value();
-                var orgAndAncestry = org.ancestry.split('/');
-                orgAndAncestry.push(org.id);
+                var orgAndAncestry = (org.ancestry || '').split('/').concat(org.id);
                 return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
             }
         };
