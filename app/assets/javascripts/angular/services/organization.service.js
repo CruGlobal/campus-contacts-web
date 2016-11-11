@@ -4,10 +4,10 @@
 
     angular
         .module('missionhubApp')
-        .factory('organizationBreadcrumbsService', organizationBreadcrumbsService);
+        .factory('organizationService', organizationService);
 
 
-    function organizationBreadcrumbsService (JsonApiDataStore, _) {
+    function organizationService (JsonApiDataStore, _) {
         return {
             // Generate an array of the organization's ancestors (including the organization itself)
             getOrgHierarchy: function (orgId) {
