@@ -1,4 +1,7 @@
 <div class="grid-content">
+    <div class="group row alternate-color">
+        <a href="" ng-click="$ctrl.addGroup()" class="row-content padded">Add Group</a>
+    </div>
     <div ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
          ng-class="{'alternate-color': $odd}" class="group row">
         <div class="row-content padded">

@@ -816,6 +816,8 @@ en:
       meets_on: 'On'
       meets_on_the: On the
       of_month: of the month
+      from: From
+      to: To
     index:
       add: Add
       add_a_group: Add a Group
