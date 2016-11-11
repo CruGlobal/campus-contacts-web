@@ -3,7 +3,7 @@
         .module('missionhubApp')
         .factory('loggedInPerson', loggedInPerson);
 
-    function loggedInPerson (httpProxy, modelsService, JsonApiDataStore, _) {
+    function loggedInPerson (httpProxy, modelsService, JsonApiDataStore, organizationService, _) {
         var person = null;
         var loadingPromise = null;
 
@@ -45,7 +45,7 @@
                                    .filter({ permission_id: 1 })
                                    .map('organization_id')
                                    .value();
-                var orgAndAncestry = (org.ancestry || '').split('/').concat(org.id);
+                var orgAndAncestry = organizationService.getOrgHierarchyIds(org);
                 return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
             }
         };
