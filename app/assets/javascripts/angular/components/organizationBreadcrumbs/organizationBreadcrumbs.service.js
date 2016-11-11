@@ -12,8 +12,7 @@
             // Generate an array of the organization's ancestors (including the organization itself)
             getOrgHierarchy: function (orgId) {
                 var org = JsonApiDataStore.store.find('organization', orgId);
-                var ancestry = org && org.ancestry;
-                return (ancestry || '').split('/').concat(org.id)
+                return org ? (org.ancestry || '').split('/').concat(org.id) : []
                     // Convert org ids to organizations
                     .map(function (orgId) {
                         return JsonApiDataStore.store.find('organization', orgId);
