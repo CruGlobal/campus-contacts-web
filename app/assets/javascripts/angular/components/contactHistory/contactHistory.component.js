@@ -39,7 +39,8 @@
                         return item.timestamp;
                     }
                     if (item._type === 'answer_sheet') {
-                        return item.completed_at;
+                        // Default to an empty string so that answer sheets without a date will appear first
+                        return item.completed_at || '';
                     }
                 });
             });
