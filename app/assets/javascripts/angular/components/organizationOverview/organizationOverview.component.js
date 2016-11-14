@@ -13,7 +13,6 @@
         });
 
     function organizationOverviewController (JsonApiDataStore, ministryViewTabs,
-                                             organizationOverviewContactsService, organizationOverviewTeamService,
                                              organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
 
@@ -50,12 +49,11 @@
             // The contacts and team are loaded by their respective tab components, not this component.
             // However, this component does need to know how many contacts and team members there are, so set the
             // contacts and team to a sparse array of the appropriate length.
-            var page = { limit: 0, offset: 0 };
-            organizationOverviewContactsService.loadOrgContacts(vm.org.id, page).then(function (response) {
-                vm.contacts = new Array(response.meta.total);
+            organizationOverviewService.getContactCount(vm.org).then(function (contactCount) {
+                vm.contacts = new Array(contactCount);
             });
-            organizationOverviewTeamService.loadOrgTeam(vm.org.id, page).then(function (response) {
-                vm.team = new Array(response.meta.total);
+            organizationOverviewService.getTeamCount(vm.org).then(function (teamMemberCount) {
+                vm.team = new Array(teamMemberCount);
             });
 
             vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);

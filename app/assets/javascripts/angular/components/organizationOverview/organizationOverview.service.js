@@ -6,7 +6,10 @@
         .module('missionhubApp')
         .factory('organizationOverviewService', organizationOverviewService);
 
-    function organizationOverviewService ($q, httpProxy, modelsService, _) {
+    function organizationOverviewService ($q, httpProxy, modelsService,
+                                          organizationOverviewContactsService, organizationOverviewTeamService, _) {
+        var emptyPage = { limit: 0, offset: 0 };
+
         return {
             // Load an organization's relationships (groups and surveys)
             loadOrgRelations: function (org) {
@@ -30,6 +33,20 @@
                 return httpProxy.get(modelsService.getModelMetadata('organization').url.all, {
                     'filters[parent_ids]': org.id,
                     include: 'groups,surveys'
+                });
+            },
+
+            // Return a promise that resolves to the number of contacts in an organization
+            getContactCount: function (org) {
+                return organizationOverviewContactsService.loadOrgContacts(org.id, emptyPage).then(function (response) {
+                    return response.meta.total;
+                });
+            },
+
+            // Return a promise that resolves to the number of team members in an organization
+            getTeamCount: function (org) {
+                return organizationOverviewTeamService.loadOrgTeam(org.id, emptyPage).then(function (response) {
+                    return response.meta.total;
                 });
             }
         };
