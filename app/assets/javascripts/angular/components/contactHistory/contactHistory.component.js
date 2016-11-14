@@ -35,11 +35,12 @@
                     all: [].concat(vm.contactTab.contact.interactions, vm.contactTab.contact.answer_sheets)
                 }[vm.filter], function (item) {
                     // Pick the sort key based on whether the item is an interaction or an answer sheet
+                    // Default to an empty string so that items without a date will appear first
                     if (item._type === 'interaction') {
-                        return item.timestamp;
+                        return item.timestamp || '';
                     }
                     if (item._type === 'answer_sheet') {
-                        return item.completed_at;
+                        return item.completed_at || '';
                     }
                 });
             });
