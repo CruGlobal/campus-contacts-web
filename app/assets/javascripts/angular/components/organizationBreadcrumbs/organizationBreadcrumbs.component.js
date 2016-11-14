@@ -8,7 +8,7 @@
             templateUrl: '/assets/angular/components/organizationBreadcrumbs/organizationBreadcrumbs.html'
         });
 
-    function organizationBreadcrumbsController ($transitions, $stateParams, organizationBreadcrumbsService) {
+    function organizationBreadcrumbsController ($transitions, $stateParams, JsonApiDataStore, organizationService) {
         var vm = this;
         vm.orgHierarchy = null;
 
@@ -23,7 +23,8 @@
         }
 
         function updateOrganization (orgId) {
-            vm.orgHierarchy = organizationBreadcrumbsService.getOrgHierarchy(orgId || null);
+            var org = JsonApiDataStore.store.find('organization', orgId);
+            vm.orgHierarchy = organizationService.getOrgHierarchy(org);
         }
     }
 })();

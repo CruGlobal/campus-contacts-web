@@ -14,7 +14,7 @@
 
     function organizationOverviewController (JsonApiDataStore, ministryViewTabs,
                                              organizationOverviewContactsService, organizationOverviewTeamService,
-                                             organizationOverviewService, loggedInPerson, _) {
+                                             organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
 
         _.defaults(vm, {
@@ -43,7 +43,7 @@
             organizationOverviewService.loadOrgSuborgs(vm.org).then(function () {
                 // Find all of the organizations with org as its parent
                 vm.suborgs = _.filter(JsonApiDataStore.store.findAll('organization'), {
-                    ancestry: (vm.org.ancestry || '').split('/').concat(vm.org.id).join('/')
+                    ancestry: organizationService.getOrgHierarchyIds(vm.org).join('/')
                 });
             });
 
@@ -61,7 +61,7 @@
             vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
 
             var cruOrgId = '1';
-            vm.cruOrg = vm.org.id === cruOrgId || (vm.org.ancestry || '').split('/')[0] === cruOrgId;
+            vm.cruOrg = organizationService.getOrgHierarchyIds(vm.org)[0] === cruOrgId;
         }
     }
 })();
