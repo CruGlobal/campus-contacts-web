@@ -32,6 +32,8 @@
 //= require jsonapi-datastore/dist/ng-jsonapi-datastore
 //= require angular-environment/dist/angular-environment
 //= require angular-ui-sortable/dist/sortable
+//= require angular-ui-bootstrap/dist/ui-bootstrap
+//= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
 //= require moment/moment

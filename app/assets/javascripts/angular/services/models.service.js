@@ -51,6 +51,9 @@
             interaction: {
                 include: 'interactions',
                 url: generateUrls('/interactions')
+            },
+            group: {
+                url: generateUrls('/groups')
             }
         };
 

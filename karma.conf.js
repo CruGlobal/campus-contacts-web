@@ -18,6 +18,7 @@ module.exports = function (config) {
             './node_modules/jsonapi-datastore/dist/ng-jsonapi-datastore.js',
             './node_modules/angular-environment/src/angular-environment.js',
             './node_modules/angular-ui-sortable/src/sortable.js',
+            './node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
             './node_modules/angulartics/src/angulartics.js',
             './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
             './node_modules/moment/moment.js',

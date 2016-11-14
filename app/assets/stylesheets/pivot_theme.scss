@@ -46,6 +46,11 @@
     }
   }
 
+  .required-field::after {
+    content: "*";
+    color: $pivot-orange;
+  }
+
   .form {
     .form-group {
       margin-bottom: 16px;
@@ -78,6 +83,11 @@
       font-size: 14px;
     }
 
+    textarea.form-control {
+      height: 3.5em;
+      line-height: normal;
+    }
+
     .form-control-select {
       position: relative;
       select {
@@ -97,6 +107,72 @@
         border-right: 5px solid transparent;
         border-top: 5px solid $pivot-dark-blue;
       }
+    }
+  }
+
+  .btn {
+    background-image: linear-gradient(to bottom, #72d9e6, #3eb1c8);
+    font-size: 15px;
+    color: #ffffff;
+    padding: 0 15px 0 15px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border-radius: none;
+    text-align: center;
+    border: 0;
+    box-shadow: none;
+    height: 36px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &[disabled] {
+      opacity: 0.6;
+    }
+  }
+
+  .btn-secondary {
+    background-image: none;
+    color: $gray-1;
+    border: 1px solid $gray-3;
+    -webkit-font-smoothing: initial;
+    -moz-osx-font-smoothing: initial;
+  }
+
+  .uib-timepicker {
+    td {
+      padding: 0;
+    }
+
+    input[type='text'] {
+      width: 36px;
+    }
+
+    .btn {
+      height: 32px;
+      padding: 0 6px;
+    }
+
+    .btn-link {
+      background: none;
+      border: 0;
+    }
+
+    .uib-increment .btn, .uib-decrement .btn {
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      height: 20px;
+      padding: 0px;
+      width: 100%;
+    }
+    .uib-increment .btn {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cGF0aCBkPSJNMTIgOGwtNiA2IDEuNDEgMS40MUwxMiAxMC44M2w0LjU5IDQuNThMMTggMTR6Ij48L3BhdGg+PC9zdmc+");
+    }
+    .uib-decrement .btn {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cGF0aCBkPSJNMTYuNTkgOC41OUwxMiAxMy4xNyA3LjQxIDguNTkgNiAxMGw2IDYgNi02eiI+PC9wYXRoPjwvc3ZnPg==");
     }
   }
 }

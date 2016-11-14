@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-title">{{ $ctrl.title | t }}</h3>
+</div>
+<div class="modal-body form" id="modal-body">
+  <div class="form-group">
+    <label>
+      <span class="required-field">{{'groups.index.group_name' | t}}</span>
+      <input type="text" ng-model="$ctrl.group.name" class="form-control">
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label>
+      <span class="required-field">{{'groups.show.location' | t}}</span>
+      <textarea ng-model="$ctrl.group.location" class="form-control"></textarea>
+    </label>
+  </div>
+
+  <div class="form-group split-row">
+    <label class="form-control-select">
+      {{'groups.show.meets' | t}}
+      <select ng-model="$ctrl.group.meets" class="form-control"
+              ng-options="(value | t) for value in $ctrl.meetingFrequencyOptions">
+      </select>
+    </label>
+    <label class="form-control-select" ng-if="$ctrl.group.meets !== 'sporadically'">
+      {{'groups.form.meets_on' | t}}
+      <select ng-if="$ctrl.group.meets === 'weekly'" ng-model="$ctrl.group.meeting_day"
+              ng-options="idx as day for (idx, day) in ('date.day_names' | t)"
+              class="form-control">
+      </select>
+      <select ng-if="$ctrl.group.meets === 'monthly'" ng-model="$ctrl.group.meeting_day"
+              ng-options="i for i in $ctrl.dayOptions"
+              class="form-control">
+      </select>
+    </label>
+  </div>
+
+  <div class="split-row" ng-if="$ctrl.group.meets !== 'sporadically'">
+    <label>
+      {{'groups.form.from' | t}}
+      <div uib-timepicker ng-model="$ctrl.group.start_time" minute-step="15"></div>
+    </label>
+    <label>
+      {{'groups.form.to' | t}}
+      <div uib-timepicker ng-model="$ctrl.group.end_time" minute-step="15"></div>
+    </label>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+  <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+          ng-disabled="!$ctrl.valid() || $ctrl.saving">
+    <span ng-hide="$ctrl.saving">OK</span>
+    <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+  </button>
+</div>

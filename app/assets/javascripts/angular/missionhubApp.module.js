@@ -10,6 +10,7 @@
             'environment',
             'ui.router',
             'ui.sortable',
+            'ui.bootstrap',
             'angulartics',
             'angulartics.google.analytics'
         ]);
