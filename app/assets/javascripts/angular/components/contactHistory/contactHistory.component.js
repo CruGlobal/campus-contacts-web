@@ -11,7 +11,7 @@
             templateUrl: '/assets/angular/components/contactHistory/contactHistory.html'
         });
 
-    function contactHistoryController ($scope, interactionsService, _) {
+    function contactHistoryController ($scope, interactionsService, contactHistoryService) {
         var vm = this;
         vm.filters = ['all', 'notes', 'surveys'];
         vm.filter = vm.filters[0];
@@ -29,20 +29,7 @@
             $scope.$watchGroup([
                 '$ctrl.filter', '$ctrl.contactTab.contact.interactions', '$ctrl.contactTab.contact.answer_sheets'
             ], function () {
-                vm.historyFeed = _.sortBy({
-                    notes: vm.contactTab.contact.interactions,
-                    surveys: vm.contactTab.contact.answer_sheets,
-                    all: [].concat(vm.contactTab.contact.interactions, vm.contactTab.contact.answer_sheets)
-                }[vm.filter], function (item) {
-                    // Pick the sort key based on whether the item is an interaction or an answer sheet
-                    if (item._type === 'interaction') {
-                        return item.timestamp;
-                    }
-                    if (item._type === 'answer_sheet') {
-                        // Default to an empty string so that answer sheets without a date will appear first
-                        return item.completed_at || '';
-                    }
-                });
+                vm.historyFeed = contactHistoryService.buildHistoryFeed(vm.contactTab.contact, vm.filter);
             });
         }
 
