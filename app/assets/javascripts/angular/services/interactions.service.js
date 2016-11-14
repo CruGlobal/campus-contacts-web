@@ -94,6 +94,8 @@
                         // Add the new interaction to the organization report
                         var report = reportsService.lookupOrganizationReport(interaction.organization.id);
                         reportsService.incrementReportInteraction(report, interaction.interaction_type_id);
+
+                        return interaction;
                     });
             }
         };
