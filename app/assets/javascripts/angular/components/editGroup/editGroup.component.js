@@ -13,7 +13,7 @@
             templateUrl: '/assets/angular/components/editGroup/editGroup.html'
         });
 
-    function editGroupController (groupsService, _) {
+    function editGroupController (groupsService, editGroupService, _) {
         var vm = this;
 
         vm.title = 'groups.new.new_group';
@@ -29,56 +29,32 @@
 
         function activate () {
             vm.group = vm.resolve.group;
-            if(!vm.group) {
-                createBlankGroup()
+            if (!vm.group) {
+                createBlankGroup();
             }
         }
 
         function valid () {
-            return vm.group.name && vm.group.location;
+            return editGroupService.isGroupValid(vm.group);
         }
 
         function createBlankGroup () {
-            var from = new Date(21600000 + getTimeOffset());
-            var to = new Date(25200000 + getTimeOffset());
-            vm.group = {
-                name: '',
-                location: '',
-                meets: 'weekly',
-                meeting_day: '0',
-                start_time: from,
-                end_time: to
-            }
+            vm.group = editGroupService.getGroupTemplate();
         }
 
         function save () {
-            var groupParams = _.clone(vm.group);
-
-            groupParams.start_time = (groupParams.start_time.getTime() - getTimeOffset()) / 1000;
-            groupParams.end_time = (groupParams.end_time.getTime() - getTimeOffset()) / 1000;
-
-            if(vm.group.meets === 'sporadically') {
-                vm.group.meeting_day = null;
-                vm.group.start_time = null;
-                vm.group.end_time = null;
-            }
-            // save the group
             vm.saving = true;
-            groupsService.createGroup(groupParams, vm.resolve.organizationId)
+            editGroupService.saveGroup(vm.group, vm.resolve.organizationId)
                 .then(function (newGroup) {
                     vm.close({ $value: newGroup });
                 })
                 .catch(function () {
                     vm.saving = false;
-                })
+                });
         }
 
         function cancel () {
             vm.dismiss();
-        }
-
-        function getTimeOffset () {
-            return (new Date().getTimezoneOffset()) * 60000;
         }
     }
 })();
