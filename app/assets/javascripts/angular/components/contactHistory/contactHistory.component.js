@@ -59,11 +59,7 @@
             };
             var orgId = vm.contactTab.organizationId;
             var contactId = vm.contactTab.contact.id;
-            return interactionsService.recordInteraction(interaction, orgId, contactId).then(function (newInteraction) {
-                // Create a new array instead of mutating the existing one
-                // so that the $watch on interactions changes will trigger
-                vm.contactTab.contact.interactions = vm.contactTab.contact.interactions.concat(newInteraction);
-
+            return interactionsService.recordInteraction(interaction, orgId, contactId).then(function () {
                 vm.clearInteraction();
             });
         }
