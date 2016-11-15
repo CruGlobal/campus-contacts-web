@@ -95,9 +95,6 @@
                         var report = reportsService.lookupOrganizationReport(interaction.organization.id);
                         reportsService.incrementReportInteraction(report, interaction.interaction_type_id);
 
-                        return interaction;
-                    })
-                    .then(function (interaction) {
                         // Try to add the interaction to the person's interaction list
                         var person = JsonApiDataStore.store.find('person', personId);
                         if (person && person.interactions) {
