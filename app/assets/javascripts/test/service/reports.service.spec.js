@@ -37,6 +37,7 @@
             this.period = '1d';
             this.orgId = 1;
             this.personId = 2;
+            this.organizationReport = { id: '1-1d' };
             this.personReport = { id: '1-2-1d' };
             this.orgIds = [123, 456, 789];
             this.report1 = { id: '123-1d' };
@@ -57,6 +58,42 @@
             });
             spyOn(periodService, 'getPeriod').and.returnValue(this.period);
         }));
+
+        describe('lookupOrganizationReport', function () {
+            it('should return the found report if it exists', function () {
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.organizationReport);
+                expect(reportsService.lookupOrganizationReport(this.orgId)).toBe(this.organizationReport);
+            });
+
+            it('should return a placeholder report if it does not exist', function () {
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+                expect(reportsService.lookupOrganizationReport(this.orgId)).toEqual(jasmine.objectContaining({
+                    id: this.organizationReport.id,
+                    contact_count: 0,
+                    uncontacted_count: 0,
+                    placeholder: true,
+                    interactions: []
+                }));
+            });
+        });
+
+        describe('lookupPersonReport', function () {
+            it('should return the found report if it exists', function () {
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.personReport);
+                expect(reportsService.lookupPersonReport(this.orgId, this.personId)).toBe(this.personReport);
+            });
+
+            it('should return a placeholder report if it does not exist', function () {
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+                expect(reportsService.lookupPersonReport(this.orgId, this.personId)).toEqual(jasmine.objectContaining({
+                    id: this.personReport.id,
+                    contact_count: 0,
+                    uncontacted_count: 0,
+                    placeholder: true,
+                    interactions: []
+                }));
+            });
+        });
 
         describe('loadPersonReport', function () {
             it('should try to find the existing person report', function () {
