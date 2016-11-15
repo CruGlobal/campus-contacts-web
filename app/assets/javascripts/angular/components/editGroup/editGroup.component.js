@@ -28,10 +28,7 @@
         vm.$onInit = activate;
 
         function activate () {
-            vm.group = vm.resolve.group;
-            if (!vm.group) {
-                createBlankGroup();
-            }
+            vm.group = vm.resolve.group || createBlankGroup();
         }
 
         function valid () {
