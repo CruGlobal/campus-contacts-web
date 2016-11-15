@@ -18,7 +18,7 @@
         };
     }
 
-    describe('ReportsService Tests', function () {
+    describe('reportsService', function () {
 
         beforeEach(angular.mock.module('missionhubApp'));
 
@@ -37,7 +37,7 @@
             this.period = '1d';
             this.orgId = 1;
             this.personId = 2;
-            this.report = { id: '1-2-1d' };
+            this.personReport = { id: '1-2-1d' };
             this.orgIds = [123, 456, 789];
             this.report1 = { id: '123-1d' };
             this.report2 = { id: '456-1d' };
@@ -83,16 +83,16 @@
             });
 
             it('should not make a network request if the report is loaded', function () {
-                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.report);
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.personReport);
                 reportsService.loadPersonReport(this.orgId, this.personId);
                 expect(httpProxy.callHttp).not.toHaveBeenCalled();
             });
 
             it('should return a promise that resolves to the report if it is already loaded', async(function () {
                 var _this = this;
-                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.report);
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.personReport);
                 return reportsService.loadPersonReport(this.orgId, this.personId).then(function (personReport) {
-                    expect(personReport).toBe(_this.report);
+                    expect(personReport).toBe(_this.personReport);
                 });
             }));
 
@@ -100,10 +100,10 @@
                 var _this = this;
                 spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
                 this.httpResponse = {
-                    data: [this.report]
+                    data: [this.personReport]
                 };
                 return reportsService.loadPersonReport(this.orgId, this.personId).then(function (personReport) {
-                    expect(personReport).toBe(_this.report);
+                    expect(personReport).toBe(_this.personReport);
                 });
             }));
         });
