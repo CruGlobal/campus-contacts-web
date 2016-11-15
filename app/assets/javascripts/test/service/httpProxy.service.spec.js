@@ -4,8 +4,9 @@
 
     // Constants
     var httpProxy;
-    var JsonApiDataStore;
     var $rootScope;
+    var $http;
+    var JsonApiDataStore;
 
     // Add better asynchronous support to a test function
     // The test function must return a promise
@@ -25,44 +26,126 @@
 
     describe('HttpProxyService Tests', function () {
 
-
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_httpProxy_, _$rootScope_, _JsonApiDataStore_) {
+        beforeEach(function () {
+            var _this = this;
+            this.token = null;
+            this.responseData = {};
+            this.responseHeaders = {
+                get 'x-mh-session' () {
+                    return _this.token;
+                }
+            };
+            this.httpResponse = {
+                headers: function (header) {
+                    return _this.responseHeaders[header];
+                },
+                get data () {
+                    return _this.responseData;
+                }
+            }
+
+            // Mock out the $http service
+            angular.mock.module(function ($provide) {
+                $provide.factory('$http', function ($q) {
+                    var $http = jasmine.createSpy('$http').and.returnValue($q.resolve(_this.httpResponse));
+                    $http.defaults = { headers: { common: {} } };
+                    return $http;
+                });
+            });
+        });
+
+        beforeEach(inject(function (_httpProxy_, _$rootScope_, _$http_, _JsonApiDataStore_) {
             httpProxy = _httpProxy_;
             $rootScope = _$rootScope_;
+            $http = _$http_;
             JsonApiDataStore = _JsonApiDataStore_;
         }));
 
-        it('service should exist', function () {
-            expect(httpProxy).toBeDefined();
-        });
+        describe('callHttp', function () {
+            beforeEach(inject(function (envService) {
+                this.apiUrl = 'http://localhost:4000';
+                this.method = 'GET';
+                this.url = '/';
+                this.params = { key1: 'value1' };
+                this.data = { key2: 'value2' };
 
-        it('should contain get', function () {
-            expect(httpProxy.get).toBeDefined();
-        });
+                spyOn(envService, 'read').and.returnValue(this.apiUrl);
+            }));
 
-        it('should contain post', function () {
-            expect(httpProxy.post).toBeDefined();
-        });
+            it('should get the base API url from envService', inject(function (envService) {
+                httpProxy.callHttp(this.method, this.url, this.params, this.data);
+                expect(envService.read).toHaveBeenCalledWith('apiUrl');
 
-        it('should contain put', function () {
-            expect(httpProxy.put).toBeDefined();
-        });
+                var httpConfig = $http.calls.argsFor(0)[0];
+                expect(httpConfig.url.indexOf(this.apiUrl)).toBe(0);
+            }));
 
-        it('should contain delete', function () {
-            expect(httpProxy.delete).toBeDefined();
-        });
+            it('should call $http', function () {
+                httpProxy.callHttp(this.method, this.url, this.params, this.data);
+                expect($http).toHaveBeenCalledWith({
+                    method: this.method,
+                    url: this.apiUrl + this.url,
+                    data: this.data,
+                    params: this.params
+                });
+            });
 
-        it('contain callHttp', function () {
-            expect(httpProxy.callHttp).toBeDefined();
-        });
+            it('should set the Authorization header when a token is received', asynchronous(function () {
+                var _this = this;
+                this.token = 'abcde';
+                this.responseData = { data: [] };
+                spyOn(this.httpResponse, 'headers').and.callThrough();
+                return httpProxy.callHttp(this.method, this.url, this.params, this.data).then(function () {
+                    expect(_this.httpResponse.headers).toHaveBeenCalledWith('x-mh-session');
+                    expect($http.defaults.headers.common.Authorization).toBe('Bearer ' + _this.token);
+                });
+            }));
 
-        it('http proxy can make fake async call', inject(function () {
-            var spy = spyOn(httpProxy, 'callHttp').and.callFake(function(){});
-            httpProxy.callHttp();
-            expect(spy).toHaveBeenCalled();
-        }));
+            it('should not set the Authorization header when a token is not received', asynchronous(function () {
+                var originalAuthorization = 'Bearer old';
+                this.token = null;
+                $http.defaults.headers.common.Authorization = originalAuthorization;
+                return httpProxy.callHttp(this.method, this.url, this.params, this.data).then(function () {
+                    expect($http.defaults.headers.common.Authorization).toBe(originalAuthorization);
+                });
+            }));
+
+            it('should sync the JSON store with the response', asynchronous(function () {
+                var _this = this;
+                spyOn(JsonApiDataStore.store, 'syncWithMeta');
+                return httpProxy.callHttp(this.method, this.url, this.params, this.data).then(function () {
+                    expect(JsonApiDataStore.store.syncWithMeta).toHaveBeenCalledWith(_this.responseData);
+                });
+            }));
+
+            describe('aliases', function () {
+                beforeEach(function () {
+                    spyOn(httpProxy, 'callHttp');
+                });
+
+                it('should contain get', function () {
+                    httpProxy.get(this.url, this.params);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', this.url, this.params);
+                });
+
+                it('should contain post', function () {
+                    httpProxy.post(this.url, this.params, this.data);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('POST', this.url, this.params, this.data);
+                });
+
+                it('should contain put', function () {
+                    httpProxy.put(this.url, this.params, this.data);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('PUT', this.url, this.params, this.data);
+                });
+
+                it('should contain delete', function () {
+                    httpProxy.delete(this.url, this.params);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params);
+                });
+            })
+        });
 
         describe('model loading', function () {
             beforeEach(function () {
@@ -188,6 +271,24 @@
                             });
                         });
                 }));
+            });
+
+            describe('extractModel', function () {
+                it('should return the model of a JSON API response', function () {
+                    var model = { id: 1 };
+                    expect(httpProxy.extractModel({
+                        data: model
+                    })).toBe(model);
+                });
+            });
+
+            describe('extractModels', function () {
+                it('should return the model of a JSON API response', function () {
+                    var models = [{ id: 1 }, { id: 2 }, { id: 3 }];
+                    expect(httpProxy.extractModel({
+                        data: models
+                    })).toBe(models);
+                });
             });
         });
     });
