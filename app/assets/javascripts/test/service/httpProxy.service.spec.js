@@ -216,7 +216,7 @@
                     this.relationships = ['a', 'b', 'c', 'd', 'e.a', 'f.a', 'g.a', 'h.a.b.c', 'i.a.b.c', 'j.a.b.c'];
                     expect(httpProxy.getUnloadedRelationships(this.model, this.relationships))
                         .toEqual(['c', 'd', 'f.a', 'g.a', 'i.a.b.c', 'j.a.b.c']);
-                })
+                });
             });
 
             describe('getModel', function () {

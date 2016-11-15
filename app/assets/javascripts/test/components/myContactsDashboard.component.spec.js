@@ -11,7 +11,7 @@
         beforeEach(angular.mock.module('missionhubApp'));
 
 
-        beforeEach(inject(function($rootScope, $componentController, _loggedInPerson_){
+        beforeEach(inject(function ($rootScope, $componentController, _loggedInPerson_) {
 
             $scope = $rootScope.$new();
             loggedInPerson = _loggedInPerson_;

@@ -71,15 +71,15 @@
 
         }));
 
-        describe('Save interaction', function(){
-            it('should POST a Url', function(){
+        describe('Save interaction', function () {
+            it('should POST a Url', function () {
                 peopleService.saveInteraction(this.interaction);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'POST',
                     jasmine.any(String),
                     null,
                     this.interaction
-                )
+                );
             });
 
             it('should return a promise', async(function () {
@@ -91,7 +91,7 @@
 
         });
 
-        describe('People service', function(){
+        describe('People service', function () {
             it('should be defined', function () {
                 expect(peopleService).toBeDefined();
             });

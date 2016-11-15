@@ -124,7 +124,7 @@
                 spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                     null, this.report2, null
                 );
-                var promise = reportsService.loadOrganizationReports(this.orgIds);
+                reportsService.loadOrganizationReports(this.orgIds);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,789',
                     period: this.period

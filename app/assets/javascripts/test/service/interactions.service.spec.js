@@ -37,14 +37,12 @@
                                 return _this.loggedInPersonId;
                             }
                         }
-                    }
+                    };
                 });
             });
         });
 
         beforeEach(inject(function (_interactionsService_, _$q_, _$rootScope_, _httpProxy_, _reportsService_) {
-            var _this = this;
-
             interactionsService = _interactionsService_;
             $q = _$q_;
             $rootScope = _$rootScope_;
