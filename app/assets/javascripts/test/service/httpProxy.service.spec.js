@@ -44,7 +44,7 @@
                 get data () {
                     return _this.responseData;
                 }
-            }
+            };
 
             // Mock out the $http service
             angular.mock.module(function ($provide) {
@@ -144,7 +144,7 @@
                     httpProxy.delete(this.url, this.params);
                     expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params);
                 });
-            })
+            });
         });
 
         describe('model loading', function () {
