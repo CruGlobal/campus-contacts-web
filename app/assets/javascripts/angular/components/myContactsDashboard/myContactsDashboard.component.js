@@ -36,7 +36,7 @@
             vm.sortableOptions = {
                 handle: '.sort-orgs-handle',
                 stop: organizationOrderChange
-            }
+            };
 
             vm.noContactsWelcome = I18n.t('dashboard.no_contacts.welcome', {
                 name: loggedInPerson.person.first_name.toUpperCase()
@@ -150,7 +150,7 @@
             _.each(vm.organizations, function (org) {
                 var hidden = orgHiddenPreference.indexOf(org.id.toString());
                 org.visible = hidden === -1;
-            })
+            });
         }
 
         function noContacts () {

@@ -118,7 +118,7 @@
                     return JsonApiDataStore.store.find(type, id);
                 });
             }
-        }
+        };
 
 
         return proxy;

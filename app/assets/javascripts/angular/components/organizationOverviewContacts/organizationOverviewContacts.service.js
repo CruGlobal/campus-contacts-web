@@ -20,7 +20,7 @@
                     'page[limit]': page.limit,
                     'page[offset]': page.offset,
                     'filters[organization_ids]': orgId
-                })
+                });
             }
         };
     }
