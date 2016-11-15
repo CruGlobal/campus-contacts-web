@@ -35,7 +35,7 @@
                         .replace(/&/g, '&amp;')
                         .replace(/\n$/, '<br/>&nbsp;')
                         .replace(/\n/g, '<br/>')
-                        .replace(/\s{2,}/g, function (space) { return times('&nbsp;', space.length - 1) + ' ' });
+                        .replace(/\s{2,}/g, function (space) { return times('&nbsp;', space.length - 1) + ' '; });
                     $shadow.html(val);
 
                     element.css('height', Math.max($shadow[0].offsetHeight + 10 /* the "threshold" */, minHeight) + 'px');
@@ -52,6 +52,6 @@
             return {
                 link: link,
                 restrict: 'AC'
-            }
+            };
         });
 })();
