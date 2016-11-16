@@ -71,7 +71,7 @@
                 'page[limit]': 100,
                 order: 'active_people_count',
                 include: ''
-            }
+            };
 
             spyOn(httpProxy, 'callHttp').and.callFake(function () {
                 return $q.resolve(_this.httpResponse);
@@ -191,7 +191,7 @@
                         expect(loadedOrganization).toEqual(_this.organizationReports);
                     });
             }));
-        })
+        });
 
     });
 })();

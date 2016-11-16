@@ -46,10 +46,9 @@
                 return _.chain(person.email_addresses).find({ primary: true }).defaultTo(null).value();
             },
 
+            // Archive the person in a particular organization
             archivePerson: function (person, organizationId) {
-                var organizationalPermission = _.find(person.organizational_permissions, {
-                    organization_id: organizationId
-                });
+                var organizationalPermission = personService.getOrgPermission(person, organizationId);
                 var updateJson = {
                     data: {
                         type: 'person',
@@ -73,7 +72,7 @@
                     });
             },
 
-            // Return a promise that resolve to an array of the contact assignments for people assigned to a
+            // Return a promise that resolves to an array of the contact assignments for people assigned to a
             // particular person
             // If organization is null, return all contact assignments, otherwise filter the returned assignments to
             // those related to a particular organization

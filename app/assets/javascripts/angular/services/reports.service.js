@@ -67,9 +67,8 @@
                     period: periodService.getPeriod(),
                     organization_ids: organizationId.toString(),
                     people_ids: personId.toString()
-                }).then(function (response) {
-                    var reports = response.data;
-                    return reports[0];
+                }).then(httpProxy.extractModels).then(function (people) {
+                    return people[0];
                 });
             },
 
