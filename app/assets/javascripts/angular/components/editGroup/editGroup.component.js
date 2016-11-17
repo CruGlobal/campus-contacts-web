@@ -28,15 +28,11 @@
         vm.$onInit = activate;
 
         function activate () {
-            vm.group = vm.resolve.group || createBlankGroup();
+            vm.group = vm.resolve.group || editGroupService.getGroupTemplate();
         }
 
         function valid () {
             return editGroupService.isGroupValid(vm.group);
-        }
-
-        function createBlankGroup () {
-            vm.group = editGroupService.getGroupTemplate();
         }
 
         function save () {
