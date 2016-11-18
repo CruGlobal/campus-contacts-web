@@ -140,7 +140,7 @@
             }));
         });
 
-        fdescribe('getContactAssignments', function () {
+        describe('getContactAssignments', function () {
             beforeEach(function () {
                 this.organizationId = 1;
 
