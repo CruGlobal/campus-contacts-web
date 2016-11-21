@@ -178,7 +178,7 @@
                     ]
                 };
                 this.personWrongOrg = {
-                    id: 103,
+                    id: 104,
                     reverse_contact_assignments: [
                         {
                             assigned_to: { id: this.person.id },
@@ -213,8 +213,8 @@
                     };
 
                     return personService.getContactAssignments(this.person, this.organizationId)
-                        .then(function (people) {
-                            expect(people).toEqual([_this.personRelevant.reverse_contact_assignments[0]]);
+                        .then(function (assignments) {
+                            expect(assignments).toEqual([_this.personRelevant.reverse_contact_assignments[0]]);
                         });
                 }));
             });
@@ -241,8 +241,8 @@
                     };
 
                     return personService.getContactAssignments(this.person)
-                        .then(function (people) {
-                            expect(people).toEqual([_this.personRelevant.reverse_contact_assignments[0]]);
+                        .then(function (assignments) {
+                            expect(assignments).toEqual([_this.personRelevant.reverse_contact_assignments[0]]);
                         });
                 }));
             });
