@@ -1,11 +1,9 @@
 (function () {
-
     'use strict';
 
     angular
         .module('missionhubApp')
         .factory('myOrganizationsDashboardService', myOrganizationsDashboardService);
-
 
     function myOrganizationsDashboardService (httpProxy, JsonApiDataStore, loggedInPerson, _) {
         return {
@@ -23,5 +21,4 @@
             }
         };
     }
-
 })();

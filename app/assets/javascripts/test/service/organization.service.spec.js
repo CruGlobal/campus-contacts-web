@@ -1,17 +1,13 @@
 (function () {
-
     'use strict';
 
     // Constants
-    var organizationService;
-    var JsonApiDataStore;
+    var organizationService, JsonApiDataStore;
 
     describe('organizationService', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_organizationService_, _JsonApiDataStore_) {
-
             organizationService = _organizationService_;
             JsonApiDataStore = _JsonApiDataStore_;
 
@@ -27,7 +23,6 @@
             spyOn(JsonApiDataStore.store, 'find').and.callFake(function (type, orgId) {
                 return _this.orgs[orgId];
             });
-
         }));
 
         describe('getOrgHierarchyIds', function () {
@@ -57,7 +52,5 @@
                 ]);
             });
         });
-
     });
-
 })();

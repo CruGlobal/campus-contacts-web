@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     angular
@@ -14,14 +13,19 @@
                 .filter(['organization.id', orgId])
                 .map('assigned_to')
                 .value();
-            var unloaded = _.filter(assignedTos, { '_placeHolder': true });
-            var unloadedIds = _.chain(unloaded).map('id').uniq().value();
+            var unloadedIds = _.chain(assignedTos)
+                .filter({ _placeHolder: true })
+                .map('id')
+                .uniq()
+                .value();
 
-            if(unloadedIds.length === 0) {
+            if (unloadedIds.length === 0) {
                 return;
             }
-            var getParams = {include: '', 'filters[ids]': unloadedIds.join(',')};
-            httpProxy.get(modelsService.getModelMetadata('person').url.all, getParams);
+            httpProxy.get(modelsService.getModelMetadata('person').url.all, {
+                include: '',
+                'filters[ids]': unloadedIds.join(',')
+            });
         }
 
         return {
@@ -38,7 +42,7 @@
                     'page[offset]': page.offset,
                     'filters[organization_ids]': orgId
                 }).then(function (resp) {
-                    if(resp.data.length > 0) {
+                    if (resp.data.length > 0) {
                         loadAssignments(resp.data, orgId);
                     }
                     return resp;
@@ -46,5 +50,4 @@
             }
         };
     }
-
 })();

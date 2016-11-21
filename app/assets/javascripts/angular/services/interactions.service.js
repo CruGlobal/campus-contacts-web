@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     angular
         .module('missionhubApp')
         .factory('interactionsService', interactionsService);
@@ -57,12 +59,12 @@
                 // Build up the relationships object
                 var relationships = {
                     organization: {
-                        data: {id: organizationId, type: 'organization'}
+                        data: { id: organizationId, type: 'organization' }
                     }
                 };
                 if (personId) {
                     relationships.receiver = {
-                        data: {id: personId, type: 'person'}
+                        data: { id: personId, type: 'person' }
                     };
                 }
                 var newInteraction = JsonApiDataStore.store.sync({

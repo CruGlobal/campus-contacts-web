@@ -31,6 +31,7 @@
 
         vm.addAnonymousInteractionButtonsVisible = false;
         vm.pendingAnonymousInteraction = null;
+
         // Restrict to the interactions that can be anonymous
         vm.anonymousInteractionTypes = _.filter(interactionsService.getInteractionTypes(), { anonymous: true });
 

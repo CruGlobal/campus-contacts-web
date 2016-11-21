@@ -1,11 +1,9 @@
 (function () {
-
     'use strict';
 
     angular
         .module('missionhubApp')
         .factory('organizationService', organizationService);
-
 
     function organizationService (JsonApiDataStore, _) {
         var organizationService = {
@@ -19,6 +17,7 @@
 
             // Generate an array of the organization's ancestors as org models (including the organization itself)
             getOrgHierarchy: function (org) {
+                /* eslint-disable lines-around-comment */
                 return organizationService.getOrgHierarchyIds(org)
                     // Convert org ids to organizations
                     .map(function (orgId) {
@@ -26,10 +25,10 @@
                     })
                     // Filter out organizations that were not loaded because the user does not have access to them
                     .filter(_.identity);
+                /* eslint-enable lines-around-comment */
             }
         };
 
         return organizationService;
     }
-
 })();

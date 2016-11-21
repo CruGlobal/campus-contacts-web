@@ -6,9 +6,8 @@
         .run(function (lscache, nativeLocation, $analytics) {
             lscache.setBucket('missionhub:');
 
-            if(nativeLocation.pathname !== '/') {
+            if (nativeLocation.pathname !== '/') {
                 $analytics.pageTrack(nativeLocation.pathname);
             }
         });
-
 })();

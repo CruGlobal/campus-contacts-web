@@ -1,13 +1,8 @@
 (function () {
-
     'use strict';
 
-    var organizationOverviewService;
-    var httpProxy;
-    var $rootScope;
-    var $q;
-    var organizationOverviewContactsService;
-    var organizationOverviewTeamService;
+    var organizationOverviewService, httpProxy, $rootScope, $q;
+    var organizationOverviewContactsService, organizationOverviewTeamService; // eslint-disable-line one-var
 
     function asynchronous (fn) {
         return function (done) {
@@ -23,12 +18,10 @@
     }
 
     describe('organizationOverviewService', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_organizationOverviewService_, _httpProxy_, _$rootScope_, _$q_,
                                     _organizationOverviewContactsService_, _organizationOverviewTeamService_) {
-
             organizationOverviewService = _organizationOverviewService_;
             httpProxy = _httpProxy_;
             $rootScope = _$rootScope_;
@@ -139,5 +132,4 @@
             }));
         });
     });
-
 })();

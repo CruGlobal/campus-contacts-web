@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     angular
@@ -9,10 +8,9 @@
     function organizationOverviewTeamService (httpProxy, modelsService) {
         return {
             // Load an organization's team members
+            // The "org" parameter may either be an organization model or an organization id
             loadOrgTeam: function (org, page) {
-                if (org.id) {
-                    org = org.id;
-                }
+                var orgId = org.id || org;
                 return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: [
                         'phone_numbers',
@@ -20,11 +18,10 @@
                     ].join(','),
                     'page[limit]': page.limit,
                     'page[offset]': page.offset,
-                    'filters[organization_ids]': org,
+                    'filters[organization_ids]': orgId,
                     'filters[permissions]': 'admin,user'
                 });
             }
         };
     }
-
 })();

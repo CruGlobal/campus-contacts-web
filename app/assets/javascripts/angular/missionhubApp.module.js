@@ -14,5 +14,4 @@
             'angulartics',
             'angulartics.google.analytics'
         ]);
-
 })();

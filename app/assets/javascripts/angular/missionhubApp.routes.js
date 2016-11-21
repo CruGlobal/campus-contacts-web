@@ -117,5 +117,4 @@
             // This is the default URL if the URL does not match any routes
             $urlRouterProvider.otherwise('/people');
         });
-
 })();

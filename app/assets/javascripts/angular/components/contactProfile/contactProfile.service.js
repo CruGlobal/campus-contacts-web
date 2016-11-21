@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     angular
@@ -26,6 +25,7 @@
                     // We are updating an existing model
 
                     changes.id = model.id;
+
                     // Persist only the one attribute
                     changes.attributes = _.fromPairs([
                         [attribute, model[attribute]]
@@ -62,5 +62,4 @@
             }
         };
     }
-
 })();

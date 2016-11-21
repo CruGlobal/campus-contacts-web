@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -22,7 +21,6 @@
     }
 
     describe('loggedInPerson service', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_loggedInPerson_, _$q_, _$rootScope_, _httpProxy_, _JsonApiDataStore_) {
@@ -100,6 +98,5 @@
                 expect(loggedInPerson.loadingPromise).toBe(loadingPromise);
             });
         });
-
     });
 })();

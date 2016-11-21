@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     angular
@@ -24,8 +23,8 @@
                     location: '',
                     meets: 'weekly',
                     meeting_day: '0',
-                    start_time: new Date(6 * 60 * 60 * 1000 + getTimeOffset()),
-                    end_time: new Date(7 * 60 * 60 * 1000 + getTimeOffset())
+                    start_time: new Date((6 * 60 * 60 * 1000) + getTimeOffset()),
+                    end_time: new Date((7 * 60 * 60 * 1000) + getTimeOffset())
                 };
             },
 
@@ -45,5 +44,4 @@
             }
         };
     }
-
 })();

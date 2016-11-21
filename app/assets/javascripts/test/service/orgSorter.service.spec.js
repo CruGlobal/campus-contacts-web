@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -60,6 +59,5 @@
                 expect(_.map(orgSorter.sort(this.orgs), 'id')).toEqual([2, 5, 3, 1, 4]);
             });
         });
-
     });
 })();

@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -19,12 +18,10 @@
     }
 
     describe('reportsService', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_$q_, _$rootScope_, _reportsService_,
                                     _httpProxy_, _JsonApiDataStore_, _periodService_) {
-
             var _this = this;
 
             $q = _$q_;
@@ -176,33 +173,33 @@
                 expect(httpProxy.callHttp).not.toHaveBeenCalled();
             });
 
-            it('should return a promise that resolves to an array of organization reports ' +
-               'when a network request is required', async(function () {
-                var _this = this;
-                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
-                    null, null, null,
-                    this.report1, this.report2, this.report3
-                );
+            it('should asynchronously return an array of organization reports when a network request is required',
+                async(function () {
+                    var _this = this;
+                    spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                        null, null, null,
+                        this.report1, this.report2, this.report3
+                    );
 
-                return reportsService.loadOrganizationReports(this.orgIds)
-                    .then(function (loadedOrganizationReports) {
-                        expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
-                    });
-            }));
+                    return reportsService.loadOrganizationReports(this.orgIds)
+                        .then(function (loadedOrganizationReports) {
+                            expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
+                        });
+                }));
 
-            it('should return a promise that resolves to an array of organization reports ' +
-               'when a network request is not required', async(function () {
-                var _this = this;
-                spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
-                    this.report1, this.report2, this.report3,
-                    this.report1, this.report2, this.report3
-                );
+            it('should asynchronously return an array of organization reports when a network request is not required',
+                async(function () {
+                    var _this = this;
+                    spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+                        this.report1, this.report2, this.report3,
+                        this.report1, this.report2, this.report3
+                    );
 
-                return reportsService.loadOrganizationReports(this.orgIds)
-                    .then(function (loadedOrganizationReports) {
-                        expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
-                    });
-            }));
+                    return reportsService.loadOrganizationReports(this.orgIds)
+                        .then(function (loadedOrganizationReports) {
+                            expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
+                        });
+                }));
         });
 
         describe('getInteractionCount', function () {
@@ -240,5 +237,4 @@
             });
         });
     });
-
 })();

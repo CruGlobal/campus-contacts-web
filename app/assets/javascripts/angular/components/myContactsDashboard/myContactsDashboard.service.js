@@ -2,18 +2,14 @@
  * Created by eijeh on 9/2/16.
  */
 
-
 (function () {
-
     'use strict';
 
     angular
         .module('missionhubApp')
         .factory('myContactsDashboardService', myContactsDashboardService);
 
-
     function myContactsDashboardService (httpProxy, modelsService, loggedInPerson, periodService, _) {
-
         var myContactsDashboardService = {
 
             loadPeople: function (params) {
@@ -53,8 +49,7 @@
                 if (organization.visible) {
                     // The organization is now visible, so remove it from the user's list of hidden organizations
                     hiddenOrgs = _.remove(hiddenOrgs, organization.id);
-                }
-                else {
+                } else {
                     // The organization is now hidden, so add it to the user's list of hidden organizations
                     hiddenOrgs.push(organization.id);
                 }
@@ -68,5 +63,4 @@
 
         return myContactsDashboardService;
     }
-
 })();

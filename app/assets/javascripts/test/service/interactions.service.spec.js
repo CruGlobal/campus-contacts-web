@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -22,7 +21,6 @@
     }
 
     describe('interactionsService', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(function () {
@@ -166,6 +164,5 @@
                     });
             }));
         });
-
     });
 })();

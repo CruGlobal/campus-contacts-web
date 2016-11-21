@@ -6,8 +6,8 @@
         .component('preloadState', {
             controller: preloadStateController,
             bindings: {
-                'name': '@',
-                'data': '@'
+                name: '@',
+                data: '@'
             }
         });
 
@@ -17,7 +17,7 @@
         activate();
 
         function activate () {
-            if(vm.data === 'true' || vm.data === 'false') {
+            if (vm.data === 'true' || vm.data === 'false') {
                 state[vm.name] = vm.data === 'true';
             } else {
                 state[vm.name] = vm.data;
@@ -26,7 +26,7 @@
         }
 
         function addAuthHeader () {
-            if(vm.name === 'v4AccessToken') {
+            if (vm.name === 'v4AccessToken') {
                 $http.defaults.headers.common.Authorization = 'Bearer ' + state.v4AccessToken;
             }
         }

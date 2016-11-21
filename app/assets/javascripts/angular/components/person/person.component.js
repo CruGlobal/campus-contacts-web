@@ -58,10 +58,9 @@
         }
 
         function openAddInteractionPanel (type) {
-            if(type.id === -1) {
+            if (type.id === -1) {
                 archivePerson();
-            }
-            else {
+            } else {
                 vm.openPanelType = type;
             }
         }

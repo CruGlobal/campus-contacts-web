@@ -8,6 +8,7 @@
     function MenuController ($window, _) {
         var vm = this;
 
+        /* eslint-disable lines-around-comment */
         $window.location.search.slice(1)
             // Break up querystring into its individual parameters
             .split('&')
@@ -28,6 +29,7 @@
                     $window.localStorage.setItem('beta', true);
                 }
             });
+        /* eslint-enable lines-around-comment */
 
         vm.betaMode = $window.localStorage.getItem('beta') !== null;
     }

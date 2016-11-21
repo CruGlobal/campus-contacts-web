@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     angular
         .module('missionhubApp')
         .factory('groupsService', groupsService);
@@ -9,13 +11,14 @@
                 // Build up the relationships object
                 var relationships = {
                     organization: {
-                        data: {id: organizationId, type: 'organization'}
+                        data: { id: organizationId, type: 'organization' }
                     }
                 };
+                var includedAttrs = ['name', 'location', 'meets', 'meeting_day', 'start_time', 'end_time'];
                 var newGroup = JsonApiDataStore.store.sync({
                     data: {
                         type: 'group',
-                        attributes: _.pick(group, ['name', 'location', 'meets', 'meeting_day', 'start_time', 'end_time']),
+                        attributes: _.pick(group, includedAttrs),
                         relationships: relationships
                     }
                 });

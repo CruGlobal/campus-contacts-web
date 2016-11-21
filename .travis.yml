@@ -26,8 +26,7 @@ before_script:
   - bundle exec rake db:structure:load RAILS_ENV=test
 
 script:
-  - ./node_modules/.bin/eslint app/assets/javascripts/angular
-  - ./node_modules/.bin/eslint app/assets/javascripts/test
+  - npm run lint
   - ./node_modules/.bin/karma start --single-run --browsers PhantomJS
   - bundle exec rake test
   - bundle exec rake spec

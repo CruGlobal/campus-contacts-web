@@ -23,7 +23,9 @@
                 animation: true,
                 component: 'editGroup',
                 resolve: {
-                    organizationId: function () { return vm.organizationOverview.org.id; }
+                    organizationId: function () {
+                        return vm.organizationOverview.org.id;
+                    }
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'

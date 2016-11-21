@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -22,7 +21,6 @@
     }
 
     describe('groupsService', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_groupsService_, _$q_, _$rootScope_, _httpProxy_) {
@@ -83,6 +81,5 @@
                 });
             }));
         });
-
     });
 })();

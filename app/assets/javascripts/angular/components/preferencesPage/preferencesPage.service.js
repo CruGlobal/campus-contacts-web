@@ -6,7 +6,6 @@
         .factory('preferencesPageService', preferencesPageService);
 
     function preferencesPageService (httpProxy, modelsService, loggedInPerson) {
-
         return {
 
             updatePreferences: function (model) {
@@ -18,5 +17,4 @@
             }
         };
     }
-
 })();

@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     // Constants
@@ -19,13 +18,10 @@
     }
 
     describe('myContactsDashboardService Tests', function () {
-
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_$q_, _$rootScope_, _myContactsDashboardService_,
                                     _httpProxy_, _JsonApiDataStore_, _periodService_, ___) {
-
             var _this = this;
 
             $q = _$q_;
@@ -35,7 +31,6 @@
             periodService = _periodService_;
             myContactsDashboardService = _myContactsDashboardService_;
             _ = ___;
-
 
             this.person = {
                 personId: 123
@@ -78,7 +73,6 @@
             });
 
             spyOn(JsonApiDataStore.store, 'sync').and.returnValue(_this.httpResponse);
-
         }));
         describe('People Tests', function () {
             it('should contain loadPeople', function () {
@@ -118,19 +112,15 @@
                     expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('people', _this.people);
                 });
             }));
-
         });
 
-
         describe('Reports Tests', function () {
-
             describe('People Reports', function () {
                 it('should contain loadPeopleReports', function () {
                     expect(myContactsDashboardService.loadPeopleReports).toBeDefined();
                 });
 
                 it('should call GET loadPeopleReports URL', function () {
-
                     var joinedParams = _.clone(this.peopleReportsParams);
                     joinedParams.organization_ids = joinedParams.organization_ids.join(',');
                     joinedParams.people_ids = joinedParams.people_ids.join(',');
@@ -162,7 +152,6 @@
                     return myContactsDashboardService.loadPeopleReports(this.peopleReportsParams).then(function () {
                         expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('peopleReports', _this.peopleReports);
                     });
-
                 }));
             });
         });
@@ -192,6 +181,5 @@
                     });
             }));
         });
-
     });
 })();

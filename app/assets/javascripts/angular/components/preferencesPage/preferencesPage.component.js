@@ -28,29 +28,29 @@
         }
 
         function unsubscribeWeeklyDigest () {
-             if(nativeLocation.search === "?ministry-digest-unsubscribe") {
-                 vm.weeklyDigest = false;
-                 updatePreferences().then(function () {
-                     nativeLocation.search = '';
-                 });
-             }
+            if (nativeLocation.search === '?ministry-digest-unsubscribe') {
+                vm.weeklyDigest = false;
+                updatePreferences().then(function () {
+                    nativeLocation.search = '';
+                });
+            }
         }
 
         function readPreferences () {
-             preferencesPageService.readPreferences().then(function (me) {
-                 vm.user = me.user;
-                 mapUserPreferences(vm.user);
-                 unsubscribeWeeklyDigest();
+            preferencesPageService.readPreferences().then(function (me) {
+                vm.user = me.user;
+                mapUserPreferences(vm.user);
+                unsubscribeWeeklyDigest();
             });
         }
 
         function mapUserPreferences (user) {
             vm.timeZone = user.timezone;
-            if(user.language !== null) {
+            if (user.language !== null) {
                 vm.selectedLanguage = _.find(vm.supportedLanguages, { abbreviation: user.language });
             }
 
-            if(user.notification_settings !== null) {
+            if (user.notification_settings !== null) {
                 vm.contactMoved = user.notification_settings.contact_moved;
                 vm.contactAssigned = user.notification_settings.contact_assigned;
                 vm.weeklyDigest = user.notification_settings.weekly_digest;
@@ -68,7 +68,7 @@
                 weekly_digest: vm.weeklyDigest
             };
 
-            if(vm.selectedLanguage) {
+            if (vm.selectedLanguage) {
                 vm.selectedLanguageChanged = vm.user.language !== vm.selectedLanguage.abbreviation;
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }

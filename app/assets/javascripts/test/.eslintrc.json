@@ -4,5 +4,8 @@
   },
   "globals": {
     "inject": false
+  },
+  "rules": {
+    "no-restricted-globals": ["error", "fdescribe", "fit"]
   }
 }

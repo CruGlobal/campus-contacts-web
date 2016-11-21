@@ -27,7 +27,7 @@
         }
 
         function setUnassignedVisible (value) {
-            vm.unassignedVisible = !!value;
+            vm.unassignedVisible = Boolean(value);
             lscache.set(getUnassignedVisibleKey(), vm.unassignedVisible, 24 * 60); // 24 hour expiry
         }
     }

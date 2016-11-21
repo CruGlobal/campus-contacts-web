@@ -1,11 +1,8 @@
 (function () {
-
     'use strict';
 
     // Constants
-    var personService;
-    var $rootScope;
-    var httpProxy;
+    var personService, $rootScope, httpProxy;
 
     function asynchronous (fn) {
         return function (done) {
@@ -250,6 +247,5 @@
                 }));
             });
         });
-
     });
 })();

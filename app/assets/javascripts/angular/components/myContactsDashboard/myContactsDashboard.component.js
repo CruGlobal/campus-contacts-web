@@ -6,7 +6,7 @@
         .component('myContactsDashboard', {
             controller: myContactsDashboardController,
             bindings: {
-                'editMode': '<'
+                editMode: '<'
             },
             templateUrl: '/assets/angular/components/myContactsDashboard/myContactsDashboard.html'
         });
@@ -54,15 +54,15 @@
         }
 
         function loadReports () {
-            var people_ids = _.map(JsonApiDataStore.store.findAll('person'), 'id'),
-                organization_ids = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
+            var peopleIds = _.map(JsonApiDataStore.store.findAll('person'), 'id');
+            var organizationIds = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
 
             var peopleReportParams = {
-                organization_ids: organization_ids,
-                people_ids: people_ids
+                organization_ids: organizationIds,
+                people_ids: peopleIds
             };
 
-            var organizationReportPromise = reportsService.loadOrganizationReports(organization_ids);
+            var organizationReportPromise = reportsService.loadOrganizationReports(organizationIds);
             organizationReportPromise.catch(function (error) {
                 $log.error('Error loading organization reports', error);
             });
@@ -74,22 +74,23 @@
         }
 
         function loadOrganizations () {
-            myContactsDashboardService.loadOrganizations({ 'page[limit]': 100 }).then(function (organizations) {
-                vm.organizations = _.orderBy(organizations, 'active_people_count', 'desc');
+            myContactsDashboardService.loadOrganizations({ 'page[limit]': 100 })
+                .then(function (organizations) {
+                    vm.organizations = _.orderBy(organizations, 'active_people_count', 'desc');
 
-                orderOrganizations();
-                hideOrganizations();
+                    orderOrganizations();
+                    hideOrganizations();
 
-                if (vm.organizations.length <= vm.noPeopleShowLimit) {
-                    vm.numberOfOrgsToShow = 100;
-                }
-                else {
-                    vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
-                }
-                loadReports();
-            }).catch(function (error) {
-                $log.error('Error loading organizations', error);
-            });
+                    if (vm.organizations.length <= vm.noPeopleShowLimit) {
+                        vm.numberOfOrgsToShow = 100;
+                    } else {
+                        vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
+                    }
+                    loadReports();
+                })
+                .catch(function (error) {
+                    $log.error('Error loading organizations', error);
+                });
         }
 
         function dataLoaded (assignmentsToMe) {
@@ -102,7 +103,10 @@
             });
 
             // Get the array of all the organizations that have at least one person assigned to me
-            vm.organizations = _.chain(assignmentsToMe).map('organization').uniq().value();
+            vm.organizations = _.chain(assignmentsToMe)
+                .map('organization')
+                .uniq()
+                .value();
 
             vm.organizations.forEach(function (organization) {
                 // Get an array of the people assigned to me on this organization
@@ -117,7 +121,7 @@
 
             vm.collapsible = people.length > 10 || _.keys(vm.organizations).length > 1;
 
-            if(_.keys(vm.organizations).length === 0) {
+            if (_.keys(vm.organizations).length === 0) {
                 noContacts();
             }
 
@@ -126,15 +130,15 @@
 
         function orderOrganizations () {
             var orgOrderPreference = loggedInPerson.person.user.organization_order;
-            if(!orgOrderPreference) {
+            if (!orgOrderPreference) {
                 vm.organizations = _.orderBy(vm.organizations, ['ancestry', 'name']);
                 return;
             }
             var oldArray = _.clone(vm.organizations);
             var newArray = [];
             _.each(orgOrderPreference, function (org) {
-                var found = _.remove(oldArray, {id: org})[0];
-                if(found) {
+                var found = _.remove(oldArray, { id: org })[0];
+                if (found) {
                     newArray.push(found);
                 }
             });

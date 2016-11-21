@@ -1,12 +1,8 @@
 (function () {
-
     'use strict';
 
     // Constants
-    var httpProxy;
-    var $rootScope;
-    var $http;
-    var JsonApiDataStore;
+    var httpProxy, $rootScope, $http, JsonApiDataStore;
 
     // Add better asynchronous support to a test function
     // The test function must return a promise
@@ -25,7 +21,6 @@
     }
 
     describe('HttpProxyService Tests', function () {
-
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(function () {
@@ -257,20 +252,21 @@
                         });
                 }));
 
-                it('should make a network request when the model relationships are not already loaded', asynchronous(function () {
-                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
-                    spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
+                it('should make a network request when the model relationships are not already loaded',
+                    asynchronous(function () {
+                        spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
+                        spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
 
-                    var _this = this;
-                    return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)
-                        .then(function (model) {
-                            expect(model).toBe(_this.model);
-                            expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
-                                key: 'value',
-                                include: 'a,b,c'
+                        var _this = this;
+                        return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)
+                            .then(function (model) {
+                                expect(model).toBe(_this.model);
+                                expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
+                                    key: 'value',
+                                    include: 'a,b,c'
+                                });
                             });
-                        });
-                }));
+                    }));
             });
 
             describe('extractModel', function () {
@@ -292,5 +288,4 @@
             });
         });
     });
-
 })();

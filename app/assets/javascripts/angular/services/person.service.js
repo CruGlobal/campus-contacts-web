@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     angular
         .module('missionhubApp')
         .factory('personService', personService);
@@ -38,12 +40,18 @@
 
             // Return the person's primary phone number
             getPhoneNumber: function (person) {
-                return _.chain(person.phone_numbers).find({ primary: true }).defaultTo(null).value();
+                return _.chain(person.phone_numbers)
+                    .find({ primary: true })
+                    .defaultTo(null)
+                    .value();
             },
 
             // Return the person's primary email address
             getEmailAddress: function (person) {
-                return _.chain(person.email_addresses).find({ primary: true }).defaultTo(null).value();
+                return _.chain(person.email_addresses)
+                    .find({ primary: true })
+                    .defaultTo(null)
+                    .value();
             },
 
             // Archive the person in a particular organization
@@ -88,10 +96,13 @@
                     'filters[assigned_tos]': person.id,
                     'filters[organizations_id]': _.isNil(organizationId) ? '' : organizationId,
                     'page[limit]': 1000
-                }).then(httpProxy.extractModels).then(function (assignedPeople) {
+                })
+                .then(httpProxy.extractModels)
+                .then(function (assignedPeople) {
                     // Determine whether the assignment
                     function isRelevantAssignment (assignment, assignedPerson) {
                         // Make sure that the person is assigned to the person in question
+                        /* eslint-disable lines-around-comment */
                         return assignment.assigned_to.id === person.id &&
                             // Make sure that the assignment is related to an organization that the person is a part of
                             _.find(assignedPerson.organizational_permissions, {
@@ -99,6 +110,7 @@
                             }) &&
                             // Make sure that the assignment is related to the specified organization
                             (_.isNil(organizationId) || assignment.organization.id === organizationId);
+                        /* eslint-enable lines-around-comment */
                     }
 
                     // Start with the array of assigned people, map it to an array of contact assignment arrays,

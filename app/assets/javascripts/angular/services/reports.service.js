@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     angular
         .module('missionhubApp')
         .factory('reportsService', reportsService);
@@ -63,13 +65,16 @@
                 }
 
                 // Load the report and return it
-                return httpProxy.get(modelsService.getModelMetadata('person_report').url.all, {
-                    period: periodService.getPeriod(),
-                    organization_ids: organizationId.toString(),
-                    people_ids: personId.toString()
-                }).then(httpProxy.extractModels).then(function (people) {
-                    return people[0];
-                });
+                return httpProxy
+                    .get(modelsService.getModelMetadata('person_report').url.all, {
+                        period: periodService.getPeriod(),
+                        organization_ids: organizationId.toString(),
+                        people_ids: personId.toString()
+                    })
+                    .then(httpProxy.extractModels)
+                    .then(function (people) {
+                        return people[0];
+                    });
             },
 
             // Load organization reports for the given organizations
@@ -85,6 +90,7 @@
                 // Determine which organization reports have not been loaded yet and actually need to be loaded
                 var unloadedOrgIds = organizationIds.filter(function (organizationId) {
                     var report = reportsService.lookupOrganizationReport(organizationId);
+
                     // The report needs to be loaded if the report could not be found or if it is just a placeholder
                     return !report || report.placeholder;
                 });
