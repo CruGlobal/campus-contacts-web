@@ -12,14 +12,12 @@
             }
         });
 
-    function interactionController (interactionsService, _) {
+    function interactionController (interactionsService) {
         var vm = this;
         vm.$onInit = activate;
 
         function activate () {
-            vm.interactionType = _.find(interactionsService.getInteractionTypes(), {
-                id: vm.interaction.interaction_type_id
-            });
+            vm.interactionType = interactionsService.getInteractionType(vm.interaction.interaction_type_id);
         }
     }
 })();

@@ -2,7 +2,7 @@
     'use strict';
 
     // Constants
-    var interactionsService, $q, $rootScope, httpProxy, reportsService;
+    var interactionsService, $q, $rootScope, httpProxy, reportsService, _;
 
     // Add better asynchronous support to a test function
     // The test function must return a promise
@@ -40,12 +40,13 @@
             });
         });
 
-        beforeEach(inject(function (_interactionsService_, _$q_, _$rootScope_, _httpProxy_, _reportsService_) {
+        beforeEach(inject(function (_interactionsService_, _$q_, _$rootScope_, _httpProxy_, _reportsService_, ___) {
             interactionsService = _interactionsService_;
             $q = _$q_;
             $rootScope = _$rootScope_;
             httpProxy = _httpProxy_;
             reportsService = _reportsService_;
+            _ = ___;
 
             this.interaction = {
                 interactionTypeId: 1,
@@ -66,6 +67,22 @@
                 return $q.resolve({ data: {} });
             });
         }));
+
+        describe('getInteractionTypes', function () {
+            it('should not include deprecated interaction types', function () {
+                expect(_.find(interactionsService.getInteractionTypes(), { id: 6 })).not.toBeDefined();
+            });
+        });
+
+        describe('getInteractionType', function () {
+            it('should find interaction types', function () {
+                expect(interactionsService.getInteractionType(1)).toBeDefined();
+            });
+
+            it('should find deprecated interaction types', function () {
+                expect(interactionsService.getInteractionType(6)).toBeDefined();
+            });
+        });
 
         describe('recordInteraction', function () {
             it('with no personId should create an anyonymous interaction', function () {
