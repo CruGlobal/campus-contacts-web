@@ -12,16 +12,12 @@ organization-overview-contacts {
   }
 
   .contacts-list {
-    flex-grow: 1;
+    flex: 1; /* 25% of available width */
   }
 
   .collapsed {
     ui-view {
-      flex-grow: 1;
-    }
-
-    .contacts-list {
-      flex-grow: initial;
+      flex: 3; /* 75% of available width */
     }
 
     contact .detail-column {
