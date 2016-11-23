@@ -1,9 +1,12 @@
 // Karma configuration
 // Generated on Thu Sep 08 2016 18:14:18 GMT-0500 (CDT)
 
-module.exports = function (config) {
-    config.set({
+/* eslint-env node */
 
+module.exports = function (config) {
+    'use strict';
+
+    config.set({
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine'],
@@ -47,16 +50,16 @@ module.exports = function (config) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: ['spec', 'coverage'],
 
-        coverageReporter : {
-            type : 'html',
-            dir : 'coverage/',
-            file : 'coverage.html'
+        coverageReporter: {
+            type: 'html',
+            dir: 'coverage/',
+            file: 'coverage.html'
         },
-
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        //We can other browsers later if we intend to test on them as well ['Chrome', 'Firefox', 'IE', 'Safari', 'ChromeCanary']
+        // We can other browsers later if we intend to test on them as well: ['Chrome', 'Firefox', 'IE', 'Safari',
+        // 'ChromeCanary']
         browsers: ['PhantomJS']
     });
 };

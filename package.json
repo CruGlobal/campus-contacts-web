@@ -2,8 +2,8 @@
   "name": "missionhub",
   "version": "1.0.0",
   "scripts": {
-    "lint": "eslint app/assets/javascripts/angular app/assets/javascripts/test",
-    "lint-watch": "esw --watch app/assets/javascripts/angular app/assets/javascripts/test",
+    "lint": "eslint app/assets/javascripts/angular app/assets/javascripts/test karma.conf.js",
+    "lint-watch": "esw --watch app/assets/javascripts/angular app/assets/javascripts/test karma.conf.js",
     "test": "karma start",
     "test-debug": "karma start --browsers Chrome --reporters spec"
   },
