@@ -13,7 +13,7 @@
 
     function contactHistoryController ($scope, interactionsService, contactHistoryService) {
         var vm = this;
-        vm.filters = ['all', 'notes', 'surveys'];
+        vm.filters = ['all', 'interactions', 'notes', 'surveys'];
         vm.filter = vm.filters[0];
         vm.historyFeed = null;
         vm.interactionTypesVisible = false;

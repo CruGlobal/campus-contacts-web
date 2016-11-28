@@ -106,6 +106,7 @@ en:
         all: All
         anonymous: Anonymous
         header: History
+        interactions: Interactions
         me: Me
         note_for_interaction: Note for %{interaction}
         notes: Notes

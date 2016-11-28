@@ -11,7 +11,10 @@
             // feedFilter is a string and must have the value 'notes', 'surveys', or 'all'
             buildHistoryFeed: function (person, feedFilter) {
                 return _.sortBy({
-                    notes: person.interactions,
+                    interactions: person.interactions.filter(function (interaction) {
+                        return interaction.interaction_type_id !== 1;
+                    }),
+                    notes: _.filter(person.interactions, { interaction_type_id: 1 }),
                     surveys: person.answer_sheets,
                     all: [].concat(person.interactions, person.answer_sheets)
                 }[feedFilter], function (item) {
