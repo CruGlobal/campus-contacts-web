@@ -1968,8 +1968,9 @@ CREATE TABLE `versions` (
   KEY `index_versions_on_item_type_and_item_id` (`item_type`,`item_id`),
   KEY `index_versions_on_person_id_and_created_at` (`person_id`,`created_at`),
   KEY `index_versions_on_organization_id_and_created_at` (`organization_id`,`created_at`),
-  KEY `index_versions_on_item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+  KEY `index_versions_on_item_id` (`item_id`),
+  KEY `index_versions_on_created_at` (`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=452 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1981,7 +1982,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-08 15:25:19
+-- Dump completed on 2016-11-16 13:57:53
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2532,7 +2533,13 @@ INSERT INTO schema_migrations (version) VALUES ('20160823152936');
 
 INSERT INTO schema_migrations (version) VALUES ('20160824144038');
 
+INSERT INTO schema_migrations (version) VALUES ('20160912193216');
+
 INSERT INTO schema_migrations (version) VALUES ('20160922211250');
 
 INSERT INTO schema_migrations (version) VALUES ('20161108201848');
+
+INSERT INTO schema_migrations (version) VALUES ('20161114212017');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116185540');
 
