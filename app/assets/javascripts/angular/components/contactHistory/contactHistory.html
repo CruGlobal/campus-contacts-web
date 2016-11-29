@@ -27,11 +27,13 @@
         <ng-md-icon class="icon-chip actionable" icon="done" size="20"></ng-md-icon>
     </button>
 </form>
-<div class="sheet" ng-if="$ctrl.interactionTypesVisible">
-    <div class="item actionable" ng-repeat="interactionType in $ctrl.interactionTypes"
-         ng-click="$ctrl.createInteraction(interactionType)">
-        <ng-md-icon icon="{{interactionType.icon}}"></ng-md-icon>
-        <div>{{interactionType.title | t}}</div>
+<div class="sheet-container">
+    <div class="sheet" ng-if="$ctrl.interactionTypesVisible" ng-style="{ 'margin-top': (-50 * $ctrl.interactionTypes.length) + 'px' }">
+        <div class="item actionable" ng-repeat="interactionType in $ctrl.interactionTypes"
+             ng-click="$ctrl.createInteraction(interactionType)">
+            <ng-md-icon icon="{{interactionType.icon}}"></ng-md-icon>
+            <div>{{interactionType.title | t}}</div>
+        </div>
     </div>
 </div>
 <div class="row add-interaction" ng-if="!$ctrl.newInteractionType">

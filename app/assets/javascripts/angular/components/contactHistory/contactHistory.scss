@@ -20,6 +20,12 @@ contact-history {
     }
   }
 
+  .history-items {
+    /* The .sheet-container container pushes the .add-interaction button down 14px. After trying multiple approaches,
+    this is the only one that would work: adding negative padding to its preceeding sibling. */
+    margin-bottom: -14px;
+  }
+
   .history-item {
     margin-top: 10px;
     padding-bottom: 10px;
@@ -47,7 +53,13 @@ contact-history {
   }
 
   .add-interaction {
-    padding: 20px 0;
+    padding-bottom: 20px;
+    padding-top: 10px;
+  }
+
+  .sheet-container {
+    height: 0;
+    display: inline-block;
   }
 
   .new-interaction {
