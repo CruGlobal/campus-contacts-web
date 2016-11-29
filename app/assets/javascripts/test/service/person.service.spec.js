@@ -36,6 +36,7 @@
                 }
             };
             this.person = {
+                _type: 'person',
                 id: 11,
                 organizational_permissions: [
                     this.organizationalPermission,

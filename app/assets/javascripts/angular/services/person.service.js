@@ -73,7 +73,7 @@
                     ]
                 };
                 return httpProxy
-                    .put(modelsService.getModelMetadata('person').url.single(person.id), null, updateJson)
+                    .put(modelsService.getModelUrl(person), null, updateJson)
                     .then(function () {
                         // Remove the archived person from the organization's list of people
                         _.remove(organizationalPermission.organization.people, { id: person.id });

@@ -39,6 +39,7 @@
         describe('loadOrgRelations', function () {
             it('loads groups and surveys when they are unloaded', function () {
                 organizationOverviewService.loadOrgRelations({
+                    _type: 'organization',
                     id: this.id,
                     groups: [this.placeholderRelation],
                     surveys: [this.placeholderRelation]
@@ -52,6 +53,7 @@
 
             it('loads nothing when groups and surveys are loaded', function () {
                 organizationOverviewService.loadOrgRelations({
+                    _type: 'organization',
                     id: this.id,
                     groups: [this.loadedRelation],
                     surveys: [this.loadedRelation]
@@ -61,6 +63,7 @@
 
             it('loads only surveys when groups are loaded', function () {
                 organizationOverviewService.loadOrgRelations({
+                    _type: 'organization',
                     id: this.id,
                     groups: [this.loadedRelation],
                     surveys: [this.placeholderRelation]
@@ -74,6 +77,7 @@
 
             it('loads only groups when groups are partialy loaded and surveys are loaded', function () {
                 organizationOverviewService.loadOrgRelations({
+                    _type: 'organization',
                     id: this.id,
                     groups: [this.loadedRelation, this.placeholderRelation],
                     surveys: [this.loadedRelation]

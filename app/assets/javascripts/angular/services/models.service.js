@@ -59,11 +59,19 @@
             }
         };
 
-        return {
+        var modelsService = {
             // Return the metadata for a particular model
             getModelMetadata: function (model) {
                 return modelMetadata[model];
+            },
+
+            // Return the single URL for a model
+            getModelUrl: function (model) {
+                var metadata = modelsService.getModelMetadata(model._type);
+                return metadata && metadata.url.single(model.id);
             }
         };
+
+        return modelsService;
     }
 })();

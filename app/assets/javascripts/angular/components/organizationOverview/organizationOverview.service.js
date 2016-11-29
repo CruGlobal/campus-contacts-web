@@ -22,7 +22,7 @@
                 if (include.length === 0) {
                     return $q.resolve();
                 }
-                return httpProxy.get(modelsService.getModelMetadata('organization').url.single(org.id), {
+                return httpProxy.get(modelsService.getModelUrl(org), {
                     include: include.join(',')
                 });
             },

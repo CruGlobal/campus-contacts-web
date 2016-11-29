@@ -58,7 +58,7 @@
 
             // Delete a model on the server
             deleteModel: function (model) {
-                return httpProxy.delete(modelsService.getModelMetadata(model._type).url.single(model.id));
+                return httpProxy.delete(modelsService.getModelUrl(model));
             }
         };
     }
