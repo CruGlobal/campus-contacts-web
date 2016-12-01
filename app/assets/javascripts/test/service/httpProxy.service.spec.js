@@ -124,7 +124,7 @@
 
                 it('should contain get', function () {
                     httpProxy.get(this.url, this.params, this.config);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', this.url, this.params, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', this.url, this.params, null, this.config);
                 });
 
                 it('should contain post', function () {
@@ -139,7 +139,7 @@
 
                 it('should contain delete', function () {
                     httpProxy.delete(this.url, this.params, this.config);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params, null, this.config);
                 });
             });
         });

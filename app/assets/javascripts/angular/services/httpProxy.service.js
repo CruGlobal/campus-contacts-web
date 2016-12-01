@@ -41,7 +41,7 @@
             },
 
             get: function (url, params, config) {
-                return this.callHttp('GET', url, params, config);
+                return this.callHttp('GET', url, params, null, config);
             },
 
             post: function (url, data, config) {
@@ -53,7 +53,7 @@
             },
 
             delete: function (url, params, config) {
-                return this.callHttp('DELETE', url, params, config);
+                return this.callHttp('DELETE', url, params, null, config);
             },
 
             // Extract the model(s) from a JSON API response

@@ -48,6 +48,7 @@
                     'GET',
                     jasmine.any(String),
                     { include: 'groups,surveys' },
+                    null,
                     undefined
                 );
             });
@@ -73,6 +74,7 @@
                     'GET',
                     jasmine.any(String),
                     { include: 'surveys' },
+                    null,
                     undefined
                 );
             });
@@ -88,6 +90,7 @@
                     'GET',
                     jasmine.any(String),
                     { include: 'groups' },
+                    null,
                     undefined
                 );
             });
@@ -103,6 +106,7 @@
                         'filters[parent_ids]': 1,
                         include: 'groups,surveys'
                     },
+                    null,
                     undefined
                 );
             });

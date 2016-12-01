@@ -91,6 +91,7 @@
                     'GET',
                     jasmine.any(String),
                     params,
+                    null,
                     undefined
                 );
             });
@@ -131,6 +132,7 @@
                         'GET',
                         jasmine.any(String),
                         _.extend(joinedParams, { period: 'period' }),
+                        null,
                         undefined
                     );
                 });
@@ -169,6 +171,7 @@
                     'GET',
                     jasmine.any(String),
                     this.loadOrganizationParams,
+                    null,
                     undefined
                 );
             });

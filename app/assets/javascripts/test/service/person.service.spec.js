@@ -204,6 +204,7 @@
                             'filters[assigned_tos]': this.person.id,
                             'filters[organizations_id]': this.organizationId
                         }),
+                        null,
                         undefined
                     );
                 });
@@ -233,6 +234,7 @@
                             'filters[assigned_tos]': this.person.id,
                             'filters[organizations_id]': ''
                         }),
+                        null,
                         undefined
                     );
                 });
