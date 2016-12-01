@@ -8,7 +8,7 @@
     <div class="history-item" ng-repeat="historyItem in $ctrl.historyFeed" ng-switch="historyItem._type">
         <interaction ng-switch-when="interaction" contact="$ctrl.contactTab.contact" interaction="historyItem">
         </interaction>
-        <answer-sheet ng-switch-when="answer_sheet" answer-sheet="historyItem">
+        <answer-sheet ng-switch-when="answer_sheet" answer-sheet="historyItem" organization-id="$ctrl.organizationId">
         </answer-sheet>
     </div>
 </div>

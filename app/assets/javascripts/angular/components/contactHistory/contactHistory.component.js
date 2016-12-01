@@ -31,6 +31,8 @@
             ], function () {
                 vm.historyFeed = contactHistoryService.buildHistoryFeed(vm.contactTab.contact, vm.filter);
             });
+
+            vm.organizationId = vm.contactTab.organizationId;
         }
 
         function createInteraction (interactionType) {
@@ -44,9 +46,8 @@
                 interactionTypeId: vm.newInteractionType.id,
                 comment: vm.newInteractionComment
             };
-            var orgId = vm.contactTab.organizationId;
             var contactId = vm.contactTab.contact.id;
-            return interactionsService.recordInteraction(interaction, orgId, contactId).then(function () {
+            return interactionsService.recordInteraction(interaction, vm.organizationId, contactId).then(function () {
                 vm.clearInteraction();
             });
         }

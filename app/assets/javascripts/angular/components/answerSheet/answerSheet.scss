@@ -1,3 +1,9 @@
 answer-sheet {
   display: flex;
+
+  .actions-column {
+    ng-md-icon {
+      fill: $gray-1;
+    }
+  }
 }

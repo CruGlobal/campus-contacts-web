@@ -5,6 +5,8 @@ class SurveyResponsesController < ApplicationController
   before_action :prepare_for_mobile, except: [:show, :edit, :answer_other_surveys]
   before_action :set_locale
   before_action :remove_frame_header
+  before_action :check_new_current_organization, only: :edit
+
   skip_before_action :authenticate_user!, except: [:update, :live]
   skip_before_action :check_url
 

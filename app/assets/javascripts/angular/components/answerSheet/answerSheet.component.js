@@ -6,7 +6,8 @@
         .component('answerSheet', {
             templateUrl: '/assets/angular/components/answerSheet/answerSheet.html',
             bindings: {
-                answerSheet: '<'
+                answerSheet: '<',
+                organizationId: '<'
             }
         });
 })();
