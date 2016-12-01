@@ -90,7 +90,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    params
+                    params,
+                    undefined
                 );
             });
 
@@ -129,7 +130,8 @@
                     expect(httpProxy.callHttp).toHaveBeenCalledWith(
                         'GET',
                         jasmine.any(String),
-                        _.extend(joinedParams, { period: 'period' })
+                        _.extend(joinedParams, { period: 'period' }),
+                        undefined
                     );
                 });
 
@@ -166,7 +168,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    this.loadOrganizationParams
+                    this.loadOrganizationParams,
+                    undefined
                 );
             });
 

@@ -126,7 +126,8 @@
                                 archive_date: jasmine.any(String)
                             }
                         }]
-                    }
+                    },
+                    undefined
                 );
             });
 
@@ -202,7 +203,8 @@
                             include: 'reverse_contact_assignments,organizational_permissions',
                             'filters[assigned_tos]': this.person.id,
                             'filters[organizations_id]': this.organizationId
-                        })
+                        }),
+                        undefined
                     );
                 });
 
@@ -230,7 +232,8 @@
                             include: 'reverse_contact_assignments.organization,organizational_permissions',
                             'filters[assigned_tos]': this.person.id,
                             'filters[organizations_id]': ''
-                        })
+                        }),
+                        undefined
                     );
                 });
 

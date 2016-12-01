@@ -47,7 +47,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    { include: 'groups,surveys' }
+                    { include: 'groups,surveys' },
+                    undefined
                 );
             });
 
@@ -71,7 +72,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    { include: 'surveys' }
+                    { include: 'surveys' },
+                    undefined
                 );
             });
 
@@ -85,7 +87,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    { include: 'groups' }
+                    { include: 'groups' },
+                    undefined
                 );
             });
         });
@@ -99,7 +102,8 @@
                     {
                         'filters[parent_ids]': 1,
                         include: 'groups,surveys'
-                    }
+                    },
+                    undefined
                 );
             });
         });

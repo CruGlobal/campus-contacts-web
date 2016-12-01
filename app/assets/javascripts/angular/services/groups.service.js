@@ -23,7 +23,7 @@
                     }
                 });
                 var createJson = newGroup.serialize();
-                return httpProxy.post(modelsService.getModelMetadata('group').url.root, null, createJson)
+                return httpProxy.post(modelsService.getModelMetadata('group').url.root, createJson)
                     .then(httpProxy.extractModel);
             }
         };

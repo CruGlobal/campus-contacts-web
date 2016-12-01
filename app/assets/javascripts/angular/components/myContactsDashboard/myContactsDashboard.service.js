@@ -33,7 +33,7 @@
 
             // Modify the user's preferences and save those changes on the server
             updateUserPreference: function (changedPreferences) {
-                return httpProxy.put(modelsService.getModelMetadata('user').url.single('me'), null, {
+                return httpProxy.put(modelsService.getModelMetadata('user').url.single('me'), {
                     data: {
                         type: 'user',
                         attributes: changedPreferences

@@ -112,7 +112,8 @@
                         period: this.period,
                         organization_ids: this.orgId.toString(),
                         people_ids: this.personId.toString()
-                    }
+                    },
+                    undefined
                 );
             });
 
@@ -151,7 +152,7 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,456,789',
                     period: this.period
-                });
+                }, undefined);
             });
 
             it('should only load reports that are not already loaded', function () {
@@ -162,7 +163,7 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,789',
                     period: this.period
-                });
+                }, undefined);
             });
 
             it('should not make a network request when all reports are already loaded', function () {

@@ -110,7 +110,8 @@
                                 person_id: this.loggedInPersonId
                             }
                         }]
-                    }
+                    },
+                    undefined
                 );
             });
 
@@ -142,7 +143,8 @@
                                 person_id: this.loggedInPersonId
                             }
                         }]
-                    }
+                    },
+                    undefined
                 );
             });
 

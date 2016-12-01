@@ -65,6 +65,7 @@
                 this.url = '/';
                 this.params = { key1: 'value1' };
                 this.data = { key2: 'value2' };
+                this.config = { key3: 'value3' };
 
                 spyOn(envService, 'read').and.returnValue(this.apiUrl);
             }));
@@ -78,12 +79,13 @@
             }));
 
             it('should call $http', function () {
-                httpProxy.callHttp(this.method, this.url, this.params, this.data);
+                httpProxy.callHttp(this.method, this.url, this.params, this.data, this.config);
                 expect($http).toHaveBeenCalledWith({
                     method: this.method,
                     url: this.apiUrl + this.url,
                     data: this.data,
-                    params: this.params
+                    params: this.params,
+                    key3: 'value3'
                 });
             });
 
@@ -121,23 +123,23 @@
                 });
 
                 it('should contain get', function () {
-                    httpProxy.get(this.url, this.params);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', this.url, this.params);
+                    httpProxy.get(this.url, this.params, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', this.url, this.params, this.config);
                 });
 
                 it('should contain post', function () {
-                    httpProxy.post(this.url, this.params, this.data);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('POST', this.url, this.params, this.data);
+                    httpProxy.post(this.url, this.data, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('POST', this.url, null, this.data, this.config);
                 });
 
                 it('should contain put', function () {
-                    httpProxy.put(this.url, this.params, this.data);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('PUT', this.url, this.params, this.data);
+                    httpProxy.put(this.url, this.data, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('PUT', this.url, null, this.data, this.config);
                 });
 
                 it('should contain delete', function () {
-                    httpProxy.delete(this.url, this.params);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params);
+                    httpProxy.delete(this.url, this.params, this.config);
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith('DELETE', this.url, this.params, this.config);
                 });
             });
         });

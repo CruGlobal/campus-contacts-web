@@ -54,7 +54,8 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
-                    { include: jasmine.any(String) }
+                    { include: jasmine.any(String) },
+                    undefined
                 );
             });
 

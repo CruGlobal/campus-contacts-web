@@ -15,14 +15,13 @@
         }
 
         var proxy = {
-
-            callHttp: function (method, url, params, data) {
-                var config = {
+            callHttp: function (method, url, params, data, extraConfig) {
+                var config = _.extend({
                     method: method,
                     url: envService.read('apiUrl') + url,
                     data: data,
                     params: params
-                };
+                }, extraConfig);
 
                 return $http(config)
                     .then(function (res) {
@@ -41,20 +40,20 @@
                     });
             },
 
-            get: function (url, params) {
-                return this.callHttp('GET', url, params);
+            get: function (url, params, config) {
+                return this.callHttp('GET', url, params, config);
             },
 
-            post: function (url, params, data) {
-                return this.callHttp('POST', url, params, data);
+            post: function (url, data, config) {
+                return this.callHttp('POST', url, null, data, config);
             },
 
-            put: function (url, params, data) {
-                return this.callHttp('PUT', url, params, data);
+            put: function (url, data, config) {
+                return this.callHttp('PUT', url, null, data, config);
             },
 
-            delete: function (url, params) {
-                return this.callHttp('DELETE', url, params);
+            delete: function (url, params, config) {
+                return this.callHttp('DELETE', url, params, config);
             },
 
             // Extract the model(s) from a JSON API response

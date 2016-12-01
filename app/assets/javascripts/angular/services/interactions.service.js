@@ -105,7 +105,7 @@
                         person_id: loggedInPerson.person.id
                     }
                 }];
-                return httpProxy.post(modelsService.getModelMetadata('interaction').url.root, null, createJson)
+                return httpProxy.post(modelsService.getModelMetadata('interaction').url.root, createJson)
                     .then(httpProxy.extractModel)
                     .then(function (interaction) {
                         interaction.initiators.forEach(function (initiator) {
