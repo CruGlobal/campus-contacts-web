@@ -23,6 +23,7 @@
     "lodash": "^4.16.2",
     "lscache": "1.0.6",
     "moment": "^2.15.1",
+    "ui-select": "^0.19.6",
     "vex-js": "^3.0.0"
   },
   "devDependencies": {

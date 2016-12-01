@@ -19,7 +19,7 @@
             });
 
             it('should return undefined for invalid model types', function () {
-                expect(modelsService.getModelUrl({ _type: 'contact_assignment', id: 1 })).toBeUndefined();
+                expect(modelsService.getModelUrl({ _type: 'organizational_permission', id: 1 })).toBeUndefined();
             });
         });
     });

@@ -33,8 +33,6 @@
                 return _.chain(person.reverse_contact_assignments)
                     .filter(['organization.id', organizationId])
                     .map('assigned_to')
-                    .first()
-                    .defaultTo(null)
                     .value();
             },
 

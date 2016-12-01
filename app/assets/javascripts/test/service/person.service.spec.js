@@ -86,12 +86,9 @@
         });
 
         describe('getAssignedTo', function () {
-            it('should find the person\'s assignment', function () {
-                expect(personService.getAssignedTo(this.person, 1)).toEqual({ name: 'Adam' });
-            });
-
-            it('should return null when the user has no assignment', function () {
-                expect(personService.getAssignedTo(this.person, 4)).toBe(null);
+            it('should find the person\'s assignments', function () {
+                expect(personService.getAssignedTo(this.person, 1)).toEqual([{ name: 'Adam' }]);
+                expect(personService.getAssignedTo(this.person, 4)).toEqual([]);
             });
         });
 

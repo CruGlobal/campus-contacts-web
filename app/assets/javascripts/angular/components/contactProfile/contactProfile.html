@@ -12,8 +12,9 @@
     <div class="form-group">
         <label>
             <span class="label">{{'contact.assigned_to' | t}}</span>
+            <assigned-select assigned="$ctrl.contactTab.assignedTo"
+                             organization-id="$ctrl.contactTab.organizationId"></assigned-select>
         </label>
-        <span>{{$ctrl.contactTab.assignedTo.full_name}}</span>
     </div>
     <div class="form-group">
         <label class="form-control-select">

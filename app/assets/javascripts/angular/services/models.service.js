@@ -5,9 +5,9 @@
         .module('missionhubApp')
         .factory('modelsService', modelsService);
 
-    function modelsService () {
-        function generateUrls (root) {
-            return {
+    function modelsService (_) {
+        function generateUrls (root, extras) {
+            return _.extend({
                 // The base URL
                 root: root,
 
@@ -18,13 +18,15 @@
 
                 // The URL for all models
                 all: root
-            };
+            }, extras);
         }
 
         var modelMetadata = {
             person: {
                 include: 'people',
-                url: generateUrls('/people')
+                url: generateUrls('/people', {
+                    search: '/search'
+                })
             },
             user: {
                 include: 'users',
@@ -53,6 +55,10 @@
             interaction: {
                 include: 'interactions',
                 url: generateUrls('/interactions')
+            },
+            contact_assignment: {
+                include: 'contact_assignments',
+                url: generateUrls('/contact_assignments')
             },
             group: {
                 url: generateUrls('/groups')

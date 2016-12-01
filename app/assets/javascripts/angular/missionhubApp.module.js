@@ -9,6 +9,7 @@
             'beauby.jsonApiDataStore',
             'environment',
             'ui.router',
+            'ui.select',
             'ui.sortable',
             'ui.bootstrap',
             'angulartics',

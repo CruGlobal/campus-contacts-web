@@ -66,6 +66,14 @@
                     vm.addPhoneNumber();
                 }
             });
+
+            $scope.$watchCollection('$ctrl.contactTab.assignedTo', function (newAssignedTo, oldAssignedTo) {
+                var addedPeople = _.difference(newAssignedTo, oldAssignedTo);
+                contactProfileService.addAssignments(vm.contactTab.contact, vm.contactTab.organizationId, addedPeople);
+
+                var removedPeople = _.difference(oldAssignedTo, newAssignedTo);
+                contactProfileService.removeAssignments(vm.contactTab.contact, removedPeople);
+            });
         }
 
         function updatePrimary (newPrimary, oldPrimary) {

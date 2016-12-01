@@ -18,6 +18,7 @@ module.exports = function (config) {
             './node_modules/angular-material-icons/angular-material-icons.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/angular-ui-router/release/angular-ui-router.js',
+            './node_modules/ui-select/dist/select.js',
             './node_modules/jsonapi-datastore/dist/ng-jsonapi-datastore.js',
             './node_modules/angular-environment/src/angular-environment.js',
             './node_modules/angular-ui-sortable/src/sortable.js',
