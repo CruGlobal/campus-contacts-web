@@ -1,5 +1,7 @@
 <header>
-    <a ui-sref="^" class="close-button">X</a>
+    <a ui-sref="^" class="close-button">
+      <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
     <div class="row text-row">
         <span class="small-spacing name">{{$ctrl.contact.full_name}}</span>
         <span class="small-spacing warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">

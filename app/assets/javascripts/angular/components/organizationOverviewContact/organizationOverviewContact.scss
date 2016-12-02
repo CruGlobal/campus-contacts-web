@@ -2,13 +2,14 @@ organization-overview-contact {
   display: block;
   background-color: $white;
   border-left: 1px solid $pivot-dark-blue;
+  min-height: 100%;
 
   $inner-padding: 10%;
 
   header {
     padding: 10px $inner-padding;
     padding-bottom: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background: $gray-4;
 
     .tabs .tab {
@@ -34,6 +35,7 @@ organization-overview-contact {
 
   .close-button {
     float: right;
+    fill: $pivot-dark-blue;
   }
 
   .name-row .warning {

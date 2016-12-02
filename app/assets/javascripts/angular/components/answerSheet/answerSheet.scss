@@ -1,6 +1,11 @@
 answer-sheet {
   display: flex;
 
+  .title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
   .actions-column {
     ng-md-icon {
       fill: $gray-1;

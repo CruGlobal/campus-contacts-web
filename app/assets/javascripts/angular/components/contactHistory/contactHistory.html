@@ -4,6 +4,7 @@
       {{'ministries.contacts.history.' + filter | t}}
   </span>
 </div>
+<hr />
 <div class="history-items">
     <div class="history-item" ng-repeat="historyItem in $ctrl.historyFeed" ng-switch="historyItem._type">
         <interaction ng-switch-when="interaction" contact="$ctrl.contactTab.contact" interaction="historyItem">

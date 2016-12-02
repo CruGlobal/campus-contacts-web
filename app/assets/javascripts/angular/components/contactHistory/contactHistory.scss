@@ -1,23 +1,33 @@
 contact-history {
   .filters {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     .filter {
+      $filter-gray: $gray-2;
       display: flex;
       align-items: center;
-      justify-content: center;
       margin: 0 5px;
-      width: 6em;
-      height: 1.5em;
-      border: 1px solid $gray-3;
-      border-radius: 20px;
+      width: auto;
+      padding: 0 18px;
+      height: 24px;
+      border: 1px solid $filter-gray;
+      border-radius: 12px;
       background-color: $white;
-      color: $gray-3;
+      color: $filter-gray;
       &.active {
-        background-color: $gray-3;
+        background-color: $filter-gray;
         color: $white;
       }
     }
+  }
+
+  hr {
+    box-shadow: none;
+    background: $gray-3;
+    // this is so that it overflows both directions, even over the padding of the grandparent, making
+    // a nice divider
+    width: 2000px;
+    margin: 0 -100px;
   }
 
   .history-items {
