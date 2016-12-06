@@ -7,7 +7,9 @@
 
     function contactProfileService (httpProxy, modelsService, $q, _) {
         function updatePerson (personId, params, payload) {
-            return httpProxy.put(modelsService.getModelMetadata('person').url.single(personId), params, payload);
+            return httpProxy.put(modelsService.getModelMetadata('person').url.single(personId), payload, {
+                params: params
+            });
         }
 
         return {

@@ -45,6 +45,92 @@
             spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
         }));
 
+        describe('saveAttribute', function () {
+            beforeEach(function () {
+                this.personId = 123;
+                this.person = {
+                    _type: 'person',
+                    id: this.personId,
+                    key1: 'value1'
+                };
+            });
+
+            it('should update person attributes', function () {
+                contactProfileService.saveAttribute(this.personId, this.person, 'key1');
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    {
+                        data: {
+                            type: 'person',
+                            id: this.personId,
+                            attributes: {
+                                key1: 'value1'
+                            }
+                        }
+                    },
+                    { params: {} }
+                );
+            });
+
+            it('should update existing relationships', function () {
+                var relationship = {
+                    _type: 'organization',
+                    id: 456,
+                    key2: 'value2'
+                };
+
+                contactProfileService.saveAttribute(this.personId, relationship, 'key2');
+
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    {
+                        data: {
+                            type: 'person'
+                        },
+                        included: [{
+                            type: 'organization',
+                            id: 456,
+                            attributes: {
+                                key2: 'value2'
+                            }
+                        }]
+                    },
+                    { params: { } }
+                );
+            });
+
+            it('should create new relationships', function () {
+                var relationship = {
+                    _type: 'organization',
+                    key3: 'value3',
+                    key4: 'value4',
+                    key5: 'value5'
+                };
+
+                contactProfileService.saveAttribute(this.personId, relationship);
+
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    {
+                        data: {
+                            type: 'person'
+                        },
+                        included: [{
+                            type: 'organization',
+                            attributes: relationship
+                        }]
+                    },
+                    { params: { include: 'organizations' } }
+                );
+            });
+        });
+
         describe('addAssignments', function () {
             it('should not make a network request when adding no assignments', function () {
                 contactProfileService.addAssignments(this.person, this.organizationId, []);
