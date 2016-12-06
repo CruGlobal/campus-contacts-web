@@ -107,6 +107,14 @@
         border-right: 5px solid transparent;
         border-top: 5px solid $pivot-dark-blue;
       }
+      &.disabled {
+        &::after {
+          border-top-color: $gray-2;
+        }
+        select {
+          color: $gray-2;
+        }
+      }
     }
   }
 

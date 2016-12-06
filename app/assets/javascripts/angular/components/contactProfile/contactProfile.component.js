@@ -11,17 +11,22 @@
             templateUrl: '/assets/angular/components/contactProfile/contactProfile.html'
         });
 
-    function contactProfileController ($scope, contactProfileService, _) {
+    function contactProfileController ($scope, $filter, JsonApiDataStore, jQuery,
+                                       contactProfileService, loggedInPerson, _) {
         var vm = this;
-        vm.saveAttribute = saveAttribute;
+
         vm.pendingEmailAddress = null;
         vm.pendingPhoneNumber = null;
+
+        vm.saveAttribute = saveAttribute;
         vm.getEmailAddresses = getEmailAddresses;
         vm.getPhoneNumbers = getPhoneNumbers;
         vm.addEmailAddress = addEmailAddress;
         vm.addPhoneNumber = addPhoneNumber;
         vm.deleteEmailAddress = deleteEmailAddress;
         vm.deletePhoneNumber = deletePhoneNumber;
+        vm.permissionChange = permissionChange;
+
         vm.$onInit = activate;
 
         // Each of these arrays contains all possible values for a partiuclar contact attribute
@@ -41,6 +46,11 @@
             'part_time_staff',
             'full_time_staff'
         ];
+        vm.permissionOptions = [
+            { id: 1, i18n: 'admin' },
+            { id: 4, i18n: 'user' },
+            { id: 2, i18n: 'no_permissions' }
+        ];
         vm.enrollmentIds = [
             'not_student',
             'middle_school',
@@ -50,6 +60,17 @@
         ];
 
         function activate () {
+            var organization = JsonApiDataStore.store.find('organization', vm.contactTab.organizationId);
+            if (loggedInPerson.person === vm.contactTab.contact) {
+                vm.permissionChangeDisabled = true;
+            } else if (!loggedInPerson.isAdminAt(organization)) {
+                if (vm.contactTab.orgPermission.permission_id === 1) {
+                    vm.permissionChangeDisabled = true;
+                } else {
+                    vm.permissionOptions.shift();
+                }
+            }
+
             // Save the changes on the server whenever the primary email or primary phone changes
             $scope.$watch('$ctrl.contactTab.primaryEmail', updatePrimary);
             $scope.$watch('$ctrl.contactTab.primaryPhone', updatePrimary);
@@ -142,6 +163,22 @@
                 // Remove the deleted phone number
                 _.pull(vm.contactTab.contact.phone_numbers, phoneNumber);
             });
+        }
+
+        /*
+        This is used on the profile component with a tricky interpolation that results in it
+        returning the old value. It looks like this:
+        ng-change="$ctrl.permissionChange({{$ctrl.contactTab.orgPermission.permission_id}})"
+        Reference: http://stackoverflow.com/a/28047112/879524
+         */
+        function permissionChange (oldValue) {
+            var hasEmailAddress = vm.contactTab.contact.email_addresses.length > 0;
+            if (hasEmailAddress) {
+                vm.saveAttribute(vm.contactTab.orgPermission, 'permission_id');
+            } else {
+                vm.contactTab.orgPermission.permission_id = oldValue;
+                jQuery.a($filter('t')('contacts.index.for_this_permission_email_is_required_no_name'));
+            }
         }
     }
 })();
