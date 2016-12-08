@@ -9,9 +9,9 @@ class LeaderMailer < ActionMailer::Base
   #
   #   en.leader_mailer.added.subject
   #
-  def added(person, added_by_id, token)
-    @person = person
-    @added_by = Person.find_by(id: added_by_id)
+  def added(person_id, added_by_id, token)
+    @person = Person.find(person_id)
+    @added_by = Person.find_by(id: added_by_id) || 'Someone'
 
     if @person.user.present? && @person.email.present?
       @link = leader_link_url(token, @person.user.id)
