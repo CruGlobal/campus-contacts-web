@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .factory('loggedInPerson', loggedInPerson);
 
-    function loggedInPerson (httpProxy, modelsService, JsonApiDataStore, organizationService, _) {
+    function loggedInPerson (httpProxy, modelsService, organizationService, permissionService, _) {
         var person = null;
         var loadingPromise = null;
 
@@ -44,7 +44,7 @@
             // check if you have admin access on the org or any above it
             isAdminAt: function (org) {
                 var adminOrgIds = _.chain(person.organizational_permissions)
-                                   .filter({ permission_id: 1 })
+                                   .filter({ permission_id: permissionService.adminId })
                                    .map('organization_id')
                                    .value();
                 var orgAndAncestry = organizationService.getOrgHierarchyIds(org);
