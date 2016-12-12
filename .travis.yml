@@ -4,6 +4,7 @@ cache:
   directories:
     - node_modules
     - cache
+    - ../../../.nvm/versions
 language: ruby
 rvm: 2.3.0
 branches:
