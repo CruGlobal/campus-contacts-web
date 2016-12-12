@@ -750,6 +750,7 @@ en:
     no_recipient_in_send_comment: You have to select at least 1 recipient/person to comment on.
     note: Note
     organization: Organization
+    other: Other
     permission: Label
     permissions_applied: labels have been applied.
     phone: Phone

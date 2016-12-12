@@ -95,6 +95,12 @@
                 var removedPeople = _.difference(oldAssignedTo, newAssignedTo);
                 contactProfileService.removeAssignments(vm.contactTab.contact, removedPeople);
             });
+
+            $scope.$watchCollection('$ctrl.contactTab.contact.gender', function (newGender, oldGender) {
+                if (newGender !== oldGender) {
+                    saveAttribute(vm.contactTab.contact, 'gender');
+                }
+            });
         }
 
         function updatePrimary (newPrimary, oldPrimary) {

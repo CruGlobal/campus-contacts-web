@@ -2,6 +2,7 @@
   font-family: 'Titillium Web', sans-serif;
 
   $focus-gray: $gray-4;
+  $label-color: $gray-3;
 
   textarea,
   input[type="text"],
@@ -75,7 +76,7 @@
         display: block;
         padding-bottom: 3px;
         font-size: 12px;
-        color: $gray-3;
+        color: $label-color;
       }
     }
 
@@ -130,6 +131,24 @@
         select {
           color: $gray-2;
         }
+      }
+    }
+
+    .form-group--radio {
+      .label {
+        color: $label-color;
+        display: block;
+        font-size: 12px;
+        margin-bottom: 2px;
+      }
+
+      label {
+        display: inline-block;
+        margin-right: 1em;
+      }
+
+      input[type='radio'] {
+        position: static;
       }
     }
   }

@@ -63,6 +63,21 @@
                    class="form-control">
         </label>
     </div>
+    <div class="form-group form-group--radio">
+        <span class="label">Gender</span>
+        <label>
+            <input type="radio" ng-model="$ctrl.contactTab.contact.gender" value="Male">
+            {{ 'general.male' | t }}
+        </label>
+        <label>
+            <input type="radio" ng-model="$ctrl.contactTab.contact.gender" value="Female">
+            {{ 'general.female' | t }}
+        </label>
+        <label>
+            <input type="radio" ng-model="$ctrl.contactTab.contact.gender" value="">
+            {{ 'general.other' | t }}
+        </label>
+    </div>
     <div class="form-group" ng-repeat="emailAddress in $ctrl.getEmailAddresses()"
          ng-init="isPending = emailAddress === $ctrl.pendingEmailAddress">
         <label>
