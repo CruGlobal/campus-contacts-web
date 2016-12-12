@@ -1,6 +1,8 @@
 .pivot_theme {
   font-family: 'Titillium Web', sans-serif;
 
+  $focus-gray: $gray-4;
+
   textarea,
   input[type="text"],
   input[type="button"],
@@ -15,11 +17,20 @@
     color: $pivot-dark-blue;
   }
 
-  textarea, input[type="text"] {
+  textarea, input[type="text"], input[type="email"], input[type="tel"] {
     border-top: none;
     border-left: none;
     border-right: none;
     outline: none;
+    &:focus {
+      background-color: $focus-gray;
+      border-color: $focus-gray;
+    }
+  }
+
+  .ui-select-container.open, .form .ui-select-container.open {
+    background-color: $focus-gray;
+    border-color: $focus-gray;
   }
 
   input[type="radio"] {
@@ -92,6 +103,11 @@
       position: relative;
       select {
         padding-right: 30px;
+        outline: none;
+        &:focus {
+          background-color: $focus-gray;
+          border-color: $focus-gray;
+        }
       }
       &::after {
         content: " ";
