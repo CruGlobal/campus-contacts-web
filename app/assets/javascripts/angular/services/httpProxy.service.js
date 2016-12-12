@@ -8,36 +8,48 @@
         .module('missionhubApp')
         .factory('httpProxy', proxyService);
 
-    function proxyService ($http, $log, $q, envService, JsonApiDataStore, _) {
+    function proxyService ($http, $log, $q, envService, JsonApiDataStore, Upload, _) {
         // Extract and return the data portion of a JSON API payload
         function extractData (response) {
             return response.data;
         }
 
+        // Send a network request using a generic provider that uses the same API as $http.
+        // This was added because Uploader.upload provides functionality on top of $http, but we
+        // want to be able to reuse the authorization token, JSON API store syncing, and
+        // other logic that was originally in callHttp.
+        function networkRequest (provider, method, url, params, data, extraConfig) {
+            var config = _.extend({
+                method: method,
+                url: envService.read('apiUrl') + url,
+                data: data,
+                params: params
+            }, extraConfig);
+
+            return provider(config)
+                .then(function (res) {
+                    // store rolling access token
+                    var token = res.headers('x-mh-session');
+                    if (token) {
+                        $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+                    }
+
+                    return JsonApiDataStore.store.syncWithMeta(res.data);
+                })
+                .catch(function (error) {
+                    // We can redirect to some error page if that's better
+                    $log.error(error + ' - Something has gone terribly wrong.');
+                    throw error;
+                });
+        }
+
         var proxy = {
             callHttp: function (method, url, params, data, extraConfig) {
-                var config = _.extend({
-                    method: method,
-                    url: envService.read('apiUrl') + url,
-                    data: data,
-                    params: params
-                }, extraConfig);
+                return networkRequest($http, method, url, params, data, extraConfig);
+            },
 
-                return $http(config)
-                    .then(function (res) {
-                        // store rolling access token
-                        var token = res.headers('x-mh-session');
-                        if (token) {
-                            $http.defaults.headers.common.Authorization = 'Bearer ' + token;
-                        }
-
-                        return JsonApiDataStore.store.syncWithMeta(res.data);
-                    })
-                    .catch(function (error) {
-                        // We can redirect to some error page if that's better
-                        $log.error(error + ' - Something has gone terribly wrong.');
-                        throw error;
-                    });
+            submitForm: function (method, url, form, extraConfig) {
+                return networkRequest(Upload.upload, method, url, null, form, extraConfig);
             },
 
             get: function (url, params, config) {

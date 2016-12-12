@@ -12,6 +12,7 @@
             'ui.select',
             'ui.sortable',
             'ui.bootstrap',
+            'ngFileUpload',
             'angulartics',
             'angulartics.google.analytics'
         ]);

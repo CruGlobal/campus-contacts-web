@@ -37,6 +37,7 @@
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
+//= require ng-file-upload/dist/ng-file-upload
 //= require moment/moment
 //= require angular-moment/angular-moment
 //= require angular/missionhubApp.module

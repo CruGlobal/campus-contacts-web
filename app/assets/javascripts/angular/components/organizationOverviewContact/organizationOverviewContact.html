@@ -1,29 +1,40 @@
-<header>
-    <a ui-sref="^" class="close-button">
-      <ng-md-icon icon="close" size="28"></ng-md-icon>
-    </a>
-    <div class="row text-row">
-        <span class="small-spacing name">{{$ctrl.contact.full_name}}</span>
-        <span class="small-spacing warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
-            {{'contacts.statuses.uncontacted' | t}}
-        </span>
+<header class="row">
+    <div class="avatar">
+        <img ng-src="{{$ctrl.avatarUrl}}">
+        <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
+                    ngf-select="$ctrl.uploadAvatar($file)">
+        </ng-md-icon>
+        <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
+                    ng-if="$ctrl.contact.picture && !$ctrl.isFacebookAvatar" ng-click="$ctrl.deleteAvatar()">
+        </ng-md-icon>
     </div>
-    <div class="row">
-        <a ng-href="mailto:{{$ctrl.primaryEmail.email}}" ng-if="$ctrl.primaryEmail">
-            <round-button>
+    <div class="normal-column">
+        <div class="row text-row">
+            <span class="small-spacing name">{{$ctrl.contact.full_name}}</span>
+            <span class="small-spacing warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
+                {{'contacts.statuses.uncontacted' | t}}
+            </span>
+        </div>
+        <div class="row">
+            <a ng-href="mailto:{{$ctrl.primaryEmail.email}}" ng-if="$ctrl.primaryEmail">
+                <round-button>
+                    <ng-md-icon icon="email"></ng-md-icon>
+                </round-button>
+            </a>
+            <round-button class="disabled" ng-if="!$ctrl.primaryEmail">
                 <ng-md-icon icon="email"></ng-md-icon>
             </round-button>
-        </a>
-        <round-button class="disabled" ng-if="!$ctrl.primaryEmail">
-            <ng-md-icon icon="email"></ng-md-icon>
-        </round-button>
 
-        <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
-    </div>
-    <div class="tabs">
-        <div class="tab" ng-repeat="tabName in $ctrl.contactTabs" ui-sref-active="active" ui-state="'^.' + tabName">
-            {{'ministries.contacts.' + tabName + '.header' | t}}
+            <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
+        </div>
+        <div class="tabs">
+            <div class="tab" ng-repeat="tabName in $ctrl.contactTabs" ui-sref-active="active" ui-state="'^.' + tabName">
+                {{'ministries.contacts.' + tabName + '.header' | t}}
+            </div>
         </div>
     </div>
+    <a ui-sref="^" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </header>
 <ui-view></ui-view>
