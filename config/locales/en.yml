@@ -91,7 +91,7 @@ en:
     messages:
       question_too_long: 'WARNING: This question exceeds the length limit for a single text and might be split up over multiple messages.'
   ministries:
-    contacts:
+    people:
       female: F
       gender: M/F
       header: Contacts

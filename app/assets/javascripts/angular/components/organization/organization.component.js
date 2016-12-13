@@ -17,7 +17,7 @@
         });
 
     function organizationController (JsonApiDataStore, loggedInPerson, periodService,
-                                     reportsService, interactionsService, myContactsDashboardService, _) {
+                                     reportsService, interactionsService, myPeopleDashboardService, _) {
         var vm = this;
 
         _.defaultsDeep(vm, {
@@ -70,7 +70,7 @@
         }
 
         function toggleVisibility () {
-            myContactsDashboardService.toggleOrganizationVisibility(vm.org);
+            myPeopleDashboardService.toggleOrganizationVisibility(vm.org);
         }
     }
 })();

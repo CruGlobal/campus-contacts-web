@@ -1,0 +1,43 @@
+<div class="filters row">
+  <span class="filter nav-item" ng-repeat="filter in $ctrl.filters"
+        ng-click="$ctrl.filter = filter" ng-class="{ active: filter === $ctrl.filter }">
+      {{'ministries.people.history.' + filter | t}}
+  </span>
+</div>
+<hr />
+<div class="history-items">
+    <div class="history-item" ng-repeat="historyItem in $ctrl.historyFeed" ng-switch="historyItem._type">
+        <interaction ng-switch-when="interaction" person="$ctrl.personTab.person" interaction="historyItem">
+        </interaction>
+        <answer-sheet ng-switch-when="answer_sheet" answer-sheet="historyItem" organization-id="$ctrl.organizationId">
+        </answer-sheet>
+    </div>
+</div>
+<form class="new-interaction pivot_theme" ng-if="$ctrl.newInteractionType" ng-safe-submit="$ctrl.saveInteraction()">
+    <div class="column icon-column flush-column">
+        <ng-md-icon class="icon-chip" icon="{{$ctrl.newInteractionType.icon}}" size="20"></ng-md-icon>
+    </div>
+    <div class="column normal-column">
+        <textarea type="text" placeholder="{{ 'ministries.people.history.note_for_interaction'
+                                           | t:{ interaction: ($ctrl.newInteractionType.title | t)} }}"
+                  ng-model="$ctrl.newInteractionComment" ng-required="$ctrl.newInteractionType.id === 1"
+                  ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()">
+        </textarea>
+    </div>
+    <button type="submit" class="column icon-column">
+        <ng-md-icon class="icon-chip actionable" icon="done" size="20"></ng-md-icon>
+    </button>
+</form>
+<div class="sheet-container">
+    <div class="sheet" ng-if="$ctrl.interactionTypesVisible" ng-style="{ 'margin-top': (-50 * $ctrl.interactionTypes.length) + 'px' }">
+        <div class="item actionable" ng-repeat="interactionType in $ctrl.interactionTypes"
+             ng-click="$ctrl.createInteraction(interactionType)">
+            <ng-md-icon icon="{{interactionType.icon}}"></ng-md-icon>
+            <div>{{interactionType.title | t}}</div>
+        </div>
+    </div>
+</div>
+<div class="row add-interaction" ng-if="!$ctrl.newInteractionType">
+    <ng-md-icon class="icon-chip primary-action actionable" icon="add" size="20"
+                ng-click="$ctrl.interactionTypesVisible = !$ctrl.interactionTypesVisible"></ng-md-icon>
+</div>

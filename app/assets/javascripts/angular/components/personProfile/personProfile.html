@@ -1,0 +1,127 @@
+<div class="person-profileTab form">
+    <div class="form-group">
+        <label class="form-control-select">
+            <span class="label">{{'contact.followup_status' | t}}</span>
+            <select ng-options="('followup_status.' + statusId | t) for statusId in $ctrl.followupStatusIds"
+                    ng-model="$ctrl.personTab.orgPermission.followup_status"
+                    ng-change="$ctrl.saveAttribute($ctrl.personTab.orgPermission, 'followup_status')"
+                    class="form-control">
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            <span class="label">{{'contact.assigned_to' | t}}</span>
+            <assigned-select assigned="$ctrl.personTab.assignedTo"
+                             organization-id="$ctrl.personTab.organizationId"></assigned-select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="form-control-select" ng-class="{'disabled': $ctrl.permissionChangeDisabled}">
+            <span class="label">{{'application.add_contact.title_permission' | t}}</span>
+            <select ng-options="permission.id as ('permissions.' + permission.i18n | t) for permission in $ctrl.permissionOptions"
+                    ng-model="$ctrl.personTab.orgPermission.permission_id"
+                    ng-change="$ctrl.permissionChange({{$ctrl.personTab.orgPermission.permission_id}})"
+                    ng-disabled="$ctrl.permissionChangeDisabled"
+                    class="form-control">
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="form-control-select">
+            <span class="label">{{'contact.cru_status' | t}}</span>
+            <select ng-options="('cru_status.' + cruStatusId | t) for cruStatusId in $ctrl.cruStatusIds"
+                    ng-model="$ctrl.personTab.orgPermission.cru_status"
+                    ng-change="$ctrl.saveAttribute($ctrl.personTab.orgPermission, 'cru_status')"
+                    class="form-control">
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label class="form-control-select">
+            <span class="label">{{'contact.student_status' | t}}</span>
+            <select ng-options="('student_status.' + enrollmentId | t) for enrollmentId in $ctrl.enrollmentIds"
+                    ng-model="$ctrl.personTab.person.student_status"
+                    ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'student_status')"
+                    class="form-control">
+            </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            <span class="label">{{'contact.first_name' | t}}</span>
+            <input type="text" ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')"
+                   class="form-control">
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            <span class="label">{{'contact.last_name' | t}}</span>
+            <input type="text" ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')"
+                   class="form-control">
+        </label>
+    </div>
+    <div class="form-group form-group--radio">
+        <span class="label">Gender</span>
+        <label>
+            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Male">
+            {{ 'general.male' | t }}
+        </label>
+        <label>
+            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Female">
+            {{ 'general.female' | t }}
+        </label>
+        <label>
+            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="">
+            {{ 'general.other' | t }}
+        </label>
+    </div>
+    <div class="form-group" ng-repeat="emailAddress in $ctrl.getEmailAddresses()"
+         ng-init="isPending = emailAddress === $ctrl.pendingEmailAddress">
+        <label>
+            <div class="row">
+                <span class="normal-column label">{{'contact.email_address' | t}}</span>
+                <span class="label" ng-if="!isPending">{{'contact.primary_email' | t}}</span>
+                <input type="radio" name="primary-email" ng-if="!isPending"
+                       ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
+                       class="primary-toggle">
+            </div>
+            <div class="row">
+                <input type="email" class="normal-column form-control"
+                       ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
+                       ng-change="$ctrl.saveAttribute(emailAddress, 'email')">
+                <button ng-if="$last && !$ctrl.pendingEmailAddress" ng-click="$ctrl.addEmailAddress()">
+                    {{'contact.add' | t}}
+                </button>
+                <button ng-if="!isPending" ng-click="$ctrl.deleteEmailAddress(emailAddress)">
+                    {{'contact.delete' | t}}
+                </button>
+            </div>
+        </label>
+    </div>
+    <div class="form-group" ng-repeat="phoneNumber in $ctrl.getPhoneNumbers()"
+         ng-init="isPending = phoneNumber === $ctrl.pendingPhoneNumber">
+        <label>
+            <div class="row">
+                <span class="normal-column label">{{'contact.phone_number' | t}}</span>
+                <span class="label" ng-if="!isPending">{{'contact.primary_phone' | t}}</span>
+                <input type="radio" name="primary-phone" ng-if="!isPending"
+                       ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
+                       class="primary-toggle">
+            </div>
+            <div class="row">
+                <input type="tel" class="normal-column form-control"
+                       ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
+                       ng-change="$ctrl.saveAttribute(phoneNumber, 'number')">
+                <button ng-if="$last && !$ctrl.pendingPhoneNumber" ng-click="$ctrl.addPhoneNumber()">
+                    {{'contact.add' | t}}
+                </button>
+                <button ng-if="!isPending" ng-click="$ctrl.deletePhoneNumber(phoneNumber)">
+                    {{'contact.delete' | t}}
+                </button>
+            </div>
+        </label>
+    </div>
+</div>

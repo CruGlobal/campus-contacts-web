@@ -1,0 +1,24 @@
+$person-height: 50px;
+
+ministry-view-person {
+  $person-padding: 10px;
+
+  @extend .row;
+  height: $person-height;
+
+  .button-column {
+    width: 56px;
+  }
+  .gender-column {
+    width: 50px;
+  }
+  .phone-number-column {
+    width: 120px;
+  }
+
+  round-button {
+    margin: auto;
+  }
+
+  padding: $person-padding;
+}

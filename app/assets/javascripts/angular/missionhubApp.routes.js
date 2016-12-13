@@ -9,7 +9,7 @@
     angular
         .module('missionhubApp')
         .config(function ($stateProvider, $urlRouterProvider,
-                          ministryViewTabs, ministryViewDefaultTab, contactTabs, contactDefaultTab, _) {
+                          ministryViewTabs, ministryViewDefaultTab, personTabs, personDefaultTab, _) {
             $stateProvider
                 .state({
                     name: 'app',
@@ -26,7 +26,7 @@
                     name: 'app.people',
                     url: '/people',
                     template:
-                        '<my-contacts-dashboard edit-mode="$ctrl.editOrganizations"></my-contacts-dashboard>'
+                        '<my-people-dashboard edit-mode="$ctrl.editOrganizations"></my-people-dashboard>'
                 })
                 .state({
                     name: 'app.ministries',
@@ -79,15 +79,15 @@
             });
 
             $stateProvider.state({
-                name: 'app.ministries.ministry.contacts.contact',
-                url: '/:contactId',
-                component: 'organizationOverviewContact',
+                name: 'app.ministries.ministry.people.person',
+                url: '/:personId',
+                component: 'personPage',
                 abstract: true,
                 resolve: {
-                    contact: function ($state, $stateParams, routesService) {
-                        return routesService.getPerson($stateParams.contactId).catch(function () {
-                            // Go back to the parents list if the contact could not be found
-                            $state.go('app.ministries.ministry.contacts', { orgId: $stateParams.orgId });
+                    person: function ($state, $stateParams, routesService) {
+                        return routesService.getPerson($stateParams.personId).catch(function () {
+                            // Go back to the parents list if the person could not be found
+                            $state.go('app.ministries.ministry.people', { orgId: $stateParams.orgId });
                         });
                     },
 
@@ -97,18 +97,18 @@
                 }
             })
             .state({
-                name: 'app.ministries.ministry.contacts.contact.defaultTab',
-                redirectTo: 'app.ministries.ministry.contacts.contact.' + contactDefaultTab
+                name: 'app.ministries.ministry.people.person.defaultTab',
+                redirectTo: 'app.ministries.ministry.people.person.' + personDefaultTab
             });
 
-            contactTabs.forEach(function (tab) {
+            personTabs.forEach(function (tab) {
                 $stateProvider.state({
-                    name: 'app.ministries.ministry.contacts.contact.' + tab,
+                    name: 'app.ministries.ministry.people.person.' + tab,
                     url: '/' + tab,
-                    component: 'contact' + _.capitalize(tab),
+                    component: 'person' + _.capitalize(tab),
                     resolve: {
                         history: function ($stateParams, routesService) {
-                            return routesService.getHistory($stateParams.contactId);
+                            return routesService.getHistory($stateParams.personId);
                         }
                     }
                 });

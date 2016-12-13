@@ -46,11 +46,11 @@
                 });
             });
 
-            // The contacts and team are loaded by their respective tab components, not this component.
-            // However, this component does need to know how many contacts and team members there are, so set the
-            // contacts and team to a sparse array of the appropriate length.
-            organizationOverviewService.getContactCount(vm.org).then(function (contactCount) {
-                vm.contacts = new Array(contactCount);
+            // The people and team are loaded by their respective tab components, not this component.
+            // However, this component does need to know how many people and team members there are, so set the
+            // people and team to a sparse array of the appropriate length.
+            organizationOverviewService.getPersonCount(vm.org).then(function (personCount) {
+                vm.people = new Array(personCount);
             });
             organizationOverviewService.getTeamCount(vm.org).then(function (teamMemberCount) {
                 vm.team = new Array(teamMemberCount);

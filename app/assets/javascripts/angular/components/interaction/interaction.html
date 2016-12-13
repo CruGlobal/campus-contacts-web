@@ -4,13 +4,13 @@
 <div class="column normal-column">
     <div class="subtitle">
         <span ng-repeat="initiator in $ctrl.interaction.initiators">
-            <span ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, contactId: initiator.id })">{{
-                initiator === $ctrl.contactTab.contact ?
-                    ('ministries.contacts.history.me' | t) :
+            <span ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, personId: initiator.id })">{{
+                initiator === $ctrl.personTab.person ?
+                    ('ministries.people.history.me' | t) :
                     initiator.full_name
             }}</span><span ng-if="!$last">,</span>
         </span>
-        <span ng-if="$ctrl.interaction.initiators.length === 0">{{'ministries.contacts.history.anonymous' | t}}</span>
+        <span ng-if="$ctrl.interaction.initiators.length === 0">{{'ministries.people.history.anonymous' | t}}</span>
         >>
         <span am-time-ago="$ctrl.interaction.timestamp"></span>
     </div>

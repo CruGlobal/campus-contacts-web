@@ -12,8 +12,8 @@
         var vm = this;
 
         vm.supportedLanguages = [];
-        vm.contactMoved = true;
-        vm.contactAssigned = true;
+        vm.personMoved = true;
+        vm.personAssigned = true;
         vm.weeklyDigest = true;
         vm.selectedLanguageChanged = false;
 
@@ -51,8 +51,8 @@
             }
 
             if (user.notification_settings !== null) {
-                vm.contactMoved = user.notification_settings.contact_moved;
-                vm.contactAssigned = user.notification_settings.contact_assigned;
+                vm.personMoved = user.notification_settings.person_moved;
+                vm.personAssigned = user.notification_settings.person_assigned;
                 vm.weeklyDigest = user.notification_settings.weekly_digest;
             }
         }
@@ -63,8 +63,8 @@
 
         function updatePreferences () {
             vm.user.notification_settings = {
-                contact_moved: vm.contactMoved,
-                contact_assigned: vm.contactAssigned,
+                person_moved: vm.personMoved,
+                person_assigned: vm.personAssigned,
                 weekly_digest: vm.weeklyDigest
             };
 

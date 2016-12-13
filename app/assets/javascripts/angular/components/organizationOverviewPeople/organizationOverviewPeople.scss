@@ -1,0 +1,45 @@
+organization-overview-people {
+  $visible-people: 10;
+
+  .container {
+    align-items: inherit;
+    // Add another row for the header
+    max-height: $person-height * ($visible-people + 1);
+  }
+
+  .people-list, ui-view {
+    overflow: auto;
+  }
+
+  .people-list {
+    flex: 1; /* 25% of available width */
+  }
+
+  .collapsed {
+    ui-view {
+      flex: 3; /* 75% of available width */
+    }
+
+    ministry-view-person .detail-column {
+      display: none;
+    }
+  }
+
+  .header {
+    @extend ministry-view-person;
+
+    input[type="checkbox"] {
+      background-color: $pivot-darker-blue;
+      border: 0;
+      &:checked {
+        background-color: $pivot-darker-blue;
+        border: 1px solid white;
+      }
+    }
+  }
+
+  input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+  }
+}

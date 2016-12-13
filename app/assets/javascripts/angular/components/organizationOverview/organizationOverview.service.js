@@ -6,7 +6,7 @@
         .factory('organizationOverviewService', organizationOverviewService);
 
     function organizationOverviewService ($q, httpProxy, modelsService,
-                                          organizationOverviewContactsService, organizationOverviewTeamService, _) {
+                                          organizationOverviewPeopleService, organizationOverviewTeamService, _) {
         var emptyPage = { limit: 0, offset: 0 };
 
         return {
@@ -35,9 +35,9 @@
                 });
             },
 
-            // Return a promise that resolves to the number of contacts in an organization
-            getContactCount: function (org) {
-                return organizationOverviewContactsService.loadOrgContacts(org.id, emptyPage).then(function (response) {
+            // Return a promise that resolves to the number of people in an organization
+            getPersonCount: function (org) {
+                return organizationOverviewPeopleService.loadOrgPeople(org.id, emptyPage).then(function (response) {
                     return response.meta.total;
                 });
             },

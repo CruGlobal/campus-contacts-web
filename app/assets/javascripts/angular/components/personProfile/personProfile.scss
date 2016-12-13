@@ -1,0 +1,12 @@
+person-profile {
+  .row button {
+    $padding: 10px;
+    margin-left: $padding;
+    padding-right: $padding;
+  }
+
+  input[type=radio].primary-toggle {
+    position: relative;
+    margin-left: 5px;
+  }
+}

@@ -7,7 +7,7 @@
             controller: interactionController,
             templateUrl: '/assets/angular/components/interaction/interaction.html',
             bindings: {
-                contact: '<',
+                person: '<',
                 interaction: '<'
             }
         });

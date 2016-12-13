@@ -2,7 +2,7 @@
     'use strict';
 
     var organizationOverviewService, httpProxy, $rootScope, $q;
-    var organizationOverviewContactsService, organizationOverviewTeamService; // eslint-disable-line one-var
+    var organizationOverviewPeopleService, organizationOverviewTeamService; // eslint-disable-line one-var
 
     function asynchronous (fn) {
         return function (done) {
@@ -21,12 +21,12 @@
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_organizationOverviewService_, _httpProxy_, _$rootScope_, _$q_,
-                                    _organizationOverviewContactsService_, _organizationOverviewTeamService_) {
+                                    _organizationOverviewPeopleService_, _organizationOverviewTeamService_) {
             organizationOverviewService = _organizationOverviewService_;
             httpProxy = _httpProxy_;
             $rootScope = _$rootScope_;
             $q = _$q_;
-            organizationOverviewContactsService = _organizationOverviewContactsService_;
+            organizationOverviewPeopleService = _organizationOverviewPeopleService_;
             organizationOverviewTeamService = _organizationOverviewTeamService_;
 
             this.id = 123;
@@ -112,18 +112,18 @@
             });
         });
 
-        describe('getContactCount', function () {
-            it('should load the contact count', asynchronous(function () {
-                spyOn(organizationOverviewContactsService, 'loadOrgContacts').and.returnValue(
+        describe('getPersonCount', function () {
+            it('should load the person count', asynchronous(function () {
+                spyOn(organizationOverviewPeopleService, 'loadOrgPeople').and.returnValue(
                     $q.resolve({ meta: { total: 5 } })
                 );
 
-                return organizationOverviewService.getContactCount({ id: 1 }).then(function (contactCount) {
-                    expect(organizationOverviewContactsService.loadOrgContacts).toHaveBeenCalledWith(
+                return organizationOverviewService.getPersonCount({ id: 1 }).then(function (personCount) {
+                    expect(organizationOverviewPeopleService.loadOrgPeople).toHaveBeenCalledWith(
                         1,
                         { limit: 0, offset: 0 }
                     );
-                    expect(contactCount).toBe(5);
+                    expect(personCount).toBe(5);
                 });
             }));
         });
@@ -134,12 +134,12 @@
                     $q.resolve({ meta: { total: 5 } })
                 );
 
-                return organizationOverviewService.getTeamCount({ id: 1 }).then(function (contactCount) {
+                return organizationOverviewService.getTeamCount({ id: 1 }).then(function (personCount) {
                     expect(organizationOverviewTeamService.loadOrgTeam).toHaveBeenCalledWith(
                         1,
                         { limit: 0, offset: 0 }
                     );
-                    expect(contactCount).toBe(5);
+                    expect(personCount).toBe(5);
                 });
             }));
         });

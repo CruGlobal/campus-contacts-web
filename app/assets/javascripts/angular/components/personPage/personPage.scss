@@ -1,0 +1,88 @@
+person-page {
+  display: block;
+  background-color: $white;
+  border-left: 1px solid $pivot-dark-blue;
+  min-height: 100%;
+
+  $inner-padding: 10%;
+
+  header {
+    &.row {
+      align-items: flex-start;
+    }
+
+    padding: 10px $inner-padding;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+    background: $gray-4;
+
+    .tabs .tab {
+      &, a {
+        color: $pivot-dark-blue;
+      }
+      &.active {
+        color: $pivot-dark-blue;
+        border-bottom-color: $pivot-dark-blue;
+      }
+    }
+  }
+
+  .avatar {
+    position: relative;
+    margin-right: 10px;
+
+    img {
+      $size: 60px;
+      width: $size;
+      height: $size;
+      border-radius: 50%;
+    }
+
+    ng-md-icon {
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      padding: 2px;
+      background: $pivot-dark-blue;
+      fill: $white;
+    }
+
+    .edit-avatar {
+      left: 0;
+    }
+
+    .delete-avatar {
+      right: 0;
+    }
+  }
+
+  /* Duplicate a ui-select rule that is overwritten because its specificity is not high enough. */
+  .form .ui-select-multiple.ui-select-bootstrap {
+    height: auto;
+    padding: 3px 3px 0 3px;
+  }
+
+  round-button {
+    margin-left: initial;
+  }
+
+  .close-button {
+    float: right;
+    fill: $pivot-dark-blue;
+  }
+
+  .name-row .warning {
+    padding: 0 5px;
+  }
+
+  header .name {
+    font-size: 2em;
+  }
+
+  ui-view {
+    display: block;
+    padding: 0 $inner-padding;
+  }
+}
