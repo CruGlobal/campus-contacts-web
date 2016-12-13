@@ -3,10 +3,13 @@
 }
 
 .warning-highlight {
-  padding: 4px 7px;
-  color: $white;
-  background-color: $pivot-orange;
-  border-radius: 40%;
+  /* Increase specificity for links so that this rule will not be overridden */
+  &, &:link, &:hover {
+    padding: 4px 7px;
+    color: $white;
+    background-color: $pivot-orange;
+    border-radius: 40%;
+  }
 }
 
 .small-spacing {
