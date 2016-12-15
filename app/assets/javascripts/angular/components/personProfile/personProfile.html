@@ -78,50 +78,52 @@
             {{ 'general.other' | t }}
         </label>
     </div>
-    <div class="form-group" ng-repeat="emailAddress in $ctrl.getEmailAddresses()"
+    <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()"
          ng-init="isPending = emailAddress === $ctrl.pendingEmailAddress">
-        <label>
-            <div class="row">
-                <span class="normal-column label">{{'contact.email_address' | t}}</span>
-                <span class="label" ng-if="!isPending">{{'contact.primary_email' | t}}</span>
-                <input type="radio" name="primary-email" ng-if="!isPending"
-                       ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
-                       class="primary-toggle">
-            </div>
-            <div class="row">
-                <input type="email" class="normal-column form-control"
-                       ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
-                       ng-change="$ctrl.saveAttribute(emailAddress, 'email')">
-                <button ng-if="$last && !$ctrl.pendingEmailAddress" ng-click="$ctrl.addEmailAddress()">
-                    {{'contact.add' | t}}
-                </button>
-                <button ng-if="!isPending" ng-click="$ctrl.deleteEmailAddress(emailAddress)">
-                    {{'contact.delete' | t}}
-                </button>
-            </div>
-        </label>
+        <div class="button-column" ng-if="!isPending">
+            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                        ng-click="$ctrl.deleteEmailAddress(emailAddress)"
+                        title="{{'contact.delete' | t}}"></ng-md-icon>
+        </div>
+        <div class="form-group">
+            <label>
+                <div class="row">
+                    <span class="normal-column label">{{'contact.email_address' | t}}</span>
+                    <span class="label" ng-if="!isPending">{{'contact.primary_email' | t}}</span>
+                    <input type="radio" name="primary-email" ng-if="!isPending"
+                           ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
+                           class="primary-toggle">
+                </div>
+                <div class="row">
+                    <input type="email" class="normal-column form-control"
+                           ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
+                           ng-change="$ctrl.saveAttribute(emailAddress, 'email')">
+                </div>
+            </label>
+        </div>
     </div>
-    <div class="form-group" ng-repeat="phoneNumber in $ctrl.getPhoneNumbers()"
+    <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()"
          ng-init="isPending = phoneNumber === $ctrl.pendingPhoneNumber">
-        <label>
-            <div class="row">
-                <span class="normal-column label">{{'contact.phone_number' | t}}</span>
-                <span class="label" ng-if="!isPending">{{'contact.primary_phone' | t}}</span>
-                <input type="radio" name="primary-phone" ng-if="!isPending"
-                       ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
-                       class="primary-toggle">
-            </div>
-            <div class="row">
-                <input type="tel" class="normal-column form-control"
-                       ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
-                       ng-change="$ctrl.saveAttribute(phoneNumber, 'number')">
-                <button ng-if="$last && !$ctrl.pendingPhoneNumber" ng-click="$ctrl.addPhoneNumber()">
-                    {{'contact.add' | t}}
-                </button>
-                <button ng-if="!isPending" ng-click="$ctrl.deletePhoneNumber(phoneNumber)">
-                    {{'contact.delete' | t}}
-                </button>
-            </div>
-        </label>
+        <div class="button-column" ng-if="!isPending">
+            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                        ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
+                        title="{{'contact.delete' | t}}"></ng-md-icon>
+        </div>
+        <div class="form-group">
+            <label>
+                <div class="row">
+                    <span class="normal-column label">{{'contact.phone_number' | t}}</span>
+                    <span class="label" ng-if="!isPending">{{'contact.primary_phone' | t}}</span>
+                    <input type="radio" name="primary-phone" ng-if="!isPending"
+                           ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
+                           class="primary-toggle">
+                </div>
+                <div class="row">
+                    <input type="tel" class="normal-column form-control"
+                           ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
+                           ng-change="$ctrl.saveAttribute(phoneNumber, 'number')">
+                </div>
+            </label>
+        </div>
     </div>
 </div>

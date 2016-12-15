@@ -4,19 +4,31 @@ person-page {
   border-left: 1px solid $pivot-dark-blue;
   min-height: 100%;
 
-  $inner-padding: 10%;
+  $inner-padding: 50px;
+  $left-col-width: 60px;
+  $main-col-width: 290px;
+
+  $col-spacing: 10px;
+
+  $compensated-right-padding: $inner-padding + $col-spacing + $left-col-width;
+
+  width: ($compensated-right-padding * 2) + $main-col-width;
+  box-sizing: content-box;
 
   header {
     &.row {
       align-items: flex-start;
     }
 
-    padding: 10px $inner-padding;
+    padding: 20px 0 10px $inner-padding;
     padding-bottom: 0;
     margin-bottom: 10px;
-    background: $gray-4;
+    background: $gray-5;
 
     .tabs .tab {
+      padding-left: 0;
+      padding-right: 0;
+      margin-right: 2em;
       &, a {
         color: $pivot-dark-blue;
       }
@@ -29,12 +41,12 @@ person-page {
 
   .avatar {
     position: relative;
-    margin-right: 10px;
+    margin-right: $col-spacing;
+    box-sizing: border-box;
 
     img {
-      $size: 60px;
-      width: $size;
-      height: $size;
+      width: $left-col-width;
+      height: $left-col-width;
       border-radius: 50%;
     }
 
@@ -68,9 +80,15 @@ person-page {
     margin-left: initial;
   }
 
+  .normal-column round-button {
+    width: auto;
+  }
+
   .close-button {
-    float: right;
     fill: $pivot-dark-blue;
+    position: relative;
+    right: 10px;
+    top: -10px;
   }
 
   .name-row .warning {
@@ -79,10 +97,11 @@ person-page {
 
   header .name {
     font-size: 2em;
+    margin-right: $col-spacing;
   }
 
   ui-view {
     display: block;
-    padding: 0 $inner-padding;
+    padding: 0 $compensated-right-padding 0 $inner-padding;
   }
 }

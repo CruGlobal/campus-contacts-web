@@ -1,4 +1,38 @@
 person-profile {
+  // This matches $left-col-width from organizationOverviewContact
+  $button-col-width: 60px;
+  $col-spacing: 10px;
+
+  display: block;
+
+  .button-column {
+    width: $button-col-width;
+    margin-right: $col-spacing;
+    text-align: right;
+    .icon-chip {
+      display: inline-block;
+      padding: 4px;
+    }
+    .primary-action {
+      background-color: $pivot-dark-blue;
+    }
+  }
+
+  .form-group {
+    margin-left: $button-col-width + $col-spacing;
+    flex: 1;
+  }
+
+  .form-group-with-left-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .button-column + .form-group {
+      margin-left: 0;
+    }
+  }
+
   .row button {
     $padding: 10px;
     margin-left: $padding;

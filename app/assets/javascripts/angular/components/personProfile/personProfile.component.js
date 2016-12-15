@@ -19,8 +19,8 @@
         vm.pendingPhoneNumber = null;
 
         vm.saveAttribute = saveAttribute;
-        vm.getEmailAddresses = getEmailAddresses;
-        vm.getPhoneNumbers = getPhoneNumbers;
+        vm.emailAddressesWithPending = emailAddressesWithPending;
+        vm.phoneNumbersWithPending = phoneNumbersWithPending;
         vm.addEmailAddress = addEmailAddress;
         vm.addPhoneNumber = addPhoneNumber;
         vm.deleteEmailAddress = deleteEmailAddress;
@@ -75,19 +75,6 @@
             $scope.$watch('$ctrl.personTab.primaryEmail', updatePrimary);
             $scope.$watch('$ctrl.personTab.primaryPhone', updatePrimary);
 
-            // Whenever the person has no email addresses or phone numbers, show the add email address or add phone
-            // number form
-            $scope.$watch('$ctrl.personTab.person.email_addresses.length', function (newLength) {
-                if (newLength === 0) {
-                    vm.addEmailAddress();
-                }
-            });
-            $scope.$watch('$ctrl.personTab.person.phone_numbers.length', function (newLength) {
-                if (newLength === 0) {
-                    vm.addPhoneNumber();
-                }
-            });
-
             $scope.$watchCollection('$ctrl.personTab.assignedTo', function (newAssignedTo, oldAssignedTo) {
                 var addedPeople = _.difference(newAssignedTo, oldAssignedTo);
                 personProfileService.addAssignments(vm.personTab.person, vm.personTab.organizationId, addedPeople);
@@ -129,14 +116,20 @@
             });
         }
 
-        function getEmailAddresses () {
+        function emailAddressesWithPending () {
             var emailAddresses = vm.personTab.person.email_addresses;
-            return vm.pendingEmailAddress ? emailAddresses.concat(vm.pendingEmailAddress) : emailAddresses;
+            if (!vm.pendingEmailAddress) {
+                addEmailAddress();
+            }
+            return emailAddresses.concat(vm.pendingEmailAddress);
         }
 
-        function getPhoneNumbers () {
+        function phoneNumbersWithPending () {
             var phoneNumbers = vm.personTab.person.phone_numbers;
-            return vm.pendingPhoneNumber ? phoneNumbers.concat(vm.pendingPhoneNumber) : phoneNumbers;
+            if (!vm.pendingPhoneNumber) {
+                addPhoneNumber();
+            }
+            return phoneNumbers.concat(vm.pendingPhoneNumber);
         }
 
         // Add a new email address to the person
