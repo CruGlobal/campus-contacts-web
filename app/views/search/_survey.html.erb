@@ -127,19 +127,25 @@
                   <div class="dateselect_item day">
                     <div class="dateselect_label">Day</div>
                     <div class="dateselect_field">
-                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_day]", options_for_select(1..31, @answer_start_day), include_blank: true, data: {value: @answer_start_day}, class: "select_day" %>
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_day]",
+                                     options_for_select(1..31, @answer_start_day), include_blank: true,
+                                     data: {value: @answer_start_day}, class: "select_day" %>
                     </div>
                   </div>
                   <div class="dateselect_item month">
                     <div class="dateselect_label">Month</div>
                     <div class="dateselect_field">
-                      <%= select_month @answer_start_month, {field_name: 'start_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true}, {data: {value: @answer_start_month}, class: "select_month"} %>
+                      <%= select_month @answer_start_month,
+                                       {field_name: 'start_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true},
+                                       {data: {value: @answer_start_month}, class: "select_month"} %>
                     </div>
                   </div>
                   <div class="dateselect_item year">
                     <div class="dateselect_label">Year</div>
                     <div class="dateselect_field">
-                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_year]", options_for_select(1950..Date.today.year + 5, @answer_start_year), include_blank: true, data: {value: @answer_start_year}, class: "select_year" %>
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][start_year]",
+                                     options_for_select(1950..5.years.from_now.year, @answer_start_year),
+                                     include_blank: true, data: {value: @answer_start_year}, class: "select_year" %>
                     </div>
                   </div>
                 </div>
@@ -151,19 +157,25 @@
                   <div class="dateselect_item day">
                     <div class="dateselect_label <%= status_class %>">Day</div>
                     <div class="dateselect_field">
-                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_day]", options_for_select(1..31, @answer_end_day), disabled: disabled, include_blank: true, data: {value: @answer_end_day} %>
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_day]",
+                                     options_for_select(1..31, @answer_end_day), disabled: disabled, include_blank: true,
+                                     data: {value: @answer_end_day} %>
                     </div>
                   </div>
                   <div class="dateselect_item month">
                     <div class="dateselect_label <%= status_class %>">Month</div>
                     <div class="dateselect_field">
-                      <%= select_month @answer_end_month, {field_name: 'end_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true}, {disabled: disabled, data: {value: @answer_end_month}} %>
+                      <%= select_month @answer_end_month,
+                                       {field_name: 'end_month', prefix: "survey_answer[#{survey.id}][#{question.id}]", include_blank: true},
+                                       {disabled: disabled, data: {value: @answer_end_month}} %>
                     </div>
                   </div>
                   <div class="dateselect_item year">
                     <div class="dateselect_label <%= status_class %>">Year</div>
                     <div class="dateselect_field">
-                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_year]", options_for_select(1950..Date.today.year + 5, @answer_end_year), disabled: disabled, include_blank: true, data: {value: @answer_end_year} %>
+                      <%= select_tag "survey_answer[#{survey.id}][#{question.id}][end_year]",
+                                     options_for_select(1950..5.years.from_now.year, @answer_end_year), disabled: disabled,
+                                     include_blank: true, data: {value: @answer_end_year} %>
                     </div>
                   </div>
                 </div>
