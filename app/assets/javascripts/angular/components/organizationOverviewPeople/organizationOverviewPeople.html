@@ -1,5 +1,15 @@
 <pages bottom="true" load-page="$ctrl.loadPersonPage" on-new-data="$ctrl.people = newData">
     <div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
+        <div class="people-list-filters">
+            <div class="header">
+                <div class="column filters-header-column">
+                    <span>{{'ministries.people.header' | t}}</span>
+                </div>
+            </div>
+            <div>
+                <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"></people-filters-panel>
+            </div>
+        </div>
         <div class="people-list">
             <div class="header">
                 <div class="column button-column">

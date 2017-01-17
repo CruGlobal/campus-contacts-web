@@ -28,25 +28,35 @@
             });
         }
 
+        function buildGetParams (orgId, page, filters) {
+            var base = {
+                include: [
+                    'phone_numbers',
+                    'email_addresses',
+                    'organizational_permissions',
+                    'reverse_contact_assignments'
+                ].join(','),
+                'page[limit]': page.limit,
+                'page[offset]': page.offset,
+                'filters[organization_ids]': orgId
+            };
+            if (filters.labels) {
+                base['filters[label_ids]'] = filters.labels.join(',');
+            }
+            return base;
+        }
+
         return {
             // Load an organization's people
-            loadOrgPeople: function (orgId, page) {
-                return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
-                    include: [
-                        'phone_numbers',
-                        'email_addresses',
-                        'organizational_permissions',
-                        'reverse_contact_assignments'
-                    ].join(','),
-                    'page[limit]': page.limit,
-                    'page[offset]': page.offset,
-                    'filters[organization_ids]': orgId
-                }).then(function (resp) {
-                    if (resp.data.length > 0) {
-                        loadAssignments(resp.data, orgId);
-                    }
-                    return resp;
-                });
+            loadOrgPeople: function (orgId, page, filters) {
+                return httpProxy
+                    .get(modelsService.getModelMetadata('person').url.all, buildGetParams(orgId, page, filters || {}))
+                    .then(function (resp) {
+                        if (resp.data.length > 0) {
+                            loadAssignments(resp.data, orgId);
+                        }
+                        return resp;
+                    });
             }
         };
     }

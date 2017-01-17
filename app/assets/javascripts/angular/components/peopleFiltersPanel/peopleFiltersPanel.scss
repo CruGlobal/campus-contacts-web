@@ -1,0 +1,13 @@
+people-filters-panel {
+  padding: 0 12px;
+  display: block;
+
+  .filter-row {
+    border-bottom: 1px solid $gray-4;
+    padding: 12px 0;
+  }
+
+  .filter-search input {
+    width: 100%;
+  }
+}

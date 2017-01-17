@@ -11,13 +11,23 @@ organization-overview-people {
     overflow: auto;
   }
 
+  .people-list-filters {
+    width: 222px;
+    background-color: $white;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid;
+  }
+
   .people-list {
     flex: 1; /* 25% of available width */
+    min-width: 196px;
   }
 
   .collapsed {
     ui-view {
       flex: 3; /* 75% of available width */
+      max-width: 530px;
     }
 
     ministry-view-person .detail-column {
@@ -27,14 +37,11 @@ organization-overview-people {
 
   .header {
     @extend ministry-view-person;
+    background-color: $pivot-darker-blue;
 
-    input[type="checkbox"] {
+    input[type="checkbox"], input[type="checkbox"]:checked {
       background-color: $pivot-darker-blue;
-      border: 0;
-      &:checked {
-        background-color: $pivot-darker-blue;
-        border: 1px solid white;
-      }
+      border: 1px solid $white;
     }
   }
 
