@@ -19,13 +19,13 @@
         vm.interactionTypesVisible = false;
         vm.newInteractionType = null;
         vm.newInteractionComment = null;
-        vm.interactionTypes = interactionsService.getInteractionTypes();
         vm.createInteraction = createInteraction;
         vm.saveInteraction = saveInteraction;
         vm.clearInteraction = clearInteraction;
         vm.$onInit = activate;
 
         function activate () {
+            vm.interactionTypes = interactionsService.getInteractionTypes();
             $scope.$watchGroup([
                 '$ctrl.filter', '$ctrl.personTab.person.interactions', '$ctrl.personTab.person.answer_sheets'
             ], function () {

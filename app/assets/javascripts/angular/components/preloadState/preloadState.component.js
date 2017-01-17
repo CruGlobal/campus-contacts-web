@@ -14,7 +14,7 @@
     function preloadStateController (state, $http) {
         var vm = this;
 
-        activate();
+        vm.$onInit = activate;
 
         function activate () {
             if (vm.data === 'true' || vm.data === 'false') {

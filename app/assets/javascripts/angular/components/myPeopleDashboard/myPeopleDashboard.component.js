@@ -22,16 +22,16 @@
         vm.numberOfOrgsToShow = 1000;
         vm.noPeopleShowLimit = 4;
 
-        activate();
-        vm.$onDestroy = cleanUp;
+        vm.$onInit = activate;
 
-        vm.toggleOrgVisibility = myPeopleDashboardService.toggleOrganizationVisibility;
+        vm.$onDestroy = cleanUp;
 
         vm.noPeopleWelcome = '';
 
         function activate () {
             loadAndSyncData();
             angular.element($document).on('people::personAdded', loadAndSyncData);
+            vm.toggleOrgVisibility = myPeopleDashboardService.toggleOrganizationVisibility;
 
             vm.sortableOptions = {
                 handle: '.sort-orgs-handle',

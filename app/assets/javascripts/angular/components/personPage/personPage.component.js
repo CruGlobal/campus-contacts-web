@@ -15,8 +15,6 @@
     function personPageController ($scope, personService, personTabs,
                                    personPageService, _) {
         var vm = this;
-        vm.orgPermission = personService.getOrgPermission(vm.person, vm.organizationId);
-        vm.assignedTo = personService.getAssignedTo(vm.person, vm.organizationId);
         $scope.$watchCollection('$ctrl.person.email_addresses', function () {
             vm.primaryEmail = _.find(vm.person.email_addresses, { primary: true });
         });
@@ -29,6 +27,8 @@
         vm.$onInit = activate;
 
         function activate () {
+            vm.orgPermission = personService.getOrgPermission(vm.person, vm.organizationId);
+            vm.assignedTo = personService.getAssignedTo(vm.person, vm.organizationId);
             $scope.$watch('$ctrl.person.picture', function (pictureUrl) {
                 vm.avatarUrl = pictureUrl || '/assets/no_image.png';
                 vm.isFacebookAvatar = personPageService.isFacebookAvatar(vm.avatarUrl);

@@ -18,20 +18,18 @@
 
         vm.addInteractionBtnsVisible = false;
         vm.closingInteractionButtons = false;
-        vm.interactionTypes = interactionsService.getInteractionTypes().concat({
-            id: -1,
-            icon: 'archive',
-            title: 'general.archive'
-        });
-
         vm.toggleInteractionBtns = toggleInteractionBtns;
         vm.openAddInteractionPanel = openAddInteractionPanel;
         vm.saveInteraction = saveInteraction;
         vm.reportInteractions = reportInteractions;
-
         vm.$onInit = activate;
 
         function activate () {
+            vm.interactionTypes = interactionsService.getInteractionTypes().concat({
+                id: -1,
+                icon: 'archive',
+                title: 'general.archive'
+            });
             closeAddInteractionPanel();
 
             vm.uncontacted = personService.getFollowupStatus(vm.person, vm.organizationId) === 'uncontacted';

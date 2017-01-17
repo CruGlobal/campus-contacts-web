@@ -46,8 +46,13 @@
                     },
                     controllerAs: '$ctrl',
                     resolve: {
-                        rootOrgs: function (myOrganizationsDashboardService, orgSorter) {
-                            return orgSorter.sort(myOrganizationsDashboardService.getRootOrganizations());
+                        rootOrgs: function (myOrganizationsDashboardService, orgSorter, $q, $state) {
+                            var orgs = orgSorter.sort(myOrganizationsDashboardService.getRootOrganizations());
+                            if (orgs.length === 1) {
+                                $state.go('app.ministries.ministry.' + ministryViewDefaultTab, { orgId: orgs[0].id });
+                                return $q.reject('cancel transition, re-route user to root org.');
+                            }
+                            return $q.resolve(orgs);
                         }
                     }
                 })

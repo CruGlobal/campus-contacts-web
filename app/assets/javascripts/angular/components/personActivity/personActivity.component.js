@@ -13,17 +13,17 @@
 
     function personActivityController (interactionsService, reportsService, periodService) {
         var vm = this;
-        vm.interactionTypes = interactionsService.getInteractionTypes().filter(function (interactionType) {
-            return interactionType.id !== 1;
-        });
         vm.report = null;
-        vm.periods = periodService.getPeriods();
         vm.period = null;
         vm.getInteractionCount = getInteractionCount;
         vm.$onInit = activate;
         vm.setPeriod = setPeriod;
 
         function activate () {
+            vm.interactionTypes = interactionsService.getInteractionTypes().filter(function (interactionType) {
+                return interactionType.id !== 1;
+            });
+            vm.periods = periodService.getPeriods();
             updatePeriod();
         }
 

@@ -15,17 +15,15 @@
     function organizationOverviewController (JsonApiDataStore, ministryViewTabs,
                                              organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
-
-        _.defaults(vm, {
-            loadDetails: true
-        });
-
         vm.tabNames = ministryViewTabs;
         vm.$onInit = activate;
         vm.adminPrivileges = true;
         vm.cruOrg = false;
 
         function activate () {
+            _.defaults(vm, {
+                loadDetails: true
+            });
             if (!vm.loadDetails) {
                 // Abort before loading org details
                 return;
