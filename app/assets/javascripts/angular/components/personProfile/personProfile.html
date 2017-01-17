@@ -1,4 +1,22 @@
 <div class="person-profileTab form">
+    <div class="form-group-with-left-action">
+        <div class="button-column">
+            <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
+                        ng-click="$ctrl.editTags()"
+                        title="{{'people.index.manage_labels' | t}}"></ng-md-icon>
+        </div>
+        <div class="form-group">
+            <label>
+                <span class="label">{{'people.index.labels' | t}}</span>
+                <div>
+                    <span class="pill label-pill" ng-repeat="orgLabel in $ctrl.personTab.orgLabels">
+                        {{ orgLabel.label.name }}
+                    </span>
+                    <span ng-if="$ctrl.personTab.orgLabels.length === 0">{{'people.show.no_labels' | t}}</span>
+                </div>
+            </label>
+        </div>
+    </div>
     <div class="form-group">
         <label class="form-control-select">
             <span class="label">{{'contact.followup_status' | t}}</span>

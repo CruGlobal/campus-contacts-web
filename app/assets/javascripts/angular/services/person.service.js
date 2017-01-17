@@ -16,6 +16,10 @@
                     .value();
             },
 
+            getOrgLabels: function (person, organizationId) {
+                return _.filter(person.organizational_labels, { organization_id: organizationId });
+            },
+
             // Return the follow-up status of the person in a particular organization
             getFollowupStatus: function (person, organizationId) {
                 var orgPermission = personService.getOrgPermission(person, organizationId);

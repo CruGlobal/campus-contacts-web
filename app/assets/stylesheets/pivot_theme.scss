@@ -155,6 +155,7 @@
   }
 
   .btn {
+    @include font-smoothing(on);
     background-image: linear-gradient(to bottom, #72d9e6, #3eb1c8);
     font-size: 15px;
     color: #ffffff;
@@ -169,8 +170,6 @@
     border: 0;
     box-shadow: none;
     height: 36px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
     &[disabled] {
       opacity: 0.6;
@@ -178,11 +177,10 @@
   }
 
   .btn-secondary {
+    @include font-smoothing(off);
     background-image: none;
     color: $gray-1;
     border: 1px solid $field-stroke-color;
-    -webkit-font-smoothing: initial;
-    -moz-osx-font-smoothing: initial;
   }
 
   .uib-timepicker {
@@ -218,5 +216,32 @@
     .uib-decrement .btn {
       background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cGF0aCBkPSJNMTYuNTkgOC41OUwxMiAxMy4xNyA3LjQxIDguNTkgNiAxMGw2IDYgNi02eiI+PC9wYXRoPjwvc3ZnPg==");
     }
+  }
+
+  .modal-content {
+    border: 0;
+  }
+
+  .modal-header {
+    background-color: $gray-5;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .modal-title {
+    @include font-smoothing(on);
+    color: $pivot-dark-blue;
+    font-size: 24px;
+  }
+
+  .modal-subtitle {
+    font-size: 14px;
+    margin: 0;
+    color: $gray-1-5
+  }
+
+  .modal-header, .modal-body {
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }

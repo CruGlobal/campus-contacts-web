@@ -1,0 +1,36 @@
+edit-organizational-labels {
+  .modal-body {
+    max-height: 300px;
+    overflow: scroll;
+  }
+
+  .label-option {
+    margin-bottom: .5em;
+  }
+
+  .pill:not(.selected) {
+    background-color: $gray-4;
+    border-color: $gray-4;
+    color: $pivot-dark-blue;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn {
+      margin-left: 6px;
+    }
+  }
+
+  ng-md-icon {
+    fill: $white;
+    overflow: hidden;
+    float: right;
+    text-align: right;
+    height: 12px;
+    width: 17px;
+    margin-top: -1px;
+    margin-right: -10px;
+  }
+}

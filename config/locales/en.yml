@@ -1301,7 +1301,6 @@ en:
       labels: Labels
       locate_contact: Contact Location
       manage_labels: Manage Labels
-      manage_roles: Manage Labels
       merge_contacts: Merge Contacts
       merge_people: Merge People
       no_people: Sorry, there are no people involved here.
@@ -1352,6 +1351,8 @@ en:
       send_vcard_desc: This will create a vcard and send it to the email address you enter below.
       status: Status
       updated_time_difference: Updated %{time_diff} ago.
+      no_labels: No labels assigned.
+      apply_labels: Apply the following labels to %{name}.
   permissions:
     admin: Admin
     no_permissions: No Permissions

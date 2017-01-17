@@ -34,6 +34,7 @@
                     'phone_numbers',
                     'email_addresses',
                     'organizational_permissions',
+                    'organizational_labels.label',
                     'reverse_contact_assignments'
                 ].join(','),
                 'page[limit]': page.limit,

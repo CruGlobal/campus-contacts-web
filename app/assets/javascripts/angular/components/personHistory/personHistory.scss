@@ -3,15 +3,10 @@ person-history {
     margin-bottom: 10px;
 
     .filter {
+      @extend .pill;
       $filter-gray: $gray-2;
-      display: flex;
-      align-items: center;
-      margin: 0 5px;
       width: auto;
-      padding: 0 18px;
-      height: 24px;
       border: 1px solid $filter-gray;
-      border-radius: 12px;
       background-color: $white;
       color: $filter-gray;
       &.active {

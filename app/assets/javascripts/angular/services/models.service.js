@@ -52,6 +52,9 @@
                 include: 'organization_reports',
                 url: generateUrls('/reports/organizations')
             },
+            organizational_label: {
+                url: generateUrls('/organizational_labels')
+            },
             interaction: {
                 include: 'interactions',
                 url: generateUrls('/interactions')

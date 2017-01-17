@@ -22,8 +22,11 @@
             vm.primaryPhone = _.find(vm.person.phone_numbers, { primary: true });
         });
         vm.personTabs = personTabs;
+        vm.orgLabels = [];
+
         vm.uploadAvatar = uploadAvatar;
         vm.deleteAvatar = deleteAvatar;
+        vm.updateLabels = updateLabels;
         vm.$onInit = activate;
 
         function activate () {
@@ -36,6 +39,8 @@
                     vm.avatarUrl += '?width=120&height=120';
                 }
             });
+
+            updateLabels();
         }
 
         function uploadAvatar (file) {
@@ -46,6 +51,10 @@
 
         function deleteAvatar () {
             personPageService.deleteAvatar(vm.person);
+        }
+
+        function updateLabels () {
+            vm.orgLabels = personService.getOrgLabels(vm.person, vm.organizationId);
         }
     }
 })();

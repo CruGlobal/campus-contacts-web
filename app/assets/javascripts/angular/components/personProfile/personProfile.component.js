@@ -11,7 +11,7 @@
             templateUrl: '/assets/angular/components/personProfile/personProfile.html'
         });
 
-    function personProfileController ($scope, $filter, JsonApiDataStore, jQuery,
+    function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery,
                                        personProfileService, loggedInPerson, _) {
         var vm = this;
 
@@ -26,6 +26,7 @@
         vm.deleteEmailAddress = deleteEmailAddress;
         vm.deletePhoneNumber = deletePhoneNumber;
         vm.permissionChange = permissionChange;
+        vm.editTags = editTags;
 
         vm.$onInit = activate;
 
@@ -178,6 +179,27 @@
                 vm.personTab.orgPermission.permission_id = oldValue;
                 jQuery.a($filter('t')('people.index.for_this_permission_email_is_required_no_name'));
             }
+        }
+
+        function editTags () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                component: 'editOrganizationalLabels',
+                resolve: {
+                    organizationId: function () {
+                        return vm.personTab.organizationId;
+                    },
+                    person: function () {
+                        return vm.personTab.person;
+                    }
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm'
+            });
+
+            modalInstance.result.then(function () {
+                vm.personTab.updateLabels();
+            });
         }
     }
 })();
