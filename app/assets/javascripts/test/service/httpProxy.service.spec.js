@@ -179,40 +179,42 @@
 
                 it('should correctly detect unloaded relationships', function () {
                     this.model = {
-                        a: [],
-                        b: [
+                        // a is undefined
+                        b: [],
+                        c: [
                             this.loadedModel
                         ],
-                        c: [
-                            this.placeholderModel
-                        ],
                         d: [
-                            this.loadedModel,
                             this.placeholderModel
                         ],
                         e: [
-                            { a: this.loadedModel }
+                            this.loadedModel,
+                            this.placeholderModel
                         ],
                         f: [
-                            { a: this.placeholderModel }
+                            { a: this.loadedModel }
                         ],
                         g: [
-                            { a: this.loadedModel },
                             { a: this.placeholderModel }
                         ],
                         h: [
-                            { a: { b: { c: this.loadedModel } } }
+                            { a: this.loadedModel },
+                            { a: this.placeholderModel }
                         ],
                         i: [
-                            { a: { b: { c: this.placeholderModel } } }
+                            { a: { b: { c: this.loadedModel } } }
                         ],
                         j: [
+                            { a: { b: { c: this.placeholderModel } } }
+                        ],
+                        k: [
                             { a: this.placeholderModel }
                         ]
                     };
-                    this.relationships = ['a', 'b', 'c', 'd', 'e.a', 'f.a', 'g.a', 'h.a.b.c', 'i.a.b.c', 'j.a.b.c'];
+                    this.relationships =
+                        ['a', 'b', 'c', 'd', 'e', 'f.a', 'g.a', 'h.a', 'i.a.b.c', 'j.a.b.c', 'k.a.b.c'];
                     expect(httpProxy.getUnloadedRelationships(this.model, this.relationships))
-                        .toEqual(['c', 'd', 'f.a', 'g.a', 'i.a.b.c', 'j.a.b.c']);
+                        .toEqual(['a', 'd', 'e', 'g.a', 'h.a', 'j.a.b.c', 'k.a.b.c']);
                 });
             });
 

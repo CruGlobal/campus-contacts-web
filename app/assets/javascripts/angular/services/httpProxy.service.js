@@ -96,6 +96,11 @@
                     var relationshipHead = _.head(relationshipParts);
                     var relationshipTail = _.tail(relationshipParts);
 
+                    if (!model[relationshipHead]) {
+                        // The relationship is not even present on the model, and is therefore considered unloaded
+                        return true;
+                    }
+
                     // Try to find an an unloaded model
                     // If an unloaded model is found, this relationship will pass the filter and will be considered
                     // to be a unloaded relationship
