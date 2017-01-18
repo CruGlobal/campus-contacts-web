@@ -44,7 +44,7 @@
   cursor: pointer;
 }
 
-.pill {
+.shared-pill-style {
   display: inline-block;
   margin-right: 10px;
   padding: 4px 16px;
@@ -52,4 +52,11 @@
   background-color: $gray-1-5;
   border: 1px solid $gray-1-5;
   color: $white;
+}
+
+// Normally I would have had other css styles extend from .pill, but on production other things
+// could extend from this style, but it was exported as it's own style rule, this seems to fix it.
+// I wish I knew why. -SO
+.pill {
+  @extend .shared-pill-style
 }

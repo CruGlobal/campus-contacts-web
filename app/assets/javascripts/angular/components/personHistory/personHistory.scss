@@ -3,7 +3,7 @@ person-history {
     margin-bottom: 10px;
 
     .filter {
-      @extend .pill;
+      @extend .shared-pill-style;
       $filter-gray: $gray-2;
       width: auto;
       border: 1px solid $filter-gray;
