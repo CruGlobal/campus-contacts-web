@@ -12,7 +12,7 @@
         });
 
     function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery,
-                                       personProfileService, loggedInPerson, _) {
+                                       personProfileService, loggedInPerson, _, confirmModalService) {
         var vm = this;
 
         vm.pendingEmailAddress = null;
@@ -152,16 +152,26 @@
         }
 
         function deleteEmailAddress (emailAddress) {
-            return personProfileService.deleteModel(emailAddress).then(function () {
-                // Remove the deleted email address
-                _.pull(vm.personTab.person.email_addresses, emailAddress);
+            var message = $filter('t')('people.edit.delete_email_confirm');
+            var confirmModal = confirmModalService.create(message);
+
+            confirmModal.then(function () {
+                return personProfileService.deleteModel(emailAddress).then(function () {
+                    // Remove the deleted email address
+                    _.pull(vm.personTab.person.email_addresses, emailAddress);
+                });
             });
         }
 
         function deletePhoneNumber (phoneNumber) {
-            return personProfileService.deleteModel(phoneNumber).then(function () {
-                // Remove the deleted phone number
-                _.pull(vm.personTab.person.phone_numbers, phoneNumber);
+            var message = $filter('t')('people.edit.delete_phone_confirm');
+            var confirmModal = confirmModalService.create(message);
+
+            confirmModal.then(function () {
+                return personProfileService.deleteModel(phoneNumber).then(function () {
+                    // Remove the deleted phone number
+                    _.pull(vm.personTab.person.phone_numbers, phoneNumber);
+                });
             });
         }
 
