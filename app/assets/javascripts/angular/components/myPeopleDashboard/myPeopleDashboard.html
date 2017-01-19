@@ -1,27 +1,29 @@
 <div class="my-people-dashboard" ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.organizations">
-  <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
-  <div ng-if="$ctrl.noPeople" class="no-people-message ng-cloak">
-    <h1>{{ $ctrl.noPeopleWelcome }}</h1>
-    <p bind-dynamic="'dashboard.no_contacts_help' | t"></p>
-  </div>
-  <organization
+    <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
+    <div ng-if="$ctrl.noPeople" class="no-people-message ng-cloak">
+        <h1>{{ $ctrl.noPeopleWelcome }}</h1>
+        <p bind-dynamic="'dashboard.no_contacts_help' | t"></p>
+    </div>
+    <organization
         ng-repeat="org in $ctrl.organizations | limitTo : $ctrl.numberOfOrgsToShow track by org.id"
         ng-if="org.visible || $ctrl.editMode"
         org="org" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
         options="{ anonymousInteractions: true, reorderable: true }">
-      <div class="people-list grid" ng-if="!$ctrl.editMode">
-        <div class="grid-content">
-            <unassigned-people></unassigned-people>
-            <people-view-person person="person" organization-id="org.id"
-                                ng-repeat="person in org.people | orderBy: 'last_name' track by person.id"
-                                ng-class="{'alternate-color': $odd}">
-            </people-view-person>
+        <div class="people-list grid" ng-if="!$ctrl.editMode">
+            <div class="grid-content">
+                <unassigned-people></unassigned-people>
+                <people-view-person person="person" organization-id="org.id"
+                                    ng-repeat="person in org.people | orderBy: 'last_name' track by person.id"
+                                    ng-class="{'alternate-color': $odd}">
+                </people-view-person>
+            </div>
         </div>
-      </div>
-  </organization>
-  <div class="no-people-extras" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit">
-    <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more" bind-dynamic="'dashboard.show_more' | t"></a>
-    <br>
-    <a href ng-click="$ctrl.editMode = true" class="edit-mode" bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
-  </div>
+    </organization>
+    <div class="no-people-extras" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit">
+        <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more"
+           bind-dynamic="'dashboard.show_more' | t"></a>
+        <br>
+        <a href ng-click="$ctrl.editMode = true" class="edit-mode"
+           bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
+    </div>
 </div>
