@@ -1,3 +1,5 @@
+@import '../personPage/variables'; /* For $person-page--inner-padding */
+
 person-history {
   .filters {
     margin-bottom: 10px;
@@ -22,7 +24,7 @@ person-history {
     // this is so that it overflows both directions, even over the padding of the grandparent, making
     // a nice divider
     width: 2000px;
-    margin: 0 -100px;
+    margin: 0 (-$person-page--inner-padding);
   }
 
   .history-items {
@@ -37,6 +39,10 @@ person-history {
     border-bottom: 1px solid $gray-3;
     &:last-of-type {
       border-bottom: none;
+    }
+
+    .row {
+      align-items: initial;
     }
   }
 

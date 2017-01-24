@@ -1,10 +1,10 @@
 person-page {
   display: block;
   background-color: $white;
-  border-left: 1px solid $pivot-dark-blue;
   min-height: 100%;
+  overflow: hidden; /* To prevent the "person-history hr" element from overflowing this element's bounds */
 
-  $inner-padding: 50px;
+  $inner-padding: $person-page--inner-padding;
   $left-col-width: 60px;
   $main-col-width: 290px;
 
@@ -100,7 +100,7 @@ person-page {
     margin-right: $col-spacing;
   }
 
-  ui-view {
+  .person-tab-content {
     display: block;
     padding: 0 $compensated-right-padding 0 $inner-padding;
   }

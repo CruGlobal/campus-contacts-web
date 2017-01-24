@@ -3,7 +3,7 @@
 <% group_pattern = /groups/ %>
 
 <%= link_to("", "/", id: "logoInvert") if branded? %>
-<span style="color: white; padding-top: 10px;" ng-if="$ctrl.betaMode">Beta</span>
+<span style="color: white; padding-top: 10px;" ng-if="$root.betaMode">Beta</span>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
   <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
     <li class="<%= 'current' if request.path == '/' %>">
@@ -27,10 +27,10 @@
     <li class="<%= 'current' if request.path =~ care_pattern %>">
       <%= link_to(t('nav.contacts'), "/allcontacts") %>
     </li>
-    <li ng-if="$ctrl.betaMode" ui-sref-active="current">
+    <li ng-if="$root.betaMode" ui-sref-active="current">
       <%= link_to(t('dashboard.people_assigned_to_you'), '/#/people') %>
     </li>
-    <li ng-if="$ctrl.betaMode" ui-sref-active="current">
+    <li ng-if="$root.betaMode" ui-sref-active="current">
       <%= link_to(t('dashboard.organizations_assigned_to_you'), '/#/ministries/root') %>
     </li>
     <% if can? :manage_groups, current_organization %>

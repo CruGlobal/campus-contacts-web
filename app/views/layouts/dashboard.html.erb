@@ -11,7 +11,7 @@
     <%= render 'dialogs/locate_contact' %>
     <%= render 'shared/jwt_preload_state' %>
       <div id="outer" ng-controller="DashboardController as $ctrl">
-        <div id="menutop" class="topmenu topmenu-with-sub" ng-controller="MenuController as $ctrl">
+        <div id="menutop" class="topmenu topmenu-with-sub">
           <%= render 'shared/menu' %>
         </div>
         <% if current_organization %>

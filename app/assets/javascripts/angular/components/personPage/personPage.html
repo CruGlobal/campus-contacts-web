@@ -33,8 +33,8 @@
             </div>
         </div>
     </div>
-    <a ui-sref="^" class="close-button">
+    <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
     </a>
 </header>
-<ui-view></ui-view>
+<div ui-view="personTab" class="person-tab-content"></div>

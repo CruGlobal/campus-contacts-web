@@ -12,7 +12,7 @@
             }
         });
 
-    function personPageController ($scope, personService, personTabs,
+    function personPageController ($scope, $state, personService, personTabs,
                                    personPageService, _) {
         var vm = this;
         $scope.$watchCollection('$ctrl.person.email_addresses', function () {
@@ -27,6 +27,7 @@
         vm.uploadAvatar = uploadAvatar;
         vm.deleteAvatar = deleteAvatar;
         vm.updateLabels = updateLabels;
+        vm.dismiss = dismiss;
         vm.updateGroupMemberships = updateGroupMemberships;
         vm.$onInit = activate;
 
@@ -57,6 +58,11 @@
 
         function updateLabels () {
             vm.orgLabels = personService.getOrgLabels(vm.person, vm.organizationId);
+        }
+
+        // Dismiss this page
+        function dismiss () {
+            $state.go('^.^');
         }
 
         function updateGroupMemberships () {

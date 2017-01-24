@@ -12,7 +12,7 @@
             }
         });
 
-    function peopleViewPersonController ($animate, $filter, $scope, confirm, jQuery,
+    function peopleViewPersonController ($animate, $filter, $scope, confirm, jQuery, $state,
                                          periodService, personService, reportsService, interactionsService) {
         var vm = this;
 
@@ -22,6 +22,7 @@
         vm.openAddInteractionPanel = openAddInteractionPanel;
         vm.saveInteraction = saveInteraction;
         vm.reportInteractions = reportInteractions;
+        vm.openProfile = openProfile;
         vm.$onInit = activate;
 
         function activate () {
@@ -89,6 +90,11 @@
                 .catch(function () {
                     jQuery.e($filter('t')('dashboard.error_archiving_person'));
                 });
+        }
+
+        // Open the profile page for this person
+        function openProfile () {
+            $state.go('app.people.person.defaultTab', { personId: vm.person.id, orgId: vm.organizationId });
         }
     }
 })();
