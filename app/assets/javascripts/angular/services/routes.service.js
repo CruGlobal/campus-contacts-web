@@ -17,6 +17,7 @@
                     'email_addresses',
                     'organizational_permissions',
                     'organizational_labels.label',
+                    'group_memberships',
                     'reverse_contact_assignments.assigned_to'
                 ]);
             },
@@ -24,7 +25,7 @@
             // Return a promise that resolves to the specified organization, loading that organization if necessary
             getOrganization: function (organizationId) {
                 var url = modelsService.getModelMetadata('organization').url.single(organizationId);
-                return httpProxy.getModel(url, 'organization', organizationId, ['labels']);
+                return httpProxy.getModel(url, 'organization', organizationId, ['labels', 'groups']);
             },
 
             // Load a person's interaction history (which consists of interactions as well as survey responses)

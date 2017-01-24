@@ -1304,6 +1304,7 @@ en:
       labels: Labels
       locate_contact: Contact Location
       manage_labels: Manage Labels
+      manage_groups: Manage Groups
       merge_contacts: Merge Contacts
       merge_people: Merge People
       no_people: Sorry, there are no people involved here.
@@ -1355,7 +1356,9 @@ en:
       status: Status
       updated_time_difference: Updated %{time_diff} ago.
       no_labels: No labels assigned.
+      no_groups: No groups assigned.
       apply_labels: Apply the following labels to %{name}.
+      apply_groups: Assign %{name} to the following groups.
   permissions:
     admin: Admin
     no_permissions: No Permissions

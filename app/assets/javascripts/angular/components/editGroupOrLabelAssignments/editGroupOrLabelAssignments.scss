@@ -1,0 +1,15 @@
+edit-group-or-label-assignments {
+  .modal-body {
+    max-height: 300px;
+    overflow: scroll;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn {
+      margin-left: 6px;
+    }
+  }
+}

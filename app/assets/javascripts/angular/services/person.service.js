@@ -56,6 +56,10 @@
                     .value();
             },
 
+            getGroupMemberships: function (person, organizationId) {
+                return _.filter(person.group_memberships, ['group.organization.id', organizationId]);
+            },
+
             // Archive the person in a particular organization
             archivePerson: function (person, organizationId) {
                 var organizationalPermission = personService.getOrgPermission(person, organizationId);

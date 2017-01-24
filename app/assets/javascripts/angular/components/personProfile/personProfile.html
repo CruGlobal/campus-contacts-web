@@ -1,7 +1,9 @@
 <div class="person-profileTab form">
     <div class="form-group-with-left-action">
         <div class="button-column">
-            <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
+            <ng-md-icon class="icon-chip actionable primary-action"
+                        icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
+                        size="16"
                         ng-click="$ctrl.editTags()"
                         title="{{'people.index.manage_labels' | t}}"></ng-md-icon>
         </div>
@@ -13,6 +15,26 @@
                         {{ orgLabel.label.name }}
                     </span>
                     <span ng-if="$ctrl.personTab.orgLabels.length === 0">{{'people.show.no_labels' | t}}</span>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="form-group-with-left-action">
+        <div class="button-column">
+            <ng-md-icon class="icon-chip actionable primary-action"
+                        icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
+                        size="16"
+                        ng-click="$ctrl.editGroups()"
+                        title="{{'people.index.manage_groups' | t}}"></ng-md-icon>
+        </div>
+        <div class="form-group">
+            <label>
+                <span class="label">{{'nav.groups' | t}}</span>
+                <div>
+                    <span class="pill label-pill" ng-repeat="groupMembership in $ctrl.personTab.groupMemberships">
+                        {{ groupMembership.group.name }}
+                    </span>
+                    <span ng-if="$ctrl.personTab.groupMemberships.length === 0">{{'people.show.no_groups' | t}}</span>
                 </div>
             </label>
         </div>

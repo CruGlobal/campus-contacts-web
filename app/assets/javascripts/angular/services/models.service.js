@@ -65,6 +65,9 @@
             },
             group: {
                 url: generateUrls('/groups')
+            },
+            group_membership: {
+                url: generateUrls('/group_memberships')
             }
         };
 

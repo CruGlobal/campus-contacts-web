@@ -1,10 +1,10 @@
-edit-organizational-labels {
-  .modal-body {
-    max-height: 300px;
-    overflow: scroll;
+multiselect-list {
+  ul {
+    list-style: none;
+    padding: 0;
   }
 
-  .label-option {
+  li {
     margin-bottom: .5em;
   }
 
@@ -12,15 +12,6 @@ edit-organizational-labels {
     background-color: $gray-4;
     border-color: $gray-4;
     color: $pivot-dark-blue;
-  }
-
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-
-    .btn {
-      margin-left: 6px;
-    }
   }
 
   ng-md-icon {

@@ -27,6 +27,7 @@
         vm.deletePhoneNumber = deletePhoneNumber;
         vm.permissionChange = permissionChange;
         vm.editTags = editTags;
+        vm.editGroups = editGroups;
 
         vm.$onInit = activate;
 
@@ -194,13 +195,16 @@
         function editTags () {
             var modalInstance = $uibModal.open({
                 animation: true,
-                component: 'editOrganizationalLabels',
+                component: 'editGroupOrLabelAssignments',
                 resolve: {
                     organizationId: function () {
                         return vm.personTab.organizationId;
                     },
                     person: function () {
                         return vm.personTab.person;
+                    },
+                    relationship: function () {
+                        return 'organizational_labels';
                     }
                 },
                 windowClass: 'pivot_theme',
@@ -209,6 +213,30 @@
 
             modalInstance.result.then(function () {
                 vm.personTab.updateLabels();
+            });
+        }
+
+        function editGroups () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                component: 'editGroupOrLabelAssignments',
+                resolve: {
+                    organizationId: function () {
+                        return vm.personTab.organizationId;
+                    },
+                    person: function () {
+                        return vm.personTab.person;
+                    },
+                    relationship: function () {
+                        return 'group_memberships';
+                    }
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm'
+            });
+
+            modalInstance.result.then(function () {
+                vm.personTab.updateGroupMemberships();
             });
         }
     }

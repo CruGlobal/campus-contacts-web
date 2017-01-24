@@ -27,6 +27,7 @@
         vm.uploadAvatar = uploadAvatar;
         vm.deleteAvatar = deleteAvatar;
         vm.updateLabels = updateLabels;
+        vm.updateGroupMemberships = updateGroupMemberships;
         vm.$onInit = activate;
 
         function activate () {
@@ -41,6 +42,7 @@
             });
 
             updateLabels();
+            updateGroupMemberships();
         }
 
         function uploadAvatar (file) {
@@ -55,6 +57,10 @@
 
         function updateLabels () {
             vm.orgLabels = personService.getOrgLabels(vm.person, vm.organizationId);
+        }
+
+        function updateGroupMemberships () {
+            vm.groupMemberships = personService.getGroupMemberships(vm.person, vm.organizationId);
         }
     }
 })();
