@@ -4,7 +4,9 @@
   "scripts": {
     "lint": "eslint app/assets/javascripts/angular app/assets/javascripts/test karma.conf.js",
     "lint-watch": "esw --watch app/assets/javascripts/angular app/assets/javascripts/test karma.conf.js",
-    "test": "karma start",
+    "test": "npm run lint && npm run test-once",
+    "test-once": "karma start --single-run",
+    "test-watch": "karma start",
     "test-debug": "karma start --browsers Chrome --reporters spec"
   },
   "dependencies": {

@@ -27,8 +27,7 @@ before_script:
   - bundle exec rake db:structure:load RAILS_ENV=test
 
 script:
-  - npm run lint
-  - ./node_modules/.bin/karma start --single-run --browsers PhantomJS
+  - npm test
   - bundle exec rake test
   - bundle exec rake spec
   - bundle exec rubocop -R
