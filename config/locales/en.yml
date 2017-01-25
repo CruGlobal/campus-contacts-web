@@ -739,6 +739,7 @@ en:
     leader_link_expired: Sorry, this link is already used.
     leader_login_confirmation: You are currently logged in as %{name}.<br>Do you want to continue?
     leader_login_title: MissionHub Confirmation
+    loading_more: Loading more...
     locate_contact_search_required_fields: You should enter at least 1 search field.
     male: Male
     match_found: Match found

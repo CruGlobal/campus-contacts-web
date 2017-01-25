@@ -12,7 +12,8 @@ person-page {
 
   $compensated-right-padding: $inner-padding + $col-spacing + $left-col-width;
 
-  width: ($compensated-right-padding * 2) + $main-col-width;
+  // subtract one pixel for the left border
+  width: ($compensated-right-padding * 2) + $main-col-width - 1px;
   box-sizing: content-box;
 
   header {

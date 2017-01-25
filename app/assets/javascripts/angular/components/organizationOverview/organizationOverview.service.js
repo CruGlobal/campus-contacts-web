@@ -37,9 +37,7 @@
 
             // Return a promise that resolves to the number of people in an organization
             getPersonCount: function (org) {
-                return organizationOverviewPeopleService.loadOrgPeople(org.id, emptyPage).then(function (response) {
-                    return response.meta.total;
-                });
+                return organizationOverviewPeopleService.loadOrgPeopleCount(org.id);
             },
 
             // Return a promise that resolves to the number of team members in an organization

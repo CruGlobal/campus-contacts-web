@@ -13,6 +13,7 @@
             'ui.sortable',
             'ui.bootstrap',
             'ngFileUpload',
+            'infinite-scroll',
             'angulartics',
             'angulartics.google.analytics'
         ]);

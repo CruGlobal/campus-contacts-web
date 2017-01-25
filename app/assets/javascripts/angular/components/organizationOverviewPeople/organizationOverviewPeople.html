@@ -1,51 +1,57 @@
-<pages bottom="true" load-page="$ctrl.loadPersonPage" on-new-data="$ctrl.people = newData">
-    <div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
-        <div class="people-list-filters">
-            <div class="header">
-                <div class="column filters-header-column">
-                    <span>{{'ministries.people.header' | t}}</span>
-                </div>
-            </div>
-            <div>
-                <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"></people-filters-panel>
+<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
+    <div class="people-list-filters">
+        <div class="header">
+            <div class="column filters-header-column">
+                <span>{{'ministries.people.header' | t}}</span>
             </div>
         </div>
-        <div class="people-list">
-            <div class="header">
-                <div class="column button-column">
-                    <input type="checkbox" />
-                </div>
-                <div class="column important-column">
-                    <span>{{'ministries.people.name' | t}}</span>
-                </div>
-                <div class="column detail-column gender-column">
-                    <span>{{'ministries.people.gender' | t}}</span>
-                </div>
-                <div class="column detail-column normal-column">
-                    <span>{{'assignments.assignment' | t}}</span>
-                </div>
-                <div class="column detail-column normal-column">
-                    <span>{{'ministries.people.status' | t}}</span>
-                </div>
-                <div class="column detail-column phone-number-column">
-                    <round-button class="disabled">
-                        <ng-md-icon icon="phone"></ng-md-icon>
-                    </round-button>
-                </div>
-                <div class="column detail-column button-column">
-                    <round-button class="disabled">
-                        <ng-md-icon icon="email"></ng-md-icon>
-                    </round-button>
-                </div>
+        <div>
+            <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"></people-filters-panel>
+        </div>
+    </div>
+    <div class="people-list">
+        <div class="header">
+            <div class="column button-column">
+                <input type="checkbox" />
             </div>
-            <div class="grid-content">
+            <div class="column important-column">
+                <span>{{'ministries.people.name' | t}}</span>
+            </div>
+            <div class="column detail-column gender-column">
+                <span>{{'ministries.people.gender' | t}}</span>
+            </div>
+            <div class="column detail-column normal-column">
+                <span>{{'assignments.assignment' | t}}</span>
+            </div>
+            <div class="column detail-column normal-column">
+                <span>{{'ministries.people.status' | t}}</span>
+            </div>
+            <div class="column detail-column phone-number-column">
+                <round-button class="disabled">
+                    <ng-md-icon icon="phone"></ng-md-icon>
+                </round-button>
+            </div>
+            <div class="column detail-column button-column">
+                <round-button class="disabled">
+                    <ng-md-icon icon="email"></ng-md-icon>
+                </round-button>
+            </div>
+        </div>
+        <div class="scroll-contain">
+            <div infinite-scroll="$ctrl.loadPersonPage()"
+                 infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+                 infinite-scroll-distance="0"
+                 infinite-scroll-container="'organization-overview-people .scroll-contain'"
+                 class="grid-content">
                 <ministry-view-person ng-repeat="person in $ctrl.people | orderBy: 'last_name' track by person.id"
-                                      ng-class="{'alternate-color': $odd,
-                                                collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
+                                      ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
                                       person="person" organization-id="$ctrl.org.id">
                 </ministry-view-person>
+                <div ng-if="$ctrl.busy" class="row message-row">
+                    {{ 'general.loading_more' | t }}
+                </div>
             </div>
         </div>
-        <ui-view></ui-view>
     </div>
-</pages>
+    <ui-view></ui-view>
+</div>

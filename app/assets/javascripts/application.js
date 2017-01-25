@@ -38,6 +38,7 @@
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
 //= require ng-file-upload/dist/ng-file-upload
+//= require ng-infinite-scroll/build/ng-infinite-scroll
 //= require moment/moment
 //= require angular-moment/angular-moment
 //= require angular/missionhubApp.module

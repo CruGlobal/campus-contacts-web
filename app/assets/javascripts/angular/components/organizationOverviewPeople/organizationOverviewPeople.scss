@@ -1,10 +1,17 @@
 organization-overview-people {
   $visible-people: 10;
 
+  // includes all of the elements that should be on the screen when scrolled down (fixed header, footer, and margin)
+  $page-trim-height: 190px;
+
   .container {
     align-items: inherit;
-    // Add another row for the header
-    max-height: $person-height * ($visible-people + 1);
+    max-height: calc(100vh - #{$page-trim-height});
+  }
+
+  .scroll-contain {
+    max-height: calc(100vh - #{$page-trim-height} - #{$person-height});
+    overflow: scroll;
   }
 
   .people-list, ui-view {

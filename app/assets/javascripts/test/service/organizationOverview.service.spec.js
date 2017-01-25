@@ -114,14 +114,13 @@
 
         describe('getPersonCount', function () {
             it('should load the person count', asynchronous(function () {
-                spyOn(organizationOverviewPeopleService, 'loadOrgPeople').and.returnValue(
-                    $q.resolve({ meta: { total: 5 } })
+                spyOn(organizationOverviewPeopleService, 'loadOrgPeopleCount').and.returnValue(
+                    $q.resolve(5)
                 );
 
                 return organizationOverviewService.getPersonCount({ id: 1 }).then(function (personCount) {
-                    expect(organizationOverviewPeopleService.loadOrgPeople).toHaveBeenCalledWith(
-                        1,
-                        { limit: 0, offset: 0 }
+                    expect(organizationOverviewPeopleService.loadOrgPeopleCount).toHaveBeenCalledWith(
+                        1
                     );
                     expect(personCount).toBe(5);
                 });
