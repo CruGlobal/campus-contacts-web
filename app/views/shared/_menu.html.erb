@@ -128,7 +128,15 @@
       <% end %>
       <ul>
         <li>
-          <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person)) %>
+          <%= link_to(t('nav.my_profile', name: current_user.to_s), profile_path(current_person),
+              'ng-if' => '$root.isLegacyPage || !$root.betaMode') %>
+          <a ng-if="$root.isSpaPage && $root.betaMode"
+             ui-sref="app.people.person.defaultTab({
+                        personId: $ctrl.loggedInPerson.person.id,
+                        orgId: '<%= current_organization.id %>'
+                      })">
+            {{ 'nav.my_profile' | t }}
+          </a>
         </li>
         <li>
           <%= link_to(t('nav.settings'), preferences_path) %>

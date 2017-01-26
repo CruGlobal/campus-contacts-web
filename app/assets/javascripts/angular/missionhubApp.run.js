@@ -11,6 +11,10 @@
             }
         })
         .run(function ($window, $rootScope, _) {
+            // Determine whether this page is a SPA page or a legacy page
+            $rootScope.isSpaPage = $window.location.pathname === '/';
+            $rootScope.isLegacyPage = !$rootScope.isSpaPage;
+
             /* eslint-disable lines-around-comment */
             $window.location.search.slice(1)
                 // Break up querystring into its individual parameters
