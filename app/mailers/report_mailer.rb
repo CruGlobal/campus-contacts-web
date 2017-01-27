@@ -10,12 +10,8 @@ class ReportMailer < ActionMailer::Base
 
     read_report
 
-    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org Paul.Alexander@cru.org)
-
-    ###
-    # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org Paul.Alexander@cru.org Spencer.Oberstadt@cru.org)
-    ###
+    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org Paul.Alexander@cru.org
+            erik.butz@cru.org jenny.chau@cru.org spencer.oberstadt@cru.org)
 
     mail to: to,
          subject: almanac_subject('All'),
@@ -29,11 +25,6 @@ class ReportMailer < ActionMailer::Base
     @label_counts = report.number_of_people_with_label(Label.default_cru_labels)
 
     to = %w(Matthew.Watts@cru.org ryan.mcreynolds@cru.org joseph.chau@cru.org)
-
-    ###
-    # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org ryan.mcreynolds@cru.org joseph.chau@cru.org Spencer.Oberstadt@cru.org)
-    ###
 
     mail to: to,
          subject: almanac_subject('Cru'),
@@ -50,11 +41,6 @@ class ReportMailer < ActionMailer::Base
     @gained_decision = report.gained_label(decision)[decision.name]
 
     to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org paul.hildebrand@p2c.com)
-
-    ###
-    # delete this override once this is ready to go
-    to = %w(Matthew.Watts@cru.org Russ.l.Martin@cru.org paul.hildebrand@p2c.com Spencer.Oberstadt@cru.org)
-    ###
 
     mail to: to,
          subject: almanac_subject('Power2Change'),
