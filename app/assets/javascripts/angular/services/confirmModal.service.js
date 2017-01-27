@@ -30,8 +30,8 @@
                         '</div>',
                         '<div class="modal-body">' + message + '</div>',
                         '<div class="modal-footer">',
-                        '<button class="btn btn-secondary" type="button" ng-click="vm.cancel()">{{"people.edit.cancel" | t}}</button>',
-                        '<button class="btn btn-primary" type="button" ng-click="vm.confirm()">{{"welcome.request.ok" | t}}</button>',
+                        '<button class="btn btn-secondary" type="button" ng-click="vm.cancel()">{{"general.cancel" | t}}</button>',
+                        '<button class="btn btn-primary" type="button" ng-click="vm.confirm()">{{"general.ok" | t}}</button>',
                         '</div>',
                         '</div>'
                     ].join('')

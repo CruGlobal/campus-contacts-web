@@ -640,6 +640,7 @@ ca:
     no_recipient_in_send_comment: You have to select at least 1 recipient/person to comment on.
     note: Note
     organization:
+    ok: OK
     permission: Label
     permissions_applied: labels have been applied.
     phone: Phone
@@ -1669,7 +1670,6 @@ ca:
       request_access_verb: Request Access
       submitting: Submitting...
       matched_organization_message: You requested a new ministry called %{orgName}. Many of %{orgName}’s ministries already exist in MissionHub. Ask one of your leaders at %{orgName} to send you an invite to MissionHub.
-      ok: OK
     tutorials:
       get_started: Get Started!
       video_headline_html: Got questions?

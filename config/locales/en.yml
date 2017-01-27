@@ -698,6 +698,7 @@ en:
     autocomplete_name_hint: 'Type a name or facebook profile url here:'
     back: Back
     both: Both
+    cancel: Cancel
     city: City
     comment_is_blank: Please enter your comment.
     contact_location: Contact Location
@@ -750,6 +751,7 @@ en:
     no_recipient_in_comment: You didn't select any people to comment on.
     no_recipient_in_send_comment: You have to select at least 1 recipient/person to comment on.
     note: Note
+    ok: OK
     organization: Organization
     other: Other
     permission: Label
@@ -1275,7 +1277,6 @@ en:
       no_results: We couldn't find anyone on facebook with that name
       delete_email_confirm: Are you sure you want to delete this email address?
       delete_phone_confirm: Are you sure you want to delete this phone number?
-      cancel: Cancel
     form:
       facebook_url: 'Facebook Profile Url:'
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
@@ -1806,7 +1807,6 @@ en:
       request_access_verb: Request Access
       submitting: Submitting...
       matched_organization_message: You requested a new ministry called %{orgName}. Many of %{orgName}’s ministries already exist in MissionHub. Ask one of your leaders at %{orgName} to send you an invite to MissionHub.
-      ok: OK
     thank_you:
       thank_you: Thank You
       contact_soon: We received your request and will contact you soon.
