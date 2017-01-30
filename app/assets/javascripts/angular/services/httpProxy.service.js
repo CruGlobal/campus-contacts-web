@@ -19,28 +19,35 @@
         // want to be able to reuse the authorization token, JSON API store syncing, and
         // other logic that was originally in callHttp.
         function networkRequest (provider, method, url, params, data, extraConfig) {
-            var config = _.extend({
-                method: method,
-                url: envService.read('apiUrl') + url,
-                data: data,
-                params: params
-            }, extraConfig);
+            function makeRequest (dedupeConfig) {
+                var config = _.extend({
+                    method: method,
+                    url: envService.read('apiUrl') + url,
+                    data: data,
+                    params: params
+                }, extraConfig, dedupeConfig);
 
-            return provider(config)
-                .then(function (res) {
-                    // store rolling access token
-                    var token = res.headers('x-mh-session');
-                    if (token) {
-                        $http.defaults.headers.common.Authorization = 'Bearer ' + token;
-                    }
+                return provider(config)
+                    .then(function (res) {
+                        // store rolling access token
+                        var token = res.headers('x-mh-session');
+                        if (token) {
+                            $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+                        }
 
-                    return JsonApiDataStore.store.syncWithMeta(res.data);
-                })
-                .catch(function (error) {
-                    // We can redirect to some error page if that's better
-                    $log.error(error + ' - Something has gone terribly wrong.');
-                    throw error;
-                });
+                        return JsonApiDataStore.store.syncWithMeta(res.data);
+                    })
+                    .catch(function (error) {
+                        // We can redirect to some error page if that's better
+                        $log.error(error + ' - Something has gone terribly wrong.');
+                        throw error;
+                    });
+            }
+
+            if (extraConfig && extraConfig.deduper) {
+                return extraConfig.deduper.request(makeRequest);
+            }
+            return makeRequest({});
         }
 
         var proxy = {

@@ -2,7 +2,7 @@
     'use strict';
 
     // Constants
-    var httpProxy, $rootScope, $http, JsonApiDataStore;
+    var httpProxy, $rootScope, $http, $q, JsonApiDataStore, RequestDeduper;
 
     // Add better asynchronous support to a test function
     // The test function must return a promise
@@ -51,11 +51,13 @@
             });
         });
 
-        beforeEach(inject(function (_httpProxy_, _$rootScope_, _$http_, _JsonApiDataStore_) {
+        beforeEach(inject(function (_httpProxy_, _$rootScope_, _$http_, _$q_, _JsonApiDataStore_, _RequestDeduper_) {
             httpProxy = _httpProxy_;
             $rootScope = _$rootScope_;
             $http = _$http_;
+            $q = _$q_;
             JsonApiDataStore = _JsonApiDataStore_;
+            RequestDeduper = _RequestDeduper_;
         }));
 
         describe('callHttp', function () {
@@ -116,6 +118,18 @@
                     expect(JsonApiDataStore.store.syncWithMeta).toHaveBeenCalledWith(_this.responseData);
                 });
             }));
+
+            it('should use the deduper instance when provided', function () {
+                var deduper = new RequestDeduper();
+                spyOn(deduper, 'request').and.returnValue($q.resolve());
+                var config = {
+                    deduper: deduper
+                };
+
+                return httpProxy.callHttp(this.method, this.url, this.params, this.data, config).then(function () {
+                    expect(deduper.request).toHaveBeenCalledWith(jasmine.any(Function));
+                });
+            });
 
             describe('aliases', function () {
                 beforeEach(function () {
