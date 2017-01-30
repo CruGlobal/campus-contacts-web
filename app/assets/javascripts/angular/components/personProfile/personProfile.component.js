@@ -17,6 +17,7 @@
 
         vm.pendingEmailAddress = null;
         vm.pendingPhoneNumber = null;
+        vm.modalInstance = null;
 
         vm.saveAttribute = saveAttribute;
         vm.emailAddressesWithPending = emailAddressesWithPending;
@@ -94,7 +95,9 @@
         }
 
         function onDestroy () {
-            vm.modalInstance.close();
+            if (vm.modalInstance) {
+                vm.modalInstance.close();
+            }
         }
 
         function updatePrimary (newPrimary, oldPrimary) {
@@ -226,6 +229,8 @@
 
             vm.modalInstance.result.then(function () {
                 updateFunction();
+            }).finally(function () {
+                vm.modalInstance = null;
             });
         }
     }
