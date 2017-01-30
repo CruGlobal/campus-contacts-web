@@ -45,6 +45,7 @@ organization-overview-people {
   .header {
     @extend ministry-view-person;
     background-color: $pivot-darker-blue;
+    flex-shrink: 0;
 
     input[type="checkbox"], input[type="checkbox"]:checked {
       background-color: $pivot-darker-blue;

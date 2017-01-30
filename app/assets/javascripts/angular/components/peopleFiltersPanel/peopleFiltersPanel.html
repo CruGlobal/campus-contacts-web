@@ -1,15 +1,43 @@
-<div class="filter-row filter-search">
-    <input ng-model="$ctrl.filters.searchString" placeholder="{{'contacts.index.filter' | t}}">
-</div>
+<div class="pivot_theme">
+    <div class="filter-row filter-search">
+        <input ng-model="$ctrl.filters.searchString" placeholder="{{'contacts.index.filter' | t}}">
+    </div>
 
-<div class="filter-row filter-labels">
-    {{'search.labels.title' | t}}
-</div>
+    <accordion collapsed="$ctrl.labelFilterCollapsed"
+               class="filter-row filter-labels">
+        <accordion-header>
+            <span ng-click="$ctrl.labelFilterCollapsed = !$ctrl.labelFilterCollapsed">
+                {{'search.labels.title' | t}}
+            </span>
+            <accordion-toggle></accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="labelOption in $ctrl.labelOptions" class="filter-option">
+                <input type="checkbox" ng-model="$ctrl.filters.labels[labelOption.label_id]">
+                <span class="filter-option-name">{{ labelOption.name }}</span>
+                <span class="filter-option-count">{{ labelOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
 
-<div class="filter-row filter-assigned-to">
-    {{'search.assignments.title' | t}}
-</div>
+    <div class="filter-row filter-assigned-to">
+        {{'search.assignments.title' | t}}
+    </div>
 
-<div class="filter-row filter-groups">
-    {{'search.groups.title' | t}}
+    <accordion collapsed="$ctrl.groupFilterCollapsed"
+               class="filter-row filter-groups">
+        <accordion-header>
+            <span ng-click="$ctrl.groupFilterCollapsed = !$ctrl.groupFilterCollapsed">
+                {{'search.groups.title' | t}}
+            </span>
+            <accordion-toggle></accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="groupOption in $ctrl.groupOptions" class="filter-option">
+                <input type="checkbox" ng-model="$ctrl.filters.groups[groupOption.group_id]">
+                <span class="filter-option-name">{{ groupOption.name }}</span>
+                <span class="filter-option-count">{{ groupOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
 </div>

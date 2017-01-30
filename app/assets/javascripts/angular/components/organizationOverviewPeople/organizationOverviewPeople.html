@@ -5,9 +5,9 @@
                 <span>{{'ministries.people.header' | t}}</span>
             </div>
         </div>
-        <div>
-            <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"></people-filters-panel>
-        </div>
+        <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"
+                              organization-id="$ctrl.org.id">
+        </people-filters-panel>
     </div>
     <div class="people-list">
         <div class="header">

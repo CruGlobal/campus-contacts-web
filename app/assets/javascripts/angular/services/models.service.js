@@ -73,6 +73,9 @@
             },
             group_membership: {
                 url: generateUrls('/group_memberships')
+            },
+            filter_stats: {
+                url: generateUrls('/filter_stats')
             }
         };
 
