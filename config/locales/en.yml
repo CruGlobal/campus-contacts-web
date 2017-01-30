@@ -1360,9 +1360,9 @@ en:
       no_labels: No labels assigned.
       no_groups: No groups assigned.
       apply_labels: Apply the following labels to %{name}.
+      apply_groups: Assign %{name} to the following groups.
     view:
       title: View Person
-      apply_groups: Assign %{name} to the following groups.
   permissions:
     admin: Admin
     no_permissions: No Permissions

@@ -30,6 +30,7 @@
         vm.editGroups = editGroups;
 
         vm.$onInit = activate;
+        vm.$onDestroy = onDestroy;
 
         // Each of these arrays contains all possible values for a partiuclar person attribute
         // The ids also match the last part of the i18n label path (i.e., 'cru_status.{none,volunteer,affiliate,...}')
@@ -90,6 +91,10 @@
                     saveAttribute(vm.personTab.person, 'gender');
                 }
             });
+        }
+
+        function onDestroy () {
+            vm.modalInstance.close();
         }
 
         function updatePrimary (newPrimary, oldPrimary) {
@@ -193,31 +198,15 @@
         }
 
         function editTags () {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                component: 'editGroupOrLabelAssignments',
-                resolve: {
-                    organizationId: function () {
-                        return vm.personTab.organizationId;
-                    },
-                    person: function () {
-                        return vm.personTab.person;
-                    },
-                    relationship: function () {
-                        return 'organizational_labels';
-                    }
-                },
-                windowClass: 'pivot_theme',
-                size: 'sm'
-            });
-
-            modalInstance.result.then(function () {
-                vm.personTab.updateLabels();
-            });
+            editLabelsOrGroups('organizational_labels', vm.personTab.updateLabels);
         }
 
         function editGroups () {
-            var modalInstance = $uibModal.open({
+            editLabelsOrGroups('group_memberships', vm.personTab.updateGroupMemberships);
+        }
+
+        function editLabelsOrGroups (relationship, updateFunction) {
+            vm.modalInstance = $uibModal.open({
                 animation: true,
                 component: 'editGroupOrLabelAssignments',
                 resolve: {
@@ -228,15 +217,15 @@
                         return vm.personTab.person;
                     },
                     relationship: function () {
-                        return 'group_memberships';
+                        return relationship;
                     }
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'
             });
 
-            modalInstance.result.then(function () {
-                vm.personTab.updateGroupMemberships();
+            vm.modalInstance.result.then(function () {
+                updateFunction();
             });
         }
     }

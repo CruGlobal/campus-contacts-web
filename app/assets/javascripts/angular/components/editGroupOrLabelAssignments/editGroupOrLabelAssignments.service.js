@@ -82,6 +82,14 @@
             saveGroupMemberships: function (person, newGroupIds, oldGroupIds) {
                 return saveRelationshipChanges('group_membership',
                                                person, newGroupIds, oldGroupIds);
+            },
+
+            loadPlaceholderEntries: function (entries, orgId) {
+                if (_.find(entries, { _placeHolder: true })) {
+                    httpProxy.get(modelsService.getModelMetadata('organization').url.single(orgId), {
+                        include: modelsService.getModelMetadata(entries[0]._type).include
+                    });
+                }
             }
         };
     }

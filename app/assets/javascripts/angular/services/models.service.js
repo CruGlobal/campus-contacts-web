@@ -52,6 +52,10 @@
                 include: 'organization_reports',
                 url: generateUrls('/reports/organizations')
             },
+            label: {
+                include: 'labels',
+                url: generateUrls('/labels')
+            },
             organizational_label: {
                 url: generateUrls('/organizational_labels')
             },
@@ -64,6 +68,7 @@
                 url: generateUrls('/contact_assignments')
             },
             group: {
+                include: 'groups',
                 url: generateUrls('/groups')
             },
             group_membership: {

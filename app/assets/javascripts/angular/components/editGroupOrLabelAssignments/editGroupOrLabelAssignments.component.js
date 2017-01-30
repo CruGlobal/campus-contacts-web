@@ -66,6 +66,7 @@
         function loadEntryOptions () {
             var entries = JsonApiDataStore.store.find('organization', vm.resolve.organizationId)[orgRelationship()];
             vm.entryOptions = _.sortBy(entries, sortFunction());
+            editGroupOrLabelAssignmentsService.loadPlaceholderEntries(entries, vm.resolve.organizationId);
         }
 
         function buildSelectedDict () {
