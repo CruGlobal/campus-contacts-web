@@ -55,7 +55,7 @@
             },
 
             // Load an organization's people
-            loadMoreOrgPeople: function (orgId, loadedPeople, filters) {
+            loadMoreOrgPeople: function (orgId, loadedPeople, filters, requestDeduper) {
                 // There are two situations where our length gets out of sync from our offset:
                 // 1. The already-loaded portion of the data set becomes larger on the server. In this
                 // case, we would be requesting the next set after #10, but what we think is #10 is
@@ -73,7 +73,7 @@
                 var getParams = organizationOverviewPeopleService.buildGetParams(orgId, page, filters);
 
                 return httpProxy
-                    .get(modelsService.getModelMetadata('person').url.all, getParams)
+                    .get(modelsService.getModelMetadata('person').url.all, getParams, { deduper: requestDeduper })
                     .then(function (resp) {
                         if (resp.data.length > 0) {
                             loadAssignments(resp.data, orgId);
