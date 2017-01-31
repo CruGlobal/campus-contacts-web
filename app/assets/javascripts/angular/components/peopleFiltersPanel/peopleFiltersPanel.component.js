@@ -20,8 +20,10 @@
             groups: {}
         };
         vm.groupOptions = [];
+        vm.assignmentOptions = [];
         vm.labelOptions = [];
         vm.labelFilterCollapsed = true;
+        vm.assignedToFilterCollapsed = true;
         vm.groupFilterCollapsed = true;
 
         vm.$onInit = activate;
@@ -37,20 +39,24 @@
                 organization_id: vm.organizationId
             }).then(function (resp) {
                 vm.labelOptions = resp.data.labels;
+                vm.assignmentOptions = resp.data.assigned_tos;
                 vm.groupOptions = resp.data.groups;
             });
         }
 
+        // Return the an array of an dictionary's keys that have a truthy value
+        function getTruthyKeys (dictionary) {
+            return _.chain(dictionary)
+                .pickBy()
+                .keys()
+                .value();
+        }
+
         function cleanUpFilters () {
             var normalizedFilters = { searchString: vm.filters.searchString };
-            normalizedFilters.labels = _.chain(vm.filters.labels)
-                                        .pickBy()
-                                        .keys()
-                                        .value();
-            normalizedFilters.groups = _.chain(vm.filters.groups)
-                                        .pickBy()
-                                        .keys()
-                                        .value();
+            normalizedFilters.labels = getTruthyKeys(vm.filters.labels);
+            normalizedFilters.assignedTos = getTruthyKeys(vm.filters.assigned_tos);
+            normalizedFilters.groups = getTruthyKeys(vm.filters.groups);
             return normalizedFilters;
         }
     }

@@ -48,6 +48,9 @@
                 if (filters.labels) {
                     base['filters[label_ids]'] = filters.labels.join(',');
                 }
+                if (filters.assignedTos) {
+                    base['filters[assigned_tos]'] = filters.assignedTos.join(',');
+                }
                 return base;
             },
 

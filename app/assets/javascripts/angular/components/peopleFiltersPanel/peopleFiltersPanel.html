@@ -20,9 +20,22 @@
         </accordion-content>
     </accordion>
 
-    <div class="filter-row filter-assigned-to">
-        {{'search.assignments.title' | t}}
-    </div>
+    <accordion collapsed="$ctrl.assignedToFilterCollapsed"
+               class="filter-row assigned-to">
+        <accordion-header>
+            <span ng-click="$ctrl.assignedToFilterCollapsed = !$ctrl.assignedToFilterCollapsed">
+                {{'search.assignments.title' | t}}
+            </span>
+            <accordion-toggle></accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="assignmentOption in $ctrl.assignmentOptions" class="filter-option">
+                <input type="checkbox" ng-model="$ctrl.filters.assigned_tos[assignmentOption.person_id]">
+                <span class="filter-option-name">{{ assignmentOption.name }}</span>
+                <span class="filter-option-count">{{ assignmentOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
 
     <accordion collapsed="$ctrl.groupFilterCollapsed"
                class="filter-row filter-groups">
