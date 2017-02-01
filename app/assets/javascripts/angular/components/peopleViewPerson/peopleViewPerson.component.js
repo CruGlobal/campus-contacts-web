@@ -94,7 +94,7 @@
 
         // Open the profile page for this person
         function openProfile () {
-            $state.go('app.people.person.defaultTab', { personId: vm.person.id, orgId: vm.organizationId });
+            $state.go('.person.defaultTab', { personId: vm.person.id, orgId: vm.organizationId });
         }
     }
 })();
