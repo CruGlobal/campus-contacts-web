@@ -1,7 +1,7 @@
 <stats-header></stats-header>
 <div class="grid-content">
     <div ng-repeat="org in $ctrl.organizationOverview.suborgs | orderBy: 'name' track by org.id"
-       ng-class="{'alternate-color': $odd}" class="suborg row">
+         class="suborg row">
         <div class="row-content padded">
             <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="suborg-name">{{org.name}}</a>
             <organizational-stats org="org"></organizational-stats>

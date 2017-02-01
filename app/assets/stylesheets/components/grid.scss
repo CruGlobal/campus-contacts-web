@@ -1,6 +1,6 @@
 .grid .grid-content .row {
   background: $white;
-  &:nth-child(odd), &.alternate-color {
+  &:nth-child(odd) {
     background: $gray-5;
   }
 

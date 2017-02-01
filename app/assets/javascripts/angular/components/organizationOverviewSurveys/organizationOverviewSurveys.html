@@ -1,6 +1,6 @@
 <div class="grid-content">
     <div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
-         ng-class="{'alternate-color': $odd}" class="survey row">
+         class="survey row">
         <div class="row-content padded">{{survey.title}}</div>
     </div>
 </div>

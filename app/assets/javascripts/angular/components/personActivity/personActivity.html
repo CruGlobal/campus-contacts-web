@@ -10,11 +10,11 @@
             <span class="normal-column">{{'assignments.assigned' | t}}</span>
             <span class="count-column">{{$ctrl.report.contact_count || '-'}}</span>
         </div>
-        <div class="row double-column alternate-color">
+        <div class="row double-column">
             <span class="normal-column">{{'followup_status.uncontacted' | t}}</span>
             <span class="count-column warning-highlight">{{$ctrl.report.uncontacted_count || '-'}}</span>
         </div>
-        <div class="row double-column" ng-class="{ 'alternate-color': $odd }"
+        <div class="row double-column"
              ng-repeat="interactionType in $ctrl.interactionTypes">
             <span class="normal-column">{{interactionType.title | t}}</span>
             <span class="count-column">{{$ctrl.getInteractionCount(interactionType.id) || '-'}}</span>
