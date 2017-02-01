@@ -6,6 +6,11 @@ ministry-view-person {
   @extend .row;
   height: $person-height;
 
+  .column.select-column {
+    width: 26px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
   .button-column {
     width: 56px;
   }

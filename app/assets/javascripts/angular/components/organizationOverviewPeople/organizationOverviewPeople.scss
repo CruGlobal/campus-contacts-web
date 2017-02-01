@@ -29,6 +29,20 @@ organization-overview-people {
   .people-list {
     flex: 1; /* 25% of available width */
     min-width: 196px;
+
+    .grid-content .active {
+      background-color: $pivot-dark-blue;
+      color: $white;
+
+      a:focus, a:hover, a:visited {
+        color: $white;
+      }
+
+      input[type="checkbox"] {
+        background-color: $pivot-darker-blue;
+        border-color: $pivot-darker-blue;
+      }
+    }
   }
 
   .collapsed {

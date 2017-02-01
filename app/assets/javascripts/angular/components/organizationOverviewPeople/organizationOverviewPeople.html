@@ -11,7 +11,7 @@
     </div>
     <div class="people-list">
         <div class="header">
-            <div class="column button-column">
+            <div class="column select-column">
                 <input type="checkbox" />
             </div>
             <div class="column important-column">
@@ -44,7 +44,8 @@
                  infinite-scroll-container="'organization-overview-people .scroll-contain'"
                  class="grid-content">
                 <ministry-view-person ng-repeat="person in $ctrl.people | orderBy: ['last_name','first_name'] track by person.id"
-                                      ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
+                                      ng-class="{ collapsed: ('app.ministries.ministry.people.person' | includedByState),
+                                                  active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
                                       person="person" organization-id="$ctrl.org.id">
                 </ministry-view-person>
                 <div ng-if="$ctrl.busy" class="row message-row">
