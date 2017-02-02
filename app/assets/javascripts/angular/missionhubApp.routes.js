@@ -48,7 +48,7 @@
                     name: state.name,
                     url: state.url,
                     abstract: state.abstract,
-                    onEnter: function ($state, $uibModal) {
+                    onEnter: /* @ngInject */ function ($state, $uibModal) {
                         closedByRouteChange = false;
                         modalInstance = $uibModal.open({
                             animation: true,
@@ -81,7 +81,7 @@
             // The key is the tab name and the name is a dictionary of extra resolves
             var personTabResolves = {
                 history: {
-                    history: function ($stateParams, routesService) {
+                    history: /* @ngInject */ function ($stateParams, routesService) {
                         return routesService.getHistory($stateParams.personId);
                     }
                 }
@@ -100,14 +100,14 @@
                     abstract: true,
                     modal: state.modal,
                     resolve: {
-                        person: function ($state, $stateParams, routesService) {
+                        person: /* @ngInject */ function ($state, $stateParams, routesService) {
                             return routesService.getPerson($stateParams.personId).catch(function () {
                                 // Go back to the parent state if the person could not be found
                                 $state.go(getParentState(state.name), { orgId: $stateParams.orgId });
                             });
                         },
 
-                        organizationId: function ($stateParams) {
+                        organizationId: /* @ngInject */ function ($stateParams) {
                             return $stateParams.orgId;
                         }
                     }
