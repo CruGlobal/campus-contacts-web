@@ -11,7 +11,7 @@ organization-overview-people {
 
   .scroll-contain {
     max-height: calc(100vh - #{$page-trim-height} - #{$person-height});
-    overflow: scroll;
+    overflow-y: auto;
   }
 
   .people-list, ui-view {

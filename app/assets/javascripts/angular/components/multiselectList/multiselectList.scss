@@ -8,6 +8,17 @@ multiselect-list {
     margin-bottom: .5em;
   }
 
+  .pill {
+    max-width: 100%;
+
+    span {
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: inline-block;
+    }
+  }
+
   .pill:not(.selected) {
     background-color: $gray-4;
     border-color: $gray-4;

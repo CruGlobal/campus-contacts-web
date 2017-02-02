@@ -2,7 +2,7 @@
     <li ng-repeat="entry in $ctrl.options" class="entry-option">
         <span class="pill actionable" ng-class="{selected: $ctrl.selected[entry.id]}"
             ng-click="$ctrl.toggle(entry.id)">
-            {{ entry.name }}
+            <span>{{ entry.name }}</span>
             <ng-md-icon icon="close" size="14" ng-if="$ctrl.selected[entry.id]"></ng-md-icon>
         </span>
     </li>

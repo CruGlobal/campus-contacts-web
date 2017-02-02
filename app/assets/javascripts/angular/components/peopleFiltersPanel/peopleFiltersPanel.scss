@@ -1,7 +1,7 @@
 people-filters-panel {
   padding: 0 12px;
   display: block;
-  overflow: scroll;
+  overflow-y: auto;
 
   .filter-row {
     border-bottom: 1px solid $gray-4;

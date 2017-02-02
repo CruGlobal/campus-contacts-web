@@ -1,7 +1,7 @@
 edit-group-or-label-assignments {
   .modal-body {
     max-height: 300px;
-    overflow: scroll;
+    overflow-y: auto;
   }
 
   .modal-footer {
