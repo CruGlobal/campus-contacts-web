@@ -45,11 +45,17 @@
                     'page[offset]': page.offset,
                     'filters[organization_ids]': orgId
                 };
+                if (filters.searchString) {
+                    base['filters[name]'] = filters.searchString;
+                }
                 if (filters.labels) {
                     base['filters[label_ids]'] = filters.labels.join(',');
                 }
                 if (filters.assignedTos) {
                     base['filters[assigned_tos]'] = filters.assignedTos.join(',');
+                }
+                if (filters.groups) {
+                    base['filters[group_ids]'] = filters.groups.join(',');
                 }
                 return base;
             },

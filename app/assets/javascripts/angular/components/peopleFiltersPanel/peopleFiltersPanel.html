@@ -1,6 +1,8 @@
 <div class="pivot_theme">
     <div class="filter-row filter-search">
-        <input ng-model="$ctrl.filters.searchString" placeholder="{{'contacts.index.filter' | t}}">
+        <input ng-model="$ctrl.filters.searchString"
+               ng-model-options="{ debounce: 200 }"
+               placeholder="{{'contacts.index.filter' | t}}">
     </div>
 
     <accordion collapsed="$ctrl.labelFilterCollapsed"
