@@ -220,6 +220,7 @@
 
   .modal-content {
     border: 0;
+    box-shadow: rgba(0, 0, 0, .5) -2px 1px 1px;
   }
 
   .modal-header {
@@ -243,5 +244,26 @@
   .modal-header, .modal-body {
     padding-left: 40px;
     padding-right: 40px;
+  }
+
+  .modal-footer {
+    display: flex;
+    padding: 0;
+
+    .btn {
+      flex-grow: 1;
+      margin: 0 1px 0 0;
+      border: 0;
+      height: 50px;
+      background: $pivot-dark-blue;
+    }
+    .btn-secondary {
+      color: $white;
+      background-color: $gray-1-5;
+    }
+
+    .btn:last-of-type {
+      margin-right: 0;
+    }
   }
 }
