@@ -12,7 +12,7 @@
     <div class="people-list">
         <div class="header">
             <div class="column select-column">
-                <input type="checkbox" />
+                <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
             </div>
             <div class="column important-column">
                 <span>{{'ministries.people.name' | t}}</span>
@@ -37,6 +37,9 @@
                 </round-button>
             </div>
         </div>
+        <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
+            {{$ctrl.selectedCount}} contacts selected
+        </div>
         <div class="scroll-contain">
             <div infinite-scroll="$ctrl.loadPersonPage()"
                  infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
@@ -46,9 +49,10 @@
                 <ministry-view-person ng-repeat="person in $ctrl.people | orderBy: ['last_name','first_name'] track by person.id"
                                       ng-class="{ collapsed: ('app.ministries.ministry.people.person' | includedByState),
                                                   active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
+                                      selected="$ctrl.multiSelection[person.id]"
                                       person="person" organization-id="$ctrl.org.id">
                 </ministry-view-person>
-                <div ng-if="$ctrl.busy" class="row message-row">
+                <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}
                 </div>
             </div>

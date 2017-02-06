@@ -93,7 +93,8 @@
 
                         return {
                             people: people,
-                            loadedAll: loadedAll
+                            loadedAll: loadedAll,
+                            total: resp.meta.total
                         };
                     });
             },

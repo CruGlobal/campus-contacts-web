@@ -8,7 +8,8 @@
             templateUrl: '/assets/angular/components/ministryViewPerson/ministryViewPerson.html',
             bindings: {
                 person: '<',
-                organizationId: '<'
+                organizationId: '<',
+                selected: '='
             }
         });
 
