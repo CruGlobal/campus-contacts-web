@@ -8,6 +8,7 @@ person-profile {
   .button-column {
     width: $button-col-width;
     margin-right: $col-spacing;
+    margin-top: 15px;
     text-align: right;
     .icon-chip {
       display: inline-block;
@@ -25,11 +26,15 @@ person-profile {
 
   .form-group-with-left-action {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    margin-bottom: 12px;
 
     .button-column + .form-group {
       margin-left: 0;
+      margin-bottom: 0;
+
+      label {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -42,5 +47,9 @@ person-profile {
   input[type=radio].primary-toggle {
     position: relative;
     margin-left: 5px;
+  }
+
+  .pill {
+    margin-bottom: 2px;
   }
 }
