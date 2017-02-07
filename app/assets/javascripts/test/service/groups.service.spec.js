@@ -2,7 +2,7 @@
     'use strict';
 
     // Constants
-    var groupsService, $q, $rootScope, httpProxy;
+    var groupsService, $q, $rootScope, httpProxy, JsonApiDataStore;
 
     // Add better asynchronous support to a test function
     // The test function must return a promise
@@ -23,13 +23,14 @@
     describe('groupsService', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_groupsService_, _$q_, _$rootScope_, _httpProxy_) {
+        beforeEach(inject(function (_groupsService_, _$q_, _$rootScope_, _httpProxy_, _JsonApiDataStore_) {
             var _this = this;
 
             groupsService = _groupsService_;
             $q = _$q_;
             $rootScope = _$rootScope_;
             httpProxy = _httpProxy_;
+            JsonApiDataStore = _JsonApiDataStore_;
 
             this.organizationId = 1;
             this.groupAttributes = {
@@ -79,6 +80,23 @@
                 var _this = this;
                 return groupsService.createGroup(this.groupAttributes, this.organizationId).then(function (group) {
                     expect(group).toEqual(jasmine.objectContaining(_this.groupAttributes));
+                });
+            }));
+
+            it('should add the group to the organization', asynchronous(function () {
+                var org = JsonApiDataStore.store.sync({
+                    data: {
+                        type: 'organization',
+                        id: this.organizationId,
+                        relationships: {
+                            groups: {
+                                data: []
+                            }
+                        }
+                    }
+                });
+                return groupsService.createGroup(this.groupAttributes, this.organizationId).then(function (group) {
+                    expect(org.groups).toEqual(jasmine.arrayContaining([group]));
                 });
             }));
         });

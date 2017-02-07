@@ -24,7 +24,14 @@
                 });
                 var createJson = newGroup.serialize();
                 return httpProxy.post(modelsService.getModelMetadata('group').url.root, createJson)
-                    .then(httpProxy.extractModel);
+                    .then(httpProxy.extractModel)
+                    .then(function (group) {
+                        var org = JsonApiDataStore.store.find('organization', organizationId);
+                        if (org && org.groups) {
+                            org.groups.push(group);
+                        }
+                        return group;
+                    });
             }
         };
     }

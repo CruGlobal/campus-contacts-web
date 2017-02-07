@@ -19,7 +19,7 @@
         vm.addGroup = addGroup;
 
         function addGroup () {
-            var modalInstance = $uibModal.open({
+            $uibModal.open({
                 animation: true,
                 component: 'editGroup',
                 resolve: {
@@ -29,10 +29,6 @@
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'
-            });
-
-            modalInstance.result.then(function (newGroup) {
-                vm.organizationOverview.groups = vm.organizationOverview.groups.concat(newGroup);
             });
 
             return false;
