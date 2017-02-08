@@ -112,11 +112,15 @@
 
                     // Check whether the assignment is in the organization that we are getting assignments for
                     function isAssignmentInCurrentOrganization (assignment) {
-                        return _.isNil(organizationId) || assignment.organization.id === organizationId;
+                        return _.isNil(organizationId) || _.get(assignment, 'organization.id') === organizationId;
                     }
 
                     // Check whether the assigned person is in the organization that the assignment is in
                     function isAssignedPersonInAssignmentOrganization (assignment, assignedPerson) {
+                        if (!assignment.organization) {
+                            // we currently don't support non-organization people
+                            return false;
+                        }
                         return _.find(assignedPerson.organizational_permissions, {
                             organization_id: assignment.organization.id
                         });

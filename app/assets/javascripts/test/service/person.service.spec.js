@@ -188,6 +188,14 @@
                         { organization_id: 123 }
                     ]
                 };
+                this.personOnNoOrg = {
+                    id: 103,
+                    reverse_contact_assignments: [
+                        {
+                            assigned_to: { id: this.person.id }
+                        }
+                    ]
+                };
             });
 
             describe('scoped to organization', function () {
@@ -210,7 +218,13 @@
                     var _this = this;
 
                     this.httpResponse = {
-                        data: [this.personRelevant, this.personNotAssigned, this.personNotOnOrg, this.personWrongOrg]
+                        data: [
+                            this.personRelevant,
+                            this.personNotAssigned,
+                            this.personNotOnOrg,
+                            this.personWrongOrg,
+                            this.personOnNoOrg
+                        ]
                     };
 
                     return personService.getContactAssignments(this.person, this.organizationId)
@@ -240,7 +254,7 @@
                     var _this = this;
 
                     this.httpResponse = {
-                        data: [this.personRelevant, this.personNotAssigned, this.personNotOnOrg]
+                        data: [this.personRelevant, this.personNotAssigned, this.personNotOnOrg, this.personOnNoOrg]
                     };
 
                     return personService.getContactAssignments(this.person)
