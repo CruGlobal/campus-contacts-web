@@ -12,6 +12,7 @@
   "dependencies": {
     "angular": "~1.6.1",
     "angular-animate": "~1.6.1",
+    "angular-asset-path": "github:cruglobal/angular-asset-path#new",
     "angular-environment": "^1.0.4",
     "angular-material-icons": "^0.7.0",
     "angular-moment": "^1.0.0",

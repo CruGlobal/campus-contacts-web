@@ -15,6 +15,7 @@
             'ngFileUpload',
             'infinite-scroll',
             'angulartics',
-            'angulartics.google.analytics'
+            'angulartics.google.analytics',
+            'asset-path'
         ]);
 })();

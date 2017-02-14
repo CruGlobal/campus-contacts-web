@@ -5,14 +5,16 @@
         .module('missionhubApp')
         .component('personPage', {
             controller: personPageController,
-            templateUrl: '/assets/angular/components/personPage/personPage.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('personPage');
+            },
             bindings: {
                 person: '<',
                 organizationId: '<'
             }
         });
 
-    function personPageController ($scope, $state, personService, personTabs,
+    function personPageController ($scope, $state, $filter, personService, personTabs,
                                    personPageService, _) {
         var vm = this;
         $scope.$watchCollection('$ctrl.person.email_addresses', function () {
@@ -35,7 +37,7 @@
             vm.orgPermission = personService.getOrgPermission(vm.person, vm.organizationId);
             vm.assignedTo = personService.getAssignedTo(vm.person, vm.organizationId);
             $scope.$watch('$ctrl.person.picture', function (pictureUrl) {
-                vm.avatarUrl = pictureUrl || '/assets/no_image.png';
+                vm.avatarUrl = pictureUrl || $filter('assetPath')('no_image.png');
                 vm.isFacebookAvatar = personPageService.isFacebookAvatar(vm.avatarUrl);
                 if (vm.isFacebookAvatar) {
                     vm.avatarUrl += '?width=120&height=120';

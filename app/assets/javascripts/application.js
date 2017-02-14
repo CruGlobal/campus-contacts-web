@@ -37,6 +37,7 @@
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
+//= require angular-asset-path/src/index
 //= require ng-file-upload/dist/ng-file-upload
 //= require ng-infinite-scroll/build/ng-infinite-scroll
 //= require moment/moment

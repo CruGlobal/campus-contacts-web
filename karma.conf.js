@@ -23,6 +23,7 @@ module.exports = function (config) {
             './node_modules/angular-environment/src/angular-environment.js',
             './node_modules/angular-ui-sortable/src/sortable.js',
             './node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
+            './node_modules/angular-asset-path/src/index.js',
             './node_modules/ng-file-upload/dist/ng-file-upload.js',
             './node_modules/ng-infinite-scroll/build/ng-infinite-scroll.js',
             './node_modules/angulartics/src/angulartics.js',
