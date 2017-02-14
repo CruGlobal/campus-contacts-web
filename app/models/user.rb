@@ -80,8 +80,10 @@ class User < ActiveRecord::Base
       begin
         user = User.where(username: email).first_or_initialize
         user.password = Devise.friendly_token[0, 20] unless user.id.present?
-        person.update(user: user)
+        person.user = user
+        user.person = person
         user.save!
+        person.save!
       rescue ActiveRecord::RecordNotUnique
         retry
       end
