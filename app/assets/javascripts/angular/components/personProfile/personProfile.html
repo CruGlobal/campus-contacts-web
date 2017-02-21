@@ -118,9 +118,8 @@
             {{ 'general.other' | t }}
         </label>
     </div>
-    <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()"
-         ng-init="isPending = emailAddress === $ctrl.pendingEmailAddress">
-        <div class="button-column" ng-if="!isPending">
+    <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()">
+        <div class="button-column" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
             <ng-md-icon class="icon-chip actionable" icon="close" size="16"
                         ng-click="$ctrl.deleteEmailAddress(emailAddress)"
                         title="{{'contact.delete' | t}}"></ng-md-icon>
@@ -129,8 +128,10 @@
             <label>
                 <div class="row">
                     <span class="normal-column label">{{'contact.email_address' | t}}</span>
-                    <span class="label" ng-if="!isPending">{{'contact.primary_email' | t}}</span>
-                    <input type="radio" name="primary-email" ng-if="!isPending"
+                    <span class="label" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
+                        {{'contact.primary_email' | t}}
+                    </span>
+                    <input type="radio" name="primary-email" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
                            ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
                            class="primary-toggle">
                 </div>
@@ -142,9 +143,8 @@
             </label>
         </div>
     </div>
-    <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()"
-         ng-init="isPending = phoneNumber === $ctrl.pendingPhoneNumber">
-        <div class="button-column" ng-if="!isPending">
+    <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()">
+        <div class="button-column" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
             <ng-md-icon class="icon-chip actionable" icon="close" size="16"
                         ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
                         title="{{'contact.delete' | t}}"></ng-md-icon>
@@ -153,8 +153,10 @@
             <label>
                 <div class="row">
                     <span class="normal-column label">{{'contact.phone_number' | t}}</span>
-                    <span class="label" ng-if="!isPending">{{'contact.primary_phone' | t}}</span>
-                    <input type="radio" name="primary-phone" ng-if="!isPending"
+                    <span class="label" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
+                        {{'contact.primary_phone' | t}}
+                    </span>
+                    <input type="radio" name="primary-phone" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)"
                            ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
                            class="primary-toggle">
                 </div>
@@ -165,5 +167,40 @@
                 </div>
             </label>
         </div>
+    </div>
+    <div class="form-group-with-left-action dual-action" ng-repeat="address in $ctrl.personTab.person.addresses">
+        <div class="button-column first-action">
+            <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
+                        ng-click="$ctrl.editAddress(address)"
+                        title="{{'contact.edit' | t}}"></ng-md-icon>
+        </div>
+        <div class="button-column second-action">
+            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                        ng-click="$ctrl.deleteAddress(address)"
+                        title="{{'contact.delete' | t}}"></ng-md-icon>
+        </div>
+        <label>
+            <div class="row">
+                <span class="normal-column label">{{('address_types.' + address.address_type) | t}}</span>
+            </div>
+            <div class="row" ng-repeat="addressPart in $ctrl.formatAddress(address)">
+                {{addressPart}}
+            </div>
+        </label>
+    </div>
+    <div class="form-group-with-left-action">
+        <div class="button-column">
+            <ng-md-icon class="icon-chip actionable primary-action" icon="add" size="16"
+                        ng-click="$ctrl.editAddress(null)"
+                        title="{{'contact.add' | t}}"></ng-md-icon>
+        </div>
+        <label>
+            <div class="row">
+                <span class="normal-column label">{{'general.address' | t}}</span>
+            </div>
+            <div class="row">
+                {{'people.index.add_address' | t}}
+            </div>
+        </label>
     </div>
 </div>

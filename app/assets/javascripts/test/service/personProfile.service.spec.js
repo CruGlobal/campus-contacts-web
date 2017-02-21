@@ -51,11 +51,13 @@
                 this.person = {
                     _type: 'person',
                     id: this.personId,
-                    key1: 'value1'
+                    key1: 'value1',
+                    key2: 'value2',
+                    key3: 'value3'
                 };
             });
 
-            it('should update person attributes', function () {
+            it('should update individual person attributes', function () {
                 personProfileService.saveAttribute(this.personId, this.person, 'key1');
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'PUT',
@@ -74,14 +76,35 @@
                 );
             });
 
+            it('should update multiple person attributes', function () {
+                personProfileService.saveAttribute(this.personId, this.person, ['key1', 'key2', 'key3']);
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'PUT',
+                    jasmine.any(String),
+                    null,
+                    {
+                        data: {
+                            type: 'person',
+                            id: this.personId,
+                            attributes: {
+                                key1: 'value1',
+                                key2: 'value2',
+                                key3: 'value3'
+                            }
+                        }
+                    },
+                    { params: {} }
+                );
+            });
+
             it('should update existing relationships', function () {
                 var relationship = {
                     _type: 'organization',
                     id: 456,
-                    key2: 'value2'
+                    key11: 'value11'
                 };
 
-                personProfileService.saveAttribute(this.personId, relationship, 'key2');
+                personProfileService.saveAttribute(this.personId, relationship, 'key11');
 
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'PUT',
@@ -95,7 +118,7 @@
                             type: 'organization',
                             id: 456,
                             attributes: {
-                                key2: 'value2'
+                                key11: 'value11'
                             }
                         }]
                     },
@@ -106,9 +129,9 @@
             it('should create new relationships', function () {
                 var relationship = {
                     _type: 'organization',
-                    key3: 'value3',
-                    key4: 'value4',
-                    key5: 'value5'
+                    key21: 'value21',
+                    key22: 'value21',
+                    key23: 'value23'
                 };
 
                 personProfileService.saveAttribute(this.personId, relationship);
@@ -190,6 +213,39 @@
                     expect(_.map(_this.person.reverse_contact_assignments, 'id')).toEqual([2, 4]);
                 });
             }));
+        });
+
+        describe('formatAddress', function () {
+            it('should remove empty address lines', function () {
+                expect(personProfileService.formatAddress({
+                    address1: '123 Main Street',
+                    address2: 'Apt 1234'
+                })).toEqual([
+                    '123 Main Street',
+                    'Apt 1234'
+                ]);
+            });
+
+            it('should generate the region line', function () {
+                var tests = [
+                    { address: { city: 'Orlando', state: 'FL', zip: '32832' }, lines: ['Orlando, FL 32832'] },
+                    { address: { city: 'Orlando', state: 'FL' }, lines: ['Orlando, FL'] },
+                    { address: { city: 'Orlando', zip: '32832' }, lines: ['Orlando 32832'] },
+                    { address: { city: 'Orlando' }, lines: ['Orlando'] },
+                    { address: { state: 'FL', zip: '32832' }, lines: ['FL 32832'] },
+                    { address: { state: 'FL' }, lines: ['FL'] },
+                    { address: { zip: '32832' }, lines: ['32832'] },
+                    { address: {}, lines: [] }
+                ];
+                tests.forEach(function (test) {
+                    expect(personProfileService.formatAddress(test.address)).toEqual(test.lines);
+                });
+            });
+
+            it('should hide non-US country lines', function () {
+                expect(personProfileService.formatAddress({ country: 'CA' })).toEqual(['CA']);
+                expect(personProfileService.formatAddress({ country: 'US' })).toEqual([]);
+            });
         });
     });
 })();

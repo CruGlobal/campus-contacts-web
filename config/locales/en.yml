@@ -192,6 +192,7 @@ en:
     assigned_to: Assigned To
     cru_status: Role
     delete: Delete
+    edit: Edit
     email_address: Email
     first_name: First
     followup_status: Status
@@ -683,8 +684,11 @@ en:
     add_a_leader: Add a leader
     adding: Adding...
     address: Address
+    address_type: Address Type
     address1: Address 1
     address2: Address 2
+    address3: Address 3
+    address4: Address 4
     adv_search: Advanced Search
     alert: Alert
     archive: Archive
@@ -1275,12 +1279,15 @@ en:
       fb_profile_link: link to profile on facebook
       more_facebook_matches: Click here to see more results
       no_results: We couldn't find anyone on facebook with that name
+      delete_address_confirm: Are you sure you want to delete this address?
       delete_email_confirm: Are you sure you want to delete this email address?
       delete_phone_confirm: Are you sure you want to delete this phone number?
+      delete_address_confirm: Are you sure you want to delete this address?
     form:
       facebook_url: 'Facebook Profile Url:'
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.
     index:
+      add_address: Add Address
       add_person: Add Person
       apply_labels: Apply Labels
       apply_roles: Apply Labels
@@ -1288,8 +1295,10 @@ en:
       archived_label: Archived
       cannot_archive_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
       cannot_delete_admin_error: As an ADMIN you cannot remove yourself! Please assign another individual as an ADMIN for this organization and then ask that "new ADMIN" to remove your ADMIN label.
+      create_address: Create Address
       directory_title: Directory - %{org}
       displaying: Displaying %{start} - %{finish} of %{total}
+      edit_address: Edit Address
       email: Email
       error_message: 'Error: %{person} does not have valid email to be leader'
       error_message_update_admin_without_person: 'Error: Person does not have valid email to be admin'
@@ -1835,3 +1844,8 @@ en:
     high_school: High School
     collegiate: Collegiate
     masters_or_doctorate: Masters/Doctorate
+  address_types:
+    current: Current
+    permanent: Permanent
+    emergency1: Emergency 1
+    emergency2: Emergency 2

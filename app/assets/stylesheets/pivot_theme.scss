@@ -67,11 +67,16 @@
   .form {
     .form-group {
       margin-bottom: 16px;
+
+      label + label {
+        margin-top: 10px;
+      }
     }
 
     label {
       display: block;
       position: relative;
+      margin-bottom: 0;
 
       .label {
         display: block;

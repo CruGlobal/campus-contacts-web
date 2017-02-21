@@ -15,6 +15,7 @@
                 return httpProxy.getModel(url, 'person', personId, [
                     'phone_numbers',
                     'email_addresses',
+                    'addresses',
                     'organizational_permissions',
                     'organizational_labels.label',
                     'group_memberships',

@@ -11,8 +11,8 @@
             templateUrl: '/assets/angular/components/personProfile/personProfile.html'
         });
 
-    function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery,
-                                       personProfileService, loggedInPerson, _, confirmModalService) {
+    function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery, geoDataService,
+                                      personProfileService, loggedInPerson, _, confirmModalService) {
         var vm = this;
 
         vm.pendingEmailAddress = null;
@@ -22,13 +22,18 @@
         vm.saveAttribute = saveAttribute;
         vm.emailAddressesWithPending = emailAddressesWithPending;
         vm.phoneNumbersWithPending = phoneNumbersWithPending;
+        vm.isPendingEmailAddress = isPendingEmailAddress;
+        vm.isPendingPhoneNumber = isPendingPhoneNumber;
         vm.addEmailAddress = addEmailAddress;
         vm.addPhoneNumber = addPhoneNumber;
         vm.deleteEmailAddress = deleteEmailAddress;
         vm.deletePhoneNumber = deletePhoneNumber;
+        vm.deleteAddress = deleteAddress;
         vm.permissionChange = permissionChange;
         vm.editTags = editTags;
         vm.editGroups = editGroups;
+        vm.editAddress = editAddress;
+        vm.formatAddress = personProfileService.formatAddress;
 
         vm.$onInit = activate;
         vm.$onDestroy = onDestroy;
@@ -142,6 +147,14 @@
             return phoneNumbers.concat(vm.pendingPhoneNumber);
         }
 
+        function isPendingEmailAddress (emailAddress) {
+            return emailAddress === vm.pendingEmailAddress;
+        }
+
+        function isPendingPhoneNumber (phoneNumber) {
+            return phoneNumber === vm.pendingPhoneNumber;
+        }
+
         // Add a new email address to the person
         // The email address is not actually saved to the server until the call to saveAttribute
         function addEmailAddress () {
@@ -180,6 +193,18 @@
                 return personProfileService.deleteModel(phoneNumber).then(function () {
                     // Remove the deleted phone number
                     _.pull(vm.personTab.person.phone_numbers, phoneNumber);
+                });
+            });
+        }
+
+        function deleteAddress (address) {
+            var message = $filter('t')('people.edit.delete_address_confirm');
+            var confirmModal = confirmModalService.create(message);
+
+            confirmModal.then(function () {
+                return personProfileService.deleteModel(address).then(function () {
+                    // Remove the deleted address
+                    _.pull(vm.personTab.person.addresses, address);
                 });
             });
         }
@@ -231,6 +256,29 @@
                 updateFunction();
             }).finally(function () {
                 vm.modalInstance = null;
+            });
+        }
+
+        // Open an address for editing in a modal dialog
+        function editAddress (address) {
+            $uibModal.open({
+                animation: true,
+                component: 'editAddress',
+                resolve: {
+                    organizationId: function () {
+                        return vm.personTab.organizationId;
+                    },
+
+                    personId: function () {
+                        return vm.personTab.person.id;
+                    },
+
+                    address: function () {
+                        return address;
+                    }
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm'
             });
         }
     }

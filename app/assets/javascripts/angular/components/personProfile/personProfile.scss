@@ -26,7 +26,17 @@ person-profile {
 
   .form-group-with-left-action {
     display: flex;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+
+    &.dual-action {
+      .first-action {
+        width: 20px;
+      }
+
+      .second-action {
+        width: 30px;
+      }
+    }
 
     .button-column + .form-group {
       margin-left: 0;

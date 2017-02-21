@@ -15,7 +15,8 @@
         return {
             // Persist attribute changes to a person (including changes to attributes of a person's relationship) on
             // the server
-            saveAttribute: function (personId, model, attribute) {
+            // "attributes" may either be the name of a single attribute or an array of attribute names
+            saveAttribute: function (personId, model, attributes) {
                 var params = {};
 
                 // Build up the changes object
@@ -28,10 +29,8 @@
 
                     changes.id = model.id;
 
-                    // Persist only the one attribute
-                    changes.attributes = _.fromPairs([
-                        [attribute, model[attribute]]
-                    ]);
+                    // Persist only the specified attributes
+                    changes.attributes = _.pick(model, attributes);
                 } else {
                     // We are creating a new model
 
@@ -103,6 +102,33 @@
                     person.reverse_contact_assignments = _.difference(person.reverse_contact_assignments,
                                                                       contactAssignments);
                 });
+            },
+
+            // Transform an address into an array of address lines for display in the UI
+            formatAddress: function (address) {
+                var lineParts = [
+                    { content: address.city, prefix: null },
+                    { content: address.state, prefix: ', ' },
+                    { content: address.zip, prefix: ' ' }
+                ];
+
+                // Essentially what we are doing here is joining each of the line parts but using a different delimiter
+                // for each line part
+                // See the specs for examples of how this function will generate region lines from addresses
+                var regionLine = _.filter(lineParts, 'content').reduce(function (regionLine, part) {
+                    // Append the prefix to the line unless the line is empty (because the line should not start with a
+                    // part prefix)
+                    // Then append the part content to the line
+                    return regionLine + (regionLine ? part.prefix : '') + part.content;
+                }, '');
+
+                return [
+                    address.address1, address.address2, address.address3, address.address4,
+                    regionLine,
+
+                    // Only show the country line if the country is outside of the US
+                    address.country === 'US' ? null : address.country
+                ].filter(_.identity);
             }
         };
     }

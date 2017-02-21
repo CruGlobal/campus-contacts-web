@@ -40,6 +40,10 @@
                 include: 'phone_numbers',
                 url: generateUrls('/phone_numbers')
             },
+            address: {
+                include: 'addresses',
+                url: generateUrls('/addresses')
+            },
             organization: {
                 include: 'organizations',
                 url: generateUrls('/organizations')
