@@ -27,7 +27,20 @@ person-history {
     margin: 0 (-$person-page--inner-padding);
   }
 
+  $sheetItemHeight: 50px;
+  $interactionTypeCount: 6;
+  $interactionSheetHeight: $sheetItemHeight * $interactionTypeCount;
+
+  .scrollable-area {
+      height: 668px /* person-tab-content height */
+              - 44px /* filters height */
+              - 1px /* hr height */;
+      overflow: auto;
+  }
+
   .history-items {
+    min-height: $interactionSheetHeight;
+
     /* The .sheet-container container pushes the .add-interaction button down 14px. After trying multiple approaches,
     this is the only one that would work: adding negative padding to its preceeding sibling. */
     margin-bottom: -14px;
@@ -71,6 +84,10 @@ person-history {
   .sheet-container {
     height: 0;
     display: inline-block;
+
+    .sheet {
+      margin-top: -$interactionSheetHeight;
+    }
   }
 
   .new-interaction {
@@ -96,6 +113,9 @@ person-history {
 
     .icon-chip {
       background-color: $pivot-dark-blue;
+    }
+    .close-icon {
+      background-color: $gray-2;
     }
   }
 }

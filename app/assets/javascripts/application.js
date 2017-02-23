@@ -35,6 +35,7 @@
 //= require angular-ui-sortable/dist/sortable
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
+//= require angularjs-scroll-glue/src/scrollglue
 //= require angulartics/dist/angulartics.min
 //= require angulartics-google-analytics/lib/angulartics-ga
 //= require angular-asset-path/src/index

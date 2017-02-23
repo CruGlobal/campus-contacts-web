@@ -26,6 +26,7 @@ module.exports = function (config) {
             './node_modules/angular-asset-path/src/index.js',
             './node_modules/ng-file-upload/dist/ng-file-upload.js',
             './node_modules/ng-infinite-scroll/build/ng-infinite-scroll.js',
+            './node_modules/angularjs-scroll-glue/src/scrollglue.js',
             './node_modules/angulartics/src/angulartics.js',
             './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
             './node_modules/moment/moment.js',
