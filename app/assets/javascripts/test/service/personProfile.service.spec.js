@@ -184,7 +184,11 @@
                             }
                         }]
                     },
-                    undefined
+                    {
+                        params: {
+                            include: 'reverse_contact_assignments'
+                        }
+                    }
                 );
             });
         });
