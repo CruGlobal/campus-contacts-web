@@ -270,7 +270,7 @@ class ApplicationController < ActionController::Base
     session[:locale] = params[:locale] if params[:locale]
     session[:locale] = 'qb' if session[:locale] == 'qc'
     current_user.update(language: session[:locale]) if current_user && session[:locale]
-    I18n.locale = current_user&.language || session[:locale] || 'en'
+    I18n.locale = current_user&.user_language || 'en'
   end
 
   def export_i18n_messages

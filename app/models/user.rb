@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   WIZARD_STEPS = %w(welcome verify keyword survey leaders)
   self.primary_key = 'id'
 
-  store :settings, accessors: [:primary_organization_id, :time_zone, :language, :notification_settings]
+  store :settings, accessors: [:primary_organization_id, :time_zone, :language, :mobile_language, :notification_settings]
 
   has_one :person, foreign_key: 'user_id'
   has_one :super_admin
@@ -250,5 +250,9 @@ class User < ActiveRecord::Base
     self.remember_token = token
     self.remember_token_expires_at = 1.month.from_now
     save(validate: false)
+  end
+
+  def user_language
+    language || mobile_language
   end
 end
