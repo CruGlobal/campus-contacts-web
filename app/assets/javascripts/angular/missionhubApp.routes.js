@@ -104,6 +104,8 @@
                             return routesService.getPerson($stateParams.personId).catch(function () {
                                 // Go back to the parent state if the person could not be found
                                 $state.go(getParentState(state.name), { orgId: $stateParams.orgId });
+
+                                throw new Error('Person could not be loaded');
                             });
                         },
 
@@ -191,6 +193,8 @@
                             return routesService.getOrganization($stateParams.orgId).catch(function () {
                                 // Go to the root organization if the organization could not be loaded
                                 $state.go('app.ministries.root');
+
+                                throw new Error('Organization could not be loaded');
                             });
                         }
                     }
