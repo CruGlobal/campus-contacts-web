@@ -20,7 +20,7 @@
         };
     }
 
-    describe('assignedSelectService', function () {
+    describe('RequestDeduper', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_RequestDeduper_, _$rootScope_, _$q_) {

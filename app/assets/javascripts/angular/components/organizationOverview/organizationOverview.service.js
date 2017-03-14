@@ -7,8 +7,6 @@
 
     function organizationOverviewService ($q, httpProxy, modelsService,
                                           organizationOverviewPeopleService, organizationOverviewTeamService, _) {
-        var emptyPage = { limit: 0, offset: 0 };
-
         return {
             // Load an organization's relationships (groups and surveys)
             loadOrgRelations: function (org) {
@@ -42,9 +40,7 @@
 
             // Return a promise that resolves to the number of team members in an organization
             getTeamCount: function (org) {
-                return organizationOverviewTeamService.loadOrgTeam(org.id, emptyPage).then(function (response) {
-                    return response.meta.total;
-                });
+                return organizationOverviewTeamService.loadOrgTeamCount(org.id);
             }
         };
     }

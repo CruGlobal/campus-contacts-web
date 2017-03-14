@@ -11,7 +11,8 @@
             templateUrl: '/assets/angular/components/organizationOverviewPeople/organizationOverviewPeople.html'
         });
 
-    function organizationOverviewPeopleController ($scope, organizationOverviewPeopleService, RequestDeduper, _) {
+    function organizationOverviewPeopleController ($scope, organizationOverviewPeopleService,
+                                                   RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
         vm.multiSelection = {};
@@ -29,6 +30,7 @@
         vm.selectAll = selectAll;
 
         var requestDeduper = new RequestDeduper();
+        var listLoader = new ProgressiveListLoader('person', requestDeduper);
 
         $scope.$watch('$ctrl.multiSelection', function () {
             // because multiSelection is only a list of the loaded records,
@@ -60,15 +62,15 @@
 
         function loadPersonPage () {
             vm.busy = true;
-            organizationOverviewPeopleService.loadMoreOrgPeople(vm.org.id, vm.people, vm.filters, requestDeduper)
+            organizationOverviewPeopleService.loadMoreOrgPeople(vm.org.id, vm.filters, listLoader)
                 .then(function (resp) {
                     vm.busy = false;
-                    vm.people = resp.people;
+                    vm.people = resp.list;
                     vm.loadedAll = resp.loadedAll;
                     vm.totalCount = resp.total;
 
                     if (vm.selectAllValue) {
-                        addSelection(resp.people);
+                        addSelection(resp.list);
                     }
                 })
                 .catch(function (err) {
@@ -84,6 +86,7 @@
         function filtersChanged (newFilters) {
             vm.filters = newFilters;
             vm.people = [];
+            listLoader.reset();
             vm.loadedAll = false;
             vm.selectAllValue = false;
             vm.multiSelection = {};

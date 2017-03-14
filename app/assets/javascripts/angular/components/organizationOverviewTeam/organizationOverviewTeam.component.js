@@ -11,13 +11,27 @@
             templateUrl: '/assets/angular/components/organizationOverviewTeam/organizationOverviewTeam.html'
         });
 
-    function organizationOverviewTeamController (organizationOverviewTeamService) {
+    function organizationOverviewTeamController (organizationOverviewTeamService, ProgressiveListLoader) {
         var vm = this;
-        vm.team = null;
+        vm.team = [];
         vm.loadTeamPage = loadTeamPage;
 
-        function loadTeamPage (page) {
-            return organizationOverviewTeamService.loadOrgTeam(vm.org, page);
+        var listLoader = new ProgressiveListLoader('person');
+
+        function loadTeamPage () {
+            if (vm.busy) {
+                return;
+            }
+            vm.busy = true;
+
+            return organizationOverviewTeamService.loadOrgTeam(vm.org, listLoader)
+                .then(function (resp) {
+                    vm.team = resp.list;
+                    vm.loadedAll = resp.loadedAll;
+                })
+                .finally(function () {
+                    vm.busy = false;
+                });
         }
     }
 })();

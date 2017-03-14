@@ -129,14 +129,13 @@
 
         describe('getTeamCount', function () {
             it('should load the team count', asynchronous(function () {
-                spyOn(organizationOverviewTeamService, 'loadOrgTeam').and.returnValue(
-                    $q.resolve({ meta: { total: 5 } })
+                spyOn(organizationOverviewTeamService, 'loadOrgTeamCount').and.returnValue(
+                    $q.resolve(5)
                 );
 
                 return organizationOverviewService.getTeamCount({ id: 1 }).then(function (personCount) {
-                    expect(organizationOverviewTeamService.loadOrgTeam).toHaveBeenCalledWith(
-                        1,
-                        { limit: 0, offset: 0 }
+                    expect(organizationOverviewTeamService.loadOrgTeamCount).toHaveBeenCalledWith(
+                        1
                     );
                     expect(personCount).toBe(5);
                 });
