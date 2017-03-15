@@ -9,7 +9,7 @@
     function reportsService ($q, httpProxy, modelsService, JsonApiDataStore, periodService, _) {
         // Create an empty report for the specified report type and id
         function createReport (type, reportId) {
-            return JsonApiDataStore.store.sync({
+            var record = JsonApiDataStore.store.sync({
                 data: {
                     type: type,
                     id: reportId,
@@ -21,6 +21,8 @@
                     }
                 }
             });
+            record._placeHolder = true;
+            return record;
         }
 
         // Calculate the id of the report for the specified organization
@@ -92,7 +94,7 @@
                     var report = reportsService.lookupOrganizationReport(organizationId);
 
                     // The report needs to be loaded if the report could not be found or if it is just a placeholder
-                    return !report || report.placeholder;
+                    return !report || report._placeHolder;
                 });
 
                 if (unloadedOrgIds.length === 0) {

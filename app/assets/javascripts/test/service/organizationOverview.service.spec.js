@@ -96,22 +96,6 @@
             });
         });
 
-        describe('loadOrgSuborgs', function () {
-            it('should load the org\'s suborgs', function () {
-                organizationOverviewService.loadOrgSuborgs({ id: 1 });
-                expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                    'GET',
-                    jasmine.any(String),
-                    {
-                        'filters[parent_ids]': 1,
-                        include: 'groups,surveys'
-                    },
-                    null,
-                    undefined
-                );
-            });
-        });
-
         describe('getPersonCount', function () {
             it('should load the person count', asynchronous(function () {
                 spyOn(organizationOverviewPeopleService, 'loadOrgPeopleCount').and.returnValue(

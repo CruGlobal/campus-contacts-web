@@ -6,7 +6,8 @@
         .factory('organizationOverviewService', organizationOverviewService);
 
     function organizationOverviewService ($q, httpProxy, modelsService,
-                                          organizationOverviewPeopleService, organizationOverviewTeamService, _) {
+                                          organizationOverviewPeopleService, organizationOverviewTeamService,
+                                          organizationOverviewSuborgsService, _) {
         return {
             // Load an organization's relationships (groups and surveys)
             loadOrgRelations: function (org) {
@@ -25,12 +26,8 @@
                 });
             },
 
-            // Load an organization's sub-orgs
-            loadOrgSuborgs: function (org) {
-                return httpProxy.get(modelsService.getModelMetadata('organization').url.all, {
-                    'filters[parent_ids]': org.id,
-                    include: 'groups,surveys'
-                });
+            getSubOrgCount: function (org) {
+                return organizationOverviewSuborgsService.loadOrgSubOrgCount(org.id);
             },
 
             // Return a promise that resolves to the number of people in an organization

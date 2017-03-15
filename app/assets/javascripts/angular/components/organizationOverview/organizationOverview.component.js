@@ -37,16 +37,12 @@
                 vm.surveys = vm.org.surveys;
             });
 
-            organizationOverviewService.loadOrgSuborgs(vm.org).then(function () {
-                // Find all of the organizations with org as its parent
-                vm.suborgs = _.filter(JsonApiDataStore.store.findAll('organization'), {
-                    ancestry: organizationService.getOrgHierarchyIds(vm.org).join('/')
-                });
-            });
-
-            // The people and team are loaded by their respective tab components, not this component.
+            // The suborgs, people, and team are loaded by their respective tab components, not this component.
             // However, this component does need to know how many people and team members there are, so set the
             // people and team to a sparse array of the appropriate length.
+            organizationOverviewService.getSubOrgCount(vm.org).then(function (subOrgCount) {
+                vm.suborgs = new Array(subOrgCount);
+            });
             organizationOverviewService.getPersonCount(vm.org).then(function (personCount) {
                 vm.people = new Array(personCount);
             });

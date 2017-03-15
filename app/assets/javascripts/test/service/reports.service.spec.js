@@ -68,7 +68,7 @@
                     id: this.organizationReport.id,
                     contact_count: 0,
                     uncontacted_count: 0,
-                    placeholder: true,
+                    _placeHolder: true,
                     interactions: []
                 }));
             });
@@ -86,7 +86,7 @@
                     id: this.personReport.id,
                     contact_count: 0,
                     uncontacted_count: 0,
-                    placeholder: true,
+                    _placeHolder: true,
                     interactions: []
                 }));
             });
