@@ -11,7 +11,7 @@
             templateUrl: '/assets/angular/components/organizationOverviewPeople/organizationOverviewPeople.html'
         });
 
-    function organizationOverviewPeopleController ($scope, organizationOverviewPeopleService,
+    function organizationOverviewPeopleController ($scope, $uibModal, organizationOverviewPeopleService,
                                                    RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
@@ -28,6 +28,7 @@
         vm.loadPersonPage = loadPersonPage;
         vm.filtersChanged = filtersChanged;
         vm.selectAll = selectAll;
+        vm.massEdit = massEdit;
 
         var requestDeduper = new RequestDeduper();
         var listLoader = new ProgressiveListLoader('person', requestDeduper);
@@ -36,13 +37,7 @@
             // because multiSelection is only a list of the loaded records,
             // we need to count the ones that are explicitly un-selected when
             // select all is checked
-            var unselected = _.chain(vm.multiSelection)
-                .pickBy(function (v) {
-                    return !v;
-                })
-                .keys()
-                .value()
-                .length;
+            var unselected = getUnselectedPeople().length;
 
             // has the user unselected all of the records?
             if (unselected === vm.totalCount) {
@@ -52,26 +47,25 @@
             if (vm.selectAllValue) {
                 vm.selectedCount = vm.totalCount - unselected;
             } else {
-                vm.selectedCount = _.chain(vm.multiSelection)
-                    .pickBy()
-                    .keys()
-                    .value()
-                    .length;
+                vm.selectedCount = getSelectedPeople().length;
             }
         }, true);
 
         function loadPersonPage () {
             vm.busy = true;
-            organizationOverviewPeopleService.loadMoreOrgPeople(vm.org.id, vm.filters, listLoader)
+            return organizationOverviewPeopleService.loadMoreOrgPeople(vm.org.id, vm.filters, listLoader)
                 .then(function (resp) {
+                    var oldPeople = vm.people;
+
                     vm.busy = false;
                     vm.people = resp.list;
                     vm.loadedAll = resp.loadedAll;
                     vm.totalCount = resp.total;
 
-                    if (vm.selectAllValue) {
-                        addSelection(resp.list);
-                    }
+                    // Set the selected state of all of the new people
+                    _.differenceBy(vm.people, oldPeople, 'id').forEach(function (person) {
+                        vm.multiSelection[person.id] = vm.selectAllValue;
+                    });
                 })
                 .catch(function (err) {
                     if (err.canceled) {
@@ -83,30 +77,98 @@
                 });
         }
 
-        function filtersChanged (newFilters) {
-            vm.filters = newFilters;
+        // Return an array of the ids of all people with the specified selection state (true for selected, false for
+        // unselected)
+        function getPeopleByState (state) {
+            return _.chain(vm.multiSelection)
+                .pickBy(function (selected) {
+                    return selected === state;
+                })
+                .keys()
+                .value();
+        }
+
+        // Return an array of the ids of all selected people
+        function getSelectedPeople () {
+            return getPeopleByState(true);
+        }
+
+        // Return an array of the ids of all selected people
+        function getUnselectedPeople () {
+            return getPeopleByState(false);
+        }
+
+        function resetList () {
             vm.people = [];
             listLoader.reset();
             vm.loadedAll = false;
             vm.selectAllValue = false;
             vm.multiSelection = {};
+        }
 
+        function filtersChanged (newFilters) {
+            vm.filters = newFilters;
+            resetList();
             loadPersonPage();
         }
 
         function selectAll () {
-            if (!vm.selectAllValue) {
-                vm.multiSelection = {};
-                return;
-            }
-            addSelection(vm.people, true);
+            vm.people.forEach(function (person) {
+                vm.multiSelection[person.id] = vm.selectAllValue;
+            });
         }
 
-        function addSelection (people, force) {
-            people.forEach(function (person) {
-                if (force || _.isUndefined(vm.multiSelection[person.id])) {
-                    vm.multiSelection[person.id] = true;
+        // Open a modal to mass-edit all selected people
+        function massEdit () {
+            $uibModal.open({
+                component: 'massEdit',
+                resolve: {
+                    selection: function () {
+                        return {
+                            orgId: vm.org.id,
+                            filters: vm.filters,
+                            selectedPeople: getSelectedPeople(),
+                            unselectedPeople: getUnselectedPeople(),
+                            allSelected: vm.selectAllValue,
+                            allIncluded: vm.loadedAll
+                        };
+                    }
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm'
+            }).result.then(function () {
+                $scope.$broadcast('massEditApplied');
+
+                // Determine whether any filters are applied
+                var filtersApplied = vm.filters.searchString || _.keys(vm.filters.labels).length ||
+                    _.keys(vm.filters.assignedTos).length || _.keys(vm.filters.groups).length;
+                if (!filtersApplied) {
+                    // When there are no filters, we only need to make sure that all the people that people in the list
+                    // are assigned to are loaded
+                    organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.org.id);
+                    return;
                 }
+
+                // When there are filters, we need to reload the entire people list because those people might not match
+                // the filter anymore and we are currently choosing not to do client-side filtering
+
+                var originalSelectAllValue = vm.selectAllValue;
+                var originalMultiSelection = vm.multiSelection;
+
+                // Empty and reload the people list
+                resetList();
+                loadPersonPage().then(function () {
+                    // Restore the select all value and the selection states of all people that are still loaded
+
+                    // Ignore original selection states that do not match a loaded person
+                    var relevantOriginalSelections = _.pick(originalMultiSelection, _.map(vm.people, 'id'));
+
+                    // Copy those selections to the current selection
+                    _.extend(vm.multiSelection, relevantOriginalSelections);
+
+                    // Keep the select all checkbox selected if it was originally selected and some people are selected
+                    vm.selectAllValue = originalSelectAllValue && getSelectedPeople().length > 0;
+                });
             });
         }
     }

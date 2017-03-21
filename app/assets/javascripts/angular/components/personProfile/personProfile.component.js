@@ -12,7 +12,7 @@
         });
 
     function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery, geoDataService,
-                                      personProfileService, loggedInPerson, _, confirmModalService) {
+                                      personService, personProfileService, loggedInPerson, _, confirmModalService) {
         var vm = this;
 
         vm.pendingEmailAddress = null;
@@ -38,35 +38,10 @@
         vm.$onInit = activate;
         vm.$onDestroy = onDestroy;
 
-        // Each of these arrays contains all possible values for a partiuclar person attribute
-        // The ids also match the last part of the i18n label path (i.e., 'cru_status.{none,volunteer,affiliate,...}')
-        vm.followupStatusIds = [
-            'attempted_contact',
-            'completed',
-            'contacted',
-            'do_not_contact',
-            'uncontacted'
-        ];
-        vm.cruStatusIds = [
-            'none',
-            'volunteer',
-            'affiliate',
-            'intern',
-            'part_time_staff',
-            'full_time_staff'
-        ];
-        vm.permissionOptions = [
-            { id: 1, i18n: 'admin' },
-            { id: 4, i18n: 'user' },
-            { id: 2, i18n: 'no_permissions' }
-        ];
-        vm.enrollmentIds = [
-            'not_student',
-            'middle_school',
-            'high_school',
-            'collegiate',
-            'masters_or_doctorate'
-        ];
+        vm.followupStatusOptions = personService.getFollowupStatusOptions();
+        vm.cruStatusOptions = personService.getCruStatusOptions();
+        vm.permissionOptions = personService.getPermissionOptions();
+        vm.enrollmentOptions = personService.getEnrollmentOptions();
 
         function activate () {
             var organization = JsonApiDataStore.store.find('organization', vm.personTab.organizationId);

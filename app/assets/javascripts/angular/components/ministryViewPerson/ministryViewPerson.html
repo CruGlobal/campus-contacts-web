@@ -14,8 +14,12 @@
             $ctrl.assignedTo[0].full_name :
             ('assignments.unassigned' | t)}}</span>
 </div>
-<div class="column detail-column normal-column" ng-class="{warning: $ctrl.uncontacted}">
-    <span>{{($ctrl.uncontacted ? 'followup_status.uncontacted' : 'followup_status.contacted') | t}}</span>
+<div class="column detail-column normal-column"
+     ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}">
+    <span>{{($ctrl.orgPermission.followup_status === 'uncontacted' ?
+                'followup_status.uncontacted' :
+                'followup_status.contacted')
+            | t}}</span>
 </div>
 <div class="column detail-column phone-number-column">
     <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>

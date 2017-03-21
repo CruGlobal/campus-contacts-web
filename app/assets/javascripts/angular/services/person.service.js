@@ -6,6 +6,17 @@
         .factory('personService', personService);
 
     function personService (httpProxy, modelsService, JsonApiDataStore, _) {
+        // Convert an array of string ids into an array of options with the schema { id, i18n }
+        // Used by personService.get*Options()
+        function generateOptionsFromIds (ids, i18nPrefix) {
+            return ids.map(function (id) {
+                return {
+                    id: id,
+                    i18n: i18nPrefix + '.' + id
+                };
+            });
+        }
+
         var personService = {
             // Find and return a person's organizational permission for a particular organization
             getOrgPermission: function (person, organizationId) {
@@ -32,7 +43,7 @@
                 return orgPermission && orgPermission.cru_status;
             },
 
-            // Given a person in a particular organization, return the person that that person is assigned to
+            // Given a person in a particular organization, return the people that that person is assigned to
             getAssignedTo: function (person, organizationId) {
                 return _.chain(person.reverse_contact_assignments)
                     .filter(['organization.id', organizationId])
@@ -56,8 +67,63 @@
                     .value();
             },
 
+            // Return the person's group memberships
             getGroupMemberships: function (person, organizationId) {
                 return _.filter(person.group_memberships, ['group.organization.id', organizationId]);
+            },
+
+            // These methods return array of all possible options for a particular person attribute
+            // Each option has an "id" property that is the database value and an "i18n" value that is the label path
+
+            // Return an array of followup status options
+            getFollowupStatusOptions: function () {
+                return generateOptionsFromIds([
+                    'attempted_contact',
+                    'completed',
+                    'contacted',
+                    'do_not_contact',
+                    'uncontacted'
+                ], 'followup_status');
+            },
+
+            // Return an array of Cru status options
+            getCruStatusOptions: function () {
+                return generateOptionsFromIds([
+                    'none',
+                    'volunteer',
+                    'affiliate',
+                    'intern',
+                    'part_time_staff',
+                    'full_time_staff'
+                ], 'cru_status');
+            },
+
+            // Return an array of permission options
+            getPermissionOptions: function () {
+                return [
+                    { id: 1, i18n: 'permissions.admin' },
+                    { id: 4, i18n: 'permissions.user' },
+                    { id: 2, i18n: 'permissions.no_permissions' }
+                ];
+            },
+
+            // Return an array of enrollment options
+            getEnrollmentOptions: function () {
+                return generateOptionsFromIds([
+                    'not_student',
+                    'middle_school',
+                    'high_school',
+                    'collegiate',
+                    'masters_or_doctorate'
+                ], 'student_status');
+            },
+
+            // Return an array of gender options
+            getGenderOptions: function () {
+                return [
+                    { id: 'Male', i18n: 'general.male' },
+                    { id: 'Female', i18n: 'general.female' }
+                ];
             },
 
             // Archive the person in a particular organization

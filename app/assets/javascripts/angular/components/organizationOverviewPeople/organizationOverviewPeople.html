@@ -39,6 +39,7 @@
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
             {{$ctrl.selectedCount}} contacts selected
+            <ng-md-icon class="actionable" icon="edit" size="16" ng-click="$ctrl.massEdit()"></ng-md-icon>
         </div>
         <div class="scroll-contain">
             <div infinite-scroll="$ctrl.loadPersonPage()"

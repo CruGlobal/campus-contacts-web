@@ -19,7 +19,7 @@ multiselect-list {
     }
   }
 
-  .pill:not(.selected) {
+  .pill.unselected {
     background-color: $gray-4;
     border-color: $gray-4;
     color: $pivot-dark-blue;

@@ -9,7 +9,7 @@
                 // list of objects that have an id and name
                 options: '=',
 
-                // dictionary with id keys and value of true/false
+                // dictionary with id keys and value of true/false/null
                 originalSelection: '=',
                 addedOutput: '=',
                 removedOutput: '='
@@ -17,10 +17,13 @@
             templateUrl: '/assets/angular/components/multiselectList/multiselectList.html'
         });
 
-    function multiselectListController (_) {
+    function multiselectListController (multiselectListService, _) {
         var vm = this;
 
         vm.toggle = toggle;
+        vm.isSelected = isSelected;
+        vm.isUnselected = isUnselected;
+        vm.isIndeterminate = isIndeterminate;
 
         vm.$onInit = activate;
 
@@ -36,23 +39,24 @@
         }
 
         function toggle (id) {
-            vm.selected[id] = !vm.selected[id];
+            multiselectListService.toggle(id, {
+                originalSelection: vm.originalSelection,
+                currentSelection: vm.selected,
+                addedOutput: vm.addedOutput,
+                removedOutput: vm.removedOutput
+            });
+        }
 
-            if (vm.selected[id]) {
-                _.pull(vm.removedOutput, id);
+        function isSelected (id) {
+            return multiselectListService.isSelected(vm.selected, id);
+        }
 
-                // don't add to added diff if it was one of the original selections
-                if (vm.originalSelection[id] !== true) {
-                    vm.addedOutput.push(id);
-                }
-            } else {
-                _.pull(vm.addedOutput, id);
+        function isUnselected (id) {
+            return multiselectListService.isUnselected(vm.selected, id);
+        }
 
-                // don't flag something to be removed if it wasn't there in the first place
-                if (vm.originalSelection[id] === true) {
-                    vm.removedOutput.push(id);
-                }
-            }
+        function isIndeterminate (id) {
+            return multiselectListService.isIndeterminate(vm.selected, id);
         }
     }
 })();

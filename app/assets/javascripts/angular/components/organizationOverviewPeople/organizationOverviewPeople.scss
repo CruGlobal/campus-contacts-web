@@ -79,9 +79,17 @@ organization-overview-people {
   }
 
   .selected-people-message {
+    display: flex;
     background-color: $pivot-orange;
     color: $white;
     padding: 10px;
     flex-shrink: 0;
+
+    ng-md-icon {
+      padding-left: 5px;
+      svg {
+        fill: $white;
+      }
+    }
   }
 }

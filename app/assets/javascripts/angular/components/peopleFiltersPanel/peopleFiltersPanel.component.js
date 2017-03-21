@@ -17,6 +17,7 @@
         vm.filters = {
             searchString: '',
             labels: {},
+            assignedTos: {},
             groups: {}
         };
         vm.groupOptions = [];
@@ -35,13 +36,30 @@
                 }
             }, true);
 
-            httpProxy.get(modelsService.getModelMetadata('filter_stats').url.single('people'), {
-                organization_id: vm.organizationId
-            }).then(function (resp) {
-                vm.labelOptions = resp.data.labels;
-                vm.assignmentOptions = resp.data.assigned_tos;
-                vm.groupOptions = resp.data.groups;
+            loadFilterStats();
+
+            $scope.$on('massEditApplied', function () {
+                loadFilterStats();
             });
+        }
+
+        function loadFilterStats () {
+            return httpProxy.get(modelsService.getModelMetadata('filter_stats').url.single('people'), {
+                organization_id: vm.organizationId
+            })
+                .then(httpProxy.extractModel)
+                .then(function (stats) {
+                    vm.labelOptions = stats.labels;
+                    vm.assignmentOptions = stats.assigned_tos;
+                    vm.groupOptions = stats.groups;
+
+                    // Restrict the active filters to currently valid options
+                    // A filter could include a non-existent label, for example, if people were edited so that no one
+                    // has that label anymore
+                    vm.filters.labels = _.pick(vm.filters.labels, _.map(vm.labelOptions, 'label_id'));
+                    vm.filters.assignedTos = _.pick(vm.filters.assignedTos, _.map(vm.assignmentOptions, 'person_id'));
+                    vm.filters.groups = _.pick(vm.filters.groups, _.map(vm.groupOptions, 'group_id'));
+                });
         }
 
         // Return the an array of an dictionary's keys that have a truthy value

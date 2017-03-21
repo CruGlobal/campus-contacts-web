@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        {{ 'mass_edit.title' | t }}
+    </h3>
+</div>
+<div class="modal-body form" id="modal-body">
+    <div class="form-group" ng-repeat="selectField in $ctrl.selectFields">
+        <label class="form-control-select">
+            <span class="label">{{('contact.' + selectField.name) | t}}</span>
+            <select class="form-control"
+                    ng-options="option.id as (option.i18n | t) for option in selectField.options"
+                    ng-model="$ctrl.changes[selectField.name]">
+            </select>
+        </label>
+    </div>
+    <div class="form-group" ng-repeat="multiselectField in $ctrl.multiselectFields" ng-if="multiselectField.ready">
+        <label>
+            <span class="label">{{('contact.' + multiselectField.name) | t}}</span>
+            <multiselect-list options="multiselectField.options"
+                              original-selection="multiselectField.selection"
+                              added-output="$ctrl.changes[multiselectField.name + '_added']"
+                              removed-output="$ctrl.changes[multiselectField.name + '_removed']">
+            </multiselect-list>
+        </label>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+            ng-disabled="$ctrl.saving">
+        <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
+        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+    </button>
+</div>

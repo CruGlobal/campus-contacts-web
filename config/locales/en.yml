@@ -190,13 +190,17 @@ en:
   contact:
     add: Add
     assigned_to: Assigned To
+    assigned_tos: Assignments
     cru_status: Role
     delete: Delete
     edit: Edit
     email_address: Email
     first_name: First
     followup_status: Status
+    gender: Gender
+    groups: Groups
     last_name: Last
+    labels: Labels
     phone_number: Phone
     primary_email: Primary
     primary_phone: Primary
@@ -1022,6 +1026,9 @@ en:
     organizational_labels: Organizational Labels
     system_labels: System Labels
     title: '%{org} Labels'
+  mass_edit:
+    title: Edit Contacts
+    unchanged: Unchanged
   member: Member
   monthly: Monthly
   movement_indicator_suggestions:

@@ -1,9 +1,12 @@
 <ul>
     <li ng-repeat="entry in $ctrl.options" class="entry-option">
-        <span class="pill actionable" ng-class="{selected: $ctrl.selected[entry.id]}"
-            ng-click="$ctrl.toggle(entry.id)">
+        <span class="pill actionable"
+              ng-class="{ selected: $ctrl.isSelected(entry.id), unselected: $ctrl.isUnselected(entry.id),
+                          indeterminate: $ctrl.isIndeterminate(entry.id) }"
+              ng-click="$ctrl.toggle(entry.id)">
             <span>{{ entry.name }}</span>
-            <ng-md-icon icon="close" size="14" ng-if="$ctrl.selected[entry.id]"></ng-md-icon>
+            <ng-md-icon icon="close" size="14" ng-if="$ctrl.isSelected(entry.id)"></ng-md-icon>
+            <ng-md-icon icon="remove" size="14" ng-if="$ctrl.isIndeterminate(entry.id)"></ng-md-icon>
         </span>
     </li>
 </ul>
