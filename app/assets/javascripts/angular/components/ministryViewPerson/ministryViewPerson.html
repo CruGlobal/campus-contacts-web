@@ -2,7 +2,7 @@
     <input type="checkbox" ng-model="$ctrl.selected" />
 </div>
 <div class="column important-column">
-    <a ui-sref="app.ministries.ministry.people.person.defaultTab({ personId: $ctrl.person.id })">
+    <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
         {{$ctrl.person.full_name}}
     </a>
 </div>

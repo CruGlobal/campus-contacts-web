@@ -8,14 +8,15 @@
             templateUrl: '/assets/angular/components/organizationBreadcrumbs/organizationBreadcrumbs.html'
         });
 
-    function organizationBreadcrumbsController ($transitions, $stateParams, JsonApiDataStore, organizationService) {
+    function organizationBreadcrumbsController ($transitions, $uiRouter, JsonApiDataStore, organizationService) {
         var vm = this;
         vm.orgHierarchy = null;
 
         vm.$onInit = activate;
 
         function activate () {
-            updateOrganization($stateParams.orgId);
+            var params = $uiRouter.globals.params;
+            updateOrganization(params.orgId);
 
             $transitions.onSuccess({ to: 'app.ministries.**' }, function (transition) {
                 updateOrganization(transition.params('to').orgId);

@@ -8,7 +8,7 @@
 
     angular
         .module('missionhubApp')
-        .config(function ($stateProvider, $urlRouterProvider, $uibResolveProvider,
+        .config(function ($stateProvider, $urlServiceProvider, $uibResolveProvider,
                           ministryViewTabs, ministryViewDefaultTab, personTabs, personDefaultTab, _) {
             // Hack $stateProvider.state to support a custom state property "modal" that turns the state into a modal
             // dialog. An Angular decorator would be preferable, but there is no way of decorating a provider.
@@ -26,7 +26,7 @@
                 return $stateProvider;
             };
 
-            // Use the ui-router resolver so that we can correctly resolve ui-router injectables like $stateParams in
+            // Use the ui-router resolver so that we can correctly resolve ui-router injectables like $transition$ in
             // $uibModal resolve blocks.
             $uibResolveProvider.setResolver('$resolve');
 
@@ -50,9 +50,30 @@
                     abstract: state.abstract,
                     onEnter: /* @ngInject */ function ($state, $uibModal) {
                         closedByRouteChange = false;
+
+                        // The final generated template will look like this:
+                        // <component-name first-attribute="$ctrl.firstAttribute"
+                        //                 second-attribute="$ctrl.secondAttribute"></component-name>
+                        var injectedProps = _.keys(state.resolve);
+                        var attributes = injectedProps.map(function (property) {
+                            return _.kebabCase(property) + '="$ctrl.' + property + '"';
+                        });
+                        var directive = _.kebabCase(state.component);
+                        var template = '<' + directive + ' ' + attributes.join(' ') + '></' + directive + '>';
+
                         modalInstance = $uibModal.open({
                             animation: true,
-                            component: state.component,
+                            template: template,
+
+                            // Explicitly inject the injected properties as dependencies
+                            controller: injectedProps.concat([function () {
+                                var vm = this;
+
+                                var injectedValues = arguments;
+                                var injections = _.zipObject(injectedProps, injectedValues);
+                                _.extend(vm, injections);
+                            }]),
+                            controllerAs: '$ctrl',
                             resolve: state.resolve,
                             windowClass: 'dashboard_panels pivot_theme'
                         });
@@ -81,8 +102,9 @@
             // The key is the tab name and the name is a dictionary of extra resolves
             var personTabResolves = {
                 history: {
-                    history: /* @ngInject */ function ($stateParams, routesService) {
-                        return routesService.getHistory($stateParams.personId);
+                    history: /* @ngInject */ function ($uiRouter, routesService) {
+                        var $transition$ = $uiRouter.globals.transition;
+                        return routesService.getHistory($transition$.params().personId);
                     }
                 }
             };
@@ -96,21 +118,31 @@
                 states.push({
                     name: state.name,
                     url: state.url,
-                    component: state.modal ? 'personPageModal' : 'personPage',
+                    component: 'personPage',
                     abstract: true,
                     modal: state.modal,
                     resolve: {
-                        person: /* @ngInject */ function ($state, $stateParams, routesService) {
-                            return routesService.getPerson($stateParams.personId).catch(function () {
+                        // We have to send the state name to the personPage component so that route links will work when
+                        // the person page is in a modal. Relative ui-state directives work fine when the person page is
+                        // a component. However, when it is a modal, apparently the component created by uib-modal does
+                        // not know the state that it was created from, so those relative links will all be broken. To
+                        // solve this, we send the state name to the component so that it can generate absolute links
+                        // based on its current state.
+                        stateName: _.constant(state.name),
+
+                        person: /* @ngInject */ function ($state, $uiRouter, routesService) {
+                            var $transition$ = $uiRouter.globals.transition;
+                            return routesService.getPerson($transition$.params().personId).catch(function () {
                                 // Go back to the parent state if the person could not be found
-                                $state.go(getParentState(state.name), { orgId: $stateParams.orgId });
+                                $state.go(getParentState(state.name), { orgId: $transition$.params().orgId });
 
                                 throw new Error('Person could not be loaded');
                             });
                         },
 
-                        organizationId: /* @ngInject */ function ($stateParams) {
-                            return $stateParams.orgId;
+                        organizationId: /* @ngInject */ function ($uiRouter) {
+                            var $transition$ = $uiRouter.globals.transition;
+                            return $transition$.params().orgId;
                         }
                     }
                 });
@@ -189,8 +221,8 @@
                     component: 'organizationOverview',
                     abstract: true,
                     resolve: {
-                        org: function ($state, $stateParams, routesService) {
-                            return routesService.getOrganization($stateParams.orgId).catch(function () {
+                        org: function ($state, $transition$, routesService) {
+                            return routesService.getOrganization($transition$.params().orgId).catch(function () {
                                 // Go to the root organization if the organization could not be loaded
                                 $state.go('app.ministries.root');
 
@@ -227,6 +259,6 @@
                 }));
 
             // This is the default URL if the URL does not match any routes
-            $urlRouterProvider.otherwise('/people');
+            $urlServiceProvider.rules.otherwise('/people');
         });
 })();

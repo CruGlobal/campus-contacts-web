@@ -9,6 +9,7 @@
                 return templateUrl('personPage');
             },
             bindings: {
+                stateName: '<',
                 person: '<',
                 organizationId: '<'
             }

@@ -28,7 +28,7 @@
             <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
         </div>
         <div class="tabs">
-            <div class="tab" ng-repeat="tabName in $ctrl.personTabs" ui-sref-active="active" ui-state="'^.' + tabName">
+            <div class="tab" ng-repeat="tabName in $ctrl.personTabs" ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName">
                 {{'ministries.people.' + tabName + '.header' | t}}
             </div>
         </div>
