@@ -1,17 +1,23 @@
 (function () {
     'use strict';
 
+    var bindings = {
+        history: '<'
+    };
+
     angular
         .module('missionhubApp')
         .component('personHistory', {
             controller: personHistoryController,
+            bindings: bindings,
             require: {
                 personTab: '^personPage'
             },
             templateUrl: '/assets/angular/components/personHistory/personHistory.html'
         });
 
-    function personHistoryController ($scope, $element, $interval, $q, interactionsService, personHistoryService) {
+    function personHistoryController ($scope, $element, $interval, $q, asyncBindingsService,
+                                      interactionsService, personHistoryService, _) {
         var vm = this;
         vm.filters = ['all', 'interactions', 'notes', 'surveys'];
         vm.filter = vm.filters[0];
@@ -24,11 +30,18 @@
         vm.clearInteraction = clearInteraction;
         vm.openInteractionTypeSheet = openInteractionTypeSheet;
         vm.closeInteractionTypeSheet = closeInteractionTypeSheet;
-        vm.$onInit = activate;
+        vm.$onInit = preactivate;
         vm.$postLink = postLink;
 
         // The DOM element holding the scrolling content
         var scrollContainer = null;
+
+        function preactivate () {
+            asyncBindingsService.resolveAsyncBindings(vm, _.keys(bindings)).then(function () {
+                vm.ready = true;
+                activate();
+            });
+        }
 
         function activate () {
             vm.interactionTypes = interactionsService.getInteractionTypes();

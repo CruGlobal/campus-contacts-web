@@ -1,24 +1,33 @@
 (function () {
     'use strict';
 
+    var bindings = {
+        org: '<',
+        loadDetails: '<?'
+    };
+
     angular
         .module('missionhubApp')
         .component('organizationOverview', {
             controller: organizationOverviewController,
-            bindings: {
-                org: '<',
-                loadDetails: '<?'
-            },
+            bindings: bindings,
             templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
         });
 
-    function organizationOverviewController (JsonApiDataStore, ministryViewTabs,
+    function organizationOverviewController (JsonApiDataStore, asyncBindingsService, ministryViewTabs,
                                              organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
         vm.tabNames = ministryViewTabs;
-        vm.$onInit = activate;
         vm.adminPrivileges = true;
         vm.cruOrg = false;
+        vm.$onInit = preactivate;
+
+        function preactivate () {
+            asyncBindingsService.resolveAsyncBindings(vm, _.keys(bindings)).then(function () {
+                vm.ready = true;
+                activate();
+            });
+        }
 
         function activate () {
             _.defaults(vm, {

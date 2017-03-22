@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .component('organizationOverviewSurveys', {
             require: {
-                organizationOverview: '^organizationOverview'
+                organizationOverview: '^'
             },
             templateUrl: '/assets/angular/components/organizationOverviewSurveys/organizationOverviewSurveys.html'
         });

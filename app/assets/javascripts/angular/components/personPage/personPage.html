@@ -1,40 +1,42 @@
-<header class="row">
-    <div class="avatar">
-        <img ng-src="{{$ctrl.avatarUrl}}">
-        <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
-                    ngf-select="$ctrl.uploadAvatar($file)">
-        </ng-md-icon>
-        <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
-                    ng-if="$ctrl.person.picture && !$ctrl.isFacebookAvatar" ng-click="$ctrl.deleteAvatar()">
-        </ng-md-icon>
-    </div>
-    <div class="normal-column">
-        <div class="row text-row">
-            <span class="name">{{$ctrl.person.full_name}}</span>
-            <span class="warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
-                {{'contacts.statuses.uncontacted' | t}}
-            </span>
+<async-content ready="$ctrl.ready">
+    <header class="row">
+        <div class="avatar">
+            <img ng-src="{{$ctrl.avatarUrl}}">
+            <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
+                        ngf-select="$ctrl.uploadAvatar($file)">
+            </ng-md-icon>
+            <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
+                        ng-if="$ctrl.person.picture && !$ctrl.isFacebookAvatar" ng-click="$ctrl.deleteAvatar()">
+            </ng-md-icon>
         </div>
-        <div class="row">
-            <a ng-href="mailto:{{$ctrl.primaryEmail.email}}" ng-if="$ctrl.primaryEmail">
-                <round-button>
+        <div class="normal-column">
+            <div class="row text-row">
+                <span class="name">{{$ctrl.person.full_name}}</span>
+                <span class="warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
+                    {{'contacts.statuses.uncontacted' | t}}
+                </span>
+            </div>
+            <div class="row">
+                <a ng-href="mailto:{{$ctrl.primaryEmail.email}}" ng-if="$ctrl.primaryEmail">
+                    <round-button>
+                        <ng-md-icon icon="email"></ng-md-icon>
+                    </round-button>
+                </a>
+                <round-button class="disabled" ng-if="!$ctrl.primaryEmail">
                     <ng-md-icon icon="email"></ng-md-icon>
                 </round-button>
-            </a>
-            <round-button class="disabled" ng-if="!$ctrl.primaryEmail">
-                <ng-md-icon icon="email"></ng-md-icon>
-            </round-button>
 
-            <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
-        </div>
-        <div class="tabs">
-            <div class="tab" ng-repeat="tabName in $ctrl.personTabs" ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName">
-                {{'ministries.people.' + tabName + '.header' | t}}
+                <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
+            </div>
+            <div class="tabs">
+                <div class="tab" ng-repeat="tabName in $ctrl.personTabs" ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName">
+                    {{'ministries.people.' + tabName + '.header' | t}}
+                </div>
             </div>
         </div>
-    </div>
-    <a ng-click="$ctrl.dismiss()" class="close-button">
-        <ng-md-icon icon="close" size="28"></ng-md-icon>
-    </a>
-</header>
-<div ui-view="personTab" class="person-tab-content"></div>
+        <a ng-click="$ctrl.dismiss()" class="close-button">
+            <ng-md-icon icon="close" size="28"></ng-md-icon>
+        </a>
+    </header>
+    <div ui-view="personTab" class="person-tab-content"></div>
+</async-content>

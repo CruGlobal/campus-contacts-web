@@ -5,8 +5,8 @@
         .module('missionhubApp')
         .component('organizationOverviewPeople', {
             controller: organizationOverviewPeopleController,
-            bindings: {
-                org: '<'
+            require: {
+                organizationOverview: '^'
             },
             templateUrl: '/assets/angular/components/organizationOverviewPeople/organizationOverviewPeople.html'
         });
@@ -53,7 +53,8 @@
 
         function loadPersonPage () {
             vm.busy = true;
-            return organizationOverviewPeopleService.loadMoreOrgPeople(vm.org.id, vm.filters, listLoader)
+            var orgId = vm.organizationOverview.org.id;
+            return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, listLoader)
                 .then(function (resp) {
                     var oldPeople = vm.people;
 
@@ -120,12 +121,13 @@
 
         // Open a modal to mass-edit all selected people
         function massEdit () {
+            var orgId = vm.organizationOverview.org.id;
             $uibModal.open({
                 component: 'massEdit',
                 resolve: {
                     selection: function () {
                         return {
-                            orgId: vm.org.id,
+                            orgId: orgId,
                             filters: vm.filters,
                             selectedPeople: getSelectedPeople(),
                             unselectedPeople: getUnselectedPeople(),
@@ -145,7 +147,7 @@
                 if (!filtersApplied) {
                     // When there are no filters, we only need to make sure that all the people that people in the list
                     // are assigned to are loaded
-                    organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.org.id);
+                    organizationOverviewPeopleService.loadAssignedTos(vm.people, orgId);
                     return;
                 }
 

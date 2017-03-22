@@ -1,52 +1,54 @@
-<div class="header">
-    <div class="org-name" ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
-    <div class="tabs">
-        <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
-             ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
-             ng-if="tabName !== 'surveys'">
-            <span>
-                {{'ministries.' + tabName + '.header' | t}}
-                <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
-            </span>
-            <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
-            </loading-spinner>
+<async-content ready="$ctrl.ready">
+    <div class="header">
+        <div class="org-name" ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
+        <div class="tabs">
+            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
+                 ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
+                 ng-if="tabName !== 'surveys'">
+                <span>
+                    {{'ministries.' + tabName + '.header' | t}}
+                    <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+                </span>
+                <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
+                </loading-spinner>
+            </div>
+            <div class="tab" ng-init="tabName = 'surveys'">
+                <span>
+                    <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.surveys.header' | t}}</a>
+                    <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+                </span>
+                <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
+                </loading-spinner>
+            </div>
+            <div class="tab dropdown">
+                {{'ministries.tools.header' | t}}
+                <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
+                    <ul class="dropdown-content">
+                        <li ng-if="$ctrl.adminPrivileges">
+                            <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
+                        </li>
+                        <li ng-if="$ctrl.adminPrivileges">
+                            <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
+                        </li>
+                        <li ng-if="$ctrl.adminPrivileges && $ctrl.cruOrg" class="divider">
+                            <a ng-href="/movement_indicator_suggestions?organization_id={{$ctrl.org.id}}">
+                                {{ 'nav.report_movement_indicators' | t }}
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-href="/charts/snapshot?organization_id={{$ctrl.org.id}}">{{ 'nav.snapshot' | t }}</a>
+                        </li>
+                        <li>
+                            <a ng-href="/charts/goal?organization_id={{$ctrl.org.id}}">{{ 'nav.goal' | t }}</a>
+                        </li>
+                        <li>
+                            <a ng-href="/charts/trend?organization_id={{$ctrl.org.id}}">{{ 'nav.trend' | t }}</a>
+                        </li>
+                    </ul>
+              </div>
         </div>
-        <div class="tab" ng-init="tabName = 'surveys'">
-            <span>
-                <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.surveys.header' | t}}</a>
-                <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
-            </span>
-            <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
-            </loading-spinner>
-        </div>
-        <div class="tab dropdown">
-            {{'ministries.tools.header' | t}}
-            <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
-                <ul class="dropdown-content">
-                    <li ng-if="$ctrl.adminPrivileges">
-                        <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
-                    </li>
-                    <li ng-if="$ctrl.adminPrivileges">
-                        <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
-                    </li>
-                    <li ng-if="$ctrl.adminPrivileges && $ctrl.cruOrg" class="divider">
-                        <a ng-href="/movement_indicator_suggestions?organization_id={{$ctrl.org.id}}">
-                            {{ 'nav.report_movement_indicators' | t }}
-                        </a>
-                    </li>
-                    <li>
-                        <a ng-href="/charts/snapshot?organization_id={{$ctrl.org.id}}">{{ 'nav.snapshot' | t }}</a>
-                    </li>
-                    <li>
-                        <a ng-href="/charts/goal?organization_id={{$ctrl.org.id}}">{{ 'nav.goal' | t }}</a>
-                    </li>
-                    <li>
-                        <a ng-href="/charts/trend?organization_id={{$ctrl.org.id}}">{{ 'nav.trend' | t }}</a>
-                    </li>
-                </ul>
-          </div>
     </div>
-</div>
-<div class="row-content pivot_theme" ng-if="!('app.ministries.root' | isState)">
-    <ui-view class="grid"></ui-view>
-</div>
+    <div class="row-content pivot_theme" ng-if="!('app.ministries.root' | isState)">
+        <ui-view class="grid"></ui-view>
+    </div>
+</async-content>

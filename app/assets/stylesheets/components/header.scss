@@ -1,5 +1,5 @@
 @mixin header($background-color) {
-  height: 50px;
+  min-height: 50px;
   background-color: $background-color;
   color: $white;
   svg {

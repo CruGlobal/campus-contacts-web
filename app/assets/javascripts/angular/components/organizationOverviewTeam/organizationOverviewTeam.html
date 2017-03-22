@@ -3,7 +3,7 @@
      infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
      class="grid-content">
     <people-view-person ng-repeat="person in $ctrl.team | orderBy: 'last_name' track by person.id"
-                        person="person" organization-id="$ctrl.org.id">
+                        person="person" organization-id="$ctrl.organizationOverview.org.id">
     </people-view-person>
     <div ng-show="$ctrl.busy" class="row message-row">{{ 'general.loading_more' | t }}</div>
 </div>

@@ -5,8 +5,8 @@
         .module('missionhubApp')
         .component('organizationOverviewTeam', {
             controller: organizationOverviewTeamController,
-            bindings: {
-                org: '<'
+            require: {
+                organizationOverview: '^'
             },
             templateUrl: '/assets/angular/components/organizationOverviewTeam/organizationOverviewTeam.html'
         });
@@ -24,7 +24,7 @@
             }
             vm.busy = true;
 
-            return organizationOverviewTeamService.loadOrgTeam(vm.org, listLoader)
+            return organizationOverviewTeamService.loadOrgTeam(vm.organizationOverview.org, listLoader)
                 .then(function (resp) {
                     vm.team = resp.list;
                     vm.loadedAll = resp.loadedAll;

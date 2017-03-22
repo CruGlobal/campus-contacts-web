@@ -6,10 +6,7 @@
         .component('organizationOverviewGroups', {
             controller: organizationOverviewGroupsController,
             require: {
-                organizationOverview: '^organizationOverview'
-            },
-            bindings: {
-                org: '<'
+                organizationOverview: '^'
             },
             templateUrl: '/assets/angular/components/organizationOverviewGroups/organizationOverviewGroups.html'
         });

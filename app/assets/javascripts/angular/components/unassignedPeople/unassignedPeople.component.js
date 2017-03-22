@@ -6,7 +6,7 @@
         .component('unassignedPeople', {
             controller: unassignedPeopleController,
             require: {
-                organization: '^organization'
+                organization: '^'
             },
             templateUrl: '/assets/angular/components/unassignedPeople/unassignedPeople.html'
         });

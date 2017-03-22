@@ -6,7 +6,7 @@
         .component('accordionToggle', {
             controller: accordionToggleController,
             require: {
-                accordion: '^accordion'
+                accordion: '^'
             },
             templateUrl: '/assets/angular/components/accordionToggle/accordionToggle.html'
         });

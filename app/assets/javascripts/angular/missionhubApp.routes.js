@@ -121,6 +121,7 @@
                     component: 'personPage',
                     abstract: true,
                     modal: state.modal,
+                    resolvePolicy: { async: 'NOWAIT' },
                     resolve: {
                         // We have to send the state name to the personPage component so that route links will work when
                         // the person page is in a modal. Relative ui-state directives work fine when the person page is
@@ -155,7 +156,8 @@
                     states.push({
                         name: state.name + '.' + tab,
                         url: '/' + tab,
-                        resolve: _.extend({}, personTabResolves[tab]),
+                        resolvePolicy: { async: 'NOWAIT' },
+                        resolve: personTabResolves[tab],
                         views: state.modal ? { 'personTab@': personTabView } : { personTab: personTabView }
                     });
                 });
@@ -220,6 +222,7 @@
                     url: '/:orgId',
                     component: 'organizationOverview',
                     abstract: true,
+                    resolvePolicy: { async: 'NOWAIT' },
                     resolve: {
                         org: function ($state, $transition$, routesService) {
                             return routesService.getOrganization($transition$.params().orgId).catch(function () {

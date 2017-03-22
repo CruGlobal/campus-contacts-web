@@ -6,7 +6,7 @@
         .component('organizationOverviewSuborgs', {
             controller: organizationOverviewSuborgsController,
             require: {
-                organizationOverview: '^organizationOverview'
+                organizationOverview: '^'
             },
             templateUrl: '/assets/angular/components/organizationOverviewSuborgs/organizationOverviewSuborgs.html'
         });

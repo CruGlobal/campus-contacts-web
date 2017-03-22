@@ -6,7 +6,7 @@
             </div>
         </div>
         <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"
-                              organization-id="$ctrl.org.id">
+                              organization-id="$ctrl.organizationOverview.org.id">
         </people-filters-panel>
     </div>
     <div class="people-list">
@@ -51,7 +51,7 @@
                                       ng-class="{ collapsed: ('app.ministries.ministry.people.person' | includedByState),
                                                   active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
                                       selected="$ctrl.multiSelection[person.id]"
-                                      person="person" organization-id="$ctrl.org.id">
+                                      person="person" organization-id="$ctrl.organizationOverview.org.id">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}

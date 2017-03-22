@@ -5,7 +5,7 @@
     <div ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
          class="group row">
         <div class="row-content padded">
-            <a ng-href="/groups/{{group.id}}?organization_id={{$ctrl.org.id}}">{{group.name}}</a>
+            <a ng-href="/groups/{{group.id}}?organization_id={{$ctrl.organizationOverview.org.id}}">{{group.name}}</a>
         </div>
     </div>
 </div>
