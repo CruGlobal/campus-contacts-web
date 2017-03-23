@@ -32,9 +32,10 @@ person-history {
   $interactionSheetHeight: $sheetItemHeight * $interactionTypeCount;
 
   .scrollable-area {
-      height: 668px /* person-tab-content height */
-              - 44px /* filters height */
-              - 1px /* hr height */;
+      height: calc(#{$organization-overview-content-height} -
+                   121px /* person-page header height */ -
+                   44px /* filters height */ -
+                   1px /* hr height */);
       overflow: auto;
   }
 

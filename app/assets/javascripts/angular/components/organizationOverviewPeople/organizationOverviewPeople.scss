@@ -1,16 +1,20 @@
+// includes all of the elements that should be on the screen when scrolled down (fixed header, footer, and margin)
+$page-trim-height: 140px /* root navigation */ +
+                   87px /* organization-overview header */ +
+                   43px /* footer */ +
+                   30px /* bottom padding */;
+$organization-overview-content-height: calc(100vh - #{$page-trim-height});
+
 organization-overview-people {
   $visible-people: 10;
 
-  // includes all of the elements that should be on the screen when scrolled down (fixed header, footer, and margin)
-  $page-trim-height: 190px;
-
   .container {
     align-items: inherit;
-    max-height: calc(100vh - #{$page-trim-height});
+    max-height: #{$organization-overview-content-height};
   }
 
   .scroll-contain {
-    max-height: calc(100vh - #{$page-trim-height} - #{$person-height});
+    max-height: calc(#{$organization-overview-content-height} - #{$person-height});
     overflow-y: auto;
   }
 
