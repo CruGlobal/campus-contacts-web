@@ -1,4 +1,4 @@
-@import '../personPage/variables'; /* For $person-page--inner-padding */
+@import '../personPage/variables'; /* For $person-page--* */
 
 person-history {
   .filters {
@@ -32,11 +32,14 @@ person-history {
   $interactionSheetHeight: $sheetItemHeight * $interactionTypeCount;
 
   .scrollable-area {
-      height: calc(#{$organization-overview-content-height} -
-                   121px /* person-page header height */ -
-                   44px /* filters height */ -
-                   1px /* hr height */);
-      overflow: auto;
+    $header-height: $person-page--header-height /* title and tabs */ + 54px /* filters */ + 1px /* hr */;
+    organization-overview & {
+      height: calc(100vh - #{$page-trim-height} - #{$header-height});
+    }
+    .modal & {
+      height: calc(100vh - #{$modal-padding * 2} - #{$header-height});
+    }
+    overflow-y: auto;
   }
 
   .history-items {

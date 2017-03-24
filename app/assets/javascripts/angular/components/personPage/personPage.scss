@@ -1,10 +1,13 @@
 person-page {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  organization-overview & {
+    height: calc(100vh - #{$page-trim-height});
+  }
+  .modal & {
+    height: calc(100vh - #{$modal-padding * 2});
+  }
   background-color: $white;
-  min-height: 100%;
-  overflow: hidden; /* To prevent the "person-history hr" element from overflowing this element's bounds */
 
   $inner-padding: $person-page--inner-padding;
   $left-col-width: 60px;
@@ -23,7 +26,6 @@ person-page {
 
     padding: 20px 0 10px $inner-padding;
     padding-bottom: 0;
-    margin-bottom: 10px;
     background: $gray-5;
 
     .tabs .tab {
@@ -106,8 +108,15 @@ person-page {
   }
 
   .person-tab-content {
+    $top-padding: 10px;
     flex: 1;
     overflow-x: hidden;
-    padding: 10px $compensated-right-padding 0 $inner-padding;
+    padding: $top-padding $compensated-right-padding 0 $inner-padding;
+    organization-overview & {
+      height: calc(100vh - #{$page-trim-height} - #{$person-page--header-height} - #{$top-padding});
+    }
+    .modal & {
+      height: calc(100vh - #{$modal-padding * 2} - #{$person-page--header-height} - #{$top-padding});
+    }
   }
 }
