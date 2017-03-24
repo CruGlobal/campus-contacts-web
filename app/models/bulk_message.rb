@@ -4,6 +4,8 @@ class BulkMessage < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true
 
+  self.table_name = 'legacy_bulk_messages'
+
   attr_accessible :person_id, :organization_id, :status, :results, :organization
 
   serialize :results

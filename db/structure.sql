@@ -260,6 +260,7 @@ CREATE TABLE `authentications` (
   `updated_at` datetime DEFAULT NULL,
   `token` text,
   `mobile_token` text,
+  `invalidated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid_provider` (`uid`,`provider`),
   KEY `user_id` (`user_id`),
@@ -269,24 +270,25 @@ CREATE TABLE `authentications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bulk_messages`
+-- Table structure for table `challenge_suggestions`
 --
 
-DROP TABLE IF EXISTS `bulk_messages`;
+DROP TABLE IF EXISTS `challenge_suggestions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bulk_messages` (
+CREATE TABLE `challenge_suggestions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `person_id` int(11) DEFAULT NULL,
-  `organization_id` int(11) DEFAULT NULL,
-  `status` varchar(255) DEFAULT 'pending',
-  `results` longtext,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_bulk_messages_on_person_id` (`person_id`),
-  KEY `index_bulk_messages_on_organization_id` (`organization_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `challenge_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `locale` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `body` text COLLATE utf8_unicode_ci,
+  `notification_message` text COLLATE utf8_unicode_ci,
+  `notification_delay` int(11) DEFAULT NULL,
+  `pathway_stage_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `self_step` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -885,6 +887,27 @@ CREATE TABLE `labels` (
   KEY `index_labels_on_organization_id` (`organization_id`),
   KEY `index_labels_on_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `legacy_bulk_messages`
+--
+
+DROP TABLE IF EXISTS `legacy_bulk_messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `legacy_bulk_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT 'pending',
+  `results` longtext,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_legacy_bulk_messages_on_person_id` (`person_id`),
+  KEY `index_legacy_bulk_messages_on_organization_id` (`organization_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1982,7 +2005,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-16 13:57:53
+-- Dump completed on 2017-03-24 10:56:41
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2542,4 +2565,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161108201848');
 INSERT INTO schema_migrations (version) VALUES ('20161114212017');
 
 INSERT INTO schema_migrations (version) VALUES ('20161116185540');
+
+INSERT INTO schema_migrations (version) VALUES ('20170324144234');
 
