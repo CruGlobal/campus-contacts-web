@@ -1315,7 +1315,6 @@ class Person < ActiveRecord::Base
         end
       end
 
-      async_get_or_update_friends_and_interests(authentication)
       get_location(authentication, response)
       get_education_history(authentication, response)
 
@@ -1416,40 +1415,6 @@ class Person < ActiveRecord::Base
 
   def email_address=(hash)
     self.email = hash['email']
-  end
-
-  def get_friends(authentication, response = nil)
-    if friends.length == 0
-      if response.nil?
-        response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch
-      end
-      @friends = response.friends
-      @friends.each do |friend|
-        raw_info = friend.raw_attributes
-        Friend.new(raw_info['id'], raw_info['name'], self)
-      end
-      @friends.length # return how many friend you got from facebook for testing
-    end
-  rescue
-    return 0
-  end
-
-  def update_friends(authentication, response = nil)
-    if response.nil?
-      response = FbGraph2::User.new('me').authenticate(authentication['token']).fetch.friends
-    end
-    @fb_friends = response
-    @fb_friends.each do |fb_friend|
-      raw_info = fb_friend.raw_attributes
-      Friend.new(raw_info['id'], raw_info['name'], self)
-    end
-
-    (Friend.followers(self) - @fb_friends.collect { |f| f.raw_attributes['id'] }).each do |uid|
-      Friend.unfollow(self, uid)
-    end
-  rescue => e
-    Rollbar.error(e)
-    return false
   end
 
   def get_location(authentication, response = nil)
@@ -1785,10 +1750,6 @@ class Person < ActiveRecord::Base
     hash['locale'] = user.try(:locale) ? user.locale : ''
     hash['organization_membership'] = organization_objects.collect { |org_id, org| { org_id: org_id, primary: (primary_organization.id == org.id).to_s, name: org.name } }
     hash
-  end
-
-  def async_get_or_update_friends_and_interests(authentication)
-    Jobs::UpdateFB.perform_async(id, authentication, 'friends')
   end
 
   def picture

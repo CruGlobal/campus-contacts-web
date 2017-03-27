@@ -555,21 +555,6 @@ class PersonTest < ActiveSupport::TestCase
       end
     end
 
-    context 'get friendships' do
-      should 'get friends' do
-        # make sure # of friends from MiniFB = # written into DB
-        existing_friends = @person.friend_uids
-        @x = @person.get_friends(@authentication, TestFBResponses::FULL_WITH_FRIENDS)
-        assert_equal(@x, @person.friend_uids.length + existing_friends.length)
-      end
-
-      should 'update friends' do
-        friend1 = Friend.new('1', 'Test User', @person)
-        x = @person.update_friends(@authentication, TestFBResponses::FULL_WITH_FRIENDS)
-        assert(@person.friend_uids.include?(friend1.uid))
-      end
-    end
-
     should 'not create a duplicate email when adding an email they already have' do
       primary_email = @person.email_addresses.create(email: 'test1@example.com')
       assert primary_email.primary?
@@ -702,26 +687,6 @@ class PersonTest < ActiveSupport::TestCase
     person = FactoryGirl.create(:person, fb_uid: '5')
 
     assert_equal(person, Person.find_existing_person(Person.new(fb_uid: '5')))
-  end
-
-  context 'FB update' do
-    setup do
-      @user = FactoryGirl.create(:user_with_auxs)
-      @org = FactoryGirl.create(:organization)
-      @org.add_user(@user.person)
-    end
-
-    should 'run if authentication is present' do
-      Sidekiq::Testing.inline! do
-        assert @user.person.async_get_or_update_friends_and_interests(@user.authentications.first)
-      end
-    end
-
-    should 'not raise error even if authentication is missing' do
-      Sidekiq::Testing.inline! do
-        assert @user.person.async_get_or_update_friends_and_interests(nil)
-      end
-    end
   end
 
   context 'deleting person with utf character' do
