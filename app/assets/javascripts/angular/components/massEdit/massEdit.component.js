@@ -10,7 +10,9 @@
                 close: '&',
                 dismiss: '&'
             },
-            templateUrl: '/assets/angular/components/massEdit/massEdit.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('massEdit');
+            }
         });
 
     function massEditController ($q, massEditService, personService) {

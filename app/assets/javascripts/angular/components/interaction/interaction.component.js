@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('interaction', {
             controller: interactionController,
-            templateUrl: '/assets/angular/components/interaction/interaction.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('interaction');
+            },
             bindings: {
                 person: '<',
                 interaction: '<'

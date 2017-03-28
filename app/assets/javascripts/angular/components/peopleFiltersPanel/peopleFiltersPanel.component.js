@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('peopleFiltersPanel', {
             controller: peopleFiltersPanelController,
-            templateUrl: '/assets/angular/components/peopleFiltersPanel/peopleFiltersPanel.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('peopleFiltersPanel');
+            },
             bindings: {
                 filtersChanged: '&',
                 organizationId: '='

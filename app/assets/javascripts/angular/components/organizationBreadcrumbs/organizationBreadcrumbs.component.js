@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('organizationBreadcrumbs', {
             controller: organizationBreadcrumbsController,
-            templateUrl: '/assets/angular/components/organizationBreadcrumbs/organizationBreadcrumbs.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationBreadcrumbs');
+            }
         });
 
     function organizationBreadcrumbsController ($transitions, $uiRouter, JsonApiDataStore, organizationService) {

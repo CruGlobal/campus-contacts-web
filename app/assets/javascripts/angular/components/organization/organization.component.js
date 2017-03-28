@@ -12,7 +12,9 @@
                 editMode: '<',
                 org: '<'
             },
-            templateUrl: '/assets/angular/components/organization/organization.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organization');
+            },
             transclude: true
         });
 

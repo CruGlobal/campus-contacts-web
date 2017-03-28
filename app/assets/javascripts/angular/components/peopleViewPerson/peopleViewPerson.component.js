@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('peopleViewPerson', {
             controller: peopleViewPersonController,
-            templateUrl: '/assets/angular/components/peopleViewPerson/peopleViewPerson.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('peopleViewPerson');
+            },
             bindings: {
                 person: '<',
                 organizationId: '<'

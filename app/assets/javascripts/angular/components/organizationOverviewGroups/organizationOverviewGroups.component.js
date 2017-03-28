@@ -8,7 +8,9 @@
             require: {
                 organizationOverview: '^'
             },
-            templateUrl: '/assets/angular/components/organizationOverviewGroups/organizationOverviewGroups.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverviewGroups');
+            }
         });
 
     function organizationOverviewGroupsController ($uibModal) {

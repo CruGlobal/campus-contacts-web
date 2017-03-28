@@ -14,7 +14,9 @@
                 addedOutput: '=',
                 removedOutput: '='
             },
-            templateUrl: '/assets/angular/components/multiselectList/multiselectList.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('multiselectList');
+            }
         });
 
     function multiselectListController (multiselectListService, _) {

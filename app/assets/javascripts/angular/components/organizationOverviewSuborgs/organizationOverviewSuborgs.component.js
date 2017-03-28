@@ -8,7 +8,9 @@
             require: {
                 organizationOverview: '^'
             },
-            templateUrl: '/assets/angular/components/organizationOverviewSuborgs/organizationOverviewSuborgs.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverviewSuborgs');
+            }
         });
 
     function organizationOverviewSuborgsController ($scope, $log, reportsService, periodService, _,

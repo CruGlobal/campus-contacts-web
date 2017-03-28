@@ -13,7 +13,9 @@
             require: {
                 personTab: '^personPage'
             },
-            templateUrl: '/assets/angular/components/personHistory/personHistory.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('personHistory');
+            }
         });
 
     function personHistoryController ($scope, $element, $interval, $q, asyncBindingsService,

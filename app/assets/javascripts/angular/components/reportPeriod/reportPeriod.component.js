@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('reportPeriod', {
             controller: reportPeriodController,
-            templateUrl: '/assets/angular/components/reportPeriod/reportPeriod.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('reportPeriod');
+            }
         });
 
     function reportPeriodController (periodService) {

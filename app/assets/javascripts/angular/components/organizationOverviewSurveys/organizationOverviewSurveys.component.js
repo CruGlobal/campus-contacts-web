@@ -7,6 +7,8 @@
             require: {
                 organizationOverview: '^'
             },
-            templateUrl: '/assets/angular/components/organizationOverviewSurveys/organizationOverviewSurveys.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverviewSurveys');
+            }
         });
 })();

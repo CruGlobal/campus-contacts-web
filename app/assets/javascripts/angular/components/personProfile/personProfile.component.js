@@ -8,7 +8,9 @@
             require: {
                 personTab: '^personPage'
             },
-            templateUrl: '/assets/angular/components/personProfile/personProfile.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('personProfile');
+            }
         });
 
     function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery, geoDataService,

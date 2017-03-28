@@ -8,7 +8,9 @@
             require: {
                 organizationOverview: '^'
             },
-            templateUrl: '/assets/angular/components/organizationOverviewPeople/organizationOverviewPeople.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverviewPeople');
+            }
         });
 
     function organizationOverviewPeopleController ($scope, $uibModal, organizationOverviewPeopleService,

@@ -9,7 +9,9 @@
                 collapsed: '=?',
                 collapsible: '=?'
             },
-            templateUrl: '/assets/angular/components/accordion/accordion.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('accordion');
+            },
             transclude: {
                 header: 'accordionHeader',
                 content: 'accordionContent'

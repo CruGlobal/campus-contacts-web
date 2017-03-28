@@ -7,6 +7,8 @@
             bindings: {
                 editMode: '<'
             },
-            templateUrl: '/assets/angular/components/myOrganizationsDashboard/myOrganizationsDashboard.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('myOrganizationsDashboard');
+            }
         });
 })();

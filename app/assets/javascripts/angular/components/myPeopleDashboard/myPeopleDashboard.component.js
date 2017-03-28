@@ -8,7 +8,9 @@
             bindings: {
                 editMode: '<'
             },
-            templateUrl: '/assets/angular/components/myPeopleDashboard/myPeopleDashboard.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('myPeopleDashboard');
+            }
         });
 
     function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,

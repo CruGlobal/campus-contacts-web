@@ -8,7 +8,9 @@
             require: {
                 personTab: '^personPage'
             },
-            templateUrl: '/assets/angular/components/personActivity/personActivity.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('personActivity');
+            }
         });
 
     function personActivityController (interactionsService, reportsService, periodService) {

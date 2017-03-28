@@ -9,7 +9,9 @@
                 organizationId: '<'
             },
             controller: assignedSelectController,
-            templateUrl: '/assets/angular/components/assignedSelect/assignedSelect.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('assignedSelect');
+            }
         });
 
     function assignedSelectController ($scope, assignedSelectService, RequestDeduper) {

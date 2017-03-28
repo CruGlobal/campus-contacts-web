@@ -8,7 +8,9 @@
                 org: '<'
             },
             controller: organizationalStatsController,
-            templateUrl: '/assets/angular/components/organizationalStats/organizationalStats.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationalStats');
+            }
         });
 
     function organizationalStatsController ($scope, periodService, reportsService) {

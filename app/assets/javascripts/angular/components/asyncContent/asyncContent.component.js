@@ -7,7 +7,9 @@
             bindings: {
                 ready: '<'
             },
-            templateUrl: '/assets/angular/components/asyncContent/asyncContent.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('asyncContent');
+            },
             transclude: true
         });
 })();

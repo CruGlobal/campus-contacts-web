@@ -7,6 +7,8 @@
             bindings: {
                 size: '<'
             },
-            templateUrl: '/assets/angular/components/loadingSpinner/loadingSpinner.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('loadingSpinner');
+            }
         });
 })();

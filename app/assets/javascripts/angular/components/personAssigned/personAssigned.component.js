@@ -8,7 +8,9 @@
             require: {
                 personTab: '^personPage'
             },
-            templateUrl: '/assets/angular/components/personAssigned/personAssigned.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('personAssigned');
+            }
         });
 
     function personAssignedController (personAssignedService) {

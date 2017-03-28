@@ -8,7 +8,9 @@
             require: {
                 accordion: '^'
             },
-            templateUrl: '/assets/angular/components/accordionToggle/accordionToggle.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('accordionToggle');
+            }
         });
 
     function accordionToggleController () {

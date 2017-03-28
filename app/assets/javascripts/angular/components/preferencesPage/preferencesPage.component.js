@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('preferencesPage', {
             controller: preferencesPageController,
-            templateUrl: '/assets/angular/components/preferencesPage/preferencesPage.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('preferencesPage');
+            }
         });
 
     function preferencesPageController (preferencesPageService, languageService, _, nativeLocation) {

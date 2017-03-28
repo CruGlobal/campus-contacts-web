@@ -11,7 +11,9 @@
         .component('organizationOverview', {
             controller: organizationOverviewController,
             bindings: bindings,
-            templateUrl: '/assets/angular/components/organizationOverview/organizationOverview.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverview');
+            }
         });
 
     function organizationOverviewController (JsonApiDataStore, asyncBindingsService, ministryViewTabs,

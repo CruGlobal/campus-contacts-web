@@ -8,7 +8,9 @@
             require: {
                 organizationOverview: '^'
             },
-            templateUrl: '/assets/angular/components/organizationOverviewTeam/organizationOverviewTeam.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('organizationOverviewTeam');
+            }
         });
 
     function organizationOverviewTeamController (organizationOverviewTeamService, ProgressiveListLoader) {

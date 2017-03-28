@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('statsHeader', {
             controller: statsHeaderController,
-            templateUrl: '/assets/angular/components/statsHeader/statsHeader.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('statsHeader');
+            }
         });
 
     function statsHeaderController (interactionsService) {

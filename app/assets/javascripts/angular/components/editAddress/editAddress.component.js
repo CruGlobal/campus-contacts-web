@@ -10,7 +10,9 @@
                 close: '&',
                 dismiss: '&'
             },
-            templateUrl: '/assets/angular/components/editAddress/editAddress.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('editAddress');
+            }
         });
 
     function editAddressController (editAddressService, personProfileService, geoDataService, JsonApiDataStore, _) {

@@ -8,7 +8,9 @@
             require: {
                 organization: '^'
             },
-            templateUrl: '/assets/angular/components/unassignedPeople/unassignedPeople.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('unassignedPeople');
+            }
         });
 
     function unassignedPeopleController (lscache) {

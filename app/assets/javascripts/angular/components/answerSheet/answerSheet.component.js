@@ -4,7 +4,9 @@
     angular
         .module('missionhubApp')
         .component('answerSheet', {
-            templateUrl: '/assets/angular/components/answerSheet/answerSheet.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('answerSheet');
+            },
             bindings: {
                 answerSheet: '<',
                 organizationId: '<'

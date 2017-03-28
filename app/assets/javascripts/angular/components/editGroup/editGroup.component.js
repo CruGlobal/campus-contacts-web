@@ -10,7 +10,9 @@
                 close: '&',
                 dismiss: '&'
             },
-            templateUrl: '/assets/angular/components/editGroup/editGroup.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('editGroup');
+            }
         });
 
     function editGroupController (groupsService, editGroupService, _) {

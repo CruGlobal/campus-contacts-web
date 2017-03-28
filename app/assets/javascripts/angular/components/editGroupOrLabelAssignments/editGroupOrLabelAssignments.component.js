@@ -10,7 +10,9 @@
                 close: '&',
                 dismiss: '&'
             },
-            templateUrl: '/assets/angular/components/editGroupOrLabelAssignments/editGroupOrLabelAssignments.html'
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('editGroupOrLabelAssignments');
+            }
         });
 
     function editGroupOrLabelAssignmentsController (editGroupOrLabelAssignmentsService, JsonApiDataStore, _) {
