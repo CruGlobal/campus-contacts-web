@@ -198,7 +198,7 @@
                 vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
             } else {
                 vm.personTab.orgPermission.permission_id = oldValue;
-                jQuery.a($filter('t')('people.index.for_this_permission_email_is_required_no_name'));
+                jQuery.a($filter('t')('contacts.index.for_this_permission_email_is_required_no_name'));
             }
         }
 
