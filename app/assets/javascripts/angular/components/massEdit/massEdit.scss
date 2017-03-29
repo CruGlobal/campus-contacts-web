@@ -1,0 +1,16 @@
+@import '../multiselectList/variables';
+
+mass-edit {
+  .modal-body {
+    max-height: calc(100vh - 60px /* modal padding */ - 117px /* header height */ - 51px /* footer height */);
+    overflow-y: auto;
+  }
+
+  multiselect-list {
+    $visible-pills: 5;
+    display: block;
+    max-height: ($multiselect-list--entry-height + $multiselect-list--entry-padding) * $visible-pills +
+                $multiselect-list--entry-height / 2;
+    overflow-y: auto;
+  }
+}

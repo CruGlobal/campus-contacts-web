@@ -98,6 +98,7 @@ en:
       male: M
       name: Name
       status: Status
+      selected_contacts: '%{contactCount} contacts selected'
       activity:
         header: Activity
       assigned:
@@ -1027,6 +1028,7 @@ en:
     system_labels: System Labels
     title: '%{org} Labels'
   mass_edit:
+    save: Edit %{contactCount} contacts
     title: Edit Contacts
     unchanged: Unchanged
   member: Member

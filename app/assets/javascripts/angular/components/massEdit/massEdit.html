@@ -28,7 +28,9 @@
     <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
     <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
             ng-disabled="$ctrl.saving">
-        <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
+        <span ng-hide="$ctrl.saving">
+            {{ 'mass_edit.save' | t : { contactCount: $ctrl.resolve.selection.totalSelectedPeople } }}
+        </span>
         <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
     </button>
 </div>

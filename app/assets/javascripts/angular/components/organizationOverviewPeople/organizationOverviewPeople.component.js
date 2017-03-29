@@ -31,6 +31,7 @@
         vm.filtersChanged = filtersChanged;
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
+        vm.clearSelection = clearSelection;
 
         var requestDeduper = new RequestDeduper();
         var listLoader = new ProgressiveListLoader('person', requestDeduper);
@@ -133,6 +134,7 @@
                             filters: vm.filters,
                             selectedPeople: getSelectedPeople(),
                             unselectedPeople: getUnselectedPeople(),
+                            totalSelectedPeople: vm.selectedCount,
                             allSelected: vm.selectAllValue,
                             allIncluded: vm.loadedAll
                         };
@@ -174,6 +176,11 @@
                     vm.selectAllValue = originalSelectAllValue && getSelectedPeople().length > 0;
                 });
             });
+        }
+
+        function clearSelection () {
+            vm.selectAllValue = false;
+            vm.multiSelection = {};
         }
     }
 })();

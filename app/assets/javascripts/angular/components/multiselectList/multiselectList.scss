@@ -2,10 +2,12 @@ multiselect-list {
   ul {
     list-style: none;
     padding: 0;
+    margin-bottom: 0;
   }
 
   li {
-    margin-bottom: .5em;
+    height: $multiselect-list--entry-height;
+    margin-bottom: $multiselect-list--entry-padding;
   }
 
   .pill {
