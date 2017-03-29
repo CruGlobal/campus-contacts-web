@@ -32,7 +32,7 @@ person-history {
   $interactionSheetHeight: $sheetItemHeight * $interactionTypeCount;
 
   .scrollable-area {
-    $header-height: $person-page--header-height /* title and tabs */ + 54px /* filters */ + 1px /* hr */;
+    $header-height: $person-page--header-height /* title and tabs */ + 44px /* filters */ + 1px /* hr */;
     organization-overview & {
       height: calc(100vh - #{$page-trim-height} - #{$header-height});
     }
