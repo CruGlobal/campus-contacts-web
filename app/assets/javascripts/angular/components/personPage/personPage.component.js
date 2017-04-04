@@ -1,12 +1,6 @@
 (function () {
     'use strict';
 
-    var bindings = {
-        stateName: '<',
-        person: '<',
-        organizationId: '<'
-    };
-
     angular
         .module('missionhubApp')
         .component('personPage', {
@@ -14,7 +8,11 @@
             templateUrl: /* @ngInject */ function (templateUrl) {
                 return templateUrl('personPage');
             },
-            bindings: bindings
+            bindings: {
+                stateName: '<',
+                person: '<',
+                organizationId: '<'
+            }
         });
 
     function personPageController ($scope, $state, $filter, asyncBindingsService, personService, personTabs,
@@ -28,14 +26,7 @@
         vm.updateLabels = updateLabels;
         vm.dismiss = dismiss;
         vm.updateGroupMemberships = updateGroupMemberships;
-        vm.$onInit = preactivate;
-
-        function preactivate () {
-            asyncBindingsService.resolveAsyncBindings(vm, _.keys(bindings)).then(function () {
-                vm.ready = true;
-                activate();
-            });
-        }
+        vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['person', 'organizationId']);
 
         function activate () {
             vm.orgPermission = personService.getOrgPermission(vm.person, vm.organizationId);

@@ -8,8 +8,14 @@
 
     angular
         .module('missionhubApp')
-        .config(function ($stateProvider, $urlServiceProvider, $uibResolveProvider,
+        .config(function ($stateProvider, $urlServiceProvider, $uibResolveProvider, asyncBindingsServiceProvider,
                           ministryViewTabs, ministryViewDefaultTab, personTabs, personDefaultTab, _) {
+            // Instantiate factories
+            var asyncBindingsService = asyncBindingsServiceProvider.$get();
+
+            // Convenience alias
+            var lazyLoadedResolve = asyncBindingsService.lazyLoadedResolve;
+
             // Hack $stateProvider.state to support a custom state property "modal" that turns the state into a modal
             // dialog. An Angular decorator would be preferable, but there is no way of decorating a provider.
             var originalState = $stateProvider.state;
@@ -102,10 +108,10 @@
             // The key is the tab name and the name is a dictionary of extra resolves
             var personTabResolves = {
                 history: {
-                    history: /* @ngInject */ function ($uiRouter, routesService) {
+                    history: lazyLoadedResolve(/* @ngInject */ function ($uiRouter, routesService) {
                         var $transition$ = $uiRouter.globals.transition;
                         return routesService.getHistory($transition$.params().personId);
-                    }
+                    })
                 }
             };
 
@@ -121,7 +127,6 @@
                     component: 'personPage',
                     abstract: true,
                     modal: state.modal,
-                    resolvePolicy: { async: 'NOWAIT' },
                     resolve: {
                         // We have to send the state name to the personPage component so that route links will work when
                         // the person page is in a modal. Relative ui-state directives work fine when the person page is
@@ -131,20 +136,20 @@
                         // based on its current state.
                         stateName: _.constant(state.name),
 
-                        person: /* @ngInject */ function ($state, $uiRouter, routesService) {
+                        person: lazyLoadedResolve(/* @ngInject */ function ($state, $uiRouter, routesService) {
                             var $transition$ = $uiRouter.globals.transition;
                             return routesService.getPerson($transition$.params().personId).catch(function () {
-                                // Go back to the parent state if the person could not be found
+                            // Go back to the parent state if the person could not be found
                                 $state.go(getParentState(state.name), { orgId: $transition$.params().orgId });
 
                                 throw new Error('Person could not be loaded');
                             });
-                        },
+                        }),
 
-                        organizationId: /* @ngInject */ function ($uiRouter) {
+                        organizationId: lazyLoadedResolve(/* @ngInject */ function ($uiRouter) {
                             var $transition$ = $uiRouter.globals.transition;
                             return $transition$.params().orgId;
-                        }
+                        })
                     }
                 });
 
@@ -156,7 +161,6 @@
                     states.push({
                         name: state.name + '.' + tab,
                         url: '/' + tab,
-                        resolvePolicy: { async: 'NOWAIT' },
                         resolve: personTabResolves[tab],
                         views: state.modal ? { 'personTab@': personTabView } : { personTab: personTabView }
                     });
@@ -222,16 +226,15 @@
                     url: '/:orgId',
                     component: 'organizationOverview',
                     abstract: true,
-                    resolvePolicy: { async: 'NOWAIT' },
                     resolve: {
-                        org: function ($state, $transition$, routesService) {
+                        org: lazyLoadedResolve(/* @ngInject */ function ($state, $transition$, routesService) {
                             return routesService.getOrganization($transition$.params().orgId).catch(function () {
                                 // Go to the root organization if the organization could not be loaded
                                 $state.go('app.ministries.root');
 
                                 throw new Error('Organization could not be loaded');
                             });
-                        }
+                        })
                     }
                 })
                 .state({
