@@ -13,8 +13,8 @@
             }
         });
 
-    function organizationOverviewPeopleController ($scope, $uibModal, organizationOverviewPeopleService,
-                                                   RequestDeduper, ProgressiveListLoader, _) {
+    function organizationOverviewPeopleController ($scope, $filter, $uibModal, organizationOverviewPeopleService,
+                                                   confirmModalService, RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
         vm.multiSelection = {};
@@ -31,6 +31,8 @@
         vm.filtersChanged = filtersChanged;
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
+        vm.archivePeople = archivePeople;
+        vm.deletePeople = deletePeople;
         vm.clearSelection = clearSelection;
 
         var requestDeduper = new RequestDeduper();
@@ -122,23 +124,25 @@
             });
         }
 
+        // Get the current selection in a standard form
+        function getSelection () {
+            return {
+                orgId: vm.organizationOverview.org.id,
+                filters: vm.filters,
+                selectedPeople: getSelectedPeople(),
+                unselectedPeople: getUnselectedPeople(),
+                totalSelectedPeople: vm.selectedCount,
+                allSelected: vm.selectAllValue,
+                allIncluded: vm.loadedAll
+            };
+        }
+
         // Open a modal to mass-edit all selected people
         function massEdit () {
-            var orgId = vm.organizationOverview.org.id;
             $uibModal.open({
                 component: 'massEdit',
                 resolve: {
-                    selection: function () {
-                        return {
-                            orgId: orgId,
-                            filters: vm.filters,
-                            selectedPeople: getSelectedPeople(),
-                            unselectedPeople: getUnselectedPeople(),
-                            totalSelectedPeople: vm.selectedCount,
-                            allSelected: vm.selectAllValue,
-                            allIncluded: vm.loadedAll
-                        };
-                    }
+                    selection: _.constant(getSelection())
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'
@@ -151,7 +155,7 @@
                 if (!filtersApplied) {
                     // When there are no filters, we only need to make sure that all the people that people in the list
                     // are assigned to are loaded
-                    organizationOverviewPeopleService.loadAssignedTos(vm.people, orgId);
+                    organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.organizationOverview.org.id);
                     return;
                 }
 
@@ -176,6 +180,57 @@
                     vm.selectAllValue = originalSelectAllValue && getSelectedPeople().length > 0;
                 });
             });
+        }
+
+        // Remove the selected people
+        // This is an abstract method that can both archive and remove people
+        function removePeople (message, performRemoval) {
+            var selection = getSelection();
+            confirmModalService.create($filter('t')(message, { contact_count: vm.selectedCount }))
+                .then(function () {
+                    return performRemoval(selection);
+                })
+                .then(function () {
+                    // Partition loaded people by whether or not they are removed
+                    var partition = _.partition(vm.people, function (person) {
+                        return _.includes(selection.selectedPeople, person.id);
+                    });
+                    var removedPeople = partition[0];
+                    var remainingPeople = partition[1];
+
+                    // Update the people list and count
+                    vm.people = remainingPeople;
+                    vm.totalCount -= removedPeople.length;
+                    listLoader.reset(vm.people);
+
+                    // Update the people count shown in the people tab
+                    if (vm.organizationOverview.people) {
+                        vm.organizationOverview.people.length -= removedPeople.length;
+                    }
+
+                    // Remove the selection state of removed people
+                    removedPeople.forEach(function (person) {
+                        delete vm.multiSelection[person.id];
+                    });
+                })
+                .then(function () {
+                    // Instruct the infinite scroller to check whether more people should be loaded because after
+                    // removing some people, the list will be shorter and may now be at the bottom. However, do this in
+                    // the next digest cycle after all of the removed people have been removed from the UI.
+                    $scope.$applyAsync(function () {
+                        $scope.$emit('checkInfiniteScroll');
+                    });
+
+                    $scope.$broadcast('massEditApplied');
+                });
+        }
+
+        function archivePeople () {
+            removePeople('ministries.people.archive_people_confirm', organizationOverviewPeopleService.archivePeople);
+        }
+
+        function deletePeople () {
+            removePeople('ministries.people.delete_people_confirm', organizationOverviewPeopleService.deletePeople);
         }
 
         function clearSelection () {

@@ -30,7 +30,9 @@
             student_status: { type: 'person' },
             gender: { type: 'person' },
             followup_status: { type: 'permission' },
-            cru_status: { type: 'permission' }
+            cru_status: { type: 'permission' },
+            archived: { type: null },
+            delete: { type: null }
         };
 
         // List of mass editable attributes that are simple values

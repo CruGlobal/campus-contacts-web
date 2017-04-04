@@ -99,6 +99,8 @@ en:
       name: Name
       status: Status
       selected_contacts: '%{contactCount} contacts selected'
+      archive_people_confirm: Are you sure you want to archive %{contact_count} contacts?
+      delete_people_confirm: Are you sure you want to delete %{contact_count} contacts?
       activity:
         header: Activity
       assigned:

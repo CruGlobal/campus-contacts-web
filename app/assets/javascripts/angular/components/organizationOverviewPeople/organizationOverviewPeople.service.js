@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .factory('organizationOverviewPeopleService', organizationOverviewPeopleService);
 
-    function organizationOverviewPeopleService ($q, httpProxy, modelsService, _) {
+    function organizationOverviewPeopleService ($q, httpProxy, modelsService, massEditService, _) {
         var organizationOverviewPeopleService = {
             // Load all of the people that a list of people are assigned to
             loadAssignedTos: function (people, orgId) {
@@ -82,6 +82,16 @@
                     .then(function (resp) {
                         return resp.meta.total;
                     });
+            },
+
+            // Archive the selected people
+            archivePeople: function (selection) {
+                return massEditService.applyChanges(selection, { archived: true });
+            },
+
+            // Delete the selected people
+            deletePeople: function (selection) {
+                return massEditService.applyChanges(selection, { delete: true });
             }
         };
         return organizationOverviewPeopleService;

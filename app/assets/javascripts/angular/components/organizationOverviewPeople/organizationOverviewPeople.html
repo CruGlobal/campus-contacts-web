@@ -40,6 +40,8 @@
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
             {{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}
             <ng-md-icon class="actionable" icon="edit" size="16" ng-click="$ctrl.massEdit()"></ng-md-icon>
+            <ng-md-icon class="actionable" icon="archive" size="16" ng-click="$ctrl.archivePeople()"></ng-md-icon>
+            <ng-md-icon class="actionable" icon="delete" size="16" ng-click="$ctrl.deletePeople()"></ng-md-icon>
             <div class="space"></div>
             <ng-md-icon class="actionable" icon="close" size="16" ng-click="$ctrl.clearSelection()"></ng-md-icon>
         </div>
@@ -48,6 +50,7 @@
                  infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
                  infinite-scroll-distance="0"
                  infinite-scroll-container="'organization-overview-people .scroll-contain'"
+                 infinite-scroll-listen-for-event="checkInfiniteScroll"
                  class="grid-content">
                 <ministry-view-person ng-repeat="person in $ctrl.people | orderBy: ['last_name','first_name'] track by person.id"
                                       ng-class="{ collapsed: ('app.ministries.ministry.people.person' | includedByState),
