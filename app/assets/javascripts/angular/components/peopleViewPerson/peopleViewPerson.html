@@ -25,16 +25,12 @@
     </div>
 
     <!-- Email -->
-    <a ng-href="mailto:{{$ctrl.person.email_addresses[0].email}}"
-       ng-if="$ctrl.person.email_addresses.length > 0"
+    <a ng-href="{{$ctrl.person.email_addresses[0].email | mailto}}"
        analytics-on="click" analytics-category="Dashboard" analytics-event="Send Email">
-        <round-button>
+        <icon-button icon="'email'" disabled="$ctrl.person.email_addresses.length === 0">
             <ng-md-icon icon="email"></ng-md-icon>
-        </round-button>
+        </icon-button>
     </a>
-    <round-button class="disabled" ng-if="$ctrl.person.email_addresses.length == 0">
-        <ng-md-icon icon="email"></ng-md-icon>
-    </round-button>
 
     <div class="addInteractionButtons" ng-if="$ctrl.addInteractionBtnsVisible">
         <square-button ng-repeat="type in $ctrl.interactionTypes"

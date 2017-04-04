@@ -1,4 +1,4 @@
-round-button {
+icon-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,18 +8,19 @@ round-button {
   fill: $pivot-dark-blue;
   margin-left: 8px;
   margin-right: 8px;
-  cursor: pointer;
-  & > ng-md-icon {
+  ng-md-icon {
     display: inherit;
-  }
-  & + round-button {
-    margin-left: 0;
-  }
-  &.disabled {
-    cursor: initial;
-    opacity: 0.3;
-    &:hover, &:active {
-      background: none;
+    cursor: pointer;
+
+    &.disabled {
+      cursor: initial;
+      opacity: 0.3;
+      &:hover, &:active {
+        background: none;
+      }
     }
+  }
+  & + icon-button {
+    margin-left: 0;
   }
 }

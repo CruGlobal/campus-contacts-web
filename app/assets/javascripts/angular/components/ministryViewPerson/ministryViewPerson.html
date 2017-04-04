@@ -25,12 +25,7 @@
     <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>
 </div>
 <div class="column detail-column button-column">
-    <a ng-href="mailto:{{$ctrl.emailAddress.email}}" ng-if="$ctrl.emailAddress">
-        <round-button ng-class="{disabled: !$ctrl.emailAddress}">
-            <ng-md-icon icon="email"></ng-md-icon>
-        </round-button>
+    <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
+        <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
     </a>
-    <round-button class="disabled" ng-if="!$ctrl.emailAddress">
-        <ng-md-icon icon="email"></ng-md-icon>
-    </round-button>
 </div>

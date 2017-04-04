@@ -27,14 +27,10 @@
                 <span>{{'ministries.people.status' | t}}</span>
             </div>
             <div class="column detail-column phone-number-column">
-                <round-button class="disabled">
-                    <ng-md-icon icon="phone"></ng-md-icon>
-                </round-button>
+                <icon-button icon="'phone'" disabled="true"></icon-button>
             </div>
             <div class="column detail-column button-column">
-                <round-button class="disabled">
-                    <ng-md-icon icon="email"></ng-md-icon>
-                </round-button>
+                <icon-button icon="'email'" disabled="true"></icon-button>
             </div>
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">

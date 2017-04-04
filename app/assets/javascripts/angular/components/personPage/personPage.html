@@ -17,14 +17,9 @@
                 </span>
             </div>
             <div class="row">
-                <a ng-href="mailto:{{$ctrl.primaryEmail.email}}" ng-if="$ctrl.primaryEmail">
-                    <round-button>
-                        <ng-md-icon icon="email"></ng-md-icon>
-                    </round-button>
+                <a ng-href="{{$ctrl.primaryEmail.email | mailto}}">
+                    <icon-button icon="'email'" disabled="!$ctrl.primaryEmail"></icon-button>
                 </a>
-                <round-button class="disabled" ng-if="!$ctrl.primaryEmail">
-                    <ng-md-icon icon="email"></ng-md-icon>
-                </round-button>
 
                 <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
             </div>
