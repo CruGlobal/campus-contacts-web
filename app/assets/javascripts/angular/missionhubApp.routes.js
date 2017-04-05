@@ -54,6 +54,7 @@
                     name: state.name,
                     url: state.url,
                     abstract: state.abstract,
+                    params: state.params,
                     onEnter: /* @ngInject */ function ($state, $uibModal) {
                         closedByRouteChange = false;
 
@@ -126,6 +127,7 @@
                     url: state.url,
                     component: 'personPage',
                     abstract: true,
+                    params: state.params,
                     modal: state.modal,
                     resolve: {
                         // We have to send the state name to the personPage component so that route links will work when
@@ -135,12 +137,24 @@
                         // solve this, we send the state name to the component so that it can generate absolute links
                         // based on its current state.
                         stateName: _.constant(state.name),
-
-                        person: lazyLoadedResolve(/* @ngInject */ function ($state, $uiRouter, routesService) {
+                        person: lazyLoadedResolve(/* @ngInject */ function ($state, $uiRouter,
+                                                                            routesService, personService) {
+                            // Ideally, we would inject $transition$, an object representing that ui-router makes
+                            // available to states' resolves. However, when the state is refers to a state in a modal,
+                            // the resolve will not have access to that transition, so we have to get it from the
+                            // a ui-router global that is injectable everywhere.
                             var $transition$ = $uiRouter.globals.transition;
-                            return routesService.getPerson($transition$.params().personId).catch(function () {
-                            // Go back to the parent state if the person could not be found
-                                $state.go(getParentState(state.name), { orgId: $transition$.params().orgId });
+                            var params = $transition$.params();
+
+                            if (params.personId === 'new') {
+                                // We are creating a new person instead of editing an existing one, so generate that
+                                // new person model
+                                return personService.getNewPerson(params.orgId);
+                            }
+
+                            return routesService.getPerson(params.personId).catch(function () {
+                                // Go back to the parent state if the person could not be found
+                                $state.go(getParentState(state.name), { orgId: params.orgId });
 
                                 throw new Error('Person could not be loaded');
                             });
@@ -241,6 +255,14 @@
                     name: 'app.ministries.ministry.defaultTab',
                     redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab
                 })
+                .states(generatePersonPageStates({
+                    name: 'app.ministries.ministry.people.new',
+                    url: '/new',
+                    modal: true,
+                    params: {
+                        personId: { value: 'new' }
+                    }
+                }))
                 .states(ministryViewTabs.map(function (tab) {
                     return {
                         name: 'app.ministries.ministry.' + tab,

@@ -138,7 +138,7 @@
                 <div class="row">
                     <input type="email" class="normal-column form-control"
                            ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
-                           ng-change="$ctrl.saveAttribute(emailAddress, 'email')">
+                           ng-change="$ctrl.saveRelationship(emailAddress, 'email', 'email_addresses')">
                 </div>
             </label>
         </div>
@@ -163,7 +163,7 @@
                 <div class="row">
                     <input type="tel" class="normal-column form-control"
                            ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
-                           ng-change="$ctrl.saveAttribute(phoneNumber, 'number')">
+                           ng-change="$ctrl.saveRelationship(phoneNumber, 'number', 'phone_numbers')">
                 </div>
             </label>
         </div>

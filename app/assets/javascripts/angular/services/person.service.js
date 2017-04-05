@@ -18,6 +18,34 @@
         }
 
         var personService = {
+            // Return a new person model without any data
+            getNewPerson: function (orgId) {
+                var orgPermission = new JsonApiDataStore.Model('organizational_permission');
+                orgPermission.setAttribute('organization_id', orgId);
+                orgPermission.setAttribute('followup_status', 'uncontacted');
+                orgPermission.setAttribute('permission_id', 2);
+                orgPermission.setAttribute('cru_status', 'none');
+                orgPermission.setRelationship('organization', JsonApiDataStore.store.find('organization', orgId));
+
+                var person = new JsonApiDataStore.Model('person', null);
+                person.setAttribute('first_name', '');
+                person.setAttribute('last_name', '');
+                person.setAttribute('full_name', '');
+                person.setAttribute('gender', 'Male');
+                person.setAttribute('student_status', 'collegiate');
+                person.setRelationship('organizational_permissions', [orgPermission]);
+                person.setRelationship('email_addresses', []);
+                person.setRelationship('phone_numbers', []);
+                person.setRelationship('addresses', []);
+                person.setRelationship('reverse_contact_assignments', []);
+                person.setRelationship('answer_sheets', []);
+                person.setRelationship('interactions', []);
+                person.setRelationship('contact_assignments', []);
+                person.setRelationship('organizational_labels', []);
+                person.setRelationship('group_memberships', []);
+                return person;
+            },
+
             // Find and return a person's organizational permission for a particular organization
             getOrgPermission: function (person, organizationId) {
                 return _.chain(person.organizational_permissions)

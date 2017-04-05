@@ -22,6 +22,7 @@
         vm.modalInstance = null;
 
         vm.saveAttribute = saveAttribute;
+        vm.saveRelationship = saveRelationship;
         vm.emailAddressesWithPending = emailAddressesWithPending;
         vm.phoneNumbersWithPending = phoneNumbersWithPending;
         vm.isPendingEmailAddress = isPendingEmailAddress;
@@ -62,6 +63,12 @@
             $scope.$watch('$ctrl.personTab.primaryPhone', updatePrimary);
 
             $scope.$watchCollection('$ctrl.personTab.assignedTo', function (newAssignedTo, oldAssignedTo) {
+                if (newAssignedTo === oldAssignedTo) {
+                    return;
+                }
+
+                $scope.$emit('personModified');
+
                 var addedPeople = _.difference(newAssignedTo, oldAssignedTo);
                 personProfileService.addAssignments(vm.personTab.person, vm.personTab.organizationId, addedPeople);
 
@@ -99,13 +106,29 @@
         }
 
         function saveAttribute (model, attribute) {
-            personProfileService.saveAttribute(vm.personTab.person.id, model, attribute).then(function () {
-                if (model === vm.pendingEmailAddress) {
+            $scope.$emit('personModified');
+
+            personProfileService.saveAttribute(vm.personTab.person.id, model, attribute);
+        }
+
+        function saveRelationship (relationship, attribute, relationshipName) {
+            $scope.$emit('personModified');
+
+            var savePromise = personProfileService.saveRelationship(vm.personTab.person, relationship,
+                                                                    relationshipName, attribute);
+            savePromise.then(function () {
+                if (relationship === vm.pendingEmailAddress) {
                     vm.pendingEmailAddress = null;
-                } else if (model === vm.pendingPhoneNumber) {
+                } else if (relationship === vm.pendingPhoneNumber) {
                     vm.pendingPhoneNumber = null;
                 }
             });
+        }
+
+        function deleteRelationship (relationship, relationshipName) {
+            $scope.$emit('personModified');
+
+            personProfileService.deleteRelationship(vm.personTab.person, relationship, relationshipName);
         }
 
         function emailAddressesWithPending () {
@@ -135,19 +158,19 @@
         // Add a new email address to the person
         // The email address is not actually saved to the server until the call to saveAttribute
         function addEmailAddress () {
-            vm.pendingEmailAddress = {
-                _type: 'email_address',
-                person_id: vm.personTab.person.id
-            };
+            vm.pendingEmailAddress = new JsonApiDataStore.Model('email_address');
+            vm.pendingEmailAddress.setAttribute('person_id', vm.personTab.person.id);
+            vm.pendingEmailAddress.setAttribute('email', '');
+            vm.pendingEmailAddress.setAttribute('primary', false);
         }
 
         // Add a new phone number to the person
         // The phone number is not actually saved to the server until the call to saveAttribute
         function addPhoneNumber () {
-            vm.pendingPhoneNumber = {
-                _type: 'phone_number',
-                person_id: vm.personTab.person.id
-            };
+            vm.pendingPhoneNumber = new JsonApiDataStore.Model('phone_number');
+            vm.pendingPhoneNumber.setAttribute('person_id', vm.personTab.person.id);
+            vm.pendingPhoneNumber.setAttribute('number', '');
+            vm.pendingPhoneNumber.setAttribute('primary', false);
         }
 
         function deleteEmailAddress (emailAddress) {
@@ -155,10 +178,7 @@
             var confirmModal = confirmModalService.create(message);
 
             confirmModal.then(function () {
-                return personProfileService.deleteModel(emailAddress).then(function () {
-                    // Remove the deleted email address
-                    _.pull(vm.personTab.person.email_addresses, emailAddress);
-                });
+                deleteRelationship(emailAddress, 'email_addresses');
             });
         }
 
@@ -167,10 +187,7 @@
             var confirmModal = confirmModalService.create(message);
 
             confirmModal.then(function () {
-                return personProfileService.deleteModel(phoneNumber).then(function () {
-                    // Remove the deleted phone number
-                    _.pull(vm.personTab.person.phone_numbers, phoneNumber);
-                });
+                deleteRelationship(phoneNumber, 'phone_numbers');
             });
         }
 
@@ -179,10 +196,7 @@
             var confirmModal = confirmModalService.create(message);
 
             confirmModal.then(function () {
-                return personProfileService.deleteModel(address).then(function () {
-                    // Remove the deleted address
-                    _.pull(vm.personTab.person.addresses, address);
-                });
+                deleteRelationship(address, 'addresses');
             });
         }
 
@@ -230,6 +244,8 @@
             });
 
             vm.modalInstance.result.then(function () {
+                $scope.$emit('personModified');
+
                 updateFunction();
             }).finally(function () {
                 vm.modalInstance = null;
@@ -238,7 +254,7 @@
 
         // Open an address for editing in a modal dialog
         function editAddress (address) {
-            $uibModal.open({
+            var addressModal = $uibModal.open({
                 animation: true,
                 component: 'editAddress',
                 resolve: {
@@ -246,8 +262,8 @@
                         return vm.personTab.organizationId;
                     },
 
-                    personId: function () {
-                        return vm.personTab.person.id;
+                    person: function () {
+                        return vm.personTab.person;
                     },
 
                     address: function () {
@@ -256,6 +272,10 @@
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'
+            });
+
+            addressModal.result.then(function () {
+                $scope.$emit('personModified');
             });
         }
     }

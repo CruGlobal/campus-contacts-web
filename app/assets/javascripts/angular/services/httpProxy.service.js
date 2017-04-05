@@ -142,6 +142,14 @@
                     .then(function () {
                         return JsonApiDataStore.store.find(type, id);
                     });
+            },
+
+            // Generate a JSON API "included" array from an array of models
+            includedFromModels: function (models) {
+                return models.map(function (model) {
+                    // Don't send the relationships' relationships
+                    return model.serialize({ relationships: [] }).data;
+                });
             }
         };
 

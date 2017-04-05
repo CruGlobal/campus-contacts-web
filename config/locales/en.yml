@@ -1293,7 +1293,7 @@ en:
       delete_address_confirm: Are you sure you want to delete this address?
       delete_email_confirm: Are you sure you want to delete this email address?
       delete_phone_confirm: Are you sure you want to delete this phone number?
-      delete_address_confirm: Are you sure you want to delete this address?
+      cancel_create_confirm: Are you sure you want to discard this unsaved contact?
     form:
       facebook_url: 'Facebook Profile Url:'
       facebook_url_tip: You can manually search facebook for this person's profile if they haven't already connected. Keep in mind that some people set their facebook privacy settings such that they won't show up in this search.

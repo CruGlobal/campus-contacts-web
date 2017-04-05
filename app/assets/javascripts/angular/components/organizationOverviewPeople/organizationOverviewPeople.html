@@ -14,8 +14,9 @@
             <div class="column select-column">
                 <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
             </div>
-            <div class="column important-column">
-                <span>{{'ministries.people.name' | t}}</span>
+            <div class="column important-column row">
+                <span class="normal-column">{{'ministries.people.name' | t}}</span>
+                <icon-button icon="'person_add'" ui-sref=".new.defaultTab"></icon-button>
             </div>
             <div class="column detail-column gender-column">
                 <span>{{'ministries.people.gender' | t}}</span>

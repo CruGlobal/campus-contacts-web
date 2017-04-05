@@ -57,6 +57,12 @@
                 };
             });
 
+            it('should not save relationships on unpersisted people', function () {
+                this.person.id = null;
+                personProfileService.saveAttribute(null, this.person, 'key');
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
+            });
+
             it('should update individual person attributes', function () {
                 personProfileService.saveAttribute(this.personId, this.person, 'key1');
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
@@ -154,7 +160,102 @@
             });
         });
 
+        describe('saveRelationship', function () {
+            beforeEach(function () {
+                this.person = {
+                    id: null,
+                    relationships: [{ key: 'value' }]
+                };
+
+                this.newRelationship = { key: 'value2' };
+            });
+
+            it('should not save relationships on unpersisted people', function () {
+                personProfileService.saveRelationship(this.person, this.newRelationship, 'relationships');
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
+            });
+
+            it('should save relationships on persisted people', function () {
+                this.person.id = 1;
+                spyOn(httpProxy, 'includedFromModels').and.returnValue({});
+                personProfileService.saveRelationship(this.person, this.newRelationship, 'relationships');
+                expect(httpProxy.callHttp).toHaveBeenCalled();
+            });
+
+            it('should add created relationships on unpersisted people', function () {
+                personProfileService.saveRelationship(this.person, this.newRelationship, 'relationships');
+                expect(_.map(this.person.relationships, 'key')).toEqual(['value', 'value2']);
+            });
+
+            it('should not add updated relationships on unpersisted people', function () {
+                personProfileService.saveRelationship(this.person, this.person.relationships[0], 'relationships');
+                expect(_.map(this.person.relationships, 'key')).toEqual(['value']);
+            });
+        });
+
+        describe('deleteRelationship', function () {
+            it('should call deleteRelationships', function () {
+                this.person = { id: 1 };
+                this.relationship = { id: 2 };
+
+                spyOn(personProfileService, 'deleteRelationships');
+                personProfileService.deleteRelationship(this.person, this.relationship, 'relationships');
+                expect(personProfileService.deleteRelationships)
+                    .toHaveBeenCalledWith(this.person, [this.relationship], 'relationships');
+            });
+        });
+
+        describe('deleteRelationships', function () {
+            beforeEach(function () {
+                this.relationship1 = { key: 'value1' };
+                this.relationship2 = { key: 'value2' };
+                this.relationship3 = { key: 'value3' };
+                this.relationships = [this.relationship1, this.relationship2];
+                this.person = {
+                    id: null,
+                    relationships: [this.relationship1, this.relationship2, this.relationship3]
+                };
+            });
+
+            it('should not delete unpersisted models', function () {
+                personProfileService.deleteRelationships(this.person, this.relationships, 'relationships');
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
+            });
+
+            it('should delete persisted models', function () {
+                this.person.id = 1;
+                personProfileService.deleteRelationships(this.person, this.relationships, 'relationships');
+                expect(httpProxy.callHttp).toHaveBeenCalled();
+            });
+
+            it('should remove deleted models from the relationship', asynchronous(function () {
+                var _this = this;
+                return personProfileService.deleteRelationships(this.person, this.relationships, 'relationships')
+                    .then(function () {
+                        expect(_this.person.relationships).toEqual([_this.relationship3]);
+                    });
+            }));
+        });
+
         describe('addAssignments', function () {
+            it('should not make a network request when adding assignments to an unpersisted person', function () {
+                this.person.id = null;
+                personProfileService.addAssignments(this.person, this.organizationId, [{ id: 104 }, { id: 105 }]);
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
+            });
+
+            it('should save assignments locally when adding assignments to an unpersisted person', function () {
+                this.person.id = null;
+                personProfileService.addAssignments(this.person, this.organizationId, [{ id: 104 }, { id: 105 }]);
+                var assignedToIds = _.chain(this.person.reverse_contact_assignments)
+                    .filter(function (assignment) {
+                        return assignment._placeHolder !== true;
+                    })
+                    .map('assigned_to.id')
+                    .chain();
+                expect(assignedToIds, [101, 102, 103, 104, 105]);
+            });
+
             it('should not make a network request when adding no assignments', function () {
                 personProfileService.addAssignments(this.person, this.organizationId, []);
                 expect(httpProxy.callHttp).not.toHaveBeenCalled();
@@ -167,9 +268,6 @@
                     jasmine.any(String),
                     null,
                     {
-                        data: {
-                            type: 'person'
-                        },
                         included: [{
                             type: 'contact_assignment',
                             attributes: {
@@ -200,6 +298,12 @@
                     { id: 103 },
                     { id: 104 }
                 ];
+            });
+
+            it('should not make a network request when removing assignments from an unpersisted person', function () {
+                this.person.id = null;
+                personProfileService.removeAssignments(this.person, this.removedPeople);
+                expect(httpProxy.callHttp).not.toHaveBeenCalled();
             });
 
             it('should make a network request for each removed assignment', function () {

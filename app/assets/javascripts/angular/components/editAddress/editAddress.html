@@ -12,7 +12,7 @@
             <div class="row">
                 <select class="form-control"
                         ng-options="type as (('address_types.' + type) | t)
-                                    disable when !$ctrl.isAddressTypeValid(type, $ctrl.address)
+                                    disable when !$ctrl.isAddressTypeValid(type, $ctrl.person, $ctrl.address)
                                     for type in $ctrl.addressTypes"
                         ng-model="$ctrl.address.address_type">
                 </select>

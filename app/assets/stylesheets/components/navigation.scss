@@ -17,5 +17,9 @@
       color: $pivot-bright-blue;
       border-bottom-color: $pivot-bright-blue;
     }
+    &.disabled {
+      color: $gray-3;
+      cursor: initial;
+    }
   }
 }

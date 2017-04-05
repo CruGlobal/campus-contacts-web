@@ -30,11 +30,17 @@
         vm.$onInit = activate;
 
         function activate () {
-            vm.person = JsonApiDataStore.store.find('person', vm.resolve.personId);
+            vm.person = vm.resolve.person;
+
+            // This will be true if we are creating a new contact and false if we are editing an existing contact
+            vm.isNewAddress = vm.resolve.address === null;
 
             // Copy the address so that the changes can be discard if the user does not save
             var address = vm.resolve.address;
             vm.address = address ? _.clone(address) : editAddressService.getAddressTemplate(vm.person);
+
+            // Get the list of the user's other addresses
+            vm.otherAddresses = _.without(vm.person.addresses, address);
 
             loadCountries().then(function () {
                 // For now, US regions are the only valid region choices
@@ -60,8 +66,8 @@
             });
         }
 
-        function isAddressTypeValid (addressType, address) {
-            return editAddressService.isAddressTypeValid(addressType, address);
+        function isAddressTypeValid (addressType) {
+            return editAddressService.isAddressTypeValid(addressType, vm.otherAddresses);
         }
 
         // Persist the changes to the address to the server
@@ -69,8 +75,16 @@
             vm.saving = true;
             personProfileService.saveAttribute(vm.person.id, vm.address, _.keys(vm.address))
                 .then(function () {
-                    // Apply the changes to the original address
-                    _.extend(vm.resolve.address, vm.address);
+                    if (vm.person.id === null && vm.isNewAddress) {
+                        // The person is not saved on the server, so manually add the new address to the person
+                        vm.person.addresses.push(vm.address);
+                    }
+
+                    if (!vm.isNewAddress) {
+                        // Apply the changes to the original address
+                        _.extend(vm.resolve.address, vm.address);
+                    }
+
                     vm.close({ $value: vm.address });
                 })
                 .catch(function () {

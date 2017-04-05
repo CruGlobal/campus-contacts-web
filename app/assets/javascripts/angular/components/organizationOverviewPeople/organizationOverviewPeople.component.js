@@ -13,8 +13,9 @@
             }
         });
 
-    function organizationOverviewPeopleController ($scope, $filter, $uibModal, organizationOverviewPeopleService,
-                                                   confirmModalService, RequestDeduper, ProgressiveListLoader, _) {
+    function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal,
+                                                   organizationOverviewPeopleService, confirmModalService,
+                                                   RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
         vm.multiSelection = {};
@@ -35,8 +36,30 @@
         vm.deletePeople = deletePeople;
         vm.clearSelection = clearSelection;
 
+        vm.$onInit = activate;
+        vm.$onDestroy = deactivate;
+
         var requestDeduper = new RequestDeduper();
         var listLoader = new ProgressiveListLoader('person', requestDeduper);
+
+        var unsubscribe = null;
+
+        function activate () {
+            unsubscribe = $rootScope.$on('personCreated', function (event, person) {
+                vm.people.push(person);
+                vm.totalCount++;
+                vm.multiSelection[person.id] = vm.selectAllValue;
+
+                // Update the people count shown in the people tab
+                if (vm.organizationOverview.people) {
+                    vm.organizationOverview.people.length++;
+                }
+            });
+        }
+
+        function deactivate () {
+            unsubscribe();
+        }
 
         $scope.$watch('$ctrl.multiSelection', function () {
             // because multiSelection is only a list of the loaded records,

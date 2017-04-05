@@ -5,47 +5,32 @@
         .module('missionhubApp')
         .factory('editGroupOrLabelAssignmentsService', editGroupOrLabelAssignmentsService);
 
-    function editGroupOrLabelAssignmentsService ($q, httpProxy, modelsService, _) {
-        function updatePerson (personId, params, payload) {
-            return httpProxy.put(modelsService.getModelMetadata('person').url.single(personId), payload, {
-                params: params
-            });
-        }
-
+    function editGroupOrLabelAssignmentsService ($q, httpProxy, modelsService, JsonApiDataStore,
+                                                 personProfileService, _) {
         function pushNew (modelType, person, newIds, organizationId) {
-            var includedObjects = _.map(newIds, function (labelId) {
-                return buildRelationshipObject(modelType, labelId, organizationId);
+            var relationships = _.map(newIds, function (labelId) {
+                return buildRelationshipModel(modelType, labelId, organizationId);
             });
-            return updatePerson(person.id, { include: personRelationshipName(modelType) }, {
-                included: includedObjects
-            });
+
+            return personProfileService.saveRelationships(person, relationships, personRelationshipName(modelType));
         }
 
-        function buildRelationshipObject (modelType, relatedId, organizationId) {
-            var json = {
-                type: modelType,
-                attributes: {}
-            };
+        function buildRelationshipModel (modelType, relatedId, organizationId) {
+            var model = new JsonApiDataStore.Model(modelType);
             if (modelType === 'organizational_label') {
-                json.attributes.label_id = relatedId;
-                json.attributes.organization_id = organizationId;
+                model.setAttribute('label_id', relatedId);
+                model.setAttribute('organization_id', organizationId);
+                model.setRelationship('label', JsonApiDataStore.store.find('label', relatedId));
             } else {
-                json.attributes.group_id = relatedId;
+                model.setAttribute('group_id', relatedId);
+                model.setRelationship('group', JsonApiDataStore.store.find('group', relatedId));
             }
-            return json;
+            return model;
         }
 
-        function deleteModel (model, person) {
-            var url = modelsService.getModelMetadata(model._type).url.single(model.id);
-            return httpProxy.delete(url).then(function () {
-                _.pull(person[personRelationshipName(model)], model);
-            });
-        }
-
-        function personRelationshipName (model) {
+        function personRelationshipName (modelType) {
             // accept either a string type or an object
-            var type = _.isString(model) ? model : model._type;
-            return type === 'organizational_label' ?
+            return modelType === 'organizational_label' ?
                 'organizational_labels' :
                 'group_memberships';
         }
@@ -55,33 +40,33 @@
         }
 
         function deleteByRelatedId (type, relatedId, person) {
-            var relationship = person[personRelationshipName(type)];
+            var relationshipName = personRelationshipName(type);
             var relatedType = relatedModel(type);
-            var relationshipModel = _.find(relationship, [relatedType + '.id', relatedId]);
-            return deleteModel(relationshipModel, person);
+            var relationship = _.find(person[relationshipName], [relatedType + '.id', relatedId]);
+            return personProfileService.deleteRelationship(person, relationship, relationshipName);
         }
 
         function saveRelationshipChanges (type, person,
-                                          newRelationshipIds, oldRelationshipIds,
+                                          addedRelationshipIds, removedRelationshipIds,
                                           organizationId) {
-            var promises = _.map(oldRelationshipIds, function (relatedId) {
+            var promises = _.map(removedRelationshipIds, function (relatedId) {
                 return deleteByRelatedId(type, relatedId, person);
             });
-            if (newRelationshipIds.length > 0) {
-                promises.push(pushNew(type, person, newRelationshipIds, organizationId));
+            if (addedRelationshipIds.length > 0) {
+                promises.push(pushNew(type, person, addedRelationshipIds, organizationId));
             }
             return $q.all(promises);
         }
 
         return {
-            saveOrganizationalLabels: function (person, organizationId, newLabelIds, oldLabelIds) {
+            saveOrganizationalLabels: function (person, organizationId, addedLabelIds, removedLabelIds) {
                 return saveRelationshipChanges('organizational_label',
-                                               person, newLabelIds, oldLabelIds, organizationId);
+                                               person, addedLabelIds, removedLabelIds, organizationId);
             },
 
-            saveGroupMemberships: function (person, newGroupIds, oldGroupIds) {
+            saveGroupMemberships: function (person, addedGroupIds, removedGroupIds) {
                 return saveRelationshipChanges('group_membership',
-                                               person, newGroupIds, oldGroupIds);
+                                               person, addedGroupIds, removedGroupIds);
             },
 
             loadPlaceholderEntries: function (entries, orgId) {

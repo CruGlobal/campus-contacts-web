@@ -3,10 +3,11 @@
         <div class="avatar">
             <img ng-src="{{$ctrl.avatarUrl}}">
             <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
-                        ngf-select="$ctrl.uploadAvatar($file)">
+                        ng-if="$ctrl.person.id !== null" ngf-select="$ctrl.uploadAvatar($file)">
             </ng-md-icon>
             <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
-                        ng-if="$ctrl.person.picture && !$ctrl.isFacebookAvatar" ng-click="$ctrl.deleteAvatar()">
+                        ng-if="$ctrl.person.id !== null && $ctrl.person.picture && !$ctrl.isFacebookAvatar"
+                        ng-click="$ctrl.deleteAvatar()">
             </ng-md-icon>
         </div>
         <div class="normal-column">
@@ -24,7 +25,10 @@
                 <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
             </div>
             <div class="tabs">
-                <div class="tab" ng-repeat="tabName in $ctrl.personTabs" ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName">
+                <div class="tab" ng-class="{ disabled: disabled }" ng-repeat="tabName in $ctrl.personTabs"
+                     ng-init="disabled = $ctrl.person.id === null && tabName !== 'profile'"
+                     ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName"
+                     ng-click="disabled && $event.preventDefault()">
                     {{'ministries.people.' + tabName + '.header' | t}}
                 </div>
             </div>
@@ -34,4 +38,11 @@
         </a>
     </header>
     <div ui-view="personTab" class="person-tab-content"></div>
+    <div class="modal-footer" ng-if="$ctrl.person.id === null">
+        <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
+        <button class="btn btn-primary" type="button" ng-click="$ctrl.save()" ng-disabled="$ctrl.saving">
+            <span ng-hide="$ctrl.saving">{{ 'general.save' | t }}</span>
+            <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        </button>
+    </div>
 </async-content>

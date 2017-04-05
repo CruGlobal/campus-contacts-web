@@ -107,16 +107,21 @@ person-page {
     margin-right: $col-spacing;
   }
 
-  .person-tab-content {
-    $top-padding: 10px;
-    flex: 1;
-    overflow-x: hidden;
-    padding: $top-padding $compensated-right-padding 0 $inner-padding;
+  async-content .content {
+    display: flex;
+    flex-direction: column;
+
     organization-overview & {
-      height: calc(100vh - #{$page-trim-height} - #{$person-page--header-height} - #{$top-padding});
+      height: calc(100vh - #{$page-trim-height});
     }
     .modal & {
-      height: calc(100vh - #{$modal-padding * 2} - #{$person-page--header-height} - #{$top-padding});
+      height: calc(100vh - #{$modal-padding * 2});
     }
+  }
+
+  .person-tab-content {
+    flex: 1;
+    overflow-x: hidden;
+    padding: 10px $compensated-right-padding 0 $inner-padding;
   }
 }

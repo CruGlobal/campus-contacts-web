@@ -36,6 +36,33 @@
                         }
                     }
                 });
+            },
+
+            // Save a person to the server along with all of its relationships
+            savePerson: function (person) {
+                var attributeNames = [
+                    'first_name', 'last_name', 'gender', 'student_status'
+                ];
+                var relationshipNames = [
+                    'organizational_permissions', 'organizational_labels', 'group_memberships',
+                    'reverse_contact_assignments', 'email_addresses', 'phone_numbers', 'addresses'
+                ];
+
+                var personAttributes = person.serialize({ attributes: attributeNames, relationships: [] }).data;
+
+                var includedRelationships = _.chain(relationshipNames)
+                    .map(function (relationshipName) {
+                        return httpProxy.includedFromModels(person[relationshipName]);
+                    })
+                    .flatten()
+                    .value();
+
+                return httpProxy.post(modelsService.getModelMetadata('person').url.all, {
+                    data: personAttributes,
+                    included: includedRelationships
+                }, {
+                    include: relationshipNames.join(',')
+                }).then(httpProxy.extractModel);
             }
         };
     }

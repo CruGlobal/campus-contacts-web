@@ -5,18 +5,23 @@
         .module('missionhubApp')
         .factory('personProfileService', personProfileService);
 
-    function personProfileService (httpProxy, modelsService, $q, _) {
+    function personProfileService ($q, JsonApiDataStore, httpProxy, modelsService, _) {
         function updatePerson (personId, params, payload) {
             return httpProxy.put(modelsService.getModelMetadata('person').url.single(personId), payload, {
                 params: params
             });
         }
 
-        return {
+        var personProfileService = {
             // Persist attribute changes to a person (including changes to attributes of a person's relationship) on
             // the server
             // "attributes" may either be the name of a single attribute or an array of attribute names
             saveAttribute: function (personId, model, attributes) {
+                if (personId === null) {
+                    // The person is not saved on the server
+                    return $q.resolve();
+                }
+
                 var params = {};
 
                 // Build up the changes object
@@ -54,58 +59,93 @@
                         type: 'person'
                     },
                     included: [changes]
+                }).then(function (res) {
+                    // If the update resulted in a merge, then reload all of the person's relationships because the
+                    // person may have new relationships as a result of the merge
+                    if (res.meta.user_merged) {
+                        return httpProxy.get(modelsService.getModelMetadata('person').url.single(personId));
+                    }
+
+                    return res;
                 });
             },
 
-            // Delete a model on the server
-            deleteModel: function (model) {
-                return httpProxy.delete(modelsService.getModelUrl(model));
+            // Persist attribute changes to a person's relationship on the server
+            // "relationshipName" is the property on the person where the relationship is located
+            saveRelationship: function (person, relationship, relationshipName) {
+                return personProfileService.saveRelationships(person, [relationship], relationshipName);
+            },
+
+            // Persist attribute changes to a person's relationship on the server
+            // "relationshipName" is the property on the person where the relationship is located
+            saveRelationships: function (person, relationships, relationshipName) {
+                if (relationships.length === 0) {
+                    // Nothing needs to be done
+                    return $q.resolve();
+                }
+
+                if (person.id === null) {
+                    // The person is not saved on the server, so manually add the relationship to the person instead of
+                    // saving it on the server
+                    person[relationshipName] = _.union(person[relationshipName], relationships);
+                    return $q.resolve();
+                }
+
+                return updatePerson(person.id, { include: relationshipName }, {
+                    included: httpProxy.includedFromModels(relationships)
+                });
+            },
+
+            // Delete a relationship on the server
+            deleteRelationship: function (person, relationship, relationshipName) {
+                return personProfileService.deleteRelationships(person, [relationship], relationshipName);
+            },
+
+            // Delete multiple relationships on the server
+            deleteRelationships: function (person, relationships, relationshipName) {
+                var deletePromise;
+                if (person.id === null) {
+                    deletePromise = $q.resolve();
+                } else {
+                    // Delete all of the relationships in series
+                    deletePromise = $q.all(relationships.map(function (relationship) {
+                        httpProxy.delete(modelsService.getModelUrl(relationship));
+                    }));
+                }
+
+                return deletePromise.then(function () {
+                    // Manually remove the models from the person's relationships
+                    person[relationshipName] = _.difference(person[relationshipName], relationships);
+                });
             },
 
             // Assign contacts to a person
             addAssignments: function (person, organizationId, contacts) {
-                if (contacts.length === 0) {
-                    return $q.resolve();
-                }
-
-                return httpProxy.put(modelsService.getModelUrl(person), {
-                    data: {
-                        type: 'person'
-                    },
-                    included: contacts.map(function (contact) {
-                        return {
-                            type: 'contact_assignment',
-                            attributes: {
-                                assigned_to_id: contact.id,
-                                organization_id: organizationId
-                            }
-                        };
-                    })
-                }, {
-                    params: {
-                        include: 'reverse_contact_assignments'
-                    }
+                var assignments = contacts.map(function (contact) {
+                    var model = new JsonApiDataStore.Model('contact_assignment');
+                    model.setAttribute('assigned_to_id', contact.id);
+                    model.setAttribute('organization_id', organizationId);
+                    model.setRelationship('assigned_to', contact);
+                    model.setRelationship('organization', JsonApiDataStore.store.find('organization', organizationId));
+                    return model;
                 });
+
+                return personProfileService.saveRelationships(person, assignments, 'reverse_contact_assignments');
             },
 
             // Unassign contacts from a person
-            removeAssignments: function (person, contact) {
-                var contactIds = _.map(contact, 'id');
-                var contactAssignments = person.reverse_contact_assignments.filter(function (contactAssignment) {
-                    return httpProxy.isLoaded(contactAssignment) &&
-                        _.includes(contactIds, contactAssignment.assigned_to.id);
-                });
-
-                function deleteContactAssignment (contactAssignment) {
-                    return httpProxy.delete(modelsService.getModelUrl(contactAssignment));
-                }
-
-                // Delete the contact assignments in parallel
-                return $q.all(contactAssignments.map(deleteContactAssignment)).then(function () {
-                    // Remove the deleted contact assignments from memory
-                    person.reverse_contact_assignments = _.difference(person.reverse_contact_assignments,
-                                                                      contactAssignments);
-                });
+            removeAssignments: function (person, contacts) {
+                var contactIds = _.map(contacts, 'id');
+                var deletePromises = _.chain(person.reverse_contact_assignments)
+                    .filter(function (assignment) {
+                        return httpProxy.isLoaded(assignment) && _.includes(contactIds, assignment.assigned_to.id);
+                    })
+                    .map(function (assignment) {
+                        return personProfileService.deleteRelationship(person, assignment,
+                                                                       'reverse_contact_assignments');
+                    })
+                    .value();
+                return $q.all(deletePromises);
             },
 
             // Transform an address into an array of address lines for display in the UI
@@ -135,5 +175,7 @@
                 ].filter(_.identity);
             }
         };
+
+        return personProfileService;
     }
 })();

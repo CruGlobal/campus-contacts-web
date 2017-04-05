@@ -12,18 +12,10 @@
                 return ['current', 'permanent', 'emergency1', 'emergency2'];
             },
 
-            // Return a boolean indicating whether a particular address type is valid for a particular address
-            isAddressTypeValid: function (addressType, address) {
-                var person = JsonApiDataStore.store.find('person', address.person_id);
-
-                // The address type is invalid if another address already has the address type
-                var isInvalid = person.addresses.some(function (existingAddress) {
-                    return existingAddress.id !== address.id && existingAddress.address_type === addressType;
-                });
-
-                // Calculate invalidity and negate because the logic is more intuitive than directly calcualating
-                // validity
-                return !isInvalid;
+            // Return a boolean indicating whether a particular address type is valid for a particular person's address
+            isAddressTypeValid: function (addressType, otherAddresses) {
+                // The address type is valid if no other addresses already have the address type
+                return !_.find(otherAddresses, { address_type: addressType });
             },
 
             // Determine whether an address has valid field values
@@ -40,11 +32,16 @@
                     .defaultTo(null)
                     .value();
 
-                return {
-                    _type: 'address',
-                    person_id: person.id,
-                    address_type: addressType
-                };
+                var address = new JsonApiDataStore.Model('address');
+                address.setAttribute('person_id', person.id);
+                address.setAttribute('address_type', addressType);
+                [
+                    'address1', 'address2', 'address3', 'address4',
+                    'city', 'state', 'zip', 'country'
+                ].forEach(function (attribute) {
+                    address.setAttribute(attribute, '');
+                });
+                return address;
             },
 
             // Return an array that resolves to the list of country options

@@ -56,28 +56,20 @@
         });
 
         describe('isAddressTypeValid', function () {
-            beforeEach(inject(function (JsonApiDataStore) {
-                var person = {
-                    addresses: [
-                        this.address1,
-                        this.address2
-                    ]
-                };
+            beforeEach(function () {
+                this.otherAddresses = [
+                    this.address1,
+                    this.address2
+                ];
                 spyOn(editAddressService, 'getAddressTypes').and.returnValue(['type1', 'type2', 'type3']);
-                spyOn(JsonApiDataStore.store, 'find').and.returnValue(person);
-            }));
+            });
 
             it('should treat unused address types as valid', function () {
-                expect(editAddressService.isAddressTypeValid('type3', { id: 3 })).toBe(true);
+                expect(editAddressService.isAddressTypeValid('type3', this.otherAddresses)).toBe(true);
             });
 
             it('should treat used address types as invalid', function () {
-                expect(editAddressService.isAddressTypeValid('type1', { id: 3 })).toBe(false);
-            });
-
-            it('should not consider changing addresses', function () {
-                expect(editAddressService.isAddressTypeValid('type1', { id: 1 })).toBe(true);
-                expect(editAddressService.isAddressTypeValid('type2', { id: 1 })).toBe(false);
+                expect(editAddressService.isAddressTypeValid('type1', this.otherAddresses)).toBe(false);
             });
         });
 
@@ -96,11 +88,11 @@
                 var person = {
                     id: 1
                 };
-                expect(editAddressService.getAddressTemplate(person)).toEqual({
+                expect(editAddressService.getAddressTemplate(person)).toEqual(jasmine.objectContaining({
                     _type: 'address',
                     person_id: person.id,
                     address_type: jasmine.any(String)
-                });
+                }));
             });
 
             it('should choose the first available address type', function () {
