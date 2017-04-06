@@ -1,7 +1,7 @@
 MissionHub
 ==========
 
-###Overview
+### Overview
 
 MissionHub is an online tool that makes it easier than ever for you to connect, communicate and track ministry relationships.
 
