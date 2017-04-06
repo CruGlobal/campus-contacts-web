@@ -1,4 +1,4 @@
-<div class="person-profileTab form">
+<form class="person-profileTab form" name="$ctrl.form">
     <div class="form-group-with-left-action">
         <div class="button-column">
             <ng-md-icon class="icon-chip actionable primary-action"
@@ -90,17 +90,18 @@
     <div class="form-group">
         <label>
             <span class="label">{{'contact.first_name' | t}}</span>
-            <input type="text" ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')"
-                   class="form-control">
+            <input type="text" class="form-control" name="first_name" required
+                   ng-class="{ invalid: $ctrl.form.first_name.$invalid }"
+                   ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')">
         </label>
     </div>
     <div class="form-group">
         <label>
             <span class="label">{{'contact.last_name' | t}}</span>
-            <input type="text" ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')"
-                   class="form-control">
+            <input type="text" class="form-control"
+                   ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')">
         </label>
     </div>
     <div class="form-group form-group--radio">
@@ -137,6 +138,9 @@
                 </div>
                 <div class="row">
                     <input type="email" class="normal-column form-control"
+                           ng-pattern="'[^@]+@[^@]+\\.[^@]+'" ng-required="!$ctrl.isPendingEmailAddress(emailAddress)"
+                           name="email_address_{{(emailAddress.id || 'pending')}}"
+                           ng-class="{ invalid: !$ctrl.isEmailAddressValid(emailAddress) }"
                            ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
                            ng-change="$ctrl.saveRelationship(emailAddress, 'email', 'email_addresses')">
                 </div>
@@ -162,6 +166,9 @@
                 </div>
                 <div class="row">
                     <input type="tel" class="normal-column form-control"
+                           ng-pattern="'(\\D*\\d\\D*){8,15}'" ng-required="!$ctrl.isPendingPhoneNumber(phoneNumber)"
+                           name="phone_number_{{(phoneNumber.id || 'pending')}}"
+                           ng-class="{ invalid: !$ctrl.isPhoneNumberValid(phoneNumber) }"
                            ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
                            ng-change="$ctrl.saveRelationship(phoneNumber, 'number', 'phone_numbers')">
                 </div>
@@ -203,4 +210,4 @@
             </div>
         </label>
     </div>
-</div>
+</form>

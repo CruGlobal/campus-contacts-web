@@ -40,7 +40,8 @@
     <div ui-view="personTab" class="person-tab-content"></div>
     <div class="modal-footer" ng-if="$ctrl.person.id === null">
         <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
-        <button class="btn btn-primary" type="button" ng-click="$ctrl.save()" ng-disabled="$ctrl.saving">
+        <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+                ng-disabled="$ctrl.saving || $ctrl.profileForm.$invalid">
             <span ng-hide="$ctrl.saving">{{ 'general.save' | t }}</span>
             <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
         </button>

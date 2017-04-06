@@ -27,6 +27,8 @@
         vm.phoneNumbersWithPending = phoneNumbersWithPending;
         vm.isPendingEmailAddress = isPendingEmailAddress;
         vm.isPendingPhoneNumber = isPendingPhoneNumber;
+        vm.isEmailAddressValid = isEmailAddressValid;
+        vm.isPhoneNumberValid = isPhoneNumberValid;
         vm.addEmailAddress = addEmailAddress;
         vm.addPhoneNumber = addPhoneNumber;
         vm.deleteEmailAddress = deleteEmailAddress;
@@ -47,6 +49,16 @@
         vm.enrollmentOptions = personService.getEnrollmentOptions();
 
         function activate () {
+            // The personPage needs access to the profile form to determine validity. Because component "require" only
+            // works upwards (from descendent to ancestor), we have to have the profile component send its profile form
+            // to the person component.
+            var unsubscribeForm = $scope.$watch('$ctrl.form', function (form) {
+                if (form) {
+                    vm.personTab.profileForm = form;
+                    unsubscribeForm();
+                }
+            });
+
             var organization = JsonApiDataStore.store.find('organization', vm.personTab.organizationId);
             if (loggedInPerson.person === vm.personTab.person) {
                 vm.permissionChangeDisabled = true;
@@ -106,12 +118,26 @@
         }
 
         function saveAttribute (model, attribute) {
+            if (_.isUndefined(model[attribute])) {
+                // The attribute is invalid, so do not attempt to auto-save it
+                return;
+            }
+
             $scope.$emit('personModified');
 
-            personProfileService.saveAttribute(vm.personTab.person.id, model, attribute);
+            // Only save the attribute if it passes validation
+            var control = vm.form[attribute];
+            if (!control || control.$valid) {
+                personProfileService.saveAttribute(vm.personTab.person.id, model, attribute);
+            }
         }
 
         function saveRelationship (relationship, attribute, relationshipName) {
+            if (_.isUndefined(relationship[attribute])) {
+                // The attribute is invalid, so do not attempt to auto-save it
+                return;
+            }
+
             $scope.$emit('personModified');
 
             var savePromise = personProfileService.saveRelationship(vm.personTab.person, relationship,
@@ -153,6 +179,16 @@
 
         function isPendingPhoneNumber (phoneNumber) {
             return phoneNumber === vm.pendingPhoneNumber;
+        }
+
+        function isEmailAddressValid (emailAddress) {
+            var control = vm.form['email_address_' + (emailAddress.id || 'pending')];
+            return control.$valid || (control.$viewValue === '' && vm.isPendingEmailAddress(emailAddress));
+        }
+
+        function isPhoneNumberValid (phoneNumber) {
+            var control = vm.form['phone_number_' + (phoneNumber.id || 'pending')];
+            return control.$valid || (control.$viewValue === '' && vm.isPendingPhoneNumber(phoneNumber));
         }
 
         // Add a new email address to the person
