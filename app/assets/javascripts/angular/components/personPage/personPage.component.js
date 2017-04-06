@@ -73,9 +73,7 @@
         // Prevent the modal from being closed without a confirmation dialog
         function beginDismissLock () {
             // Intercept transitions away from this component
-            unsubscribeTransition = $transitions.onBefore({
-                exiting: vm.stateName
-            }, function () {
+            unsubscribeTransition = $transitions.onBefore({ exiting: vm.stateName }, function () {
                 return confirmCancel()
                     .then(function () {
                         // Allow the transition to proceede
@@ -127,14 +125,10 @@
 
         // Dismiss this page
         function dismiss () {
-            return $q.resolve()
-                .then(function () {
-                    return confirmCancel();
-                })
-                .then(function () {
-                    endDismissLock();
-                    $state.go('^.^');
-                });
+            return confirmCancel().then(function () {
+                endDismissLock();
+                $state.go('^.^');
+            });
         }
 
         // Save the pending changes and dismiss

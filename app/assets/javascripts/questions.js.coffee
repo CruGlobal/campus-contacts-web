@@ -1,6 +1,6 @@
 $ ->
   # update sms length
-  $('.label, .content').live 'keyup', (event)->
+  $('#create_question_form .label, #create_question_form .content').live 'keyup', (event)->
     return false if $('#web_only_' + $(this).closest('.inlineform').attr('data-elem-id')).prop("checked")
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     parent = $(this).closest('.inlineform')
