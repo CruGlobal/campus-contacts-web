@@ -107,7 +107,7 @@ person-page {
     margin-right: $col-spacing;
   }
 
-  async-content .content {
+  > async-content > .content {
     display: flex;
     flex-direction: column;
 
