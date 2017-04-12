@@ -46,6 +46,7 @@
                 $provide.factory('$http', function ($q) {
                     var $http = jasmine.createSpy('$http').and.returnValue($q.resolve(_this.httpResponse));
                     $http.defaults = { headers: { common: {} } };
+                    $http.get = jasmine.createSpy('$http.get');
                     return $http;
                 });
             });
@@ -67,7 +68,7 @@
                 this.url = '/';
                 this.params = { key1: 'value1' };
                 this.data = { key2: 'value2' };
-                this.config = { key3: 'value3' };
+                this.config = { key3: 'value3', errorMessage: 'error' };
 
                 spyOn(envService, 'read').and.returnValue(this.apiUrl);
             }));
@@ -87,7 +88,8 @@
                     url: this.apiUrl + this.url,
                     data: this.data,
                     params: this.params,
-                    key3: 'value3'
+                    key3: 'value3',
+                    errorMessage: 'error'
                 });
             });
 
@@ -239,7 +241,7 @@
                     this.id = 123;
                     this.model = { id: this.id };
                     this.relationships = ['a', 'b', 'c'];
-                    this.requestParams = { key: 'value' };
+                    this.config = { key: 'value' };
 
                     spyOn(httpProxy, 'callHttp');
                 });
@@ -260,13 +262,12 @@
                     spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue([]);
 
                     var _this = this;
-                    return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)
+                    return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.config)
                         .then(function (model) {
                             expect(model).toBe(_this.model);
                             expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
-                                key: 'value',
                                 include: ''
-                            });
+                            }, null, _this.config);
                         });
                 }));
 
@@ -276,13 +277,12 @@
                         spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
 
                         var _this = this;
-                        return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.requestParams)
+                        return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.config)
                             .then(function (model) {
                                 expect(model).toBe(_this.model);
                                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
-                                    key: 'value',
                                     include: 'a,b,c'
-                                });
+                                }, null, _this.config);
                             });
                     }));
             });

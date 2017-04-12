@@ -20,7 +20,10 @@
         vm.subOrgs = [];
         vm.loadSubOrgsPage = loadSubOrgsPage;
 
-        var listLoader = new ProgressiveListLoader('organization');
+        var listLoader = new ProgressiveListLoader({
+            modelType: 'organization',
+            errorMessage: 'error.messages.organization_overview_suborgs.load_org_chunk'
+        });
 
         function loadSubOrgsPage () {
             if (vm.busy) {

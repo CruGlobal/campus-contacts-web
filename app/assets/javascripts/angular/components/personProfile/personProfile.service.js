@@ -8,7 +8,8 @@
     function personProfileService ($q, JsonApiDataStore, httpProxy, modelsService, _) {
         function updatePerson (personId, params, payload) {
             return httpProxy.put(modelsService.getModelMetadata('person').url.single(personId), payload, {
-                params: params
+                params: params,
+                errorMessage: 'error.messages.person_profile.update_person'
             });
         }
 
@@ -63,7 +64,9 @@
                     // If the update resulted in a merge, then reload all of the person's relationships because the
                     // person may have new relationships as a result of the merge
                     if (res.meta.user_merged) {
-                        return httpProxy.get(modelsService.getModelMetadata('person').url.single(personId));
+                        return httpProxy.get(modelsService.getModelMetadata('person').url.single(personId), {}, {
+                            errorMessage: 'error.messages.person_profile.reload_merged_person'
+                        });
                     }
 
                     return res;
@@ -109,7 +112,9 @@
                 } else {
                     // Delete all of the relationships in series
                     deletePromise = $q.all(relationships.map(function (relationship) {
-                        httpProxy.delete(modelsService.getModelUrl(relationship));
+                        return httpProxy.delete(modelsService.getModelUrl(relationship), {}, {
+                            errorMessage: 'error.messages.person_profile.delete_relationships'
+                        });
                     }));
                 }
 

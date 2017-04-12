@@ -8,7 +8,7 @@
         .module('missionhubApp')
         .factory('httpProxy', proxyService);
 
-    function proxyService ($http, $log, $q, envService, JsonApiDataStore, Upload, _) {
+    function proxyService ($http, $log, $q, envService, JsonApiDataStore, Upload, tFilter, errorService, _) {
         // Extract and return the data portion of a JSON API payload
         function extractData (response) {
             return response.data;
@@ -24,8 +24,15 @@
                     method: method,
                     url: envService.read('apiUrl') + url,
                     data: data,
-                    params: params
+                    params: params,
+
+                    // Default value
+                    errorMessage: 'error.messages.http_proxy.default_network_error'
                 }, extraConfig, dedupeConfig);
+
+                if (!extraConfig || !extraConfig.errorMessage) {
+                    $log.warn(new Error('No error message specified'));
+                }
 
                 return provider(config)
                     .then(function (res) {
@@ -37,10 +44,10 @@
 
                         return JsonApiDataStore.store.syncWithMeta(res.data);
                     })
-                    .catch(function (error) {
-                        // We can redirect to some error page if that's better
-                        $log.error(error + ' - Something has gone terribly wrong.');
-                        throw error;
+                    .catch(function (err) {
+                        $log.error(err);
+                        err.message = tFilter(config.errorMessage);
+                        throw err;
                     });
             }
 
@@ -51,13 +58,13 @@
         }
 
         var proxy = {
-            callHttp: function (method, url, params, data, extraConfig) {
+            callHttp: errorService.autoRetry(function (method, url, params, data, extraConfig) {
                 return networkRequest($http, method, url, params, data, extraConfig);
-            },
+            }, errorService.networkRetryConfig),
 
-            submitForm: function (method, url, form, extraConfig) {
+            submitForm: errorService.autoRetry(function (method, url, form, extraConfig) {
                 return networkRequest(Upload.upload, method, url, null, form, extraConfig);
-            },
+            }, errorService.networkRetryConfig),
 
             get: function (url, params, config) {
                 return this.callHttp('GET', url, params, null, config);
@@ -124,7 +131,7 @@
             // Return a promise that resolves to the model of the specified type and with the specified id
             // If the model is already loaded, it is returned (wrapped in a promise) without a network request
             // If the model's required relationships are not fully loaded, those are loaded as well
-            getModel: function (url, type, id, relationships, requestParams) {
+            getModel: function (url, type, id, relationships, extraConfig) {
                 var model = JsonApiDataStore.store.find(type, id);
                 var unloadedRelationships = proxy.getUnloadedRelationships(model, relationships);
                 return $q.resolve()
@@ -135,9 +142,9 @@
                         }
 
                         // Load the required relationships
-                        return proxy.callHttp('GET', url, _.extend({
+                        return proxy.get(url, {
                             include: unloadedRelationships.join(',')
-                        }, requestParams));
+                        }, extraConfig);
                     })
                     .then(function () {
                         return JsonApiDataStore.store.find(type, id);

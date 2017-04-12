@@ -43,6 +43,7 @@
 //= require angular-asset-path/src/index
 //= require ng-file-upload/dist/ng-file-upload
 //= require ng-infinite-scroll/build/ng-infinite-scroll
+//= require angularjs-toaster/toaster
 //= require moment/moment
 //= require angular-moment/angular-moment
 //= require angular/missionhubApp.module
@@ -50,6 +51,7 @@
 //= require angular/missionhubApp.config
 //= require angular/missionhubApp.run
 //= require_tree ./angular
+//= require angular-animate/angular-animate
 
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js

@@ -13,6 +13,8 @@
         function loadMe () {
             return httpProxy.get(modelsService.getModelMetadata('person').url.single('me'), {
                 include: 'user,organizational_permissions.organization'
+            }, {
+                errorMessage: 'error.messages.logged_in_person.load_user'
             }).then(httpProxy.extractModel);
         }
 

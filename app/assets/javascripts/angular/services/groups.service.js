@@ -23,7 +23,9 @@
                     }
                 });
                 var createJson = newGroup.serialize();
-                return httpProxy.post(modelsService.getModelMetadata('group').url.root, createJson)
+                return httpProxy.post(modelsService.getModelMetadata('group').url.root, createJson, {
+                    errorMessage: 'error.messages.groups.create_group'
+                })
                     .then(httpProxy.extractModel)
                     .then(function (group) {
                         var org = JsonApiDataStore.store.find('organization', organizationId);

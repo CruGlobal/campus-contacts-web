@@ -1860,3 +1860,68 @@ en:
     permanent: Permanent
     emergency1: Emergency 1
     emergency2: Emergency 2
+  error:
+    default_error_message: An unknown error occurred
+    retry_instructions: Click to retry
+    messages:
+      assigned_select:
+        search_people: Error occurred while loading the assignment choices
+      edit_group_or_label_assignments:
+        load_groups: Error occurred while loading the user's groups
+        load_labels: Error occurred while loading the user's labels
+      groups:
+        create_group: Error occurred while creating the group
+      http_proxy:
+        default_network_error: An unknown network error occured
+      interactions:
+        create_interation: Error occurred while creating the interaction
+      logged_in_person:
+        load_user: Error occurred while loading your user information
+      mass_edit:
+        apply_mass_edit: Error occurred while mass editing the contacts
+        load_options: Error occurred while loading options
+        load_relationships: Error occurred while loading options
+      my_people_dashboard:
+        load_orgs: Error occurred while loading the organizations
+        load_people: Error occurred while loading the people
+        load_reports: Error occurred while loading the reports
+        update_org_order: Error occurred while updating the organization order
+        update_org_visibility: Error occurred while updating the organization visibility
+      organization_overview:
+        load_org_relationships: Error occurred while loading the organization's groups and surveys
+      organization_overview_people:
+        load_assignments: Error occurred while loading the people assigned to these people
+        load_org_people_count: Error occurred while loading the number of people in the organization
+        load_people_chunk: Error occurred while loading the next batch of people
+      organization_overview_suborgs:
+        load_org_chunk: Error occurred while loading the next batch of sub-organizations
+        load_org_suborg_count: Error occurred while loading the number of sub-organizations in the organization
+      organization_overview_team:
+        load_org_team_count: Error occurred while loading the number of team members in the organization
+        load_team_chunk: Error occurred while loading the next batch of team members
+      people_filters_panel:
+        load_filter_stats: Error occurred while loading the filter counts
+      person:
+        archive_person: Error occurred while archiving the person
+        get_contact_assignments: Error occurred while loading load the people this person is assigned to
+        load_org_reports: Error occurred while loading the organization's reports
+      person_page:
+        create_person: Error occurred while creating the person
+        delete_avatar: Error occurred while removing the profile picture
+        upload_avatar: Error occurred while uploading the profile picture
+      person_profile:
+        delete_relationships: Error occurred while updating the person
+        reload_merged_person: Error occurred while refreshing the person
+        update_person: Error occurred while updating the person
+      preferences_page:
+        update_preferences: Error occurred while updating the preferences
+      progressive_list_loader:
+        load_chunk: Error occurred while loading the items
+      reports:
+        load_person_report: Error occurred while loading the person's report
+      routes:
+        get_history: Error occurred while loading the person's history
+        get_organization: Error occurred while loading the organization
+        get_person: Error occurred while loading the person
+      template_request:
+        load_template: Error occurred while loading the page

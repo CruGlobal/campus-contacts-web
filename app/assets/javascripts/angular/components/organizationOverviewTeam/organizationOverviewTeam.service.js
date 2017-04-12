@@ -31,7 +31,9 @@
                 requestParams['page[limit]'] = 0;
 
                 return httpProxy
-                    .get(modelsService.getModelMetadata('person').url.all, requestParams)
+                    .get(modelsService.getModelMetadata('person').url.all, requestParams, {
+                        errorMessage: 'error.messages.organization_overview_team.load_org_team_count'
+                    })
                     .then(function (resp) {
                         return resp.meta.total;
                     });

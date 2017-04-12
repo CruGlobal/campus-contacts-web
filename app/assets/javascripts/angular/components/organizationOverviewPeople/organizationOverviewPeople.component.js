@@ -40,7 +40,11 @@
         vm.$onDestroy = deactivate;
 
         var requestDeduper = new RequestDeduper();
-        var listLoader = new ProgressiveListLoader('person', requestDeduper);
+        var listLoader = new ProgressiveListLoader({
+            modelType: 'person',
+            requestDeduper: requestDeduper,
+            errorMessage: 'error.messages.organization_overview_people.load_people_chunk'
+        });
 
         var unsubscribe = null;
 

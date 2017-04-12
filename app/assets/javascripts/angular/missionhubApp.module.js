@@ -14,6 +14,7 @@
             'ui.bootstrap',
             'ngFileUpload',
             'infinite-scroll',
+            'toaster',
             'luegg.directives',
             'angulartics',
             'angulartics.google.analytics',

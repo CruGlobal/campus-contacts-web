@@ -22,7 +22,9 @@
                         }
                     }
                 };
-                return httpProxy.submitForm('PUT', url, form);
+                return httpProxy.submitForm('PUT', url, form, {
+                    errorMessage: 'error.messages.person_page.upload_avatar'
+                });
             },
 
             // Delete a person's existing avatar
@@ -35,6 +37,8 @@
                             picture: null
                         }
                     }
+                }, {
+                    errorMessage: 'error.messages.person_page.delete_avatar'
                 });
             },
 
@@ -61,7 +65,8 @@
                     data: personAttributes,
                     included: includedRelationships
                 }, {
-                    include: relationshipNames.join(',')
+                    params: { include: relationshipNames.join(',') },
+                    errorMessage: 'error.messages.person_page.create_person'
                 }).then(httpProxy.extractModel);
             }
         };

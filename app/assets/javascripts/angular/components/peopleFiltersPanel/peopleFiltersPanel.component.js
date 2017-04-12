@@ -48,6 +48,8 @@
         function loadFilterStats () {
             return httpProxy.get(modelsService.getModelMetadata('filter_stats').url.single('people'), {
                 organization_id: vm.organizationId
+            }, {
+                errorMessage: 'error.messages.people_filters_panel.load_filter_stats'
             })
                 .then(httpProxy.extractModel)
                 .then(function (stats) {

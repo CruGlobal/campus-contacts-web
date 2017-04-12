@@ -180,7 +180,9 @@
                     },
                     filters: normalizedFilters
                 };
-                return httpProxy.post('/bulk_people_changes', payload).then(httpProxy.extractModels);
+                return httpProxy.post('/bulk_people_changes', payload, {
+                    errorMessage: 'error.messages.mass_edit.apply_mass_edit'
+                }).then(httpProxy.extractModels);
             },
 
             // Apply changes that involve modifying a one-to-many relationship (like assignments, group memberships,
@@ -284,6 +286,8 @@
                         include: relationships.join(','),
                         'filters[organization_ids]': selection.orgId,
                         'filters[ids]': peopleMissingRelationships.join(',')
+                    }, {
+                        errorMessage: 'error.messages.mass_edit.load_relationships'
                     });
             },
 
@@ -292,6 +296,8 @@
                 return httpProxy.get(modelsService.getModelMetadata('filter_stats').url.single('people'), {
                     organization_id: orgId,
                     include_zeros: true
+                }, {
+                    errorMessage: 'error.messages.mass_edit.load_options'
                 }).then(httpProxy.extractModel);
             },
 

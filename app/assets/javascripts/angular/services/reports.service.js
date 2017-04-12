@@ -72,6 +72,8 @@
                         period: periodService.getPeriod(),
                         organization_ids: organizationId.toString(),
                         people_ids: personId.toString()
+                    }, {
+                        errorMessage: 'error.messages.reports.load_person_report'
                     })
                     .then(httpProxy.extractModels)
                     .then(function (people) {
@@ -105,6 +107,8 @@
                 return httpProxy.get(modelsService.getModelMetadata('organization_report').url.all, {
                     period: periodService.getPeriod(),
                     organization_ids: unloadedOrgIds.join(',')
+                }, {
+                    errorMessage: 'error.messages.reports.load_org_reports'
                 }).then(function () {
                     return lookupReports();
                 });

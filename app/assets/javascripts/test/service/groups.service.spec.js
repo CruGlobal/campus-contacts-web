@@ -72,7 +72,7 @@
                             type: 'group'
                         }
                     },
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 

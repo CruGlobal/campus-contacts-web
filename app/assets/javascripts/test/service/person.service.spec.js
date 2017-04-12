@@ -124,7 +124,7 @@
                             }
                         }]
                     },
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -210,7 +210,7 @@
                             'filters[organizations_id]': this.organizationId
                         }),
                         null,
-                        undefined
+                        jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                     );
                 });
 
@@ -246,7 +246,7 @@
                             'filters[organizations_id]': ''
                         }),
                         null,
-                        undefined
+                        jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                     );
                 });
 

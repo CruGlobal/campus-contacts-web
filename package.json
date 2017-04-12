@@ -20,6 +20,7 @@
     "angular-ui-router": "1.0.0-rc.1",
     "angular-ui-sortable": "^0.14.3",
     "angularjs-scroll-glue": "^2.2.0",
+    "angularjs-toaster": "^2.1.0",
     "angulartics": "^1.1.2",
     "angulartics-google-analytics": "^0.2.1",
     "bootstrap": "4.0.0-alpha.5",

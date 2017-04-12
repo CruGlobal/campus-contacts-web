@@ -11,9 +11,10 @@
 
     function myPeopleDashboardService (httpProxy, modelsService, loggedInPerson, periodService, _) {
         var myPeopleDashboardService = {
-
             loadPeople: function (params) {
-                return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {});
+                return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {}, {
+                    errorMessage: 'error.messages.my_people_dashboard.load_people'
+                });
             },
 
             loadPeopleReports: function (model) {
@@ -21,6 +22,8 @@
                     period: periodService.getPeriod(),
                     organization_ids: model.organization_ids.join(','),
                     people_ids: model.people_ids.join(',')
+                }, {
+                    errorMessage: 'error.messages.my_people_dashboard.load_reports'
                 });
             },
 
@@ -28,16 +31,20 @@
                 return httpProxy.get(modelsService.getModelMetadata('organization').url.all, _.extend({
                     order: 'active_people_count',
                     include: ''
-                }, params)).then(httpProxy.extractModels);
+                }, params), {
+                    errorMessage: 'error.messages.my_people_dashboard.load_orgs'
+                }).then(httpProxy.extractModels);
             },
 
             // Modify the user's preferences and save those changes on the server
-            updateUserPreference: function (changedPreferences) {
+            updateUserPreference: function (changedPreferences, errorMessage) {
                 return httpProxy.put(modelsService.getModelMetadata('user').url.single('me'), {
                     data: {
                         type: 'user',
                         attributes: changedPreferences
                     }
+                }, {
+                    errorMessage: errorMessage
                 });
             },
 
@@ -57,7 +64,7 @@
                 // Commit the changes
                 myPeopleDashboardService.updateUserPreference({
                     hidden_organizations: hiddenOrgs
-                });
+                }, 'error.messages.my_people_dashboard.update_org_visibility');
             }
         };
 

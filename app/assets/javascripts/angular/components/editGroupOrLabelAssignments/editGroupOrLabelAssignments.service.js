@@ -69,10 +69,12 @@
                                                person, addedGroupIds, removedGroupIds);
             },
 
-            loadPlaceholderEntries: function (entries, orgId) {
+            loadPlaceholderEntries: function (entries, orgId, errorMessage) {
                 if (_.find(entries, { _placeHolder: true })) {
                     httpProxy.get(modelsService.getModelMetadata('organization').url.single(orgId), {
                         include: modelsService.getModelMetadata(entries[0]._type).include
+                    }, {
+                        errorMessage: errorMessage
                     });
                 }
             }

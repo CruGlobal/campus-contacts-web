@@ -56,7 +56,7 @@
                     jasmine.any(String),
                     { include: jasmine.any(String) },
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 

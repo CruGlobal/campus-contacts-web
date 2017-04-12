@@ -78,7 +78,10 @@
                             }
                         }
                     },
-                    { params: {} }
+                    {
+                        params: {},
+                        errorMessage: jasmine.any(String)
+                    }
                 );
             });
 
@@ -99,7 +102,10 @@
                             }
                         }
                     },
-                    { params: {} }
+                    {
+                        params: {},
+                        errorMessage: jasmine.any(String)
+                    }
                 );
             });
 
@@ -128,7 +134,10 @@
                             }
                         }]
                     },
-                    { params: { } }
+                    {
+                        params: {},
+                        errorMessage: jasmine.any(String)
+                    }
                 );
             });
 
@@ -155,7 +164,10 @@
                             attributes: relationship
                         }]
                     },
-                    { params: { include: 'organizations' } }
+                    {
+                        params: { include: 'organizations' },
+                        errorMessage: jasmine.any(String)
+                    }
                 );
             });
         });
@@ -285,7 +297,8 @@
                     {
                         params: {
                             include: 'reverse_contact_assignments'
-                        }
+                        },
+                        errorMessage: jasmine.any(String)
                     }
                 );
             });
@@ -309,9 +322,11 @@
             it('should make a network request for each removed assignment', function () {
                 personProfileService.removeAssignments(this.person, this.removedPeople);
 
+                var errorMessageConfig = jasmine.objectContaining({ errorMessage: jasmine.any(String) });
+
                 expect(httpProxy.callHttp.calls.allArgs()).toEqual([
-                    ['DELETE', jasmine.stringMatching(/\/1$/), undefined, null, undefined], // ends with "/1"
-                    ['DELETE', jasmine.stringMatching(/\/3$/), undefined, null, undefined] // ends with "/3"
+                    ['DELETE', jasmine.stringMatching(/\/1$/), {}, null, errorMessageConfig], // ends with "/1"
+                    ['DELETE', jasmine.stringMatching(/\/3$/), {}, null, errorMessageConfig] // ends with "/3"
                 ]);
             });
 

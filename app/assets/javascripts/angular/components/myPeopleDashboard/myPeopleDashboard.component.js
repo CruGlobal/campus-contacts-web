@@ -168,7 +168,7 @@
             var orgOrder = _.map(vm.organizations, 'id');
             myPeopleDashboardService.updateUserPreference({
                 organization_order: orgOrder
-            });
+            }, 'error.messages.my_people_dashboard.update_org_order');
         }
     }
 })();

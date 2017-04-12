@@ -23,6 +23,8 @@
                 }
                 return httpProxy.get(modelsService.getModelUrl(org), {
                     include: include.join(',')
+                }, {
+                    errorMessage: 'error.messages.organization_overview.load_org_relationships'
                 });
             },
 

@@ -11,6 +11,7 @@
     <%= render 'dialogs/locate_contact' %>
     <%= render 'shared/jwt_preload_state' %>
       <div id="outer" ng-controller="DashboardController as $ctrl">
+        <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
         <div id="menutop" class="topmenu topmenu-with-sub">
           <%= render 'shared/menu' %>
         </div>

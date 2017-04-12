@@ -18,7 +18,10 @@
         vm.team = [];
         vm.loadTeamPage = loadTeamPage;
 
-        var listLoader = new ProgressiveListLoader('person');
+        var listLoader = new ProgressiveListLoader({
+            modelType: 'person',
+            errorMessage: 'error.messages.organization_overview_team.load_team_chunk'
+        });
 
         function loadTeamPage () {
             if (vm.busy) {

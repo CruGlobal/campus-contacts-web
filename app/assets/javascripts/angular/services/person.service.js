@@ -173,7 +173,9 @@
                     ]
                 };
                 return httpProxy
-                    .put(modelsService.getModelUrl(person), updateJson)
+                    .put(modelsService.getModelUrl(person), updateJson, {
+                        errorMessage: 'error.messages.person.archive_person'
+                    })
                     .then(function () {
                         // Remove the archived person from the organization's list of people
                         _.remove(organizationalPermission.organization.people, { id: person.id });
@@ -196,6 +198,8 @@
                     'filters[assigned_tos]': person.id,
                     'filters[organizations_id]': _.isNil(organizationId) ? '' : organizationId,
                     'page[limit]': 1000
+                }, {
+                    errorMessage: 'error.messages.person.get_contact_assignments'
                 })
                 .then(httpProxy.extractModels)
                 .then(function (assignedPeople) {

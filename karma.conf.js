@@ -27,6 +27,7 @@ module.exports = function (config) {
             './node_modules/angular-asset-path/src/index.js',
             './node_modules/ng-file-upload/dist/ng-file-upload.js',
             './node_modules/ng-infinite-scroll/build/ng-infinite-scroll.js',
+            './node_modules/angularjs-toaster/toaster.js',
             './node_modules/angularjs-scroll-glue/src/scrollglue.js',
             './node_modules/angulartics/src/angulartics.js',
             './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
@@ -41,8 +42,9 @@ module.exports = function (config) {
             './app/assets/javascripts/angular/missionhubApp.config.js',
             './app/assets/javascripts/angular/missionhubApp.constants.js',
             './app/assets/javascripts/angular/missionhubApp.run.js',
-            './app/assets/javascripts/angular/services/*.js',
             './app/assets/javascripts/angular/components/*/*.js',
+            './app/assets/javascripts/angular/filters/*.js',
+            './app/assets/javascripts/angular/services/*.js',
             './app/assets/javascripts/test/**/*.spec.js'
         ],
 

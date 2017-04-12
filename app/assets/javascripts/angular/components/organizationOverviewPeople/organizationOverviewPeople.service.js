@@ -30,6 +30,8 @@
                     httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                         include: '',
                         'filters[ids]': unloadedIds.join(',')
+                    }, {
+                        errorMessage: 'error.messages.organization_overview_people.load_assignments'
                     });
             },
 
@@ -78,7 +80,9 @@
                 requestParams['page[limit]'] = 0;
 
                 return httpProxy
-                    .get(modelsService.getModelMetadata('person').url.all, requestParams)
+                    .get(modelsService.getModelMetadata('person').url.all, requestParams, {
+                        errorMessage: 'error.messages.organization_overview_people.load_org_people_count'
+                    })
                     .then(function (resp) {
                         return resp.meta.total;
                     });

@@ -65,10 +65,17 @@
             return ['group.organization.id', vm.resolve.organizationId];
         }
 
+        function errorMessage () {
+            return isOrgLabelsMode() ?
+                'error.messages.edit_group_or_label_assignments.load_labels' :
+                'error.messages.edit_group_or_label_assignments.load_groups';
+        }
+
         function loadEntryOptions () {
             var entries = JsonApiDataStore.store.find('organization', vm.resolve.organizationId)[orgRelationship()];
             vm.entryOptions = _.sortBy(entries, sortFunction());
-            editGroupOrLabelAssignmentsService.loadPlaceholderEntries(entries, vm.resolve.organizationId);
+            editGroupOrLabelAssignmentsService.loadPlaceholderEntries(entries, vm.resolve.organizationId,
+                                                                      errorMessage());
         }
 
         function buildSelectedDict () {

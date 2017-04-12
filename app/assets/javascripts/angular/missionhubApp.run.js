@@ -3,6 +3,11 @@
 
     angular
         .module('missionhubApp')
+        .run(function ($http, $templateCache, assetPathFilter) {
+            // Preload the error message template so that it will be available in the case of a network error when it
+            // is most likely to be needed
+            $http.get(assetPathFilter('angular/templates/retryToastTemplate.html'), { cache: $templateCache });
+        })
         .run(function (lscache, nativeLocation, $analytics) {
             lscache.setBucket('missionhub:');
 

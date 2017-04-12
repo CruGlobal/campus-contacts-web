@@ -13,7 +13,10 @@
                     q: query,
                     organization_ids: organizationId,
                     'filters[permission_ids]': permissionService.adminAndUserIds.join(',')
-                }, { deduper: deduper }).then(httpProxy.extractModels);
+                }, {
+                    deduper: deduper,
+                    errorMessage: 'error.messages.assigned_select.search_people'
+                }).then(httpProxy.extractModels);
             },
 
             // Determine whether a person is the currently logged-in person

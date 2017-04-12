@@ -30,7 +30,7 @@
             httpProxy = _httpProxy_;
             _ = ___;
 
-            this.listLoader = new ProgressiveListLoader('person');
+            this.listLoader = new ProgressiveListLoader({ modelType: 'person' });
 
             var _this = this;
             spyOn(httpProxy, 'callHttp').and.callFake(function () {

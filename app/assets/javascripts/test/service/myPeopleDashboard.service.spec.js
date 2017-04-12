@@ -92,7 +92,7 @@
                     jasmine.any(String),
                     params,
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -133,7 +133,7 @@
                         jasmine.any(String),
                         _.extend(joinedParams, { period: 'period' }),
                         null,
-                        undefined
+                        jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                     );
                 });
 
@@ -172,7 +172,7 @@
                     jasmine.any(String),
                     this.loadOrganizationParams,
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 

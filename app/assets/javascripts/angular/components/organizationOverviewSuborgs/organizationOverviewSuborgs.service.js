@@ -28,7 +28,9 @@
                 var requestParams = organizationOverviewSuborgsService.buildGetParams(orgId);
                 requestParams['page[limit]'] = 0;
                 return httpProxy
-                    .get(modelsService.getModelMetadata('organization').url.all, requestParams)
+                    .get(modelsService.getModelMetadata('organization').url.all, requestParams, {
+                        errorMessage: 'error.messages.organization_overview_suborgs.load_org_suborg_count'
+                    })
                     .then(function (resp) {
                         return resp.meta.total;
                     });

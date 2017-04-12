@@ -114,7 +114,7 @@
                         people_ids: this.personId.toString()
                     },
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -153,7 +153,7 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,456,789',
                     period: this.period
-                }, null, undefined);
+                }, null, jasmine.objectContaining({ errorMessage: jasmine.any(String) }));
             });
 
             it('should only load reports that are not already loaded', function () {
@@ -164,7 +164,7 @@
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,789',
                     period: this.period
-                }, null, undefined);
+                }, null, jasmine.objectContaining({ errorMessage: jasmine.any(String) }));
             });
 
             it('should not make a network request when all reports are already loaded', function () {

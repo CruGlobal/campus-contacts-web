@@ -111,7 +111,7 @@
                             }
                         }]
                     },
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -144,7 +144,7 @@
                             }
                         }]
                     },
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 

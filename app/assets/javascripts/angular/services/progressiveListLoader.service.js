@@ -9,9 +9,10 @@
         var pageSize = 25;
         var overlapMargin = 1;
 
-        function ProgressiveListLoader (modelTypeOption, requestDeduperOption) {
-            var modelType = modelTypeOption;
-            var requestDeduper = requestDeduperOption;
+        function ProgressiveListLoader (options) {
+            var modelType = options.modelType;
+            var requestDeduper = options.requestDeduper;
+            var errorMessage = options.errorMessage;
             var list = [];
 
             this.loadMore = function (params) {
@@ -34,7 +35,10 @@
                 paramsWithPage['page[offset]'] = page.offset;
 
                 return httpProxy
-                    .get(modelsService.getModelMetadata(modelType).url.all, paramsWithPage, { deduper: requestDeduper })
+                    .get(modelsService.getModelMetadata(modelType).url.all, paramsWithPage, {
+                        deduper: requestDeduper,
+                        errorMessage: errorMessage || 'error.messages.progressive_list_loader.load_chunk'
+                    })
                     .then(function (resp) {
                         list = _.unionBy(list, resp.data, 'id');
                         var loadedAll = resp.meta.total <= list.length;

@@ -49,7 +49,7 @@
                     jasmine.any(String),
                     { include: 'groups,surveys' },
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -75,7 +75,7 @@
                     jasmine.any(String),
                     { include: 'surveys' },
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
 
@@ -91,7 +91,7 @@
                     jasmine.any(String),
                     { include: 'groups' },
                     null,
-                    undefined
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
             });
         });
