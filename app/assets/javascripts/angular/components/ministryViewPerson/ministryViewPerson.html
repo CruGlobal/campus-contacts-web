@@ -3,7 +3,7 @@
 </div>
 <div class="column important-column">
     <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
-        {{$ctrl.person.full_name}}
+        {{$ctrl.person | personName}}
     </a>
 </div>
 <div class="column detail-column gender-column">
@@ -11,7 +11,7 @@
 </div>
 <div class="column detail-column normal-column" ng-class="{warning: $ctrl.assignedTo.length === 0}">
     <span>{{$ctrl.assignedTo.length > 0 ?
-            $ctrl.assignedTo[0].full_name :
+            ($ctrl.assignedTo[0] | personName) :
             ('assignments.unassigned' | t)}}</span>
 </div>
 <div class="column detail-column status-column form"

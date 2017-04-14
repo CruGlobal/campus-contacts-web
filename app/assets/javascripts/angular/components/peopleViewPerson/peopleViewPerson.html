@@ -1,8 +1,8 @@
 <div class="person-info row-content">
     <div class="name">
-        <a ng-if="$root.betaMode" ng-click="$ctrl.openProfile()">{{ $ctrl.person.full_name }}</a>
+        <a ng-if="$root.betaMode" ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
         <a ng-if="!$root.betaMode" href="/profile/{{$ctrl.person.id}}?organization_id={{$ctrl.organizationId}}">
-            {{ $ctrl.person.full_name }}
+            {{ $ctrl.person | personName }}
         </a>
         <span class="uncontacted" ng-if="$ctrl.uncontacted">({{'dashboard.uncontacted' | t}})</span>
     </div>

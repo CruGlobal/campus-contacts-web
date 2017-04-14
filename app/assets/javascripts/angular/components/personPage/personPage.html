@@ -12,7 +12,7 @@
         </div>
         <div class="normal-column">
             <div class="row text-row">
-                <span class="name">{{$ctrl.person.full_name}}</span>
+                <span class="name">{{$ctrl.person | personName}}</span>
                 <span class="warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
                     {{'contacts.statuses.uncontacted' | t}}
                 </span>

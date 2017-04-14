@@ -30,7 +30,6 @@
                 var person = new JsonApiDataStore.Model('person', null);
                 person.setAttribute('first_name', '');
                 person.setAttribute('last_name', '');
-                person.setAttribute('full_name', '');
                 person.setAttribute('gender', 'Male');
                 person.setAttribute('student_status', 'collegiate');
                 person.setRelationship('organizational_permissions', [orgPermission]);

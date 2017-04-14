@@ -1,13 +1,13 @@
 <ui-select expose-select multiple ng-model="$ctrl.assigned" close-on-select="false">
     <ui-select-match>
         <span>
-            {{$item.first_name}} {{$item.last_name}}
+            {{$item | personName}}
             <span ng-if="$ctrl.isMe($item)">({{ 'application.assign_search.me' | t }})</span>
         </span>
     </ui-select-match>
     <ui-select-choices repeat="person in $ctrl.people track by person.id">
         <span>
-            {{person.first_name}} {{person.last_name}}
+            {{person | personName}}
             <span ng-if="$ctrl.isMe(person)">({{ 'application.assign_search.me' | t }})</span>
         </span>
     </ui-select-choices>
