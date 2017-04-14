@@ -775,6 +775,7 @@ en:
     roles_applied: Labels have been applied.
     save: Save
     search: Search
+    send: Send
     send_comment_success: Your comment has been successfully posted.
     send_email: Email
     show: Show
@@ -1034,6 +1035,20 @@ en:
     title: Edit Contacts
     unchanged: Unchanged
   member: Member
+  messages:
+    email_title: Email Contacts
+    email_subtitle: Send an email to %{recipients}.
+    sms_title: Text Contacts
+    sms_subtitle: Send a text message to %{recipients}.
+    recipients:
+      contacts: '%{contact_count} contacts'
+      organization: in organization %{name}
+      search: matching %{search}
+      groups: in groups %{names}
+      labels: with labels %{names}
+      assigned_tos: assigned to %{names}
+      exclusions: except %{names}
+    length_limit: '%{remaining_characters} characters left'
   monthly: Monthly
   movement_indicator_suggestions:
     index:

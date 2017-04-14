@@ -16,26 +16,6 @@
             this.unloadedRelationship = [this.loadedModel, this.unloadedModel];
         }));
 
-        describe('selectionContainsUnincludedPeople', function () {
-            it('should return true when all people are selected and all people are not included', function () {
-                expect(massEditService.selectionContainsUnincludedPeople({
-                    allSelected: true,
-                    allIncluded: false
-                })).toBe(true);
-            });
-
-            it('should return false otherwise', function () {
-                expect(massEditService.selectionContainsUnincludedPeople({
-                    allSelected: false,
-                    allIncluded: true
-                })).toBe(false);
-                expect(massEditService.selectionContainsUnincludedPeople({
-                    allSelected: true,
-                    allIncluded: true
-                })).toBe(false);
-            });
-        });
-
         describe('hashFromAddedRemoved', function () {
             it('should generate a hash of added and removed fields', function () {
                 expect(massEditService.hashFromAddedRemoved([1, 4, 5], [2, 3])).toEqual({
@@ -78,75 +58,6 @@
                     assigned_tos_removed: [2, 3]
                 })).toEqual({
                     assigned_tos: { 1: true, 2: false, 3: false }
-                });
-            });
-        });
-
-        describe('prepareFilters', function () {
-            beforeEach(function () {
-                this.orgId = 123;
-            });
-
-            it('should filter by id when all people are not selected', function () {
-                expect(massEditService.prepareFilters({
-                    orgId: this.orgId,
-                    allSelected: false,
-                    selectedPeople: [1, 2, 3]
-                })).toEqual({
-                    ids: '1,2,3'
-                });
-            });
-
-            it('should correctly transform filter attribute names and values', function () {
-                expect(massEditService.prepareFilters({
-                    orgId: this.orgId,
-                    allSelected: true,
-                    allIncluded: false,
-                    filters: {
-                        assignedTos: [1, 2, 3],
-                        labels: [11, 12, 13],
-                        groups: [21, 22, 23],
-                        searchString: 'John'
-                    },
-                    unselectedPeople: [31, 32, 33]
-                })).toEqual({
-                    organization_ids: this.orgId,
-                    assigned_tos: '1,2,3',
-                    label_ids: '11,12,13',
-                    group_ids: '21,22,23',
-                    exclude_ids: '31,32,33',
-                    name: 'John'
-                });
-            });
-
-            it('should default missing filter attributes', function () {
-                expect(massEditService.prepareFilters({
-                    orgId: this.orgId,
-                    allSelected: true,
-                    allIncluded: false,
-                    filters: {
-                        searchString: 'John'
-                    }
-                })).toEqual({
-                    organization_ids: this.orgId,
-                    name: 'John'
-                });
-            });
-
-            it('should ignore empty filter attributes', function () {
-                expect(massEditService.prepareFilters({
-                    orgId: this.orgId,
-                    allSelected: true,
-                    allIncluded: false,
-                    filters: {
-                        assignedTos: [],
-                        labels: [],
-                        groups: [],
-                        searchString: ''
-                    },
-                    exclude_ids: []
-                })).toEqual({
-                    organization_ids: this.orgId
                 });
             });
         });

@@ -38,11 +38,18 @@
                 }
             }, true);
 
+            sendFilters();
+
             loadFilterStats();
 
             $scope.$on('massEditApplied', function () {
                 loadFilterStats();
             });
+        }
+
+        // Send the filters to this component's parent via the filtersChanged binding
+        function sendFilters () {
+            vm.filtersChanged({ filters: cleanUpFilters() });
         }
 
         function loadFilterStats () {

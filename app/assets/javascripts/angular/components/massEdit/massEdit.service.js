@@ -5,7 +5,8 @@
         .module('missionhubApp')
         .factory('massEditService', massEditService);
 
-    function massEditService ($q, httpProxy, modelsService, organizationOverviewTeamService, JsonApiDataStore, _) {
+    function massEditService ($q, httpProxy, JsonApiDataStore, modelsService,
+                              personSelectionService, organizationOverviewTeamService, _) {
         // Return a boolean indicating whether a particular person is assigned to the team member
         function personHasAssignment (person, orgId, teamMember) {
             return Boolean(_.find(person.reverse_contact_assignments, function (assignment) {
@@ -96,13 +97,6 @@
         var complexChangeFields = _.keys(complexChangeManifests);
 
         var massEditService = {
-            // Return a boolean indicating whether a selection contains people that are not included in the id list
-            selectionContainsUnincludedPeople: function (selection) {
-                // The selection contains unincluded people when all people are selected and not all of those people
-                // are included in the person id list
-                return selection.allSelected && !selection.allIncluded;
-            },
-
             // Convert a list of added and removed ids into a hash with keys matching the ids and a value of true for
             // added and false for removed
             hashFromAddedRemoved: function (addedIds, removedIds) {
@@ -135,37 +129,12 @@
                 return filteredChanges;
             },
 
-            // Convert a filters object from the organizationOverviewPeople component into the form expected by the
-            // bulk people changed endpoint
-            prepareFilters: function (selection) {
-                if (!massEditService.selectionContainsUnincludedPeople(selection)) {
-                    // Use the id filters when we have the ids of all the people who are selected
-                    return {
-                        ids: (selection.selectedPeople || []).join(',')
-                    };
-                }
-
-                // Use the filters when all people are selected
-                var filters = selection.filters;
-                return _.pickBy({
-                    organization_ids: selection.orgId,
-                    exclude_ids: (selection.unselectedPeople || []).join(','),
-                    assigned_tos: (filters.assignedTos || []).join(','),
-                    label_ids: (filters.labels || []).join(','),
-                    group_ids: (filters.groups || []).join(','),
-                    name: filters.searchString || ''
-                }, function (filterValue) {
-                    // Ignore filter attributes that have are an empty string
-                    return filterValue !== '';
-                });
-            },
-
             // Apply the changes on the server
             applyChanges: function (selection, changes) {
                 var filteredChanges = massEditService.prepareChanges(changes);
                 massEditService.applyChangesLocally(selection, filteredChanges);
 
-                var normalizedFilters = massEditService.prepareFilters(selection);
+                var normalizedFilters = personSelectionService.convertToFilters(selection);
 
                 var payload = {
                     data: {
@@ -265,7 +234,7 @@
             loadPeopleRelationships: function (selection) {
                 // Optimize by only loading relationships when optionStateFromModel will actually use those
                 // relationships when determining option selection states
-                if (massEditService.selectionContainsUnincludedPeople(selection)) {
+                if (personSelectionService.containsUnincludedPeople(selection)) {
                     return $q.resolve();
                 }
 
@@ -353,7 +322,7 @@
             // "personHasModel" is expected to implement the algorithm for determining whether a person "has" a model.
             // It is called with the model and the person in question.
             optionStateFromModel: function (model, selection, personHasModel) {
-                if (massEditService.selectionContainsUnincludedPeople(selection)) {
+                if (personSelectionService.containsUnincludedPeople(selection)) {
                     // When unincluded contacts are selected, all options are automatically treated as indeterminate
                     return null;
                 }

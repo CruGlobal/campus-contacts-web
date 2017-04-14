@@ -32,6 +32,7 @@
         vm.filtersChanged = filtersChanged;
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
+        vm.sendMessage = sendMessage;
         vm.archivePeople = archivePeople;
         vm.deletePeople = deletePeople;
         vm.clearSelection = clearSelection;
@@ -206,6 +207,18 @@
                     // Keep the select all checkbox selected if it was originally selected and some people are selected
                     vm.selectAllValue = originalSelectAllValue && getSelectedPeople().length > 0;
                 });
+            });
+        }
+
+        function sendMessage (medium) {
+            $uibModal.open({
+                component: 'messageModal',
+                resolve: {
+                    medium: _.constant(medium),
+                    selection: _.constant(getSelection())
+                },
+                windowClass: 'pivot_theme',
+                size: 'md'
             });
         }
 
