@@ -14,12 +14,18 @@
             $ctrl.assignedTo[0].full_name :
             ('assignments.unassigned' | t)}}</span>
 </div>
-<div class="column detail-column normal-column"
+<div class="column detail-column status-column form"
      ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}">
-    <span>{{($ctrl.orgPermission.followup_status === 'uncontacted' ?
-                'followup_status.uncontacted' :
-                'followup_status.contacted')
-            | t}}</span>
+    <div class="form-group">
+        <label class="form-control-select">
+            <span class="label">&nbsp;</span>
+            <select class="form-control"
+                    ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
+                    ng-model="$ctrl.orgPermission.followup_status"
+                    ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')">
+            </select>
+        </label>
+    </div>
 </div>
 <div class="column detail-column phone-number-column">
     <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>

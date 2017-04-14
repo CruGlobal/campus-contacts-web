@@ -17,6 +17,23 @@ ministry-view-person {
   .gender-column {
     width: 50px;
   }
+  .status-column {
+    width: 170px;
+
+    .pivot_theme &.warning .form-control-select::after {
+      border-top-color: $pivot-orange;
+    }
+
+    .pivot_theme & .form-control-select select {
+      border: none;
+      padding-left: 0;
+      color: inherit;
+
+      &, &:focus {
+        background-color: transparent;
+      }
+    }
+  }
   .phone-number-column {
     width: 120px;
   }

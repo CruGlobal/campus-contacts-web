@@ -15,8 +15,11 @@
             }
         });
 
-    function ministryViewPersonController ($scope, personService) {
+    function ministryViewPersonController ($scope, personService, personProfileService) {
         var vm = this;
+
+        vm.saveAttribute = saveAttribute;
+        vm.followupStatusOptions = personService.getFollowupStatusOptions();
 
         vm.$onInit = activate;
 
@@ -36,6 +39,10 @@
             $scope.$watchCollection('$ctrl.person.email_addresses', function () {
                 vm.emailAddress = personService.getEmailAddress(vm.person);
             });
+        }
+
+        function saveAttribute (model, attribute) {
+            personProfileService.saveAttribute(vm.person.id, model, attribute);
         }
     }
 })();
