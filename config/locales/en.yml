@@ -1919,7 +1919,6 @@ en:
       person:
         archive_person: Error occurred while archiving the person
         get_contact_assignments: Error occurred while loading load the people this person is assigned to
-        load_org_reports: Error occurred while loading the organization's reports
       person_page:
         create_person: Error occurred while creating the person
         delete_avatar: Error occurred while removing the profile picture
@@ -1933,6 +1932,7 @@ en:
       progressive_list_loader:
         load_chunk: Error occurred while loading the items
       reports:
+        load_org_reports: Error occurred while loading the organization's reports
         load_person_report: Error occurred while loading the person's report
       routes:
         get_history: Error occurred while loading the person's history
