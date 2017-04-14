@@ -51,7 +51,6 @@
 //= require angular/missionhubApp.config
 //= require angular/missionhubApp.run
 //= require_tree ./angular
-//= require angular-animate/angular-animate
 
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js
