@@ -96,6 +96,19 @@
                     expect(getPromise).toHaveBeenCalledTimes(1);
                 });
             }));
+
+            it('ignores errors that match the criteria', asynchronous(function () {
+                var error = new Error();
+                var getPromise = jasmine.createSpy('getPromise').and.returnValue($q.reject(error));
+                var decorated = errorService.autoRetry(getPromise, {
+                    retryCount: 3,
+                    ignoreFilter: _.constant(true)
+                });
+                return decorated().catch(function (err) {
+                    expect(err).toBe(error);
+                    expect(getPromise).toHaveBeenCalledTimes(1);
+                });
+            }));
         });
     });
 })();

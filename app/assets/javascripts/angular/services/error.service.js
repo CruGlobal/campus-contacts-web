@@ -12,12 +12,17 @@
 
             // Default retry configuration for network requests
             networkRetryConfig: {
+                retryDelay: 1000,
+
                 retryFilter: function (err) {
                     // Retry network errors and 500 errors
                     return err.status === -1 || err.status === 500;
                 },
 
-                retryDelay: 1000
+                ignoreFilter: function (err) {
+                    // Ignore errors from canceled network requests
+                    return err.canceled;
+                }
             }
         };
 
@@ -77,7 +82,10 @@
                 retryDelay: 0,
 
                 // Retry all errors
-                retryFilter: _.constant(true)
+                retryFilter: _.constant(true),
+
+                // Ignore no errors
+                ignoreFilter: _.constant(false)
             });
 
             // Return the wrapper function that decorates the original getPromise function
@@ -87,6 +95,12 @@
                 // This error handler determines whether an error should be retried and retries the failed operation if
                 // necessary
                 function possiblyRetryError (err) {
+                    var ignore = options.ignoreFilter(err);
+                    if (ignore) {
+                        // Ignore the error; don't show an error message for it and don't retry it
+                        throw err;
+                    }
+
                     // Stop retrying if we are out of retries or the filter says to not retry this error
                     var retryable = options.retryFilter(err);
                     if (retriesRemaining === 0 || !retryable) {
