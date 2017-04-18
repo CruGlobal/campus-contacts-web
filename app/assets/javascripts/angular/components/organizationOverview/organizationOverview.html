@@ -23,6 +23,7 @@
             <div class="tab dropdown">
                 {{'ministries.tools.header' | t}}
                 <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
+                <div class="dropdown-container">
                     <ul class="dropdown-content">
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
@@ -45,7 +46,8 @@
                             <a ng-href="/charts/trend?organization_id={{$ctrl.org.id}}">{{ 'nav.trend' | t }}</a>
                         </li>
                     </ul>
-              </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row-content pivot_theme" ng-if="!('app.ministries.root' | isState)">

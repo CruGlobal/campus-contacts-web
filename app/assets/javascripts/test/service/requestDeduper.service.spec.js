@@ -69,35 +69,24 @@
                 expect(resolved).toBe(true);
             });
 
-            it('should flag cancelation errors', asynchronous(function () {
+            it('should keep the promise for a canceled request from settling', asynchronous(function () {
                 // Make the first request
                 var firstRequestCompletion = $q.defer();
-                var firstRequest = this.requestDeduper.request(function () {
+                var catchHandler = jasmine.createSpy('catchHandler');
+                this.requestDeduper.request(function () {
                     return firstRequestCompletion.promise;
-                });
+                }).catch(catchHandler);
 
                 // Make the second request
-                this.requestDeduper.request(makeSuccessfulRequest);
+                var secondRequest = this.requestDeduper.request(makeSuccessfulRequest);
 
-                // First request completes
-                firstRequestCompletion.resolve();
-
-                return firstRequest.catch(function (err) {
-                    expect(err.canceled).toBe(true);
-                });
-            }));
-
-            it('should not flag non-cancelation errors', asynchronous(function () {
-                // Make the first request and fail it
-                var firstRequestCompletion = $q.defer();
-                var firstRequest = this.requestDeduper.request(makeSuccessfulRequest);
+                // Fail the first request to simulate $http timeout behavior
                 firstRequestCompletion.reject(new Error());
 
-                // Make the second request
-                this.requestDeduper.request(makeSuccessfulRequest);
-
-                return firstRequest.catch(function (err) {
-                    expect(err.canceled).toBe(false);
+                // Wrap the promise from the second request so that the catch handler from the first request has a
+                // chance to be called first
+                return $q.resolve(secondRequest).then(function () {
+                    expect(catchHandler).not.toHaveBeenCalled();
                 });
             }));
         });

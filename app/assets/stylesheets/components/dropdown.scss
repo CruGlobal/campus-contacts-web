@@ -1,0 +1,15 @@
+.dropdown {
+  .chevron {
+    transform: rotate(90deg);
+    display: inline-block;
+  }
+
+  .dropdown-container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .dropdown-content {
+    position: absolute;
+  }
+}

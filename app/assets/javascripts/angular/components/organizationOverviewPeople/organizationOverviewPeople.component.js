@@ -141,7 +141,6 @@
                 .then(function (resp) {
                     var oldPeople = vm.people;
 
-                    vm.busy = false;
                     vm.people = resp.list;
                     vm.loadedAll = resp.loadedAll;
                     vm.totalCount = resp.total;
@@ -151,12 +150,7 @@
                         vm.multiSelection[person.id] = vm.selectAllValue;
                     });
                 })
-                .catch(function (err) {
-                    if (err.canceled) {
-                        // Ignore errors that were the result of the network request being deduped
-                        return;
-                    }
-
+                .finally(function () {
                     vm.busy = false;
                 });
         }

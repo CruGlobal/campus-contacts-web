@@ -2,7 +2,7 @@
     'use strict';
 
     /*
-     * The personName filter takes a perosn and converts it into the person's name.
+     * The personName filter takes a person and converts it into the person's name.
      */
     angular.module('missionhubApp')
         .filter('personName', function (_) {

@@ -116,6 +116,10 @@ en:
         surveys: Surveys
       profile:
         header: Profile
+    person:
+      search_placeholder: Search leaders
+      searching: Searching leaders...
+      no_search_results: No leaders found matching "%{search}"
     groups:
       header: Groups
     roots: Ministries

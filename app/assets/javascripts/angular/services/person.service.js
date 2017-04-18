@@ -74,6 +74,7 @@
             getAssignedTo: function (person, organizationId) {
                 return _.chain(person.reverse_contact_assignments)
                     .filter(['organization.id', organizationId])
+                    .sortBy('created_at')
                     .map('assigned_to')
                     .value();
             },

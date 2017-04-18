@@ -17,11 +17,6 @@
                 retryFilter: function (err) {
                     // Retry network errors and 500 errors
                     return err.status === -1 || err.status === 500;
-                },
-
-                ignoreFilter: function (err) {
-                    // Ignore errors from canceled network requests
-                    return err.canceled;
                 }
             }
         };

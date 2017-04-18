@@ -26,17 +26,11 @@ organization-overview {
       padding-left: 3px;
     }
     &.dropdown {
-      position: relative;
-      display: inline-block;
-      .chevron {
-        transform: rotate(90deg);
-        display: inline-block;
-      }
+      display: block;
     }
 
     .dropdown-content {
       display: none;
-      position: absolute;
       background-color: $pivot-dark-blue;
       min-width: 200px;
       list-style: none;

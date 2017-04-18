@@ -46,7 +46,12 @@
                 reverse_contact_assignments: [
                     {
                         organization: { id: 1 },
-                        assigned_to: { name: 'Adam' }
+                        assigned_to: { name: 'Adam' },
+                        created_at: '2'
+                    }, {
+                        organization: { id: 1 },
+                        assigned_to: { name: 'Alice' },
+                        created_at: '1'
                     }, {
                         organization: { id: 2 },
                         assigned_to: { name: 'Bill' }
@@ -87,7 +92,10 @@
 
         describe('getAssignedTo', function () {
             it('should find the person\'s assignments', function () {
-                expect(personService.getAssignedTo(this.person, 1)).toEqual([{ name: 'Adam' }]);
+                expect(personService.getAssignedTo(this.person, 1)).toEqual([
+                    { name: 'Alice' },
+                    { name: 'Adam' }
+                ]);
                 expect(personService.getAssignedTo(this.person, 4)).toEqual([]);
             });
         });

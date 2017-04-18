@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .factory('RequestDeduper', requestDeduper);
 
-    function requestDeduper ($q) {
+    function requestDeduper ($q, _) {
         /*
          * This class facilitates network request deduplication, i.e. preventing there from being multiple outstanding
          * requests. An instance of this class can be passed to httpProxy to enable deduplication of all requests that
@@ -32,8 +32,12 @@
                 });
 
                 return makeRequest({ timeout: nextRequestStart.promise }).catch(function (err) {
-                    // Mark the error as being the result of a duplicate request
-                    err.canceled = canceled;
+                    if (canceled) {
+                        // This error was the result of it being a duplicate request, so keep the promise that request()
+                        // returns to the caller from ever settling
+                        return $q(_.noop);
+                    }
+
                     throw err;
                 });
             };
