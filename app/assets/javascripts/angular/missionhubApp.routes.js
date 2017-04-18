@@ -267,6 +267,11 @@
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
+                        resolve: {
+                            $transition$: function ($transition$) {
+                                return $transition$;
+                            }
+                        },
                         component: 'organizationOverview' + _.capitalize(tab)
                     };
                 }))
