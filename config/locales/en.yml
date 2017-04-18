@@ -1906,6 +1906,8 @@ en:
         load_reports: Error occurred while loading the reports
         update_org_order: Error occurred while updating the organization order
         update_org_visibility: Error occurred while updating the organization visibility
+      organization:
+        load_ancestry: Error occurred while loading the organization's ancestors
       organization_overview:
         load_org_relationships: Error occurred while loading the organization's groups and surveys
       organization_overview_people:

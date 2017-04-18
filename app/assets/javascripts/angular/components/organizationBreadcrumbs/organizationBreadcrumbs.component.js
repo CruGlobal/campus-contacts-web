@@ -27,7 +27,9 @@
 
         function updateOrganization (orgId) {
             var org = JsonApiDataStore.store.find('organization', orgId);
-            vm.orgHierarchy = organizationService.getOrgHierarchy(org);
+            organizationService.getOrgHierarchy(org).then(function (hierarchy) {
+                vm.orgHierarchy = hierarchy;
+            });
         }
     }
 })();

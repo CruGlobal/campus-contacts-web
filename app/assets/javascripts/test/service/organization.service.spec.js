@@ -2,14 +2,33 @@
     'use strict';
 
     // Constants
-    var organizationService, JsonApiDataStore;
+    var organizationService, $rootScope, $q, JsonApiDataStore, _;
+
+    // Add better asynchronous support to a test function
+    // The test function must return a promise
+    // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
+    function asynchronous (fn) {
+        return function (done) {
+            var returnValue = fn.call(this, done);
+            returnValue.then(function () {
+                done();
+            }).catch(function (err) {
+                done.fail(err);
+            });
+            $rootScope.$apply();
+            return returnValue;
+        };
+    }
 
     describe('organizationService', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_organizationService_, _JsonApiDataStore_) {
+        beforeEach(inject(function (_organizationService_, _$rootScope_, _$q_, _JsonApiDataStore_, ___) {
             organizationService = _organizationService_;
+            $rootScope = _$rootScope_;
+            $q = _$q_;
             JsonApiDataStore = _JsonApiDataStore_;
+            _ = ___;
 
             var _this = this;
 
@@ -40,17 +59,41 @@
         });
 
         describe('getOrgHierarchy', function () {
-            it('should return org models', function () {
-                expect(organizationService.getOrgHierarchy(this.orgs[3])).toEqual(
-                    [this.orgs[1], this.orgs[2], this.orgs[3]]
-                );
-            });
+            it('should not load orgs when all orgs are loaded', asynchronous(function () {
+                spyOn(organizationService, 'loadOrgs').and.returnValue($q.resolve([]));
+                return organizationService.getOrgHierarchy(this.orgs[3]).then(function (orgs) {
+                    expect(_.map(orgs, 'id')).toEqual(['1', '2', '3']);
+                    expect(organizationService.loadOrgs).toHaveBeenCalledWith([], jasmine.any(String));
+                });
+            }));
 
-            it('should handle orgs with holes in the ancestry', function () {
-                expect(organizationService.getOrgHierarchy(this.orgs[5])).toEqual([
-                    this.orgs[1], this.orgs[2], this.orgs[3], this.orgs[5]
-                ]);
-            });
+            it('should load missing orgs when not all orgs are loaded', asynchronous(function () {
+                var _this = this;
+                spyOn(organizationService, 'loadOrgs').and.callFake(function () {
+                    // Simulate the load of org 4
+                    _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
+                    return $q.resolve();
+                });
+
+                return organizationService.getOrgHierarchy(this.orgs[5]).then(function (orgs) {
+                    expect(_.map(orgs, 'id')).toEqual(['1', '2', '3', '4', '5']);
+                    expect(organizationService.loadOrgs).toHaveBeenCalledWith(['4'], jasmine.any(String));
+                });
+            }));
+
+            it('should ignore unloadable orgs', asynchronous(function () {
+                var _this = this;
+                spyOn(organizationService, 'loadOrgs').and.returnValue($q.resolve([]));
+                return organizationService.getOrgHierarchy(this.orgs[5]).then(function (orgs) {
+                    // Should not include org 4
+                    expect(_.map(orgs, 'id')).toEqual(['1', '2', '3', '5']);
+
+                    // Should not attempt to reload org 4
+                    organizationService.loadOrgs.calls.reset();
+                    organizationService.getOrgHierarchy(_this.orgs[5]);
+                    expect(organizationService.loadOrgs).toHaveBeenCalledWith([], jasmine.any(String));
+                });
+            }));
         });
     });
 })();
