@@ -30,6 +30,11 @@ organization-overview-people {
     border-right: 1px solid;
   }
 
+  .sort-order-column {
+    padding-top: 4px;
+    padding-left: 4px;
+  }
+
   .people-list {
     flex: 1; /* 25% of available width */
     min-width: 196px;

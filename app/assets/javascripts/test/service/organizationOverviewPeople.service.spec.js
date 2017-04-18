@@ -40,6 +40,16 @@
             });
         }));
 
+        describe('buildOrderString', function () {
+            it('should generate a valid order string', function () {
+                expect(organizationOverviewPeopleService.buildOrderString([
+                    { field: 'key1', direction: 'asc' },
+                    { field: 'key2', direction: 'desc' },
+                    { field: 'key3', direction: 'desc' }
+                ])).toBe('key1 asc,key2 desc,key3 desc');
+            });
+        });
+
         describe('loadOrgPeopleCount', function () {
             it('should load the person count', asynchronous(function () {
                 this.responseTotal = 5;

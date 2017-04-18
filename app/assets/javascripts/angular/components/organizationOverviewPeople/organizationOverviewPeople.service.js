@@ -35,7 +35,15 @@
                     });
             },
 
-            buildGetParams: function (orgId, filtersParam) {
+            // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
+            // string expected by the API
+            buildOrderString: function (order) {
+                return order.map(function (orderEntry) {
+                    return orderEntry.field + ' ' + orderEntry.direction;
+                }).join(',');
+            },
+
+            buildGetParams: function (orgId, filtersParam, orderParam) {
                 var filters = filtersParam || {};
                 var base = {
                     include: [
@@ -44,6 +52,7 @@
                         'organizational_permissions',
                         'reverse_contact_assignments'
                     ].join(','),
+                    order: organizationOverviewPeopleService.buildOrderString(orderParam || []),
                     'filters[organization_ids]': orgId
                 };
                 if (filters.searchString) {
@@ -62,15 +71,14 @@
             },
 
             // Load an organization's people
-            loadMoreOrgPeople: function (orgId, filters, listLoader) {
-                var requestParams = organizationOverviewPeopleService.buildGetParams(orgId, filters);
+            loadMoreOrgPeople: function (orgId, filters, order, listLoader) {
+                var requestParams = organizationOverviewPeopleService.buildGetParams(orgId, filters, order);
 
                 return listLoader
                     .loadMore(requestParams)
                     .then(function (resp) {
-                        if (resp.nextBatch.length > 0) {
-                            organizationOverviewPeopleService.loadAssignedTos(resp.nextBatch, orgId);
-                        }
+                        // Load the assignments in parallel
+                        organizationOverviewPeopleService.loadAssignedTos(resp.nextBatch, orgId);
                         return resp;
                     });
             },

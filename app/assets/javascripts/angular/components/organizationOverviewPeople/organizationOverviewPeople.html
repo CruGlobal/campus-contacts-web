@@ -14,18 +14,18 @@
             <div class="column select-column">
                 <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
             </div>
-            <div class="column important-column row">
-                <span class="normal-column">{{'ministries.people.name' | t}}</span>
-                <icon-button icon="'person_add'" ui-sref=".new.defaultTab"></icon-button>
-            </div>
-            <div class="column detail-column gender-column">
-                <span>{{'ministries.people.gender' | t}}</span>
-            </div>
-            <div class="column detail-column normal-column">
-                <span>{{'assignments.assignment' | t}}</span>
-            </div>
-            <div class="column detail-column status-column">
-                <span>{{'ministries.people.status' | t}}</span>
+            <div class="column row" ng-repeat="column in $ctrl.columns"
+                 ng-class="column.cssClass" ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                <span>{{column.label | t}}</span>
+                <div class="normal-column sort-order-column">
+                    <ng-md-icon icon="arrow_downward" size="12"
+                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
+                    </ng-md-icon>
+                    <ng-md-icon icon="arrow_upwards" size="12"
+                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
+                    </ng-md-icon>
+                </div>
+                <icon-button ng-if="column.name === 'name'" icon="'person_add'" ui-sref=".new.defaultTab"></icon-button>
             </div>
             <div class="column detail-column phone-number-column">
                 <icon-button icon="'phone'" disabled="true"></icon-button>
@@ -51,11 +51,15 @@
                  infinite-scroll-container="'organization-overview-people .scroll-contain'"
                  infinite-scroll-listen-for-event="checkInfiniteScroll"
                  class="grid-content">
-                <ministry-view-person ng-repeat="person in $ctrl.people | orderBy: ['last_name','first_name'] track by person.id"
-                                      ng-class="{ collapsed: ('app.ministries.ministry.people.person' | includedByState),
-                                                  active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
-                                      selected="$ctrl.multiSelection[person.id]"
-                                      person="person" organization-id="$ctrl.organizationOverview.org.id">
+                <ministry-view-person
+                    ng-repeat="person in $ctrl.people |
+                               orderBy:$ctrl.sortOrder.column.getSortKey:$ctrl.sortOrder.direction === 'desc'
+                               track by person.id"
+                    ng-class="{
+                        collapsed: ('app.ministries.ministry.people.person' | includedByState),
+                        active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
+                    selected="$ctrl.multiSelection[person.id]"
+                    person="person" organization-id="$ctrl.organizationOverview.org.id">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}

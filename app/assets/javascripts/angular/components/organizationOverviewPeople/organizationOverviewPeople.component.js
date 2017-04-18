@@ -13,8 +13,8 @@
             }
         });
 
-    function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal,
-                                                   organizationOverviewPeopleService, confirmModalService,
+    function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal, confirmModalService,
+                                                   organizationOverviewPeopleService, personService,
                                                    RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
@@ -30,6 +30,7 @@
 
         vm.loadPersonPage = loadPersonPage;
         vm.filtersChanged = filtersChanged;
+        vm.setSortColumn = setSortColumn;
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
         vm.sendMessage = sendMessage;
@@ -47,6 +48,48 @@
             errorMessage: 'error.messages.organization_overview_people.load_people_chunk'
         });
 
+        // Define the columns that can be selected as sort keys
+        // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
+        vm.columns = [
+            {
+                name: 'name',
+                cssClass: 'important-column',
+                label: 'ministries.people.name',
+                sortable: true,
+                getSortKey: function (person) {
+                    return [person.last_name, person.first_name];
+                },
+                orderFields: ['last_name', 'first_name']
+            }, {
+                name: 'gender',
+                cssClass: 'detail-column gender-column',
+                label: 'ministries.people.gender',
+                sortable: true,
+                getSortKey: function (person) {
+                    return person.gender;
+                },
+                orderFields: ['gender', 'last_name', 'first_name']
+            }, {
+                name: 'assignment',
+                cssClass: 'detail-column normal-column',
+                label: 'assignments.assignment',
+                sortable: false
+            }, {
+                name: 'status',
+                cssClass: 'detail-column status-column',
+                label: 'ministries.people.status',
+                sortable: true,
+                getSortKey: function (person) {
+                    return personService.getFollowupStatus(person, vm.organizationOverview.org.id);
+                },
+                orderFields: ['followup_status', 'last_name', 'first_name']
+            }
+        ];
+
+        var defaultSortOrder = { column: vm.columns[0], direction: 'asc' };
+
+        vm.$onInit = activate;
+
         var unsubscribe = null;
 
         function activate () {
@@ -60,6 +103,8 @@
                     vm.organizationOverview.people.length++;
                 }
             });
+
+            vm.sortOrder = _.clone(defaultSortOrder);
         }
 
         function deactivate () {
@@ -87,7 +132,12 @@
         function loadPersonPage () {
             vm.busy = true;
             var orgId = vm.organizationOverview.org.id;
-            return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, listLoader)
+
+            // Generate the sort order list
+            var order = vm.sortOrder.column.orderFields.map(function (fieldName) {
+                return { field: fieldName, direction: vm.sortOrder.direction };
+            });
+            return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, order, listLoader)
                 .then(function (resp) {
                     var oldPeople = vm.people;
 
@@ -142,6 +192,23 @@
 
         function filtersChanged (newFilters) {
             vm.filters = newFilters;
+            resetList();
+            loadPersonPage();
+        }
+
+        function setSortColumn (column) {
+            if (vm.sortOrder.column === column) {
+                if (vm.sortOrder.direction === 'asc') {
+                    vm.sortOrder.direction = 'desc';
+                } else if (vm.sortOrder.direction === 'desc') {
+                    vm.sortOrder = _.clone(defaultSortOrder);
+                }
+            } else {
+                vm.sortOrder.column = column;
+                vm.sortOrder.direction = 'asc';
+            }
+
+            // Reload the list of people using the new sort order
             resetList();
             loadPersonPage();
         }
