@@ -34,6 +34,7 @@
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
         vm.sendMessage = sendMessage;
+        vm.exportPeople = exportPeople;
         vm.archivePeople = archivePeople;
         vm.deletePeople = deletePeople;
         vm.clearSelection = clearSelection;
@@ -134,10 +135,7 @@
             var orgId = vm.organizationOverview.org.id;
 
             // Generate the sort order list
-            var order = vm.sortOrder.column.orderFields.map(function (fieldName) {
-                return { field: fieldName, direction: vm.sortOrder.direction };
-            });
-            return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, order, listLoader)
+            return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, getOrder(), listLoader)
                 .then(function (resp) {
                     var oldPeople = vm.people;
 
@@ -224,6 +222,13 @@
                 allSelected: vm.selectAllValue,
                 allIncluded: vm.loadedAll
             };
+        }
+
+        // Get the current sort order
+        function getOrder () {
+            return vm.sortOrder.column.orderFields.map(function (fieldName) {
+                return { field: fieldName, direction: vm.sortOrder.direction };
+            });
         }
 
         // Open a modal to mass-edit all selected people
@@ -324,6 +329,10 @@
 
                     $scope.$broadcast('massEditApplied');
                 });
+        }
+
+        function exportPeople () {
+            organizationOverviewPeopleService.exportPeople(getSelection(), getOrder());
         }
 
         function archivePeople () {

@@ -5,7 +5,8 @@
         .module('missionhubApp')
         .factory('organizationOverviewPeopleService', organizationOverviewPeopleService);
 
-    function organizationOverviewPeopleService ($q, httpProxy, modelsService, massEditService, _) {
+    function organizationOverviewPeopleService ($http, $q, $window, httpProxy, modelsService, envService,
+                                                personSelectionService, massEditService, _) {
         var organizationOverviewPeopleService = {
             // Load all of the people that a list of people are assigned to
             loadAssignedTos: function (people, orgId) {
@@ -94,6 +95,28 @@
                     .then(function (resp) {
                         return resp.meta.total;
                     });
+            },
+
+            // Export the selected people
+            exportPeople: function (selection, order) {
+                var filterParams = _.mapKeys(personSelectionService.convertToFilters(selection), function (value, key) {
+                    return 'filters[' + key + ']';
+                });
+                var params = _.extend(filterParams, {
+                    access_token: $http.defaults.headers.common.Authorization.slice(7), // strip off the "Bearer " part
+                    organization_id: selection.orgId,
+                    order: organizationOverviewPeopleService.buildOrderString(order),
+                    format: 'csv'
+                });
+                var queryString = _.map(params, function (value, key) {
+                    return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+                }).join('&');
+
+                // Navigate to the URL to initiate the download
+                var url = envService.read('apiUrl') +
+                          modelsService.getModelMetadata('person').url.all + '?' +
+                          queryString;
+                $window.location.replace(url);
             },
 
             // Archive the selected people

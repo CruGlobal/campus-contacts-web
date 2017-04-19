@@ -36,13 +36,14 @@
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
             {{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}
-            <ng-md-icon class="actionable" icon="edit" size="16" ng-click="$ctrl.massEdit()"></ng-md-icon>
-            <ng-md-icon class="actionable" icon="email" size="16" ng-click="$ctrl.sendMessage('email')"></ng-md-icon>
-            <ng-md-icon class="actionable" icon="sms" size="16" ng-click="$ctrl.sendMessage('sms')"></ng-md-icon>
-            <ng-md-icon class="actionable" icon="archive" size="16" ng-click="$ctrl.archivePeople()"></ng-md-icon>
-            <ng-md-icon class="actionable" icon="delete" size="16" ng-click="$ctrl.deletePeople()"></ng-md-icon>
+            <ng-md-icon icon="edit" size="16" ng-click="$ctrl.massEdit()"></ng-md-icon>
+            <ng-md-icon icon="email" size="16" ng-click="$ctrl.sendMessage('email')"></ng-md-icon>
+            <ng-md-icon icon="sms" size="16" ng-click="$ctrl.sendMessage('sms')"></ng-md-icon>
+            <ng-md-icon icon="file_download" size="16" ng-click="$ctrl.exportPeople()"></ng-md-icon>
+            <ng-md-icon icon="archive" size="16" ng-click="$ctrl.archivePeople()"></ng-md-icon>
+            <ng-md-icon icon="delete" size="16" ng-click="$ctrl.deletePeople()"></ng-md-icon>
             <div class="space"></div>
-            <ng-md-icon class="actionable" icon="close" size="16" ng-click="$ctrl.clearSelection()"></ng-md-icon>
+            <ng-md-icon icon="close" size="16" ng-click="$ctrl.clearSelection()"></ng-md-icon>
         </div>
         <div class="scroll-contain">
             <div infinite-scroll="$ctrl.loadPersonPage()"
