@@ -3,7 +3,12 @@
         <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible}">
             <accordion-toggle></accordion-toggle>
             <div class="org-name">
-                <h2><a href="/allcontacts?organization_id={{$ctrl.org.id}}">{{ $ctrl.org.name }}</a></h2>
+                <h2 ng-if="$root.betaMode" ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })">
+                    {{ $ctrl.org.name }}
+                </h2>
+                <h2 ng-if="!$root.betaMode">
+                    <a href="/allcontacts?organization_id={{$ctrl.org.id}}">{{ $ctrl.org.name }}</a>
+                </h2>
             </div>
             <organizational-stats org="$ctrl.org"></organizational-stats>
             <div class="right-buttons">
