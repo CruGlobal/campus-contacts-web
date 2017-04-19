@@ -1,4 +1,6 @@
 class ChartsController < ApplicationController
+  before_action :check_new_current_organization, only: [:snapshot, :goal, :trend]
+
   def index
     redirect_to snapshot_charts_path
   end

@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
   before_action :get_import, only: [:show, :edit, :update, :destroy, :labels, :import]
+  before_action :check_new_current_organization, only: :new
   before_action :init_org, only: [:index, :show, :edit, :update, :new, :labels, :import]
   rescue_from Import::NilColumnHeader, with: :nil_column_header
   rescue_from Import::InvalidCSVFormat, with: :invalid_csv_format

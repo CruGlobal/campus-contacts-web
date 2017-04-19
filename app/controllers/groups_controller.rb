@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  before_action :check_new_current_organization, only: [:show]
   before_action :ensure_current_org
   before_action :get_group
   before_action :leader_needed, only: [:create, :new]

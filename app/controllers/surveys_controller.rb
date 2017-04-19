@@ -4,6 +4,7 @@ class SurveysController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :check_url
   load_and_authorize_resource except: [:start, :stop, :index]
+  before_action :check_new_current_organization, only: [:index]
 
   require 'api_helper'
   include ApiHelper

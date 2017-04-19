@@ -25,6 +25,9 @@
                 <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
                 <div class="dropdown-container">
                     <ul class="dropdown-content">
+                        <li>
+                            <a ng-href="/imports/new?organization_id={{$ctrl.org.id}}">{{ 'contacts.index.import_contacts' | t }}</a>
+                        </li>
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
                         </li>
