@@ -1,15 +1,16 @@
 (function () {
     'use strict';
 
-    if (location.pathname !== '/') {
-        // Only set up client-side routing on the single-page app page
-        return;
-    }
-
     angular
         .module('missionhubApp')
-        .config(function ($stateProvider, $urlServiceProvider, $uibResolveProvider, asyncBindingsServiceProvider,
-                          ministryViewTabs, ministryViewDefaultTab, personTabs, personDefaultTab, _) {
+        .config(function ($stateProvider, $locationProvider, $urlServiceProvider, $uibResolveProvider,
+                          asyncBindingsServiceProvider,
+                          ministryViewTabs, ministryViewDefaultTab, personTabs, personDefaultTab, spaPage, _) {
+            // Only set up client-side routing on single-page app pages
+            if (!spaPage) {
+                return false;
+            }
+
             // Instantiate factories
             var asyncBindingsService = asyncBindingsServiceProvider.$get();
 
@@ -293,5 +294,6 @@
 
             // This is the default URL if the URL does not match any routes
             $urlServiceProvider.rules.otherwise('/people');
+            $locationProvider.html5Mode(true);
         });
 })();

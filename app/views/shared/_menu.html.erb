@@ -24,14 +24,16 @@
       </ul>
     </li>
 
-    <li class="<%= 'current' if request.path =~ care_pattern %>">
-      <%= link_to(t('nav.contacts'), "/allcontacts") %>
+    <li ng-class="{ current: $root.isLegacyPage && <%= !(request.path =~ care_pattern).nil? %> }">
+      <a href="/allcontacts">{{ 'nav.contacts' | t}}</a>
     </li>
     <li ng-if="$root.betaMode" ui-sref-active="current">
-      <%= link_to(t('dashboard.people_assigned_to_you'), '/#/people') %>
+      <a ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+      <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
     </li>
     <li ng-if="$root.betaMode" ui-sref-active="current">
-      <%= link_to(t('dashboard.organizations_assigned_to_you'), '/#/ministries/root') %>
+      <a ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+      <a ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
     </li>
     <% if can? :manage_groups, current_organization %>
       <li class="<%= 'current' if request.path =~ group_pattern %>">

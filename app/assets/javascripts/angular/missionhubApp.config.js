@@ -3,8 +3,7 @@
 
     angular
         .module('missionhubApp')
-        .config(function (envServiceProvider, ngMdIconServiceProvider, I18n, $locationProvider,
-                          $qProvider) {
+        .config(function (envServiceProvider, ngMdIconServiceProvider, I18n, $qProvider) {
             // TODO: Remove eslint comment when bug is fixed.
             // See https://github.com/Gillespie59/eslint-plugin-angular/issues/223
             envServiceProvider.config({ // eslint-disable-line angular/module-getter
@@ -93,6 +92,5 @@
 
             I18n.fallbacks = true;
             $qProvider.errorOnUnhandledRejections(false);
-            $locationProvider.hashPrefix('');
         });
 })();

@@ -63,6 +63,8 @@ Mh::Application.routes.draw do
   end
 
   get 'dashboard/index'
+  get '/d' => 'dashboard#index'
+  get '/d/*all' => 'dashboard#index'
 
   resources :imports, except: [:show] do
     collection do
@@ -171,8 +173,6 @@ Mh::Application.routes.draw do
       delete :destroy
     end
   end
-
-  resources :ministries
 
   resources :sms_keywords, only: [:new, :create, :edit, :update, :destroy, :index] do
     collection do

@@ -8,17 +8,16 @@
             // is most likely to be needed
             $http.get(assetPathFilter('angular/templates/retryToastTemplate.html'), { cache: $templateCache });
         })
-        .run(function (lscache, nativeLocation, $analytics) {
+        .run(function ($window, $rootScope, $analytics, lscache, spaPage, _) {
             lscache.setBucket('missionhub:');
 
-            if (nativeLocation.pathname !== '/') {
-                $analytics.pageTrack(nativeLocation.pathname);
-            }
-        })
-        .run(function ($window, $rootScope, _) {
             // Determine whether this page is a SPA page or a legacy page
-            $rootScope.isSpaPage = $window.location.pathname === '/';
+            $rootScope.isSpaPage = spaPage;
             $rootScope.isLegacyPage = !$rootScope.isSpaPage;
+
+            if ($rootScope.isLegacyPage) {
+                $analytics.pageTrack($window.location.pathname);
+            }
 
             /* eslint-disable lines-around-comment */
             $window.location.search.slice(1)
