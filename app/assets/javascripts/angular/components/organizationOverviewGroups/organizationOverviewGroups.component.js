@@ -13,24 +13,34 @@
             }
         });
 
-    function organizationOverviewGroupsController ($uibModal) {
+    function organizationOverviewGroupsController ($uibModal, _) {
         var vm = this;
         vm.addGroup = addGroup;
+        vm.editGroup = editGroup;
 
         function addGroup () {
             $uibModal.open({
-                animation: true,
                 component: 'editGroup',
                 resolve: {
-                    organizationId: function () {
-                        return vm.organizationOverview.org.id;
-                    }
+                    organizationId: _.constant(vm.organizationOverview.org.id)
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm'
             });
 
             return false;
+        }
+
+        function editGroup (group) {
+            $uibModal.open({
+                component: 'editGroup',
+                resolve: {
+                    organizationId: _.constant(vm.organizationOverview.org.id),
+                    group: _.constant(group)
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm'
+            });
         }
     }
 })();

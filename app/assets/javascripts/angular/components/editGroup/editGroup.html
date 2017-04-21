@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3 class="modal-title" id="modal-title">{{ $ctrl.title | t }}</h3>
+  <h3 class="modal-title" id="modal-title">{{ $ctrl.title | t : { group: $ctrl.resolve.group.name } }}</h3>
 </div>
 <div class="modal-body form" id="modal-body">
   <div class="form-group">
@@ -39,11 +39,11 @@
   <div class="split-row" ng-if="$ctrl.group.meets !== 'sporadically'">
     <label>
       {{'groups.form.from' | t}}
-      <div uib-timepicker ng-model="$ctrl.group.start_time" minute-step="15"></div>
+      <div uib-timepicker ng-model="$ctrl.group.start_time_date" minute-step="15"></div>
     </label>
     <label>
       {{'groups.form.to' | t}}
-      <div uib-timepicker ng-model="$ctrl.group.end_time" minute-step="15"></div>
+      <div uib-timepicker ng-model="$ctrl.group.end_time_date" minute-step="15"></div>
     </label>
   </div>
 </div>

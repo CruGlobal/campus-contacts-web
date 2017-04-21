@@ -8,7 +8,8 @@
         .module('missionhubApp')
         .factory('httpProxy', proxyService);
 
-    function proxyService ($http, $log, $q, envService, JsonApiDataStore, Upload, tFilter, errorService, _) {
+    function proxyService ($http, $log, $q, envService, JsonApiDataStore, modelsService,
+                           Upload, tFilter, errorService, _) {
         // Extract and return the data portion of a JSON API payload
         function extractData (response) {
             return response.data;
@@ -149,6 +150,11 @@
                     .then(function () {
                         return JsonApiDataStore.store.find(type, id);
                     });
+            },
+
+            // Return the URL for a JSON API model
+            getModelUrl: function (model) {
+                return modelsService.getModelMetadata(model._type).url.single(model.id);
             },
 
             // Generate a JSON API "included" array from an array of models

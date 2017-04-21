@@ -1890,6 +1890,7 @@ en:
         load_labels: Error occurred while loading the user's labels
       groups:
         create_group: Error occurred while creating the group
+        update_group: Error occurred while updating the group
       http_proxy:
         default_network_error: An unknown network error occured
       interactions:

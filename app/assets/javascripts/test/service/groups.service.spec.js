@@ -32,19 +32,21 @@
             httpProxy = _httpProxy_;
             JsonApiDataStore = _JsonApiDataStore_;
 
-            this.organizationId = 1;
-            this.groupAttributes = {
-                name: 'Test group',
-                location: 'Somwhere great',
-                meets: 'weekly',
-                meeting_day: 'Thursday',
-                start_time: 64800,
-                end_time: 69300
-            };
+            this.organization = new JsonApiDataStore.Model('organization', 1);
+            this.organization.setRelationship('groups', []);
+
+            this.group = new JsonApiDataStore.Model('group');
+            this.group.setAttribute('name', 'Test group');
+            this.group.setAttribute('location', 'Somwhere great');
+            this.group.setAttribute('meets', 'weekly');
+            this.group.setAttribute('meeting_day', 'Thursday');
+            this.group.setAttribute('start_time', 64800);
+            this.group.setAttribute('end_time', 69300);
+            this.group.setRelationship('organization', this.organization);
 
             // Can be changed in individual tests
             this.httpResponse = $q.resolve({
-                data: this.groupAttributes
+                data: this.group
             });
             spyOn(httpProxy, 'callHttp').and.callFake(function () {
                 return _this.httpResponse;
@@ -53,50 +55,22 @@
 
         describe('createGroup', function () {
             it('should make a network request', function () {
-                groupsService.createGroup(angular.extend({
-                    _type: 'group'
-                }, this.groupAttributes), this.organizationId);
-
-                expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                    'POST',
-                    jasmine.any(String),
-                    null,
-                    {
-                        data: {
-                            attributes: this.groupAttributes,
-                            relationships: {
-                                organization: {
-                                    data: { id: this.organizationId, type: 'organization' }
-                                }
-                            },
-                            type: 'group'
-                        }
-                    },
-                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
-                );
+                groupsService.createGroup(this.group);
+                expect(httpProxy.callHttp).toHaveBeenCalled();
             });
 
             it('should return a promise that resolves to the new group', asynchronous(function () {
                 var _this = this;
-                return groupsService.createGroup(this.groupAttributes, this.organizationId).then(function (group) {
-                    expect(group).toEqual(jasmine.objectContaining(_this.groupAttributes));
+                return groupsService.createGroup(this.group).then(function (group) {
+                    expect(group).toBe(_this.group);
                 });
             }));
 
             it('should add the group to the organization', asynchronous(function () {
-                var org = JsonApiDataStore.store.sync({
-                    data: {
-                        type: 'organization',
-                        id: this.organizationId,
-                        relationships: {
-                            groups: {
-                                data: []
-                            }
-                        }
-                    }
-                });
-                return groupsService.createGroup(this.groupAttributes, this.organizationId).then(function (group) {
-                    expect(org.groups).toEqual(jasmine.arrayContaining([group]));
+                var _this = this;
+                spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.organization);
+                return groupsService.createGroup(this.group).then(function (group) {
+                    expect(_this.organization.groups).toEqual(jasmine.arrayContaining([group]));
                 });
             }));
         });

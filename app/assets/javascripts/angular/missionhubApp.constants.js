@@ -7,6 +7,7 @@
         .module('missionhubApp')
         .constant('_', window._)
         .constant('lscache', window.lscache)
+        .constant('moment', window.moment)
         .constant('I18n', window.I18n)
         .constant('confirm', window.confirm)
         .constant('jQuery', window.jQuery)
