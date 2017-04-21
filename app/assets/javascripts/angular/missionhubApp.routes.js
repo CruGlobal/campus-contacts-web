@@ -268,7 +268,7 @@
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
                         resolve: {
-                            $transition$: function ($transition$) {
+                            $transition$: /* @ngInject */ function ($transition$) {
                                 return $transition$;
                             }
                         },
