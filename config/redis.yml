@@ -1,5 +1,0 @@
-development: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV.fetch('REDIS_PORT_6379_TCP_PORT') %>
-test: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV.fetch('REDIS_PORT_6379_TCP_PORT') %>
-staging: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV.fetch('REDIS_PORT_6379_TCP_PORT') %>
-production: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV.fetch('REDIS_PORT_6379_TCP_PORT') %>
-aws: <%= ENV.fetch('REDIS_PORT_6379_TCP_ADDR') %>:<%= ENV.fetch('REDIS_PORT_6379_TCP_PORT') %>
