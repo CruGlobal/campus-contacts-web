@@ -826,6 +826,7 @@ en:
     add_a_label: Add a Group Label
     add_a_label_title: Add New Label
     add_group_member_success: You have successfully added a new contact to group.
+    confirm_delete_group: Are you sure you want to delete "%{group_name}"?
     delete_group_member: Delete this group member
     edit:
       edit_group: Editing %{group}
@@ -1890,6 +1891,7 @@ en:
         load_labels: Error occurred while loading the user's labels
       groups:
         create_group: Error occurred while creating the group
+        delete_group: Error occurred while deleting the group
         update_group: Error occurred while updating the group
       http_proxy:
         default_network_error: An unknown network error occured

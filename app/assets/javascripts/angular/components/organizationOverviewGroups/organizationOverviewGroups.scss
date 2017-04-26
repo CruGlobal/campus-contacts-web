@@ -1,4 +1,8 @@
 organization-overview-groups {
+  .row-content {
+    flex: 1;
+  }
+
   ng-md-icon {
     svg {
       fill: $pivot-dark-blue;
@@ -6,6 +10,10 @@ organization-overview-groups {
   }
 
   .edit-action {
-    margin-right: 6px;
+    margin-right: 10px;
+  }
+
+  .space {
+    flex: 1;
   }
 }

@@ -42,6 +42,13 @@
                     return groupsService.updateGroup(group);
                 }
                 return groupsService.createGroup(group);
+            },
+
+            // Delete a group on the server
+            deleteGroup: function (group) {
+                return httpProxy.delete(modelsService.getModelMetadata('group').url.single(group.id), {}, {
+                    errorMessage: 'error.messages.groups.delete_group'
+                }).then(httpProxy.extractModel);
             }
         };
 

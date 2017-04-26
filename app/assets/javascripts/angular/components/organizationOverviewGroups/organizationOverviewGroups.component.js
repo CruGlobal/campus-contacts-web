@@ -13,10 +13,11 @@
             }
         });
 
-    function organizationOverviewGroupsController ($uibModal, _) {
+    function organizationOverviewGroupsController ($uibModal, groupsService, tFilter, confirmModalService, _) {
         var vm = this;
         vm.addGroup = addGroup;
         vm.editGroup = editGroup;
+        vm.deleteGroup = deleteGroup;
 
         function addGroup () {
             $uibModal.open({
@@ -41,6 +42,16 @@
                 windowClass: 'pivot_theme',
                 size: 'sm'
             });
+        }
+
+        function deleteGroup (group) {
+            confirmModalService.create(tFilter('groups.confirm_delete_group', { group_name: group.name }))
+                .then(function () {
+                    return groupsService.deleteGroup(group);
+                })
+                .then(function () {
+                    _.pull(vm.organizationOverview.org.groups, group);
+                });
         }
     }
 })();
