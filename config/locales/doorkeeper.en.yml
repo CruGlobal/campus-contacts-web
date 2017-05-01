@@ -55,7 +55,7 @@ en:
         title: 'An error has occurred'
       new:
         title: 'Authorization required'
-        prompt: 'Authorize %{client_name} to use your account?'
+        prompt: 'Authorize %{client_name} to use your Missionhub account?'
         able_to: 'This application will be able to'
       show:
         title: 'Authorization code'
