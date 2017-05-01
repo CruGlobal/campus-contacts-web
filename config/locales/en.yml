@@ -101,7 +101,15 @@ en:
       selected_contacts: '%{contactCount} contacts selected'
       archive_people_confirm: Are you sure you want to archive %{contact_count} contacts?
       delete_people_confirm: Are you sure you want to delete %{contact_count} contacts?
-      merge_disabled: Select between 2 and 4 contacts to merge them
+      mass_edit_hover: Mass edit the selected contacts
+      merge_disabled_hover: Select between 2 and 4 contacts to merge them
+      merge_hover: Merge the selected contacts
+      email_hover: Email the selected contacts
+      sms_hover: Text the selected contacts
+      export_hover: Export the selected contacts as CSV
+      archive_hover: Archive the selected contacts
+      delete_hover: Delete the selected contacts
+      clear_selection_hover: Unselect all of the selected contacts
       activity:
         header: Activity
       assigned:
