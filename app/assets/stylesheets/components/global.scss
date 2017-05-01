@@ -25,6 +25,11 @@
   font-size: 12px;
 }
 
+ng-md-icon.disabled {
+  cursor: initial;
+  opacity: 0.3;
+}
+
 .icon-chip {
   display: block;
   background-color: $gray-2;

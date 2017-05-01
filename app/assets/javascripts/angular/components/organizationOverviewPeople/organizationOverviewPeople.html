@@ -37,6 +37,10 @@
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
             {{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}
             <ng-md-icon icon="edit" size="16" ng-click="$ctrl.massEdit()"></ng-md-icon>
+            <ng-md-icon icon="merge_type" size="16" ng-click="$ctrl.merge()"
+                        ng-class="{ disabled: !$ctrl.mergeable() }"
+                        ng-attr-title="{{ $ctrl.mergeable() ? undefined : ('ministries.people.merge_disabled' | t) }}">
+            </ng-md-icon>
             <ng-md-icon icon="email" size="16" ng-click="$ctrl.sendMessage('email')"></ng-md-icon>
             <ng-md-icon icon="sms" size="16" ng-click="$ctrl.sendMessage('sms')"></ng-md-icon>
             <ng-md-icon icon="file_download" size="16" ng-click="$ctrl.exportPeople()"></ng-md-icon>

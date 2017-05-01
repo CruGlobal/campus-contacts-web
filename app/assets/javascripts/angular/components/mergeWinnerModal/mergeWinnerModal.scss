@@ -1,0 +1,32 @@
+merge-winner-modal {
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .choice {
+    $unselected-border-width: 1px;
+    $selected-border-width: 3px;
+    $margin: 5px;
+
+    padding: ($selected-border-width - $unselected-border-width);
+    margin: $margin;
+    width: calc(50% - #{$margin * 2});
+    border: 1px dashed $pivot-dark-blue;
+    &.selected {
+      padding: 0;
+      border: $selected-border-width solid $pivot-dark-blue;
+    }
+
+    hr {
+      margin: 10px 5px;
+    }
+  }
+
+  .field {
+    margin: 5px;
+    .key {
+      font-weight: bold;
+    }
+  }
+}

@@ -8,18 +8,6 @@ icon-button {
   fill: $pivot-dark-blue;
   margin-left: 8px;
   margin-right: 8px;
-  ng-md-icon {
-    display: inherit;
-    cursor: pointer;
-
-    &.disabled {
-      cursor: initial;
-      opacity: 0.3;
-      &:hover, &:active {
-        background: none;
-      }
-    }
-  }
   & + icon-button {
     margin-left: 0;
   }

@@ -5,7 +5,9 @@
         .module('missionhubApp')
         .component('messageModal', {
             controller: messageModalController,
-            templateUrl: '/assets/angular/components/messageModal/messageModal.html',
+            templateUrl: /* @ngInject */ function (templateUrl) {
+                return templateUrl('messageModal');
+            },
             bindings: {
                 resolve: '<',
                 close: '&',

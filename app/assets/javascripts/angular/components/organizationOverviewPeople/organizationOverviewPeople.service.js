@@ -5,8 +5,8 @@
         .module('missionhubApp')
         .factory('organizationOverviewPeopleService', organizationOverviewPeopleService);
 
-    function organizationOverviewPeopleService ($http, $q, $window, httpProxy, modelsService, envService,
-                                                personSelectionService, massEditService, _) {
+    function organizationOverviewPeopleService ($http, $q, $window, httpProxy, JsonApiDataStore, modelsService,
+                                                envService, personSelectionService, massEditService, _) {
         var organizationOverviewPeopleService = {
             // Load all of the people that a list of people are assigned to
             loadAssignedTos: function (people, orgId) {
@@ -94,6 +94,17 @@
                     })
                     .then(function (resp) {
                         return resp.meta.total;
+                    });
+            },
+
+            // Merge the specified people
+            mergePeople: function (personIds, winnerId) {
+                var model = new JsonApiDataStore.Model('bulk_people_change');
+                model.setAttribute('person_ids', personIds);
+                model.setAttribute('winner_id', winnerId);
+                return httpProxy
+                    .post('/person_merges', model.serialize(), {
+                        errorMessage: 'error.messages.organization_overview_people.merge_people'
                     });
             },
 

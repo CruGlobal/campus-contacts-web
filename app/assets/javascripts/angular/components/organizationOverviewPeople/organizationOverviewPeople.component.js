@@ -33,6 +33,8 @@
         vm.setSortColumn = setSortColumn;
         vm.selectAll = selectAll;
         vm.massEdit = massEdit;
+        vm.mergeable = mergeable;
+        vm.merge = merge;
         vm.sendMessage = sendMessage;
         vm.exportPeople = exportPeople;
         vm.archivePeople = archivePeople;
@@ -276,6 +278,32 @@
             });
         }
 
+        // Return a boolean indicating whether the selected people can be merged
+        function mergeable () {
+            // Only 2 - 4 people may be merged at a time
+            return vm.selectedCount >= 2 && vm.selectedCount <= 4;
+        }
+
+        function merge () {
+            if (!mergeable()) {
+                return;
+            }
+
+            var personIds = getSelectedPeople();
+            $uibModal.open({
+                component: 'mergeWinnerModal',
+                resolve: {
+                    choices: _.constant(personIds)
+                },
+                windowClass: 'pivot_theme',
+                size: 'md'
+            }).result.then(function (winner) {
+                return organizationOverviewPeopleService.mergePeople(personIds, winner.id).then(function () {
+                    removePeopleFromList(_.without(personIds, winner.id));
+                });
+            });
+        }
+
         function sendMessage (medium) {
             $uibModal.open({
                 component: 'messageModal',
@@ -288,6 +316,40 @@
             });
         }
 
+        // Remove the specified people from the people list in the UI
+        function removePeopleFromList (peopleIds) {
+            // Partition loaded people by whether or not they are removed
+            var partition = _.partition(vm.people, function (person) {
+                return _.includes(peopleIds, person.id);
+            });
+            var removedPeople = partition[0];
+            var remainingPeople = partition[1];
+
+            // Update the people list and count
+            vm.people = remainingPeople;
+            vm.totalCount -= removedPeople.length;
+            listLoader.reset(vm.people);
+
+            // Update the people count shown in the people tab
+            if (vm.organizationOverview.people) {
+                vm.organizationOverview.people.length -= removedPeople.length;
+            }
+
+            // Remove the selection state of removed people
+            removedPeople.forEach(function (person) {
+                delete vm.multiSelection[person.id];
+            });
+
+            // Instruct the infinite scroller to check whether more people should be loaded because after
+            // removing some people, the list will be shorter and may now be at the bottom. However, do this in
+            // the next digest cycle after all of the removed people have been removed from the UI.
+            $scope.$applyAsync(function () {
+                $scope.$emit('checkInfiniteScroll');
+            });
+
+            $scope.$broadcast('massEditApplied');
+        }
+
         // Remove the selected people
         // This is an abstract method that can both archive and remove people
         function removePeople (message, performRemoval) {
@@ -297,37 +359,7 @@
                     return performRemoval(selection);
                 })
                 .then(function () {
-                    // Partition loaded people by whether or not they are removed
-                    var partition = _.partition(vm.people, function (person) {
-                        return _.includes(selection.selectedPeople, person.id);
-                    });
-                    var removedPeople = partition[0];
-                    var remainingPeople = partition[1];
-
-                    // Update the people list and count
-                    vm.people = remainingPeople;
-                    vm.totalCount -= removedPeople.length;
-                    listLoader.reset(vm.people);
-
-                    // Update the people count shown in the people tab
-                    if (vm.organizationOverview.people) {
-                        vm.organizationOverview.people.length -= removedPeople.length;
-                    }
-
-                    // Remove the selection state of removed people
-                    removedPeople.forEach(function (person) {
-                        delete vm.multiSelection[person.id];
-                    });
-                })
-                .then(function () {
-                    // Instruct the infinite scroller to check whether more people should be loaded because after
-                    // removing some people, the list will be shorter and may now be at the bottom. However, do this in
-                    // the next digest cycle after all of the removed people have been removed from the UI.
-                    $scope.$applyAsync(function () {
-                        $scope.$emit('checkInfiniteScroll');
-                    });
-
-                    $scope.$broadcast('massEditApplied');
+                    removePeopleFromList(selection.selectedPeople);
                 });
         }
 

@@ -101,6 +101,7 @@ en:
       selected_contacts: '%{contactCount} contacts selected'
       archive_people_confirm: Are you sure you want to archive %{contact_count} contacts?
       delete_people_confirm: Are you sure you want to delete %{contact_count} contacts?
+      merge_disabled: Select between 2 and 4 contacts to merge them
       activity:
         header: Activity
       assigned:
@@ -1040,6 +1041,24 @@ en:
     title: Edit Contacts
     unchanged: Unchanged
   member: Member
+  merge_winner:
+    title: Merge Winner
+    subtitle: Choose the winner of the merge. The other people will be merged into the winner.
+    merge: Merge
+    person_fields:
+      first_name: First name
+      last_name: Last name
+      gender: Gender
+      email_addresses: Email addresses
+      phone_numbers: Phone numbers
+      created_date: Person created
+      updated_date: Person updated
+    user_fields:
+      id: User id
+      username: Username
+      created_date: User created
+      updated_date: User updated
+      login_date: Last login
   messages:
     email_title: Email Contacts
     email_subtitle: Send an email to %{recipients}.
@@ -1903,6 +1922,8 @@ en:
         apply_mass_edit: Error occurred while mass editing the contacts
         load_options: Error occurred while loading options
         load_relationships: Error occurred while loading options
+      merge_winner:
+          load_users: Error occurred while loading the users
       my_people_dashboard:
         load_orgs: Error occurred while loading the organizations
         load_people: Error occurred while loading the people
@@ -1917,6 +1938,7 @@ en:
         load_assignments: Error occurred while loading the people assigned to these people
         load_org_people_count: Error occurred while loading the number of people in the organization
         load_people_chunk: Error occurred while loading the next batch of people
+        merge_people: Error occurred while merging people
       organization_overview_suborgs:
         load_org_chunk: Error occurred while loading the next batch of sub-organizations
         load_org_suborg_count: Error occurred while loading the number of sub-organizations in the organization
