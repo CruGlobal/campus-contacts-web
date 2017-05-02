@@ -451,9 +451,10 @@ Mh::Application.routes.draw do
   #  get 'home' => 'welcome#home', as: 'user_root' ---- LOOK FOR THIS IN application_controller.rb
   get 'dashboard' => 'dashboard#index'
   get 'wizard' => 'welcome#wizard', as: 'wizard'
-  get 'terms' => 'welcome#terms', as: 'terms'
-  get 'privacy' => 'welcome#privacy', as: 'privacy'
+  get 'terms', to: redirect('https://get.missionhub.com/terms-of-service/')
+  get 'privacy', to: redirect('https://get.missionhub.com/terms-of-service/')
   get 'tutorials', to: redirect('http://help.missionhub.com/')
+  get 'get_missionhub', to: redirect('https://get.missionhub.com/')
   get 'test' => 'welcome#test'
   get 'welcome/index'
   get 'welcome/duplicate'

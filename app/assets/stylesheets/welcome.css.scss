@@ -83,8 +83,8 @@ p {
 .icon {
   width: 96px;
   height: 96px;
-  background: #007398;
-  background-image: linear-gradient(to top, #00abc9, #007398);
+  background: $pivot-dark-blue;
+  background-image: linear-gradient(to top, #00abc9, $pivot-dark-blue);
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
@@ -117,7 +117,7 @@ p {
 }
 
 .btn {
-  background-image: linear-gradient(to bottom, #72d9e6, #3eb1c8);
+  background-color: $pivot-darker-blue;
   font-size: .89em;
   color: #ffffff;
   padding: 11px 15px 13px 15px;
@@ -200,7 +200,7 @@ p {
 
 header,
 .hero {
-  background-color: #007398;
+  background-color: $pivot-dark-blue;
 }
 
 header {
@@ -352,13 +352,13 @@ footer a {
 
 .top {
   min-height: 80vh;
-  background-color: #007398;
+  background-color: $pivot-dark-blue;
 }
 
 /* Content */
 
 .content {
-  background-color: #007398;
+  background-color: $pivot-dark-blue;
   padding: 40px;
   color: #66d9f0;
   a, p {

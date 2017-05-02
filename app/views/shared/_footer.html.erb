@@ -1,7 +1,6 @@
 <span>&#169; Copyright <%= Time.now.year %></span>
 <% if branded? %>
-<span><%= link_to(t('nav.terms'), '/terms') %></span>
-<span><%= link_to(t('nav.privacy'), '/privacy') %></span>
+<span><%= link_to(t('nav.terms'), terms_url) %></span>
 <span><%= link_to(t('nav.support'), t('general.help_redirect_link')) %></span>
 <span><%= link_to(t('nav.faq'), t('general.faq_redirect_link')) %></span>
 <span>

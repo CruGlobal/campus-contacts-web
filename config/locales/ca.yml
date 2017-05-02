@@ -937,7 +937,7 @@ ca:
     help: Resources and Help
     hide: Hide
     keywords: Keywords
-    login: Log In
+    login: Sign In
     logout: Sign Out
     make_default: make default
     manage: Organizations

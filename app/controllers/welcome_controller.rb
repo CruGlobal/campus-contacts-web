@@ -6,7 +6,8 @@ class WelcomeController < ApplicationController
 
   def index
     redirect_to(user_root_path) && return if user_signed_in?
-    render layout: 'welcome' # , stream: true
+    redirect_to(get_missionhub_url) if Rails.env.production?
+    render layout: 'welcome'
   end
 
   def wizard

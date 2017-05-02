@@ -40,16 +40,6 @@ class WelcomeControllerTest < ActionController::TestCase
     end
   end
 
-  should 'get correct template for terms' do
-    get :terms
-    assert_template 'layouts/welcome'
-  end
-
-  should 'get correct template for privacy' do
-    get :privacy
-    assert_template 'layouts/welcome'
-  end
-
   should 'get correct template for duplicate' do
     get :duplicate
     assert_template 'layouts/splash'
