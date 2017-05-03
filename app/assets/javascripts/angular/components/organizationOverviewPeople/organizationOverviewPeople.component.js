@@ -60,7 +60,7 @@
                 label: 'ministries.people.name',
                 sortable: true,
                 getSortKey: function (person) {
-                    return [person.last_name, person.first_name];
+                    return [person.last_name.toLowerCase(), person.first_name.toLowerCase()];
                 },
                 orderFields: ['last_name', 'first_name']
             }, {
