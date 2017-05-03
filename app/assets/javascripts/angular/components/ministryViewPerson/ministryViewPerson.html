@@ -1,7 +1,7 @@
 <div class="column select-column">
     <input type="checkbox" ng-model="$ctrl.selected" />
 </div>
-<div class="column important-column">
+<div class="column name-column">
     <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
         {{$ctrl.person | personName}}
     </a>
@@ -9,7 +9,7 @@
 <div class="column detail-column gender-column">
     <span ng-if="$ctrl.person.gender">{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) | t}}</span>
 </div>
-<div class="column detail-column normal-column assigned-to-column dropdown"
+<div class="column detail-column assigned-to-column dropdown"
      ng-class="{warning: $ctrl.assignedTo.length === 0}">
     <div class="name-container">
         <div class="name">

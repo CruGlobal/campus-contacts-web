@@ -11,13 +11,18 @@ ministry-view-person {
     padding-left: 6px;
     padding-right: 6px;
   }
+  .name-column {
+    flex: 2;
+  }
   .button-column {
     width: 56px;
   }
   .gender-column {
-    width: 60px;
+    width: 40px;
   }
   .assigned-to-column {
+    flex: 1.5;
+
     .name-container {
       display: flex;
       height: $person-height;

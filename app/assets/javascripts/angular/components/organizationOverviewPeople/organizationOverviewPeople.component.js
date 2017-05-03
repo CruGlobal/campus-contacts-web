@@ -56,7 +56,7 @@
         vm.columns = [
             {
                 name: 'name',
-                cssClass: 'important-column',
+                cssClass: 'name-column',
                 label: 'ministries.people.name',
                 sortable: true,
                 getSortKey: function (person) {
@@ -74,7 +74,7 @@
                 orderFields: ['gender', 'last_name', 'first_name']
             }, {
                 name: 'assignment',
-                cssClass: 'detail-column normal-column',
+                cssClass: 'detail-column assigned-to-column',
                 label: 'assignments.assignment',
                 sortable: false
             }, {
