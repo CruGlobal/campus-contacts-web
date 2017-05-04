@@ -17,7 +17,7 @@
           <%= render 'shared/menu' %>
         </div>
         <% if current_organization %>
-          <div class="dashboard-subnav">
+          <div class="dashboard-subnav" ng-if="'app.people' | isState">
             <div class="inner">
               <div class="dashboard-mode-toggle">
                 <%= t('dashboard.people_assigned_to_you') %>
@@ -63,5 +63,3 @@
     <%= render 'shared/shared_footer' %>
   </body>
 </html>
-
-
