@@ -14,7 +14,7 @@ organization-overview-people {
   }
 
   .scroll-contain {
-    max-height: calc(#{$organization-overview-content-height} - #{$person-height});
+    height: calc(#{$organization-overview-content-height} - #{$person-height});
     overflow-y: auto;
   }
 
