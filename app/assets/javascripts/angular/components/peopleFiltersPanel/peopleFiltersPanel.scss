@@ -3,6 +3,12 @@ people-filters-panel {
   display: block;
   overflow-y: auto;
 
+  .reset {
+    width: 100%;
+    height: 2em;
+    margin-top: 10px;
+  }
+
   .filter-row {
     border-bottom: 1px solid $gray-4;
     padding: 12px 0;

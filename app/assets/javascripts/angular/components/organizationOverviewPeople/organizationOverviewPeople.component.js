@@ -15,6 +15,7 @@
 
     function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal, confirmModalService,
                                                    organizationOverviewPeopleService, personService,
+                                                   peopleFiltersPanelService,
                                                    RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
@@ -246,9 +247,7 @@
                 $scope.$broadcast('massEditApplied');
 
                 // Determine whether any filters are applied
-                var filtersApplied = vm.filters.searchString || _.keys(vm.filters.labels).length ||
-                    _.keys(vm.filters.assignedTos).length || _.keys(vm.filters.groups).length;
-                if (!filtersApplied) {
+                if (!peopleFiltersPanelService.filtersHasActive(vm.active)) {
                     // When there are no filters, we only need to make sure that all the people that people in the list
                     // are assigned to are loaded
                     organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.organizationOverview.org.id);

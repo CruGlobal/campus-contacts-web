@@ -14,14 +14,10 @@
             }
         });
 
-    function peopleFiltersPanelController ($scope, httpProxy, modelsService, _) {
+    function peopleFiltersPanelController ($scope, httpProxy, modelsService, peopleFiltersPanelService, _) {
         var vm = this;
-        vm.filters = {
-            searchString: '',
-            labels: {},
-            assignedTos: {},
-            groups: {}
-        };
+        vm.filters = null;
+        vm.filtersApplied = false;
         vm.groupOptions = [];
         vm.assignmentOptions = [];
         vm.labelOptions = [];
@@ -29,16 +25,20 @@
         vm.assignedToFilterCollapsed = true;
         vm.groupFilterCollapsed = true;
 
+        vm.resetFilters = resetFilters;
+
         vm.$onInit = activate;
 
         function activate () {
             $scope.$watch('$ctrl.filters', function (newFilters, oldFilters) {
                 if (!_.isEqual(newFilters, oldFilters)) {
-                    vm.filtersChanged({ filters: cleanUpFilters() });
+                    vm.filtersApplied = peopleFiltersPanelService.filtersHasActive(getNormalizedFilters());
+
+                    sendFilters();
                 }
             }, true);
 
-            sendFilters();
+            vm.resetFilters();
 
             loadFilterStats();
 
@@ -47,9 +47,18 @@
             });
         }
 
+        function resetFilters () {
+            vm.filters = {
+                searchString: '',
+                labels: {},
+                assignedTos: {},
+                groups: {}
+            };
+        }
+
         // Send the filters to this component's parent via the filtersChanged binding
         function sendFilters () {
-            vm.filtersChanged({ filters: cleanUpFilters() });
+            vm.filtersChanged({ filters: getNormalizedFilters() });
         }
 
         function loadFilterStats () {
@@ -81,12 +90,13 @@
                 .value();
         }
 
-        function cleanUpFilters () {
-            var normalizedFilters = { searchString: vm.filters.searchString };
-            normalizedFilters.labels = getTruthyKeys(vm.filters.labels);
-            normalizedFilters.assignedTos = getTruthyKeys(vm.filters.assigned_tos);
-            normalizedFilters.groups = getTruthyKeys(vm.filters.groups);
-            return normalizedFilters;
+        function getNormalizedFilters () {
+            return {
+                searchString: vm.filters.searchString,
+                labels: getTruthyKeys(vm.filters.labels),
+                assignedTos: getTruthyKeys(vm.filters.assigned_tos),
+                groups: getTruthyKeys(vm.filters.groups)
+            };
         }
     }
 })();
