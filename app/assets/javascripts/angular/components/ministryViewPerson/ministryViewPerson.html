@@ -50,7 +50,7 @@
 <div class="column detail-column status-column form"
      ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}">
     <div class="form-group">
-        <label class="form-control-select">
+        <label class="form-control-select" ng-if="$ctrl.isContact()">
             <span class="label">&nbsp;</span>
             <select class="form-control"
                     ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"

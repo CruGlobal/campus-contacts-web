@@ -39,7 +39,7 @@
             </label>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-if="$ctrl.isContact()">
         <label class="form-control-select">
             <span class="label">{{'contact.followup_status' | t}}</span>
             <select ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"

@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .factory('personService', personService);
 
-    function personService (httpProxy, modelsService, JsonApiDataStore, _) {
+    function personService (httpProxy, modelsService, JsonApiDataStore, permissionService, _) {
         // Convert an array of string ids into an array of options with the schema { id, i18n }
         // Used by personService.get*Options()
         function generateOptionsFromIds (ids, i18nPrefix) {
@@ -23,7 +23,7 @@
                 var orgPermission = new JsonApiDataStore.Model('organizational_permission');
                 orgPermission.setAttribute('organization_id', orgId);
                 orgPermission.setAttribute('followup_status', 'uncontacted');
-                orgPermission.setAttribute('permission_id', 2);
+                orgPermission.setAttribute('permission_id', permissionService.noPermissionId);
                 orgPermission.setAttribute('cru_status', 'none');
                 orgPermission.setRelationship('organization', JsonApiDataStore.store.find('organization', orgId));
 
@@ -52,6 +52,12 @@
                     .first()
                     .defaultTo(null)
                     .value();
+            },
+
+            // Return a boolean indicating whether a person in a contact in a particular organization
+            isContact: function (person, organizationId) {
+                var orgPermission = personService.getOrgPermission(person, organizationId);
+                return orgPermission ? orgPermission.permission_id === permissionService.noPermissionId : false;
             },
 
             getOrgLabels: function (person, organizationId) {
@@ -129,9 +135,9 @@
             // Return an array of permission options
             getPermissionOptions: function () {
                 return [
-                    { id: 1, i18n: 'permissions.admin' },
-                    { id: 4, i18n: 'permissions.user' },
-                    { id: 2, i18n: 'permissions.no_permissions' }
+                    { id: permissionService.adminId, i18n: 'permissions.admin' },
+                    { id: permissionService.userId, i18n: 'permissions.user' },
+                    { id: permissionService.noPermissionId, i18n: 'permissions.no_permissions' }
                 ];
             },
 

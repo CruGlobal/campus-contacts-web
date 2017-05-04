@@ -14,7 +14,8 @@
         });
 
     function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery, geoDataService,
-                                      personService, personProfileService, loggedInPerson, _, confirmModalService) {
+                                      permissionService, personService, personProfileService,
+                                      loggedInPerson, confirmModalService, _) {
         var vm = this;
 
         vm.pendingEmailAddress = null;
@@ -23,6 +24,7 @@
 
         vm.saveAttribute = saveAttribute;
         vm.saveRelationship = saveRelationship;
+        vm.isContact = isContact;
         vm.emailAddressesWithPending = emailAddressesWithPending;
         vm.phoneNumbersWithPending = phoneNumbersWithPending;
         vm.isPendingEmailAddress = isPendingEmailAddress;
@@ -63,7 +65,7 @@
             if (loggedInPerson.person === vm.personTab.person) {
                 vm.permissionChangeDisabled = true;
             } else if (!loggedInPerson.isAdminAt(organization)) {
-                if (vm.personTab.orgPermission.permission_id === 1) {
+                if (vm.personTab.orgPermission.permission_id === permissionService.adminId) {
                     vm.permissionChangeDisabled = true;
                 } else {
                     vm.permissionOptions.shift();
@@ -155,6 +157,10 @@
             $scope.$emit('personModified');
 
             personProfileService.deleteRelationship(vm.personTab.person, relationship, relationshipName);
+        }
+
+        function isContact () {
+            return personService.isContact(vm.personTab.person, vm.personTab.organizationId);
         }
 
         function emailAddressesWithPending () {

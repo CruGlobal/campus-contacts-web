@@ -90,6 +90,34 @@
             });
         });
 
+        describe('isContact', function () {
+            it('should return true for contacts', function () {
+                this.person.organizational_permissions = [
+                    { organization_id: 1, permission_id: 2 }
+                ];
+                expect(personService.isContact(this.person, 1)).toBe(true);
+            });
+
+            it('should return false for users', function () {
+                this.person.organizational_permissions = [
+                    { organization_id: 1, permission_id: 4 }
+                ];
+                expect(personService.isContact(this.person, 1)).toBe(false);
+            });
+
+            it('should return false for admins', function () {
+                this.person.organizational_permissions = [
+                    { organization_id: 1, permission_id: 1 }
+                ];
+                expect(personService.isContact(this.person, 1)).toBe(false);
+            });
+
+            it('should return false for people not on the org', function () {
+                this.person.organizational_permissions = [];
+                expect(personService.isContact(this.person, 1)).toBe(false);
+            });
+        });
+
         describe('getAssignedTo', function () {
             it('should find the person\'s assignments', function () {
                 expect(personService.getAssignedTo(this.person, 1)).toEqual([

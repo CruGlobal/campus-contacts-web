@@ -28,6 +28,7 @@
         vm.saveAttribute = saveAttribute;
         vm.toggleAssignmentVisibility = toggleAssignmentVisibility;
         vm.onSearchKeydown = onSearchKeydown;
+        vm.isContact = isContact;
         vm.followupStatusOptions = personService.getFollowupStatusOptions();
 
         vm.$onInit = activate;
@@ -100,6 +101,10 @@
                 // Escape key was pressed, so hide the assignments selector
                 vm.assignmentsVisible = false;
             }
+        }
+
+        function isContact () {
+            return personService.isContact(vm.person, vm.organizationId);
         }
     }
 })();
