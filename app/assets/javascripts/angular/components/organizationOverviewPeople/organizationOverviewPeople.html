@@ -1,6 +1,6 @@
 <div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
     <div class="people-list-filters">
-        <div class="header">
+        <div class="header row padded">
             <div class="column filters-header-column">
                 <span>{{'ministries.people.header' | t}}</span>
             </div>
@@ -10,7 +10,7 @@
         </people-filters-panel>
     </div>
     <div class="people-list">
-        <div class="header">
+        <div class="header row padded">
             <div class="column select-column">
                 <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
             </div>

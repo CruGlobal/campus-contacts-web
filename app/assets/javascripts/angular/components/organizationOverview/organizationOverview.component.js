@@ -14,7 +14,7 @@
             }
         });
 
-    function organizationOverviewController (JsonApiDataStore, asyncBindingsService, ministryViewTabs,
+    function organizationOverviewController ($scope, JsonApiDataStore, asyncBindingsService, ministryViewTabs,
                                              organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
         vm.tabNames = ministryViewTabs;
@@ -31,13 +31,16 @@
                 return;
             }
 
-            organizationOverviewService.loadOrgRelations(vm.org).then(function () {
-                // Find all of the groups related to the org
+            // Make groups and surveys mirror that property on the organization
+            $scope.$watch('$ctrl.org.groups', function () {
                 vm.groups = vm.org.groups;
-
-                // Find all of the surveys related to the org
+            });
+            $scope.$watch('$ctrl.org.surveys', function () {
                 vm.surveys = vm.org.surveys;
             });
+
+            // Find all of the groups and surveys related to the org
+            organizationOverviewService.loadOrgRelations(vm.org);
 
             // The suborgs, people, and team are loaded by their respective tab components, not this component.
             // However, this component does need to know how many people and team members there are, so set the

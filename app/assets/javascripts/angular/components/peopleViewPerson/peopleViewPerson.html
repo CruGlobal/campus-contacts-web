@@ -1,4 +1,4 @@
-<div class="person-info row-content">
+<div class="person-info row">
     <div class="name">
         <a ng-if="$root.betaMode" ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
         <a ng-if="!$root.betaMode" href="/profile/{{$ctrl.person.id}}?organization_id={{$ctrl.organizationId}}">

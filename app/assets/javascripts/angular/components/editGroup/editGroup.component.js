@@ -15,13 +15,18 @@
             }
         });
 
-    function editGroupController (groupsService, editGroupService, moment, _) {
+    function editGroupController (groupsService, editGroupService, tFilter, _) {
         var vm = this;
 
         vm.title = null;
         vm.saving = false;
         vm.meetingFrequencyOptions = ['weekly', 'monthly', 'sporadically'];
-        vm.dayOptions = _.range(1, 32);
+        vm.weekDayOptions = _.range(0, 7).map(function (day) {
+            return { value: day, label: tFilter('date.day_names.' + day) };
+        });
+        vm.monthDayOptions = _.range(1, 32).map(function (day) {
+            return { value: day, label: day.toString() };
+        });
 
         vm.valid = valid;
         vm.save = save;
@@ -30,11 +35,19 @@
         vm.$onInit = activate;
 
         function activate () {
-            vm.group = _.clone(vm.resolve.group || editGroupService.getGroupTemplate(vm.resolve.organizationId));
+            vm.orgId = vm.resolve.organizationId;
+            var groupTemplate = groupsService.getGroupTemplate(vm.orgId);
+            vm.group = _.clone(vm.resolve.group || groupTemplate);
+            vm.leaders = groupsService.getMembersWithRole(vm.group, 'leader');
 
             // The uib-timepicker needs the start and end times to be Date instances
-            vm.group.start_time_date = editGroupService.timeToDate(vm.group.start_time);
-            vm.group.end_time_date = editGroupService.timeToDate(vm.group.end_time);
+            // Default the start and end times to the values set on their default values in a new group template
+            vm.startTimeDate = groupsService.timeToDate(vm.group.start_time || groupTemplate.start_time);
+            vm.endTimeDate = groupsService.timeToDate(vm.group.end_time || groupTemplate.end_time);
+
+            // Track the meeting time when it is a day of the week and when it is a day of the month separately
+            vm.meetingDayOfWeek = vm.group.meets === 'weekly' ? vm.group.meeting_day : 0;
+            vm.meetingDayOfMonth = vm.group.meets === 'monthly' ? vm.group.meeting_day : 1;
 
             vm.title = vm.group.id ? 'groups.edit.edit_group' : 'groups.new.new_group';
         }
@@ -47,10 +60,21 @@
             vm.saving = true;
 
             // Update the start and end times with the uib-timepicker values
-            vm.group.start_time = editGroupService.dateToTime(vm.group.start_time_date);
-            vm.group.end_time = editGroupService.dateToTime(vm.group.end_time_date);
+            vm.group.start_time = groupsService.dateToTime(vm.startTimeDate);
+            vm.group.end_time = groupsService.dateToTime(vm.endTimeDate);
 
-            editGroupService.saveGroup(vm.group)
+            // Copy the meeting time to the group
+            if (vm.group.meets === 'weekly') {
+                vm.group.meeting_day = vm.meetingDayOfWeek;
+            } else if (vm.group.meets === 'monthly') {
+                vm.group.meeting_day = vm.meetingDayOfMonth;
+            } else if (vm.group.meets === 'sporadically') {
+                vm.group.meeting_day = null;
+                vm.group.start_time = null;
+                vm.group.end_time = null;
+            }
+
+            groupsService.saveGroup(vm.group, vm.leaders)
                 .then(function (newGroup) {
                     vm.close({ $value: newGroup });
                 })

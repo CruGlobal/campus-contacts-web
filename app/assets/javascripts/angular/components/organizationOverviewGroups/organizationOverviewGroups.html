@@ -1,14 +1,21 @@
+<div class="group row header">
+    <div class="column name-column">
+        {{ 'ministries.groups.columns.name' | t : { group_count : $ctrl.organizationOverview.groups.length } }}
+    </div>
+    <div class="column leaders-column">
+        {{ 'ministries.groups.columns.leaders' | t }}
+    </div>
+    <div class="column time-column">
+        {{ 'ministries.groups.columns.time' | t }}
+    </div>
+    <div class="column location-column">
+        {{ 'ministries.groups.columns.location' | t }}
+    </div>
+    <div class="column buttons-column">
+        <icon-button icon="'add'" ng-click="$ctrl.addGroup()"></icon-button>
+    </div>
+</div>
 <div class="grid-content">
-    <div class="group row">
-        <a href="" ng-click="$ctrl.addGroup()" class="row-content padded">Add Group</a>
-    </div>
-    <div ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
-         class="group row">
-        <div class="row-content padded">
-            <a ng-href="/groups/{{group.id}}?organization_id={{$ctrl.organizationOverview.org.id}}">{{group.name}}</a>
-            <div class="space"></div>
-            <ng-md-icon class="edit-action" icon="edit" size="16" ng-click="$ctrl.editGroup(group)"></ng-md-icon>
-            <ng-md-icon class="delete-action" icon="delete" size="16" ng-click="$ctrl.deleteGroup(group)"></ng-md-icon>
-        </div>
-    </div>
+    <ministry-view-group ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
+                         group="group"></ministry-view-group>
 </div>

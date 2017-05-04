@@ -1,19 +1,12 @@
 organization-overview-groups {
-  .row-content {
-    flex: 1;
-  }
+  .header {
+    @extend ministry-view-group;
 
-  ng-md-icon {
-    svg {
-      fill: $pivot-dark-blue;
+    display: flex;
+    background-color: $pivot-darker-blue;
+
+    ng-md-icon svg {
+      fill: white;
     }
-  }
-
-  .edit-action {
-    margin-right: 10px;
-  }
-
-  .space {
-    flex: 1;
   }
 }

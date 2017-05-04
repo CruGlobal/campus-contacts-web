@@ -81,7 +81,7 @@
                 { name: 'exclusions', type: 'person', nameField: 'full_name', ids: exclusions }
             ];
             filterDefinitions.forEach(function (definition) {
-                var ids = definition.ids || filters[definition.name];
+                var ids = definition.ids || filters[definition.name] || [];
                 if (ids.length > 0) {
                     var names = ids.map(function (id) {
                         return quote(JsonApiDataStore.store.find(definition.type, id)[definition.nameField]);

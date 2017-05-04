@@ -1,9 +1,7 @@
 $person-height: 50px;
 
 ministry-view-person {
-  $person-padding: 10px;
-
-  @extend .row;
+  display: block;
   height: $person-height;
 
   .column.select-column {
@@ -67,57 +65,7 @@ ministry-view-person {
     margin: auto;
   }
 
-  padding: $person-padding;
-
   .dropdown-content {
-    background-color: $pivot-dark-blue;
     min-width: 200px;
-
-    .item {
-      display: flex;
-      align-items: center;
-      padding: 6px 10px;
-      color: $white;
-
-      ng-md-icon {
-        align-self: flex-end;
-        width: 14px;
-        height: 14px;
-
-        // Align the icon with the text baseline
-        margin-bottom: -1px;
-      }
-
-      input {
-        width: 100%;
-        background-color: transparent;
-        border: none;
-        border-bottom: 1px solid $white;
-        outline: none;
-
-        // Unfortunately, these rules cannot be simply combined using the comma operator because browsers choke on the
-        // the prefixed selectors of other browsers and ignore the entire rule
-        @mixin white-placeholder() {
-          color: $white;
-          opacity: 1;
-        }
-        &::-webkit-input-placeholder {
-          @include white-placeholder();
-        }
-        &::-moz-placeholder {
-          @include white-placeholder();
-        }
-        &::-ms-input-placeholder {
-          @include white-placeholder();
-        }
-      }
-
-      .assignment-icon {
-        margin-right: 6px;
-        svg {
-          fill: $white;
-        }
-      }
-    }
   }
 }

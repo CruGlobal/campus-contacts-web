@@ -13,11 +13,15 @@
             }
         });
 
-    function organizationOverviewGroupsController ($uibModal, groupsService, tFilter, confirmModalService, _) {
+    function organizationOverviewGroupsController ($uibModal, groupsService, _) {
         var vm = this;
         vm.addGroup = addGroup;
-        vm.editGroup = editGroup;
-        vm.deleteGroup = deleteGroup;
+        vm.$onInit = activate;
+
+        function activate () {
+            // Load the groups and leaders
+            groupsService.loadLeaders(vm.organizationOverview.org);
+        }
 
         function addGroup () {
             $uibModal.open({
@@ -28,30 +32,6 @@
                 windowClass: 'pivot_theme',
                 size: 'sm'
             });
-
-            return false;
-        }
-
-        function editGroup (group) {
-            $uibModal.open({
-                component: 'editGroup',
-                resolve: {
-                    organizationId: _.constant(vm.organizationOverview.org.id),
-                    group: _.constant(group)
-                },
-                windowClass: 'pivot_theme',
-                size: 'sm'
-            });
-        }
-
-        function deleteGroup (group) {
-            confirmModalService.create(tFilter('groups.confirm_delete_group', { group_name: group.name }))
-                .then(function () {
-                    return groupsService.deleteGroup(group);
-                })
-                .then(function () {
-                    _.pull(vm.organizationOverview.org.groups, group);
-                });
         }
     }
 })();

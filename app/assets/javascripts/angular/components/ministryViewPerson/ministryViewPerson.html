@@ -1,70 +1,54 @@
-<div class="column select-column">
-    <input type="checkbox" ng-model="$ctrl.selected" />
-</div>
-<div class="column name-column">
-    <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
-        {{$ctrl.person | personName}}
-    </a>
-</div>
-<div class="column detail-column gender-column">
-    <span ng-if="$ctrl.person.gender">{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) | t}}</span>
-</div>
-<div class="column detail-column assigned-to-column dropdown"
-     ng-class="{warning: $ctrl.assignedTo.length === 0}">
-    <div class="name-container">
-        <div class="name">
-            {{$ctrl.assignedTo.length > 0 ?
-                ($ctrl.assignedTo[0] | personName) :
-                ('assignments.unassigned' | t)}}
-            <span ng-if="$ctrl.assignedTo.length > 1">(+{{$ctrl.assignedTo.length - 1}})</span>
-        </div>
-        <ng-md-icon icon="play_arrow" class="chevron" size="14"
-                    ng-click="$ctrl.toggleAssignmentVisibility()"></ng-md-icon>
+<div class="row padded">
+    <div class="column select-column">
+        <input type="checkbox" ng-model="$ctrl.selected" />
     </div>
-    <div class="dropdown-container" ng-if="$ctrl.assignmentsVisible">
-        <div class="dropdown-content">
-            <div class="item" ng-repeat="person in $ctrl.assignedTo">
-                <ng-md-icon icon="close" class="assignment-icon" size="14"
-                            ng-click="$ctrl.removeAssignment(person)"></ng-md-icon>
-                <div>{{person | personName}}</div>
+    <div class="column name-column">
+        <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
+            {{$ctrl.person | personName}}
+        </a>
+    </div>
+    <div class="column detail-column gender-column">
+        <span ng-if="$ctrl.person.gender">{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) | t}}</span>
+    </div>
+    <div class="column detail-column assigned-to-column dropdown"
+         ng-class="{warning: $ctrl.assignedTo.length === 0}">
+        <div class="name-container">
+            <div class="name">
+                {{$ctrl.assignedTo.length > 0 ?
+                    ($ctrl.assignedTo[0] | personName) :
+                    ('assignments.unassigned' | t)}}
+                <span ng-if="$ctrl.assignedTo.length > 1">(+{{$ctrl.assignedTo.length - 1}})</span>
             </div>
-            <div class="item">
-                <input ng-model="$ctrl.assignmentSearch" ng-keydown="$ctrl.onSearchKeydown($event)" focus="true"
-                       placeholder="{{ 'ministries.person.search_placeholder' | t }}" />
-            </div>
-            <div class="item" ng-if="$ctrl.loadingAssignmentOptions">
-                {{ 'ministries.person.searching' | t }}
-            </div>
-            <div class="item" ng-if="$ctrl.assignmentSearch && !$ctrl.loadingAssignmentOptions &&
-                                     $ctrl.assignmentOptions.length === 0">
-                {{ 'ministries.person.no_search_results' | t : { search: $ctrl.assignmentSearch } }}
-            </div>
-            <div class="item" ng-repeat="person in $ctrl.assignmentOptions">
-                <ng-md-icon icon="add" class="assignment-icon" size="14"
-                            ng-click="$ctrl.addAssignment(person)"></ng-md-icon>
-                <div>{{person | personName}}</div>
-            </div>
+            <ng-md-icon icon="play_arrow" class="chevron" size="14"
+                        ng-click="$ctrl.toggleAssignmentVisibility()"></ng-md-icon>
+        </div>
+        <div class="dropdown-container" ng-if="$ctrl.assignmentsVisible">
+            <person-multiselect class="dark dropdown-content" people-description="'ministries.people.leaders'"
+                                selected-people="$ctrl.assignedTo" organization-id="$ctrl.organizationId"
+                                add-person="$ctrl.addAssignment(person)" remove-person="$ctrl.removeAssignment(person)"
+                                focused="true" ng-keydown="$ctrl.onAssignmentsKeydown($event)">
+            </person-multiselect>
         </div>
     </div>
-</div>
-<div class="column detail-column status-column form"
-     ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}">
-    <div class="form-group">
-        <label class="form-control-select" ng-if="$ctrl.isContact()">
-            <span class="label">&nbsp;</span>
-            <select class="form-control"
-                    ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
-                    ng-model="$ctrl.orgPermission.followup_status"
-                    ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')">
-            </select>
-        </label>
+    <div class="column detail-column status-column form"
+         ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}">
+        <div class="form-group">
+            <label class="form-control-select" ng-if="$ctrl.isContact()">
+                <span class="label">&nbsp;</span>
+                <select class="form-control"
+                        ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
+                        ng-model="$ctrl.orgPermission.followup_status"
+                        ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')">
+                </select>
+            </label>
+        </div>
     </div>
-</div>
-<div class="column detail-column phone-number-column">
-    <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>
-</div>
-<div class="column detail-column button-column">
-    <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
-        <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
-    </a>
+    <div class="column detail-column phone-number-column">
+        <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>
+    </div>
+    <div class="column detail-column button-column">
+        <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
+            <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
+        </a>
+    </div>
 </div>

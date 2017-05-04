@@ -1,0 +1,18 @@
+<div class="row" ng-click="$ctrl.openGroup(group)">
+    <div class="column name-column">
+        {{ $ctrl.group.name }} ({{ $ctrl.group.group_memberships.length }})
+    </div>
+    <div class="column leaders-column">
+        <span ng-repeat="leader in $ctrl.getLeaders()">
+            {{ leader | personName }}<span ng-if="!$last">,</span>
+        </span>
+    </div>
+    <div class="column time-column">{{ $ctrl.meetingTime }}</div>
+    <div class="column location-column">{{ $ctrl.group.location }}</div>
+    <div class="column buttons-column">
+        <ng-md-icon class="edit-action" icon="edit" size="16"
+                    ng-click="$ctrl.editGroup(); $event.stopPropagation();"></ng-md-icon>
+        <ng-md-icon class="delete-action" icon="delete" size="16"
+                    ng-click="$ctrl.deleteGroup(); $event.stopPropagation();"></ng-md-icon>
+    </div>
+</div>

@@ -125,12 +125,24 @@ en:
         surveys: Surveys
       profile:
         header: Profile
-    person:
-      search_placeholder: Search leaders
-      searching: Searching leaders...
-      no_search_results: No leaders found matching "%{search}"
+      leaders: leaders
     groups:
       header: Groups
+      columns:
+        name: Groups (%{group_count})
+        leaders: Leader(s)
+        time: Meeting Time
+        location: Location
+      meeting_time:
+        time_range: '%{start} - %{end}'
+        weekly: Weekly on %{day}s %{time}
+        monthly: Monthly on %{day} %{time}
+        sporadically: Sporadically
+      ordinal_suffixes:
+      - th
+      - st
+      - nd
+      - rd
     roots: Ministries
     suborgs:
       header: Ministries
@@ -140,6 +152,10 @@ en:
       header: Team
     tools:
       header: Tools
+  person_multiselect:
+    search_placeholder: Search %{people_description}
+    searching: Searching %{people_description}...
+    no_search_results: No %{people_description} found matching "%{search}"
   signatures:
     title: Signatures
     signed_forms: Signed Forms
@@ -871,6 +887,14 @@ en:
     label_name: Group Label Name
     label_name_is_added: You have successfully added a new group label.
     label_name_is_required: Group Label Name is required.
+    members:
+      title: Group Members
+      subtitle: Members of "%{group_name}"
+      columns:
+        name: Contacts
+      leader: Leader
+      contacts: contacts
+      remove_confirm: Are you sure you want to this member from the group?
     new:
       new_group: Create a New Group
     new_label_prompt: Please enter a new label name
@@ -1916,10 +1940,15 @@ en:
       edit_group_or_label_assignments:
         load_groups: Error occurred while loading the user's groups
         load_labels: Error occurred while loading the user's labels
+      group_members:
+        load_member_chunk: Error occurred while loading the next batch of group members
+        add_member: Error occurred while adding the person to the group
+        remove_member: Error occurred while removing the person from the group
       groups:
         create_group: Error occurred while creating the group
         delete_group: Error occurred while deleting the group
         update_group: Error occurred while updating the group
+        load_leaders: Error occurred while loading the group's leaders
       http_proxy:
         default_network_error: An unknown network error occured
       interactions:
