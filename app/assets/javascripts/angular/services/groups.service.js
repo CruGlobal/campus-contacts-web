@@ -61,7 +61,13 @@
             deleteGroup: function (group) {
                 return httpProxy.delete(modelsService.getModelMetadata('group').url.single(group.id), {}, {
                     errorMessage: 'error.messages.groups.delete_group'
-                }).then(httpProxy.extractModel);
+                }).then(function () {
+                    var org = group.organization;
+                    if (org && org.groups) {
+                        _.pull(org.groups, group);
+                    }
+                    return group;
+                });
             },
 
             // Convert a time in milliseconds since midnight into a JavaScript Date object
@@ -95,7 +101,17 @@
                     .filter({ role: role })
                     .map('person')
                     .value();
-            }
+            },
+
+            // Find the group membership for a particular person
+            findMember: function (group, person) {
+                return _.find(group.group_memberships, { person: person }) || null;
+            },
+
+            // Internal methods exposed for testing purposes
+            payloadFromGroup: payloadFromGroup,
+            loadMemberships: loadMemberships,
+            loadMissingLeaders: loadMissingLeaders
         };
 
         // Return a JSON API model that represents the change in the role of a person in the group
@@ -142,7 +158,7 @@
             // Apply the changes
             var includedAttrs = ['name', 'location', 'meets', 'meeting_day', 'start_time', 'end_time'];
             return {
-                data: group.serialize({ attributes: includedAttrs }).data,
+                data: group.serialize({ attributes: includedAttrs, relationships: [] }).data,
                 included: [].concat(demoteModels, promoteModels, createModels)
             };
         }

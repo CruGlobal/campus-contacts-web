@@ -43,6 +43,7 @@
                     errorMessage: 'error.messages.group_members.remove_member'
                 }).then(function () {
                     _.pull(group.group_memberships, membership);
+                    return membership;
                 });
             }
         };

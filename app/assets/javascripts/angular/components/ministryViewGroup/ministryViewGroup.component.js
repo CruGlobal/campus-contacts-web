@@ -61,9 +61,6 @@
             confirmModalService.create(tFilter('groups.confirm_delete_group', { group_name: vm.group.name }))
                 .then(function () {
                     return groupsService.deleteGroup(vm.group);
-                })
-                .then(function () {
-                    _.pull(vm.organizationOverview.org.groups, vm.group);
                 });
         }
     }

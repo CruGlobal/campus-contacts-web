@@ -40,6 +40,7 @@
 
         return {
             formatTime: formatTime,
+            formatOrdinal: formatOrdinal,
             formatMeetingTime: formatMeetingTime
         };
     }

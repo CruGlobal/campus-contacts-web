@@ -56,7 +56,7 @@
                 .then(function (res) {
                     // Convert members to memberships
                     vm.memberships = res.list.map(function (member) {
-                        return _.find(vm.group.group_memberships, { person: member });
+                        return groupsService.findMember(vm.group, member);
                     });
                     vm.loadedAll = res.loadedAll;
                 })
