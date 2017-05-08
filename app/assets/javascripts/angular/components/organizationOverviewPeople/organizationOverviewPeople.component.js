@@ -98,14 +98,7 @@
 
         function activate () {
             unsubscribe = $rootScope.$on('personCreated', function (event, person) {
-                vm.people.push(person);
-                vm.totalCount++;
-                vm.multiSelection[person.id] = vm.selectAllValue;
-
-                // Update the people count shown in the people tab
-                if (vm.organizationOverview.people) {
-                    vm.organizationOverview.people.length++;
-                }
+                onNewPerson(person);
             });
 
             vm.sortOrder = _.clone(defaultSortOrder);
@@ -154,6 +147,25 @@
                 .finally(function () {
                     vm.busy = false;
                 });
+        }
+
+        // Respond to the creation of a new person by potentially adding it to the person list, updating counts, etc.
+        function onNewPerson (person) {
+            // If filters are applied, then refresh the list because the new person may or may not be included
+            // in the person list. If no filters applied, simply add it to the person list.
+            if (peopleFiltersPanelService.filtersHasActive(vm.active)) {
+                resetList();
+                loadPersonPage();
+            } else {
+                vm.people.push(person);
+                vm.totalCount++;
+                vm.multiSelection[person.id] = vm.selectAllValue;
+            }
+
+            // Update the people count shown in the people tab
+            if (vm.organizationOverview.people) {
+                vm.organizationOverview.people.length++;
+            }
         }
 
         // Return an array of the ids of all people with the specified selection state (true for selected, false for

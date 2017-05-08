@@ -25,7 +25,9 @@
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
                     </ng-md-icon>
                 </div>
-                <icon-button ng-if="column.name === 'name'" icon="'person_add'" ui-sref=".new.defaultTab"></icon-button>
+                <icon-button ng-if="column.name === 'name'" icon="'person_add'" ui-sref=".new.defaultTab"
+                             ng-click="$event.stopPropagation()">
+                </icon-button>
             </div>
             <div class="column detail-column phone-number-column">
                 <icon-button icon="'phone'" disabled="true"></icon-button>
