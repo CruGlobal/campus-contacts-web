@@ -71,15 +71,14 @@ class QuestionSet
                   if question.predefined? || !answer.auto_notify_sent?
                     leaders = Person.find(question_rule.extra_parameters['leaders'])
                     recipients = leaders.collect { |p| "#{p.name} <#{p.email}>" }.join(', ')
+                    message_params = [recipients, question_rule.id, answer_value, @answer_sheet.id, question.id]
                     if question.predefined?
                       if notify_on_predefined_questions
-                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet, question.id)
+                        PeopleMailer.notify_on_survey_answer(*message_params).deliver_later!
                       end
                     elsif answer.present?
-                      unless answer.auto_notify_sent?
-                        PeopleMailer.delay.notify_on_survey_answer(recipients, question_rule.id, answer_value, @answer_sheet, question.id)
-                        answer.update_attributes(auto_notify_sent: true)
-                      end
+                      PeopleMailer.notify_on_survey_answer(*message_params).deliver_later!
+                      answer.update_attributes(auto_notify_sent: true)
                     end
                   end
                 when 'AUTOASSIGN'

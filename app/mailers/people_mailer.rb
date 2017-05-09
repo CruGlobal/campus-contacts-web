@@ -9,14 +9,11 @@ class PeopleMailer < ActionMailer::Base
   #   en.people_mailer.bulk_message.subject
   #
 
-  def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet, question_id)
+  def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet_id, question_id)
     @keyword = keyword
-    begin
-      @answer_sheet = answer_sheet.reload
-    rescue ActiveRecord::RecordNotFound
-      # don't notify leader about a answer sheet that doesn't exist
-      return
-    end
+    @answer_sheet = AnswerSheet.find_by(id: answer_sheet_id)
+    # don't notify leader about a answer sheet that doesn't exist
+    return unless @answer_sheet
     @person = @answer_sheet.person
     return unless @person
     @question = Element.find(question_id)

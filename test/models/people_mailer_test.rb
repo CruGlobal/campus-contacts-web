@@ -15,7 +15,7 @@ class PeopleMailerTest < ActiveSupport::TestCase
     end
 
     should 'send notification' do
-      PeopleMailer.notify_on_survey_answer('Sample <sample@email.com>', @question_rule.id, 'Testing1', @answer_sheet, @element.id).deliver_now
+      PeopleMailer.notify_on_survey_answer('Sample <sample@email.com>', @question_rule.id, 'Testing1', @answer_sheet.id, @element.id).deliver_now
       content = ActionMailer::Base.deliveries.last
       assert_equal "Someone answered \"Testing1\" in your survey", content.subject
     end
