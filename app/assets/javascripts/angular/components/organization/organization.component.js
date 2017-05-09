@@ -18,18 +18,12 @@
             transclude: true
         });
 
-    function organizationController (JsonApiDataStore, loggedInPerson, periodService,
+    function organizationController ($rootScope, JsonApiDataStore, loggedInPerson, periodService,
                                      reportsService, interactionsService, myPeopleDashboardService, _) {
         var vm = this;
 
-        _.defaultsDeep(vm, {
-            collapsed: false,
-            collapsible: false,
-            options: {
-                anonymousInteractions: false,
-                reorderable: false
-            }
-        });
+        vm.$onInit = activate;
+        vm.$onDestroy = deactivate;
 
         vm.addAnonymousInteractionButtonsVisible = false;
         vm.pendingAnonymousInteraction = null;
@@ -41,6 +35,30 @@
         vm.toggleVisibility = toggleVisibility;
         vm.addAnonymousInteraction = addAnonymousInteraction;
         vm.saveAnonymousInteraction = saveAnonymousInteraction;
+
+        var unsubscribe;
+
+        function activate () {
+            _.defaultsDeep(vm, {
+                collapsed: false,
+                collapsible: false,
+                options: {
+                    anonymousInteractions: false,
+                    reorderable: false
+                }
+            });
+
+            // Add new people assigned to the logged-in user to this org's people list
+            unsubscribe = $rootScope.$on('personCreated', function (event, person) {
+                if (_.find(person.reverse_contact_assignments, { assigned_to: loggedInPerson.person })) {
+                    vm.org.people.push(person);
+                }
+            });
+        }
+
+        function deactivate () {
+            unsubscribe();
+        }
 
         function toggleAnonymousInteractionButtons () {
             vm.addAnonymousInteractionButtonsVisible = !vm.addAnonymousInteractionButtonsVisible;

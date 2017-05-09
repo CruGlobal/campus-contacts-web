@@ -11,7 +11,8 @@
             bindings: {
                 stateName: '<',
                 person: '<',
-                organizationId: '<'
+                organizationId: '<',
+                options: '='
             }
         });
 

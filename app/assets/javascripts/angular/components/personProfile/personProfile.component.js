@@ -95,6 +95,13 @@
                     saveAttribute(vm.personTab.person, 'gender');
                 }
             });
+
+            if (vm.personTab.options.assignToMe) {
+                // Assign the person to the logged in person
+                var newAssignment = loggedInPerson.person;
+                vm.personTab.assignedTo.push(newAssignment);
+                personProfileService.addAssignments(vm.personTab.person, vm.personTab.organizationId, [newAssignment]);
+            }
         }
 
         function onDestroy () {

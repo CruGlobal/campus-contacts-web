@@ -128,7 +128,9 @@
                     url: state.url,
                     component: 'personPage',
                     abstract: true,
-                    params: state.params,
+                    params: _.extend({
+                        assignToMe: { type: 'bool', value: false }
+                    }, state.params),
                     modal: state.modal,
                     resolve: {
                         // We have to send the state name to the personPage component so that route links will work when
@@ -164,7 +166,14 @@
                         organizationId: lazyLoadedResolve(/* @ngInject */ function ($uiRouter) {
                             var $transition$ = $uiRouter.globals.transition;
                             return $transition$.params().orgId;
-                        })
+                        }),
+
+                        options: /* @ngInject */ function ($uiRouter) {
+                            var $transition$ = $uiRouter.globals.transition;
+                            return {
+                                assignToMe: $transition$.params().assignToMe
+                            };
+                        }
                     }
                 });
 
@@ -208,6 +217,15 @@
                     template:
                         '<my-people-dashboard edit-mode="$ctrl.editOrganizations"></my-people-dashboard>'
                 })
+                .states(generatePersonPageStates({
+                    name: 'app.people.new',
+                    url: '/new?orgId',
+                    modal: true,
+                    params: {
+                        orgId: { value: null },
+                        personId: { value: 'new' }
+                    }
+                }))
                 .state({
                     name: 'app.ministries',
                     url: '/ministries',

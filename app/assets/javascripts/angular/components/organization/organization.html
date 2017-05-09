@@ -12,7 +12,11 @@
             </div>
             <organizational-stats org="$ctrl.org"></organizational-stats>
             <div class="right-buttons">
-                <a href="/contacts/new.js?temp_current_organization_id={{$ctrl.org.id}}&assign_to_me=1"
+                <ng-md-icon ng-if="$root.betaMode" icon="addPerson"
+                            ui-sref=".new.defaultTab({ orgId: $ctrl.org.id, assignToMe: true })">
+                </ng-md-icon>
+                <a ng-if="!$root.betaMode"
+                   href="/contacts/new.js?temp_current_organization_id={{$ctrl.org.id}}&assign_to_me=1"
                    analytics-on="click" analytics-category="Dashboard" analytics-event="Add Contact Click"
                    data-remote="true" title="{{'contacts.add_contact' | t}}" ng-hide="$ctrl.editMode" class="tipitmiddle">
                     <ng-md-icon icon="addPerson"></ng-md-icon>
