@@ -6,13 +6,23 @@
 <span style="color: white; padding-top: 10px;" ng-if="$root.betaMode">Beta</span>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
   <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
-    <li class="<%= 'current' if request.path == '/' %>">
+    <li ng-if="$root.betaMode" ui-sref-active="current">
+      <a ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+      <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+    </li>
+
+    <li ng-if="$root.betaMode" ui-sref-active="current">
+      <a ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+      <a ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+    </li>
+
+    <li class="<%= 'current' if request.path == '/' %>" ng-if="!$root.betaMode">
       <%= link_to authenticated_root_path, title: t('nav.dashboard') do %>
         <ng-md-icon icon='dashboard' color="white"></ng-md-icon>
       <% end %>
     </li>
 
-    <li class="org_tree_link">
+    <li class="org_tree_link" ng-if="!$root.betaMode">
       <%= link_to(current_organization, "#", title: current_organization) %>
       <ul>
         <li class="under_tree">
@@ -24,25 +34,19 @@
       </ul>
     </li>
 
-    <li ng-class="{ current: $root.isLegacyPage && <%= !(request.path =~ care_pattern).nil? %> }">
+    <li ng-class="{ current: $root.isLegacyPage && <%= !(request.path =~ care_pattern).nil? %> }"
+        ng-if="!$root.betaMode">
       <a href="/allcontacts">{{ 'nav.contacts' | t}}</a>
     </li>
-    <li ng-if="$root.betaMode" ui-sref-active="current">
-      <a ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
-      <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
-    </li>
-    <li ng-if="$root.betaMode" ui-sref-active="current">
-      <a ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
-      <a ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
-    </li>
+
     <% if can? :manage_groups, current_organization %>
-      <li class="<%= 'current' if request.path =~ group_pattern %>">
+      <li class="<%= 'current' if request.path =~ group_pattern %>" ng-if="!$root.betaMode">
         <%= link_to(t('nav.groups'), "/groups") %>
       </li>
     <% end %>
 
     <% if can? :manage, current_organization %>
-      <li class="<%= 'current' if request.path =~ connect_pattern %>">
+      <li class="<%= 'current' if request.path =~ connect_pattern %>" ng-if="!$root.betaMode">
         <%= link_to(t('nav.surveys'), index_admin_surveys_path) %>
         <ul style='display:none;'>
           <li class="<%= 'current' if ['surveys','questions'].include?(controller.controller_name) %>">
@@ -68,7 +72,8 @@
       </li>
     <% end %>
 
-    <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>">
+    <li class="<%= 'current' if ['organizations', 'movement_indicator_suggestions'].include?(params[:controller]) %>"
+        ng-if="!$root.betaMode">
       <%= link_to(t('nav.tools'), "/organizations") %>
       <ul>
         <li class="<%= 'current' if request.path == snapshot_charts_path %> visual-menu">
