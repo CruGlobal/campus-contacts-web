@@ -8,7 +8,7 @@
       <div class="mh_popup_box_content">
         <div class="mh_popup_box_scroller">
           <% @from_group = flash[:add_to_group_tag].present? && flash[:add_to_group_tag] != '0' ? 'display:none;' : nil %>
-          <%= form_for person, url: contacts_path, method: :post, remote: true, html: {id: 'modal_contact_form'} do |f| %>
+          <%= form_for person, url: contacts_path, method: :post, remote: true, html: {id: 'modal_contact_form', autocomplete: 'off'} do |f| %>
             <div class="fancy"><%= t('application.add_contact.survey_mode_instructions') %></div>
             <% if @assign_to_me %>
               <div class="fancy info">
