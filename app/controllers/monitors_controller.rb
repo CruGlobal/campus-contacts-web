@@ -7,8 +7,11 @@ class MonitorsController < ApplicationController
                      :check_all_signatures
 
   def lb
+    ActiveRecord::Migration.check_pending!
     ActiveRecord::Base.connection.select_values('select id from people limit 1')
     render text: 'OK'
+  rescue ActiveRecord::PendingMigrationError
+    render text: 'PENDING MIGRATIONS', status: :service_unavailable
   end
 
   def commit
