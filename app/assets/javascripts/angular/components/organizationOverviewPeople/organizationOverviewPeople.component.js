@@ -153,7 +153,7 @@
         function onNewPerson (person) {
             // If filters are applied, then refresh the list because the new person may or may not be included
             // in the person list. If no filters applied, simply add it to the person list.
-            if (peopleFiltersPanelService.filtersHasActive(vm.active)) {
+            if (peopleFiltersPanelService.filtersHasActive(vm.filters)) {
                 resetList();
                 loadPersonPage();
             } else {
@@ -259,7 +259,7 @@
                 $scope.$broadcast('massEditApplied');
 
                 // Determine whether any filters are applied
-                if (!peopleFiltersPanelService.filtersHasActive(vm.active)) {
+                if (!peopleFiltersPanelService.filtersHasActive(vm.filters)) {
                     // When there are no filters, we only need to make sure that all the people that people in the list
                     // are assigned to are loaded
                     organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.organizationOverview.org.id);
