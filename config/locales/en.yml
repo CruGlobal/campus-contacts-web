@@ -1458,6 +1458,18 @@ en:
     admin: Admin
     no_permissions: No Permissions
     user: User
+  preferences:
+    title: User Preferences
+    language: Language
+    no_language_selected: Select Language
+    refresh_language: Refresh To Show Language Changes
+    time_zone: Time zone
+    notifications_header: When would you like us to let you know?
+    notifications_info: (Enabled by default)
+    person_moved: When a person is transferred to your organization
+    person_assigned: When a person is assigned to you
+    weekly_digest: Weekly Ministry Digest
+    beta_mode: Try out experimental beta features
   questions:
     archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
     create:

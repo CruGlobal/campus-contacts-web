@@ -8,7 +8,7 @@
             // is most likely to be needed
             $http.get(assetPathFilter('angular/templates/retryToastTemplate.html'), { cache: $templateCache });
         })
-        .run(function ($window, $rootScope, $analytics, lscache, spaPage, _) {
+        .run(function ($window, $rootScope, $analytics, $timeout, lscache, spaPage, _, loggedInPerson) {
             lscache.setBucket('missionhub:');
 
             // Determine whether this page is a SPA page or a legacy page
@@ -19,29 +19,17 @@
                 $analytics.pageTrack($window.location.pathname);
             }
 
-            /* eslint-disable lines-around-comment */
-            $window.location.search.slice(1)
-                // Break up querystring into its individual parameters
-                .split('&')
-                // Look for beta=0 or beta=1
-                .map(function (part) {
-                    return /^beta=(0|1)$/.exec(part);
-                })
-                // Filter out null non-matches
-                .filter(_.identity)
-                // Update beta mode
-                .forEach(function (matches) {
-                    var betaMode = matches[1];
-                    if (betaMode === '0') {
-                        // Disable beta mode
-                        $window.localStorage.removeItem('beta');
-                    } else if (betaMode === '1') {
-                        // Enable beta mode
-                        $window.localStorage.setItem('beta', true);
-                    }
+            $rootScope.betaMode = $window.localStorage.getItem('beta');
+            if ($rootScope.betaMode === null) {
+                // This code will run when Angular initializes, but currently we are gaining our
+                // authentication from the rails host through a <preload-state> component. This means
+                // that the access token isn't populated at the time of application initialization,
+                // the $timeout will cause delay this execution until after the first digest.
+                $timeout(function () {
+                    loggedInPerson.loadOnce().then(function (me) {
+                        $rootScope.betaMode = Boolean(me.user.beta_mode);
+                    });
                 });
-            /* eslint-enable lines-around-comment */
-
-            $rootScope.betaMode = $window.localStorage.getItem('beta') !== null;
+            }
         });
 })();

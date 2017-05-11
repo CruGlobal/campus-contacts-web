@@ -18,6 +18,14 @@
             }).then(httpProxy.extractModel);
         }
 
+        function load () {
+            loadingPromise = loadMe().then(function (me) {
+                person = me;
+                return me;
+            });
+            return loadingPromise;
+        }
+
         // This service exposes an object with a person property that will be set to person model, or null if it has
         // not yet been loaded.
         return {
@@ -35,11 +43,12 @@
             },
 
             // Load (or reload) the person
-            load: function () {
-                loadingPromise = loadMe().then(function (me) {
-                    person = me;
-                    return me;
-                });
+            load: load,
+
+            loadOnce: function () {
+                if (!loadingPromise) {
+                    load();
+                }
                 return loadingPromise;
             },
 

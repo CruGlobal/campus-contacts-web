@@ -5,7 +5,7 @@
 <%= link_to("", "/", id: "logoInvert") if branded? %>
 <span style="color: white; padding-top: 10px;" ng-if="$root.betaMode">Beta</span>
 <% if current_organization &&  can?(:manage_contacts, current_organization) %>
-  <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
+  <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav" ng-class="{'invisible': $root.betaMode === null}">
     <li ng-if="$root.betaMode" ui-sref-active="current">
       <a ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
       <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>

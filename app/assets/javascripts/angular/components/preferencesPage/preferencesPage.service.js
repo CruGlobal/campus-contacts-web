@@ -14,7 +14,7 @@
             },
 
             readPreferences: function () {
-                return loggedInPerson.load();
+                return loggedInPerson.loadOnce();
             }
         };
     }

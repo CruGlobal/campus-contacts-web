@@ -1,32 +1,32 @@
 <div class="titlebar titlebarmod">
-    <h1>User Preferences</h1>
+    <h1>{{ 'preferences.title' | t }}</h1>
 </div>
 
 <div class="space">
-    <span>Language</span>
-    <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.saveUserPreferences()"
+    <span>{{ 'preferences.language' | t }}</span>
+    <select ng-model="$ctrl.selectedLanguage" ng-change="$ctrl.updatePreferences()"
             ng-options="language.description for language in $ctrl.supportedLanguages track by language.abbreviation"
             required>
-        <option value="">Select Language</option>
+        <option value="">{{ 'preferences.no_language_selected' | t }}</option>
     </select>
-    <a href ng-if="$ctrl.selectedLanguageChanged" ng-click="$ctrl.reload()">
-      Refresh To Show Language Changes
+    <a ng-if="$ctrl.selectedLanguageChanged" ng-click="$ctrl.reload()">
+        {{ 'preferences.refresh_language' | t }}
     </a>
 </div>
 
 <div class="space">
-    <span>Time zone: {{$ctrl.timeZone}}</span>
+    <span>{{ 'preferences.time_zone' }}: {{$ctrl.timeZone}}</span>
 </div>
 
-<h3>When would you like us to let you know?</h3>
-<span>(Enabled by default)</span>
+<h3>{{ 'preferences.notifications_header' | t }}</h3>
+<span>{{ 'preferences.notifications_info' | t }}</span>
 <ul>
     <li class="space">
-        <span>When a person is transferred to your organization</span>
+        <span>{{ 'preferences.person_moved' | t }}</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="personMoved" ng-model="$ctrl.personMoved"
-                   ng-change="$ctrl.saveUserPreferences()">
+                   ng-change="$ctrl.updatePreferences()">
             <label class="onoffswitch-label" for="personMoved">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
@@ -34,11 +34,11 @@
         </div>
     </li>
     <li class="space">
-        <span>When a person is assigned to you</span>
+        <span>{{ 'preferences.person_assigned' | t }}</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="personAssigned" ng-model="$ctrl.personAssigned"
-                   ng-change="$ctrl.saveUserPreferences()">
+                   ng-change="$ctrl.updatePreferences()">
             <label class="onoffswitch-label" for="personAssigned">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
@@ -46,11 +46,11 @@
         </div>
     </li>
     <li class="space">
-        <span>Weekly Ministry Digest</span>
+        <span>{{ 'preferences.weekly_digest' | t }}</span>
         <div class="onoffswitch">
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
                    id="weeklyDigest" ng-model="$ctrl.weeklyDigest"
-                   ng-change="$ctrl.saveUserPreferences()">
+                   ng-change="$ctrl.updatePreferences()">
             <label class="onoffswitch-label" for="weeklyDigest">
                 <span class="onoffswitch-inner"></span>
                 <span class="onoffswitch-switch"></span>
@@ -58,4 +58,15 @@
         </div>
     </li>
 </ul>
-
+<div class="space">
+    <span>{{ 'preferences.beta_mode' | t }}</span>
+    <div class="onoffswitch">
+        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+               id="betaMode" ng-model="$ctrl.betaMode"
+               ng-change="$ctrl.updatePreferences()">
+        <label class="onoffswitch-label" for="betaMode">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+        </label>
+    </div>
+</div>

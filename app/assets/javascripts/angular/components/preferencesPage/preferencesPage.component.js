@@ -10,7 +10,8 @@
             }
         });
 
-    function preferencesPageController (preferencesPageService, languageService, _, nativeLocation) {
+    function preferencesPageController ($rootScope, $window, preferencesPageService,
+                                        languageService, _, nativeLocation) {
         var vm = this;
 
         vm.supportedLanguages = [];
@@ -20,7 +21,7 @@
         vm.selectedLanguageChanged = false;
 
         vm.reload = reload;
-        vm.saveUserPreferences = updatePreferences;
+        vm.updatePreferences = updatePreferences;
 
         vm.$onInit = activate;
 
@@ -57,6 +58,11 @@
                 vm.personAssigned = user.notification_settings.person_assigned;
                 vm.weeklyDigest = user.notification_settings.weekly_digest;
             }
+
+            vm.betaMode = user.beta_mode;
+            if (vm.betaMode === null) {
+                vm.betaMode = $rootScope.betaMode;
+            }
         }
 
         function reload () {
@@ -75,7 +81,12 @@
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }
 
-            return preferencesPageService.updatePreferences(vm.user.serialize());
+            vm.user.beta_mode = vm.betaMode;
+
+            return preferencesPageService.updatePreferences(vm.user.serialize()).then(function () {
+                $rootScope.betaMode = vm.user.beta_mode;
+                $window.localStorage.removeItem('beta');
+            });
         }
     }
 })();

@@ -14,7 +14,7 @@
         vm.$onInit = activate;
 
         function activate () {
-            loggedInPerson.load();
+            loggedInPerson.loadOnce();
         }
     }
 })();
