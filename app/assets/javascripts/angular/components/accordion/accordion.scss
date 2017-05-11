@@ -1,3 +1,5 @@
+@import "../../../../stylesheets/colors";
+
 accordion {
   display: block;
 
@@ -7,5 +9,10 @@ accordion {
 
   & > .uncollapsible accordion-toggle {
     visibility: hidden;
+  }
+
+  .accordionDisabled [ng-click] {
+    color: $gray-1-5;
+    cursor: not-allowed;
   }
 }

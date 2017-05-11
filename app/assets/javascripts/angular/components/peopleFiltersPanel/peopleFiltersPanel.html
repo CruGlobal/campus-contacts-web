@@ -9,7 +9,7 @@
                placeholder="{{'contacts.index.filter' | t}}">
     </div>
 
-    <accordion collapsed="$ctrl.labelFilterCollapsed" ng-if="$ctrl.labelOptions.length > 0"
+    <accordion collapsed="$ctrl.labelFilterCollapsed" accordion-disabled="!$ctrl.labelOptions.length > 0"
                class="filter-row filter-labels">
         <accordion-header>
             <span ng-click="$ctrl.labelFilterCollapsed = !$ctrl.labelFilterCollapsed">
@@ -26,7 +26,7 @@
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="$ctrl.assignedToFilterCollapsed" ng-if="$ctrl.assignmentOptions.length > 0"
+    <accordion collapsed="$ctrl.assignedToFilterCollapsed" accordion-disabled="!$ctrl.assignmentOptions.length > 0"
                class="filter-row assigned-to">
         <accordion-header>
             <span ng-click="$ctrl.assignedToFilterCollapsed = !$ctrl.assignedToFilterCollapsed">
@@ -43,7 +43,7 @@
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="$ctrl.groupFilterCollapsed" ng-if="$ctrl.groupOptions.length > 0"
+    <accordion collapsed="$ctrl.groupFilterCollapsed" accordion-disabled="!$ctrl.groupOptions.length > 0"
                class="filter-row filter-groups">
         <accordion-header>
             <span ng-click="$ctrl.groupFilterCollapsed = !$ctrl.groupFilterCollapsed">

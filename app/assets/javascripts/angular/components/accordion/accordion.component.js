@@ -7,7 +7,8 @@
             controller: accordionController,
             bindings: {
                 collapsed: '=?',
-                collapsible: '=?'
+                collapsible: '=?',
+                accordionDisabled: '<'
             },
             templateUrl: /* @ngInject */ function (templateUrl) {
                 return templateUrl('accordion');
