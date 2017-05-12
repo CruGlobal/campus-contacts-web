@@ -1177,6 +1177,11 @@ en:
     tools: Tools
     contacts: Contacts
     ministries: Ministries
+    about:
+      title: About MissionHub
+      subtitle: Get info and support
+      copyright: Copyright
+      close: Close
   number:
     currency:
       format:

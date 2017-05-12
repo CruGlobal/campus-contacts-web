@@ -149,6 +149,9 @@
           <%= link_to(t('nav.settings'), preferences_path) %>
         </li>
         <li>
+          <a href="javascript:;" ng-click="$root.openAboutModal()">About</a>
+        </li>
+        <li>
           <%= link_to(t('nav.logout'), '#', onclick: "$.mh.logout()")  %>
         </li>
       </ul>
