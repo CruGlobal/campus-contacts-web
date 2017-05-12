@@ -1,6 +1,14 @@
 organization-breadcrumbs {
   display: block;
-  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow-x: auto;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+
+  span:not(:last-child) {
+    margin-right: 4px;
+  }
 
   &, a {
     color: black;
