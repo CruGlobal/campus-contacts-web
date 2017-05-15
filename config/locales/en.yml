@@ -740,6 +740,7 @@ en:
     back: Back
     both: Both
     cancel: Cancel
+    close: Close
     city: City
     comment_is_blank: Please enter your comment.
     contact_location: Contact Location
@@ -760,7 +761,6 @@ en:
     export_vcard_help: Export to contacts list (email or phone)
     faculty: Faculty
     'false': false
-    faq_redirect_link: http://help.missionhub.com/article/34-faqs-frequently-asked-questions
     female: Female
     first_name: First Name
     gender: Gender
@@ -1139,7 +1139,6 @@ en:
     email_us: Email Us
     enter_survey_mode: Enter Survey Mode
     exit_survey_mode: Exit Survey Mode
-    faq: FAQ
     go_to: go to
     goal: Goal Tracker
     groups: Groups
@@ -1179,9 +1178,7 @@ en:
     ministries: Ministries
     about:
       title: About MissionHub
-      subtitle: Get info and support
       copyright: Copyright
-      close: Close
   number:
     currency:
       format:
