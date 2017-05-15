@@ -107,6 +107,7 @@ en:
       email_hover: Email the selected contacts
       sms_hover: Text the selected contacts
       export_hover: Export the selected contacts as CSV
+      transfer_hover: Transfer the selected contacts to another organization
       archive_hover: Archive the selected contacts
       delete_hover: Delete the selected contacts
       clear_selection_hover: Unselect all of the selected contacts
@@ -1812,6 +1813,15 @@ en:
       short: '%d %b %H:%M'
       time_only: '%l:%M %p'
     pm: pm
+  transfer:
+    title: Transfer Contacts
+    subtitle: Transfer %{contact_count} contact(s) to another organization.
+    organizations: organizations
+    transfer: Transfer %{contact_count} Contact(s)
+    options:
+      copy_contact: Leave a copy of the contact in the organization
+      copy_answers: Copy survey answers with contact
+      copy_interactions: Copy interactions with contact
   views:
     pagination:
       first: '&laquo; First'
@@ -1981,6 +1991,7 @@ en:
         update_org_visibility: Error occurred while updating the organization visibility
       organization:
         load_ancestry: Error occurred while loading the organization's ancestors
+        search_orgs: Error occurred while searching for organizations
       organization_overview:
         load_org_relationships: Error occurred while loading the organization's groups and surveys
       organization_overview_people:

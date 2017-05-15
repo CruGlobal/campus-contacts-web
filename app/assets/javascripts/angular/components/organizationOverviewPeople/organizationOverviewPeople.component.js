@@ -38,6 +38,7 @@
         vm.merge = merge;
         vm.sendMessage = sendMessage;
         vm.exportPeople = exportPeople;
+        vm.transferPeople = transferPeople;
         vm.archivePeople = archivePeople;
         vm.deletePeople = deletePeople;
         vm.clearSelection = clearSelection;
@@ -376,6 +377,22 @@
 
         function exportPeople () {
             organizationOverviewPeopleService.exportPeople(getSelection(), getOrder());
+        }
+
+        function transferPeople () {
+            var selection = getSelection();
+            $uibModal.open({
+                component: 'transferModal',
+                resolve: {
+                    selection: _.constant(selection)
+                },
+                windowClass: 'pivot_theme',
+                size: 'md'
+            }).result.then(function (copyContacts) {
+                if (copyContacts === false) {
+                    removePeopleFromList(selection.selectedPeople);
+                }
+            });
         }
 
         function archivePeople () {

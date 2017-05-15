@@ -53,6 +53,19 @@
                         // Filter out organizations that were not loaded because the user does not have access to them
                         return hierarchyIds.map(organizationService.lookupOrg).filter(_.identity);
                     });
+            },
+
+            // Search for organizations in the same org tree as the specified org that match the query
+            searchOrgs: function (org, query, deduper) {
+                var rootOrgId = organizationService.getOrgHierarchyIds(org)[0];
+                return httpProxy.get('/organization_search', {
+                    q: query,
+                    ancestry_roots: rootOrgId,
+                    limit: 10
+                }, {
+                    deduper: deduper,
+                    errorMessage: 'error.messages.organization.search_organizations'
+                }).then(httpProxy.extractModels);
             }
         };
 
