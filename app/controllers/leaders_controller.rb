@@ -14,11 +14,7 @@ class LeadersController < ApplicationController
         else
           if current_user.person.blank? || current_user.person.has_email?(@user.username)
             current_user.merge(@user)
-            if current_user.person(true).present?
-              redirect_to all_contacts_path(assigned_to: current_user.person.id)
-            else
-              redirect_to '/mycontacts'
-            end
+            redirect_to root_path
           else
             @valid_token = true
             render layout: 'mhub'
