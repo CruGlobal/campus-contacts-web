@@ -19,6 +19,13 @@ class EmailResponsesController < ApplicationController
     bouncerecps.each do |recp|
       email = recp['emailAddress']
       extra_info = "status: #{recp['status']}, action: #{recp['action']}, diagnosticCode: #{recp['diagnosticCode']}"
+      if recp['status'].blank? && recp['action'].blank? && recp['diagnosticCode'].blank?
+        Rails.logger.info 'Received blank bounce report. Spencer thinks this is only for out of office issues.'
+        # but he's not completely sure, so dump the whole recipient to the log so we can see if
+        # there is anything else in the payload telling us that it is an out-of-the-office message
+        Rails.logger.info recp.to_s
+        next
+      end
       Rails.logger.info "Creating a bounce record for #{email}"
 
       existing = EmailResponse.find_by(email: email)
