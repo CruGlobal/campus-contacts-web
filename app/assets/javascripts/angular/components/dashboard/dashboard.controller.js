@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .controller('DashboardController', DashboardController);
 
-    function DashboardController (loggedInPerson, periodService) {
+    function DashboardController (loggedInPerson, periodService, $uibModal) {
         var vm = this;
 
         vm.editOrganizations = false;
@@ -14,7 +14,16 @@
         vm.$onInit = activate;
 
         function activate () {
-            loggedInPerson.loadOnce();
+            loggedInPerson.loadOnce().then(function (me) {
+                if (me.user.beta_mode === null) {
+                    $uibModal.open({
+                        component: 'betaWelcomeModal',
+                        resolve: {},
+                        windowClass: 'pivot_theme',
+                        size: 'sm'
+                    });
+                }
+            });
         }
     }
 })();

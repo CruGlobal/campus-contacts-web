@@ -1955,6 +1955,13 @@ en:
     permanent: Permanent
     emergency1: Emergency 1
     emergency2: Emergency 2
+  beta:
+    welcome:
+      title: MissionHub Beta is here!
+      p1: We are working hard at improving MissionHub's web experience and our open beta is now live.
+      p2: Try it now! You can always change your preference under your user profile.
+      no_thanks: No Thanks
+      try: Try Beta
   error:
     default_error_message: An unknown error occurred
     retry_instructions: Click to retry

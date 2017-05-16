@@ -60,6 +60,17 @@
                                    .value();
                 var orgAndAncestry = organizationService.getOrgHierarchyIds(org);
                 return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
+            },
+
+            updatePreferences: function (preferences) {
+                var model = {
+                    data: {
+                        attributes: preferences
+                    }
+                };
+                return httpProxy.put(modelsService.getModelMetadata('user').url.single('me'), model, {
+                    errorMessage: 'error.messages.preferences_page.update_preferences'
+                });
             }
         };
     }
