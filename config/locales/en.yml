@@ -1983,7 +1983,7 @@ en:
       http_proxy:
         default_network_error: An unknown network error occured
       interactions:
-        create_interation: Error occurred while creating the interaction
+        create_interaction: Error occurred while creating the interaction
       logged_in_person:
         load_user: Error occurred while loading your user information
       mass_edit:
