@@ -153,6 +153,8 @@ en:
       header: Team
     tools:
       header: Tools
+    survey_responses:
+      header: Survey Responses
   person_multiselect:
     search_placeholder: Search %{people_description}
     searching: Searching %{people_description}...
