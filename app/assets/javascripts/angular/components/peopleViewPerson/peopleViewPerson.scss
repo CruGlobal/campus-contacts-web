@@ -6,6 +6,7 @@
 people-view-person {
   @extend .row;
   display: block;
+  flex-wrap: wrap;
   & > .person-info {
     justify-content: space-between;
     .no-data {
@@ -109,6 +110,7 @@ people-view-person {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     & > textarea{
       display: flex;
       flex-grow: 1;
