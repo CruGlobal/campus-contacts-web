@@ -8,5 +8,11 @@
     <% if current_user && current_user.key_auth %>
       ga_extra.userId = "<%= current_user.key_auth.uid %>";
     <% end %>
+
     ga('create', 'UA-325725-21', 'auto', ga_extra);
+
+    var clientId = tracker.get('clientId');
+    ga('set', 'dimension2', clientId);
+    ga('set', 'dimension3', userId);
+
   </script>
