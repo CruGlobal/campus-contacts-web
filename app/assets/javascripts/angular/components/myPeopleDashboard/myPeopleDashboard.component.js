@@ -52,7 +52,8 @@
         }
 
         function loadAndSyncData () {
-            personService.getContactAssignments(loggedInPerson.person, null).then(dataLoaded);
+            var includes = ['organizational_permissions', 'phone_numbers', 'email_addresses'];
+            personService.getContactAssignments(loggedInPerson.person, null, includes).then(dataLoaded);
         }
 
         function loadReports () {

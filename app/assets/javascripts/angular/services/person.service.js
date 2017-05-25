@@ -192,15 +192,16 @@
             // particular person
             // If organization is null, return all contact assignments, otherwise filter the returned assignments to
             // those related to a particular organization
-            getContactAssignments: function (person, organizationId) {
+            getContactAssignments: function (person, organizationId, additionalIncludes) {
+                var include = additionalIncludes || [];
+
+                // When we have an organization, we do not need to load the contact assignments' organizations
+                include = include.concat(_.isNil(organizationId) ?
+                                                        'reverse_contact_assignments.organization' :
+                                                        'reverse_contact_assignments',
+                                                        'organizational_permissions');
                 return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
-                    include: [
-                        // When we have an organization, we do not need to load the contact assignments' organizations
-                        _.isNil(organizationId) ?
-                            'reverse_contact_assignments.organization' :
-                            'reverse_contact_assignments',
-                        'organizational_permissions'
-                    ].join(','),
+                    include: include.join(','),
                     'filters[assigned_tos]': person.id,
                     'filters[organizations_id]': _.isNil(organizationId) ? '' : organizationId,
                     'page[limit]': 1000
