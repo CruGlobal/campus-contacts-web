@@ -28,16 +28,26 @@ ministry-view-person {
         flex: 1;
         align-self: center;
       }
-      .chevron {
-        padding-top: 10px;
+      .arrow {
+        display: flex;
+        align-items: center;
+        color: $pivot-dark-blue;
+        &::after {
+          content: " ";
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-top: 5px solid;
+        }
+        &.arrow-up::after{
+          border-top: none;
+          border-bottom: 5px solid;
+        }
       }
     }
-
-    .chevron svg {
-      fill: $pivot-dark-blue;
-    }
-    &.warning .chevron svg {
-      fill: $pivot-orange;
+    &.warning .name-container a.arrow {
+      &, &:hover{
+        color: $pivot-orange;
+      }
     }
   }
   .status-column {

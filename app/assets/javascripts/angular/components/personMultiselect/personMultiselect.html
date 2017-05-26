@@ -1,6 +1,7 @@
 <div class="item selected" ng-repeat="person in $ctrl.selectedPeople">
-    <ng-md-icon icon="close" class="action-icon" size="14"
-                ng-click="$ctrl.unselectPerson(person)"></ng-md-icon>
+    <a href="javascript:;" ng-click="$ctrl.unselectPerson(person)">
+        <ng-md-icon icon="close" class="action-icon" size="14"></ng-md-icon>
+    </a>
     <div>{{ person | personName }}</div>
 </div>
 <div class="item search">
@@ -15,7 +16,7 @@
     {{ 'person_multiselect.no_search_results' | t :
        { people_description: $ctrl.peopleDescription, search: $ctrl.search } }}
 </div>
-<div class="item option" ng-repeat="person in $ctrl.searchOptions" ng-click="$ctrl.selectPerson(person)">
+<a href="javascript:;" class="item option" ng-repeat="person in $ctrl.searchOptions" ng-click="$ctrl.selectPerson(person)">
     <ng-md-icon icon="add" class="action-icon" size="14"></ng-md-icon>
-    <div>{{ person | personName }}</div>
-</div>
+    <span>{{ person | personName }}</span>
+</a>
