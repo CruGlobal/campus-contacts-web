@@ -4,6 +4,8 @@ class LabelsController < ApplicationController
   before_action :set_label, only: [:new, :edit, :update, :destroy]
 
   def index
+    check_new_current_organization
+
     @organizational_labels = current_organization.non_default_labels
     @system_labels = current_organization.default_labels
   end
