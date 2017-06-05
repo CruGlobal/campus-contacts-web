@@ -26,6 +26,9 @@
             _.defaults(vm, {
                 loadDetails: true
             });
+
+            vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
+
             if (!vm.loadDetails) {
                 // Abort before loading org details
                 return;
@@ -54,8 +57,6 @@
             organizationOverviewService.getTeamCount(vm.org).then(function (teamMemberCount) {
                 vm.team = new Array(teamMemberCount);
             });
-
-            vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
 
             var cruOrgId = '1';
             vm.cruOrg = organizationService.getOrgHierarchyIds(vm.org)[0] === cruOrgId;
