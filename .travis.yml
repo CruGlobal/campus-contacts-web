@@ -6,7 +6,7 @@ cache:
     - cache
     - ../../../.nvm/versions
 language: ruby
-rvm: 2.3.0
+rvm: 2.3.4
 branches:
   only:
     - master
@@ -16,8 +16,9 @@ services:
   - redis-server
 
 before_install:
-- nvm install node
-- npm install
+  - bundle config gems.contribsys.com $SIDEKIQ_CREDS
+  - nvm install node
+  - npm install
 
 before_script:
   - cp config/s3.travis.yml config/s3.yml
