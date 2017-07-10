@@ -942,7 +942,7 @@ ca:
     manage: Organizations
     my_comments: My Comments
     my_contacts: My Contacts
-    my_profile: '%{name} Profile'
+    my_profile: My Profile
     organizations: Organizations
     people: People
     permissions: Labels
