@@ -44,7 +44,7 @@
   <% case params[:step] %>
   <% when 'keyword' %>
     <h2><%= t('.request_a_keyword') %></h2>
-    <p><%= raw t('welcome.wizard.keyword_paragraph') %> </p>
+    <p><%= raw t('welcome.wizard.keyword_paragraph', shortcode: current_organization.sms_code) %> </p>
     <%= link_to(t('welcome.wizard.request_keyword_link'), new_sms_keyword_path) %><br/>
   <% when 'survey' %>
     <h2><%= t('.create_a_survey') %></h2>

@@ -798,7 +798,7 @@ fr:
     profile_info:
       confirm_remove_facebook:
       email_contact_info: Envoyez-moi ces renseignements sur le contact
-      opt_in_help: Si vous désirez recevoir des messages textes, textez « ACTIVER » au 85005.
+      opt_in_help: Si vous désirez recevoir des messages textes, textez « ACTIVER » au %{shortcode}.
       success_remove_facebook:
     profile_interactions_edit:
       confirm_delete_interaction: Êtes-vous sûr de vouloir supprimer cette interaction?
@@ -826,7 +826,6 @@ fr:
       explanation: Veuillez expliquer la façon dont vous prévoyez utiliser ce mot-clé.
       initial_response: Comment voulez-vous que nous répondions aux textes qu'on nous envoie?  <br/>Si vous voulez que la personne réponde à un sondage, la réponse DOIT inclure {{ link }}<br/>(exactement comme cela; il ne faut pas modifier cet élément de la réponse)
       keyword: Mot-clé
-      keyword_instruct: '- Un mot-clé est requis pour recueillir des contacts et des sondages au moyen de textes, du Web et de téléphones intelligents. <br/>. « P2CUQAM » est le mot-clé dans « Textez P2CUQAM au 85005 ».<br/> Votre mot-clé doit contenir au moins 3 lettres.'
       keyword_tip: Ceci est ce que les gens entreront dans leur cellulaire.
       keyword_why: Ceci est réservé à notre usage. La description d'usage pourrait inclure des mots tels que « rencontre hebdomadaire », « activité d'évangélisation », et d'autres utilisations du mot-clé.
       post_survey_message: Quel message aimeriez-vous que la personne voie après avoir terminé le sondage?
@@ -1391,7 +1390,7 @@ fr:
         Comment voulez-vous que nous répondions aux textes qu'on nous envoie?  <br/>Si vous voulez que la personne réponde à un sondage, la réponse DOIT inclure {{ link }}<br/>(exactement comme cela; il ne faut pas modifier cet élément de la réponse.)
       initial_response_default: 'Salut! Merci de vous intéresser à %{org}. Pour y participer davantage, répondez par  « i », ou cliquez sur {{ link }} si vous avez un téléphone intelligent. '
       keyword: Mot-clé
-      keyword_instruct: '- Un mot-clé est requis pour recueillir des contacts et des sondages au moyen de textes, du Web et de téléphones intelligents. <br/>. « P2CUQAM » est le mot-clé dans « Textez P2CUQAM au 85005 ».<br/> Votre mot-clé doit contenir au moins 3 lettres (sans caractère spécial ni espace).'
+      keyword_instruct: '- Un mot-clé est requis pour recueillir des contacts et des sondages au moyen de textes, du Web et de téléphones intelligents. <br/>. « P2CUQAM » est le mot-clé dans « Textez P2CUQAM au %{shortcode} ».<br/> Votre mot-clé doit contenir au moins 3 lettres (sans caractère spécial ni espace).'
       keyword_locked: Les mots-clés ne peuvent pas être modifiés. Vous pouvez supprimer celui-ci et en créer un nouveau au besoin.
       keyword_tip: C'est ce que les gens entreront dans leur cellulaire.
       keyword_why: Ceci est réservé à notre usage. La description d'usage pourrait inclure des mots tels que « rencontre hebdomadaire », « activité d'évangélisation », ou d'autres utilisations du mot-clé.
@@ -1640,7 +1639,7 @@ fr:
       quick_interactions: Interactions rapides
       quick_interactions_text: 'Sur le tableau de bord, il est rapide et facile de communiquer avec vos contacts et de consigner les interactions.'
       request_key: Cliquez ici pour demander un mot-clé
-      request_key_help: 'Un mot-clé est à la fois le nom du sondage et ce que la personne texterait pour répondre aux questions du sondage. Par exemple, vous diriez : « Textez P2CUQAM au numéro 85005 ». P2CUQAM est le mot-clé. '
+      request_key_help: 'Un mot-clé est à la fois le nom du sondage et ce que la personne texterait pour répondre aux questions du sondage. Par exemple, vous diriez : « Textez P2CUQAM au numéro %{shortcode} ». P2CUQAM est le mot-clé. '
       stay_on_mission: Cap Sur la Mission
       stay_on_mission_text: 'À mesure que votre ministère grandit, vous avez besoin d’aide pour consigner et organiser l’information afin de ne rien manquer. Grâce à MissionHub, vous pouvez facilement rester en contact avec les personnes dans votre ministère en consignant de façon efficace les renseignements importants qui vous aident à bien servir ces personnes.'
       subheadline_html: Créer des liens plus facilement. Communiquer plus facilement. Suivre plus facilement.
@@ -1666,7 +1665,7 @@ fr:
       create_survey: Créer un sondage
       create_survey_link: Cliquez ici pour créer votre sondage.
       designate_leaders: Désigner des leaders
-      keyword_paragraph: 'Un grand avantage de MissionHub est la capacité de recueillir des contacts au moyen de messages textes. Pour ce faire, vous devez choisir un mot-clé propre à votre ministère auquel des gens enverront des textes. Grâce à ce mot-clé, vous pourrez dire lors de votre prochain événement ou de votre rencontre hebdomadaire : « Textez <strong>votre mot-clé</strong> au 85005. »'
+      keyword_paragraph: 'Un grand avantage de MissionHub est la capacité de recueillir des contacts au moyen de messages textes. Pour ce faire, vous devez choisir un mot-clé propre à votre ministère auquel des gens enverront des textes. Grâce à ce mot-clé, vous pourrez dire lors de votre prochain événement ou de votre rencontre hebdomadaire : « Textez <strong>votre mot-clé</strong> au %{shortcode}. »'
       leaders_header: Donner accès à d'autre leaders
       leaders_paragraph: 'Cette partie est facultative. Il est fort probable qu''il y ait d''autres personnes avec lesquelles vous travaillez à qui vous aimeriez donner la capacité de gérer le mot-clé que vous avez établi ainsi que les contacts qui seront générés lorsque les gens répondront à votre sondage. Cette étape vous permet d''ajouter ces personnes. Malheureusement, nous ne l''avons pas encore programmée. '
       next: Suivant

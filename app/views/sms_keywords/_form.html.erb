@@ -8,7 +8,8 @@
       <% if @sms_keyword.new_record? %>
         <label for="survey_label">
           <%= t('sms_keywords.form.keyword') + ": " + t('sms_keywords.form.keyword_tip') %>
-          <div class="icon help tip help_bubble_keyword " title="<%= t('sms_keywords.form.keyword_instruct') %>"></div>
+          <div class="icon help tip help_bubble_keyword "
+               title="<%= t('sms_keywords.form.keyword_instruct', shortcode: current_organization.sms_code) %>"></div>
         </label>
         <div class="field">
           <%= f.text_field :keyword, placeholder: "Shorter keywords are better" %>

@@ -653,7 +653,7 @@ es:
     subject: Asunto
     survey: Encuesta
     survey_help_desc: Para iniciar su encuesta,
-    survey_text_help_desc: Mandar un texto con su palabra clave a 85005
+    survey_text_help_desc: Mandar un texto con su palabra clave a %{shortcode}
     survey_text_tip_html: Para iniciar tu encuesta, <strong>text %{keyword} de %{shortcode}.</strong>
     survey_web_tip_html: Para la versión web de la encuesta, enviar a la gente a <strong>http://mhub.cc/c/%{keyword}/</strong>
     to: A
@@ -1314,7 +1314,7 @@ es:
       initial_response: ¿Qué respuesta debemos devolver a las personas cuando nos escriben? <br/>Si quieres que la persona complete la encuesta, la respuesta DEBE incluir {{ link }}<br/>(exactamente así, no cambies esa parte de la respuesta.)
       initial_response_default: 
       keyword: Palabra Clave
-      keyword_instruct: '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para 85005''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
+      keyword_instruct: '- Una palabra clave es requerida para coleccionar contactos y encuestas vía texto, web y teléfono inteligente. <br/> - ''FSUCRU'' es la palabra clave ''Escribe FSUCRU para %{shortcode}''.<br/>- Utiliza por lo menos 3 letras para tu palabra clave.'
       keyword_locked: La palabra clave no puede ser cambiada. Puedes eliminar esta y crear una nueva si es necesario.
       keyword_tip: Esto es lo que las personas escribirán en su teléfono.
       keyword_why: Esto para nuestro uso exclusivo. La descripción puede incluir el uso de palabras como 'reunión semanal', 'eventos de alcance', y otros usos que la palabra clave tendrá.
@@ -1551,7 +1551,7 @@ es:
       headline_html: Un sistema de seguimiento <span class="babyblue">en línea</span> con tu audiencia en mente.
       learn_more: Conocer Más
       request_key: Haz clic para pedir una palabra clave
-      request_key_help: La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número 85005.' UFCRU es la palabra clave.
+      request_key_help: La palabra clave es el nombre de la encuesta y también lo que la persona va escribir para llenar su encuesta. Por ejemplo, puedes decir, 'Escribe UFCRU al número %{shortcode}.' UFCRU es la palabra clave.
       subheadline_html: Escribir a estudiante para conectar. Tu seguimiento potencial desde la web o un teléfono inteligente.
       title_top: Bienvenido a MissionHub!
       title_top_mobile: Encuesta
@@ -1567,7 +1567,7 @@ es:
       create_survey: Crear una encuesta
       create_survey_link: Haz Clic aquí para crear tu encuesta.
       designate_leaders: Designar líder
-      keyword_paragraph: Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al 85005‚Äù a tu reunión o evento siguiente.
+      keyword_paragraph: Una potente característica de MissionHub es la capacidad de coleccionar contactos a través de los mensajes de texto. Para que esto funcione, debes elegir una palabra clave que sea única para tu ministerio y que haga que las personas envíen mensajes de texto. Con una palabra clave, podrás decir ‚ÄúText <strong>tu palabra clave</strong>  al %{shortcode}‚Äù a tu reunión o evento siguiente.
       leaders_header: Dar acceso a otros líderes
       leaders_paragraph: Esta parte es opcional. Hay probabilidades de que hayan otras personas con las que trabajas a quienes te gustaría darles la capacidad de administrar la palabra clave que configuraste la palabra clave que al igual que los contactos que obtienes de las personas que respondieron a tu encuesta. Este paso te permitirá agregar esas personas. Excepto que no lo hemos programado aun.
       next: Next

@@ -23,7 +23,8 @@
     <tr id="table_header">
       <th>
         <%= t("general.keyword") %>
-        <div class="icon help tipitright help_bubble_keyword " title="<%= t('welcome.index.request_key_help') %>"></div>
+        <div class="icon help tipitright help_bubble_keyword "
+             title="<%= t('welcome.index.request_key_help', shortcode: current_organization.sms_code) %>"></div>
       </th>
       <th><%= t("general.status") %></th>
       <th><%= t("general.survey") %></th>
