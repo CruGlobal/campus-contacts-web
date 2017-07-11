@@ -11,7 +11,6 @@ branches:
   only:
     - master
     - staging
-    - new-dashboard
 services:
   - redis-server
 
@@ -21,11 +20,7 @@ before_install:
   - npm install
 
 before_script:
-  - cp config/s3.travis.yml config/s3.yml
-  - cp config/database.travis.yml config/database.yml
-  - cp config/config.travis.yml config/config.yml
-  - bundle exec rake db:create RAILS_ENV=test
-  - bundle exec rake db:structure:load RAILS_ENV=test
+  - bundle exec rake db:create db:structure:load RAILS_ENV=test
 
 script:
   - npm test
