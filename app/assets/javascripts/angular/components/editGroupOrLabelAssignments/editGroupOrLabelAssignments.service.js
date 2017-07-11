@@ -58,6 +58,19 @@
             return $q.all(promises);
         }
 
+        function updateGroupMemberships (person, addedGroupIds, removedGroupIds) {
+            _.each(addedGroupIds, function (groupId) {
+                var group = JsonApiDataStore.store.find('group', groupId);
+                var membership = _.find(person.group_memberships, ['group.id', groupId]);
+                group.group_memberships.push(membership);
+            });
+            _.each(removedGroupIds, function (groupId) {
+                var group = JsonApiDataStore.store.find('group', groupId);
+                var membership = _.find(group.group_memberships, ['person.id', person.id]);
+                _.remove(group.group_memberships, membership);
+            });
+        }
+
         return {
             saveOrganizationalLabels: function (person, organizationId, addedLabelIds, removedLabelIds) {
                 return saveRelationshipChanges('organizational_label',
@@ -65,8 +78,12 @@
             },
 
             saveGroupMemberships: function (person, addedGroupIds, removedGroupIds) {
-                return saveRelationshipChanges('group_membership',
+                var savePromise = saveRelationshipChanges('group_membership',
                                                person, addedGroupIds, removedGroupIds);
+                return savePromise.then(function (resp) {
+                    updateGroupMemberships(person, addedGroupIds, removedGroupIds);
+                    return resp;
+                });
             },
 
             loadPlaceholderEntries: function (entries, orgId, errorMessage) {
