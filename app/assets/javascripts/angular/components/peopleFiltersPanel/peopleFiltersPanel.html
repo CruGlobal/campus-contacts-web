@@ -37,7 +37,12 @@
         <accordion-content>
             <label ng-repeat="assignmentOption in $ctrl.assignmentOptions" class="filter-option">
                 <input type="checkbox" ng-model="$ctrl.filters.assigned_tos[assignmentOption.person_id]">
-                <span class="filter-option-name">{{ assignmentOption.name }}</span>
+                <span class="filter-option-name" ng-if="assignmentOption.person_id != 'unassigned'">
+                    {{ assignmentOption.name }}
+                </span>
+                <span class="filter-option-name" ng-if="assignmentOption.person_id == 'unassigned'">
+                    {{ 'contacts.index.unassigned' | t }}
+                </span>
                 <span class="filter-option-count">{{ assignmentOption.count }}</span>
             </label>
         </accordion-content>
