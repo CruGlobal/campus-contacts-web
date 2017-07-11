@@ -157,8 +157,12 @@
 
             // Apply the changes
             var includedAttrs = ['name', 'location', 'meets', 'meeting_day', 'start_time', 'end_time'];
+            var relationships = [];
+            if (_.isUndefined(group.id)) {
+                relationships = ['organization'];
+            }
             return {
-                data: group.serialize({ attributes: includedAttrs, relationships: [] }).data,
+                data: group.serialize({ attributes: includedAttrs, relationships: relationships }).data,
                 included: [].concat(demoteModels, promoteModels, createModels)
             };
         }

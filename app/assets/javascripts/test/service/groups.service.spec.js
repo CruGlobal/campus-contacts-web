@@ -181,6 +181,7 @@
                 this.group.setAttribute('end_time', 1);
                 this.group.setAttribute('extra_key', 'extra_value'); // attribute that should not be serialized
                 this.group.setRelationship('group_memberships', [groupMembership1, groupMembership2]);
+                this.group.setRelationship('organization', this.organization);
 
                 var newLeaders = [this.people[1], this.people[2]];
                 expect(groupsService.payloadFromGroup(this.group, newLeaders)).toEqual({
@@ -206,6 +207,43 @@
                          // created
                         { type: 'group_membership', attributes: { group_id: 3, person_id: 13, role: 'leader' } }
                     ]
+                });
+            });
+
+            it('should include organization id if it is a new group', function () {
+                this.people = [];
+
+                this.group = new JsonApiDataStore.Model('group');
+                this.group.setAttribute('name', 'Group');
+                this.group.setAttribute('location', 'Place');
+                this.group.setAttribute('meets', 'monthly');
+                this.group.setAttribute('meeting_day', 1);
+                this.group.setAttribute('start_time', 0);
+                this.group.setAttribute('end_time', 1);
+                this.group.setRelationship('organization', this.organization);
+
+                var newLeaders = [];
+                expect(groupsService.payloadFromGroup(this.group, newLeaders)).toEqual({
+                    data: {
+                        type: 'group',
+                        attributes: {
+                            name: 'Group',
+                            location: 'Place',
+                            meets: 'monthly',
+                            meeting_day: 1,
+                            start_time: 0,
+                            end_time: 1
+                        },
+                        relationships: {
+                            organization: {
+                                data: {
+                                    id: 1,
+                                    type: 'organization'
+                                }
+                            }
+                        }
+                    },
+                    included: []
                 });
             });
         });
