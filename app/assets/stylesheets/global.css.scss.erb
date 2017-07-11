@@ -1113,7 +1113,7 @@ ul.pillmenu {
 }
 
 
-.beta-dashboard {
+.body--beta {
   #primary_nav a {
     @include font-smoothing;
     font-size: 20px;
@@ -1125,10 +1125,10 @@ ul.pillmenu {
     background-image: url("<%= asset_path('whitebar-up.png') %>");
     background-position: 50% 100%;
   }
+}
 
-  #profile_dropdown_nav ul {
-    right: inherit;
-  }
+#dashboard_controller.body--beta #profile_dropdown_nav ul {
+  right: inherit;
 }
 
 #filter_box,
