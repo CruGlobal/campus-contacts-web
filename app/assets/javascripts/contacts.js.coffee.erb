@@ -646,7 +646,12 @@ $ ->
     $(this).autocomplete
       source: '/contacts/search_by_name_and_email.json'+inc,
       select: (event, ui) ->
-        window.location = "/profile/" + ui.item.id
+        current_organization_id = $('meta[name="mh_current_organization"]').attr('content')
+        if angular.element('*[ng-app]').injector().get('$rootScope').isSpaPage
+          state = angular.element('*[ng-app]').injector().get('$state');
+          state.go('.person.defaultTab', { personId: ui.item.id, orgId: current_organization_id })
+        else
+          window.location.href = "/d/people/" + current_organization_id + "/" + ui.item.id + "/profile"
     .data("autocomplete")
     ._renderItem = ( ul, item )->
       temp = item
