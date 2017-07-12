@@ -1,2 +1,3 @@
 <preload-state name="v4AccessToken"
                data="<%= JWTGenerator.new(current_user).generate %>"></preload-state>
+<preload-state name="legacy_current_organization" data="<%= current_organization.try(:id) %>" />
