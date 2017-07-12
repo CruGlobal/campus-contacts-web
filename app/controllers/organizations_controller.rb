@@ -2,7 +2,7 @@ class OrganizationsController < ApplicationController
   respond_to :html, :js
   before_action :get_organization, only: [:show, :edit, :update, :destroy, :update_from_crs]
   skip_before_action :authenticate_user!, only: [:new]
-  before_action :check_new_current_organization, only: [:index, :cleanup]
+  before_action :check_new_current_organization, only: [:index, :cleanup, :signatures]
 
   def load_tree
     if params[:id].present?

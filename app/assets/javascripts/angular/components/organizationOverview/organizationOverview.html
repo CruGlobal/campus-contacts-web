@@ -45,6 +45,11 @@
                                 {{ 'nav.report_movement_indicators' | t }}
                             </a>
                         </li>
+                        <li ng-if="$ctrl.adminPrivileges && $ctrl.p2cOrg" class="divider">
+                            <a ng-href="/organizations/signatures?organization_id={{$ctrl.org.id}}">
+                                {{ 'signatures.title' | t }}
+                            </a>
+                        </li>
                         <li>
                             <a ng-href="/charts/snapshot?organization_id={{$ctrl.org.id}}">{{ 'nav.snapshot' | t }}</a>
                         </li>

@@ -14,12 +14,13 @@
             }
         });
 
-    function organizationOverviewController ($scope, JsonApiDataStore, asyncBindingsService, ministryViewTabs,
+    function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService, ministryViewTabs,
                                              organizationOverviewService, organizationService, loggedInPerson, _) {
         var vm = this;
         vm.tabNames = ministryViewTabs;
         vm.adminPrivileges = true;
         vm.cruOrg = false;
+        vm.p2cOrg = false;
         vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
         function activate () {
@@ -28,8 +29,11 @@
             });
 
             vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
+
             var cruOrgId = '1';
             vm.cruOrg = organizationService.getOrgHierarchyIds(vm.org)[0] === cruOrgId;
+
+            vm.p2cOrg = vm.org.id === p2cOrgId || organizationService.getOrgHierarchyIds(vm.org)[0] === p2cOrgId;
 
             if (!vm.loadDetails) {
                 // Abort before loading org details

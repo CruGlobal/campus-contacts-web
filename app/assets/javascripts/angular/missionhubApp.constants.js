@@ -12,5 +12,6 @@
         .constant('confirm', window.confirm)
         .constant('jQuery', window.jQuery)
         .constant('nativeLocation', window.location)
+        .constant('p2cOrgId', '7311')
         .constant('spaPage', window.location.pathname === '/' || /^\/d(\/.*)?$/.test(window.location.pathname));
 })();
