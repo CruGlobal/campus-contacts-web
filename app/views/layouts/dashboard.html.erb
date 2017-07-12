@@ -6,7 +6,7 @@
     <base href="/d/">
   </head>
   <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>"
-        ng-app="missionhubApp" ng-class="{ 'body--beta': $root.betaMode }">
+        ng-app="missionhubApp" ng-class="{ 'nav--legacy': $root.legacyNavigation }">
     <%= wiser_timezone_initialize(auto_set_guest: true) %>
     <%= render 'dialogs/alert' %>
     <%= render 'dialogs/locate_contact' %>

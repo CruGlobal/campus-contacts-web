@@ -59,9 +59,9 @@
                 vm.weeklyDigest = user.notification_settings.weekly_digest;
             }
 
-            vm.betaMode = user.beta_mode;
-            if (vm.betaMode === null) {
-                vm.betaMode = $rootScope.betaMode;
+            vm.legacyNavigation = !user.beta_mode;
+            if (user.beta_mode === null) {
+                vm.legacyNavigation = $rootScope.legacyNavigation;
             }
         }
 
@@ -81,11 +81,10 @@
                 vm.user.language = vm.selectedLanguage.abbreviation;
             }
 
-            vm.user.beta_mode = vm.betaMode;
+            vm.user.beta_mode = !vm.legacyNavigation;
 
             return preferencesPageService.updatePreferences(vm.user.serialize()).then(function () {
-                $rootScope.betaMode = vm.user.beta_mode;
-                $window.localStorage.removeItem('beta');
+                $rootScope.legacyNavigation = !vm.user.beta_mode;
             });
         }
     }

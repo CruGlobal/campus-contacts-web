@@ -7,8 +7,21 @@
 .topmenu.topmenu-with-sub {
   margin-bottom: 0;
 }
-#dashboard_controller.body--beta .topmenu {
-  padding: 0 calc(50% - 484px);
+#dashboard_controller {
+  .topmenu {
+    padding: 0 calc(50% - 484px);
+  }
+  #profile_dropdown_nav ul {
+    right: inherit;
+  }
+}
+#dashboard_controller.nav--legacy {
+  .topmenu {
+    padding: 0;
+  }
+  #profile_dropdown_nav ul {
+    right: 12px;
+  }
 }
 
 .dashboard-subnav {

@@ -17,7 +17,7 @@
             loggedInPerson.loadOnce().then(function (me) {
                 if (me.user.beta_mode === null) {
                     $uibModal.open({
-                        component: 'betaWelcomeModal',
+                        component: 'newWelcomeModal',
                         resolve: {},
                         windowClass: 'pivot_theme',
                         size: 'sm'

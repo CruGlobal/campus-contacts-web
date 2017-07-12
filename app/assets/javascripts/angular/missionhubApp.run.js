@@ -19,17 +19,14 @@
                 $analytics.pageTrack($window.location.pathname);
             }
 
-            $rootScope.betaMode = $window.localStorage.getItem('beta');
-            if ($rootScope.betaMode === null) {
-                // This code will run when Angular initializes, but currently we are gaining our
-                // authentication from the rails host through a <preload-state> component. This means
-                // that the access token isn't populated at the time of application initialization,
-                // the $timeout will cause delay this execution until after the first digest.
-                $timeout(function () {
-                    loggedInPerson.loadOnce().then(function (me) {
-                        $rootScope.betaMode = Boolean(me.user.beta_mode);
-                    });
+            // This code will run when Angular initializes, but currently we are gaining our
+            // authentication from the rails host through a <preload-state> component. This means
+            // that the access token isn't populated at the time of application initialization,
+            // the $timeout will cause delay this execution until after the first digest.
+            $timeout(function () {
+                loggedInPerson.loadOnce().then(function (me) {
+                    $rootScope.legacyNavigation = me.user.beta_mode === false;
                 });
-            }
+            });
         });
 })();

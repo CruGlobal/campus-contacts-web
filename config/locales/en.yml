@@ -1473,7 +1473,7 @@ en:
     person_moved: When a person is transferred to your organization
     person_assigned: When a person is assigned to you
     weekly_digest: Weekly Ministry Digest
-    beta_mode: Try out experimental beta features
+    legacy_navigation: Revert to legacy navigation
   questions:
     archived_help: Archived questions will no longer be included in the survey.  If no answers have ever been given to the question, the archived question will be deleted.  If you USE an archived question, the question will move to the YOUR QUESTIONS section and the previous answers will re-appear.
     create:
@@ -1958,11 +1958,10 @@ en:
     emergency2: Emergency 2
   beta:
     welcome:
-      title: MissionHub Beta is here!
-      p1: We are working hard at improving MissionHub's web experience and our open beta is now live.
-      p2: Try it now! You can always change your preference under your user profile.
-      no_thanks: No Thanks
-      try: Try Beta
+      title: Welcome to the new MissionHub!
+      p1: We are excited about the improved navigation and performance. We hope you enjoy it, too!
+      p2: If you need any help, click the life ring in the bottom right!
+      accept: Let's Go!
   error:
     default_error_message: An unknown error occurred
     retry_instructions: Click to retry

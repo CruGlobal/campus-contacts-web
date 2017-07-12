@@ -1107,28 +1107,33 @@ ul.pillmenu {
     }
   }
   ul {
-    right: 15px;
+    right: 12px;
   }
 
 }
 
+.mh-top li.current, .mh-top li.current:hover {
+  background-image: url("<%= asset_path('whitebar-up.png') %>");
+  background-position: 50% 100%;
+}
 
-.body--beta {
+#primary_nav a {
+  @include font-smoothing;
+  font-size: 20px;
+  padding-left: .75em;
+  padding-right: .75em;
+}
+
+.nav--legacy {
   #primary_nav a {
-    @include font-smoothing;
-    font-size: 20px;
-    padding-left: .75em;
-    padding-right: .75em;
+    @include font-smoothing(off);
+    font-size: 14px;
+    padding-left: 1em;
+    padding-right: 1em;
   }
-
-  .mh-top .current, .mh-top .current:hover {
-    background-image: url("<%= asset_path('whitebar-up.png') %>");
-    background-position: 50% 100%;
+  #primary_nav .sf-with-ul {
+    padding-right: 2.25em;
   }
-}
-
-#dashboard_controller.body--beta #profile_dropdown_nav ul {
-  right: inherit;
 }
 
 #filter_box,
@@ -3018,11 +3023,11 @@ ul.sf-menu {
         color: #fff !important;
       }
     }
-    .sfHover ul {
+    li ul {
       min-width: 120px;
       border: 1px solid #06415f;
       border-top: none;
-      background-color: #06415f !important;
+      background-color: #06415f;
       li a {
         color: #ddd !important;
         &:hover {
