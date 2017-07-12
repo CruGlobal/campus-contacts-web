@@ -31,9 +31,10 @@
             vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
 
             var cruOrgId = '1';
-            vm.cruOrg = organizationService.getOrgHierarchyIds(vm.org)[0] === cruOrgId;
+            var rootOrgId = organizationService.getOrgHierarchyIds(vm.org)[0];
+            vm.cruOrg = rootOrgId === cruOrgId;
 
-            vm.p2cOrg = vm.org.id === p2cOrgId || organizationService.getOrgHierarchyIds(vm.org)[0] === p2cOrgId;
+            vm.p2cOrg = vm.org.id === p2cOrgId || rootOrgId === p2cOrgId;
 
             if (!vm.loadDetails) {
                 // Abort before loading org details
