@@ -3,6 +3,9 @@ $person-height: 50px;
 ministry-view-person {
   display: block;
   height: $person-height;
+  .row {
+    height: 50px;
+  }
 
   .column.select-column {
     width: 26px;
