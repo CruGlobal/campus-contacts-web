@@ -76,7 +76,7 @@
                 filters: {
                     groups: [vm.group.id]
                 },
-                selectedPeople: members,
+                selectedPeople: _.map(members, 'id'),
                 unselectedPeople: [],
                 totalSelectedPeople: members.length,
                 allSelected: true,
