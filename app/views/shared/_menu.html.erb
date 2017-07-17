@@ -10,7 +10,7 @@
       <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
     </li>
 
-    <li ng-if="!$root.legacyNavigation" ui-sref-active="current">
+    <li ng-if="!$root.legacyNavigation" ng-class="{ current: ('app.ministries' | includedByState) }">
       <a ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
       <a ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
     </li>
