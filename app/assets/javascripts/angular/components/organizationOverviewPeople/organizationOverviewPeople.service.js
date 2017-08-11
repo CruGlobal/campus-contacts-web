@@ -59,6 +59,9 @@
                 if (filters.searchString) {
                     base['filters[name]'] = filters.searchString;
                 }
+                if (filters.includeArchived) {
+                    base['filters[include_archived]'] = true;
+                }
                 if (filters.labels) {
                     base['filters[label_ids]'] = filters.labels.join(',');
                 }

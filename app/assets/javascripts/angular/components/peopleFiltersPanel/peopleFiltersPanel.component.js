@@ -52,7 +52,8 @@
                 searchString: '',
                 labels: {},
                 assignedTos: {},
-                groups: {}
+                groups: {},
+                includeArchived: false
             };
         }
 
@@ -94,6 +95,7 @@
         function getNormalizedFilters () {
             return {
                 searchString: vm.filters.searchString,
+                includeArchived: vm.filters.includeArchived,
                 labels: getTruthyKeys(vm.filters.labels),
                 assignedTos: getTruthyKeys(vm.filters.assigned_tos),
                 groups: getTruthyKeys(vm.filters.groups)
