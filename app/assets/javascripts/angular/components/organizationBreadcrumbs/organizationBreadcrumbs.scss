@@ -1,3 +1,10 @@
+.dashboard-subnav organization-breadcrumbs, organization-breadcrumbs  {
+  // for specificity sake :(
+  .ministry-name {
+    color: $gray-1;
+  }
+}
+
 organization-breadcrumbs {
   display: block;
   white-space: nowrap;
@@ -6,16 +13,16 @@ organization-breadcrumbs {
   align-self: stretch;
   align-items: center;
 
+  .arrow {
+    color: $gray-3;
+  }
+
   span:not(:last-child) {
     margin-right: 4px;
   }
 
-  &, a {
-    color: black;
-  }
-
   .current-org {
-    a {
+    .ministry-name {
       color: $pivot-dark-blue;
     }
 

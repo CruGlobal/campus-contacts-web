@@ -4,7 +4,7 @@
     <%= render 'shared/head' %>
     <%= stylesheet_link_tag 'legacy_bootstrap' %>
   </head>
-  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %>"
+  <body id="<%= controller.controller_name %>_controller" class="<%= params[:action] %> legacy-page"
         ng-app="missionhubApp" ng-class="{ 'nav--legacy': $root.legacyNavigation }">
     <%= wiser_timezone_initialize(auto_set_guest: true) %>
     <%= render 'dialogs/alert' %>
@@ -17,6 +17,7 @@
     	      <%= render 'shared/menu' %>
         	</div>
         </div>
+        <organization-breadcrumbs org-id="<%= current_organization.id %>"></organization-breadcrumbs>
 
         <div id="left">
           <div class="block">
