@@ -1,4 +1,6 @@
 class MovementIndicatorSuggestionsController < ApplicationController
+  before_action :check_new_current_organization
+
   def index
   end
 
