@@ -25,7 +25,7 @@
                 <textarea type="text" placeholder="{{ 'ministries.people.history.note_for_interaction'
                                                    | t:{ interaction: ($ctrl.newInteractionType.title | t)} }}"
                           ng-model="$ctrl.newInteractionComment" ng-required="$ctrl.newInteractionType.id === 1"
-                          ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()">
+                          ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()" focus="true">
                 </textarea>
             </div>
             <button type="submit" class="column icon-column">

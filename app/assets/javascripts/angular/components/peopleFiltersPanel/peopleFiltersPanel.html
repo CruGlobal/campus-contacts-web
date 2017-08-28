@@ -64,4 +64,11 @@
             </label>
         </accordion-content>
     </accordion>
+
+    <div class="filter-row filter-archived">
+        <label>
+            <input type="checkbox" ng-model="$ctrl.filters.includeArchived">
+            <span class="filter-option-name">{{ 'search.sidebar.include_archived' | t }}</span>
+        </label>
+    </div>
 </div>
