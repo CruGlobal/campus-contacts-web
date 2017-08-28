@@ -23,9 +23,9 @@
 //angular
 //= require angular/angular
 //= require angular-animate/angular-animate
-//= require @uirouter/angularjs/release/angular-ui-router
+//= require angular-ui-router/release/angular-ui-router
 //= require angular/setupResolveService
-//= require @uirouter/angularjs/release/resolveService
+//= require angular-ui-router/release/resolveService
 //= require ui-select/dist/select
 //= require lodash/lodash
 //= require lscache/lscache
