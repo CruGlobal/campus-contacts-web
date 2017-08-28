@@ -16,9 +16,6 @@ person-page {
 
   $compensated-right-padding: $inner-padding + $col-spacing + $left-col-width;
 
-  // subtract one pixel for the left border
-  box-sizing: content-box;
-
   header {
     &.row {
       align-items: flex-start;
