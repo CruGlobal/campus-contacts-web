@@ -121,7 +121,7 @@
                 });
             }));
 
-            it('should use the deduper instance when provided', function () {
+            it('should use the deduper instance when provided', asynchronous(function () {
                 var deduper = new RequestDeduper();
                 spyOn(deduper, 'request').and.returnValue($q.resolve());
                 var config = {
@@ -131,7 +131,7 @@
                 return httpProxy.callHttp(this.method, this.url, this.params, this.data, config).then(function () {
                     expect(deduper.request).toHaveBeenCalledWith(jasmine.any(Function));
                 });
-            });
+            }));
 
             describe('aliases', function () {
                 beforeEach(function () {

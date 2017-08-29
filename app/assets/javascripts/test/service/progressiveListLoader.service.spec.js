@@ -96,7 +96,7 @@
                     });
             }));
 
-            it('loads second and final batch', function () {
+            it('loads second and final batch', asynchronous(function () {
                 this.listLoader.reset([
                     { id: 1 },
                     { id: 2 }
@@ -121,7 +121,7 @@
                                 null,
                                 jasmine.any(Object));
                     });
-            });
+            }));
         });
     });
 })();
