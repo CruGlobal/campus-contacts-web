@@ -40,6 +40,7 @@
         vm.editTags = editTags;
         vm.editGroups = editGroups;
         vm.editAddress = editAddress;
+        vm.unarchive = unarchive;
         vm.formatAddress = personProfileService.formatAddress;
 
         vm.$onInit = activate;
@@ -326,6 +327,13 @@
             addressModal.result.then(function () {
                 $scope.$emit('personModified');
             });
+        }
+
+        function unarchive () {
+            if (vm.personTab.orgPermission !== null) {
+                vm.personTab.orgPermission.archive_date = null;
+                vm.saveAttribute(vm.personTab.orgPermission, 'archive_date');
+            }
         }
     }
 })();

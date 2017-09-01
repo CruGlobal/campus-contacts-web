@@ -48,9 +48,19 @@
             // Find and return a person's organizational permission for a particular organization
             getOrgPermission: function (person, organizationId) {
                 return _.chain(person.organizational_permissions)
-                    .filter({ organization_id: organizationId })
-                    .first()
-                    .defaultTo(null)
+                    .find({ organization_id: organizationId })
+                    .thru(function (orgPermission) {
+                        if (orgPermission) {
+                            return orgPermission;
+                        }
+
+                        // double check the data store
+                        var matchParams = {
+                            person_id: person.id,
+                            organization_id: organizationId
+                        };
+                        return _.find(JsonApiDataStore.store.findAll('organizational_permission'), matchParams) || null;
+                    })
                     .value();
             },
 

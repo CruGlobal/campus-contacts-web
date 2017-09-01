@@ -178,6 +178,18 @@
                     // Only show the country line if the country is outside of the US
                     address.country === 'US' ? null : address.country
                 ].filter(_.identity);
+            },
+
+            unarchive: function (permission) {
+                return updatePerson(permission.person_id, { include: 'organizational_permissions' }, {
+                    included: [{
+                        type: 'organizational_permission',
+                        id: permission.id,
+                        attributes: {
+                            archive_date: null
+                        }
+                    }]
+                });
             }
         };
 
