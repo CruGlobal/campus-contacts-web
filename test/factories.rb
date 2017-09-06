@@ -140,16 +140,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :v4_person, class: V4::Person do
-    first_name 'John'
-    last_name 'Doe'
-    gender '1'
-    sequence(:fb_uid) { |n| "person_fb_uid_#{n}" }
-    after(:create) do |x|
-      FactoryGirl.create(:v4_email_address, person: x)
-    end
-  end
-
   factory :person_without_name, parent: :person do
     first_name ''
     last_name ''
@@ -491,11 +481,6 @@ FactoryGirl.define do
   end
 
   factory :email_address do
-    sequence(:email) { |n| "email_address_email_#{n}@email.com" }
-    association :person
-  end
-
-  factory :v4_email_address, class: V4::EmailAddress do
     sequence(:email) { |n| "email_address_email_#{n}@email.com" }
     association :person
   end
