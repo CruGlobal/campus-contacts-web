@@ -67,6 +67,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def key
+    head :no_content and return if params[:logoutRequest].present?
     if user_signed_in?
       redirect_to root_path
     else
