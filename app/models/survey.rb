@@ -188,11 +188,4 @@ class Survey < ActiveRecord::Base
       end
     end
   end
-
-  def convert_all_answer_sheets_to_notes
-    eager_loaded_sheets = answer_sheets.includes({ person: [:interactions] }, :answers).where.not(people: { id: nil })
-    eager_loaded_sheets.find_each do |as|
-      as.to_note.save! unless as.existing_note
-    end
-  end
 end
