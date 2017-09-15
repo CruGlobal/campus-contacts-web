@@ -8,7 +8,11 @@ class SurveyResponsesController < ApplicationController
   before_action :check_new_current_organization, only: :edit
 
   skip_before_action :authenticate_user!, except: [:update, :live]
-  skip_before_action :check_url
+  skip_before_action :check_url, except: [:index]
+
+  def index
+    redirect_to root_path
+  end
 
   def new
     unless mhub? || Rails.env.test?
