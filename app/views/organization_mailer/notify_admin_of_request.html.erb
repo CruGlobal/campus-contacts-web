@@ -11,5 +11,5 @@
   Organization Name: <%= @org %><br/>
 </p>
 <p>
-  Click here to respond to the request: <%= link_to(@org, admin_organization_url(@org)) %>
+  Click here to respond to the request: <%= link_to(@org, admin_organization_url(@org, host: ENV['API_HOST'])) %>
 </p>

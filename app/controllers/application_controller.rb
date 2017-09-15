@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   force_ssl if: :ssl_configured?, except: [:lb]
   before_action :check_valid_subdomain
-  before_action :authenticate_user!, except: [:facebook_logout]
+  before_action :authenticate_user!, except: [:facebook_logout, :redirect_admin]
   before_action :clear_advanced_search
   before_action :set_login_cookie
   before_action :check_su
@@ -28,6 +28,17 @@ class ApplicationController < ActionController::Base
 
   def clear_advanced_search
     session[:filters] = nil
+  end
+
+  def redirect_admin
+    api_remote = [0, 80].include?(ENV['API_PORT'])
+    api_port = api_remote ? nil : ENV['API_PORT']
+    api_protocol = api_remote ? 'https' : 'http'
+    api_url = URI::HTTP.build(host: ENV['API_HOST'],
+                              path: request.original_fullpath,
+                              port: api_port,
+                              protocol: api_protocol).to_s
+    redirect_to api_url
   end
 
   # def set_user_time_zone

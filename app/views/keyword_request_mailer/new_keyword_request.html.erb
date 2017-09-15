@@ -16,5 +16,5 @@
 </p>
 
 <p>
-  Click here to respond to the request: <%= link_to(@keyword, admin_sms_keyword_url(@keyword)) %>
+  Click here to respond to the request: <%= link_to(@keyword, admin_sms_keyword_url(@keyword, host: ENV['API_HOST'])) %>
 </p>

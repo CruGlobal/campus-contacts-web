@@ -25,16 +25,4 @@ class OrganizationMailer < ActionMailer::Base
     @intro = intro
     mail to: to, subject: 'New Contact Notification'
   end
-
-  def notify_user(org_id)
-    @org = Organization.find(org_id)
-    @admin = @org.admins.first
-    mail(to: @admin.email, subject: "Organization '#{@org}' was approved!")
-  end
-
-  def notify_user_of_denial(org_id)
-    @org = Organization.find(org_id)
-    @admin = @org.admins.first
-    mail(to: @admin.email, subject: "Organization '#{@org}' was rejected.")
-  end
 end

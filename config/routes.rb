@@ -16,6 +16,11 @@ Mh::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  match 'admin', to: 'application#redirect_admin', via: :get
+  match 'admin/*path', to: 'application#redirect_admin', via: :all
+  get 'admin/sms_keywords/:id', to: 'application#redirect_admin', as: 'admin_sms_keyword'
+  get 'admin/organizations/:id', to: 'application#redirect_admin', as: 'admin_organization'
+
   resources :signatures, only: [] do
     collection do
       get :code_of_conduct
@@ -106,16 +111,6 @@ Mh::Application.routes.draw do
   get 'search_locate_contact' => 'contacts#search_locate_contact'
 
   resources :group_labels, only: [:create, :destroy]
-
-  ActiveAdmin::ResourceController.class_eval do
-    def authenticate_admin!
-      unless user_signed_in? && SuperAdmin.where(user_id: current_user.id, site: 'MissionHub').first
-        render file: Rails.root.join(mhub? ? 'public/404_mhub.html' : 'public/404.html'), layout: false, status: 404
-        false
-      end
-    end
-  end
-  ActiveAdmin.routes(self)
 
   resources :groups do
     resources :group_labelings, only: [:create, :destroy]
@@ -215,14 +210,6 @@ Mh::Application.routes.draw do
       post :edit_label
     end
   end
-
-  namespace :admin do
-    resources :email_templates
-  end
-
-  # namespace :admin do
-  #   resources :organizations
-  # end
 
   get 'load_organization_tree' => 'organizations#load_tree'
   resources :organizations, only: [:show, :new, :create, :edit, :update, :destroy, :index] do
@@ -462,13 +449,6 @@ Mh::Application.routes.draw do
   post 'requested_access' => 'welcome#requested_access', as: 'requested_access'
   get 'thank_you' => 'welcome#thank_you', as: 'thank_you'
 
-  # SMS keyword state transitions
-  post '/admin/sms_keywords/:id/t/:transition' => 'admin/sms_keywords#transition', as: 'sms_keyword_transition'
-  post '/admin/sms_keywords/approve'
-
-  post '/admin/organizations/:id/t/:transition' => 'admin/organizations#transition', as: 'organization_transition'
-  post '/admin/organizations/approve'
-
   # Map keyword responses with phone numbers
   get 'c/:keyword(/:received_sms_id)' => 'survey_responses#new', as: 'contact_form'
   get 'm/:received_sms_id' => 'survey_responses#new'
@@ -477,12 +457,10 @@ Mh::Application.routes.draw do
   get 'l/:token/:user_id/signout' => 'leaders#sign_out_and_leader_sign_in', as: 'sign_out_and_leader_sign_in'
   get 's/:survey_id' => 'survey_responses#new', as: 'short_survey'
   get '/surveys/:keyword' => 'surveys#start'
-  # mount RailsAdmin::Engine => "/admin"
 
   get 'autoassign_suggest' => 'surveys/questions#suggestion', as: 'question_suggestion'
   get 'add_survey_question/:survey_id' => 'surveys/questions#add', as: 'add_survey_question'
 
-  # mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   # mount Resque::Server.new, at: "/resque"
 
   # other oauth calls
@@ -495,7 +473,6 @@ Mh::Application.routes.draw do
   end
   # make admin portion of oauth2 rack accessible
   mount Rack::OAuth2::Server::Admin => '/oauth/admin'
-  mount Raddocs::App => '/docs'
 
   get 'monitors/lb'
   get 'monitors/commit'

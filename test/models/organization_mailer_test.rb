@@ -3,7 +3,7 @@ require 'test_helper'
 class OrganizationMailerTest < ActiveSupport::TestCase
   setup do
     @user = FactoryGirl.create(:user_with_auxs)
-    email = FactoryGirl.create(:email_address, person: @user.person)
+    FactoryGirl.create(:email_address, person: @user.person)
     @user.person.reload
     @org = @user.person.organizations.first
   end
@@ -12,17 +12,5 @@ class OrganizationMailerTest < ActiveSupport::TestCase
     OrganizationMailer.notify_admin_of_request(@org).deliver_now
     content = ActionMailer::Base.deliveries.last
     assert_match /New organization request/, content.subject.to_s
-  end
-
-  test 'notify user' do
-    OrganizationMailer.notify_user(@org).deliver_now
-    content = ActionMailer::Base.deliveries.last
-    assert_match /Organization '#{@org}' was approved!/, content.subject.to_s
-  end
-
-  test 'notify user of denial' do
-    OrganizationMailer.notify_user_of_denial(@org).deliver_now
-    content = ActionMailer::Base.deliveries.last
-    assert_match /Organization '#{@org}' was rejected./, content.subject.to_s
   end
 end

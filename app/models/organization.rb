@@ -120,12 +120,10 @@ class Organization < ActiveRecord::Base
     event :approve do
       transition requested: :active
     end
-    after_transition on: :approve, do: :notify_user
 
     event :deny do
       transition requested: :denied
     end
-    after_transition on: :deny, do: :notify_user_of_denial
 
     event :disable do
       transition any => :inactive
@@ -1060,18 +1058,6 @@ class Organization < ActiveRecord::Base
     user = User.find(user_id)
 
     CrsImport.new(self, user).import
-  end
-
-  def notify_user
-    # touch each user so that their org tree's update
-    admins.each(&:touch)
-    OrganizationMailer.delay.notify_user(id) if admins
-    true
-  end
-
-  def notify_user_of_denial
-    OrganizationMailer.delay.notify_user_of_denial(id) if admins
-    true
   end
 
   # When an organization is added or removed, any person associated with that organization needs to

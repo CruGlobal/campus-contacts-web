@@ -49,12 +49,10 @@ class SmsKeyword < ActiveRecord::Base
     event :approve do
       transition [:denied, :requested] => :active
     end
-    after_transition on: :approve, do: :notify_user
 
     event :deny do
       transition requested: :denied
     end
-    after_transition on: :deny, do: :notify_user_of_denial
 
     event :disable do
       transition active: :inactive
@@ -81,17 +79,5 @@ class SmsKeyword < ActiveRecord::Base
 
   def keyword_with_state
     "#{keyword} (#{state})"
-  end
-
-  private
-
-  def notify_user
-    KeywordRequestMailer.delay.notify_user(id) if user
-    true
-  end
-
-  def notify_user_of_denial
-    KeywordRequestMailer.delay.notify_user_of_denial(id) if user
-    true
   end
 end
