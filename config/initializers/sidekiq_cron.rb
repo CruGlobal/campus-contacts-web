@@ -1,7 +1,6 @@
 daily = '0 0 * * *'
 every_6_hours = '0 */4 * * *'
 just_after_midnight = '0 10 * * *'
-sunday_morning = '10 7 * * 7'
 
 hash = {
   'Infobase Sync' => {
@@ -27,16 +26,6 @@ hash = {
   'Mailchimp sync' => {
     'class' => 'MailChimpSyncWorker',
     'cron'  => just_after_midnight
-  },
-
-  'Mega farmer report' => {
-    'class' => 'MegaFarmerReportWorker',
-    'cron'  => sunday_morning
-  },
-
-  'Weekly digest report' => {
-    'class' => 'DigestMailerWorker',
-    'cron'  => sunday_morning
   }
 }
 
