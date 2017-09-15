@@ -42,6 +42,10 @@ class OrganizationalLabel < ActiveRecord::Base
       .update_all(removed_date: Time.now)
   end
 
+  def safe_start_date
+    start_date || created_at
+  end
+
   private
 
   def set_start_date
