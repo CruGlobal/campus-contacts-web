@@ -15,7 +15,7 @@
 
     function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal, confirmModalService,
                                                    organizationOverviewPeopleService, personService,
-                                                   peopleFiltersPanelService,
+                                                   peopleFiltersPanelService, loggedInPerson,
                                                    RequestDeduper, ProgressiveListLoader, _) {
         var vm = this;
         vm.people = [];
@@ -110,6 +110,10 @@
         }
 
         $scope.$watch('$ctrl.multiSelection', function () {
+            vm.selectedCount = selectedCount();
+        }, true);
+
+        function selectedCount () {
             // because multiSelection is only a list of the loaded records,
             // we need to count the ones that are explicitly un-selected when
             // select all is checked
@@ -121,11 +125,10 @@
             }
 
             if (vm.selectAllValue) {
-                vm.selectedCount = vm.totalCount - unselected;
-            } else {
-                vm.selectedCount = getSelectedPeople().length;
+                return vm.totalCount - unselected;
             }
-        }, true);
+            return getSelectedPeople().length;
+        }
 
         function loadPersonPage () {
             vm.busy = true;
@@ -366,7 +369,22 @@
         // This is an abstract method that can both archive and remove people
         function removePeople (message, performRemoval) {
             var selection = getSelection();
-            confirmModalService.create($filter('t')(message, { contact_count: vm.selectedCount }))
+            var transformedMessage = message;
+
+            // look to see if the user is the only one selected, if so, allow them to archive self
+            if (_.isEqual(selection.selectedPeople, [loggedInPerson.person.id])) {
+                transformedMessage = 'ministries.people.remove_self_confirm';
+            } else if (selection.allSelected) {
+                if (_.indexOf(selection.unselectedPeople, loggedInPerson.person.id) === -1) {
+                    selection.unselectedPeople = _.union(selection.unselectedPeople, [loggedInPerson.person.id]);
+                    selection.totalSelectedPeople = selectedCount() - 1;
+                }
+            } else if (_.indexOf(selection.selectedPeople, loggedInPerson.person.id) !== -1) {
+                selection.selectedPeople = _.pull(selection.selectedPeople, loggedInPerson.person.id);
+                selection.totalSelectedPeople = selectedCount() - 1;
+            }
+            transformedMessage = $filter('t')(transformedMessage, { contact_count: selection.totalSelectedPeople });
+            confirmModalService.create(transformedMessage)
                 .then(function () {
                     return performRemoval(selection);
                 })

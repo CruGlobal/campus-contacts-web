@@ -101,6 +101,7 @@ en:
       selected_contacts: '%{contactCount} contacts selected'
       archive_people_confirm: Are you sure you want to archive %{contact_count} contacts?
       delete_people_confirm: Are you sure you want to delete %{contact_count} contacts?
+      remove_self_confirm: You are removing yourself. If you continue, you will no longer have access to this ministry.
       mass_edit_hover: Mass edit the selected contacts
       merge_disabled_hover: Select between 2 and 4 contacts to merge them
       merge_hover: Merge the selected contacts
