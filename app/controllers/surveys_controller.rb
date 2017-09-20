@@ -1,6 +1,6 @@
 class SurveysController < ApplicationController
   before_action :set_keyword_cookie, only: :start
-  before_action :prepare_for_mobile, only: [:start, :stop, :index]
+  before_action :prepare_for_mobile, only: [:start, :stop]
   skip_before_action :authenticate_user!
   skip_before_action :check_url
   load_and_authorize_resource except: [:start, :stop, :index]
