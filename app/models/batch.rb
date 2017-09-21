@@ -1,52 +1,4 @@
-class Batch # < ActiveRecord::Base
-  def self.person_transfer_notify
-    notify_entries = get_unnotified_transfers
-    receiving_orgs = notify_entries.group('new_organization_id')
-
-    receiving_orgs.each do |o|
-      if Organization.exists?(o.new_organization_id)
-        organization = Organization.find(o.new_organization_id)
-        transferred_contacts = notify_entries.where(new_organization_id: organization.id).order('old_organization_id')
-        admins = organization.all_possible_admins_with_email
-        if admins.present?
-          admins.each do |admin|
-            formated_transferred_contacts = []
-            transferred_contacts.each do |contact|
-              begin
-                if contact.present? && contact.person.present? && contact.transferred_by.present? && contact.old_organization.present?
-                  transfer_log = {}
-                  transfer_log['transferer_name'] = contact.transferred_by.name
-                  transfer_log['transferer_email'] = contact.transferred_by.email
-                  transfer_log['old_org_name'] = contact.old_organization.name
-                  transfer_log['contact_name'] = contact.person.name
-                  transfer_log['contact_email'] = contact.person.email
-                  formated_transferred_contacts << transfer_log
-                end
-              rescue => e
-                Rails.env.production? ? Rollbar.error(e) : (raise e)
-              end
-            end
-            intro = I18n.t('batch.person_transfer_message', org_name: organization.name, contacts_count: formated_transferred_contacts.size)
-            OrganizationMailer.notify_person_transfer(admin.email, intro, formated_transferred_contacts).deliver_now
-            transferred_contacts.update_all(notified: true)
-          end
-        else
-          transferred_contacts.update_all(skipped: true)
-          error = "Root parent organization #{organization.name}(ID#{organization.id}) do not have admin with valid email."
-          if Rails.env.production?
-            Rollbar.error(
-              error_class: 'Batch::PersonTransferNotify',
-              error_message: "Batch::PersonTransferNotify: #{error}",
-              parameters: { receiving_organizations: receiving_orgs.collect(&:organization_id) }
-            )
-          else
-            fail error
-          end
-        end
-      end
-    end
-  end
-
+class Batch
   def self.new_person_notify
     notify_entries = get_unnotified_new_contacts
 
@@ -91,10 +43,6 @@ class Batch # < ActiveRecord::Base
         end
       end
     end
-  end
-
-  def self.get_unnotified_transfers
-    PersonTransfer.where(notified: false, skipped: false)
   end
 
   def self.get_unnotified_new_contacts

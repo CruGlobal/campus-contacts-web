@@ -18,11 +18,6 @@ hash = {
     'cron'  => daily
   },
 
-  'Transfer notifications' => {
-    'class' => 'Jobs::PersonTransferNotifications',
-    'cron'  => daily
-  },
-
   'Mailchimp sync' => {
     'class' => 'MailChimpSyncWorker',
     'cron'  => just_after_midnight
