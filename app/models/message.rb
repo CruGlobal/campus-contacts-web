@@ -26,6 +26,20 @@ class Message < ActiveRecord::Base
     where("(`messages`.to = ? AND sent_via = 'sms') OR (`messages`.reply_to LIKE ? AND sent_via = 'sms_email')", phone_number, "#{phone_number}%")
   end
 
+  def self.last_outbound_text_message(phone_number, within_days = 365)
+    timeframe = within_days.days.ago..DateTime.current
+    sent_by_legacy = where(sent_via: 'sms', to: phone_number, sent: true, created_at: timeframe).order(:created_at).last
+    sent_by_v4_api = V4::BulkMessageRecipient.includes({ recipient: [:phone_numbers] }, :bulk_message)
+                                             .where(phone_numbers: { not_mobile: false, number: phone_number },
+                                                    bulk_messages: { send_via: 'sms' },
+                                                    status: ['sent', 'delivered'], created_at: timeframe)
+                                             .order(:created_at)
+                                             .last
+
+    # which one was sent most recently
+    [sent_by_legacy, sent_by_v4_api].compact.sort_by(&:created_at).last
+  end
+
   def status
     if sent_via == 'sms'
       sent_sms.present? ? sent_sms.status : 'none'

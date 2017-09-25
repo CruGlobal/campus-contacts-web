@@ -152,7 +152,7 @@ class SmsControllerTest < ActionController::TestCase
         @person = FactoryGirl.create(:person)
         FactoryGirl.create(:phone_number, number: @phone_number, person_id: @person.id)
         @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)
-        @outbound_message = FactoryGirl.create(:outbound_text_message, to: @strip_phone_number)
+        @outbound_message = FactoryGirl.create(:outbound_text_message, to: @strip_phone_number, sent: true)
         @organization = @outbound_message.organization
         @organization.add_user(@person)
       end

@@ -37,9 +37,9 @@ class SmsController < ApplicationController
         @organization = @sms_session.sms_keyword.organization
         SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization.present?
       else
-        outbound = Message.outbound_text_messages(phone_number)
+        outbound = Message.last_outbound_text_message(phone_number)
         if outbound.present?
-          @organization = outbound.last.organization
+          @organization = outbound.organization
           SmsUnsubscribe.add_to_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
@@ -55,9 +55,9 @@ class SmsController < ApplicationController
         @organization = @sms_session.sms_keyword.organization
         SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization.present?
       else
-        outbound = Message.outbound_text_messages(phone_number)
+        outbound = Message.last_outbound_text_message(phone_number)
         if outbound.present?
-          @organization = outbound.last.organization
+          @organization = outbound.organization
           SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization
         end
       end
@@ -119,13 +119,11 @@ class SmsController < ApplicationController
       keyword = SmsKeyword.where(keyword: first_word).first
       if !keyword || !keyword.active?
         # See if they're responding to an outbound text
-        outbound_message = Message.includes(:sender)
-                           .where(to: PhoneNumber.strip_us_country_code(sms_params[:phone_number]),
-                                  sent: true, created_at: SMS_REPLY_TIMEOUT_DAYS.days.ago..DateTime.current)
-                           .order('created_at desc').first
-        if outbound_message
+        phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
+        outbound = Message.last_outbound_text_message(phone_number, SMS_REPLY_TIMEOUT_DAYS)
+        if outbound
           # Forward this reply on to the sender
-          send_message(person.name + ': ' + message, outbound_message.sender.phone_number).send_sms
+          send_message(person.name + ': ' + message, outbound.sender.phone_number).send_sms if outbound.sender
           render(xml: blank_response) && return
         end
         @msg = I18n.t('sms.keyword_inactive')
