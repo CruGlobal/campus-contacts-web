@@ -56,10 +56,16 @@ class SmsController < ApplicationController
       if unsubscribes.empty?
         @msg = I18n.t('sms.sms_subscribed_without_org')
       else
-        @msg = 'Which organization would you like to subscribe to? '
-        unsubscribes.each do |u|
-          org = u.organization
-          @msg += "#{org.id} #{org.name}, "
+        if unsubscribes.one?
+          org = unsubscribes[0].organization
+          @msg = I18n.t('sms.sms_subscribed_with_org', org: org)
+          SmsUnsubscribe.remove_from_unsubscribe(phone_number, org.id)
+        else
+          @msg = 'Which organization would you like to subscribe to? '
+          unsubscribes.each do |u|
+            org = u.organization
+            @msg += "#{org.id} #{org.name}, "
+          end
         end
       end
 
