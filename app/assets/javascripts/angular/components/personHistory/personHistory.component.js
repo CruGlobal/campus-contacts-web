@@ -16,7 +16,7 @@
             }
         });
 
-    function personHistoryController ($scope, $element, $interval, $q, asyncBindingsService,
+    function personHistoryController ($scope, $element, $interval, $q, $timeout, asyncBindingsService,
                                       interactionsService, personHistoryService) {
         var vm = this;
         vm.filters = ['all', 'interactions', 'notes', 'surveys'];
@@ -48,7 +48,9 @@
         }
 
         function postLink () {
-            scrollContainer = $element.find('.scrollable-area')[0];
+            $timeout(function () {
+                scrollContainer = $element.find('.scrollable-area')[0];
+            });
         }
 
         function createInteraction (interactionType) {
