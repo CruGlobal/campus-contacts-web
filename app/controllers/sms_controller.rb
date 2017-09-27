@@ -51,18 +51,17 @@ class SmsController < ApplicationController
       render(xml: @sent_sms.to_twilio) && return
     when 'on'
       phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
-      if @sms_session
-        @organization = @sms_session.sms_keyword.organization
-        SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization.present?
-      else
-        outbound = Message.last_outbound_text_message(phone_number)
-        if outbound.present?
-          @organization = outbound.organization
-          SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization
+      unsubscribes = SmsUnsubscribe.where(phone_number: phone_number)
+
+      if unsubscribes
+        @msg = 'Which organization would you like to subscribe to? '
+        unsubscribes.each do |u|
+          org = u.organization
+          @msg += "#{org.id} #{org.name}, "
         end
+      else
+        @msg = I18n.t('sms.sms_subscribed_without_org')
       end
-      @msg = I18n.t('sms.sms_subscribed_without_org')
-      @msg = I18n.t('sms.sms_subscribed_with_org', org: @organization) if @organization.present?
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
