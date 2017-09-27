@@ -53,14 +53,14 @@ class SmsController < ApplicationController
       phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
       unsubscribes = SmsUnsubscribe.where(phone_number: phone_number)
 
-      if unsubscribes
+      if unsubscribes.empty?
+        @msg = I18n.t('sms.sms_subscribed_without_org')
+      else
         @msg = 'Which organization would you like to subscribe to? '
         unsubscribes.each do |u|
           org = u.organization
           @msg += "#{org.id} #{org.name}, "
         end
-      else
-        @msg = I18n.t('sms.sms_subscribed_without_org')
       end
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
