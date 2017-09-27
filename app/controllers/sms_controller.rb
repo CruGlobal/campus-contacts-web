@@ -71,6 +71,15 @@ class SmsController < ApplicationController
 
       @sent_sms = send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
+    when /on \d+/
+      organization = Organization.find(message.remove('on ')) # TODO: need to scope this
+      @msg = I18n.t('sms.sms_subscribed_with_org', org: organization)
+
+      phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
+      SmsUnsubscribe.remove_from_unsubscribe(phone_number, organization.id)
+
+      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      render(xml: @sent_sms.to_twilio) && return
     when 'help'
       @msg = I18n.t('sms.sms_help_guide')
       @sent_sms = send_message(@msg, sms_params[:phone_number])
