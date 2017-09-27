@@ -8,7 +8,8 @@
             // is most likely to be needed
             $http.get(assetPathFilter('angular/templates/retryToastTemplate.html'), { cache: $templateCache });
         })
-        .run(function ($window, $rootScope, $analytics, $timeout, lscache, spaPage, _, loggedInPerson) {
+        .run(function ($window, $rootScope, $analytics, $timeout, lscache, spaPage, _, loggedInPerson,
+                       updateRollbarPerson) {
             lscache.setBucket('missionhub:');
 
             // Determine whether this page is a SPA page or a legacy page
@@ -25,6 +26,7 @@
             // the $timeout will cause delay this execution until after the first digest.
             $timeout(function () {
                 loggedInPerson.loadOnce().then(function (me) {
+                    updateRollbarPerson(me);
                     $rootScope.legacyNavigation = me.user.beta_mode === false;
                 });
             });
