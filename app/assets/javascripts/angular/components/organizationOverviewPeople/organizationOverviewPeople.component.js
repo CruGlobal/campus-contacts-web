@@ -103,6 +103,7 @@
             });
 
             vm.sortOrder = _.clone(defaultSortOrder);
+            vm.isAdmin = loggedInPerson.isAdminAt(vm.organizationOverview.org);
         }
 
         function deactivate () {

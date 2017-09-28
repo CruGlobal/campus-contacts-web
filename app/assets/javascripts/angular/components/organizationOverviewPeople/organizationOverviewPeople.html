@@ -51,7 +51,8 @@
             <ng-md-icon icon="file_download" size="16" ng-click="$ctrl.exportPeople()"
                         ng-attr-title="{{ 'ministries.people.export_hover' | t }}"></ng-md-icon>
             <ng-md-icon icon="send" size="16" ng-click="$ctrl.transferPeople()"
-                        ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"></ng-md-icon>
+                        ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
+                        ng-if="$ctrl.isAdmin"></ng-md-icon>
             <ng-md-icon icon="archive" size="16" ng-click="$ctrl.archivePeople()"
                         ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"></ng-md-icon>
             <ng-md-icon icon="delete" size="16" ng-click="$ctrl.deletePeople()"
