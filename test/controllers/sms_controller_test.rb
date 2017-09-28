@@ -199,7 +199,7 @@ class SmsControllerTest < ActionController::TestCase
       end
 
       should "have response when user sends 'on' subscribe" do
-        message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@organization.name}."
+        message = 'You have been subscribed from MHub text alerts. You can now receive text messages.'
         post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         assert_equal message, assigns(:msg)
       end
