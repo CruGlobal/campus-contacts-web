@@ -58,9 +58,8 @@ module.exports = function (config) {
         reporters: ['spec', 'coverage'],
 
         coverageReporter: {
-            type: 'html',
-            dir: 'coverage/',
-            file: 'coverage.html'
+            type: 'lcov',
+            dir: 'coverage/'
         },
 
         // start these browsers
