@@ -210,6 +210,29 @@ class SmsControllerTest < ActionController::TestCase
         assert_equal message, assigns(:msg)
       end
     end
+
+    context 'ON with multiple organizations' do
+      setup do
+        @person = FactoryGirl.create(:person)
+        FactoryGirl.create(:phone_number, number: @phone_number, person_id: @person.id)
+
+        @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)
+
+        @org1 = FactoryGirl.create(:organization, name: 'Organization 1')
+        @org2 = FactoryGirl.create(:organization, name: 'Organization 2')
+
+        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org1.id)
+        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org2.id)
+      end
+
+      should 'have response with previously unsubscribed organizations' do
+        message = "What organization would you like to subscribe to? for #{@org1.name} respond with 'ON #{@org1.id}', for #{@org2.name} respond with 'ON #{@org2.id}', ."
+
+        post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+        assert_equal message, assigns(:msg)
+      end
+    end
   end
 
   should 'Test for email validation' do
