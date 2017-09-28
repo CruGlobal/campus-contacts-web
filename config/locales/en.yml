@@ -1585,6 +1585,8 @@ en:
     no_survey: There isn't a survey associated with that keyword
     sms_help_guide: MHub SMS. Msg & data rates may apply. Reply STOP to quit. Go to https://mhub.cc/terms for more help. Msg frequency depends on user.
     sms_subscribed_with_org: You have been subscribed from MHub text alerts. You can now receive text messages from %{org}.
+    sms_subscribed_with_orgs: What organization would you like to subscribe to? %{orgs}.
+    sms_respond_with: respond with
     sms_subscribed_without_org: You have been subscribed from MHub text alerts. You can now receive text messages.
     sms_unsubscribed_with_org: You have been unsubscribed from MHub text alerts for %{org}. You will receive no more messages. To opt back in, reply ON.
     sms_unsubscribed_without_org: You have been unsubscribed from MHub text alerts. You will receive no more messages. To opt back in, reply ON.
