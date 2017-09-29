@@ -228,7 +228,7 @@ class SmsControllerTest < ActionController::TestCase
 
       context 'ON' do
         should 'have response with previously unsubscribed organizations' do
-          message = "What organization would you like to subscribe to? for #{@org1.name} respond with 'ON #{@org1.id}', for #{@org2.name} respond with 'ON #{@org2.id}', ."
+          message = "What organization would you like to subscribe to? for #{@org1.name} respond with '1', for #{@org2.name} respond with '2', ."
 
           post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 
@@ -236,19 +236,15 @@ class SmsControllerTest < ActionController::TestCase
         end
       end
 
-      context 'ON {number}' do
+      context '{number}' do
+        setup do
+          FactoryGirl.create(:subscription_sms_session, number: @phone_number, person_id: @person.id)
+        end
+
         should 'should subscribe to specified organization' do
           message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
 
-          post :mo, @post_params.merge!(message: "on #{@org2.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
-
-          assert_equal message, assigns(:msg)
-        end
-
-        should 'not allow subscription to organization not previously unsubscribed from' do
-          message = 'You have been subscribed from MHub text alerts. You can now receive text messages.'
-
-          post :mo, @post_params.merge!(message: "on #{@org3.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          post :mo, @post_params.merge!(message: '2', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 
           assert_equal message, assigns(:msg)
         end

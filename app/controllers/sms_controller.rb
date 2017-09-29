@@ -61,25 +61,9 @@ class SmsController < ApplicationController
           @msg = I18n.t('sms.sms_subscribed_with_org', org: org)
           SmsUnsubscribe.remove_from_unsubscribe(phone_number, org.id)
         else
-          orgs_str = ''
-          unsubscribes.each do |u|
-            org = u.organization
-            orgs_str += "for #{org.name} #{I18n.t('sms.sms_respond_with')} 'ON #{org.id}', "
-          end
-          @msg = I18n.t('sms.sms_subscribed_with_orgs', orgs: orgs_str)
+          subscription = SubscriptionSmsSession.create!(phone_number: phone_number, person_id: find_or_create_person.id)
+          @msg = I18n.t('sms.sms_subscribed_with_orgs', orgs: subscription.create_choices(unsubscribes))
         end
-      end
-
-      send_message(@msg, sms_params[:phone_number])
-      render(xml: @sent_sms.to_twilio) && return
-    when /on \d+/
-      organization = SmsUnsubscribe.find_by(phone_number: phone_number, organization_id: message.remove('on '))&.organization
-
-      if organization
-        @msg = I18n.t('sms.sms_subscribed_with_org', org: organization)
-        SmsUnsubscribe.remove_from_unsubscribe(phone_number, organization.id)
-      else
-        @msg = I18n.t('sms.sms_subscribed_without_org')
       end
 
       send_message(@msg, sms_params[:phone_number])
@@ -90,6 +74,14 @@ class SmsController < ApplicationController
       render(xml: @sent_sms.to_twilio) && return
     when ''
       render(xml: blank_response) && return
+    end
+
+    # TODO: make sure this doesn't interfere with survey keywords?
+    subscription_session = SubscriptionSmsSession.find_by(phone_number: phone_number) # TODO check if active
+    if subscription_session
+      @msg = subscription_session.subscribe(message)
+      send_message(@msg, sms_params[:phone_number])
+      render(xml: @sent_sms.to_twilio) && return
     end
 
     # If it is, check for interactive texting
@@ -124,13 +116,7 @@ class SmsController < ApplicationController
 
     else
       # We're starting a new sms session
-      # Try to find a person with this phone number. If we can't, create a new person
-      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => PhoneNumber.strip_us_country_code(sms_params[:phone_number])).first
-        # Create a person record for this phone number
-        person = Person.new
-        person.save(validate: false)
-        person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
-      end
+      person = find_or_create_person
 
       # Look for an active keyword for this message
       first_word = Emojimmy.emoji_to_token(message.downcase).split(' ').first
@@ -158,6 +144,18 @@ class SmsController < ApplicationController
   end
 
   protected
+
+  def find_or_create_person
+    # Try to find a person with this phone number. If we can't, create a new person
+    unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => PhoneNumber.strip_us_country_code(sms_params[:phone_number])).first
+      # Create a person record for this phone number
+      person = Person.new
+      person.save(validate: false)
+      person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
+    end
+
+    person
+  end
 
   def sent_again?
   end
