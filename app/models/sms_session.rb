@@ -1,7 +1,6 @@
-class SmsSession < ActiveRecord::Base
+class SmsSession < AbstractSmsSession
   attr_accessible :phone_number, :person_id, :sms_keyword_id, :interactive, :ended
 
-  belongs_to :person
   belongs_to :sms_keyword
 
   scope :active,
