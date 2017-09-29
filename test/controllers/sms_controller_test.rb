@@ -232,6 +232,14 @@ class SmsControllerTest < ActionController::TestCase
 
         assert_equal message, assigns(:msg)
       end
+
+      should 'should subscribe to specified organization' do
+        message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
+
+        post :mo, @post_params.merge!(message: "on #{@org2.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+        assert_equal message, assigns(:msg)
+      end
     end
   end
 
