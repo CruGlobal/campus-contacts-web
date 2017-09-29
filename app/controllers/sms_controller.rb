@@ -73,10 +73,14 @@ class SmsController < ApplicationController
       send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when /on \d+/
-      organization = Organization.find(message.remove('on ')) # TODO: need to scope this
-      @msg = I18n.t('sms.sms_subscribed_with_org', org: organization)
+      organization = SmsUnsubscribe.where(phone_number: phone_number, organization_id: message.remove('on ')).first&.organization
 
-      SmsUnsubscribe.remove_from_unsubscribe(phone_number, organization.id)
+      if organization
+        @msg = I18n.t('sms.sms_subscribed_with_org', org: organization)
+        SmsUnsubscribe.remove_from_unsubscribe(phone_number, organization.id)
+      else
+        @msg = I18n.t('sms.sms_subscribed_without_org')
+      end
 
       send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return

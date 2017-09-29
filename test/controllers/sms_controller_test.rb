@@ -211,7 +211,7 @@ class SmsControllerTest < ActionController::TestCase
       end
     end
 
-    context 'ON with multiple organizations' do
+    context 'multiple organizations' do
       setup do
         @person = FactoryGirl.create(:person)
         FactoryGirl.create(:phone_number, number: @phone_number, person_id: @person.id)
@@ -220,25 +220,38 @@ class SmsControllerTest < ActionController::TestCase
 
         @org1 = FactoryGirl.create(:organization, name: 'Organization 1')
         @org2 = FactoryGirl.create(:organization, name: 'Organization 2')
+        @org3 = FactoryGirl.create(:organization, name: 'Organization 3')
 
         SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org1.id)
         SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org2.id)
       end
 
-      should 'have response with previously unsubscribed organizations' do
-        message = "What organization would you like to subscribe to? for #{@org1.name} respond with 'ON #{@org1.id}', for #{@org2.name} respond with 'ON #{@org2.id}', ."
+      context 'ON' do
+        should 'have response with previously unsubscribed organizations' do
+          message = "What organization would you like to subscribe to? for #{@org1.name} respond with 'ON #{@org1.id}', for #{@org2.name} respond with 'ON #{@org2.id}', ."
 
-        post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 
-        assert_equal message, assigns(:msg)
+          assert_equal message, assigns(:msg)
+        end
       end
 
-      should 'should subscribe to specified organization' do
-        message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
+      context 'ON {number}' do
+        should 'should subscribe to specified organization' do
+          message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
 
-        post :mo, @post_params.merge!(message: "on #{@org2.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          post :mo, @post_params.merge!(message: "on #{@org2.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 
-        assert_equal message, assigns(:msg)
+          assert_equal message, assigns(:msg)
+        end
+
+        should 'not allow subscription to organization not previously unsubscribed from' do
+          message = 'You have been subscribed from MHub text alerts. You can now receive text messages.'
+
+          post :mo, @post_params.merge!(message: "on #{@org3.id}", timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+          assert_equal message, assigns(:msg)
+        end
       end
     end
   end
