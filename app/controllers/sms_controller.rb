@@ -73,7 +73,7 @@ class SmsController < ApplicationController
       send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when /on \d+/
-      organization = SmsUnsubscribe.where(phone_number: phone_number, organization_id: message.remove('on ')).first&.organization
+      organization = SmsUnsubscribe.find_by(phone_number: phone_number, organization_id: message.remove('on '))&.organization
 
       if organization
         @msg = I18n.t('sms.sms_subscribed_with_org', org: organization)
