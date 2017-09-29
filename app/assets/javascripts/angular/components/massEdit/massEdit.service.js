@@ -6,7 +6,7 @@
         .factory('massEditService', massEditService);
 
     function massEditService ($q, httpProxy, JsonApiDataStore, modelsService,
-                              personSelectionService, organizationOverviewTeamService, _) {
+                              personSelectionService, _) {
         // Return a boolean indicating whether a particular person is assigned to the team member
         function personHasAssignment (person, orgId, teamMember) {
             return Boolean(_.find(person.reverse_contact_assignments, function (assignment) {

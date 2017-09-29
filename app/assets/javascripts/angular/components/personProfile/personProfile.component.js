@@ -13,7 +13,7 @@
             }
         });
 
-    function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery, geoDataService,
+    function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, jQuery,
                                       permissionService, personService, personProfileService,
                                       loggedInPerson, confirmModalService, _) {
         var vm = this;

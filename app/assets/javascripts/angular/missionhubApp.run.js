@@ -8,7 +8,7 @@
             // is most likely to be needed
             $http.get(assetPathFilter('angular/templates/retryToastTemplate.html'), { cache: $templateCache });
         })
-        .run(function ($window, $rootScope, $analytics, $timeout, lscache, spaPage, _, loggedInPerson,
+        .run(function ($window, $rootScope, $analytics, $timeout, lscache, spaPage, loggedInPerson,
                        updateRollbarPerson) {
             lscache.setBucket('missionhub:');
 

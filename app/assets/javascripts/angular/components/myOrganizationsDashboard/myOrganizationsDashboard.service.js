@@ -5,8 +5,7 @@
         .module('missionhubApp')
         .factory('myOrganizationsDashboardService', myOrganizationsDashboardService);
 
-    function myOrganizationsDashboardService (httpProxy, JsonApiDataStore, loggedInPerson,
-                                              personService, permissionService, _) {
+    function myOrganizationsDashboardService (JsonApiDataStore, loggedInPerson, permissionService, _) {
         return {
             // Return an array of all loaded root organizations
             getRootOrganizations: function () {

@@ -18,8 +18,7 @@
             transclude: true
         });
 
-    function organizationController ($rootScope, JsonApiDataStore, loggedInPerson, periodService,
-                                     reportsService, interactionsService, myPeopleDashboardService, _) {
+    function organizationController ($rootScope, loggedInPerson, interactionsService, myPeopleDashboardService, _) {
         var vm = this;
 
         vm.$onInit = activate;

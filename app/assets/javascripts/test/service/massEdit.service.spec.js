@@ -6,7 +6,7 @@
     describe('massEditService', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
-        beforeEach(inject(function (_massEditService_, _$rootScope_, _$q_, ___) {
+        beforeEach(inject(function (_massEditService_, ___) {
             massEditService = _massEditService_;
             _ = ___;
 

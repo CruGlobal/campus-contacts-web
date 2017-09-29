@@ -15,7 +15,7 @@
             }
         });
 
-    function massEditController ($q, massEditService, personService) {
+    function massEditController (massEditService, personService) {
         var vm = this;
 
         vm.saving = false;

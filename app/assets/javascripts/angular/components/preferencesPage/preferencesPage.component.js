@@ -10,7 +10,7 @@
             }
         });
 
-    function preferencesPageController ($rootScope, $window, preferencesPageService,
+    function preferencesPageController ($rootScope, preferencesPageService,
                                         languageService, _, nativeLocation) {
         var vm = this;
 

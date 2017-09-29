@@ -15,7 +15,7 @@
             }
         });
 
-    function editAddressController (editAddressService, personProfileService, geoDataService, JsonApiDataStore, _) {
+    function editAddressController (editAddressService, personProfileService, _) {
         var vm = this;
 
         vm.saving = false;
