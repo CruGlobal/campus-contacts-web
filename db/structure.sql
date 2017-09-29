@@ -1673,7 +1673,7 @@ CREATE TABLE `received_sms` (
   UNIQUE KEY `index_received_sms_on_twilio_sid` (`twilio_sid`),
   KEY `person_id` (`person_id`),
   KEY `index_received_sms_on_city_and_state_and_zip_and_country` (`city`,`state`,`zip`,`country`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1835,7 +1835,7 @@ CREATE TABLE `sent_sms` (
   UNIQUE KEY `index_sent_sms_on_twilio_sid` (`twilio_sid`),
   KEY `index_sent_sms_on_message_id` (`message_id`),
   KEY `index_sent_sms_on_received_sms_id_id` (`received_sms_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1955,6 +1955,22 @@ CREATE TABLE `sms_unsubscribes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `subscription_choices`
+--
+
+DROP TABLE IF EXISTS `subscription_choices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `subscription_choices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` int(11) DEFAULT NULL,
+  `subscription_sms_session_id` int(11) DEFAULT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `subscription_sms_sessions`
 --
 
@@ -1969,7 +1985,7 @@ CREATE TABLE `subscription_sms_sessions` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2135,7 +2151,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-29 14:13:30
+-- Dump completed on 2017-09-29 14:39:52
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2739,4 +2755,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170905212404');
 INSERT INTO schema_migrations (version) VALUES ('20170907195659');
 
 INSERT INTO schema_migrations (version) VALUES ('20170929180512');
+
+INSERT INTO schema_migrations (version) VALUES ('20170929183330');
 
