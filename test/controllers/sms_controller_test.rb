@@ -264,10 +264,11 @@ class SmsControllerTest < ActionController::TestCase
         end
 
         should 'not subscribe if session is more than 10 minutes old' do
-          @session.update(created_at: 11.minutes.ago)
           message = 'The keyword you have just texted is not active. Please check your spelling and try again.'
 
-          post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          travel_to 11.minutes.from_now do
+            post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          end
 
           assert_equal message, assigns(:msg)
         end
