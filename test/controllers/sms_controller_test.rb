@@ -222,8 +222,13 @@ class SmsControllerTest < ActionController::TestCase
         @org2 = FactoryGirl.create(:organization, name: 'Organization 2')
         @org3 = FactoryGirl.create(:organization, name: 'Organization 3')
 
-        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org1.id)
-        SmsUnsubscribe.create(phone_number: @strip_phone_number, organization_id: @org2.id)
+        @session = FactoryGirl.create(:subscription_sms_session, phone_number: @strip_phone_number, person: @person)
+
+        FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org1, value: 1)
+        @choice2 = FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org2, value: 2)
+
+        FactoryGirl.create(:sms_unsubscribe, phone_number: @strip_phone_number, organization_id: @org1.id)
+        FactoryGirl.create(:sms_unsubscribe, phone_number: @strip_phone_number, organization_id: @org2.id)
       end
 
       context 'ON' do
@@ -238,13 +243,13 @@ class SmsControllerTest < ActionController::TestCase
 
       context '{number}' do
         setup do
-          FactoryGirl.create(:subscription_sms_session, number: @phone_number, person_id: @person.id)
+          FactoryGirl.create(:subscription_sms_session, phone_number: @phone_number, person_id: @person.id)
         end
 
         should 'should subscribe to specified organization' do
           message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
 
-          post :mo, @post_params.merge!(message: '2', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 
           assert_equal message, assigns(:msg)
         end
