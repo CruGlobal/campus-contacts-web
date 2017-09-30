@@ -1,5 +1,5 @@
 class SubscriptionSmsSession < AbstractSmsSession
-  attr_accessible :phone_number, :person_id, :interactive, :ended # TODO: need ended field in db
+  attr_accessible :phone_number, :person_id, :interactive, :ended
 
   validates_presence_of :phone_number, :person_id
 
@@ -24,6 +24,7 @@ class SubscriptionSmsSession < AbstractSmsSession
     return 'Invalid choice' unless subscription_choice
 
     SmsUnsubscribe.remove_from_unsubscribe(phone_number, subscription_choice.organization.id)
+    update!(ended: true)
     I18n.t('sms.sms_subscribed_with_org', org: subscription_choice.organization)
   end
 end

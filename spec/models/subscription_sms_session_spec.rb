@@ -39,5 +39,11 @@ describe SubscriptionSmsSession do
 
       expect(result).to eq("You have been subscribed from MHub text alerts. You can now receive text messages from #{@organization1.name}.")
     end
+
+    it 'sets ended=true' do
+      @session.subscribe(@value)
+
+      expect(@session.ended).to be_truthy
+    end
   end
 end

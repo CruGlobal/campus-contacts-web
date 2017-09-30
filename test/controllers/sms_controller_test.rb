@@ -222,7 +222,7 @@ class SmsControllerTest < ActionController::TestCase
         @org2 = FactoryGirl.create(:organization, name: 'Organization 2')
         @org3 = FactoryGirl.create(:organization, name: 'Organization 3')
 
-        @session = FactoryGirl.create(:subscription_sms_session, phone_number: @strip_phone_number, person: @person)
+        @session = FactoryGirl.create(:subscription_sms_session, phone_number: @strip_phone_number, person: @person, ended: false)
 
         FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org1, value: 1)
         @choice2 = FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org2, value: 2)
