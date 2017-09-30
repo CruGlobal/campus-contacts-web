@@ -76,7 +76,6 @@ class SmsController < ApplicationController
       render(xml: blank_response) && return
     end
 
-    # TODO: make sure this doesn't interfere with survey keywords?
     subscription_session = SubscriptionSmsSession.find_by('created_at > ? AND ended = ? AND phone_number = ?', 10.minutes.ago, false, phone_number)
     if subscription_session
       @msg = subscription_session.subscribe(message)
