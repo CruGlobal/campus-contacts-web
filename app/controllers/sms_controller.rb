@@ -77,7 +77,7 @@ class SmsController < ApplicationController
     end
 
     # TODO: make sure this doesn't interfere with survey keywords?
-    subscription_session = SubscriptionSmsSession.find_by(phone_number: phone_number, ended: false) # TODO check if active
+    subscription_session = SubscriptionSmsSession.find_by('created_at > ? AND ended = ? AND phone_number = ?', 10.minutes.ago, false, phone_number)
     if subscription_session
       @msg = subscription_session.subscribe(message)
       send_message(@msg, sms_params[:phone_number])
