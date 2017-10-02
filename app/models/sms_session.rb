@@ -1,10 +1,10 @@
 class SmsSession < AbstractSmsSession
-  attr_accessible :phone_number, :person_id, :sms_keyword_id, :interactive, :ended
+  attr_accessible :sms_keyword_id
 
   belongs_to :sms_keyword
 
   scope :active,
         -> { where(['updated_at > ? AND ended = ?', 10.minutes.ago, false]) }
 
-  validates_presence_of :phone_number, :person_id, :sms_keyword_id
+  validates_presence_of :sms_keyword_id
 end

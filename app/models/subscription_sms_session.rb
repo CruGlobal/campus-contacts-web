@@ -1,8 +1,4 @@
 class SubscriptionSmsSession < AbstractSmsSession
-  attr_accessible :phone_number, :person_id, :interactive, :ended
-
-  validates_presence_of :phone_number, :person_id
-
   has_many :subscription_choices
 
   def create_choices(unsubscribes)
