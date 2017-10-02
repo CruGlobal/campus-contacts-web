@@ -233,7 +233,7 @@ class SmsControllerTest < ActionController::TestCase
 
       context 'ON' do
         should 'have response with previously unsubscribed organizations' do
-          message = "What organization would you like to subscribe to? for #{@org1.name} respond with '1', for #{@org2.name} respond with '2', ."
+          message = "What organization would you like to subscribe to? for #{@org1.name} respond with '1', for #{@org2.name} respond with '2'."
 
           post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
 

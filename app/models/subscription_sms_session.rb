@@ -11,7 +11,8 @@ class SubscriptionSmsSession < AbstractSmsSession
       org = u.organization
 
       value = index + 1
-      orgs_str += "for #{org.name} #{I18n.t('sms.sms_respond_with')} '#{value}', "
+      orgs_str += "for #{org.name} #{I18n.t('sms.sms_respond_with')} '#{value}'"
+      orgs_str += ', ' unless value == unsubscribes.length
 
       SubscriptionChoice.create!(organization_id: org.id, subscription_sms_session_id: id, value: value)
     end
