@@ -46,9 +46,12 @@
 //= require angularjs-toaster/toaster
 //= require moment/moment
 //= require angular-moment/angular-moment
+//= require rollbar/dist/rollbar.umd.min.js
+
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants
 //= require angular/missionhubApp.config
+//= require angular/rollbar.config
 //= require angular/missionhubApp.run
 //= require_tree ./angular
 

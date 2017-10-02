@@ -5,7 +5,7 @@
         .module('missionhubApp')
         .factory('errorService', errorService);
 
-    function errorService ($timeout, $q, assetPathFilter, toaster, _) {
+    function errorService ($timeout, $q, $log, assetPathFilter, toaster, _) {
         var errorService = {
             displayError: displayError,
             autoRetry: autoRetry,
@@ -99,6 +99,8 @@
                     // Stop retrying if we are out of retries or the filter says to not retry this error
                     var retryable = options.retryFilter(err);
                     if (retriesRemaining === 0 || !retryable) {
+                        $log.error(err);
+
                         // Wait for the user to manually initiate a retry, then try again
                         return errorService.displayError(err, retryable).then(attempt);
                     }

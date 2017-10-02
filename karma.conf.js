@@ -36,10 +36,12 @@ module.exports = function (config) {
             './vendor/assets/javascripts/i18n.js',
             './node_modules/lscache/lscache.js',
             './node_modules/lodash/lodash.js',
+            './node_modules/rollbar/dist/rollbar.umd.min.js',
             './app/assets/javascripts/test/patch/fix-lscache.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './app/assets/javascripts/angular/missionhubApp.module.js',
             './app/assets/javascripts/angular/missionhubApp.config.js',
+            './app/assets/javascripts/angular/rollbar.config.js',
             './app/assets/javascripts/angular/missionhubApp.constants.js',
             './app/assets/javascripts/angular/missionhubApp.run.js',
             './app/assets/javascripts/angular/components/*/*.js',
@@ -58,9 +60,8 @@ module.exports = function (config) {
         reporters: ['spec', 'coverage'],
 
         coverageReporter: {
-            type: 'html',
-            dir: 'coverage/',
-            file: 'coverage.html'
+            type: 'lcov',
+            dir: 'coverage/'
         },
 
         // start these browsers

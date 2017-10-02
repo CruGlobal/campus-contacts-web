@@ -46,7 +46,6 @@
                         return JsonApiDataStore.store.syncWithMeta(res.data);
                     })
                     .catch(function (err) {
-                        $log.error(err);
                         err.message = tFilter(config.errorMessage);
                         throw err;
                     });
