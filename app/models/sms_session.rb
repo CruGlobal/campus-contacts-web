@@ -1,5 +1,5 @@
 class SmsSession < AbstractSmsSession
-  attr_accessible :sms_keyword_id
+  attr_accessible :sms_keyword_id, :interactive
 
   belongs_to :sms_keyword
 

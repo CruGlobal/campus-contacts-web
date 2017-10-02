@@ -1,7 +1,7 @@
 class AbstractSmsSession < ActiveRecord::Base
   self.abstract_class = true
 
-  attr_accessible :phone_number, :person_id, :interactive, :ended
+  attr_accessible :phone_number, :person_id, :ended
 
   belongs_to :person
 

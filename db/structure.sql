@@ -1673,7 +1673,7 @@ CREATE TABLE `received_sms` (
   UNIQUE KEY `index_received_sms_on_twilio_sid` (`twilio_sid`),
   KEY `person_id` (`person_id`),
   KEY `index_received_sms_on_city_and_state_and_zip_and_country` (`city`,`state`,`zip`,`country`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1835,7 +1835,7 @@ CREATE TABLE `sent_sms` (
   UNIQUE KEY `index_sent_sms_on_twilio_sid` (`twilio_sid`),
   KEY `index_sent_sms_on_message_id` (`message_id`),
   KEY `index_sent_sms_on_received_sms_id_id` (`received_sms_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1951,7 +1951,7 @@ CREATE TABLE `sms_unsubscribes` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1967,7 +1967,7 @@ CREATE TABLE `subscription_choices` (
   `subscription_sms_session_id` int(11) DEFAULT NULL,
   `organization_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1981,12 +1981,11 @@ CREATE TABLE `subscription_sms_sessions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `phone_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `person_id` int(11) DEFAULT NULL,
-  `interactive` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `ended` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2152,7 +2151,7 @@ CREATE TABLE `versions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-29 21:04:02
+-- Dump completed on 2017-10-02 14:00:18
 INSERT INTO schema_migrations (version) VALUES ('20101206001456');
 
 INSERT INTO schema_migrations (version) VALUES ('20101212042403');
@@ -2760,4 +2759,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170929180512');
 INSERT INTO schema_migrations (version) VALUES ('20170929183330');
 
 INSERT INTO schema_migrations (version) VALUES ('20170930010301');
+
+INSERT INTO schema_migrations (version) VALUES ('20171002175906');
 
