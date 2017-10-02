@@ -374,7 +374,9 @@
             // look to see if the user is the only one selected, if so, allow them to archive self
             if (_.isEqual(selection.selectedPeople, [loggedInPerson.person.id])) {
                 transformedMessage = 'ministries.people.remove_self_confirm';
-            } else if (selection.allSelected) {
+            } else if (selection.allSelected && !selection.allIncluded) {
+                // if everyone is selected, unselectedPeople will only be used if not everyone is loaded
+                // and we know if everyone is loaded by checkin allIncluded
                 if (_.indexOf(selection.unselectedPeople, loggedInPerson.person.id) === -1) {
                     selection.unselectedPeople = _.union(selection.unselectedPeople, [loggedInPerson.person.id]);
                     selection.totalSelectedPeople = selectedCount() - 1;
