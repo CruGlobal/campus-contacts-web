@@ -51,7 +51,7 @@ class SmsController < ApplicationController
       send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when 'on'
-      unsubscribes = SmsUnsubscribe.where(phone_number: phone_number)
+      unsubscribes = SmsUnsubscribe.where(phone_number: phone_number).includes(:organization)
 
       if unsubscribes.empty?
         @msg = I18n.t('sms.sms_subscribed_without_org')
