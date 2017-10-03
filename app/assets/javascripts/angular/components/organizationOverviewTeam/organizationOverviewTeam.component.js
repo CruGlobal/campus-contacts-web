@@ -18,6 +18,7 @@
         var vm = this;
         vm.team = [];
         vm.loadTeamPage = loadTeamPage;
+        vm._loadReports = loadReports;
 
         var listLoader = new ProgressiveListLoader({
             modelType: 'person',
@@ -33,7 +34,7 @@
             return organizationOverviewTeamService.loadOrgTeam(vm.organizationOverview.org, listLoader)
                 .then(function (resp) {
                     vm.team = resp.list;
-                    loadReports(vm.team);
+                    vm._loadReports(vm.team);
                     vm.loadedAll = resp.loadedAll;
                 })
                 .finally(function () {
