@@ -32,8 +32,8 @@
                         // to get the real value
                         var bindingValue = vm[bindingName];
                         var unwrappedValue = (bindingValue && bindingValue.wrapped) ?
-                                                 bindingValue.wrapped :
-                                                 bindingValue;
+                            bindingValue.wrapped :
+                            bindingValue;
 
                         // Wait for the binding value to resolve if it is a promise
                         return $q.when(unwrappedValue).then(function (value) {

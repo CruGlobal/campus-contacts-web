@@ -2,8 +2,22 @@
   "env": {
     "browser": true
   },
-  "ecmaFeatures": {},
   "extends": ["eslint:recommended", "angular"],
+  "overrides": [
+    {
+      "files": [ "app/assets/javascripts/angular/**/*.spec.js", "app/assets/javascripts/test/**/*.spec.js"],
+      "env": {
+        "jasmine": true
+      },
+      "globals": {
+        "inject": false
+      },
+      "rules": {
+        "no-restricted-globals": ["error", "fdescribe", "fit"],
+        "no-undefined": "off"
+      }
+    }
+  ],
   "rules": {
     "block-scoped-var": "error",
     "curly": "warn",
@@ -45,7 +59,6 @@
     "no-throw-literal": "error",
     "no-undef-init": "error",
     "no-undefined": "error",
-    "no-undefined": "error",
     "no-unmodified-loop-condition": "error",
     "no-unsafe-negation": "error",
     "no-unused-expressions": "error",
@@ -77,16 +90,26 @@
     "id-blacklist": "off",
     "id-length": "off",
     "id-match": "off",
-    "indent": "error",
+    "indent": ["error", 4, {
+      "FunctionDeclaration": {
+        "parameters": "first"
+      },
+      "FunctionExpression": {
+        "parameters": "first"
+      },
+      "CallExpression": {
+        "arguments": "first"
+      }
+    }],
     "key-spacing": "error",
     "keyword-spacing": "error",
     "line-comment-position": "off",
     "linebreak-style": "error",
     "lines-around-comment": [ "error", {
-        "beforeLineComment": true,
-        "allowArrayStart": true,
-        "allowBlockStart": true,
-        "allowObjectStart": true
+      "beforeLineComment": true,
+      "allowArrayStart": true,
+      "allowBlockStart": true,
+      "allowObjectStart": true
     }],
     "lines-around-directive": "error",
     "max-depth": "off",

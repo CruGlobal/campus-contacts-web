@@ -58,10 +58,10 @@
 
                         expect(httpProxy.callHttp)
                             .toHaveBeenCalledWith('GET',
-                                jasmine.any(String),
-                                jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 0 }),
-                                null,
-                                jasmine.any(Object));
+                                                  jasmine.any(String),
+                                                  jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 0 }),
+                                                  null,
+                                                  jasmine.any(Object));
                     });
             }));
 
@@ -89,10 +89,10 @@
 
                         expect(httpProxy.callHttp)
                             .toHaveBeenCalledWith('GET',
-                                jasmine.any(String),
-                                jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 2 }),
-                                null,
-                                jasmine.any(Object));
+                                                  jasmine.any(String),
+                                                  jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 2 }),
+                                                  null,
+                                                  jasmine.any(Object));
                     });
             }));
 
@@ -116,10 +116,10 @@
 
                         expect(httpProxy.callHttp)
                             .toHaveBeenCalledWith('GET',
-                                jasmine.any(String),
-                                jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 1 }),
-                                null,
-                                jasmine.any(Object));
+                                                  jasmine.any(String),
+                                                  jasmine.objectContaining({ 'page[limit]': 26, 'page[offset]': 1 }),
+                                                  null,
+                                                  jasmine.any(Object));
                     });
             }));
         });

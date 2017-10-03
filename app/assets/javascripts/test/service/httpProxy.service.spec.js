@@ -272,19 +272,19 @@
                 }));
 
                 it('should make a network request when the model relationships are not already loaded',
-                    asynchronous(function () {
-                        spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
-                        spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
+                   asynchronous(function () {
+                       spyOn(JsonApiDataStore.store, 'find').and.returnValues(this.model, this.model);
+                       spyOn(httpProxy, 'getUnloadedRelationships').and.returnValue(this.relationships);
 
-                        var _this = this;
-                        return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.config)
-                            .then(function (model) {
-                                expect(model).toBe(_this.model);
-                                expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
-                                    include: 'a,b,c'
-                                }, null, _this.config);
-                            });
-                    }));
+                       var _this = this;
+                       return httpProxy.getModel(this.url, this.type, this.id, this.relationships, this.config)
+                           .then(function (model) {
+                               expect(model).toBe(_this.model);
+                               expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', _this.url, {
+                                   include: 'a,b,c'
+                               }, null, _this.config);
+                           });
+                   }));
             });
 
             describe('extractModel', function () {

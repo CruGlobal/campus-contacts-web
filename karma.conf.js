@@ -47,7 +47,7 @@ module.exports = function (config) {
             './app/assets/javascripts/angular/components/*/*.js',
             './app/assets/javascripts/angular/filters/*.js',
             './app/assets/javascripts/angular/services/*.js',
-            './app/assets/javascripts/test/**/*.spec.js'
+            './app/assets/javascripts/**/*.spec.js'
         ],
 
         preprocessors: {

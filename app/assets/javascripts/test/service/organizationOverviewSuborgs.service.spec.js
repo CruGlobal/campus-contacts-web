@@ -45,7 +45,8 @@
                 this.responseTotal = 5;
 
                 return organizationOverviewSuborgsService.loadOrgSubOrgCount(this.orgId).then(function (subOrgCount) {
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith('GET',
+                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                        'GET',
                         jasmine.any(String),
                         jasmine.objectContaining({ 'page[limit]': 0 }),
                         null,

@@ -204,7 +204,7 @@
                         // promoted
                         { type: 'group_membership', id: 2, attributes: { role: 'leader' } },
 
-                         // created
+                        // created
                         { type: 'group_membership', attributes: { group_id: 3, person_id: 13, role: 'leader' } }
                     ]
                 });

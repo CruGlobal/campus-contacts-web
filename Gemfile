@@ -132,3 +132,5 @@ gem 'raddocs'
 gem 'gibbon'
 
 gem 'doorkeeper', '~> 4.2.0'
+
+gem 'sprockets-glob', '0.1.0'

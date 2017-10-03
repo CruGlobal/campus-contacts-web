@@ -53,7 +53,8 @@
 //= require angular/missionhubApp.config
 //= require angular/rollbar.config
 //= require angular/missionhubApp.run
-//= require_tree ./angular
+//= require_glob ./angular/**/*.js
+//= stub_glob ./angular/**/*.spec.js
 
 //= require colorpicker.js
 //= require ba-debug-0.4.min.js

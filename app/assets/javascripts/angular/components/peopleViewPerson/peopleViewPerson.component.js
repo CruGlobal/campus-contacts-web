@@ -49,10 +49,10 @@
             vm.addInteractionBtnsVisible = !vm.addInteractionBtnsVisible;
             if (!vm.addInteractionBtnsVisible) {
                 $animate.on('leave', angular.element('.addInteractionButtons'),
-                    function callback (element, phase) {
-                        vm.closingInteractionButtons = phase === 'start';
-                        $scope.$apply();
-                    }
+                            function callback (element, phase) {
+                                vm.closingInteractionButtons = phase === 'start';
+                                $scope.$apply();
+                            }
                 );
                 closeAddInteractionPanel();
             }

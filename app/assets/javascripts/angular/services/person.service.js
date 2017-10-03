@@ -207,9 +207,9 @@
 
                 // When we have an organization, we do not need to load the contact assignments' organizations
                 include = include.concat(_.isNil(organizationId) ?
-                                                        'reverse_contact_assignments.organization' :
-                                                        'reverse_contact_assignments',
-                                                        'organizational_permissions');
+                    'reverse_contact_assignments.organization' :
+                    'reverse_contact_assignments',
+                                         'organizational_permissions');
                 return httpProxy.get(modelsService.getModelMetadata('person').url.all, {
                     include: include.join(','),
                     'filters[assigned_tos]': person.id,
@@ -218,45 +218,45 @@
                 }, {
                     errorMessage: 'error.messages.person.get_contact_assignments'
                 })
-                .then(httpProxy.extractModels)
-                .then(function (assignedPeople) {
+                    .then(httpProxy.extractModels)
+                    .then(function (assignedPeople) {
                     // Check whether the person is assigned to the person that we are getting assignments for
-                    function isAssignmentForCurrentPerson (assignment) {
-                        return assignment.assigned_to.id === person.id;
-                    }
-
-                    // Check whether the assignment is in the organization that we are getting assignments for
-                    function isAssignmentInCurrentOrganization (assignment) {
-                        return _.isNil(organizationId) || _.get(assignment, 'organization.id') === organizationId;
-                    }
-
-                    // Check whether the assigned person is in the organization that the assignment is in
-                    function isAssignedPersonInAssignmentOrganization (assignment, assignedPerson) {
-                        if (!assignment.organization) {
-                            // we currently don't support non-organization people
-                            return false;
+                        function isAssignmentForCurrentPerson (assignment) {
+                            return assignment.assigned_to.id === person.id;
                         }
-                        return _.find(assignedPerson.organizational_permissions, {
-                            organization_id: assignment.organization.id
-                        });
-                    }
 
-                    // Determine whether the assignment should be included in the returned list
-                    function isRelevantAssignment (assignment, assignedPerson) {
-                        return isAssignmentForCurrentPerson(assignment) &&
+                        // Check whether the assignment is in the organization that we are getting assignments for
+                        function isAssignmentInCurrentOrganization (assignment) {
+                            return _.isNil(organizationId) || _.get(assignment, 'organization.id') === organizationId;
+                        }
+
+                        // Check whether the assigned person is in the organization that the assignment is in
+                        function isAssignedPersonInAssignmentOrganization (assignment, assignedPerson) {
+                            if (!assignment.organization) {
+                            // we currently don't support non-organization people
+                                return false;
+                            }
+                            return _.find(assignedPerson.organizational_permissions, {
+                                organization_id: assignment.organization.id
+                            });
+                        }
+
+                        // Determine whether the assignment should be included in the returned list
+                        function isRelevantAssignment (assignment, assignedPerson) {
+                            return isAssignmentForCurrentPerson(assignment) &&
                             isAssignmentInCurrentOrganization(assignment) &&
                             isAssignedPersonInAssignmentOrganization(assignment, assignedPerson);
-                    }
+                        }
 
-                    // Start with the array of assigned people, map it to an array of contact assignment arrays,
-                    // then flatten it into a one-dimensional array
-                    return _.flatten(assignedPeople.map(function (assignedPerson) {
+                        // Start with the array of assigned people, map it to an array of contact assignment arrays,
+                        // then flatten it into a one-dimensional array
+                        return _.flatten(assignedPeople.map(function (assignedPerson) {
                         // Include only the relevant contact assignments
-                        return assignedPerson.reverse_contact_assignments.filter(function (assignment) {
-                            return isRelevantAssignment(assignment, assignedPerson);
-                        });
-                    }));
-                });
+                            return assignedPerson.reverse_contact_assignments.filter(function (assignment) {
+                                return isRelevantAssignment(assignment, assignedPerson);
+                            });
+                        }));
+                    });
             }
         };
 

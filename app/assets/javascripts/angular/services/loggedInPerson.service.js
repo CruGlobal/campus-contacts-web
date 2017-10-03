@@ -55,9 +55,9 @@
             // check if you have admin access on the org or any above it
             isAdminAt: function (org) {
                 var adminOrgIds = _.chain(person.organizational_permissions)
-                                   .filter({ permission_id: permissionService.adminId })
-                                   .map('organization_id')
-                                   .value();
+                    .filter({ permission_id: permissionService.adminId })
+                    .map('organization_id')
+                    .value();
                 var orgAndAncestry = organizationService.getOrgHierarchyIds(org);
                 return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
             },

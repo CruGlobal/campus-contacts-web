@@ -79,7 +79,7 @@
 
             saveGroupMemberships: function (person, addedGroupIds, removedGroupIds) {
                 var savePromise = saveRelationshipChanges('group_membership',
-                                               person, addedGroupIds, removedGroupIds);
+                                                          person, addedGroupIds, removedGroupIds);
                 return savePromise.then(function (resp) {
                     updateGroupMemberships(person, addedGroupIds, removedGroupIds);
                     return resp;
