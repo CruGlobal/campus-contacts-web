@@ -15,7 +15,7 @@ class SurveyResponsesController < ApplicationController
   end
 
   def new
-    unless mhub? || Rails.env.test?
+    unless mhub? || Rails.env.development? || Rails.env.test?
       port = Rails.env.development? ? ENV.fetch('PUBLIC_PORT') : ''
       protocol = Rails.env.development? ? 'http' : 'https'
 
