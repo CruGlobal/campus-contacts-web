@@ -18,7 +18,7 @@
             transclude: true
         });
 
-    function organizationController ($rootScope, loggedInPerson, interactionsService, myPeopleDashboardService, _) {
+    function organizationController ($rootScope, loggedInPerson, interactionsService, userPreferencesService, _) {
         var vm = this;
 
         vm.$onInit = activate;
@@ -89,7 +89,7 @@
         }
 
         function toggleVisibility () {
-            myPeopleDashboardService.toggleOrganizationVisibility(vm.org);
+            userPreferencesService.toggleOrganizationVisibility(vm.org);
         }
     }
 })();

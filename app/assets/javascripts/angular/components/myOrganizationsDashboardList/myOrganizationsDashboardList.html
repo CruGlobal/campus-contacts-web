@@ -1,0 +1,9 @@
+<div ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.rootOrgs">
+    <organization-overview
+            ng-repeat="org in $ctrl.rootOrgs"
+            org="org"
+            ng-if="org.visible || $ctrl.myOrganizationsDashboard.editOrganizations"
+            load-details="false"
+            edit-mode="$ctrl.myOrganizationsDashboard.editOrganizations">
+    </organization-overview>
+</div>

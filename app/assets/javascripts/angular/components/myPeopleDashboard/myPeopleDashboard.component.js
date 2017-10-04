@@ -15,7 +15,7 @@
 
     function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,
                                           myPeopleDashboardService, periodService, loggedInPerson,
-                                          personService, reportsService) {
+                                          personService, reportsService, userPreferencesService) {
         var vm = this;
         vm.people = [];
         vm.organizations = [];
@@ -33,11 +33,13 @@
         function activate () {
             loadAndSyncData();
             angular.element($document).on('people::personAdded', loadAndSyncData);
-            vm.toggleOrgVisibility = myPeopleDashboardService.toggleOrganizationVisibility;
+            vm.toggleOrgVisibility = userPreferencesService.toggleOrganizationVisibility;
 
             vm.sortableOptions = {
                 handle: '.sort-orgs-handle',
-                stop: organizationOrderChange
+                stop: function () {
+                    return userPreferencesService.organizationOrderChange(vm.organizations);
+                }
             };
 
             vm.noPeopleWelcome = I18n.t('dashboard.no_contacts.welcome', {
@@ -81,8 +83,7 @@
                 .then(function (organizations) {
                     vm.organizations = _.orderBy(organizations, 'active_people_count', 'desc');
 
-                    orderOrganizations();
-                    hideOrganizations();
+                    vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(vm.organizations);
 
                     if (vm.organizations.length <= vm.noPeopleShowLimit) {
                         vm.numberOfOrgsToShow = 100;
@@ -119,8 +120,7 @@
                     });
             });
 
-            orderOrganizations();
-            hideOrganizations();
+            vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(vm.organizations);
 
             vm.collapsible = people.length > 10 || _.keys(vm.organizations).length > 1;
 
@@ -131,45 +131,9 @@
             vm.loading = false;
         }
 
-        function orderOrganizations () {
-            var orgOrderPreference = loggedInPerson.person.user.organization_order;
-            if (!orgOrderPreference) {
-                vm.organizations = _.orderBy(vm.organizations, ['ancestry', 'name']);
-                return;
-            }
-            var oldArray = _.clone(vm.organizations);
-            var newArray = [];
-            _.each(orgOrderPreference, function (org) {
-                var found = _.remove(oldArray, { id: org })[0];
-                if (found) {
-                    newArray.push(found);
-                }
-            });
-            oldArray = _.orderBy(oldArray, ['ancestry', 'name']);
-            _.each(oldArray, function (org) {
-                newArray.push(org);
-            });
-            vm.organizations = newArray;
-        }
-
-        function hideOrganizations () {
-            var orgHiddenPreference = loggedInPerson.person.user.hidden_organizations || [];
-            _.each(vm.organizations, function (org) {
-                var hidden = orgHiddenPreference.indexOf(org.id.toString());
-                org.visible = hidden === -1;
-            });
-        }
-
         function noPeople () {
             vm.noPeople = true;
             loadOrganizations();
-        }
-
-        function organizationOrderChange () {
-            var orgOrder = _.map(vm.organizations, 'id');
-            myPeopleDashboardService.updateUserPreference({
-                organization_order: orgOrder
-            }, 'error.messages.my_people_dashboard.update_org_order');
         }
     }
 })();

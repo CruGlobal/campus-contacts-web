@@ -10,8 +10,14 @@ organization-overview {
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .org-name {
+  .org-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
+  }
+
+  .org-name {
     color: $pivot-bright-blue;
     font-size: 2em;
   }
