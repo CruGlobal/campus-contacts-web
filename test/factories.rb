@@ -95,7 +95,7 @@ FactoryGirl.define do
     association :survey
   end
 
-  factory :unsubscribe do
+  factory :sms_unsubscribe do
     association :organization
   end
 
@@ -255,6 +255,15 @@ FactoryGirl.define do
       org = FactoryGirl.create(:organization)
       org.add_admin(f)
     end
+  end
+
+  factory :subscription_sms_session do
+    association :person
+  end
+
+  factory :subscription_choice do
+    association :subscription_sms_session
+    association :organization
   end
 
   factory :organizational_permission do

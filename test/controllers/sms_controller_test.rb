@@ -199,7 +199,7 @@ class SmsControllerTest < ActionController::TestCase
       end
 
       should "have response when user sends 'on' subscribe" do
-        message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@organization.name}."
+        message = 'You have been subscribed from MHub text alerts. You can now receive text messages.'
         post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         assert_equal message, assigns(:msg)
       end
@@ -208,6 +208,70 @@ class SmsControllerTest < ActionController::TestCase
         message = "You have been unsubscribed from MHub text alerts for #{@organization.name}. You will receive no more messages. To opt back in, reply ON."
         post :mo, @post_params.merge!(message: 'stop', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
         assert_equal message, assigns(:msg)
+      end
+    end
+
+    context 'multiple organizations' do
+      setup do
+        @person = FactoryGirl.create(:person)
+        FactoryGirl.create(:phone_number, number: @phone_number, person_id: @person.id)
+
+        @strip_phone_number = PhoneNumber.strip_us_country_code(@phone_number)
+
+        @org1 = FactoryGirl.create(:organization, name: 'Organization 1')
+        @org2 = FactoryGirl.create(:organization, name: 'Organization 2')
+        @org3 = FactoryGirl.create(:organization, name: 'Organization 3')
+
+        @session = FactoryGirl.create(:subscription_sms_session, phone_number: @strip_phone_number, person: @person, ended: false)
+
+        FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org1, value: 1)
+        @choice2 = FactoryGirl.create(:subscription_choice, subscription_sms_session: @session, organization: @org2, value: 2)
+
+        FactoryGirl.create(:sms_unsubscribe, phone_number: @strip_phone_number, organization_id: @org1.id)
+        FactoryGirl.create(:sms_unsubscribe, phone_number: @strip_phone_number, organization_id: @org2.id)
+      end
+
+      context 'ON' do
+        should 'have response with previously unsubscribed organizations' do
+          message = "What organization would you like to subscribe to? for #{@org1.name} respond with '1', for #{@org2.name} respond with '2'."
+
+          post :mo, @post_params.merge!(message: 'on', timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+          assert_equal message, assigns(:msg)
+        end
+      end
+
+      context '{number}' do
+        setup do
+          FactoryGirl.create(:subscription_sms_session, phone_number: @phone_number, person_id: @person.id)
+        end
+
+        should 'subscribe to specified organization' do
+          message = "You have been subscribed from MHub text alerts. You can now receive text messages from #{@org2.name}."
+
+          post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+          assert_equal message, assigns(:msg)
+        end
+
+        should 'not subscribe if session has ended' do
+          @session.update(ended: true)
+          message = 'The keyword you have just texted is not active. Please check your spelling and try again.'
+
+          post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+
+          assert_equal message, assigns(:msg)
+        end
+
+        should 'not subscribe if session is more than 10 minutes old' do
+          message = 'The keyword you have just texted is not active. Please check your spelling and try again.'
+
+          travel_to 11.minutes.from_now do
+            post :mo, @post_params.merge!(message: @choice2.value, timestamp: Time.now.strftime('%m/%d/%Y %H:%M:%S'))
+          end
+
+          assert_equal message, assigns(:msg)
+        end
       end
     end
   end

@@ -27,11 +27,12 @@ class SmsController < ApplicationController
     end
     @sms_session = @sms_session.first
 
+    phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
+
     # Handle STOP and HELP messages
 
     case message.downcase
     when 'stop'
-      phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
       if @sms_session
         @sms_session.update_attribute(:interactive, false)
         @organization = @sms_session.sms_keyword.organization
@@ -47,31 +48,39 @@ class SmsController < ApplicationController
       @msg = I18n.t('sms.sms_unsubscribed_without_org')
       @msg = I18n.t('sms.sms_unsubscribed_with_org', org: @organization) if @organization.present?
 
-      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when 'on'
-      phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
-      if @sms_session
-        @organization = @sms_session.sms_keyword.organization
-        SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization.present?
+      unsubscribes = SmsUnsubscribe.where(phone_number: phone_number).includes(:organization)
+
+      if unsubscribes.empty?
+        @msg = I18n.t('sms.sms_subscribed_without_org')
       else
-        outbound = Message.last_outbound_text_message(phone_number)
-        if outbound.present?
-          @organization = outbound.organization
-          SmsUnsubscribe.remove_from_unsubscribe(phone_number, @organization.id) if @organization
+        if unsubscribes.one?
+          org = unsubscribes[0].organization
+          @msg = I18n.t('sms.sms_subscribed_with_org', org: org)
+          SmsUnsubscribe.remove_from_unsubscribe(phone_number, org.id)
+        else
+          subscription = SubscriptionSmsSession.create!(phone_number: phone_number, person_id: find_or_create_person.id)
+          @msg = I18n.t('sms.sms_subscribed_with_orgs', orgs: subscription.create_choices(unsubscribes))
         end
       end
-      @msg = I18n.t('sms.sms_subscribed_without_org')
-      @msg = I18n.t('sms.sms_subscribed_with_org', org: @organization) if @organization.present?
 
-      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when 'help'
       @msg = I18n.t('sms.sms_help_guide')
-      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
       render(xml: @sent_sms.to_twilio) && return
     when ''
       render(xml: blank_response) && return
+    end
+
+    subscription_session = SubscriptionSmsSession.find_by('created_at > ? AND ended = ? AND phone_number = ?', 10.minutes.ago, false, phone_number)
+    if subscription_session
+      @msg = subscription_session.subscribe(message)
+      send_message(@msg, sms_params[:phone_number])
+      render(xml: @sent_sms.to_twilio) && return
     end
 
     # If it is, check for interactive texting
@@ -102,24 +111,17 @@ class SmsController < ApplicationController
       else
         @msg = I18n.t('sms.keyword_inactive')
       end
-      @sent_sms = send_message(@msg, @received.phone_number)
+      send_message(@msg, @received.phone_number)
 
     else
       # We're starting a new sms session
-      # Try to find a person with this phone number. If we can't, create a new person
-      unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => PhoneNumber.strip_us_country_code(sms_params[:phone_number])).first
-        # Create a person record for this phone number
-        person = Person.new
-        person.save(validate: false)
-        person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
-      end
+      person = find_or_create_person
 
       # Look for an active keyword for this message
       first_word = Emojimmy.emoji_to_token(message.downcase).split(' ').first
       keyword = SmsKeyword.where(keyword: first_word).first
       if !keyword || !keyword.active?
         # See if they're responding to an outbound text
-        phone_number = PhoneNumber.strip_us_country_code(sms_params[:phone_number])
         outbound = Message.last_outbound_text_message(phone_number, SMS_REPLY_TIMEOUT_DAYS)
         if outbound
           # Forward this reply on to the sender
@@ -134,13 +136,25 @@ class SmsController < ApplicationController
         @msg = keyword.initial_response.sub(/\{\{\s*link\s*\}\}/, "https://mhub.cc/m/#{Base62.encode(@sms_session.id)}")
         @received.update_attributes(sms_keyword_id: keyword.id, person_id: person.id, sms_session_id: @sms_session.id)
       end
-      @sent_sms = send_message(@msg, sms_params[:phone_number])
+      send_message(@msg, sms_params[:phone_number])
     end
     # render text: @msg.to_s + "\n"
     render xml: @sent_sms.to_twilio
   end
 
   protected
+
+  def find_or_create_person
+    # Try to find a person with this phone number. If we can't, create a new person
+    unless person = Person.includes(:phone_numbers).where('phone_numbers.number' => PhoneNumber.strip_us_country_code(sms_params[:phone_number])).first
+      # Create a person record for this phone number
+      person = Person.new
+      person.save(validate: false)
+      person.phone_numbers.create!(number: sms_params[:phone_number], location: 'mobile')
+    end
+
+    person
+  end
 
   def sent_again?
   end
