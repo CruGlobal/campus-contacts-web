@@ -13,12 +13,11 @@
             }
         });
 
-    function organizationOverviewTeamController ($log, _, organizationOverviewTeamService, ProgressiveListLoader,
-                                                 myPeopleDashboardService) {
+    function organizationOverviewTeamController (organizationOverviewTeamService, ProgressiveListLoader,
+                                                 reportsService) {
         var vm = this;
         vm.team = [];
         vm.loadTeamPage = loadTeamPage;
-        vm._loadReports = loadReports;
 
         var listLoader = new ProgressiveListLoader({
             modelType: 'person',
@@ -34,25 +33,11 @@
             return organizationOverviewTeamService.loadOrgTeam(vm.organizationOverview.org, listLoader)
                 .then(function (resp) {
                     vm.team = resp.list;
-                    vm._loadReports(vm.team);
+                    reportsService.loadMultiplePeopleReports([vm.organizationOverview.org.id], vm.team);
                     vm.loadedAll = resp.loadedAll;
                 })
                 .finally(function () {
                     vm.busy = false;
-                });
-        }
-
-        function loadReports (team) {
-            var peopleIds = _.map(team, 'id');
-
-            var peopleReportParams = {
-                organization_ids: [vm.organizationOverview.org.id],
-                people_ids: peopleIds
-            };
-
-            myPeopleDashboardService.loadPeopleReports(peopleReportParams)
-                .catch(function (error) {
-                    $log.error('Error loading team people reports', error);
                 });
         }
     }

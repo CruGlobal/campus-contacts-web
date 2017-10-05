@@ -59,23 +59,18 @@
         }
 
         function loadReports () {
-            var peopleIds = _.map(JsonApiDataStore.store.findAll('person'), 'id');
-            var organizationIds = _.map(JsonApiDataStore.store.findAll('organization'), 'id');
+            var people = JsonApiDataStore.store.findAll('person');
+            var organizations = JsonApiDataStore.store.findAll('organization');
 
-            var peopleReportParams = {
-                organization_ids: organizationIds,
-                people_ids: peopleIds
-            };
+            reportsService.loadOrganizationReports(organizations)
+                .catch(function (error) {
+                    $log.error('Error loading organization reports', error);
+                });
 
-            var organizationReportPromise = reportsService.loadOrganizationReports(organizationIds);
-            organizationReportPromise.catch(function (error) {
-                $log.error('Error loading organization reports', error);
-            });
-
-            var peopleReportPromise = myPeopleDashboardService.loadPeopleReports(peopleReportParams);
-            peopleReportPromise.catch(function (error) {
-                $log.error('Error loading people reports', error);
-            });
+            reportsService.loadMultiplePeopleReports(organizations, people)
+                .catch(function (error) {
+                    $log.error('Error loading people reports', error);
+                });
         }
 
         function loadOrganizations () {

@@ -2,7 +2,7 @@
     'use strict';
 
     // Constants
-    var myPeopleDashboardService, httpProxy, $rootScope, $q, JsonApiDataStore, periodService, _;
+    var myPeopleDashboardService, httpProxy, $rootScope, $q, JsonApiDataStore;
 
     function async (fn) {
         return function (done) {
@@ -21,16 +21,14 @@
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_$q_, _$rootScope_, _myPeopleDashboardService_,
-                                    _httpProxy_, _JsonApiDataStore_, _periodService_, ___) {
+                                    _httpProxy_, _JsonApiDataStore_) {
             var _this = this;
 
             $q = _$q_;
             $rootScope = _$rootScope_;
             httpProxy = _httpProxy_;
             JsonApiDataStore = _JsonApiDataStore_;
-            periodService = _periodService_;
             myPeopleDashboardService = _myPeopleDashboardService_;
-            _ = ___;
 
             this.person = {
                 personId: 123
@@ -45,21 +43,8 @@
                 }
             ];
 
-            this.peopleReports = {
-                reportId: 123
-            };
-
             this.organizationReports = {
                 reportId: 123
-            };
-
-            this.peopleReportsParams = {
-                organization_ids: [123],
-                people_ids: [456]
-            };
-
-            this.loadOrganizationReportsParams = {
-                organization_ids: 456
             };
 
             this.loadOrganizationParams = {
@@ -114,50 +99,6 @@
                     expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('people', _this.people);
                 });
             }));
-        });
-
-        describe('Reports Tests', function () {
-            describe('People Reports', function () {
-                it('should contain loadPeopleReports', function () {
-                    expect(myPeopleDashboardService.loadPeopleReports).toBeDefined();
-                });
-
-                it('should call GET loadPeopleReports URL', function () {
-                    var joinedParams = _.clone(this.peopleReportsParams);
-                    joinedParams.organization_ids = joinedParams.organization_ids.join(',');
-                    joinedParams.people_ids = joinedParams.people_ids.join(',');
-                    spyOn(periodService, 'getPeriod').and.returnValue('period');
-                    myPeopleDashboardService.loadPeopleReports(this.peopleReportsParams);
-                    expect(httpProxy.callHttp).toHaveBeenCalledWith(
-                        'GET',
-                        jasmine.any(String),
-                        _.extend(joinedParams, { period: 'period' }),
-                        null,
-                        jasmine.objectContaining({ errorMessage: jasmine.any(String) })
-                    );
-                });
-
-                it('should load people reports', async(function () {
-                    this.httpResponse = this.peopleReports;
-
-                    var _this = this;
-
-                    return myPeopleDashboardService.loadPeopleReports(this.peopleReportsParams)
-                        .then(function (loadedPeopleReports) {
-                            expect(loadedPeopleReports).toEqual(_this.peopleReports);
-                        });
-                }));
-
-                it('should sync people Reports JsonApiDataStore', async(function () {
-                    this.httpResponse = this.peopleReports;
-
-                    var _this = this;
-                    JsonApiDataStore.store.sync('peopleReports', this.peopleReports);
-                    return myPeopleDashboardService.loadPeopleReports(this.peopleReportsParams).then(function () {
-                        expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith('peopleReports', _this.peopleReports);
-                    });
-                }));
-            });
         });
 
         describe('Organization loading', function () {

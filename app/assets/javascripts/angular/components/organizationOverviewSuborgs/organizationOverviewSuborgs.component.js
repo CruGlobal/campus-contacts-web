@@ -17,7 +17,7 @@
         });
 
     function organizationOverviewSuborgsController ($scope, $state, $log, reportsService, periodService,
-                                                    ProgressiveListLoader, organizationOverviewSuborgsService, _) {
+                                                    ProgressiveListLoader, organizationOverviewSuborgsService) {
         var vm = this;
         vm.loadedAll = false;
         vm.subOrgs = [];
@@ -59,8 +59,7 @@
         }
 
         function loadReports () {
-            var organizationIds = _.map(vm.subOrgs, 'id');
-            reportsService.loadOrganizationReports(organizationIds)
+            reportsService.loadOrganizationReports(vm.subOrgs)
                 .catch(function (error) {
                     $log.error('Error loading organization reports', error);
                 });
