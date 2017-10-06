@@ -41,6 +41,10 @@
                             // Parse the exception to get the stack
                             stackFramesPromise = StackTrace.fromError(arguments[0], { offline: true });
                         } else {
+                            if (arguments[0] && (arguments[0].status === -1 || arguments[0].status === 401)) {
+                                return; // Drop browser network errors and unauthorized api errors due to expired tokens
+                            }
+
                             // Join $log arguments
                             message = arguments[0] && arguments[0].message + '\n' +
                                 _.map(
