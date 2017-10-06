@@ -145,8 +145,13 @@
         });
 
         describe('loadMultiplePeopleReports', function () {
-            it('should call GET loadMultiplePeopleReports URL', function () {
+            it('should call GET loadMultiplePeopleReports URL and return the reports', async(function () {
+                this.httpResponse = {
+                    reportId: 123
+                };
+
                 reportsService.loadMultiplePeopleReports([{ id: 123 }], [{ id: 1 }, { id: 2 }]);
+
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
                     jasmine.any(String),
@@ -154,12 +159,6 @@
                     null,
                     jasmine.objectContaining({ errorMessage: jasmine.any(String) })
                 );
-            });
-
-            it('should load people reports', async(function () {
-                this.httpResponse = {
-                    reportId: 123
-                };
 
                 return reportsService.loadMultiplePeopleReports([{ id: 123 }], [{ id: 1 }, { id: 2 }])
                     .then(function (loadedPeopleReports) {
