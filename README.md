@@ -1,6 +1,8 @@
 MissionHub
 ==========
 
+[![Build Status](https://travis-ci.com/CruGlobal/missionhub.svg?token=f5yxyceGFsEMRFnFdKXz&branch=MH-978v2)](https://travis-ci.com/CruGlobal/missionhub) [![codecov](https://codecov.io/gh/CruGlobal/missionhub/branch/master/graph/badge.svg?token=WtajghOzSN)](https://codecov.io/gh/CruGlobal/missionhub)
+
 ### Overview
 
 MissionHub is an online tool that makes it easier than ever for you to connect, communicate and track ministry relationships.
@@ -16,7 +18,3 @@ We use a universal rails setup for all of our web apps. To start with MissionHub
 ### License
 
 MissionHub is released under the MIT license:  http://www.opensource.org/licenses/MIT
-
-## Latest Release
-
-MissionHub's latest release was 7/24/2013
