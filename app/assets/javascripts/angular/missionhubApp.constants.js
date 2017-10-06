@@ -14,6 +14,7 @@
         .constant('nativeLocation', window.location)
         .constant('p2cOrgId', '8411')
         .constant('spaPage', window.location.pathname === '/' || /^\/d(\/.*)?$/.test(window.location.pathname))
+        .constant('StackTrace', window.StackTrace)
         .constant('rollbar', window.rollbar)
         .constant('rollbarAccessToken', 'e749b290a241465b9e70c9cf93124721');
 })();

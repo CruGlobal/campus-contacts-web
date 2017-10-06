@@ -47,6 +47,7 @@
 //= require moment/moment
 //= require angular-moment/angular-moment
 //= require rollbar/dist/rollbar.umd.min.js
+//= require stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.js
 
 //= require angular/missionhubApp.module
 //= require angular/missionhubApp.constants

@@ -36,6 +36,7 @@ module.exports = function (config) {
             './vendor/assets/javascripts/i18n.js',
             './node_modules/lscache/lscache.js',
             './node_modules/lodash/lodash.js',
+            './node_modules/stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.js',
             './node_modules/rollbar/dist/rollbar.umd.min.js',
             './app/assets/javascripts/test/patch/fix-lscache.js',
             './node_modules/angular-mocks/angular-mocks.js',
