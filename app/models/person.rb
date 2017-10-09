@@ -1754,7 +1754,7 @@ class Person < ActiveRecord::Base
 
   def picture
     if avatar_file_name.present?
-      avatar.url(:thumb)
+      avatar.expiring_url(1.week.to_i, :big_square)
     elsif fb_uid.present?
       "https://graph.facebook.com/v2.2/#{fb_uid}/picture"
     end
