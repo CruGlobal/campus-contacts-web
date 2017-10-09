@@ -6,7 +6,7 @@
         <span class="mh_popup_heading"><%= t("dialogs.dialog_avatar.dialog_title") %></span>
       </div>
     	<div id="avatar_form_container">
-        <%= image_tag(@person.get_avatar, width:'200', height:'200', class:'current_avatar_display browse_preview') %>
+        <%= image_tag(@person.picture, width:'200', height:'200', class:'current_avatar_display browse_preview') %>
         <%= form_for @person, url: change_avatar_profile_path(@person), :html => { method: :post, :multipart => true, id: "avatar_upload_form" } do |f| %>
           <div id='avatar_fb_container'>
             <%= text_field_tag :avatar_facebook_search, "", placeholder: "Search Facebook name", autocomplete: "off" %>

@@ -702,16 +702,6 @@ class Person < ActiveRecord::Base
     answered_surveys.where(organization_id: org.id)
   end
 
-  def get_avatar
-    if avatar_file_name.present?
-      return avatar.url(:medium)
-    elsif fb_uid.present?
-      return "https://graph.facebook.com/v2.2/#{fb_uid}/picture?width=200&height=200"
-    else
-      return 'no_image.png'
-    end
-  end
-
   def all_organizational_permissions_for_org_id(org_id)
     OrganizationalPermission.where('person_id = ? AND organization_id = ?', id, org_id)
   end
