@@ -11,8 +11,9 @@
 
     ga('create', 'UA-325725-21', 'auto', ga_extra);
 
-    var clientId = tracker.get('clientId');
-    ga('set', 'dimension2', clientId);
+    ga(function (tracker) {
+      ga('set', 'dimension2', tracker.get('clientId'));
+    });
     ga('set', 'dimension3', ga_extra.userId);
 
   </script>
