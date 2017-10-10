@@ -1,5 +1,5 @@
 <async-content ready="$ctrl.ready">
-    <div class="header">
+    <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible}">
         <div class="org-title-row">
             <div class="org-name" ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
             <div ng-if="$ctrl.editMode">

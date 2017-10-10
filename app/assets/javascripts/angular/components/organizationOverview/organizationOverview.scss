@@ -8,6 +8,13 @@ organization-overview {
   .header {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    &.hidden-org {
+      background: gray;
+      .org-name {
+        color: white;
+      }
+    }
   }
 
   .org-title-row {
