@@ -1,6 +1,21 @@
 <async-content ready="$ctrl.ready">
-    <div class="header">
-        <div class="org-name" ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
+    <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible}">
+        <div class="org-title-row">
+            <div class="org-name" ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
+            <div ng-if="$ctrl.editMode">
+                <ng-md-icon icon="visibilityOn" ng-if="$ctrl.org.visible"
+                            ng-click="$ctrl.toggleVisibility($ctrl.org)"
+                            analytics-on="click" analytics-category="Dashboard" analytics-event="Hide Organization">
+                </ng-md-icon>
+                <ng-md-icon icon="visibilityOff" ng-if="!$ctrl.org.visible"
+                            ng-click="$ctrl.toggleVisibility($ctrl.org)"
+                            analytics-on="click" analytics-category="Dashboard" analytics-event="Show Organization">
+                </ng-md-icon>
+                <ng-md-icon class="sort-orgs-handle" icon="dragHandle">
+                </ng-md-icon>
+            </div>
+        </div>
+
         <div class="tabs">
             <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
                  ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"

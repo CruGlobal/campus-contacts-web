@@ -7,7 +7,8 @@
             controller: organizationOverviewController,
             bindings: {
                 org: '<',
-                loadDetails: '<?'
+                loadDetails: '<?',
+                editMode: '<?'
             },
             templateUrl: /* @ngInject */ function (templateUrl) {
                 return templateUrl('organizationOverview');
@@ -15,12 +16,15 @@
         });
 
     function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService, ministryViewTabs,
-                                             organizationOverviewService, organizationService, loggedInPerson, _) {
+                                             organizationOverviewService, organizationService, loggedInPerson,
+                                             userPreferencesService, _) {
         var vm = this;
         vm.tabNames = ministryViewTabs;
         vm.adminPrivileges = true;
         vm.cruOrg = false;
         vm.p2cOrg = false;
+        vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
+
         vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
         function activate () {

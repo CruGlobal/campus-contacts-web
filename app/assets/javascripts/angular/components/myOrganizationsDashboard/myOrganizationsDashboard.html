@@ -2,6 +2,14 @@
     <div class="inner">
         <organization-breadcrumbs></organization-breadcrumbs>
         <report-period></report-period>
+        <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+           ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
+           analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
+           class="dashboard-edit-toggle tipitmiddle"
+           ng-class="{'active': $ctrl.editOrganizations}"
+           href="" title="<%= t('dashboard.edit_org_order') %>">
+            <ng-md-icon icon="editOrder"></ng-md-icon>
+        </a>
     </div>
 </div>
 

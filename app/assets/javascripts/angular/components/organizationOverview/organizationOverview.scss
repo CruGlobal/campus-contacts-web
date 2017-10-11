@@ -8,10 +8,23 @@ organization-overview {
   .header {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    &.hidden-org {
+      background: gray;
+      .org-name {
+        color: white;
+      }
+    }
+  }
+
+  .org-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
   }
 
   .org-name {
-    padding: 10px;
     color: $pivot-bright-blue;
     font-size: 2em;
   }

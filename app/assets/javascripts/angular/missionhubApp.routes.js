@@ -231,21 +231,17 @@
                     url: '/ministries',
                     abstract: true,
                     template:
-                        '<my-organizations-dashboard edit-mode="$ctrl.editOrganizations"></my-organizations-dashboard>'
+                        '<my-organizations-dashboard></my-organizations-dashboard>'
                 })
                 .state({
                     name: 'app.ministries.root',
                     url: '/root',
-                    template:
-                        '<organization-overview ng-repeat="org in $ctrl.rootOrgs" org="org" load-details="false">' +
-                        '</organization-overview>',
-                    controller: function (rootOrgs) {
-                        this.rootOrgs = rootOrgs;
-                    },
-                    controllerAs: '$ctrl',
+                    component: 'myOrganizationsDashboardList',
                     resolve: {
-                        rootOrgs: function (myOrganizationsDashboardService, orgSorter, $q, $state) {
-                            var orgs = orgSorter.sort(myOrganizationsDashboardService.getRootOrganizations());
+                        rootOrgs: function (myOrganizationsDashboardService, userPreferencesService, $q, $state) {
+                            var orgs = userPreferencesService.applyUserOrgDisplayPreferences(
+                                myOrganizationsDashboardService.getRootOrganizations()
+                            );
                             if (orgs.length === 1) {
                                 $state.go('app.ministries.ministry.' + ministryViewDefaultTab, { orgId: orgs[0].id });
                                 return $q.reject('cancel transition, re-route user to root org.');

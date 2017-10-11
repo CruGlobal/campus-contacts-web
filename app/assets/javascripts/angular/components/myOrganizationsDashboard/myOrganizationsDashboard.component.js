@@ -4,11 +4,11 @@
     angular
         .module('missionhubApp')
         .component('myOrganizationsDashboard', {
-            bindings: {
-                editMode: '<'
-            },
             templateUrl: /* @ngInject */ function (templateUrl) {
                 return templateUrl('myOrganizationsDashboard');
+            },
+            controller: function ($state) {
+                this.$state = $state;
             }
         });
 })();
