@@ -156,6 +156,10 @@ en:
       header: Tools
     survey_responses:
       header: Survey Responses
+    labels:
+      header: Labels
+      columns:
+        name: Name
   person_multiselect:
     search_placeholder: Search %{people_description}
     searching: Searching %{people_description}...
@@ -1025,6 +1029,14 @@ en:
     leader: leader
     leader_definition: 'This is a person leading small groups of Win-Build-Send ministry. (Examples: groups focused on reaching target audiences, launching movements, etc.)'
     leader_sentence: a leader
+    index:
+      label_name: Name
+    new:
+      new_label: Create a New Label
+    edit:
+      edit_label: Edit Label
+    delete:
+      confirm: Are you sure you want to delete the "%{label_name}" label?
   leader: Group Leader
   leader_mailer:
     added:
@@ -1987,6 +1999,10 @@ en:
         default_network_error: An unknown network error occured
       interactions:
         create_interaction: Error occurred while creating the interaction
+      labels:
+        create_label: Error occurred while creating the label
+        delete_label: Error occurred while deleting the label
+        update_label: Error occurred while updating the label
       logged_in_person:
         load_user: Error occurred while loading your user information
       mass_edit:

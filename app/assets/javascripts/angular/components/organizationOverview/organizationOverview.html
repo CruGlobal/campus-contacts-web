@@ -50,9 +50,6 @@
                             <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
                         </li>
                         <li ng-if="$ctrl.adminPrivileges">
-                            <a ng-href="/labels?organization_id={{$ctrl.org.id}}">{{ 'people.index.manage_labels' | t }}</a>
-                        </li>
-                        <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
                         </li>
                         <li ng-if="$ctrl.adminPrivileges && $ctrl.cruOrg" class="divider">

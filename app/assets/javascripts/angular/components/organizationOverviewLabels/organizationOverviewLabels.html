@@ -1,0 +1,13 @@
+<div class="label row header">
+    <div class="column name-column">
+        {{ 'ministries.labels.columns.name' | t }}
+    </div>
+
+    <div class="column buttons-column" ng-if="$ctrl.organizationOverview.adminPrivileges">
+        <icon-button icon="'add'" ng-click="$ctrl.addLabel()"></icon-button>
+    </div>
+</div>
+<div class="grid-content">
+    <ministry-view-label ng-repeat="label in $ctrl.organizationOverview.org.labels | orderBy: 'name' track by label.id"
+                         label="label"></ministry-view-label>
+</div>
