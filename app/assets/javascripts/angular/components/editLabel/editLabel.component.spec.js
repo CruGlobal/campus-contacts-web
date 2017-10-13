@@ -52,7 +52,9 @@
             it('should initialize and create a label if one doesn\'t exist', function () {
                 delete $ctrl.resolve.label;
                 this.labelsService.getLabelTemplate.and.returnValue({ name: 'New Label' });
+
                 $ctrl.$onInit();
+
                 expect($ctrl.orgId).toEqual(1);
                 expect($ctrl.label).toEqual({ name: 'New Label' });
                 expect($ctrl.title).toEqual('labels.new.new_label');
@@ -82,6 +84,7 @@
             it('should save the edited label', asynchronous(function () {
                 var _this = this;
                 this.labelsService.saveLabel.and.returnValue($q.resolve({ name: 'Saved Label' }));
+
                 return $ctrl.save()
                     .then(function () {
                         expect(_this.labelsService.saveLabel).toHaveBeenCalledWith(_this.label);
@@ -93,6 +96,7 @@
             it('should handle an error saving the edited label', asynchronous(function () {
                 var _this = this;
                 this.labelsService.saveLabel.and.returnValue($q.reject());
+
                 return $ctrl.save()
                     .then(function () {
                         expect(_this.labelsService.saveLabel).toHaveBeenCalledWith(_this.label);

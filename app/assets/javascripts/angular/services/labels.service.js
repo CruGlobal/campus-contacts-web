@@ -22,12 +22,12 @@
                     errorMessage: 'error.messages.labels.create_label'
                 })
                     .then(httpProxy.extractModel)
-                    .then(function (label) {
-                        var org = label.organization;
+                    .then(function (savedLabel) {
+                        var org = savedLabel.organization;
                         if (org && org.labels) {
-                            org.labels.push(label);
+                            org.labels.push(savedLabel);
                         }
-                        return label;
+                        return savedLabel;
                     });
             },
 

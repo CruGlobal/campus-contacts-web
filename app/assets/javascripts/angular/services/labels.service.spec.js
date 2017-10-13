@@ -44,7 +44,13 @@
             this.httpResponse = $q.resolve({
                 data: this.label
             });
-            spyOn(httpProxy, 'callHttp').and.callFake(function () {
+            spyOn(httpProxy, 'post').and.callFake(function () {
+                return _this.httpResponse;
+            });
+            spyOn(httpProxy, 'put').and.callFake(function () {
+                return _this.httpResponse;
+            });
+            spyOn(httpProxy, 'delete').and.callFake(function () {
                 return _this.httpResponse;
             });
         }));
@@ -65,11 +71,13 @@
         describe('createLabel', function () {
             it('should make a network request', function () {
                 labelsService.createLabel(this.label);
-                expect(httpProxy.callHttp).toHaveBeenCalled();
+
+                expect(httpProxy.post).toHaveBeenCalled();
             });
 
             it('should return a promise that resolves to the new label', asynchronous(function () {
                 var _this = this;
+
                 return labelsService.createLabel(this.label).then(function (label) {
                     expect(label).toBe(_this.label);
                 });
@@ -91,11 +99,13 @@
 
             it('should make a network request', function () {
                 labelsService.updateLabel(this.label);
-                expect(httpProxy.callHttp).toHaveBeenCalled();
+
+                expect(httpProxy.put).toHaveBeenCalled();
             });
 
             it('should return a promise that resolves to the label', asynchronous(function () {
                 var _this = this;
+
                 return labelsService.updateLabel(this.label).then(function (label) {
                     expect(label).toBe(_this.label);
                 });
@@ -104,6 +114,8 @@
             it('should edit the label in the organization', asynchronous(function () {
                 var _this = this;
                 this.organization.setRelationship('labels', [this.label]);
+                this.label.name = 'New Name';
+
                 return labelsService.updateLabel(this.label).then(function (label) {
                     expect(_this.organization.labels).toEqual([label]);
                 });
@@ -113,14 +125,18 @@
         describe('saveLabel', function () {
             it('should create a new label if the label has no id', function () {
                 spyOn(labelsService, 'createLabel');
+
                 labelsService.saveLabel(this.label);
+
                 expect(labelsService.createLabel).toHaveBeenCalledWith(this.label);
             });
 
             it('should update a label if the label has an id', function () {
                 this.label.setAttribute('id', 1);
                 spyOn(labelsService, 'updateLabel');
+
                 labelsService.saveLabel(this.label);
+
                 expect(labelsService.updateLabel).toHaveBeenCalledWith(this.label);
             });
         });
@@ -129,8 +145,10 @@
             it('should remove the label from the organization', asynchronous(function () {
                 var _this = this;
                 this.organization.labels = [this.label];
+
                 return labelsService.deleteLabel(this.label).then(function () {
                     expect(_this.organization.labels).toEqual([]);
+                    expect(httpProxy.delete).toHaveBeenCalled();
                 });
             }));
         });
@@ -168,7 +186,7 @@
                         relationships: {
                             organization: {
                                 data: {
-                                    id: 1,
+                                    id: this.organization.id,
                                     type: 'organization'
                                 }
                             }

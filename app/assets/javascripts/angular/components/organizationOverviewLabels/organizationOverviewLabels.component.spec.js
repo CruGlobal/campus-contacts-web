@@ -14,6 +14,13 @@
 
             this.organization = new JsonApiDataStore.Model('organization', 1);
 
+            this.label = new JsonApiDataStore.Model('label');
+            this.label.setAttribute('id', 1);
+            this.label.setAttribute('name', 'Test label');
+            this.label.setRelationship('organization', this.organization);
+
+            this.organization.setRelationship('labels', [this.label]);
+
             $ctrl = $componentController('organizationOverviewLabels', {
                 $uibModal: this.$uibModal
             }, {
@@ -23,9 +30,14 @@
             });
         }));
 
+        it('should make the labels available to the template', function () {
+            expect($ctrl.organizationOverview.org.labels).toEqual([this.label]);
+        });
+
         describe('addLabel', function () {
             it('should open the edit label modal', function () {
                 $ctrl.addLabel();
+
                 expect(this.$uibModal.open).toHaveBeenCalledWith(jasmine.objectContaining({
                     component: 'editLabel'
                 }));

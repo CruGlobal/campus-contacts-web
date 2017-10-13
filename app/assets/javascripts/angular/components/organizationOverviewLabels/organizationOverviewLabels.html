@@ -8,6 +8,6 @@
     </div>
 </div>
 <div class="grid-content">
-    <ministry-view-label ng-repeat="label in $ctrl.organizationOverview.org.labels | orderBy: 'name' track by label.id"
+    <ministry-view-label ng-repeat="label in $ctrl.organizationOverview.org.labels track by label.id"
                          label="label"></ministry-view-label>
 </div>

@@ -54,7 +54,9 @@
         describe('$onInit', function () {
             it('should initialize admin privileges', function () {
                 this.loggedInPerson.isAdminAt.and.returnValue(true);
+
                 $ctrl.$onInit();
+
                 expect(this.loggedInPerson.isAdminAt).toHaveBeenCalledWith(this.organization);
                 expect($ctrl.adminPrivileges).toEqual(true);
             });
@@ -63,6 +65,7 @@
         describe('editLabel', function () {
             it('should open the edit label modal', function () {
                 $ctrl.editLabel();
+
                 expect(this.$uibModal.open).toHaveBeenCalledWith(jasmine.objectContaining({
                     component: 'editLabel'
                 }));
@@ -79,11 +82,13 @@
 
             it('should open the confirmation dialog', function () {
                 $ctrl.deleteLabel();
+
                 expect(this.confirmModalService.create).toHaveBeenCalled();
             });
 
             it('should delete the label', asynchronous(function () {
                 var _this = this;
+
                 return $ctrl.deleteLabel()
                     .then(function () {
                         expect(_this.labelsService.deleteLabel).toHaveBeenCalledWith(_this.label);
