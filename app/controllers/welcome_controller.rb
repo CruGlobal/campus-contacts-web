@@ -62,7 +62,7 @@ class WelcomeController < ApplicationController
   def marketing_url
     base = 'https://get.missionhub.com/'
     return URI.join(base, '/en_ca/').to_s if %w(ca en_ca).include?(session[:locale])
-    return URI.join(base, '/fr_ca/').to_s if %w(qb fr fr_ca).include?(session[:locale])
+    return URI.join(base, '/fr_ca/').to_s if %w(qb fr fr-CA).include?(session[:locale])
     base
   end
 end

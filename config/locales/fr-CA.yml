@@ -1,4 +1,5 @@
-qb:
+# Contains old qb translations (first section) and New Angular Translations (see comment below for start of New Angular Translations)
+fr-CA:
   activerecord:
     errors:
       full_messages:
@@ -1689,3 +1690,381 @@ qb:
       verify_with_relay: Confirmer à l'aide de Relay
       welcome: Bienvenue!
       welcome_paragraph: Bienvenue à MissionHub!<br><br> Cet assistant d'installation vous aidera à démarrer et à créer un mot-clé, un aspect essentiel de l'ajout de contacts au système.
+
+# New Angular Translations from http://osx4n0c.oneskyapp.com/admin/project/dashboard/project/240181
+  address_types:
+    current: Actuelle
+    emergency1: "Urgence 1"
+    emergency2: "Urgence 2"
+    permanent: Permanente
+  application:
+    add_contact:
+      title_permission: Permissions
+    assign_search:
+      me: Moi
+    interaction_types:
+      comment: "Commenter seulement"
+      discipleship: "Conversation de formation de disciple"
+      gospel_presentation: "Évangélisation personnelle"
+      graduating_on_mission: "Finissant en mission"
+      holy_spirit_presentation: "Présentation du ministère du Saint-Esprit"
+      prayed_to_receive_christ: "Décisions en évangélisation personnelle"
+      spiritual_conversation: "Conversation avec des éléments clés de l'évangile"
+  assignments:
+    assigned: Attribué(e)
+    assignment: "Attribué(e) à"
+    unassigned: "Non attribué(e)"
+  beta:
+    welcome:
+      no_thanks: "Non merci"
+      p1: "Nous travaillons fort à l'amélioration de l'expérience Web de MissionHub et notre version bêta ouverte est maintenant active."
+      p2: "Faites-en l'essai maintenant! Vous pouvez toujours changer vos préférences dans votre profil d'utilisateur."
+      title: "MissionHub Bêta est arrivée!"
+      try: "Essayer la version bêta"
+  contact:
+    add: Ajouter
+    assigned_to: "Attribué(e) à"
+    cru_status: Rôle
+    delete: Supprimer
+    edit: Modifier
+    email_address: "Adresse courriel"
+    first_name: Prénom
+    followup_status: État
+    gender: Sexe
+    last_name: "Nom de famille"
+    phone_number: "Numéro de téléphone"
+    primary_email: Principale
+    primary_phone: Principal
+    student_status: Scolarité
+  contacts:
+    add_contact: "Ajouter un contact"
+    all_contacts:
+      title: "Tous les contacts"
+    index:
+      filter: Rechercher
+      for_this_permission_email_is_required: "Une adresse courriel est requise pour la permission '%{permission}'."
+      for_this_permission_email_is_required_no_name: "Une adresse courriel est requise pour cette permission."
+      import_contacts: "Importer des contacts"
+      search_contact_results_description: "Veuillez utiliser le formulaire pour trouver un contact."
+      search_locate_contact_button: Trouver
+      unassigned: "Non attribué(e)"
+    statuses:
+      uncontacted: "Non contacté(e)"
+  dashboard:
+    anonymous:
+      add: "Ajouter une interaction anonyme"
+      note: "Notes pour la nouvelle personne anonyme"
+    done: Terminé
+    edit_org_order: "Modifier l'ordre des organismes"
+    edit_org_order_help: "Voulez-vous personnaliser l'affichage? Cliquez sur <ng-md-icon icon=\"editOrder\"></ng-md-icon> ci-dessus pour changer l'ordre des ministères et en cacher."
+    error_archiving_person: "Erreur d'archivage de la personne. Veuillez réessayer ou nous contacter."
+    loading_contacts: "Chargement des contacts"
+    no_contacts:
+      welcome: "BIENVENUE %{name}!"
+    no_contacts_help: "Lorsque vous ajoutez une nouvelle personne <ng-md-icon icon=\"addContact\"></ng-md-icon> ou quelqu'un vous est assigné, <br> cette personne s'affichera ici."
+    notes_for_new_interaction: "Notes pour la nouvelle"
+    organizations_assigned_to_you: Ministères
+    people_assigned_to_you: Personnes
+    report_periods:
+      one_month: 1m
+      one_week: 7s
+      one_year: 1a
+      six_months: 6m
+      three_months: 3m
+    show_more: "Afficher plus"
+    snooze_for_24_hours: "Nouveau rappel dans 24 heures"
+    uncontacted: "Non contacté(e)"
+  date:
+    day_names:
+      - Dimanche
+      - Lundi
+      - Mardi
+      - Mercredi
+      - Jeudi
+      - Vendredi
+      - Samedi
+  error:
+    default_error_message: "Une erreur inconnue est survenue."
+    messages:
+      assigned_select:
+        search_people: "Une erreur s'est produite lors du chargement des choix d'attribution."
+      edit_group_or_label_assignments:
+        load_groups: "Une erreur s'est produite lors du chargement des groupes de l'utilisateur."
+        load_labels: "Une erreur s'est produite lors du chargement des étiquettes de l'utilisateur."
+      group_members:
+        add_member: "Une erreur s'est produite lors de l'ajout de la personne au groupe."
+        load_member_chunk: "Une erreur s'est produite lors du chargement des membres du groupe suivants."
+        remove_member: "Une erreur s'est produite lors de la suppression de la personne du groupe."
+      groups:
+        create_group: "Une erreur s'est produite lors de la création du groupe."
+        delete_group: "Une erreur s'est produite lors de la suppression du groupe."
+        load_leaders: "Une erreur s'est produite lors du chargement des leaders du groupe."
+        update_group: "Une erreur s'est produite lors de la mise à jour du groupe."
+      http_proxy:
+        default_network_error: "Une erreur de réseau inconnue s'est produite."
+      logged_in_person:
+        load_user: "Une erreur s'est produite lors du chargement de vos informations d'utilisateur."
+      mass_edit:
+        apply_mass_edit: "Une erreur s'est produite lors de l'édition simultanée des contacts."
+        load_options: "Une erreur s'est produite lors du chargement des options."
+        load_relationships: "Une erreur s'est produite lors du chargement des options."
+      merge_winner:
+        load_users: "Une erreur s'est produite lors du chargement des utilisateurs."
+      my_people_dashboard:
+        load_orgs: "Une erreur s'est produite lors du chargement des organismes."
+        load_people: "Une erreur s'est produite lors du chargement des personnes."
+        load_reports: "Une erreur s'est produite lors du chargement des rapports."
+        update_org_order: "Une erreur s'est produite lors du chargement de l'ordre des organismes."
+        update_org_visibility: "Une erreur s'est produite lors de la mise à jour de la visibilité de l'organisme."
+      organization:
+        load_ancestry: "Une erreur s'est produite lors de la mise à jour des ancêtres de l'organisme."
+      organization_overview:
+        load_org_relationships: "Une erreur s'est produite lors du chargement des groupes et sondages de l'organisme."
+      organization_overview_people:
+        load_assignments: "Une erreur s'est produite lors du chargement des personnes attribuées à ces personnes."
+        load_org_people_count: "Une erreur s'est produite lors du chargement du nombre de personnes dans l'organisme."
+        load_people_chunk: "Une erreur s'est produite lors du chargement des personnes suivantes."
+        merge_people: "Une erreur s'est produite lors de la fusion de personnes."
+      organization_overview_suborgs:
+        load_org_chunk: "Une erreur s'est produite lors du chargement des sous-organismes suivants."
+        load_org_suborg_count: "Une erreur s'est produite lors du chargement du nombre de sous-organismes dans l'organisme."
+      organization_overview_team:
+        load_org_team_count: "Une erreur s'est produite lors du chargement du nombre d'équipiers dans l'organisme."
+        load_team_chunk: "Une erreur s'est produite lors du chargement des membres d'équipe suivants."
+      people_filters_panel:
+        load_filter_stats: "Une erreur s'est produite lors du chargement des comptes de filtre."
+      person:
+        archive_person: "Une erreur s'est produite lors de l'archivage de la personne."
+        get_contact_assignments: "Une erreur s'est produite lors du chargement des personnes auxquelles cette personne est attribuée."
+      person_page:
+        create_person: "Une erreur s'est produite lors de la création de la personne."
+        delete_avatar: "Une erreur s'est produite lors de la suppression de la photo de profil."
+        upload_avatar: "Une erreur s'est produite lors du chargement de la photo de profil."
+      person_profile:
+        delete_relationships: "Une erreur s'est produite lors du chargement de la personne."
+        reload_merged_person: "Une erreur s'est produite lors de l'actualisation de la personne."
+        update_person: "Une erreur s'est produite lors de la mise à jour de la personne."
+      preferences_page:
+        update_preferences: "Une erreur s'est produite lors de la mise à jour des préférences."
+      progressive_list_loader:
+        load_chunk: "Une erreur s'est produite lors du chargement des éléments."
+      reports:
+        load_org_reports: "Une erreur s'est produite lors du chargement des rapports de l'organisme."
+        load_person_report: "Une erreur s'est produite lors du chargement du rapport de la personne."
+      routes:
+        get_history: "Une erreur s'est produite lors du chargement de l'historique de la personne."
+        get_organization: "Une erreur s'est produite lors du chargement de l'organisme."
+        get_person: "Une erreur s'est produite lors du chargement de la personne."
+      template_request:
+        load_template: "Une erreur s'est produite lors du chargement de la page."
+    retry_instructions: "Cliquer pour réessayer."
+  followup_status:
+    attempted_contact: "Communication tentée"
+    completed: Effectué
+    contacted: Contacté(e)
+    do_not_contact: "Ne pas contacter"
+    uncontacted: "Non contacté(e)"
+  general:
+    add: Ajouter
+    address: Adresse
+    address_type: "Type d'adresse"
+    archive: Archive
+    cancel: Annuler
+    close: Fermer
+    country: Pays
+    female: Femme
+    male: Homme
+    ? ""
+    :
+      one: Autre
+      other: Autres
+    loading_more: "Chargement en cours..."
+    message: "Message :"
+    ok: OK
+    save: Enregistrer
+    send: Envoyer
+    state: Province
+    subject: "Objet :"
+    zip: "Code postal"
+  group: Groupe
+  groups:
+    confirm_delete_group: "Voulez-vous vraiment supprimer \"%{group_name}\"?"
+    edit:
+      edit_group: "En cours de modification de %{group}"
+    form:
+      from: De
+      meets_on: Le
+      to: à
+    index:
+      group_name: "Nom du groupe"
+    members:
+      columns:
+        name: Contacts
+      contacts: contacts
+      leader: Leader
+      remove_confirm: "Voulez-vous vraiment supprimer ce membre du groupe?"
+      subtitle: "Membres de \"%{group_name}\""
+      title: "Membres du groupe"
+    new:
+      new_group: "Créer un nouveau groupe"
+    show:
+      leaders: "Leaders du groupe"
+      location: Emplacement
+      meets: "Se réunit"
+  label: Étiquette
+  leader: "Leader du groupe"
+  mass_edit:
+    save: "Modifier %{contactCount} contacts"
+    title: "Modifier les contacts"
+    unchanged: "Non modifiés"
+  member: Membre
+  merge_winner:
+    merge: Fusionner
+    subtitle: "Sélectionnez la personne qui remportera la fusion. Les autres personnes seront fusionnées avec cette personne."
+    title: "Fusionner la personne sélectionnée"
+  messages:
+    length_limit: "%{remaining_characters} caractères restants"
+    recipients:
+      contacts: "%{contact_count} contacts"
+      organization: "dans l'organisme %{name}"
+      search: "correspondant à %{search}"
+  ministries:
+    groups:
+      columns:
+        leaders: Leader(s)
+        location: Emplacement
+        name: "Groupes (%{group_count})"
+        time: "Heure de la rencontre"
+      header: Groupes
+      meeting_time:
+        monthly: "Tous les mois le %{day} %{time}"
+        sporadically: Sporadiquement
+        time_range: "%{start} - %{end}"
+        weekly: "Toutes les semaines les %{day}s %{time}"
+      ordinal_suffixes:
+        - e
+        - er
+        - e
+        - e
+    people:
+      activity:
+        header: Activités
+      archive_hover: "Archiver les contacts sélectionnés"
+      archive_people_confirm: "Voulez-vous vraiment archiver %{contact_count} contacts?"
+      assigned:
+        header: Attribué(e)
+      clear_selection_hover: "Désélectionner tous les contacts sélectionnés"
+      delete_hover: "Supprimer les contacts sélectionnés"
+      delete_people_confirm: "Voulez-vous vraiment supprimer %{contact_count} contacts?"
+      email_hover: "Écrire aux contacts sélectionnés"
+      export_hover: "Exporter les contacts sélectionnés en tant que CSV"
+      female: F
+      male: H
+      gender: H/F
+      header: Contacts
+      history:
+        all: Tous
+        anonymous: Anonyme
+        header: Historique
+        interactions: Interactions
+        me: Moi
+        note_for_interaction: "Note pour %{interaction}"
+        notes: Notes
+        surveys: Sondages
+      leaders: leaders
+      mass_edit_hover: "Modifier en masse les contacts sélectionnés"
+      merge_disabled_hover: "Sélectionnez entre 2 et 4 contacts pour les fusionner."
+      merge_hover: "Fusionner les contacts sélectionnés"
+      name: Nom
+      profile:
+        header: Profil
+      selected_contacts: "%{contactCount} contacts sélectionnés"
+      sms_hover: "Texter les contacts sélectionnés"
+      status: État
+      transfer_hover: "Transférer les contacts sélectionnés à un autre organisme."
+    roots: Ministères
+    suborgs:
+      header: Ministères
+    surveys:
+      header: Sondages
+    team:
+      header: Équipe
+    tools:
+      header: Outils
+  monthly: "Tous les mois"
+  nav:
+    about:
+      copyright: "Droit d'auteur"
+      title: "Au sujet de MissionHub"
+    cleanup: "Nettoyage de l'organisme"
+    contacts: Contacts
+    email_us: "Nous contacter"
+    goal: "Suivi de l'objectif"
+    groups: Groupes
+    manage: "Gérer les organismes"
+    powered_by_cru: "Géré par Cru"
+    report_movement_indicators: "Rapport - Indicateurs de mouvement"
+    snapshot: "Image instantanée"
+    support: Soutien
+    terms: "Conditions de service"
+    trend: "Suivi de la tendance"
+  organizations:
+    cleanup:
+      confirm_archive: "Voulez-vous vraiment archiver les contacts sélectionnés?"
+  people:
+    edit:
+      cancel_create_confirm: "Voulez-vous vraiment supprimer ce contact non enregistré?"
+      delete_address_confirm: "Voulez-vous vraiment supprimer cette adresse?"
+      delete_email_confirm: "Voulez-vous vraiment supprimer cette adresse courriel?"
+      delete_phone_confirm: "Voulez-vous vraiment supprimer ce numéro de téléphone?"
+    index:
+      add_address: "Ajouter une adresse"
+      create_address: "Créer une adresse"
+      edit_address: "Modifier l'adresse"
+      labels: Étiquettes
+      manage_groups: "Gérer les groupes"
+      manage_labels: "Gérer les étiquettes"
+    show:
+      apply_groups: "Attribuer %{name} aux groupes suivants."
+      no_groups: "Aucun groupe attribué."
+      no_labels: "Aucune étiquette attribuée."
+  permissions:
+    admin: Admin
+    no_permissions: "Aucune permission"
+    user: Utilisateur
+  person_multiselect:
+    no_search_results: "Aucun(e) %{people_description} ne correspond à \"%{search}\""
+    search_placeholder: "Rechercher %{people_description}"
+    searching: "En cours de recherche de %{people_description}..."
+  preferences:
+    beta_mode: "Faites l'essai de caractéristiques expérimentales de la version bêta."
+    language: Langue
+    no_language_selected: "Sélectionner la langue"
+    notifications_header: "Quand voulez-vous être notifié(e)?"
+    notifications_info: "(Activé par défaut)"
+    person_assigned: "Quand une personne vous est assignée"
+    person_moved: "Quand une personne est transférée à votre organisme"
+    refresh_language: "Rafraîchir pour afficher le changement de langue"
+    time_zone: "Fuseau horaire"
+    title: "Préférences d'utilisateur"
+    weekly_digest: "Rapport hebdomadaire des activités"
+  search:
+    assignments:
+      title: "Attribué(e) à"
+    groups:
+      title: Groupes
+    labels:
+      title: Étiquettes
+  signatures:
+    clear: "Effacer les filtres"
+  sporadically: Sporadiquement
+  transfer:
+    options:
+      copy_answers: "Copier les réponses au sondage avec le contact"
+      copy_contact: "Laisser une copie du contact dans l'organisme"
+      copy_interactions: "Copier les interactions avec le contact"
+    organizations: organismes
+    subtitle: "Transférer %{contact_count} contact(s) à un autre organisme."
+    title: "Transférer des contacts"
+    transfer: "Transférer %{contact_count} contact(s)"
+  weekly: "Toutes les semaines"

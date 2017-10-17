@@ -30,11 +30,15 @@
                         description: 'Spanish'
                     },
                     {
+                        abbreviation: 'es-419',
+                        description: 'Spanish - Latin America and Caribbean'
+                    },
+                    {
                         abbreviation: 'fr',
                         description: 'French'
                     },
                     {
-                        abbreviation: 'qb',
+                        abbreviation: 'fr-CA',
                         description: 'French - Canadian'
                     },
                     {

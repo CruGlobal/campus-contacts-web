@@ -1,0 +1,378 @@
+---
+es-419:
+  address_types:
+    current: "Actual:"
+    emergency1: "Emergencia 1"
+    emergency2: "Emergencia 2"
+    permanent: Permanente
+  application:
+    add_contact:
+      title_permission: Permisos
+    assign_search:
+      me: Mi
+    interaction_types:
+      comment: "Solo comentario"
+      discipleship: "Conversación sobre Discipulado"
+      gospel_presentation: "Evangelismo Personal"
+      graduating_on_mission: "Graduando en la Misión"
+      holy_spirit_presentation: "Presentación del Espíritu Santo"
+      prayed_to_receive_christ: "Decisiones por Evangelismo Personal"
+      spiritual_conversation: "Conversación Espiritual"
+  assignments:
+    assigned: Asignado
+    assignment: "Asignado a"
+    unassigned: "Sin asignar"
+  beta:
+    welcome:
+      no_thanks: "No Gracias"
+      p1: "Estamos trabajando duro para mejorar la experiencia web de MissionHub y nuestra versión beta  ya está en vivo."
+      p2: "¡Pruébalo ahora! Siempre puedes cambiar tus preferencias bajo tu perfil de usuario."
+      title: "¡MissionHub Beta está aquí!"
+      try: "Prueba Beta"
+  contact:
+    add: Agregar
+    assigned_to: "Asignado a"
+    cru_status: Rol
+    delete: Eliminar
+    edit: Editar
+    email_address: "Correo electrónico"
+    first_name: Primero
+    followup_status: Estado
+    gender: Género
+    last_name: Último
+    phone_number: Teléfono
+    primary_email: Principal
+    primary_phone: Principal
+    student_status: Inscripción
+  contacts:
+    add_contact: "Agregar contacto"
+    all_contacts:
+      title: "Todos los contactos"
+    index:
+      filter: Buscar
+      for_this_permission_email_is_required: "Se requiere correo electrónico para el permiso '% {permission}'."
+      for_this_permission_email_is_required_no_name: "Se requiere correo electrónico para este permiso."
+      import_contacts: "Importar contactos"
+      search_contact_results_description: "Utilice el formulario para encontrar un contacto."
+      search_locate_contact_button: "Ir a buscar"
+      unassigned: "Sin asignar"
+    statuses:
+      uncontacted: "Sin contactar"
+  dashboard:
+    anonymous:
+      add: "Agregar una interacción anónima "
+      note: "Notas para Nuevo Anónimo"
+    done: Listo
+    edit_org_order: "Editar orden de organización"
+    edit_org_order_help: "¿Quieres personalizar tu vista? Presiona <ng-md-icon icon = \"editOrder\"> </ ng-md-icon> para reorganizar y ocultar los ministerios."
+    error_archiving_person: "Error archivando persona! Inténtalo de nuevo o ponte en contacto con el servicio de asistencia."
+    loading_contacts: "Cargando contactos..."
+    no_contacts:
+      welcome: "BIENVENIDO %{name}!"
+    no_contacts_help: "Cuando agregas una persona nueva <ng-md-icon icon=\"addContact\"></ng-md-icon> o alguien se te asigna, <br> aparecerán aquí."
+    notes_for_new_interaction: "Notas para nuevo "
+    organizations_assigned_to_you: Ministerios
+    people_assigned_to_you: Personas
+    report_periods:
+      one_month: "1 mes"
+      one_week: "1 semana"
+      one_year: 1y
+      six_months: "6 meses"
+      three_months: "3 meses"
+    show_more: "Show more"
+    snooze_for_24_hours: "Recordatorio de repetición durante 24 horas"
+    uncontacted: "Sin contactar"
+  date:
+    day_names:
+      - Domingo
+      - Lunes
+      - Martes
+      - Miércoles
+      - Jueves
+      - Viernes
+      - Sábado
+  error:
+    default_error_message: "Un error desconocido ha ocurrido"
+    messages:
+      assigned_select:
+        search_people: "Se ha producido un error al cargar las opciones de asignación"
+      edit_group_or_label_assignments:
+        load_groups: "Se ha producido un error al cargar los grupos del usuario"
+        load_labels: "Se ha producido un error al cargar las etiquetas del usuario"
+      group_members:
+        add_member: "Se ha producido un error al agregar la persona al grupo"
+        load_member_chunk: "Error al cargar el siguiente lote de miembros del grupo"
+        remove_member: "Se ha producido un error al quitar la persona del grupo"
+      groups:
+        create_group: "Se ha producido un error al crear el grupo"
+        delete_group: "Se ha producido un error al eliminar el grupo"
+        load_leaders: "Se ha producido un error al cargar los líderes del grupo"
+        update_group: "Error al actualizar el grupo"
+      http_proxy:
+        default_network_error: "Se ha producido un error de red desconocido."
+      logged_in_person:
+        load_user: "Se ha producido un error al cargar la información de usuario"
+      mass_edit:
+        apply_mass_edit: "Se produjo un error durante la edición masiva de los contactos"
+        load_options: "Se ha producido un error al cargar las opciones\n"
+        load_relationships: "Se ha producido un error al cargar las opciones"
+      merge_winner:
+        load_users: "Se ha producido un error al cargar los usuarios"
+      my_people_dashboard:
+        load_orgs: "Se ha producido un error al cargar las organizaciones"
+        load_people: "Se ha producido un error al cargar las personas"
+        load_reports: "Se ha producido un error al cargar los informes"
+        update_org_order: "Se ha producido un error al actualizar el orden de organización"
+        update_org_visibility: "Error al actualizar la visibilidad de la organización"
+      organization:
+        load_ancestry: "Se produjo un error al cargar los antecesores de la organización"
+      organization_overview:
+        load_org_relationships: "Se ha producido un error al cargar los grupos y las encuestas de la organización"
+      organization_overview_people:
+        load_assignments: "Se ha producido un error al cargar las personas asignadas a estas personas"
+        load_org_people_count: "Error al cargar el número de personas en la organización"
+        load_people_chunk: "Se ha producido un error al cargar el siguiente lote de personas"
+        merge_people: "Se produjo un error al fusionar personas"
+      organization_overview_suborgs:
+        load_org_chunk: "Se ha producido un error al cargar el siguiente lote de suborganizaciones"
+        load_org_suborg_count: "Se ha producido un error al cargar el número de suborganizaciones en la organización"
+      organization_overview_team:
+        load_org_team_count: "Error al cargar el número de miembros del equipo en la organización"
+        load_team_chunk: "Error al cargar el siguiente lote de miembros del equipo"
+      people_filters_panel:
+        load_filter_stats: "Se ha producido un error al cargar los recuentos del filtro"
+      person:
+        archive_person: "Se ha producido un error al archivar a la persona"
+        get_contact_assignments: "Se ha producido un error al cargar las personas a las que esta persona está asignada"
+      person_page:
+        create_person: "Se ha producido un error al crear la persona"
+        delete_avatar: "Se ha producido un error al eliminar la imagen de perfil"
+        upload_avatar: "Se ha producido un error al subir la imagen de perfil"
+      person_profile:
+        delete_relationships: "Se ha producido un error al actualizar la persona"
+        reload_merged_person: "Se produjo un error al actualizar la persona"
+        update_person: "Se ha producido un error al actualizar la persona"
+      preferences_page:
+        update_preferences: "Se ha producido un error al actualizar las preferencias"
+      progressive_list_loader:
+        load_chunk: "Se ha producido un error al cargar los elementos"
+      reports:
+        load_org_reports: "Se ha producido un error al cargar los informes de la organización"
+        load_person_report: "Se ha producido un error al cargar el informe de la persona"
+      routes:
+        get_history: "Se ha producido un error al cargar el historial de la persona"
+        get_organization: "Se ha producido un error al cargar la organización"
+        get_person: "Se ha producido un error al cargar la persona"
+      template_request:
+        load_template: "Se ha producido un error al cargar la página"
+    retry_instructions: "Haga clic para volver a intentarlo"
+  followup_status:
+    attempted_contact: "Contacto Intentado"
+    completed: Completado
+    contacted: Contactado
+    do_not_contact: "No contactar"
+    uncontacted: "Sin contactar"
+  general:
+    add: Agregar
+    address: Dirección
+    address_type: "Tipos de Dirección"
+    archive: Archivo
+    cancel: Cancelar
+    close: Cerrar
+    country: País
+    female: Femenino
+    male: Masculino
+    ? ""
+    :
+      one: "El lenguaje de origen no contiene esta forma plural"
+      other: Otro
+    loading_more: "Cargando mas..."
+    message: "Mensaje:"
+    ok: OK
+    save: Guardar
+    send: Enviar
+    state: Estado
+    subject: Asunto
+    zip: "Código postal"
+  group: Grupo
+  groups:
+    confirm_delete_group: "¿Está seguro de que desea eliminar \"%{group_name}\"?"
+    edit:
+      edit_group: "Editando %{group}"
+    form:
+      from: De
+      meets_on: Activado
+      to: Para
+    index:
+      group_name: "Nombre del Grupo"
+    members:
+      columns:
+        name: Contactos
+      contacts: Contactos
+      leader: Lider
+      remove_confirm: "¿Estás seguro de que quieres este miembro del grupo?"
+      subtitle: "Miembros de \"%{group_name}\""
+      title: "Miembros del Grupo"
+    new:
+      new_group: "Crear un nuevo grupo"
+    show:
+      leaders: "Lideres de Grupo"
+      location: Ubicación
+      meets: Cumple
+  label: Etiqueta
+  leader: "Líder de Grupo"
+  mass_edit:
+    save: "Editar %{contactCount} contactos"
+    title: "Editar contactos"
+    unchanged: "Sin cambiar"
+  member: Miembro
+  merge_winner:
+    merge: Fusionar
+    subtitle: "Elige al ganador de la fusión. Las otras personas se fusionarán con el ganador."
+    title: "Fusionar al Ganador"
+  messages:
+    length_limit: "%{remaining_characters} caracteres restantes"
+    recipients:
+      contacts: "%{contact_count} contactos"
+      organization: "en organización %{name}"
+      search: "comparando %{search}"
+  ministries:
+    groups:
+      columns:
+        leaders: Lider/es
+        location: Ubicación
+        name: "Grupos (%{group_count})"
+        time: "Hora de encuentro"
+      header: Grupos
+      meeting_time:
+        monthly: "Mensual en %{day} %{time}"
+        sporadically: Esporádicamente
+        time_range: "%{start} - %{end}"
+        weekly: "Semanalmente en %{day}s %{time}"
+      ordinal_suffixes:
+        - th
+        - st
+        - nd
+        - rd
+    people:
+      activity:
+        header: Actividad
+      archive_hover: "Archivar los contactos seleccionados"
+      archive_people_confirm: "Estas seguro que quieres archivar %{contact_count} contactos?"
+      assigned:
+        header: Asignado
+      clear_selection_hover: "Deseleccionar todos los contactos seleccionados"
+      delete_hover: "Eliminar los contactos seleccionados"
+      delete_people_confirm: "Estas seguro que quieres eliminar %{contact_count} contactos?"
+      email_hover: "Enviar por correo electrónico los contactos seleccionados"
+      export_hover: "Exportar contactos seleccionados a un archivo CSV"
+      female: F
+      male: M
+      gender: M/F
+      header: Contactos
+      history:
+        all: Todo
+        anonymous: Anónimo
+        header: Historial
+        interactions: Interacciones
+        me: Mi
+        note_for_interaction: "Nota para %{interaction}"
+        notes: Notas
+        surveys: Encuestas
+      leaders: líderes
+      mass_edit_hover: "Edición masiva de los contactos seleccionados"
+      merge_disabled_hover: "Seleccione entre 2 y 4 contactos para fusionarlos"
+      merge_hover: "Fusionar los contactos seleccionados"
+      name: Nombre
+      profile:
+        header: Perfil
+      selected_contacts: "%{contactCount} contactos seleccionados"
+      sms_hover: "Enviar un mensaje de texto a los contactos seleccionados"
+      status: Estado
+      transfer_hover: "Transferir los contactos seleccionados a otra organización"
+    roots: Ministerios
+    suborgs:
+      header: Ministerios
+    surveys:
+      header: Encuestas
+    team:
+      header: Equipo
+    tools:
+      header: Herramientas
+  monthly: Mensualmente
+  nav:
+    about:
+      copyright: "Derechos de autor"
+      title: "Sobre MissionHub"
+    cleanup: "Limpieza de la organización"
+    contacts: Contactos
+    email_us: "Envíanos un correo electrónico"
+    goal: "Seguimiento de objetivos"
+    groups: Grupos
+    manage: "Administrar organizaciones"
+    powered_by_cru: "Desarrollado por Cru"
+    report_movement_indicators: "Reportar indicadores de movimiento"
+    snapshot: "Vista instantánea"
+    support: Soporte
+    terms: "Términos de uso"
+    trend: "Rastreador de tendencias"
+  organizations:
+    cleanup:
+      confirm_archive: "¿Seguro que deseas archivar los contactos deseados?"
+  people:
+    edit:
+      cancel_create_confirm: "¿Está seguro de que desea descartar este contacto no guardado?"
+      delete_address_confirm: "¿Está seguro de que desea eliminar esta dirección?"
+      delete_email_confirm: "¿Seguro que quieres eliminar esta dirección de correo electrónico?"
+      delete_phone_confirm: "¿Está seguro de que deseas eliminar este número de teléfono?"
+    index:
+      add_address: "Agregar dirección"
+      create_address: "Crear dirección"
+      edit_address: "Editar dirección"
+      labels: Etiquetas
+      manage_groups: "Administrar grupos"
+      manage_labels: "Administrar etiquetas"
+    show:
+      apply_groups: "Asignar  %{name} a los siguientes grupos"
+      no_groups: "No hay grupos asignados"
+      no_labels: "No hay etiquetas asignadas"
+  permissions:
+    admin: Administrador
+    no_permissions: "No hay permisos"
+    user: Usuario
+  person_multiselect:
+    no_search_results: "No se ha encontrado coincidencia %{people_description} para \"%{search}\""
+    search_placeholder: "Buscar %{people_description}"
+    searching: "Buscando %{people_description}..."
+  preferences:
+    beta_mode: "Pruebe las funciones beta experimentales"
+    language: Idioma
+    no_language_selected: "Seleccionar idioma"
+    notifications_header: "Cuándo desea que le hagamos saber?"
+    notifications_info: "(Activado de forma predeterminada)"
+    person_assigned: "Cuando se le asigna una persona"
+    person_moved: "Cuando una persona es transferida a su organización"
+    refresh_language: "Actualizar para mostrar cambios de idioma"
+    time_zone: "Zona horaria"
+    title: "Preferencias del usuario:"
+    weekly_digest: "Informe Semanal del Ministerio"
+  search:
+    assignments:
+      title: "Asignado a"
+    groups:
+      title: Grupos
+    labels:
+      title: Etiquetas
+  signatures:
+    clear: "Borrar filtros"
+  sporadically: Esporádicamente
+  transfer:
+    options:
+      copy_answers: "Copiar las respuestas de la encuesta con el contacto"
+      copy_contact: "Dejar una copia del contacto en la Organización"
+      copy_interactions: "Copiar interacciones con los Contactos"
+    organizations: organizaciones
+    subtitle: "Transferir %{contact_count} contactos a otra organización"
+    title: "Transferir Contactos"
+    transfer: "Transferir %{contact_count} Contactos"
+  weekly: Semanalmente
