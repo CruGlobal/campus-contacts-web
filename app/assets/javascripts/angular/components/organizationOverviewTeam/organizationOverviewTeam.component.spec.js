@@ -4,7 +4,7 @@
     describe('organizationOverviewTeam component', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
-        var $ctrl, $q, $rootScope, organizationOverviewTeamService, reportsService;
+        var $ctrl, $q, $rootScope, organizationOverviewTeamService, reportsService, periodService;
 
         beforeEach(inject(function ($componentController, _$q_, _$timeout_, _$rootScope_) {
             organizationOverviewTeamService = jasmine.createSpyObj('organizationOverviewTeamService', [
@@ -13,23 +13,43 @@
             reportsService = jasmine.createSpyObj('reportsService', [
                 'loadMultiplePeopleReports'
             ]);
+            periodService = jasmine.createSpyObj('periodService', [
+                'subscribe'
+            ]);
 
-            $ctrl = $componentController('organizationOverviewTeam',
-                                         {
-                                             organizationOverviewTeamService: organizationOverviewTeamService,
-                                             reportsService: reportsService
-                                         },
-                                         {
-                                             organizationOverview: {
-                                                 org: {
-                                                     id: 1
-                                                 }
-                                             }
-                                         }
+            $ctrl = $componentController(
+                'organizationOverviewTeam',
+                {
+                    organizationOverviewTeamService: organizationOverviewTeamService,
+                    reportsService: reportsService,
+                    periodService: periodService
+                },
+                {
+                    organizationOverview: {
+                        org: {
+                            id: 1
+                        }
+                    }
+                }
             );
             $q = _$q_;
             $rootScope = _$rootScope_;
         }));
+
+        describe('$onInit', function () {
+            it('should reload the team reports when the period changes', function () {
+                $ctrl.$onInit();
+
+                expect(periodService.subscribe).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(Function));
+                expect(reportsService.loadMultiplePeopleReports).not.toHaveBeenCalled();
+
+                $ctrl.team = 'fake team';
+
+                periodService.subscribe.calls.argsFor(0)[1]();
+
+                expect(reportsService.loadMultiplePeopleReports).toHaveBeenCalledWith([1], 'fake team');
+            });
+        });
 
         describe('loadTeamPage', function () {
             it('should load the people on the team', function () {
