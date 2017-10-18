@@ -159,7 +159,7 @@ en:
     labels:
       header: Labels
       columns:
-        name: Name
+        name: Label Name
   person_multiselect:
     search_placeholder: Search %{people_description}
     searching: Searching %{people_description}...

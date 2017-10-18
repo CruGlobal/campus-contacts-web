@@ -52,9 +52,6 @@
             $scope.$watch('$ctrl.org.surveys', function () {
                 vm.surveys = vm.org.surveys;
             });
-            $scope.$watch('$ctrl.org.labels', function () {
-                vm.labels = vm.org.labels;
-            });
 
             // Find all of the groups and surveys related to the org
             organizationOverviewService.loadOrgRelations(vm.org);

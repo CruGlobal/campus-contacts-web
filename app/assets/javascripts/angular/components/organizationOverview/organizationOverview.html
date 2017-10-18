@@ -19,7 +19,7 @@
         <div class="tabs">
             <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
                  ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
-                 ng-if="tabName !== 'surveys'">
+                 ng-if="tabName !== 'surveys' && tabName !== 'labels'">
                 <span>
                     {{'ministries.' + tabName + '.header' | t}}
                     <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
@@ -48,6 +48,9 @@
                         </li>
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>
+                        </li>
+                        <li ng-if="$ctrl.adminPrivileges">
+                            <a ui-state="'^.ministry.labels'" ui-state-params="{ orgId: $ctrl.org.id }" ui-sref-active="active">{{ 'people.index.manage_labels' | t }}</a>
                         </li>
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
