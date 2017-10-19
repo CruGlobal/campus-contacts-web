@@ -15,5 +15,19 @@
         <span am-time-ago="$ctrl.interaction.timestamp"></span>
     </div>
     <div class="title">{{$ctrl.interactionType.title | t}}</div>
-    <div class="comment" ng-if="$ctrl.interaction.comment">{{$ctrl.interaction.comment}}</div>
+    <div ng-switch="$ctrl.modifyInteractionState">
+        <div ng-switch-default class="comment" ng-if="$ctrl.interaction.comment">{{$ctrl.interaction.comment}}</div>
+        <textarea ng-switch-when="edit"
+                  ng-model="$ctrl.interaction.comment"
+                  ng-required="$ctrl.interaction.interaction_type_id === 1"
+                  focus="true">
+        </textarea>
+    </div>
+</div>
+<div class="column" ng-switch="$ctrl.modifyInteractionState">
+    <ng-md-icon ng-switch-when="view" icon="edit" size="16" ng-click="$ctrl.modifyInteractionState = 'edit'"></ng-md-icon>
+    <br ng-switch-when="view">
+    <ng-md-icon ng-switch-when="view" icon="delete" size="16" ng-click="$ctrl.deleteInteraction()"></ng-md-icon>
+    <ng-md-icon ng-switch-when="edit" icon="done" size="16" ng-click="$ctrl.updateInteraction()"></ng-md-icon>
+    <loading-spinner ng-switch-when="saving" class="loading" size="16"></loading-spinner>
 </div>
