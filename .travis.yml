@@ -32,4 +32,4 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 env:
-  - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 APP_DOMAIN=localhost.com
+  - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 APP_DOMAIN=localhost.com AWS_ACCESS_KEY_ID=fwaijfwoifjewioaefjiofwjeiowj AWS_SECRET_ACCESS_KEY=fejiwaofjewoifjewoifj
