@@ -10,6 +10,8 @@ class PeopleMailer < ActionMailer::Base
   #
 
   def notify_on_survey_answer(to, question_rule_id, keyword, answer_sheet_id, question_id)
+    sleep 10
+
     @keyword = keyword
     @answer_sheet = AnswerSheet.find_by(id: answer_sheet_id)
     # don't notify leader about a answer sheet that doesn't exist
