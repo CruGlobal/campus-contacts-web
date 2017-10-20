@@ -9,21 +9,11 @@
         .module('missionhubApp')
         .factory('myPeopleDashboardService', myPeopleDashboardService);
 
-    function myPeopleDashboardService (httpProxy, modelsService, periodService, _) {
+    function myPeopleDashboardService (httpProxy, modelsService, _) {
         var myPeopleDashboardService = {
             loadPeople: function (params) {
                 return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {}, {
                     errorMessage: 'error.messages.my_people_dashboard.load_people'
-                });
-            },
-
-            loadPeopleReports: function (model) {
-                return httpProxy.get(modelsService.getModelMetadata('person_report').url.all, {
-                    period: periodService.getPeriod(),
-                    organization_ids: model.organization_ids.join(','),
-                    people_ids: model.people_ids.join(',')
-                }, {
-                    errorMessage: 'error.messages.my_people_dashboard.load_reports'
                 });
             },
 

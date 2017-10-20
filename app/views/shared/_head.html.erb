@@ -1,6 +1,8 @@
 <title><%= @title || (mhub? ? 'Take a Survey' : ENV['SITE_TITLE']) %></title>
 <link rel="icon" type="image/png" href="<%= image_path("favicon.png") %>">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+<meta name="apple-itunes-app" content="app-id=447869440">
+<link rel="manifest" href="<%= asset_path("manifest.json") %>">
 <%= csrf_meta_tag %>
 
 <%= stylesheet_link_tag 'application' %>

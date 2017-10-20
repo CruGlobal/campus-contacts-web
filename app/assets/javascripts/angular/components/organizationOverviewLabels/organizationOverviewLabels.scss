@@ -1,0 +1,12 @@
+organization-overview-labels {
+  .header {
+    @extend ministry-view-label;
+
+    display: flex;
+    background-color: $pivot-darker-blue;
+
+    ng-md-icon svg {
+      fill: white;
+    }
+  }
+}

@@ -36,7 +36,7 @@
             this.personId = 2;
             this.organizationReport = { id: '1-1d' };
             this.personReport = { id: '1-2-1d' };
-            this.orgIds = [123, 456, 789];
+            this.orgs = [{ id: 123 }, { id: 456 }, { id: 789 }];
             this.report1 = { id: '123-1d' };
             this.report2 = { id: '456-1d' };
             this.report3 = { id: '789-1d' };
@@ -144,12 +144,37 @@
             }));
         });
 
+        describe('loadMultiplePeopleReports', function () {
+            it('should call GET loadMultiplePeopleReports URL and return the reports', async(function () {
+                this.httpResponse = {
+                    reportId: 123
+                };
+
+                reportsService.loadMultiplePeopleReports([{ id: 123 }], [{ id: 1 }, { id: 2 }]);
+
+                expect(httpProxy.callHttp).toHaveBeenCalledWith(
+                    'GET',
+                    jasmine.any(String),
+                    { organization_ids: '123', people_ids: '1,2', period: '1d' },
+                    null,
+                    jasmine.objectContaining({ errorMessage: jasmine.any(String) })
+                );
+
+                return reportsService.loadMultiplePeopleReports([{ id: 123 }], [{ id: 1 }, { id: 2 }])
+                    .then(function (loadedPeopleReports) {
+                        expect(loadedPeopleReports).toEqual({
+                            reportId: 123
+                        });
+                    });
+            }));
+        });
+
         describe('loadOrganizationReports', function () {
             it('should GET the organization reports URL', function () {
                 spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                     null, null, null
                 );
-                reportsService.loadOrganizationReports(this.orgIds);
+                reportsService.loadOrganizationReports(this.orgs);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,456,789',
                     period: this.period
@@ -160,7 +185,7 @@
                 spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                     null, this.report2, null
                 );
-                reportsService.loadOrganizationReports(this.orgIds);
+                reportsService.loadOrganizationReports(this.orgs);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith('GET', '/reports/organizations', {
                     organization_ids: '123,789',
                     period: this.period
@@ -171,7 +196,7 @@
                 spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                     this.report1, this.report2, this.report3
                 );
-                reportsService.loadOrganizationReports(this.orgIds);
+                reportsService.loadOrganizationReports(this.orgs);
                 expect(httpProxy.callHttp).not.toHaveBeenCalled();
             });
 
@@ -183,7 +208,7 @@
                        this.report1, this.report2, this.report3
                    );
 
-                   return reportsService.loadOrganizationReports(this.orgIds)
+                   return reportsService.loadOrganizationReports(this.orgs)
                        .then(function (loadedOrganizationReports) {
                            expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
                        });
@@ -197,7 +222,7 @@
                        this.report1, this.report2, this.report3
                    );
 
-                   return reportsService.loadOrganizationReports(this.orgIds)
+                   return reportsService.loadOrganizationReports(this.orgs)
                        .then(function (loadedOrganizationReports) {
                            expect(loadedOrganizationReports).toEqual([_this.report1, _this.report2, _this.report3]);
                        });

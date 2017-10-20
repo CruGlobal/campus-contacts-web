@@ -81,8 +81,21 @@
                     });
             },
 
+            // Load reports for specific people and organizations
+            loadMultiplePeopleReports: function (orgs, people) {
+                return httpProxy.get(modelsService.getModelMetadata('person_report').url.all, {
+                    period: periodService.getPeriod(),
+                    organization_ids: _.map(orgs, 'id').join(','),
+                    people_ids: _.map(people, 'id').join(',')
+                }, {
+                    errorMessage: 'error.messages.my_people_dashboard.load_reports'
+                });
+            },
+
             // Load organization reports for the given organizations
-            loadOrganizationReports: function (organizationIds) {
+            loadOrganizationReports: function (orgs) {
+                var organizationIds = _.map(orgs, 'id');
+
                 // Return an array of the organization reports for the requested organization ids. Any reports that are
                 // not yet loaded will be represented as a null value.
                 function lookupReports () {

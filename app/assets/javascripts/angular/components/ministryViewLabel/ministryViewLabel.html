@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="column name-column">
+        {{ $ctrl.label.name }}
+    </div>
+
+    <div class="column buttons-column" ng-if="$ctrl.label.organization_id !== '0' && $ctrl.adminPrivileges">
+        <ng-md-icon class="edit-action" icon="edit" size="16"
+                    ng-click="$ctrl.editLabel();"></ng-md-icon>
+        <ng-md-icon class="delete-action" icon="delete" size="16"
+                    ng-click="$ctrl.deleteLabel();"></ng-md-icon>
+    </div>
+</div>

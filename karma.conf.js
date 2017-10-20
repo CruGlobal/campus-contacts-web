@@ -52,7 +52,7 @@ module.exports = function (config) {
         ],
 
         preprocessors: {
-            './app/assets/javascripts/angular/**/*.js': ['coverage']
+            './app/assets/javascripts/angular/**/!(*.spec).js': ['coverage']
         },
 
         // test results reporter to use
