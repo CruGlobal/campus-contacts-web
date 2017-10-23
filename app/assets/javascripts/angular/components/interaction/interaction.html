@@ -26,8 +26,9 @@
 </div>
 <div class="column" ng-switch="$ctrl.modifyInteractionState">
     <ng-md-icon ng-switch-when="view" icon="edit" size="16" ng-click="$ctrl.modifyInteractionState = 'edit'"></ng-md-icon>
-    <br ng-switch-when="view">
-    <ng-md-icon ng-switch-when="view" icon="delete" size="16" ng-click="$ctrl.deleteInteraction()"></ng-md-icon>
+    <!--TODO: uncomment when API endpoint exists https://jira.cru.org/browse/MHP-943bund-->
+    <!--<br ng-switch-when="view">-->
+    <!--<ng-md-icon ng-switch-when="view" icon="delete" size="16" ng-click="$ctrl.deleteInteraction()"></ng-md-icon>-->
     <ng-md-icon ng-switch-when="edit" icon="done" size="16" ng-click="$ctrl.updateInteraction()"></ng-md-icon>
     <loading-spinner ng-switch-when="saving" class="loading" size="16"></loading-spinner>
 </div>
