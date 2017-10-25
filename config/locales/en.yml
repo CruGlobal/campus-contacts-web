@@ -2045,6 +2045,7 @@ en:
       person:
         archive_person: Error occurred while archiving the person
         get_contact_assignments: Error occurred while loading load the people this person is assigned to
+        search: Error loading search results
       person_page:
         create_person: Error occurred while creating the person
         delete_avatar: Error occurred while removing the profile picture

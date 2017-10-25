@@ -1,0 +1,50 @@
+<div id="menu_search">
+    <input type="text"
+           class="search-autocomplete-field"
+           ng-class="{ 'ui-autocomplete-loading': loadingSearchResults }"
+           placeholder="{{ 'people.search.search_placeholder' | t }}"
+           autocomplete="off"
+           ng-model="$ctrl.searchQuery"
+           uib-typeahead="person for person in $ctrl.searchPeople($viewValue)"
+           typeahead-popup-template-url="customTypeaheadPopup.html"
+           typeahead-template-url="customTypeaheadMatch.html"
+           typeahead-loading="loadingSearchResults"
+           typeahead-wait-ms="100">
+
+    <script type="text/ng-template" id="customTypeaheadPopup.html">
+        <ul class="dropdown-menu w-18-rem pa0 mxhi-20-rem overflow-auto"
+            ng-show="isOpen() && !moveInProgress"
+            ng-style="{top: position().top+'px', left: position().left+'px'}"
+            role="listbox"
+            ng-click="$event.stopPropagation()"
+            aria-hidden="{{!isOpen()}}">
+            <li class="uib-typeahead-match pt1 hover-bg-pivot-muted-blue"
+                ng-repeat="match in matches track by $index">
+                <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+            </li>
+        </ul>
+    </script>
+    <script type="text/ng-template" id="customTypeaheadMatch.html">
+        <div class="pa1 truncate">
+            <span class="pivot-dark-blue" ng-bind-html="match.model.first_name | uibTypeaheadHighlight:query"></span>
+            <span class="pivot-dark-blue" ng-if="match.model.last_name" ng-bind-html="match.model.last_name | uibTypeaheadHighlight:query"></span>
+            <span ng-if="match.model.primary_email_address" class="f7"> - </span>
+            <span ng-if="match.model.primary_email_address" class="f7" ng-bind-html="match.model.primary_email_address| uibTypeaheadHighlight:query"></span>
+        </div>
+        <ul class="list pl0">
+            <li ng-repeat="orgPermission in match.model.organizational_permissions">
+                <a href
+                   class="db ph2 pv1 f6 hover-white hover-bg-pivot-dark-blue"
+                   ui-sref="app.people.person.defaultTab({
+                        personId: match.model.id,
+                        orgId: orgPermission.organization.id
+                      })"
+                   role="option"
+                   tabindex="-1">
+                    {{orgPermission.organization.name || orgPermission.organization.id}}
+                </a>
+            </li>
+        </ul>
+        <hr ng-if="!$last" class="mv0 mt1">
+    </script>
+</div>

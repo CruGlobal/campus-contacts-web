@@ -33,6 +33,38 @@ $pivot-orange: #FF5532;
 $pivot-gradient-light: #00ABC9;
 $pivot-gradient-dark: $pivot-dark-blue;
 
+$pivot-colors: (
+        dark-blue: $pivot-dark-blue,
+        darker-blue: $pivot-darker-blue,
+        bright-blue: $pivot-bright-blue,
+        muted-blue: $pivot-muted-blue,
+        muted-dark-blue: $pivot-muted-dark-blue,
+        teal: $pivot-teal,
+        orange: $pivot-orange
+);
+
+@each $name, $value in $pivot-colors {
+  .pivot-#{$name} {
+    color: $value;
+  }
+  .bg-pivot-#{$name} {
+    background-color: $value;
+  }
+  .b--pivot-#{$name} {
+    border-color: $value;
+  }
+  .hover-pivot-#{$name}{
+    &:hover, &:focus {
+      color: $value;
+    }
+  }
+  .hover-bg-pivot-#{$name}{
+    &:hover, &:focus {
+      background-color: $value;
+    }
+  }
+}
+
 
 
 /// Convert angle

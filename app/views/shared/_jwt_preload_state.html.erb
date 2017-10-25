@@ -1,3 +1,5 @@
 <preload-state name="v4AccessToken"
                data="<%= JWTGenerator.new(current_user).generate %>"></preload-state>
-<preload-state name="legacy_current_organization" data="<%= current_organization.try(:id) %>" />
+<preload-state name="legacyCurrentOrganization" data="<%= current_organization.try(:id) %>"></preload-state>
+<preload-state name="branded" data="<%= branded? %>"></preload-state>
+<preload-state name="hasMissionhubAccess" data="<%= current_organization &&  can?(:manage_contacts, current_organization) %>"></preload-state>

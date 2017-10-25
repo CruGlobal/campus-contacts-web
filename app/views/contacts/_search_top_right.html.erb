@@ -3,7 +3,7 @@
   <% if params[:include_archived].present? %>
     <%= hidden_field_tag :include_archived, true %>
   <% end %>
-  <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder'), autocomplete: 'off', id: 'search_autocomplete_field' %>
+  <%= text_field_tag :query, params[:query], placeholder: t('people.search.search_placeholder'), autocomplete: 'off', id: 'search_autocomplete_field', class: 'search-autocomplete-field' %>
 <% end %>
 <div id="advanced_search_actions">
   <div id="advanced_search_right_container">

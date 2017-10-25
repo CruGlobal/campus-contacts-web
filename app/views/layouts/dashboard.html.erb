@@ -14,9 +14,11 @@
     <%= render 'shared/jwt_preload_state' %>
       <div id="outer" ng-controller="DashboardController as $ctrl" ng-cloak>
         <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
-        <div id="menutop" class="topmenu topmenu-with-sub">
+        <nav ng-if="!$root.legacyNavigation"></nav>
+        <div id="menutop" class="topmenu topmenu-with-sub" ng-if="$root.legacyNavigation">
           <%= render 'shared/menu' %>
         </div>
+
         <% if current_organization %>
           <div class="dashboard-subnav" ng-if="'app.people' | isState">
             <div class="inner">
