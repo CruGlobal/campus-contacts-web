@@ -38,7 +38,11 @@
             $scope.$watchGroup([
                 '$ctrl.filter', '$ctrl.personTab.person.interactions', '$ctrl.personTab.person.answer_sheets'
             ], function () {
-                vm.historyFeed = personHistoryService.buildHistoryFeed(vm.personTab.person, vm.filter);
+                vm.historyFeed = personHistoryService.buildHistoryFeed(
+                    vm.personTab.person,
+                    vm.filter,
+                    vm.personTab.organizationId
+                );
             });
 
             vm.organizationId = vm.personTab.organizationId;

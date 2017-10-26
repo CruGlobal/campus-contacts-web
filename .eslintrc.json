@@ -99,7 +99,8 @@
       },
       "CallExpression": {
         "arguments": "first"
-      }
+      },
+      "SwitchCase": 1
     }],
     "key-spacing": "error",
     "keyword-spacing": "error",
