@@ -28,7 +28,7 @@ docker build \
     --build-arg SUMMER_PROJECT_URL=$SUMMER_PROJECT_URL \
     --build-arg TWILIO_ID=$TWILIO_ID \
     --build-arg TWILIO_TOKEN=$TWILIO_TOKEN \
-    -t 056154071827.dkr.ecr.us-east-1.amazonaws.com/$PROJECT_NAME:$GIT_COMMIT-$BUILD_NUMBER .
+    -t 056154071827.dkr.ecr.us-east-1.amazonaws.com/$PROJECT_NAME:$ENVIRONMENT-$BUILD_NUMBER .
 rc=$?
 
 if [ $rc -ne 0 ]; then
