@@ -1,7 +1,7 @@
 <div class="column icon-column flush-column">
     <ng-md-icon class="icon-chip" icon="{{$ctrl.interactionType.icon}}" size="20"></ng-md-icon>
 </div>
-<div class="column normal-column">
+<div class="column flex-auto">
     <div class="subtitle">
         <span ng-repeat="initiator in $ctrl.interaction.initiators">
             <span ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, personId: initiator.id })">{{
