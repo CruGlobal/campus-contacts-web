@@ -29,7 +29,7 @@
             <span class="pivot-dark-blue" ng-bind-html="match.model.first_name | uibTypeaheadHighlight:query"></span>
             <span class="pivot-dark-blue" ng-if="match.model.last_name" ng-bind-html="match.model.last_name | uibTypeaheadHighlight:query"></span>
             <span ng-if="match.model.primary_email_address" class="f7"> - </span>
-            <span ng-if="match.model.primary_email_address" class="f7" ng-bind-html="match.model.primary_email_address| uibTypeaheadHighlight:query"></span>
+            <span ng-if="match.model.primary_email_address" class="f7" title="{{ match.model.primary_email_address }}" ng-bind-html="match.model.primary_email_address| uibTypeaheadHighlight:query"></span>
         </div>
         <ul class="list pl0">
             <li ng-repeat="orgPermission in match.model.organizational_permissions">
@@ -41,7 +41,7 @@
                       })"
                    role="option"
                    tabindex="-1">
-                    {{orgPermission.organization.name || orgPermission.organization.id}}
+                    {{ 'nav.search.in' | t}} {{orgPermission.organization.name || orgPermission.organization.id}}
                 </a>
             </li>
         </ul>

@@ -1176,6 +1176,8 @@ en:
     report_movement_indicators: Report Movement Indicators
     request_access: Request Access
     roles: Labels
+    search:
+      in: in
     settings: Settings
     snapshot: Snapshot View
     support: Support
