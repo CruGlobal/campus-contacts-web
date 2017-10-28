@@ -19,10 +19,16 @@
                 bulkTransfer.setAttribute('copy_answer_sheets', options.copyAnswers);
                 bulkTransfer.setAttribute('copy_interactions', options.copyInteractions);
 
-                return httpProxy.post('/bulk_transfers', {
-                    data: bulkTransfer.serialize().data,
-                    filters: filters
-                });
+                return httpProxy.post(
+                    '/bulk_transfers',
+                    {
+                        data: bulkTransfer.serialize().data,
+                        filters: filters
+                    },
+                    {
+                        errorMessage: 'error.messages.bulk_transfer_modal.transfer_contacts'
+                    }
+                );
             }
         };
     }

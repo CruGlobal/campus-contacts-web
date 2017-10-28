@@ -1984,6 +1984,10 @@ en:
     messages:
       assigned_select:
         search_people: Error occurred while loading the assignment choices
+      bulk_message_modal:
+        send_message: Error occurred while trying to send message
+      bulk_transfer_modal:
+        transfer_contacts: Error occurred while trying to transfer contacts
       edit_group_or_label_assignments:
         load_groups: Error occurred while loading the user's groups
         load_labels: Error occurred while loading the user's labels
