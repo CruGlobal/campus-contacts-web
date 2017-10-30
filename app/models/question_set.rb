@@ -74,10 +74,10 @@ class QuestionSet
                     message_params = [recipients, question_rule.id, answer_value, @answer_sheet.id, question.id]
                     if question.predefined?
                       if notify_on_predefined_questions
-                        PeopleMailer.notify_on_survey_answer(*message_params).deliver_later
+                        PeopleMailer.notify_on_survey_answer(*message_params).deliver_later(wait: 5.minutes)
                       end
                     elsif answer.present?
-                      PeopleMailer.notify_on_survey_answer(*message_params).deliver_later
+                      PeopleMailer.notify_on_survey_answer(*message_params).deliver_later(wait: 5.minutes)
                       answer.update_attributes(auto_notify_sent: true)
                     end
                   end
