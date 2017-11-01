@@ -98,7 +98,8 @@
             <input type="text" class="form-control" name="first_name" required
                    ng-class="{ invalid: $ctrl.form.first_name.$invalid }"
                    ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')">
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')"
+                   ng-disabled="$ctrl.disableNameFields">
         </label>
     </div>
     <div class="form-group">
@@ -106,7 +107,8 @@
             <span class="label">{{'contact.last_name' | t}}</span>
             <input type="text" class="form-control"
                    ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')">
+                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')"
+                   ng-disabled="$ctrl.disableNameFields">
         </label>
     </div>
     <div class="form-group form-group--radio">

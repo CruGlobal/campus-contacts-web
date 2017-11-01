@@ -52,6 +52,9 @@
         vm.enrollmentOptions = personService.getEnrollmentOptions();
 
         function activate () {
+            // Disable editing other users name fields
+            vm.disableNameFields = vm.personTab.person.user && loggedInPerson.person !== vm.personTab.person;
+
             // The personPage needs access to the profile form to determine validity. Because component "require" only
             // works upwards (from descendent to ancestor), we have to have the profile component send its profile form
             // to the person component.
