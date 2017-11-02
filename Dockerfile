@@ -1,6 +1,21 @@
 FROM 056154071827.dkr.ecr.us-east-1.amazonaws.com/base-image-ruby-version-arg:2.3
 MAINTAINER cru.org <wmd@cru.org>
 
+# Update node and install yarn
+ENV NODE_VERSION node_8.x
+ENV NODE_DISTRO jessie
+RUN apt-get update \
+  && apt-get install -y -q apt-transport-https \
+  && curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+  && echo "deb https://deb.nodesource.com/$NODE_VERSION $NODE_DISTRO main" | tee /etc/apt/sources.list.d/nodesource.list \
+  && echo "deb-src https://deb.nodesource.com/$NODE_VERSION $NODE_DISTRO main" | tee -a /etc/apt/sources.list.d/nodesource.list \
+  && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+  && apt-get update \
+  && apt-get install -y -q nodejs yarn \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 ARG SIDEKIQ_CREDS
 ARG RAILS_ENV=production
 
@@ -38,7 +53,7 @@ ARG TWILIO_ID
 ARG TWILIO_TOKEN
 ARG DISABLE_ROLLBAR=true
 
-RUN npm install --production
+RUN yarn install --prod
 RUN bundle exec rake assets:clobber assets:precompile RAILS_ENV=production
 
 ## Run this last to make sure permissions are all correct

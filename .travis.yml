@@ -1,6 +1,7 @@
 sudo: false
 cache:
   bundler: true
+  yarn: true
   directories:
     - node_modules
     - cache
@@ -17,13 +18,13 @@ services:
 before_install:
   - bundle config gems.contribsys.com $SIDEKIQ_CREDS
   - nvm install node
-  - npm install
+  - yarn
 
 before_script:
   - bundle exec rake db:create db:structure:load RAILS_ENV=test
 
 script:
-  - npm test
+  - yarn test
   - bundle exec rake test
   - bundle exec rake spec
   - bundle exec rubocop -R
