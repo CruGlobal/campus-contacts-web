@@ -16,8 +16,8 @@
             }
         });
 
-    function personHistoryController ($scope, $element, $interval, $q, $timeout, asyncBindingsService,
-                                      interactionsService, personHistoryService) {
+    function personHistoryController ($scope, $element, $interval, $q, asyncBindingsService,
+                                      interactionsService, personHistoryService, _) {
         var vm = this;
         vm.filters = ['all', 'interactions', 'notes', 'surveys'];
         vm.filter = vm.filters[0];
@@ -30,11 +30,8 @@
         vm.clearInteraction = clearInteraction;
         vm.openInteractionTypeSheet = openInteractionTypeSheet;
         vm.closeInteractionTypeSheet = closeInteractionTypeSheet;
+        vm.removeInteraction = removeInteraction;
         vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['history']);
-        vm.$postLink = postLink;
-
-        // The DOM element holding the scrolling content
-        var scrollContainer = null;
 
         function activate () {
             vm.interactionTypes = interactionsService.getInteractionTypes();
@@ -45,12 +42,6 @@
             });
 
             vm.organizationId = vm.personTab.organizationId;
-        }
-
-        function postLink () {
-            $timeout(function () {
-                scrollContainer = $element.find('.scrollable-area')[0];
-            });
         }
 
         function createInteraction (interactionType) {
@@ -91,8 +82,14 @@
             vm.interactionTypesVisible = false;
         }
 
+        // Remove server deleted interaction locally
+        function removeInteraction ($event) {
+            _.pull(vm.historyFeed, $event.interaction);
+        }
+
         // Scroll to the bottom of the history list
         function scrollToBottom () {
+            var scrollContainer = $element.find('.scrollable-area')[0];
             scrollContainer.scrollTop = scrollContainer.scrollHeight;
         }
 

@@ -9,8 +9,11 @@
     <div class="scrollable-area" scroll-glue>
         <div class="history-items">
             <div class="history-item" ng-repeat="historyItem in $ctrl.historyFeed" ng-switch="historyItem._type">
-                <interaction ng-switch-when="interaction" class="row"
-                             person="$ctrl.personTab.person" interaction="historyItem">
+                <interaction ng-switch-when="interaction"
+                             class="row"
+                             person="$ctrl.personTab.person"
+                             interaction="historyItem"
+                             on-delete="$ctrl.removeInteraction($event)">
                 </interaction>
                 <answer-sheet ng-switch-when="answer_sheet" class="row"
                               answer-sheet="historyItem" organization-id="$ctrl.organizationId">

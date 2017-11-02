@@ -128,6 +128,27 @@
 
                         return interaction;
                     });
+            },
+
+            updateInteraction: function (interaction) {
+                return httpProxy.put(
+                    modelsService.getModelMetadata('interaction').url.single(interaction.id),
+                    interaction.serialize(),
+                    {
+                        errorMessage: 'error.messages.interactions.update_interaction'
+                    }
+                )
+                    .then(httpProxy.extractModel);
+            },
+
+            deleteInteraction: function (interaction) {
+                return httpProxy.delete(
+                    modelsService.getModelMetadata('interaction').url.single(interaction.id),
+                    interaction.serialize(),
+                    {
+                        errorMessage: 'error.messages.interactions.delete_interaction'
+                    }
+                );
             }
         };
     }

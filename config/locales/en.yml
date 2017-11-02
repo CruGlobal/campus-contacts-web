@@ -977,6 +977,7 @@ en:
     comment_field_title: Comment
     edit_survey_results: Edit Survey Results
     edit_this_survey: Edit this survey
+    delete_confirmation: Are you sure you want to delete this interaction?
     profile_info:
       confirm_remove_facebook: Do you want to remove this Facebook URL from this profile?
       email_contact_info: Email Me This Contact Info
@@ -1999,6 +2000,8 @@ en:
         default_network_error: An unknown network error occured
       interactions:
         create_interaction: Error occurred while creating the interaction
+        update_interaction: Error occurred while updating the interaction
+        delete_interaction: Error occurred while deleting the interaction
       labels:
         create_label: Error occurred while creating the label
         delete_label: Error occurred while deleting the label

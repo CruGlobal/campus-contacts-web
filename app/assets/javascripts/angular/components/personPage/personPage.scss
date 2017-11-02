@@ -14,8 +14,6 @@ person-page {
 
   $col-spacing: 10px;
 
-  $compensated-right-padding: $inner-padding + $col-spacing + $left-col-width;
-
   header {
     &.row {
       align-items: flex-start;
@@ -119,6 +117,6 @@ person-page {
   .person-tab-content {
     flex: 1;
     overflow-x: hidden;
-    padding: 10px $compensated-right-padding 0 $inner-padding;
+    padding: 10px $inner-padding 0 $inner-padding;
   }
 }
