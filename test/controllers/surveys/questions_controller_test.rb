@@ -137,25 +137,6 @@ class Surveys::QuestionsControllerTest < ActionController::TestCase
       end
     end
 
-    should 'create from existing archived question' do
-      assert_no_difference 'Question.count' do
-        assert_no_difference "Survey.find(#{@survey.id}).survey_elements.count", 1 do
-          xhr :post, :create, { question_id: @question_3.id, survey_id: @survey.id }
-          assert_response :success
-        end
-      end
-    end
-
-    should 'create question with trigger words' do
-      rule = FactoryGirl.create(:rule, rule_code: 'AUTONOTIFY')
-      rule = FactoryGirl.create(:rule, rule_code: 'AUTOASSIGN')
-      FactoryGirl.create(:question_rule, rule: rule, survey_element: @survey.survey_elements.where(element_id: @question_3.id).first)
-      assert_difference 'Question.count', 1 do
-        xhr :post, :create, { question_type: 'ChoiceField:radio', question: { label: '', slug: '', content: "Verge\r\nBarge\r\nTarge", notify_via: 'SMS', web_only: '0', hidden: '0' }, leaders: [@user_2.person.id], trigger_words: 'Yes', assign_contact_to: 'Leader', autoassign_keyword: "#{@user_2.person.name} (#{@user_2.person.email})", autoassign_selected_id: "#{@user_2.person.id}", assignment_trigger_words: 'trigger, happy', survey_id: @survey.id }
-        assert_response :success
-      end
-    end
-
     should 'should not create question with trigger words if chosen leader has an invalid email' do
       FactoryGirl.create(:rule, rule_code: 'AUTONOTIFY')
       @user_2.person.email_addresses.collect(&:destroy)
