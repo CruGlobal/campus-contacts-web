@@ -5,7 +5,7 @@
   "extends": ["eslint:recommended", "angular"],
   "overrides": [
     {
-      "files": [ "app/assets/javascripts/angular/**/*.spec.js", "app/assets/javascripts/test/**/*.spec.js"],
+      "files": [ "app/assets/javascripts/angular/**/*.spec.js"],
       "env": {
         "jasmine": true
       },

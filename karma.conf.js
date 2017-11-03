@@ -38,7 +38,7 @@ module.exports = function (config) {
             './node_modules/lodash/lodash.js',
             './node_modules/stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.js',
             './node_modules/rollbar/dist/rollbar.umd.min.js',
-            './app/assets/javascripts/test/patch/fix-lscache.js',
+            './app/assets/javascripts/angular/karma-fix-lscache.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './app/assets/javascripts/angular/missionhubApp.module.js',
             './app/assets/javascripts/angular/missionhubApp.config.js',
