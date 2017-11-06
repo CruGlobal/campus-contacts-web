@@ -11,7 +11,9 @@
                 return httpProxy.get(
                     modelsService.getModelMetadata('person').url.search,
                     {
-                        q: searchQuery
+                        q: searchQuery,
+                        include: 'organizational_permissions.organization',
+                        'fields[organization]': 'name'
                     },
                     {
                         errorMessage: 'error.messages.person.search'

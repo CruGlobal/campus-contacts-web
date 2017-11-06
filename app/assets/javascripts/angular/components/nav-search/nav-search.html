@@ -9,7 +9,7 @@
            typeahead-popup-template-url="customTypeaheadPopup.html"
            typeahead-template-url="customTypeaheadMatch.html"
            typeahead-loading="loadingSearchResults"
-           typeahead-wait-ms="100">
+           typeahead-wait-ms="250">
 
     <script type="text/ng-template" id="customTypeaheadPopup.html">
         <ul class="dropdown-menu w-18-rem pa0 mxhi-20-rem overflow-auto"
@@ -41,7 +41,7 @@
                       })"
                    role="option"
                    tabindex="-1">
-                    {{ 'nav.search.in' | t}} {{orgPermission.organization.name || orgPermission.organization.id}}
+                    {{ 'nav.search.in' | t}} {{orgPermission.organization.name}}
                 </a>
             </li>
         </ul>

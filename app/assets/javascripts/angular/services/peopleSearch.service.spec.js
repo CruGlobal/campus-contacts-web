@@ -20,7 +20,7 @@
         };
     }
 
-    describe('labelsService', function () {
+    describe('peopleSearchService', function () {
         beforeEach(angular.mock.module('missionhubApp'));
 
         beforeEach(inject(function (_peopleSearchService_, _$q_, _$rootScope_, _httpProxy_) {
@@ -48,7 +48,11 @@
                     .then(function (results) {
                         expect(httpProxy.get).toHaveBeenCalledWith(
                             '/search',
-                            { q: 'query' },
+                            {
+                                q: 'query',
+                                include: 'organizational_permissions.organization',
+                                'fields[organization]': 'name'
+                            },
                             { errorMessage: jasmine.any(String) }
                         );
                         expect(results).toEqual('results');
