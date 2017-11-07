@@ -136,6 +136,10 @@ describe('groupsService', function () {
         it('should return all the members of a group', function () {
             expect(_.map(groupsService.getAllMembers(this.group), 'id')).toEqual([21, 22, 23]);
         });
+        it('should ignore unloaded group_memberships', function () {
+            this.group.group_memberships[0]._placeHolder = true;
+            expect(_.map(groupsService.getAllMembers(this.group), 'id')).toEqual([22, 23]);
+        });
     });
 
     describe('getMembersWithRole', function () {
