@@ -844,7 +844,7 @@ es:
     added:
       body_html: |-
         <p>Hi %{name},</p>
-        <p>Te acabo de agregar como lider de%{org} en MissionHub</p>
+        <p>Te acabo de agregar como lider de%{org_name} en MissionHub</p>
         <p>Visita %{link} para iniciar sesión. Por favor no compartas este enlace con nadie.</p>
         <p>%{added_by}</p>
   leaders:

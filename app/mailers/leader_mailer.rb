@@ -9,13 +9,15 @@ class LeaderMailer < ActionMailer::Base
   #
   #   en.leader_mailer.added.subject
   #
-  def added(person_id, added_by_id, token)
+  def added(person_id, added_by_id, organization_id, token)
     @person = Person.find(person_id)
     @added_by = Person.find_by(id: added_by_id) || 'Someone'
+    @organization = Organization.find(organization_id)
+    @organization_name = @organization.name
 
     if @person.user.present? && @person.email.present?
       @link = leader_link_url(token, @person.user.id)
-      mail to: @person.email_addresses.pluck(:email), subject: "#{@added_by} has invited you to MissionHub"
+      mail to: @person.email_addresses.pluck(:email), subject: "#{@added_by} has invited you to #{@organization_name} on MissionHub"
     end
   end
 

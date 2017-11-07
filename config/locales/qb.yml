@@ -852,7 +852,7 @@ qb:
     added:
       body_html: |-
         <p>Bonjour %{name},</p>
-        <p>Je viens de vous ajouter comme %{permission_name} pour %{org} dans MissionHub.</p>
+        <p>Je viens de vous ajouter comme %{permission_name} pour %{org_name} dans MissionHub.</p>
         <p>Visitez le %{link} pour ouvrir une session. S'il vous plaît ne partagez pas ce lien avec personne.</p>
         <p>%{added_by}</p>
     resend:

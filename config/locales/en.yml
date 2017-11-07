@@ -1044,7 +1044,7 @@ en:
       greeting: Hello %{name}!
       header: Welcome to MissionHub, let's get this party started.
       body_html: |-
-        <p>You've been invited by %{added_by}. If you haven't already, connect with them to hear
+        <p>You've been invited by %{added_by} to %{org_name} on MissionHub. If you haven't already, connect with them to hear
           more about how your team is using MissionHub.</p>
         <p>We help you stay connected to the people within your ministry by efficiently keeping
           track of the important details that help you serve them well.</p>

@@ -2,7 +2,7 @@
   <%= email_image_tag('email/invite.png', height: 80) %>
   <h3 style="font-size: 16px"><%= t('.greeting', name: @person.first_name) %></h3>
   <h1 style="font-size: 24px"><%= t('.header') %></h1>
-  <%= t('.body_html', added_by: @added_by || 'Unknown') %>
+  <%= t('.body_html', added_by: @added_by || 'Unknown', org_name: @organization_name || 'Unknown') %>
   <%= fancy_email_button(t('.invite_button_text'), @link) %>
   <p style="font-size: 13px;">
     <%= t('.paste_link') %>

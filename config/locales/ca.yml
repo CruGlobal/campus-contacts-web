@@ -861,7 +861,7 @@ ca:
     added:
       body_html: |-
         <p>Hi %{name},</p>
-        <p>I've just added you as a User for %{org} on MissionHub</p>
+        <p>I've just added you as a User for %{org_name} on MissionHub</p>
         <p>Visit %{link} to log in. Please don't share this link with anyone else.</p>
         <p>%{added_by}</p>
     resend:
