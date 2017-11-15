@@ -1,6 +1,0 @@
-<tr id="pre_<%= dom_id(question) %>">
-  <td><%= question.label_for_survey(@survey) %></td>
-  <td class="controls" align="right">
-    <%= link_to('use', survey_questions_path(question_id: question),  method: :post, remote: true, class: 'use_question icon add') %>
-  </td>
-</tr>

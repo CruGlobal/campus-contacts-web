@@ -1,2 +1,0 @@
-class NotAllowedToUseCASError < StandardError
-end

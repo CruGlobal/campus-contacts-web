@@ -1,7 +1,0 @@
-<% name = defined?(survey) ? "answers[#{survey.id}][#{text_field.id}]" : "answers[#{text_field.id}]" %>
-<% person ||= nil %>
-<% value = @checked_or_val.present? ? @checked_or_val : text_field.response(answer_sheet, person) %>
-<%= text_field_tag name, value,
-      :id => dom_id(text_field),
-      :maxlength => text_field.max_length.to_i > 0 ? text_field.max_length : 255 %>
-

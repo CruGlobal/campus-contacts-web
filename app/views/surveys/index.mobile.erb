@@ -1,7 +1,0 @@
-<% provide :title, t('.title', org: @organization) %>
-
-<div data-role="controlgroup">
-  <% @surveys.each do |survey| %>
-    <%= link_to(survey, start_survey_url(survey.id, host: ENV.fetch('PUBLIC_HOST'), port: ENV.fetch('PUBLIC_PORT')), {"data-role" => "button", "data-icon" => "arrow-r", "data-iconpos" => "right"}) %>
-  <% end %>
-</div>

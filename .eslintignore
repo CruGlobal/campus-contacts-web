@@ -1,9 +1,0 @@
-# Only lint karma.conf.js, Angular.js scripts, and test scripts
-
-# Ignore everything
-**/*.js
-
-# Unignore these files and directories
-!karma.conf.js
-!app/assets/javascripts/angular/**
-!app/assets/javascripts/test/**

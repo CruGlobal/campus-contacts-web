@@ -1,5 +1,0 @@
-<% if @predefined.questions.include?(@question) %>
-  $('#predefined_questions').append('<%= j(render('predefined_question', question: @question)) %>')
-<% else %>
-  $('#archived_questions').append('<%= j(render('predefined_question', question: @question)) %>')
-<% end %>

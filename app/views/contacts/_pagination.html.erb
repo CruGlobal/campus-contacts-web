@@ -1,8 +1,0 @@
-<div class="pagination_area">
-  <div class="pagination_links">
-    <%= paginate(@people, remote: true, params: {controller: 'contacts', action: 'filter', paginate: true}) %>
-  </div>
-  <div class="pagination_info">
-    <%= page_entries_info(@people).gsub("information","").squeeze(" ").html_safe %>
-  </div>
-</div>

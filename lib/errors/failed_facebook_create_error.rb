@@ -1,2 +1,0 @@
-class FailedFacebookCreateError < StandardError
-end

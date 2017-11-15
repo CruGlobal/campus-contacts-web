@@ -1,7 +1,0 @@
-<li>
-  <% label = hidden_question.label.try(:titleize) %>
-  <% slug = hidden_question.slug.try(:titleize) %>
-  <% question = slug.present? ? "#{label} [Column: #{slug}]" : label %>
-  <%= check_box_tag :hidden_question, hidden_question.id, false, class: "hidden_question_checkbox" %>
-  <%= question %>
-</li>

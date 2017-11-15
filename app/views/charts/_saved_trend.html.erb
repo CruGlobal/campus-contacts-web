@@ -1,8 +1,0 @@
-<%- current_trend_id = 0 unless current_trend_id.present? %>
-<%- active = false unless active.present? %>
-<div class="saved_visual_tool_line <%= 'active' if active || current_trend_id.to_i == saved_visual_tool.id %>" id="trend_<%= saved_visual_tool.id %>">
-  <span><%= link_to saved_visual_tool.name, trend_charts_path(id: saved_visual_tool.id) %></span>
-  <div class="saved_visual_tool_delete">
-    <%= link_to 'x', delete_trend_charts_path(id: saved_visual_tool.id), remote: true, method: 'post', confirm: "Delete saved Trend Tracker?" %>
-  </div>
-</div>

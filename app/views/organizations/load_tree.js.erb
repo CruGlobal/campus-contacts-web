@@ -1,5 +1,0 @@
-<%- if @child_tree.present? %>
-  $("ul.sf-menu .under_tree .children_org_<%= @organization.id %>").html("<%= escape_javascript(render partial: 'organizations/child_tree', locals: {child_tree: @child_tree}) %>").addClass("loaded")
-<%- else %>
-  $("ul.sf-menu .under_tree").html("<%= escape_javascript(render partial: 'organizations/tree') %>")
-<%- end %>

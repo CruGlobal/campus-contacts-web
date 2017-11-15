@@ -1,6 +1,0 @@
-@import "header";
-@import "footer";
-
-.container {
-  @include container($total-columns, $tablet, $desktop, $widescreen);
-}

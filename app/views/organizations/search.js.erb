@@ -1,6 +1,0 @@
-$('.orgs_list').html('<%= j(render('search', organizations: @organizations)) %>')
-
-<% if @total && @total > @organizations.length %>
-  $("#transfer_show_guide").show()
-  $("#transfer_show_guide").html("<%= t('application.assign_search.copy_show_orgs_guide', number_of_orgs: @organizations.length, total_orgs: @total) %>")
-<% end %>

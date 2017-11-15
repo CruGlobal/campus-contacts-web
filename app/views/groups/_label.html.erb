@@ -1,4 +1,0 @@
-<li class="entry label <%= 'selected_entry' if params[:label].to_i == label.id %>" data-id="<%= label.id %>">
-  <%= link_to label, groups_path(label: label) %>
-  <%= link_to(image_tag('delete.png', title: 'Remove Group Label', class: 'tip'), group_label_path(label), method: :delete, remote: true, class: 'delete_icon delete_label', data: { confirm: t('.delete_confirm', label: label) }) %>
-</li>

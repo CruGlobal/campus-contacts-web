@@ -1,2 +1,0 @@
-class RejoicablesController < ApplicationController
-end

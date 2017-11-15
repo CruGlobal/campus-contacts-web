@@ -1,6 +1,0 @@
-$('.commentswall').show();
-$('#followup_comment_comment').val('');
-$('#rejoicable_fields input').prop('checked', false)
-$('#comment_submit').show();
-$('#spinner_comment').hide();
-$('#previous_comments').prepend('<%= j(render("followup_comment", followup_comment: @followup_comment)) %>');
