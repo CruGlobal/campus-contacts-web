@@ -1,32 +1,24 @@
-/**
- * Created by eijeh on 9/2/16.
- */
+angular
+    .module('missionhubApp')
+    .factory('myPeopleDashboardService', myPeopleDashboardService);
 
-(function () {
-    'use strict';
+function myPeopleDashboardService (httpProxy, modelsService, _) {
+    var myPeopleDashboardService = {
+        loadPeople: function (params) {
+            return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {}, {
+                errorMessage: 'error.messages.my_people_dashboard.load_people'
+            });
+        },
 
-    angular
-        .module('missionhubApp')
-        .factory('myPeopleDashboardService', myPeopleDashboardService);
+        loadOrganizations: function (params) {
+            return httpProxy.get(modelsService.getModelMetadata('organization').url.all, _.extend({
+                order: 'active_people_count',
+                include: ''
+            }, params), {
+                errorMessage: 'error.messages.my_people_dashboard.load_orgs'
+            }).then(httpProxy.extractModels);
+        }
+    };
 
-    function myPeopleDashboardService (httpProxy, modelsService, _) {
-        var myPeopleDashboardService = {
-            loadPeople: function (params) {
-                return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {}, {
-                    errorMessage: 'error.messages.my_people_dashboard.load_people'
-                });
-            },
-
-            loadOrganizations: function (params) {
-                return httpProxy.get(modelsService.getModelMetadata('organization').url.all, _.extend({
-                    order: 'active_people_count',
-                    include: ''
-                }, params), {
-                    errorMessage: 'error.messages.my_people_dashboard.load_orgs'
-                }).then(httpProxy.extractModels);
-            }
-        };
-
-        return myPeopleDashboardService;
-    }
-})();
+    return myPeopleDashboardService;
+}

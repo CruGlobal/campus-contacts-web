@@ -1,3 +1,5 @@
+@import '../variables/colors';
+
 @mixin header($background-color) {
   min-height: 50px;
   background-color: $background-color;

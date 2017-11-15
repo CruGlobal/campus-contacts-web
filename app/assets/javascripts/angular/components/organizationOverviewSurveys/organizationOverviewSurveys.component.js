@@ -1,14 +1,10 @@
-(function () {
-    'use strict';
+import template from './organizationOverviewSurveys.html';
 
-    angular
-        .module('missionhubApp')
-        .component('organizationOverviewSurveys', {
-            require: {
-                organizationOverview: '^'
-            },
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('organizationOverviewSurveys');
-            }
-        });
-})();
+angular
+    .module('missionhubApp')
+    .component('organizationOverviewSurveys', {
+        require: {
+            organizationOverview: '^'
+        },
+        template: template
+    });

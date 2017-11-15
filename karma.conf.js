@@ -1,74 +1,45 @@
-// Karma configuration
-// Generated on Thu Sep 08 2016 18:14:18 GMT-0500 (CDT)
-
 /* eslint-env node */
 
-module.exports = function (config) {
-    'use strict';
+const path = require('path');
+const webpackConfig = require('./webpack.config.js')({ test: true });
 
+delete webpackConfig.entry;
+delete webpackConfig.devServer;
+webpackConfig.devtool = 'inline-source-map';
+if (process.env.npm_lifecycle_event !== 'test-debug') {
+    webpackConfig.module.rules.push({
+        test: /^(?!.*\.(spec|fixture)\.js$).*\.js$/,
+        include: path.resolve('app/'),
+        loader: 'istanbul-instrumenter-loader',
+        query: {
+            esModules: true
+        }
+    });
+}
+
+module.exports = function(config) {
     config.set({
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+
         frameworks: ['jasmine'],
 
-        // list of files / patterns to load in the browser
+        browsers: ['PhantomJS'],
+
+        reporters: ['mocha', 'coverage-istanbul'],
+
         files: [
-            './node_modules/angular/angular.js',
-            './node_modules/angular-animate/angular-animate.js',
-            './node_modules/angular-material-icons/angular-material-icons.js',
-            './node_modules/angular-mocks/angular-mocks.js',
-            './node_modules/@uirouter/angularjs/release/angular-ui-router.js',
-            './node_modules/@uirouter/angularjs/release/resolveService.js',
-            './node_modules/ui-select/dist/select.js',
-            './node_modules/jsonapi-datastore/dist/ng-jsonapi-datastore.js',
-            './node_modules/angular-environment/src/angular-environment.js',
-            './node_modules/angular-ui-sortable/src/sortable.js',
-            './node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
-            './node_modules/angular-asset-path/src/index.js',
-            './node_modules/ng-file-upload/dist/ng-file-upload.js',
-            './node_modules/ng-infinite-scroll/build/ng-infinite-scroll.js',
-            './node_modules/angularjs-toaster/toaster.js',
-            './node_modules/angularjs-scroll-glue/src/scrollglue.js',
-            './node_modules/angulartics/src/angulartics.js',
-            './node_modules/angulartics-google-analytics/lib/angulartics-ga.js',
-            './node_modules/moment/moment.js',
-            './node_modules/angular-moment/angular-moment.js',
-            './vendor/assets/javascripts/i18n.js',
-            './node_modules/lscache/lscache.js',
-            './node_modules/lodash/lodash.js',
-            './node_modules/stacktrace-js/dist/stacktrace-with-promises-and-json-polyfills.js',
-            './node_modules/rollbar/dist/rollbar.umd.min.js',
-            './app/assets/javascripts/angular/karma-fix-lscache.js',
-            './node_modules/angular-mocks/angular-mocks.js',
-            './app/assets/javascripts/angular/missionhubApp.module.js',
-            './app/assets/javascripts/angular/missionhubApp.config.js',
-            './app/assets/javascripts/angular/rollbar.config.js',
-            './app/assets/javascripts/angular/missionhubApp.constants.js',
-            './app/assets/javascripts/angular/missionhubApp.run.js',
-            './app/assets/javascripts/angular/components/*/*.js',
-            './app/assets/javascripts/angular/filters/*.js',
-            './app/assets/javascripts/angular/services/*.js',
-            './app/assets/javascripts/**/*.spec.js'
+            'node_modules/es6-promise/dist/es6-promise.auto.js',
+            'app/assets/javascripts/angular/all-tests.spec.js'
         ],
 
         preprocessors: {
-            './app/assets/javascripts/angular/**/!(*.spec).js': ['coverage']
+            'app/assets/javascripts/angular/all-tests.spec.js': ['webpack', 'sourcemap']
         },
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec', 'coverage'],
+        webpack: webpackConfig,
 
-        coverageReporter: {
-            type: 'lcov',
-            dir: 'coverage/'
-        },
-
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        // We can other browsers later if we intend to test on them as well: ['Chrome', 'Firefox', 'IE', 'Safari',
-        // 'ChromeCanary']
-        browsers: ['PhantomJS']
+        coverageIstanbulReporter: {
+            reports: ['lcov'],
+            fixWebpackSourcePaths: true
+        }
     });
 };

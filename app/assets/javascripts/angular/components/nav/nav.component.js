@@ -1,19 +1,15 @@
-(function () {
-    'use strict';
+import template from './nav.html';
 
-    angular
-        .module('missionhubApp')
-        .component('nav', {
-            controller: navController,
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('nav');
-            }
-        });
+angular
+    .module('missionhubApp')
+    .component('nav', {
+        controller: navController,
+        template: template
+    });
 
-    function navController (state, loggedInPerson) {
-        var vm = this;
+function navController (state, loggedInPerson) {
+    var vm = this;
 
-        vm.state = state;
-        vm.loggedInPerson = loggedInPerson;
-    }
-})();
+    vm.state = state;
+    vm.loggedInPerson = loggedInPerson;
+}

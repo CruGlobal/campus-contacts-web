@@ -1,27 +1,24 @@
-(function () {
-    'use strict';
+import template from './myOrganizationsDashboardList.html';
 
-    angular
-        .module('missionhubApp')
-        .component('myOrganizationsDashboardList', {
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('myOrganizationsDashboardList');
-            },
-            require: {
-                myOrganizationsDashboard: '^'
-            },
-            bindings: {
-                rootOrgs: '<'
-            },
-            controller: /* @ngInject */ function (userPreferencesService) {
-                var vm = this;
+angular
+    .module('missionhubApp')
+    .component('myOrganizationsDashboardList', {
+        template: template,
+        require: {
+            myOrganizationsDashboard: '^'
+        },
+        bindings: {
+            rootOrgs: '<'
+        },
+        controller: /* @ngInject */ function (userPreferencesService) {
+            var vm = this;
 
-                vm.sortableOptions = {
-                    handle: '.sort-orgs-handle',
-                    stop: function () {
-                        return userPreferencesService.organizationOrderChange(vm.rootOrgs);
-                    }
-                };
-            }
-        });
-})();
+            vm.sortableOptions = {
+                handle: '.sort-orgs-handle',
+                stop: function () {
+                    return userPreferencesService.organizationOrderChange(vm.rootOrgs);
+                }
+            };
+        }
+    });
+

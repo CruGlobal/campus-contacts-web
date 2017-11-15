@@ -1,14 +1,11 @@
-(function () {
-    'use strict';
+import template from './loadingSpinner.html';
+import './loadingSpinner.scss';
 
-    angular
-        .module('missionhubApp')
-        .component('loadingSpinner', {
-            bindings: {
-                size: '<'
-            },
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('loadingSpinner');
-            }
-        });
-})();
+angular
+    .module('missionhubApp')
+    .component('loadingSpinner', {
+        bindings: {
+            size: '<'
+        },
+        template: template
+    });

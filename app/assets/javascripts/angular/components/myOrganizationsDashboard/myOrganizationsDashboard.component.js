@@ -1,14 +1,12 @@
-(function () {
-    'use strict';
+import template from './myOrganizationsDashboard.html';
+import './myOrganizationsDashboard.scss';
 
-    angular
-        .module('missionhubApp')
-        .component('myOrganizationsDashboard', {
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('myOrganizationsDashboard');
-            },
-            controller: function ($state) {
-                this.$state = $state;
-            }
-        });
-})();
+angular
+    .module('missionhubApp')
+    .component('myOrganizationsDashboard', {
+        template: template,
+        controller: function ($state) {
+            this.$state = $state;
+        }
+    });
+

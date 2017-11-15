@@ -1,3 +1,8 @@
+@import '../../../../stylesheets/variables/colors';
+@import '../../../../stylesheets/variables/ministriesView';
+@import '../../../../stylesheets/variables/modals';
+@import './variables.scss';
+
 person-page {
   display: flex;
   flex-direction: column;

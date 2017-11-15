@@ -1,3 +1,13 @@
+@import '~tachyons';
+@import './variables/colors.scss';
+@import './components/dropdown';
+@import './components/global';
+@import './components/grid';
+@import './components/header';
+@import './components/navigation';
+@import './components/row';
+@import './components/sheet';
+
 .pivot_theme {
   font-family: 'Titillium Web', sans-serif;
   font-size: 14px;

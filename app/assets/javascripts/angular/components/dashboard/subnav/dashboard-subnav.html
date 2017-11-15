@@ -1,0 +1,30 @@
+<div class="dashboard-subnav" ng-if="'app.people' | isState">
+    <div class="inner">
+        <div class="dashboard-mode-toggle">
+            {{ 'dashboard.people_assigned_to_you' | t }}
+        </div>
+        <div class="dashboard-stats-icons">
+            <ng-md-icon icon="assignedPeople" class="tipitmiddle"
+                        title="{{ 'contacts.all_contacts.title' | t }}"></ng-md-icon>
+            <ng-md-icon icon="uncontactedPerson" class="tipitmiddle"
+                        title="{{ 'contacts.statuses.uncontacted' | t }}"></ng-md-icon>
+            <ng-md-icon icon="spiritualConversation" class="tipitmiddle"
+                        title="{{ 'application.interaction_types.spiritual_conversation' | t }}"></ng-md-icon>
+            <ng-md-icon icon="evangelism" class="tipitmiddle"
+                        title="{{ 'application.interaction_types.gospel_presentation' | t }}"></ng-md-icon>
+            <ng-md-icon icon="personalDecision" class="tipitmiddle"
+                        title="{{ 'application.interaction_types.prayed_to_receive_christ' | t }}"></ng-md-icon>
+            <ng-md-icon icon="holySpirit" class="tipitmiddle"
+                        title="{{ 'application.interaction_types.holy_spirit_presentation' | t }}"></ng-md-icon>
+            <ng-md-icon icon="discipleship" class="tipitmiddle"
+                        title="{{ 'application.interaction_types.discipleship' | t }}"></ng-md-icon>
+        </div>
+        <report-period></report-period>
+        <a ng-click="$ctrl.toggleEditOrganizations()"
+           analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
+           class="dashboard-edit-toggle tipitmiddle" ng-class="{'active': $ctrl.editOrganizations}"
+           href="" title="{{ 'dashboard.edit_org_order' | t }}">
+            <ng-md-icon icon="editOrder"></ng-md-icon>
+        </a>
+    </div>
+</div>

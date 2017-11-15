@@ -1,20 +1,13 @@
-(function () {
-    'use strict';
+angular
+    .module('missionhubApp')
+    .factory('geoDataService', geoDataService);
 
-    angular
-        .module('missionhubApp')
-        .factory('geoDataService', geoDataService);
-
-    function geoDataService ($http, _) {
-        var geoDataUrl = '/assets/country-region-data/data.json';
-
-        return {
-            // Return a promise that resolves to the countries list
-            getCountries: function () {
-                // Cache the response so that the data will only be loaded once
-                return $http.get(geoDataUrl, { cache: true }).then(function (res) {
-                    var countries = res.data;
-
+function geoDataService (_) {
+    return {
+        // Return a promise that resolves to the countries list
+        getCountries: function () {
+            return import(/* webpackChunkName: "country-region-data" */ 'country-region-data')
+                .then(function (countries) {
                     // Manipulate the data schema
                     return countries.map(function (country) {
                         // Rename the country name and short code fields
@@ -25,7 +18,6 @@
                         };
                     });
                 });
-            }
-        };
-    }
-})();
+        }
+    };
+}

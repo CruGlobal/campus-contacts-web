@@ -1,8 +1,5 @@
-// includes all of the elements that should be on the screen when scrolled down (fixed header, footer, and margin)
-$page-trim-height: 140px /* root navigation */ +
-                   87px /* organization-overview header */ +
-                   30px /* bottom padding */;
-$organization-overview-content-height: calc(100vh - #{$page-trim-height});
+@import '../../../../stylesheets/variables/colors';
+@import '../../../../stylesheets/variables/ministriesView';
 
 organization-overview-people {
   $visible-people: 10;

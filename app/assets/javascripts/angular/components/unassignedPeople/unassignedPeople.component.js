@@ -1,36 +1,35 @@
-(function () {
-    'use strict';
+import lscache from 'lscache';
 
-    angular
-        .module('missionhubApp')
-        .component('unassignedPeople', {
-            controller: unassignedPeopleController,
-            require: {
-                organization: '^'
-            },
-            templateUrl: /* @ngInject */ function (templateUrl) {
-                return templateUrl('unassignedPeople');
-            }
-        });
+import template from './unassignedPeople.html';
+import './unassignedPeople.scss';
 
-    function unassignedPeopleController (lscache) {
-        var vm = this;
-        vm.setUnassignedVisible = setUnassignedVisible;
+angular
+    .module('missionhubApp')
+    .component('unassignedPeople', {
+        controller: unassignedPeopleController,
+        require: {
+            organization: '^'
+        },
+        template: template
+    });
 
-        vm.$onInit = activate;
+function unassignedPeopleController () {
+    var vm = this;
+    vm.setUnassignedVisible = setUnassignedVisible;
 
-        function getUnassignedVisibleKey () {
-            return ['unassignedVisible', vm.organization.org.id].join(':');
-        }
+    vm.$onInit = activate;
 
-        function activate () {
-            var val = lscache.get(getUnassignedVisibleKey());
-            vm.unassignedVisible = (val === null) ? true : val;
-        }
-
-        function setUnassignedVisible (value) {
-            vm.unassignedVisible = Boolean(value);
-            lscache.set(getUnassignedVisibleKey(), vm.unassignedVisible, 24 * 60); // 24 hour expiry
-        }
+    function getUnassignedVisibleKey () {
+        return ['unassignedVisible', vm.organization.org.id].join(':');
     }
-})();
+
+    function activate () {
+        var val = lscache.get(getUnassignedVisibleKey());
+        vm.unassignedVisible = (val === null) ? true : val;
+    }
+
+    function setUnassignedVisible (value) {
+        vm.unassignedVisible = Boolean(value);
+        lscache.set(getUnassignedVisibleKey(), vm.unassignedVisible, 24 * 60); // 24 hour expiry
+    }
+}

@@ -1,3 +1,6 @@
+@import '../../../../stylesheets/variables/colors';
+@import '../groupMembersModal/groupMembersModal.scss';
+
 transfer-modal {
   @extend person-multiselect;
 

@@ -1,36 +1,45 @@
 sudo: false
-cache:
-  bundler: true
-  yarn: true
-  directories:
-    - node_modules
-    - cache
-    - ../../../.nvm/versions
-language: ruby
-rvm: 2.3.4
-branches:
-  only:
-    - master
-    - staging
-services:
-  - redis-server
-
-before_install:
-  - bundle config gems.contribsys.com $SIDEKIQ_CREDS
-  - nvm install node
-  - yarn
-
-before_script:
-  - bundle exec rake db:create db:structure:load RAILS_ENV=test
+language: node_js
+node_js: '8'
 
 script:
   - yarn test
-  - bundle exec rake test
-  - bundle exec rake spec
-  - bundle exec rubocop -R
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
+      || [ "$TRAVIS_BRANCH" == "staging" ]); then yarn run build; fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
+cache:
+  yarn: true
+  directories:
+  - node_modules
+
+before_deploy:
+  - pip install --user awscli
+
+deploy:
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist s3://cru-missionhub-web-stage --region us-east-1 --acl public-read --exclude '*.html' --exclude 'manifest.json' --cache-control 'public, max-age=31536000' --delete
+  skip_cleanup: true
+  on:
+    branch: staging
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist s3://cru-missionhub-web-stage --region us-east-1 --acl public-read --include '*.html' --include 'manifest.json' --cache-control 'public, no-cache' --delete
+  skip_cleanup: true
+  on:
+    branch: staging
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist s3://cru-missionhub-web-prod --region us-east-1 --acl public-read --exclude '*.html' --exclude 'manifest.json' --cache-control 'public, max-age=31536000'
+  skip_cleanup: true
+  on:
+    branch: master
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist s3://cru-missionhub-web-prod --region us-east-1 --acl public-read --include '*.html' --include 'manifest.json' --cache-control 'public, max-age=180'
+  skip_cleanup: true
+  on:
+    branch: master
 env:
-  - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 APP_DOMAIN=localhost.com AWS_ACCESS_KEY_ID=fwaijfwoifjewioaefjiofwjeiowj AWS_SECRET_ACCESS_KEY=fejiwaofjewoifjewoifj
+  global:
+  - AWS_ACCESS_KEY_ID=AKIAIELROGTP3V2UJKRA
+  - secure: ExiSJbkkgxOzpoSu5WY6mXWnJl9EWEOnTNQCPJRZCM4e45r3XIl+e6J/H/YAkua+UrOiytTcnKNKIUDpxNFQ7u5nr3pj0EZ2Jy0MYZmuBcVm4WqPHowKi1SAa7Zw1Nh9D0AsDmi6m1n+H/MoT1pKId7r+2LUyskEWCEiwgS1D1ka2zBj8haCZhxcTSmdoHLyU7SZ3c9OAa5nasFy0ss1/58FgofiOrzWpEU12U+0Sv1wVlttHO6pGaokD8aRx8aggYsWe0QDbNIbfj+7/Ej3eYKDCJHXjeMr7BqRVS+BuqmpmRLwTSYnPd40MQtWq0urUtPjg6krmwZdLIH/UIg3UVPQEJrBG1A/KpoGS+DkNp9LbYKslu9eZHNwji668KW+U6WloT2kUPvSMH3GeKDVQBy3h2XK10P8YQsr4D81ZPUAUqHiIseICBEOmInxgKHjGopFYucTci9SviJdLbvyz78Px9Vfg8mYb2saxtzYWfSEKUdOdblLrjbc5rYWezty2kaFHF7zwrJEKKi6q2YJcQFGXWDFK09gnBOqT5jijaaygNkxtdJNCBI3BGNDgkFwWN4eD9eP1flayHtpW/poygiz5GMs3NsgKgJoulY96Kjj/34W2YW0VlDIT0Jw4HSdOP1wJ/8V7Gx6bg/v0BHIY4/KuI7ruXuyfkHpgOMdWKo=

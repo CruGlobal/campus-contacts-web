@@ -1,0 +1,77 @@
+/* !important
+* This is a file that should only have scss abstracts (variable and mix-in definitions)!
+* If you add anything else that results in real code, it will imported into the processed file
+* many times and that will be bad. So don't do it!
+*/
+
+
+/* Colors */
+$blue-1: #0379AE;
+$blue-2: #3594BE;
+$blue-3: #C7DFF0;
+$blue-4: #EAF1F6;
+$blue-5: #F7F9FB;
+$white: #fff;
+$gray-1: #333333;
+$gray-1-5: #767676; // This is the lightest font color we can use on a white background
+$gray-2: #808284;
+$gray-2-5: #969696;
+$gray-3: #C0C0C0;
+$gray-4: #E6E6E6;
+$gray-5: #F0F0F0;
+
+$background-gray: #DADADA;
+
+$pivot-dark-blue: #007398;
+$pivot-darker-blue: #005A7F;
+$pivot-bright-blue: #66D9F0;
+$pivot-muted-blue: #D3E0E3;
+$pivot-muted-dark-blue: #85A4AB;
+$pivot-teal: #58C6B9;
+$pivot-orange: #FF5532;
+
+$pivot-gradient-light: #00ABC9;
+$pivot-gradient-dark: $pivot-dark-blue;
+
+$pivot-colors: (
+        dark-blue: $pivot-dark-blue,
+        darker-blue: $pivot-darker-blue,
+        bright-blue: $pivot-bright-blue,
+        muted-blue: $pivot-muted-blue,
+        muted-dark-blue: $pivot-muted-dark-blue,
+        teal: $pivot-teal,
+        orange: $pivot-orange
+);
+
+@each $name, $value in $pivot-colors {
+  .pivot-#{$name} {
+    color: $value;
+  }
+  .bg-pivot-#{$name} {
+    background-color: $value;
+  }
+  .b--pivot-#{$name} {
+    border-color: $value;
+  }
+  .hover-pivot-#{$name}{
+    &:hover, &:focus {
+      color: $value;
+    }
+  }
+  .hover-bg-pivot-#{$name}{
+    &:hover, &:focus {
+      background-color: $value;
+    }
+  }
+}
+
+@mixin font-smoothing($value: on) {
+  @if $value == on {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}

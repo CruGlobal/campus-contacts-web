@@ -1,3 +1,6 @@
+@import '../../../../stylesheets/variables/colors';
+@import '../ministryViewGroup/ministryViewGroup';
+
 organization-overview-groups {
   .header {
     @extend ministry-view-group;
