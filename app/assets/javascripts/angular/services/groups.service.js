@@ -89,7 +89,14 @@ function groupsService ($q, httpProxy, JsonApiDataStore, modelsService, moment, 
 
         // Return as a list of people the members in a group
         getAllMembers: function (group) {
-            return _.map(group.group_memberships, 'person');
+            return _.reduce(group.group_memberships, function (allMembers, groupMembership) {
+                // Skip all unloaded group_memberships. They seem to be loaded later
+                if (!groupMembership._placeHolder) {
+                    // Map groupMembership to person
+                    allMembers.push(groupMembership.person);
+                }
+                return allMembers;
+            }, []);
         },
 
         // Return as a list of people the members in a group with a particular role
