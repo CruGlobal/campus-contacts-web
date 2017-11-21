@@ -17,7 +17,7 @@
                 <span class="label">{{'people.index.labels' | t}}</span>
                 <div>
                     <span class="pill label-pill" ng-repeat="orgLabel in $ctrl.personTab.orgLabels">
-                        {{ orgLabel.label.name }}
+                        {{ orgLabel.label.i18n ? (orgLabel.label.i18n | t) : orgLabel.label.name }}
                     </span>
                     <span ng-if="$ctrl.personTab.orgLabels.length === 0">{{'people.show.no_labels' | t}}</span>
                 </div>
