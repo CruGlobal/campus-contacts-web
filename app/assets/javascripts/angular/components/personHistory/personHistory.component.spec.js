@@ -10,10 +10,30 @@ describe('personHistory component', function () {
                 $element: null
             },
             {
-                historyFeed: [
-                    { id: 1, comment: 'interaction 1' },
-                    { id: 2, comment: 'interaction 2' }
-                ]
+                personTab: {
+                    person: {
+                        interactions: [
+                            {
+                                id: 1,
+                                comment: 'interaction 1',
+                                _type: 'interaction',
+                                organization: {
+                                    id: 1
+                                }
+                            },
+                            {
+                                id: 2,
+                                comment: 'interaction 2',
+                                _type: 'interaction',
+                                organization: {
+                                    id: 1
+                                }
+                            }
+                        ]
+                    },
+                    organizationId: 1
+
+                }
             }
         );
     }));
@@ -21,10 +41,17 @@ describe('personHistory component', function () {
     describe('removeInteraction', function () {
         it('should locally remove an interaction from the history feed', function () {
             $ctrl.removeInteraction({ interaction:
-                $ctrl.historyFeed[0]
+                $ctrl.personTab.person.interactions[0]
             });
 
-            expect($ctrl.historyFeed).toEqual([{ id: 2, comment: 'interaction 2' }]);
+            expect($ctrl.historyFeed).toEqual([{
+                id: 2,
+                comment: 'interaction 2',
+                _type: 'interaction',
+                organization: {
+                    id: 1
+                }
+            }]);
         });
     });
 });
