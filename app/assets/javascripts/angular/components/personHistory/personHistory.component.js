@@ -35,13 +35,7 @@ function personHistoryController ($scope, $element, $interval, $q, asyncBindings
         vm.interactionTypes = interactionsService.getInteractionTypes();
         $scope.$watchGroup([
             '$ctrl.filter', '$ctrl.personTab.person.interactions', '$ctrl.personTab.person.answer_sheets'
-        ], function () {
-            vm.historyFeed = personHistoryService.buildHistoryFeed(
-                vm.personTab.person,
-                vm.filter,
-                vm.personTab.organizationId
-            );
-        });
+        ], buildHistoryFeed);
 
         vm.organizationId = vm.personTab.organizationId;
     }
@@ -86,7 +80,12 @@ function personHistoryController ($scope, $element, $interval, $q, asyncBindings
 
     // Remove server deleted interaction locally
     function removeInteraction ($event) {
-        _.pull(vm.historyFeed, $event.interaction);
+        if ($event.interaction._type === 'interaction') {
+            _.pull(vm.personTab.person.interactions, $event.interaction);
+        } else if ($event.interaction._type === 'answer_sheet') {
+            _.pull(vm.personTab.person.answer_sheets, $event.interaction);
+        }
+        buildHistoryFeed();
     }
 
     // Scroll to the bottom of the history list
@@ -106,5 +105,13 @@ function personHistoryController ($scope, $element, $interval, $q, asyncBindings
                 }
             });
         });
+    }
+
+    function buildHistoryFeed () {
+        vm.historyFeed = personHistoryService.buildHistoryFeed(
+            vm.personTab.person,
+            vm.filter,
+            vm.personTab.organizationId
+        );
     }
 }
