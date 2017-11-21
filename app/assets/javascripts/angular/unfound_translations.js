@@ -1,4 +1,6 @@
-// translation strings here are marked as being used by the Angular app.
+// Angular translations are discovered by grep search
+// https://github.com/CruGlobal/missionhub/blob/master/lib/generate_translation_yml.rb
+// Below is a whitelist of translation strings being used by the Angular app
 
 // nav.contacts
 // contacts.index.search_locate_contact_button
@@ -35,3 +37,16 @@
 // followup_status.do_not_contact
 // followup_status.uncontacted
 
+// -- API i18n phrases from DB
+// involved
+// engaged_disciple
+// leader
+// seeker
+// knows_and_trusts_christian
+// became_curious
+// became_open_to_change
+// seeking_god
+// made_decision
+// growing_disciple
+// ministering_disciple
+// multiplying_disciple

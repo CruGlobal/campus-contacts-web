@@ -1,6 +1,6 @@
 <div class="row">
     <div class="column name-column">
-        {{ $ctrl.label.name }}
+        {{ $ctrl.label.i18n ? ($ctrl.label.i18n | t) : $ctrl.label.name }}
     </div>
 
     <div class="column buttons-column" ng-if="$ctrl.label.organization_id !== '0' && $ctrl.adminPrivileges">
