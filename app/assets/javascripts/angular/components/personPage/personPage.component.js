@@ -22,6 +22,7 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
     vm.personTabs = personTabs;
     vm.orgLabels = [];
     vm.dirty = false;
+    vm.avatarPausedUploadFile = null;
 
     vm.uploadAvatar = uploadAvatar;
     vm.deleteAvatar = deleteAvatar;
@@ -101,7 +102,11 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
 
     function uploadAvatar (file) {
         if (file) {
-            personPageService.uploadAvatar(vm.person, file);
+            if (vm.person.id) {
+                vm.avatarPausedUploadFile = null;
+                return personPageService.uploadAvatar(vm.person, file);
+            }
+            vm.avatarPausedUploadFile = file;
         }
     }
 
@@ -136,14 +141,21 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
     function save () {
         vm.saving = true;
         personPageService.savePerson(vm.person)
-            .then(function (person) {
+            .then(person => {
                 // Update our person model with the newly-saved one. If it is a newly-created person, it will have
                 // an id now, and the dismiss call will not ask for a confirmation before navigating away.
                 vm.person = person;
+            })
+            .then(() => {
+                if (vm.avatarPausedUploadFile) {
+                    return uploadAvatar(vm.avatarPausedUploadFile);
+                }
+            })
+            .then(() => {
                 $scope.$emit('personCreated', vm.person);
                 vm.dismiss();
             })
-            .catch(function () {
+            .catch(() => {
                 vm.saving = false;
             });
     }
