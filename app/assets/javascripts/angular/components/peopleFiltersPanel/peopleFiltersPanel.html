@@ -20,7 +20,7 @@
         <accordion-content>
             <label ng-repeat="labelOption in $ctrl.labelOptions" class="filter-option">
                 <input type="checkbox" ng-model="$ctrl.filters.labels[labelOption.label_id]">
-                <span class="filter-option-name">{{ labelOption.name }}</span>
+                <span class="filter-option-name">{{ labelOption.i18n ? (labelOption.i18n | t) : labelOption.name }}</span>
                 <span class="filter-option-count">{{ labelOption.count }}</span>
             </label>
         </accordion-content>
