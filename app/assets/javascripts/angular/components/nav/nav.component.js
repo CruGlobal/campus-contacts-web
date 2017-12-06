@@ -7,9 +7,11 @@ angular
         template: template
     });
 
-function navController (state, loggedInPerson) {
+function navController (state, loggedInPerson, $timeout) {
     var vm = this;
 
     vm.state = state;
-    vm.loggedInPerson = loggedInPerson;
+    $timeout(() => {
+        vm.loggedInPerson = loggedInPerson;
+    });
 }
