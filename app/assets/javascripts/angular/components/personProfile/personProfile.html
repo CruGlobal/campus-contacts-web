@@ -1,50 +1,52 @@
-<form class="person-profileTab form" name="$ctrl.form" autocomplete="off">
+<form class="person-profileTab form" ng-class="{ 'flex flex-column': $ctrl.isNewPerson }" name="$ctrl.form" autocomplete="off">
     <div class="form-group" ng-if="$ctrl.personTab.orgPermission.archive_date">
         <input type="button" ng-click="$ctrl.unarchive()" class="btn btn-secondary"
                value="Unarchive {{ $ctrl.personTab.person.first_name }}">
         </input>
     </div>
-    <div class="form-group-with-left-action">
-        <div class="button-column">
-            <ng-md-icon class="icon-chip actionable primary-action"
-                        icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
-                        size="16"
-                        ng-click="$ctrl.editTags()"
-                        title="{{'people.index.manage_labels' | t}}"></ng-md-icon>
-        </div>
-        <div class="form-group">
-            <label>
-                <span class="label">{{'people.index.labels' | t}}</span>
-                <div>
+    <div class="order-6">
+        <div class="form-group-with-left-action">
+            <div class="button-column">
+                <ng-md-icon class="icon-chip actionable primary-action"
+                            icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
+                            size="16"
+                            ng-click="$ctrl.editTags()"
+                            title="{{'people.index.manage_labels' | t}}"></ng-md-icon>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span class="label">{{'people.index.labels' | t}}</span>
+                    <div>
                     <span class="pill label-pill" ng-repeat="orgLabel in $ctrl.personTab.orgLabels">
                         {{ orgLabel.label.i18n ? (orgLabel.label.i18n | t) : orgLabel.label.name }}
                     </span>
-                    <span ng-if="$ctrl.personTab.orgLabels.length === 0">{{'people.show.no_labels' | t}}</span>
-                </div>
-            </label>
+                        <span ng-if="$ctrl.personTab.orgLabels.length === 0">{{'people.show.no_labels' | t}}</span>
+                    </div>
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="form-group-with-left-action">
-        <div class="button-column">
-            <ng-md-icon class="icon-chip actionable primary-action"
-                        icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
-                        size="16"
-                        ng-click="$ctrl.editGroups()"
-                        title="{{'people.index.manage_groups' | t}}"></ng-md-icon>
-        </div>
-        <div class="form-group">
-            <label>
-                <span class="label">{{'nav.groups' | t}}</span>
-                <div>
+        <div class="form-group-with-left-action">
+            <div class="button-column">
+                <ng-md-icon class="icon-chip actionable primary-action"
+                            icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
+                            size="16"
+                            ng-click="$ctrl.editGroups()"
+                            title="{{'people.index.manage_groups' | t}}"></ng-md-icon>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span class="label">{{'nav.groups' | t}}</span>
+                    <div>
                     <span class="pill label-pill" ng-repeat="groupMembership in $ctrl.personTab.groupMemberships">
                         {{ groupMembership.group.name }}
                     </span>
-                    <span ng-if="$ctrl.personTab.groupMemberships.length === 0">{{'people.show.no_groups' | t}}</span>
-                </div>
-            </label>
+                        <span ng-if="$ctrl.personTab.groupMemberships.length === 0">{{'people.show.no_groups' | t}}</span>
+                    </div>
+                </label>
+            </div>
         </div>
     </div>
-    <div class="form-group" ng-if="$ctrl.isContact()">
+    <div class="form-group order-4" ng-if="$ctrl.isContact()">
         <label class="form-control-select">
             <span class="label">{{'contact.followup_status' | t}}</span>
             <select ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
@@ -54,14 +56,14 @@
             </select>
         </label>
     </div>
-    <div class="form-group">
+    <div class="form-group order-3">
         <label>
             <span class="label">{{'contact.assigned_to' | t}}</span>
             <assigned-select assigned="$ctrl.personTab.assignedTo"
                              organization-id="$ctrl.personTab.organizationId"></assigned-select>
         </label>
     </div>
-    <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
+    <div class="form-group order-2" ng-if="$ctrl.personTab.orgPermission">
         <label class="form-control-select" ng-class="{'disabled': $ctrl.permissionChangeDisabled}">
             <span class="label">{{'application.add_contact.title_permission' | t}}</span>
             <select ng-options="option.id as (option.i18n | t) for option in $ctrl.permissionOptions"
@@ -72,149 +74,153 @@
             </select>
         </label>
     </div>
-    <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
-        <label class="form-control-select">
-            <span class="label">{{'contact.cru_status' | t}}</span>
-            <select ng-options="option.id as (option.i18n | t) for option in $ctrl.cruStatusOptions"
-                    ng-model="$ctrl.personTab.orgPermission.cru_status"
-                    ng-change="$ctrl.saveAttribute($ctrl.personTab.orgPermission, 'cru_status')"
-                    class="form-control">
-            </select>
-        </label>
+    <div class="order-5">
+        <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
+            <label class="form-control-select">
+                <span class="label">{{'contact.cru_status' | t}}</span>
+                <select ng-options="option.id as (option.i18n | t) for option in $ctrl.cruStatusOptions"
+                        ng-model="$ctrl.personTab.orgPermission.cru_status"
+                        ng-change="$ctrl.saveAttribute($ctrl.personTab.orgPermission, 'cru_status')"
+                        class="form-control">
+                </select>
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="form-control-select">
+                <span class="label">{{'contact.student_status' | t}}</span>
+                <select ng-options="option.id as (option.i18n | t) for option in $ctrl.enrollmentOptions"
+                        ng-model="$ctrl.personTab.person.student_status"
+                        ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'student_status')"
+                        class="form-control">
+                </select>
+            </label>
+        </div>
     </div>
-    <div class="form-group">
-        <label class="form-control-select">
-            <span class="label">{{'contact.student_status' | t}}</span>
-            <select ng-options="option.id as (option.i18n | t) for option in $ctrl.enrollmentOptions"
-                    ng-model="$ctrl.personTab.person.student_status"
-                    ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'student_status')"
-                    class="form-control">
-            </select>
-        </label>
-    </div>
-    <div class="form-group">
-        <label>
-            <span class="label">{{'contact.first_name' | t}}</span>
-            <input type="text" class="form-control" name="first_name" required
-                   ng-class="{ invalid: $ctrl.form.first_name.$invalid }"
-                   ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')"
-                   ng-disabled="$ctrl.disableNameFields">
-        </label>
-    </div>
-    <div class="form-group">
-        <label>
-            <span class="label">{{'contact.last_name' | t}}</span>
-            <input type="text" class="form-control"
-                   ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
-                   ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')"
-                   ng-disabled="$ctrl.disableNameFields">
-        </label>
-    </div>
-    <div class="form-group form-group--radio">
-        <span class="label">{{'contact.gender' | t}}</span>
-        <label>
-            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Male">
-            {{ 'general.male' | t }}
-        </label>
-        <label>
-            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Female">
-            {{ 'general.female' | t }}
-        </label>
-        <label>
-            <input type="radio" ng-model="$ctrl.personTab.person.gender" value="">
-            {{ 'general.other' | t }}
-        </label>
-    </div>
-    <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()">
-        <div class="button-column" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
-            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
-                        ng-click="$ctrl.deleteEmailAddress(emailAddress)"
-                        title="{{'contact.delete' | t}}"></ng-md-icon>
+    <div class="order-1">
+        <div class="form-group">
+            <label>
+                <span class="label">{{'contact.first_name' | t}}</span>
+                <input type="text" class="form-control" name="first_name" required
+                       ng-class="{ invalid: $ctrl.form.first_name.$invalid }"
+                       ng-model="$ctrl.personTab.person.first_name" ng-model-options="{ updateOn: 'blur' }"
+                       ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'first_name')"
+                       ng-disabled="$ctrl.disableNameFields">
+            </label>
         </div>
         <div class="form-group">
             <label>
-                <div class="row">
-                    <span class="normal-column label">{{'contact.email_address' | t}}</span>
-                    <span class="label" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
+                <span class="label">{{'contact.last_name' | t}}</span>
+                <input type="text" class="form-control"
+                       ng-model="$ctrl.personTab.person.last_name" ng-model-options="{ updateOn: 'blur' }"
+                       ng-change="$ctrl.saveAttribute($ctrl.personTab.person, 'last_name')"
+                       ng-disabled="$ctrl.disableNameFields">
+            </label>
+        </div>
+        <div class="form-group form-group--radio">
+            <span class="label">{{'contact.gender' | t}}</span>
+            <label>
+                <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Male">
+                {{ 'general.male' | t }}
+            </label>
+            <label>
+                <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Female">
+                {{ 'general.female' | t }}
+            </label>
+            <label>
+                <input type="radio" ng-model="$ctrl.personTab.person.gender" value="Other">
+                {{ 'general.other' | t }}
+            </label>
+        </div>
+        <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()">
+            <div class="button-column" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
+                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                            ng-click="$ctrl.deleteEmailAddress(emailAddress)"
+                            title="{{'contact.delete' | t}}"></ng-md-icon>
+            </div>
+            <div class="form-group">
+                <label>
+                    <div class="row">
+                        <span class="normal-column label">{{'contact.email_address' | t}}</span>
+                        <span class="label" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
                         {{'contact.primary_email' | t}}
                     </span>
-                    <input type="radio" name="primary-email" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
-                           ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
-                           class="primary-toggle">
-                </div>
-                <div class="row">
-                    <input type="email" class="normal-column form-control"
-                           ng-pattern="'[^@]+@[^@]+\\.[^@]+'" ng-required="!$ctrl.isPendingEmailAddress(emailAddress)"
-                           name="email_address_{{(emailAddress.id || 'pending')}}"
-                           ng-class="{ invalid: !$ctrl.isEmailAddressValid(emailAddress) }"
-                           ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
-                           ng-change="$ctrl.saveRelationship(emailAddress, 'email', 'email_addresses')">
-                </div>
-            </label>
+                        <input type="radio" name="primary-email" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
+                               ng-model="$ctrl.personTab.primaryEmail" ng-value="emailAddress"
+                               class="primary-toggle">
+                    </div>
+                    <div class="row">
+                        <input type="email" class="normal-column form-control"
+                               ng-pattern="'[^@]+@[^@]+\\.[^@]+'" ng-required="!$ctrl.isPendingEmailAddress(emailAddress)"
+                               name="email_address_{{(emailAddress.id || 'pending')}}"
+                               ng-class="{ invalid: !$ctrl.isEmailAddressValid(emailAddress) }"
+                               ng-model="emailAddress.email" ng-model-options="{ updateOn: 'blur' }"
+                               ng-change="$ctrl.saveRelationship(emailAddress, 'email', 'email_addresses')">
+                    </div>
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()">
-        <div class="button-column" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
-            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
-                        ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
-                        title="{{'contact.delete' | t}}"></ng-md-icon>
-        </div>
-        <div class="form-group">
-            <label>
-                <div class="row">
-                    <span class="normal-column label">{{'contact.phone_number' | t}}</span>
-                    <span class="label" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
+        <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()">
+            <div class="button-column" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
+                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                            ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
+                            title="{{'contact.delete' | t}}"></ng-md-icon>
+            </div>
+            <div class="form-group">
+                <label>
+                    <div class="row">
+                        <span class="normal-column label">{{'contact.phone_number' | t}}</span>
+                        <span class="label" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
                         {{'contact.primary_phone' | t}}
                     </span>
-                    <input type="radio" name="primary-phone" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)"
-                           ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
-                           class="primary-toggle">
-                </div>
+                        <input type="radio" name="primary-phone" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)"
+                               ng-model="$ctrl.personTab.primaryPhone" ng-value="phoneNumber"
+                               class="primary-toggle">
+                    </div>
+                    <div class="row">
+                        <input type="tel" class="normal-column form-control"
+                               ng-pattern="'(\\D*\\d\\D*){8,15}'" ng-required="!$ctrl.isPendingPhoneNumber(phoneNumber)"
+                               name="phone_number_{{(phoneNumber.id || 'pending')}}"
+                               ng-class="{ invalid: !$ctrl.isPhoneNumberValid(phoneNumber) }"
+                               ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
+                               ng-change="$ctrl.saveRelationship(phoneNumber, 'number', 'phone_numbers')">
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="form-group-with-left-action dual-action" ng-repeat="address in $ctrl.personTab.person.addresses">
+            <div class="button-column first-action">
+                <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
+                            ng-click="$ctrl.editAddress(address)"
+                            title="{{'contact.edit' | t}}"></ng-md-icon>
+            </div>
+            <div class="button-column second-action">
+                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                            ng-click="$ctrl.deleteAddress(address)"
+                            title="{{'contact.delete' | t}}"></ng-md-icon>
+            </div>
+            <label>
                 <div class="row">
-                    <input type="tel" class="normal-column form-control"
-                           ng-pattern="'(\\D*\\d\\D*){8,15}'" ng-required="!$ctrl.isPendingPhoneNumber(phoneNumber)"
-                           name="phone_number_{{(phoneNumber.id || 'pending')}}"
-                           ng-class="{ invalid: !$ctrl.isPhoneNumberValid(phoneNumber) }"
-                           ng-model="phoneNumber.number" ng-model-options="{ updateOn: 'blur' }"
-                           ng-change="$ctrl.saveRelationship(phoneNumber, 'number', 'phone_numbers')">
+                    <span class="normal-column label">{{('address_types.' + address.address_type) | t}}</span>
+                </div>
+                <div class="row" ng-repeat="addressPart in $ctrl.formatAddress(address)">
+                    {{addressPart}}
                 </div>
             </label>
         </div>
-    </div>
-    <div class="form-group-with-left-action dual-action" ng-repeat="address in $ctrl.personTab.person.addresses">
-        <div class="button-column first-action">
-            <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
-                        ng-click="$ctrl.editAddress(address)"
-                        title="{{'contact.edit' | t}}"></ng-md-icon>
+        <div class="form-group-with-left-action">
+            <div class="button-column">
+                <ng-md-icon class="icon-chip actionable primary-action" icon="add" size="16"
+                            ng-click="$ctrl.editAddress(null)"
+                            title="{{'contact.add' | t}}"></ng-md-icon>
+            </div>
+            <label>
+                <div class="row">
+                    <span class="normal-column label">{{'general.address' | t}}</span>
+                </div>
+                <div class="row">
+                    {{'people.index.add_address' | t}}
+                </div>
+            </label>
         </div>
-        <div class="button-column second-action">
-            <ng-md-icon class="icon-chip actionable" icon="close" size="16"
-                        ng-click="$ctrl.deleteAddress(address)"
-                        title="{{'contact.delete' | t}}"></ng-md-icon>
-        </div>
-        <label>
-            <div class="row">
-                <span class="normal-column label">{{('address_types.' + address.address_type) | t}}</span>
-            </div>
-            <div class="row" ng-repeat="addressPart in $ctrl.formatAddress(address)">
-                {{addressPart}}
-            </div>
-        </label>
-    </div>
-    <div class="form-group-with-left-action">
-        <div class="button-column">
-            <ng-md-icon class="icon-chip actionable primary-action" icon="add" size="16"
-                        ng-click="$ctrl.editAddress(null)"
-                        title="{{'contact.add' | t}}"></ng-md-icon>
-        </div>
-        <label>
-            <div class="row">
-                <span class="normal-column label">{{'general.address' | t}}</span>
-            </div>
-            <div class="row">
-                {{'people.index.add_address' | t}}
-            </div>
-        </label>
     </div>
 </form>

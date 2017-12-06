@@ -27,7 +27,7 @@ function personService (httpProxy, modelsService, JsonApiDataStore, permissionSe
             var person = new JsonApiDataStore.Model('person', null);
             person.setAttribute('first_name', '');
             person.setAttribute('last_name', '');
-            person.setAttribute('gender', 'Male');
+            person.setAttribute('gender', '');
             person.setAttribute('student_status', 'collegiate');
             person.setRelationship('organizational_permissions', [orgPermission]);
             person.setRelationship('email_addresses', []);

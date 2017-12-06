@@ -50,6 +50,8 @@ function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, 
     vm.enrollmentOptions = personService.getEnrollmentOptions();
 
     function activate () {
+        vm.isNewPerson = !vm.personTab.person.id;
+
         // Disable editing other users name fields
         vm.disableNameFields = vm.personTab.person.user && loggedInPerson.person !== vm.personTab.person;
 
