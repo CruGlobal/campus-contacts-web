@@ -29,7 +29,7 @@
             <ul>
                 <li>
                     <a ng-if="!$root.isSpaPage"
-                       ng-href="'/d/people/' + $ctrl.loggedInPerson.person.id + '/' + $ctrl.state.legacyCurrentOrganization + '/profile'">
+                       ng-href="{{ '/d/people/' + $ctrl.state.legacyCurrentOrganization + '/' + $ctrl.loggedInPerson.person.id + '/profile' }}">
                         {{ 'nav.my_profile' | t }}
                     </a>
                     <a ng-if="$root.isSpaPage"
