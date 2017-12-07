@@ -50,7 +50,7 @@ function personProfileController ($scope, $filter, $uibModal, JsonApiDataStore, 
     vm.enrollmentOptions = personService.getEnrollmentOptions();
 
     function activate () {
-        // Disable editing other users name fields
+        // Disable editing name fields of other users
         vm.disableNameFields = vm.personTab.person.user && loggedInPerson.person !== vm.personTab.person;
 
         // The personPage needs access to the profile form to determine validity. Because component "require" only
