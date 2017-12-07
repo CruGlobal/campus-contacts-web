@@ -17,7 +17,7 @@ angular
     });
 
 function personPageController ($scope, $state, $filter, $q, $transitions, asyncBindingsService, personService,
-                               personTabs, confirmModalService, personPageService, _) {
+                               personTabs, confirmModalService, personPageService, _, loggedInPerson) {
     var vm = this;
     vm.personTabs = personTabs;
     vm.orgLabels = [];
@@ -33,6 +33,9 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['person', 'organizationId']);
 
     function activate () {
+        // Disable editing profile pictures of other users
+        vm.hideProfilePhotoBtns = vm.person.user && loggedInPerson.person !== vm.person;
+
         $scope.$on('personModified', function () {
             vm.dirty = true;
         });
