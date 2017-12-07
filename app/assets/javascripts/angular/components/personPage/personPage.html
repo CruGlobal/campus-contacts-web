@@ -3,10 +3,10 @@
         <div class="avatar">
             <img ng-src="{{$ctrl.avatarUrl}}">
             <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
-                        ngf-select="$ctrl.uploadAvatar($file)">
+                        ng-if="!$ctrl.hideProfilePhotoBtns" ngf-select="$ctrl.uploadAvatar($file)">
             </ng-md-icon>
             <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
-                        ng-if="$ctrl.person.picture && !$ctrl.isFacebookAvatar"
+                        ng-if="!$ctrl.hideProfilePhotoBtns && $ctrl.person.picture && !$ctrl.isFacebookAvatar"
                         ng-click="$ctrl.deleteAvatar()">
             </ng-md-icon>
         </div>
