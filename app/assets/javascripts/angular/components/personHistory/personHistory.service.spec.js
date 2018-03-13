@@ -31,16 +31,16 @@ describe('personHistoryService', function () {
             this.answerSheet1 = {
                 _type: 'answer_sheet',
                 interaction_type_id: 1,
-                organization: {
-                    id: 1
+                survey: {
+                    organization_id: 1
                 },
                 completed_at: 3
             };
             this.answerSheet2 = {
                 _type: 'answer_sheet',
                 interaction_type_id: 2,
-                organization: {
-                    id: 1
+                survey: {
+                    organization_id: 1
                 },
                 completed_at: 1
             };
@@ -86,7 +86,7 @@ describe('personHistoryService', function () {
 
         it('should filter out history from other orgs', function () {
             this.interaction.organization.id = 2;
-            this.answerSheet2.organization.id = 2;
+            this.answerSheet2.survey.organization_id = 2;
             expect(personHistoryService.buildHistoryFeed(this.person, 'all', 1)).toEqual([
                 this.answerSheet1,
                 this.note

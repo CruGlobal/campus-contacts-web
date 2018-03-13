@@ -17,27 +17,31 @@ function personHistoryService (_) {
     function filterHistoryByType (person, feedFilter, orgId) {
         switch (feedFilter) {
             case 'interactions':
-                return filterHistoryByOrg(person.interactions, orgId)
+                return filterInteractionByOrg(person.interactions, orgId)
                     .filter(function (interaction) {
                         return interaction.interaction_type_id !== 1;
                     });
             case 'notes':
                 return _.filter(
-                    filterHistoryByOrg(person.interactions, orgId),
+                    filterInteractionByOrg(person.interactions, orgId),
                     { interaction_type_id: 1 }
                 );
             case 'surveys':
-                return filterHistoryByOrg(person.answer_sheets, orgId);
+                return filterSurveyByOrg(person.answer_sheets, orgId);
             case 'all':
                 return [].concat(
-                    filterHistoryByOrg(person.interactions, orgId),
-                    filterHistoryByOrg(person.answer_sheets, orgId)
+                    filterInteractionByOrg(person.interactions, orgId),
+                    filterSurveyByOrg(person.answer_sheets, orgId)
                 );
         }
     }
 
-    function filterHistoryByOrg (history, orgId) {
+    function filterInteractionByOrg (history, orgId) {
         return _.filter(history, ['organization.id', orgId]);
+    }
+
+    function filterSurveyByOrg (history, orgId) {
+        return _.filter(history, ['survey.organization_id', orgId]);
     }
 
     function getHistorySortKey (item) {
