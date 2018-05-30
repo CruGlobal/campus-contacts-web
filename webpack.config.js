@@ -2,8 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const concat = require('lodash/concat');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
@@ -42,10 +41,10 @@ const htmlMinDefaults = {
     removeStyleTypeAttributes: true
 };
 
-module.exports = env => {
-    env = env || {};
+module.exports = (env = {}) => {
     const isTest = env.test;
     return {
+        mode: isBuild ? 'production' : 'development',
         entry: {
             app: 'assets/javascripts/angular/main.js'
         },
@@ -57,37 +56,31 @@ module.exports = env => {
             devtoolModuleFilenameTemplate: info => info.resourcePath.replace(/^\.\//, ''),
             crossOriginLoading: 'anonymous'
         },
-        plugins: concat(
-            [
-                new ExtractTextPlugin({
-                    filename: '[name].[contenthash].css'
-                }),
-                new ManifestPlugin()
-            ],
-            !isTest ? [
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    commons: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendor',
+                        chunks: 'initial'
+                    }
+                }
+            }
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: '[name].[contenthash].css'
+            }),
+            new ManifestPlugin(),
+            ...!isTest ? [
                 new HtmlWebpackPlugin({
                     template: 'index.ejs',
                     prod: prod,
                     minify: htmlMinDefaults
                 }),
             ] : [],
-            isBuild ?
+            ...isBuild ?
                 [
-                    new webpack.optimize.CommonsChunkPlugin({
-                        name: 'vendor',
-                        minChunks: function (module) {
-                            // This prevents stylesheet resources with the .css or .scss extension
-                            // from being moved from their original chunk to the vendor chunk
-                            if (module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
-                                return false;
-                            }
-                            return module.context && module.context.indexOf('node_modules') !== -1;
-                        }
-                    }),
-                    new webpack.optimize.CommonsChunkPlugin({
-                        name: 'manifest',
-                        minChunks: Infinity
-                    }),
                     new webpack.NamedModulesPlugin(),
                     new InlineManifestWebpackPlugin({
                         name: 'webpackManifest'
@@ -97,9 +90,8 @@ module.exports = env => {
                         hashFuncNames: ['sha512']
                     })
                 ] : [],
-            env.analyze ? [ new BundleAnalyzerPlugin() ] : []
-
-        ),
+            ...env.analyze ? [ new BundleAnalyzerPlugin() ] : []
+        ],
         module: {
             rules: [
                 {
@@ -110,10 +102,11 @@ module.exports = env => {
                             loader: 'babel-loader',
                             options: {
                                 presets: [['env', { modules: false }]],
-                                plugins: concat(
-                                    ['transform-runtime', 'syntax-dynamic-import'],
-                                    !isTest ? ['angularjs-annotate'] : []
-                                )
+                                plugins: [
+                                    'transform-runtime',
+                                    'syntax-dynamic-import',
+                                    ...!isTest ? ['angularjs-annotate'] : []
+                                ]
                             }
                         }
                     ]
@@ -135,22 +128,21 @@ module.exports = env => {
                 },
                 {
                     test: /\.(scss|css)$/,
-                    use: ExtractTextPlugin.extract({
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    sourceMap: true
-                                }
-                            },
-                            {
-                                loader: 'sass-loader',
-                                options: {
-                                    sourceMap: true
-                                }
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true
                             }
-                        ]
-                    })
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                    ]
                 },
                 {
                     test: /\.(woff|ttf|eot|ico)/,
