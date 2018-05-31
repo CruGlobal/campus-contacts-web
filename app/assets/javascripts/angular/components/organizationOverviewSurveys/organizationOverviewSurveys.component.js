@@ -1,3 +1,5 @@
+import '../../../../../../src/surveys/SurveyList';
+
 import template from './organizationOverviewSurveys.html';
 
 angular

@@ -1,6 +1,7 @@
-<div class="grid-content">
-    <div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
-         class="survey row padded">
-        {{survey.title}}
-    </div>
-</div>
+<!--<div class="grid-content">-->
+    <!--<div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"-->
+         <!--class="survey row padded">-->
+        <!--{{survey.title}}-->
+    <!--</div>-->
+<!--</div>-->
+<survey-list surveys="$ctrl.organizationOverview.surveys"></survey-list>
