@@ -46,7 +46,7 @@ module.exports = (env = {}) => {
     return {
         mode: isBuild ? 'production' : 'development',
         entry: {
-            app: 'assets/javascripts/angular/main.js'
+            app: './src/main.ts'
         },
         output: {
             filename: '[name].[chunkhash].js',
@@ -94,6 +94,11 @@ module.exports = (env = {}) => {
         ],
         module: {
             rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: ['ts-loader', 'angular2-template-loader'],
+                    exclude: /node_modules/
+                },
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
@@ -171,7 +176,8 @@ module.exports = (env = {}) => {
             ]
         },
         resolve: {
-            modules: [path.resolve(__dirname, 'app'), 'node_modules']
+            // modules: [path.resolve(__dirname, 'app'), 'node_modules'],
+            extensions: [ '.tsx', '.ts', '.js', '.json' ]
         },
         devtool: 'source-map',
         devServer: {

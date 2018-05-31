@@ -1,0 +1,129 @@
+@import '../../../styles/variables/colors';
+@import '../../../styles/variables/ministriesView';
+@import '../../../styles/variables/modals';
+@import '../../../styles/components/global';
+@import '../personPage/variables'; /* For $person-page--* */
+
+person-history {
+  .filters {
+    margin-bottom: 10px;
+
+    .filter {
+      @extend .shared-pill-style;
+      $filter-gray: $gray-2;
+      width: auto;
+      border: 1px solid $filter-gray;
+      background-color: $white;
+      color: $filter-gray;
+      &.active {
+        background-color: $filter-gray;
+        color: $white;
+      }
+    }
+  }
+
+  hr {
+    box-shadow: none;
+    background: $gray-3;
+    // this is so that it overflows both directions, even over the padding of the grandparent, making
+    // a nice divider
+    width: 2000px;
+    margin: 0 (-$person-page--inner-padding);
+  }
+
+  $sheetItemHeight: 50px;
+  $interactionTypeCount: 6;
+  $interactionSheetHeight: $sheetItemHeight * $interactionTypeCount;
+
+  .scrollable-area {
+    $header-height: $person-page--header-height /* title and tabs */ + 44px /* filters */ + 1px /* hr */;
+    organization-overview & {
+      height: calc(100vh - #{$page-trim-height} - #{$header-height});
+    }
+    .modal & {
+      height: calc(100vh - #{$modal-padding * 2} - #{$header-height});
+    }
+    overflow-y: auto;
+  }
+
+  .history-items {
+    min-height: $interactionSheetHeight;
+
+    /* The .sheet-container container pushes the .add-interaction button down 14px. After trying multiple approaches,
+    this is the only one that would work: adding negative padding to its preceeding sibling. */
+    margin-bottom: -14px;
+  }
+
+  .history-item {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $gray-3;
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .row {
+      align-items: initial;
+    }
+  }
+
+  answer-sheet {
+    .qa-pair {
+      margin-bottom: 10px;
+    }
+
+    .question {
+      color: $gray-3;
+      font-size: 12px;
+    }
+
+    .answer {
+      color: $gray-2;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  .add-interaction {
+    padding-bottom: 20px;
+    padding-top: 10px;
+  }
+
+  .sheet-container {
+    height: 0;
+    display: inline-block;
+
+    .sheet {
+      margin-top: -$interactionSheetHeight;
+    }
+  }
+
+  .new-interaction {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 40px;
+    padding-bottom: 20px;
+
+    textarea {
+      width: 100%;
+      height: 2em;
+    }
+
+    button {
+      display: flex;
+      width: auto;
+      border: none;
+      &:hover {
+        background: none;
+        border: none;
+      }
+    }
+
+    .icon-chip {
+      background-color: $pivot-dark-blue;
+    }
+    .close-icon {
+      background-color: $gray-2;
+    }
+  }
+}

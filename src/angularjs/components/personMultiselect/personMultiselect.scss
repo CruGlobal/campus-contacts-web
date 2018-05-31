@@ -1,0 +1,73 @@
+@import '../../../styles/variables/colors';
+
+person-multiselect {
+  display: block;
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+
+    ng-md-icon {
+      align-self: flex-end;
+      width: 14px;
+      height: 14px;
+
+      // Align the icon with the text baseline
+      margin-bottom: -1px;
+    }
+
+    input {
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      outline: none;
+    }
+
+    .action-icon {
+      margin-right: 6px;
+    }
+  }
+
+  @mixin placeholder-color($color) {
+    color: $color;
+    opacity: 1;
+  }
+
+  @mixin generate-styles($foreground-color, $background-color) {
+    background-color: $background-color;
+
+    .item {
+      color: $foreground-color;
+
+      input {
+        border-bottom-color: $foreground-color;
+
+        // Unfortunately, these rules cannot be simply combined using the comma operator because browsers choke on the
+        // the prefixed selectors of other browsers and ignore the entire rule
+        &::-webkit-input-placeholder {
+          @include placeholder-color($foreground-color);
+        }
+        &::-moz-placeholder {
+          @include placeholder-color($foreground-color);
+        }
+        &::-ms-input-placeholder {
+          @include placeholder-color($foreground-color);
+        }
+      }
+
+      .action-icon svg {
+        fill: $foreground-color;
+      }
+    }
+  }
+
+  &.light {
+    @include generate-styles($pivot-dark-blue, $white);
+  }
+  &.dark {
+    @include generate-styles($white, $pivot-dark-blue);
+  }
+}

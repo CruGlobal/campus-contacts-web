@@ -1,0 +1,27 @@
+@import "~bootstrap/scss/bootstrap-reboot.scss";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/print";
+
+body {
+  font-size: 12px;
+  line-height: 1;
+  font-family: Tahoma, Arial, Sans-serif;
+}
+
+// Fixes for angular-ui-bootstrap not supporting Bootstrap 4
+// Bootstrap 4 changed "in" to "show" but uib still applies old "in" class
+.modal.in .modal-dialog {
+    transform: translate(0, 0);
+}
+.modal-backdrop.in {
+  opacity: $modal-backdrop-opacity;
+}
+
+// Fix for angular-ui-select since Bootstrap 4 handles this differently
+.open>.dropdown-menu {
+    display: block;
+}

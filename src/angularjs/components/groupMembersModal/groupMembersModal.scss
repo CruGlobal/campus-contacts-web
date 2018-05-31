@@ -1,0 +1,54 @@
+@import '../../../styles/variables/colors';
+
+group-members-modal {
+  .scroll-contain {
+    max-height: calc(100vh - 60px /* modal padding */ - 132px /* modal header height */ - 30px /* modal body padding */ - 50px /* header row height */ - 51px /* modal footer height */);
+    overflow-y: auto;
+  }
+
+  .member {
+    height: 50px;
+  }
+
+  .name-column {
+    flex: 1;
+  }
+
+  .phone-column {
+    width: 150px;
+
+    text-align: right;
+    icon-button {
+      margin-right: -6px;
+      margin-left: auto;
+    }
+  }
+
+  .email-column {
+    width: 56px;
+  }
+
+  .action-column {
+    width: 56px;
+  }
+
+  person-multiselect {
+    width: 200px;
+    right: -10px;
+    border: 1px solid $pivot-dark-blue;
+
+    .item.selected {
+      display: none;
+    }
+  }
+
+  .modal-footer {
+    ng-md-icon svg {
+      fill: $white;
+    }
+  }
+
+  icon-button {
+    margin: auto;
+  }
+}

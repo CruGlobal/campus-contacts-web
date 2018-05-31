@@ -1,0 +1,16 @@
+@import '../../../styles/variables/colors';
+
+report-period {
+  flex: 1 0 auto;
+  padding-left: 6px;
+  .dashboard-timeframe-toggle {
+    display: inline-block;
+    float: right;
+    a {
+      padding: 0 4px;
+      &.active {
+        color: $pivot-bright-blue;
+      }
+    }
+  }
+}

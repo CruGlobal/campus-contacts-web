@@ -1,0 +1,67 @@
+@import '../../../styles/variables/colors';
+
+person-profile {
+  // This matches $left-col-width from organizationOverviewContact
+  $button-col-width: 60px;
+  $col-spacing: 10px;
+
+  display: block;
+
+  .button-column {
+    width: $button-col-width;
+    margin-right: $col-spacing;
+    margin-top: 15px;
+    text-align: right;
+    .icon-chip {
+      display: inline-block;
+      padding: 4px;
+    }
+    .primary-action {
+      background-color: $pivot-dark-blue;
+    }
+  }
+
+  .form-group {
+    margin-left: $button-col-width + $col-spacing;
+    flex: 1;
+  }
+
+  .form-group-with-left-action {
+    display: flex;
+    margin-bottom: 16px;
+
+    &.dual-action {
+      .first-action {
+        width: 20px;
+      }
+
+      .second-action {
+        width: 30px;
+      }
+    }
+
+    .button-column + .form-group {
+      margin-left: 0;
+      margin-bottom: 0;
+
+      label {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .row button {
+    $padding: 10px;
+    margin-left: $padding;
+    padding-right: $padding;
+  }
+
+  input[type=radio].primary-toggle {
+    position: relative;
+    margin-left: 5px;
+  }
+
+  .pill {
+    margin-bottom: 2px;
+  }
+}

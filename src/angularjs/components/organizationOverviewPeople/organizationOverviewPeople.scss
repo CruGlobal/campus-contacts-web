@@ -1,0 +1,105 @@
+@import '../../../styles/variables/colors';
+@import '../../../styles/variables/ministriesView';
+
+organization-overview-people {
+  $visible-people: 10;
+
+  .container {
+    align-items: inherit;
+    max-height: #{$organization-overview-content-height};
+  }
+
+  .scroll-contain {
+    height: calc(#{$organization-overview-content-height} - #{$person-height});
+    overflow-y: auto;
+  }
+
+  .people-list, ui-view {
+    overflow: auto;
+  }
+
+  .people-list-filters {
+    width: 222px;
+    background-color: $white;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid;
+  }
+
+  .sort-order-column {
+    padding-top: 4px;
+    padding-left: 4px;
+  }
+
+  .people-list {
+    flex: 1; /* 25% of available width */
+    min-width: 196px;
+    display: flex;
+    flex-direction: column;
+
+    .grid-content .active {
+      background-color: $pivot-dark-blue;
+      color: $white;
+
+      a:focus, a:hover, a:visited {
+        color: $white;
+      }
+
+      input[type="checkbox"] {
+        background-color: $pivot-darker-blue;
+        border-color: $pivot-darker-blue;
+      }
+    }
+  }
+
+  .collapsed {
+    ui-view {
+      flex: 3; /* 75% of available width */
+      max-width: 530px;
+    }
+
+    ministry-view-person .detail-column {
+      display: none;
+    }
+  }
+
+  .header {
+    @extend ministry-view-person;
+    background-color: $pivot-darker-blue;
+    display: flex;
+    flex-shrink: 0;
+
+    input[type="checkbox"], input[type="checkbox"]:checked {
+      background-color: $pivot-darker-blue;
+      border: 1px solid $white;
+    }
+  }
+
+  input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+  }
+
+  person-page {
+    border-left: 1px solid $pivot-dark-blue;
+  }
+
+  .selected-people-message {
+    display: flex;
+    background-color: $pivot-orange;
+    color: $white;
+    padding: 10px;
+    flex-shrink: 0;
+
+    ng-md-icon {
+      padding-left: 5px;
+      svg {
+        fill: $white;
+      }
+    }
+
+    .space {
+      flex: 1;
+    }
+  }
+}

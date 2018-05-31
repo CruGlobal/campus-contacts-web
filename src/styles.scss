@@ -1,0 +1,57 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'styles/bootstrap.scss';
+@import 'styles/global.scss';
+@import 'styles/dashboard.scss';
+@import 'styles/pivot_theme.scss';
+@import 'styles/superfish.scss';
+@import 'styles/superfish-navbar.scss';
+@import 'styles/superfish-vertical.css';
+
+// Manually import AngularJS component styles since the Angular CLI won't import them with JS imports
+@import './angularjs/components/reportPeriod/reportPeriod.scss';
+@import './angularjs/components/organization/organization.scss';
+@import './angularjs/components/personAssigned/personAssigned.scss';
+@import './angularjs/components/myOrganizationsDashboard/myOrganizationsDashboard.scss';
+@import './angularjs/components/personActivity/personActivity.scss';
+@import './angularjs/components/personPage/variables.scss';
+@import './angularjs/components/personPage/personPage.scss';
+@import './angularjs/components/editAddress/editAddress.scss';
+@import './angularjs/components/nav-search/nav-search.scss';
+@import './angularjs/components/multiselectList/variables.scss';
+@import './angularjs/components/multiselectList/multiselectList.scss';
+@import './angularjs/components/statsHeader/statsHeader.scss';
+@import './angularjs/components/organizationalStats/organizationalStats.scss';
+@import './angularjs/components/accordion/accordion.scss';
+@import './angularjs/components/peopleFiltersPanel/peopleFiltersPanel.scss';
+@import './angularjs/components/accordionToggle/accordionToggle.scss';
+@import './angularjs/components/transferModal/transferModal.scss';
+@import './angularjs/components/peopleViewPerson/peopleViewPerson.scss';
+@import './angularjs/components/organizationOverviewPeople/organizationOverviewPeople.scss';
+@import './angularjs/components/groupMembersModal/groupMembersModal.scss';
+@import './angularjs/components/myPeopleDashboard/myPeopleDashboard.scss';
+@import './angularjs/components/organizationOverviewGroups/organizationOverviewGroups.scss';
+@import './angularjs/components/editGroupOrLabelAssignments/editGroupOrLabelAssignments.scss';
+@import './angularjs/components/preferencesPage/preferencesPage.scss';
+@import './angularjs/components/organizationOverviewLabels/organizationOverviewLabels.scss';
+@import './angularjs/components/loadingSpinner/loadingSpinner.scss';
+@import './angularjs/components/ministryViewPerson/ministryViewPerson.scss';
+@import './angularjs/components/iconButton/iconButton.scss';
+@import './angularjs/components/answerSheet/answerSheet.scss';
+@import './angularjs/components/organizationOverview/organizationOverview.scss';
+@import './angularjs/components/mergeWinnerModal/mergeWinnerModal.scss';
+@import './angularjs/components/organizationBreadcrumbs/organizationBreadcrumbs.scss';
+@import './angularjs/components/personMultiselect/personMultiselect.scss';
+@import './angularjs/components/messageModal/messageModal.scss';
+@import './angularjs/components/ministryViewGroup/ministryViewGroup.scss';
+@import './angularjs/components/personProfile/personProfile.scss';
+@import './angularjs/components/massEdit/massEdit.scss';
+@import './angularjs/components/editGroup/editGroup.scss';
+@import './angularjs/components/aboutModal/aboutModal.scss';
+@import './angularjs/components/interaction/interaction.scss';
+@import './angularjs/components/personHistory/personHistory.scss';
+@import './angularjs/components/asyncContent/asyncContent.scss';
+@import './angularjs/components/newWelcomeModal/newWelcomeModal.scss';
+@import './angularjs/components/ministryViewLabel/ministryViewLabel.scss';
+@import './angularjs/components/unassignedPeople/unassignedPeople.scss';
+@import './angularjs/components/assignedSelect/assignedSelect.scss';
