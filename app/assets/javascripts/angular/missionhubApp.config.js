@@ -9,7 +9,7 @@ angular
             },
             vars: {
                 development: {
-                    apiUrl: '//localhost:3001/apis/v4'
+                    apiUrl: 'https://api-stage.missionhub.com/apis/v4'
                 },
                 staging: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4'
