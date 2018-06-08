@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "missionhub-web"
+  "defaultProject": "missionhub-web",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
