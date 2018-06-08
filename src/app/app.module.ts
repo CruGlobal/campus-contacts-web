@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
 
-  ],
+  NavComponent],
   imports: [
     BrowserModule,
     UpgradeModule

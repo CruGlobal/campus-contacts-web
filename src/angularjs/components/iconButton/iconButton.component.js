@@ -7,26 +7,24 @@ import './iconButton.scss';
  * action is an ng-click handler, an href link, a ui-sref link, or some other click-based action.
  */
 
-angular
-    .module('missionhubApp')
-    .component('iconButton', {
-        controller: iconButtonController,
-        bindings: {
-            disabled: '<',
-            icon: '<'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('iconButton', {
+  controller: iconButtonController,
+  bindings: {
+    disabled: '<',
+    icon: '<',
+  },
+  template: template,
+});
 
-function iconButtonController () {
-    var vm = this;
+function iconButtonController() {
+  var vm = this;
 
-    vm.handleClick = handleClick;
+  vm.handleClick = handleClick;
 
-    function handleClick (event) {
-        if (vm.disabled) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+  function handleClick(event) {
+    if (vm.disabled) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+  }
 }
