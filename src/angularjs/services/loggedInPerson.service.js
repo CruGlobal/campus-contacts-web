@@ -1,6 +1,8 @@
-angular.module('missionhubApp').factory('loggedInPerson', loggedInPerson);
+angular
+  .module('missionhubApp')
+  .factory('loggedInPerson', LoggedInPersonService);
 
-function loggedInPerson(
+export function LoggedInPersonService(
   httpProxy,
   modelsService,
   organizationService,
@@ -86,3 +88,13 @@ function loggedInPerson(
     },
   };
 }
+
+export function loggedInPersonServiceFactory(i) {
+  return i.get('loggedInPerson');
+}
+
+export const loggedInPersonServiceProvider = {
+  provide: LoggedInPersonService,
+  useFactory: loggedInPersonServiceFactory,
+  deps: ['$injector'],
+};

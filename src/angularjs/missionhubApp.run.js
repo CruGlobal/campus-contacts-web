@@ -25,14 +25,8 @@ angular
       $analytics.pageTrack($window.location.pathname);
     }
 
-    // This code will run when Angular initializes, but currently we are gaining our
-    // authentication from the rails host through a <preload-state> component. This means
-    // that the access token isn't populated at the time of application initialization,
-    // the $timeout will cause delay this execution until after the first digest.
-    $timeout(function() {
-      loggedInPerson.loadOnce().then(function(me) {
-        updateRollbarPerson(me);
-        $rootScope.legacyNavigation = me.user.beta_mode === false;
-      });
+    loggedInPerson.loadOnce().then(function(me) {
+      updateRollbarPerson(me);
+      $rootScope.legacyNavigation = me.user.beta_mode === false;
     });
   });
