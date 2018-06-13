@@ -2,11 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { NavComponent } from './nav/nav.component';
-import { loggedInPersonServiceProvider } from '../angularjs/services/loggedInPerson.service.js';
+import { loggedInPersonServiceProvider } from '../angularjs/services/loggedInPerson.service';
+import { NavSearchDirective } from './upgrade/toAngular';
 import { TranslatePipe } from './translate.pipe';
 
 @NgModule({
-  declarations: [NavComponent, TranslatePipe],
+  declarations: [NavComponent, NavSearchDirective, TranslatePipe],
   imports: [BrowserModule, UpgradeModule],
   providers: [loggedInPersonServiceProvider],
   entryComponents: [NavComponent],

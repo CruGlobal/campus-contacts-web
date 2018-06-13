@@ -3013,29 +3013,6 @@ div.help_bubble_group {
     color: white;
     opacity: $search-initial-op;
   }
-  .search-autocomplete-field {
-    margin-right: 5px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    border: 0 solid white;
-    color: white;
-    width: 30px;
-    font-size: 0;
-    // TODO: fix
-    //background: url('../images/search.svg') 5px 0 no-repeat;
-    height: 24px;
-    box-sizing: border-box;
-    &.ui-autocomplete-loading {
-      background-color: transparent !important;
-    }
-    &:focus {
-      border-width: 0 0 1px;
-      background: none;
-      font-size: 12px;
-      width: 290px;
-      outline: none;
-    }
-  }
 }
 
 ul#ui-autocomplete {
