@@ -13,19 +13,8 @@
 <body>
   <preload-state name="hasMissionhubAccess" data="true"></preload-state>
   <preload-state name="branded" data="true"></preload-state>
-  <div id="outer">
-    <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
-    <app-nav></app-nav>
-    <dashboard-subnav></dashboard-subnav>
 
-    <div id="dashboard_main">
-      <div class="dashboard_panels">
-        <dashboard></dashboard>
-      </div>
-    </div>
-
-    <div class="clear"></div>
-  </div>
+  <ui-view></ui-view>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script><!-- needed for angular-ui-sortable --->

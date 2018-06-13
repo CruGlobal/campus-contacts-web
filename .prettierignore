@@ -4,3 +4,4 @@ coverage
 package.json
 yarn.lock
 README.md
+*.html

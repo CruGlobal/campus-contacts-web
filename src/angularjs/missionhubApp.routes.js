@@ -245,7 +245,7 @@ angular
             return loggedInPerson.loadingPromise;
           },
         },
-        template: '<ui-view></ui-view>',
+        template: '<app></app>',
       })
       .state({
         name: 'app.people',

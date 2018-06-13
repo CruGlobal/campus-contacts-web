@@ -5,17 +5,26 @@ import {
   UIRouterUpgradeModule,
   NgHybridStateDeclaration,
 } from '@uirouter/angular-hybrid';
+import { routes } from './routes';
 import { NavComponent } from './nav/nav.component';
 import { loggedInPersonServiceProvider } from '../angularjs/services/loggedInPerson.service';
 import { NavSearchDirective } from './upgrade/toAngular';
 import { TranslatePipe } from './translate.pipe';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
-  declarations: [NavComponent, NavSearchDirective, TranslatePipe],
+  declarations: [
+    NavComponent,
+    NavSearchDirective,
+    TranslatePipe,
+    SignInComponent,
+    LandingComponent,
+  ],
   imports: [
     BrowserModule,
     UpgradeModule,
-    UIRouterUpgradeModule.forRoot({ states: [] }),
+    UIRouterUpgradeModule.forRoot({ states: routes }),
   ],
   providers: [loggedInPersonServiceProvider],
   entryComponents: [NavComponent],

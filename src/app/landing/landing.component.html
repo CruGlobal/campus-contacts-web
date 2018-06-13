@@ -1,0 +1,32 @@
+<div class="welcome">
+  <header role="global">
+    <div class="container">
+      <h1>
+        <a uiSref="landing.main">{{ 'general.missionhub' | t}}</a>
+      </h1>
+
+      <nav class="primary">
+        <ul>
+          <li>
+            <a href="https://help.missionhub.com">{{ 'nav.support' | t}}</a>
+          </li>
+          <li>
+            <a uiSref="landing.signIn">{{ 'nav.login' | t }}</a>
+          </li>
+          <li>
+            <a uiSref="landing.requestAccess">{{ 'nav.request_access' | t }}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <ui-view></ui-view>
+
+  <footer role="global">
+    <div class="copyright">{{'general.copyright' | t: { year: year } }}</div>
+    <nav>
+      <a href="https://get.missionhub.com/terms-of-service">{{ 'nav.terms' }}</a>
+    </nav>
+  </footer>
+</div>
