@@ -1,12 +1,12 @@
 <div id="menutop" class="topmenu topmenu-with-sub">
   <a href="/" id="logoInvert"></a>
   <ul class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
-    <li ui-sref-active="current">
-      <a ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+    <li uiSrefActive="current">
+      <a uiSref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
     </li>
 
     <li ng-class="{ current: ('app.ministries' | includedByState) }">
-      <a ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+      <a uiSref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
     </li>
   </ul>
 
@@ -26,10 +26,7 @@
       </a>
       <ul>
         <li>
-          <a ui-sref="app.people.person.defaultTab({
-                        personId: $ctrl.loggedInPerson.person.id,
-                        orgId: $ctrl.state.legacyCurrentOrganization
-                      })">
+          <a uiSref="app.people.person.defaultTab" [uiParams]="{ personId: person.id }">
             {{ 'nav.my_profile' | t }}
           </a>
         </li>

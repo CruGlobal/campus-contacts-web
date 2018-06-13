@@ -13,6 +13,10 @@ angular
     spaPage,
     _,
   ) {
+    // Using AngularJS config block, call `deferIntercept()`.
+    // This tells UI-Router to delay the initial URL sync (until all bootstrapping is complete)
+    $urlServiceProvider.deferIntercept();
+
     // Only set up client-side routing on single-page app pages
     if (!spaPage) {
       return false;

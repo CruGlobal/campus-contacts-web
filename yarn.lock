@@ -234,15 +234,34 @@
   version "2.53.43"
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-2.53.43.tgz#2de3d718819bc20165754c4a59afb7e9833f6707"
 
-"@uirouter/angularjs@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.18.tgz#7ec481921c0c66dc93442b340779d733a49b0214"
+"@uirouter/angular-hybrid@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@uirouter/angular-hybrid/-/angular-hybrid-6.0.0.tgz#ebcb26526a5167da7d6c393bca756c592564b4ca"
+  dependencies:
+    "@uirouter/angular" "2.0.0"
+    "@uirouter/angularjs" "1.0.17"
+    "@uirouter/core" "5.0.19"
+
+"@uirouter/angular@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@uirouter/angular/-/angular-2.0.0.tgz#fb5649e4c12fb1a6cca484495639d2d0c8b11399"
+  dependencies:
+    "@uirouter/core" "5.0.19"
+    "@uirouter/rx" "0.5.0"
+
+"@uirouter/angularjs@1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.17.tgz#ec9818e9aa79f3a11d0657cb0e5f567d682fc450"
   dependencies:
     "@uirouter/core" "5.0.19"
 
 "@uirouter/core@5.0.19":
   version "5.0.19"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.19.tgz#fe2888190393a8c92584c354e65ab8322c1b0db4"
+
+"@uirouter/rx@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@uirouter/rx/-/rx-0.5.0.tgz#a0577408488e9523732ef5985a631f7b607fed5b"
 
 "@webassemblyjs/ast@1.4.3":
   version "1.4.3"

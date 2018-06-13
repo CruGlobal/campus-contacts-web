@@ -26,6 +26,7 @@ export default angular.module('missionhubApp', [
   'beauby.jsonApiDataStore',
   ngEnvironment,
   uiRouter,
+  'ui.router.upgrade',
   uiSelect,
   'ui.sortable',
   uiBootstrap,

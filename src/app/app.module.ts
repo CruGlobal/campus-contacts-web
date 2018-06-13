@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UpgradeModule } from '@angular/upgrade/static';
+import {
+  UIRouterUpgradeModule,
+  NgHybridStateDeclaration,
+} from '@uirouter/angular-hybrid';
 import { NavComponent } from './nav/nav.component';
 import { loggedInPersonServiceProvider } from '../angularjs/services/loggedInPerson.service';
 import { NavSearchDirective } from './upgrade/toAngular';
@@ -8,7 +12,11 @@ import { TranslatePipe } from './translate.pipe';
 
 @NgModule({
   declarations: [NavComponent, NavSearchDirective, TranslatePipe],
-  imports: [BrowserModule, UpgradeModule],
+  imports: [
+    BrowserModule,
+    UpgradeModule,
+    UIRouterUpgradeModule.forRoot({ states: [] }),
+  ],
   providers: [loggedInPersonServiceProvider],
   entryComponents: [NavComponent],
 })
