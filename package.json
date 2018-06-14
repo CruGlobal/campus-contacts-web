@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^6.0.4",
     "@angular/router": "^6.0.3",
     "@angular/upgrade": "^6.0.4",
+    "@types/angular": "^1.6.47",
     "@uirouter/angular-hybrid": "^6.0.0",
     "angular": "~1.7.0",
     "angular-animate": "~1.7.0",

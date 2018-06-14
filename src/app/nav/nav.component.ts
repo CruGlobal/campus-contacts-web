@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as angular from 'angular';
-import { LoggedInPersonService } from '../../angularjs/services/loggedInPerson.service.js';
+import { LoggedInPersonService } from '../../angularjs/services/loggedInPerson.service';
+import { UibModal } from '../upgrade/toAngularServices';
 
 @Component({
   selector: 'app-nav',
@@ -8,16 +9,24 @@ import { LoggedInPersonService } from '../../angularjs/services/loggedInPerson.s
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
-  loggedInPerson: any;
-  person = { first_name: '', last_name: '' };
+  person = { id: null, first_name: '', last_name: '', picture: '' };
 
-  constructor(loggedInPerson: LoggedInPersonService) {
-    this.loggedInPerson = loggedInPerson;
-  }
+  constructor(
+    private loggedInPerson: LoggedInPersonService,
+    private $uibModal: UibModal,
+  ) {}
 
   async ngOnInit() {
     await this.loggedInPerson.loadingPromise;
     this.person = this.loggedInPerson.person;
+  }
+
+  openAboutModal() {
+    this.$uibModal.open({
+      component: 'aboutModal',
+      windowClass: 'pivot_theme',
+      size: 'md',
+    });
   }
 }
 
