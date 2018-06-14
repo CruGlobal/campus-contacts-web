@@ -1,5 +1,13 @@
 angular.module('missionhubApp').factory('groupsService', groupsService);
 
+groupsService.$inject = [
+  '$q',
+  'httpProxy',
+  'JsonApiDataStore',
+  'modelsService',
+  'moment',
+  '_',
+];
 function groupsService(
   $q,
   httpProxy,

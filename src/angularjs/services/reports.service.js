@@ -1,6 +1,14 @@
 angular.module('missionhubApp').factory('reportsService', reportsService);
 
 // This service contains action logic that is shared across components
+reportsService.$inject = [
+  '$q',
+  'httpProxy',
+  'modelsService',
+  'JsonApiDataStore',
+  'periodService',
+  '_',
+];
 function reportsService(
   $q,
   httpProxy,

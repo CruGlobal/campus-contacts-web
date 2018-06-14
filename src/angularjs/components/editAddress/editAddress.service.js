@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('editAddressService', editAddressService);
 
+editAddressService.$inject = ['geoDataService', 'JsonApiDataStore', '_'];
 function editAddressService(geoDataService, JsonApiDataStore, _) {
   var editAddressService = {
     // Return an array of valid address types

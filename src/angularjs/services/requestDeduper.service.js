@@ -1,3 +1,4 @@
+requestDeduper.$inject = ['$q', '_'];
 angular.module('missionhubApp').factory('RequestDeduper', requestDeduper);
 
 function requestDeduper($q, _) {

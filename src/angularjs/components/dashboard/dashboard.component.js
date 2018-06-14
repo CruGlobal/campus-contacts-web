@@ -1,3 +1,9 @@
+DashboardController.$inject = [
+  'loggedInPerson',
+  'periodService',
+  '$uibModal',
+  '$rootScope',
+];
 import template from './dashboard.html';
 
 angular.module('missionhubApp').component('dashboard', {

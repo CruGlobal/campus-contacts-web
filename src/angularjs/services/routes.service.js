@@ -1,3 +1,4 @@
+routesService.$inject = ['httpProxy', 'modelsService'];
 angular.module('missionhubApp').factory('routesService', routesService);
 
 // This service contains logic used by the routes

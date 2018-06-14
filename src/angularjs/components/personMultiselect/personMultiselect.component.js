@@ -1,3 +1,11 @@
+personMultiselectController.$inject = [
+  '$scope',
+  '$q',
+  'RequestDeduper',
+  'assignedSelectService',
+  'tFilter',
+  '_',
+];
 import template from './personMultiselect.html';
 import './personMultiselect.scss';
 

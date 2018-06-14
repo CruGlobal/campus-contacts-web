@@ -1,3 +1,4 @@
+personPageService.$inject = ['httpProxy', 'modelsService', '_'];
 angular.module('missionhubApp').factory('personPageService', personPageService);
 
 function personPageService(httpProxy, modelsService, _) {

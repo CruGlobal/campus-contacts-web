@@ -1,3 +1,4 @@
+multiselectListController.$inject = ['multiselectListService', '_'];
 import template from './multiselectList.html';
 import './multiselectList.scss';
 

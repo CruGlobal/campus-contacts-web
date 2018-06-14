@@ -1,3 +1,8 @@
+preferencesPageService.$inject = [
+  'httpProxy',
+  'modelsService',
+  'loggedInPerson',
+];
 angular
   .module('missionhubApp')
   .factory('preferencesPageService', preferencesPageService);

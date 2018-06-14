@@ -1,3 +1,10 @@
+organizationController.$inject = [
+  '$rootScope',
+  'loggedInPerson',
+  'interactionsService',
+  'userPreferencesService',
+  '_',
+];
 import template from './organization.html';
 import './organization.scss';
 

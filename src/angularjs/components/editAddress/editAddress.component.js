@@ -1,3 +1,8 @@
+editAddressController.$inject = [
+  'editAddressService',
+  'personProfileService',
+  '_',
+];
 import template from './editAddress.html';
 import './editAddress.scss';
 

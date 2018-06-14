@@ -1,3 +1,4 @@
+personAssignedService.$inject = ['JsonApiDataStore', 'personService'];
 angular
   .module('missionhubApp')
   .factory('personAssignedService', personAssignedService);

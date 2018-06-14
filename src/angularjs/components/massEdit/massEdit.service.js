@@ -1,5 +1,13 @@
 angular.module('missionhubApp').factory('massEditService', massEditService);
 
+massEditService.$inject = [
+  '$q',
+  'httpProxy',
+  'JsonApiDataStore',
+  'modelsService',
+  'personSelectionService',
+  '_',
+];
 function massEditService(
   $q,
   httpProxy,

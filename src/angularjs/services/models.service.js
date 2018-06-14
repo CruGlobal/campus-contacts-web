@@ -1,5 +1,6 @@
 angular.module('missionhubApp').factory('modelsService', modelsService);
 
+modelsService.$inject = ['_'];
 function modelsService(_) {
   function generateUrls(root, extras) {
     return _.extend(

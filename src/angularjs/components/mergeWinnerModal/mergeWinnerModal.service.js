@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('mergeWinnerService', mergeWinnerService);
 
+mergeWinnerService.$inject = ['httpProxy', 'modelsService', 'dateFilter', '_'];
 function mergeWinnerService(httpProxy, modelsService, dateFilter, _) {
   var mergeWinnerService = {
     // The fields of a choice.person object

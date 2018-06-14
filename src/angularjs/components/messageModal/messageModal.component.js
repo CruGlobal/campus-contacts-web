@@ -1,3 +1,9 @@
+messageModalController.$inject = [
+  '$filter',
+  'JsonApiDataStore',
+  'messageModalService',
+  '_',
+];
 import template from './messageModal.html';
 import './messageModal.scss';
 

@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('messageModalService', messageModalService);
 
+messageModalService.$inject = ['httpProxy', 'personSelectionService'];
 function messageModalService(httpProxy, personSelectionService) {
   var messageModalService = {
     sendMessage: function(options) {

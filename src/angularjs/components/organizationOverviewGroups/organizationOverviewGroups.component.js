@@ -1,3 +1,8 @@
+organizationOverviewGroupsController.$inject = [
+  '$uibModal',
+  'groupsService',
+  '_',
+];
 import template from './organizationOverviewGroups.html';
 import './organizationOverviewGroups.scss';
 

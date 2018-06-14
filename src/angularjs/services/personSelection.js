@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('personSelectionService', personSelectionService);
 
+personSelectionService.$inject = ['_'];
 function personSelectionService(_) {
   var personSelectionService = {
     // Return a boolean indicating whether a selection contains people that are not included in the id list

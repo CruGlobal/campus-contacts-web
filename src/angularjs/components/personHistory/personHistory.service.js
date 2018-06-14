@@ -1,3 +1,4 @@
+personHistoryService.$inject = ['_'];
 angular
   .module('missionhubApp')
   .factory('personHistoryService', personHistoryService);

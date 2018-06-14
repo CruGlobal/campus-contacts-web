@@ -1,3 +1,4 @@
+organizationOverviewLabelsController.$inject = ['$uibModal', '_'];
 import template from './organizationOverviewLabels.html';
 import './organizationOverviewLabels.scss';
 

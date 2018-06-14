@@ -1,3 +1,8 @@
+personActivityController.$inject = [
+  'interactionsService',
+  'reportsService',
+  'periodService',
+];
 import template from './personActivity.html';
 import './personActivity.scss';
 

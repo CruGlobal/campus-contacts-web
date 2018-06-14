@@ -1,3 +1,4 @@
+accordionController.$inject = ['_'];
 import template from './accordion.html';
 import './accordion.scss';
 

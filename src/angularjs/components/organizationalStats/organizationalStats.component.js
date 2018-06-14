@@ -1,3 +1,8 @@
+organizationalStatsController.$inject = [
+  '$scope',
+  'periodService',
+  'reportsService',
+];
 import template from './organizationalStats.html';
 import './organizationalStats.scss';
 

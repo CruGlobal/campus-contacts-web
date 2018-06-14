@@ -1,6 +1,8 @@
-angular
-  .module('missionhubApp')
-  .directive('onClickAway', function($window, $parse, $timeout) {
+angular.module('missionhubApp').directive('onClickAway', [
+  '$window',
+  '$parse',
+  '$timeout',
+  function($window, $parse, $timeout) {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -22,4 +24,5 @@ angular
         }
       },
     };
-  });
+  },
+]);

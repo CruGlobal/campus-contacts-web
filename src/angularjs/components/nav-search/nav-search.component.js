@@ -1,3 +1,4 @@
+navSearchController.$inject = ['peopleSearchService'];
 import template from './nav-search.html';
 import './nav-search.scss';
 

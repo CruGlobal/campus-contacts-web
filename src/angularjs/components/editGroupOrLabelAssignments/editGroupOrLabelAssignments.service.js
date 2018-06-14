@@ -1,3 +1,11 @@
+editGroupOrLabelAssignmentsService.$inject = [
+  '$q',
+  'httpProxy',
+  'modelsService',
+  'JsonApiDataStore',
+  'personProfileService',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory(

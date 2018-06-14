@@ -1,3 +1,16 @@
+personProfileController.$inject = [
+  '$scope',
+  '$filter',
+  '$uibModal',
+  'JsonApiDataStore',
+  'jQuery',
+  'permissionService',
+  'personService',
+  'personProfileService',
+  'loggedInPerson',
+  'confirmModalService',
+  '_',
+];
 import template from './personProfile.html';
 import './personProfile.scss';
 

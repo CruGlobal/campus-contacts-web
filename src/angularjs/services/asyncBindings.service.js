@@ -1,3 +1,4 @@
+asyncBindingsService.$inject = ['$injector', '$q', '_'];
 angular
   .module('missionhubApp')
   .factory('asyncBindingsService', asyncBindingsService);

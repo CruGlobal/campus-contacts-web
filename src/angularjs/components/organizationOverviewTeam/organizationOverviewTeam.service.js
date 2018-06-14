@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('organizationOverviewTeamService', organizationOverviewTeamService);
 
+organizationOverviewTeamService.$inject = ['httpProxy', 'modelsService'];
 function organizationOverviewTeamService(httpProxy, modelsService) {
   var organizationOverviewTeamService = {
     buildGetParams: function(orgId) {

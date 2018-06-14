@@ -1,3 +1,9 @@
+organizationBreadcrumbsController.$inject = [
+  '$transitions',
+  '$uiRouter',
+  'JsonApiDataStore',
+  'organizationService',
+];
 import template from './organizationBreadcrumbs.html';
 import './organizationBreadcrumbs.scss';
 

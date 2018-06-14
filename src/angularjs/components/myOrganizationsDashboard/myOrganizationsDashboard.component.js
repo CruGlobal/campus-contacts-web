@@ -3,7 +3,10 @@ import './myOrganizationsDashboard.scss';
 
 angular.module('missionhubApp').component('myOrganizationsDashboard', {
   template: template,
-  controller: function($state) {
-    this.$state = $state;
-  },
+  controller: [
+    '$state',
+    function($state) {
+      this.$state = $state;
+    },
+  ],
 });

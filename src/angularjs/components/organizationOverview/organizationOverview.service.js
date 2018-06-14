@@ -1,3 +1,12 @@
+organizationOverviewService.$inject = [
+  '$q',
+  'httpProxy',
+  'modelsService',
+  'organizationOverviewPeopleService',
+  'organizationOverviewTeamService',
+  'organizationOverviewSuborgsService',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory('organizationOverviewService', organizationOverviewService);

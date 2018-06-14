@@ -1,3 +1,4 @@
+editLabelController.$inject = ['labelsService', '_'];
 import template from './editLabel.html';
 
 angular.module('missionhubApp').component('editLabel', {

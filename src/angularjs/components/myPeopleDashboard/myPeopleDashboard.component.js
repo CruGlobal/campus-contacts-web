@@ -1,3 +1,17 @@
+myPeopleDashboardController.$inject = [
+  '$scope',
+  '$log',
+  '$document',
+  'JsonApiDataStore',
+  '_',
+  'I18n',
+  'myPeopleDashboardService',
+  'periodService',
+  'loggedInPerson',
+  'personService',
+  'reportsService',
+  'userPreferencesService',
+];
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 
@@ -134,7 +148,9 @@ function myPeopleDashboardController(
     vm.organizations.forEach(function(organization) {
       // Get an array of the people assigned to me on this organization
       organization.people = _
-        .filter(assignmentsToMe, { organization: organization })
+        .filter(assignmentsToMe, {
+          organization: organization,
+        })
         .map(function(assignment) {
           return JsonApiDataStore.store.find('person', assignment.person_id);
         });

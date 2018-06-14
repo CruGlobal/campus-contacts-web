@@ -1,3 +1,4 @@
+periodService.$inject = ['$window', '$rootScope'];
 angular.module('missionhubApp').factory('periodService', periodService);
 
 // This service contains action logic that is shared across components

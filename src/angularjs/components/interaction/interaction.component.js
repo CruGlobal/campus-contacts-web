@@ -1,3 +1,8 @@
+interactionController.$inject = [
+  'interactionsService',
+  'confirmModalService',
+  '$filter',
+];
 import template from './interaction.html';
 import './interaction.scss';
 

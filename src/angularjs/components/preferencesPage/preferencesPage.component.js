@@ -1,3 +1,10 @@
+preferencesPageController.$inject = [
+  '$rootScope',
+  'preferencesPageService',
+  'languageService',
+  '_',
+  'nativeLocation',
+];
 import template from './preferencesPage.html';
 import './preferencesPage.scss';
 

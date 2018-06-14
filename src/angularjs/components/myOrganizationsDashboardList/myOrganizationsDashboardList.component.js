@@ -8,14 +8,17 @@ angular.module('missionhubApp').component('myOrganizationsDashboardList', {
   bindings: {
     rootOrgs: '<',
   },
-  controller: /* @ngInject */ function(userPreferencesService) {
-    var vm = this;
+  controller: /* @ngInject */ [
+    'userPreferencesService',
+    function(userPreferencesService) {
+      var vm = this;
 
-    vm.sortableOptions = {
-      handle: '.sort-orgs-handle',
-      stop: function() {
-        return userPreferencesService.organizationOrderChange(vm.rootOrgs);
-      },
-    };
-  },
+      vm.sortableOptions = {
+        handle: '.sort-orgs-handle',
+        stop: function() {
+          return userPreferencesService.organizationOrderChange(vm.rootOrgs);
+        },
+      };
+    },
+  ],
 });

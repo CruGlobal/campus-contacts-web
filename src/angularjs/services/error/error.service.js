@@ -2,6 +2,7 @@ import './errorRetryToastTemplate.directive';
 
 angular.module('missionhubApp').factory('errorService', errorService);
 
+errorService.$inject = ['$timeout', '$q', '$log', 'toaster', '_'];
 function errorService($timeout, $q, $log, toaster, _) {
   var errorService = {
     displayError: displayError,

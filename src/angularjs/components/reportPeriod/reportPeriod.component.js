@@ -1,3 +1,4 @@
+reportPeriodController.$inject = ['periodService'];
 import template from './reportPeriod.html';
 import './reportPeriod.scss';
 

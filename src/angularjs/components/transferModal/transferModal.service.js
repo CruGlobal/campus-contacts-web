@@ -1,3 +1,8 @@
+transferService.$inject = [
+  'httpProxy',
+  'JsonApiDataStore',
+  'personSelectionService',
+];
 angular.module('missionhubApp').factory('transferService', transferService);
 
 function transferService(httpProxy, JsonApiDataStore, personSelectionService) {

@@ -1,3 +1,4 @@
+ministryViewGroupService.$inject = ['groupsService', 'tFilter', 'moment', '_'];
 angular
   .module('missionhubApp')
   .factory('ministryViewGroupService', ministryViewGroupService);

@@ -1,3 +1,9 @@
+groupMembersModalService.$inject = [
+  'httpProxy',
+  'JsonApiDataStore',
+  'modelsService',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory('groupMembersModalService', groupMembersModalService);

@@ -1,3 +1,4 @@
+progressiveListLoader.$inject = ['httpProxy', 'modelsService', '_'];
 angular
   .module('missionhubApp')
   .factory('ProgressiveListLoader', progressiveListLoader);

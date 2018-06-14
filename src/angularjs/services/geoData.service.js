@@ -1,3 +1,4 @@
+geoDataService.$inject = ['_'];
 angular.module('missionhubApp').factory('geoDataService', geoDataService);
 
 function geoDataService(_) {

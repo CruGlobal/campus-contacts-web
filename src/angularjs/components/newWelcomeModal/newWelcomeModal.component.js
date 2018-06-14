@@ -1,3 +1,4 @@
+newWelcomeModalController.$inject = ['$rootScope', 'loggedInPerson'];
 import template from './newWelcomeModal.html';
 import './newWelcomeModal.scss';
 

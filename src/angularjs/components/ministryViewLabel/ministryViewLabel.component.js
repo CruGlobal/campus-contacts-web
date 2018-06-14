@@ -1,3 +1,11 @@
+ministryViewLabelController.$inject = [
+  '$uibModal',
+  'confirmModalService',
+  'tFilter',
+  'labelsService',
+  'loggedInPerson',
+  '_',
+];
 import template from './ministryViewLabel.html';
 import './ministryViewLabel.scss';
 

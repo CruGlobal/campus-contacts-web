@@ -1,3 +1,14 @@
+organizationOverviewController.$inject = [
+  '$scope',
+  'p2cOrgId',
+  'asyncBindingsService',
+  'ministryViewTabs',
+  'organizationOverviewService',
+  'organizationService',
+  'loggedInPerson',
+  'userPreferencesService',
+  '_',
+];
 import template from './organizationOverview.html';
 import './organizationOverview.scss';
 

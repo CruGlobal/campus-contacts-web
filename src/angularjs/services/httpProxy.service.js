@@ -1,3 +1,15 @@
+proxyService.$inject = [
+  '$http',
+  '$log',
+  '$q',
+  'envService',
+  'JsonApiDataStore',
+  'modelsService',
+  'Upload',
+  'tFilter',
+  'errorService',
+  '_',
+];
 angular.module('missionhubApp').factory('httpProxy', proxyService);
 
 function proxyService(

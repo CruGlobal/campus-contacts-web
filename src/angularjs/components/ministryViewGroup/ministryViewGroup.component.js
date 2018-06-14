@@ -1,3 +1,12 @@
+ministryViewGroupController.$inject = [
+  '$scope',
+  '$uibModal',
+  'confirmModalService',
+  'tFilter',
+  'groupsService',
+  'ministryViewGroupService',
+  '_',
+];
 import template from './ministryViewGroup.html';
 import './ministryViewGroup.scss';
 

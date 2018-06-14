@@ -1,3 +1,4 @@
+peopleSearchService.$inject = ['httpProxy', 'modelsService'];
 angular
   .module('missionhubApp')
   .factory('peopleSearchService', peopleSearchService);

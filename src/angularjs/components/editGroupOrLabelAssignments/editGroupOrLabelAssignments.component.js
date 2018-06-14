@@ -1,3 +1,8 @@
+editGroupOrLabelAssignmentsController.$inject = [
+  'editGroupOrLabelAssignmentsService',
+  'JsonApiDataStore',
+  '_',
+];
 import template from './editGroupOrLabelAssignments.html';
 import './editGroupOrLabelAssignments.scss';
 

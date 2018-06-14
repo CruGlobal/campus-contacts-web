@@ -1,3 +1,8 @@
+assignedSelectController.$inject = [
+  '$scope',
+  'assignedSelectService',
+  'RequestDeduper',
+];
 import template from './assignedSelect.html';
 import './assignedSelect.scss';
 

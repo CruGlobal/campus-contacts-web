@@ -5,6 +5,7 @@ angular
     organizationOverviewSuborgsService,
   );
 
+organizationOverviewSuborgsService.$inject = ['httpProxy', 'modelsService'];
 function organizationOverviewSuborgsService(httpProxy, modelsService) {
   var organizationOverviewSuborgsService = {
     buildGetParams: function(orgId) {

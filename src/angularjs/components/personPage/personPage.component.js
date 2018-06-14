@@ -1,3 +1,17 @@
+personPageController.$inject = [
+  '$scope',
+  '$state',
+  '$filter',
+  '$q',
+  '$transitions',
+  'asyncBindingsService',
+  'personService',
+  'personTabs',
+  'confirmModalService',
+  'personPageService',
+  '_',
+  'loggedInPerson',
+];
 import template from './personPage.html';
 import './personPage.scss';
 

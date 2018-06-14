@@ -1,8 +1,15 @@
 import lscache from 'lscache';
 
-angular
-  .module('missionhubApp')
-  .run(function(
+angular.module('missionhubApp').run([
+  '$window',
+  '$rootScope',
+  '$analytics',
+  '$timeout',
+  'spaPage',
+  'loggedInPerson',
+  'updateRollbarPerson',
+  '$http',
+  function(
     $window,
     $rootScope,
     $analytics,
@@ -29,4 +36,5 @@ angular
       updateRollbarPerson(me);
       $rootScope.legacyNavigation = me.user.beta_mode === false;
     });
-  });
+  },
+]);

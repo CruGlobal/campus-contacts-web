@@ -1,3 +1,8 @@
+ministryViewPersonController.$inject = [
+  '$scope',
+  'personService',
+  'personProfileService',
+];
 import template from './ministryViewPerson.html';
 import './ministryViewPerson.scss';
 

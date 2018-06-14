@@ -1,3 +1,4 @@
+$templateRequest.$inject = ['$delegate', 'errorService', 'tFilter', '_'];
 /*
  * Decorate $templateRequest so that failures can be retried.
  */

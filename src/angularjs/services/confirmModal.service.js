@@ -1,3 +1,4 @@
+confirmModalService.$inject = ['$uibModal'];
 /* eslint max-len: ["error", { "ignoreStrings": true }] */
 
 angular
@@ -9,15 +10,18 @@ function confirmModalService($uibModal) {
     create: function(message) {
       var modalInstance = $uibModal.open({
         animation: true,
-        controller: function($uibModalInstance) {
-          var vm = this;
-          vm.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
-          };
-          vm.confirm = function() {
-            $uibModalInstance.close('delete');
-          };
-        },
+        controller: [
+          '$uibModalInstance',
+          function($uibModalInstance) {
+            var vm = this;
+            vm.cancel = function() {
+              $uibModalInstance.dismiss('cancel');
+            };
+            vm.confirm = function() {
+              $uibModalInstance.close('delete');
+            };
+          },
+        ],
         controllerAs: 'vm',
         windowClass: 'pivot_theme',
         size: 'sm',

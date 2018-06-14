@@ -1,3 +1,4 @@
+massEditController.$inject = ['massEditService', 'personService'];
 import template from './massEdit.html';
 import './massEdit.scss';
 

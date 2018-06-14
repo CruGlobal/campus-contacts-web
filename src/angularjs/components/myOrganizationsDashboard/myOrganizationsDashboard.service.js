@@ -1,3 +1,9 @@
+myOrganizationsDashboardService.$inject = [
+  'JsonApiDataStore',
+  'loggedInPerson',
+  'permissionService',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory('myOrganizationsDashboardService', myOrganizationsDashboardService);

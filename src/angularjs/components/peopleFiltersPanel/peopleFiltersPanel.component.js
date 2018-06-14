@@ -1,3 +1,10 @@
+peopleFiltersPanelController.$inject = [
+  '$scope',
+  'httpProxy',
+  'modelsService',
+  'peopleFiltersPanelService',
+  '_',
+];
 import template from './peopleFiltersPanel.html';
 import './peopleFiltersPanel.scss';
 

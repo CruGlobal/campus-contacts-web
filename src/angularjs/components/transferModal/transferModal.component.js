@@ -1,3 +1,10 @@
+transferModalController.$inject = [
+  '$scope',
+  'JsonApiDataStore',
+  'transferService',
+  'organizationService',
+  'RequestDeduper',
+];
 import template from './transferModal.html';
 import './transferModal.scss';
 

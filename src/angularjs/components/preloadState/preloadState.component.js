@@ -1,3 +1,4 @@
+preloadStateController.$inject = ['state', '$http'];
 angular.module('missionhubApp').component('preloadState', {
   controller: preloadStateController,
   bindings: {

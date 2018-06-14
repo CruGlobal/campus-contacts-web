@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('multiselectListService', multiselectListService);
 
+multiselectListService.$inject = ['_'];
 function multiselectListService(_) {
   /*
      * Throughout the multiselectListService API, a "selection" is a hash where the key is the option id and the

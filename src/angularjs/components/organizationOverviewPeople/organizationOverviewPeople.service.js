@@ -5,6 +5,18 @@ angular
     organizationOverviewPeopleService,
   );
 
+organizationOverviewPeopleService.$inject = [
+  '$http',
+  '$q',
+  '$window',
+  'httpProxy',
+  'JsonApiDataStore',
+  'modelsService',
+  'envService',
+  'personSelectionService',
+  'massEditService',
+  '_',
+];
 function organizationOverviewPeopleService(
   $http,
   $q,

@@ -1,3 +1,9 @@
+editGroupController.$inject = [
+  'groupsService',
+  'editGroupService',
+  'tFilter',
+  '_',
+];
 import template from './editGroup.html';
 import './editGroup.scss';
 

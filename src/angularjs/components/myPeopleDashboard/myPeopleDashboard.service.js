@@ -2,6 +2,7 @@ angular
   .module('missionhubApp')
   .factory('myPeopleDashboardService', myPeopleDashboardService);
 
+myPeopleDashboardService.$inject = ['httpProxy', 'modelsService', '_'];
 function myPeopleDashboardService(httpProxy, modelsService, _) {
   var myPeopleDashboardService = {
     loadPeople: function(params) {

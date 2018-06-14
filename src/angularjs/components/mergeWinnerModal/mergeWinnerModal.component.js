@@ -1,3 +1,4 @@
+mergeWinnerModalController.$inject = ['mergeWinnerService'];
 import template from './mergeWinnerModal.html';
 import './mergeWinnerModal.scss';
 

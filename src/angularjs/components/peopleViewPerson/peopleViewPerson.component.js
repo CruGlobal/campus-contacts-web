@@ -1,3 +1,15 @@
+peopleViewPersonController.$inject = [
+  '$animate',
+  '$filter',
+  '$scope',
+  'confirm',
+  'jQuery',
+  '$state',
+  'periodService',
+  'personService',
+  'reportsService',
+  'interactionsService',
+];
 import template from './peopleViewPerson.html';
 import './peopleViewPerson.scss';
 

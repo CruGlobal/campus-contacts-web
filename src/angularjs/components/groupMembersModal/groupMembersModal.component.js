@@ -1,3 +1,14 @@
+groupMembersModalController.$inject = [
+  '$scope',
+  '$uibModal',
+  'confirmModalService',
+  'RequestDeduper',
+  'ProgressiveListLoader',
+  'groupsService',
+  'groupMembersModalService',
+  'tFilter',
+  '_',
+];
 import template from './groupMembersModal.html';
 import './groupMembersModal.scss';
 

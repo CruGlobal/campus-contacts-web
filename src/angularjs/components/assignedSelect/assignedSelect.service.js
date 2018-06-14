@@ -1,3 +1,9 @@
+assignedSelectService.$inject = [
+  'httpProxy',
+  'modelsService',
+  'loggedInPerson',
+  'permissionService',
+];
 angular
   .module('missionhubApp')
   .factory('assignedSelectService', assignedSelectService);

@@ -1,3 +1,11 @@
+interactionsService.$inject = [
+  'httpProxy',
+  'modelsService',
+  'JsonApiDataStore',
+  'reportsService',
+  'loggedInPerson',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory('interactionsService', interactionsService);

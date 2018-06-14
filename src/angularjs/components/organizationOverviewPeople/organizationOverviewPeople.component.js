@@ -1,3 +1,17 @@
+organizationOverviewPeopleController.$inject = [
+  '$rootScope',
+  '$scope',
+  '$filter',
+  '$uibModal',
+  'confirmModalService',
+  'organizationOverviewPeopleService',
+  'personService',
+  'peopleFiltersPanelService',
+  'loggedInPerson',
+  'RequestDeduper',
+  'ProgressiveListLoader',
+  '_',
+];
 import template from './organizationOverviewPeople.html';
 import './organizationOverviewPeople.scss';
 

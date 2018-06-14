@@ -1,11 +1,9 @@
-angular
-  .module('missionhubApp')
-  .config(function(
-    envServiceProvider,
-    ngMdIconServiceProvider,
-    I18n,
-    $qProvider,
-  ) {
+angular.module('missionhubApp').config([
+  'envServiceProvider',
+  'ngMdIconServiceProvider',
+  'I18n',
+  '$qProvider',
+  function(envServiceProvider, ngMdIconServiceProvider, I18n, $qProvider) {
     envServiceProvider.config({
       domains: {
         development: ['localhost', 'missionhub.local'],
@@ -109,4 +107,5 @@ angular
 
     I18n.fallbacks = true;
     $qProvider.errorOnUnhandledRejections(false);
-  });
+  },
+]);

@@ -1,3 +1,4 @@
+statsHeaderController.$inject = ['interactionsService'];
 import template from './statsHeader.html';
 import './statsHeader.scss';
 

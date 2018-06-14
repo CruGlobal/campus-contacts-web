@@ -1,3 +1,10 @@
+organizationOverviewTeamController.$inject = [
+  'organizationOverviewTeamService',
+  'ProgressiveListLoader',
+  'reportsService',
+  'periodService',
+  '$scope',
+];
 import template from './organizationOverviewTeam.html';
 
 angular.module('missionhubApp').component('organizationOverviewTeam', {

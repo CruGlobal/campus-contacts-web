@@ -1,3 +1,10 @@
+LoggedInPersonService.$inject = [
+  'httpProxy',
+  'modelsService',
+  'organizationService',
+  'permissionService',
+  '_',
+];
 angular
   .module('missionhubApp')
   .factory('loggedInPerson', LoggedInPersonService);

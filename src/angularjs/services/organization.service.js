@@ -2,6 +2,13 @@ angular
   .module('missionhubApp')
   .factory('organizationService', organizationService);
 
+organizationService.$inject = [
+  '$q',
+  'httpProxy',
+  'modelsService',
+  'JsonApiDataStore',
+  '_',
+];
 function organizationService(
   $q,
   httpProxy,

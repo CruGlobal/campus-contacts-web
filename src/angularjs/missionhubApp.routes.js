@@ -1,6 +1,16 @@
-angular
-  .module('missionhubApp')
-  .config(function(
+angular.module('missionhubApp').config([
+  '$stateProvider',
+  '$locationProvider',
+  '$urlServiceProvider',
+  '$uibResolveProvider',
+  'asyncBindingsServiceProvider',
+  'ministryViewTabs',
+  'ministryViewDefaultTab',
+  'personTabs',
+  'personDefaultTab',
+  'spaPage',
+  '_',
+  function(
     $stateProvider,
     $locationProvider,
     $urlServiceProvider,
@@ -68,56 +78,60 @@ angular
         url: state.url,
         abstract: state.abstract,
         params: state.params,
-        onEnter: /* @ngInject */ function($state, $uibModal) {
-          closedByRouteChange = false;
+        onEnter: /* @ngInject */ [
+          '$state',
+          '$uibModal',
+          function($state, $uibModal) {
+            closedByRouteChange = false;
 
-          // The final generated template will look like this:
-          // <component-name first-attribute="$ctrl.firstAttribute"
-          //                 second-attribute="$ctrl.secondAttribute"></component-name>
-          var injectedProps = _.keys(state.resolve);
-          var attributes = injectedProps.map(function(property) {
-            return _.kebabCase(property) + '="$ctrl.' + property + '"';
-          });
-          var directive = _.kebabCase(state.component);
-          var template =
-            '<' +
-            directive +
-            ' ' +
-            attributes.join(' ') +
-            '></' +
-            directive +
-            '>';
+            // The final generated template will look like this:
+            // <component-name first-attribute="$ctrl.firstAttribute"
+            //                 second-attribute="$ctrl.secondAttribute"></component-name>
+            var injectedProps = _.keys(state.resolve);
+            var attributes = injectedProps.map(function(property) {
+              return _.kebabCase(property) + '="$ctrl.' + property + '"';
+            });
+            var directive = _.kebabCase(state.component);
+            var template =
+              '<' +
+              directive +
+              ' ' +
+              attributes.join(' ') +
+              '></' +
+              directive +
+              '>';
 
-          modalInstance = $uibModal.open({
-            animation: true,
-            template: template,
+            modalInstance = $uibModal.open({
+              animation: true,
+              template: template,
 
-            // Explicitly inject the injected properties as dependencies
-            controller: injectedProps.concat([
-              function() {
-                var vm = this;
+              // Explicitly inject the injected properties as dependencies
+              controller: injectedProps.concat([
+                function() {
+                  var vm = this;
 
-                var injectedValues = arguments;
-                var injections = _.zipObject(injectedProps, injectedValues);
-                _.extend(vm, injections);
-              },
-            ]),
-            controllerAs: '$ctrl',
-            resolve: state.resolve,
-            windowClass: 'dashboard_panels pivot_theme',
-          });
+                  var injectedValues = arguments;
+                  var injections = _.zipObject(injectedProps, injectedValues);
+                  _.extend(vm, injections);
+                },
+              ]),
+              controllerAs: '$ctrl',
+              resolve: state.resolve,
+              windowClass: 'dashboard_panels pivot_theme',
+            });
 
-          modalInstance.result.finally(function() {
-            modalInstance = null;
+            modalInstance.result.finally(function() {
+              modalInstance = null;
 
-            if (closedByRouteChange) {
-              // The modal was closed as a result of a route change, so we should not modify the route
-              return;
-            }
+              if (closedByRouteChange) {
+                // The modal was closed as a result of a route change, so we should not modify the route
+                return;
+              }
 
-            $state.go(getParentState(state.name));
-          });
-        },
+              $state.go(getParentState(state.name));
+            });
+          },
+        ],
         onExit: function() {
           if (modalInstance) {
             closedByRouteChange = true;
@@ -132,10 +146,14 @@ angular
     var personTabResolves = {
       history: {
         history: lazyLoadedResolve(
-          /* @ngInject */ function($uiRouter, routesService) {
-            var $transition$ = $uiRouter.globals.transition;
-            return routesService.getHistory($transition$.params().personId);
-          },
+          /* @ngInject */ [
+            '$uiRouter',
+            'routesService',
+            function($uiRouter, routesService) {
+              var $transition$ = $uiRouter.globals.transition;
+              return routesService.getHistory($transition$.params().personId);
+            },
+          ],
         ),
       },
     };
@@ -167,47 +185,58 @@ angular
           // based on its current state.
           stateName: _.constant(state.name),
           person: lazyLoadedResolve(
-            /* @ngInject */ function(
-              $state,
-              $uiRouter,
-              routesService,
-              personService,
-            ) {
-              // Ideally, we would inject $transition$, an object representing that ui-router makes
-              // available to states' resolves. However, when the state is refers to a state in a modal,
-              // the resolve will not have access to that transition, so we have to get it from the
-              // a ui-router global that is injectable everywhere.
-              var $transition$ = $uiRouter.globals.transition;
-              var params = $transition$.params();
+            /* @ngInject */ [
+              '$state',
+              '$uiRouter',
+              'routesService',
+              'personService',
+              function($state, $uiRouter, routesService, personService) {
+                // Ideally, we would inject $transition$, an object representing that ui-router makes
+                // available to states' resolves. However, when the state is refers to a state in a modal,
+                // the resolve will not have access to that transition, so we have to get it from the
+                // a ui-router global that is injectable everywhere.
+                var $transition$ = $uiRouter.globals.transition;
+                var params = $transition$.params();
 
-              if (params.personId === 'new') {
-                // We are creating a new person instead of editing an existing one, so generate that
-                // new person model
-                return personService.getNewPerson(params.orgId);
-              }
+                if (params.personId === 'new') {
+                  // We are creating a new person instead of editing an existing one, so generate that
+                  // new person model
+                  return personService.getNewPerson(params.orgId);
+                }
 
-              return routesService.getPerson(params.personId).catch(function() {
-                // Go back to the parent state if the person could not be found
-                $state.go(getParentState(state.name), { orgId: params.orgId });
+                return routesService
+                  .getPerson(params.personId)
+                  .catch(function() {
+                    // Go back to the parent state if the person could not be found
+                    $state.go(getParentState(state.name), {
+                      orgId: params.orgId,
+                    });
 
-                throw new Error('Person could not be loaded');
-              });
-            },
+                    throw new Error('Person could not be loaded');
+                  });
+              },
+            ],
           ),
 
           organizationId: lazyLoadedResolve(
-            /* @ngInject */ function($uiRouter) {
-              var $transition$ = $uiRouter.globals.transition;
-              return $transition$.params().orgId;
-            },
+            /* @ngInject */ [
+              '$uiRouter',
+              function($uiRouter) {
+                var $transition$ = $uiRouter.globals.transition;
+                return $transition$.params().orgId;
+              },
+            ],
           ),
 
-          options: /* @ngInject */ function($uiRouter) {
-            var $transition$ = $uiRouter.globals.transition;
-            return {
-              assignToMe: $transition$.params().assignToMe,
-            };
-          },
+          options: /* @ngInject */ [
+            '$uiRouter',
+            function($uiRouter) {
+              var $transition$ = $uiRouter.globals.transition;
+              return {
+                assignToMe: $transition$.params().assignToMe,
+              };
+            },
+          ],
         },
       });
 
@@ -241,9 +270,12 @@ angular
         url: '',
         abstract: true,
         resolve: {
-          person: function(loggedInPerson) {
-            return loggedInPerson.loadingPromise;
-          },
+          person: [
+            'loggedInPerson',
+            function(loggedInPerson) {
+              return loggedInPerson.loadingPromise;
+            },
+          ],
         },
         template: '<app></app>',
       })
@@ -275,23 +307,31 @@ angular
         url: '/root',
         component: 'myOrganizationsDashboardList',
         resolve: {
-          rootOrgs: function(
-            myOrganizationsDashboardService,
-            userPreferencesService,
-            $q,
-            $state,
-          ) {
-            var orgs = userPreferencesService.applyUserOrgDisplayPreferences(
-              myOrganizationsDashboardService.getRootOrganizations(),
-            );
-            if (orgs.length === 1) {
-              $state.go('app.ministries.ministry.' + ministryViewDefaultTab, {
-                orgId: orgs[0].id,
-              });
-              return $q.reject('cancel transition, re-route user to root org.');
-            }
-            return $q.resolve(orgs);
-          },
+          rootOrgs: [
+            'myOrganizationsDashboardService',
+            'userPreferencesService',
+            '$q',
+            '$state',
+            function(
+              myOrganizationsDashboardService,
+              userPreferencesService,
+              $q,
+              $state,
+            ) {
+              var orgs = userPreferencesService.applyUserOrgDisplayPreferences(
+                myOrganizationsDashboardService.getRootOrganizations(),
+              );
+              if (orgs.length === 1) {
+                $state.go('app.ministries.ministry.' + ministryViewDefaultTab, {
+                  orgId: orgs[0].id,
+                });
+                return $q.reject(
+                  'cancel transition, re-route user to root org.',
+                );
+              }
+              return $q.resolve(orgs);
+            },
+          ],
         },
       })
       .state({
@@ -301,16 +341,21 @@ angular
         abstract: true,
         resolve: {
           org: lazyLoadedResolve(
-            /* @ngInject */ function($state, $transition$, routesService) {
-              return routesService
-                .getOrganization($transition$.params().orgId)
-                .catch(function() {
-                  // Go to the root organization if the organization could not be loaded
-                  $state.go('app.ministries.root');
+            /* @ngInject */ [
+              '$state',
+              '$transition$',
+              'routesService',
+              function($state, $transition$, routesService) {
+                return routesService
+                  .getOrganization($transition$.params().orgId)
+                  .catch(function() {
+                    // Go to the root organization if the organization could not be loaded
+                    $state.go('app.ministries.root');
 
-                  throw new Error('Organization could not be loaded');
-                });
-            },
+                    throw new Error('Organization could not be loaded');
+                  });
+              },
+            ],
           ),
         },
       })
@@ -362,4 +407,5 @@ angular
     // This is the default URL if the URL does not match any routes
     $urlServiceProvider.rules.otherwise('/people');
     $locationProvider.html5Mode(true);
-  });
+  },
+]);

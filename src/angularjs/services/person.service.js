@@ -1,5 +1,12 @@
 angular.module('missionhubApp').factory('personService', personService);
 
+personService.$inject = [
+  'httpProxy',
+  'modelsService',
+  'JsonApiDataStore',
+  'permissionService',
+  '_',
+];
 function personService(
   httpProxy,
   modelsService,

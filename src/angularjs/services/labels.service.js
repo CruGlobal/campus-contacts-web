@@ -1,5 +1,6 @@
 angular.module('missionhubApp').factory('labelsService', labelsService);
 
+labelsService.$inject = ['httpProxy', 'JsonApiDataStore', 'modelsService', '_'];
 function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
   var labelsService = {
     // Return a label with default field values

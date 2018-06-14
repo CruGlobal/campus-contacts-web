@@ -1,3 +1,4 @@
+peopleFiltersPanelService.$inject = ['_'];
 angular
   .module('missionhubApp')
   .factory('peopleFiltersPanelService', peopleFiltersPanelService);

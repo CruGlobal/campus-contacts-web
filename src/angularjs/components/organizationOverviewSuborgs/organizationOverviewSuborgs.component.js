@@ -1,3 +1,12 @@
+organizationOverviewSuborgsController.$inject = [
+  '$scope',
+  '$state',
+  '$log',
+  'reportsService',
+  'periodService',
+  'ProgressiveListLoader',
+  'organizationOverviewSuborgsService',
+];
 import template from './organizationOverviewSuborgs.html';
 
 angular.module('missionhubApp').component('organizationOverviewSuborgs', {

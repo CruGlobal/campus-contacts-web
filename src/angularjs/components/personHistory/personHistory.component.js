@@ -1,3 +1,13 @@
+personHistoryController.$inject = [
+  '$scope',
+  '$element',
+  '$interval',
+  '$q',
+  'asyncBindingsService',
+  'interactionsService',
+  'personHistoryService',
+  '_',
+];
 import template from './personHistory.html';
 import './personHistory.scss';
 

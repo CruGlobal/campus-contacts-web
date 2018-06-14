@@ -1,3 +1,4 @@
+DashboardSubnavController.$inject = ['$scope'];
 import template from './dashboard-subnav.html';
 
 angular.module('missionhubApp').component('dashboardSubnav', {

@@ -1,3 +1,4 @@
+personAssignedController.$inject = ['personAssignedService'];
 import template from './personAssigned.html';
 import './personAssigned.scss';
 
