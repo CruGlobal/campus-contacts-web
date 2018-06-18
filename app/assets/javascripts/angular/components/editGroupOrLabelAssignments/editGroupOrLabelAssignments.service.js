@@ -145,6 +145,7 @@ function editGroupOrLabelAssignmentsService(
                         include: modelsService.getModelMetadata(
                             entries[0]._type,
                         ).include,
+                        'filters[user_created]': false,
                     },
                     {
                         errorMessage: errorMessage,

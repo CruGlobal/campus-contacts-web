@@ -314,20 +314,24 @@ angular
                         $q,
                         $state,
                     ) {
-                        var orgs = userPreferencesService.applyUserOrgDisplayPreferences(
-                            myOrganizationsDashboardService.getRootOrganizations(),
-                        );
-                        if (orgs.length === 1) {
-                            $state.go(
-                                'app.ministries.ministry.' +
-                                    ministryViewDefaultTab,
-                                { orgId: orgs[0].id },
-                            );
-                            return $q.reject(
-                                'cancel transition, re-route user to root org.',
-                            );
-                        }
-                        return $q.resolve(orgs);
+                        return myOrganizationsDashboardService
+                            .getRootOrganizations()
+                            .then(
+                                userPreferencesService.applyUserOrgDisplayPreferences,
+                            )
+                            .then(orgs => {
+                                if (orgs.length === 1) {
+                                    $state.go(
+                                        'app.ministries.ministry.' +
+                                            ministryViewDefaultTab,
+                                        { orgId: orgs[0].id },
+                                    );
+                                    return $q.reject(
+                                        'cancel transition, re-route user to root org.',
+                                    );
+                                }
+                                return orgs;
+                            });
                     },
                 },
             })

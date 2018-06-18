@@ -76,7 +76,7 @@ describe('organizationService', function() {
         it(
             'should not load orgs when all orgs are loaded',
             asynchronous(function() {
-                spyOn(organizationService, 'loadOrgs').and.returnValue(
+                spyOn(organizationService, 'loadOrgsById').and.returnValue(
                     $q.resolve([]),
                 );
                 return organizationService
@@ -84,7 +84,7 @@ describe('organizationService', function() {
                     .then(function(orgs) {
                         expect(_.map(orgs, 'id')).toEqual(['1', '2', '3']);
                         expect(
-                            organizationService.loadOrgs,
+                            organizationService.loadOrgsById,
                         ).toHaveBeenCalledWith([], jasmine.any(String));
                     });
             }),
@@ -94,11 +94,13 @@ describe('organizationService', function() {
             'should load missing orgs when not all orgs are loaded',
             asynchronous(function() {
                 var _this = this;
-                spyOn(organizationService, 'loadOrgs').and.callFake(function() {
-                    // Simulate the load of org 4
-                    _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
-                    return $q.resolve();
-                });
+                spyOn(organizationService, 'loadOrgsById').and.callFake(
+                    function() {
+                        // Simulate the load of org 4
+                        _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
+                        return $q.resolve();
+                    },
+                );
 
                 return organizationService
                     .getOrgHierarchy(this.orgs[5])
@@ -111,7 +113,7 @@ describe('organizationService', function() {
                             '5',
                         ]);
                         expect(
-                            organizationService.loadOrgs,
+                            organizationService.loadOrgsById,
                         ).toHaveBeenCalledWith(['4'], jasmine.any(String));
                     });
             }),
@@ -121,7 +123,7 @@ describe('organizationService', function() {
             'should ignore unloadable orgs',
             asynchronous(function() {
                 var _this = this;
-                spyOn(organizationService, 'loadOrgs').and.returnValue(
+                spyOn(organizationService, 'loadOrgsById').and.returnValue(
                     $q.resolve([]),
                 );
                 return organizationService
@@ -131,10 +133,10 @@ describe('organizationService', function() {
                         expect(_.map(orgs, 'id')).toEqual(['1', '2', '3', '5']);
 
                         // Should not attempt to reload org 4
-                        organizationService.loadOrgs.calls.reset();
+                        organizationService.loadOrgsById.calls.reset();
                         organizationService.getOrgHierarchy(_this.orgs[5]);
                         expect(
-                            organizationService.loadOrgs,
+                            organizationService.loadOrgsById,
                         ).toHaveBeenCalledWith([], jasmine.any(String));
                     });
             }),
