@@ -23,7 +23,7 @@ function organizationBreadcrumbsController(
     function activate() {
         if (vm.orgId) {
             organizationService
-                .loadOrgs(
+                .loadOrgsById(
                     [vm.orgId],
                     'error.messages.organization.load_ancestry',
                 )
