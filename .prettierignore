@@ -1,0 +1,7 @@
+.prettierignore
+coverage
+*.snap
+package.json
+yarn.lock
+README.md
+*.html
