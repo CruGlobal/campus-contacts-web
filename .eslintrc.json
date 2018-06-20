@@ -68,7 +68,6 @@
         "wrap-iife": ["error", "inside"],
         "yoda": "error",
 
-        "camelcase": ["error", { "properties": "never" }],
         "consistent-this": ["error", "_this", "vm"],
         "new-cap": "error",
         "new-parens": "error",

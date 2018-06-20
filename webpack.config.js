@@ -97,7 +97,6 @@ module.exports = (env = {}) => {
                         {
                             loader: 'babel-loader',
                             options: {
-                                presets: [['env', { modules: false }]],
                                 plugins: [
                                     'transform-runtime',
                                     'syntax-dynamic-import',

@@ -6,3 +6,4 @@ yarn.lock
 README.md
 *.html
 netlify.toml
+.babelrc
