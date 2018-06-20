@@ -52,7 +52,7 @@ describe('organizationOverviewPeopleService', function() {
                     { field: 'key2', direction: 'desc' },
                     { field: 'key3', direction: 'desc' },
                 ]),
-            ).toBe('key1 asc,key2 desc,key3 desc');
+            ).toBe('key1,-key2,-key3');
         });
     });
 
