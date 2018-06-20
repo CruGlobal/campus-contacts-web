@@ -56,7 +56,9 @@ function organizationOverviewPeopleService(
         buildOrderString: function(order) {
             return order
                 .map(function(orderEntry) {
-                    return orderEntry.field + ' ' + orderEntry.direction;
+                    return `${
+                        orderEntry.direction === 'desc' ? '-' : ''
+                    }${orderEntry.field}`;
                 })
                 .join(',');
         },
@@ -70,7 +72,7 @@ function organizationOverviewPeopleService(
                     'organizational_permissions',
                     'reverse_contact_assignments',
                 ].join(','),
-                order: organizationOverviewPeopleService.buildOrderString(
+                sort: organizationOverviewPeopleService.buildOrderString(
                     orderParam || [],
                 ),
                 'filters[organization_ids]': orgId,
@@ -155,9 +157,7 @@ function organizationOverviewPeopleService(
                     7,
                 ), // strip off the "Bearer " part
                 organization_id: selection.orgId,
-                order: organizationOverviewPeopleService.buildOrderString(
-                    order,
-                ),
+                sort: organizationOverviewPeopleService.buildOrderString(order),
                 format: 'csv',
             });
             var queryString = _.map(params, function(value, key) {
