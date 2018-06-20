@@ -12,7 +12,7 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 
 1. `yarn` or `npm install`
 2. `yarn start` or `npm start`
-3. Currently this repo needs to be run inside the legacy missionhub rails app. Clone and run the [missionhub](https://github.com/CruGlobal/missionhub) and [missionhub-api](https://github.com/CruGlobal/missionhub-api) repos. `yarn runn start-rails-web` and `start-rails-api` can be used as shortcuts to start the respective rails servers if you have cloned all of these repos in the same parent directory.
+3. Currently this repo needs to be run inside the legacy missionhub rails app. Clone and run the [missionhub](https://github.com/CruGlobal/missionhub) and [missionhub-api](https://github.com/CruGlobal/missionhub-api) repos. `yarn run start-rails-web` and `start-rails-api` can be used as shortcuts to start the respective rails servers if you have cloned all of these repos in the same parent directory.
 3. Browse to [`http://localhost:3000`](http://localhost:3000) (url of legacy rails app)
 
 ### Development Tasks
