@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 
@@ -15,7 +16,6 @@ function myPeopleDashboardController(
     $document,
     JsonApiDataStore,
     _,
-    I18n,
     myPeopleDashboardService,
     periodService,
     loggedInPerson,
@@ -52,7 +52,7 @@ function myPeopleDashboardController(
             },
         };
 
-        vm.noPeopleWelcome = I18n.t('dashboard.no_contacts.welcome', {
+        vm.noPeopleWelcome = i18next.t('dashboard.no_contacts.welcome', {
             name: loggedInPerson.person.first_name.toUpperCase(),
         });
 
