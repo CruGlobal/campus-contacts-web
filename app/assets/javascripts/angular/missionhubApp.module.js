@@ -19,23 +19,20 @@ import 'angularjs-toaster/toaster.scss';
 import 'moment';
 import 'angular-moment';
 
-export default angular.module(
-    'missionhubApp',
-    [
-        ngAnimate,
-        ngMdIcons,
-        'angularMoment',
-        'beauby.jsonApiDataStore',
-        ngEnvironment,
-        uiRouter,
-        uiSelect,
-        'ui.sortable',
-        uiBootstrap,
-        ngFileUpload,
-        ngInfiniteScroll,
-        'toaster',
-        ngScrollGlue,
-        angulartics,
-        angularticsGoogle
-    ]
-);
+export default angular.module('missionhubApp', [
+    ngAnimate,
+    ngMdIcons,
+    'angularMoment',
+    'beauby.jsonApiDataStore',
+    ngEnvironment,
+    uiRouter,
+    uiSelect,
+    'ui.sortable',
+    uiBootstrap,
+    ngFileUpload,
+    ngInfiniteScroll,
+    'toaster',
+    ngScrollGlue,
+    angulartics,
+    angularticsGoogle,
+]);

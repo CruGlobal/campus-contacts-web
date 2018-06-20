@@ -1,19 +1,34 @@
 angular
     .module('missionhubApp')
-    .factory('myOrganizationsDashboardService', myOrganizationsDashboardService);
+    .factory(
+        'myOrganizationsDashboardService',
+        myOrganizationsDashboardService,
+    );
 
-function myOrganizationsDashboardService (JsonApiDataStore, loggedInPerson, permissionService, _) {
+function myOrganizationsDashboardService(
+    JsonApiDataStore,
+    loggedInPerson,
+    permissionService,
+    _,
+) {
     return {
         // Return an array of all loaded root organizations
-        getRootOrganizations: function () {
+        getRootOrganizations: function() {
             // Find all of the organizations that the user is a team member of
-            return _.chain(JsonApiDataStore.store.findAll('organizational_permission'))
-                .filter(function (permission) {
-                    return permission.person_id === loggedInPerson.person.id &&
-                        _.includes(permissionService.adminAndUserIds, permission.permission_id);
+            return _.chain(
+                JsonApiDataStore.store.findAll('organizational_permission'),
+            )
+                .filter(function(permission) {
+                    return (
+                        permission.person_id === loggedInPerson.person.id &&
+                        _.includes(
+                            permissionService.adminAndUserIds,
+                            permission.permission_id,
+                        )
+                    );
                 })
                 .map('organization')
                 .value();
-        }
+        },
     };
 }

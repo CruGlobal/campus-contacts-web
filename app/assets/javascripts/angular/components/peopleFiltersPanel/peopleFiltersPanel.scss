@@ -1,52 +1,53 @@
 @import '../../../../stylesheets/variables/colors';
 
 people-filters-panel {
-  padding: 0 12px;
-  display: block;
-  overflow-y: auto;
+    padding: 0 12px;
+    display: block;
+    overflow-y: auto;
 
-  .reset {
-    width: 100%;
-    height: 2em;
-    margin-top: 10px;
-  }
-
-  .filter-row {
-    border-bottom: 1px solid $gray-4;
-    padding: 12px 0;
-
-    accordion-header {
-      display: flex;
-
-      span {
-        flex: 1;
-      }
-
-      ng-md-icon {
-        fill: $pivot-dark-blue;
-      }
-    }
-  }
-
-  .filter-search input {
-    width: 100%;
-  }
-
-  .filter-option {
-    display: flex;
-    align-items: baseline;
-    margin: 1em 0;
-    color: $gray-2;
-
-    input, .filter-option-count {
-      flex-shrink: 0;
+    .reset {
+        width: 100%;
+        height: 2em;
+        margin-top: 10px;
     }
 
-    .filter-option-name {
-      flex: 1;
-      padding: 0 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .filter-row {
+        border-bottom: 1px solid $gray-4;
+        padding: 12px 0;
+
+        accordion-header {
+            display: flex;
+
+            span {
+                flex: 1;
+            }
+
+            ng-md-icon {
+                fill: $pivot-dark-blue;
+            }
+        }
     }
-  }
+
+    .filter-search input {
+        width: 100%;
+    }
+
+    .filter-option {
+        display: flex;
+        align-items: baseline;
+        margin: 1em 0;
+        color: $gray-2;
+
+        input,
+        .filter-option-count {
+            flex-shrink: 0;
+        }
+
+        .filter-option-name {
+            flex: 1;
+            padding: 0 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }

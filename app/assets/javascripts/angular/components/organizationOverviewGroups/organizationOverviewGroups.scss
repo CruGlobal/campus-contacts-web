@@ -2,14 +2,14 @@
 @import '../ministryViewGroup/ministryViewGroup';
 
 organization-overview-groups {
-  .header {
-    @extend ministry-view-group;
+    .header {
+        @extend ministry-view-group;
 
-    display: flex;
-    background-color: $pivot-darker-blue;
+        display: flex;
+        background-color: $pivot-darker-blue;
 
-    ng-md-icon svg {
-      fill: white;
+        ng-md-icon svg {
+            fill: white;
+        }
     }
-  }
 }

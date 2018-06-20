@@ -5,9 +5,8 @@
  * whereas the second form causes the href attribute to be set to the invalid link "mailto:" and styled as a link
  * even though it really is not.
  */
-angular.module('missionhubApp')
-    .filter('mailto', function () {
-        return function (address) {
-            return address ? ('mailto:' + address) : null;
-        };
-    });
+angular.module('missionhubApp').filter('mailto', function() {
+    return function(address) {
+        return address ? 'mailto:' + address : null;
+    };
+});

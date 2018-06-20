@@ -1,20 +1,20 @@
 .grid .grid-content {
-  & > * {
-    background: $white;
-    &:nth-child(odd) {
-      background: $gray-5;
+    & > * {
+        background: $white;
+        &:nth-child(odd) {
+            background: $gray-5;
+        }
     }
-  }
 
-  .row {
-    width: 100%;
-    min-height: 50px;
-    display: flex;
-    align-items: center;
+    .row {
+        width: 100%;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
 
-    &.message-row {
-      padding: 10px;
-      font-size: 16px;
+        &.message-row {
+            padding: 10px;
+            font-size: 16px;
+        }
     }
-  }
 }

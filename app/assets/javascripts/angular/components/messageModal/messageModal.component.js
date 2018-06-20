@@ -1,19 +1,22 @@
 import template from './messageModal.html';
 import './messageModal.scss';
 
-angular
-    .module('missionhubApp')
-    .component('messageModal', {
-        controller: messageModalController,
-        template: template,
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        }
-    });
+angular.module('missionhubApp').component('messageModal', {
+    controller: messageModalController,
+    template: template,
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
+});
 
-function messageModalController ($filter, JsonApiDataStore, messageModalService, _) {
+function messageModalController(
+    $filter,
+    JsonApiDataStore,
+    messageModalService,
+    _,
+) {
     var vm = this;
 
     vm.message = '';
@@ -30,10 +33,10 @@ function messageModalController ($filter, JsonApiDataStore, messageModalService,
     // The maximum message lengths of the supported media
     var lengthLimits = {
         email: 5000,
-        sms: 480
+        sms: 480,
     };
 
-    function activate () {
+    function activate() {
         vm.medium = vm.resolve.medium;
         if (!_.includes(['email', 'sms'], vm.medium)) {
             throw new Error('Invalid medium: ' + vm.medium);
@@ -45,26 +48,43 @@ function messageModalController ($filter, JsonApiDataStore, messageModalService,
     }
 
     // Wrap a string in quotation marks
-    function quote (string) {
+    function quote(string) {
         return '"' + string + '"';
     }
 
     // Return the recipients list as a nicely-formatted, human-readable string
-    function getFormattedRecipients () {
+    function getFormattedRecipients() {
         var filters = vm.resolve.selection.filters;
         var t = $filter('t');
         var parts = [];
 
-        parts.push(t('messages.recipients.contacts', { contact_count: vm.resolve.selection.totalSelectedPeople }));
+        parts.push(
+            t('messages.recipients.contacts', {
+                contact_count: vm.resolve.selection.totalSelectedPeople,
+            }),
+        );
 
-        var organizationName = quote(JsonApiDataStore.store.find('organization', vm.resolve.selection.orgId).name);
-        parts.push(t('messages.recipients.organization', { name: organizationName }));
+        var organizationName = quote(
+            JsonApiDataStore.store.find(
+                'organization',
+                vm.resolve.selection.orgId,
+            ).name,
+        );
+        parts.push(
+            t('messages.recipients.organization', { name: organizationName }),
+        );
 
         if (filters.searchString) {
-            parts.push(t('messages.recipients.search', { search: quote(filters.searchString) }));
+            parts.push(
+                t('messages.recipients.search', {
+                    search: quote(filters.searchString),
+                }),
+            );
         }
 
-        var exclusions = vm.resolve.selection.allSelected ? vm.resolve.selection.unselectedPeople : [];
+        var exclusions = vm.resolve.selection.allSelected
+            ? vm.resolve.selection.unselectedPeople
+            : [];
 
         /*
          * "name" the property on the filters object
@@ -76,15 +96,30 @@ function messageModalController ($filter, JsonApiDataStore, messageModalService,
             { name: 'groups', type: 'group', nameField: 'name' },
             { name: 'labels', type: 'label', nameField: 'name' },
             { name: 'assignedTos', type: 'person', nameField: 'full_name' },
-            { name: 'exclusions', type: 'person', nameField: 'full_name', ids: exclusions }
+            {
+                name: 'exclusions',
+                type: 'person',
+                nameField: 'full_name',
+                ids: exclusions,
+            },
         ];
-        filterDefinitions.forEach(function (definition) {
+        filterDefinitions.forEach(function(definition) {
             var ids = definition.ids || filters[definition.name] || [];
             if (ids.length > 0) {
-                var names = ids.map(function (id) {
-                    return quote(JsonApiDataStore.store.find(definition.type, id)[definition.nameField]);
-                }).join(', ');
-                parts.push(t('messages.recipients.' + _.snakeCase(definition.name), { names: names }));
+                var names = ids
+                    .map(function(id) {
+                        return quote(
+                            JsonApiDataStore.store.find(definition.type, id)[
+                                definition.nameField
+                            ],
+                        );
+                    })
+                    .join(', ');
+                parts.push(
+                    t('messages.recipients.' + _.snakeCase(definition.name), {
+                        names: names,
+                    }),
+                );
             }
         });
 
@@ -92,38 +127,35 @@ function messageModalController ($filter, JsonApiDataStore, messageModalService,
     }
 
     // Return the number of characters that the message can still hold
-    function getMaximumLength () {
+    function getMaximumLength() {
         return lengthLimits[vm.medium];
     }
 
     // Return the number of characters that the message can still hold
-    function getRemainingLength () {
+    function getRemainingLength() {
         return getMaximumLength() - vm.message.length;
     }
 
-    function isValid () {
+    function isValid() {
         return vm.message && (vm.medium !== 'email' || vm.subject);
     }
 
-    function send () {
+    function send() {
         vm.sending = true;
 
         var sendingPromise = messageModalService.sendMessage({
             recipients: vm.resolve.selection,
             medium: vm.medium,
             subject: vm.subject,
-            message: vm.message
+            message: vm.message,
         });
 
-        sendingPromise
-            .then(vm.close)
-            .catch(function () {
-                vm.sending = false;
-            });
+        sendingPromise.then(vm.close).catch(function() {
+            vm.sending = false;
+        });
     }
 
-    function cancel () {
+    function cancel() {
         vm.dismiss();
     }
 }
-

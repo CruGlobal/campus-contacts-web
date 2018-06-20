@@ -3,7 +3,7 @@ import StackTrace from 'stacktrace-js';
 
 angular
     .module('missionhubApp')
-    .config(function (rollbarAccessToken, envServiceProvider, $provide, _) {
+    .config(function(rollbarAccessToken, envServiceProvider, $provide, _) {
         var rollbarConfig = {
             accessToken: rollbarAccessToken,
             captureUncaught: true,
@@ -15,70 +15,94 @@ angular
                 client: {
                     javascript: {
                         source_map_enabled: true,
-                        guess_uncaught_frames: true
-                    }
-                }
-            }
+                        guess_uncaught_frames: true,
+                    },
+                },
+            },
         };
         var Rollbar = rollbar.init(rollbarConfig);
 
-        $provide.decorator('$log', function ($delegate) {
+        $provide.decorator('$log', function($delegate) {
             // Add rollbar functionality to each $log method
-            angular.forEach(['log', 'debug', 'info', 'warn', 'error'], function (ngLogLevel) {
-                var rollbarLogLevel = ngLogLevel === 'warn' ? 'warning' : ngLogLevel;
+            angular.forEach(['log', 'debug', 'info', 'warn', 'error'], function(
+                ngLogLevel,
+            ) {
+                var rollbarLogLevel =
+                    ngLogLevel === 'warn' ? 'warning' : ngLogLevel;
 
                 var originalFunction = $delegate[ngLogLevel]; // Call below to keep angular $log functionality
 
-                $delegate[ngLogLevel] = function () {
+                $delegate[ngLogLevel] = function() {
                     originalFunction.apply(null, arguments);
 
-                    var origin = arguments[0] && arguments[0].stack ? '$ExceptionHandler' : '$log';
+                    var origin =
+                        arguments[0] && arguments[0].stack
+                            ? '$ExceptionHandler'
+                            : '$log';
                     var stackFramesPromise, message;
 
                     if (origin === '$ExceptionHandler') {
                         message = arguments[0].message;
 
                         // Parse the exception to get the stack
-                        stackFramesPromise = StackTrace.fromError(arguments[0], { offline: true });
+                        stackFramesPromise = StackTrace.fromError(
+                            arguments[0],
+                            { offline: true },
+                        );
                     } else {
-                        if (arguments[0] && (arguments[0].status === -1 || arguments[0].status === 401)) {
+                        if (
+                            arguments[0] &&
+                            (arguments[0].status === -1 ||
+                                arguments[0].status === 401)
+                        ) {
                             return; // Drop browser network errors and unauthorized api errors due to expired tokens
                         }
 
                         // Join $log arguments
-                        message = arguments[0] && arguments[0].message + '\n' +
-                            _.map(
-                                arguments,
-                                function (arg) {
+                        message =
+                            arguments[0] &&
+                            arguments[0].message +
+                                '\n' +
+                                _.map(arguments, function(arg) {
                                     // Mask Auth header if present
-                                    _.update(arg, 'config.headers.Authorization', function (val) {
-                                        // eslint-disable-next-line no-undefined
-                                        return val ? '***' : undefined;
-                                    });
+                                    _.update(
+                                        arg,
+                                        'config.headers.Authorization',
+                                        function(val) {
+                                            // eslint-disable-next-line no-undefined
+                                            return val ? '***' : undefined;
+                                        },
+                                    );
                                     return angular.toJson(arg, true);
-                                }
-                            ).join('\n');
+                                }).join('\n');
 
                         // Log came from app so we get the stacktrace from this file
                         stackFramesPromise = StackTrace.get({ offline: true });
                     }
 
                     stackFramesPromise
-                        .then(function (stackFrames) {
+                        .then(function(stackFrames) {
                             // For logs, ignore first stack frame which is this file
                             if (origin === '$log') {
                                 stackFrames.shift();
                             }
 
                             // Send combined message and stack trace to rollbar
-                            Rollbar[rollbarLogLevel](message, { stackTrace: stackFrames, origin: origin });
+                            Rollbar[rollbarLogLevel](message, {
+                                stackTrace: stackFrames,
+                                origin: origin,
+                            });
                         })
-                        .catch(function (error) {
+                        .catch(function(error) {
                             // Send message without stack trace to rollbar
-                            Rollbar[rollbarLogLevel](message, { origin: origin });
+                            Rollbar[rollbarLogLevel](message, {
+                                origin: origin,
+                            });
 
                             // Send warning about the issue loading stackframes
-                            Rollbar.warning('Error loading stackframes: ' + error);
+                            Rollbar.warning(
+                                'Error loading stackframes: ' + error,
+                            );
                         });
                 };
 
@@ -89,7 +113,7 @@ angular
             return $delegate;
         });
 
-        $provide.value('updateRollbarPerson', function (person) {
+        $provide.value('updateRollbarPerson', function(person) {
             Rollbar.configure({
                 payload: {
                     person: {
@@ -97,34 +121,37 @@ angular
                         person_id: person.id,
                         username: person.full_name,
                         email: person.user.username,
-                        primary_organization_id: person.user.primary_organization_id
-                    }
-                }
+                        primary_organization_id:
+                            person.user.primary_organization_id,
+                    },
+                },
             });
         });
 
-        function transformRollbarPayload (payload) {
+        function transformRollbarPayload(payload) {
             if (_.get(payload, 'body.message.extra.stackTrace')) {
                 // Convert message format to trace format
                 payload.body.trace = {
-                    frames: formatStacktraceForRollbar(payload.body.message.extra.stackTrace),
+                    frames: formatStacktraceForRollbar(
+                        payload.body.message.extra.stackTrace,
+                    ),
                     exception: {
                         message: payload.body.message.body,
-                        class: payload.body.message.extra.origin
-                    }
+                        class: payload.body.message.extra.origin,
+                    },
                 };
                 delete payload.body.message;
             }
             return payload;
         }
 
-        function formatStacktraceForRollbar (stackFrames) {
-            return _.map(stackFrames, function (frame) {
+        function formatStacktraceForRollbar(stackFrames) {
+            return _.map(stackFrames, function(frame) {
                 return {
                     method: frame.functionName,
                     lineno: frame.lineNumber,
                     colno: frame.columnNumber,
-                    filename: frame.fileName
+                    filename: frame.fileName,
                 };
             });
         }

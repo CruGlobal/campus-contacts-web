@@ -3,21 +3,31 @@ import './personPage.scss';
 
 import noProfileImage from '../../../../images/no_image.png';
 
-angular
-    .module('missionhubApp')
-    .component('personPage', {
-        controller: personPageController,
-        template: template,
-        bindings: {
-            stateName: '<',
-            person: '<',
-            organizationId: '<',
-            options: '='
-        }
-    });
+angular.module('missionhubApp').component('personPage', {
+    controller: personPageController,
+    template: template,
+    bindings: {
+        stateName: '<',
+        person: '<',
+        organizationId: '<',
+        options: '=',
+    },
+});
 
-function personPageController ($scope, $state, $filter, $q, $transitions, asyncBindingsService, personService,
-                               personTabs, confirmModalService, personPageService, _, loggedInPerson) {
+function personPageController(
+    $scope,
+    $state,
+    $filter,
+    $q,
+    $transitions,
+    asyncBindingsService,
+    personService,
+    personTabs,
+    confirmModalService,
+    personPageService,
+    _,
+    loggedInPerson,
+) {
     var vm = this;
     vm.personTabs = personTabs;
     vm.orgLabels = [];
@@ -30,27 +40,41 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
     vm.dismiss = dismiss;
     vm.save = save;
     vm.updateGroupMemberships = updateGroupMemberships;
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['person', 'organizationId']);
+    vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, [
+        'person',
+        'organizationId',
+    ]);
 
-    function activate () {
+    function activate() {
         // Disable editing profile pictures of other users
-        vm.hideProfilePhotoBtns = vm.person.user && loggedInPerson.person !== vm.person;
+        vm.hideProfilePhotoBtns =
+            vm.person.user && loggedInPerson.person !== vm.person;
 
-        $scope.$on('personModified', function () {
+        $scope.$on('personModified', function() {
             vm.dirty = true;
         });
 
-        vm.orgPermission = personService.getOrgPermission(vm.person, vm.organizationId);
-        vm.assignedTo = personService.getAssignedTo(vm.person, vm.organizationId);
-        $scope.$watch('$ctrl.person.picture', function (pictureUrl) {
+        vm.orgPermission = personService.getOrgPermission(
+            vm.person,
+            vm.organizationId,
+        );
+        vm.assignedTo = personService.getAssignedTo(
+            vm.person,
+            vm.organizationId,
+        );
+        $scope.$watch('$ctrl.person.picture', function(pictureUrl) {
             vm.avatarUrl = pictureUrl || noProfileImage;
-            vm.isFacebookAvatar = personPageService.isFacebookAvatar(vm.avatarUrl);
+            vm.isFacebookAvatar = personPageService.isFacebookAvatar(
+                vm.avatarUrl,
+            );
             if (vm.isFacebookAvatar) {
                 vm.avatarUrl += '?width=120&height=120';
             }
         });
 
-        $scope.$watchCollection('$ctrl.person.email_addresses', function (relationships) {
+        $scope.$watchCollection('$ctrl.person.email_addresses', function(
+            relationships,
+        ) {
             vm.primaryEmail = _.find(relationships, { primary: true });
             if (!vm.primaryEmail && relationships.length > 0) {
                 // The primary email address defaults to the first one
@@ -58,7 +82,9 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
                 vm.primaryEmail.primary = true;
             }
         });
-        $scope.$watchCollection('$ctrl.person.phone_numbers', function (relationships) {
+        $scope.$watchCollection('$ctrl.person.phone_numbers', function(
+            relationships,
+        ) {
             vm.primaryPhone = _.find(relationships, { primary: true });
             if (!vm.primaryPhone && relationships.length > 0) {
                 // The primary phone number defaults to the first one
@@ -76,34 +102,37 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
     var unsubscribeTransition, unsubscribeClose;
 
     // Prevent the modal from being closed without a confirmation dialog
-    function beginDismissLock () {
+    function beginDismissLock() {
         // Intercept transitions away from this component
-        unsubscribeTransition = $transitions.onBefore({ exiting: vm.stateName }, function () {
-            return confirmCancel()
-                .then(function () {
-                    // Allow the transition to proceede
-                    endDismissLock();
-                })
-                .catch(function () {
-                    // Cancel the transition
-                    return false;
-                });
-        });
+        unsubscribeTransition = $transitions.onBefore(
+            { exiting: vm.stateName },
+            function() {
+                return confirmCancel()
+                    .then(function() {
+                        // Allow the transition to proceede
+                        endDismissLock();
+                    })
+                    .catch(function() {
+                        // Cancel the transition
+                        return false;
+                    });
+            },
+        );
 
         // Intercept close events, prevent the modal from closing, and display the dismissal confirmation
-        unsubscribeClose = $scope.$on('modal.closing', function (event) {
+        unsubscribeClose = $scope.$on('modal.closing', function(event) {
             event.preventDefault();
             vm.dismiss();
         });
     }
 
     // Allow the modal to be closed without a confirmation dialog
-    function endDismissLock () {
+    function endDismissLock() {
         unsubscribeTransition();
         unsubscribeClose();
     }
 
-    function uploadAvatar (file) {
+    function uploadAvatar(file) {
         if (file) {
             if (vm.person.id) {
                 vm.avatarPausedUploadFile = null;
@@ -113,37 +142,40 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
         }
     }
 
-    function deleteAvatar () {
+    function deleteAvatar() {
         personPageService.deleteAvatar(vm.person);
     }
 
-    function updateLabels () {
+    function updateLabels() {
         vm.orgLabels = personService.getOrgLabels(vm.person, vm.organizationId);
     }
 
     // If necessary, display a confirmation dialog asking whether the user wants to cancel their changes to the
     // current contact
-    function confirmCancel () {
-        return $q.resolve().then(function () {
+    function confirmCancel() {
+        return $q.resolve().then(function() {
             if (vm.person.id === null && vm.dirty) {
                 // Receive confirmation before canceling the creation of a new contact
-                return confirmModalService.create($filter('t')('people.edit.cancel_create_confirm'));
+                return confirmModalService.create(
+                    $filter('t')('people.edit.cancel_create_confirm'),
+                );
             }
         });
     }
 
     // Dismiss this page
-    function dismiss () {
-        return confirmCancel().then(function () {
+    function dismiss() {
+        return confirmCancel().then(function() {
             endDismissLock();
             $state.go('^.^');
         });
     }
 
     // Save the pending changes and dismiss
-    function save () {
+    function save() {
         vm.saving = true;
-        personPageService.savePerson(vm.person)
+        personPageService
+            .savePerson(vm.person)
             .then(person => {
                 // Update our person model with the newly-saved one. If it is a newly-created person, it will have
                 // an id now, and the dismiss call will not ask for a confirmation before navigating away.
@@ -163,8 +195,10 @@ function personPageController ($scope, $state, $filter, $q, $transitions, asyncB
             });
     }
 
-    function updateGroupMemberships () {
-        vm.groupMemberships = personService.getGroupMemberships(vm.person, vm.organizationId);
+    function updateGroupMemberships() {
+        vm.groupMemberships = personService.getGroupMemberships(
+            vm.person,
+            vm.organizationId,
+        );
     }
 }
-

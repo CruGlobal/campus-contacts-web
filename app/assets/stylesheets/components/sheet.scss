@@ -1,27 +1,27 @@
 .sheet {
-  display: inline-block;
-  overflow: hidden;
-  background-color: $pivot-dark-blue;
-  border-radius: 10px;
-  color: $white;
-  svg {
-    fill: $white;
-  }
-
-  .item {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    height: 50px;
-    padding: 10px;
-    border-bottom: 1px solid $pivot-bright-blue;
-    &:last-of-type {
-      border-bottom-style: none;
+    display: inline-block;
+    overflow: hidden;
+    background-color: $pivot-dark-blue;
+    border-radius: 10px;
+    color: $white;
+    svg {
+        fill: $white;
     }
 
-    ng-md-icon {
-      padding-right: 10px;
-      padding-left: 5px;
+    .item {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        height: 50px;
+        padding: 10px;
+        border-bottom: 1px solid $pivot-bright-blue;
+        &:last-of-type {
+            border-bottom-style: none;
+        }
+
+        ng-md-icon {
+            padding-right: 10px;
+            padding-left: 5px;
+        }
     }
-  }
 }

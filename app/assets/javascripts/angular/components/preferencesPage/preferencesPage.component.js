@@ -1,15 +1,18 @@
 import template from './preferencesPage.html';
 import './preferencesPage.scss';
 
-angular
-    .module('missionhubApp')
-    .component('preferencesPage', {
-        controller: preferencesPageController,
-        template: template
-    });
+angular.module('missionhubApp').component('preferencesPage', {
+    controller: preferencesPageController,
+    template: template,
+});
 
-function preferencesPageController ($rootScope, preferencesPageService,
-                                    languageService, _, nativeLocation) {
+function preferencesPageController(
+    $rootScope,
+    preferencesPageService,
+    languageService,
+    _,
+    nativeLocation,
+) {
     var vm = this;
 
     vm.supportedLanguages = [];
@@ -23,32 +26,34 @@ function preferencesPageController ($rootScope, preferencesPageService,
 
     vm.$onInit = activate;
 
-    function activate () {
+    function activate() {
         readPreferences();
         vm.supportedLanguages = languageService.loadLanguages();
     }
 
-    function unsubscribeWeeklyDigest () {
+    function unsubscribeWeeklyDigest() {
         if (nativeLocation.search === '?ministry-digest-unsubscribe') {
             vm.weeklyDigest = false;
-            updatePreferences().then(function () {
+            updatePreferences().then(function() {
                 nativeLocation.search = '';
             });
         }
     }
 
-    function readPreferences () {
-        preferencesPageService.readPreferences().then(function (me) {
+    function readPreferences() {
+        preferencesPageService.readPreferences().then(function(me) {
             vm.user = me.user;
             mapUserPreferences(vm.user);
             unsubscribeWeeklyDigest();
         });
     }
 
-    function mapUserPreferences (user) {
+    function mapUserPreferences(user) {
         vm.timeZone = user.timezone;
         if (user.language !== null) {
-            vm.selectedLanguage = _.find(vm.supportedLanguages, { abbreviation: user.language });
+            vm.selectedLanguage = _.find(vm.supportedLanguages, {
+                abbreviation: user.language,
+            });
         }
 
         if (user.notification_settings !== null) {
@@ -63,26 +68,29 @@ function preferencesPageController ($rootScope, preferencesPageService,
         }
     }
 
-    function reload () {
+    function reload() {
         nativeLocation.reload();
     }
 
-    function updatePreferences () {
+    function updatePreferences() {
         vm.user.notification_settings = {
             person_moved: vm.personMoved,
             person_assigned: vm.personAssigned,
-            weekly_digest: vm.weeklyDigest
+            weekly_digest: vm.weeklyDigest,
         };
 
         if (vm.selectedLanguage) {
-            vm.selectedLanguageChanged = vm.user.language !== vm.selectedLanguage.abbreviation;
+            vm.selectedLanguageChanged =
+                vm.user.language !== vm.selectedLanguage.abbreviation;
             vm.user.language = vm.selectedLanguage.abbreviation;
         }
 
         vm.user.beta_mode = !vm.legacyNavigation;
 
-        return preferencesPageService.updatePreferences(vm.user.serialize()).then(function () {
-            $rootScope.legacyNavigation = !vm.user.beta_mode;
-        });
+        return preferencesPageService
+            .updatePreferences(vm.user.serialize())
+            .then(function() {
+                $rootScope.legacyNavigation = !vm.user.beta_mode;
+            });
     }
 }

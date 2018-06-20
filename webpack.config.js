@@ -3,7 +3,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -38,7 +39,7 @@ const htmlMinDefaults = {
     minifyJS: true,
     minifyCSS: true,
     removeScriptTypeAttributes: true,
-    removeStyleTypeAttributes: true
+    removeStyleTypeAttributes: true,
 };
 
 module.exports = (env = {}) => {
@@ -46,15 +47,16 @@ module.exports = (env = {}) => {
     return {
         mode: isBuild ? 'production' : 'development',
         entry: {
-            app: 'assets/javascripts/angular/main.js'
+            app: 'assets/javascripts/angular/main.js',
         },
         output: {
             filename: '[name].[chunkhash].js',
             chunkFilename: '[name].[chunkhash].js',
             path: path.resolve(__dirname, 'dist'),
             publicPath: publicPath,
-            devtoolModuleFilenameTemplate: info => info.resourcePath.replace(/^\.\//, ''),
-            crossOriginLoading: 'anonymous'
+            devtoolModuleFilenameTemplate: info =>
+                info.resourcePath.replace(/^\.\//, ''),
+            crossOriginLoading: 'anonymous',
         },
         optimization: {
             splitChunks: {
@@ -62,35 +64,40 @@ module.exports = (env = {}) => {
                     commons: {
                         test: /[\\/]node_modules[\\/]/,
                         name: 'vendor',
-                        chunks: 'initial'
-                    }
-                }
-            }
+                        chunks: 'initial',
+                    },
+                },
+            },
         },
         plugins: [
             new MiniCssExtractPlugin({
-                filename: '[name].[contenthash].css'
+                filename: '[name].[contenthash].css',
             }),
             new ManifestPlugin(),
-            ...!isTest ? [
-                new HtmlWebpackPlugin({
-                    template: 'index.ejs',
-                    prod: prod,
-                    minify: htmlMinDefaults
-                }),
-            ] : [],
-            ...isBuild ?
-                [
-                    new webpack.NamedModulesPlugin(),
-                    new InlineManifestWebpackPlugin({
-                        name: 'webpackManifest'
-                    }),
-                    new FaviconsWebpackPlugin('./app/assets/images/favicon.png'),
-                    new SriPlugin({
-                        hashFuncNames: ['sha512']
-                    })
-                ] : [],
-            ...env.analyze ? [ new BundleAnalyzerPlugin() ] : []
+            ...(!isTest
+                ? [
+                      new HtmlWebpackPlugin({
+                          template: 'index.ejs',
+                          prod: prod,
+                          minify: htmlMinDefaults,
+                      }),
+                  ]
+                : []),
+            ...(isBuild
+                ? [
+                      new webpack.NamedModulesPlugin(),
+                      new InlineManifestWebpackPlugin({
+                          name: 'webpackManifest',
+                      }),
+                      new FaviconsWebpackPlugin(
+                          './app/assets/images/favicon.png',
+                      ),
+                      new SriPlugin({
+                          hashFuncNames: ['sha512'],
+                      }),
+                  ]
+                : []),
+            ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),
         ],
         module: {
             rules: [
@@ -105,15 +112,15 @@ module.exports = (env = {}) => {
                                 plugins: [
                                     'transform-runtime',
                                     'syntax-dynamic-import',
-                                    ...!isTest ? ['angularjs-annotate'] : []
-                                ]
-                            }
-                        }
-                    ]
+                                    ...(!isTest ? ['angularjs-annotate'] : []),
+                                ],
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.html$/,
-                    use: ['html-loader']
+                    use: ['html-loader'],
                 },
                 {
                     test: /\.js$/,
@@ -123,8 +130,8 @@ module.exports = (env = {}) => {
                     options: {
                         // Show errors as warnings during development to prevent start/test commands from exiting
                         failOnError: isBuild || ci,
-                        emitWarning: !isBuild && !ci
-                    }
+                        emitWarning: !isBuild && !ci,
+                    },
                 },
                 {
                     test: /\.(scss|css)$/,
@@ -133,25 +140,27 @@ module.exports = (env = {}) => {
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap: true
-                            }
+                                sourceMap: true,
+                            },
                         },
                         {
                             loader: 'sass-loader',
                             options: {
-                                sourceMap: true
-                            }
-                        }
-                    ]
+                                sourceMap: true,
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.(woff|ttf|eot|ico)/,
-                    use: [{
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[hash].[ext]'
-                        }
-                    }]
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].[hash].[ext]',
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.(svg|png|jpe?g|gif)/,
@@ -159,26 +168,26 @@ module.exports = (env = {}) => {
                         {
                             loader: 'file-loader',
                             options: {
-                                name: '[name].[hash].[ext]'
-                            }
+                                name: '[name].[hash].[ext]',
+                            },
                         },
                         {
                             loader: 'image-webpack-loader',
-                            options: {}
-                        }
-                    ]
-                }
-            ]
+                            options: {},
+                        },
+                    ],
+                },
+            ],
         },
         resolve: {
-            modules: [path.resolve(__dirname, 'app'), 'node_modules']
+            modules: [path.resolve(__dirname, 'app'), 'node_modules'],
         },
         devtool: 'source-map',
         devServer: {
             historyApiFallback: true,
             headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        }
+                'Access-Control-Allow-Origin': '*',
+            },
+        },
     };
 };

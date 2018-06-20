@@ -1,12 +1,12 @@
 @import '../../../../stylesheets/variables/colors';
 
 edit-group {
-  .form .split-row > * {
-    width: 49%;
-    display: inline-block;
-  }
+    .form .split-row > * {
+        width: 49%;
+        display: inline-block;
+    }
 
-  person-multiselect {
-    border: 1px solid $gray-3;
-  }
+    person-multiselect {
+        border: 1px solid $gray-3;
+    }
 }

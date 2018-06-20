@@ -1,21 +1,27 @@
 import template from './organizationOverview.html';
 import './organizationOverview.scss';
 
-angular
-    .module('missionhubApp')
-    .component('organizationOverview', {
-        controller: organizationOverviewController,
-        bindings: {
-            org: '<',
-            loadDetails: '<?',
-            editMode: '<?'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('organizationOverview', {
+    controller: organizationOverviewController,
+    bindings: {
+        org: '<',
+        loadDetails: '<?',
+        editMode: '<?',
+    },
+    template: template,
+});
 
-function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService, ministryViewTabs,
-                                         organizationOverviewService, organizationService, loggedInPerson,
-                                         userPreferencesService, _) {
+function organizationOverviewController(
+    $scope,
+    p2cOrgId,
+    asyncBindingsService,
+    ministryViewTabs,
+    organizationOverviewService,
+    organizationService,
+    loggedInPerson,
+    userPreferencesService,
+    _,
+) {
     var vm = this;
     vm.tabNames = ministryViewTabs;
     vm.adminPrivileges = true;
@@ -25,9 +31,9 @@ function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService,
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
-    function activate () {
+    function activate() {
         _.defaults(vm, {
-            loadDetails: true
+            loadDetails: true,
         });
 
         vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
@@ -44,10 +50,10 @@ function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService,
         }
 
         // Make groups and surveys mirror that property on the organization
-        $scope.$watch('$ctrl.org.groups', function () {
+        $scope.$watch('$ctrl.org.groups', function() {
             vm.groups = vm.org.groups;
         });
-        $scope.$watch('$ctrl.org.surveys', function () {
+        $scope.$watch('$ctrl.org.surveys', function() {
             vm.surveys = vm.org.surveys;
         });
 
@@ -57,14 +63,20 @@ function organizationOverviewController ($scope, p2cOrgId, asyncBindingsService,
         // The suborgs, people, and team are loaded by their respective tab components, not this component.
         // However, this component does need to know how many people and team members there are, so set the
         // people and team to a sparse array of the appropriate length.
-        organizationOverviewService.getSubOrgCount(vm.org).then(function (subOrgCount) {
-            vm.suborgs = new Array(subOrgCount);
-        });
-        organizationOverviewService.getPersonCount(vm.org).then(function (personCount) {
-            vm.people = new Array(personCount);
-        });
-        organizationOverviewService.getTeamCount(vm.org).then(function (teamMemberCount) {
-            vm.team = new Array(teamMemberCount);
-        });
+        organizationOverviewService
+            .getSubOrgCount(vm.org)
+            .then(function(subOrgCount) {
+                vm.suborgs = new Array(subOrgCount);
+            });
+        organizationOverviewService
+            .getPersonCount(vm.org)
+            .then(function(personCount) {
+                vm.people = new Array(personCount);
+            });
+        organizationOverviewService
+            .getTeamCount(vm.org)
+            .then(function(teamMemberCount) {
+                vm.team = new Array(teamMemberCount);
+            });
     }
 }

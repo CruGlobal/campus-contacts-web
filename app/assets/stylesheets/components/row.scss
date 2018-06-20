@@ -1,29 +1,29 @@
 @import './global';
 
 .row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-  &.padded {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
+    &.padded {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
-  &.text-row {
-    align-items: baseline;
-  }
+    &.text-row {
+        align-items: baseline;
+    }
 
-  .column {
-    @extend .medium-spacing;
-  }
-  .flush-column {
-    padding-left: 0;
-  }
-  .normal-column {
-    flex: 1;
-  }
-  .important-column {
-    flex: 2;
-  }
+    .column {
+        @extend .medium-spacing;
+    }
+    .flush-column {
+        padding-left: 0;
+    }
+    .normal-column {
+        flex: 1;
+    }
+    .important-column {
+        flex: 2;
+    }
 }

@@ -2,8 +2,15 @@ import lscache from 'lscache';
 
 angular
     .module('missionhubApp')
-    .run(function ($window, $rootScope, $analytics, $timeout, spaPage, loggedInPerson,
-                   updateRollbarPerson) {
+    .run(function(
+        $window,
+        $rootScope,
+        $analytics,
+        $timeout,
+        spaPage,
+        loggedInPerson,
+        updateRollbarPerson,
+    ) {
         lscache.setBucket('missionhub:');
 
         // Determine whether this page is a SPA page or a legacy page
@@ -18,8 +25,8 @@ angular
         // authentication from the rails host through a <preload-state> component. This means
         // that the access token isn't populated at the time of application initialization,
         // the $timeout will cause delay this execution until after the first digest.
-        $timeout(function () {
-            loggedInPerson.loadOnce().then(function (me) {
+        $timeout(function() {
+            loggedInPerson.loadOnce().then(function(me) {
                 updateRollbarPerson(me);
                 $rootScope.legacyNavigation = me.user.beta_mode === false;
             });

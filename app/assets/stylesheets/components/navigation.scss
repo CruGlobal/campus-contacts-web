@@ -1,25 +1,29 @@
-.nav-item, [ui-sref], [ui-state], [ng-click] {
-  cursor: pointer;
+.nav-item,
+[ui-sref],
+[ui-state],
+[ng-click] {
+    cursor: pointer;
 }
 
 .tabs {
-  display: flex;
-
-  .tab {
     display: flex;
-    align-items: center;
-    padding: 10px;
-    &, a {
-      color: white;
+
+    .tab {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        &,
+        a {
+            color: white;
+        }
+        border-bottom: 3px solid transparent;
+        &.active {
+            color: $pivot-bright-blue;
+            border-bottom-color: $pivot-bright-blue;
+        }
+        &.disabled {
+            color: $gray-3;
+            cursor: initial;
+        }
     }
-    border-bottom: 3px solid transparent;
-    &.active {
-      color: $pivot-bright-blue;
-      border-bottom-color: $pivot-bright-blue;
-    }
-    &.disabled {
-      color: $gray-3;
-      cursor: initial;
-    }
-  }
 }

@@ -1,13 +1,13 @@
 @import '../../../../stylesheets/variables/colors';
 
 async-content {
-  loading-spinner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    loading-spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-    svg {
-      fill: $pivot-dark-blue;
+        svg {
+            fill: $pivot-dark-blue;
+        }
     }
-  }
 }

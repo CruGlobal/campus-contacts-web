@@ -1,67 +1,69 @@
 .warning {
-  color: $pivot-orange;
+    color: $pivot-orange;
 }
 
 .warning-highlight {
-  /* Increase specificity for links so that this rule will not be overridden */
-  &, &:link, &:hover {
-    padding: 4px 7px;
-    color: $white;
-    background-color: $pivot-orange;
-    border-radius: 40%;
-  }
+    /* Increase specificity for links so that this rule will not be overridden */
+    &,
+    &:link,
+    &:hover {
+        padding: 4px 7px;
+        color: $white;
+        background-color: $pivot-orange;
+        border-radius: 40%;
+    }
 }
 
 .medium-spacing {
-  padding: 0 10px;
+    padding: 0 10px;
 }
 
 .title {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 .subtitle {
-  color: $gray-3;
-  font-size: 12px;
+    color: $gray-3;
+    font-size: 12px;
 }
 
 ng-md-icon.disabled {
-  cursor: initial;
-  opacity: 0.3;
+    cursor: initial;
+    opacity: 0.3;
 }
 
 .icon-chip {
-  display: block;
-  background-color: $gray-2;
-  padding: 10px;
-  border-radius: 100%;
-  svg {
     display: block;
-    fill: white;
-  }
+    background-color: $gray-2;
+    padding: 10px;
+    border-radius: 100%;
+    svg {
+        display: block;
+        fill: white;
+    }
 }
 
 .primary-action {
-  background-color: $pivot-bright-blue;
+    background-color: $pivot-bright-blue;
 }
 
 .actionable {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .shared-pill-style {
-  display: inline-block;
-  margin-right: 10px;
-  padding: 4px 16px;
-  border-radius: 12px;
-  background-color: $gray-1-5;
-  border: 1px solid $gray-1-5;
-  color: $white;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 4px 16px;
+    border-radius: 12px;
+    background-color: $gray-1-5;
+    border: 1px solid $gray-1-5;
+    color: $white;
 }
 
 // Normally I would have had other css styles extend from .pill, but on production other things
 // could extend from this style, but it was exported as it's own style rule, this seems to fix it.
 // I wish I knew why. -SO
 .pill {
-  @extend .shared-pill-style
+    @extend .shared-pill-style;
 }

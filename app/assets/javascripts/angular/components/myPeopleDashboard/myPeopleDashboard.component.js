@@ -1,19 +1,28 @@
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 
-angular
-    .module('missionhubApp')
-    .component('myPeopleDashboard', {
-        controller: myPeopleDashboardController,
-        bindings: {
-            editMode: '<'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('myPeopleDashboard', {
+    controller: myPeopleDashboardController,
+    bindings: {
+        editMode: '<',
+    },
+    template: template,
+});
 
-function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore, _, I18n,
-                                      myPeopleDashboardService, periodService, loggedInPerson,
-                                      personService, reportsService, userPreferencesService) {
+function myPeopleDashboardController(
+    $scope,
+    $log,
+    $document,
+    JsonApiDataStore,
+    _,
+    I18n,
+    myPeopleDashboardService,
+    periodService,
+    loggedInPerson,
+    personService,
+    reportsService,
+    userPreferencesService,
+) {
     var vm = this;
     vm.people = [];
     vm.organizations = [];
@@ -28,55 +37,73 @@ function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore,
 
     vm.noPeopleWelcome = '';
 
-    function activate () {
+    function activate() {
         loadAndSyncData();
         angular.element($document).on('people::personAdded', loadAndSyncData);
-        vm.toggleOrgVisibility = userPreferencesService.toggleOrganizationVisibility;
+        vm.toggleOrgVisibility =
+            userPreferencesService.toggleOrganizationVisibility;
 
         vm.sortableOptions = {
             handle: '.sort-orgs-handle',
-            stop: function () {
-                return userPreferencesService.organizationOrderChange(vm.organizations);
-            }
+            stop: function() {
+                return userPreferencesService.organizationOrderChange(
+                    vm.organizations,
+                );
+            },
         };
 
         vm.noPeopleWelcome = I18n.t('dashboard.no_contacts.welcome', {
-            name: loggedInPerson.person.first_name.toUpperCase()
+            name: loggedInPerson.person.first_name.toUpperCase(),
         });
 
         periodService.subscribe($scope, loadReports);
     }
 
-    function cleanUp () {
+    function cleanUp() {
         angular.element($document).off('people::personAdded', loadAndSyncData);
     }
 
-    function loadAndSyncData () {
-        var includes = ['organizational_permissions', 'phone_numbers', 'email_addresses'];
-        personService.getContactAssignments(loggedInPerson.person, null, includes).then(dataLoaded);
+    function loadAndSyncData() {
+        var includes = [
+            'organizational_permissions',
+            'phone_numbers',
+            'email_addresses',
+        ];
+        personService
+            .getContactAssignments(loggedInPerson.person, null, includes)
+            .then(dataLoaded);
     }
 
-    function loadReports () {
+    function loadReports() {
         var people = JsonApiDataStore.store.findAll('person');
         var organizations = JsonApiDataStore.store.findAll('organization');
 
-        reportsService.loadOrganizationReports(organizations)
-            .catch(function (error) {
+        reportsService
+            .loadOrganizationReports(organizations)
+            .catch(function(error) {
                 $log.error('Error loading organization reports', error);
             });
 
-        reportsService.loadMultiplePeopleReports(organizations, people)
-            .catch(function (error) {
+        reportsService
+            .loadMultiplePeopleReports(organizations, people)
+            .catch(function(error) {
                 $log.error('Error loading people reports', error);
             });
     }
 
-    function loadOrganizations () {
-        myPeopleDashboardService.loadOrganizations({ 'page[limit]': 100 })
-            .then(function (organizations) {
-                vm.organizations = _.orderBy(organizations, 'active_people_count', 'desc');
+    function loadOrganizations() {
+        myPeopleDashboardService
+            .loadOrganizations({ 'page[limit]': 100 })
+            .then(function(organizations) {
+                vm.organizations = _.orderBy(
+                    organizations,
+                    'active_people_count',
+                    'desc',
+                );
 
-                vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(vm.organizations);
+                vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(
+                    vm.organizations,
+                );
 
                 if (vm.organizations.length <= vm.noPeopleShowLimit) {
                     vm.numberOfOrgsToShow = 100;
@@ -85,15 +112,15 @@ function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore,
                 }
                 loadReports();
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 $log.error('Error loading organizations', error);
             });
     }
 
-    function dataLoaded (assignmentsToMe) {
+    function dataLoaded(assignmentsToMe) {
         loadReports();
         var people = JsonApiDataStore.store.findAll('person');
-        people.forEach(function (person) {
+        people.forEach(function(person) {
             if (_.isNil(person.last_name)) {
                 person.last_name = '';
             }
@@ -105,17 +132,24 @@ function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore,
             .uniq()
             .value();
 
-        vm.organizations.forEach(function (organization) {
+        vm.organizations.forEach(function(organization) {
             // Get an array of the people assigned to me on this organization
-            organization.people = _.filter(assignmentsToMe, { organization: organization })
-                .map(function (assignment) {
-                    return JsonApiDataStore.store.find('person', assignment.person_id);
-                });
+            organization.people = _.filter(assignmentsToMe, {
+                organization: organization,
+            }).map(function(assignment) {
+                return JsonApiDataStore.store.find(
+                    'person',
+                    assignment.person_id,
+                );
+            });
         });
 
-        vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(vm.organizations);
+        vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(
+            vm.organizations,
+        );
 
-        vm.collapsible = people.length > 10 || _.keys(vm.organizations).length > 1;
+        vm.collapsible =
+            people.length > 10 || _.keys(vm.organizations).length > 1;
 
         if (_.keys(vm.organizations).length === 0) {
             noPeople();
@@ -124,7 +158,7 @@ function myPeopleDashboardController ($scope, $log, $document, JsonApiDataStore,
         vm.loading = false;
     }
 
-    function noPeople () {
+    function noPeople() {
         vm.noPeople = true;
         loadOrganizations();
     }

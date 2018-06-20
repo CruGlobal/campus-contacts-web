@@ -2,42 +2,42 @@
 @import './variables.scss';
 
 multiselect-list {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 0;
-  }
-
-  li {
-    height: $multiselect-list--entry-height;
-    margin-bottom: $multiselect-list--entry-padding;
-  }
-
-  .pill {
-    max-width: 100%;
-
-    span {
-      max-width: 100%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: inline-block;
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 0;
     }
-  }
 
-  .pill.unselected {
-    background-color: $gray-4;
-    border-color: $gray-4;
-    color: $pivot-dark-blue;
-  }
+    li {
+        height: $multiselect-list--entry-height;
+        margin-bottom: $multiselect-list--entry-padding;
+    }
 
-  ng-md-icon {
-    fill: $white;
-    overflow: hidden;
-    float: right;
-    text-align: right;
-    height: 12px;
-    width: 17px;
-    margin-top: -1px;
-    margin-right: -10px;
-  }
+    .pill {
+        max-width: 100%;
+
+        span {
+            max-width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: inline-block;
+        }
+    }
+
+    .pill.unselected {
+        background-color: $gray-4;
+        border-color: $gray-4;
+        color: $pivot-dark-blue;
+    }
+
+    ng-md-icon {
+        fill: $white;
+        overflow: hidden;
+        float: right;
+        text-align: right;
+        height: 12px;
+        width: 17px;
+        margin-top: -1px;
+        margin-right: -10px;
+    }
 }

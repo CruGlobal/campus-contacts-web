@@ -1,19 +1,21 @@
 import template from './editGroupOrLabelAssignments.html';
 import './editGroupOrLabelAssignments.scss';
 
-angular
-    .module('missionhubApp')
-    .component('editGroupOrLabelAssignments', {
-        controller: editGroupOrLabelAssignmentsController,
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('editGroupOrLabelAssignments', {
+    controller: editGroupOrLabelAssignmentsController,
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
+    template: template,
+});
 
-function editGroupOrLabelAssignmentsController (editGroupOrLabelAssignmentsService, JsonApiDataStore, _) {
+function editGroupOrLabelAssignmentsController(
+    editGroupOrLabelAssignmentsService,
+    JsonApiDataStore,
+    _,
+) {
     var vm = this;
 
     vm.saving = false;
@@ -27,65 +29,74 @@ function editGroupOrLabelAssignmentsController (editGroupOrLabelAssignmentsServi
 
     vm.$onInit = activate;
 
-    function activate () {
+    function activate() {
         loadEntryOptions();
         buildSelectedDict();
 
-        vm.title = isOrgLabelsMode() ? 'people.show.apply_labels' : 'people.show.apply_groups';
+        vm.title = isOrgLabelsMode()
+            ? 'people.show.apply_labels'
+            : 'people.show.apply_groups';
         vm.subtitle = isOrgLabelsMode() ? 'people.index.labels' : 'nav.groups';
     }
 
-    function isOrgLabelsMode () {
+    function isOrgLabelsMode() {
         return vm.resolve.relationship === 'organizational_labels';
     }
 
-    function orgRelationship () {
+    function orgRelationship() {
         return isOrgLabelsMode() ? 'labels' : 'groups';
     }
 
-    function relatedModel () {
+    function relatedModel() {
         return isOrgLabelsMode() ? 'label' : 'group';
     }
 
-    function sortFunction () {
+    function sortFunction() {
         if (isOrgLabelsMode()) {
-            return function (organization) {
+            return function(organization) {
                 return parseInt(organization.id, 10);
             };
         }
         return 'name';
     }
 
-    function orgFilterExpression () {
+    function orgFilterExpression() {
         if (isOrgLabelsMode()) {
             return { organization_id: vm.resolve.organizationId };
         }
         return ['group.organization.id', vm.resolve.organizationId];
     }
 
-    function errorMessage () {
-        return isOrgLabelsMode() ?
-            'error.messages.edit_group_or_label_assignments.load_labels' :
-            'error.messages.edit_group_or_label_assignments.load_groups';
+    function errorMessage() {
+        return isOrgLabelsMode()
+            ? 'error.messages.edit_group_or_label_assignments.load_labels'
+            : 'error.messages.edit_group_or_label_assignments.load_groups';
     }
 
-    function loadEntryOptions () {
-        var entries = JsonApiDataStore.store.find('organization', vm.resolve.organizationId)[orgRelationship()];
+    function loadEntryOptions() {
+        var entries = JsonApiDataStore.store.find(
+            'organization',
+            vm.resolve.organizationId,
+        )[orgRelationship()];
         vm.entryOptions = _.sortBy(entries, sortFunction());
-        editGroupOrLabelAssignmentsService.loadPlaceholderEntries(entries, vm.resolve.organizationId, errorMessage());
+        editGroupOrLabelAssignmentsService.loadPlaceholderEntries(
+            entries,
+            vm.resolve.organizationId,
+            errorMessage(),
+        );
     }
 
-    function buildSelectedDict () {
+    function buildSelectedDict() {
         vm.selectedEntries = _.chain(vm.resolve.person[vm.resolve.relationship])
             .filter(orgFilterExpression())
-            .map(function (entry) {
+            .map(function(entry) {
                 return [entry[relatedModel()].id, true];
             })
             .fromPairs()
             .value();
     }
 
-    function save () {
+    function save() {
         var savingPromise;
         vm.saving = true;
         if (isOrgLabelsMode()) {
@@ -93,22 +104,22 @@ function editGroupOrLabelAssignmentsController (editGroupOrLabelAssignmentsServi
                 vm.resolve.person,
                 vm.resolve.organizationId,
                 vm.addedEntries,
-                vm.removedEntries);
+                vm.removedEntries,
+            );
         } else {
             savingPromise = editGroupOrLabelAssignmentsService.saveGroupMemberships(
                 vm.resolve.person,
                 vm.addedEntries,
-                vm.removedEntries);
+                vm.removedEntries,
+            );
         }
 
-        savingPromise
-            .then(vm.close)
-            .catch(function () {
-                vm.saving = false;
-            });
+        savingPromise.then(vm.close).catch(function() {
+            vm.saving = false;
+        });
     }
 
-    function cancel () {
+    function cancel() {
         vm.dismiss();
     }
 }

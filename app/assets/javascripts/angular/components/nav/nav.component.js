@@ -1,13 +1,11 @@
 import template from './nav.html';
 
-angular
-    .module('missionhubApp')
-    .component('nav', {
-        controller: navController,
-        template: template
-    });
+angular.module('missionhubApp').component('nav', {
+    controller: navController,
+    template: template,
+});
 
-function navController (state, loggedInPerson, $timeout) {
+function navController(state, loggedInPerson, $timeout) {
     var vm = this;
 
     vm.state = state;

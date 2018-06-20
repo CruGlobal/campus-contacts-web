@@ -1,15 +1,15 @@
 message-modal {
-  textarea#message {
-    &.email {
-      height: 10em;
+    textarea#message {
+        &.email {
+            height: 10em;
+        }
+
+        &.sms {
+            height: 5em;
+        }
     }
 
-    &.sms {
-      height: 5em;
+    .length-limit {
+        text-align: right;
     }
-  }
-
-  .length-limit {
-    text-align: right;
-  }
 }

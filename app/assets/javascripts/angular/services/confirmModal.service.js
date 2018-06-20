@@ -4,17 +4,17 @@ angular
     .module('missionhubApp')
     .factory('confirmModalService', confirmModalService);
 
-function confirmModalService ($uibModal) {
+function confirmModalService($uibModal) {
     return {
-        create: function (message) {
+        create: function(message) {
             var modalInstance = $uibModal.open({
                 animation: true,
-                controller: function ($uibModalInstance) {
+                controller: function($uibModalInstance) {
                     var vm = this;
-                    vm.cancel = function () {
+                    vm.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
-                    vm.confirm = function () {
+                    vm.confirm = function() {
                         $uibModalInstance.close('delete');
                     };
                 },
@@ -31,11 +31,11 @@ function confirmModalService ($uibModal) {
                     '<button class="btn btn-secondary" type="button" ng-click="vm.cancel()">{{"general.cancel" | t}}</button>',
                     '<button class="btn btn-primary" type="button" ng-click="vm.confirm()">{{"general.ok" | t}}</button>',
                     '</div>',
-                    '</div>'
-                ].join('')
+                    '</div>',
+                ].join(''),
             });
 
             return modalInstance.result;
-        }
+        },
     };
 }
