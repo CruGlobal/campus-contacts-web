@@ -1,34 +1,34 @@
 @import '../../../../stylesheets/variables/colors';
 
 ministry-view-group {
-  display: block;
-  height: 50px;
+    display: block;
+    height: 50px;
 
-  ng-md-icon svg {
-    fill: $pivot-dark-blue;
-  }
+    ng-md-icon svg {
+        fill: $pivot-dark-blue;
+    }
 
-  .edit-action {
-    margin-right: 10px;
-  }
+    .edit-action {
+        margin-right: 10px;
+    }
 
-  .name-column {
-    flex: 1;
-  }
-  .leaders-column {
-    flex: 1;
+    .name-column {
+        flex: 1;
+    }
+    .leaders-column {
+        flex: 1;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .time-column {
-    flex: 2;
-  }
-  .location-column {
-    flex: 1;
-  }
-  .buttons-column {
-    width: 70px;
-  }
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .time-column {
+        flex: 2;
+    }
+    .location-column {
+        flex: 1;
+    }
+    .buttons-column {
+        width: 70px;
+    }
 }

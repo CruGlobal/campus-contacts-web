@@ -2,8 +2,8 @@ import template from './errorRetryToastTemplate.html';
 
 angular
     .module('missionhubApp')
-    .directive('errorRetryToastTemplate', function () {
+    .directive('errorRetryToastTemplate', function() {
         return {
-            template: template
+            template: template,
         };
     });

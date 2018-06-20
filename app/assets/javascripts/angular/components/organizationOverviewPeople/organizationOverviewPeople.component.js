@@ -1,20 +1,28 @@
 import template from './organizationOverviewPeople.html';
 import './organizationOverviewPeople.scss';
 
-angular
-    .module('missionhubApp')
-    .component('organizationOverviewPeople', {
-        controller: organizationOverviewPeopleController,
-        require: {
-            organizationOverview: '^'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('organizationOverviewPeople', {
+    controller: organizationOverviewPeopleController,
+    require: {
+        organizationOverview: '^',
+    },
+    template: template,
+});
 
-function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uibModal, confirmModalService,
-                                               organizationOverviewPeopleService, personService,
-                                               peopleFiltersPanelService, loggedInPerson,
-                                               RequestDeduper, ProgressiveListLoader, _) {
+function organizationOverviewPeopleController(
+    $rootScope,
+    $scope,
+    $filter,
+    $uibModal,
+    confirmModalService,
+    organizationOverviewPeopleService,
+    personService,
+    peopleFiltersPanelService,
+    loggedInPerson,
+    RequestDeduper,
+    ProgressiveListLoader,
+    _,
+) {
     var vm = this;
     vm.people = [];
     vm.multiSelection = {};
@@ -48,7 +56,8 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
     var listLoader = new ProgressiveListLoader({
         modelType: 'person',
         requestDeduper: requestDeduper,
-        errorMessage: 'error.messages.organization_overview_people.load_people_chunk'
+        errorMessage:
+            'error.messages.organization_overview_people.load_people_chunk',
     });
 
     // Define the columns that can be selected as sort keys
@@ -59,34 +68,43 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
             cssClass: 'name-column',
             label: 'ministries.people.name',
             sortable: true,
-            getSortKey: function (person) {
-                return [person.last_name.toLowerCase(), person.first_name.toLowerCase()];
+            getSortKey: function(person) {
+                return [
+                    person.last_name.toLowerCase(),
+                    person.first_name.toLowerCase(),
+                ];
             },
-            orderFields: ['last_name', 'first_name']
-        }, {
+            orderFields: ['last_name', 'first_name'],
+        },
+        {
             name: 'gender',
             cssClass: 'detail-column gender-column',
             label: 'ministries.people.gender',
             sortable: true,
-            getSortKey: function (person) {
+            getSortKey: function(person) {
                 return person.gender;
             },
-            orderFields: ['gender', 'last_name', 'first_name']
-        }, {
+            orderFields: ['gender', 'last_name', 'first_name'],
+        },
+        {
             name: 'assignment',
             cssClass: 'detail-column assigned-to-column',
             label: 'assignments.assignment',
-            sortable: false
-        }, {
+            sortable: false,
+        },
+        {
             name: 'status',
             cssClass: 'detail-column status-column',
             label: 'ministries.people.status',
             sortable: true,
-            getSortKey: function (person) {
-                return personService.getFollowupStatus(person, vm.organizationOverview.org.id);
+            getSortKey: function(person) {
+                return personService.getFollowupStatus(
+                    person,
+                    vm.organizationOverview.org.id,
+                );
             },
-            orderFields: ['followup_status', 'last_name', 'first_name']
-        }
+            orderFields: ['followup_status', 'last_name', 'first_name'],
+        },
     ];
 
     var defaultSortOrder = { column: vm.columns[0], direction: 'asc' };
@@ -95,8 +113,8 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
 
     var unsubscribe = null;
 
-    function activate () {
-        unsubscribe = $rootScope.$on('personCreated', function (event, person) {
+    function activate() {
+        unsubscribe = $rootScope.$on('personCreated', function(event, person) {
             onNewPerson(person);
         });
 
@@ -104,15 +122,19 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         vm.isAdmin = loggedInPerson.isAdminAt(vm.organizationOverview.org);
     }
 
-    function deactivate () {
+    function deactivate() {
         unsubscribe();
     }
 
-    $scope.$watch('$ctrl.multiSelection', function () {
-        vm.selectedCount = selectedCount();
-    }, true);
+    $scope.$watch(
+        '$ctrl.multiSelection',
+        function() {
+            vm.selectedCount = selectedCount();
+        },
+        true,
+    );
 
-    function selectedCount () {
+    function selectedCount() {
         // because multiSelection is only a list of the loaded records,
         // we need to count the ones that are explicitly un-selected when
         // select all is checked
@@ -129,13 +151,14 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         return getSelectedPeople().length;
     }
 
-    function loadPersonPage () {
+    function loadPersonPage() {
         vm.busy = true;
         var orgId = vm.organizationOverview.org.id;
 
         // Generate the sort order list
-        return organizationOverviewPeopleService.loadMoreOrgPeople(orgId, vm.filters, getOrder(), listLoader)
-            .then(function (resp) {
+        return organizationOverviewPeopleService
+            .loadMoreOrgPeople(orgId, vm.filters, getOrder(), listLoader)
+            .then(function(resp) {
                 var oldPeople = vm.people;
 
                 vm.people = resp.list;
@@ -143,17 +166,19 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
                 vm.totalCount = resp.total;
 
                 // Set the selected state of all of the new people
-                _.differenceBy(vm.people, oldPeople, 'id').forEach(function (person) {
+                _.differenceBy(vm.people, oldPeople, 'id').forEach(function(
+                    person,
+                ) {
                     vm.multiSelection[person.id] = vm.selectAllValue;
                 });
             })
-            .finally(function () {
+            .finally(function() {
                 vm.busy = false;
             });
     }
 
     // Respond to the creation of a new person by potentially adding it to the person list, updating counts, etc.
-    function onNewPerson (person) {
+    function onNewPerson(person) {
         // If filters are applied, then refresh the list because the new person may or may not be included
         // in the person list. If no filters applied, simply add it to the person list.
         if (peopleFiltersPanelService.filtersHasActive(vm.filters)) {
@@ -173,9 +198,9 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
 
     // Return an array of the ids of all people with the specified selection state (true for selected, false for
     // unselected)
-    function getPeopleByState (state) {
+    function getPeopleByState(state) {
         return _.chain(vm.multiSelection)
-            .pickBy(function (selected) {
+            .pickBy(function(selected) {
                 return selected === state;
             })
             .keys()
@@ -183,16 +208,16 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
     }
 
     // Return an array of the ids of all selected people
-    function getSelectedPeople () {
+    function getSelectedPeople() {
         return getPeopleByState(true);
     }
 
     // Return an array of the ids of all selected people
-    function getUnselectedPeople () {
+    function getUnselectedPeople() {
         return getPeopleByState(false);
     }
 
-    function resetList () {
+    function resetList() {
         vm.people = [];
         listLoader.reset();
         vm.loadedAll = false;
@@ -200,13 +225,13 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         vm.multiSelection = {};
     }
 
-    function filtersChanged (newFilters) {
+    function filtersChanged(newFilters) {
         vm.filters = newFilters;
         resetList();
         loadPersonPage();
     }
 
-    function setSortColumn (column) {
+    function setSortColumn(column) {
         if (vm.sortOrder.column === column) {
             if (vm.sortOrder.direction === 'asc') {
                 vm.sortOrder.direction = 'desc';
@@ -223,14 +248,14 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         loadPersonPage();
     }
 
-    function selectAll () {
-        vm.people.forEach(function (person) {
+    function selectAll() {
+        vm.people.forEach(function(person) {
             vm.multiSelection[person.id] = vm.selectAllValue;
         });
     }
 
     // Get the current selection in a standard form
-    function getSelection () {
+    function getSelection() {
         return {
             orgId: vm.organizationOverview.org.id,
             filters: vm.filters,
@@ -238,102 +263,116 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
             unselectedPeople: getUnselectedPeople(),
             totalSelectedPeople: vm.selectedCount,
             allSelected: vm.selectAllValue,
-            allIncluded: vm.loadedAll
+            allIncluded: vm.loadedAll,
         };
     }
 
     // Get the current sort order
-    function getOrder () {
-        return vm.sortOrder.column.orderFields.map(function (fieldName) {
+    function getOrder() {
+        return vm.sortOrder.column.orderFields.map(function(fieldName) {
             return { field: fieldName, direction: vm.sortOrder.direction };
         });
     }
 
     // Open a modal to mass-edit all selected people
-    function massEdit () {
-        $uibModal.open({
-            component: 'massEdit',
-            resolve: {
-                selection: _.constant(getSelection())
-            },
-            windowClass: 'pivot_theme',
-            size: 'sm'
-        }).result.then(function () {
-            $scope.$broadcast('massEditApplied');
+    function massEdit() {
+        $uibModal
+            .open({
+                component: 'massEdit',
+                resolve: {
+                    selection: _.constant(getSelection()),
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm',
+            })
+            .result.then(function() {
+                $scope.$broadcast('massEditApplied');
 
-            // Determine whether any filters are applied
-            if (!peopleFiltersPanelService.filtersHasActive(vm.filters)) {
-                // When there are no filters, we only need to make sure that all the people that people in the list
-                // are assigned to are loaded
-                organizationOverviewPeopleService.loadAssignedTos(vm.people, vm.organizationOverview.org.id);
-                return;
-            }
+                // Determine whether any filters are applied
+                if (!peopleFiltersPanelService.filtersHasActive(vm.filters)) {
+                    // When there are no filters, we only need to make sure that all the people that people in the list
+                    // are assigned to are loaded
+                    organizationOverviewPeopleService.loadAssignedTos(
+                        vm.people,
+                        vm.organizationOverview.org.id,
+                    );
+                    return;
+                }
 
-            // When there are filters, we need to reload the entire people list because those people might not match
-            // the filter anymore and we are currently choosing not to do client-side filtering
+                // When there are filters, we need to reload the entire people list because those people might not match
+                // the filter anymore and we are currently choosing not to do client-side filtering
 
-            var originalSelectAllValue = vm.selectAllValue;
-            var originalMultiSelection = vm.multiSelection;
+                var originalSelectAllValue = vm.selectAllValue;
+                var originalMultiSelection = vm.multiSelection;
 
-            // Empty and reload the people list
-            resetList();
-            loadPersonPage().then(function () {
-                // Restore the select all value and the selection states of all people that are still loaded
+                // Empty and reload the people list
+                resetList();
+                loadPersonPage().then(function() {
+                    // Restore the select all value and the selection states of all people that are still loaded
 
-                // Ignore original selection states that do not match a loaded person
-                var relevantOriginalSelections = _.pick(originalMultiSelection, _.map(vm.people, 'id'));
+                    // Ignore original selection states that do not match a loaded person
+                    var relevantOriginalSelections = _.pick(
+                        originalMultiSelection,
+                        _.map(vm.people, 'id'),
+                    );
 
-                // Copy those selections to the current selection
-                _.extend(vm.multiSelection, relevantOriginalSelections);
+                    // Copy those selections to the current selection
+                    _.extend(vm.multiSelection, relevantOriginalSelections);
 
-                // Keep the select all checkbox selected if it was originally selected and some people are selected
-                vm.selectAllValue = originalSelectAllValue && getSelectedPeople().length > 0;
+                    // Keep the select all checkbox selected if it was originally selected and some people are selected
+                    vm.selectAllValue =
+                        originalSelectAllValue &&
+                        getSelectedPeople().length > 0;
+                });
             });
-        });
     }
 
     // Return a boolean indicating whether the selected people can be merged
-    function mergeable () {
+    function mergeable() {
         // Only 2 - 4 people may be merged at a time
         return vm.selectedCount >= 2 && vm.selectedCount <= 4;
     }
 
-    function merge () {
+    function merge() {
         if (!mergeable()) {
             return;
         }
 
         var personIds = getSelectedPeople();
-        $uibModal.open({
-            component: 'mergeWinnerModal',
-            resolve: {
-                choices: _.constant(personIds)
-            },
-            windowClass: 'pivot_theme',
-            size: 'md'
-        }).result.then(function (winner) {
-            return organizationOverviewPeopleService.mergePeople(personIds, winner.id).then(function () {
-                removePeopleFromList(_.without(personIds, winner.id));
+        $uibModal
+            .open({
+                component: 'mergeWinnerModal',
+                resolve: {
+                    choices: _.constant(personIds),
+                },
+                windowClass: 'pivot_theme',
+                size: 'md',
+            })
+            .result.then(function(winner) {
+                return organizationOverviewPeopleService
+                    .mergePeople(personIds, winner.id)
+                    .then(function() {
+                        removePeopleFromList(_.without(personIds, winner.id));
+                    });
             });
-        });
     }
 
-    function sendMessage (medium) {
+    function sendMessage(medium) {
         $uibModal.open({
             component: 'messageModal',
             resolve: {
                 medium: _.constant(medium),
-                selection: _.constant(getSelection())
+                selection: _.constant(getSelection()),
             },
             windowClass: 'pivot_theme',
-            size: 'md'
+            size: 'md',
         });
     }
 
     // Remove the specified people from the people list in the UI
-    function removePeopleFromList (peopleIds) {
+    function removePeopleFromList(peopleIds) {
         // Partition loaded people by whether or not they are removed
-        var partition = _.partition(vm.people, function (person) {
+        var partition = _.partition(vm.people, function(person) {
             return _.includes(peopleIds, person.id);
         });
         var removedPeople = partition[0];
@@ -350,14 +389,14 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         }
 
         // Remove the selection state of removed people
-        removedPeople.forEach(function (person) {
+        removedPeople.forEach(function(person) {
             delete vm.multiSelection[person.id];
         });
 
         // Instruct the infinite scroller to check whether more people should be loaded because after
         // removing some people, the list will be shorter and may now be at the bottom. However, do this in
         // the next digest cycle after all of the removed people have been removed from the UI.
-        $scope.$applyAsync(function () {
+        $scope.$applyAsync(function() {
             $scope.$emit('checkInfiniteScroll');
         });
 
@@ -366,7 +405,7 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
 
     // Remove the selected people
     // This is an abstract method that can both archive and remove people
-    function removePeople (message, performRemoval) {
+    function removePeople(message, performRemoval) {
         var selection = getSelection();
         var transformedMessage = message;
 
@@ -376,55 +415,81 @@ function organizationOverviewPeopleController ($rootScope, $scope, $filter, $uib
         } else if (selection.allSelected && !selection.allIncluded) {
             // if everyone is selected, unselectedPeople will only be used if not everyone is loaded
             // and we know if everyone is loaded by checkin allIncluded
-            if (_.indexOf(selection.unselectedPeople, loggedInPerson.person.id) === -1) {
-                selection.unselectedPeople = _.union(selection.unselectedPeople, [loggedInPerson.person.id]);
+            if (
+                _.indexOf(
+                    selection.unselectedPeople,
+                    loggedInPerson.person.id,
+                ) === -1
+            ) {
+                selection.unselectedPeople = _.union(
+                    selection.unselectedPeople,
+                    [loggedInPerson.person.id],
+                );
                 selection.totalSelectedPeople = selectedCount() - 1;
             }
-        } else if (_.indexOf(selection.selectedPeople, loggedInPerson.person.id) !== -1) {
-            selection.selectedPeople = _.pull(selection.selectedPeople, loggedInPerson.person.id);
+        } else if (
+            _.indexOf(selection.selectedPeople, loggedInPerson.person.id) !== -1
+        ) {
+            selection.selectedPeople = _.pull(
+                selection.selectedPeople,
+                loggedInPerson.person.id,
+            );
             selection.totalSelectedPeople = selectedCount() - 1;
         }
-        transformedMessage = $filter('t')(transformedMessage, { contact_count: selection.totalSelectedPeople });
-        confirmModalService.create(transformedMessage)
-            .then(function () {
+        transformedMessage = $filter('t')(transformedMessage, {
+            contact_count: selection.totalSelectedPeople,
+        });
+        confirmModalService
+            .create(transformedMessage)
+            .then(function() {
                 return performRemoval(selection);
             })
-            .then(function () {
+            .then(function() {
                 removePeopleFromList(selection.selectedPeople);
             });
     }
 
-    function exportPeople () {
-        organizationOverviewPeopleService.exportPeople(getSelection(), getOrder());
+    function exportPeople() {
+        organizationOverviewPeopleService.exportPeople(
+            getSelection(),
+            getOrder(),
+        );
     }
 
-    function transferPeople () {
+    function transferPeople() {
         var selection = getSelection();
-        $uibModal.open({
-            component: 'transferModal',
-            resolve: {
-                selection: _.constant(selection)
-            },
-            windowClass: 'pivot_theme',
-            size: 'md'
-        }).result.then(function (copyContacts) {
-            if (copyContacts === false) {
-                removePeopleFromList(selection.selectedPeople);
-            }
-        });
+        $uibModal
+            .open({
+                component: 'transferModal',
+                resolve: {
+                    selection: _.constant(selection),
+                },
+                windowClass: 'pivot_theme',
+                size: 'md',
+            })
+            .result.then(function(copyContacts) {
+                if (copyContacts === false) {
+                    removePeopleFromList(selection.selectedPeople);
+                }
+            });
     }
 
-    function archivePeople () {
-        removePeople('ministries.people.archive_people_confirm', organizationOverviewPeopleService.archivePeople);
+    function archivePeople() {
+        removePeople(
+            'ministries.people.archive_people_confirm',
+            organizationOverviewPeopleService.archivePeople,
+        );
     }
 
-    function deletePeople () {
-        removePeople('ministries.people.delete_people_confirm', organizationOverviewPeopleService.deletePeople);
+    function deletePeople() {
+        removePeople(
+            'ministries.people.delete_people_confirm',
+            organizationOverviewPeopleService.deletePeople,
+        );
     }
 
-    function clearSelection () {
+    function clearSelection() {
         vm.selectAllValue = false;
         vm.multiSelection = {};
     }
 }
-

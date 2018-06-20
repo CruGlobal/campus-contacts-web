@@ -9,28 +9,27 @@ angular
         bindings: {
             resolve: '<',
             close: '&',
-            dismiss: '&'
-        }
+            dismiss: '&',
+        },
     })
-    .run(/* @ngInject */ function ($rootScope, $uibModal) {
-        $rootScope.openAboutModal = function () {
-            $uibModal.open({
-                component: 'aboutModal',
-                windowClass: 'pivot_theme',
-                size: 'md'
-            });
-        };
-    });
+    .run(
+        /* @ngInject */ function($rootScope, $uibModal) {
+            $rootScope.openAboutModal = function() {
+                $uibModal.open({
+                    component: 'aboutModal',
+                    windowClass: 'pivot_theme',
+                    size: 'md',
+                });
+            };
+        },
+    );
 
-function aboutModalController () {
+function aboutModalController() {
     var vm = this;
 
     vm.year = new Date().getFullYear();
 
     vm.$onInit = activate;
 
-    function activate () {
-
-    }
+    function activate() {}
 }
-

@@ -1,141 +1,159 @@
 @import '../../../../stylesheets/variables/colors';
 
 organization {
-  display: block;
-  accordion-toggle {
-    fill: $white;
-    padding-left: 8px;
-  }
-  .header {
-    background: $pivot-gradient-light;
-    background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
-    background: linear-gradient(to bottom, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
-    color: $white;
-    display: flex;
-    align-items: center;
-    height: 48px;
-    &.hidden-org {
-      background: gray;
-      background: -webkit-linear-gradient(down, #9F999B 0%, #666062 100%);
-      background: linear-gradient(to bottom, #9F999B 0%, #666062 100%);
+    display: block;
+    accordion-toggle {
+        fill: $white;
+        padding-left: 8px;
     }
-
-    ng-md-icon {
-      display: flex;
-    }
-
-    .org-name {
-      width: 287px;
-      padding: 0 8px;
-      display: flex;
-    }
-
-    .right-buttons {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      ng-md-icon {
-        height: 48px;
-        width: 44px;
-        padding: 12px 10px;
-        svg {
-          fill: $white;
-        }
-      }
-      .add-anonymous-interaction {
-        cursor: pointer;
-        &.closed {
-          transition: transform 200ms;
-          -ms-transform: translateX(-2px) rotate(45deg);
-          -webkit-transform: translateX(-2px) rotate(45deg);
-          transform: translateX(-2px) rotate(45deg);
-        }
-      }
-      .add-anonymous-interaction-buttons {
+    .header {
+        background: $pivot-gradient-light;
+        background: -webkit-linear-gradient(
+            down,
+            $pivot-gradient-light 0%,
+            $pivot-gradient-dark 100%
+        );
+        background: linear-gradient(
+            to bottom,
+            $pivot-gradient-light 0%,
+            $pivot-gradient-dark 100%
+        );
+        color: $white;
         display: flex;
-        align-self: stretch;
-        align-items: stretch;
-        overflow: hidden;
-        width: 0;
-        animation: anonymous-interactions-show 500ms ease forwards;
-        &.ng-leave {
-          width: 176px;
-          animation: anonymous-interactions-hide 500ms ease forwards;
-        }
-        @keyframes anonymous-interactions-show {
-          to {
-            width: 176px;
-          }
-        }
-        @keyframes anonymous-interactions-hide {
-          to {
-            width: 0;
-          }
+        align-items: center;
+        height: 48px;
+        &.hidden-org {
+            background: gray;
+            background: -webkit-linear-gradient(down, #9f999b 0%, #666062 100%);
+            background: linear-gradient(to bottom, #9f999b 0%, #666062 100%);
         }
 
         ng-md-icon {
-          cursor: pointer;
+            display: flex;
         }
-        > ng-md-icon {
-          &:nth-child(1) { background-color: mix(white, $pivot-dark-blue, 20%); }
-          &:nth-child(2) { background-color: mix(white, $pivot-dark-blue, 30%); }
-          &:nth-child(3) { background-color: mix(white, $pivot-dark-blue, 40%); }
-          &:nth-child(4) { background-color: mix(white, $pivot-dark-blue, 50%); }
-          &:hover, &.opened {
-            background-color: $pivot-dark-blue;
-          }
-          &:active {
-            background-color: lighten($pivot-dark-blue, 5%);
-          }
+
+        .org-name {
+            width: 287px;
+            padding: 0 8px;
+            display: flex;
         }
-      }
+
+        .right-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            ng-md-icon {
+                height: 48px;
+                width: 44px;
+                padding: 12px 10px;
+                svg {
+                    fill: $white;
+                }
+            }
+            .add-anonymous-interaction {
+                cursor: pointer;
+                &.closed {
+                    transition: transform 200ms;
+                    -ms-transform: translateX(-2px) rotate(45deg);
+                    -webkit-transform: translateX(-2px) rotate(45deg);
+                    transform: translateX(-2px) rotate(45deg);
+                }
+            }
+            .add-anonymous-interaction-buttons {
+                display: flex;
+                align-self: stretch;
+                align-items: stretch;
+                overflow: hidden;
+                width: 0;
+                animation: anonymous-interactions-show 500ms ease forwards;
+                &.ng-leave {
+                    width: 176px;
+                    animation: anonymous-interactions-hide 500ms ease forwards;
+                }
+                @keyframes anonymous-interactions-show {
+                    to {
+                        width: 176px;
+                    }
+                }
+                @keyframes anonymous-interactions-hide {
+                    to {
+                        width: 0;
+                    }
+                }
+
+                ng-md-icon {
+                    cursor: pointer;
+                }
+                > ng-md-icon {
+                    &:nth-child(1) {
+                        background-color: mix(white, $pivot-dark-blue, 20%);
+                    }
+                    &:nth-child(2) {
+                        background-color: mix(white, $pivot-dark-blue, 30%);
+                    }
+                    &:nth-child(3) {
+                        background-color: mix(white, $pivot-dark-blue, 40%);
+                    }
+                    &:nth-child(4) {
+                        background-color: mix(white, $pivot-dark-blue, 50%);
+                    }
+                    &:hover,
+                    &.opened {
+                        background-color: $pivot-dark-blue;
+                    }
+                    &:active {
+                        background-color: lighten($pivot-dark-blue, 5%);
+                    }
+                }
+            }
+        }
+
+        h2 {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            font-family: 'Titillium Web', sans-serif;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            a {
+                padding: 13px 0;
+                display: inline-block;
+            }
+            a:visited {
+                color: inherit;
+            }
+        }
     }
 
-    h2 {
-      -webkit-box-flex: 1;
-      -webkit-flex: 1;
-      -ms-flex: 1;
-      flex: 1;
-      margin: 0;
-      font-weight: normal;
-      font-size: 14px;
-      font-family: 'Titillium Web', sans-serif;
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      a {
-        padding: 13px 0;
-        display: inline-block;
-      }
-      a:visited {
-        color: inherit;
-      }
+    .add-anonymous-interaction-panel {
+        background-color: $pivot-dark-blue;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        textarea {
+            display: flex;
+            flex-grow: 1;
+            resize: none;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+        a {
+            color: $white;
+            font-size: 16px;
+            padding-left: 10px;
+            line-height: 32px;
+            &:visited,
+            &:active {
+                color: white;
+            }
+        }
     }
-  }
-
-  .add-anonymous-interaction-panel {
-    background-color: $pivot-dark-blue;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    textarea {
-      display: flex;
-      flex-grow: 1;
-      resize: none;
-      -webkit-box-sizing: content-box;
-      -moz-box-sizing: content-box;
-      box-sizing: content-box;
-    }
-    a {
-      color: $white;
-      font-size: 16px;
-      padding-left: 10px;
-      line-height: 32px;
-      &:visited, &:active {
-        color: white;
-      }
-    }
-  }
 }

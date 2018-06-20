@@ -1,53 +1,51 @@
-angular
-    .module('missionhubApp')
-    .factory('languageService', languageService);
+angular.module('missionhubApp').factory('languageService', languageService);
 
-function languageService () {
+function languageService() {
     var service = {
-        loadLanguages: function () {
+        loadLanguages: function() {
             return [
                 {
                     abbreviation: 'en',
-                    description: 'English'
+                    description: 'English',
                 },
                 {
                     abbreviation: 'ca',
-                    description: 'English - Canadian'
+                    description: 'English - Canadian',
                 },
                 {
                     abbreviation: 'ru',
-                    description: 'Russian'
+                    description: 'Russian',
                 },
                 {
                     abbreviation: 'es',
-                    description: 'Spanish'
+                    description: 'Spanish',
                 },
                 {
                     abbreviation: 'es-419',
-                    description: 'Spanish - Latin America and Caribbean'
+                    description: 'Spanish - Latin America and Caribbean',
                 },
                 {
                     abbreviation: 'fr',
-                    description: 'French'
+                    description: 'French',
                 },
                 {
                     abbreviation: 'fr-CA',
-                    description: 'French - Canadian'
+                    description: 'French - Canadian',
                 },
                 {
                     abbreviation: 'zh',
-                    description: 'Chinese'
+                    description: 'Chinese',
                 },
                 {
                     abbreviation: 'bs',
-                    description: 'Bosnian'
+                    description: 'Bosnian',
                 },
                 {
                     abbreviation: 'de',
-                    description: 'German'
-                }
+                    description: 'German',
+                },
             ];
-        }
+        },
     };
     return service;
 }

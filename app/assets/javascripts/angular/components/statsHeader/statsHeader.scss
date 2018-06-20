@@ -1,26 +1,26 @@
 @import '../../../../stylesheets/components/header';
 
 stats-header {
-  display: flex;
-  align-items: center;
-  @extend .subheader;
-
-  .stats-title {
-    padding-left: 10px;
-    width: 370px;
-  }
-
-  .stats-icons {
-    display: inline-flex;
-    width: 332px;
-    justify-content: space-between;
+    display: flex;
     align-items: center;
-    ng-md-icon {
-      display: inline-block;
-      width: 25px;
+    @extend .subheader;
+
+    .stats-title {
+        padding-left: 10px;
+        width: 370px;
     }
-    svg {
-      fill: rgba(255, 255, 255, 0.5);
+
+    .stats-icons {
+        display: inline-flex;
+        width: 332px;
+        justify-content: space-between;
+        align-items: center;
+        ng-md-icon {
+            display: inline-block;
+            width: 25px;
+        }
+        svg {
+            fill: rgba(255, 255, 255, 0.5);
+        }
     }
-  }
 }

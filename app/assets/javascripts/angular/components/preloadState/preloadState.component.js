@@ -1,19 +1,17 @@
-angular
-    .module('missionhubApp')
-    .component('preloadState', {
-        controller: preloadStateController,
-        bindings: {
-            name: '@',
-            data: '@'
-        }
-    });
+angular.module('missionhubApp').component('preloadState', {
+    controller: preloadStateController,
+    bindings: {
+        name: '@',
+        data: '@',
+    },
+});
 
-function preloadStateController (state, $http) {
+function preloadStateController(state, $http) {
     var vm = this;
 
     vm.$onInit = activate;
 
-    function activate () {
+    function activate() {
         if (vm.data === 'true' || vm.data === 'false') {
             state[vm.name] = vm.data === 'true';
         } else {
@@ -22,9 +20,10 @@ function preloadStateController (state, $http) {
         addAuthHeader();
     }
 
-    function addAuthHeader () {
+    function addAuthHeader() {
         if (vm.name === 'v4AccessToken') {
-            $http.defaults.headers.common.Authorization = 'Bearer ' + state.v4AccessToken;
+            $http.defaults.headers.common.Authorization =
+                'Bearer ' + state.v4AccessToken;
         }
     }
 }

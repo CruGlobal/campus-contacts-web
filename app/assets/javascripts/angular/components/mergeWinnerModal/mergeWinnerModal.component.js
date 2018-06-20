@@ -1,19 +1,17 @@
 import template from './mergeWinnerModal.html';
 import './mergeWinnerModal.scss';
 
-angular
-    .module('missionhubApp')
-    .component('mergeWinnerModal', {
-        controller: mergeWinnerModalController,
-        template: template,
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        }
-    });
+angular.module('missionhubApp').component('mergeWinnerModal', {
+    controller: mergeWinnerModalController,
+    template: template,
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
+});
 
-function mergeWinnerModalController (mergeWinnerService) {
+function mergeWinnerModalController(mergeWinnerService) {
     var vm = this;
 
     vm.personFields = mergeWinnerService.personFields;
@@ -28,27 +26,27 @@ function mergeWinnerModalController (mergeWinnerService) {
 
     vm.$onInit = activate;
 
-    function activate () {
-        mergeWinnerService.generateChoices(vm.resolve.choices)
-            .then(function (choices) {
+    function activate() {
+        mergeWinnerService
+            .generateChoices(vm.resolve.choices)
+            .then(function(choices) {
                 vm.ready = true;
                 vm.choices = choices;
             })
-            .catch(function (err) {
+            .catch(function(err) {
                 vm.dismiss({ $value: err });
             });
     }
 
-    function setWinner (model) {
+    function setWinner(model) {
         vm.winner = model;
     }
 
-    function save () {
+    function save() {
         vm.close({ $value: vm.winner });
     }
 
-    function cancel () {
+    function cancel() {
         vm.dismiss();
     }
 }
-

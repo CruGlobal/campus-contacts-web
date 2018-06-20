@@ -1,64 +1,72 @@
 @import '../../../../stylesheets/variables/colors';
 
 .my-people-dashboard {
-  .no-people-message {
-    margin-top: 24px;
-    margin-bottom: 36px;
-    text-align: center;
+    .no-people-message {
+        margin-top: 24px;
+        margin-bottom: 36px;
+        text-align: center;
 
-    h1 {
-      font-size: 32px;
-      line-height: 32px;
-      margin: 8px;
-      font-weight: bold;
-      color: $white;
-      font-family: Montserrat, sans-serif;
+        h1 {
+            font-size: 32px;
+            line-height: 32px;
+            margin: 8px;
+            font-weight: bold;
+            color: $white;
+            font-family: Montserrat, sans-serif;
+        }
+
+        p {
+            font-size: 16px;
+            margin-top: 10px;
+            ng-md-icon {
+                display: inline-block;
+                line-height: 12px;
+                position: relative;
+                top: 5px;
+                margin-left: 2px;
+            }
+            svg {
+                fill: $pivot-dark-blue;
+            }
+        }
+    }
+    .no-people-extras {
+        text-align: center;
+
+        .show-more {
+            color: $white;
+            display: inline-block;
+            background: $pivot-gradient-light;
+            background: -webkit-linear-gradient(
+                down,
+                $pivot-gradient-light 0%,
+                $pivot-gradient-dark 100%
+            );
+            background: linear-gradient(
+                to bottom,
+                $pivot-gradient-light 0%,
+                $pivot-gradient-dark 100%
+            );
+            line-height: 44px;
+            padding: 0 60px;
+            margin-bottom: 8px;
+        }
+        .edit-mode {
+            line-height: 25px;
+            svg {
+                position: relative;
+                top: 9px;
+                margin-left: 3px;
+                fill: $pivot-dark-blue;
+            }
+        }
     }
 
-    p {
-      font-size: 16px;
-      margin-top: 10px;
-      ng-md-icon {
-        display: inline-block;
-        line-height: 12px;
-        position: relative;
-        top: 5px;
-        margin-left: 2px;
-      }
-      svg {
-        fill: $pivot-dark-blue;
-      }
+    organization {
+        margin-bottom: 20px;
     }
-  }
-  .no-people-extras {
-    text-align: center;
 
-    .show-more {
-      color: $white;
-      display: inline-block;
-      background: $pivot-gradient-light;
-      background: -webkit-linear-gradient(down, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
-      background: linear-gradient(to bottom, $pivot-gradient-light 0%, $pivot-gradient-dark 100%);
-      line-height: 44px;
-      padding: 0 60px;
-      margin-bottom: 8px;
+    people-view-person > .person-info > .name {
+        width: 290px;
     }
-    .edit-mode {
-      line-height: 25px;
-      svg {
-        position: relative;
-        top: 9px;
-        margin-left: 3px;
-        fill: $pivot-dark-blue;
-      }
-    }
-  }
-
-  organization {
-    margin-bottom: 20px;
-  }
-
-  people-view-person > .person-info > .name {
-    width: 290px;
-  }
 }

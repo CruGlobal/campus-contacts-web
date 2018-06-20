@@ -2,17 +2,17 @@ angular
     .module('missionhubApp')
     .factory('ProgressiveListLoader', progressiveListLoader);
 
-function progressiveListLoader (httpProxy, modelsService, _) {
+function progressiveListLoader(httpProxy, modelsService, _) {
     var pageSize = 25;
     var overlapMargin = 1;
 
-    function ProgressiveListLoader (options) {
+    function ProgressiveListLoader(options) {
         var modelType = options.modelType;
         var requestDeduper = options.requestDeduper;
         var errorMessage = options.errorMessage;
         var list = [];
 
-        this.loadMore = function (params) {
+        this.loadMore = function(params) {
             // There are two situations where our length gets out of sync from our offset:
             // 1. The already-loaded portion of the data set becomes larger on the server. In this
             // case, we would be requesting the next set after #10, but what we think is #10 is
@@ -25,18 +25,24 @@ function progressiveListLoader (httpProxy, modelsService, _) {
             // away duplicates. `overlapMargin` defines how many extra rows to load.
             var page = {
                 limit: pageSize + overlapMargin,
-                offset: Math.max(list.length - overlapMargin, 0)
+                offset: Math.max(list.length - overlapMargin, 0),
             };
             var paramsWithPage = params || {};
             paramsWithPage['page[limit]'] = page.limit;
             paramsWithPage['page[offset]'] = page.offset;
 
             return httpProxy
-                .get(modelsService.getModelMetadata(modelType).url.all, paramsWithPage, {
-                    deduper: requestDeduper,
-                    errorMessage: errorMessage || 'error.messages.progressive_list_loader.load_chunk'
-                })
-                .then(function (resp) {
+                .get(
+                    modelsService.getModelMetadata(modelType).url.all,
+                    paramsWithPage,
+                    {
+                        deduper: requestDeduper,
+                        errorMessage:
+                            errorMessage ||
+                            'error.messages.progressive_list_loader.load_chunk',
+                    },
+                )
+                .then(function(resp) {
                     list = _.unionBy(list, resp.data, 'id');
                     var loadedAll = resp.meta.total <= list.length;
 
@@ -44,12 +50,12 @@ function progressiveListLoader (httpProxy, modelsService, _) {
                         nextBatch: resp.data,
                         list: list,
                         loadedAll: loadedAll,
-                        total: resp.meta.total
+                        total: resp.meta.total,
                     };
                 });
         };
 
-        this.reset = function (newList) {
+        this.reset = function(newList) {
             list = newList || [];
             return this;
         };

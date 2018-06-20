@@ -1,12 +1,25 @@
 angular
     .module('missionhubApp')
-    .factory('organizationOverviewPeopleService', organizationOverviewPeopleService);
+    .factory(
+        'organizationOverviewPeopleService',
+        organizationOverviewPeopleService,
+    );
 
-function organizationOverviewPeopleService ($http, $q, $window, httpProxy, JsonApiDataStore, modelsService,
-                                            envService, personSelectionService, massEditService, _) {
+function organizationOverviewPeopleService(
+    $http,
+    $q,
+    $window,
+    httpProxy,
+    JsonApiDataStore,
+    modelsService,
+    envService,
+    personSelectionService,
+    massEditService,
+    _,
+) {
     var organizationOverviewPeopleService = {
         // Load all of the people that a list of people are assigned to
-        loadAssignedTos: function (people, orgId) {
+        loadAssignedTos: function(people, orgId) {
             // Find all of the people that any of those people are assigned to
             var assignedTos = _.chain(people)
                 .map('reverse_contact_assignments')
@@ -23,35 +36,44 @@ function organizationOverviewPeopleService ($http, $q, $window, httpProxy, JsonA
                 .value();
 
             // Load those unloaded models
-            return unloadedIds.length === 0 ?
-                $q.resolve() :
-                httpProxy.get(modelsService.getModelMetadata('person').url.all, {
-                    include: '',
-                    'filters[ids]': unloadedIds.join(',')
-                }, {
-                    errorMessage: 'error.messages.organization_overview_people.load_assignments'
-                });
+            return unloadedIds.length === 0
+                ? $q.resolve()
+                : httpProxy.get(
+                      modelsService.getModelMetadata('person').url.all,
+                      {
+                          include: '',
+                          'filters[ids]': unloadedIds.join(','),
+                      },
+                      {
+                          errorMessage:
+                              'error.messages.organization_overview_people.load_assignments',
+                      },
+                  );
         },
 
         // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
         // string expected by the API
-        buildOrderString: function (order) {
-            return order.map(function (orderEntry) {
-                return orderEntry.field + ' ' + orderEntry.direction;
-            }).join(',');
+        buildOrderString: function(order) {
+            return order
+                .map(function(orderEntry) {
+                    return orderEntry.field + ' ' + orderEntry.direction;
+                })
+                .join(',');
         },
 
-        buildGetParams: function (orgId, filtersParam, orderParam) {
+        buildGetParams: function(orgId, filtersParam, orderParam) {
             var filters = filtersParam || {};
             var base = {
                 include: [
                     'phone_numbers',
                     'email_addresses',
                     'organizational_permissions',
-                    'reverse_contact_assignments'
+                    'reverse_contact_assignments',
                 ].join(','),
-                order: organizationOverviewPeopleService.buildOrderString(orderParam || []),
-                'filters[organization_ids]': orgId
+                order: organizationOverviewPeopleService.buildOrderString(
+                    orderParam || [],
+                ),
+                'filters[organization_ids]': orgId,
             };
             if (filters.searchString) {
                 base['filters[name]'] = filters.searchString;
@@ -72,73 +94,96 @@ function organizationOverviewPeopleService ($http, $q, $window, httpProxy, JsonA
         },
 
         // Load an organization's people
-        loadMoreOrgPeople: function (orgId, filters, order, listLoader) {
-            var requestParams = organizationOverviewPeopleService.buildGetParams(orgId, filters, order);
+        loadMoreOrgPeople: function(orgId, filters, order, listLoader) {
+            var requestParams = organizationOverviewPeopleService.buildGetParams(
+                orgId,
+                filters,
+                order,
+            );
 
-            return listLoader
-                .loadMore(requestParams)
-                .then(function (resp) {
-                    // Load the assignments in parallel
-                    organizationOverviewPeopleService.loadAssignedTos(resp.nextBatch, orgId);
-                    return resp;
-                });
+            return listLoader.loadMore(requestParams).then(function(resp) {
+                // Load the assignments in parallel
+                organizationOverviewPeopleService.loadAssignedTos(
+                    resp.nextBatch,
+                    orgId,
+                );
+                return resp;
+            });
         },
 
-        loadOrgPeopleCount: function (orgId) {
-            var requestParams = organizationOverviewPeopleService.buildGetParams(orgId);
+        loadOrgPeopleCount: function(orgId) {
+            var requestParams = organizationOverviewPeopleService.buildGetParams(
+                orgId,
+            );
             requestParams['page[limit]'] = 0;
 
             return httpProxy
-                .get(modelsService.getModelMetadata('person').url.all, requestParams, {
-                    errorMessage: 'error.messages.organization_overview_people.load_org_people_count'
-                })
-                .then(function (resp) {
+                .get(
+                    modelsService.getModelMetadata('person').url.all,
+                    requestParams,
+                    {
+                        errorMessage:
+                            'error.messages.organization_overview_people.load_org_people_count',
+                    },
+                )
+                .then(function(resp) {
                     return resp.meta.total;
                 });
         },
 
         // Merge the specified people
-        mergePeople: function (personIds, winnerId) {
+        mergePeople: function(personIds, winnerId) {
             var model = new JsonApiDataStore.Model('bulk_people_change');
             model.setAttribute('person_ids', personIds);
             model.setAttribute('winner_id', winnerId);
-            return httpProxy
-                .post('/person_merges', model.serialize(), {
-                    errorMessage: 'error.messages.organization_overview_people.merge_people'
-                });
+            return httpProxy.post('/person_merges', model.serialize(), {
+                errorMessage:
+                    'error.messages.organization_overview_people.merge_people',
+            });
         },
 
         // Export the selected people
-        exportPeople: function (selection, order) {
-            var filterParams = _.mapKeys(personSelectionService.convertToFilters(selection), function (value, key) {
-                return 'filters[' + key + ']';
-            });
+        exportPeople: function(selection, order) {
+            var filterParams = _.mapKeys(
+                personSelectionService.convertToFilters(selection),
+                function(value, key) {
+                    return 'filters[' + key + ']';
+                },
+            );
             var params = _.extend(filterParams, {
-                access_token: $http.defaults.headers.common.Authorization.slice(7), // strip off the "Bearer " part
+                access_token: $http.defaults.headers.common.Authorization.slice(
+                    7,
+                ), // strip off the "Bearer " part
                 organization_id: selection.orgId,
-                order: organizationOverviewPeopleService.buildOrderString(order),
-                format: 'csv'
+                order: organizationOverviewPeopleService.buildOrderString(
+                    order,
+                ),
+                format: 'csv',
             });
-            var queryString = _.map(params, function (value, key) {
-                return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+            var queryString = _.map(params, function(value, key) {
+                return (
+                    encodeURIComponent(key) + '=' + encodeURIComponent(value)
+                );
             }).join('&');
 
             // Navigate to the URL to initiate the download
-            var url = envService.read('apiUrl') +
-                modelsService.getModelMetadata('person').url.all + '?' +
+            var url =
+                envService.read('apiUrl') +
+                modelsService.getModelMetadata('person').url.all +
+                '?' +
                 queryString;
             $window.location.replace(url);
         },
 
         // Archive the selected people
-        archivePeople: function (selection) {
+        archivePeople: function(selection) {
             return massEditService.applyChanges(selection, { archived: true });
         },
 
         // Delete the selected people
-        deletePeople: function (selection) {
+        deletePeople: function(selection) {
             return massEditService.applyChanges(selection, { delete: true });
-        }
+        },
     };
     return organizationOverviewPeopleService;
 }

@@ -1,16 +1,16 @@
 @import '../../../../stylesheets/variables/colors';
 
 answer-sheet {
-  display: flex;
+    display: flex;
 
-  .title {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-
-  .actions-column {
-    ng-md-icon {
-      fill: $gray-1;
+    .title {
+        font-size: 14px;
+        margin-bottom: 4px;
     }
-  }
+
+    .actions-column {
+        ng-md-icon {
+            fill: $gray-1;
+        }
+    }
 }

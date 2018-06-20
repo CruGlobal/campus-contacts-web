@@ -3,10 +3,14 @@ import 'angular-mocks';
 // Constants
 var $controller, myPeopleDashboardService, $scope, loggedInPerson;
 
-describe('myPeopleDashboard Components Tests', function () {
+describe('myPeopleDashboard Components Tests', function() {
     beforeEach(angular.mock.module('missionhubApp'));
 
-    beforeEach(inject(function ($rootScope, $componentController, _loggedInPerson_) {
+    beforeEach(inject(function(
+        $rootScope,
+        $componentController,
+        _loggedInPerson_,
+    ) {
         $scope = $rootScope.$new();
         loggedInPerson = _loggedInPerson_;
 
@@ -16,21 +20,20 @@ describe('myPeopleDashboard Components Tests', function () {
             'myPeopleDashboard',
             { $scope: $scope },
             { myBinding: { period: '<', editMode: '<' } },
-            loggedInPerson
+            loggedInPerson,
         );
 
-        myPeopleDashboardService = jasmine.createSpyObj('myPeopleDashboardService', [
-            'loadPeople',
-            'loadReports',
-            'loadOrganizations'
-        ]);
+        myPeopleDashboardService = jasmine.createSpyObj(
+            'myPeopleDashboardService',
+            ['loadPeople', 'loadReports', 'loadOrganizations'],
+        );
 
-        describe('Components.Controller', function () {
-            it('should exist', function () {
+        describe('Components.Controller', function() {
+            it('should exist', function() {
                 expect($controller).toBeDefined();
             });
 
-            it('loadPeople should have been called', function () {
+            it('loadPeople should have been called', function() {
                 myPeopleDashboardService.loadPeople();
                 expect(myPeopleDashboardService.loadPeople).toHaveBeenCalled();
             });

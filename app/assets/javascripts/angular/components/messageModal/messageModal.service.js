@@ -2,9 +2,9 @@ angular
     .module('missionhubApp')
     .factory('messageModalService', messageModalService);
 
-function messageModalService (httpProxy, personSelectionService) {
+function messageModalService(httpProxy, personSelectionService) {
     var messageModalService = {
-        sendMessage: function (options) {
+        sendMessage: function(options) {
             var selection = options.recipients;
             var filters = personSelectionService.convertToFilters(selection);
 
@@ -21,16 +21,17 @@ function messageModalService (httpProxy, personSelectionService) {
 
                             // Prefer using recipient_ids over filters because the former does validation that the
                             // latter does not. If recipient_ids is truthy, it will override the filters.
-                            recipient_ids: filters.ids
-                        }
+                            recipient_ids: filters.ids,
+                        },
                     },
-                    filters: filters
+                    filters: filters,
                 },
                 {
-                    errorMessage: 'error.messages.bulk_message_modal.send_message'
-                }
+                    errorMessage:
+                        'error.messages.bulk_message_modal.send_message',
+                },
             );
-        }
+        },
     };
 
     return messageModalService;

@@ -1,19 +1,23 @@
 import template from './transferModal.html';
 import './transferModal.scss';
 
-angular
-    .module('missionhubApp')
-    .component('transferModal', {
-        controller: transferModalController,
-        template: template,
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        }
-    });
+angular.module('missionhubApp').component('transferModal', {
+    controller: transferModalController,
+    template: template,
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
+});
 
-function transferModalController ($scope, JsonApiDataStore, transferService, organizationService, RequestDeduper) {
+function transferModalController(
+    $scope,
+    JsonApiDataStore,
+    transferService,
+    organizationService,
+    RequestDeduper,
+) {
     var vm = this;
 
     vm.search = '';
@@ -24,7 +28,7 @@ function transferModalController ($scope, JsonApiDataStore, transferService, org
     vm.options = {
         copyContact: false,
         copyAnswers: false,
-        copyInteractions: false
+        copyInteractions: false,
     };
 
     vm.save = save;
@@ -32,14 +36,17 @@ function transferModalController ($scope, JsonApiDataStore, transferService, org
 
     vm.$onInit = activate;
 
-    function activate () {
+    function activate() {
         vm.selection = vm.resolve.selection;
-        vm.sourceOrg = JsonApiDataStore.store.find('organization', vm.selection.orgId);
+        vm.sourceOrg = JsonApiDataStore.store.find(
+            'organization',
+            vm.selection.orgId,
+        );
 
         var requestDeduper = new RequestDeduper();
 
         // Refresh the org list whenever the search term changes
-        $scope.$watch('$ctrl.search', function (search) {
+        $scope.$watch('$ctrl.search', function(search) {
             // Unselect the org because it may not be shown anymore
             vm.selectedOrg = null;
 
@@ -50,34 +57,35 @@ function transferModalController ($scope, JsonApiDataStore, transferService, org
             }
 
             vm.searching = true;
-            organizationService.searchOrgs(vm.sourceOrg, search, requestDeduper)
-                .then(function (orgs) {
+            organizationService
+                .searchOrgs(vm.sourceOrg, search, requestDeduper)
+                .then(function(orgs) {
                     // Filter out people that are already selected
                     vm.searchOptions = orgs;
                 })
-                .finally(function () {
+                .finally(function() {
                     vm.searching = false;
                 });
         });
     }
 
-    function selectOrg (org) {
+    function selectOrg(org) {
         vm.selectedOrg = org;
     }
 
-    function save () {
+    function save() {
         vm.saving = true;
-        transferService.transfer(vm.selection, vm.selectedOrg, vm.options)
-            .then(function () {
+        transferService
+            .transfer(vm.selection, vm.selectedOrg, vm.options)
+            .then(function() {
                 vm.close({ $value: vm.options.copyContact });
             })
-            .catch(function () {
+            .catch(function() {
                 vm.saving = false;
             });
     }
 
-    function cancel () {
+    function cancel() {
         vm.dismiss();
     }
 }
-

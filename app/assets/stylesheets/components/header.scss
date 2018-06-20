@@ -1,18 +1,18 @@
 @import '../variables/colors';
 
 @mixin header($background-color) {
-  min-height: 50px;
-  background-color: $background-color;
-  color: $white;
-  svg {
-    fill: $white;
-  }
+    min-height: 50px;
+    background-color: $background-color;
+    color: $white;
+    svg {
+        fill: $white;
+    }
 }
 
 .header {
-  @include header($pivot-dark-blue);
+    @include header($pivot-dark-blue);
 }
 
 .subheader {
-  @include header($pivot-darker-blue);
+    @include header($pivot-darker-blue);
 }

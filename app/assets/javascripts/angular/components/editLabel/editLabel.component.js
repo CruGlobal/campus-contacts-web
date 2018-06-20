@@ -1,18 +1,16 @@
 import template from './editLabel.html';
 
-angular
-    .module('missionhubApp')
-    .component('editLabel', {
-        controller: editLabelController,
-        bindings: {
-            resolve: '<',
-            close: '&',
-            dismiss: '&'
-        },
-        template: template
-    });
+angular.module('missionhubApp').component('editLabel', {
+    controller: editLabelController,
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
+    template: template,
+});
 
-function editLabelController (labelsService, _) {
+function editLabelController(labelsService, _) {
     var vm = this;
 
     vm.title = null;
@@ -23,26 +21,29 @@ function editLabelController (labelsService, _) {
 
     vm.$onInit = activate;
 
-    function activate () {
+    function activate() {
         vm.orgId = vm.resolve.organizationId;
         var labelTemplate = labelsService.getLabelTemplate(vm.orgId);
         vm.label = _.clone(vm.resolve.label || labelTemplate);
 
-        vm.title = vm.label.id ? 'labels.edit.edit_label' : 'labels.new.new_label';
+        vm.title = vm.label.id
+            ? 'labels.edit.edit_label'
+            : 'labels.new.new_label';
     }
 
-    function valid () {
+    function valid() {
         return Boolean(vm.label.name);
     }
 
-    function save () {
+    function save() {
         vm.saving = true;
 
-        return labelsService.saveLabel(vm.label)
-            .then(function (newLabel) {
+        return labelsService
+            .saveLabel(vm.label)
+            .then(function(newLabel) {
                 vm.close({ $value: newLabel });
             })
-            .catch(function () {
+            .catch(function() {
                 vm.saving = false;
             });
     }

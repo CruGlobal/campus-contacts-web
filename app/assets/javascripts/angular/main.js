@@ -9,5 +9,9 @@ import '../../stylesheets/bootstrap.scss';
 import '../../stylesheets/pivot_theme.scss';
 
 /* global require */
-const srcFilesContext = require.context('./', true, /^(?!.*\.spec\.js$).*\.js$/);
+const srcFilesContext = require.context(
+    './',
+    true,
+    /^(?!.*\.spec\.js$).*\.js$/,
+);
 srcFilesContext.keys().forEach(srcFilesContext);

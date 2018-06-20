@@ -2,19 +2,19 @@
 @import '../groupMembersModal/groupMembersModal.scss';
 
 transfer-modal {
-  @extend person-multiselect;
+    @extend person-multiselect;
 
-  input[type=checkbox] {
-    margin-right: 4px;
-  }
-
-  .pill {
-    border: none;
-    background-color: $gray-4;
-    color: $pivot-dark-blue;
-    &.selected {
-      background-color: $gray-2;
-      color: $white;
+    input[type='checkbox'] {
+        margin-right: 4px;
     }
-  }
+
+    .pill {
+        border: none;
+        background-color: $gray-4;
+        color: $pivot-dark-blue;
+        &.selected {
+            background-color: $gray-2;
+            color: $white;
+        }
+    }
 }

@@ -1,11 +1,11 @@
 @import '../../../../stylesheets/variables/colors';
 
 new-welcome-modal {
-  p {
-    color: $gray-1-5;
-  }
+    p {
+        color: $gray-1-5;
+    }
 
-  button span {
-    text-transform: uppercase;
-  }
+    button span {
+        text-transform: uppercase;
+    }
 }
