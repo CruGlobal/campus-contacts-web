@@ -75,7 +75,7 @@ export default {
             index: {
                 filter: 'Search',
                 for_this_permission_email_is_required:
-                    "Email is required for '%{permission}' permission.",
+                    "Email is required for '{{permission}}' permission.",
                 for_this_permission_email_is_required_no_name:
                     'Email is required for this permission.',
                 import_contacts: 'Import Contacts',
@@ -101,7 +101,7 @@ export default {
                 'Error archiving person! Please try again or contact support.',
             loading_contacts: 'Loading Contacts',
             no_contacts: {
-                welcome: 'WELCOME %{name}!',
+                welcome: 'WELCOME {{name}}!',
             },
             no_contacts_help:
                 'When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.',
@@ -313,9 +313,9 @@ export default {
         group: 'Group',
         groups: {
             confirm_delete_group:
-                'Are you sure you want to delete "%{group_name}"?',
+                'Are you sure you want to delete "{{group_name}}"?',
             edit: {
-                edit_group: 'Editing %{group}',
+                edit_group: 'Editing {{group}}',
             },
             form: {
                 from: 'From',
@@ -333,7 +333,7 @@ export default {
                 leader: 'Leader',
                 remove_confirm:
                     'Are you sure you want to this member from the group?',
-                subtitle: 'Members of "%{group_name}"',
+                subtitle: 'Members of "{{group_name}}"',
                 title: 'Group Members',
             },
             new: {
@@ -353,7 +353,7 @@ export default {
         labels: {
             delete: {
                 confirm:
-                    'Are you sure you want to delete the "%{label_name}" label?',
+                    'Are you sure you want to delete the "{{label_name}}" label?',
             },
             edit: {
                 edit_label: 'Edit Label',
@@ -367,7 +367,7 @@ export default {
         },
         leader: 'Leader',
         mass_edit: {
-            save: 'Edit %{contactCount} contacts',
+            save: 'Edit {{contactCount}} contacts',
             title: 'Edit Contacts',
             unchanged: 'Unchanged',
         },
@@ -379,11 +379,11 @@ export default {
             title: 'Merge Winner',
         },
         messages: {
-            length_limit: '%{remaining_characters} characters left',
+            length_limit: '{{remaining_characters}} characters left',
             recipients: {
-                contacts: '%{contact_count} contacts',
-                organization: 'in organization %{name}',
-                search: 'matching %{search}',
+                contacts: '{{contact_count}} contacts',
+                organization: 'in organization {{name}}',
+                search: 'matching {{search}}',
             },
         },
         ministries: {
@@ -391,15 +391,15 @@ export default {
                 columns: {
                     leaders: 'Leader(s)',
                     location: 'Location',
-                    name: 'Groups (%{group_count})',
+                    name: 'Groups ({{group_count}})',
                     time: 'Meeting Time',
                 },
                 header: 'Groups',
                 meeting_time: {
-                    monthly: 'Monthly on %{day} %{time}',
+                    monthly: 'Monthly on {{day}} {{time}}',
                     sporadically: 'Sporadically',
-                    time_range: '%{start} - %{end}',
-                    weekly: 'Weekly on %{day}s %{time}',
+                    time_range: '{{start}} - {{end}}',
+                    weekly: 'Weekly on {{day}}s {{time}}',
                 },
                 ordinal_suffixes: ['th', 'st', 'nd', 'rd'],
             },
@@ -414,14 +414,14 @@ export default {
                 },
                 archive_hover: 'Archive the selected contacts',
                 archive_people_confirm:
-                    'Are you sure you want to archive %{contact_count} contacts?',
+                    'Are you sure you want to archive {{contact_count}} contacts?',
                 assigned: {
                     header: 'Assigned',
                 },
                 clear_selection_hover: 'Unselect all of the selected contacts',
                 delete_hover: 'Delete the selected contacts',
                 delete_people_confirm:
-                    'Are you sure you want to delete %{contact_count} contacts?',
+                    'Are you sure you want to delete {{contact_count}} contacts?',
                 email_hover: 'Email the selected contacts',
                 export_hover: 'Export the selected contacts as CSV',
                 gender: 'M/F',
@@ -432,7 +432,7 @@ export default {
                     header: 'History',
                     interactions: 'Interactions',
                     me: 'Me',
-                    note_for_interaction: 'Note for %{interaction}',
+                    note_for_interaction: 'Note for {{interaction}}',
                     notes: 'Notes',
                     surveys: 'Surveys',
                 },
@@ -447,7 +447,7 @@ export default {
                 },
                 remove_self_confirm:
                     'You are removing yourself. If you continue, you will no longer have access to this ministry.',
-                selected_contacts: '%{contactCount} contacts selected',
+                selected_contacts: '{{contactCount}} contacts selected',
                 sms_hover: 'Text the selected contacts',
                 status: 'Status',
                 transfer_hover:
@@ -527,7 +527,7 @@ export default {
                     'Search for the first name, last name or email.',
             },
             show: {
-                apply_groups: 'Assign %{name} to the following groups.',
+                apply_groups: 'Assign {{name}} to the following groups.',
                 no_groups: 'No groups assigned.',
                 no_labels: 'No labels assigned.',
             },
@@ -539,9 +539,9 @@ export default {
         },
         person_multiselect: {
             no_search_results:
-                'No %{people_description} found matching "%{search}"',
-            search_placeholder: 'Search %{people_description}',
-            searching: 'Searching %{people_description}...',
+                'No {{people_description}} found matching "{{search}}"',
+            search_placeholder: 'Search {{people_description}}',
+            searching: 'Searching {{people_description}}...',
         },
         preferences: {
             beta_mode: 'Try out experimental beta features',
@@ -584,9 +584,9 @@ export default {
             },
             organizations: 'organizations',
             subtitle:
-                'Transfer %{contact_count} contact(s) to another organization.',
+                'Transfer {{contact_count}} contact(s) to another organization.',
             title: 'Transfer Contacts',
-            transfer: 'Transfer %{contact_count} Contact(s)',
+            transfer: 'Transfer {{contact_count}} Contact(s)',
         },
         weekly: 'Weekly',
     },
