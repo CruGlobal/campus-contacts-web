@@ -55,7 +55,7 @@ describe('myPeopleDashboardService Tests', function() {
 
         this.loadOrganizationParams = {
             'page[limit]': 100,
-            sort: 'active_people_count',
+            sort: '-active_people_count',
             include: '',
         };
 
