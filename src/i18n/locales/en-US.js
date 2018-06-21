@@ -23,6 +23,7 @@ export default {
             },
             assign_search: {
                 me: 'Me',
+                placeholder: "Type a person's name you want to assign to here",
             },
             interaction_types: {
                 comment: 'Comment Only',
@@ -289,15 +290,26 @@ export default {
             do_not_contact: 'Do Not Contact',
             uncontacted: 'Uncontacted',
         },
+        student_status: {
+            not_student: 'Not currently a student',
+            middle_school: 'Middle School',
+            high_school: 'High School',
+            collegiate: 'Collegiate',
+            masters_or_doctorate: 'Masters/Doctorate',
+        },
         general: {
             add: 'Add',
             address: 'Address',
             address_type: 'Address Type',
+            address1: 'Address 1',
+            address2: 'Address 2',
+            address3: 'Address 3',
+            address4: 'Address 4',
+            city: 'City',
+            country: 'Country',
             archive: 'Archive',
             cancel: 'Cancel',
             close: 'Close',
-            country: 'Country',
-            other: 'Other',
             loading_more: 'Loading more...',
             message: 'Message:',
             ok: 'OK',
@@ -306,10 +318,10 @@ export default {
             state: 'State',
             subject: 'Subject:',
             zip: 'Zip',
+            female: 'Female',
+            male: 'Male',
+            other: 'Other',
         },
-        general_female: 'Female',
-        general_male: 'Male',
-        general_plural: 'Other',
         group: 'Group',
         groups: {
             confirm_delete_group:
@@ -377,6 +389,22 @@ export default {
             subtitle:
                 'Choose the winner of the merge. The other people will be merged into the winner.',
             title: 'Merge Winner',
+            person_fields: {
+                first_name: 'First name',
+                last_name: 'Last name',
+                gender: 'Gender',
+                email_addresses: 'Email addresses',
+                phone_numbers: 'Phone numbers',
+                created_date: 'Person created',
+                updated_date: 'Person updated',
+            },
+            user_fields: {
+                id: 'User id',
+                username: 'Username',
+                created_date: 'User created',
+                updated_date: 'User updated',
+                login_date: 'Last login',
+            },
         },
         messages: {
             length_limit: '{{remaining_characters}} characters left',
@@ -425,6 +453,10 @@ export default {
                 email_hover: 'Email the selected contacts',
                 export_hover: 'Export the selected contacts as CSV',
                 gender: 'M/F',
+                female: 'F',
+                male: 'M',
+                other: 'O',
+                none: '-',
                 header: 'Contacts',
                 history: {
                     all: 'All',
@@ -453,8 +485,6 @@ export default {
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
             },
-            people_female: 'F',
-            people_male: 'M',
             roots: 'Ministries',
             suborgs: {
                 header: 'Ministries',
