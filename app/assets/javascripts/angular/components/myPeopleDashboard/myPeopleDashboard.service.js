@@ -21,7 +21,7 @@ function myPeopleDashboardService(httpProxy, modelsService, _) {
                     modelsService.getModelMetadata('organization').url.all,
                     _.extend(
                         {
-                            sort: 'active_people_count',
+                            sort: '-active_people_count',
                             include: '',
                         },
                         params,
