@@ -1,6 +1,64 @@
+<div class="group row header">
+    <div class="column column-title">
+        Survey
+    </div>
+    <div class="column column-number">
+        Contacts
+    </div>
+    <div class="column column-number">
+        Unassigned
+    </div>
+    <div class="column column-number">
+        Uncontacted
+    </div>
+    <div class="column column-link">
+        Keyword
+    </div>
+    <div class="column column-link">
+        Link
+    </div>
+    <div class="column column-number">
+        Status
+    </div>
+    <div class="column buttons-column">
+        <icon-button icon="'add'" ng-click="$ctrl.createSurvey()"></icon-button>
+    </div>
+</div>
 <div class="grid-content">
-    <div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
-         class="survey row padded">
-        {{survey.title}}
+    <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+        <div class="column column-title">
+            <a href="">
+                {{survey.title}}
+            </a>
+        </div>
+        <div class="column column-number"></div>
+        <div class="column column-number"></div>
+        <div class="column column-number"></div>
+        <div class="column column-link"></div>
+        <div class="column column-link">
+            <a ng-href="https://mhub.cc/s/{{survey.id}}" target="_blank">https://mhub.cc/s/{{survey.id}}</a>
+        </div>
+        <div class="column column-status" ng-if="survey.is_frozen">
+            <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+            Inactive
+        </div>
+        <div class="column column-status" ng-if="!survey.is_frozen">
+            <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+            Active
+        </div>
+        <div class="column buttons-column text-center">
+            <div uib-dropdown>
+                <ng-md-icon uib-dropdown-toggle icon="more_vert" size="26"
+                            ng-click="$ctrl.deleteSurvey(); $event.stopPropagation();"></ng-md-icon>
+
+                <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                    <a class="dropdown-item" ng-href="/surveys/{{survey.id}}/edit">Edit</a>
+                    <a class="dropdown-item" href="#">Preview</a>
+                    <a class="dropdown-item" href="#">Delete</a>
+                    <a class="dropdown-item" href="#">Copy</a>
+                    <a class="dropdown-item" href="#">Import Survey Results</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

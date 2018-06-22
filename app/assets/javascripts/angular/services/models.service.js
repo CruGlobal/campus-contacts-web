@@ -79,6 +79,10 @@ function modelsService(_) {
         filter_stats: {
             url: generateUrls('/filter_stats'),
         },
+        survey: {
+            include: 'surveys',
+            url: generateUrls('/surveys'),
+        },
     };
 
     var modelsService = {
