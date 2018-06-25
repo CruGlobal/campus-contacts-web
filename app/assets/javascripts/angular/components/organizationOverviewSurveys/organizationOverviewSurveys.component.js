@@ -22,6 +22,8 @@ function organizationOverviewSurveysController($uibModal) {
             },
             windowClass: 'pivot_theme',
             size: 'sm',
+        }).result.then((newSurvey) => {
+            vm.organizationOverview.surveys.push(newSurvey);
         });
     }
 }
