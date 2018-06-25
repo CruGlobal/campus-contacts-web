@@ -12,7 +12,7 @@ function surveyService(
                     type: 'survey',
                     attributes: {
                         title: title,
-                        post_survey_message: title
+                        post_survey_message: 'Complete'
                     },
                     relationships: {
                         organization: {
@@ -37,6 +37,20 @@ function surveyService(
                     return survey.data;
                 });
         },
+
+        updateSurvey: (survey) => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('survey').url.single(survey.id),
+                    survey,
+                    {
+                        errorMessage: 'error.messages.surveys.create_survey',
+                    },
+                )
+                .then(function(survey) {
+                    return survey.data;
+                });
+        }
     };
 
     return surveyService;

@@ -11,9 +11,10 @@ angular.module('missionhubApp').component('organizationOverviewSurveys', {
 });
 
 
-function organizationOverviewSurveysController($uibModal) {
+function organizationOverviewSurveysController($uibModal, surveyService) {
     var vm = this;
     vm.createSurvey = createSurvey;
+    vm.changeStatus = changeStatus;
 
     function createSurvey() {
         $uibModal.open({
@@ -26,5 +27,10 @@ function organizationOverviewSurveysController($uibModal) {
         }).result.then((newSurvey) => {
             vm.organizationOverview.surveys.push(newSurvey);
         });
+    }
+
+    function changeStatus(survey, active) {
+        survey.is_frozen = !active;
+        surveyService.updateSurvey(survey);
     }
 }

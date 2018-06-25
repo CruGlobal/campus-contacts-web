@@ -38,13 +38,21 @@
         <div class="column column-link">
             <a ng-href="https://mhub.cc/s/{{survey.id}}" target="_blank">https://mhub.cc/s/{{survey.id}}</a>
         </div>
-        <div class="column column-status" ng-if="survey.is_frozen">
-            <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
-            Inactive
-        </div>
-        <div class="column column-status" ng-if="!survey.is_frozen">
-            <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
-            Active
+        <div class="column column-status" uib-dropdown>
+            <div uib-dropdown-toggle class="pointer">
+                <span ng-if="!survey.is_frozen">
+                    <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+                    Live
+                </span>
+                <span ng-if="survey.is_frozen">
+                    <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+                    Off
+                </span>
+            </div>
+            <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">Live</a>
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">Off</a>
+            </div>
         </div>
         <div class="column buttons-column text-center">
             <div uib-dropdown>
