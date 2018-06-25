@@ -31,17 +31,16 @@ function createSurveyController(surveyService) {
         return vm.survey.title;
     }
 
-    function save() {
+    async function save() {
         vm.saving = true;
 
-        surveyService
-            .createSurvey(vm.survey.title, vm.orgId)
-            .then(function(newSurvey) {
-                vm.close({ $value: newSurvey });
-            })
-            .catch(function() {
-                vm.saving = false;
-            });
+
+        try {
+            const newSurvey = await surveyService.createSurvey(vm.survey.title, vm.orgId);
+            vm.close({ $value: newSurvey });
+        } catch (err) {
+            vm.saving = false;
+        }
     }
 
     function cancel() {
