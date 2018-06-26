@@ -540,7 +540,7 @@ export default {
             search: {
                 in: 'in',
             },
-            settings: 'Settings',
+            preferences: 'Preferences',
             snapshot: 'Snapshot View',
             support: 'Support',
             terms: 'Terms of Service',
@@ -591,20 +591,6 @@ export default {
                 'No {{people_description}} found matching "{{search}}"',
             search_placeholder: 'Search {{people_description}}',
             searching: 'Searching {{people_description}}...',
-        },
-        preferences: {
-            beta_mode: 'Try out experimental beta features',
-            language: 'Language',
-            legacy_navigation: 'Revert to legacy navigation',
-            no_language_selected: 'Select Language',
-            notifications_header: 'When would you like us to let you know?',
-            notifications_info: '(Enabled by default)',
-            person_assigned: 'When a person is assigned to you',
-            person_moved: 'When a person is transferred to your organization',
-            refresh_language: 'Refresh To Show Language Changes',
-            time_zone: 'Time zone',
-            title: 'User Preferences',
-            weekly_digest: 'Weekly Ministry Digest',
         },
         search: {
             assignments: {
@@ -768,5 +754,15 @@ export default {
             bulkImport:
                 'Error occurred while importing contacts from your CSV file',
         },
+    },
+    userPreferences: {
+        title: 'User Preferences',
+        language: 'Language',
+        notificationsHeader: 'Let me know...',
+        enabledByDefault: '(Enabled by default)',
+        personTransferred:
+            'When a person is transferred to one of my organizations',
+        personAssigned: 'When a person is assigned to me',
+        weeklyDigest: 'Weekly Ministry Digest',
     },
 };

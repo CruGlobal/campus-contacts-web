@@ -400,7 +400,13 @@ angular
                     url: '/:personId',
                     modal: false,
                 }),
-            );
+            )
+            .state({
+                name: 'app.userPreferences',
+                url: '/user-preferences',
+                template: '<user-preferences></user-preferences>',
+                whiteBackground: true,
+            });
 
         // This is the default URL if the URL does not match any routes
         $urlServiceProvider.rules.otherwise('/people');
