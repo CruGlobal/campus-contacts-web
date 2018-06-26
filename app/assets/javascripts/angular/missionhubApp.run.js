@@ -8,6 +8,7 @@ angular
         $rootScope,
         $analytics,
         $timeout,
+        $transitions,
         spaPage,
         loggedInPerson,
         updateRollbarPerson,
@@ -21,6 +22,11 @@ angular
         if ($rootScope.isLegacyPage) {
             $analytics.pageTrack($window.location.pathname);
         }
+
+        $rootScope.whiteBackground = false;
+        $transitions.onSuccess({}, transition => {
+            $rootScope.whiteBackground = !!transition.to().whiteBackground;
+        });
 
         // This code will run when Angular initializes, but currently we are gaining our
         // authentication from the rails host through a <preload-state> component. This means

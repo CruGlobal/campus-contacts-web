@@ -8,6 +8,10 @@
 @import './components/row';
 @import './components/sheet';
 
+body.white-background {
+    background: white !important;
+}
+
 .pivot_theme {
     font-family: 'Titillium Web', sans-serif;
     font-size: 14px;
@@ -16,6 +20,16 @@
     $focus-gray: $gray-4;
     $label-color: $gray-1-5;
     $field-stroke-color: $gray-3;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    h7 {
+        font-weight: normal;
+    }
 
     textarea,
     input[type='text'],
