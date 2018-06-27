@@ -11,10 +11,11 @@ angular.module('missionhubApp').component('organizationOverviewSurveys', {
 });
 
 
-function organizationOverviewSurveysController($uibModal, surveyService) {
+function organizationOverviewSurveysController($uibModal, surveyService, confirmModalService) {
     var vm = this;
     vm.createSurvey = createSurvey;
     vm.changeStatus = changeStatus;
+    vm.deleteSurvey = deleteSurvey;
 
     function createSurvey() {
         $uibModal.open({
@@ -32,5 +33,19 @@ function organizationOverviewSurveysController($uibModal, surveyService) {
     function changeStatus(survey, active) {
         survey.is_frozen = !active;
         surveyService.updateSurvey(survey);
+    }
+
+    function deleteSurvey(survey) {
+        if(!survey){ return; }
+
+        confirmModalService
+            .create(
+                'Are you sure you want to delete ' + survey.title + '?'
+            )
+            .then(function() {
+                surveyService.deleteSurvey(survey).then(() => {
+                    vm.organizationOverview.surveys.splice(vm.organizationOverview.surveys.indexOf(survey), 1);
+                });
+            });
     }
 }

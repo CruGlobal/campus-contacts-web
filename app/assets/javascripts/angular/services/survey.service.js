@@ -50,6 +50,17 @@ function surveyService(
                 .then(function(survey) {
                     return survey.data;
                 });
+        },
+
+        deleteSurvey: (survey) => {
+            return httpProxy
+                .delete(
+                    modelsService.getModelMetadata('survey').url.single(survey.id),
+                    null,
+                    {
+                        errorMessage: 'error.messages.surveys.create_survey',
+                    },
+                );
         }
     };
 

@@ -61,8 +61,8 @@
 
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                     <a class="dropdown-item" ng-href="/surveys/{{survey.id}}/edit">Edit</a>
-                    <a class="dropdown-item" href="#">Preview</a>
-                    <a class="dropdown-item" href="#">Delete</a>
+                    <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}">Preview</a>
+                    <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">Delete</a>
                     <a class="dropdown-item" href="#">Copy</a>
                     <a class="dropdown-item" href="#">Import Survey Results</a>
                 </div>
