@@ -1,0 +1,16 @@
+sunset-legacy-env-bar {
+    z-index: 101;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #ffef00;
+    display: flex;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+
+    .small-button {
+        font-size: 11px;
+        margin-top: 2px;
+    }
+}
