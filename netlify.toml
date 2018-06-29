@@ -1,0 +1,14 @@
+[[redirects]]
+  from = "/"
+  to = "/netlify-to-rails-redirect.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/netlify-to-rails-redirect.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
