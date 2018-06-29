@@ -1,9 +1,6 @@
 angular.module('missionhubApp').factory('surveyService', surveyService);
 
-function surveyService(
-    httpProxy,
-    modelsService,
-) {
+function surveyService(httpProxy, modelsService) {
     var surveyService = {
         // Create a new survey
         createSurvey: function(title, organization) {
@@ -12,17 +9,17 @@ function surveyService(
                     type: 'survey',
                     attributes: {
                         title: title,
-                        post_survey_message: 'Complete'
+                        post_survey_message: 'Complete',
                     },
                     relationships: {
                         organization: {
                             data: {
                                 type: 'organization',
-                                id: organization
-                            }
-                        }
-                    }
-                }
+                                id: organization,
+                            },
+                        },
+                    },
+                },
             };
 
             return httpProxy
@@ -30,7 +27,7 @@ function surveyService(
                     modelsService.getModelMetadata('survey').url.all,
                     payload,
                     {
-                        errorMessage: 'error.messages.surveys.create_survey',
+                        errorMessage: 'surveyTab:errors.createSurvey',
                     },
                 )
                 .then(function(survey) {
@@ -38,13 +35,15 @@ function surveyService(
                 });
         },
 
-        updateSurvey: (survey) => {
+        updateSurvey: survey => {
             return httpProxy
                 .post(
-                    modelsService.getModelMetadata('survey').url.single(survey.id),
+                    modelsService
+                        .getModelMetadata('survey')
+                        .url.single(survey.id),
                     survey,
                     {
-                        errorMessage: 'error.messages.surveys.create_survey',
+                        errorMessage: 'surveyTab:errors.updateSurvey',
                     },
                 )
                 .then(function(survey) {
@@ -52,16 +51,15 @@ function surveyService(
                 });
         },
 
-        deleteSurvey: (survey) => {
-            return httpProxy
-                .delete(
-                    modelsService.getModelMetadata('survey').url.single(survey.id),
-                    null,
-                    {
-                        errorMessage: 'error.messages.surveys.create_survey',
-                    },
-                );
-        }
+        deleteSurvey: survey => {
+            return httpProxy.delete(
+                modelsService.getModelMetadata('survey').url.single(survey.id),
+                null,
+                {
+                    errorMessage: 'surveyTab:errors.deleteSurvey',
+                },
+            );
+        },
     };
 
     return surveyService;

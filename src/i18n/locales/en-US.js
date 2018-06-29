@@ -620,4 +620,33 @@ export default {
         },
         weekly: 'Weekly',
     },
+    surveyTab: {
+        createSurvey: 'Create Survey',
+        surveyName: 'Survey Name',
+        columns: {
+            survey: 'Survey',
+            contacts: 'Contacts',
+            unassigned: 'Unassigned',
+            uncontacted: 'Uncontacted',
+            keyword: 'Keyword',
+            link: 'Link',
+            status: 'Status',
+        },
+        status: {
+            live: 'Live',
+            off: 'Off',
+        },
+        menu: {
+            edit: 'Edit',
+            preview: 'Preview',
+            delete: 'Delete',
+            copy: 'Copy',
+            import: 'Import Survey Results',
+        },
+        errors: {
+            createSurvey: 'Error occurred while creating survey',
+            updateSurvey: 'Error occurred while updating survey',
+            deleteSurvey: 'Error occurred while deleting survey',
+        },
+    },
 };
