@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import lscache from 'lscache';
 
 angular
@@ -27,6 +28,7 @@ angular
         // the $timeout will cause delay this execution until after the first digest.
         $timeout(function() {
             loggedInPerson.loadOnce().then(function(me) {
+                i18next.changeLanguage(me.user.language);
                 updateRollbarPerson(me);
                 $rootScope.legacyNavigation = me.user.beta_mode === false;
             });

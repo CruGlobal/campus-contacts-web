@@ -10,22 +10,11 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const ci = process.env.CI === 'true';
 const prod = process.env.TRAVIS_BRANCH === 'master';
-let publicPath;
-switch (process.env.TRAVIS_BRANCH) {
-    case undefined:
-        publicPath = 'http://localhost:8080/';
-        break;
-    case 'staging':
-        publicPath = 'https://d17qkzkfpa9gxm.cloudfront.net/';
-        break;
-    case 'master':
-        publicPath = 'https://d3n8lspvao4e66.cloudfront.net/';
-        break;
-}
 
 const htmlMinDefaults = {
     removeComments: true,
@@ -53,7 +42,6 @@ module.exports = (env = {}) => {
             filename: '[name].[chunkhash].js',
             chunkFilename: '[name].[chunkhash].js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: publicPath,
             devtoolModuleFilenameTemplate: info =>
                 info.resourcePath.replace(/^\.\//, ''),
             crossOriginLoading: 'anonymous',
@@ -95,6 +83,7 @@ module.exports = (env = {}) => {
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
+                      new CopyWebpackPlugin(['netlify-to-rails-redirect.html']),
                   ]
                 : []),
             ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),
@@ -108,7 +97,6 @@ module.exports = (env = {}) => {
                         {
                             loader: 'babel-loader',
                             options: {
-                                presets: [['env', { modules: false }]],
                                 plugins: [
                                     'transform-runtime',
                                     'syntax-dynamic-import',

@@ -34,9 +34,11 @@ function createSurveyController(surveyService) {
     async function save() {
         vm.saving = true;
 
-
         try {
-            const newSurvey = await surveyService.createSurvey(vm.survey.title, vm.orgId);
+            const newSurvey = await surveyService.createSurvey(
+                vm.survey.title,
+                vm.orgId,
+            );
             vm.close({ $value: newSurvey });
         } catch (err) {
             vm.saving = false;

@@ -1,24 +1,24 @@
 <div class="group row header">
     <div class="column column-title">
-        Survey
+        {{ 'surveyTab:columns.survey' | t }}
     </div>
     <div class="column column-number">
-        Contacts
+        {{ 'surveyTab:columns.contacts' | t }}
     </div>
     <div class="column column-number">
-        Unassigned
+        {{ 'surveyTab:columns.unassigned' | t }}
     </div>
     <div class="column column-number">
-        Uncontacted
+        {{ 'surveyTab:columns.uncontacted' | t }}
     </div>
     <div class="column column-link">
-        Keyword
+        {{ 'surveyTab:columns.keyword' | t }}
     </div>
     <div class="column column-link">
-        Link
+        {{ 'surveyTab:columns.link' | t }}
     </div>
     <div class="column column-number">
-        Status
+        {{ 'surveyTab:columns.status' | t }}
     </div>
     <div class="column buttons-column">
         <icon-button icon="'add'" ng-click="$ctrl.createSurvey()"></icon-button>
@@ -36,22 +36,22 @@
         <div class="column column-number"></div>
         <div class="column column-link"></div>
         <div class="column column-link">
-            <a ng-href="https://mhub.cc/s/{{survey.id}}" target="_blank">https://mhub.cc/s/{{survey.id}}</a>
+            <a ng-href="{{$ctrl.surveyLinkPrefix + survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix + survey.id}}</a>
         </div>
         <div class="column column-status" uib-dropdown>
             <div uib-dropdown-toggle class="pointer">
                 <span ng-if="!survey.is_frozen">
                     <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
-                    Live
+                    {{ 'surveyTab:status.live' | t }}
                 </span>
                 <span ng-if="survey.is_frozen">
                     <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
-                    Off
+                    {{ 'surveyTab:status.off' | t }}
                 </span>
             </div>
             <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">Live</a>
-                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">Off</a>
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">{{ 'surveyTab:status.live' | t }}</a>
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">{{ 'surveyTab:status.off' | t }}</a>
             </div>
         </div>
         <div class="column buttons-column text-center">
@@ -60,11 +60,11 @@
                             ng-click="$ctrl.deleteSurvey(); $event.stopPropagation();"></ng-md-icon>
 
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <a class="dropdown-item" ng-href="/surveys/{{survey.id}}/edit">Edit</a>
-                    <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}">Preview</a>
-                    <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">Delete</a>
-                    <a class="dropdown-item" href="#">Copy</a>
-                    <a class="dropdown-item" href="#">Import Survey Results</a>
+                    <a class="dropdown-item" ng-href="/surveys/{{survey.id}}/edit">{{ 'surveyTab:menu.edit' | t }}</a>
+                    <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}">{{ 'surveyTab:menu.preview' | t }}</a>
+                    <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
+                    <a class="dropdown-item" href="#">{{ 'surveyTab:menu.copy' | t }}</a>
+                    <a class="dropdown-item" href="#">{{ 'surveyTab:menu.import' | t }}</a>
                 </div>
             </div>
         </div>

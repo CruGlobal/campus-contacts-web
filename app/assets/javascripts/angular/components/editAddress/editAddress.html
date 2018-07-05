@@ -20,7 +20,7 @@
         </label>
         <label ng-repeat="addressField in ['address1', 'address2', 'address3', 'address4', 'city']">
             <div class="row">
-                <span class="normal-column label">{{('general.' + addressField) | t}}</span>
+                <span class="normal-column label">{{('general.' + addressField || 'other') | t}}</span>
             </div>
             <div class="row">
                 <input type="text" class="normal-column form-control"

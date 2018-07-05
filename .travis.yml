@@ -5,10 +5,16 @@ node_js: '8'
 script:
   - yarn test
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
-      || [ "$TRAVIS_BRANCH" == "staging" ]); then yarn run build; fi
+      || [ "$TRAVIS_BRANCH" == "staging" ]); then
+        yarn run onesky:download;
+        yarn run build;
+    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      yarn run onesky:upload;
+    fi
 
 cache:
   yarn: true

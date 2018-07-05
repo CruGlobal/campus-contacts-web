@@ -11,7 +11,7 @@ organization-overview-surveys {
         }
     }
 
-    .row{
+    .row {
         @extend ministry-view-group;
 
         .column-title {
@@ -37,7 +37,7 @@ organization-overview-surveys {
     }
 
     ng-md-icon.status-active svg {
-        fill: #00D264;
+        fill: #00d264;
     }
     ng-md-icon.status-inactive svg {
         fill: #c6c4c6;

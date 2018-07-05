@@ -7,7 +7,6 @@ angular
     .module('missionhubApp')
     .constant('_', _)
     .constant('moment', moment)
-    .constant('I18n', window.I18n || { t: () => '' })
     .constant('confirm', window.confirm)
     .constant('jQuery', window.jQuery)
     .constant('nativeLocation', window.location)

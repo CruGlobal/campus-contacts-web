@@ -1,11 +1,6 @@
 angular
     .module('missionhubApp')
-    .config(function(
-        envServiceProvider,
-        ngMdIconServiceProvider,
-        I18n,
-        $qProvider,
-    ) {
+    .config(function(envServiceProvider, ngMdIconServiceProvider, $qProvider) {
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
@@ -107,6 +102,5 @@ angular
 
         /* eslint-enable max-len */
 
-        I18n.fallbacks = true;
         $qProvider.errorOnUnhandledRejections(false);
     });
