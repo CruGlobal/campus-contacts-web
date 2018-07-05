@@ -8,8 +8,7 @@ function surveyService(httpProxy, modelsService) {
                 data: {
                     type: 'survey',
                     attributes: {
-                        title: title,
-                        post_survey_message: 'Complete',
+                        title: title
                     },
                     relationships: {
                         organization: {
