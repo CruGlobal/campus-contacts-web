@@ -15,6 +15,7 @@ function organizationOverviewSurveysController(
     surveyService,
     confirmModalService,
     envService,
+    tFilter,
 ) {
     var vm = this;
     vm.createSurvey = createSurvey;
@@ -50,7 +51,11 @@ function organizationOverviewSurveysController(
         }
 
         confirmModalService
-            .create('Are you sure you want to delete ' + survey.title + '?')
+            .create(
+                tFilter('surveys.delete.confirm', {
+                    survey_title: survey.title,
+                }),
+            )
             .then(function() {
                 surveyService.deleteSurvey(survey).then(() => {
                     vm.organizationOverview.surveys.splice(
