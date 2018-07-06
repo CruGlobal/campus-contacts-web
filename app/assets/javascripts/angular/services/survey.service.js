@@ -8,7 +8,7 @@ function surveyService(httpProxy, modelsService) {
                 data: {
                     type: 'survey',
                     attributes: {
-                        title: title
+                        title: title,
                     },
                     relationships: {
                         organization: {
@@ -40,7 +40,15 @@ function surveyService(httpProxy, modelsService) {
                     modelsService
                         .getModelMetadata('survey')
                         .url.single(survey.id),
-                    survey,
+                    {
+                        data: {
+                            type: 'survey',
+                            attributes: {
+                                title: survey.title,
+                                is_frozen: survey.is_frozen,
+                            },
+                        },
+                    },
                     {
                         errorMessage: 'surveyTab:errors.updateSurvey',
                     },
