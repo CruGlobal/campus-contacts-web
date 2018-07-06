@@ -103,7 +103,11 @@ function organizationOverviewPeopleController(
                     vm.organizationOverview.org.id,
                 );
             },
-            orderFields: ['followup_status', 'last_name', 'first_name'],
+            orderFields: [
+                'organizational_permissions.followup_status',
+                'last_name',
+                'first_name',
+            ],
         },
     ];
 
