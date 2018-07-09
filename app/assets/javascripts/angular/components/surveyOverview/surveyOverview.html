@@ -1,0 +1,27 @@
+<div class="dashboard-subnav">
+    <div class="inner">
+        <organization-breadcrumbs></organization-breadcrumbs>
+    </div>
+</div>
+
+<async-content ready="$ctrl.ready">
+    <div class="header">
+        <div class="survey-title-row">
+            <div class="survey-title">{{$ctrl.survey.title}}</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
+                 ui-state="'^.ministry.' + tabName" ui-state-params="{ surveyId: $ctrl.survey.id }">
+                <span>
+                    {{tabName | t}}
+                </span>
+                <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
+                </loading-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
+        <ui-view class="grid"></ui-view>
+    </div>
+</async-content>

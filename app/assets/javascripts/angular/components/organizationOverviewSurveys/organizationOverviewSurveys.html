@@ -27,7 +27,7 @@
 <div class="grid-content">
     <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
         <div class="column column-title">
-            <a href="">
+            <a ng-href="/d/surveys/{{survey.id}}">
                 {{survey.title}}
             </a>
         </div>
