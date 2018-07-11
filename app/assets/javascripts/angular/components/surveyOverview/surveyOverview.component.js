@@ -9,8 +9,10 @@ angular.module('missionhubApp').component('surveyOverview', {
     template: template,
 });
 
-function surveyOverviewController($scope, p2cOrgId, asyncBindingsService) {
+function surveyOverviewController($scope, asyncBindingsService) {
     var vm = this;
     vm.tabNames = ['Settings', 'Keyword', 'Questions'];
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(() => {}, []);
+    vm.activeTab = vm.tabNames[0];
+
+    vm.$onInit = asyncBindingsService.lazyLoadedActivate(angular.noop, []);
 }

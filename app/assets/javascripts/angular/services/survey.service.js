@@ -36,7 +36,7 @@ function surveyService(httpProxy, modelsService) {
 
         updateSurvey: survey => {
             return httpProxy
-                .post(
+                .put(
                     modelsService
                         .getModelMetadata('survey')
                         .url.single(survey.id),
@@ -46,6 +46,7 @@ function surveyService(httpProxy, modelsService) {
                             attributes: {
                                 title: survey.title,
                                 is_frozen: survey.is_frozen,
+                                post_survey_message: survey.post_survey_message,
                             },
                         },
                     },

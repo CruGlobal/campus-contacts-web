@@ -11,11 +11,9 @@
         </div>
 
         <div class="tabs">
-            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
-                 ui-state="'^.ministry.' + tabName" ui-state-params="{ surveyId: $ctrl.survey.id }">
-                <span>
-                    {{tabName | t}}
-                </span>
+            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tabName}"
+                ng-click="$ctrl.activeTab = tabName">
+                <span>{{tabName | t}}</span>
                 <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
                 </loading-spinner>
             </div>
@@ -25,3 +23,5 @@
         <ui-view class="grid"></ui-view>
     </div>
 </async-content>
+
+<survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'Settings'"></survey-overview-settings>
