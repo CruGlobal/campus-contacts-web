@@ -1,6 +1,6 @@
 angular.module('missionhubApp').factory('surveyService', surveyService);
 
-function surveyService(httpProxy, modelsService) {
+function surveyService(httpProxy, modelsService, loggedInPerson) {
     var surveyService = {
         // Create a new survey
         createSurvey: function(title, organization) {
@@ -67,6 +67,47 @@ function surveyService(httpProxy, modelsService) {
                     errorMessage: 'surveyTab:errors.deleteSurvey',
                 },
             );
+        },
+
+        deleteKeyword: keywordId => {
+            return httpProxy.delete(
+                modelsService
+                    .getModelMetadata('sms_keyword')
+                    .url.single(keywordId),
+                null,
+                {
+                    errorMessage: 'surveys:keyword:errors.deleteKeyword',
+                },
+            );
+        },
+
+        requestKeyword: data => {
+            const payload = {
+                data: {
+                    type: 'sms_keyword',
+                    attributes: {
+                        state: 'requested',
+                        user_id: loggedInPerson.person.user.id,
+                        keyword: data.keyword.keyword,
+                        initial_response: data.keyword.initial_response,
+                        explanation: data.keyword.explanation,
+                        survey_id: data.surveyId,
+                        organization_id: data.orgId,
+                    },
+                },
+            };
+
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('sms_keyword').url.all,
+                    payload,
+                    {
+                        errorMessage: 'surveys:keyword:errors.requestKeyword',
+                    },
+                )
+                .then(function(keyword) {
+                    return keyword.data;
+                });
         },
     };
 

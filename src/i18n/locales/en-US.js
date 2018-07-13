@@ -321,6 +321,8 @@ export default {
             female: 'Female',
             male: 'Male',
             other: 'Other',
+            required: 'Required',
+            help: 'Help',
         },
         group: 'Group',
         groups: {
@@ -647,6 +649,39 @@ export default {
             createSurvey: 'Error occurred while creating survey',
             updateSurvey: 'Error occurred while updating survey',
             deleteSurvey: 'Error occurred while deleting survey',
+        },
+    },
+    surveys: {
+        settings: {
+            welcome_message: 'Welcome Message',
+            success_message: 'Success Message',
+            image: 'Image',
+            image_upload: 'Upload Image',
+        },
+        keyword: {
+            keyword: 'Keyword',
+            instructions:
+                'Use at least 3 letters (no special characters/spaces)',
+            help:
+                'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.\n' +
+                'They will text your keyword to the number 85005 and your survey questions will appear on their device. Note: The process of acquiring new keywords requires manual intervention.\n' +
+                'Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.',
+            purpose: 'Keyword Purpose',
+            purpose_instructions: 'What do you plan to use the keyword for?',
+            response: 'Text Response',
+            response_instructions: 'Response must include {{ link }} exactly.',
+            request: 'Request Keyword',
+            requested: 'Keyword Requested',
+            requested_message:
+                'We will notify you within 24 hours by email if/when your keyword is approved and ready for use.',
+            errors: {
+                taken: 'This keyword is taken. Try another.',
+                requestKeyword: 'Error occurred while requesting a keyword',
+                deleteKeyword: 'Error occurred while deleting a keyword',
+            },
+        },
+        questions: {
+            questions: 'Questions',
         },
     },
 };

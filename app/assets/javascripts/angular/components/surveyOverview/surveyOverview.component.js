@@ -11,8 +11,21 @@ angular.module('missionhubApp').component('surveyOverview', {
 
 function surveyOverviewController($scope, asyncBindingsService) {
     var vm = this;
-    vm.tabNames = ['Settings', 'Keyword', 'Questions'];
-    vm.activeTab = vm.tabNames[0];
+    vm.tabNames = [
+        {
+            id: 'settings',
+            name: 'common:nav:settings',
+        },
+        {
+            id: 'keyword',
+            name: 'surveys:keyword:keyword',
+        },
+        {
+            id: 'questions',
+            name: 'surveys:questions:questions',
+        },
+    ];
+    vm.activeTab = vm.tabNames[0].id;
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(angular.noop, []);
 }

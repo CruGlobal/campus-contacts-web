@@ -3,20 +3,37 @@
         <form class="measure center">
             <fieldset class="ba b--transparent ph0 mh0" id="sign_up">
                 <div class="mt4 bb pv4 b--grey-medium tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="surveyName">Survey Name</label>
-                    <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="surveyName" placeholder="Survey Name" type="text" ng-model="$ctrl.surveyEdit.title">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="surveyName">
+                        {{'surveyTab:surveyName' | t}}
+                    </label>
+                    <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="surveyName"
+                           placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title">
                 </div>
                 <div class="mt4 bb pb4 b--grey-medium tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">Welcome Message</label>
-                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="welcomeMessage" name="welcomeMessage" placeholder="Welcome message..." ng-model="$ctrl.surveyEdit.welcome_message"></textarea>
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">
+                        {{'surveys:settings:welcome_message' | t}}
+                    </label>
+                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="welcomeMessage"
+                              name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
+                              ng-model="$ctrl.surveyEdit.welcome_message"></textarea>
                 </div>
                 <div class="mt4 bb pb4 b--grey-medium tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">Success Message</label>
-                    <textarea class="pa2 input-reset bg-white bw0 grey-darker ihshort w-100" id="successMessage" placeholder="Success message..." ng-model="$ctrl.surveyEdit.post_survey_message"></textarea>
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">
+                        {{'surveys:settings:success_message' | t}}
+                    </label>
+                    <textarea class="pa2 input-reset bg-white bw0 grey-darker ihshort w-100" id="successMessage"
+                              placeholder="{{'surveys:settings:success_message' | t}}"
+                              ng-model="$ctrl.surveyEdit.post_survey_message"></textarea>
                 </div>
                 <div class="mt4 tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">Image <span class="f6 grey-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span></label>
-                    <div class="image-box bg-white mb3 br2"></div><a class="f6 link dim ba ph4 pv2 mb2 dib blue bold br2 dim ttu tracked" href="#0">Upload Image</a>
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
+                        {{'surveys:settings:image' | t}}
+                        <span class="f6 grey-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
+                    </label>
+                    <div class="image-box bg-white mb3 br2"></div>
+                    <a class="f6 link dim ba ph4 pv2 mb2 dib blue bold br2 dim ttu tracked" href="#">
+                        {{'surveys:settings:image_upload' | t}}
+                    </a>
                 </div>
             </fieldset>
         </form>

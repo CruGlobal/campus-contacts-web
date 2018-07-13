@@ -11,11 +11,9 @@
         </div>
 
         <div class="tabs">
-            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tabName}"
-                ng-click="$ctrl.activeTab = tabName">
-                <span>{{tabName | t}}</span>
-                <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
-                </loading-spinner>
+            <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
+                ng-click="$ctrl.activeTab = tab.id">
+                <span>{{tab.name | t}}</span>
             </div>
         </div>
     </div>
@@ -24,4 +22,5 @@
     </div>
 </async-content>
 
-<survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'Settings'"></survey-overview-settings>
+<survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
+<survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>

@@ -1,5 +1,4 @@
 import template from './surveyOverviewSettings.html';
-import './surveyOverviewSettings.scss';
 import _ from 'lodash';
 
 angular.module('missionhubApp').component('surveyOverviewSettings', {

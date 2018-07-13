@@ -65,7 +65,7 @@ function routesService(httpProxy, modelsService) {
                 modelsService.getModelMetadata('survey').url.single(surveyId),
                 'survey',
                 surveyId,
-                [],
+                ['keyword'],
                 {
                     errorMessage: 'error.messages.routes.get_history',
                 },
