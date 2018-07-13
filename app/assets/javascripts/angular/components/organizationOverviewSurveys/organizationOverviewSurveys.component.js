@@ -52,7 +52,7 @@ function organizationOverviewSurveysController(
 
         confirmModalService
             .create(
-                tFilter('surveys.delete.confirm', {
+                tFilter('surveys:delete:confirm', {
                     survey_title: survey.title,
                 }),
             )

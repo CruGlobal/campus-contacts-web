@@ -652,6 +652,9 @@ export default {
         },
     },
     surveys: {
+        delete: {
+            confirm: 'Are you sure you want to delete this survey?',
+        },
         settings: {
             welcome_message: 'Welcome Message',
             success_message: 'Success Message',
