@@ -11,11 +11,13 @@ angular.module('missionhubApp').component('organizationOverviewSurveys', {
 });
 
 function organizationOverviewSurveysController(
+    $scope,
     $uibModal,
     surveyService,
     confirmModalService,
     envService,
     tFilter,
+    periodService,
 ) {
     var vm = this;
     vm.createSurvey = createSurvey;
@@ -24,6 +26,26 @@ function organizationOverviewSurveysController(
     vm.surveyLinkPrefix = envService.is('production')
         ? 'https://mhub.cc/s/'
         : 'https://stage.mhub.cc/s/';
+
+    vm.surveyStats = {};
+    vm.$onInit = () => {
+        //get survey stats
+        getSurveyStats();
+
+        //on period change, update survey stats
+        periodService.subscribe($scope, () => {
+            vm.surveyStats = {};
+            getSurveyStats();
+        });
+    };
+
+    function getSurveyStats() {
+        _.forEach(vm.organizationOverview.surveys, survey => {
+            surveyService.getStats(survey.id).then(statData => {
+                vm.surveyStats[survey.id] = statData;
+            });
+        });
+    }
 
     function createSurvey() {
         $uibModal

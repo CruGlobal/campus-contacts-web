@@ -22,6 +22,10 @@ function organizationOverviewService(
                 );
             });
 
+            if (_.includes(include, 'surveys')) {
+                include.push('keyword');
+            }
+
             // Load the missing relations, if any
             if (include.length === 0) {
                 return $q.resolve();

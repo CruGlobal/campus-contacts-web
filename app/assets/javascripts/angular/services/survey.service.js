@@ -1,6 +1,11 @@
 angular.module('missionhubApp').factory('surveyService', surveyService);
 
-function surveyService(httpProxy, modelsService, loggedInPerson) {
+function surveyService(
+    httpProxy,
+    modelsService,
+    loggedInPerson,
+    periodService,
+) {
     var surveyService = {
         // Create a new survey
         createSurvey: function(title, organization) {
@@ -107,6 +112,24 @@ function surveyService(httpProxy, modelsService, loggedInPerson) {
                 )
                 .then(function(keyword) {
                     return keyword.data;
+                });
+        },
+
+        getStats: surveyId => {
+            return httpProxy
+                .get(
+                    modelsService.getModelMetadata('survey_report').url.all,
+                    {
+                        period: periodService.getPeriod(),
+                        survey_id: surveyId.toString(),
+                    },
+                    {
+                        errorMessage: 'surveyTab:errors.getStats',
+                    },
+                )
+                .then(httpProxy.extractModels)
+                .then(function(survey) {
+                    return survey[0];
                 });
         },
     };

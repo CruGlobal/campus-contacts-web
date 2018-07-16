@@ -11,7 +11,7 @@
     <div class="column column-number">
         {{ 'surveyTab:columns.uncontacted' | t }}
     </div>
-    <div class="column column-link">
+    <div class="column column-keyword">
         {{ 'surveyTab:columns.keyword' | t }}
     </div>
     <div class="column column-link">
@@ -31,10 +31,10 @@
                 {{survey.title}}
             </a>
         </div>
-        <div class="column column-number"></div>
-        <div class="column column-number"></div>
-        <div class="column column-number"></div>
-        <div class="column column-link"></div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].contact_count}}</div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].unassigned_count}}</div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].uncontacted_count}}</div>
+        <div class="column column-keyword">{{survey.keyword.keyword}}</div>
         <div class="column column-link">
             <a ng-href="{{$ctrl.surveyLinkPrefix + survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix + survey.id}}</a>
         </div>

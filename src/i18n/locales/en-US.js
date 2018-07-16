@@ -649,6 +649,7 @@ export default {
             createSurvey: 'Error occurred while creating survey',
             updateSurvey: 'Error occurred while updating survey',
             deleteSurvey: 'Error occurred while deleting survey',
+            getStats: 'Error occurred while retrieving survey stats',
         },
     },
     surveys: {

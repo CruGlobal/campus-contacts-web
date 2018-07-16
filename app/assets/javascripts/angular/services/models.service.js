@@ -87,6 +87,10 @@ function modelsService(_) {
             include: 'sms_keywords',
             url: generateUrls('/sms_keywords'),
         },
+        survey_report: {
+            include: 'survey_reports',
+            url: generateUrls('/reports/survey'),
+        },
     };
 
     var modelsService = {
