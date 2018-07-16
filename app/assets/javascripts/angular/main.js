@@ -1,3 +1,8 @@
+/* eslint-disable angular/window-service */
+if (window.__webpack_public_path__) {
+    __webpack_public_path__ = window.__webpack_public_path__;
+}
+
 import '../../../../src/i18n/i18next.config';
 
 import './missionhubApp.module';
