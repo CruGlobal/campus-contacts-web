@@ -60,7 +60,7 @@
                             ng-click="$ctrl.deleteSurvey(); $event.stopPropagation();"></ng-md-icon>
 
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <a class="dropdown-item" ng-href="/surveys/{{survey.id}}/edit">{{ 'surveyTab:menu.edit' | t }}</a>
+                    <a class="dropdown-item" ng-href="/d/surveys/{{survey.id}}">{{ 'surveyTab:menu.edit' | t }}</a>
                     <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}">{{ 'surveyTab:menu.preview' | t }}</a>
                     <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
                     <a class="dropdown-item" href="#">{{ 'surveyTab:menu.copy' | t }}</a>
