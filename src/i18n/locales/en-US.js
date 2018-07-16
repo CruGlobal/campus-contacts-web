@@ -40,6 +40,14 @@ export default {
             assignment: 'Assigned to',
             unassigned: 'Unassigned',
         },
+        cru_status: {
+            none: 'None',
+            volunteer: 'Volunteer',
+            affiliate: 'Affiliate',
+            intern: 'Intern',
+            part_time_staff: 'Part Time Field Staff',
+            full_time_staff: 'Full Time Supported Staff',
+        },
         beta: {
             welcome: {
                 accept: "Let's Go!",
