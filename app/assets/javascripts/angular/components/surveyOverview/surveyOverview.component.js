@@ -20,10 +20,10 @@ function surveyOverviewController($scope, asyncBindingsService) {
             id: 'keyword',
             name: 'surveys:keyword:keyword',
         },
-        {
-            id: 'questions',
-            name: 'surveys:questions:questions',
-        },
+        // {
+        //     id: 'questions',
+        //     name: 'surveys:questions:questions',
+        // },
     ];
     vm.activeTab = vm.tabNames[0].id;
 
