@@ -40,10 +40,9 @@ function organizationOverviewSurveysController(
     };
 
     function getSurveyStats() {
-        _.forEach(vm.organizationOverview.surveys, survey => {
-            surveyService.getStats(survey.id).then(statData => {
-                vm.surveyStats[survey.id] = statData;
-            });
+        _.forEach(vm.organizationOverview.surveys, async survey => {
+            const statData = await surveyService.getStats(survey.id);
+            vm.surveyStats[survey.id] = statData;
         });
     }
 
