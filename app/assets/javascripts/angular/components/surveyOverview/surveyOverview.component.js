@@ -9,8 +9,9 @@ angular.module('missionhubApp').component('surveyOverview', {
     template: template,
 });
 
-function surveyOverviewController($scope, asyncBindingsService) {
-    var vm = this;
+function surveyOverviewController() {
+    const vm = this;
+
     vm.tabNames = [
         {
             id: 'settings',
@@ -26,6 +27,4 @@ function surveyOverviewController($scope, asyncBindingsService) {
         // },
     ];
     vm.activeTab = vm.tabNames[0].id;
-
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(angular.noop, []);
 }

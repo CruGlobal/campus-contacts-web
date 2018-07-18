@@ -4,26 +4,24 @@
     </div>
 </div>
 
-<async-content ready="$ctrl.ready">
-    <div class="header">
-        <div class="survey-title-row">
-            <div class="survey-title">{{$ctrl.survey.title}}</div>
-        </div>
+<div class="header">
+    <div class="survey-title-row">
+        <div class="survey-title">{{$ctrl.survey.title}}</div>
+    </div>
 
-        <div class="tabs">
-            <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
-                ng-click="$ctrl.activeTab = tab.id">
-                <span>{{tab.name | t}}</span>
-            </div>
-            <div class="tab">
-                <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">{{'surveys:questions:questions' | t}}</a>
-            </div>
+    <div class="tabs">
+        <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
+             ng-click="$ctrl.activeTab = tab.id">
+            <span>{{tab.name | t}}</span>
+        </div>
+        <div class="tab">
+            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">{{'surveys:questions:questions' | t}}</a>
         </div>
     </div>
-    <div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
-        <ui-view class="grid"></ui-view>
-    </div>
-</async-content>
+</div>
+<div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
+    <ui-view class="grid"></ui-view>
+</div>
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
