@@ -15,7 +15,7 @@
                 <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
             </div>
             <div class="column row" ng-repeat="column in $ctrl.columns"
-                 ng-class="column.cssClass" ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]" ng-click="column.sortable && $ctrl.setSortColumn(column)">
                 <span>{{column.label | t}}</span>
                 <div class="normal-column sort-order-column">
                     <ng-md-icon icon="arrow_downward" size="12"
