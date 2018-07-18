@@ -276,6 +276,7 @@ export default {
                     get_organization:
                         'Error occurred while loading the organization',
                     get_person: 'Error occurred while loading the person',
+                    get_survey: 'Error occurred while getting survey data',
                 },
                 template_request: {
                     load_template: 'Error occurred while loading the page',

@@ -67,7 +67,7 @@ function routesService(httpProxy, modelsService) {
                 surveyId,
                 ['keyword'],
                 {
-                    errorMessage: 'error.messages.routes.get_history',
+                    errorMessage: 'error.messages.routes.get_survey',
                 },
             );
         },
