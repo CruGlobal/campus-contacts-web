@@ -6,10 +6,10 @@ function surveyService(
     loggedInPerson,
     periodService,
 ) {
-    var surveyService = {
+    return {
         // Create a new survey
-        createSurvey: function(title, organization) {
-            var payload = {
+        createSurvey: (title, organization) => {
+            const payload = {
                 data: {
                     type: 'survey',
                     attributes: {
@@ -34,7 +34,7 @@ function surveyService(
                         errorMessage: 'surveyTab:errors.createSurvey',
                     },
                 )
-                .then(function(survey) {
+                .then(survey => {
                     return survey.data;
                 });
         },
@@ -59,7 +59,7 @@ function surveyService(
                         errorMessage: 'surveyTab:errors.updateSurvey',
                     },
                 )
-                .then(function(survey) {
+                .then(survey => {
                     return survey.data;
                 });
         },
@@ -133,6 +133,4 @@ function surveyService(
                 });
         },
     };
-
-    return surveyService;
 }
