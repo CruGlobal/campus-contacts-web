@@ -9,12 +9,8 @@ angular.module('missionhubApp').component('surveyOverviewSettings', {
     template: template,
 });
 
-function surveyOverviewSettingsController(
-    $scope,
-    asyncBindingsService,
-    surveyService,
-) {
-    var vm = this;
+function surveyOverviewSettingsController($scope, surveyService) {
+    const vm = this;
 
     const saveSurvey = _.throttle(
         (newSurveyData, oldSurveyData) => {
@@ -32,11 +28,11 @@ function surveyOverviewSettingsController(
         { leading: false },
     );
 
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(() => {
+    vm.$onInit = () => {
         vm.surveyEdit = {
-            title: angular.copy(vm.survey.title),
-            welcome_message: angular.copy(vm.welcome_message),
-            post_survey_message: angular.copy(vm.post_survey_message),
+            title: vm.survey.title,
+            welcome_message: vm.welcome_message,
+            post_survey_message: vm.post_survey_message,
         };
 
         $scope.$watch(
@@ -46,5 +42,5 @@ function surveyOverviewSettingsController(
             saveSurvey,
             true,
         );
-    }, []);
+    };
 }
