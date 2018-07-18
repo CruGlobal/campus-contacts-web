@@ -8,7 +8,7 @@
                     </label>
 
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="keyword">
-                        {{'general:required' | t}} <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
+                        {{'surveys:keyword.keyword' | t}} <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
                     </label>
                     <p class="f7 grey-darker mt0 lh-16">
                         {{'surveys:keyword.instructions' | t}}
@@ -42,9 +42,6 @@
                     </label>
                     <p class="f7 grey-darker mt0 lh-16">
                         {{'surveys:keyword.purpose_instructions' | t}}
-                        <a class="help fr" href="#">
-                            <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" style="width:16px; height:16px;">
-                        </a>
                     </p>
                     <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="keywordPurpose"
                            placeholder="{{'surveys:keyword.purpose_example' | t}}" type="text" ng-model="$ctrl.keyword.explanation">
@@ -56,10 +53,15 @@
                     </label>
                     <p class="f7 grey-darker mt0 lh-16">
                         {{'surveys:keyword.response_instructions' | t}}
-                        <a class="help fr" href="#">
+                        <a class="help fr" href="" ng-click="$ctrl.showResponseHelp = !$ctrl.showResponseHelp">
                             <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" style="width:16px; height:16px;">
                         </a>
                     </p>
+                    <div class="help-text" ng-if="$ctrl.showResponseHelp">
+                        <p class="grey-darker f7 lh-copy mv2 pv3">
+                            {{'surveys:keyword.response_help' | t: {interpolation: { prefix: '-', suffix: '-'} } }}
+                        </p>
+                    </div>
                     <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100" id="textResponse"
                               maxlength="140"
                               placeholder="{{'surveys:keyword.response_example' | t: {interpolation: { prefix: '-', suffix: '-'} } }}"
