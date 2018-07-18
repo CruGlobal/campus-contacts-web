@@ -15,11 +15,11 @@ function surveyOverviewController() {
     vm.tabNames = [
         {
             id: 'settings',
-            name: 'common:nav:settings',
+            name: 'common:nav.settings',
         },
         {
             id: 'keyword',
-            name: 'surveys:keyword:keyword',
+            name: 'surveys:keyword.keyword',
         },
         // {
         //     id: 'questions',

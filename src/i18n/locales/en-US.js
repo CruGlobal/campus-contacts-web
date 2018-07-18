@@ -323,6 +323,7 @@ export default {
             other: 'Other',
             required: 'Required',
             help: 'Help',
+            delete: 'Delete',
         },
         group: 'Group',
         groups: {
@@ -664,6 +665,7 @@ export default {
         },
         keyword: {
             keyword: 'Keyword',
+            keyword_example: 'Example: Cookies',
             instructions:
                 'Use at least 3 letters (no special characters/spaces)',
             help:
@@ -672,8 +674,11 @@ export default {
                 'Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.',
             purpose: 'Keyword Purpose',
             purpose_instructions: 'What do you plan to use the keyword for?',
+            purpose_example: 'Example: Weekly Meeting',
             response: 'Text Response',
             response_instructions: 'Response must include {{ link }} exactly.',
+            response_example:
+                'Example: Thanks for taking our survey! Reply with “i” or press {{ link }} if you have a smartphone.',
             request: 'Request Keyword',
             requested: 'Keyword Requested',
             requested_message:
