@@ -1,6 +1,7 @@
 @import '../../../../stylesheets/variables/colors';
 
-survey-overview {
+survey-overview,
+keyword-request-modal {
     display: block;
     margin-bottom: 20px;
     &:last-child {
@@ -294,46 +295,6 @@ survey-overview {
             background-repeat: no-repeat;
             background-size: 14px 18px;
             background-position: 98% center;
-        }
-    }
-
-    /* Modals */
-
-    .modal {
-        max-width: 360px;
-
-        &.modal-create {
-            width: 420px;
-            max-width: 420px;
-
-            .modal-text {
-                text-align: left;
-            }
-        }
-
-        .modal-header {
-            position: relative;
-            .close {
-                position: absolute;
-                top: 0.75rem;
-                right: 0.75rem;
-            }
-        }
-    }
-
-    .modal-fade {
-        z-index: 999;
-        position: fixed;
-        display: block !important;
-        margin-left: auto;
-        margin-right: auto;
-        overflow-y: auto;
-        overflow-x: hidden;
-        text-align: center;
-        padding: 3rem 0;
-        .modal {
-            margin-left: auto;
-            margin-right: auto;
         }
     }
 

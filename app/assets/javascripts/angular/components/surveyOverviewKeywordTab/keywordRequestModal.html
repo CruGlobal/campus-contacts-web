@@ -1,9 +1,14 @@
-<div class="modal-body">
-    <h3>{{'surveys:keyword.requested' | t}}</h3>
-    <p>{{'surveys:keyword.requested_message' | t}}</p>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.dismiss()">
-        <span>{{ 'general.ok' | t }}</span>
-    </button>
+<div class="center bg-white">
+    <div class="modal-text pv5 ph5">
+        <div class="tc">
+            <img class="dib" ng-src="{{$ctrl.clockIcon}}" style="width:60px; height:60px;">
+            <h2 class="f3 normal blue mb2 mt2">{{'surveys:keyword.requested' | t}}</h2>
+        </div>
+        <p class="lh-copy measure center f5 grey-darker mb0 mt0">
+            {{'surveys:keyword.requested_message' | t}}
+        </p>
+    </div>
+    <a class="btn-okay bg-blue b white dim f4 ttu tracked db pv3 ph3 tc link" href="" ng-click="$ctrl.dismiss()">
+        {{ 'general.ok' | t }}
+    </a>
 </div>

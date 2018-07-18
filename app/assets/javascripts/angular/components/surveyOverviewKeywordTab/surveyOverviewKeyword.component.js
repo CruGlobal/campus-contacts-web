@@ -11,22 +11,17 @@ angular.module('missionhubApp').component('surveyOverviewKeyword', {
     template: template,
 });
 
-function surveyOverviewKeywordController(
-    $scope,
-    $uibModal,
-    asyncBindingsService,
-    surveyService,
-) {
+function surveyOverviewKeywordController($scope, $uibModal, surveyService) {
     var vm = this;
     vm.helpIcon = helpIcon;
 
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(() => {
+    vm.$onInit = () => {
         vm.keyword = angular.copy(vm.survey.keyword) || {};
 
         vm.disableKeywordField =
             vm.keyword.keyword &&
             _.includes(['requested', 'active'], vm.keyword.state);
-    }, []);
+    };
 
     vm.requestKeyword = () => {
         vm.keywordError = false;
@@ -43,7 +38,6 @@ function surveyOverviewKeywordController(
 
                     $uibModal.open({
                         component: 'keywordRequestModal',
-                        windowClass: 'pivot_theme',
                         size: 'md',
                     });
                 },

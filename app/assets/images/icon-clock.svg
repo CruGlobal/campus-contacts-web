@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>ic-access-time-24px copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Master" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Keyword-1.5-Request-Confirmation" transform="translate(-610.000000, -403.000000)" fill="#007398" fill-rule="nonzero">
+            <g id="Group-11" transform="translate(460.000000, 351.000000)">
+                <g id="ic-access-time-24px-copy" transform="translate(150.000000, 52.000000)">
+                    <path d="M29.97,0 C13.41,0 0,13.44 0,30 C0,46.56 13.41,60 29.97,60 C46.56,60 60,46.56 60,30 C60,13.44 46.56,0 29.97,0 Z M30,54 C16.74,54 6,43.26 6,30 C6,16.74 16.74,6 30,6 C43.26,6 54,16.74 54,30 C54,43.26 43.26,54 30,54 Z" id="Shape"></path>
+                    <polygon id="Shape" points="31.6981132 14.7169811 27.1698113 14.7169811 27.1698113 32.5332509 43.0188679 41.8867925 45.2830189 38.2344572 31.6981132 30.3062171"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

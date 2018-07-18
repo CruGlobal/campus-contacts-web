@@ -1,4 +1,6 @@
 import template from './keywordRequestModal.html';
+import './keywordRequestModal.scss';
+import clockIcon from '../../../../images/icon-clock.svg';
 
 angular.module('missionhubApp').component('keywordRequestModal', {
     controller: keywordRequestModalController,
@@ -10,4 +12,6 @@ angular.module('missionhubApp').component('keywordRequestModal', {
     },
 });
 
-function keywordRequestModalController() {}
+function keywordRequestModalController() {
+    this.clockIcon = clockIcon;
+}
