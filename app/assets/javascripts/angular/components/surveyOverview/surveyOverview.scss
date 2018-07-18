@@ -32,18 +32,6 @@ survey-overview {
 
     $base-font-family: 'Source Sans Pro', sans-serif;
 
-    /* Color Variables */
-
-    $blue: #007398;
-    $blue-light: #66d9f0;
-    $grey-light: #f0f0f0;
-    $grey-medium: #dadada;
-    $grey-dark: #a0a2a6;
-    $grey-darker: #505256;
-    $grey-darkest: #3c3c3c;
-    $red: #ff5532;
-    $black: #000000;
-
     body {
         text-align: center;
         color: $grey-darker;
@@ -60,11 +48,11 @@ survey-overview {
     /* Backgrounds */
 
     .bg-blue {
-        background: $blue;
+        background: $pivot-dark-blue;
     }
 
     .bg-blue-light {
-        background: $blue-light;
+        background: $pivot-bright-blue;
     }
 
     .bg-grey-darker {
@@ -72,11 +60,11 @@ survey-overview {
     }
 
     .bg-grey-medium {
-        background: $grey-medium;
+        background: $background-gray;
     }
 
     .bg-grey-light {
-        background: $grey-light;
+        background: $gray-5;
     }
 
     .bg-transparent {
@@ -99,27 +87,27 @@ survey-overview {
         color: $grey-dark;
     }
     .blue-light {
-        color: $blue-light;
+        color: $pivot-bright-blue;
     }
     .blue {
-        color: $blue;
+        color: $pivot-dark-blue;
     }
     .red {
-        color: $red;
+        color: $pivot-orange;
     }
 
     /* Border Colors */
 
     .b--blue {
-        border-color: $blue;
+        border-color: $pivot-dark-blue;
     }
 
     .b--blue-light {
-        border-color: $blue-light;
+        border-color: $pivot-bright-blue;
     }
 
     .b--grey-medium {
-        border-color: $grey-medium;
+        border-color: $background-gray;
     }
 
     .b--grey-dark {
@@ -127,15 +115,15 @@ survey-overview {
     }
 
     .b--grey-medium {
-        border-color: $grey-medium;
+        border-color: $background-gray;
     }
 
     .b--grey-light {
-        border-color: $grey-light;
+        border-color: $gray-5;
     }
 
     .b--red {
-        border-color: $red;
+        border-color: $pivot-orange;
     }
 
     /* Fonts */
@@ -423,7 +411,7 @@ survey-overview {
                 border-left: 6px solid transparent;
                 border-right: 6px solid transparent;
 
-                border-top: 6px solid $blue;
+                border-top: 6px solid $pivot-dark-blue;
                 margin-top: -3px;
                 top: 50%;
             }
@@ -443,10 +431,10 @@ survey-overview {
                 text-decoration: none;
                 color: $grey-darker;
                 &:hover {
-                    background-color: $grey-light;
+                    background-color: $gray-5;
                 }
                 &:active {
-                    background-color: $blue;
+                    background-color: $pivot-dark-blue;
                     color: #ffffff;
                 }
             }
@@ -542,7 +530,7 @@ survey-overview {
             border-bottom: 1px solid $grey-dark;
 
             &.active {
-                border-bottom: 1px solid $grey-light;
+                border-bottom: 1px solid $gray-5;
             }
         }
     }
@@ -645,7 +633,7 @@ survey-overview {
                  *to vertically center it.
                  */
                 top: 0;
-                border: 1px solid $grey-medium;
+                border: 1px solid $background-gray;
             }
 
             &:after {
@@ -674,8 +662,8 @@ survey-overview {
 
         input[type='checkbox']:checked + label::before,
         input[type='radio']:checked + label::before {
-            background: $blue-light;
-            border-color: $grey-medium;
+            background: $pivot-bright-blue;
+            border-color: $background-gray;
         }
 
         /*Adding focus styles on the outer-box of the fake checkbox*/
@@ -704,7 +692,7 @@ survey-overview {
                     width: 1rem;
                     height: 1rem;
                     border-radius: 0;
-                    border-color: $grey-medium;
+                    border-color: $background-gray;
                 }
 
                 &:after {
@@ -717,8 +705,8 @@ survey-overview {
                 }
             }
             input[type='checkbox']:checked + label::before {
-                background-color: $blue;
-                border-color: $blue;
+                background-color: $pivot-dark-blue;
+                border-color: $pivot-dark-blue;
             }
         }
     }
@@ -733,7 +721,7 @@ survey-overview {
             right: 0;
             top: 50%;
             font-size: 1.75rem;
-            color: $blue;
+            color: $pivot-dark-blue;
             transform: translate(-50%, -50%);
             font-weight: 300;
         }
@@ -756,7 +744,7 @@ survey-overview {
         }
 
         &:after {
-            background: $grey-light;
+            background: $gray-5;
             height: 0.5rem;
             width: 5rem;
             border-radius: 0.25rem;
