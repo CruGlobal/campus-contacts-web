@@ -12,13 +12,12 @@ function ministryViewGroupService(groupsService, tFilter, moment, _) {
 
     // Convert a number into its ordinal form (1st, 2nd, 3rd, etc.)
     function formatOrdinal(number) {
-        var suffixes = tFilter('ministries.groups.ordinal_suffixes');
         var onesDigit = number % 10;
         var tensDigit = ((number % 100) - onesDigit) / 10;
         var suffix =
             tensDigit !== 1 && onesDigit >= 1 && onesDigit <= 3
-                ? suffixes[onesDigit]
-                : suffixes[0];
+                ? tFilter(`ministries.groups.ordinal_suffixes.${onesDigit}`)
+                : tFilter('ministries.groups.ordinal_suffixes.0');
         return number + suffix;
     }
 

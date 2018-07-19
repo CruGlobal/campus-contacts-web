@@ -432,7 +432,7 @@ export default {
                 },
                 header: 'Groups',
                 meeting_time: {
-                    monthly: 'Monthly on {{day}} {{time}}',
+                    monthly: 'Monthly on the {{day}} from {{time}}',
                     sporadically: 'Sporadically',
                     time_range: '{{start}} - {{end}}',
                     weekly: 'Weekly on {{day}}s {{time}}',
