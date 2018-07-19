@@ -280,24 +280,6 @@ angular
                     '<my-organizations-dashboard></my-organizations-dashboard>',
             })
             .state({
-                name: 'app.surveys',
-                url: '/surveys',
-                abstract: true,
-                template: '<ui-view></ui-view>',
-            })
-            .state({
-                name: 'app.surveys.survey',
-                url: '/:surveyId',
-                component: 'surveyOverview',
-                resolve: {
-                    survey: ($state, $transition$, routesService) => {
-                        return routesService.getSurvey(
-                            $transition$.params().surveyId,
-                        );
-                    },
-                },
-            })
-            .state({
                 name: 'app.ministries.root',
                 url: '/root',
                 component: 'myOrganizationsDashboardList',
@@ -349,6 +331,18 @@ angular
                                 });
                         },
                     ),
+                },
+            })
+            .state({
+                name: 'app.ministries.ministry.survey',
+                url: '/survey/:surveyId',
+                component: 'surveyOverview',
+                resolve: {
+                    survey: ($state, $transition$, routesService) => {
+                        return routesService.getSurvey(
+                            $transition$.params().surveyId,
+                        );
+                    },
                 },
             })
             .state({

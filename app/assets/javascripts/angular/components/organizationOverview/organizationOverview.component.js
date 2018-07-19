@@ -13,6 +13,7 @@ angular.module('missionhubApp').component('organizationOverview', {
 
 function organizationOverviewController(
     $scope,
+    $state,
     p2cOrgId,
     asyncBindingsService,
     ministryViewTabs,
@@ -28,6 +29,10 @@ function organizationOverviewController(
     vm.cruOrg = false;
     vm.p2cOrg = false;
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
+
+    vm.showOrgNav = () => {
+        return $state.$current.name !== 'app.ministries.ministry.survey';
+    };
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 

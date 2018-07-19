@@ -23,7 +23,7 @@ function organizationOverviewService(
             });
 
             if (_.includes(include, 'surveys')) {
-                include.push('keyword');
+                include.push('surveys.keyword');
             }
 
             // Load the missing relations, if any
