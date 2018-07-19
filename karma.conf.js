@@ -36,14 +36,17 @@ module.exports = function(config) {
     config.set({
         frameworks: ['jasmine'],
 
-        browsers: ['PhantomJS'],
+        browsers: ['ChromeHeadlessNoSandbox'],
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox'],
+            },
+        },
 
         reporters: ['mocha', 'coverage-istanbul'],
 
-        files: [
-            'node_modules/es6-promise/dist/es6-promise.auto.js',
-            'app/assets/javascripts/angular/all-tests.spec.js',
-        ],
+        files: ['app/assets/javascripts/angular/all-tests.spec.js'],
 
         preprocessors: {
             'app/assets/javascripts/angular/all-tests.spec.js': [
