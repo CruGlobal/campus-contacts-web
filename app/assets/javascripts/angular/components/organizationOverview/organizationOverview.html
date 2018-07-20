@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="tabs" ng-if="$ctrl.showOrgNav()">
+        <div class="tabs">
             <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
                  ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
                  ng-if="tabName !== 'labels'">
