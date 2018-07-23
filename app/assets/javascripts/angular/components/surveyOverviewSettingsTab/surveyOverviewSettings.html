@@ -30,8 +30,10 @@
                         {{'surveys:settings.image' | t}}
                         <span class="f6 grey-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
                     </label>
-                    <div class="image-box bg-white mb3 br2"></div>
-                    <a class="f6 link dim ba ph4 pv2 mb2 dib blue bold br2 dim ttu tracked" href="#">
+                    <div class="image-box bg-white mb3 br2">
+                        <img ng-src="{{$ctrl.surveyEdit.logo}}">
+                    </div>
+                    <a class="f6 link dim ba ph4 pv2 mb2 dib blue bold br2 dim ttu tracked" href="" ng-click="$ctrl.selectImage()">
                         {{'surveys:settings.image_upload' | t}}
                     </a>
                 </div>
