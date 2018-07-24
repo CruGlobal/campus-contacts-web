@@ -21,7 +21,11 @@ function surveyOverviewSettingsController($scope, surveyService) {
             vm.survey.title = vm.surveyEdit.title;
             vm.survey.welcome_message = vm.surveyEdit.welcome_message;
             vm.survey.post_survey_message = vm.surveyEdit.post_survey_message;
-            vm.survey.logo = vm.surveyEdit.logo;
+
+            //only send logo if updated
+            if (vm.surveyEdit.logo !== vm.survey.logo_url) {
+                vm.survey.logo = vm.surveyEdit.logo;
+            }
 
             surveyService.updateSurvey(vm.survey);
         },
