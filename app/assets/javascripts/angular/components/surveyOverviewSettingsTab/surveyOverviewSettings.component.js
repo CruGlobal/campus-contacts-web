@@ -51,6 +51,7 @@ function surveyOverviewSettingsController($scope, surveyService) {
     };
 
     vm.selectImage = () => {
+        // eslint-disable-next-line
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.click();
