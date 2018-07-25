@@ -10,9 +10,7 @@ angular.module('missionhubApp').component('surveyOverview', {
 });
 
 function surveyOverviewController() {
-    const vm = this;
-
-    vm.tabNames = [
+    this.tabNames = [
         {
             id: 'settings',
             name: 'common:nav.settings',
@@ -26,5 +24,5 @@ function surveyOverviewController() {
         //     name: 'surveys:questions:questions',
         // },
     ];
-    vm.activeTab = vm.tabNames[0].id;
+    this.activeTab = this.tabNames[0].id;
 }

@@ -12,29 +12,28 @@ angular.module('missionhubApp').component('surveyOverviewKeyword', {
 });
 
 function surveyOverviewKeywordController($scope, $uibModal, surveyService) {
-    var vm = this;
-    vm.helpIcon = helpIcon;
+    this.helpIcon = helpIcon;
 
-    vm.$onInit = () => {
-        vm.keyword = angular.copy(vm.survey.keyword) || {};
+    this.$onInit = () => {
+        this.keyword = angular.copy(this.survey.keyword) || {};
 
-        vm.disableKeywordField =
-            vm.keyword.keyword &&
-            _.includes(['requested', 'active'], vm.keyword.state);
+        this.disableKeywordField =
+            this.keyword.keyword &&
+            _.includes(['requested', 'active'], this.keyword.state);
     };
 
-    vm.requestKeyword = () => {
-        vm.keywordError = false;
+    this.requestKeyword = () => {
+        this.keywordError = false;
 
         surveyService
             .requestKeyword({
-                surveyId: vm.survey.id,
-                orgId: vm.survey.organization_id,
-                keyword: vm.keyword,
+                surveyId: this.survey.id,
+                orgId: this.survey.organization_id,
+                keyword: this.keyword,
             })
             .then(
                 keywordData => {
-                    vm.keyword = keywordData;
+                    this.keyword = keywordData;
 
                     $uibModal.open({
                         component: 'keywordRequestModal',
@@ -42,14 +41,14 @@ function surveyOverviewKeywordController($scope, $uibModal, surveyService) {
                     });
                 },
                 () => {
-                    vm.keywordError = true;
+                    this.keywordError = true;
                 },
             );
     };
 
-    vm.deleteKeyword = keywordId => {
-        vm.survey.keyword = {};
-        vm.keyword = {};
+    this.deleteKeyword = keywordId => {
+        this.survey.keyword = {};
+        this.keyword = {};
         surveyService.deleteKeyword(keywordId);
     };
 }

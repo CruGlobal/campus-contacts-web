@@ -19,54 +19,52 @@ function organizationOverviewSurveysController(
     tFilter,
     periodService,
 ) {
-    var vm = this;
-    vm.createSurvey = createSurvey;
-    vm.changeStatus = changeStatus;
-    vm.deleteSurvey = deleteSurvey;
-    vm.surveyLinkPrefix = envService.is('production')
+    this.surveyLinkPrefix = envService.is('production')
         ? 'https://mhub.cc/s/'
         : 'https://stage.mhub.cc/s/';
 
-    vm.surveyStats = {};
-    vm.$onInit = () => {
+    this.surveyStats = {};
+    this.$onInit = () => {
         //get survey stats
-        getSurveyStats();
+        this.getSurveyStats();
 
         //on period change, update survey stats
         periodService.subscribe($scope, () => {
-            vm.surveyStats = {};
-            getSurveyStats();
+            this.surveyStats = {};
+            this.getSurveyStats();
         });
     };
 
-    function getSurveyStats() {
-        _.forEach(vm.organizationOverview.surveys, async survey => {
+    this.getSurveyStats = () => {
+        _.forEach(this.organizationOverview.surveys, async survey => {
             const statData = await surveyService.getStats(survey.id);
-            vm.surveyStats[survey.id] = statData;
+            this.surveyStats[survey.id] = statData;
         });
-    }
+    };
 
-    function createSurvey() {
+    this.createSurvey = () => {
         $uibModal
             .open({
                 component: 'createSurvey',
                 resolve: {
-                    organizationId: _.constant(vm.organizationOverview.org.id),
+                    organizationId: _.constant(
+                        this.organizationOverview.org.id,
+                    ),
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm',
             })
             .result.then(newSurvey => {
-                vm.organizationOverview.surveys.push(newSurvey);
+                this.organizationOverview.surveys.push(newSurvey);
             });
-    }
+    };
 
-    function changeStatus(survey, active) {
+    this.changeStatus = (survey, active) => {
         survey.is_frozen = !active;
         surveyService.updateSurvey(survey);
-    }
+    };
 
-    function deleteSurvey(survey) {
+    this.deleteSurvey = survey => {
         if (!survey) {
             return;
         }
@@ -77,13 +75,13 @@ function organizationOverviewSurveysController(
                     survey_title: survey.title,
                 }),
             )
-            .then(function() {
+            .then(() => {
                 surveyService.deleteSurvey(survey).then(() => {
-                    vm.organizationOverview.surveys.splice(
-                        vm.organizationOverview.surveys.indexOf(survey),
+                    this.organizationOverview.surveys.splice(
+                        this.organizationOverview.surveys.indexOf(survey),
                         1,
                     );
                 });
             });
-    }
+    };
 }
