@@ -1,7 +1,7 @@
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
 
-organization-overview-people {
+people-screen {
     $visible-people: 10;
 
     .container {
@@ -79,6 +79,29 @@ organization-overview-people {
             background-color: $pivot-darker-blue;
             border: 1px solid $white;
         }
+        .column.select-column {
+            width: 26px;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+        .name-column {
+            flex: 2;
+        }
+        .gender-column {
+            width: 40px;
+        }
+        .assigned-to-column {
+            flex: 1.5;
+        }
+        .status-column {
+            width: 170px;
+        }
+        .phone-number-column {
+            width: 120px;
+        }
+        .button-column {
+            width: 79px;
+        }
     }
 
     input[type='checkbox'] {
@@ -92,13 +115,14 @@ organization-overview-people {
 
     .selected-people-message {
         display: flex;
+        align-items: center;
         background-color: $pivot-orange;
         color: $white;
         padding: 10px;
         flex-shrink: 0;
 
         ng-md-icon {
-            padding-left: 5px;
+            padding-right: 18px;
             svg {
                 fill: $white;
             }
