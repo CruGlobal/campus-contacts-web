@@ -12,10 +12,11 @@
     <div class="people-list">
         <div class="header row padded">
             <div class="column select-column">
-                <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()" />
+                <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
             </div>
             <div class="column row" ng-repeat="column in $ctrl.columns"
-                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]" ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]"
+                 ng-click="column.sortable && $ctrl.setSortColumn(column)">
                 <span>{{column.label | t}}</span>
                 <div class="normal-column sort-order-column">
                     <ng-md-icon icon="arrow_downward" size="12"
@@ -37,29 +38,29 @@
             </div>
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
-            <ng-md-icon icon="close" size="24" ng-click="$ctrl.clearSelection()"
-                        ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}"></ng-md-icon>
+            <img ng-src="{{$ctrl.closeIcon}}" ng-click="$ctrl.clearSelection()"
+                        ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}" />
             <div>{{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}</div>
             <div class="space"></div>
-            <ng-md-icon icon="edit" size="24" ng-click="$ctrl.massEdit()"
-                        ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}"></ng-md-icon>
-            <ng-md-icon icon="merge_type" size="24" ng-click="$ctrl.merge()"
-                        ng-class="{ disabled: !$ctrl.mergeable() }"
-                        ng-attr-title="{{ ($ctrl.mergeable() ? 'ministries.people.merge_hover' :
-                                          'ministries.people.merge_disabled_hover') | t }}"></ng-md-icon>
-            <ng-md-icon icon="email" size="24" ng-click="$ctrl.sendMessage('email')"
-                        ng-attr-title="{{ 'ministries.people.email_hover' | t }}"></ng-md-icon>
-            <ng-md-icon icon="sms" size="24" ng-click="$ctrl.sendMessage('sms')"
-                        ng-attr-title="{{ 'ministries.people.sms_hover' | t }}"></ng-md-icon>
-            <ng-md-icon icon="file_download" size="24" ng-click="$ctrl.exportPeople()"
-                        ng-attr-title="{{ 'ministries.people.export_hover' | t }}"></ng-md-icon>
-            <ng-md-icon icon="send" size="24" ng-click="$ctrl.transferPeople()"
+            <img ng-src="{{$ctrl.pencilIcon}}" ng-click="$ctrl.massEdit()"
+                 ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}">
+            <img ng-src="{{$ctrl.mergeIcon}}" ng-click="$ctrl.merge()"
+                 ng-class="{ disabled: !$ctrl.mergeable() }"
+                 ng-attr-title="{{ ($ctrl.mergeable() ? 'ministries.people.merge_hover' :
+                                          'ministries.people.merge_disabled_hover') | t }}" />
+            <img ng-src="{{$ctrl.emailIcon}}" ng-click="$ctrl.sendMessage('email')"
+                 ng-attr-title="{{ 'ministries.people.email_hover' | t }}" />
+            <img ng-src="{{$ctrl.messageIcon}}" ng-click="$ctrl.sendMessage('sms')"
+                 ng-attr-title="{{ 'ministries.people.sms_hover' | t }}" />
+            <img ng-src="{{$ctrl.shareIcon}}" ng-click="$ctrl.exportPeople()"
+                 ng-attr-title="{{ 'ministries.people.export_hover' | t }}" />
+            <ng-md-icon icon="send" size="22" ng-click="$ctrl.transferPeople()"
                         ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
                         ng-if="$ctrl.isAdmin"></ng-md-icon>
-            <ng-md-icon icon="archive" size="24" ng-click="$ctrl.archivePeople()"
-                        ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"></ng-md-icon>
-            <ng-md-icon icon="delete" size="24" ng-click="$ctrl.deletePeople()"
-                        ng-attr-title="{{ 'ministries.people.delete_hover' | t }}"></ng-md-icon>
+            <img ng-src="{{$ctrl.archiveIcon}}" ng-click="$ctrl.archivePeople()"
+                 ng-attr-title="{{ 'ministries.people.archive_hover' | t }}" />
+            <img ng-src="{{$ctrl.deleteIcon}}" ng-click="$ctrl.deletePeople()"
+                 ng-attr-title="{{ 'ministries.people.delete_hover' | t }}" />
         </div>
         <div class="scroll-contain">
             <div infinite-scroll="$ctrl.loadPersonPage()"

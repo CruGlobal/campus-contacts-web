@@ -1,5 +1,13 @@
 import template from './peopleScreen.html';
 import './peopleScreen.scss';
+import pencilIcon from '../../../../images/icons/pencil.svg';
+import mergeIcon from '../../../../images/icons/merge.svg';
+import emailIcon from '../../../../images/icons/email.svg';
+import messageIcon from '../../../../images/icons/message.svg';
+import shareIcon from '../../../../images/icons/share.svg';
+import archiveIcon from '../../../../images/icons/archive.svg';
+import deleteIcon from '../../../../images/icons/delete.svg';
+import closeIcon from '../../../../images/icons/close.svg';
 
 angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,
@@ -30,6 +38,16 @@ function peopleScreenController(
     this.busy = false;
     this.selectedCount = 0;
     this.totalCount = 0;
+
+    // Icons
+    this.pencilIcon = pencilIcon;
+    this.mergeIcon = mergeIcon;
+    this.emailIcon = emailIcon;
+    this.messageIcon = messageIcon;
+    this.shareIcon = shareIcon;
+    this.archiveIcon = archiveIcon;
+    this.deleteIcon = deleteIcon;
+    this.closeIcon = closeIcon;
 
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;

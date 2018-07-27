@@ -118,13 +118,18 @@ people-screen {
         align-items: center;
         background-color: $pivot-orange;
         color: $white;
-        padding: 10px;
+        padding: 12px;
         flex-shrink: 0;
 
-        ng-md-icon {
+        ng-md-icon,
+        img {
             padding-right: 18px;
             svg {
                 fill: $white;
+            }
+            &.disabled {
+                opacity: 0.5;
+                cursor: auto;
             }
         }
 
