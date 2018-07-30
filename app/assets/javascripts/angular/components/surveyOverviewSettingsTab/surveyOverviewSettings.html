@@ -7,7 +7,8 @@
                         {{'surveyTab:surveyName' | t}}
                     </label>
                     <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="surveyName"
-                           placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title">
+                           placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title"
+                           ng-change="$ctrl.saveSurvey()">
                 </div>
                 <div class="mt4 bb pb4 b--grey-medium tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">
@@ -15,7 +16,8 @@
                     </label>
                     <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="welcomeMessage"
                               name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
-                              ng-model="$ctrl.surveyEdit.welcome_message"></textarea>
+                              ng-model="$ctrl.surveyEdit.login_paragraph"
+                              ng-change="$ctrl.saveSurvey()"></textarea>
                 </div>
                 <div class="mt4 bb pb4 b--grey-medium tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">
@@ -23,7 +25,8 @@
                     </label>
                     <textarea class="pa2 input-reset bg-white bw0 grey-darker ihshort w-100" id="successMessage"
                               placeholder="{{'surveys:settings.success_message' | t}}"
-                              ng-model="$ctrl.surveyEdit.post_survey_message"></textarea>
+                              ng-model="$ctrl.surveyEdit.post_survey_message"
+                              ng-change="$ctrl.saveSurvey()"></textarea>
                 </div>
                 <div class="mt4 tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
@@ -31,7 +34,7 @@
                         <span class="f6 grey-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
                     </label>
                     <div class="image-box bg-white mb3 br2">
-                        <img ng-src="{{$ctrl.surveyEdit.logo}}">
+                        <img ng-src="{{$ctrl.surveyEdit.logo_url}}" ng-if="$ctrl.surveyEdit.logo_url">
                     </div>
                     <a class="f6 link dim ba ph4 pv2 mb2 dib blue bold br2 dim ttu tracked" href="" ng-click="$ctrl.selectImage()">
                         {{'surveys:settings.image_upload' | t}}

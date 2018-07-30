@@ -9,23 +9,23 @@ angular.module('missionhubApp').component('surveyOverviewSettings', {
     template: template,
 });
 
-function surveyOverviewSettingsController($scope, surveyService) {
-    const saveSurvey = _.throttle(
-        (newSurveyData, oldSurveyData) => {
-            if (angular.equals(newSurveyData, oldSurveyData)) {
-                return;
-            }
-
+function surveyOverviewSettingsController(surveyService) {
+    this.saveSurvey = _.throttle(
+        () => {
             this.survey.title = this.surveyEdit.title;
-            this.survey.welcome_message = this.surveyEdit.welcome_message;
+            this.survey.login_paragraph = this.surveyEdit.login_paragraph;
             this.survey.post_survey_message = this.surveyEdit.post_survey_message;
 
             //only send logo if updated
-            if (this.surveyEdit.logo !== this.survey.logo_url) {
+            if (this.surveyEdit.logo) {
                 this.survey.logo = this.surveyEdit.logo;
             }
 
-            surveyService.updateSurvey(this.survey);
+            surveyService.updateSurvey(this.survey).then(updatedSurveyData => {
+                //update logo
+                this.surveyEdit.logo = null;
+                this.surveyEdit.logo_url = updatedSurveyData.logo_url;
+            });
         },
         1500,
         { leading: false },
@@ -34,18 +34,10 @@ function surveyOverviewSettingsController($scope, surveyService) {
     this.$onInit = () => {
         this.surveyEdit = {
             title: this.survey.title,
-            welcome_message: this.survey.welcome_message,
+            login_paragraph: this.survey.login_paragraph,
             post_survey_message: this.survey.post_survey_message,
-            logo: this.survey.logo_url,
+            logo_url: this.survey.logo_url,
         };
-
-        $scope.$watch(
-            () => {
-                return this.surveyEdit;
-            },
-            saveSurvey,
-            true,
-        );
     };
 
     this.selectImage = () => {
@@ -69,11 +61,14 @@ function surveyOverviewSettingsController($scope, surveyService) {
                     return;
                 }
 
+                //clear current logo
+                this.surveyEdit.logo_url = null;
+
                 //base 64 encode image
                 const reader = new FileReader();
                 reader.onload = event => {
                     this.surveyEdit.logo = event.target.result;
-                    $scope.$digest();
+                    this.saveSurvey();
                 };
                 reader.readAsDataURL(this.selectedImage);
             },

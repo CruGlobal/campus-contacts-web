@@ -52,6 +52,7 @@ function surveyService(
                                 title: survey.title,
                                 is_frozen: survey.is_frozen,
                                 post_survey_message: survey.post_survey_message,
+                                login_paragraph: survey.login_paragraph,
                                 logo: survey.logo,
                             },
                         },
