@@ -11,7 +11,13 @@ angular.module('missionhubApp').component('surveyOverviewKeyword', {
     template: template,
 });
 
-function surveyOverviewKeywordController($scope, $uibModal, surveyService) {
+function surveyOverviewKeywordController(
+    $scope,
+    $uibModal,
+    surveyService,
+    confirmModalService,
+    tFilter,
+) {
     this.helpIcon = helpIcon;
 
     this.$onInit = () => {
@@ -47,8 +53,12 @@ function surveyOverviewKeywordController($scope, $uibModal, surveyService) {
     };
 
     this.deleteKeyword = keywordId => {
-        this.survey.keyword = {};
-        this.keyword = {};
-        surveyService.deleteKeyword(keywordId);
+        confirmModalService
+            .create(tFilter('surveys:keyword:delete:confirm'))
+            .then(() => {
+                this.survey.keyword = {};
+                this.keyword = {};
+                surveyService.deleteKeyword(keywordId);
+            });
     };
 }

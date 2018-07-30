@@ -699,6 +699,9 @@ export default {
                 requestKeyword: 'Error occurred while requesting a keyword',
                 deleteKeyword: 'Error occurred while deleting a keyword',
             },
+            delete: {
+                confirm: 'Are you sure you want to delete this keyword?',
+            },
         },
         questions: {
             questions: 'Questions',

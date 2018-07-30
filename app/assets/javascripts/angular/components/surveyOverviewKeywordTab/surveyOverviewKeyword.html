@@ -52,7 +52,7 @@
                         <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
                     </label>
                     <p class="f7 grey-darker mt0 lh-16">
-                        {{'surveys:keyword.response_instructions' | t}}
+                        {{'surveys:keyword.response_instructions' | t: {interpolation: { prefix: '-', suffix: '-'} } }}
                         <a class="help fr" href="" ng-click="$ctrl.showResponseHelp = !$ctrl.showResponseHelp">
                             <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" style="width:16px; height:16px;">
                         </a>
