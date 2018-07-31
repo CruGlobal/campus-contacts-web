@@ -59,44 +59,15 @@ function peopleScreenService(
                 })
                 .join(',');
         },
-
-        buildGetParams: function(orgId, filtersParam, orderParam) {
-            const filters = filtersParam || {};
-            const base = {
-                include: [
-                    'phone_numbers',
-                    'email_addresses',
-                    'organizational_permissions',
-                    'reverse_contact_assignments',
-                ].join(','),
-                sort: peopleScreenService.buildOrderString(orderParam || []),
-                'filters[organization_ids]': orgId,
-            };
-            if (filters.searchString) {
-                base['filters[name]'] = filters.searchString;
-            }
-            if (filters.includeArchived) {
-                base['filters[include_archived]'] = true;
-            }
-            if (filters.labels) {
-                base['filters[label_ids]'] = filters.labels.join(',');
-            }
-            if (filters.assignedTos) {
-                base['filters[assigned_tos]'] = filters.assignedTos.join(',');
-            }
-            if (filters.groups) {
-                base['filters[group_ids]'] = filters.groups.join(',');
-            }
-            return base;
-        },
-
         // Load an organization's people
-        loadMoreOrgPeople: function(orgId, filters, order, listLoader) {
-            const requestParams = peopleScreenService.buildGetParams(
-                orgId,
-                filters,
-                order,
-            );
+        loadMoreOrgPeople: function(
+            orgId,
+            filters,
+            order,
+            listLoader,
+            buildListParams,
+        ) {
+            const requestParams = buildListParams(orgId, filters, order);
 
             return listLoader.loadMore(requestParams).then(function(resp) {
                 // Load the assignments in parallel
@@ -105,8 +76,8 @@ function peopleScreenService(
             });
         },
 
-        loadOrgPeopleCount: function(orgId) {
-            const requestParams = peopleScreenService.buildGetParams(orgId);
+        loadOrgPeopleCount: function(orgId, buildListParams) {
+            const requestParams = buildListParams(orgId);
             requestParams['page[limit]'] = 0;
 
             return httpProxy
