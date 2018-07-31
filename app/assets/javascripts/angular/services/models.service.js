@@ -79,6 +79,9 @@ function modelsService(_) {
         filter_stats: {
             url: generateUrls('/filter_stats'),
         },
+        answer_sheet: {
+            url: generateUrls('/answer_sheets'),
+        },
     };
 
     var modelsService = {

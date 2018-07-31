@@ -7,6 +7,7 @@ function organizationOverviewService(
     httpProxy,
     modelsService,
     peopleScreenService,
+    organizationOverviewPeopleService,
     organizationOverviewTeamService,
     organizationOverviewSuborgsService,
     _,
@@ -46,7 +47,10 @@ function organizationOverviewService(
 
         // Return a promise that resolves to the number of people in an organization
         getPersonCount: function(org) {
-            return peopleScreenService.loadOrgPeopleCount(org.id);
+            return peopleScreenService.loadOrgPeopleCount(
+                org.id,
+                organizationOverviewPeopleService.buildListParams,
+            );
         },
 
         // Return a promise that resolves to the number of team members in an organization

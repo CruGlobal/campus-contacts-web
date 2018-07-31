@@ -14,6 +14,8 @@ angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,
     bindings: {
         org: '<',
+        listLoader: '<',
+        buildListParams: '<',
     },
     template: template,
 });
@@ -28,8 +30,6 @@ function peopleScreenController(
     personService,
     peopleFiltersPanelService,
     loggedInPerson,
-    RequestDeduper,
-    ProgressiveListLoader,
     _,
 ) {
     this.people = [];
@@ -53,14 +53,6 @@ function peopleScreenController(
 
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;
-
-    const requestDeduper = new RequestDeduper();
-    const listLoader = new ProgressiveListLoader({
-        modelType: 'person',
-        requestDeduper: requestDeduper,
-        errorMessage:
-            'error.messages.organization_overview_people.load_people_chunk',
-    });
 
     // Define the columns that can be selected as sort keys
     // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
@@ -158,7 +150,13 @@ function peopleScreenController(
 
         // Generate the sort order list
         return peopleScreenService
-            .loadMoreOrgPeople(orgId, this.filters, getOrder(), listLoader)
+            .loadMoreOrgPeople(
+                orgId,
+                this.filters,
+                getOrder(),
+                this.listLoader,
+                this.buildListParams,
+            )
             .then(resp => {
                 const oldPeople = this.people;
 
@@ -218,7 +216,7 @@ function peopleScreenController(
 
     const resetList = () => {
         this.people = [];
-        listLoader.reset();
+        this.listLoader.reset();
         this.loadedAll = false;
         this.selectAllValue = false;
         this.multiSelection = {};
@@ -380,7 +378,7 @@ function peopleScreenController(
         // Update the people list and count
         this.people = remainingPeople;
         this.totalCount -= removedPeople.length;
-        listLoader.reset(this.people);
+        this.listLoader.reset(this.people);
 
         // Update the people count shown in the people tab
         if (this.people) {
