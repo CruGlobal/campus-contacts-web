@@ -3,16 +3,16 @@ angular
     .factory('ProgressiveListLoader', progressiveListLoader);
 
 function progressiveListLoader(httpProxy, modelsService, _) {
-    var pageSize = 25;
-    var overlapMargin = 1;
+    const pageSize = 25;
+    const overlapMargin = 1;
 
     function ProgressiveListLoader(options) {
-        var modelType = options.modelType;
-        var requestDeduper = options.requestDeduper;
-        var errorMessage = options.errorMessage;
-        var list = [];
+        const modelType = options.modelType;
+        const requestDeduper = options.requestDeduper;
+        const errorMessage = options.errorMessage;
+        let list = [];
 
-        this.loadMore = function(params) {
+        this.loadMore = function(params = {}) {
             // There are two situations where our length gets out of sync from our offset:
             // 1. The already-loaded portion of the data set becomes larger on the server. In this
             // case, we would be requesting the next set after #10, but what we think is #10 is
@@ -23,18 +23,17 @@ function progressiveListLoader(httpProxy, modelsService, _) {
             // now 9th, so we would never load #11 as the server picks up with the 11th item (#12).
             // This off-by-one issue is covered by loading one extra row every 'page' and throwing
             // away duplicates. `overlapMargin` defines how many extra rows to load.
-            var page = {
+            const page = {
                 limit: pageSize + overlapMargin,
                 offset: Math.max(list.length - overlapMargin, 0),
             };
-            var paramsWithPage = params || {};
-            paramsWithPage['page[limit]'] = page.limit;
-            paramsWithPage['page[offset]'] = page.offset;
+            params['page[limit]'] = page.limit;
+            params['page[offset]'] = page.offset;
 
             return httpProxy
                 .get(
                     modelsService.getModelMetadata(modelType).url.all,
-                    paramsWithPage,
+                    params,
                     {
                         deduper: requestDeduper,
                         errorMessage:
@@ -44,7 +43,7 @@ function progressiveListLoader(httpProxy, modelsService, _) {
                 )
                 .then(function(resp) {
                     list = _.unionBy(list, resp.data, 'id');
-                    var loadedAll = resp.meta.total <= list.length;
+                    const loadedAll = resp.meta.total <= list.length;
 
                     return {
                         nextBatch: resp.data,

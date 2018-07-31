@@ -99,6 +99,9 @@ function modelsService(_) {
             include: 'bulk_create_jobs',
             url: generateUrls('/answer_sheets/bulk_create_jobs'),
         },
+        answer_sheet: {
+            url: generateUrls('/answer_sheets'),
+        },
     };
 
     var modelsService = {
