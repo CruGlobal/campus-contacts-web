@@ -9,7 +9,11 @@ angular.module('missionhubApp').component('surveyOverviewSettings', {
     template: template,
 });
 
-function surveyOverviewSettingsController(surveyService) {
+function surveyOverviewSettingsController(
+    surveyService,
+    confirmModalService,
+    tFilter,
+) {
     this.saveSurvey = _.throttle(
         () => {
             this.survey.title = this.surveyEdit.title;
@@ -17,7 +21,7 @@ function surveyOverviewSettingsController(surveyService) {
             this.survey.post_survey_message = this.surveyEdit.post_survey_message;
 
             //only send logo if updated
-            if (this.surveyEdit.logo) {
+            if (this.surveyEdit.logo !== undefined) {
                 this.survey.logo = this.surveyEdit.logo;
             }
 
@@ -74,5 +78,15 @@ function surveyOverviewSettingsController(surveyService) {
             },
             false,
         );
+    };
+
+    this.deleteImage = () => {
+        confirmModalService
+            .create(tFilter('surveys:settings:image_delete_confirm'))
+            .then(() => {
+                this.surveyEdit.logo_url = null;
+                this.surveyEdit.logo = null;
+                this.saveSurvey();
+            });
     };
 }

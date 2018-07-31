@@ -671,6 +671,8 @@ export default {
             success_message: 'Success Message',
             image: 'Image',
             image_upload: 'Upload Image',
+            image_delete: 'Delete Image',
+            image_delete_confirm: 'Are you sure you want to delete this image?',
         },
         keyword: {
             keyword: 'Keyword',
