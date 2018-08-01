@@ -53,7 +53,7 @@ function organizationOverviewService(
         getPersonCount: function(org) {
             return peopleScreenService.loadOrgPeopleCount(
                 org.id,
-                organizationOverviewPeopleService.buildListParams,
+                organizationOverviewPeopleService,
             );
         },
 
