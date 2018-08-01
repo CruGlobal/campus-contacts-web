@@ -47,37 +47,32 @@ function peopleScreenService(
                       },
                   );
         },
-
-        // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
-        // string expected by the API
-        buildOrderString: function(order) {
-            return order
-                .map(function(orderEntry) {
-                    return `${
-                        orderEntry.direction === 'desc' ? '-' : ''
-                    }${orderEntry.field}`;
-                })
-                .join(',');
-        },
         // Load an organization's people
         loadMoreOrgPeople: function(
             orgId,
             filters,
             order,
-            listLoader,
-            buildListParams,
+            loaderService,
+            surveyId,
         ) {
-            const requestParams = buildListParams(orgId, filters, order);
+            const requestParams = loaderService.buildListParams(
+                orgId,
+                filters,
+                order,
+                surveyId,
+            );
 
-            return listLoader.loadMore(requestParams).then(function(resp) {
-                // Load the assignments in parallel
-                peopleScreenService.loadAssignedTos(resp.nextBatch, orgId);
-                return resp;
-            });
+            return loaderService.listLoader
+                .loadMore(requestParams, loaderService.transformData)
+                .then(function(resp) {
+                    // Load the assignments in parallel
+                    peopleScreenService.loadAssignedTos(resp.nextBatch, orgId);
+                    return resp;
+                });
         },
 
-        loadOrgPeopleCount: function(orgId, buildListParams) {
-            const requestParams = buildListParams(orgId);
+        loadOrgPeopleCount: function(orgId, loaderService) {
+            const requestParams = loaderService.buildListParams(orgId);
             requestParams['page[limit]'] = 0;
 
             return httpProxy
@@ -106,7 +101,7 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(selection, order) {
+        exportPeople: function(selection, order, buildOrderString) {
             const filterParams = _.mapKeys(
                 personSelectionService.convertToFilters(selection),
                 function(value, key) {

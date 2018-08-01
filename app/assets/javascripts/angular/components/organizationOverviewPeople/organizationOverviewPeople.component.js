@@ -10,6 +10,5 @@ angular.module('missionhubApp').component('organizationOverviewPeople', {
 function organizationOverviewPeopleController(
     organizationOverviewPeopleService,
 ) {
-    this.listLoader = organizationOverviewPeopleService.listLoader;
-    this.buildListParams = organizationOverviewPeopleService.buildListParams;
+    this.loaderService = organizationOverviewPeopleService;
 }

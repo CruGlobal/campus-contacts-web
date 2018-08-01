@@ -1,69 +1,80 @@
 angular
     .module('missionhubApp')
-    .factory(
-        'organizationOverviewPeopleService',
-        organizationOverviewPeopleService,
-    );
+    .factory('surveyResponsesService', surveyResponsesService);
 
-function organizationOverviewPeopleService(
-    ProgressiveListLoader,
-    RequestDeduper,
-) {
+function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
     const listLoader = new ProgressiveListLoader({
-        modelType: 'person',
+        modelType: 'answer_sheet',
         requestDeduper: new RequestDeduper(),
         errorMessage:
             'error.messages.organization_overview_people.load_people_chunk',
     });
-    const buildListParams = (orgId, filters = {}, orderParam = []) => ({
+    const buildListParams = (
+        orgId,
+        filters = {},
+        orderParam = [],
+        surveyId = '',
+    ) => ({
         include: [
-            'phone_numbers',
-            'email_addresses',
-            'organizational_permissions',
-            'reverse_contact_assignments',
+            'person.phone_numbers',
+            'person.email_addresses',
+            'person.organizational_permissions',
+            'person.reverse_contact_assignments',
+            'answers',
         ].join(','),
         sort: buildOrderString(orderParam),
-        'filters[organization_ids]': orgId,
+        'filters[survey_ids]': surveyId,
         ...(filters.searchString
             ? {
-                  'filters[name]': filters.searchString,
+                  'filters[people][name]': filters.searchString,
               }
             : {}),
         ...(filters.includeArchived
             ? {
-                  'filters[include_archived]': true,
+                  'filters[people][include_archived]': true,
               }
             : {}),
         ...(filters.labels
             ? {
-                  'filters[label_ids]': filters.labels.join(','),
+                  'filters[people][label_ids]': filters.labels.join(','),
               }
             : {}),
         ...(filters.assignedTos
             ? {
-                  'filters[assigned_tos]': filters.assignedTos.join(','),
+                  'filters[people][assigned_tos]': filters.assignedTos.join(
+                      ',',
+                  ),
               }
             : {}),
         ...(filters.groups
             ? {
-                  'filters[group_ids]': filters.groups.join(','),
+                  'filters[people][group_ids]': filters.groups.join(','),
               }
             : {}),
     });
     // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
     // string expected by he API
     const buildOrderString = function(order) {
+        return '';
         return order
             .map(function(orderEntry) {
-                return `${
+                return `people.${
                     orderEntry.direction === 'desc' ? '-' : ''
                 }${orderEntry.field}`;
             })
             .join(',');
     };
+
+    const transformData = data => {
+        return {
+            ...data.person,
+        };
+    };
+
     return {
         listLoader,
         buildListParams,
         buildOrderString,
+        transformData,
     };
 }
