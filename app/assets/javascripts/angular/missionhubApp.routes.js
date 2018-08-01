@@ -376,7 +376,25 @@ angular
                     url: '/:personId',
                     modal: false,
                 }),
-            );
+            )
+            // .state({
+            //     name: 'app.ministries.ministry.survey',
+            //     url: '/survey/:surveyId',
+            //     // component: 'surveyOverview',
+            //     template: '<ui-view></ui-view>',
+            //     // resolve: {
+            //     //     survey: ($state, $transition$, routesService) => {
+            //     //         return routesService.getSurvey(
+            //     //             $transition$.params().surveyId,
+            //     //         );
+            //     //     },
+            //     // },
+            // })
+            .state({
+                name: 'app.surveyResponses',
+                url: '/survey/:surveyId/responses',
+                component: 'surveyResponses',
+            });
 
         // This is the default URL if the URL does not match any routes
         $urlServiceProvider.rules.otherwise('/people');

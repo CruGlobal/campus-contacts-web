@@ -14,8 +14,8 @@ angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,
     bindings: {
         org: '<',
-        listLoader: '<',
-        buildListParams: '<',
+        surveyId: '<',
+        loaderService: '<',
     },
     template: template,
 });
@@ -154,8 +154,8 @@ function peopleScreenController(
                 orgId,
                 this.filters,
                 getOrder(),
-                this.listLoader,
-                this.buildListParams,
+                this.loaderService,
+                this.surveyId,
             )
             .then(resp => {
                 const oldPeople = this.people;
