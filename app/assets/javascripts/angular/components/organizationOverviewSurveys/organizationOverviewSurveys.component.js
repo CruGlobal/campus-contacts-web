@@ -36,9 +36,10 @@ function organizationOverviewSurveysController(
     };
 
     this.getSurveyStats = () => {
-        _.forEach(this.organizationOverview.surveys, async survey => {
-            const statData = await surveyService.getStats(survey.id);
-            this.surveyStats[survey.id] = statData;
+        _.forEach(this.organizationOverview.surveys, survey => {
+            surveyService.getStats(survey.id).then(statData => {
+                this.surveyStats[survey.id] = statData;
+            });
         });
     };
 
