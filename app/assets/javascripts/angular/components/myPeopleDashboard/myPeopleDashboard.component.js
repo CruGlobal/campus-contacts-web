@@ -95,11 +95,7 @@ function myPeopleDashboardController(
         myPeopleDashboardService
             .loadOrganizations({ 'page[limit]': 100 })
             .then(function(organizations) {
-                vm.organizations = _.orderBy(
-                    organizations,
-                    'active_people_count',
-                    'desc',
-                );
+                vm.organizations = organizations;
 
                 vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(
                     vm.organizations,

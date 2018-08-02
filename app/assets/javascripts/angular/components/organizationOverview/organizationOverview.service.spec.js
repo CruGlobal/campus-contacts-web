@@ -1,5 +1,5 @@
 var organizationOverviewService, httpProxy, $rootScope, $q;
-var organizationOverviewPeopleService, organizationOverviewTeamService; // eslint-disable-line one-var
+var peopleScreenService, organizationOverviewTeamService; // eslint-disable-line one-var
 
 function asynchronous(fn) {
     return function(done) {
@@ -24,14 +24,14 @@ describe('organizationOverviewService', function() {
         _httpProxy_,
         _$rootScope_,
         _$q_,
-        _organizationOverviewPeopleService_,
+        _peopleScreenService_,
         _organizationOverviewTeamService_,
     ) {
         organizationOverviewService = _organizationOverviewService_;
         httpProxy = _httpProxy_;
         $rootScope = _$rootScope_;
         $q = _$q_;
-        organizationOverviewPeopleService = _organizationOverviewPeopleService_;
+        peopleScreenService = _peopleScreenService_;
         organizationOverviewTeamService = _organizationOverviewTeamService_;
 
         this.id = 123;
@@ -106,7 +106,7 @@ describe('organizationOverviewService', function() {
             'should load the person count',
             asynchronous(function() {
                 spyOn(
-                    organizationOverviewPeopleService,
+                    peopleScreenService,
                     'loadOrgPeopleCount',
                 ).and.returnValue($q.resolve(5));
 
@@ -114,7 +114,7 @@ describe('organizationOverviewService', function() {
                     .getPersonCount({ id: 1 })
                     .then(function(personCount) {
                         expect(
-                            organizationOverviewPeopleService.loadOrgPeopleCount,
+                            peopleScreenService.loadOrgPeopleCount,
                         ).toHaveBeenCalledWith(1);
                         expect(personCount).toBe(5);
                     });

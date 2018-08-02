@@ -63,6 +63,7 @@ export default {
         contact: {
             add: 'Add',
             assigned_to: 'Assigned To',
+            assigned_tos: 'Assignments',
             cru_status: 'Role',
             delete: 'Delete',
             edit: 'Edit',
@@ -70,6 +71,8 @@ export default {
             first_name: 'First',
             followup_status: 'Status',
             gender: 'Gender',
+            groups: 'Groups',
+            labels: 'Labels',
             last_name: 'Last',
             phone_number: 'Phone',
             primary_email: 'Primary',
@@ -436,7 +439,7 @@ export default {
                 },
                 header: 'Groups',
                 meeting_time: {
-                    monthly: 'Monthly on {{day}} {{time}}',
+                    monthly: 'Monthly on the {{day}} from {{time}}',
                     sporadically: 'Sporadically',
                     time_range: '{{start}} - {{end}}',
                     weekly: 'Weekly on {{day}}s {{time}}',

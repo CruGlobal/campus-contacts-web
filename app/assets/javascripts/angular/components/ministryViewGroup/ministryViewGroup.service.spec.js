@@ -6,20 +6,12 @@ var ministryViewGroupService, tFilter;
 describe('ministryViewGroupService service', function() {
     beforeEach(angular.mock.module('missionhubApp'));
 
-    beforeEach(
-        angular.mock.module(function($provide) {
-            $provide.value('tFilter', jasmine.createSpy('tFilter'));
-        }),
-    );
-
-    beforeEach(inject(function(_ministryViewGroupService_, _tFilter_) {
+    beforeEach(inject(function(_ministryViewGroupService_) {
         ministryViewGroupService = _ministryViewGroupService_;
-        tFilter = _tFilter_;
     }));
 
     describe('ministryViewGroupService.formatOrdinal', function() {
         it('should convert numbers to ordinal strings', function() {
-            tFilter.and.returnValue(['th', 'st', 'nd', 'rd']);
             expect(ministryViewGroupService.formatOrdinal(0)).toBe('0th');
             expect(ministryViewGroupService.formatOrdinal(1)).toBe('1st');
             expect(ministryViewGroupService.formatOrdinal(2)).toBe('2nd');
@@ -50,66 +42,36 @@ describe('ministryViewGroupService service', function() {
 
     describe('ministryViewGroupService.formatMeetingTime', function() {
         it('should format weekly meeting times', function() {
-            tFilter.and.returnValues('6:00 PM - 8:00 PM', 'Thursday', null);
-            ministryViewGroupService.formatMeetingTime({
-                meets: 'weekly',
-                meeting_day: 4,
-                start_time: 18 * 60 * 60 * 1000,
-                end_time: 20 * 60 * 60 * 1000,
-            });
-            expect(tFilter.calls.allArgs()).toEqual([
-                [
-                    'ministries.groups.meeting_time.time_range',
-                    { start: '6:00 PM', end: '8:00 PM' },
-                ],
-                ['date.day_names.4'],
-                [
-                    'ministries.groups.meeting_time.weekly',
-                    { time: '6:00 PM - 8:00 PM', day: 'Thursday' },
-                ],
-            ]);
+            expect(
+                ministryViewGroupService.formatMeetingTime({
+                    meets: 'weekly',
+                    meeting_day: 4,
+                    start_time: 18 * 60 * 60 * 1000,
+                    end_time: 20 * 60 * 60 * 1000,
+                }),
+            ).toEqual('Weekly on Thursdays 6:00 PM - 8:00 PM');
         });
 
         it('should format monthly meeting times', function() {
-            tFilter.and.returnValues(
-                '6:00 PM - 8:00 PM',
-                ['th', 'st', 'nd', 'rd'],
-                null,
-            );
-            ministryViewGroupService.formatMeetingTime({
-                meets: 'monthly',
-                meeting_day: 11,
-                start_time: 18 * 60 * 60 * 1000,
-                end_time: 20 * 60 * 60 * 1000,
-            });
-            expect(tFilter.calls.allArgs()).toEqual([
-                [
-                    'ministries.groups.meeting_time.time_range',
-                    { start: '6:00 PM', end: '8:00 PM' },
-                ],
-                ['ministries.groups.ordinal_suffixes'],
-                [
-                    'ministries.groups.meeting_time.monthly',
-                    { time: '6:00 PM - 8:00 PM', day: '11th' },
-                ],
-            ]);
+            expect(
+                ministryViewGroupService.formatMeetingTime({
+                    meets: 'monthly',
+                    meeting_day: 11,
+                    start_time: 18 * 60 * 60 * 1000,
+                    end_time: 20 * 60 * 60 * 1000,
+                }),
+            ).toEqual('Monthly on the 11th from 6:00 PM - 8:00 PM');
         });
 
         it('should format sporadic meeting times', function() {
-            tFilter.and.returnValues(' - ', null);
-            ministryViewGroupService.formatMeetingTime({
-                meets: 'sporadically',
-                meeting_day: null,
-                start_time: null,
-                end_time: null,
-            });
-            expect(tFilter.calls.allArgs()).toEqual([
-                [
-                    'ministries.groups.meeting_time.time_range',
-                    { start: '', end: '' },
-                ],
-                ['ministries.groups.meeting_time.sporadically'],
-            ]);
+            expect(
+                ministryViewGroupService.formatMeetingTime({
+                    meets: 'sporadically',
+                    meeting_day: null,
+                    start_time: null,
+                    end_time: null,
+                }),
+            ).toEqual('Sporadically');
         });
     });
 });

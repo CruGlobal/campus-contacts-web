@@ -1,0 +1,89 @@
+<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
+    <div class="people-list-filters">
+        <div class="header row padded">
+            <div class="column filters-header-column">
+                <span>{{'ministries.people.header' | t}}</span>
+            </div>
+        </div>
+        <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"
+                              organization-id="$ctrl.org.id">
+        </people-filters-panel>
+    </div>
+    <div class="people-list">
+        <div class="header row padded">
+            <div class="column select-column">
+                <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
+            </div>
+            <div class="column row" ng-repeat="column in $ctrl.columns"
+                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]"
+                 ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                <span>{{column.label | t}}</span>
+                <div class="normal-column sort-order-column">
+                    <ng-md-icon icon="arrow_downward" size="12"
+                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
+                    </ng-md-icon>
+                    <ng-md-icon icon="arrow_upwards" size="12"
+                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
+                    </ng-md-icon>
+                </div>
+                <icon-button ng-if="column.name === 'name'" icon="'person_add'" ui-sref=".new.defaultTab"
+                             ng-click="$event.stopPropagation()">
+                </icon-button>
+            </div>
+            <div class="column detail-column phone-number-column">
+                <icon-button icon="'phone'" disabled="true"></icon-button>
+            </div>
+            <div class="column detail-column button-column">
+                <icon-button icon="'email'" disabled="true"></icon-button>
+            </div>
+        </div>
+        <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
+            <img ng-src="{{$ctrl.closeIcon}}" ng-click="$ctrl.clearSelection()"
+                 ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}"/>
+            <div>{{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}</div>
+            <div class="space"></div>
+            <img ng-src="{{$ctrl.pencilIcon}}" ng-click="$ctrl.massEdit()"
+                 ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}">
+            <img ng-src="{{$ctrl.mergeIcon}}" ng-click="$ctrl.merge()"
+                 ng-class="{ disabled: !$ctrl.mergeable() }"
+                 ng-attr-title="{{ ($ctrl.mergeable() ? 'ministries.people.merge_hover' :
+                                          'ministries.people.merge_disabled_hover') | t }}"/>
+            <img ng-src="{{$ctrl.emailIcon}}" ng-click="$ctrl.sendMessage('email')"
+                 ng-attr-title="{{ 'ministries.people.email_hover' | t }}"/>
+            <img ng-src="{{$ctrl.messageIcon}}" ng-click="$ctrl.sendMessage('sms')"
+                 ng-attr-title="{{ 'ministries.people.sms_hover' | t }}"/>
+            <img ng-src="{{$ctrl.downloadCsvIcon}}" ng-click="$ctrl.exportPeople()"
+                 ng-attr-title="{{ 'ministries.people.export_hover' | t }}"/>
+            <img ng-src="{{$ctrl.transferIcon}}" ng-click="$ctrl.transferPeople()"
+                 ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
+                 ng-if="$ctrl.isAdmin"/>
+            <img ng-src="{{$ctrl.archiveIcon}}" ng-click="$ctrl.archivePeople()"
+                 ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"/>
+            <img ng-src="{{$ctrl.deleteIcon}}" ng-click="$ctrl.deletePeople()"
+                 ng-attr-title="{{ 'ministries.people.delete_hover' | t }}"/>
+        </div>
+        <div class="scroll-contain">
+            <div infinite-scroll="$ctrl.loadPersonPage()"
+                 infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+                 infinite-scroll-distance="0"
+                 infinite-scroll-container="'organization-overview-people .scroll-contain'"
+                 infinite-scroll-listen-for-event="checkInfiniteScroll"
+                 class="grid-content">
+                <ministry-view-person
+                    ng-repeat="person in $ctrl.people |
+                               orderBy:$ctrl.sortOrder.column.getSortKey:$ctrl.sortOrder.direction === 'desc'
+                               track by person.id"
+                    ng-class="{
+                        collapsed: ('app.ministries.ministry.people.person' | includedByState),
+                        active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
+                    selected="$ctrl.multiSelection[person.id]"
+                    person="person" organization-id="$ctrl.org.id">
+                </ministry-view-person>
+                <div ng-if="!$ctrl.loadedAll" class="row message-row">
+                    {{ 'general.loading_more' | t }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <ui-view></ui-view>
+</div>

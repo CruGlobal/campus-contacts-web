@@ -1,4 +1,4 @@
-describe('organizationOverviewPeople component', function() {
+describe('peopleScreen component', function() {
     beforeEach(angular.mock.module('missionhubApp'));
 
     var $ctrl, loggedInPerson;
@@ -7,15 +7,13 @@ describe('organizationOverviewPeople component', function() {
         loggedInPerson = jasmine.createSpyObj('loggedInPerson', ['isAdminAt']);
 
         $ctrl = $componentController(
-            'organizationOverviewPeople',
+            'peopleScreen',
             {
                 loggedInPerson: loggedInPerson,
             },
             {
-                organizationOverview: {
-                    org: {
-                        id: 1,
-                    },
+                org: {
+                    id: 1,
                 },
             },
         );
