@@ -52,7 +52,7 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
                 jasmine.any(String),
-                { include: 'groups,surveys' },
+                { include: 'groups,surveys,surveys.keyword' },
                 null,
                 jasmine.objectContaining({ errorMessage: jasmine.any(String) }),
             );
@@ -78,7 +78,7 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
                 jasmine.any(String),
-                { include: 'surveys' },
+                { include: 'surveys,surveys.keyword' },
                 null,
                 jasmine.objectContaining({ errorMessage: jasmine.any(String) }),
             );
