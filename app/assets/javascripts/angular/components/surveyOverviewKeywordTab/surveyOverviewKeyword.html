@@ -71,7 +71,8 @@
                     </p>
                 </div>
                 <div class="mt4">
-                    <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue" ng-click="$ctrl.requestKeyword()" ng-if="!$ctrl.survey.keyword.state">
+                    <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                            ng-click="$ctrl.requestKeyword()" ng-if="!$ctrl.survey.keyword.state">
                         {{'surveys:keyword.request' | t}}
                     </button>
                     <span class="status grey-dark bold f6 ttu mb2" ng-if="$ctrl.survey.keyword.state === 'requested'">

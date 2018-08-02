@@ -14,7 +14,7 @@
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">
                         {{'surveys:settings.welcome_message' | t}}
                     </label>
-                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="welcomeMessage"
+                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100" id="welcomeMessage"
                               name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
                               ng-model="$ctrl.surveyEdit.login_paragraph"
                               ng-change="$ctrl.saveSurvey()"></textarea>
@@ -23,7 +23,7 @@
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">
                         {{'surveys:settings.success_message' | t}}
                     </label>
-                    <textarea class="pa2 input-reset bg-white bw0 grey-darker ihshort w-100" id="successMessage"
+                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100" id="successMessage"
                               placeholder="{{'surveys:settings.success_message' | t}}"
                               ng-model="$ctrl.surveyEdit.post_survey_message"
                               ng-change="$ctrl.saveSurvey()"></textarea>

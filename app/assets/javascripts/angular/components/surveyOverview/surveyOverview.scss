@@ -8,6 +8,10 @@ keyword-request-modal {
         margin-bottom: 0;
     }
 
+    .white {
+        color: #ffffff;
+    }
+
     .header {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -699,10 +703,6 @@ keyword-request-modal {
         font-size: 1.3rem;
         color: $grey-darker;
         margin-right: 6.5rem;
-
-        &.white {
-            color: #ffffff;
-        }
 
         &:after {
             background: $gray-5;
