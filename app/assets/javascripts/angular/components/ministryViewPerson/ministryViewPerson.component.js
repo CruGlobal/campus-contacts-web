@@ -8,6 +8,7 @@ angular.module('missionhubApp').component('ministryViewPerson', {
         person: '<',
         organizationId: '<',
         selected: '=',
+        questions: '<',
     },
 });
 
