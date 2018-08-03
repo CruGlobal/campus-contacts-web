@@ -68,6 +68,13 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
     const transformData = data => {
         return {
             ...data.person,
+            answers: data.answers.reduce(
+                (acc, answer) => ({
+                    ...acc,
+                    [answer.question.id]: answer.value,
+                }),
+                {},
+            ),
         };
     };
 
