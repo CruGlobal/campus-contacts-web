@@ -302,6 +302,9 @@ export default {
                     loadQuestions:
                         'Error occurred while loading survey questions',
                 },
+                surveyResponses: {
+                    loadQuestions: 'Error loading survey questions',
+                },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
