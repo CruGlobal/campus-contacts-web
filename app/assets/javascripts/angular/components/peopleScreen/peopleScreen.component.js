@@ -14,8 +14,9 @@ angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,
     bindings: {
         org: '<',
-        surveyId: '<',
         loaderService: '<',
+        surveyId: '<',
+        questions: '<',
     },
     require: {
         organizationOverview: '^',
