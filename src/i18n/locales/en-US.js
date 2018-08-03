@@ -288,6 +288,9 @@ export default {
                         'Error occurred while loading the organization',
                     get_person: 'Error occurred while loading the person',
                 },
+                surveyResponses: {
+                    loadQuestions: 'Error loading survey questions',
+                },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
