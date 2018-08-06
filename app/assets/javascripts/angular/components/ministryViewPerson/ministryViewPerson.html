@@ -50,7 +50,7 @@
             <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
         </a>
     </div>
-    <div class="column" ng-repeat="question in $ctrl.questions">
+    <div class="column survey-column" ng-repeat="question in $ctrl.questions" title="{{$ctrl.person.answers[question.id]}}">
         {{$ctrl.person.answers[question.id]}}
     </div>
 </div>
