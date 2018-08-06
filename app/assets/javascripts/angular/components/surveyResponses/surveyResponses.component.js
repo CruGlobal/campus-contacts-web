@@ -2,10 +2,13 @@ import template from './surveyResponses.html';
 
 angular.module('missionhubApp').component('surveyResponses', {
     controller: surveyResponsesController,
+    bindings: {
+        survey: '<',
+    },
     template: template,
 });
 function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
-    this.surveyId = $state.params.surveyId;
+    this.orgId = $state.params.orgId;
     this.loaderService = surveyResponsesService;
 
     this.$onInit = async () => {
@@ -14,7 +17,7 @@ function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
 
     const loadQuestions = async () => {
         const { data } = await httpProxy.get(
-            `/surveys/${this.surveyId}/questions`,
+            `/surveys/${this.survey.id}/questions`,
             {},
             { errorMessage: 'error.messages.surveyResponses.loadQuestions' },
         );

@@ -21,11 +21,11 @@
         </thead>
         <tbody>
         <tr ng-repeat="(index, value) in $ctrl.csvData[0] track by $index">
-            <td class="ph3 pb1 pt3 gray-darkest">{{$ctrl.csvData[0][index]}}</td>
-            <td class="ph3 pb1 pt3 gray-darkest">{{$ctrl.csvData[$ctrl.currentPreviewRow][index]}}</td>
-            <td class="ph3 pb1 pt3 gray-darkest">
+            <td class="ph3 pb1 pt3 pivot-gray-darkest">{{$ctrl.csvData[0][index]}}</td>
+            <td class="ph3 pb1 pt3 pivot-gray-darkest">{{$ctrl.csvData[$ctrl.currentPreviewRow][index]}}</td>
+            <td class="ph3 pb1 pt3 pivot-gray-darkest">
                 <div class="dropdown dropdown-select w-100 mr2 icon-gray-darker" uib-dropdown>
-                    <a class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark dim" href=""
+                    <a class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--pivot-gray-dark dim" href=""
                        uib-dropdown-toggle>
                         {{$ctrl.columnMap[index] ?
                         ($ctrl.columnMap[index].column_title || $ctrl.columnMap[index].label) :
