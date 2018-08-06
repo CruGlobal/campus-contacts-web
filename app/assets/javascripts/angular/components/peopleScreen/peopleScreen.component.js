@@ -220,7 +220,7 @@ function peopleScreenController(
 
     const resetList = () => {
         this.people = [];
-        this.listLoader.reset();
+        this.loaderService.listLoader.reset();
         this.loadedAll = false;
         this.selectAllValue = false;
         this.multiSelection = {};
@@ -382,7 +382,7 @@ function peopleScreenController(
         // Update the people list and count
         this.people = remainingPeople;
         this.totalCount -= removedPeople.length;
-        this.listLoader.reset(this.people);
+        this.loaderService.listLoader.reset(this.people);
 
         // Update the people count shown in the people tab
         if (this.organizationOverview.people) {

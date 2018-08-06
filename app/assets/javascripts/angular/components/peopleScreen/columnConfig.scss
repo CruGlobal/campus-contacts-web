@@ -1,0 +1,31 @@
+%column-config {
+    .select-column {
+        width: 26px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    .name-column {
+        width: 160px;
+    }
+    .gender-column {
+        width: 40px;
+    }
+    .assigned-to-column {
+        width: 120px;
+    }
+    .status-column {
+        width: 162px;
+    }
+    .phone-number-column {
+        width: 120px;
+    }
+    .button-column {
+        width: 63px;
+    }
+    .survey-column {
+        width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
