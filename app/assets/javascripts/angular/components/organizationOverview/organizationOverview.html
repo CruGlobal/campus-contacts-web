@@ -44,7 +44,7 @@
                 <div class="dropdown-container">
                     <ul class="dropdown-content">
                         <li>
-                            <a ng-href="/imports/new?organization_id={{$ctrl.org.id}}">{{ 'contacts.index.import_contacts' | t }}</a>
+                            <a ui-sref="app.ministries.ministry.import({ orgId: $ctrl.org.id })">{{ 'contacts.index.import_contacts' | t }}</a>
                         </li>
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations?organization_id={{$ctrl.org.id}}">{{ 'nav.manage' | t }}</a>

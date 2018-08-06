@@ -1,0 +1,50 @@
+<div class="import-contact-form mt5 bb b--grey-medium pb3 mb4">
+    <h2 class="normal f3 fw6 blue">{{ 'contact_import:step_2.title' | t }}</h2>
+    <p class="lh-copy grey-darker f4 w-90">
+        {{ 'contact_import:step_2.instructions' | t }}
+    </p>
+    <table class="collapse w-100 f6 grey-darker">
+        <thead>
+        <tr class="bg-grey-light ttu tracked bold">
+            <th class="ph3 pv2">{{ 'contact_import:step_2.csv_column' | t }}</th>
+            <th class="ph3 pv2">{{ 'contact_import:step_2.preview' | t }}</th>
+            <th class="ph3 pv2">{{ 'contact_import:step_2.question_column' | t }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(index, value) in $ctrl.csvData[0]">
+            <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[0][index]}}</td>
+            <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[1][index]}}</td>
+            <td class="ph3 pb1 pt3 grey-darkest">
+                <div class="dropdown dropdown-select w-100 mr2 icon-grey-darker" uib-dropdown>
+                    <a class="f6 link db pa3 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark dim" href="" uib-dropdown-toggle>
+                        {{$ctrl.columnMap[index].attributes.column_title}}
+                    </a>
+                    <ul class="bg-white f6" uib-dropdown-menu>
+                        <li ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+                            ng-if="!$ctrl.questionInUse(question.id) && question.attributes.column_title">
+                            <a href="" ng-click="$ctrl.columnMap[index] = question">
+                                {{question.attributes.column_title}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="buttons">
+    <button ng-click="$ctrl.previous()"
+            class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-grey-darker">
+        {{ 'contact_import:back' | t }}
+    </button>
+    <button class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue" ng-class="{
+                'disabled o-30 dim': !$ctrl.canContinue()
+            }" ng-click="$ctrl.next({
+                columnMap: $ctrl.columnMap
+            })">
+        {{ 'contact_import:continue' | t }}
+    </button>
+</div>

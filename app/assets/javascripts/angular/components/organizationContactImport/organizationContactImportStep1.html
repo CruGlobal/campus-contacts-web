@@ -1,0 +1,49 @@
+<div class="import-contact-form mt5 bb b--grey-medium pb3 mb4">
+    <h2 class="normal f3 fw6 blue">
+        {{ 'contact_import:step_1.title' | t }}
+    </h2>
+    <p class="lh-copy grey-darker f4 w-90">
+        {{ 'contact_import:step_1.instructions' | t }}
+    </p>
+    <fieldset class="ba b--transparent ph0 mh0">
+        <div class="mt3">
+            <label class="grey-darker f5 mb2 db">
+                {{ 'contact_import:step_1.select_survey' | t }}
+            </label>
+            <div class="dropdown dropdown-select w-60 mr2" uib-dropdown>
+                <a class="f6 link db pa3 input-reset bg-white ba blue ttu fw6 w-100 br2 b--grey-dark dim" href="" uib-dropdown-toggle>
+                    {{$ctrl.selectedSurvey ? $ctrl.selectedSurvey.title : 'Select'}}
+                </a>
+                <ul class="bg-white f6" uib-dropdown-menu>
+                    <li ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+                        <a href="" ng-click="$ctrl.selectedSurvey = survey">{{survey.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt5">
+            <h3 class="normal f3 fw6 blue mb3">{{ 'contact_import:step_1.upload' | t }}</h3>
+            <div class="flex items-center">
+                <button class="f5 link ph5 pv3 mb2 dib white bold br-pill ttu tracked bg-blue" ng-class="{
+                            'disabled dim o-20': !$ctrl.selectedSurvey
+                        }" ng-click="$ctrl.selectFile()">
+                    {{ 'contact_import:step_1.select' | t }}
+                </button>
+
+                <span class="filename grey-darker f6 flex items-center" ng-if="$ctrl.selectedFile">
+                            <img alt="" class="mr2 ml3" ng-src="{{$ctrl.fileIcon}}" style="width:18px; height:24px;">
+                            {{$ctrl.selectedFile.name}}
+                        </span>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+<div class="buttons">
+    <button class="f5 link ph5 pv3 mb2 dib w-33 white fr bold br-pill ttu tracked bg-blue" ng-class="{
+                'disabled o-30 dim': !$ctrl.selectedFile
+            }" ng-click="$ctrl.next({
+                selectedSurvey: $ctrl.selectedSurvey,
+                selectedFile: $ctrl.selectedFile
+            })">{{ 'contact_import:continue' | t }}</button>
+</div>
