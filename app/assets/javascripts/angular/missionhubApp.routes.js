@@ -334,18 +334,6 @@ angular
                 },
             })
             .state({
-                name: 'app.ministries.ministry.survey',
-                url: '/survey/:surveyId',
-                component: 'surveyOverview',
-                resolve: {
-                    survey: ($state, $transition$, routesService) => {
-                        return routesService.getSurvey(
-                            $transition$.params().surveyId,
-                        );
-                    },
-                },
-            })
-            .state({
                 name: 'app.ministries.ministry.import',
                 url: '/import',
                 component: 'organizationContactImport',
@@ -407,22 +395,27 @@ angular
                 template: '<user-preferences></user-preferences>',
                 whiteBackground: true,
             })
-            // .state({
-            //     name: 'app.ministries.ministry.survey',
-            //     url: '/survey/:surveyId',
-            //     // component: 'surveyOverview',
-            //     template: '<ui-view></ui-view>',
-            //     // resolve: {
-            //     //     survey: ($state, $transition$, routesService) => {
-            //     //         return routesService.getSurvey(
-            //     //             $transition$.params().surveyId,
-            //     //         );
-            //     //     },
-            //     // },
-            // })
             .state({
-                name: 'app.surveyResponses',
-                url: '/survey/:surveyId/responses',
+                name: 'app.ministries.ministry.survey',
+                url: '/survey/:surveyId',
+                abstract: true,
+                template: '<ui-view></ui-view>',
+                resolve: {
+                    survey: ($state, $transition$, routesService) => {
+                        return routesService.getSurvey(
+                            $transition$.params().surveyId,
+                        );
+                    },
+                },
+            })
+            .state({
+                name: 'app.ministries.ministry.survey.manage',
+                url: '/',
+                component: 'surveyOverview',
+            })
+            .state({
+                name: 'app.ministries.ministry.survey.responses',
+                url: '/responses',
                 component: 'surveyResponses',
             });
 

@@ -1,1 +1,2 @@
-<people-screen org="{id: 728}" loader-service="$ctrl.loaderService" survey-id="$ctrl.organizationOverview.org" questions="$ctrl.questions"></people-screen>
+<survey-header survey="$ctrl.survey" previewBtn="false"></survey-header>
+<people-screen org="{id: $ctrl.orgId}" loader-service="$ctrl.loaderService" survey-id="$ctrl.survey.id" questions="$ctrl.questions"></people-screen>

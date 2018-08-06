@@ -4,7 +4,7 @@
     </div>
 
     <h2 class="normal f3 fw6 blue">{{ 'contact_import:step_3.title' | t }}</h2>
-    <p class="lh-copy grey-darker f4 w-90">
+    <p class="lh-copy pivot-grey-darker f4 w-90">
         {{ 'contact_import:step_3.instructions' | t : { count : ($ctrl.csvData.length | number) } }}
     </p>
     <fieldset class="ba b--transparent ph0 mt3">
@@ -18,7 +18,7 @@
         </div>
         <div class="flex justify-stretch mt3 w-60">
             <label class="dn" for="add-label">{{ 'contact_import:step_3.add_label' | t }}</label>
-            <input class="f6 link db pa3 input-reset bg-white ba grey-darker br2 b--grey-medium f-grow"
+            <input class="f6 link db pa3 input-reset bg-white ba pivot-grey-darker br2 b--grey-medium f-grow"
                    ng-model="$ctrl.newLabelName"
                    id="add-label" placeholder="{{ 'contact_import:step_3.add_label' | t }}" type="text">
             <button class="f5 link dim ph4 pv2 dib white bold br2 ttu tracked bg-blue ml2"
@@ -32,7 +32,7 @@
 
 <div class="buttons">
     <button ng-click="$ctrl.previous()"
-            class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-grey-darker"
+            class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-grey-darker"
             ng-class="{
                 'disabled o-30 dim': $ctrl.disableButtons
             }">

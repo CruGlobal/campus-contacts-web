@@ -50,6 +50,7 @@ $pivot-colors: (
     teal: $pivot-teal,
     orange: $pivot-orange,
     grey-dark: $grey-dark,
+    grey-darker: $grey-darker,
 );
 
 @each $name, $value in $pivot-colors {

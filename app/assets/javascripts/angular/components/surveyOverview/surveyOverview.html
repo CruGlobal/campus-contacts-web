@@ -1,20 +1,4 @@
-<div class="dashboard-subnav">
-    <div class="inner">
-        <organization-breadcrumbs></organization-breadcrumbs>
-    </div>
-</div>
-
-<div class="header">
-    <div class="pa3 fr">
-        <a class="f6 link dim ba ph4 pv3 mb2 dib white bold br2 dim ttu tracked"
-            ng-href="/survey_responses/new?preview=true&survey_id={{$ctrl.survey.id}}"
-            target="_blank">Preview</a>
-    </div>
-
-    <div class="survey-title-row">
-        <div class="survey-title">{{$ctrl.survey.title}}</div>
-    </div>
-
+<survey-header survey="$ctrl.survey" preview-btn="true">
     <div class="tabs">
         <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
              ng-click="$ctrl.activeTab = tab.id">
@@ -24,10 +8,7 @@
             <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">{{'surveys:questions.questions' | t}}</a>
         </div>
     </div>
-</div>
-<div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
-    <ui-view class="grid"></ui-view>
-</div>
+</survey-header>
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>

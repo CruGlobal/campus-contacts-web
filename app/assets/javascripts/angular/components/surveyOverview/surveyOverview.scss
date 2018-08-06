@@ -9,27 +9,6 @@ organization-contact-import {
         margin-bottom: 0;
     }
 
-    .white {
-        color: #fff !important;
-    }
-
-    .header {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .survey-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-
-        .survey-title {
-            color: $pivot-bright-blue;
-            font-size: 2em;
-        }
-    }
-
     /* Widths */
 
     $wrapper-fixed-width: 948px;
@@ -85,9 +64,6 @@ organization-contact-import {
 
     .grey-darkest {
         color: $grey-darkest;
-    }
-    .grey-darker {
-        color: $grey-darker;
     }
     .grey-dark {
         color: $grey-dark;
@@ -702,7 +678,6 @@ organization-contact-import {
         line-height: 3rem;
         vertical-align: middle;
         font-size: 1.3rem;
-        color: $grey-darker;
         margin-right: 6.5rem;
 
         &:after {

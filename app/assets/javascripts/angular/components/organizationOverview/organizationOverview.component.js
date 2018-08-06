@@ -32,8 +32,9 @@ function organizationOverviewController(
 
     vm.showOrgNav = () => {
         return (
-            $state.$current.name !== 'app.ministries.ministry.survey' &&
-            $state.$current.name !== 'app.ministries.ministry.import'
+            !$state.$current.name.startsWith(
+                'app.ministries.ministry.survey.',
+            ) && $state.$current.name !== 'app.ministries.ministry.import'
         );
     };
 
