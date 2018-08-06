@@ -287,6 +287,7 @@ export default {
                     get_organization:
                         'Error occurred while loading the organization',
                     get_person: 'Error occurred while loading the person',
+                    get_survey: 'Error occurred while getting survey data',
                 },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
@@ -332,6 +333,9 @@ export default {
             female: 'Female',
             male: 'Male',
             other: 'Other',
+            required: 'Required',
+            help: 'Help',
+            delete: 'Delete',
         },
         group: 'Group',
         groups: {
@@ -630,5 +634,116 @@ export default {
             transfer: 'Transfer {{contact_count}} Contact(s)',
         },
         weekly: 'Weekly',
+    },
+    surveyTab: {
+        createSurvey: 'Create Survey',
+        surveyName: 'Survey Name',
+        columns: {
+            survey: 'Survey',
+            contacts: 'Contacts',
+            unassigned: 'Unassigned',
+            uncontacted: 'Uncontacted',
+            keyword: 'Keyword',
+            link: 'Link',
+            status: 'Status',
+        },
+        status: {
+            live: 'Live',
+            off: 'Off',
+        },
+        menu: {
+            edit: 'Edit',
+            preview: 'Preview',
+            delete: 'Delete',
+            copy: 'Copy',
+            import: 'Import Survey Results',
+        },
+        errors: {
+            createSurvey: 'Error occurred while creating survey',
+            updateSurvey: 'Error occurred while updating survey',
+            deleteSurvey: 'Error occurred while deleting survey',
+            getStats: 'Error occurred while retrieving survey stats',
+        },
+    },
+    surveys: {
+        delete: {
+            confirm: 'Are you sure you want to delete this survey?',
+        },
+        settings: {
+            welcome_message: 'Welcome Message',
+            success_message: 'Success Message',
+            image: 'Image',
+            image_upload: 'Upload Image',
+            image_delete: 'Delete Image',
+            image_delete_confirm: 'Are you sure you want to delete this image?',
+        },
+        keyword: {
+            keyword: 'Keyword',
+            keyword_example: 'Example: Cookies',
+            instructions:
+                'Use at least 3 letters (no special characters/spaces)',
+            help:
+                'Choosing a keyword for your community or event enables you to have people fill out your survey questions via the web, interactive texting, and smartphones.\n' +
+                'They will text your keyword to the number 85005 and your survey questions will appear on their device. Note: The process of acquiring new keywords requires manual intervention.\n' +
+                'Once you request your keyword expect to wait up to 24 hours before we notify you via email that your keyword is approved and ready for use.',
+            purpose: 'Keyword Purpose',
+            purpose_instructions: 'What do you plan to use the keyword for?',
+            purpose_example: 'Example: Weekly Meeting',
+            response: 'Text Response',
+            response_instructions: 'Response must include {{ link }} exactly.',
+            response_help:
+                "When someone texts in the keyword, this is the message they will receive. The {{ link }} will automatically be replaced with a link to the survey. If you want to include a link to your specific website, don't include it here.",
+            response_example:
+                'Example: Thanks for taking our survey! Reply with “i” or press {{ link }} if you have a smartphone.',
+            request: 'Request Keyword',
+            requested: 'Keyword Requested',
+            requested_message:
+                'We will notify you within 24 hours by email if/when your keyword is approved and ready for use.',
+            errors: {
+                taken: 'This keyword is taken. Try another.',
+                requestKeyword: 'Error occurred while requesting a keyword',
+                deleteKeyword: 'Error occurred while deleting a keyword',
+            },
+            delete: {
+                confirm: 'Are you sure you want to delete this keyword?',
+            },
+        },
+        questions: {
+            questions: 'Questions',
+        },
+    },
+    contact_import: {
+        back: 'Back',
+        continue: 'Continue',
+        step_1: {
+            title: 'Select Survey and Upload CSV File',
+            select_survey: 'Select Survey',
+            instructions:
+                'Select a survey to import your contacts from the drop down menu below.\n' +
+                "Create a new survey if you don't have a survey to import contacts to.",
+            upload: 'Upload CSV File',
+            select: 'Select CSV File',
+        },
+        step_2: {
+            title: 'Match Columns',
+            instructions:
+                'Match the column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes.',
+            csv_column: 'CSV Column',
+            preview: 'Preview',
+            question_column: 'Question Column/Answer',
+        },
+        step_3: {
+            title: 'Add Labels to New Contacts',
+            instructions:
+                "You are almost ready to upload {{count}} new contacts! Use the list below to select any additional labels for these contact, or you can create a new one. When you're done, click Import.",
+            labels: 'Labels',
+            add_label: 'Add Label',
+        },
+        step_4: {
+            title: 'You Rock!',
+            instructions:
+                'Your CSV upload is now being processed. You will receive an email when it finishes.',
+            home: 'Take Me Home',
+        },
     },
 };

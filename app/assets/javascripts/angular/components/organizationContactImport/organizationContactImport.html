@@ -1,0 +1,36 @@
+<div class="bg-white">
+    <div class="panel-box mh2 w-75 center">
+        <header class="flex items-stretch" ng-if="$ctrl.activeStep <= 3">
+            <div class="w-100 items-end">
+                <h1 class="f2 normal blue">Import Contacts</h1>
+                <div class="progress flex items-center justify-center center">
+                    <div class="progress-step br-100 ba bw3 b--grey-light"
+                         ng-repeat="step in [1, 2, 3]" ng-class="{'bg-blue white': step === $ctrl.activeStep}">
+                        {{step}}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <organization-contact-import-step-1
+            next="$ctrl.next(selectedSurvey, selectedFile)"
+            selected-survey="$ctrl.selectedSurvey"
+            ng-if="$ctrl.activeStep === 1"></organization-contact-import-step-1>
+        <organization-contact-import-step-2
+            next="$ctrl.next(null, null, columnMap)"
+            previous="$ctrl.previous()"
+            selected-file="$ctrl.selectedFile"
+            selected-survey="$ctrl.selectedSurvey"
+            column-map="$ctrl.columnMap"
+            ng-if="$ctrl.activeStep === 2"></organization-contact-import-step-2>
+        <organization-contact-import-step-3
+            next="$ctrl.next()"
+            previous="$ctrl.previous()"
+            selected-file="$ctrl.selectedFile"
+            selected-survey="$ctrl.selectedSurvey"
+            column-map="$ctrl.columnMap"
+            ng-if="$ctrl.activeStep === 3"></organization-contact-import-step-3>
+        <organization-contact-import-step-4
+            ng-if="$ctrl.activeStep === 4"></organization-contact-import-step-4>
+    </div>
+</div>

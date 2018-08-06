@@ -79,6 +79,26 @@ function modelsService(_) {
         filter_stats: {
             url: generateUrls('/filter_stats'),
         },
+        survey: {
+            include: 'surveys',
+            url: generateUrls('/surveys'),
+        },
+        sms_keyword: {
+            include: 'sms_keywords',
+            url: generateUrls('/sms_keywords'),
+        },
+        survey_report: {
+            include: 'survey_reports',
+            url: generateUrls('/reports/survey'),
+        },
+        survey_questions: {
+            include: 'survey_questions',
+            url: generateUrls('/survey/questions'),
+        },
+        bulk_create_job: {
+            include: 'bulk_create_jobs',
+            url: generateUrls('/answer_sheets/bulk_create_jobs'),
+        },
     };
 
     var modelsService = {

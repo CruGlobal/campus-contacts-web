@@ -334,6 +334,11 @@ angular
                 },
             })
             .state({
+                name: 'app.ministries.ministry.import',
+                url: '/import',
+                component: 'organizationContactImport',
+            })
+            .state({
                 name: 'app.ministries.ministry.defaultTab',
                 redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab,
             })
