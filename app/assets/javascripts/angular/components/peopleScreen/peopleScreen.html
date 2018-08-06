@@ -36,7 +36,7 @@
             <div class="column detail-column button-column">
                 <icon-button icon="'email'" disabled="true"></icon-button>
             </div>
-            <div class="column" ng-repeat="question in $ctrl.questions">
+            <div class="column survey-column" ng-repeat="question in $ctrl.questions" title="{{question.label}}">
                 {{question.label}}
             </div>
         </div>
@@ -69,7 +69,7 @@
             <div infinite-scroll="$ctrl.loadPersonPage()"
                  infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
                  infinite-scroll-distance="0"
-                 infinite-scroll-container="'people-screen .scroll-contain'"
+                 infinite-scroll-container="'people-screen .people-list'"
                  infinite-scroll-listen-for-event="checkInfiniteScroll"
                  class="grid-content">
                 <ministry-view-person
