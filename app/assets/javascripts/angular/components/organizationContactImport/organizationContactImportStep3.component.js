@@ -20,6 +20,7 @@ angular.module('missionhubApp').component('organizationContactImportStep3', {
 
 function organizationContactImportStep3Controller(
     $scope,
+    $log,
     surveyService,
     labelsService,
 ) {
@@ -30,7 +31,7 @@ function organizationContactImportStep3Controller(
         Papa.parse(this.selectedFile, {
             complete: results => {
                 if (results.errors.length) {
-                    console.log('Parse errors:', results.errors);
+                    $log.error('CSV Parse errors', results.errors);
                 } else {
                     this.csvData = results.data;
                     this.disableButtons = false;
