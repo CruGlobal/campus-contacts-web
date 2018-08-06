@@ -18,6 +18,7 @@ function organizationContactImportStep1Controller($scope) {
     this.fileIcon = fileIcon;
 
     this.selectFile = () => {
+        // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.click();
