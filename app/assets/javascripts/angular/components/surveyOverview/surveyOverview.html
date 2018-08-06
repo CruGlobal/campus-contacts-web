@@ -24,10 +24,7 @@
             <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
         </div>
     </div>
-</div>
-<div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
-    <ui-view class="grid"></ui-view>
-</div>
+</survey-header>
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
