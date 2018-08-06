@@ -115,7 +115,7 @@ describe('organizationOverviewService', function() {
                     .then(function(personCount) {
                         expect(
                             peopleScreenService.loadOrgPeopleCount,
-                        ).toHaveBeenCalledWith(1);
+                        ).toHaveBeenCalledWith(1, jasmine.any(Object));
                         expect(personCount).toBe(5);
                     });
             }),

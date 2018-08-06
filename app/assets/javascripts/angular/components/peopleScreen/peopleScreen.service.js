@@ -113,7 +113,7 @@ function peopleScreenService(
                     7,
                 ), // strip off the "Bearer " part
                 organization_id: selection.orgId,
-                sort: peopleScreenService.buildOrderString(order),
+                sort: buildOrderString(order),
                 format: 'csv',
             });
             const queryString = _.map(params, function(value, key) {
