@@ -44,9 +44,11 @@
 </div>
 
 <div class="buttons">
-    <button class="f5 link ph5 pv3 mb2 dib w-33 white fr bold br-pill ttu tracked bg-blue" ng-class="{
+    <button class="f5 link ph5 pv3 mb2 dib w-33 white fr bold br-pill ttu tracked bg-blue"
+            ng-class="{
                 'disabled o-30 dim': !$ctrl.selectedFile
-            }" ng-click="$ctrl.next({
+            }"
+            ng-click="$ctrl.next({
                 selectedSurvey: $ctrl.selectedSurvey,
                 selectedFile: $ctrl.selectedFile
             })">{{ 'contact_import:continue' | t }}</button>
