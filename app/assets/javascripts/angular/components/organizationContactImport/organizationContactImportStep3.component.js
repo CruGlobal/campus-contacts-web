@@ -35,6 +35,8 @@ function organizationContactImportStep3Controller(
                     $log.error('CSV Parse errors', results.errors);
                 } else {
                     this.csvData = results.data;
+                    this.csvData.shift(); //remove header row
+
                     this.disableButtons = false;
                     $scope.$digest();
                 }
