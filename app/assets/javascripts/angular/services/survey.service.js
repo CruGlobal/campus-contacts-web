@@ -1,5 +1,6 @@
 function surveyService(
     envService,
+    $q,
     $http,
     httpProxy,
     modelsService,
@@ -8,15 +9,35 @@ function surveyService(
 ) {
     return {
         getSurveyQuestions: surveyId => {
-            return $http
-                .get(
-                    envService.read('apiUrl') +
-                        '/surveys/' +
-                        surveyId +
-                        '/questions',
-                )
-                .then(response => {
-                    return response.data.data;
+            return $q
+                .all([
+                    $http.get(
+                        envService.read('apiUrl') + '/surveys/predefined',
+                        {
+                            params: {
+                                include: 'active_survey_elements.question',
+                            },
+                        },
+                    ),
+                    $http.get(
+                        envService.read('apiUrl') +
+                            '/surveys/' +
+                            surveyId +
+                            '/questions',
+                    ),
+                ])
+                .then(questions => {
+                    const predefinedQuestions = questions[0].data.included;
+                    const predefinedQuestionIds = predefinedQuestions.map(
+                        question => question.id,
+                    );
+                    const surveyQuestions = questions[1].data.data.filter(
+                        question => {
+                            return !predefinedQuestionIds.includes(question.id);
+                        },
+                    );
+
+                    return predefinedQuestions.concat(surveyQuestions);
                 });
         },
 
