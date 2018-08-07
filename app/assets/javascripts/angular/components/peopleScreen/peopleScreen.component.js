@@ -58,6 +58,32 @@ function peopleScreenController(
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;
 
+    let unsubscribe = null;
+
+    this.$onInit = () => {
+        setColumns();
+        unsubscribe = $rootScope.$on('personCreated', (event, person) => {
+            onNewPerson(person);
+        });
+
+        this.sortOrder = _.clone(this.defaultSortOrder);
+        this.isAdmin = loggedInPerson.isAdminAt(this.org);
+
+        $scope.$watch(
+            '$ctrl.multiSelection',
+            () => {
+                this.selectedCount = selectedCount();
+            },
+            true,
+        );
+    };
+
+    this.$onDestroy = () => {
+        unsubscribe();
+    };
+
+    // TODO: could be called in constructor instead of $onInit once this.surveyId isn't needed anymore
+    const setColumns = () => {
     // Define the columns that can be selected as sort keys
     // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
     this.columns = [
@@ -65,7 +91,7 @@ function peopleScreenController(
             name: 'name',
             cssClass: 'name-column',
             label: 'ministries.people.name',
-            sortable: true,
+                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
             getSortKey: person => {
                 return [
                     (person.last_name || '').toLowerCase(),
@@ -78,7 +104,7 @@ function peopleScreenController(
             name: 'gender',
             cssClass: 'detail-column gender-column',
             label: 'ministries.people.gender',
-            sortable: true,
+                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
             getSortKey: person => {
                 return person.gender;
             },
@@ -94,7 +120,7 @@ function peopleScreenController(
             name: 'status',
             cssClass: 'detail-column status-column',
             label: 'ministries.people.status',
-            sortable: true,
+                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
             getSortKey: person => {
                 return personService.getFollowupStatus(person, this.org.id);
             },
@@ -106,29 +132,7 @@ function peopleScreenController(
         },
     ];
 
-    const defaultSortOrder = { column: this.columns[0], direction: 'asc' };
-
-    let unsubscribe = null;
-
-    this.$onInit = () => {
-        unsubscribe = $rootScope.$on('personCreated', (event, person) => {
-            onNewPerson(person);
-        });
-
-        this.sortOrder = _.clone(defaultSortOrder);
-        this.isAdmin = loggedInPerson.isAdminAt(this.org);
-
-        $scope.$watch(
-            '$ctrl.multiSelection',
-            () => {
-                this.selectedCount = selectedCount();
-            },
-            true,
-        );
-    };
-
-    this.$onDestroy = () => {
-        unsubscribe();
+        this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
     };
 
     const selectedCount = () => {
@@ -237,7 +241,7 @@ function peopleScreenController(
             if (this.sortOrder.direction === 'asc') {
                 this.sortOrder.direction = 'desc';
             } else if (this.sortOrder.direction === 'desc') {
-                this.sortOrder = _.clone(defaultSortOrder);
+                this.sortOrder = _.clone(this.defaultSortOrder);
             }
         } else {
             this.sortOrder.column = column;

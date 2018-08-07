@@ -55,7 +55,7 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
     // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
     // string expected by he API
     const buildOrderString = function(order) {
-        return '';
+        return ''; // TODO: remove once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
         return order
             .map(function(orderEntry) {
                 return `people.${
