@@ -6,7 +6,8 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
     template: template,
     bindings: {
         filtersChanged: '&',
-        organizationId: '=',
+        organizationId: '<',
+        surveyId: '<',
     },
 });
 
@@ -17,26 +18,21 @@ function peopleFiltersPanelController(
     peopleFiltersPanelService,
     _,
 ) {
-    var vm = this;
-    vm.filters = null;
-    vm.filtersApplied = false;
-    vm.groupOptions = [];
-    vm.assignmentOptions = [];
-    vm.labelOptions = [];
-    vm.labelFilterCollapsed = true;
-    vm.assignedToFilterCollapsed = true;
-    vm.groupFilterCollapsed = true;
+    this.filters = null;
+    this.filtersApplied = false;
+    this.groupOptions = [];
+    this.assignmentOptions = [];
+    this.labelOptions = [];
+    this.labelFilterCollapsed = true;
+    this.assignedToFilterCollapsed = true;
+    this.groupFilterCollapsed = true;
 
-    vm.resetFilters = resetFilters;
-
-    vm.$onInit = activate;
-
-    function activate() {
+    this.$onInit = () => {
         $scope.$watch(
             '$ctrl.filters',
-            function(newFilters, oldFilters) {
+            (newFilters, oldFilters) => {
                 if (!_.isEqual(newFilters, oldFilters)) {
-                    vm.filtersApplied = peopleFiltersPanelService.filtersHasActive(
+                    this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
                         getNormalizedFilters(),
                     );
 
@@ -46,38 +42,37 @@ function peopleFiltersPanelController(
             true,
         );
 
-        vm.resetFilters();
+        this.resetFilters();
 
         loadFilterStats();
 
-        $scope.$on('massEditApplied', function() {
-            loadFilterStats();
-        });
-    }
+        $scope.$on('massEditApplied', loadFilterStats);
+    };
 
-    function resetFilters() {
-        vm.filters = {
+    this.resetFilters = () => {
+        this.filters = {
             searchString: '',
             labels: {},
             assignedTos: {},
             groups: {},
             includeArchived: false,
         };
-    }
+    };
 
     // Send the filters to this component's parent via the filtersChanged binding
-    function sendFilters() {
-        vm.filtersChanged({ filters: getNormalizedFilters() });
-    }
+    const sendFilters = () => {
+        this.filtersChanged({ filters: getNormalizedFilters() });
+    };
 
-    function loadFilterStats() {
+    const loadFilterStats = () => {
         return httpProxy
             .get(
                 modelsService
                     .getModelMetadata('filter_stats')
-                    .url.single('people'),
+                    .url.single(this.surveyId ? 'survey' : 'people'),
                 {
-                    organization_id: vm.organizationId,
+                    organization_id: this.organizationId,
+                    survey_id: this.surveyId,
                     include_unassigned: true,
                 },
                 {
@@ -86,44 +81,44 @@ function peopleFiltersPanelController(
                 },
             )
             .then(httpProxy.extractModel)
-            .then(function(stats) {
-                vm.labelOptions = stats.labels;
-                vm.assignmentOptions = stats.assigned_tos;
-                vm.groupOptions = stats.groups;
+            .then(stats => {
+                this.labelOptions = stats.labels;
+                this.assignmentOptions = stats.assigned_tos;
+                this.groupOptions = stats.groups;
 
                 // Restrict the active filters to currently valid options
                 // A filter could include a non-existent label, for example, if people were edited so that no one
                 // has that label anymore
-                vm.filters.labels = _.pick(
-                    vm.filters.labels,
-                    _.map(vm.labelOptions, 'label_id'),
+                this.filters.labels = _.pick(
+                    this.filters.labels,
+                    _.map(this.labelOptions, 'label_id'),
                 );
-                vm.filters.assignedTos = _.pick(
-                    vm.filters.assignedTos,
-                    _.map(vm.assignmentOptions, 'person_id'),
+                this.filters.assignedTos = _.pick(
+                    this.filters.assignedTos,
+                    _.map(this.assignmentOptions, 'person_id'),
                 );
-                vm.filters.groups = _.pick(
-                    vm.filters.groups,
-                    _.map(vm.groupOptions, 'group_id'),
+                this.filters.groups = _.pick(
+                    this.filters.groups,
+                    _.map(this.groupOptions, 'group_id'),
                 );
             });
-    }
+    };
 
     // Return the an array of an dictionary's keys that have a truthy value
-    function getTruthyKeys(dictionary) {
+    const getTruthyKeys = dictionary => {
         return _.chain(dictionary)
             .pickBy()
             .keys()
             .value();
-    }
+    };
 
-    function getNormalizedFilters() {
+    const getNormalizedFilters = () => {
         return {
-            searchString: vm.filters.searchString,
-            includeArchived: vm.filters.includeArchived,
-            labels: getTruthyKeys(vm.filters.labels),
-            assignedTos: getTruthyKeys(vm.filters.assigned_tos),
-            groups: getTruthyKeys(vm.filters.groups),
+            searchString: this.filters.searchString,
+            includeArchived: this.filters.includeArchived,
+            labels: getTruthyKeys(this.filters.labels),
+            assignedTos: getTruthyKeys(this.filters.assigned_tos),
+            groups: getTruthyKeys(this.filters.groups),
         };
-    }
+    };
 }
