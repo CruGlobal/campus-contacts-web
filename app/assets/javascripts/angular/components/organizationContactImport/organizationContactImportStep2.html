@@ -47,9 +47,11 @@
             class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-grey-darker">
         {{ 'contact_import:back' | t }}
     </button>
-    <button class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue" ng-class="{
+    <button class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
+            ng-class="{
                 'disabled o-30 dim': !$ctrl.canContinue()
-            }" ng-click="$ctrl.next({
+            }"
+            ng-click="$ctrl.next({
                 columnMap: $ctrl.columnMap
             })">
         {{ 'contact_import:continue' | t }}
