@@ -119,24 +119,24 @@ function organizationContactImportStep3Controller(
                             id: this.selectedSurvey.id,
                         },
                     },
-                },
-                answers: {
-                    data: [],
-                },
-                organizational_labels: {
-                    data: [],
+                    answers: {
+                        data: [],
+                    },
+                    organizational_labels: {
+                        data: [],
+                    },
                 },
             };
 
             _.forEach(answerIds, answerId => {
-                answerSheet.answers.data.push({
+                answerSheet.relationships.answers.data.push({
                     type: 'answer',
                     id: answerId,
                 });
             });
 
             _.forEach(labelIds, labelId => {
-                answerSheet.organizational_labels.data.push({
+                answerSheet.relationships.organizational_labels.data.push({
                     type: 'organizational_label',
                     id: labelId,
                 });
