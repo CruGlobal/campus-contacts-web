@@ -19,7 +19,7 @@
                 <div class="dropdown dropdown-select w-100 mr2 icon-grey-darker" uib-dropdown>
                     <a class="f6 link db pa3 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark dim" href="" uib-dropdown-toggle>
                         {{$ctrl.columnMap[index] ?
-                            ($ctrl.columnMap[index].attributes.column_title || $ctrl.columnMap[index].attributes.label) :
+                            ($ctrl.columnMap[index].column_title || $ctrl.columnMap[index].label) :
                             ('contact_import:step_2.do_not_import' | t)}}
                     </a>
                     <ul class="bg-white f6" uib-dropdown-menu>
@@ -29,9 +29,9 @@
                             </a>
                         </li>
                         <li ng-repeat="question in $ctrl.surveyQuestions track by question.id"
-                            ng-if="!$ctrl.questionInUse(question.id) && (question.attributes.column_title || question.attributes.label)">
+                            ng-if="!$ctrl.questionInUse(question.id) && (question.column_title || question.label)">
                             <a href="" ng-click="$ctrl.columnMap[index] = question">
-                                {{question.attributes.column_title || question.attributes.label}}
+                                {{question.column_title || question.label}}
                             </a>
                         </li>
                     </ul>
