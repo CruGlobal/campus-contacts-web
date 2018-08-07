@@ -1,6 +1,6 @@
 import template from './organizationContactImportStep1.html';
 
-import fileIcon from '../../../../images/icon-file.svg';
+import fileIcon from '../../../../images/icons/icon-file.svg';
 
 angular.module('missionhubApp').component('organizationContactImportStep1', {
     require: {
