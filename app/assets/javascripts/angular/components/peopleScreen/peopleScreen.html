@@ -18,7 +18,7 @@
                  ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]"
                  ng-click="column.sortable && $ctrl.setSortColumn(column)">
                 <span>{{column.label | t}}</span>
-                <div class="normal-column sort-order-column">
+                <div class="normal-column sort-order-column" ng-if="column.sortable">
                     <ng-md-icon icon="arrow_downward" size="12"
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
                     </ng-md-icon>
