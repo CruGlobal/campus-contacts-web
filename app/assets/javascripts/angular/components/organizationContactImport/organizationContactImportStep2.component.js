@@ -3,9 +3,6 @@ import * as Papa from 'papaparse';
 import _ from 'lodash';
 
 angular.module('missionhubApp').component('organizationContactImportStep2', {
-    require: {
-        organizationOverview: '^',
-    },
     bindings: {
         next: '&',
         previous: '&',

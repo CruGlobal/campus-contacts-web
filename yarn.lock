@@ -7276,6 +7276,10 @@ pako@~0.2.0:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"
 
+papaparse@^4.5.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.6.0.tgz#4e3b8d6bf9f7900da437912794ec292207526867"
+
 parallel-transform@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.1.0.tgz#d410f065b05da23081fcd10f28854c29bda33b06"

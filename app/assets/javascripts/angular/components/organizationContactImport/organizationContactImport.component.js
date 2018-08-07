@@ -14,6 +14,11 @@ function organizationContactImportController() {
     this.columnMap = {};
     this.activeStep = 1;
 
+    this.$onInit = () => {
+        this.org = this.organizationOverview.org;
+        this.surveys = this.organizationOverview.surveys;
+    };
+
     this.next = (selectedSurvey, selectedFile, columnMap) => {
         if (selectedSurvey) {
             this.selectedSurvey = selectedSurvey;

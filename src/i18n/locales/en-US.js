@@ -747,5 +747,9 @@ export default {
                 'Your CSV upload is now being processed. You will receive an email when it finishes.',
             home: 'Take Me Home',
         },
+        errors: {
+            bulkImport:
+                'Error occurred while importing contacts from your CSV file',
+        },
     },
 };
