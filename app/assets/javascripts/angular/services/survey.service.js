@@ -11,33 +11,39 @@ function surveyService(
         getSurveyQuestions: surveyId => {
             return $q
                 .all([
-                    $http.get(
-                        envService.read('apiUrl') + '/surveys/predefined',
+                    httpProxy.get(
+                        '/surveys/predefined',
                         {
-                            params: {
-                                include: 'active_survey_elements.question',
-                            },
+                            include: 'active_survey_elements.question',
+                        },
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
                         },
                     ),
-                    $http.get(
-                        envService.read('apiUrl') +
-                            '/surveys/' +
-                            surveyId +
-                            '/questions',
+                    httpProxy.get(
+                        `/surveys/${surveyId}/questions`,
+                        {},
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
+                        },
                     ),
                 ])
-                .then(questions => {
-                    const predefinedQuestions = questions[0].data.included;
+                .then(([predefinedSurvey, surveyQuestions]) => {
+                    const predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+                        element => element.question,
+                    );
                     const predefinedQuestionIds = predefinedQuestions.map(
                         question => question.id,
                     );
-                    const surveyQuestions = questions[1].data.data.filter(
+                    const filteredSurveyQuestions = surveyQuestions.data.filter(
                         question => {
                             return !predefinedQuestionIds.includes(question.id);
                         },
                     );
 
-                    return predefinedQuestions.concat(surveyQuestions);
+                    return [...predefinedQuestions, ...filteredSurveyQuestions];
                 });
         },
 

@@ -289,6 +289,10 @@ export default {
                     get_person: 'Error occurred while loading the person',
                     get_survey: 'Error occurred while getting survey data',
                 },
+                surveys: {
+                    loadQuestions:
+                        'Error occurred while loading survey questions',
+                },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
