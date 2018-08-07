@@ -718,9 +718,10 @@ export default {
         step_1: {
             title: 'Select Survey and Upload CSV File',
             select_survey: 'Select Survey',
+            create_survey: 'Create a new survey',
             instructions:
-                'Select a survey to import your contacts from the drop down menu below.\n' +
-                "Create a new survey if you don't have a survey to import contacts to.",
+                'Select a survey to import your contacts from the drop down menu below.',
+            instructions_b: "if you don't have a survey to import contacts to.",
             upload: 'Upload CSV File',
             select: 'Select CSV File',
         },
@@ -731,6 +732,7 @@ export default {
             csv_column: 'CSV Column',
             preview: 'Preview',
             question_column: 'Question Column/Answer',
+            do_not_import: 'Do Not Import',
         },
         step_3: {
             title: 'Add Labels to New Contacts',

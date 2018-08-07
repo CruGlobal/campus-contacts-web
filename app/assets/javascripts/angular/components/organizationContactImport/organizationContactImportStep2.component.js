@@ -36,6 +36,12 @@ function organizationContactImportStep2Controller($scope, surveyService) {
             });
     };
 
+    this.doNotImportColumn = index => {
+        if (this.columnMap[index]) {
+            delete this.columnMap[index];
+        }
+    };
+
     this.questionInUse = questionId => {
         return _.includes(_.map(this.columnMap, 'id'), questionId);
     };
