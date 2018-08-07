@@ -13,6 +13,8 @@
         </header>
 
         <organization-contact-import-step-1
+            org="$ctrl.org"
+            surveys="$ctrl.surveys"
             next="$ctrl.next(selectedSurvey, selectedFile)"
             selected-survey="$ctrl.selectedSurvey"
             ng-if="$ctrl.activeStep === 1"></organization-contact-import-step-1>
@@ -24,6 +26,7 @@
             column-map="$ctrl.columnMap"
             ng-if="$ctrl.activeStep === 2"></organization-contact-import-step-2>
         <organization-contact-import-step-3
+            org="$ctrl.org"
             next="$ctrl.next()"
             previous="$ctrl.previous()"
             selected-file="$ctrl.selectedFile"
@@ -31,6 +34,7 @@
             column-map="$ctrl.columnMap"
             ng-if="$ctrl.activeStep === 3"></organization-contact-import-step-3>
         <organization-contact-import-step-4
+            org="$ctrl.org"
             ng-if="$ctrl.activeStep === 4"></organization-contact-import-step-4>
     </div>
 </div>

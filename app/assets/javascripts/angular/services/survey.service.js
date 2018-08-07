@@ -175,7 +175,7 @@ function surveyService(
                     modelsService.getModelMetadata('bulk_create_job').url.all,
                     payload,
                     {
-                        errorMessage: 'surveyTab:errors.getStats',
+                        errorMessage: 'contact_import:errors.bulkImport',
                     },
                 )
                 .then(httpProxy.extractModels);

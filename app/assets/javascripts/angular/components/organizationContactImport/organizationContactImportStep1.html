@@ -4,7 +4,7 @@
     </h2>
     <p class="lh-copy grey-darker f4 w-90">
         {{ 'contact_import:step_1.instructions' | t }}
-        <a ng-href="/surveys?organization_id={{$ctrl.organizationOverview.org.id}}" class="blue-light">
+        <a ng-href="/surveys?organization_id={{$ctrl.org.id}}" class="blue-light">
             {{ 'contact_import:step_1.create_survey' | t }}
         </a>
         {{ 'contact_import:step_1.instructions_b' | t }}
@@ -19,7 +19,7 @@
                     {{$ctrl.selectedSurvey ? $ctrl.selectedSurvey.title : 'Select'}}
                 </a>
                 <ul class="bg-white f6" uib-dropdown-menu>
-                    <li ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+                    <li ng-repeat="survey in $ctrl.surveys | orderBy: 'title' track by survey.id">
                         <a href="" ng-click="$ctrl.selectedSurvey = survey">{{survey.title}}</a>
                     </li>
                 </ul>

@@ -2,10 +2,9 @@ import template from './organizationContactImportStep4.html';
 import checkIcon from '../../../../images/icons/icon-check.svg';
 
 angular.module('missionhubApp').component('organizationContactImportStep4', {
-    require: {
-        organizationOverview: '^',
+    bindings: {
+        org: '<',
     },
-    bindings: {},
     template: template,
     controller: organizationContactImportStep4Controller,
 });

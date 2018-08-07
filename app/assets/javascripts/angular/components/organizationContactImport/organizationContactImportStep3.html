@@ -7,7 +7,7 @@
         <legend class="blue ttu tracked f5 mb3 db">{{ 'contact_import:step_3.labels' | t }}</legend>
         <div class="checkbox-panel pa4 shadow-2 br2 w-60">
             <div class="flex items-center mb2 pb1 checkbox-wrapper checkbox-small"
-                ng-repeat="label in $ctrl.organizationOverview.org.labels">
+                ng-repeat="label in $ctrl.org.labels">
                 <input class="mr2" id="check{{label.id}}" type="checkbox" ng-model="$ctrl.contactLabels[label.id]">
                 <label class="lh-copy" for="check{{label.id}}">{{label.name}}</label>
             </div>
