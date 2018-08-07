@@ -24,6 +24,7 @@ function organizationContactImportStep3Controller(
     surveyService,
     labelsService,
 ) {
+    this.contactLabels = {};
     this.disableButtons = true;
 
     this.$onInit = () => {
@@ -48,6 +49,7 @@ function organizationContactImportStep3Controller(
         label.name = labelName;
 
         labelsService.saveLabel(label).then(newLabel => {
+            this.contactLabels[newLabel.id] = true;
             this.newLabelName = '';
         });
     };
