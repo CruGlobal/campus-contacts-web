@@ -340,6 +340,7 @@ export default {
             female: 'Female',
             male: 'Male',
             other: 'Other',
+            none: 'None',
             required: 'Required',
             help: 'Help',
             delete: 'Delete',
@@ -604,6 +605,12 @@ export default {
             },
             labels: {
                 title: 'Labels',
+            },
+            status: {
+                title: 'Status',
+            },
+            gender: {
+                title: 'Gender',
             },
             sidebar: {
                 include_archived: 'Include archived contacts',
