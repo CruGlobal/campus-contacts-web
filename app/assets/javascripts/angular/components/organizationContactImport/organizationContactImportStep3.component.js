@@ -152,7 +152,12 @@ function organizationContactImportStep3Controller(
                 this.next();
             },
             response => {
-                this.importErrors = response.data.errors[0].detail.bulk_data;
+                const {
+                    data: {
+                        errors: [{ detail: { bulk_data } = [] } = {}] = [],
+                    } = {},
+                } = response;
+                this.importErrors = bulk_data;
                 this.disableButtons = false;
             },
         );
