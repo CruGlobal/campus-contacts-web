@@ -51,6 +51,16 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
                   'filters[people][group_ids]': filters.groups.join(','),
               }
             : {}),
+        ...(filters.statuses
+            ? {
+                  'filters[people][statuses]': filters.statuses.join(','),
+              }
+            : {}),
+        ...(filters.genders
+            ? {
+                  'filters[people][genders]': filters.genders.join(','),
+              }
+            : {}),
     });
     // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
     // string expected by he API

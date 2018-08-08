@@ -48,6 +48,40 @@
         </accordion-content>
     </accordion>
 
+    <accordion ng-if="$ctrl.surveyId" collapsed="$ctrl.statusFilterCollapsed" accordion-disabled="!$ctrl.statusOptions.length > 0"
+               class="filter-row filter-groups">
+        <accordion-header>
+            <span ng-click="$ctrl.statusFilterCollapsed = !$ctrl.statusFilterCollapsed">
+                {{'search.status.title' | t}}
+            </span>
+            <accordion-toggle></accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="statusOption in $ctrl.statusOptions" class="filter-option">
+                <input type="checkbox" ng-model="$ctrl.filters.statuses[statusOption.followup_status]">
+                <span class="filter-option-name">{{ 'followup_status.' + statusOption.followup_status | t }}</span>
+                <span class="filter-option-count">{{ statusOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
+
+    <accordion ng-if="$ctrl.surveyId" collapsed="$ctrl.genderFilterCollapsed" accordion-disabled="!$ctrl.genderOptions.length > 0"
+               class="filter-row filter-groups">
+        <accordion-header>
+            <span ng-click="$ctrl.genderFilterCollapsed = !$ctrl.genderFilterCollapsed">
+                {{'search.gender.title' | t}}
+            </span>
+            <accordion-toggle></accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="genderOption in $ctrl.genderOptions" class="filter-option">
+                <input type="checkbox" ng-model="$ctrl.filters.genders[genderOption.gender]">
+                <span class="filter-option-name">{{ 'general.' + (genderOption.gender | lowercase) | t }}</span>
+                <span class="filter-option-count">{{ genderOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
+
     <accordion collapsed="$ctrl.groupFilterCollapsed" accordion-disabled="!$ctrl.groupOptions.length > 0"
                class="filter-row filter-groups">
         <accordion-header>
