@@ -1,4 +1,8 @@
 <div class="import-contact-form mt5 bb b--grey-medium pb3 mb4">
+    <div class="error red f6 flex items-center mb3" ng-if="$ctrl.importErrors.length">
+        <div ng-repeat="error in $ctrl.importErrors">{{error}}</div>
+    </div>
+
     <h2 class="normal f3 fw6 blue">{{ 'contact_import:step_3.title' | t }}</h2>
     <p class="lh-copy grey-darker f4 w-90">
         {{ 'contact_import:step_3.instructions' | t : { count : ($ctrl.csvData.length | number) } }}

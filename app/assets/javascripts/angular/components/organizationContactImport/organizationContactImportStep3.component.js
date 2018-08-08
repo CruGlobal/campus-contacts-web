@@ -146,11 +146,13 @@ function organizationContactImportStep3Controller(
         });
 
         this.disableButtons = true;
+        this.importErrors = [];
         surveyService.importContacts(postData).then(
             () => {
                 this.next();
             },
-            () => {
+            response => {
+                this.importErrors = response.data.errors[0].detail.bulk_data;
                 this.disableButtons = false;
             },
         );
