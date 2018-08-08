@@ -23,9 +23,13 @@ function peopleFiltersPanelController(
     this.groupOptions = [];
     this.assignmentOptions = [];
     this.labelOptions = [];
+    this.statusOptions = [];
+    this.genderOptions = [];
     this.labelFilterCollapsed = true;
     this.assignedToFilterCollapsed = true;
     this.groupFilterCollapsed = true;
+    this.statusFilterCollapsed = true;
+    this.genderFilterCollapsed = true;
 
     this.$onInit = () => {
         $scope.$watch(
@@ -85,6 +89,8 @@ function peopleFiltersPanelController(
                 this.labelOptions = stats.labels;
                 this.assignmentOptions = stats.assigned_tos;
                 this.groupOptions = stats.groups;
+                this.statusOptions = stats.statuses;
+                this.genderOptions = stats.genders;
 
                 // Restrict the active filters to currently valid options
                 // A filter could include a non-existent label, for example, if people were edited so that no one
@@ -119,6 +125,8 @@ function peopleFiltersPanelController(
             labels: getTruthyKeys(this.filters.labels),
             assignedTos: getTruthyKeys(this.filters.assigned_tos),
             groups: getTruthyKeys(this.filters.groups),
+            statuses: getTruthyKeys(this.filters.statuses),
+            genders: getTruthyKeys(this.filters.genders),
         };
     };
 }
