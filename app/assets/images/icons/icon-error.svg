@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Master" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Import-Contacts-3.1" transform="translate(-598.000000, -644.000000)">
+            <g id="Group-3" transform="translate(598.000000, 644.000000)">
+                <rect id="Rectangle-6-Copy-15" fill="#FF5532" x="0" y="0" width="24" height="24" rx="12"></rect>
+                <path d="M17.25,11.25 L12.75,11.25 L12.75,6.75 C12.75,6.336 12.414,6 12,6 C11.586,6 11.25,6.336 11.25,6.75 L11.25,11.25 L6.75,11.25 C6.336,11.25 6,11.586 6,12 C6,12.414 6.336,12.75 6.75,12.75 L11.25,12.75 L11.25,17.25 C11.25,17.664 11.586,18 12,18 C12.414,18 12.75,17.664 12.75,17.25 L12.75,12.75 L17.25,12.75 C17.664,12.75 18,12.414 18,12 C18,11.586 17.664,11.25 17.25,11.25 Z" id="Reveal-Copy-9" fill="#FFFFFF" transform="translate(12.000000, 12.000000) rotate(45.000000) translate(-12.000000, -12.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

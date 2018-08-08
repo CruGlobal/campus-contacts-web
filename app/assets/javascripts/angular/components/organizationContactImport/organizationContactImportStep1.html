@@ -33,11 +33,15 @@
                         }" ng-click="$ctrl.selectFile()">
                     {{ 'contact_import:step_1.select' | t }}
                 </button>
+                <span class="error red f6 flex items-center" ng-if="$ctrl.fileError">
+                    <img class="mr2 ml3" ng-src="{{$ctrl.errorIcon}}" style="width:24px; height:24px;">
+                    {{ 'contact_import:step_1.file_error' | t }}
+                </span>
 
                 <span class="filename grey-darker f6 flex items-center" ng-if="$ctrl.selectedFile">
-                            <img alt="" class="mr2 ml3" ng-src="{{$ctrl.fileIcon}}" style="width:18px; height:24px;">
-                            {{$ctrl.selectedFile.name}}
-                        </span>
+                    <img class="mr2 ml3" ng-src="{{$ctrl.fileIcon}}" style="width:18px; height:24px;">
+                    {{$ctrl.selectedFile.name}}
+                </span>
             </div>
         </div>
     </fieldset>

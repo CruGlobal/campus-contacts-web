@@ -1,6 +1,7 @@
 import template from './organizationContactImportStep1.html';
 
 import fileIcon from '../../../../images/icons/icon-file.svg';
+import errorIcon from '../../../../images/icons/icon-error.svg';
 
 angular.module('missionhubApp').component('organizationContactImportStep1', {
     bindings: {
@@ -15,8 +16,11 @@ angular.module('missionhubApp').component('organizationContactImportStep1', {
 
 function organizationContactImportStep1Controller($scope) {
     this.fileIcon = fileIcon;
+    this.errorIcon = errorIcon;
 
     this.selectFile = () => {
+        this.fileError = false;
+
         // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -28,6 +32,7 @@ function organizationContactImportStep1Controller($scope) {
                 this.selectedFile = input.files[0];
 
                 if (this.selectedFile.type !== 'text/csv') {
+                    this.fileError = true;
                     this.selectedFile = null;
                 }
 
