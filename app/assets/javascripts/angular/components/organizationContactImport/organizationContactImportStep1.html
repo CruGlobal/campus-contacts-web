@@ -36,7 +36,7 @@
 
                 <span class="filename grey-darker f6 flex items-center" ng-if="$ctrl.fileName">
                     <img class="mr2 ml3" ng-src="{{$ctrl.fileIcon}}" style="width:18px; height:24px;">
-                    {{$ctrl.fileName}}
+                    {{$ctrl.fileName}} - {{ 'contact_import:step_1.rowCount' | t: { count: $ctrl.csvData.length - 1 } }}
                 </span>
 
                 <span class="error red f6 flex items-center" ng-if="$ctrl.fileTypeError">

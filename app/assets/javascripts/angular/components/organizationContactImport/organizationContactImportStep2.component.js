@@ -15,6 +15,8 @@ angular.module('missionhubApp').component('organizationContactImportStep2', {
 });
 
 function organizationContactImportStep2Controller($scope, surveyService) {
+    this.currentPreviewRow = 1;
+
     this.$onInit = () => {
         //get survey questions
         surveyService
@@ -36,5 +38,19 @@ function organizationContactImportStep2Controller($scope, surveyService) {
 
     this.canContinue = () => {
         return Object.keys(this.columnMap).length > 0;
+    };
+
+    this.nextPreviewRow = () => {
+        this.currentPreviewRow =
+            this.currentPreviewRow + 1 < this.csvData.length
+                ? this.currentPreviewRow + 1
+                : this.currentPreviewRow;
+    };
+
+    this.previousPreviewRow = () => {
+        this.currentPreviewRow =
+            this.currentPreviewRow - 1 > 0
+                ? this.currentPreviewRow - 1
+                : this.currentPreviewRow;
     };
 }

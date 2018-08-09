@@ -728,6 +728,8 @@ export default {
             instructions_b: "if you don't have a survey to import contacts to.",
             upload: 'Upload CSV File',
             select: 'Select CSV File',
+            rowCount: '{{count}} rows',
+            rowCount_plural: '{{count}} rows',
             parseErrors: {
                 summary: 'Warning: There were some issues parsing your CSV',
                 message:
@@ -744,7 +746,7 @@ export default {
             instructions:
                 'Match the column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes.',
             csv_column: 'CSV Column',
-            preview: 'Preview',
+            preview: 'Preview Row {{current}} of {{max}}',
             question_column: 'Question Column/Answer',
             do_not_import: 'Do Not Import',
             loadingQuestions: 'Loading Questions...',
