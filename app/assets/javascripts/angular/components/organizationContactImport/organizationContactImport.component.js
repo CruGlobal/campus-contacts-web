@@ -19,12 +19,15 @@ function organizationContactImportController() {
         this.surveys = this.organizationOverview.surveys;
     };
 
-    this.next = (selectedSurvey, selectedFile, columnMap) => {
+    this.next = (selectedSurvey, fileName, csvData, columnMap) => {
         if (selectedSurvey) {
             this.selectedSurvey = selectedSurvey;
         }
-        if (selectedFile) {
-            this.selectedFile = selectedFile;
+        if (csvData) {
+            this.csvData = csvData;
+        }
+        if (fileName) {
+            this.fileName = fileName;
         }
         if (columnMap) {
             this.columnMap = columnMap;

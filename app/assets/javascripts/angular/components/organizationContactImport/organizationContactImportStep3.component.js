@@ -8,7 +8,7 @@ angular.module('missionhubApp').component('organizationContactImportStep3', {
         org: '<',
         next: '&',
         previous: '&',
-        selectedFile: '<',
+        csvData: '<',
         selectedSurvey: '<',
         columnMap: '<',
     },
@@ -18,7 +18,6 @@ angular.module('missionhubApp').component('organizationContactImportStep3', {
 
 function organizationContactImportStep3Controller(
     $scope,
-    $log,
     surveyService,
     labelsService,
 ) {
@@ -26,20 +25,9 @@ function organizationContactImportStep3Controller(
     this.disableButtons = true;
 
     this.$onInit = () => {
-        //parse csv
-        Papa.parse(this.selectedFile, {
-            complete: results => {
-                if (results.errors.length) {
-                    $log.error('CSV Parse errors', results.errors);
-                } else {
-                    this.csvData = results.data;
-                    this.csvData.shift(); //remove header row
+        this.csvData.shift(); //remove header row
 
-                    this.disableButtons = false;
-                    $scope.$digest();
-                }
-            },
-        });
+        this.disableButtons = false;
     };
 
     this.addLabel = labelName => {
