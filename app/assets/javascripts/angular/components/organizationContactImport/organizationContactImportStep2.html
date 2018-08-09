@@ -7,20 +7,29 @@
         <thead>
         <tr class="bg-grey-light ttu tracked bold">
             <th class="ph3 pv2">{{ 'contact_import:step_2.csv_column' | t }}</th>
-            <th class="ph3 pv2">{{ 'contact_import:step_2.preview' | t }}</th>
+            <th class="ph3 pv2 flex items-center">
+                <a href="javascript:;" ng-click="$ctrl.previousPreviewRow()">
+                    <ng-md-icon icon="chevron_left"></ng-md-icon>
+                </a>
+                {{ 'contact_import:step_2.preview' | t: { current: $ctrl.currentPreviewRow, max: $ctrl.csvData.length - 1 } }}
+                <a href="javascript:;" ng-click="$ctrl.nextPreviewRow()">
+                    <ng-md-icon icon="chevron_right"></ng-md-icon>
+                </a>
+            </th>
             <th class="ph3 pv2">{{ 'contact_import:step_2.question_column' | t }}</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="(index, value) in $ctrl.csvData[0] track by $index">
             <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[0][index]}}</td>
-            <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[1][index]}}</td>
+            <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[$ctrl.currentPreviewRow][index]}}</td>
             <td class="ph3 pb1 pt3 grey-darkest">
                 <div class="dropdown dropdown-select w-100 mr2 icon-grey-darker" uib-dropdown>
-                    <a class="f6 link db pa3 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark dim" href="" uib-dropdown-toggle>
+                    <a class="f6 link db pa3 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark dim" href=""
+                       uib-dropdown-toggle>
                         {{$ctrl.columnMap[index] ?
-                            ($ctrl.columnMap[index].column_title || $ctrl.columnMap[index].label) :
-                            ('contact_import:step_2.do_not_import' | t)}}
+                        ($ctrl.columnMap[index].column_title || $ctrl.columnMap[index].label) :
+                        ('contact_import:step_2.do_not_import' | t)}}
                     </a>
                     <ul class="bg-white f6" uib-dropdown-menu>
                         <li ng-if="$ctrl.columnMap[index]">
