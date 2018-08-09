@@ -728,7 +728,16 @@ export default {
             instructions_b: "if you don't have a survey to import contacts to.",
             upload: 'Upload CSV File',
             select: 'Select CSV File',
-            file_error: 'You must select a CSV file.',
+            parseErrors: {
+                summary: 'Warning: There were some issues parsing your CSV',
+                message:
+                    'Please review these issues we encountered while parsing your CSV file. You may try and continue but be aware that some data may not match up with columns you expect.',
+                note: 'Note: Row and Character position both start at 1.',
+                row: 'CSV Row',
+                characterPos: 'Character position in row',
+                error: 'Error Message',
+            },
+            fileTypeError: 'You must select a CSV file.',
         },
         step_2: {
             title: 'Match Columns',
@@ -738,6 +747,7 @@ export default {
             preview: 'Preview',
             question_column: 'Question Column/Answer',
             do_not_import: 'Do Not Import',
+            loadingQuestions: 'Loading Questions...',
         },
         step_3: {
             title: 'Add Labels to New Contacts',

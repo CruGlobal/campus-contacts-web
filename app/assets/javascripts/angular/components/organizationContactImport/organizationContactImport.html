@@ -15,13 +15,15 @@
         <organization-contact-import-step-1
             org="$ctrl.org"
             surveys="$ctrl.surveys"
-            next="$ctrl.next(selectedSurvey, selectedFile)"
+            next="$ctrl.next(selectedSurvey, fileName, csvData)"
             selected-survey="$ctrl.selectedSurvey"
+            file-name="$ctrl.fileName"
+            csv-data="$ctrl.csvData"
             ng-if="$ctrl.activeStep === 1"></organization-contact-import-step-1>
         <organization-contact-import-step-2
-            next="$ctrl.next(null, null, columnMap)"
+            next="$ctrl.next(null, null, null, columnMap)"
             previous="$ctrl.previous()"
-            selected-file="$ctrl.selectedFile"
+            csv-data="$ctrl.csvData"
             selected-survey="$ctrl.selectedSurvey"
             column-map="$ctrl.columnMap"
             ng-if="$ctrl.activeStep === 2"></organization-contact-import-step-2>
@@ -29,7 +31,7 @@
             org="$ctrl.org"
             next="$ctrl.next()"
             previous="$ctrl.previous()"
-            selected-file="$ctrl.selectedFile"
+            csv-data="$ctrl.csvData"
             selected-survey="$ctrl.selectedSurvey"
             column-map="$ctrl.columnMap"
             ng-if="$ctrl.activeStep === 3"></organization-contact-import-step-3>

@@ -34,6 +34,11 @@
                                 {{question.column_title || question.label}}
                             </a>
                         </li>
+                        <li ng-if="!$ctrl.surveyQuestions">
+                            <a href="">
+                                {{ 'contact_import:step_2.loadingQuestions' | t }}
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </td>

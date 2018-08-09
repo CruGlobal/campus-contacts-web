@@ -6,7 +6,7 @@ angular.module('missionhubApp').component('organizationContactImportStep2', {
     bindings: {
         next: '&',
         previous: '&',
-        selectedFile: '<',
+        csvData: '<',
         selectedSurvey: '<',
         columnMap: '<',
     },
@@ -16,15 +16,6 @@ angular.module('missionhubApp').component('organizationContactImportStep2', {
 
 function organizationContactImportStep2Controller($scope, surveyService) {
     this.$onInit = () => {
-        //get first two rows of CSV
-        Papa.parse(this.selectedFile, {
-            preview: 2,
-            complete: results => {
-                this.csvData = results.data;
-                $scope.$digest();
-            },
-        });
-
         //get survey questions
         surveyService
             .getSurveyQuestions(this.selectedSurvey.id)
