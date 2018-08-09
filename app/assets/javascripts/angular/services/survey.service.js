@@ -1,12 +1,52 @@
-angular.module('missionhubApp').factory('surveyService', surveyService);
-
 function surveyService(
+    envService,
+    $q,
+    $http,
     httpProxy,
     modelsService,
     loggedInPerson,
     periodService,
 ) {
     return {
+        getSurveyQuestions: surveyId => {
+            return $q
+                .all([
+                    httpProxy.get(
+                        '/surveys/predefined',
+                        {
+                            include: 'active_survey_elements.question',
+                        },
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
+                        },
+                    ),
+                    httpProxy.get(
+                        `/surveys/${surveyId}/questions`,
+                        {},
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
+                        },
+                    ),
+                ])
+                .then(([predefinedSurvey, surveyQuestions]) => {
+                    const predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+                        element => element.question,
+                    );
+                    const predefinedQuestionIds = predefinedQuestions.map(
+                        question => question.id,
+                    );
+                    const filteredSurveyQuestions = surveyQuestions.data.filter(
+                        question => {
+                            return !predefinedQuestionIds.includes(question.id);
+                        },
+                    );
+
+                    return [...predefinedQuestions, ...filteredSurveyQuestions];
+                });
+        },
+
         // Create a new survey
         createSurvey: (title, organization) => {
             const payload = {
@@ -131,5 +171,19 @@ function surveyService(
                 )
                 .then(httpProxy.extractModels);
         },
+
+        importContacts: payload => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('bulk_create_job').url.all,
+                    payload,
+                    {
+                        errorMessage: 'contact_import:errors.bulkImport',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
     };
 }
+
+angular.module('missionhubApp').factory('surveyService', surveyService);

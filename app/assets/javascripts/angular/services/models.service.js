@@ -91,6 +91,14 @@ function modelsService(_) {
             include: 'survey_reports',
             url: generateUrls('/reports/survey'),
         },
+        survey_questions: {
+            include: 'survey_questions',
+            url: generateUrls('/survey/questions'),
+        },
+        bulk_create_job: {
+            include: 'bulk_create_jobs',
+            url: generateUrls('/answer_sheets/bulk_create_jobs'),
+        },
     };
 
     var modelsService = {

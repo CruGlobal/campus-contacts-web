@@ -1,7 +1,8 @@
 @import '../../../../stylesheets/variables/colors';
 
 survey-overview,
-keyword-request-modal {
+keyword-request-modal,
+organization-contact-import {
     display: block;
     margin-bottom: 20px;
     &:last-child {
@@ -9,7 +10,7 @@ keyword-request-modal {
     }
 
     .white {
-        color: #ffffff;
+        color: #fff !important;
     }
 
     .header {

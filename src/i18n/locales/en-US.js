@@ -289,6 +289,10 @@ export default {
                     get_person: 'Error occurred while loading the person',
                     get_survey: 'Error occurred while getting survey data',
                 },
+                surveys: {
+                    loadQuestions:
+                        'Error occurred while loading survey questions',
+                },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
@@ -710,6 +714,59 @@ export default {
         },
         questions: {
             questions: 'Questions',
+        },
+    },
+    contact_import: {
+        back: 'Back',
+        continue: 'Continue',
+        step_1: {
+            title: 'Select Survey and Upload CSV File',
+            select_survey: 'Select Survey',
+            create_survey: 'Create a new survey',
+            instructions:
+                'Select a survey to import your contacts from the drop down menu below.',
+            instructions_b: "if you don't have a survey to import contacts to.",
+            upload: 'Upload CSV File',
+            select: 'Select CSV File',
+            rowCount: '{{count}} rows',
+            rowCount_plural: '{{count}} rows',
+            parseErrors: {
+                summary: 'Warning: There were some issues parsing your CSV',
+                message:
+                    'Please review these issues we encountered while parsing your CSV file. You may try and continue but be aware that some data may not match up with columns you expect.',
+                note: 'Note: Row and Character position both start at 1.',
+                row: 'CSV Row',
+                characterPos: 'Character position in row',
+                error: 'Error Message',
+            },
+            fileTypeError: 'You must select a CSV file.',
+        },
+        step_2: {
+            title: 'Match Columns',
+            instructions:
+                'Match the column headings from your CSV file with the corresponding questions/column headers in the dropdown boxes.',
+            csv_column: 'CSV Column',
+            preview: 'Preview Row {{current}} of {{max}}',
+            question_column: 'Question Column/Answer',
+            do_not_import: 'Do Not Import',
+            loadingQuestions: 'Loading Questions...',
+        },
+        step_3: {
+            title: 'Add Labels to New Contacts',
+            instructions:
+                "You are almost ready to upload {{count}} new contacts! Use the list below to select any additional labels for these contact, or you can create a new one. When you're done, click Import.",
+            labels: 'Labels',
+            add_label: 'Add Label',
+        },
+        step_4: {
+            title: 'You Rock!',
+            instructions:
+                'Your CSV upload is now being processed. You will receive an email when it finishes.',
+            home: 'Take Me Home',
+        },
+        errors: {
+            bulkImport:
+                'Error occurred while importing contacts from your CSV file',
         },
     },
 };
