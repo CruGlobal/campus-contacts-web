@@ -12,7 +12,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="(index, value) in $ctrl.csvData[0]">
+        <tr ng-repeat="(index, value) in $ctrl.csvData[0] track by $index">
             <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[0][index]}}</td>
             <td class="ph3 pb1 pt3 grey-darkest">{{$ctrl.csvData[1][index]}}</td>
             <td class="ph3 pb1 pt3 grey-darkest">
