@@ -63,7 +63,7 @@
                     <a class="dropdown-item" ui-sref="app.ministries.ministry.survey({ surveyId: survey.id })">{{ 'surveyTab:menu.edit' | t }}</a>
                     <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}" target="_blank">{{ 'surveyTab:menu.preview' | t }}</a>
                     <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
-                    <a class="dropdown-item" href="#">{{ 'surveyTab:menu.copy' | t }}</a>
+                    <!--<a class="dropdown-item" href="#">{{ 'surveyTab:menu.copy' | t }}</a> TODO: add this back with https://jira.cru.org/browse/MHP-1579 -->
                     <a class="dropdown-item" ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })">{{ 'surveyTab:menu.import' | t }}</a>
                 </div>
             </div>
