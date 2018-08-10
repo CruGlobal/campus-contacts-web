@@ -15,6 +15,9 @@ angular.module('missionhubApp').component('peopleScreen', {
     bindings: {
         org: '<',
     },
+    require: {
+        organizationOverview: '^',
+    },
     template: template,
 });
 
@@ -190,8 +193,8 @@ function peopleScreenController(
         }
 
         // Update the people count shown in the people tab
-        if (this.people) {
-            this.people.length++;
+        if (this.organizationOverview.people) {
+            this.organizationOverview.people.length++;
         }
     };
 
@@ -383,8 +386,8 @@ function peopleScreenController(
         listLoader.reset(this.people);
 
         // Update the people count shown in the people tab
-        if (this.people) {
-            this.people.length -= removedPeople.length;
+        if (this.organizationOverview.people) {
+            this.organizationOverview.people.length -= removedPeople.length;
         }
 
         // Remove the selection state of removed people
