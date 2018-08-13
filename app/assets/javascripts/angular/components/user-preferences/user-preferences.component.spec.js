@@ -48,6 +48,7 @@ describe('userPreferences component', () => {
                         person_assigned: false,
                         weekly_digest: false,
                     },
+                    beta_mode: false,
                 },
             );
         });
