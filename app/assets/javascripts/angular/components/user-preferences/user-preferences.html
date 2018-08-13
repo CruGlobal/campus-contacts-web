@@ -1,7 +1,7 @@
 <div class="pivot_theme">
-    <h2 class="f2 mb4">{{ 'userPreferences:title' | t }}</h2>
+    <h2 class="f2">{{ 'userPreferences:title' | t }}</h2>
 
-    <div class="form w-50-ns">
+    <div class="form w-50-ns mt4">
         <div class="form-group">
             <label class="form-control-select">
                 <div class="f5 pivot-gray-1-25 mb2">{{ 'userPreferences:language' | t }}</div>
@@ -54,6 +54,17 @@
                        ng-model="$ctrl.weeklyDigest"
                        ng-change="$ctrl.onChangeNotificationSettings()">
                 <label for="weeklyDigest"></label>
+            </div>
+        </div>
+
+        <div class="flex mt4">
+            <div class="f5 pivot-gray-1-25 mb2">{{ 'userPreferences:legacyNav' | t }}</div>
+            <div class="toggle ml4">
+                <input type="checkbox"
+                       id="legacyNavigation"
+                       ng-model="$ctrl.legacyNav"
+                       ng-change="$ctrl.onChangeNotificationSettings()">
+                <label for="legacyNavigation"></label>
             </div>
         </div>
     </div>

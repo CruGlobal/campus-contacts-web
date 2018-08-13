@@ -764,5 +764,6 @@ export default {
             'When a person is transferred to one of my organizations',
         personAssigned: 'When a person is assigned to me',
         weeklyDigest: 'Weekly Ministry Digest',
+        legacyNav: 'Revert to legacy navigation',
     },
 };

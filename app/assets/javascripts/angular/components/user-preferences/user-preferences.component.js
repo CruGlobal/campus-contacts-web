@@ -5,14 +5,16 @@ import template from './user-preferences.html';
 import './user-preferences.scss';
 
 class UserPreferences {
-    constructor(loggedInPerson) {
+    constructor(loggedInPerson, $rootScope) {
         this.loggedInPerson = loggedInPerson;
+        this.$rootScope = $rootScope;
         const { user } = this.loggedInPerson.person;
         this.language = user.language;
         this.languages = getNamesOfLoadedTranslations();
         this.personMoved = user.notification_settings.person_moved;
         this.personAssigned = user.notification_settings.person_assigned;
         this.weeklyDigest = user.notification_settings.weekly_digest;
+        this.legacyNav = !user.beta_mode;
     }
 
     onChangeLanguage(language) {
@@ -29,7 +31,9 @@ class UserPreferences {
                 person_assigned: this.personAssigned,
                 weekly_digest: this.weeklyDigest,
             },
+            beta_mode: !this.legacyNav,
         });
+        this.$rootScope.legacyNavigation = this.legacyNav;
     }
 }
 
