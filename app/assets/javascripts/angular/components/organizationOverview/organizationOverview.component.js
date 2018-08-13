@@ -31,7 +31,10 @@ function organizationOverviewController(
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
 
     vm.showOrgNav = () => {
-        return $state.$current.name !== 'app.ministries.ministry.import';
+        return (
+            $state.$current.name !== 'app.ministries.ministry.survey' &&
+            $state.$current.name !== 'app.ministries.ministry.import'
+        );
     };
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);

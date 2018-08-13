@@ -1,0 +1,48 @@
+@import '../../../../stylesheets/variables/colors';
+@import '../ministryViewGroup/ministryViewGroup';
+
+organization-overview-surveys {
+    .header {
+        display: flex;
+        background-color: $pivot-darker-blue;
+
+        ng-md-icon svg {
+            fill: white;
+        }
+    }
+
+    .row {
+        @extend ministry-view-group;
+
+        .column-title {
+            flex: 3.1;
+        }
+        .column-number {
+            flex: 1.2;
+        }
+        .column-status {
+            flex: 1.1;
+        }
+        .column-keyword {
+            flex: 2.5;
+        }
+        .column-link {
+            flex: 4;
+        }
+    }
+
+    .buttons-column .dropdown-toggle::after {
+        display: none;
+    }
+
+    .dropdown-item {
+        padding: 1rem 1.5rem;
+    }
+
+    ng-md-icon.status-active svg {
+        fill: #00d264;
+    }
+    ng-md-icon.status-inactive svg {
+        fill: #c6c4c6;
+    }
+}

@@ -1,0 +1,85 @@
+<div class="bg-grey-light">
+    <div class="panel-body pt10 pb4">
+        <form class="measure center">
+            <fieldset class="ba b--transparent ph0 mh0">
+                <div class="mt4 bb pv4 b--grey-medium">
+                    <label class="db fw6 lh-copy f5 bold mb1 red" for="keyword" ng-if="$ctrl.keywordError">
+                        {{'surveys:keyword.errors.taken' | t}}
+                    </label>
+
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="keyword">
+                        {{'surveys:keyword.keyword' | t}} <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
+                    </label>
+                    <p class="f7 grey-darker mt0 lh-16">
+                        {{'surveys:keyword.instructions' | t}}
+                        <a class="help fr" href="" ng-click="$ctrl.showKeywordHelp = !$ctrl.showKeywordHelp">
+                            <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" style="width:16px; height:16px;">
+                        </a>
+                    </p>
+                    <div class="help-text" ng-if="$ctrl.showKeywordHelp">
+                        <p class="grey-darker f7 lh-copy mv2 pv3">
+                            {{'surveys:keyword.help' | t}}
+                        </p>
+                    </div>
+
+                    <div class="flex justify-stretch">
+                        <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" ng-class="{
+                            'locked': $ctrl.disableKeywordField,
+                            'b--red': $ctrl.keywordError
+                        }"
+                               ng-disabled="$ctrl.disableKeywordField"
+                               id="keyword" placeholder="{{'surveys:keyword.keyword_example' | t}}" type="text" ng-model="$ctrl.keyword.keyword">
+                        <button class="f6 link dim ph4 pv2 dib white bold br2 ttu tracked bg-blue ml2"
+                                ng-if="$ctrl.survey.keyword.state === 'active'" ng-click="$ctrl.deleteKeyword($ctrl.survey.keyword.id)">
+                            {{'common:general.delete' | t}}
+                        </button>
+                    </div>
+                </div>
+                <div class=" bb pv4 b--grey-medium">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="keywordPurpose">
+                        {{'surveys:keyword.purpose' | t}}
+                        <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
+                    </label>
+                    <p class="f7 grey-darker mt0 lh-16">
+                        {{'surveys:keyword.purpose_instructions' | t}}
+                    </p>
+                    <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="keywordPurpose"
+                           placeholder="{{'surveys:keyword.purpose_example' | t}}" type="text" ng-model="$ctrl.keyword.explanation">
+                </div>
+                <div class="mt4 pb2">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="textResponse">
+                        {{'surveys:keyword.response' | t}}
+                        <span class="ttn tracked-none normal f8">({{'common:general.required' | t}})</span>
+                    </label>
+                    <p class="f7 grey-darker mt0 lh-16">
+                        {{'surveys:keyword.response_instructions' | t: {interpolation: { prefix: '-', suffix: '-'} } }}
+                        <a class="help fr" href="" ng-click="$ctrl.showResponseHelp = !$ctrl.showResponseHelp">
+                            <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" style="width:16px; height:16px;">
+                        </a>
+                    </p>
+                    <div class="help-text" ng-if="$ctrl.showResponseHelp">
+                        <p class="grey-darker f7 lh-copy mv2 pv3">
+                            {{'surveys:keyword.response_help' | t: {interpolation: { prefix: '-', suffix: '-'} } }}
+                        </p>
+                    </div>
+                    <textarea class="pa2 input-reset bg-white bw0 grey-darker w-100" id="textResponse"
+                              maxlength="140"
+                              placeholder="{{'surveys:keyword.response_example' | t: {interpolation: { prefix: '-', suffix: '-'} } }}"
+                              ng-model="$ctrl.keyword.initial_response"></textarea>
+                    <p class="f7 grey-darker mt2 lh-16">
+                        {{ 'messages.length_limit' | t : { remaining_characters: 140 - $ctrl.keyword.initial_response.length } }}
+                    </p>
+                </div>
+                <div class="mt4">
+                    <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                            ng-click="$ctrl.requestKeyword()" ng-if="!$ctrl.survey.keyword.state">
+                        {{'surveys:keyword.request' | t}}
+                    </button>
+                    <span class="status grey-dark bold f6 ttu mb2" ng-if="$ctrl.survey.keyword.state === 'requested'">
+                        {{'surveys:keyword.requested' | t}}
+                    </span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

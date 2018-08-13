@@ -19,17 +19,9 @@
         <div class="tabs">
             <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
                  ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
-                 ng-if="tabName !== 'surveys' && tabName !== 'labels'">
+                 ng-if="tabName !== 'labels'">
                 <span>
                     {{'ministries.' + tabName + '.header' | t}}
-                    <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
-                </span>
-                <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
-                </loading-spinner>
-            </div>
-            <div class="tab" ng-init="tabName = 'surveys'">
-                <span>
-                    <a ng-href="/surveys?organization_id={{$ctrl.org.id}}">{{'ministries.surveys.header' | t}}</a>
                     <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
                 </span>
                 <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">

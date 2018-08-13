@@ -59,5 +59,17 @@ function routesService(httpProxy, modelsService) {
                 },
             );
         },
+
+        getSurvey: function(surveyId) {
+            return httpProxy.getModel(
+                modelsService.getModelMetadata('survey').url.single(surveyId),
+                'survey',
+                surveyId,
+                ['keyword'],
+                {
+                    errorMessage: 'error.messages.routes.get_survey',
+                },
+            );
+        },
     };
 }

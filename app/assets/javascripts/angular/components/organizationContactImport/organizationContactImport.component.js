@@ -6,6 +6,9 @@ angular.module('missionhubApp').component('organizationContactImport', {
     require: {
         organizationOverview: '^',
     },
+    bindings: {
+        surveyId: '<',
+    },
     template: template,
     controller: organizationContactImportController,
 });
@@ -17,6 +20,9 @@ function organizationContactImportController() {
     this.$onInit = () => {
         this.org = this.organizationOverview.org;
         this.surveys = this.organizationOverview.surveys;
+        this.selectedSurvey = this.surveys.find(
+            survey => survey.id === this.surveyId,
+        );
     };
 
     this.next = (selectedSurvey, fileName, csvData, columnMap) => {

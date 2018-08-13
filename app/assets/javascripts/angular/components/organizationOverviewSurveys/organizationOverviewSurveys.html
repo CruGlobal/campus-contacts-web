@@ -1,6 +1,72 @@
+<div class="group row header">
+    <div class="column column-title">
+        {{ 'surveyTab:columns.survey' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.contacts' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.unassigned' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.uncontacted' | t }}
+    </div>
+    <div class="column column-keyword">
+        {{ 'surveyTab:columns.keyword' | t }}
+    </div>
+    <div class="column column-link">
+        {{ 'surveyTab:columns.link' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.status' | t }}
+    </div>
+    <div class="column buttons-column">
+        <icon-button icon="'add'" ng-click="$ctrl.createSurvey()"></icon-button>
+    </div>
+</div>
 <div class="grid-content">
-    <div ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
-         class="survey row padded">
-        {{survey.title}}
+    <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+        <div class="column column-title">
+            <a ui-sref="app.ministries.ministry.survey({ surveyId: survey.id })">
+                {{survey.title}}
+            </a>
+        </div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].contact_count}}</div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].unassigned_count}}</div>
+        <div class="column column-number">{{$ctrl.surveyStats[survey.id].uncontacted_count}}</div>
+        <div class="column column-keyword">{{survey.keyword.keyword}}</div>
+        <div class="column column-link">
+            <a ng-href="{{$ctrl.surveyLinkPrefix + survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix + survey.id}}</a>
+        </div>
+        <div class="column column-status" uib-dropdown>
+            <div uib-dropdown-toggle class="pointer">
+                <span ng-if="!survey.is_frozen">
+                    <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+                    {{ 'surveyTab:status.live' | t }}
+                </span>
+                <span ng-if="survey.is_frozen">
+                    <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+                    {{ 'surveyTab:status.off' | t }}
+                </span>
+            </div>
+            <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">{{ 'surveyTab:status.live' | t }}</a>
+                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">{{ 'surveyTab:status.off' | t }}</a>
+            </div>
+        </div>
+        <div class="column buttons-column text-center">
+            <div uib-dropdown>
+                <ng-md-icon uib-dropdown-toggle icon="more_vert" size="26"
+                            ng-click="$ctrl.deleteSurvey(); $event.stopPropagation();"></ng-md-icon>
+
+                <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                    <a class="dropdown-item" ui-sref="app.ministries.ministry.survey({ surveyId: survey.id })">{{ 'surveyTab:menu.edit' | t }}</a>
+                    <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}" target="_blank">{{ 'surveyTab:menu.preview' | t }}</a>
+                    <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
+                    <!--<a class="dropdown-item" href="#">{{ 'surveyTab:menu.copy' | t }}</a> TODO: add this back with https://jira.cru.org/browse/MHP-1579 -->
+                    <a class="dropdown-item" ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })">{{ 'surveyTab:menu.import' | t }}</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

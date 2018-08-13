@@ -169,10 +169,7 @@ function surveyService(
                         errorMessage: 'surveyTab:errors.getStats',
                     },
                 )
-                .then(httpProxy.extractModels)
-                .then(function(survey) {
-                    return survey[0];
-                });
+                .then(httpProxy.extractModels);
         },
 
         importContacts: payload => {
