@@ -35,13 +35,11 @@ describe('surveyService', function() {
             },
         };
 
-        var _this = this;
-
         this.httpResponse = {
             data: this.survey,
         };
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
-            return $q.resolve(_this.httpResponse);
+        spyOn(httpProxy, 'callHttp').and.callFake(() => {
+            return $q.resolve(this.httpResponse);
         });
     }));
 
@@ -54,12 +52,9 @@ describe('surveyService', function() {
         it(
             'should return a promise that resolves to the new survey',
             asynchronous(function() {
-                var _this = this;
-                return surveyService
-                    .createSurvey(this.survey)
-                    .then(function(survey) {
-                        expect(survey).toBe(_this.survey);
-                    });
+                return surveyService.createSurvey(this.survey).then(survey => {
+                    expect(survey).toBe(this.survey);
+                });
             }),
         );
     });
@@ -73,12 +68,9 @@ describe('surveyService', function() {
         it(
             'should return a promise that resolves to the updated survey',
             asynchronous(function() {
-                var _this = this;
-                return surveyService
-                    .updateSurvey(this.survey)
-                    .then(function(survey) {
-                        expect(survey).toBe(_this.survey);
-                    });
+                return surveyService.updateSurvey(this.survey).then(survey => {
+                    expect(survey).toBe(this.survey);
+                });
             }),
         );
     });
