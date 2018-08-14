@@ -660,6 +660,7 @@ export default {
             confirm: 'Are you sure you want to delete this survey?',
         },
         settings: {
+            settings: 'Settings',
             welcome_message: 'Welcome Message',
             success_message: 'Success Message',
             image: 'Image',
