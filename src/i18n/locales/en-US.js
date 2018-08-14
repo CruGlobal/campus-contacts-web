@@ -704,9 +704,11 @@ export default {
             requested_message:
                 'We will notify you within 24 hours by email if/when your keyword is approved and ready for use.',
             errors: {
-                taken: 'This keyword is taken. Try another.',
                 requestKeyword: 'Error occurred while requesting a keyword',
                 deleteKeyword: 'Error occurred while deleting a keyword',
+                missingKeyword: 'A keyword is required',
+                missingPurpose: 'A keyword purpose is required',
+                missingTextResponse: 'A text response is required',
             },
             delete: {
                 confirm: 'Are you sure you want to delete this keyword?',
