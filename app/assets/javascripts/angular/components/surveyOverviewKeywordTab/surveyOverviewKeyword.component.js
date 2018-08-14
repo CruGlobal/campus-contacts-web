@@ -64,12 +64,15 @@ function surveyOverviewKeywordController(
                     });
                 },
                 response => {
-                    const {
+                    let {
                         data: { errors: [{ detail: details } = {}] = [] } = {},
                     } = response;
 
                     //display first error
-                    this.keywordError = details[_.keys(details)[0]][0];
+                    details = Object.values(details);
+                    if (details.length && details[0].length) {
+                        this.keywordError = details[0][0];
+                    }
                 },
             );
     };
