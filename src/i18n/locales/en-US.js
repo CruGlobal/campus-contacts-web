@@ -769,6 +769,7 @@ export default {
         errors: {
             bulkImport:
                 'Error occurred while importing contacts from your CSV file',
+            save: 'Error occurred while saving contact',
         },
     },
     userPreferences: {
