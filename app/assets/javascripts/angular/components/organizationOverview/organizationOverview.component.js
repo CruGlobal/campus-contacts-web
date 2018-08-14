@@ -29,6 +29,7 @@ function organizationOverviewController(
     vm.cruOrg = false;
     vm.p2cOrg = false;
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
+    vm.surveyResponses = 'countHidden';
 
     vm.showOrgNav = () => {
         return (

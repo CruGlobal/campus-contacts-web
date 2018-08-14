@@ -364,7 +364,7 @@ angular
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
-                        component: 'organizationOverview' + _.capitalize(tab),
+                        component: 'organizationOverview' + _.upperFirst(tab),
                     };
                 }),
             )
