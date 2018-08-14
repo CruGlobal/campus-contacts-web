@@ -389,6 +389,13 @@ angular
                     modal: false,
                 }),
             )
+            .states(
+                generatePersonPageStates({
+                    name: 'app.ministries.ministry.survey.responses.person',
+                    url: '/:personId',
+                    modal: false,
+                }),
+            )
             .state({
                 name: 'app.userPreferences',
                 url: '/user-preferences',
