@@ -15,19 +15,16 @@ organization-overview-surveys {
         @extend ministry-view-group;
 
         .column-title {
-            flex: 3.1;
-        }
-        .column-number {
-            flex: 1.2;
+            flex: 4;
         }
         .column-status {
-            flex: 1.1;
+            flex: 1;
         }
         .column-keyword {
-            flex: 2.5;
+            flex: 2;
         }
         .column-link {
-            flex: 4;
+            flex: 2;
         }
     }
 
