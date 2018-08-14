@@ -106,6 +106,10 @@ people-screen {
         color: $white;
         padding: 12px;
         flex-shrink: 0;
+        position: sticky;
+        top: 50px;
+        left: 0;
+        z-index: 10;
 
         ng-md-icon,
         img {
