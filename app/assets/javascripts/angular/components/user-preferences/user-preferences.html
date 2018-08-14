@@ -1,0 +1,71 @@
+<div class="pivot_theme">
+    <h2 class="f2">{{ 'userPreferences:title' | t }}</h2>
+
+    <div class="form w-50-ns mt4">
+        <div class="form-group">
+            <label class="form-control-select">
+                <div class="f5 pivot-gray-1-25 mb2">{{ 'userPreferences:language' | t }}</div>
+                <select class="form-control"
+                        ng-model="$ctrl.language"
+                        ng-change="$ctrl.onChangeLanguage($ctrl.language)"
+                        ng-options="language.code as language.name for language in $ctrl.languages">
+                    <option value="">Select Language</option>
+                </select>
+            </label>
+        </div>
+
+
+        <h3 class="f3 mt4 mb0">{{ 'userPreferences:notificationsHeader' | t }}</h3>
+        <div class="flex">
+            <div class="w-70"></div>
+            <div class="w-30 tc mb1">{{ 'userPreferences:enabledByDefault' | t }}</div>
+        </div>
+        <div class="flex h3">
+            <div class="w-70 f5 pivot-gray-1-25 pa3 bl bt b--pivot-gray-4 flex items-center">
+                {{ 'userPreferences:personTransferred' | t }}
+            </div>
+            <div class="w-30 toggle bg-pivot-blue-4 bt br b--pivot-gray-4 flex items-center justify-center">
+                <input type="checkbox"
+                       id="personMoved"
+                       ng-model="$ctrl.personMoved"
+                       ng-change="$ctrl.onChangeNotificationSettings()">
+                <label for="personMoved"></label>
+            </div>
+        </div>
+        <div class="flex h3">
+            <div class="w-70 f5 pivot-gray-1-25 pa3 bl bt b--pivot-gray-4 flex items-center">
+                {{ 'userPreferences:personAssigned' | t }}
+            </div>
+            <div class="w-30 toggle bg-pivot-blue-4 bt br b--pivot-gray-4 flex items-center justify-center">
+                <input type="checkbox"
+                       id="personAssigned"
+                       ng-model="$ctrl.personAssigned"
+                       ng-change="$ctrl.onChangeNotificationSettings()">
+                <label for="personAssigned"></label>
+            </div>
+        </div>
+        <div class="flex h3">
+            <div class="w-70 f5 pivot-gray-1-25 pa3 bl bt bb b--pivot-gray-4 flex items-center">
+                {{ 'userPreferences:weeklyDigest' | t }}
+            </div>
+            <div class="w-30 toggle bg-pivot-blue-4 bt br bb b--pivot-gray-4 flex items-center justify-center">
+                <input type="checkbox"
+                       id="weeklyDigest"
+                       ng-model="$ctrl.weeklyDigest"
+                       ng-change="$ctrl.onChangeNotificationSettings()">
+                <label for="weeklyDigest"></label>
+            </div>
+        </div>
+
+        <div class="flex mt4">
+            <div class="f5 pivot-gray-1-25 mb2">{{ 'userPreferences:legacyNav' | t }}</div>
+            <div class="toggle ml4">
+                <input type="checkbox"
+                       id="legacyNavigation"
+                       ng-model="$ctrl.legacyNav"
+                       ng-change="$ctrl.onChangeNotificationSettings()">
+                <label for="legacyNavigation"></label>
+            </div>
+        </div>
+    </div>
+</div>

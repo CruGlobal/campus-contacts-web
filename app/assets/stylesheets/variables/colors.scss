@@ -12,6 +12,7 @@ $blue-4: #eaf1f6;
 $blue-5: #f7f9fb;
 $white: #fff;
 $gray-1: #333333;
+$gray-1-25: #4f4f4f;
 $gray-1-5: #767676; // This is the lightest font color we can use on a white background
 $gray-2: #808284;
 $gray-2-5: #969696;
@@ -38,6 +39,9 @@ $grey-darkest: #3c3c3c;
 $black: #000000;
 
 $pivot-colors: (
+    gray-1-25: $gray-1-25,
+    gray-4: $gray-4,
+    blue-4: $blue-4,
     dark-blue: $pivot-dark-blue,
     darker-blue: $pivot-darker-blue,
     bright-blue: $pivot-bright-blue,
