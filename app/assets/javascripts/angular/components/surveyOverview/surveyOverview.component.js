@@ -13,7 +13,7 @@ function surveyOverviewController() {
     this.tabNames = [
         {
             id: 'settings',
-            name: 'common:nav.settings',
+            name: 'surveys:settings.settings',
         },
         {
             id: 'keyword',
