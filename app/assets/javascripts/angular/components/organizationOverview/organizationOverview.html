@@ -22,13 +22,10 @@
                  ng-if="tabName !== 'labels'">
                 <span>
                     {{'ministries.' + tabName + '.header' | t}}
-                    <span ng-if="$ctrl[tabName]">({{$ctrl[tabName].length}})</span>
+                    <span ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'">({{$ctrl[tabName].length}})</span>
                 </span>
                 <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
                 </loading-spinner>
-            </div>
-            <div class="tab">
-                <a ng-href="/allcontacts?organization_id={{$ctrl.org.id}}">{{'ministries.survey_responses.header' | t}}</a>
             </div>
             <div class="tab dropdown">
                 {{'ministries.tools.header' | t}}

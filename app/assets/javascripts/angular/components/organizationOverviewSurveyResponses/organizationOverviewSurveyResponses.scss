@@ -1,0 +1,24 @@
+@import '../../../../stylesheets/variables/colors';
+@import '../ministryViewGroup/ministryViewGroup';
+
+organization-overview-survey-responses {
+    .header {
+        display: flex;
+        background-color: $pivot-darker-blue;
+
+        ng-md-icon svg {
+            fill: white;
+        }
+    }
+
+    .row {
+        @extend ministry-view-group;
+
+        .column-title {
+            flex: 3.1;
+        }
+        .column-number {
+            flex: 1.2;
+        }
+    }
+}

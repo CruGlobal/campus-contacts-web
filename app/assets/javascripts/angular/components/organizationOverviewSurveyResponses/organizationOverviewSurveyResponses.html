@@ -1,0 +1,38 @@
+<div class="group row header">
+    <div class="column column-title">
+        {{ 'surveyTab:columns.survey' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.contacts' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.unassigned' | t }}
+    </div>
+    <div class="column column-number">
+        {{ 'surveyTab:columns.uncontacted' | t }}
+    </div>
+</div>
+<div class="grid-content">
+    <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+        <div class="column column-title">
+            <a ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })">
+                {{survey.title}}
+            </a>
+        </div>
+        <div class="column column-number">
+            <a ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })">
+                {{$ctrl.surveyStats[survey.id].contact_count}}
+            </a>
+        </div>
+        <div class="column column-number">
+            <a ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })">
+                {{$ctrl.surveyStats[survey.id].unassigned_count}}
+            </a>
+        </div>
+        <div class="column column-number">
+            <a ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })">
+                {{$ctrl.surveyStats[survey.id].uncontacted_count}}
+            </a>
+        </div>
+    </div>
+</div>
