@@ -529,7 +529,7 @@ export default {
             suborgs: {
                 header: 'Ministries',
             },
-            survey_responses: {
+            surveyResponses: {
                 header: 'Survey Responses',
             },
             surveys: {
