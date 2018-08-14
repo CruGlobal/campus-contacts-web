@@ -3,8 +3,8 @@
         <form class="measure center">
             <fieldset class="ba b--transparent ph0 mh0">
                 <div class="mt4 bb pv4 b--grey-medium">
-                    <label class="db fw6 lh-copy f5 bold mb1 red" for="keyword" ng-if="$ctrl.keywordError">
-                        {{'surveys:keyword.errors.taken' | t}}
+                    <label class="db fw6 lh-copy f5 bold mb1 red" ng-if="$ctrl.keywordError">
+                        {{$ctrl.keywordError}}
                     </label>
 
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="keyword">

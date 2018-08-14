@@ -29,7 +29,24 @@ function surveyOverviewKeywordController(
     };
 
     this.requestKeyword = () => {
-        this.keywordError = false;
+        this.keywordError = '';
+        if (!this.keyword.keyword) {
+            this.keywordError = tFilter(
+                'surveys:keyword:errors:missingKeyword',
+            );
+        } else if (!this.keyword.explanation) {
+            this.keywordError = tFilter(
+                'surveys:keyword:errors:missingPurpose',
+            );
+        } else if (!this.keyword.initial_response) {
+            this.keywordError = tFilter(
+                'surveys:keyword:errors:missingTextResponse',
+            );
+        }
+
+        if (this.keywordError) {
+            return;
+        }
 
         surveyService
             .requestKeyword({
@@ -46,8 +63,16 @@ function surveyOverviewKeywordController(
                         size: 'md',
                     });
                 },
-                () => {
-                    this.keywordError = true;
+                response => {
+                    let {
+                        data: { errors: [{ detail: details } = {}] = [] } = {},
+                    } = response;
+
+                    //display first error
+                    details = Object.values(details);
+                    if (details.length && details[0].length) {
+                        this.keywordError = details[0][0];
+                    }
                 },
             );
     };
