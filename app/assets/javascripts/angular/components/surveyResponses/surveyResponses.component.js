@@ -9,7 +9,10 @@ angular.module('missionhubApp').component('surveyResponses', {
 });
 function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
     this.orgId = $state.params.orgId;
-    this.loaderService = surveyResponsesService;
+    this.loaderService = {
+        ...surveyResponsesService,
+        listLoader: surveyResponsesService.createListLoader(),
+    };
 
     this.$onInit = async () => {
         this.questions = await loadQuestions();
