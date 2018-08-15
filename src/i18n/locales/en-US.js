@@ -612,6 +612,9 @@ export default {
             gender: {
                 title: 'Gender',
             },
+            questions: {
+                title: 'Survey Questions',
+            },
             sidebar: {
                 include_archived: 'Include archived contacts',
             },
