@@ -23,6 +23,24 @@ function addSurveyResponseController(surveyService) {
             });
     };
 
+    this.getChoices = content => {
+        let choices = content.split('\n');
+
+        choices = _.map(choices, choice => {
+            return {
+                value: choice,
+                name: choice,
+            };
+        });
+
+        //add undefined option
+        choices.unshift({
+            name: '-',
+        });
+
+        return choices;
+    };
+
     this.save = addAnother => {
         delete this.importError;
         this.saving = true;

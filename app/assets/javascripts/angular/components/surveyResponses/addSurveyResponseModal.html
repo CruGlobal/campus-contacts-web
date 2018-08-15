@@ -20,7 +20,7 @@
                 <div ng-switch="question.kind">
                     <select ng-switch-when="ChoiceField"
                             ng-model="$ctrl.answers[question.id]"
-                            ng-options="i for i in question.content.split('\n') track by $index">
+                            ng-options="i.value as i.name for i in $ctrl.getChoices(question.content) track by i.value">
                     </select>
 
                     <input class="pa2 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark"
