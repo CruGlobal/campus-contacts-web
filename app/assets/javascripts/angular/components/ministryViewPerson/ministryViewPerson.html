@@ -19,7 +19,7 @@
                     ('assignments.unassigned' | t)}}
                 <span ng-if="$ctrl.assignedTo.length > 1">(+{{$ctrl.assignedTo.length - 1}})</span>
             </div>
-            <a href="javascript:;" ng-click="$ctrl.toggleAssignmentVisibility()" class="arrow" ng-class="{'arrow-up': $ctrl.assignmentsVisible}"></a>
+            <a href="" ng-click="$ctrl.toggleAssignmentVisibility()" class="arrow" ng-class="{'arrow-up': $ctrl.assignmentsVisible}"></a>
         </div>
         <div class="dropdown-container" ng-if="$ctrl.assignmentsVisible" on-click-away="$ctrl.assignmentsVisible = false">
             <person-multiselect class="dark dropdown-content" people-description="'ministries.people.leaders'"
