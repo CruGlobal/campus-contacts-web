@@ -3,12 +3,13 @@ angular
     .factory('surveyResponsesService', surveyResponsesService);
 
 function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
-    const listLoader = new ProgressiveListLoader({
-        modelType: 'answer_sheet',
-        requestDeduper: new RequestDeduper(),
-        errorMessage:
-            'error.messages.organization_overview_people.load_people_chunk',
-    });
+    const createListLoader = () =>
+        new ProgressiveListLoader({
+            modelType: 'answer_sheet',
+            requestDeduper: new RequestDeduper(),
+            errorMessage:
+                'error.messages.organization_overview_people.load_people_chunk',
+        });
     const buildListParams = (
         orgId,
         filters = {},
@@ -92,7 +93,7 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
     };
 
     return {
-        listLoader,
+        createListLoader,
         buildListParams,
         buildOrderString,
         transformData,
