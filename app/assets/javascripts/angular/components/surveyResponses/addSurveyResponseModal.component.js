@@ -13,17 +13,7 @@ angular.module('missionhubApp').component('addSurveyResponseModal', {
     template: template,
 });
 function addSurveyResponseController(surveyService) {
-    this.$onInit = () => {
-        this.answers = {};
-
-        surveyService
-            .getSurveyQuestions(this.resolve.survey.id)
-            .then(questions => {
-                this.surveyQuestions = questions;
-            });
-    };
-
-    this.getChoices = content => {
+    const getChoices = (content, includeEmptyOption) => {
         let choices = content.split('\n');
 
         choices = _.map(choices, choice => {
@@ -34,11 +24,32 @@ function addSurveyResponseController(surveyService) {
         });
 
         //add undefined option
-        choices.unshift({
-            name: '-',
-        });
+        if (includeEmptyOption) {
+            choices.unshift({
+                name: '-',
+            });
+        }
 
         return choices;
+    };
+
+    this.$onInit = () => {
+        this.answers = {};
+        this.questionChoices = {};
+
+        surveyService
+            .getSurveyQuestions(this.resolve.survey.id)
+            .then(questions => {
+                this.surveyQuestions = questions;
+                _.forEach(questions, question => {
+                    if (question.content) {
+                        this.questionChoices[question.id] = getChoices(
+                            question.content,
+                            question.style === 'drop-down',
+                        );
+                    }
+                });
+            });
     };
 
     this.save = addAnother => {
@@ -62,12 +73,23 @@ function addSurveyResponseController(surveyService) {
         };
 
         _.forEach(_.keys(this.answers), id => {
-            postData.included.push({
-                type: 'answer',
-                attributes: {
-                    question_id: Number(id),
-                    value: this.answers[id],
-                },
+            let answer = this.answers[id];
+
+            if (_.isObject(answer)) {
+                //checkbox answers
+                answer = _.keys(_.pickBy(answer, _.identity));
+            } else {
+                answer = [answer];
+            }
+
+            _.forEach(answer, answer => {
+                postData.included.push({
+                    type: 'answer',
+                    attributes: {
+                        question_id: Number(id),
+                        value: answer,
+                    },
+                });
             });
         });
 
