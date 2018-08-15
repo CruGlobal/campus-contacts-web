@@ -8,11 +8,11 @@
         <tr class="bg-grey-light ttu tracked bold">
             <th class="ph3 pv2">{{ 'contact_import:step_2.csv_column' | t }}</th>
             <th class="ph3 pv2 flex items-center">
-                <a href="javascript:;" ng-click="$ctrl.previousPreviewRow()">
+                <a href="" ng-click="$ctrl.previousPreviewRow()">
                     <ng-md-icon icon="chevron_left"></ng-md-icon>
                 </a>
                 {{ 'contact_import:step_2.preview' | t: { current: $ctrl.currentPreviewRow, max: $ctrl.csvData.length - 1 } }}
-                <a href="javascript:;" ng-click="$ctrl.nextPreviewRow()">
+                <a href="" ng-click="$ctrl.nextPreviewRow()">
                     <ng-md-icon icon="chevron_right"></ng-md-icon>
                 </a>
             </th>
