@@ -9,12 +9,13 @@ function organizationOverviewPeopleService(
     ProgressiveListLoader,
     RequestDeduper,
 ) {
-    const listLoader = new ProgressiveListLoader({
-        modelType: 'person',
-        requestDeduper: new RequestDeduper(),
-        errorMessage:
-            'error.messages.organization_overview_people.load_people_chunk',
-    });
+    const createListLoader = () =>
+        new ProgressiveListLoader({
+            modelType: 'person',
+            requestDeduper: new RequestDeduper(),
+            errorMessage:
+                'error.messages.organization_overview_people.load_people_chunk',
+        });
     const buildListParams = (orgId, filters = {}, orderParam = []) => ({
         include: [
             'phone_numbers',
@@ -62,7 +63,7 @@ function organizationOverviewPeopleService(
             .join(',');
     };
     return {
-        listLoader,
+        createListLoader,
         buildListParams,
         buildOrderString,
     };
