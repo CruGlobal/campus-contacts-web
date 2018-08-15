@@ -7,6 +7,7 @@ angular.module('missionhubApp').component('accordionToggle', {
         accordion: '^',
     },
     template: template,
+    transclude: true,
 });
 
 function accordionToggleController() {

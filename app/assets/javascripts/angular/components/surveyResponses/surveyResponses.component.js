@@ -24,7 +24,7 @@ function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
             {},
             { errorMessage: 'error.messages.surveyResponses.loadQuestions' },
         );
-        return data.sort((a, b) => a.position - b.position).map(question => ({
+        return data.map(question => ({
             id: question.id,
             label: question.column_title || question.label,
         }));
