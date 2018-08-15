@@ -81,7 +81,10 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
             answers: data.answers.reduce(
                 (acc, answer) => ({
                     ...acc,
-                    [answer.question.id]: answer.value,
+                    [answer.question.id]: [
+                        ...(acc[answer.question.id] || []),
+                        answer.value,
+                    ],
                 }),
                 {},
             ),
