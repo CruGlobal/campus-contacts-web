@@ -8,6 +8,7 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
         filtersChanged: '&',
         organizationId: '<',
         surveyId: '<',
+        questions: '<',
     },
 });
 
@@ -25,11 +26,7 @@ function peopleFiltersPanelController(
     this.labelOptions = [];
     this.statusOptions = [];
     this.genderOptions = [];
-    this.labelFilterCollapsed = true;
-    this.assignedToFilterCollapsed = true;
-    this.groupFilterCollapsed = true;
-    this.statusFilterCollapsed = true;
-    this.genderFilterCollapsed = true;
+    this.questionOptions = [];
 
     this.$onInit = () => {
         $scope.$watch(
@@ -59,6 +56,7 @@ function peopleFiltersPanelController(
             labels: {},
             assignedTos: {},
             groups: {},
+            questions: {},
             includeArchived: false,
         };
     };
@@ -91,6 +89,7 @@ function peopleFiltersPanelController(
                 this.groupOptions = stats.groups;
                 this.statusOptions = stats.statuses;
                 this.genderOptions = stats.genders;
+                this.questionOptions = stats.questions;
 
                 // Restrict the active filters to currently valid options
                 // A filter could include a non-existent label, for example, if people were edited so that no one
@@ -127,6 +126,7 @@ function peopleFiltersPanelController(
             groups: getTruthyKeys(this.filters.groups),
             statuses: getTruthyKeys(this.filters.statuses),
             genders: getTruthyKeys(this.filters.genders),
+            questions: _.mapValues(this.filters.questions, getTruthyKeys),
         };
     };
 }
