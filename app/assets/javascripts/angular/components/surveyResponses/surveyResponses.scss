@@ -1,8 +1,14 @@
+@import '../../../../stylesheets/variables/colors';
+
 survey-responses {
-    .add_person_btn {
-        float: right;
-        padding: 15px 8px 0 0;
-        color: #fff !important;
-        fill: #fff !important;
+    .header {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        .survey-title {
+            display: flex;
+            align-items: center;
+            color: $pivot-bright-blue;
+            font-size: 2em;
+        }
     }
 }
