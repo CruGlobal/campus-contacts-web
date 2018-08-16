@@ -39,14 +39,10 @@ function organizationContactImportStep1Controller($scope) {
                     delete this.csvData;
                     delete this.parseErrors;
                     const file = input.files[0];
+                    const fileExtension = file.name.split('.').pop();
                     this.fileName = file.name;
 
-                    if (
-                        _.includes(
-                            ['text/csv', 'application/vnd.ms-excel'],
-                            file.type,
-                        )
-                    ) {
+                    if (fileExtension === 'csv') {
                         this.parseCsv(file);
                     } else {
                         this.fileTypeError = true;
