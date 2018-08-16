@@ -1,4 +1,5 @@
 import template from './surveyResponses.html';
+import './surveyResponses.scss';
 
 angular.module('missionhubApp').component('surveyResponses', {
     controller: surveyResponsesController,
@@ -7,7 +8,12 @@ angular.module('missionhubApp').component('surveyResponses', {
     },
     template: template,
 });
-function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
+function surveyResponsesController(
+    surveyResponsesService,
+    $state,
+    httpProxy,
+    $uibModal,
+) {
     this.orgId = $state.params.orgId;
     this.loaderService = {
         ...surveyResponsesService,
@@ -28,5 +34,18 @@ function surveyResponsesController(surveyResponsesService, $state, httpProxy) {
             id: question.id,
             label: question.column_title || question.label,
         }));
+    };
+
+    this.addSurveyResponse = () => {
+        const modal = $uibModal.open({
+            component: 'addSurveyResponseModal',
+            resolve: {
+                survey: () => this.survey,
+            },
+            windowClass: 'pivot_theme',
+        });
+        modal.result.then(() => {
+            //Refresh people screen
+        });
     };
 }
