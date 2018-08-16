@@ -31,6 +31,20 @@ organization-contact-import {
         text-align: left;
     }
 
+    .header {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        .survey-title {
+            display: flex;
+            align-items: center;
+            color: $pivot-bright-blue;
+            font-size: 2em;
+        }
+        .white {
+            color: #ffffff;
+        }
+    }
+
     /* Backgrounds */
 
     .bg-blue {

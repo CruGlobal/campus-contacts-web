@@ -1,5 +1,6 @@
 import template from './surveyResponses.html';
 import './surveyResponses.scss';
+import chevronLeftIcon from '../../../../images/icons/chevronLeft.svg';
 
 angular.module('missionhubApp').component('surveyResponses', {
     controller: surveyResponsesController,
@@ -14,6 +15,7 @@ function surveyResponsesController(
     httpProxy,
     $uibModal,
 ) {
+    this.chevronLeftIcon = chevronLeftIcon;
     this.orgId = $state.params.orgId;
     this.loaderService = {
         ...surveyResponsesService,

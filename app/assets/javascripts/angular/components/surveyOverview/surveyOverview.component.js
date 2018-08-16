@@ -1,5 +1,6 @@
 import template from './surveyOverview.html';
 import './surveyOverview.scss';
+import chevronLeftIcon from '../../../../images/icons/chevronLeft.svg';
 
 angular.module('missionhubApp').component('surveyOverview', {
     controller: surveyOverviewController,
@@ -10,6 +11,7 @@ angular.module('missionhubApp').component('surveyOverview', {
 });
 
 function surveyOverviewController() {
+    this.chevronLeftIcon = chevronLeftIcon;
     this.tabNames = [
         {
             id: 'settings',

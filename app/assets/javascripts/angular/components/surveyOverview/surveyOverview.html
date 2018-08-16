@@ -4,11 +4,13 @@
     </div>
 </div>
 
-<div class="header">
-    <div class="pa3 fr">
-        <a class="f6 link dim ba ph4 pv3 mb2 dib white bold br2 dim ttu tracked"
-            ng-href="/survey_responses/new?preview=true&survey_id={{$ctrl.survey.id}}"
-            target="_blank">{{'surveys:preview' | t}}</a>
+<div class="header flex justify-between">
+    <div class="self-end">
+        <div class="survey-title pv3 ph2">
+            <a ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
+                <img class="db mr1" ng-src="{{$ctrl.chevronLeftIcon}}"/>
+            </a>
+            {{$ctrl.survey.title}}
     </div>
 
     <div class="survey-title-row">
@@ -24,7 +26,13 @@
             <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
         </div>
     </div>
-</survey-header>
+    </div>
+    <a ng-href="/survey_responses/new?preview=true&survey_id={{$ctrl.survey.id}}"
+       target="_blank"
+       class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked">
+        {{ 'surveys:preview' | t }}
+    </a>
+</div>
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
