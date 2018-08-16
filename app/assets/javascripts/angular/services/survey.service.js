@@ -183,6 +183,18 @@ function surveyService(
                 )
                 .then(httpProxy.extractModels);
         },
+
+        importAnswerSheet: payload => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('answer_sheet').url.all,
+                    payload,
+                    {
+                        errorMessage: 'contact_import:errors.save',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
     };
 }
 
