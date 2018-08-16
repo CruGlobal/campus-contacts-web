@@ -41,11 +41,17 @@ function organizationContactImportStep1Controller($scope) {
                     const file = input.files[0];
                     this.fileName = file.name;
 
-                    if (file.type === 'text/csv') {
+                    if (
+                        _.includes(
+                            ['text/csv', 'application/vnd.ms-excel'],
+                            file.type,
+                        )
+                    ) {
                         this.parseCsv(file);
                     } else {
                         this.fileTypeError = true;
                         delete this.csvData;
+                        delete this.fileName;
                     }
                 });
             },
