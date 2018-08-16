@@ -95,7 +95,7 @@
             <accordion-toggle class="flex-auto">{{'search.questions.title' | t}}</accordion-toggle>
         </accordion-header>
         <accordion-content>
-            <accordion collapsed="true" class="filter-row filter-groups" ng-repeat="question in $ctrl.questionOptions">
+            <accordion collapsed="true" class="filter-sub-row filter-groups" ng-repeat="question in $ctrl.questionOptions">
                 <accordion-header>
                     <accordion-toggle class="flex-auto">{{($ctrl.questions | filter: {id: question.question_id})[0].label}}</accordion-toggle>
                 </accordion-header>
