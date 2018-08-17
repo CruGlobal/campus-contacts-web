@@ -45,6 +45,8 @@ function surveyResponsesController(
                 survey: () => this.survey,
             },
             windowClass: 'pivot_theme',
+            backdrop: 'static',
+            keyboard: false,
         });
         modal.result.then(() => {
             //Refresh people screen
