@@ -31,19 +31,16 @@ function surveyService(
                     ),
                 ])
                 .then(([predefinedSurvey, surveyQuestions]) => {
-                    const predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+                    let predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
                         element => element.question,
                     );
-                    const predefinedQuestionIds = predefinedQuestions.map(
-                        question => question.id,
-                    );
-                    const filteredSurveyQuestions = surveyQuestions.data.filter(
-                        question => {
-                            return !predefinedQuestionIds.includes(question.id);
-                        },
+
+                    //only include hard coded predefined questions (first/last name and phone)
+                    predefinedQuestions = predefinedQuestions.filter(question =>
+                        _.includes(['3457', '3458', '17'], question.id),
                     );
 
-                    return [...predefinedQuestions, ...filteredSurveyQuestions];
+                    return [...predefinedQuestions, ...surveyQuestions.data];
                 });
         },
 
