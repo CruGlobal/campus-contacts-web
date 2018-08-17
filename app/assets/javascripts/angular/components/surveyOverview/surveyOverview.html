@@ -20,9 +20,6 @@
              ng-click="$ctrl.activeTab = tab.id">
             <span>{{tab.name | t}}</span>
         </div>
-        <div class="tab">
-            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">{{'surveys:questions.questions' | t}}</a>
-        </div>
     </div>
 </div>
 <div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
@@ -31,3 +28,4 @@
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
+<survey-overview-questions survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'questions'"></survey-overview-questions>

@@ -19,10 +19,10 @@ function surveyOverviewController() {
             id: 'keyword',
             name: 'surveys:keyword.keyword',
         },
-        // {
-        //     id: 'questions',
-        //     name: 'surveys:questions:questions',
-        // },
+        {
+            id: 'questions',
+            name: 'surveys:questions:questions',
+        },
     ];
     this.activeTab = this.tabNames[0].id;
 }

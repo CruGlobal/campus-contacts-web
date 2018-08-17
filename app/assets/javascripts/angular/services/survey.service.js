@@ -9,41 +9,34 @@ function surveyService(
 ) {
     return {
         getSurveyQuestions: surveyId => {
-            return $q
-                .all([
-                    httpProxy.get(
-                        '/surveys/predefined',
-                        {
-                            include: 'active_survey_elements.question',
-                        },
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                    httpProxy.get(
-                        `/surveys/${surveyId}/questions`,
-                        {},
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                ])
-                .then(([predefinedSurvey, surveyQuestions]) => {
-                    const predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+            return httpProxy
+                .get(
+                    `/surveys/${surveyId}/questions`,
+                    {},
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                )
+                .then(surveyQuestions => {
+                    return surveyQuestions.data;
+                });
+        },
+
+        getPredefinedQuestions: () => {
+            return httpProxy
+                .get(
+                    '/surveys/predefined',
+                    {
+                        include: 'active_survey_elements.question',
+                    },
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                )
+                .then(predefinedQuestions => {
+                    return predefinedQuestions.data.active_survey_elements.map(
                         element => element.question,
                     );
-                    const predefinedQuestionIds = predefinedQuestions.map(
-                        question => question.id,
-                    );
-                    const filteredSurveyQuestions = surveyQuestions.data.filter(
-                        question => {
-                            return !predefinedQuestionIds.includes(question.id);
-                        },
-                    );
-
-                    return [...predefinedQuestions, ...filteredSurveyQuestions];
                 });
         },
 
@@ -77,6 +70,33 @@ function surveyService(
                 .then(survey => {
                     return survey.data;
                 });
+        },
+
+        createSurveyQuestion: (surveyId, attributes) => {
+            const payload = {
+                data: {
+                    type: 'question',
+                    attributes: attributes,
+                },
+            };
+
+            return httpProxy
+                .post(`/surveys/${surveyId}/questions`, payload, {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                })
+                .then(survey => {
+                    return survey.data;
+                });
+        },
+
+        deleteSurveyQuestion: (surveyId, questionId) => {
+            return httpProxy.delete(
+                `/surveys/${surveyId}/questions/${questionId}`,
+                null,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
         },
 
         updateSurvey: survey => {
