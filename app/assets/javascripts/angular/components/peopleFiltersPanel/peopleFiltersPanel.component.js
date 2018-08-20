@@ -27,6 +27,7 @@ function peopleFiltersPanelController(
     this.statusOptions = [];
     this.genderOptions = [];
     this.questionOptions = [];
+    this.answerMatchingOptions = [];
 
     this.$onInit = () => {
         $scope.$watch(
@@ -109,24 +110,42 @@ function peopleFiltersPanelController(
             });
     };
 
-    // Return the an array of an dictionary's keys that have a truthy value
-    const getTruthyKeys = dictionary => {
-        return _.chain(dictionary)
-            .pickBy()
-            .keys()
-            .value();
-    };
+    this.findStats = _.memoize(
+        ({ id }) =>
+            this.questionOptions.find(({ question_id }) => question_id === id),
+        ({ id }) => id,
+    );
+
+    const emptyArrayToUndefined = value =>
+        value.length === 0 ? undefined : value;
+
+    const getFiltersFromObj = _.flow([
+        _.pickBy, // keep truthy key/value pairs
+        Object.keys, // get array of keys
+        emptyArrayToUndefined,
+    ]);
 
     const getNormalizedFilters = () => {
         return {
             searchString: this.filters.searchString,
             includeArchived: this.filters.includeArchived,
-            labels: getTruthyKeys(this.filters.labels),
-            assignedTos: getTruthyKeys(this.filters.assigned_tos),
-            groups: getTruthyKeys(this.filters.groups),
-            statuses: getTruthyKeys(this.filters.statuses),
-            genders: getTruthyKeys(this.filters.genders),
-            questions: _.mapValues(this.filters.questions, getTruthyKeys),
+            labels: getFiltersFromObj(this.filters.labels),
+            assignedTos: getFiltersFromObj(this.filters.assigned_tos),
+            groups: getFiltersFromObj(this.filters.groups),
+            statuses: getFiltersFromObj(this.filters.statuses),
+            genders: getFiltersFromObj(this.filters.genders),
+            questions: _.flow([
+                questions =>
+                    _.mapValues(questions, answers =>
+                        getFiltersFromObj(
+                            typeof answers === 'string'
+                                ? { [answers]: !!answers } // becomes falsy if answer is empty string
+                                : answers,
+                        ),
+                    ),
+                _.pickBy, // keep truthy key/value pairs
+            ])(this.filters.questions),
+            answerMatchingOptions: _.pickBy(this.filters.answerMatchingOptions),
         };
     };
 }

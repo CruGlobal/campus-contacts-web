@@ -71,6 +71,15 @@ function surveyResponsesService(ProgressiveListLoader, RequestDeduper) {
                   {},
               )
             : {}),
+        ...(filters.answerMatchingOptions
+            ? Object.entries(filters.answerMatchingOptions).reduce(
+                  (acc, [questionId, value]) => ({
+                      ...acc,
+                      [`filters[answers_options][${questionId}]`]: value,
+                  }),
+                  {},
+              )
+            : {}),
     });
     // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
     // string expected by he API
