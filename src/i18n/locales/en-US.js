@@ -829,4 +829,12 @@ export default {
         weeklyDigest: 'Weekly Ministry Digest',
         legacyNav: 'Revert to legacy navigation',
     },
+    peopleScreen: {
+        filterSearchPlaceholder: 'Search answers',
+        answerMatchingOptions: {
+            exactly: 'Exactly',
+            contains: 'Contains',
+            doesNotContain: 'Does not contain',
+        },
+    },
 };

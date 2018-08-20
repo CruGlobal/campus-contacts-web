@@ -78,6 +78,7 @@
         "no-new-object": "error",
         "no-unneeded-ternary": "error",
 
-        "angular/definedundefined": "off"
+        "angular/definedundefined": "off",
+        "angular/typecheck-string": "off"
     }
 }
