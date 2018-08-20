@@ -647,6 +647,7 @@ export default {
             delete: 'Delete',
             copy: 'Copy',
             import: 'Import Survey Results',
+            mass: 'Mass Entry',
         },
         errors: {
             createSurvey: 'Error occurred while creating survey',
