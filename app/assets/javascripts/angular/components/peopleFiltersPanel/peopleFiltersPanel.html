@@ -95,16 +95,28 @@
             <accordion-toggle class="flex-auto">{{'search.questions.title' | t}}</accordion-toggle>
         </accordion-header>
         <accordion-content>
-            <accordion collapsed="true" class="filter-sub-row filter-groups" ng-repeat="question in $ctrl.questionOptions">
+            <accordion
+                collapsed="true"
+                class="filter-sub-row filter-groups"
+                ng-repeat="question in $ctrl.questions"
+                ng-if="question.kind === 'TextField' || $ctrl.findStats(question)">
                 <accordion-header>
-                    <accordion-toggle class="flex-auto">{{($ctrl.questions | filter: {id: question.question_id})[0].label}}</accordion-toggle>
+                    <accordion-toggle class="flex-auto">{{question.label}}</accordion-toggle>
                 </accordion-header>
                 <accordion-content>
-                    <label ng-repeat="answerOption in question.answers" class="filter-option">
+                    <label ng-repeat="answerOption in $ctrl.findStats(question).answers" class="filter-option">
                         <input type="checkbox"
-                               ng-model="$ctrl.filters.questions[question.question_id][answerOption.value]">
+                               ng-model="$ctrl.filters.questions[question.id][answerOption.value]">
                         <span class="filter-option-name">{{ answerOption.value }}</span>
                         <span class="filter-option-count">{{ answerOption.count }}</span>
+                    </label>
+                    <label class="filter-option flex-column" ng-if="question.kind === 'TextField'">
+                        <select class="w-100" ng-model="$ctrl.filters.answerMatchingOptions[question.id]">
+                            <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
+                            <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
+                            <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
+                        </select>
+                        <input type="text" class="w-100 mt-2" ng-model="$ctrl.filters.questions[question.id]" placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}">
                     </label>
                 </accordion-content>
         </accordion-content>

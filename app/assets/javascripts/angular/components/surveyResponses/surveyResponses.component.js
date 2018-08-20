@@ -35,6 +35,7 @@ function surveyResponsesController(
         return data.map(question => ({
             id: question.id,
             label: question.column_title || question.label,
+            kind: question.kind,
         }));
     };
 
