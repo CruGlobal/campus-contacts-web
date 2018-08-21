@@ -7,11 +7,4 @@ angular.module('missionhubApp').component('organizationOverviewPeople', {
     },
     template: template,
 });
-function organizationOverviewPeopleController(
-    organizationOverviewPeopleService,
-) {
-    this.loaderService = {
-        ...organizationOverviewPeopleService,
-        listLoader: organizationOverviewPeopleService.createListLoader(),
-    };
-}
+function organizationOverviewPeopleController() {}

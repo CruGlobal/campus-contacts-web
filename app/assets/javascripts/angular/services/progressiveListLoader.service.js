@@ -12,7 +12,10 @@ function progressiveListLoader(httpProxy, modelsService, _) {
         const errorMessage = options.errorMessage;
         let list = [];
 
-        this.loadMore = function(params = {}, transformData = data => data) {
+        this.loadMore = function(
+            params = {},
+            transformData = params => data => data,
+        ) {
             // There are two situations where our length gets out of sync from our offset:
             // 1. The already-loaded portion of the data set becomes larger on the server. In this
             // case, we would be requesting the next set after #10, but what we think is #10 is
@@ -42,7 +45,7 @@ function progressiveListLoader(httpProxy, modelsService, _) {
                     },
                 )
                 .then(function(resp) {
-                    const data = resp.data.map(transformData);
+                    const data = resp.data.map(transformData(params));
 
                     list = _.unionBy(list, data, 'id');
                     const loadedAll = resp.meta.total <= list.length;

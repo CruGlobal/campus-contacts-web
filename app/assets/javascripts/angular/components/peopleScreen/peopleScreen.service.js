@@ -52,18 +52,19 @@ function peopleScreenService(
             orgId,
             filters,
             order,
+            listLoader,
             loaderService,
             surveyId,
         ) {
-            const requestParams = loaderService.buildListParams(
+            const requestParams = peopleScreenService.buildListParams(
                 orgId,
                 filters,
                 order,
                 surveyId,
             );
 
-            return loaderService.listLoader
-                .loadMore(requestParams, loaderService.transformData)
+            return listLoader
+                .loadMore(requestParams, peopleScreenService.transformData)
                 .then(function(resp) {
                     // Load the assignments in parallel
                     peopleScreenService.loadAssignedTos(resp.nextBatch, orgId);
@@ -71,8 +72,8 @@ function peopleScreenService(
                 });
         },
 
-        loadOrgPeopleCount: function(orgId, loaderService) {
-            const requestParams = loaderService.buildListParams(orgId);
+        loadOrgPeopleCount: function(orgId) {
+            const requestParams = peopleScreenService.buildListParams(orgId);
             requestParams['page[limit]'] = 0;
 
             return httpProxy
@@ -89,6 +90,115 @@ function peopleScreenService(
                 });
         },
 
+        buildListParams: (
+            orgId,
+            filters = {},
+            orderParam = [],
+            surveyId = '',
+        ) => ({
+            include: [
+                'phone_numbers',
+                'email_addresses',
+                'organizational_permissions',
+                'reverse_contact_assignments',
+                'answer_sheets.answers',
+            ].join(','),
+            sort: peopleScreenService.buildOrderString(orderParam),
+            'filters[organization_ids]': orgId,
+            ...(surveyId
+                ? {
+                      'filters[answer_sheets][survey_ids]': surveyId,
+                  }
+                : {}),
+            ...(filters.searchString
+                ? {
+                      'filters[name]': filters.searchString,
+                  }
+                : {}),
+            ...(filters.includeArchived
+                ? {
+                      'filters[include_archived]': true,
+                  }
+                : {}),
+            ...(filters.labels
+                ? {
+                      'filters[label_ids]': filters.labels.join(','),
+                  }
+                : {}),
+            ...(filters.assignedTos
+                ? {
+                      'filters[assigned_tos]': filters.assignedTos.join(','),
+                  }
+                : {}),
+            ...(filters.groups
+                ? {
+                      'filters[group_ids]': filters.groups.join(','),
+                  }
+                : {}),
+            ...(filters.statuses
+                ? {
+                      'filters[statuses]': filters.statuses.join(','),
+                  }
+                : {}),
+            ...(filters.genders
+                ? {
+                      'filters[genders]': filters.genders.join(','),
+                  }
+                : {}),
+            ...(filters.questions
+                ? Object.entries(filters.questions).reduce(
+                      (acc, [questionId, values]) => ({
+                          ...acc,
+                          [`filters[answer_sheets][answers][${questionId}][]`]: values,
+                      }),
+                      {},
+                  )
+                : {}),
+            ...(filters.answerMatchingOptions
+                ? Object.entries(filters.answerMatchingOptions).reduce(
+                      (acc, [questionId, value]) => ({
+                          ...acc,
+                          [`filters[answer_sheets][answers_options][${questionId}]`]: value,
+                      }),
+                      {},
+                  )
+                : {}),
+        }),
+
+        // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
+        // string expected by he API
+        buildOrderString: function(order) {
+            return order
+                .map(function(orderEntry) {
+                    return `${
+                        orderEntry.direction === 'desc' ? '-' : ''
+                    }${orderEntry.field}`;
+                })
+                .join(',');
+        },
+
+        transformData: params => data => {
+            return {
+                ...data,
+                answers: (
+                    data.answer_sheets.find(
+                        sheet =>
+                            sheet.survey.id ===
+                            params['filters[answer_sheets][survey_ids]'],
+                    ) || { answers: [] }
+                ).answers.reduce(
+                    (acc, answer) => ({
+                        ...acc,
+                        [answer.question.id]: [
+                            ...(acc[answer.question.id] || []),
+                            answer.value,
+                        ],
+                    }),
+                    {},
+                ),
+            };
+        },
+
         // Merge the specified people
         mergePeople: function(personIds, winnerId) {
             const model = new JsonApiDataStore.Model('bulk_people_change');
@@ -101,7 +211,7 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(selection, order, buildOrderString) {
+        exportPeople: function(selection, order) {
             const filterParams = _.mapKeys(
                 personSelectionService.convertToFilters(selection),
                 function(value, key) {
@@ -113,7 +223,7 @@ function peopleScreenService(
                     7,
                 ), // strip off the "Bearer " part
                 organization_id: selection.orgId,
-                sort: buildOrderString(order),
+                sort: peopleScreenService.buildOrderString(order),
                 format: 'csv',
             });
             const queryString = _.map(params, function(value, key) {
