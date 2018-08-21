@@ -1,6 +1,6 @@
 <div class="modal-header">
     <div class="row">
-        <h3 class="ma0">{{ 'contacts.add_contact' | t }}</h3>
+        <h3 class="ma0">{{ 'contacts.add_contact_to' | t : {survey: $ctrl.resolve.survey.title} }}</h3>
     </div>
     <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>

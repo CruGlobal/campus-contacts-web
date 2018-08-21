@@ -81,6 +81,7 @@ export default {
         },
         contacts: {
             add_contact: 'Add Contact',
+            add_contact_to: 'Add Contact to {{survey}}',
             all_contacts: {
                 title: 'All Contacts',
             },
