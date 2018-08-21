@@ -111,12 +111,20 @@
                         <span class="filter-option-count">{{ answerOption.count }}</span>
                     </label>
                     <label class="filter-option flex-column" ng-if="question.kind === 'TextField'">
-                        <select class="w-100" ng-model="$ctrl.filters.answerMatchingOptions[question.id]">
-                            <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
+                        <select
+                            class="w-100"
+                            ng-model="$ctrl.filters.answerMatchingOptions[question.id]"
+                            ng-init="$ctrl.filters.answerMatchingOptions[question.id] = 'contains'">
                             <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
                             <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
+                            <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
                         </select>
-                        <input type="text" class="w-100 mt-2" ng-model="$ctrl.filters.questions[question.id]" placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}">
+                        <input
+                            type="text"
+                            class="w-100 mt-2"
+                            ng-model="$ctrl.filters.questions[question.id]"
+                            ng-model-options="{ debounce: 250 }"
+                            placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}">
                     </label>
                 </accordion-content>
         </accordion-content>
