@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <div class="row">
+        <h3 class="ma0">{{ 'contacts.add_contact_to' | t : {survey: $ctrl.resolve.survey.title} }}</h3>
+    </div>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
+</div>
+
+<div class="modal-text ph3">
+    <form name="$ctrl.contactForm">
+        <fieldset class="ba b--transparent ph4 mh0">
+            <div class="error red f6 flex items-center mb3" ng-if="$ctrl.importError">
+                {{$ctrl.importError}}
+            </div>
+
+            <div class="mv3" ng-repeat="question in $ctrl.surveyQuestions track by question.id">
+                <label class="grey-darker mb1 db">{{question.label}}</label>
+
+                <div ng-switch="question.kind">
+                    <div ng-switch-when="ChoiceField"  ng-switch="question.style">
+                        <select ng-switch-when="drop-down"
+                                ng-model="$ctrl.answers[question.id]"
+                                ng-options="i.value as i.name for i in $ctrl.questionChoices[question.id] track by i.value">
+                        </select>
+
+                        <div ng-switch-when="radio"
+                             ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                            <label>
+                                <input type="radio" ng-model="$ctrl.answers[question.id]"
+                                       value="{{i.value}}">
+                                <span class="pl3">{{i.name}}</span>
+                            </label>
+                        </div>
+
+                        <div ng-switch-when="checkbox"
+                             ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                            <label>
+                                <input type="checkbox" ng-model="$ctrl.answers[question.id][i.value]">
+                                <span class="pl2">{{i.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <input class="pa2 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark"
+                           ng-model="$ctrl.answers[question.id]"
+                           type="text" ng-switch-default ng-required="question.required">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+            ng-disabled="$ctrl.saving || $ctrl.contactForm.$invalid">
+        <span ng-hide="$ctrl.saving">Save and Close</span>
+    </button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.save(true)"
+            ng-disabled="$ctrl.saving || $ctrl.contactForm.$invalid">
+        <span ng-hide="$ctrl.saving">Save and Add New</span>
+    </button>
+</div>

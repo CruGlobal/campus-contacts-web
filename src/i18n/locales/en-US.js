@@ -81,6 +81,7 @@ export default {
         },
         contacts: {
             add_contact: 'Add Contact',
+            add_contact_to: 'Add Contact to {{survey}}',
             all_contacts: {
                 title: 'All Contacts',
             },
@@ -647,6 +648,7 @@ export default {
             delete: 'Delete',
             copy: 'Copy',
             import: 'Import Survey Results',
+            mass: 'Mass Entry',
         },
         errors: {
             createSurvey: 'Error occurred while creating survey',
@@ -756,6 +758,7 @@ export default {
         errors: {
             bulkImport:
                 'Error occurred while importing contacts from your CSV file',
+            save: 'Error occurred while saving contact',
         },
     },
     userPreferences: {
