@@ -10,9 +10,9 @@ function organizationService(
     _,
 ) {
     // Keep track of the orgs that the user does not have access to
-    var inaccessibleOrgs = [];
+    let inaccessibleOrgs = new Set();
 
-    var organizationService = {
+    const organizationService = {
         // Load a list of organizations
         loadOrgs: function(orgIds, errorMessage) {
             if (orgIds.length === 0) {
@@ -50,7 +50,7 @@ function organizationService(
         getOrgHierarchy: function(org) {
             var hierarchyIds = _.difference(
                 organizationService.getOrgHierarchyIds(org),
-                inaccessibleOrgs,
+                [...inaccessibleOrgs],
             );
             var unloadedOrgIds = hierarchyIds.filter(function(orgId) {
                 return !httpProxy.isLoaded(
@@ -65,14 +65,14 @@ function organizationService(
                 )
                 .then(function(loadedOrgs) {
                     // Mark as inaccessible orgs that we attempted to load but were not included in the response
-                    var newInaccessibleOrgs = _.difference(
+                    const newInaccessibleOrgs = _.difference(
                         unloadedOrgIds,
                         _.map(loadedOrgs, 'id'),
                     );
-                    inaccessibleOrgs = inaccessibleOrgs.concat(
-                        inaccessibleOrgs,
-                        newInaccessibleOrgs,
-                    );
+                    inaccessibleOrgs = new Set([
+                        ...inaccessibleOrgs,
+                        ...newInaccessibleOrgs,
+                    ]);
 
                     // Filter out organizations that were not loaded because the user does not have access to them
                     return hierarchyIds
