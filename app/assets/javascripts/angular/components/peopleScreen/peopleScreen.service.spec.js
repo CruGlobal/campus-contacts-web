@@ -1,8 +1,4 @@
-let peopleScreenService,
-    organizationOverviewPeopleService,
-    httpProxy,
-    $rootScope,
-    $q;
+let peopleScreenService, httpProxy, $rootScope, $q;
 
 function asynchronous(fn) {
     return function(done) {
@@ -24,13 +20,11 @@ describe('peopleScreenService', function() {
 
     beforeEach(inject(function(
         _peopleScreenService_,
-        _organizationOverviewPeopleService_,
         _httpProxy_,
         _$rootScope_,
         _$q_,
     ) {
         peopleScreenService = _peopleScreenService_;
-        organizationOverviewPeopleService = _organizationOverviewPeopleService_;
         httpProxy = _httpProxy_;
         $rootScope = _$rootScope_;
         $q = _$q_;
@@ -56,14 +50,23 @@ describe('peopleScreenService', function() {
                 this.responseTotal = 5;
 
                 return peopleScreenService
-                    .loadOrgPeopleCount(
-                        this.orgId,
-                        organizationOverviewPeopleService,
-                    )
+                    .loadOrgPeopleCount(this.orgId)
                     .then(function(personCount) {
                         expect(personCount).toBe(5);
                     });
             }),
         );
+    });
+
+    describe('buildOrderString', function() {
+        it('should generate a valid order string', function() {
+            expect(
+                peopleScreenService.buildOrderString([
+                    { field: 'key1', direction: 'asc' },
+                    { field: 'key2', direction: 'desc' },
+                    { field: 'key3', direction: 'desc' },
+                ]),
+            ).toBe('key1,-key2,-key3');
+        });
     });
 });

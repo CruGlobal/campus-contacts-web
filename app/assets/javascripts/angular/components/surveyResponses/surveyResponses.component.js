@@ -9,18 +9,9 @@ angular.module('missionhubApp').component('surveyResponses', {
     },
     template: template,
 });
-function surveyResponsesController(
-    surveyResponsesService,
-    $state,
-    httpProxy,
-    $uibModal,
-) {
+function surveyResponsesController($state, httpProxy, $uibModal) {
     this.chevronLeftIcon = chevronLeftIcon;
     this.orgId = $state.params.orgId;
-    this.loaderService = {
-        ...surveyResponsesService,
-        listLoader: surveyResponsesService.createListLoader(),
-    };
 
     this.$onInit = async () => {
         this.questions = await loadQuestions();
@@ -50,7 +41,7 @@ function surveyResponsesController(
             keyboard: false,
         });
         modal.result.then(() => {
-            //Refresh people screen
+            // TODO: Refresh people screen
         });
     };
 }

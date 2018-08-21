@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import template from './peopleScreen.html';
 import './peopleScreen.scss';
 import pencilIcon from '../../../../images/icons/pencil.svg';
@@ -34,8 +36,16 @@ function peopleScreenController(
     personService,
     peopleFiltersPanelService,
     loggedInPerson,
-    _,
+    ProgressiveListLoader,
+    RequestDeduper,
 ) {
+    const listLoader = new ProgressiveListLoader({
+        modelType: 'person',
+        requestDeduper: new RequestDeduper(),
+        errorMessage:
+            'error.messages.organization_overview_people.load_people_chunk',
+    });
+
     this.people = [];
     this.multiSelection = {};
     this.filters = {};
@@ -58,10 +68,59 @@ function peopleScreenController(
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;
 
+        // Define the columns that can be selected as sort keys
+        // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
+        this.columns = [
+            {
+                name: 'name',
+                cssClass: 'name-column',
+                label: 'ministries.people.name',
+            sortable: true,
+                getSortKey: person => {
+                    return [
+                    (person.last_name || '').toLowerCase(),
+                    (person.first_name || '').toLowerCase(),
+                    ];
+                },
+                orderFields: ['last_name', 'first_name'],
+            },
+            {
+                name: 'gender',
+                cssClass: 'detail-column gender-column',
+                label: 'ministries.people.gender',
+            sortable: true,
+                getSortKey: person => {
+                    return person.gender;
+                },
+                orderFields: ['gender', 'last_name', 'first_name'],
+            },
+            {
+                name: 'assignment',
+                cssClass: 'detail-column assigned-to-column',
+                label: 'assignments.assignment',
+                sortable: false,
+            },
+            {
+                name: 'status',
+                cssClass: 'detail-column status-column',
+                label: 'ministries.people.status',
+            sortable: true,
+                getSortKey: person => {
+                    return personService.getFollowupStatus(person, this.org.id);
+                },
+                orderFields: [
+                    'organizational_permissions.followup_status',
+                    'last_name',
+                    'first_name',
+                ],
+            },
+        ];
+
+        this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
+
     let unsubscribe = null;
 
     this.$onInit = () => {
-        setColumns();
         unsubscribe = $rootScope.$on('personCreated', (event, person) => {
             onNewPerson(person);
         });
@@ -80,59 +139,6 @@ function peopleScreenController(
 
     this.$onDestroy = () => {
         unsubscribe();
-    };
-
-    // TODO: could be called in constructor instead of $onInit once this.surveyId isn't needed anymore
-    const setColumns = () => {
-    // Define the columns that can be selected as sort keys
-    // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
-    this.columns = [
-        {
-            name: 'name',
-            cssClass: 'name-column',
-            label: 'ministries.people.name',
-                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
-            getSortKey: person => {
-                return [
-                    (person.last_name || '').toLowerCase(),
-                    (person.first_name || '').toLowerCase(),
-                ];
-            },
-            orderFields: ['last_name', 'first_name'],
-        },
-        {
-            name: 'gender',
-            cssClass: 'detail-column gender-column',
-            label: 'ministries.people.gender',
-                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
-            getSortKey: person => {
-                return person.gender;
-            },
-            orderFields: ['gender', 'last_name', 'first_name'],
-        },
-        {
-            name: 'assignment',
-            cssClass: 'detail-column assigned-to-column',
-            label: 'assignments.assignment',
-            sortable: false,
-        },
-        {
-            name: 'status',
-            cssClass: 'detail-column status-column',
-            label: 'ministries.people.status',
-                sortable: !this.surveyId, // TODO: change to true once MHP-1789 is fixed and sorting is supported on answer sheets endpoint
-            getSortKey: person => {
-                return personService.getFollowupStatus(person, this.org.id);
-            },
-            orderFields: [
-                'organizational_permissions.followup_status',
-                'last_name',
-                'first_name',
-            ],
-        },
-    ];
-
-        this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
     };
 
     const selectedCount = () => {
@@ -162,6 +168,7 @@ function peopleScreenController(
                 orgId,
                 this.filters,
                 getOrder(),
+                listLoader,
                 this.loaderService,
                 this.surveyId,
             )
@@ -224,7 +231,7 @@ function peopleScreenController(
 
     const resetList = () => {
         this.people = [];
-        this.loaderService.listLoader.reset();
+        listLoader.reset();
         this.loadedAll = false;
         this.selectAllValue = false;
         this.multiSelection = {};
@@ -386,7 +393,7 @@ function peopleScreenController(
         // Update the people list and count
         this.people = remainingPeople;
         this.totalCount -= removedPeople.length;
-        this.loaderService.listLoader.reset(this.people);
+        listLoader.reset(this.people);
 
         // Update the people count shown in the people tab
         if (this.organizationOverview.people) {
