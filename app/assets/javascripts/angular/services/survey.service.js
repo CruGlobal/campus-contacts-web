@@ -89,6 +89,23 @@ function surveyService(
                 });
         },
 
+        updateSurveyQuestion: (surveyId, attributes) => {
+            const payload = {
+                data: {
+                    type: 'question',
+                    attributes: attributes,
+                },
+            };
+
+            return httpProxy.put(
+                `/surveys/${surveyId}/questions/${attributes.id}`,
+                payload,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
+        },
+
         deleteSurveyQuestion: (surveyId, questionId) => {
             return httpProxy.delete(
                 `/surveys/${surveyId}/questions/${questionId}`,

@@ -26,6 +26,7 @@ function surveyOverviewQuestionsController(surveyService) {
 
     this.questionTypes = [
         { kind: 'TextField', style: 'short', name: 'Short Answer' },
+        { kind: 'TextField', style: 'email', name: 'Email Address' },
         { kind: 'ChoiceField', style: 'radio', name: 'Radio (Choose one)' },
         {
             kind: 'ChoiceField',
@@ -71,5 +72,30 @@ function surveyOverviewQuestionsController(surveyService) {
             .then(() => {
                 _.remove(this.surveyQuestions, { id: questionId });
             });
+    };
+
+    this.saveQuestion = _.throttle(
+        question => {
+            surveyService
+                .updateSurveyQuestion(
+                    this.survey.id,
+                    _.pick(question, [
+                        'id',
+                        'label',
+                        'kind',
+                        'style',
+                        'column_title',
+                        'content',
+                    ]),
+                )
+                .then();
+        },
+        750,
+        { leading: false },
+    );
+
+    this.saveQuestionContent = (question, answers) => {
+        question.content = answers.join('\n');
+        this.saveQuestion(question);
     };
 }
