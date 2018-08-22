@@ -181,7 +181,8 @@ function peopleScreenService(
             return {
                 ...data,
                 answers: (
-                    data.answer_sheets.find(
+                    _.findLast(
+                        data.answer_sheets,
                         sheet =>
                             sheet.survey.id ===
                             params['filters[answer_sheets][survey_ids]'],
