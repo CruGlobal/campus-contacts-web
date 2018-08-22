@@ -154,6 +154,28 @@ function surveyService(
                 });
         },
 
+        updateKeyword: data => {
+            const payload = {
+                data: {
+                    type: 'sms_keyword',
+                    attributes: {
+                        initial_response: data.keyword.initial_response,
+                    },
+                },
+            };
+
+            return httpProxy
+                .put(
+                    modelsService
+                        .getModelMetadata('sms_keyword')
+                        .url.single(data.keyword.id),
+                    payload,
+                )
+                .then(function(keyword) {
+                    return keyword.data;
+                });
+        },
+
         getStats: surveyId => {
             return httpProxy
                 .get(
