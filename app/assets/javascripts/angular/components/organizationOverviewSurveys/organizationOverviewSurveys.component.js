@@ -65,7 +65,7 @@ function organizationOverviewSurveysController(
             component: 'copySurvey',
             resolve: {
                 organizationId: _.constant(this.organizationOverview.org.id),
-                surveyId: _.constant(survey.id),
+                survey: _.constant(survey),
             },
             windowClass: 'pivot_theme',
             size: 'md',

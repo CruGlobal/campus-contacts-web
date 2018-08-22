@@ -8,14 +8,14 @@
 
     <div class="form-group">
         <label>
-            <span class="required-field">{{ 'surveyTab:surveyName' | t }}</span>
+            <span>{{ 'surveyTab:surveyName' | t }}</span>
             <input type="text" ng-model="$ctrl.survey.title" class="form-control">
         </label>
     </div>
 
     <div class="form-group">
         <label>
-            <span class="required-field">{{ 'surveyTab:searchMinistry' | t }}</span>
+            <span>{{ 'surveyTab:searchMinistry' | t }}</span>
             <select class="form-control"
                     ng-model="$ctrl.survey.parent_organization"
                     ng-options="org.id as org.name for org in $ctrl.orgs">

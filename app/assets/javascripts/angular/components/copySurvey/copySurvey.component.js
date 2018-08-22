@@ -15,7 +15,9 @@ function copySurveyController(surveyService, loggedInPerson) {
     this.survey = {};
 
     this.$onInit = () => {
-        this.survey.id = this.resolve.surveyId;
+        this.survey.id = this.resolve.survey.id;
+        this.survey.title = this.resolve.survey.title;
+
         this.orgs = loggedInPerson.person.organizational_permissions.map(
             orgPermission => orgPermission.organization,
         );
