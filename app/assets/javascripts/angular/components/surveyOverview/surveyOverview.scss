@@ -309,7 +309,7 @@ organization-contact-import {
         position: relative;
         cursor: pointer;
 
-        &:after {
+        .open-close-arrow {
             content: '';
             border: solid $grey-darker;
             border-width: 0 2px 2px 0;
@@ -329,7 +329,7 @@ organization-contact-import {
             position: relative;
             cursor: pointer;
 
-            &:after {
+            .open-close-arrow {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
                 margin-top: -4px;
@@ -348,7 +348,8 @@ organization-contact-import {
     .dropdown,
     .autocomplete {
         position: relative;
-        &.expanded {
+        &.expanded,
+        &.open {
             background: #ffffff;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             border-radius: 0.25rem;
@@ -506,8 +507,10 @@ organization-contact-import {
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
 
-        input {
-            margin: 0.35rem 0;
+        .ui-select-container {
+            background: #fff;
+            margin: 0.6rem 0;
+            padding: 0.5rem 0.5rem;
         }
 
         .delete {
