@@ -706,7 +706,9 @@ export default {
         questions: {
             questions: 'Questions',
             type: 'Type',
+            sort: 'Sort',
             columnTitle: 'Column Title',
+            labelPlaceholder: '[Enter question here.]',
             newAnswer: 'New Answer',
             addPredefinedQuestion: 'Add Predefined/Previous Question',
             addNewQuestion: 'Add New Question',

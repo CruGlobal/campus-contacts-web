@@ -16,11 +16,11 @@
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
             <input class="pa2 input-reset bg-white bw0 grey-darker w-83 ihshort br2"
-                   placeholder="[Enter question here.]" type="text" ng-model="question.label"
+                   placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" type="text" ng-model="question.label"
                    ng-change="$ctrl.saveQuestion(question)"
                    ng-if="$ctrl.isExpanded[question.id]">
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
-                <img ng-src="{{$ctrl.icons.trash}}" alt="Delete" style="width:20px; height:24px;">
+                <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
             </a>
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.addQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
@@ -73,7 +73,7 @@
                                  ng-repeat="answer in questionAnswers track by $index">
                                 <div>
                                     <a class="sort mr3">
-                                        <img alt="Sort" ng-src="{{$ctrl.icons.sort}}" style="width:22px; height:20px">
+                                        <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}" style="width:22px; height:20px">
                                     </a>
                                 </div>
                                 <div class="f-grow">
@@ -84,7 +84,7 @@
                                 <div>
                                     <a class="ml3 delete" href=""
                                        ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
-                                        <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                        <img alt="{{ 'general:delete' | t }}" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
                                     </a>
                                 </div>
                             </div>

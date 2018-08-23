@@ -41,9 +41,10 @@ function surveyService(
                     );
 
                     //mark predefined questions as non-editable
-                    angular.forEach(predefinedQuestions, question => {
-                        question.editable = false;
-                    });
+                    predefinedQuestions = predefinedQuestions.map(question => ({
+                        ...question,
+                        editable: false,
+                    }));
 
                     return [...predefinedQuestions, ...surveyQuestions.data];
                 });
