@@ -20,6 +20,9 @@
              ng-click="$ctrl.activeTab = tab.id">
             <span>{{tab.name | t}}</span>
         </div>
+        <div class="tab">
+            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
+        </div>
     </div>
 </div>
 <div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
