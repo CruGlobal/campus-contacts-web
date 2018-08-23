@@ -25,8 +25,9 @@
             <a class="ml3" href="" ng-if="isExpanded" ng-click="$ctrl.addQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
             </a>
-            <span class="db open-close-arrow" style=""
-               ng-click="isExpanded = !isExpanded">
+            <span class="db open-close-arrow"
+                  ng-show="question.editable !== false"
+                  ng-click="isExpanded = !isExpanded">
             </span>
         </h2>
         <div class="accordion-body" ng-if="isExpanded" ng-init="questionAnswers = question.content.split('\n')">

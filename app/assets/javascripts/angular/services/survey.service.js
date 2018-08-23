@@ -40,6 +40,11 @@ function surveyService(
                         _.includes(['3457', '3458', '17'], question.id),
                     );
 
+                    //mark predefined questions as non-editable
+                    angular.forEach(predefinedQuestions, question => {
+                        question.editable = false;
+                    });
+
                     return [...predefinedQuestions, ...surveyQuestions.data];
                 });
         },
