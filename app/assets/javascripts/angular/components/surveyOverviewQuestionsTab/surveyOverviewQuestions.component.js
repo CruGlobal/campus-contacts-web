@@ -16,6 +16,8 @@ angular.module('missionhubApp').component('surveyOverviewQuestions', {
 });
 
 function surveyOverviewQuestionsController(surveyService) {
+    this.isExpanded = {};
+
     this.icons = {
         copy: copyIcon,
         help: helpIcon,
@@ -68,6 +70,7 @@ function surveyOverviewQuestionsController(surveyService) {
             .createSurveyQuestion(this.survey.id, question)
             .then(newQuestion => {
                 this.surveyQuestions.push(newQuestion);
+                this.isExpanded[newQuestion.id] = true;
             });
     };
 

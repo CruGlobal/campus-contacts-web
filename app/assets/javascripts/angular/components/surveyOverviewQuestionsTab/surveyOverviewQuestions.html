@@ -1,36 +1,36 @@
 <div class="accordion">
     <form class="bg-grey-light br2 grey-darker" ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
-            'accordion-expanded': isExpanded
+            'accordion-expanded': $ctrl.isExpanded[question.id]
         }">
         <h2 class="accordion-header sortable normal grey-darker mt3 bg-grey-light f5 flex br2"
             ng-class="{
-                'pa3': !isExpanded,
-                'ph3 pv2 items-center': isExpanded
+                'pa3': !$ctrl.isExpanded[question.id],
+                'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
         }">
             <!--<a class="sort mr3">-->
                 <!--<img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">-->
             <!--</a>-->
-            <span class="ml3" ng-show="!isExpanded">
+            <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
                 {{question.label}}
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
             <input class="pa2 input-reset bg-white bw0 grey-darker w-83 ihshort br2"
                    placeholder="Question Title" type="text" ng-model="question.label"
                    ng-change="$ctrl.saveQuestion(question)"
-                   ng-if="isExpanded">
-            <a class="ml3" href="" ng-if="isExpanded" ng-click="$ctrl.deleteQuestion(question.id)">
+                   ng-if="$ctrl.isExpanded[question.id]">
+            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
                 <img ng-src="{{$ctrl.icons.trash}}" alt="Delete" style="width:20px; height:24px;">
             </a>
-            <a class="ml3" href="" ng-if="isExpanded" ng-click="$ctrl.addQuestion(question)">
+            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.addQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
             </a>
             <span class="db open-close-arrow"
                   ng-show="question.editable !== false"
-                  ng-click="isExpanded = !isExpanded">
+                  ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]">
             </span>
         </h2>
-        <div class="accordion-body" ng-if="isExpanded" ng-init="questionAnswers = question.content.split('\n')">
+        <div class="accordion-body" ng-if="$ctrl.isExpanded[question.id]" ng-init="questionAnswers = question.content.split('\n')">
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
                     <div class="w-48">
