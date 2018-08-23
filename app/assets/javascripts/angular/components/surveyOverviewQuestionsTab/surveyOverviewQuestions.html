@@ -1,4 +1,4 @@
-<div class="accordion" ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.surveyQuestions">
+<div class="accordion">
     <form class="bg-grey-light br2 grey-darker" ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
             'accordion-expanded': isExpanded
@@ -8,9 +8,9 @@
                 'pa3': !isExpanded,
                 'ph3 pv2 items-center': isExpanded
         }">
-            <a class="sort mr3">
-                <img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">
-            </a>
+            <!--<a class="sort mr3">-->
+                <!--<img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">-->
+            <!--</a>-->
             <span class="ml3" ng-show="!isExpanded">
                 {{question.label}}
                 <span class="f7" ng-if="question.required">(Required)</span>
