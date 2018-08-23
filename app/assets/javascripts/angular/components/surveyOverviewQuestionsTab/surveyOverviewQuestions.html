@@ -180,7 +180,7 @@
             {{ 'surveys:questions.addNewQuestion' | t }}
         </a>
         <ul class="bg-white" uib-dropdown-menu>
-            <li ng-repeat="type in $ctrl.questionTypes track by $index">
+            <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
                 <a href="" ng-click="$ctrl.addQuestion({
                     label: '', kind: type.kind, style: type.style
                 })">{{type.name}}</a>

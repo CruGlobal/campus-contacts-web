@@ -27,20 +27,32 @@ function surveyOverviewQuestionsController(surveyService) {
     };
 
     this.questionTypes = [
-        { kind: 'TextField', style: 'short', name: 'Short Answer' },
+        {
+            kind: 'TextField',
+            style: 'short',
+            name: 'Short Answer',
+            canAdd: true,
+        },
         { kind: 'TextField', style: 'email', name: 'Email Address' },
-        { kind: 'ChoiceField', style: 'radio', name: 'Radio (Choose one)' },
+        {
+            kind: 'ChoiceField',
+            style: 'radio',
+            name: 'Radio (Choose one)',
+            canAdd: true,
+        },
         {
             kind: 'ChoiceField',
             style: 'checkbox',
             name: 'Checkbox (Choose one or more)',
+            canAdd: true,
         },
         {
             kind: 'ChoiceField',
             style: 'drop-down',
             name: 'Dropdown (Choose one)',
+            canAdd: true,
         },
-        { kind: 'DateField', style: 'date_field', name: 'Date' },
+        { kind: 'DateField', style: 'date_field', name: 'Date', canAdd: true },
     ];
 
     this.getQuestionType = (kind, style) => {
