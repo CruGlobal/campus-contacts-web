@@ -38,6 +38,7 @@ function surveyOverviewQuestionsController(surveyService) {
             style: 'drop-down',
             name: 'Dropdown (Choose one)',
         },
+        { kind: 'DateField', style: 'date_field', name: 'Date' },
     ];
 
     this.getQuestionType = (kind, style) => {
