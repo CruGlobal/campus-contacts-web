@@ -705,6 +705,11 @@ export default {
         },
         questions: {
             questions: 'Questions',
+            type: 'Type',
+            columnTitle: 'Column Title',
+            newAnswer: 'New Answer',
+            addPredefinedQuestion: 'Add Predefined/Previous Question',
+            addNewQuestion: 'Add New Question',
         },
     },
     contact_import: {

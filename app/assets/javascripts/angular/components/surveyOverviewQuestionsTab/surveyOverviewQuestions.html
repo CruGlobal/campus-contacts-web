@@ -13,7 +13,7 @@
             <!--</a>-->
             <span class="ml3" ng-show="!isExpanded">
                 {{question.label}}
-                <span class="f7" ng-if="question.required">(Required)</span>
+                <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
             <input class="pa2 input-reset bg-white bw0 grey-darker w-83 ihshort br2"
                    placeholder="Question Title" type="text" ng-model="question.label"
@@ -34,7 +34,9 @@
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
                     <div class="w-48">
-                        <label class="db f6 lh-copy f5 normal mb1 grey-darker ttu tracked">Type</label>
+                        <label class="db f6 lh-copy f5 normal mb1 grey-darker ttu tracked">
+                            {{ 'surveys:questions.type' | t }}
+                        </label>
                         <div class="dropdown dropdown-select w-100 mr2" uib-dropdown>
                             <a class="f5 link dim bg-white ihshort db grey-darker br2 dim" href="" uib-dropdown-toggle>
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
@@ -51,7 +53,7 @@
                     </div>
                     <div class="w-48">
                         <label class="db f5 lh-copy f6 normal mb1 grey-darker ttu tracked">
-                            Column Title
+                            {{ 'surveys:questions.columnTitle' | t }}
                         </label>
                         <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort br2"
                                ng-change="$ctrl.saveQuestion(question)"
@@ -89,7 +91,7 @@
                             <div class="assignment-item no-line">
                                 <button ng-click="questionAnswers.push(''); $ctrl.saveQuestionContent(question, questionAnswers);"
                                         class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
-                                    New Answer
+                                    {{ 'surveys:questions.newAnswer' | t }}
                                 </button>
                             </div>
                         </div>
@@ -165,7 +167,7 @@
 <div class="new-questions flex items-start mb2 mt3">
     <div class="dropdown w-50 mr2" uib-dropdown>
         <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
-            Add Predefined/Previous Question
+            {{ 'surveys:questions.addPredefinedQuestion' | t }}
         </a>
         <ul class="bg-white" uib-dropdown-menu>
             <li ng-repeat="question in $ctrl.predefinedQuestions track by question.id">
@@ -175,7 +177,7 @@
     </div>
     <div class="dropdown w-50 ml2" uib-dropdown>
         <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
-            Add New Question
+            {{ 'surveys:questions.addNewQuestion' | t }}
         </a>
         <ul class="bg-white" uib-dropdown-menu>
             <li ng-repeat="type in $ctrl.questionTypes track by $index">
