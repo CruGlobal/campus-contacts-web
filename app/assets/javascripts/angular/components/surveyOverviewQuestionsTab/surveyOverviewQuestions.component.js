@@ -60,6 +60,10 @@ function surveyOverviewQuestionsController(surveyService) {
     };
 
     this.addQuestion = question => {
+        if (!question.content) {
+            question.content = '';
+        }
+
         surveyService
             .createSurveyQuestion(this.survey.id, question)
             .then(newQuestion => {
