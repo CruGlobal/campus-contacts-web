@@ -16,7 +16,7 @@
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
             <input class="pa2 input-reset bg-white bw0 grey-darker w-83 ihshort br2"
-                   placeholder="Question Title" type="text" ng-model="question.label"
+                   placeholder="[Enter question here.]" type="text" ng-model="question.label"
                    ng-change="$ctrl.saveQuestion(question)"
                    ng-if="$ctrl.isExpanded[question.id]">
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
@@ -182,7 +182,7 @@
         <ul class="bg-white" uib-dropdown-menu>
             <li ng-repeat="type in $ctrl.questionTypes track by $index">
                 <a href="" ng-click="$ctrl.addQuestion({
-                    label: type.name, kind: type.kind, style: type.style
+                    label: '', kind: type.kind, style: type.style
                 })">{{type.name}}</a>
             </li>
         </ul>
