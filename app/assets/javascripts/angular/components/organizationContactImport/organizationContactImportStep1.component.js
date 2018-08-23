@@ -39,13 +39,15 @@ function organizationContactImportStep1Controller($scope) {
                     delete this.csvData;
                     delete this.parseErrors;
                     const file = input.files[0];
+                    const fileExtension = file.name.split('.').pop();
                     this.fileName = file.name;
 
-                    if (file.type === 'text/csv') {
+                    if (fileExtension === 'csv') {
                         this.parseCsv(file);
                     } else {
                         this.fileTypeError = true;
                         delete this.csvData;
+                        delete this.fileName;
                     }
                 });
             },

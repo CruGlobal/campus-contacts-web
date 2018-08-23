@@ -1,0 +1,10 @@
+@import '../../../../stylesheets/variables/colors';
+
+add-survey-response-modal {
+    .close-button {
+        fill: $pivot-dark-blue;
+        position: relative;
+        right: 10px;
+        top: -10px;
+    }
+}

@@ -85,4 +85,16 @@ function organizationOverviewSurveysController(
                 });
             });
     };
+
+    this.massEntry = survey => {
+        $uibModal.open({
+            component: 'addSurveyResponseModal',
+            resolve: {
+                survey: () => survey,
+            },
+            windowClass: 'pivot_theme',
+            backdrop: 'static',
+            keyboard: false,
+        });
+    };
 }

@@ -9,16 +9,38 @@ function surveyService(
 ) {
     return {
         getSurveyQuestions: surveyId => {
-            return httpProxy
-                .get(
-                    `/surveys/${surveyId}/questions`,
-                    {},
-                    {
-                        errorMessage: 'error.messages.surveys.loadQuestions',
-                    },
-                )
-                .then(surveyQuestions => {
-                    return surveyQuestions.data;
+            return $q
+                .all([
+                    httpProxy.get(
+                        '/surveys/predefined',
+                        {
+                            include: 'active_survey_elements.question',
+                        },
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
+                        },
+                    ),
+                    httpProxy.get(
+                        `/surveys/${surveyId}/questions`,
+                        {},
+                        {
+                            errorMessage:
+                                'error.messages.surveys.loadQuestions',
+                        },
+                    ),
+                ])
+                .then(([predefinedSurvey, surveyQuestions]) => {
+                    let predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+                        element => element.question,
+                    );
+
+                    //only include hard coded predefined questions (first/last name and phone)
+                    predefinedQuestions = predefinedQuestions.filter(question =>
+                        _.includes(['3457', '3458', '17'], question.id),
+                    );
+
+                    return [...predefinedQuestions, ...surveyQuestions.data];
                 });
         },
 
@@ -194,6 +216,28 @@ function surveyService(
                 });
         },
 
+        updateKeyword: data => {
+            const payload = {
+                data: {
+                    type: 'sms_keyword',
+                    attributes: {
+                        initial_response: data.keyword.initial_response,
+                    },
+                },
+            };
+
+            return httpProxy
+                .put(
+                    modelsService
+                        .getModelMetadata('sms_keyword')
+                        .url.single(data.keyword.id),
+                    payload,
+                )
+                .then(function(keyword) {
+                    return keyword.data;
+                });
+        },
+
         getStats: surveyId => {
             return httpProxy
                 .get(
@@ -216,6 +260,18 @@ function surveyService(
                     payload,
                     {
                         errorMessage: 'contact_import:errors.bulkImport',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
+
+        importAnswerSheet: payload => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('answer_sheet').url.all,
+                    payload,
+                    {
+                        errorMessage: 'contact_import:errors.save',
                     },
                 )
                 .then(httpProxy.extractModels);
