@@ -15,7 +15,7 @@ angular.module('missionhubApp').component('surveyOverviewQuestions', {
     template: template,
 });
 
-function surveyOverviewQuestionsController(surveyService) {
+function surveyOverviewQuestionsController($uibModal, surveyService) {
     this.isExpanded = {};
 
     this.icons = {
@@ -67,9 +67,17 @@ function surveyOverviewQuestionsController(surveyService) {
         surveyService.getSurveyQuestions(this.survey.id).then(questions => {
             this.surveyQuestions = questions;
         });
+    };
 
-        surveyService.getPredefinedQuestions().then(questions => {
-            this.predefinedQuestions = questions;
+    this.addPredefinedQuestion = () => {
+        $uibModal.open({
+            component: 'predefinedQuestionsModal',
+            size: 'md',
+            resolve: {
+                addQuestion: _.constant(question => {
+                    this.addQuestion(question);
+                }),
+            },
         });
     };
 
