@@ -747,6 +747,7 @@ export default {
             newAnswer: 'New Answer',
             addPredefinedQuestion: 'Add Predefined/Previous Question',
             addNewQuestion: 'Add New Question',
+            predefinedQuestions: 'Predefined Questions',
         },
     },
     contact_import: {
