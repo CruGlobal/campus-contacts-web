@@ -74,9 +74,9 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
-                addQuestion: _.constant(question => {
+                addQuestion: () => question => {
                     this.addQuestion(question);
-                }),
+                },
             },
         });
     };
