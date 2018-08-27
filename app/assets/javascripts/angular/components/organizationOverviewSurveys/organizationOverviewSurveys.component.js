@@ -12,6 +12,7 @@ angular.module('missionhubApp').component('organizationOverviewSurveys', {
 
 function organizationOverviewSurveysController(
     $scope,
+    $state,
     $uibModal,
     surveyService,
     confirmModalService,
@@ -57,6 +58,11 @@ function organizationOverviewSurveysController(
             })
             .result.then(newSurvey => {
                 this.organizationOverview.surveys.push(newSurvey);
+
+                //go to edit screen
+                $state.go('app.ministries.ministry.survey', {
+                    surveyId: newSurvey.id,
+                });
             });
     };
 
@@ -96,5 +102,17 @@ function organizationOverviewSurveysController(
                     );
                 });
             });
+    };
+
+    this.massEntry = survey => {
+        $uibModal.open({
+            component: 'addSurveyResponseModal',
+            resolve: {
+                survey: () => survey,
+            },
+            windowClass: 'pivot_theme',
+            backdrop: 'static',
+            keyboard: false,
+        });
     };
 }

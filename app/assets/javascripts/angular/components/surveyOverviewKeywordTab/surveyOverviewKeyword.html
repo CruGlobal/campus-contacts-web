@@ -44,7 +44,9 @@
                         {{'surveys:keyword.purpose_instructions' | t}}
                     </p>
                     <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort" id="keywordPurpose"
-                           placeholder="{{'surveys:keyword.purpose_example' | t}}" type="text" ng-model="$ctrl.keyword.explanation">
+                           placeholder="{{'surveys:keyword.purpose_example' | t}}" type="text"
+                           ng-disabled="$ctrl.disableKeywordField"
+                           ng-model="$ctrl.keyword.explanation">
                 </div>
                 <div class="mt4 pb2">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="textResponse">
@@ -78,6 +80,11 @@
                     <span class="status grey-dark bold f6 ttu mb2" ng-if="$ctrl.survey.keyword.state === 'requested'">
                         {{'surveys:keyword.requested' | t}}
                     </span>
+                    <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                            ng-click="$ctrl.saveKeyword()"
+                            ng-if="$ctrl.survey.keyword.state === 'active'">
+                        {{'general:save' | t}}
+                    </button>
                 </div>
             </fieldset>
         </form>

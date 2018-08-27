@@ -29,6 +29,7 @@ function organizationContactImportStep1Controller($scope) {
         // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
+        input.setAttribute('accept', '.csv');
         input.click();
 
         input.addEventListener(

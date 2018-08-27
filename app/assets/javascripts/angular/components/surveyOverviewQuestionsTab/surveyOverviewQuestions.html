@@ -1,0 +1,190 @@
+<div class="accordion">
+    <form class="bg-grey-light br2 grey-darker" ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+        ng-class="{
+            'accordion-expanded': $ctrl.isExpanded[question.id]
+        }">
+        <h2 class="accordion-header sortable normal grey-darker mt3 bg-grey-light f5 flex br2"
+            ng-class="{
+                'pa3': !$ctrl.isExpanded[question.id],
+                'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
+        }">
+            <!--<a class="sort mr3">-->
+                <!--<img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">-->
+            <!--</a>-->
+            <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
+                {{question.label}}
+                <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
+            </span>
+            <input class="pa2 input-reset bg-white bw0 grey-darker w-83 ihshort br2"
+                   placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" type="text" ng-model="question.label"
+                   ng-change="$ctrl.saveQuestion(question)"
+                   ng-if="$ctrl.isExpanded[question.id]">
+            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
+                <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
+            </a>
+            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.addQuestion(question)">
+                <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
+            </a>
+            <span class="db open-close-arrow"
+                  ng-show="question.editable !== false"
+                  ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]">
+            </span>
+        </h2>
+        <div class="accordion-body" ng-if="$ctrl.isExpanded[question.id]" ng-init="questionAnswers = question.content.split('\n')">
+            <fieldset class="ba b--transparent ph0 mh0 w-91">
+                <div class="flex justify-between mb3">
+                    <div class="w-48">
+                        <label class="db f6 lh-copy f5 normal mb1 grey-darker ttu tracked">
+                            {{ 'surveys:questions.type' | t }}
+                        </label>
+                        <div class="dropdown dropdown-select w-100 mr2" uib-dropdown>
+                            <a class="f5 link dim bg-white ihshort db grey-darker br2 dim" href="" uib-dropdown-toggle>
+                                {{$ctrl.getQuestionType(question.kind, question.style).name}}
+                            </a>
+                            <ul class="bg-white f5" uib-dropdown-menu>
+                                <li ng-repeat="type in $ctrl.questionTypes">
+                                    <a href=""
+                                       ng-click="question.kind = type.kind; question.style = type.style; $ctrl.saveQuestion(question);">
+                                        {{type.name}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-48">
+                        <label class="db f5 lh-copy f6 normal mb1 grey-darker ttu tracked">
+                            {{ 'surveys:questions.columnTitle' | t }}
+                        </label>
+                        <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort br2"
+                               ng-change="$ctrl.saveQuestion(question)"
+                               ng-model="question.column_title" type="text">
+                    </div>
+                </div>
+                <div class="flex justify-between">
+                    <div class="w-100">
+                        <!--<p class="db f6 lh-copy f6 normal mb1 grey-darker ttu fw6 tracked mv3">-->
+                            <!--Answers to initiate assignment/notifications-->
+                        <!--</p>-->
+                        <div class="assignments pv2"
+                             ng-model="questionAnswers"
+                             ui-sortable="$ctrl.sortableOptions"
+                             ui-sortable-stop="$ctrl.saveQuestionContent(question, questionAnswers)">
+                            <div class="flex items-center assignment-item no-line"
+                                 ng-repeat="answer in questionAnswers track by $index">
+                                <div>
+                                    <a class="sort mr3">
+                                        <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}" style="width:22px; height:20px">
+                                    </a>
+                                </div>
+                                <div class="f-grow">
+                                    <input class="pa2 input-reset bg-white bw0 grey-darker w-100 ihshort br2" type="text"
+                                           ng-change="$ctrl.saveQuestionContent(question, questionAnswers)"
+                                           ng-model="questionAnswers[$index]">
+                                </div>
+                                <div>
+                                    <a class="ml3 delete" href=""
+                                       ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
+                                        <img alt="{{ 'general:delete' | t }}" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="assignment-item no-line">
+                                <button ng-click="questionAnswers.push(''); $ctrl.saveQuestionContent(question, questionAnswers);"
+                                        class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
+                                    {{ 'surveys:questions.newAnswer' | t }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="w-48" ng-if="questionAnswers.length" ng-init="answerTab = 0">-->
+                        <!--<div class="tabs flex justify-between">-->
+                            <!--<div class="w-49 relative">-->
+                                <!--<a class="tab bl br bt pv3 ph2 link grey-darker br2 br&#45;&#45;top db b&#45;&#45;grey-dark"-->
+                                   <!--href="" ng-click="answerTab = 0" ng-class="{'active': answerTab === 0}">-->
+                                    <!--Auto Assign-->
+                                <!--</a>-->
+                                <!--<a class="help fr" href="">-->
+                                    <!--<img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="w-49 relative">-->
+                                <!--<a class="tab bl br bt pv3 ph2 link grey-darker br2 br&#45;&#45;top db b&#45;&#45;grey-dark"-->
+                                   <!--href="" ng-click="answerTab = 1" ng-class="{'active': answerTab === 1}">-->
+                                    <!--Auto Notify-->
+                                <!--</a>-->
+                                <!--<a class="help fr" href="">-->
+                                    <!--<img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="tab-body pa2 ba b&#45;&#45;grey-dark" ng-if="answerTab === 0">-->
+                            <!--<div class="relative" ng-repeat="answer in questionAnswers track by $index">-->
+                                <!--<assigned-select assigned="assignedTo"-->
+                                                 <!--organization-id="$ctrl.survey.organization_id"></assigned-select>-->
+                                <!--<a class="ml3 delete" href=""-->
+                                   <!--ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">-->
+                                    <!--<img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="tab-body pa2 ba b&#45;&#45;grey-dark" ng-if="answerTab === 1">-->
+                            <!--<div class="relative autocomplete expanded" ng-repeat="answer in questionAnswers track by $index">-->
+                                <!--<assigned-select assigned="assignedTo"-->
+                                                 <!--organization-id="$ctrl.survey.organization_id"></assigned-select>-->
+
+                                <!--<a class="ml3 delete" href=""-->
+                                   <!--ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">-->
+                                    <!--<img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="flex items-center mv-ih">-->
+                                <!--<label class="db f6 lh-copy f5 normal grey-darker mr2">-->
+                                    <!--Send notifications via:-->
+                                <!--</label>-->
+                                <!--<div class="dropdown dropdown-select mr2" uib-dropdown>-->
+                                    <!--<a class="f6 link dim bg-white ihshort db grey-darker br2 dim pr5" href=""-->
+                                       <!--uib-dropdown-toggle>-->
+                                        <!--{{question.notify_via}}-->
+                                    <!--</a>-->
+                                    <!--<ul class="bg-white f6" uib-dropdown-menu>-->
+                                        <!--<li>-->
+                                            <!--<a href="" ng-click="question.notify_via = 'Email'">Email</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="" ng-click="question.notify_via = 'SMS'">Text</a>-->
+                                        <!--</li>-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+<div class="new-questions flex items-start mb2 mt3">
+    <div class="dropdown w-50 mr2" uib-dropdown>
+        <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
+            {{ 'surveys:questions.addPredefinedQuestion' | t }}
+        </a>
+        <ul class="bg-white" uib-dropdown-menu>
+            <li ng-repeat="question in $ctrl.predefinedQuestions track by question.id">
+                <a href="" ng-click="$ctrl.addQuestion(question)">{{question.label}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown w-50 ml2" uib-dropdown>
+        <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
+            {{ 'surveys:questions.addNewQuestion' | t }}
+        </a>
+        <ul class="bg-white" uib-dropdown-menu>
+            <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
+                <a href="" ng-click="$ctrl.addQuestion({
+                    label: '', kind: type.kind, style: type.style
+                })">{{type.name}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

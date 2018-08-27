@@ -65,6 +65,7 @@
                     <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
                     <a class="dropdown-item" href="" ng-click="$ctrl.copySurvey(survey)">{{ 'surveyTab:menu.copy' | t }}</a>
                     <a class="dropdown-item" ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })">{{ 'surveyTab:menu.import' | t }}</a>
+                    <a class="dropdown-item" href="" ng-click="$ctrl.massEntry(survey)">{{ 'surveyTab:menu.mass' | t }}</a>
                 </div>
             </div>
         </div>

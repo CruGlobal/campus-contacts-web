@@ -31,19 +31,40 @@ function surveyService(
                     ),
                 ])
                 .then(([predefinedSurvey, surveyQuestions]) => {
-                    const predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
+                    let predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
                         element => element.question,
                     );
-                    const predefinedQuestionIds = predefinedQuestions.map(
-                        question => question.id,
-                    );
-                    const filteredSurveyQuestions = surveyQuestions.data.filter(
-                        question => {
-                            return !predefinedQuestionIds.includes(question.id);
-                        },
+
+                    //only include hard coded predefined questions (first/last name and phone)
+                    predefinedQuestions = predefinedQuestions.filter(question =>
+                        _.includes(['3457', '3458', '17'], question.id),
                     );
 
-                    return [...predefinedQuestions, ...filteredSurveyQuestions];
+                    //mark predefined questions as non-editable
+                    predefinedQuestions = predefinedQuestions.map(question => ({
+                        ...question,
+                        editable: false,
+                    }));
+
+                    return [...predefinedQuestions, ...surveyQuestions.data];
+                });
+        },
+
+        getPredefinedQuestions: () => {
+            return httpProxy
+                .get(
+                    '/surveys/predefined',
+                    {
+                        include: 'active_survey_elements.question',
+                    },
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                )
+                .then(predefinedQuestions => {
+                    return predefinedQuestions.data.active_survey_elements.map(
+                        element => element.question,
+                    );
                 });
         },
 
@@ -77,6 +98,50 @@ function surveyService(
                 .then(survey => {
                     return survey.data;
                 });
+        },
+
+        createSurveyQuestion: (surveyId, attributes) => {
+            const payload = {
+                data: {
+                    type: 'question',
+                    attributes: attributes,
+                },
+            };
+
+            return httpProxy
+                .post(`/surveys/${surveyId}/questions`, payload, {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                })
+                .then(survey => {
+                    return survey.data;
+                });
+        },
+
+        updateSurveyQuestion: (surveyId, attributes) => {
+            const payload = {
+                data: {
+                    type: 'question',
+                    attributes: attributes,
+                },
+            };
+
+            return httpProxy.put(
+                `/surveys/${surveyId}/questions/${attributes.id}`,
+                payload,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
+        },
+
+        deleteSurveyQuestion: (surveyId, questionId) => {
+            return httpProxy.delete(
+                `/surveys/${surveyId}/questions/${questionId}`,
+                null,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
         },
 
         updateSurvey: survey => {
@@ -175,6 +240,28 @@ function surveyService(
                 });
         },
 
+        updateKeyword: data => {
+            const payload = {
+                data: {
+                    type: 'sms_keyword',
+                    attributes: {
+                        initial_response: data.keyword.initial_response,
+                    },
+                },
+            };
+
+            return httpProxy
+                .put(
+                    modelsService
+                        .getModelMetadata('sms_keyword')
+                        .url.single(data.keyword.id),
+                    payload,
+                )
+                .then(function(keyword) {
+                    return keyword.data;
+                });
+        },
+
         getStats: surveyId => {
             return httpProxy
                 .get(
@@ -197,6 +284,18 @@ function surveyService(
                     payload,
                     {
                         errorMessage: 'contact_import:errors.bulkImport',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
+
+        importAnswerSheet: payload => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('answer_sheet').url.all,
+                    payload,
+                    {
+                        errorMessage: 'contact_import:errors.save',
                     },
                 )
                 .then(httpProxy.extractModels);

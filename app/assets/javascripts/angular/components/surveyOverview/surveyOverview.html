@@ -21,7 +21,7 @@
             <span>{{tab.name | t}}</span>
         </div>
         <div class="tab">
-            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">{{'surveys:questions.questions' | t}}</a>
+            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
         </div>
     </div>
 </div>
@@ -31,3 +31,4 @@
 
 <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
 <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
+<survey-overview-questions survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'questions'"></survey-overview-questions>
