@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{ 'surveyTab:copySurvey' | t }}</h3>
+</div>
+<div class="modal-body form">
+    <div class="error red f6 mb3" ng-if="$ctrl.error">
+        {{ $ctrl.error }}
+    </div>
+
+    <div class="form-group">
+        <label>
+            <span>{{ 'surveyTab:surveyName' | t }}</span>
+            <input type="text" ng-model="$ctrl.survey.title" class="form-control">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            <span>{{ 'surveyTab:searchMinistry' | t }}</span>
+            <select class="form-control"
+                    ng-model="$ctrl.survey.parent_organization"
+                    ng-options="org.id as org.name for org in $ctrl.orgs">
+
+            </select>
+        </label>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+            ng-disabled="!$ctrl.valid() || $ctrl.saving">
+        <span ng-hide="$ctrl.saving">{{ 'surveyTab:copySurvey' | t }}</span>
+        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+    </button>
+</div>

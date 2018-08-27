@@ -181,6 +181,24 @@ function surveyService(
             );
         },
 
+        copySurvey: (surveyId, org, title) => {
+            return httpProxy.post(
+                `/surveys/${surveyId}/copy`,
+                {
+                    data: {
+                        type: 'survey',
+                        attributes: {
+                            parent_organization: org,
+                            title: title,
+                        },
+                    },
+                },
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
+        },
+
         deleteKeyword: keywordId => {
             return httpProxy.delete(
                 modelsService

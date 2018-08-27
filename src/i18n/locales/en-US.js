@@ -628,6 +628,8 @@ export default {
     },
     surveyTab: {
         createSurvey: 'Create Survey',
+        copySurvey: 'Copy Survey',
+        searchMinistry: 'Search Ministry',
         surveyName: 'Survey Name',
         columns: {
             survey: 'Survey',

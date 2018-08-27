@@ -66,6 +66,18 @@ function organizationOverviewSurveysController(
             });
     };
 
+    this.copySurvey = survey => {
+        $uibModal.open({
+            component: 'copySurvey',
+            resolve: {
+                organizationId: _.constant(this.organizationOverview.org.id),
+                survey: _.constant(survey),
+            },
+            windowClass: 'pivot_theme',
+            size: 'md',
+        });
+    };
+
     this.changeStatus = (survey, active) => {
         survey.is_frozen = !active;
         surveyService.updateSurvey(survey);
