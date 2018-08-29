@@ -165,16 +165,16 @@
 </div>
 
 <div class="new-questions flex items-start mb2 mt3">
-    <div class="dropdown w-50 mr2" uib-dropdown>
-        <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
-            {{ 'surveys:questions.addPredefinedQuestion' | t }}
-        </a>
-        <ul class="bg-white" uib-dropdown-menu>
-            <li ng-repeat="question in $ctrl.predefinedQuestions track by question.id">
-                <a href="" ng-click="$ctrl.addQuestion(question)">{{question.label}}</a>
-            </li>
-        </ul>
-    </div>
+    <!--<div class="dropdown w-50 mr2" uib-dropdown>-->
+        <!--<a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>-->
+            <!--{{ 'surveys:questions.addPredefinedQuestion' | t }}-->
+        <!--</a>-->
+        <!--<ul class="bg-white" uib-dropdown-menu>-->
+            <!--<li ng-repeat="question in $ctrl.predefinedQuestions track by question.id">-->
+                <!--<a href="" ng-click="$ctrl.addQuestion(question)">{{question.label}}</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
     <div class="dropdown w-50 ml2" uib-dropdown>
         <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
             {{ 'surveys:questions.addNewQuestion' | t }}
