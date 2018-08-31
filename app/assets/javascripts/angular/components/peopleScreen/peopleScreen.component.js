@@ -68,55 +68,56 @@ function peopleScreenController(
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;
 
-        // Define the columns that can be selected as sort keys
-        // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
-        this.columns = [
-            {
-                name: 'name',
-                cssClass: 'name-column',
-                label: 'ministries.people.name',
+    // Define the columns that can be selected as sort keys
+    // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
+    this.columns = [
+        {
+            name: 'name',
+            cssClass: 'name-column',
+            label: 'ministries.people.name',
             sortable: true,
-                getSortKey: person => {
-                    return [
+            sticky: true,
+            getSortKey: person => {
+                return [
                     (person.last_name || '').toLowerCase(),
                     (person.first_name || '').toLowerCase(),
-                    ];
-                },
-                orderFields: ['last_name', 'first_name'],
+                ];
             },
-            {
-                name: 'gender',
-                cssClass: 'detail-column gender-column',
-                label: 'ministries.people.gender',
+            orderFields: ['last_name', 'first_name'],
+        },
+        {
+            name: 'gender',
+            cssClass: 'detail-column gender-column',
+            label: 'ministries.people.gender',
             sortable: true,
-                getSortKey: person => {
-                    return person.gender;
-                },
-                orderFields: ['gender', 'last_name', 'first_name'],
+            getSortKey: person => {
+                return person.gender;
             },
-            {
-                name: 'assignment',
-                cssClass: 'detail-column assigned-to-column',
-                label: 'assignments.assignment',
-                sortable: false,
-            },
-            {
-                name: 'status',
-                cssClass: 'detail-column status-column',
-                label: 'ministries.people.status',
+            orderFields: ['gender', 'last_name', 'first_name'],
+        },
+        {
+            name: 'assignment',
+            cssClass: 'detail-column assigned-to-column',
+            label: 'assignments.assignment',
+            sortable: false,
+        },
+        {
+            name: 'status',
+            cssClass: 'detail-column status-column',
+            label: 'ministries.people.status',
             sortable: true,
-                getSortKey: person => {
-                    return personService.getFollowupStatus(person, this.org.id);
-                },
-                orderFields: [
-                    'organizational_permissions.followup_status',
-                    'last_name',
-                    'first_name',
-                ],
+            getSortKey: person => {
+                return personService.getFollowupStatus(person, this.org.id);
             },
-        ];
+            orderFields: [
+                'organizational_permissions.followup_status',
+                'last_name',
+                'first_name',
+            ],
+        },
+    ];
 
-        this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
+    this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
 
     let unsubscribe = null;
 
