@@ -17,7 +17,7 @@
                 <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
             </div>
             <div class="column row" ng-repeat="column in $ctrl.columns"
-                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]"
+                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable, 'sticky-column col-bg-blue': column.sticky }]"
                  ng-click="column.sortable && $ctrl.setSortColumn(column)">
                 <span>{{column.label | t}}</span>
                 <div class="normal-column sort-order-column" ng-if="column.sortable">
@@ -28,7 +28,8 @@
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
                     </ng-md-icon>
                 </div>
-                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'" ui-sref=".new.defaultTab"
+                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
+                             ui-sref=".new.defaultTab"
                              ng-click="$event.stopPropagation()">
                 </icon-button>
             </div>
@@ -38,7 +39,8 @@
             <div class="column detail-column button-column">
                 <icon-button icon="'email'" disabled="true"></icon-button>
             </div>
-            <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }" ng-repeat="question in $ctrl.questions" title="{{question.label}}">
+            <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }"
+                 ng-repeat="question in $ctrl.questions" title="{{question.label}}">
                 {{question.label}}
             </div>
         </div>
@@ -83,7 +85,8 @@
                         active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
                     selected="$ctrl.multiSelection[person.id]"
                     person="person" organization-id="$ctrl.org.id"
-                    questions="$ctrl.questions">
+                    questions="$ctrl.questions"
+                    odd="$odd">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}

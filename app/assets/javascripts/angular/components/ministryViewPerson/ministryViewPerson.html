@@ -2,7 +2,7 @@
     <div class="column select-column">
         <input type="checkbox" ng-model="$ctrl.selected" />
     </div>
-    <div class="column name-column">
+    <div class="column name-column sticky-column" ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'">
         <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
             {{$ctrl.person | personName}}
         </a>
