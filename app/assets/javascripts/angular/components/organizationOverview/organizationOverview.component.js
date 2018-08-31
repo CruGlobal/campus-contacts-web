@@ -14,6 +14,7 @@ angular.module('missionhubApp').component('organizationOverview', {
 function organizationOverviewController(
     $scope,
     $state,
+    $filter,
     p2cOrgId,
     asyncBindingsService,
     ministryViewTabs,
@@ -21,6 +22,7 @@ function organizationOverviewController(
     organizationService,
     loggedInPerson,
     userPreferencesService,
+    confirmModalService,
     _,
 ) {
     var vm = this;
@@ -87,4 +89,12 @@ function organizationOverviewController(
                 vm.team = new Array(teamMemberCount);
             });
     }
+
+    vm.isUnderDev = () => {
+        var message = $filter('t')('common:application.under_development');
+        confirmModalService.create(message, {
+            showCancel: false,
+            title: 'Under Development',
+        });
+    };
 }
