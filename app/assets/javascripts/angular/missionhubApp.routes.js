@@ -406,6 +406,18 @@ angular
                 url: '/user-preferences',
                 template: '<user-preferences></user-preferences>',
                 whiteBackground: true,
+            })
+            .state({
+                name: 'publicSurvey',
+                url: '/s/:surveyId',
+                component: 'publicSurvey',
+                resolve: {
+                    survey: ($state, $transition$, routesService) => {
+                        return routesService.getSurvey(
+                            $transition$.params().surveyId,
+                        );
+                    },
+                },
             });
 
         // This is the default URL if the URL does not match any routes

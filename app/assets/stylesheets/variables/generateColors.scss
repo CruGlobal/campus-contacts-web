@@ -1,0 +1,25 @@
+@import './colors.scss';
+
+@each $name, $value in $pivot-colors {
+    .pivot-#{$name} {
+        color: $value;
+    }
+    .bg-pivot-#{$name} {
+        background-color: $value;
+    }
+    .b--pivot-#{$name} {
+        border-color: $value;
+    }
+    .hover-pivot-#{$name} {
+        &:hover,
+        &:focus {
+            color: $value;
+        }
+    }
+    .hover-bg-pivot-#{$name} {
+        &:hover,
+        &:focus {
+            background-color: $value;
+        }
+    }
+}

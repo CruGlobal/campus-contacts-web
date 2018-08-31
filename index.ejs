@@ -2,31 +2,17 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
 
-    <title>MissionHub</title>
+    <title>Survey</title><!-- TODO: make title dynamic -->
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 </head>
 
-<body ng-cloak>
+<body ng-cloak ng-app="missionhubApp">
 
-<div id="outer">
-    <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
-    <nav></nav>
-    <dashboard-subnav></dashboard-subnav>
-
-    <div id="dashboard_main">
-        <div class="dashboard_panels">
-            <dashboard></dashboard>
-        </div>
-    </div>
-
-    <div class="clear"></div>
-
-</div><!-- outer -->
-
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <ui-view></ui-view>
 
 </body>
 </html>
