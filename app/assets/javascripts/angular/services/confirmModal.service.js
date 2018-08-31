@@ -8,10 +8,11 @@ function confirmModalService($uibModal) {
     return {
         create: function(message, options) {
             /*eslint no-param-reassign: 0*/
-            options = _.defaults(options, {
+            options = {
                 showCancel: true,
                 title: 'Confirm',
-            });
+                ...options,
+            };
             var modalInstance = $uibModal.open({
                 animation: true,
                 controller: function($uibModalInstance) {

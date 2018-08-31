@@ -1,6 +1,8 @@
 import template from './organizationOverview.html';
 import './organizationOverview.scss';
 
+import { t } from 'i18next';
+
 angular.module('missionhubApp').component('organizationOverview', {
     controller: organizationOverviewController,
     bindings: {
@@ -14,7 +16,6 @@ angular.module('missionhubApp').component('organizationOverview', {
 function organizationOverviewController(
     $scope,
     $state,
-    $filter,
     p2cOrgId,
     asyncBindingsService,
     ministryViewTabs,
@@ -91,10 +92,10 @@ function organizationOverviewController(
     }
 
     vm.isUnderDev = () => {
-        var message = $filter('t')('common:application.under_development');
+        var message = t('common:application.under_development');
         confirmModalService.create(message, {
             showCancel: false,
-            title: 'Under Development',
+            title: t('common:application.under_development_title'),
         });
     };
 }
