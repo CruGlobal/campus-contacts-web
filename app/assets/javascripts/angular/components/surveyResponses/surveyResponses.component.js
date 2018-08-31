@@ -27,6 +27,7 @@ function surveyResponsesController($state, httpProxy, $uibModal) {
             id: question.id,
             label: question.column_title || question.label,
             kind: question.kind,
+            style: question.style,
         }));
     };
 

@@ -38,7 +38,7 @@
             <div class="column detail-column button-column">
                 <icon-button icon="'email'" disabled="true"></icon-button>
             </div>
-            <div class="column survey-column" ng-repeat="question in $ctrl.questions" title="{{question.label}}">
+            <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }" ng-repeat="question in $ctrl.questions" title="{{question.label}}">
                 {{question.label}}
             </div>
         </div>
