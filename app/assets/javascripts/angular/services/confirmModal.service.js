@@ -6,7 +6,13 @@ angular
 
 function confirmModalService($uibModal) {
     return {
-        create: function(message) {
+        create: function(message, options) {
+            /*eslint no-param-reassign: 0*/
+            options = {
+                showCancel: true,
+                title: 'Confirm',
+                ...options,
+            };
             var modalInstance = $uibModal.open({
                 animation: true,
                 controller: function($uibModalInstance) {
@@ -24,11 +30,15 @@ function confirmModalService($uibModal) {
                 template: [
                     '<div>',
                     '<div class="modal-header">',
-                    '<h3 class="confirm-title" id="modal-title">Confirm</h3>',
+                    '<h3 class="confirm-title" id="modal-title">' +
+                        options.title +
+                        '</h3>',
                     '</div>',
                     '<div class="modal-body">' + message + '</div>',
                     '<div class="modal-footer">',
-                    '<button class="btn btn-secondary" type="button" ng-click="vm.cancel()">{{"general.cancel" | t}}</button>',
+                    options.showCancel
+                        ? '<button class="btn btn-secondary" type="button" ng-click="vm.cancel()">{{"general.cancel" | t}}</button>'
+                        : '',
                     '<button class="btn btn-primary" type="button" ng-click="vm.confirm()">{{"general.ok" | t}}</button>',
                     '</div>',
                     '</div>',

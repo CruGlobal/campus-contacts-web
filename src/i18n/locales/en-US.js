@@ -34,6 +34,9 @@ export default {
                 prayed_to_receive_christ: 'Personal Evangelism Decisions',
                 spiritual_conversation: 'Spiritual Conversation',
             },
+            under_development_title: 'Under Development',
+            under_development:
+                'This feature is being rebuilt to support Campus changes in Infobase due to the restructuring and will be available early September.',
         },
         assignments: {
             assigned: 'Assigned',

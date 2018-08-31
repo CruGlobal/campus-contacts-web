@@ -1,6 +1,8 @@
 import template from './organizationOverview.html';
 import './organizationOverview.scss';
 
+import { t } from 'i18next';
+
 angular.module('missionhubApp').component('organizationOverview', {
     controller: organizationOverviewController,
     bindings: {
@@ -21,6 +23,7 @@ function organizationOverviewController(
     organizationService,
     loggedInPerson,
     userPreferencesService,
+    confirmModalService,
     _,
 ) {
     var vm = this;
@@ -87,4 +90,12 @@ function organizationOverviewController(
                 vm.team = new Array(teamMemberCount);
             });
     }
+
+    vm.isUnderDev = () => {
+        var message = t('common:application.under_development');
+        confirmModalService.create(message, {
+            showCancel: false,
+            title: t('common:application.under_development_title'),
+        });
+    };
 }
