@@ -33,14 +33,18 @@ $pivot-orange: #ff5532;
 $pivot-gradient-light: #00abc9;
 $pivot-gradient-dark: $pivot-dark-blue;
 
-$grey-dark: #a0a2a6;
-$grey-darker: #505256;
-$grey-darkest: #3c3c3c;
+$gray-dark: #a0a2a6;
+$gray-darker: #505256;
+$gray-darkest: #3c3c3c;
 $black: #000000;
 
 $pivot-colors: (
+    gray: $background-gray,
+    gray-dark: $gray-dark,
+    gray-darker: $gray-darker,
     gray-1-25: $gray-1-25,
     gray-4: $gray-4,
+    gray-5: $gray-5,
     blue-4: $blue-4,
     dark-blue: $pivot-dark-blue,
     darker-blue: $pivot-darker-blue,
@@ -49,32 +53,7 @@ $pivot-colors: (
     muted-dark-blue: $pivot-muted-dark-blue,
     teal: $pivot-teal,
     orange: $pivot-orange,
-    grey-dark: $grey-dark,
 );
-
-@each $name, $value in $pivot-colors {
-    .pivot-#{$name} {
-        color: $value;
-    }
-    .bg-pivot-#{$name} {
-        background-color: $value;
-    }
-    .b--pivot-#{$name} {
-        border-color: $value;
-    }
-    .hover-pivot-#{$name} {
-        &:hover,
-        &:focus {
-            color: $value;
-        }
-    }
-    .hover-bg-pivot-#{$name} {
-        &:hover,
-        &:focus {
-            background-color: $value;
-        }
-    }
-}
 
 @mixin font-smoothing($value: on) {
     @if $value == on {

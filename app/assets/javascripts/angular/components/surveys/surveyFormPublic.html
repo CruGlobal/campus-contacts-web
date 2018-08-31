@@ -1,0 +1,68 @@
+<form name="$ctrl.contactForm">
+    <fieldset class="ba b--transparent ph0 mh0">
+        <div class="error red f6 flex items-center mb3" ng-if="$ctrl.importError">
+            {{$ctrl.importError}}
+        </div>
+
+        <div class="mv4" ng-repeat="question in $ctrl.surveyQuestions track by question.id">
+            <label class="pivot-gray-darker f3 mb3 db">{{question.label}}</label>
+
+            <div ng-switch="question.kind">
+                <input
+                    class="pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark"
+                    ng-model="$ctrl.answers[question.id]"
+                    type="text"
+                    ng-switch-default
+                />
+
+                <div ng-switch-when="ChoiceField" ng-switch="question.style">
+
+                    <div ng-switch-when="checkbox"
+                         ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                        <div class="flex items-center mb2 pb1 checkbox-wrapper">
+                            <input
+                                type="checkbox"
+                                class="mr2"
+                                id="{{'checkbox-question-' + question.id + '-choice-' + i.value}}"
+                                ng-model="$ctrl.answers[question.id][i.value]"
+                            />
+                            <label class="lh-copy" for="{{'checkbox-question-' + question.id + '-choice-' + i.value}}">{{i.name}}</label>
+                        </div>
+                    </div>
+
+                    <div ng-switch-when="radio"
+                         ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                        <div class="flex items-center mb2 pb1 radio-wrapper">
+                            <input class="mr2"
+                                   type="radio"
+                                   id="{{'radio-question-' + question.id + '-choice-' + i.value}}"
+                                   ng-model="$ctrl.answers[question.id]"
+                                   value="{{i.value}}"
+                            >
+                            <label class="lh-copy" for="{{'radio-question-' + question.id + '-choice-' + i.value}}">{{i.name}}</label>
+                        </div>
+                    </div>
+
+                    <div ng-switch-when="drop-down">
+                        <div
+                            class="dropdown-large dropdown dropdown-select w-100 mr2"
+                            ng-class="{ 'open': dropdownIsOpen }"
+                            ng-click="dropdownIsOpen = !dropdownIsOpen"
+                            on-click-away="dropdownIsOpen = false"
+                        >
+                            <a href=""
+                               class="link f5 link db pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark dim"
+                            >
+                                {{ ($ctrl.questionChoices[question.id] | filter: { value: $ctrl.answers[question.id] })[0].name }}</a>
+                            <ul class="bg-white f5">
+                                <li ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                                    <a href="" ng-click="$ctrl.answers[question.id] = i.value">{{ i.name }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>

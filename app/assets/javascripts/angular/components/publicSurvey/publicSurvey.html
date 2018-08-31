@@ -1,0 +1,26 @@
+<div class="bg-pivot-gray source-sans flex justify-center pv5-l">
+    <div class="mw6 bg-white center br2">
+        <img ng-if="$ctrl.survey.logo_url" ng-src="{{ $ctrl.survey.logo_url }}" class="w-100"/>
+        <div class="pa4 tl">
+            <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.survey.title }}</h1>
+            <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.survey.login_paragraph }}</p>
+            <p class="lh-copy mt1" ng-if="$ctrl.thankYou">{{ $ctrl.survey.post_survey_message }}</p>
+
+            <survey-form-public
+                survey="$ctrl.survey"
+                on-init="$ctrl.save = $event.save"
+                on-saving-change="$ctrl.saving = $event"
+                on-success="$ctrl.thankYou = true"
+                ng-if="!$ctrl.thankYou">
+            </survey-form-public>
+
+        </div>
+        <button
+            class="link fw6 br--bottom dim ph4 pv3 ba0 f3 b--transparent dib white br2 ttu tracked bg-pivot-bright-blue w-100"
+            ng-click="$ctrl.save()"
+            ng-disabled="$ctrl.saving"
+            ng-if="!$ctrl.thankYou">
+            {{'submit' | t}}
+        </button>
+    </div>
+</div>

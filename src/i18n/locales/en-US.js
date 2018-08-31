@@ -1,5 +1,7 @@
 export default {
     common: {
+        select: 'Select',
+        submit: 'Submit',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
         engaged_disciple: 'Engaged Disciple',

@@ -12,6 +12,7 @@ angular
         spaPage,
         loggedInPerson,
         updateRollbarPerson,
+        state,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -28,15 +29,17 @@ angular
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
 
-        // This code will run when Angular initializes, but currently we are gaining our
-        // authentication from the rails host through a <preload-state> component. This means
-        // that the access token isn't populated at the time of application initialization,
-        // the $timeout will cause delay this execution until after the first digest.
-        $timeout(function() {
-            loggedInPerson.loadOnce().then(function(me) {
-                i18next.changeLanguage(me.user.language);
-                updateRollbarPerson(me);
-                $rootScope.legacyNavigation = me.user.beta_mode === false;
+        if (state.v4AccessToken) {
+            // This code will run when Angular initializes, but currently we are gaining our
+            // authentication from the rails host through a <preload-state> component. This means
+            // that the access token isn't populated at the time of application initialization,
+            // the $timeout will cause delay this execution until after the first digest.
+            $timeout(function() {
+                loggedInPerson.loadOnce().then(function(me) {
+                    i18next.changeLanguage(me.user.language);
+                    updateRollbarPerson(me);
+                    $rootScope.legacyNavigation = me.user.beta_mode === false;
+                });
             });
-        });
+        }
     });

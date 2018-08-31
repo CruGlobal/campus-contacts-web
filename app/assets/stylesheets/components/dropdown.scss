@@ -1,3 +1,5 @@
+@import '../variables/colors';
+
 .dropdown {
     .chevron {
         transform: rotate(90deg);
@@ -11,5 +13,136 @@
 
     .dropdown-content {
         position: absolute;
+    }
+}
+
+.dropdown-large {
+    &.dropdown,
+    &.autocomplete {
+        position: relative;
+        &.expanded,
+        &.open {
+            background: #ffffff;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 0.25rem;
+
+            > a {
+                background: #ffffff;
+                border-color: #ffffff;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+            ul {
+                display: block;
+                border-bottom-left-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+        }
+        > a {
+            position: relative;
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                right: 1.2rem;
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+
+                border-top: 6px solid $pivot-dark-blue;
+                margin-top: -3px;
+                top: 50%;
+            }
+        }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            width: 100%;
+            display: none;
+            max-height: 17rem;
+            overflow: auto;
+            a {
+                padding: calc(1rem + 1px) calc(1rem + 1px);
+                display: block;
+                text-decoration: none;
+                color: $gray-darker;
+                &:hover {
+                    background-color: $gray-5;
+                }
+                &:active {
+                    background-color: $pivot-dark-blue;
+                    color: #ffffff;
+                }
+            }
+        }
+
+        &.dropdown-select,
+        &.autocomplete {
+            ul {
+                position: absolute;
+                top: 100%;
+                z-index: 3;
+            }
+            .ihshort {
+                padding-right: 3rem;
+            }
+        }
+        &.autocomplete {
+            background: none;
+            box-shadow: none;
+
+            &.expanded {
+                input {
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+            }
+            ul {
+                margin-top: -0.35rem;
+                max-height: 7rem;
+
+                a {
+                    padding-left: calc(0.75rem + 1px);
+                    padding-right: calc(0.75rem + 1px);
+                    padding-top: 0.75rem;
+                    padding-bottom: 0.75rem;
+
+                    &.pa2 {
+                        padding: 0.5rem;
+                    }
+                }
+            }
+            > a {
+                background: none;
+                &:after {
+                    display: none;
+                }
+            }
+
+            &.autocomplete-expand {
+                ul {
+                    position: relative;
+                    top: -1px;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        .tags {
+            position: absolute;
+            top: 15px;
+            left: 4px;
+        }
+
+        &.icon-gray-darker {
+            > a {
+                &:after {
+                    border-top: 6px solid $gray-darker;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,126 @@
+@import '../../../../stylesheets/variables/colors';
+
+survey-form-public {
+    /* Custom CSS Radios and Checkboxes */
+
+    .checkbox-wrapper,
+    .radio-wrapper {
+        position: relative;
+        input[type='checkbox'],
+        input[type='radio'] {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 0;
+            left: -9999px;
+        }
+
+        label {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            height: 1.6rem;
+
+            /*16px width of fake checkbox + 6px distance between fake checkbox and text*/
+            padding-left: 2.5rem;
+
+            &:before,
+            &:after {
+                position: absolute;
+                content: '';
+
+                /*Needed for the line-height to take effect*/
+                display: inline-block;
+            }
+
+            &:before {
+                height: 1.5rem;
+                width: 1.5rem;
+
+                background: #ffffff;
+                border-radius: 0.25rem;
+                left: 0px;
+
+                /*(24px line-height - 16px height of fake checkbox) / 2 - 1px for the border
+             *to vertically center it.
+             */
+                top: 0;
+                border: 1px solid $background-gray;
+            }
+
+            &:after {
+                height: 8px;
+                width: 14px;
+                border-left: 3px solid #fff;
+                border-bottom: 3px solid #fff;
+
+                transform: rotate(-45deg);
+
+                left: 5px;
+                top: 7px;
+            }
+        }
+
+        input[type='checkbox'] + label::after,
+        input[type='radio'] + label::after {
+            content: none;
+        }
+
+        /*Unhide on the checked state*/
+        input[type='checkbox']:checked + label::after,
+        input[type='radio']:checked + label::after {
+            content: '';
+        }
+
+        input[type='checkbox']:checked + label::before,
+        input[type='radio']:checked + label::before {
+            background: $pivot-bright-blue;
+            border-color: $background-gray;
+        }
+
+        /*Adding focus styles on the outer-box of the fake checkbox*/
+        input[type='checkbox']:focus + label::before,
+        input[type='radio']:focus + label::before {
+            outline: 0;
+        }
+
+        &.radio-wrapper {
+            label:before {
+                border-radius: 50%;
+                background: #ffffff;
+            }
+            label:after {
+                content: none !important;
+                display: none;
+            }
+        }
+
+        &.checkbox-small {
+            label {
+                height: 1rem;
+                line-height: 1rem;
+                padding-left: 2rem;
+                &:before {
+                    width: 1rem;
+                    height: 1rem;
+                    border-radius: 0;
+                    border-color: $background-gray;
+                }
+
+                &:after {
+                    width: 9px;
+                    height: 3px;
+                    border-left-width: 2px;
+                    border-bottom-width: 2px;
+                    left: 0.25rem;
+                    top: 0.4rem;
+                }
+            }
+            input[type='checkbox']:checked + label::before {
+                background-color: $pivot-dark-blue;
+                border-color: $pivot-dark-blue;
+            }
+        }
+    }
+}

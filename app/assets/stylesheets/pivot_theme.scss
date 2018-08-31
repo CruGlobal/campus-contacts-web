@@ -1,5 +1,6 @@
 @import '~tachyons';
-@import './variables/colors.scss';
+@import './variables/colors';
+@import './variables/generateColors';
 @import './components/dropdown';
 @import './components/global';
 @import './components/grid';
@@ -7,6 +8,10 @@
 @import './components/navigation';
 @import './components/row';
 @import './components/sheet';
+
+body {
+    background-color: $background-gray;
+}
 
 body.white-background {
     background: white !important;
@@ -29,6 +34,13 @@ body.white-background {
     h6,
     h7 {
         font-weight: normal;
+    }
+
+    .titillium {
+        font-family: 'Titillium Web', sans-serif;
+    }
+    .source-sans {
+        font-family: 'Source Sans Pro', sans-serif;
     }
 
     textarea,

@@ -40,7 +40,7 @@ organization-contact-import {
 
     body {
         text-align: center;
-        color: $grey-darker;
+        color: $gray-darker;
         font-family: 'Source Sans Pro', sans-serif;
         min-width: 948px;
     }
@@ -57,19 +57,15 @@ organization-contact-import {
         background: $pivot-dark-blue;
     }
 
-    .bg-blue-light {
-        background: $pivot-bright-blue;
+    .bg-gray-darker {
+        background: $gray-darker;
     }
 
-    .bg-grey-darker {
-        background: $grey-darker;
-    }
-
-    .bg-grey-medium {
+    .bg-gray-medium {
         background: $background-gray;
     }
 
-    .bg-grey-light {
+    .bg-gray-light {
         background: $gray-5;
     }
 
@@ -83,14 +79,14 @@ organization-contact-import {
 
     /* Text Colors */
 
-    .grey-darkest {
-        color: $grey-darkest;
+    .gray-darkest {
+        color: $gray-darkest;
     }
-    .grey-darker {
-        color: $grey-darker;
+    .gray-darker {
+        color: $gray-darker;
     }
-    .grey-dark {
-        color: $grey-dark;
+    .gray-dark {
+        color: $gray-dark;
     }
     .blue-light {
         color: $pivot-bright-blue;
@@ -112,19 +108,19 @@ organization-contact-import {
         border-color: $pivot-bright-blue;
     }
 
-    .b--grey-medium {
+    .b--gray-medium {
         border-color: $background-gray;
     }
 
-    .b--grey-dark {
-        border-color: $grey-dark;
+    .b--gray-dark {
+        border-color: $gray-dark;
     }
 
-    .b--grey-medium {
+    .b--gray-medium {
         border-color: $background-gray;
     }
 
-    .b--grey-light {
+    .b--gray-light {
         border-color: $gray-5;
     }
 
@@ -223,22 +219,22 @@ organization-contact-import {
 
     ::-webkit-input-placeholder {
         /* Chrome/Opera/Safari */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     ::-moz-placeholder {
         /* Firefox 19+ */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     :-ms-input-placeholder {
         /* IE 10+ */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     :-moz-placeholder {
         /* Firefox 18- */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
 
@@ -311,7 +307,7 @@ organization-contact-import {
 
         .open-close-arrow {
             content: '';
-            border: solid $grey-darker;
+            border: solid $gray-darker;
             border-width: 0 2px 2px 0;
             display: inline-block;
             padding: 4px;
@@ -343,137 +339,6 @@ organization-contact-import {
         cursor: move;
     }
 
-    /* Dropdowns */
-
-    .dropdown,
-    .autocomplete {
-        position: relative;
-        &.expanded,
-        &.open {
-            background: #ffffff;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            border-radius: 0.25rem;
-
-            > a {
-                background: #ffffff;
-                border-color: #ffffff;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            ul {
-                display: block;
-                border-bottom-left-radius: 0.25rem;
-                border-bottom-right-radius: 0.25rem;
-            }
-        }
-        > a {
-            position: relative;
-            &:after {
-                content: '';
-                display: block;
-                position: absolute;
-                right: 1.2rem;
-                width: 0;
-                height: 0;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-
-                border-top: 6px solid $pivot-dark-blue;
-                margin-top: -3px;
-                top: 50%;
-            }
-        }
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            width: 100%;
-            display: none;
-            max-height: 17rem;
-            overflow: auto;
-            a {
-                padding: calc(1rem + 1px) calc(1rem + 1px);
-                display: block;
-                text-decoration: none;
-                color: $grey-darker;
-                &:hover {
-                    background-color: $gray-5;
-                }
-                &:active {
-                    background-color: $pivot-dark-blue;
-                    color: #ffffff;
-                }
-            }
-        }
-
-        &.dropdown-select,
-        &.autocomplete {
-            ul {
-                position: absolute;
-                top: 100%;
-                z-index: 3;
-            }
-            .ihshort {
-                padding-right: 3rem;
-            }
-        }
-        &.autocomplete {
-            background: none;
-            box-shadow: none;
-
-            &.expanded {
-                input {
-                    border-bottom-left-radius: 0;
-                    border-bottom-right-radius: 0;
-                }
-            }
-            ul {
-                margin-top: -0.35rem;
-                max-height: 7rem;
-
-                a {
-                    padding-left: calc(0.75rem + 1px);
-                    padding-right: calc(0.75rem + 1px);
-                    padding-top: 0.75rem;
-                    padding-bottom: 0.75rem;
-
-                    &.pa2 {
-                        padding: 0.5rem;
-                    }
-                }
-            }
-            > a {
-                background: none;
-                &:after {
-                    display: none;
-                }
-            }
-
-            &.autocomplete-expand {
-                ul {
-                    position: relative;
-                    top: -1px;
-                    margin-top: 0;
-                }
-            }
-        }
-
-        .tags {
-            position: absolute;
-            top: 15px;
-            left: 4px;
-        }
-
-        &.icon-grey-darker {
-            > a {
-                &:after {
-                    border-top: 6px solid $grey-darker;
-                }
-            }
-        }
-    }
-
     /* Accordions */
 
     .accordion-body {
@@ -494,7 +359,7 @@ organization-contact-import {
         }
 
         .tab {
-            border-bottom: 1px solid $grey-dark;
+            border-bottom: 1px solid $gray-dark;
 
             &.active {
                 border-bottom: 1px solid $gray-5;
@@ -529,7 +394,7 @@ organization-contact-import {
         &:after {
             content: '';
             height: 1px;
-            border-bottom: 1px solid $grey-dark;
+            border-bottom: 1px solid $gray-dark;
             width: 23px;
             position: absolute;
             left: 100%;
@@ -558,128 +423,6 @@ organization-contact-import {
         margin: 100px auto;
     }
 
-    /* Custom CSS Radios and CHeckboxes */
-
-    .checkbox-wrapper,
-    .radio-wrapper {
-        position: relative;
-        input[type='checkbox'],
-        input[type='radio'] {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            position: absolute;
-            top: 0;
-            left: -9999px;
-        }
-
-        label {
-            position: relative;
-            display: inline-block;
-            height: 1.6rem;
-
-            /*16px width of fake checkbox + 6px distance between fake checkbox and text*/
-            padding-left: 2.5rem;
-
-            &:before,
-            &:after {
-                position: absolute;
-                content: '';
-
-                /*Needed for the line-height to take effect*/
-                display: inline-block;
-            }
-
-            &:before {
-                height: 1.5rem;
-                width: 1.5rem;
-
-                background: #ffffff;
-                border-radius: 0.25rem;
-                left: 0px;
-
-                /*(24px line-height - 16px height of fake checkbox) / 2 - 1px for the border
-                 *to vertically center it.
-                 */
-                top: 0;
-                border: 1px solid $background-gray;
-            }
-
-            &:after {
-                height: 5px;
-                width: 11px;
-                border-left: 3px solid #fff;
-                border-bottom: 3px solid #fff;
-
-                transform: rotate(-45deg);
-
-                left: 0.4rem;
-                top: 0.5rem;
-            }
-        }
-
-        input[type='checkbox'] + label::after,
-        input[type='radio'] + label::after {
-            content: none;
-        }
-
-        /*Unhide on the checked state*/
-        input[type='checkbox']:checked + label::after,
-        input[type='radio']:checked + label::after {
-            content: '';
-        }
-
-        input[type='checkbox']:checked + label::before,
-        input[type='radio']:checked + label::before {
-            background: $pivot-bright-blue;
-            border-color: $background-gray;
-        }
-
-        /*Adding focus styles on the outer-box of the fake checkbox*/
-        input[type='checkbox']:focus + label::before,
-        input[type='radio']:focus + label::before {
-            outline: 0;
-        }
-
-        &.radio-wrapper {
-            label:before {
-                border-radius: 50%;
-                background: #ffffff;
-            }
-            label:after {
-                content: none !important;
-                display: none;
-            }
-        }
-
-        &.checkbox-small {
-            label {
-                height: 1rem;
-                line-height: 1rem;
-                padding-left: 2rem;
-                &:before {
-                    width: 1rem;
-                    height: 1rem;
-                    border-radius: 0;
-                    border-color: $background-gray;
-                }
-
-                &:after {
-                    width: 9px;
-                    height: 3px;
-                    border-left-width: 2px;
-                    border-bottom-width: 2px;
-                    left: 0.25rem;
-                    top: 0.4rem;
-                }
-            }
-            input[type='checkbox']:checked + label::before {
-                background-color: $pivot-dark-blue;
-                border-color: $pivot-dark-blue;
-            }
-        }
-    }
-
     /* Add Questions */
 
     .add-question {
@@ -705,7 +448,7 @@ organization-contact-import {
         line-height: 3rem;
         vertical-align: middle;
         font-size: 1.3rem;
-        color: $grey-darker;
+        color: $gray-darker;
         margin-right: 6.5rem;
 
         &:after {

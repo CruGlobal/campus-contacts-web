@@ -5,12 +5,6 @@
 @import '~bootstrap/scss/utilities';
 @import '~bootstrap/scss/print';
 
-body {
-    font-size: 12px;
-    line-height: 1;
-    font-family: Tahoma, Arial, Sans-serif;
-}
-
 // Fixes for angular-ui-bootstrap not supporting Bootstrap 4
 // Bootstrap 4 changed "in" to "show" but uib still applies old "in" class
 .modal.in .modal-dialog {
