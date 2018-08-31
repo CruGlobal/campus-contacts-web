@@ -1,5 +1,5 @@
 <div class="row padded">
-    <div class="sticky-column" ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'">
+    <div class="sticky-column" ng-class="$ctrl.questions && ($ctrl.odd ? 'col-bg-gray' : 'col-bg-white')">
         <div class="column select-column">
             <input type="checkbox" ng-model="$ctrl.selected"/>
         </div>
