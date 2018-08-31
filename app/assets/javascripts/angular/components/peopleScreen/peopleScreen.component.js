@@ -76,7 +76,6 @@ function peopleScreenController(
             cssClass: 'name-column',
             label: 'ministries.people.name',
             sortable: true,
-            sticky: true,
             getSortKey: person => {
                 return [
                     (person.last_name || '').toLowerCase(),

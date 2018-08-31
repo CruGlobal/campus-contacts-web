@@ -5,13 +5,7 @@
         position: sticky;
         left: 0;
         z-index: 10;
-    }
-    .select-column {
-        width: 26px;
-        padding: 0 6px !important;
-    }
-    .name-column {
-        width: 160px;
+        display: flex;
         align-self: stretch;
         display: flex;
         align-items: center;
@@ -39,6 +33,13 @@
                 $gray-5 5px
             );
         }
+    }
+    .select-column {
+        width: 26px;
+        padding: 0 6px !important;
+    }
+    .name-column {
+        width: 160px;
     }
     .gender-column {
         width: 40px;
