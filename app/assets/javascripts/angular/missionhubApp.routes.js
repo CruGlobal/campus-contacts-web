@@ -358,6 +358,11 @@ angular
                 },
             })
             .state({
+                name: 'app.ministries.ministry.management',
+                url: '/management',
+                component: 'orgManagement',
+            })
+            .state({
                 name: 'app.ministries.ministry.defaultTab',
                 redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab,
             })

@@ -100,6 +100,70 @@ function organizationService(
                 )
                 .then(httpProxy.extractModels);
         },
+
+        createOrg: (org, parentOrg) => {
+            return httpProxy
+                .post(
+                    modelsService.getModelMetadata('organization').url.all,
+                    {
+                        data: {
+                            type: 'organization',
+                            attributes: {
+                                name: org.name,
+                                terminology: org.terminology,
+                                show_sub_orgs: org.show_sub_orgs,
+                            },
+                            relationships: {
+                                parent: {
+                                    data: {
+                                        type: 'organization',
+                                        id: parentOrg.id,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        errorMessage: 'error.messages.organization.create',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
+
+        saveOrg: org => {
+            return httpProxy
+                .put(
+                    modelsService
+                        .getModelMetadata('organization')
+                        .url.single(org.id),
+                    {
+                        data: {
+                            type: 'organization',
+                            attributes: {
+                                name: org.name,
+                                terminology: org.terminology,
+                                show_sub_orgs: org.show_sub_orgs,
+                            },
+                        },
+                    },
+                    {
+                        errorMessage: 'error.messages.organization.update',
+                    },
+                )
+                .then(httpProxy.extractModels);
+        },
+
+        deleteOrg: org => {
+            return httpProxy.delete(
+                modelsService
+                    .getModelMetadata('organization')
+                    .url.single(org.id),
+                null,
+                {
+                    errorMessage: 'error.messages.organization.delete',
+                },
+            );
+        },
     };
 
     return organizationService;

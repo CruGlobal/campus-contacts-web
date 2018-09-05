@@ -34,9 +34,13 @@ function organizationOverviewController(
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
 
     vm.showOrgNav = () => {
-        return (
-            $state.$current.name !== 'app.ministries.ministry.survey' &&
-            $state.$current.name !== 'app.ministries.ministry.import'
+        return !_.includes(
+            [
+                'app.ministries.ministry.survey',
+                'app.ministries.ministry.import',
+                'app.ministries.ministry.management',
+            ],
+            $state.$current.name,
         );
     };
 

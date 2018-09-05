@@ -20,7 +20,18 @@ function organizationOverviewSuborgsService(httpProxy, modelsService) {
             var requestParams = organizationOverviewSuborgsService.buildGetParams(
                 org.id || org,
             );
-            return listLoader.loadMore(requestParams);
+            if (listLoader) {
+                return listLoader.loadMore(requestParams);
+            }
+
+            return httpProxy
+                .get(
+                    modelsService.getModelMetadata('organization').url.all,
+                    requestParams,
+                )
+                .then(resp => {
+                    return resp.data;
+                });
         },
 
         loadOrgSubOrgCount: function(orgId) {
