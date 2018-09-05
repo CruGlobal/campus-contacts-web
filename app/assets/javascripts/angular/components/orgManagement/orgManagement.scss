@@ -81,6 +81,12 @@ org-management {
 
     /* Buttons */
 
+    .button-wrapper {
+        a {
+            text-decoration: none;
+        }
+    }
+
     .disabled {
         pointer-events: none;
         opacity: 0.5;

@@ -8,6 +8,11 @@
         ng-click="$ctrl.orgExpanded[subOrg.id] = !$ctrl.orgExpanded[subOrg.id]">
         <span>{{subOrg.name}}</span>
         <span class="button-wrapper">
+            <a class="ml3"
+               href="" ng-click="$ctrl.editSubOrg($event, subOrg.id)">
+                <img ng-src="{{$ctrl.editIcon}}" alt="Edit" style="width:20px; height:20px;">
+            </a>
+
             <a class="ml3" href="" ng-if="!$ctrl.isRoot"
                ng-click="$ctrl.deleteSubOrg($event, subOrg)">
                 <img ng-src="{{$ctrl.trashIcon}}" alt="Delete" style="width:20px; height:20px;">
@@ -15,11 +20,6 @@
 
             <a class="ml3" href="" ng-click="$ctrl.newSubOrg($event, subOrg.id)">
                 <img ng-src="{{$ctrl.addIcon}}" alt="Add" style="width:20px; height:20px;">
-            </a>
-
-            <a class="ml3"
-               href="" ng-click="$ctrl.editSubOrg($event, subOrg.id)">
-                <img ng-src="{{$ctrl.editIcon}}" alt="Edit" style="width:20px; height:20px;">
             </a>
         </span>
     </h2>

@@ -572,7 +572,10 @@ export default {
             show_sub: 'Show Sub-Organizations',
             none_found: 'No organizations found',
             delete: {
-                confirm: 'Are you sure you want to delete "{{org_name}}"?',
+                confirm:
+                    'Are you sure you want to delete "{{org_name}}"?' +
+                    '<br><br>' +
+                    'This will remove access to interactions, assignments and contacts from any of the sub-ministries.',
             },
             cleanup: {
                 confirm_archive:
