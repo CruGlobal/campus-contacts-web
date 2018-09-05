@@ -21,7 +21,7 @@ function orgManagementEditController(organizationService) {
                 show_sub_orgs: true,
             };
         } else {
-            this.orgEdit = angular.copy(this.org);
+            this.orgEdit = { ...this.org };
         }
     };
 
