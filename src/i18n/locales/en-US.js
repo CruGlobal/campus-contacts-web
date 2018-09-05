@@ -222,6 +222,9 @@ export default {
                         'Error occurred while updating the organization visibility',
                 },
                 organization: {
+                    create: 'Error occurred while create the organization.',
+                    update: 'Error occurred while updating the organization.',
+                    delete: 'Error occurred while deleting the organization.',
                     load_ancestry:
                         "Error occurred while loading the organization's ancestors",
                 },
@@ -561,6 +564,16 @@ export default {
             trend: 'Trend Tracker',
         },
         organizations: {
+            manage: 'Manage Organizations',
+            new: 'New Ministry',
+            edit: 'Edit Ministry',
+            name: 'Ministry Name',
+            type: 'Type',
+            show_sub: 'Show Sub-Organizations',
+            none_found: 'No organizations found',
+            delete: {
+                confirm: 'Are you sure you want to delete "{{org_name}}"?',
+            },
             cleanup: {
                 confirm_archive:
                     'Are you sure you wanted to archive the desired contacts?',

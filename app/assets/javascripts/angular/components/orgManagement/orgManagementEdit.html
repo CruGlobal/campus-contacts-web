@@ -1,0 +1,55 @@
+<div class="accordion-body pb3 pt3">
+    <h3 class="f3 fw6 pivot-dark-blue">
+        {{$ctrl.new ? 'common:organizations.new' : 'common:organizations.edit' | t}}
+    </h3>
+    <fieldset class="ba b--transparent ph0 mh0 w-100">
+        <div class="flex justify-between mb3">
+            <div class="w-48">
+                <label class="db f6 fw6 lh-copy normal mb1 pivot-grey-darker ttu tracked flex items-center"
+                       for="ministryName">
+                    {{'common:organizations.name' | t}}
+                    <a class="help" href="">
+                        <img alt="Help" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
+                    </a>
+                </label>
+                <input class="pa2 input-reset bg-white bw0 pivot-grey-darker w-100 ihshort br2"
+                       id="ministryName" ng-model="$ctrl.orgEdit.name" type="text">
+            </div>
+            <div class="w-48">
+                <label class="db f6 fw6 lh-copy normal mb1 pivot-grey-darker ttu tracked flex items-center"
+                       for="type">
+                    {{'common:organizations.type' | t}}
+                    <a class="help" href="">
+                        <img alt="Help" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
+                    </a>
+                </label>
+                <input class="pa2 input-reset bg-white bw0 pivot-grey-darker w-100 ihshort br2" id="type"
+                       ng-model="$ctrl.orgEdit.terminology"
+                       name="type" type="text">
+            </div>
+        </div>
+        <div class="flex items-center mb2 pb1 checkbox-wrapper checkbox-small checkbox-rounded">
+            <input class="mr2 check" id="check1" type="checkbox" ng-model="$ctrl.orgEdit.show_sub_orgs">
+            <label class="lh-copy flex f6" for="check1">
+                {{'common:organizations.show_sub' | t}}
+                <a class="help" href="">
+                    <img alt="Help" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
+                </a>
+            </label>
+        </div>
+        <div class="tr mt2">
+            <button
+                ng-click="$ctrl.editComplete({
+                    orgId: $ctrl.org.id
+                })"
+                class="f6 link ba b--pivot-dark-blue ihshort mb2 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-20">
+                {{'common:general.cancel' | t}}
+            </button>
+            <button
+                ng-click="$ctrl.save()"
+                class="f6 link ba b--pivot-dark-blue ihshort mb2 dib white bg-pivot-dark-blue bold br2 ttu tracked ml2 w-20">
+                {{'common:general.save' | t}}
+            </button>
+        </div>
+    </fieldset>
+</div>
