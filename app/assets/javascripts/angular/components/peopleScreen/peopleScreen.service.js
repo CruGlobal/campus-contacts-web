@@ -173,11 +173,8 @@ function peopleScreenService(
             'fields[email_address]': 'email,primary',
             'fields[phone_number]': 'number,primary',
             'fields[contact_assignment]': 'assigned_to,organization,created_at',
-            'fields[organization]': 'id',
             'fields[answer_sheet]': 'answers,survey',
             'fields[answer]': 'value,question',
-            'fields[question]': 'id',
-            'fields[survey]': 'id',
         }),
 
         // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
