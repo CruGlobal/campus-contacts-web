@@ -64,7 +64,10 @@ function peopleScreenService(
             );
 
             return listLoader
-                .loadMore(requestParams, peopleScreenService.transformData)
+                .loadMore(
+                    requestParams,
+                    surveyId ? peopleScreenService.transformData : undefined,
+                )
                 .then(function(resp) {
                     // Load the assignments in parallel
                     peopleScreenService.loadAssignedTos(resp.nextBatch, orgId);
@@ -101,7 +104,7 @@ function peopleScreenService(
                 'email_addresses',
                 'organizational_permissions',
                 'reverse_contact_assignments',
-                'answer_sheets.answers',
+                ...(surveyId ? ['answer_sheets.answers'] : []),
             ].join(','),
             sort: peopleScreenService.buildOrderString(orderParam),
             'filters[organization_ids]': orgId,
@@ -163,6 +166,18 @@ function peopleScreenService(
                       {},
                   )
                 : {}),
+            'fields[person]':
+                'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments',
+            'fields[organizational_permission]':
+                'followup_status,organization_id,permission_id',
+            'fields[email_address]': 'email,primary',
+            'fields[phone_number]': 'number,primary',
+            'fields[contact_assignment]': 'assigned_to,organization,created_at',
+            'fields[organization]': 'id',
+            'fields[answer_sheet]': 'answers,survey',
+            'fields[answer]': 'value,question',
+            'fields[question]': 'id',
+            'fields[survey]': 'id',
         }),
 
         // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
