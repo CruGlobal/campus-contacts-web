@@ -32,7 +32,7 @@ function surveyResponsesController($state, httpProxy, $uibModal) {
     };
 
     this.addSurveyResponse = () => {
-        const modal = $uibModal.open({
+        $uibModal.open({
             component: 'addSurveyResponseModal',
             resolve: {
                 survey: () => this.survey,
@@ -40,9 +40,6 @@ function surveyResponsesController($state, httpProxy, $uibModal) {
             windowClass: 'pivot_theme',
             backdrop: 'static',
             keyboard: false,
-        });
-        modal.result.then(() => {
-            // TODO: Refresh people screen
         });
     };
 }

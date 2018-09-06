@@ -312,6 +312,9 @@ function surveyService(
                     payload,
                     {
                         errorMessage: 'contact_import:errors.save',
+                        params: {
+                            include: 'person',
+                        },
                     },
                 )
                 .then(httpProxy.extractModels);
