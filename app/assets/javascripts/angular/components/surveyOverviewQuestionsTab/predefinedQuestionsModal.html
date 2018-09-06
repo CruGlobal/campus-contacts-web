@@ -12,7 +12,7 @@
             </h2>
             <a href="#" class="add-question dim db pa2 grey-darker link bb bl br f6 b--grey-medium"
                 ng-repeat="question in $ctrl.predefinedQuestions track by question.id"
-                ng-click="$ctrl.resolve.addQuestion(question)">
+                ng-click="$ctrl.addQuestion(question)">
                 {{question.label}}
             </a>
         </div>

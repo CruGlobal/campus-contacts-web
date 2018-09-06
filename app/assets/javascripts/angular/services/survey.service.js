@@ -40,12 +40,6 @@ function surveyService(
                         _.includes(['3457', '3458', '17'], question.id),
                     );
 
-                    //mark predefined questions as non-editable
-                    predefinedQuestions = predefinedQuestions.map(question => ({
-                        ...question,
-                        editable: false,
-                    }));
-
                     return [...predefinedQuestions, ...surveyQuestions.data];
                 });
         },
@@ -101,20 +95,40 @@ function surveyService(
         },
 
         createSurveyQuestion: (surveyId, attributes) => {
-            const payload = {
-                data: {
-                    type: 'question',
-                    attributes: attributes,
-                },
-            };
+            const isPredefinedQuestion = !!attributes.id;
+            const payload = isPredefinedQuestion
+                ? {
+                      data: {
+                          type: 'question',
+                          id: attributes.id,
+                      },
+                  }
+                : {
+                      data: {
+                          type: 'question',
+                          attributes: attributes,
+                      },
+                  };
 
-            return httpProxy
-                .post(`/surveys/${surveyId}/questions`, payload, {
-                    errorMessage: 'surveyTab:errors.createSurvey',
-                })
-                .then(survey => {
-                    return survey.data;
-                });
+            return isPredefinedQuestion
+                ? httpProxy
+                      .put(
+                          `/surveys/${surveyId}/questions/${attributes.id}`,
+                          payload,
+                          {
+                              errorMessage: 'surveyTab:errors.createSurvey',
+                          },
+                      )
+                      .then(survey => {
+                          return survey.data;
+                      })
+                : httpProxy
+                      .post(`/surveys/${surveyId}/questions`, payload, {
+                          errorMessage: 'surveyTab:errors.createSurvey',
+                      })
+                      .then(survey => {
+                          return survey.data;
+                      });
         },
 
         updateSurveyQuestion: (surveyId, attributes) => {

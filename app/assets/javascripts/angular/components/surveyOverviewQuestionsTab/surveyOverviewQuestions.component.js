@@ -74,6 +74,8 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
+                currentQuestions: () =>
+                    this.surveyQuestions.map(question => question.id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
@@ -90,7 +92,10 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             .createSurveyQuestion(this.survey.id, question)
             .then(newQuestion => {
                 this.surveyQuestions.push(newQuestion);
-                this.isExpanded[newQuestion.id] = true;
+
+                if (!newQuestion.predefined) {
+                    this.isExpanded[newQuestion.id] = true;
+                }
             });
     };
 

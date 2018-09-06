@@ -22,15 +22,16 @@
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
                 <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
             </a>
-            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.addQuestion(question)">
+            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id] && !question.predefined" ng-click="$ctrl.addQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
             </a>
             <span class="db open-close-arrow"
-                  ng-show="question.editable !== false"
                   ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]">
             </span>
         </h2>
-        <div class="accordion-body" ng-if="$ctrl.isExpanded[question.id]" ng-init="questionAnswers = question.content.split('\n')">
+        <div class="accordion-body"
+             ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
+             ng-init="questionAnswers = question.content.split('\n')">
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
                     <div class="w-48">
