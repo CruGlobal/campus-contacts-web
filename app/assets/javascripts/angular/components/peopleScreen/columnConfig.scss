@@ -1,5 +1,9 @@
 @import '../../../../stylesheets/variables/colors';
 
+%blue-border {
+    border-right: 1px solid $pivot-dark-blue;
+}
+
 %column-config {
     .sticky-column {
         position: sticky;
@@ -9,29 +13,18 @@
         align-self: stretch;
         display: flex;
         align-items: center;
+
         &.col-bg-blue {
-            background: linear-gradient(
-                to left,
-                rgba(0, 0, 0, 0),
-                rgba(0, 0, 0, 0.25) 5px,
-                $pivot-darker-blue 5px
-            );
+            background: $pivot-darker-blue;
+            @extend %blue-border;
         }
         &.col-bg-gray {
-            background: linear-gradient(
-                to left,
-                rgba(0, 0, 0, 0),
-                rgba(0, 0, 0, 0.25) 5px,
-                $white 5px
-            );
+            background: $white;
+            @extend %blue-border;
         }
         &.col-bg-white {
-            background: linear-gradient(
-                to left,
-                rgba(0, 0, 0, 0),
-                rgba(0, 0, 0, 0.25) 5px,
-                $gray-5 5px
-            );
+            background: $gray-5;
+            @extend %blue-border;
         }
     }
     .select-column {
