@@ -550,7 +550,7 @@ export default {
             goal: 'Goal Tracker',
             groups: 'Groups',
             logout: 'Sign Out',
-            manage: 'Manage Organizations',
+            manage: 'Manage Ministries',
             my_profile: 'My Profile',
             powered_by_cru: 'Powered by Cru',
             report_movement_indicators: 'Report Movement Indicators',
@@ -569,7 +569,7 @@ export default {
             edit: 'Edit Ministry',
             name: 'Ministry Name',
             type: 'Type',
-            show_sub: 'Show Sub-Organizations',
+            show_sub: 'Show Sub-Ministries',
             none_found: 'No organizations found',
             delete: {
                 confirm: 'Are you sure you want to delete "{{org_name}}"?',
