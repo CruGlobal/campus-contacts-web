@@ -45,7 +45,7 @@
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
                             </a>
                             <ul class="bg-white f5" uib-dropdown-menu>
-                                <li ng-repeat="type in $ctrl.questionTypes">
+                                <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
                                     <a href=""
                                        ng-click="question.kind = type.kind; question.style = type.style; $ctrl.saveQuestion(question);">
                                         {{type.name}}
