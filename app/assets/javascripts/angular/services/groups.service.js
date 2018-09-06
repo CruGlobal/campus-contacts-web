@@ -122,7 +122,10 @@ function groupsService(
                 group.group_memberships,
                 function(allMembers, groupMembership) {
                     // Skip all unloaded group_memberships. They seem to be loaded later
-                    if (!groupMembership._placeHolder) {
+                    if (
+                        !groupMembership._placeHolder &&
+                        groupMembership.person
+                    ) {
                         // Map groupMembership to person
                         allMembers.push(groupMembership.person);
                     }
