@@ -1,5 +1,6 @@
 import template from './messageModal.html';
 import './messageModal.scss';
+import { t } from 'i18next';
 
 angular.module('missionhubApp').component('messageModal', {
     controller: messageModalController,
@@ -12,6 +13,7 @@ angular.module('missionhubApp').component('messageModal', {
 });
 
 function messageModalController(
+    $sce,
     $filter,
     JsonApiDataStore,
     messageModalService,
@@ -22,6 +24,7 @@ function messageModalController(
     vm.message = '';
     vm.sending = false;
 
+    vm.$sce = $sce;
     vm.getMaximumLength = getMaximumLength;
     vm.getRemainingLength = getRemainingLength;
     vm.isValid = isValid;
@@ -47,15 +50,9 @@ function messageModalController(
         vm.formattedRecipients = getFormattedRecipients();
     }
 
-    // Wrap a string in quotation marks
-    function quote(string) {
-        return '"' + string + '"';
-    }
-
     // Return the recipients list as a nicely-formatted, human-readable string
     function getFormattedRecipients() {
         var filters = vm.resolve.selection.filters;
-        var t = $filter('t');
         var parts = [];
 
         parts.push(
@@ -64,12 +61,10 @@ function messageModalController(
             }),
         );
 
-        var organizationName = quote(
-            JsonApiDataStore.store.find(
-                'organization',
-                vm.resolve.selection.orgId,
-            ).name,
-        );
+        var organizationName = JsonApiDataStore.store.find(
+            'organization',
+            vm.resolve.selection.orgId,
+        ).name;
         parts.push(
             t('messages.recipients.organization', { name: organizationName }),
         );
@@ -77,7 +72,7 @@ function messageModalController(
         if (filters.searchString) {
             parts.push(
                 t('messages.recipients.search', {
-                    search: quote(filters.searchString),
+                    search: filters.searchString,
                 }),
             );
         }
@@ -90,7 +85,7 @@ function messageModalController(
          * "name" the property on the filters object
          * "type" is the JSON API model type that the filter ids refer to
          * "nameField" is the name of the name attribute on the JSON API model
-         * "ids" is the array of model ids and deaults to filters[definition.name]
+         * "ids" is the array of model ids and defaults to filters[definition.name]
          */
         var filterDefinitions = [
             { name: 'groups', type: 'group', nameField: 'name' },
@@ -108,11 +103,10 @@ function messageModalController(
             if (ids.length > 0) {
                 var names = ids
                     .map(function(id) {
-                        return quote(
-                            JsonApiDataStore.store.find(definition.type, id)[
-                                definition.nameField
-                            ],
-                        );
+                        return JsonApiDataStore.store.find(
+                            definition.type,
+                            id,
+                        )[definition.nameField];
                     })
                     .join(', ');
                 parts.push(

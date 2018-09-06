@@ -430,11 +430,19 @@ export default {
             },
         },
         messages: {
+            email_title: 'Email Contacts',
+            email_subtitle: 'Send an email to {{recipients}}.',
+            sms_title: 'Text Contacts',
+            sms_subtitle: 'Send a text message to {{recipients}}.',
             length_limit: '{{remaining_characters}} characters left',
             recipients: {
                 contacts: '{{contact_count}} contacts',
-                organization: 'in organization {{name}}',
-                search: 'matching {{search}}',
+                organization: 'in organization "{{name}}"',
+                search: 'matching "{{search}}"',
+                groups: 'in groups "{{names}}"',
+                labels: 'with labels "{{names}}"',
+                assigned_tos: 'assigned to "{{names}}"',
+                exclusions: 'except "{{names}}"',
             },
         },
         ministries: {
