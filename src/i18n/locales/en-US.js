@@ -564,7 +564,7 @@ export default {
             trend: 'Trend Tracker',
         },
         organizations: {
-            manage: 'Manage Organizations',
+            manage: 'Manage Ministries',
             new: 'New Ministry',
             edit: 'Edit Ministry',
             name: 'Ministry Name',
@@ -572,9 +572,8 @@ export default {
             show_sub: 'Show Sub-Organizations',
             none_found: 'No organizations found',
             delete: {
-                confirm:
-                    'Are you sure you want to delete "{{org_name}}"?' +
-                    '<br><br>' +
+                confirm: 'Are you sure you want to delete "{{org_name}}"?',
+                confirm_b:
                     'This will remove access to interactions, assignments and contacts from any of the sub-ministries.',
             },
             cleanup: {

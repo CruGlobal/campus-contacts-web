@@ -1,0 +1,21 @@
+<div class="center bg-white">
+    <div class="modal-text pv5 ph5">
+        <div class="tc">
+            <img class="dib" ng-src="{{$ctrl.warningIcon}}" style="width:60px; height:60px;">
+        </div>
+
+        <p class="lh-copy measure text-center f5 grey-darker mb0 mt4">
+            {{'ministries:organizations.delete.confirm' | t : { org_name: $ctrl.resolve.org_name } }}
+        </p>
+
+        <p class="lh-copy measure text-center f5 grey-darker mb0 mt2">
+            {{'ministries:organizations.delete.confirm_b' | t}}
+        </p>
+    </div>
+    <a class="btn-okay bg-pivot-dark-blue b white dim f4 ttu tracked db pv3 ph3 tc link w-50 br fl" href="" ng-click="$ctrl.dismiss()">
+        {{ 'general.cancel' | t }}
+    </a>
+    <a class="btn-okay bg-pivot-dark-blue b white dim f4 ttu tracked db pv3 ph3 tc link w-50 fl" href="" ng-click="$ctrl.close()">
+        {{ 'general.delete' | t }}
+    </a>
+</div>
