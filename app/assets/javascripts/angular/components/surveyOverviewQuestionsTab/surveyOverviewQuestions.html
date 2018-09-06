@@ -22,7 +22,9 @@
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
                 <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
             </a>
-            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id] && !question.predefined" ng-click="$ctrl.addQuestion(question)">
+            <a class="ml3" href=""
+               ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
+               ng-click="$ctrl.copyQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
             </a>
             <span class="db open-close-arrow"

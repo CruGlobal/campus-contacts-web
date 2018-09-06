@@ -99,6 +99,10 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             });
     };
 
+    this.copyQuestion = question => {
+        this.addQuestion(_.omit(question, ['id']));
+    };
+
     this.deleteQuestion = questionId => {
         surveyService
             .deleteSurveyQuestion(this.survey.id, questionId)
