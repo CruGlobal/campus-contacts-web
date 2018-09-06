@@ -3,6 +3,7 @@ import template from './orgManagementSubOrg.html';
 import addIcon from '../../../../images/icons/icon-add.svg';
 import editIcon from '../../../../images/icons/icon-edit.svg';
 import trashIcon from '../../../../images/icons/icon-trash-blue.svg';
+import _ from 'lodash';
 
 angular.module('missionhubApp').component('orgManagementSubOrg', {
     controller: orgManagementSubOrgController,
@@ -16,8 +17,7 @@ angular.module('missionhubApp').component('orgManagementSubOrg', {
 function orgManagementSubOrgController(
     organizationOverviewSuborgsService,
     organizationService,
-    confirmModalService,
-    tFilter,
+    $uibModal,
     $timeout,
 ) {
     this.addIcon = addIcon;
@@ -72,13 +72,15 @@ function orgManagementSubOrgController(
             return;
         }
 
-        confirmModalService
-            .create(
-                tFilter('ministries:organizations.delete.confirm', {
-                    org_name: org.name,
-                }),
-            )
-            .then(() => {
+        $uibModal
+            .open({
+                component: 'deleteOrgConfirmModal',
+                size: 'md',
+                resolve: {
+                    org_name: _.constant(org.name),
+                },
+            })
+            .result.then(() => {
                 organizationService.deleteOrg(org).then(() => {
                     this.subOrgs.splice(this.subOrgs.indexOf(org), 1);
                 });
