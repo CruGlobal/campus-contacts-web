@@ -52,7 +52,7 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             name: 'Dropdown (Choose one)',
             canAdd: true,
         },
-        { kind: 'DateField', style: 'date_field', name: 'Date', canAdd: true },
+        { kind: 'DateField', style: 'date_field', name: 'Date' },
     ];
 
     this.getQuestionType = (kind, style) => {
