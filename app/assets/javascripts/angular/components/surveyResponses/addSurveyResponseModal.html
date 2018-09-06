@@ -44,7 +44,7 @@
 
                     <input class="pa2 input-reset bg-white ba grey-darker w-100 br2 b--grey-dark"
                            ng-model="$ctrl.answers[question.id]"
-                           type="text" ng-switch-default ng-required="question.required">
+                           type="text" ng-switch-default>
                 </div>
             </div>
         </fieldset>
@@ -54,11 +54,11 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="$ctrl.saving || $ctrl.contactForm.$invalid">
+            ng-disabled="$ctrl.saving">
         <span ng-hide="$ctrl.saving">Save and Close</span>
     </button>
     <button class="btn btn-primary" type="button" ng-click="$ctrl.save(true)"
-            ng-disabled="$ctrl.saving || $ctrl.contactForm.$invalid">
+            ng-disabled="$ctrl.saving">
         <span ng-hide="$ctrl.saving">Save and Add New</span>
     </button>
 </div>
