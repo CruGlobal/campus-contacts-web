@@ -63,7 +63,7 @@
                                ng-model="question.column_title" type="text">
                     </div>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between" ng-if="question.kind === 'ChoiceField'">
                     <div class="w-100">
                         <!--<p class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3">-->
                             <!--Answers to initiate assignment/notifications-->
