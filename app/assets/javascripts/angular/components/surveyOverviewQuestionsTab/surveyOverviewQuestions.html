@@ -4,6 +4,7 @@
             'accordion-expanded': $ctrl.isExpanded[question.id]
         }">
         <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-pivot-gray-5 f5 flex br2"
+            ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
                 'pa3': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
@@ -15,8 +16,9 @@
                 {{question.label}}
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
-            <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-83 ihshort br2"
+            <input class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker w-83 ihshort br2"
                    placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" type="text" ng-model="question.label"
+                   ng-click="$event.stopPropagation()"
                    ng-change="$ctrl.saveQuestion(question)"
                    ng-if="$ctrl.isExpanded[question.id]">
             <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
@@ -27,9 +29,7 @@
                ng-click="$ctrl.copyQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
             </a>
-            <span class="db open-close-arrow"
-                  ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]">
-            </span>
+            <span class="db open-close-arrow"></span>
         </h2>
         <div class="accordion-body"
              ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
