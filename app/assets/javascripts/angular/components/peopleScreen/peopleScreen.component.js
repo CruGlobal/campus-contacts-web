@@ -75,8 +75,8 @@ function peopleScreenController(
             sortable: true,
             getSortKey: person => {
                 return [
-                    person.last_name.toLowerCase(),
-                    person.first_name.toLowerCase(),
+                    (person.last_name || '').toLowerCase(),
+                    (person.first_name || '').toLowerCase(),
                 ];
             },
             orderFields: ['last_name', 'first_name'],
