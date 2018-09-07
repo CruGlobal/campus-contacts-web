@@ -8,9 +8,6 @@
                 <label class="db f6 fw6 lh-copy normal mb1 pivot-grey-darker ttu tracked flex items-center"
                        for="ministryName">
                     {{'common:organizations.name' | t}}
-                    <a class="help" href="">
-                        <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
-                    </a>
                 </label>
                 <input class="pa2 input-reset bg-white bw0 pivot-grey-darker w-100 ihshort br2"
                        id="ministryName" ng-model="$ctrl.orgEdit.name" type="text">
@@ -19,9 +16,6 @@
                 <label class="db f6 fw6 lh-copy normal mb1 pivot-grey-darker ttu tracked flex items-center"
                        for="type">
                     {{'common:organizations.type' | t}}
-                    <a class="help" href="">
-                        <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
-                    </a>
                 </label>
                 <input class="pa2 input-reset bg-white bw0 pivot-grey-darker w-100 ihshort br2" id="type"
                        ng-model="$ctrl.orgEdit.terminology"
@@ -33,7 +27,8 @@
             <label class="lh-copy flex f6" for="check1">
                 {{'common:organizations.show_sub' | t}}
                 <a class="help" href="">
-                    <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}" class="ml1 db" style="width:16px; height:16px;">
+                    <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}"
+                         class="ml1 db" style="width:16px; height:16px;">
                 </a>
             </label>
         </div>
