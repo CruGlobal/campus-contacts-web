@@ -569,8 +569,12 @@ export default {
             edit: 'Edit Ministry',
             name: 'Ministry Name',
             type: 'Type',
+            type_help:
+                'This is how you want to identify this specific ministry. Some people use church, group, or team.',
             show_sub: 'Show Sub-Ministries',
-            none_found: 'No organizations found',
+            sub_help:
+                'Checking this box allows any of the sub-ministries to appear for any involved team member when navigating MissionHub.',
+            none_found: 'No ministries found',
             delete: {
                 confirm: 'Are you sure you want to delete "{{org_name}}"?',
                 confirm_b:
