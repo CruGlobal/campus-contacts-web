@@ -663,6 +663,7 @@ export default {
         },
     },
     surveys: {
+        preview: 'Preview Only',
         delete: {
             confirm: 'Are you sure you want to delete this survey?',
         },
