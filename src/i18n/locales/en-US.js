@@ -748,6 +748,7 @@ export default {
             addPredefinedQuestion: 'Add Predefined/Previous Question',
             addNewQuestion: 'Add New Question',
             predefinedQuestions: 'Predefined Questions',
+            delete_confirm: 'Are you sure you want to delete this question?',
         },
     },
     contact_import: {

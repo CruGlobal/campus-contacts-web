@@ -104,10 +104,17 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
     };
 
     this.deleteQuestion = questionId => {
-        surveyService
-            .deleteSurveyQuestion(this.survey.id, questionId)
-            .then(() => {
-                _.remove(this.surveyQuestions, { id: questionId });
+        $uibModal
+            .open({
+                component: 'deleteQuestionConfirmModal',
+                size: 'md',
+            })
+            .result.then(() => {
+                surveyService
+                    .deleteSurveyQuestion(this.survey.id, questionId)
+                    .then(() => {
+                        _.remove(this.surveyQuestions, { id: questionId });
+                    });
             });
     };
 
