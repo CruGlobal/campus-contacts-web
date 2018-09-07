@@ -16,7 +16,17 @@
                 <label class="db f6 fw6 lh-copy normal mb1 pivot-grey-darker ttu tracked flex items-center"
                        for="type">
                     {{'common:organizations.type' | t}}
+                    <a class="help" href="">
+                        <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}"
+                             ng-click="showTypeHelp = !showTypeHelp"
+                             class="ml1 db" style="width:16px; height:16px;">
+                    </a>
                 </label>
+                <div class="help-text" ng-if="showTypeHelp">
+                    <p class="grey-darker f7 lh-copy mv2">
+                        {{'common:organizations.type_help' | t}}
+                    </p>
+                </div>
                 <input class="pa2 input-reset bg-white bw0 pivot-grey-darker w-100 ihshort br2" id="type"
                        ng-model="$ctrl.orgEdit.terminology"
                        name="type" type="text">
@@ -28,9 +38,15 @@
                 {{'common:organizations.show_sub' | t}}
                 <a class="help" href="">
                     <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}"
+                         ng-click="showSubOrgsHelp = !showSubOrgsHelp"
                          class="ml1 db" style="width:16px; height:16px;">
                 </a>
             </label>
+        </div>
+        <div class="help-text" ng-if="showSubOrgsHelp">
+            <p class="grey-darker f7 lh-copy mv2">
+                {{'common:organizations.sub_help' | t}}
+            </p>
         </div>
         <div class="tr mt2">
             <button
