@@ -58,18 +58,6 @@ organization-contact-import {
         background: $pivot-dark-blue;
     }
 
-    .bg-gray-darker {
-        background: $gray-darker;
-    }
-
-    .bg-gray-medium {
-        background: $background-gray;
-    }
-
-    .bg-gray-light {
-        background: $gray-5;
-    }
-
     .bg-transparent {
         background: transparent;
     }
@@ -109,7 +97,7 @@ organization-contact-import {
         border-color: $pivot-bright-blue;
     }
 
-    .b--gray-medium {
+    .b--pivot-gray {
         border-color: $background-gray;
     }
 
@@ -117,11 +105,11 @@ organization-contact-import {
         border-color: $gray-dark;
     }
 
-    .b--gray-medium {
+    .b--pivot-gray {
         border-color: $background-gray;
     }
 
-    .b--gray-light {
+    .b--pivot-gray-5 {
         border-color: $gray-5;
     }
 

@@ -5,7 +5,7 @@
         </div>
 
         <div class="mv3" ng-repeat="question in $ctrl.surveyQuestions track by question.id">
-            <label class="gray-darker mb1 db">{{question.label}}</label>
+            <label class="pivot-gray-darker mb1 db">{{question.label}}</label>
 
             <div ng-switch="question.kind">
                 <div ng-switch-when="ChoiceField"  ng-switch="question.style">
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <input class="pa2 input-reset bg-white ba gray-darker w-100 br2 b--gray-dark"
+                <input class="pa2 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark"
                        ng-model="$ctrl.answers[question.id]"
                        type="text"
                        ng-switch-default />
