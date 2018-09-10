@@ -1,8 +1,8 @@
-<div class="import-contact-form mt5 bb b--gray-medium pb3 mb4">
+<div class="import-contact-form mt5 bb b--pivot-gray pb3 mb4">
     <h2 class="normal f3 fw6 blue">
         {{ 'contact_import:step_1.title' | t }}
     </h2>
-    <p class="lh-copy gray-darker f4 w-90">
+    <p class="lh-copy pivot-gray-darker f4 w-90">
         {{ 'contact_import:step_1.instructions' | t }}
         <a ng-href="/surveys/new?organization_id={{$ctrl.org.id}}" class="blue-light">
             {{ 'contact_import:step_1.create_survey' | t }}
@@ -11,7 +11,7 @@
     </p>
     <fieldset class="ba b--transparent ph0 mh0">
         <div class="mt3">
-            <label class="gray-darker f5 mb2 db">
+            <label class="pivot-gray-darker f5 mb2 db">
                 {{ 'contact_import:step_1.select_survey' | t }}
             </label>
             <div class="dropdown dropdown-select w-60 mr2" uib-dropdown>
@@ -34,7 +34,7 @@
                     {{ 'contact_import:step_1.select' | t }}
                 </button>
 
-                <span class="filename gray-darker f6 flex items-center" ng-if="$ctrl.fileName">
+                <span class="filename pivot-gray-darker f6 flex items-center" ng-if="$ctrl.fileName">
                     <img class="mr2 ml3" ng-src="{{$ctrl.fileIcon}}" style="width:18px; height:24px;">
                     {{$ctrl.fileName}} - {{ 'contact_import:step_1.rowCount' | t: { count: $ctrl.csvData.length - 1 } }}
                 </span>

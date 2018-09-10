@@ -1,7 +1,8 @@
 @import './colors.scss';
 
 @each $name, $value in $pivot-colors {
-    .pivot-#{$name} {
+    .pivot-#{$name},
+    a.pivot-#{$name} {
         color: $value;
     }
     .bg-pivot-#{$name} {
