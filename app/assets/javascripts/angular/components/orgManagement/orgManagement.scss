@@ -120,22 +120,22 @@ org-management {
 
     ::-webkit-input-placeholder {
         /* Chrome/Opera/Safari */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     ::-moz-placeholder {
         /* Firefox 19+ */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     :-ms-input-placeholder {
         /* IE 10+ */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
     :-moz-placeholder {
         /* Firefox 18- */
-        color: $grey-dark;
+        color: $gray-dark;
         opacity: 1;
     }
 
@@ -224,7 +224,7 @@ org-management {
 
         &:after {
             content: '';
-            border: solid $grey-darker;
+            border: solid $gray-darker;
             border-width: 0 2px 2px 0;
             display: inline-block;
             padding: 4px;
@@ -277,7 +277,7 @@ org-management {
         }
 
         .tab {
-            border-bottom: 1px solid $grey-dark;
+            border-bottom: 1px solid $gray-dark;
 
             &.active {
                 border-bottom: 1px solid $gray-5;
@@ -310,7 +310,7 @@ org-management {
         &:after {
             content: '';
             height: 1px;
-            border-bottom: 1px solid $grey-dark;
+            border-bottom: 1px solid $gray-dark;
             width: 23px;
             position: absolute;
             left: 100%;

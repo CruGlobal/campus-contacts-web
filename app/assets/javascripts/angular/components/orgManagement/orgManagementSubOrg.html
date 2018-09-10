@@ -4,7 +4,7 @@
         'bg-pivot-gray-5 br2 pl-4': $ctrl.isRoot
      }"
      ng-repeat="subOrg in $ctrl.subOrgs track by $index">
-    <h2 class="accordion-header normal pivot-grey-darker mt3 pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray"
+    <h2 class="accordion-header normal pivot-gray-darker mt3 pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray"
         ng-click="$ctrl.orgExpanded[subOrg.id] = !$ctrl.orgExpanded[subOrg.id]">
         <span>{{subOrg.name}}</span>
         <span class="button-wrapper">
