@@ -34,16 +34,10 @@ function organizationOverviewController(
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     vm.surveyResponses = 'countHidden';
 
-    vm.showOrgNav = () => {
-        return !_.includes(
-            [
-                'app.ministries.ministry.survey',
-                'app.ministries.ministry.import',
-                'app.ministries.ministry.management',
-            ],
-            $state.$current.name,
+    vm.showOrgNav = () =>
+        !$state.$current.name.match(
+            /^app\.ministries\.ministry\.(survey\.|import|management)/,
         );
-    };
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
