@@ -411,8 +411,8 @@ angular
                 name: 'publicSurvey',
                 url: '/s/:surveyId',
                 component: 'publicSurvey',
-})
-.state({
+            })
+            .state({
                 name: 'app.ministries.ministry.survey',
                 url: '/survey/:surveyId',
                 abstract: true,

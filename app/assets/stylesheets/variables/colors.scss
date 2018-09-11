@@ -53,6 +53,7 @@ $pivot-colors: (
     muted-dark-blue: $pivot-muted-dark-blue,
     teal: $pivot-teal,
     orange: $pivot-orange,
+    white: $white,
 );
 
 @mixin font-smoothing($value: on) {

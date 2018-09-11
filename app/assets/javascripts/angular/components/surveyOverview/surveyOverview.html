@@ -13,10 +13,6 @@
             {{$ctrl.survey.title}}
     </div>
 
-    <div class="survey-title-row">
-        <div class="survey-title">{{$ctrl.survey.title}}</div>
-    </div>
-
     <div class="tabs">
         <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
              ng-click="$ctrl.activeTab = tab.id">
