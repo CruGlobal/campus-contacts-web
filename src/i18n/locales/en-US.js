@@ -613,6 +613,7 @@ export default {
                     'Search for the first name, last name or email.',
             },
             show: {
+                apply_labels: 'Apply the following labels to {{name}}.',
                 apply_groups: 'Assign {{name}} to the following groups.',
                 no_groups: 'No groups assigned.',
                 no_labels: 'No labels assigned.',
