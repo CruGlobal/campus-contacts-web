@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h3 class="modal-title">{{ $ctrl.title | t }}</h3>
-    <h4 class="modal-subtitle" ng-bind-html="$ctrl.$sce.trustAsHtml($ctrl.subtitle | t: { recipients: $ctrl.formattedRecipients })"></h4>
+    <h4 class="modal-subtitle">{{ $ctrl.subtitle | t: { recipients: $ctrl.formattedRecipients } }}</h4>
 </div>
 <div class="modal-body form">
     <label class="form-group" ng-if="$ctrl.medium === 'email'">

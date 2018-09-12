@@ -13,7 +13,6 @@ angular.module('missionhubApp').component('messageModal', {
 });
 
 function messageModalController(
-    $sce,
     $filter,
     JsonApiDataStore,
     messageModalService,
@@ -24,7 +23,6 @@ function messageModalController(
     vm.message = '';
     vm.sending = false;
 
-    vm.$sce = $sce;
     vm.getMaximumLength = getMaximumLength;
     vm.getRemainingLength = getRemainingLength;
     vm.isValid = isValid;
