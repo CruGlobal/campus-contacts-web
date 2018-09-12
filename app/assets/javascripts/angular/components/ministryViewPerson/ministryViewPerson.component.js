@@ -62,19 +62,21 @@ function ministryViewPersonController(
     }
 
     function addAssignment(person) {
-        return personProfileService.addAssignments(
-            vm.person,
-            vm.organizationId,
-            [person],
-        );
+        return personProfileService
+            .addAssignments(vm.person, vm.organizationId, [person])
+            .then(() => $scope.$emit('personModified'));
     }
 
     function removeAssignment(person) {
-        return personProfileService.removeAssignments(vm.person, [person]);
+        return personProfileService
+            .removeAssignments(vm.person, [person])
+            .then(() => $scope.$emit('personModified'));
     }
 
     function saveAttribute(model, attribute) {
-        personProfileService.saveAttribute(vm.person.id, model, attribute);
+        personProfileService
+            .saveAttribute(vm.person.id, model, attribute)
+            .then(() => $scope.$emit('personModified'));
     }
 
     function toggleAssignmentVisibility() {
