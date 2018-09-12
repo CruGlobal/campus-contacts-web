@@ -49,8 +49,19 @@ function peopleFiltersPanelController(
 
         loadFilterStats();
 
-        $rootScope.$on('personModified', loadFilterStats);
-        $rootScope.$on('massEditApplied', loadFilterStats);
+        this.personModifiedUnsubscribe = $rootScope.$on(
+            'personModified',
+            loadFilterStats,
+        );
+        this.massEditAppliedUnsubscribe = $rootScope.$on(
+            'massEditApplied',
+            loadFilterStats,
+        );
+    };
+
+    this.$onDestroy = () => {
+        this.personModifiedUnsubscribe();
+        this.massEditAppliedUnsubscribe();
     };
 
     this.resetFilters = () => {
