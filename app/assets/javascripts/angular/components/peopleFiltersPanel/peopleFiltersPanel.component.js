@@ -113,11 +113,8 @@ function peopleFiltersPanelController(
             });
     };
 
-    this.findStats = _.memoize(
-        ({ id }) =>
-            this.questionOptions.find(({ question_id }) => question_id === id),
-        ({ id }) => id,
-    );
+    this.findStats = ({ id }) =>
+        this.questionOptions.find(({ question_id }) => question_id === id);
 
     const emptyArrayToUndefined = value =>
         value.length === 0 ? undefined : value;
