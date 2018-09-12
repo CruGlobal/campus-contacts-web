@@ -56,6 +56,7 @@ function peopleFiltersPanelController(
             searchString: '',
             labels: {},
             assignedTos: {},
+            statuses: {},
             groups: {},
             questions: {},
             includeArchived: false,
