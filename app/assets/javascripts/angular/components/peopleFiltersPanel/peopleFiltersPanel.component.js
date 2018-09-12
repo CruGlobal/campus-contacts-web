@@ -13,6 +13,7 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
 });
 
 function peopleFiltersPanelController(
+    $rootScope,
     $scope,
     httpProxy,
     modelsService,
@@ -48,7 +49,8 @@ function peopleFiltersPanelController(
 
         loadFilterStats();
 
-        $scope.$on('massEditApplied', loadFilterStats);
+        $rootScope.$on('personModified', loadFilterStats);
+        $rootScope.$on('massEditApplied', loadFilterStats);
     };
 
     this.resetFilters = () => {

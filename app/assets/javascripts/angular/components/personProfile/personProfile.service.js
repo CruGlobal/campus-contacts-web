@@ -72,7 +72,7 @@ function personProfileService(
             }).then(function(res) {
                 // If the update resulted in a merge, then reload all of the person's relationships because the
                 // person may have new relationships as a result of the merge
-                if (res.meta.user_merged) {
+                if (res.meta && res.meta.user_merged) {
                     return httpProxy.get(
                         modelsService
                             .getModelMetadata('person')
