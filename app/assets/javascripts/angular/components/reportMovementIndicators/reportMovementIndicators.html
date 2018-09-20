@@ -1,0 +1,11 @@
+<h2 class="f2 normal pivot-dark-blue fw6 mv4 pv3">{{ 'movementIndicators:title' | t }}</h2>
+
+<report-movement-indicators-suggested-actions ng-if="$ctrl.currentScreen === $ctrl.ScreenEnum.SuggestedActions"
+                                              org-id="$ctrl.orgId"
+                                              next="$ctrl.next()">
+</report-movement-indicators-suggested-actions>
+<report-movement-indicators-confirm ng-if="$ctrl.currentScreen === $ctrl.ScreenEnum.ReportMovementIndicators"
+                                    org-id="$ctrl.orgId"
+                                    next="$ctrl.next()"
+                                    previous="$ctrl.previous()">
+</report-movement-indicators-confirm>

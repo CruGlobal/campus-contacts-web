@@ -351,6 +351,15 @@ angular
                 component: 'orgManagement',
             })
             .state({
+                name: 'app.ministries.ministry.reportMovementIndicators',
+                url: '/report-movement-indicators',
+                component: 'reportMovementIndicators',
+                resolve: {
+                    orgId: ($state, $transition$) =>
+                        $transition$.params().orgId,
+                },
+            })
+            .state({
                 name: 'app.ministries.ministry.defaultTab',
                 redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab,
             })

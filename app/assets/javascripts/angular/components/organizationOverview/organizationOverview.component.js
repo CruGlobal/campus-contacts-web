@@ -36,7 +36,7 @@ function organizationOverviewController(
 
     vm.showOrgNav = () =>
         !$state.$current.name.match(
-            /^app\.ministries\.ministry\.(survey\.|import|management)/,
+            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators)/,
         );
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
@@ -89,12 +89,4 @@ function organizationOverviewController(
                 vm.team = new Array(teamMemberCount);
             });
     }
-
-    vm.isUnderDev = () => {
-        var message = t('common:application.under_development');
-        confirmModalService.create(message, {
-            showCancel: false,
-            title: t('common:application.under_development_title'),
-        });
-    };
 }

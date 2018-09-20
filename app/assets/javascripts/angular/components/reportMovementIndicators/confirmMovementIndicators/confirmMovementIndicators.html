@@ -1,0 +1,54 @@
+<h2 class="f3 fw6 mb3">{{ 'movementIndicators:confirmIndicators.title' | t }}</h2>
+<p class="pivot-gray-darker f5 mb4">{{ 'movementIndicators:confirmIndicators.subtitle' | t }}</p>
+
+<h3 class="tracked f5 ttu mb3 fw6">{{ $ctrl.startDate | date : 'shortDate' }} &ndash; {{ $ctrl.endDate | date : 'shortDate' }}</h3>
+
+<script type="text/ng-template" id="movementIndicatorRow.html">
+    <label class="flex items-center mb3">
+        <div class="flex-auto flex items-center justify-start">
+            {{ indicator.label }}
+            <tooltip content="{{ indicator.tooltip }}"/>
+        </div>
+        <input class="pa2 tc w-20 mr5"
+               type="number"
+               min="0"
+               ng-model="indicator.value">
+    </label>
+</script>
+
+<div class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
+    <h4 class="tracked ttu">{{ 'movementIndicators:interactions.title' | t }}</h4>
+    <div class="column-count-2">
+        <div ng-repeat="indicator in $ctrl.fieldMap.interactions">
+            <ng-include src="'movementIndicatorRow.html'"></ng-include>
+        </div>
+    </div>
+</div>
+
+<div class="flex mt3 pivot-gray-darker">
+    <div class="w-50 pa4 f5 bg-pivot-gray-5">
+        <h4 class="tracked ttu">{{ 'movementIndicators:students.title' | t }}</h4>
+        <div ng-repeat="indicator in $ctrl.fieldMap.students">
+            <ng-include src="'movementIndicatorRow.html'"></ng-include>
+        </div>
+    </div>
+    <div class="w-50 pa4 f5 bg-pivot-gray-5 ml3">
+        <h4 class="tracked ttu">{{ 'movementIndicators:faculty.title' | t }}</h4>
+        <div ng-repeat="indicator in $ctrl.fieldMap.faculty">
+            <ng-include src="'movementIndicatorRow.html'"></ng-include>
+        </div>
+    </div>
+</div>
+
+
+<div class="mt3 mb4 flex justify-between">
+    <button class="f5 pivot-dark-blue ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-transparent"
+            ng-click="$ctrl.previous()">
+        {{ 'back' | t }}
+    </button>
+    <button class="f5 white ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-pivot-dark-blue"
+            ng-click="$ctrl.submit()">
+        {{ 'submit' | t }}
+    </button>
+
+</div>

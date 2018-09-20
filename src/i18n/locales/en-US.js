@@ -2,6 +2,11 @@ export default {
     common: {
         select: 'Select',
         submit: 'Submit',
+        yes: 'Yes',
+        no: 'No',
+        back: 'Back',
+        continue: 'Continue',
+        help: 'Help',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
         engaged_disciple: 'Engaged Disciple',
@@ -36,9 +41,6 @@ export default {
                 prayed_to_receive_christ: 'Personal Evangelism Decisions',
                 spiritual_conversation: 'Spiritual Conversation',
             },
-            under_development_title: 'Under Development',
-            under_development:
-                'This feature is being rebuilt to support Campus changes in Infobase due to the restructuring and will be available soon.',
         },
         assignments: {
             assigned: 'Assigned',
@@ -766,8 +768,6 @@ export default {
         },
     },
     contact_import: {
-        back: 'Back',
-        continue: 'Continue',
         step_1: {
             title: 'Select Survey and Upload CSV File',
             select_survey: 'Select Survey',
@@ -836,6 +836,117 @@ export default {
             exactly: 'Exactly',
             contains: 'Contains',
             doesNotContain: 'Does not contain',
+        },
+    },
+    movementIndicators: {
+        title: 'Report Movement Indicators',
+        suggestedActions: {
+            title: 'Suggested Movement Indicator Actions',
+            subtitle:
+                'These suggestions are designed to reinforce the proper labeling of contacts for the Involved, Engaged Disciple, and Leader categories, which will be reported on the next page.',
+            newSuggestions: 'New Suggestions ({{num}})',
+            previousSuggestions: 'Previous Suggestions ({{num}})',
+            applyAll: 'Apply All',
+        },
+        confirmIndicators: {
+            title: 'Confirm Movement Indicators',
+            subtitle:
+                'The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
+            errorLoadingIndicators:
+                'Error occurred while loading movement indicators to pre-fill fields',
+            errorSavingIndicators:
+                'Error occurred while saving movement indicators',
+        },
+        interactions: {
+            title: 'Interactions',
+            spiritualConversations: {
+                label: 'Spiritual Conversations',
+                tooltip:
+                    'How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)',
+            },
+            personalEvangelism: {
+                label: 'Personal Evangelism',
+                tooltip:
+                    'How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)',
+            },
+            personalEvangelismDecisions: {
+                label: 'Personal Evangelism Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?',
+            },
+            holySpiritPresentations: {
+                label: 'Holy Spirit Presentations',
+                tooltip:
+                    'How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?',
+            },
+            groupEvangelism: {
+                label: 'Group Evangelism',
+                tooltip:
+                    'What was the total number of people who heard the gospel and were brought to a point of decision through group evangelism?',
+            },
+            groupEvangelismDecisions: {
+                label: 'Group Evangelism Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a large group presentation of the gospel?',
+            },
+            mediaExposures: {
+                label: 'Media Exposures',
+                tooltip:
+                    'How many people have been exposed to gospel content with an opportunity to respond through media exposures?',
+            },
+            mediaExposureDecisions: {
+                label: 'Media Exposure Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after being exposed to the gospel via media?',
+            },
+        },
+        students: {
+            title: 'Students',
+            involved: {
+                label: 'Involved',
+                tooltip:
+                    'How many students are regularly involved—attending movement events?',
+            },
+            engaged: {
+                label: 'Engaged',
+                tooltip:
+                    'How many students have intentionally engaged a non believer in a spiritual conversation within the past semester? (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith. Include all who are also leaders since to be a leader, one needs to be an engaged disciple.)',
+            },
+            leaders: {
+                label: 'Leaders',
+                tooltip:
+                    'How many students are engaged disciples and are leading small groups of Win-Build-Send ministry? (Examples: groups focused on reaching target audiences, launching movements, etc. This number will be smaller than engaged disciples.)',
+            },
+        },
+        faculty: {
+            title: 'Faculty',
+            involved: {
+                label: 'Involved',
+                tooltip: 'How many faculty are regularly involved? ',
+            },
+            engaged: {
+                label: 'Engaged',
+                tooltip:
+                    'How many faculty have intentionally engaged in a spiritual conversation within the past semester? (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith. Include all who are also leaders.)',
+            },
+            leaders: {
+                label: 'Leaders',
+                tooltip:
+                    'How many faculty who are engaged disciples are leading Win-Build-Send activities? (Examples: groups focused on reaching target audiences, evangelistic Bible study, discipleship groups etc. This number will be smaller than engaged disciples.)',
+            },
+        },
+        confirmModal: {
+            title: 'Submit Movement Indicators?',
+            description:
+                'If you want to change these numbers later you will need to go to Infobase to do so.',
+        },
+        successModal: {
+            title: 'Movement Indicators Submitted!',
+        },
+        errorModal: {
+            title: 'Something went wrong…',
+            description:
+                'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
         },
     },
 };

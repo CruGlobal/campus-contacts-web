@@ -45,7 +45,7 @@
                             <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
                         </li>
                         <li ng-if="$ctrl.adminPrivileges && $ctrl.cruOrg" class="divider">
-                            <a href="" ng-click="$ctrl.isUnderDev()">
+                            <a ui-state="'^.ministry.reportMovementIndicators'" ui-state-params="{ orgId: $ctrl.org.id }">
                                 {{ 'nav.report_movement_indicators' | t }}
                             </a>
                         </li>

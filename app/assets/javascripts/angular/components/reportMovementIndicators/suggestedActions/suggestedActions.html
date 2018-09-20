@@ -1,0 +1,50 @@
+<h2 class="f3 normal pivot-dark-blue fw6 mb3 mt0">{{ 'movementIndicators:suggestedActions.title' | t }}</h2>
+<p class="pivot-gray-darker f5 mt0 mb4 lh-copy">{{ 'movementIndicators:suggestedActions.subtitle' | t }}</p>
+<div class="accordion accordion-nested accordion bg-pivot-gray-5 br2 pl-4">
+    <h2 class="accordion-header normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray">
+        <span>{{ 'movementIndicators:suggestedActions.newSuggestions' | t : { num: 0 } }}</span>
+        <span class="button-wrapper w-20"><button
+            class="f6 pivot-gray-dark link ba b--pivot-gray-dark pv2 dib b br2 ttu tracked bg-transparent w-100">{{ 'movementIndicators:suggestedActions.applyAll' | t }}</button></span>
+    </h2>
+
+
+</div>
+
+<div class="accordion accordion-nested accordion-expanded accordion bg-pivot-gray-5 br2 pl-4">
+    <h2 class="accordion-header normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray">
+        <span>{{ 'movementIndicators:suggestedActions.previousSuggestions' | t : { num: 0 } }}</span>
+        <span class="button-wrapper w-20"><button
+            class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent w-100">{{ 'movementIndicators:suggestedActions.applyAll' | t }}</button></span>
+    </h2>
+    <div class="accordion-body pa0">
+        <div
+            class="accordion-action accordion-header pivot-gray-darker items-center pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray no-caret">
+            <span><span class="w-15 dib mr2">11/15/2017</span> <a href="#" class="b pivot-dark-blue no-underline">Judith Neibling</a> was added to a group. Apply the <strong>&quot;involved&quot;</strong> label?</span>
+            <span class="button-wrapper w-20"><button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent w-100">{{ 'movementIndicators:suggestedActions.applyAll' | t }}</button></span>
+        </div>
+
+        <div
+            class="accordion-action accordion-header pivot-gray-darker items-center pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray no-caret">
+            <span><span class="w-15 dib mr2">11/15/2017</span> <a href="#" class="b pivot-dark-blue no-underline">Judith Neibling</a> was added to a group. Apply the <strong>&quot;involved&quot;</strong> label?</span>
+            <span class="button-wrapper w-20 flex justify-between items-center"><button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent flex-auto">{{ 'yes' | t }}</button> <button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent flex-auto ml2">{{ 'no' | t }}</button></span>
+        </div>
+        <div
+            class="accordion-action accordion-header pivot-gray-darker items-center pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray no-caret">
+            <span><span class="w-15 dib mr2">11/15/2017</span> <a href="#" class="b pivot-dark-blue no-underline">Judith Neibling</a> was added to a group. Apply the <strong>&quot;involved&quot;</strong> label?</span>
+            <span class="button-wrapper w-20 flex justify-between items-center"><button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent flex-auto">{{ 'yes' | t }}</button> <button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 dib b br2 ttu tracked bg-transparent flex-auto ml2">{{ 'no' | t }}</button></span>
+        </div>
+
+    </div>
+</div>
+<div class="mv3 tr">
+    <button class="f5 white ph5 pv3 link ba b--pivot-dark-blue dib b br2 ttu tracked bg-pivot-dark-blue"
+            ng-click="$ctrl.next()">
+        {{ 'continue' | t }}
+    </button>
+
+</div>
