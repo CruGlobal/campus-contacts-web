@@ -18,11 +18,11 @@ angular.module('missionhubApp').component('surveyResponseModal', {
     bindings: {
         dismiss: '&',
     },
-    controller: function($scope, $window) {
+    controller: function($scope, localStorageService) {
         var vm = this;
 
         $scope.closeModal = function() {
-            $window.localStorage.setItem('newSurveyResponseModal', true);
+            localStorageService.set('newSurveyResponseModal', true);
             vm.dismiss({ $value: 'cancel' });
         };
     },
@@ -33,11 +33,11 @@ function organizationOverviewSurveyResponsesController(
     surveyService,
     periodService,
     $uibModal,
-    $window,
+    localStorageService,
 ) {
     this.surveyStats = {};
     this.$onInit = () => {
-        if (!$window.localStorage.getItem('newSurveyResponseModal')) {
+        if (!localStorageService.get('newSurveyResponseModal')) {
             this.showSurveyModal();
         }
 
