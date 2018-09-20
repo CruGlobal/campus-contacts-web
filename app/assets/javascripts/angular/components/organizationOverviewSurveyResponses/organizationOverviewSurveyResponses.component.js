@@ -1,4 +1,5 @@
 import template from './organizationOverviewSurveyResponses.html';
+import modalTemplate from './surveyResponsesModal.html';
 import './organizationOverviewSurveyResponses.scss';
 import _ from 'lodash';
 
@@ -12,13 +13,34 @@ angular
         controller: organizationOverviewSurveyResponsesController,
     });
 
+angular.module('missionhubApp').component('surveyResponseModal', {
+    template: modalTemplate,
+    bindings: {
+        dismiss: '&',
+    },
+    controller: function($scope, $window) {
+        var vm = this;
+
+        $scope.closeModal = function() {
+            $window.localStorage.setItem('newSurveyResponseModal', true);
+            vm.dismiss({ $value: 'cancel' });
+        };
+    },
+});
+
 function organizationOverviewSurveyResponsesController(
     $scope,
     surveyService,
     periodService,
+    $uibModal,
+    $window,
 ) {
     this.surveyStats = {};
     this.$onInit = () => {
+        if (!$window.localStorage.getItem('newSurveyResponseModal')) {
+            this.showSurveyModal();
+        }
+
         //get survey stats
         this.getSurveyStats();
 
@@ -26,6 +48,14 @@ function organizationOverviewSurveyResponsesController(
         periodService.subscribe($scope, () => {
             this.surveyStats = {};
             this.getSurveyStats();
+        });
+    };
+
+    this.showSurveyModal = () => {
+        $uibModal.open({
+            component: 'surveyResponseModal',
+            size: 'sm',
+            windowClass: 'pivot_theme',
         });
     };
 
