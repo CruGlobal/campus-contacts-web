@@ -7,7 +7,7 @@ angular
 function confirmModalService($uibModal) {
     return {
         create: function(message, options) {
-            /*eslint no-param-reassign: 0*/
+            // eslint-disable-next-line no-param-reassign
             options = {
                 showCancel: true,
                 title: 'Confirm',

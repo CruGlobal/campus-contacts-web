@@ -1,0 +1,27 @@
+<div class="center bg-white">
+    <div class="modal-text pv5 ph5">
+        <div class="tc">
+            <img class="dib" ng-src="{{ $ctrl.resolve.icon }}" style="width:60px; height:60px;">
+            <h2 class="f3 normal pivot-dark-blue mb2 mt2">{{ $ctrl.resolve.title }}</h2>
+        </div>
+
+        <p class="lh-copy measure text-center f5 pivot-gray-darker mb0" ng-class="$first ? 'mt4' : 'mt2'"
+           ng-repeat="paragraph in $ctrl.resolve.paragraphs">
+            {{ paragraph }}
+        </p>
+    </div>
+    <div class="flex">
+        <a href=""
+           class="bg-pivot-dark-blue b white dim f4 ttu tracked pv3 ph3 tc link w-100 br"
+           ng-if="$ctrl.resolve.dismissLabel"
+           ng-click="$ctrl.dismiss()">
+            {{ $ctrl.resolve.dismissLabel }}
+        </a>
+        <a href=""
+           class="bg-pivot-dark-blue b white dim f4 ttu tracked pv3 ph3 tc link w-100"
+           ng-if="$ctrl.resolve.closeLabel"
+           ng-click="$ctrl.close()">
+            {{ $ctrl.resolve.closeLabel }}
+        </a>
+    </div>
+</div>
