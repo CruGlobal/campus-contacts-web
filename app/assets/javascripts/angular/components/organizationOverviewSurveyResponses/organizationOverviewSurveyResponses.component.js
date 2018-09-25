@@ -18,7 +18,17 @@ function organizationOverviewSurveyResponsesController(
     periodService,
     $uibModal,
     localStorageService,
+    $log,
 ) {
+    let surveyResponseModalClosed = async modal => {
+        try {
+            await modal.closed;
+            localStorageService.set('newSurveyResponseModal', true);
+        } catch (error) {
+            $log.log(error);
+        }
+    };
+
     this.surveyStats = {};
     this.$onInit = () => {
         if (!localStorageService.get('newSurveyResponseModal')) {
@@ -36,11 +46,12 @@ function organizationOverviewSurveyResponsesController(
     };
 
     this.showSurveyModal = () => {
-        $uibModal.open({
+        const modal = $uibModal.open({
             component: 'surveyResponseModal',
             size: 'sm',
             windowClass: 'pivot_theme',
         });
+        surveyResponseModalClosed(modal);
     };
 
     this.getSurveyStats = () => {

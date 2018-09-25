@@ -1,21 +1,16 @@
 angular.module('missionhubApp').service('localStorageService', () => {
     var storage = {
-        set: function(key, value) {
+        set: (key, value) => {
             localStorage.setItem(key, value);
         },
-        get: function(key) {
+        get: key => {
             var value = localStorage.getItem(key);
-
-            if (value == 'true' || value == 'false') {
-                return JSON.parse(value);
-            }
-
-            return value;
+            return angular.fromJson(value);
         },
-        destroy: function(key) {
+        destroy: key => {
             localStorage.removeItem(key);
         },
-        clear: function() {
+        clear: () => {
             localStorage.clear();
         },
     };
