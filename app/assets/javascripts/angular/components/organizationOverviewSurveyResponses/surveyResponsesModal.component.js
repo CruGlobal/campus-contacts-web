@@ -9,7 +9,6 @@ angular.module('missionhubApp').component('surveyResponseModal', {
         var vm = this;
 
         $scope.closeModal = function() {
-            localStorageService.set('newSurveyResponseModal', true);
             vm.dismiss({ $value: 'cancel' });
         };
     },
