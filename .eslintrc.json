@@ -79,6 +79,7 @@
         "no-unneeded-ternary": "error",
 
         "angular/definedundefined": "off",
-        "angular/typecheck-string": "off"
+        "angular/typecheck-string": "off",
+        "angular/no-service-method": "off"
     }
 }
