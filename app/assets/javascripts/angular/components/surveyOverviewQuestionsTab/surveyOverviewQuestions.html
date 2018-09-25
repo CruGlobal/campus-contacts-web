@@ -65,9 +65,9 @@
                 </div>
                 <div class="flex justify-between" ng-if="question.kind === 'ChoiceField'">
                     <div class="w-100">
-                        <!--<p class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3">-->
+                        <p class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3">
                             <!--Answers to initiate assignment/notifications-->
-                        <!--</p>-->
+                        </p>
                         <div class="assignments pv2"
                              ng-model="questionAnswers"
                              ui-sortable="$ctrl.sortableOptions"
@@ -99,68 +99,68 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div class="w-48" ng-if="questionAnswers.length" ng-init="answerTab = 0">-->
-                        <!--<div class="tabs flex justify-between">-->
-                            <!--<div class="w-49 relative">-->
-                                <!--<a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"-->
-                                   <!--href="" ng-click="answerTab = 0" ng-class="{'active': answerTab === 0}">-->
-                                    <!--Auto Assign-->
-                                <!--</a>-->
-                                <!--<a class="help fr" href="">-->
-                                    <!--<img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">-->
-                                <!--</a>-->
-                            <!--</div>-->
-                            <!--<div class="w-49 relative">-->
-                                <!--<a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"-->
-                                   <!--href="" ng-click="answerTab = 1" ng-class="{'active': answerTab === 1}">-->
-                                    <!--Auto Notify-->
-                                <!--</a>-->
-                                <!--<a class="help fr" href="">-->
-                                    <!--<img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">-->
-                                <!--</a>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 0">-->
-                            <!--<div class="relative" ng-repeat="answer in questionAnswers track by $index">-->
-                                <!--<assigned-select assigned="assignedTo"-->
-                                                 <!--organization-id="$ctrl.survey.organization_id"></assigned-select>-->
-                                <!--<a class="ml3 delete" href=""-->
-                                   <!--ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">-->
-                                    <!--<img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">-->
-                                <!--</a>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 1">-->
-                            <!--<div class="relative autocomplete expanded" ng-repeat="answer in questionAnswers track by $index">-->
-                                <!--<assigned-select assigned="assignedTo"-->
-                                                 <!--organization-id="$ctrl.survey.organization_id"></assigned-select>-->
+                    <div class="w-48" ng-if="questionAnswers.length" ng-init="answerTab = 0">
+                        <div class="tabs flex justify-between">
+                            <div class="w-49 relative">
+                                <a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                   href="" ng-click="answerTab = 0" ng-class="{'active': answerTab === 0}">
+                                    Auto Assign
+                                </a>
+                                <a class="help fr" href="">
+                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">
+                                </a>
+                            </div>
+                            <div class="w-49 relative">
+                                <a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                   href="" ng-click="answerTab = 1" ng-class="{'active': answerTab === 1}">
+                                    Auto Notify
+                                </a>
+                                <a class="help fr" href="">
+                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 0">
+                            <div class="relative" ng-repeat="answer in questionAnswers track by $index">
+                                <assigned-select assigned="assignedTo"
+                                                 organization-id="$ctrl.survey.organization_id"></assigned-select>
+                                <a class="ml3 delete" href=""
+                                   ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
+                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 1">
+                            <div class="relative autocomplete expanded" ng-repeat="answer in questionAnswers track by $index">
+                                <assigned-select assigned="assignedTo"
+                                                 organization-id="$ctrl.survey.organization_id"></assigned-select>
 
-                                <!--<a class="ml3 delete" href=""-->
-                                   <!--ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">-->
-                                    <!--<img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">-->
-                                <!--</a>-->
-                            <!--</div>-->
-                            <!--<div class="flex items-center mv-ih">-->
-                                <!--<label class="db f6 lh-copy f5 normal pivot-gray-darker mr2">-->
-                                    <!--Send notifications via:-->
-                                <!--</label>-->
-                                <!--<div class="dropdown dropdown-select mr2" uib-dropdown>-->
-                                    <!--<a class="f6 link dim bg-white ihshort db pivot-gray-darker br2 dim pr5" href=""-->
-                                       <!--uib-dropdown-toggle>-->
-                                        <!--{{question.notify_via}}-->
-                                    <!--</a>-->
-                                    <!--<ul class="bg-white f6" uib-dropdown-menu>-->
-                                        <!--<li>-->
-                                            <!--<a href="" ng-click="question.notify_via = 'Email'">Email</a>-->
-                                        <!--</li>-->
-                                        <!--<li>-->
-                                            <!--<a href="" ng-click="question.notify_via = 'SMS'">Text</a>-->
-                                        <!--</li>-->
-                                    <!--</ul>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                                <a class="ml3 delete" href=""
+                                   ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
+                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                </a>
+                            </div>
+                            <div class="flex items-center mv-ih">
+                                <label class="db f6 lh-copy f5 normal pivot-gray-darker mr2">
+                                    Send notifications via:
+                                </label>
+                                <div class="dropdown dropdown-select mr2" uib-dropdown>
+                                    <a class="f6 link dim bg-white ihshort db pivot-gray-darker br2 dim pr5" href=""
+                                       uib-dropdown-toggle>
+                                        {{question.notify_via}}
+                                    </a>
+                                    <ul class="bg-white f6" uib-dropdown-menu>
+                                        <li>
+                                            <a href="" ng-click="question.notify_via = 'Email'">Email</a>
+                                        </li>
+                                        <li>
+                                            <a href="" ng-click="question.notify_via = 'SMS'">Text</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
         </div>
