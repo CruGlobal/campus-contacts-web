@@ -1,5 +1,4 @@
 import template from './organizationOverviewSurveyResponses.html';
-import modalTemplate from './surveyResponsesModal.html';
 import './organizationOverviewSurveyResponses.scss';
 import _ from 'lodash';
 
@@ -12,21 +11,6 @@ angular
         template: template,
         controller: organizationOverviewSurveyResponsesController,
     });
-
-angular.module('missionhubApp').component('surveyResponseModal', {
-    template: modalTemplate,
-    bindings: {
-        dismiss: '&',
-    },
-    controller: function($scope, localStorageService) {
-        var vm = this;
-
-        $scope.closeModal = function() {
-            localStorageService.set('newSurveyResponseModal', true);
-            vm.dismiss({ $value: 'cancel' });
-        };
-    },
-});
 
 function organizationOverviewSurveyResponsesController(
     $scope,
