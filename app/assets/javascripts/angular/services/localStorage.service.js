@@ -1,5 +1,5 @@
 angular.module('missionhubApp').service('localStorageService', () => {
-    var storage = {
+    const storage = {
         set: (key, value) => {
             localStorage.setItem(key, value);
         },
