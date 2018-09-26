@@ -139,14 +139,18 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
         });
     };
 
+    this.addQuestionContent = async (question, answers) => {
+        answers.push('');
+        await this.saveQuestionContent(question, answers);
+    };
+
     this.deleteQuestionContent = async (question, answers, index) => {
         answers.splice(index, 1);
-        question.content = answers.join('\n');
-        await this.saveQuestion(question);
+        await this.saveQuestionContent(question, answers);
     };
 
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
-        await this.saveQuestion(question);
+        return this.saveQuestion(question);
     };
 }
