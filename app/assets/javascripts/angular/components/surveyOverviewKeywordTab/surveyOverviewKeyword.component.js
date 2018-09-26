@@ -1,7 +1,9 @@
 import template from './surveyOverviewKeyword.html';
 import _ from 'lodash';
+import { t } from 'i18next';
 
 import helpIcon from '../../../../images/icon-help.svg';
+import clockIcon from '../../../../images/icon-clock.svg';
 
 angular.module('missionhubApp').component('surveyOverviewKeyword', {
     controller: surveyOverviewKeywordController,
@@ -74,8 +76,15 @@ function surveyOverviewKeywordController(
                 this.keyword = keywordData;
 
                 $uibModal.open({
-                    component: 'keywordRequestModal',
-                    size: 'md',
+                    component: 'iconModal',
+                    resolve: {
+                        icon: () => clockIcon,
+                        title: () => t('surveys:keyword.requested'),
+                        paragraphs: () => [
+                            t('surveys:keyword.requested_message'),
+                        ],
+                        closeLabel: () => t('ok'),
+                    },
                 });
             }, keywordErrorHandler);
     };
