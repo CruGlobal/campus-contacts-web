@@ -16,13 +16,20 @@
                 {{question.label}}
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
-            <input class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker w-83 ihshort br2"
-                   placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" type="text" ng-model="question.label"
-                   ng-click="$event.stopPropagation()"
-                   ng-change="$ctrl.saveQuestion(question)"
-                   ng-if="$ctrl.isExpanded[question.id]">
-            <a class="ml3" href="" ng-if="$ctrl.isExpanded[question.id]" ng-click="$ctrl.deleteQuestion(question.id)">
-                <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
+            <input type="text" 
+                class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker w-83 ihshort br2"
+                placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" 
+                ng-model="question.label"
+                ng-click="$event.stopPropagation()"
+                ng-change="$ctrl.saveQuestion(question)"
+                ng-model-options='{ debounce: 750 }'
+                ng-if="$ctrl.isExpanded[question.id]"
+                >
+            <a class="ml3" href="" 
+                ng-if="$ctrl.isExpanded[question.id]" 
+                ng-click="$ctrl.deleteQuestion(question.id)"
+                >
+                    <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
             </a>
             <a class="ml3" href=""
                ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
@@ -58,9 +65,11 @@
                         <label class="db f5 lh-copy f6 normal mb1 pivot-gray-darker ttu tracked">
                             {{ 'surveys:questions.columnTitle' | t }}
                         </label>
-                        <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2"
-                               ng-change="$ctrl.saveQuestion(question)"
-                               ng-model="question.column_title" type="text">
+                        <input type="text" class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2"
+                            ng-change="$ctrl.saveQuestion(question)"
+                            ng-model-options='{ debounce: 750 }'
+                            ng-model="question.column_title"
+                            >
                     </div>
                 </div>
                 <div class="flex justify-between" ng-if="question.kind === 'ChoiceField'">
@@ -81,8 +90,10 @@
                                 </div>
                                 <div class="f-grow">
                                     <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2" type="text"
-                                           ng-change="$ctrl.saveQuestionContent(question, questionAnswers)"
-                                           ng-model="questionAnswers[$index]">
+                                        ng-change="$ctrl.saveQuestionContent(question, questionAnswers)"
+                                        ng-model-options='{ debounce: 750 }'
+                                        ng-model="questionAnswers[$index]"
+                                        >
                                 </div>
                                 <div>
                                     <a class="ml3 delete" href=""
@@ -122,8 +133,7 @@
                         </div>
                         <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 0">
                             <div class="relative" ng-repeat="answer in questionAnswers track by $index">
-                                <assigned-select assigned="assignedTo"
-                                                 organization-id="$ctrl.survey.organization_id"></assigned-select>
+                                <assigned-select assigned="assignedTo" organization-id="$ctrl.survey.organization_id"></assigned-select>
                                 <a class="ml3 delete" href=""
                                    ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
@@ -132,9 +142,7 @@
                         </div>
                         <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 1">
                             <div class="relative autocomplete expanded" ng-repeat="answer in questionAnswers track by $index">
-                                <assigned-select assigned="assignedTo"
-                                                 organization-id="$ctrl.survey.organization_id"></assigned-select>
-
+                                <assigned-select assigned="assignedTo" organization-id="$ctrl.survey.organization_id"></assigned-select>
                                 <a class="ml3 delete" href=""
                                    ng-click="questionAnswers.splice($index, 1); $ctrl.saveQuestionContent(question, questionAnswers);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">

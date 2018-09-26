@@ -35,7 +35,11 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             name: 'Short Answer',
             canAdd: true,
         },
-        { kind: 'TextField', style: 'email', name: 'Email Address' },
+        {
+            kind: 'TextField',
+            style: 'email',
+            name: 'Email Address',
+        },
         {
             kind: 'ChoiceField',
             style: 'radio',
@@ -54,8 +58,18 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             name: 'Dropdown (Choose one)',
             canAdd: true,
         },
-        { kind: 'DateField', style: 'date_field', name: 'Date' },
+        {
+            kind: 'DateField',
+            style: 'date_field',
+            name: 'Date',
+        },
     ];
+
+    this.$onInit = () => {
+        surveyService.getSurveyQuestions(this.survey.id).then(questions => {
+            this.surveyQuestions = questions;
+        });
+    };
 
     this.getQuestionType = (kind, style) => {
         return _.find(this.questionTypes, { kind: kind, style: style });
@@ -63,12 +77,6 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
 
     this.sortableOptions = {
         handle: '.sort',
-    };
-
-    this.$onInit = () => {
-        surveyService.getSurveyQuestions(this.survey.id).then(questions => {
-            this.surveyQuestions = questions;
-        });
     };
 
     this.addPredefinedQuestion = () => {
@@ -125,25 +133,19 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             });
     };
 
-    this.saveQuestion = _.throttle(
-        question => {
-            surveyService
-                .updateSurveyQuestion(
-                    this.survey.id,
-                    _.pick(question, [
-                        'id',
-                        'label',
-                        'kind',
-                        'style',
-                        'column_title',
-                        'content',
-                    ]),
-                )
-                .then();
-        },
-        750,
-        { leading: false },
-    );
+    this.saveQuestion = question => {
+        return surveyService.updateSurveyQuestion(
+            this.survey.id,
+            _.pick(question, [
+                'id',
+                'label',
+                'kind',
+                'style',
+                'column_title',
+                'content',
+            ]),
+        );
+    };
 
     this.saveQuestionContent = (question, answers) => {
         question.content = answers.join('\n');
