@@ -134,21 +134,26 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
     };
 
     this.saveQuestion = question => {
-        return surveyService.updateSurveyQuestion(
-            this.survey.id,
-            _.pick(question, [
-                'id',
-                'label',
-                'kind',
-                'style',
-                'column_title',
-                'content',
-            ]),
-        );
+        let { id, label, kind, style, column_title, content } = question;
+
+        return surveyService.updateSurveyQuestion(this.survey.id, {
+            id,
+            label,
+            kind,
+            style,
+            column_title,
+            content,
+        });
     };
 
-    this.saveQuestionContent = (question, answers) => {
+    this.deleteQuestionContent = async (question, answers, index) => {
+        answers.splice(index, 1);
         question.content = answers.join('\n');
-        this.saveQuestion(question);
+        await this.saveQuestion(question);
+    };
+
+    this.saveQuestionContent = async (question, answers) => {
+        question.content = answers.join('\n');
+        await this.saveQuestion(question);
     };
 }
