@@ -44,11 +44,11 @@
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
                     <div class="w-48">
-                        <label class="db f6 lh-copy f5 normal mb1 pivot-gray-darker ttu tracked">
+                        <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
                             {{ 'surveys:questions.type' | t }}
                         </label>
                         <div class="dropdown dropdown-select w-100 mr2" uib-dropdown>
-                            <a class="f5 link dim bg-white ihshort db pivot-gray-darker br2 dim" href="" uib-dropdown-toggle>
+                            <a class="f5 link dim bg-white pa2 db pivot-gray-darker br2 dim" href="" uib-dropdown-toggle>
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
                             </a>
                             <ul class="bg-white f5" uib-dropdown-menu>
@@ -62,10 +62,10 @@
                         </div>
                     </div>
                     <div class="w-48">
-                        <label class="db f5 lh-copy f6 normal mb1 pivot-gray-darker ttu tracked">
+                        <label class="db lh-copy f6 b mb1 pivot-gray-darker ttu tracked">
                             {{ 'surveys:questions.columnTitle' | t }}
                         </label>
-                        <input type="text" class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2"
+                        <input type="text" class="input-reset bg-white w-100 ihshort"
                             ng-change="$ctrl.saveQuestion(question)"
                             ng-model-options='{ debounce: 750 }'
                             ng-model="question.column_title"
@@ -73,11 +73,11 @@
                     </div>
                 </div>
                 <div class="flex justify-between" ng-if="question.kind === 'ChoiceField'">
-                    <div class="w-100">
+                    <div class="w-52">
                         <p class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3">
-                            <!--Answers to initiate assignment/notifications-->
+                            {{ 'surveys:questions.initiateAssignment' | t }}
                         </p>
-                        <div class="assignments pv2"
+                        <div class="assignments pb2"
                              ng-model="questionAnswers"
                              ui-sortable="$ctrl.sortableOptions"
                              ui-sortable-stop="$ctrl.saveQuestionContent(question, questionAnswers)">
@@ -89,38 +89,36 @@
                                     </a>
                                 </div>
                                 <div class="f-grow">
-                                    <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2" type="text"
+                                    <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 br2 ihshort" type="text"
                                         ng-change="$ctrl.saveQuestionContent(question, questionAnswers)"
                                         ng-model-options='{ debounce: 750 }'
                                         ng-model="questionAnswers[$index]"
                                         >
                                 </div>
                                 <div>
-                                    <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, questionAnswers, $index);">
-                                        <img alt="{{ 'general:delete' | t }}" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
-                                    </a>
+                                  ----
                                 </div>
                             </div>
-                            <div class="assignment-item no-line">
+                            <div class="assignment-item no-line w-94">
                                 <button ng-click="$ctrl.addQuestionContent(question, questionAnswers);" class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
                                     {{ 'surveys:questions.newAnswer' | t }}
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                     <div class="w-48" ng-if="questionAnswers.length" ng-init="answerTab = 0">
                         <div class="tabs flex justify-between">
                             <div class="w-49 relative">
-                                <a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                <a class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
                                    href="" ng-click="answerTab = 0" ng-class="{'active': answerTab === 0}">
                                     Auto Assign
                                 </a>
-                                <a class="help fr" href="">
+                                <a class="help fr p2" href="">
                                     <img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">
                                 </a>
                             </div>
                             <div class="w-49 relative">
-                                <a class="tab bl br bt pv3 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                <a class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
                                    href="" ng-click="answerTab = 1" ng-class="{'active': answerTab === 1}">
                                     Auto Notify
                                 </a>
@@ -129,7 +127,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 0">
+                        <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 0">
                             <div class="relative" ng-repeat="answer in questionAnswers track by $index">
                                 <assigned-select assigned="assignedTo" organization-id="$ctrl.survey.organization_id"></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, questionAnswers, $index);">
@@ -137,7 +135,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="tab-body pa2 ba b&#45;&#45;gray-dark" ng-if="answerTab === 1">
+                        <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 1">
                             <div class="relative autocomplete expanded" ng-repeat="answer in questionAnswers track by $index">
                                 <assigned-select assigned="assignedTo" organization-id="$ctrl.survey.organization_id"></assigned-select>
                                 <a class="ml3 delete" href=""
