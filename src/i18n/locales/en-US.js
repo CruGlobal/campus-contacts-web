@@ -6,6 +6,8 @@ export default {
         no: 'No',
         back: 'Back',
         continue: 'Continue',
+        ok: 'Ok',
+        cancel: 'Cancel',
         help: 'Help',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
@@ -581,9 +583,9 @@ export default {
             sub_help:
                 'Checking this box allows any of the sub-ministries to appear for any involved team member when navigating MissionHub.',
             none_found: 'No ministries found',
-            delete: {
-                confirm: 'Are you sure you want to delete "{{org_name}}"?',
-                confirm_b:
+            deleteConfirmModal: {
+                title: 'Are you sure you want to delete "{{org_name}}"?',
+                description:
                     'This will remove access to interactions, assignments and contacts from any of the sub-ministries.',
             },
             cleanup: {
