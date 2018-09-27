@@ -149,9 +149,7 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
                 this.fieldMap = _.mapValues(this.fieldMap, indicatorGroup =>
                     _.mapValues(indicatorGroup, indicator => ({
                         ...indicator,
-                        value: Array.isArray(data[indicator.apiField])
-                            ? data[indicator.apiField].length
-                            : data[indicator.apiField] || 0,
+                        value: data[indicator.apiField],
                     })),
                 );
             });
