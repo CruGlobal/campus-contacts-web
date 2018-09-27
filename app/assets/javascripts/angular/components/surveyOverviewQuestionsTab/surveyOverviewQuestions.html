@@ -1,8 +1,10 @@
 <div class="accordion">
-    <form class="bg-pivot-gray-5 br2 pivot-gray-darker" ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+    <form class="bg-pivot-gray-5 br2 pivot-gray-darker" 
+        ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
             'accordion-expanded': $ctrl.isExpanded[question.id]
-        }">
+        }"
+        ng-init="questionIndex = $index">
         <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-pivot-gray-5 f5 flex br2"
             ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
@@ -99,7 +101,7 @@
                                 </div>
                             </div>
                             <div class="assignment-item no-line w-94">
-                                <button ng-click="$ctrl.addQuestionContent(question, question.question_answers);" class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
+                                <button ng-click="$ctrl.addEmptyQuestionContent(question)" class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
                                     {{ 'surveys:questions.newAnswer' | t }}
                                 </button>
                             </div>
@@ -127,25 +129,26 @@
                             </div>
                         </div>
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 0">
-                            <div class="relative" ng-repeat="answer in question.question_answers track by $index"
-                            ng-init="rule = question.question_rules.find(r => { return r.rule_code === 'AUTOASSIGN' && r.trigger_keywords === question.question_answers[$index]})">
-                                 {{rule}}
-                                 {{question.question_answers[$index]}}
-                                <p ng-repeat="rule in question.question_rules track by $index">
-                                  a:{{rule.rule_code }}
-                                  a:{{rule.trigger_keywords }}                            
-                                </p>
-                                <assigned-select assigned="e" organization-id="$ctrl.survey.organization_id"></assigned-select>
+                            <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index" >
+                                <assigned-select 
+                                  action-after-select="$ctrl.addPersonToRule(question, $index)"
+                                  assigned="rule.assignTo"
+                                  organization-id="$ctrl.survey.organization_id"
+                                ></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
                                 </a>
                             </div>
                         </div>
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 1">
-                            <div class="relative autocomplete expanded" ng-repeat="answer in question.question_answers track by $index">
-                                <assigned-select assigned="question.question_answers[$index].autoNotify" organization-id="$ctrl.survey.organization_id"></assigned-select>
+                            <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index">
+                                <assigned-select 
+                                  action-after-select="$ctrl.addPersonToRule(question, $index)"
+                                  assigned="rule.assignTo"
+                                  organization-id="$ctrl.survey.organization_id"
+                                ></assigned-select>
                                 <a class="ml3 delete" href=""
-                                   ng-click="question.question_answers.splice($index, 1); $ctrl.saveQuestionContent(question, question.question_answers);">
+                                   ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
                                 </a>
                             </div>
