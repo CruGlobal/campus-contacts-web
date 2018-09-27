@@ -21,7 +21,7 @@ function surveyService(
             );
         },
 
-        getPredefinedQuestions: () => {
+        getPredefinedQuestions: currentQuestions => {
             return httpProxy
                 .get(
                     '/surveys/predefined',
@@ -33,8 +33,45 @@ function surveyService(
                     },
                 )
                 .then(predefinedQuestions => {
-                    return predefinedQuestions.data.active_survey_elements.map(
-                        element => element.question,
+                    return predefinedQuestions.data.active_survey_elements
+                        .map(element => element.question)
+                        .filter(
+                            question => !currentQuestions.includes(question.id),
+                        );
+                });
+        },
+
+        getPreviouslyUsedQuestions: (orgId, currentQuestions) => {
+            return httpProxy
+                .get(
+                    `/organizations/${orgId}`,
+                    {
+                        include: 'surveys.active_survey_elements.question',
+                    },
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                )
+                .then(({ data }) => {
+                    return [
+                        ...new Set( // Use set to remove duplicate questions found in separate surveys
+                            data.surveys.reduce(
+                                (acc, survey) => [
+                                    ...acc,
+                                    ...survey.active_survey_elements
+                                        .map(element => element.question)
+                                        .filter(
+                                            question =>
+                                                !question.predefined &&
+                                                (question.label ||
+                                                    question.column_title), // Hide questions with no name
+                                        ),
+                                ],
+                                [],
+                            ),
+                        ),
+                    ].filter(
+                        question => !currentQuestions.includes(question.id),
                     );
                 });
         },
@@ -93,7 +130,8 @@ function surveyService(
                           `/surveys/${surveyId}/questions/${attributes.id}`,
                           payload,
                           {
-                              errorMessage: 'surveyTab:errors.createSurvey',
+                              errorMessage:
+                                  'surveyTab:errors.addSurveyQuestion',
                           },
                       )
                       .then(survey => {
