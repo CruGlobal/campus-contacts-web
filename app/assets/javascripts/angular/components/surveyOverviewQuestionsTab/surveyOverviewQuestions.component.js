@@ -25,7 +25,6 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope) {
         trash: trashIcon,
         xWhite: xWhiteIcon,
     };
-
     this.questionTypes = [
         {
             kind: 'TextField',
@@ -63,21 +62,82 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope) {
         },
     ];
 
-    this.$onInit = async () => {
+    const loadSurveyData = async () => {
+        let data = await surveyService.getSurveyQuestions(this.survey.id);
+        rebuildQuestions(data);
+        $scope.$apply();
+    };
+
+    const rebuildQuestions = questions => {
+        this.surveyQuestions = questions.map(q => buildQuestion(q));
+    };
+
+    const buildQuestion = question => {
+        let q = question;
+        let a = question.content ? question.content.split('\n') : [];
+        q.question_answers = a;
+
+        if (question.kind === 'ChoiceField') {
+            let autoassignRules = buildRules(
+                question.question_rules,
+                a,
+                'AUTOASSIGN',
+            );
+            let autoNotifyRules = buildRules(
+                question.question_rules,
+                a,
+                'AUTONOTIFY',
+            );
+
+            q.question_rules = autoassignRules.concat(autoNotifyRules);
+        }
+
+        return q;
+    };
+
+    const buildRules = (questionRules, answerQuestion, type) => {
+        return answerQuestion.map(answer =>
+            buildRule(answer, questionRules, type),
+        );
+    };
+
+    const buildRule = (answer, questionRules, type) => {
+        let ar = {
+            id: null,
+            label_ids: null,
+            organization_ids: null,
+            people_ids: null,
+            rule_code: type,
+            trigger_keywords: answer,
+            assign_to: null,
+        };
+
+        questionRules.forEach(r => {
+            if (r.trigger_keywords === answer && r.rule_code === type) {
+                ar.id = r.id;
+                ar.label_ids = r.label_ids;
+                ar.organization_ids = r.organization_ids;
+                ar.people_ids = r.people_ids;
+                ar.trigger_keywords = r.trigger_keywords;
+            }
+        });
+
+        return ar;
+    };
+
+    this.$onInit = () => {
         loadSurveyData();
     };
 
-    const loadSurveyData = async () => {
-        let data = await surveyService.getSurveyQuestions(this.survey.id);
-
-        this.surveyQuestions = data.map(q => {
-            let question = q;
-            let a = q.content ? q.content.split('\n') : [];
-            question.question_answers = a;
-            return question;
-        });
-
-        $scope.$apply();
+    this.addPersonToRule = (question, index) => {
+        if (question.question_rules[index].assignTo) {
+            let ids = [];
+            question.question_rules[index].assignTo.forEach(a => {
+                ids.push(a.id);
+            });
+            question.question_rules[index].people_ids = ids.join(',');
+            this.saveQuestionContent(question, question.question_answers);
+        }
     };
 
     this.getQuestionType = (kind, style) => {
@@ -140,28 +200,40 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope) {
     this.saveQuestion = question => {
         let { id, label, kind, style, column_title, content } = question;
 
-        return surveyService.updateSurveyQuestion(this.survey.id, {
-            id,
-            label,
-            kind,
-            style,
-            column_title,
-            content,
-        });
+        return surveyService.updateSurveyQuestion(
+            this.survey.id,
+            {
+                id,
+                label,
+                kind,
+                style,
+                column_title,
+                content,
+            },
+            question.question_rules,
+        );
     };
 
-    this.addQuestionContent = async (question, answers) => {
-        answers.push('');
-        await this.saveQuestionContent(question, answers);
+    this.addEmptyQuestionContent = question => {
+        question.question_answers.push('');
+        question.question_rules.push(
+            buildRule('', question.question_rules, 'AUTOASSIGN'),
+        );
+        question.question_rules.push(
+            buildRule('', question.question_rules, 'AUTONOTIFY'),
+        );
     };
 
     this.deleteQuestionContent = async (question, answers, index) => {
-        answers.splice(index, 1);
-        await this.saveQuestionContent(question, answers);
+        question.question_answers.splice(index, 1);
+        question.content = answers.join('\n');
+        this.saveQuestionContent(question, answers);
     };
 
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
-        return this.saveQuestion(question);
+        await this.saveQuestion(question);
+        rebuildQuestions(this.surveyQuestions);
+        $scope.$apply();
     };
 }
