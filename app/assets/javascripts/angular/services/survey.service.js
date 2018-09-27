@@ -6,6 +6,7 @@ function surveyService(
     modelsService,
     loggedInPerson,
     periodService,
+    $log,
 ) {
     return {
         getSurveyQuestions: surveyId => {
@@ -23,7 +24,9 @@ function surveyService(
                     ),
                     httpProxy.get(
                         `/surveys/${surveyId}/questions`,
-                        {},
+                        {
+                            include: 'question_rules',
+                        },
                         {
                             errorMessage:
                                 'error.messages.surveys.loadQuestions',
@@ -131,13 +134,51 @@ function surveyService(
                       });
         },
 
-        updateSurveyQuestion: (surveyId, attributes) => {
-            const payload = {
+        updateSurveyQuestion: (surveyId, attributes, rules) => {
+            let payload = {
                 data: {
                     type: 'question',
                     attributes: attributes,
                 },
             };
+
+            if (rules) {
+                let ruleRelationship = [];
+                let ruleIncludes = [];
+
+                rules.forEach(r => {
+                    if (r.id) {
+                        ruleRelationship.push({
+                            type: 'question_rule',
+                            id: r.id,
+                        });
+                    }
+
+                    if (!r.people_ids || r.people_ids === '') {
+                        return;
+                    }
+
+                    ruleIncludes.push({
+                        id: r.id,
+                        type: 'question_rule',
+                        attributes: {
+                            label_ids: null,
+                            organization_ids: null,
+                            people_ids: r.people_ids,
+                            rule_code: r.rule_code,
+                            trigger_keywords: r.trigger_keywords,
+                        },
+                    });
+                });
+
+                payload.data.relationships = {
+                    question_rules: {
+                        data: ruleRelationship,
+                    },
+                };
+
+                payload.included = ruleIncludes;
+            }
 
             return httpProxy.put(
                 `/surveys/${surveyId}/questions/${attributes.id}`,
