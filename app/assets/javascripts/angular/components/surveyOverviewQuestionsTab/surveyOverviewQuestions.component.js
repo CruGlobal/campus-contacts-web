@@ -260,7 +260,9 @@ function surveyOverviewQuestionsController(
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
-                currentQuestions: () => this.surveyQuestions.map(q => q.id),
+                orgId: () => this.survey.organization_id,
+                currentQuestions: () =>
+                    this.surveyQuestions.map(question => question.id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
