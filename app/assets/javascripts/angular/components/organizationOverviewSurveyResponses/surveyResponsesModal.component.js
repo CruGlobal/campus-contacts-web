@@ -5,9 +5,4 @@ angular.module('missionhubApp').component('surveyResponseModal', {
     bindings: {
         dismiss: '&',
     },
-    controller: function() {
-        this.closeModal = () => {
-            this.dismiss({ $value: 'cancel' });
-        };
-    },
 });
