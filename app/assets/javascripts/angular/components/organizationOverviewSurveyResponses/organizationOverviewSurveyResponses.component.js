@@ -18,15 +18,10 @@ function organizationOverviewSurveyResponsesController(
     periodService,
     $uibModal,
     localStorageService,
-    $log,
 ) {
     let surveyResponseModalClosed = async modal => {
-        try {
-            await modal.closed;
-            localStorageService.set('newSurveyResponseModal', true);
-        } catch (error) {
-            $log.log(error);
-        }
+        await modal.closed;
+        localStorageService.set('newSurveyResponseModal', true);
     };
 
     this.surveyStats = {};
