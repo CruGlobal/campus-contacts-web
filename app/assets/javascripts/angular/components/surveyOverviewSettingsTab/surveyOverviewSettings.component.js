@@ -19,15 +19,11 @@ function surveyOverviewSettingsController(
             this.survey.title = this.surveyEdit.title;
             this.survey.login_paragraph = this.surveyEdit.login_paragraph;
             this.survey.post_survey_message = this.surveyEdit.post_survey_message;
-
-            //only send logo if updated
-            if (this.surveyEdit.logo !== undefined) {
-                this.survey.logo = this.surveyEdit.logo;
-            }
+            this.survey.logo = this.surveyEdit.logo;
 
             surveyService.updateSurvey(this.survey).then(updatedSurveyData => {
-                //update logo
-                this.surveyEdit.logo = null;
+                // clear logo base64 data after upload
+                delete this.surveyEdit.logo;
                 this.surveyEdit.logo_url = updatedSurveyData.logo_url;
             });
         },
