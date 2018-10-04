@@ -38,7 +38,7 @@ export default {
             },
             under_development_title: 'Under Development',
             under_development:
-                'This feature is being rebuilt to support Campus changes in Infobase due to the restructuring and will be available early September.',
+                'This feature is being rebuilt to support Campus changes in Infobase due to the restructuring and will be available soon.',
         },
         assignments: {
             assigned: 'Assigned',
