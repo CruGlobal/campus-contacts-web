@@ -13,8 +13,7 @@ function reportMovementIndicatorsController($window, $state) {
         SuggestedActions: 1,
         ReportMovementIndicators: 2,
     }));
-    // this.currentScreen = ScreenEnum.SuggestedActions;
-    this.currentScreen = ScreenEnum.ReportMovementIndicators; // TODO: For dev only. Remove.
+    this.currentScreen = ScreenEnum.SuggestedActions;
 
     this.next = () => {
         switch (this.currentScreen) {
