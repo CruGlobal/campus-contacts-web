@@ -29,7 +29,6 @@ function organizationOverviewController(
     var vm = this;
     vm.tabNames = ministryViewTabs;
     vm.adminPrivileges = true;
-    vm.cruOrg = false;
     vm.p2cOrg = false;
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     vm.surveyResponses = 'countHidden';
@@ -48,9 +47,7 @@ function organizationOverviewController(
 
         vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
 
-        var cruOrgId = '1';
         var rootOrgId = organizationService.getOrgHierarchyIds(vm.org)[0];
-        vm.cruOrg = rootOrgId === cruOrgId;
 
         vm.p2cOrg = vm.org.id === p2cOrgId || rootOrgId === p2cOrgId;
 

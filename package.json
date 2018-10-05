@@ -10,7 +10,7 @@
         "test": "karma start --single-run",
         "test-watch": "karma start",
         "test-debug": "karma start --browsers Chrome",
-        "lint": "eslint '@(app)/**/*.js'",
+        "lint": "eslint '@(app|src)/**/*.js'",
         "precommit": "pretty-quick --staged",
         "onesky:upload": "babel-node ./bin/oneskyUpload.js",
         "onesky:download": "babel-node ./bin/oneskyDownload.js"

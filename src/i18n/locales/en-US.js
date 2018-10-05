@@ -846,9 +846,25 @@ export default {
             title: 'Suggested Movement Indicator Actions',
             subtitle:
                 'These suggestions are designed to reinforce the proper labeling of contacts for the Involved, Engaged Disciple, and Leader categories, which will be reported on the next page.',
+            loading: 'Loading suggestions…',
             newSuggestions: 'New Suggestions ({{num}})',
             previousSuggestions: 'Previous Suggestions ({{num}})',
             applyAll: 'Apply All',
+            reasonPhrases: {
+                spiritualConversation:
+                    'had a spiritual conversation with someone.',
+                gospelPresentation: 'shared the gospel with someone.',
+                groupMembership: 'was added to a group.',
+                groupLeader: 'became a group leader.',
+                leader: 'was labeled as a leader.',
+                engagedDisciple: 'was labeled as an engaged disciple.',
+            },
+            applyLabel:
+                'Apply the <strong>&quot;{{label}}&quot;</strong> label?',
+            errorLoadingSuggestedActions:
+                'Error occurred while loading the suggested actions',
+            errorSavingSuggestedActions:
+                'Error occurred while saving the suggested actions',
         },
         confirmIndicators: {
             title: 'Confirm Movement Indicators',
