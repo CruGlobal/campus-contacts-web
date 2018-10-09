@@ -15,7 +15,13 @@ angular.module('missionhubApp').component('surveyOverviewQuestions', {
     template: template,
 });
 
-function surveyOverviewQuestionsController($uibModal, surveyService, $scope) {
+function surveyOverviewQuestionsController(
+    $uibModal,
+    surveyService,
+    $scope,
+    modelsService,
+    httpProxy,
+) {
     this.isExpanded = {};
     this.surveyQuestions = [];
     this.icons = {
@@ -61,10 +67,30 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope) {
             name: 'Date',
         },
     ];
+    this.people = [];
 
     const loadSurveyData = async () => {
         let data = await surveyService.getSurveyQuestions(this.survey.id);
+        let peopleIds = data.reduce((a1, q) => {
+            return (
+                a1 +
+                q.question_rules.reduce((a2, r) => {
+                    if (!r.people_ids) {
+                        return a2;
+                    }
+
+                    let separator = a2 ? ',' : '';
+                    return a2 + separator + r.people_ids;
+                }, '')
+            );
+        }, '');
+
+        this.people = await httpProxy.get('/people', {
+            'filters[ids]': peopleIds,
+        });
+
         rebuildQuestions(data);
+
         $scope.$apply();
     };
 
