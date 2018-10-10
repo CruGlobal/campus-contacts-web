@@ -95,34 +95,34 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
         students: {
             involved: {
                 label: t('movementIndicators:students.involved.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:students.involved.tooltip'),
                 apiField: 'students_involved',
             },
             engaged: {
                 label: t('movementIndicators:students.engaged.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:students.engaged.tooltip'),
                 apiField: 'students_engaged',
             },
             leaders: {
                 label: t('movementIndicators:students.leaders.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:students.leaders.tooltip'),
                 apiField: 'student_leaders',
             },
         },
         faculty: {
             involved: {
                 label: t('movementIndicators:faculty.involved.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:faculty.involved.tooltip'),
                 apiField: 'faculty_involved',
             },
             engaged: {
                 label: t('movementIndicators:faculty.engaged.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:faculty.engaged.tooltip'),
                 apiField: 'faculty_engaged',
             },
             leaders: {
                 label: t('movementIndicators:faculty.leaders.label'),
-                tooltip: t(),
+                tooltip: t('movementIndicators:faculty.leaders.tooltip'),
                 apiField: 'faculty_leaders',
             },
         },

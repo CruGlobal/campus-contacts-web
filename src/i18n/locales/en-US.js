@@ -923,7 +923,7 @@ export default {
             involved: {
                 label: 'Involved',
                 tooltip:
-                    'How many students are regularly involved—attending movement events?',
+                    'How many students are regularly involved and attending movement events?',
             },
             engaged: {
                 label: 'Engaged',
