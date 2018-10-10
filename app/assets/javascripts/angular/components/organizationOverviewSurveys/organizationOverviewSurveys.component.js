@@ -39,7 +39,7 @@ function organizationOverviewSurveysController(
                 this.organizationOverview.surveys.push(newSurvey);
 
                 //go to edit screen
-                $state.go('app.ministries.ministry.survey', {
+                $state.go('app.ministries.ministry.survey.manage', {
                     surveyId: newSurvey.id,
                 });
             });
