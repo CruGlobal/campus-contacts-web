@@ -19,7 +19,7 @@
 <div class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
     <h4 class="tracked ttu">{{ 'movementIndicators:interactions.title' | t }}</h4>
     <div class="column-count-2">
-        <div ng-repeat="indicator in $ctrl.fieldMap.interactions">
+        <div ng-repeat="indicator in $ctrl.fieldMap.interactions" class="column-count-allow-overflow">
             <ng-include src="'movementIndicatorRow.html'"></ng-include>
         </div>
     </div>
