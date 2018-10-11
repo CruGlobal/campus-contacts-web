@@ -44,17 +44,17 @@
                         <li ng-if="$ctrl.adminPrivileges">
                             <a ng-href="/organizations/cleanup?organization_id={{$ctrl.org.id}}">{{ 'nav.cleanup' | t }}</a>
                         </li>
-                        <li ng-if="$ctrl.adminPrivileges && $ctrl.org.reports_movement_indicators" class="divider">
+                        <li ng-if="$ctrl.adminPrivileges && $ctrl.org.reports_movement_indicators">
                             <a ui-state="'^.ministry.reportMovementIndicators'" ui-state-params="{ orgId: $ctrl.org.id }">
                                 {{ 'nav.report_movement_indicators' | t }}
                             </a>
                         </li>
-                        <li ng-if="$ctrl.adminPrivileges && $ctrl.p2cOrg" class="divider">
+                        <li ng-if="$ctrl.adminPrivileges && $ctrl.p2cOrg">
                             <a ng-href="/organizations/signatures?organization_id={{$ctrl.org.id}}">
                                 {{ 'signatures.title' | t }}
                             </a>
                         </li>
-                        <li>
+                        <li class="divider">
                             <a ng-href="/charts/snapshot?organization_id={{$ctrl.org.id}}">{{ 'nav.snapshot' | t }}</a>
                         </li>
                         <li>
