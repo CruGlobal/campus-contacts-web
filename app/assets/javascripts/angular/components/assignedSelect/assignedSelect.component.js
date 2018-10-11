@@ -40,7 +40,7 @@ function assignedSelectController(
         });
 
         $scope.$watch('$ctrl.assigned', (o, n) => {
-            if (vm.actionAfterSelect) {
+            if (vm.actionAfterSelect && o !== n) {
                 vm.actionAfterSelect();
             }
         });
