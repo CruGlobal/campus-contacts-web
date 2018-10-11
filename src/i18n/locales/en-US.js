@@ -5,6 +5,7 @@ export default {
         yes: 'Yes',
         no: 'No',
         back: 'Back',
+        goBack: 'Go Back',
         continue: 'Continue',
         ok: 'Ok',
         cancel: 'Cancel',
@@ -954,9 +955,8 @@ export default {
             },
         },
         confirmModal: {
-            title: 'Submit Movement Indicators?',
             description:
-                'If you want to change these numbers later you will need to go to Infobase to do so.',
+                'Ready to submit your movement indicators? If you want to change these numbers later you will need to go to Infobase to do so.',
         },
         successModal: {
             title: 'Movement Indicators Submitted!',

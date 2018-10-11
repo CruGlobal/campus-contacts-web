@@ -179,12 +179,12 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
             component: 'iconModal',
             resolve: {
                 icon: () => warningIcon,
-                title: () => t('movementIndicators:confirmModal.title'),
+                reducedPadding: () => true,
                 paragraphs: () => [
                     t('movementIndicators:confirmModal.description'),
                 ],
-                dismissLabel: () => t('cancel'),
-                closeLabel: () => t('ok'),
+                dismissLabel: () => t('goBack'),
+                closeLabel: () => t('submit'),
             },
         }).result;
         try {
