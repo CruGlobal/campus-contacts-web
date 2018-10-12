@@ -167,7 +167,7 @@ function peopleScreenService(
                   )
                 : {}),
             'fields[person]':
-                'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments',
+                'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments,organizational_labels,group_memberships',
             'fields[organizational_permission]':
                 'followup_status,organization_id,permission_id',
             'fields[email_address]': 'email,primary',
