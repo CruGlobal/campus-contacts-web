@@ -293,6 +293,7 @@ function peopleScreenController(
                 component: 'massEdit',
                 resolve: {
                     selection: _.constant(getSelection()),
+                    surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm',
@@ -462,7 +463,11 @@ function peopleScreenController(
     };
 
     this.exportPeople = () => {
-        peopleScreenService.exportPeople(getSelection(), getOrder());
+        peopleScreenService.exportPeople(
+            getSelection(),
+            getOrder(),
+            this.surveyId,
+        );
     };
 
     this.transferPeople = () => {
@@ -472,6 +477,7 @@ function peopleScreenController(
                 component: 'transferModal',
                 resolve: {
                     selection: _.constant(selection),
+                    surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
                 size: 'md',

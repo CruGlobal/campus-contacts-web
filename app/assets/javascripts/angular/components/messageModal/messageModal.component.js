@@ -140,6 +140,7 @@ function messageModalController(
             medium: vm.medium,
             subject: vm.subject,
             message: vm.message,
+            surveyId: vm.resolve.surveyId,
         });
 
         sendingPromise.then(vm.close).catch(function() {

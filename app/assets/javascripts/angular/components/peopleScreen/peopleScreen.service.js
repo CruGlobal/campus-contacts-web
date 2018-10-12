@@ -224,9 +224,9 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(selection, order) {
+        exportPeople: function(selection, order, surveyId) {
             const filterParams = _.mapKeys(
-                personSelectionService.convertToFilters(selection),
+                personSelectionService.convertToFilters(selection, surveyId),
                 function(value, key) {
                     return 'filters[' + key + ']';
                 },
