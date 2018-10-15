@@ -46,6 +46,7 @@ function organizationOverviewController(
         });
 
         vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
+        vm.directAdminPrivileges = loggedInPerson.isDirectAdminAt(vm.org);
 
         var rootOrgId = organizationService.getOrgHierarchyIds(vm.org)[0];
 
