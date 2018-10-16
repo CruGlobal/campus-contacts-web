@@ -133,6 +133,7 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
     };
 
     const loadMovementIndicators = orgId => {
+        this.loadingMovementIndicators = true;
         return httpProxy
             .get(
                 `/movement_indicators/${orgId}`,
@@ -146,12 +147,14 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
             .then(({ data, meta }) => {
                 this.startDate = meta.start_date;
                 this.endDate = meta.end_date;
+                this.submittedInLastWeek = data.submitted_in_last_week;
                 this.fieldMap = _.mapValues(this.fieldMap, indicatorGroup =>
                     _.mapValues(indicatorGroup, indicator => ({
                         ...indicator,
                         value: data[indicator.apiField],
                     })),
                 );
+                delete this.loadingMovementIndicators;
             });
     };
 
