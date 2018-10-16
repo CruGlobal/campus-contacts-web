@@ -158,6 +158,10 @@ function surveyService(
                         return;
                     }
 
+                    if (!r.trigger_keywords || r.trigger_keywords === '') {
+                        return;
+                    }
+
                     ruleIncludes.push({
                         id: r.id,
                         type: 'question_rule',
