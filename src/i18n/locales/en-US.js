@@ -871,6 +871,15 @@ export default {
             title: 'Confirm Movement Indicators',
             subtitle:
                 'The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
+            loading: 'Loading movement indicators…',
+            submittedInLastWeek: {
+                heading:
+                    'Movement Indicators for this ministry are up to date.',
+                description:
+                    'Movement Indicators have been submitted for the past week. Please check back next week to submit these again.',
+                descriptionContinued:
+                    "If you'd like to change any numbers previously submitted, please do so in Infobase.",
+            },
             errorLoadingIndicators:
                 'Error occurred while loading movement indicators to pre-fill fields',
             errorSavingIndicators:
