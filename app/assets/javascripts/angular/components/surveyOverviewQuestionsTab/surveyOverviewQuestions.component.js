@@ -106,7 +106,6 @@ function surveyOverviewQuestionsController(
             organizationId,
             requestDeduper,
         );
-        console.log(this.people);
     };
 
     const rebuildQuestions = questions => {
@@ -118,7 +117,7 @@ function surveyOverviewQuestionsController(
         let a = question.content ? question.content.split('\n') : [];
         q.question_answers = a;
 
-        if (question.kind === 'ChoiceField') {
+        if (question.kind === 'ChoiceField' && a) {
             let autoassignRules = buildRules(
                 question.question_rules,
                 a,
@@ -177,8 +176,9 @@ function surveyOverviewQuestionsController(
         loadSurveyData();
     };
 
-    this.addPersonToRule = (question, index) => {
-        console.log('add called');
+    this.addPersonToRule = (question, rule) => {
+        let index = question.question_rules.indexOf(rule);
+
         if (question.question_rules[index].assignTo) {
             let ids = [
                 ...new Set(
@@ -189,7 +189,9 @@ function surveyOverviewQuestionsController(
                 ? question.question_rules[index].people_ids.split(',')
                 : [];
 
-            if (_.isEqual(currentIds.sort(), ids.sort())) return;
+            if (_.isEqual(currentIds.sort(), ids.sort())) {
+                return;
+            }
 
             question.question_rules[index].people_ids = ids.join(',');
             this.saveQuestionContent(question, question.question_answers);
@@ -277,9 +279,9 @@ function surveyOverviewQuestionsController(
 
     this.addEmptyQuestionContent = question => {
         if (!question.question_answers) {
-          question.question_answers = [];
+            question.question_answers = [];
         }
-      
+
         question.question_answers.push('');
         question.question_rules.push(
             buildRule('', question.question_rules, 'AUTOASSIGN'),
@@ -289,14 +291,22 @@ function surveyOverviewQuestionsController(
         );
     };
 
-    this.deleteQuestionContent = async (question, answers, index) => {
+    this.deleteQuestionContent = async (question, answers, rule, index) => {
+        if (rule.id) {
+            await surveyService.deleteSurveyQuestionRule(
+                this.survey.id,
+                rule.id,
+            );
+            let ruleIndex = question.question_rules.indexOf(rule);
+            question.question_rules.splice(ruleIndex, 1);
+        }
+
         question.question_answers.splice(index, 1);
         question.content = answers.join('\n');
         this.saveQuestionContent(question, answers);
     };
 
     this.saveQuestionContent = async (question, answers) => {
-        console.log('save called');
         question.content = answers.join('\n');
         let r = await this.saveQuestion(question);
         rebuildQuestions(this.surveyQuestions);
