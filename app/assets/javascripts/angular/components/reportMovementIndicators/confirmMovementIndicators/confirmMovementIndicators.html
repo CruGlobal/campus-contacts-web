@@ -1,5 +1,4 @@
 <h2 class="f3 fw6 mb3">{{ 'movementIndicators:confirmIndicators.title' | t }}</h2>
-<p class="pivot-gray-darker f5 mb4">{{ 'movementIndicators:confirmIndicators.subtitle' | t }}</p>
 
 <h3 class="tracked f5 ttu mb3 fw6" ng-if="$ctrl.startDate || $ctrl.endDate">
     {{ $ctrl.startDate | date : 'shortDate' }} &ndash; {{ $ctrl.endDate | date : 'shortDate' }}
@@ -21,14 +20,18 @@
 <div ng-if="$ctrl.loadingMovementIndicators" class="f3 mb5">
     {{ 'movementIndicators:confirmIndicators.loading' | t }}
 </div>
+
 <div ng-if="!$ctrl.loadingMovementIndicators">
+
     <div ng-if="$ctrl.submittedInLastWeek"
          class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
         <h2 class="f4 fw6 mb3">{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.heading' | t }}</h2>
         <p>{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.description' | t }}</p>
         <p>{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.descriptionContinued' | t }}</p>
     </div>
+
     <div ng-if="!$ctrl.submittedInLastWeek">
+        <p class="pivot-gray-darker f5 mt4">{{ 'movementIndicators:confirmIndicators.interactionsHeading' | t }}</p>
         <div class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
             <h4 class="tracked ttu">{{ 'movementIndicators:interactions.title' | t }}</h4>
             <div class="column-count-2">
@@ -38,6 +41,7 @@
             </div>
         </div>
 
+        <p class="pivot-gray-darker f5 mt4">{{ 'movementIndicators:confirmIndicators.labelsHeading' | t }}</p>
         <div class="flex mt3 pivot-gray-darker">
             <div class="w-50 pa4 f5 bg-pivot-gray-5">
                 <h4 class="tracked ttu">{{ 'movementIndicators:students.title' | t }}</h4>
@@ -53,6 +57,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 
