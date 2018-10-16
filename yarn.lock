@@ -5364,12 +5364,13 @@ https-browserify@0.0.1:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
   integrity sha1-P5E2XKvmC3ftDruiS0VOPgnZWoI=
 
-husky@^1.0.1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-1.1.2.tgz#574c2bb16958db8a8120b63306efaff110525c23"
+husky@^1.1.2:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-1.1.4.tgz#92f61383527d2571e9586234e5864356bfaceaa9"
+  integrity sha512-cZjGpS7qsaBSo3fOMUuR7erQloX3l5XzL1v/RkIqU6zrQImDdU70z5Re9fGDp7+kbYlM2EtS4aYMlahBeiCUGw==
   dependencies:
     cosmiconfig "^5.0.6"
-    execa "^0.9.0"
+    execa "^1.0.0"
     find-up "^3.0.0"
     get-stdin "^6.0.0"
     is-ci "^1.2.1"
