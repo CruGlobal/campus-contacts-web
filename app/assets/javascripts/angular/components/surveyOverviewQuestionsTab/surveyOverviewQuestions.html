@@ -131,11 +131,11 @@
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 0">
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index" >
                                 <assigned-select 
-                                  action-after-select="$ctrl.addPersonToRule(question, $index)"
+                                  action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
                                 ></assigned-select>
-                                <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);">
+                                <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
                                 </a>
                             </div>
@@ -143,12 +143,11 @@
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 1">
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index">
                                 <assigned-select 
-                                  action-after-select="$ctrl.addPersonToRule(question, $index)"
+                                  action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
                                 ></assigned-select>
-                                <a class="ml3 delete" href=""
-                                   ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);">
+                                <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
                                 </a>
                             </div>

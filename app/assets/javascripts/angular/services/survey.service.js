@@ -203,6 +203,16 @@ function surveyService(
             );
         },
 
+        deleteSurveyQuestionRule: (surveyId, ruleId) => {
+            return httpProxy.delete(
+                `/surveys/${surveyId}/question_rules/${ruleId}`,
+                null,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
+        },
+
         updateSurvey: survey => {
             return httpProxy
                 .put(
