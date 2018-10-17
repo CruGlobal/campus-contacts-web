@@ -11,9 +11,9 @@
                 'pa3': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
         }">
-            <!--<a class="sort mr3">-->
-                <!--<img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">-->
-            <!--</a>-->
+            <a class="sort mr3">
+                <img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">
+            </a>
             <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
                 {{question.label}}
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
