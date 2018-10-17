@@ -179,23 +179,23 @@ function surveyOverviewQuestionsController(
     this.addPersonToRule = (question, rule) => {
         let index = question.question_rules.indexOf(rule);
 
-        if (question.question_rules[index].assignTo) {
-            let ids = [
-                ...new Set(
-                    question.question_rules[index].assignTo.map(i => i.id),
-                ),
-            ];
-            let currentIds = question.question_rules[index].people_ids
-                ? question.question_rules[index].people_ids.split(',')
-                : [];
-
-            if (_.isEqual(currentIds.sort(), ids.sort())) {
-                return;
-            }
-
-            question.question_rules[index].people_ids = ids.join(',');
-            this.saveQuestionContent(question, question.question_answers);
+        if (!question.question_rules[index].assignTo) {
+            return;
         }
+
+        let ids = [
+            ...new Set(question.question_rules[index].assignTo.map(i => i.id)),
+        ];
+        let currentIds = question.question_rules[index].people_ids
+            ? question.question_rules[index].people_ids.split(',')
+            : [];
+
+        if (_.isEqual(currentIds.sort(), ids.sort())) {
+            return;
+        }
+
+        question.question_rules[index].people_ids = ids.join(',');
+        this.saveQuestionContent(question, question.question_answers);
     };
 
     this.getQuestionType = (kind, style) => {
@@ -309,6 +309,12 @@ function surveyOverviewQuestionsController(
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
         let r = await this.saveQuestion(question);
+
+        if (r.data.question_rules) {
+            let index = this.surveyQuestions.indexOf(question);
+            this.surveyQuestions[index].question_rules = r.data.question_rules;
+        }
+
         rebuildQuestions(this.surveyQuestions);
         $scope.$apply();
     };
