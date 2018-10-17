@@ -21,8 +21,6 @@ function surveyOverviewQuestionsController(
     $scope,
     modelsService,
     httpProxy,
-    assignedSelectService,
-    RequestDeduper,
 ) {
     this.isExpanded = {};
     this.surveyQuestions = [];
@@ -73,18 +71,13 @@ function surveyOverviewQuestionsController(
 
     const loadSurveyData = async () => {
         let q = await surveyService.getSurveyQuestions(this.survey.id);
-        const requestDeduper = new RequestDeduper();
-        this.people = await assignedSelectService.searchPeople(
-            '',
-            this.survey.organization_id,
-            requestDeduper,
-        );
+        this.people = await getPeople(q, this.survey.organization_id);
         rebuildQuestions(q);
         $scope.$apply();
     };
 
-    const loadPeople = async organizationId => {
-        /*    let peopleIds = questions.reduce((a1, q) => {
+    const getPeople = async (questions, organizationId) => {
+        let list = questions.reduce((a1, q) => {
             return (
                 a1 +
                 q.question_rules.reduce((a2, r) => {
@@ -92,18 +85,34 @@ function surveyOverviewQuestionsController(
                         return a2;
                     }
 
-                    let separator = a2 ? ',' : '';
-                    return a2 + separator + r.people_ids;
+                    return a2 + r.people_ids + ',';
                 }, '')
             );
-        }, ''); */
+        }, '');
 
-        var requestDeduper = new RequestDeduper();
+        let peopleIds = [...new Set(list.split(','))];
+
+        let r = await httpProxy.get(
+            '/people',
+            {
+                'filters[ids]': peopleIds.join(','),
+                'filters[organization_ids]': this.survey.organization_id,
+                'fields[people]':
+                    'first_name,gender,last_name,primary_email_address,id',
+            },
+            {
+                errorMessage: 'error.messages.surveys.loadQuestions',
+            },
+        );
+
+        return r.data;
+
+        /* const requestDeduper = new RequestDeduper();
         this.people = await assignedSelectService.searchPeople(
             '',
-            organizationId,
+            this.survey.organization_id,
             requestDeduper,
-        );
+        ); */
     };
 
     const rebuildQuestions = questions => {
@@ -180,7 +189,7 @@ function surveyOverviewQuestionsController(
         loadSurveyData();
     };
 
-    this.addPersonToRule = (question, rule) => {
+    this.addPersonToRule = async (question, rule) => {
         let index = question.question_rules.indexOf(rule);
 
         if (!question.question_rules[index].assignTo) {
@@ -188,7 +197,7 @@ function surveyOverviewQuestionsController(
         }
 
         let ids = [
-            ...new Set(question.question_rules[index].assignTo.map(i => i.id)),
+            ...new Set(question.question_rules[index].assignTo.map(r => r.id)),
         ];
         let currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
@@ -199,7 +208,14 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].people_ids = ids.join(',');
-        this.saveQuestionContent(question, question.question_answers);
+        question.question_rules[index].assignTo.forEach(a => {
+            let exists = this.people.find(p => p.id === a.id);
+            if (!exists || exists === undefined) {
+                this.people.push(a);
+            }
+        });
+
+        await this.saveQuestionContent(question, question.question_answers);
     };
 
     this.getQuestionType = (kind, style) => {
