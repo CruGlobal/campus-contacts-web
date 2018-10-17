@@ -254,7 +254,15 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
-        let { id, label, kind, style, column_title, content } = question;
+        let {
+            id,
+            label,
+            kind,
+            style,
+            column_title,
+            content,
+            notify_via,
+        } = question;
 
         return surveyService.updateSurveyQuestion(
             this.survey.id,
@@ -265,6 +273,7 @@ function surveyOverviewQuestionsController(
                 style,
                 column_title,
                 content,
+                notify_via,
             },
             question.question_rules,
         );
@@ -282,6 +291,11 @@ function surveyOverviewQuestionsController(
         question.question_rules.push(
             buildRule('', question.question_rules, 'AUTONOTIFY'),
         );
+    };
+
+    this.setNotifyVia = (question, via) => {
+        question.notify_via = via;
+        this.saveQuestionContent(question, question.question_answers);
     };
 
     this.deleteQuestionContent = async (question, answers, rule, index) => {
