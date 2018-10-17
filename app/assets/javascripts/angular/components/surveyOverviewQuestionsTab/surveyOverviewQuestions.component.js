@@ -110,6 +110,12 @@ function surveyOverviewQuestionsController(
         this.surveyQuestions = questions.map(q => buildQuestion(q));
     };
 
+    const rebuildQuestion = question => {
+        let q = buildQuestion(question);
+        let index = this.surveyQuestions.indexOf(question);
+        this.surveyQuestions[index] = q;
+    };
+
     const buildQuestion = question => {
         let q = question;
         let a = question.content ? question.content.split('\n') : [];
@@ -322,7 +328,7 @@ function surveyOverviewQuestionsController(
             this.surveyQuestions[index].question_rules = r.data.question_rules;
         }
 
-        rebuildQuestions(this.surveyQuestions);
+        rebuildQuestion(question);
         $scope.$apply();
     };
 }
