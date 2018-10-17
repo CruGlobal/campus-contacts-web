@@ -5,6 +5,7 @@ angular.module('missionhubApp').component('assignedSelect', {
     bindings: {
         assigned: '=',
         organizationId: '<',
+        disabled: '<',
         actionAfterSelect: '&',
     },
     controller: assignedSelectController,

@@ -1,4 +1,4 @@
-<ui-select expose-select multiple ng-model="$ctrl.assigned" close-on-select="false">
+<ui-select expose-select multiple ng-model="$ctrl.assigned" close-on-select="false" ng-disabled="$ctrl.disabled">
     <ui-select-match placeholder="{{ 'application.assign_search.placeholder' | t }}">
         <span>
             {{$item | personName}}
