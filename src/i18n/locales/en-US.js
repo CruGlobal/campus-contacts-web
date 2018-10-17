@@ -881,7 +881,7 @@ export default {
             interactionsHeading:
                 'The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
             labelsHeading:
-                'The pre-filled label indicators below display the most recently entered information. If these numbers have changed, feel free to update them below. These numbers will appear consistently week-to-week',
+                'The pre-filled label indicators below display the most recently entered information. If these numbers have changed, feel free to update them below. These numbers will appear consistently week-to-week.',
             errorLoadingIndicators:
                 'Error occurred while loading movement indicators to pre-fill fields',
             errorSavingIndicators:
