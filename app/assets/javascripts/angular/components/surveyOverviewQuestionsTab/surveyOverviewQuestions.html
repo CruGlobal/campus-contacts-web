@@ -134,6 +134,7 @@
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
+                                  disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
@@ -146,7 +147,7 @@
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
-                                  ng-if="rule.keyword !== ''"
+                                  disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
