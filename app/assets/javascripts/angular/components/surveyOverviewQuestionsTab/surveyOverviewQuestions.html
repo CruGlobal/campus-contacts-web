@@ -1,5 +1,5 @@
 <div class="accordion">
-    <form class="bg-pivot-gray-5 br2 pivot-gray-darker" 
+    <form class="bg-pivot-gray-5 br2 pivot-gray-darker"
         ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
             'accordion-expanded': $ctrl.isExpanded[question.id]
@@ -18,17 +18,17 @@
                 {{question.label}}
                 <span class="f7" ng-if="question.required">({{ 'common:general.required' | t }})</span>
             </span>
-            <input type="text" 
+            <input type="text"
                 class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker w-83 ihshort br2"
-                placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}" 
+                placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}"
                 ng-model="question.label"
                 ng-click="$event.stopPropagation()"
                 ng-change="$ctrl.saveQuestion(question)"
                 ng-model-options='{ debounce: 750 }'
                 ng-if="$ctrl.isExpanded[question.id]"
                 >
-            <a class="ml3" href="" 
-                ng-if="$ctrl.isExpanded[question.id]" 
+            <a class="ml3" href=""
+                ng-if="$ctrl.isExpanded[question.id]"
                 ng-click="$ctrl.deleteQuestion(question.id)"
                 >
                     <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
@@ -77,7 +77,7 @@
                     <div class="w-52">
                         <p class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3">
                             {{ 'surveys:questions.initiateAssignment' | t }}
-                        </p>                        
+                        </p>
                         <div class="assignments pb2"
                              ng-model="question.question_answers"
                              ui-sortable="$ctrl.sortableOptions"
@@ -130,7 +130,7 @@
                         </div>
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 0">
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index" >
-                                <assigned-select 
+                                <assigned-select
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
@@ -142,7 +142,7 @@
                         </div>
                         <div class="tab-body pa2 ba b--gray-dark" ng-if="answerTab === 1">
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index">
-                                <assigned-select 
+                                <assigned-select
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assignTo"
                                   organization-id="$ctrl.survey.organization_id"
@@ -162,10 +162,10 @@
                                     </a>
                                     <ul class="bg-white f6" uib-dropdown-menu>
                                         <li>
-                                            <a href="" ng-click="question.notify_via = 'Email'">Email</a>
+                                            <a href="" ng-click="$ctrl.setNotifyVia(question, 'Email')">Email</a>
                                         </li>
                                         <li>
-                                            <a href="" ng-click="question.notify_via = 'SMS'">Text</a>
+                                            <a href="" ng-click="$ctrl.setNotifyVia(question, 'SMS')">Text</a>
                                         </li>
                                     </ul>
                                 </div>
