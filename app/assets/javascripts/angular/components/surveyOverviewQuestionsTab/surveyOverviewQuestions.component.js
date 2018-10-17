@@ -106,13 +106,6 @@ function surveyOverviewQuestionsController(
         );
 
         return r.data;
-
-        /* const requestDeduper = new RequestDeduper();
-        this.people = await assignedSelectService.searchPeople(
-            '',
-            this.survey.organization_id,
-            requestDeduper,
-        ); */
     };
 
     const rebuildQuestions = questions => {
