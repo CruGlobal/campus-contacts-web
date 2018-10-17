@@ -236,6 +236,26 @@ function surveyOverviewQuestionsController(
         handle: '.sort',
     };
 
+    this.questionSortableOptions = {
+        handle: '.question-sort',
+    };
+
+    this.updatePosition = questions => {
+        let i = 1;
+        questions.filter(q => !q.predefined).forEach(q => {
+            q.position = i;
+
+            let { id, position } = q;
+
+            surveyService.updateSurveyQuestion(this.survey.id, {
+                id,
+                position,
+            });
+
+            i++;
+        });
+    };
+
     this.addPredefinedQuestion = () => {
         $uibModal.open({
             component: 'predefinedQuestionsModal',
@@ -290,7 +310,15 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
-        const { id, label, kind, style, column_title, content } = question;
+        const {
+            id,
+            label,
+            kind,
+            style,
+            column_title,
+            content,
+            position,
+        } = question;
 
         return surveyService.updateSurveyQuestion(
             this.survey.id,
@@ -301,6 +329,7 @@ function surveyOverviewQuestionsController(
                 style,
                 column_title,
                 content,
+                position,
             },
             question.question_rules,
         );
