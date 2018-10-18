@@ -132,7 +132,7 @@
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index" >
                                 <assigned-select
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                  assigned="rule.assignTo"
+                                  assigned="rule.assign_to"
                                   organization-id="$ctrl.survey.organization_id"
                                   disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
@@ -145,7 +145,7 @@
                             <div class="relative" ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index">
                                 <assigned-select
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                  assigned="rule.assignTo"
+                                  assigned="rule.assign_to"
                                   organization-id="$ctrl.survey.organization_id"
                                   disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
