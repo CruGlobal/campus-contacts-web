@@ -117,9 +117,7 @@ function surveyOverviewQuestionsController(
     };
 
     const buildQuestion = question => {
-        let q = question;
         const a = question.content ? question.content.split('\n') : [];
-        q.question_answers = a;
 
         if (question.kind === 'ChoiceField' && a) {
             const autoassignRules = buildRules(
@@ -133,10 +131,17 @@ function surveyOverviewQuestionsController(
                 'AUTONOTIFY',
             );
 
-            q.question_rules = [...autoassignRules, ...autoNotifyRules];
+            return {
+                ...question,
+                question_answers: a,
+                question_rules: [...autoassignRules, ...autoNotifyRules],
+            };
         }
 
-        return q;
+        return {
+            ...question,
+            question_answers: a,
+        };
     };
 
     const buildRules = (questionRules, answerQuestion, type) => {
