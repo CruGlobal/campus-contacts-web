@@ -305,6 +305,12 @@ function surveyOverviewQuestionsController(
         );
     };
 
+    this.updateQuestion = async question => {
+        await this.saveQuestion(question);
+        rebuildQuestion(question);
+        $scope.$apply();
+    };
+
     this.addEmptyQuestionContent = question => {
         if (!question.question_answers) {
             question.question_answers = [];
