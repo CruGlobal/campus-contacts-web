@@ -15,7 +15,7 @@
                 'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
         }">
             <a class="question-sort mr3" ng-if="!question.predefined">
-                <img ng-src="{{$ctrl.icons.sort}}" alt="Sort" style="width:22px; height:20px">
+                <img ng-src="{{$ctrl.icons.sort}}" alt="{{ 'surveys:questions.sort' | t }}" style="width:22px; height:20px">
             </a>
             <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
                 {{question.label}}
