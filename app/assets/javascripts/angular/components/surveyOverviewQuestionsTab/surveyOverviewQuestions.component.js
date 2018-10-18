@@ -92,7 +92,7 @@ function surveyOverviewQuestionsController(
 
         const peopleIds = [...new Set(list.split(','))];
 
-        const r = await httpProxy.get(
+        const { data } = await httpProxy.get(
             '/people',
             {
                 'filters[ids]': peopleIds.join(','),
@@ -105,7 +105,7 @@ function surveyOverviewQuestionsController(
             },
         );
 
-        return r.data;
+        return data;
     };
 
     const rebuildQuestions = questions => {
@@ -330,11 +330,11 @@ function surveyOverviewQuestionsController(
 
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
-        const r = await this.saveQuestion(question);
+        const { data } = await this.saveQuestion(question);
 
-        if (r.data.question_rules) {
+        if (data.question_rules) {
             const index = this.surveyQuestions.indexOf(question);
-            this.surveyQuestions[index].question_rules = r.data.question_rules;
+            this.surveyQuestions[index].question_rules = data.question_rules;
         }
 
         rebuildQuestion(question);
