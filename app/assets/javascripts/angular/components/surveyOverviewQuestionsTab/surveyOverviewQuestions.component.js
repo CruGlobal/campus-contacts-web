@@ -107,7 +107,7 @@ function surveyOverviewQuestionsController(
     };
 
     const rebuildQuestions = questions => {
-        this.surveyQuestions = questions.map(q => buildQuestion(q));
+        this.surveyQuestions = questions.map(buildQuestion);
     };
 
     const rebuildQuestion = question => {
@@ -163,7 +163,7 @@ function surveyOverviewQuestionsController(
                     assign_to: assignTo,
                 };
             })
-            .reduce((a, c) => (c ? c : false), false);
+            .reduce((a, c) => c, false);
 
         if (!rule) {
             return {
