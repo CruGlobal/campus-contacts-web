@@ -23,7 +23,7 @@
                 placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}"
                 ng-model="question.label"
                 ng-click="$event.stopPropagation()"
-                ng-change="$ctrl.saveQuestion(question)"
+                ng-change="$ctrl.updateQuestion(question)"
                 ng-model-options='{ debounce: 750 }'
                 ng-if="$ctrl.isExpanded[question.id]"
                 >
@@ -55,7 +55,7 @@
                             <ul class="bg-white f5" uib-dropdown-menu>
                                 <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
                                     <a href=""
-                                       ng-click="question.kind = type.kind; question.style = type.style; $ctrl.saveQuestion(question);">
+                                       ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);">
                                         {{type.name}}
                                     </a>
                                 </li>
@@ -67,7 +67,7 @@
                             {{ 'surveys:questions.columnTitle' | t }}
                         </label>
                         <input type="text" class="input-reset bg-white w-100 ihshort"
-                            ng-change="$ctrl.saveQuestion(question)"
+                            ng-change="$ctrl.updateQuestion(question)"
                             ng-model-options='{ debounce: 750 }'
                             ng-model="question.column_title"
                             >
