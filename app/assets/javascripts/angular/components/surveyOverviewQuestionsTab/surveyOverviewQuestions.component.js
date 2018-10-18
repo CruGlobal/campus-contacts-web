@@ -79,20 +79,16 @@ function surveyOverviewQuestionsController(
     };
 
     const getPeople = async (questions, organizationId) => {
-        const list = questions.reduce((a1, q) => {
-            return (
-                a1 +
-                q.question_rules.reduce((a2, r) => {
-                    if (!r.people_ids) {
-                        return a2;
-                    }
-
-                    return a2 + r.people_ids + ',';
-                }, '')
-            );
-        }, '');
-
-        const peopleIds = [...new Set(list.split(','))];
+        const peopleIds = [
+            ...new Set(
+                questions.reduce((a1, q) => {
+                    const ids = q.question_rules.reduce((a2, r) => {
+                        return [...a2, ...r.people_ids.split(',')];
+                    }, []);
+                    return [...a1, ...ids];
+                }, []),
+            ),
+        ];
 
         const { data } = await httpProxy.get(
             '/people',
