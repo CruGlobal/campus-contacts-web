@@ -148,34 +148,38 @@ function surveyOverviewQuestionsController(
     };
 
     const buildRule = (answer, questionRules, type) => {
-        let ar = {
-            id: null,
-            label_ids: null,
-            organization_ids: null,
-            people_ids: null,
-            rule_code: type,
-            trigger_keywords: answer,
-            assign_to: null,
-        };
+        const rule = questionRules
+            .filter(r => r.trigger_keywords === answer && r.rule_code === type)
+            .map(r => {
+                const ids = r.people_ids ? r.people_ids.split(',') : [];
+                const assignTo = this.people.filter(
+                    p => ids.indexOf(p.id) >= 0,
+                );
+                return {
+                    id: r.id,
+                    label_ids: r.label_ids,
+                    organization_ids: r.organization_ids,
+                    people_ids: r.people_ids,
+                    rule_code: type,
+                    trigger_keywords: answer,
+                    assign_to: assignTo,
+                };
+            })
+            .reduce((a, c) => (c ? c : false), false);
 
-        questionRules.forEach(r => {
-            if (r.trigger_keywords === answer && r.rule_code === type) {
-                ar.id = r.id;
-                ar.label_ids = r.label_ids;
-                ar.organization_ids = r.organization_ids;
-                ar.people_ids = r.people_ids;
-                ar.trigger_keywords = r.trigger_keywords;
+        if (!rule) {
+            return {
+                id: null,
+                label_ids: null,
+                organization_ids: null,
+                people_ids: null,
+                rule_code: type,
+                trigger_keywords: answer,
+                assign_to: null,
+            };
+        }
 
-                if (!r.people_ids) {
-                    return;
-                }
-
-                const ids = r.people_ids.split(',');
-                ar.assignTo = this.people.filter(p => ids.indexOf(p.id) >= 0);
-            }
-        });
-
-        return ar;
+        return rule;
     };
 
     this.$onInit = () => {
@@ -185,12 +189,12 @@ function surveyOverviewQuestionsController(
     this.addPersonToRule = async (question, rule) => {
         const index = question.question_rules.indexOf(rule);
 
-        if (!question.question_rules[index].assignTo) {
+        if (!question.question_rules[index].assign_to) {
             return;
         }
 
         const ids = [
-            ...new Set(question.question_rules[index].assignTo.map(r => r.id)),
+            ...new Set(question.question_rules[index].assign_to.map(r => r.id)),
         ];
         const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
@@ -201,7 +205,7 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].people_ids = ids.join(',');
-        question.question_rules[index].assignTo.forEach(a => {
+        question.question_rules[index].assign_to.forEach(a => {
             const exists = this.people.find(p => p.id === a.id);
             if (!exists || exists === undefined) {
                 this.people.push(a);
