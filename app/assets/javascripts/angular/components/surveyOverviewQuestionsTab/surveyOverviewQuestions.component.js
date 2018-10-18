@@ -236,18 +236,17 @@ function surveyOverviewQuestionsController(
     };
 
     this.updatePosition = questions => {
-        let i = 1;
-        questions.filter(q => !q.predefined).forEach(q => {
-            q.position = i;
+        questions.filter(q => !q.predefined).forEach((q, index) => {
+            if (q.position === index + 1) return;
 
-            let { id, position } = q;
+            q.position = index + 1;
+
+            const { id, position } = q;
 
             surveyService.updateSurveyQuestion(this.survey.id, {
                 id,
                 position,
             });
-
-            i++;
         });
     };
 
