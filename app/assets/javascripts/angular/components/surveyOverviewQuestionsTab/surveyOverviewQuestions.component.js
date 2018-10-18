@@ -210,7 +210,7 @@ function surveyOverviewQuestionsController(
         question.question_rules[index].people_ids = ids.join(',');
         question.question_rules[index].assign_to.forEach(a => {
             const exists = this.people.find(p => p.id === a.id);
-            if (!exists || exists === undefined) {
+            if (!exists) {
                 this.people.push(a);
             }
         });
