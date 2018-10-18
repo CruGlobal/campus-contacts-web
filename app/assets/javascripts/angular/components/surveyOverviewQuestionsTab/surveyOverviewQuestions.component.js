@@ -192,7 +192,7 @@ function surveyOverviewQuestionsController(
         }
 
         const ids = [
-            ...new Set(question.question_rules[index].assign_to.map(r => r.id)),
+            ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
         ];
         const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
@@ -226,8 +226,7 @@ function surveyOverviewQuestionsController(
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
-                currentQuestions: () =>
-                    this.surveyQuestions.map(question => question.id),
+                currentQuestions: () => this.surveyQuestions.map(q => q.id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
