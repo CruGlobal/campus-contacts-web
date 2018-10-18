@@ -70,29 +70,25 @@ function surveyOverviewQuestionsController(
     this.people = [];
 
     const loadSurveyData = async () => {
-        let q = await surveyService.getSurveyQuestions(this.survey.id);
+        const q = await surveyService.getSurveyQuestions(this.survey.id);
         this.people = await getPeople(q, this.survey.organization_id);
         rebuildQuestions(q);
         $scope.$apply();
     };
 
     const getPeople = async (questions, organizationId) => {
-        let list = questions.reduce((a1, q) => {
-            return (
-                a1 +
-                q.question_rules.reduce((a2, r) => {
-                    if (!r.people_ids) {
-                        return a2;
-                    }
+        const peopleIds = [
+            ...new Set(
+                questions.reduce((a1, q) => {
+                    const ids = q.question_rules.reduce((a2, r) => {
+                        return [...a2, ...r.people_ids.split(',')];
+                    }, []);
+                    return [...a1, ...ids];
+                }, []),
+            ),
+        ];
 
-                    return a2 + r.people_ids + ',';
-                }, '')
-            );
-        }, '');
-
-        let peopleIds = [...new Set(list.split(','))];
-
-        let r = await httpProxy.get(
+        const { data } = await httpProxy.get(
             '/people',
             {
                 'filters[ids]': peopleIds.join(','),
@@ -105,40 +101,45 @@ function surveyOverviewQuestionsController(
             },
         );
 
-        return r.data;
+        return data;
     };
 
     const rebuildQuestions = questions => {
-        this.surveyQuestions = questions.map(q => buildQuestion(q));
+        this.surveyQuestions = questions.map(buildQuestion);
     };
 
     const rebuildQuestion = question => {
-        let q = buildQuestion(question);
-        let index = this.surveyQuestions.indexOf(question);
+        const q = buildQuestion(question);
+        const index = this.surveyQuestions.indexOf(question);
         this.surveyQuestions[index] = q;
     };
 
     const buildQuestion = question => {
-        let q = question;
-        let a = question.content ? question.content.split('\n') : [];
-        q.question_answers = a;
+        const a = question.content ? question.content.split('\n') : [];
 
         if (question.kind === 'ChoiceField' && a) {
-            let autoassignRules = buildRules(
+            const autoassignRules = buildRules(
                 question.question_rules,
                 a,
                 'AUTOASSIGN',
             );
-            let autoNotifyRules = buildRules(
+            const autoNotifyRules = buildRules(
                 question.question_rules,
                 a,
                 'AUTONOTIFY',
             );
 
-            q.question_rules = autoassignRules.concat(autoNotifyRules);
+            return {
+                ...question,
+                question_answers: a,
+                question_rules: [...autoassignRules, ...autoNotifyRules],
+            };
         }
 
-        return q;
+        return {
+            ...question,
+            question_answers: a,
+        };
     };
 
     const buildRules = (questionRules, answerQuestion, type) => {
@@ -148,34 +149,29 @@ function surveyOverviewQuestionsController(
     };
 
     const buildRule = (answer, questionRules, type) => {
-        let ar = {
-            id: null,
-            label_ids: null,
-            organization_ids: null,
-            people_ids: null,
+        const {
+            id = null,
+            label_ids = null,
+            organization_ids = null,
+            people_ids = null,
+        } =
+            questionRules.find(
+                r => r.trigger_keywords === answer && r.rule_code === type,
+            ) || {};
+
+        const ids = people_ids ? people_ids.split(',') : [];
+
+        return {
+            id,
+            label_ids,
+            organization_ids,
+            people_ids,
             rule_code: type,
             trigger_keywords: answer,
-            assign_to: null,
+            assign_to: id
+                ? this.people.filter(p => ids.indexOf(p.id) >= 0)
+                : null,
         };
-
-        questionRules.forEach(r => {
-            if (r.trigger_keywords === answer && r.rule_code === type) {
-                ar.id = r.id;
-                ar.label_ids = r.label_ids;
-                ar.organization_ids = r.organization_ids;
-                ar.people_ids = r.people_ids;
-                ar.trigger_keywords = r.trigger_keywords;
-
-                if (!r.people_ids) {
-                    return;
-                }
-
-                let ids = r.people_ids.split(',');
-                ar.assignTo = this.people.filter(p => ids.indexOf(p.id) >= 0);
-            }
-        });
-
-        return ar;
     };
 
     this.$onInit = () => {
@@ -183,16 +179,16 @@ function surveyOverviewQuestionsController(
     };
 
     this.addPersonToRule = async (question, rule) => {
-        let index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.indexOf(rule);
 
-        if (!question.question_rules[index].assignTo) {
+        if (!question.question_rules[index].assign_to) {
             return;
         }
 
-        let ids = [
-            ...new Set(question.question_rules[index].assignTo.map(r => r.id)),
+        const ids = [
+            ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
         ];
-        let currentIds = question.question_rules[index].people_ids
+        const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
             : [];
 
@@ -201,9 +197,9 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].people_ids = ids.join(',');
-        question.question_rules[index].assignTo.forEach(a => {
-            let exists = this.people.find(p => p.id === a.id);
-            if (!exists || exists === undefined) {
+        question.question_rules[index].assign_to.forEach(a => {
+            const exists = this.people.find(p => p.id === a.id);
+            if (!exists) {
                 this.people.push(a);
             }
         });
@@ -244,8 +240,7 @@ function surveyOverviewQuestionsController(
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
-                currentQuestions: () =>
-                    this.surveyQuestions.map(question => question.id),
+                currentQuestions: () => this.surveyQuestions.map(q => q.id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
@@ -289,7 +284,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
-        let {
+        const {
             id,
             label,
             kind,
@@ -314,6 +309,12 @@ function surveyOverviewQuestionsController(
             },
             question.question_rules,
         );
+    };
+
+    this.updateQuestion = async question => {
+        await this.saveQuestion(question);
+        rebuildQuestion(question);
+        $scope.$apply();
     };
 
     this.addEmptyQuestionContent = question => {
@@ -341,7 +342,7 @@ function surveyOverviewQuestionsController(
                 this.survey.id,
                 rule.id,
             );
-            let ruleIndex = question.question_rules.indexOf(rule);
+            const ruleIndex = question.question_rules.indexOf(rule);
             question.question_rules.splice(ruleIndex, 1);
         }
 
@@ -350,13 +351,38 @@ function surveyOverviewQuestionsController(
         this.saveQuestionContent(question, answers);
     };
 
+    this.updateQuestionAnswer = async (question, answerIndex) => {
+        const oldAnswers = question.content.split('\n');
+        const newAnswer = question.question_answers[answerIndex];
+
+        if (oldAnswers.indexOf(newAnswer) === -1) {
+            const changedAnswer = oldAnswers.find(
+                a => question.question_answers.indexOf(a) === -1,
+            );
+
+            const rules = question.question_rules.map(r => {
+                if (r.trigger_keywords === changedAnswer) {
+                    return {
+                        ...r,
+                        trigger_keywords: newAnswer,
+                    };
+                }
+                return r;
+            });
+
+            question.question_rules = rules;
+        }
+
+        this.saveQuestionContent(question, question.question_answers);
+    };
+
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
-        let r = await this.saveQuestion(question);
+        const { data } = await this.saveQuestion(question);
 
-        if (r.data.question_rules) {
-            let index = this.surveyQuestions.indexOf(question);
-            this.surveyQuestions[index].question_rules = r.data.question_rules;
+        if (data.question_rules) {
+            const index = this.surveyQuestions.indexOf(question);
+            this.surveyQuestions[index].question_rules = data.question_rules;
         }
 
         rebuildQuestion(question);
