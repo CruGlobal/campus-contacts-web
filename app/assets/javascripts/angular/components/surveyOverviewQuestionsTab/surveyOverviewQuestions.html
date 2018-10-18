@@ -91,7 +91,7 @@
                                 </div>
                                 <div class="f-grow">
                                     <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 br2 ihshort" type="text"
-                                        ng-change="$ctrl.saveQuestionContent(question, question.question_answers)"
+                                        ng-change="$ctrl.updateQuestionAnswer(question, $index)"
                                         ng-model-options='{ debounce: 750 }'
                                         ng-model="question.question_answers[$index]"
                                         >
