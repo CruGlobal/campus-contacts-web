@@ -70,14 +70,14 @@ function surveyOverviewQuestionsController(
     this.people = [];
 
     const loadSurveyData = async () => {
-        let q = await surveyService.getSurveyQuestions(this.survey.id);
+        const q = await surveyService.getSurveyQuestions(this.survey.id);
         this.people = await getPeople(q, this.survey.organization_id);
         rebuildQuestions(q);
         $scope.$apply();
     };
 
     const getPeople = async (questions, organizationId) => {
-        let list = questions.reduce((a1, q) => {
+        const list = questions.reduce((a1, q) => {
             return (
                 a1 +
                 q.question_rules.reduce((a2, r) => {
@@ -90,9 +90,9 @@ function surveyOverviewQuestionsController(
             );
         }, '');
 
-        let peopleIds = [...new Set(list.split(','))];
+        const peopleIds = [...new Set(list.split(','))];
 
-        let r = await httpProxy.get(
+        const r = await httpProxy.get(
             '/people',
             {
                 'filters[ids]': peopleIds.join(','),
@@ -113,23 +113,23 @@ function surveyOverviewQuestionsController(
     };
 
     const rebuildQuestion = question => {
-        let q = buildQuestion(question);
-        let index = this.surveyQuestions.indexOf(question);
+        const q = buildQuestion(question);
+        const index = this.surveyQuestions.indexOf(question);
         this.surveyQuestions[index] = q;
     };
 
     const buildQuestion = question => {
         let q = question;
-        let a = question.content ? question.content.split('\n') : [];
+        const a = question.content ? question.content.split('\n') : [];
         q.question_answers = a;
 
         if (question.kind === 'ChoiceField' && a) {
-            let autoassignRules = buildRules(
+            const autoassignRules = buildRules(
                 question.question_rules,
                 a,
                 'AUTOASSIGN',
             );
-            let autoNotifyRules = buildRules(
+            const autoNotifyRules = buildRules(
                 question.question_rules,
                 a,
                 'AUTONOTIFY',
@@ -170,7 +170,7 @@ function surveyOverviewQuestionsController(
                     return;
                 }
 
-                let ids = r.people_ids.split(',');
+                const ids = r.people_ids.split(',');
                 ar.assignTo = this.people.filter(p => ids.indexOf(p.id) >= 0);
             }
         });
@@ -183,16 +183,16 @@ function surveyOverviewQuestionsController(
     };
 
     this.addPersonToRule = async (question, rule) => {
-        let index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.indexOf(rule);
 
         if (!question.question_rules[index].assignTo) {
             return;
         }
 
-        let ids = [
+        const ids = [
             ...new Set(question.question_rules[index].assignTo.map(r => r.id)),
         ];
-        let currentIds = question.question_rules[index].people_ids
+        const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
             : [];
 
@@ -202,7 +202,7 @@ function surveyOverviewQuestionsController(
 
         question.question_rules[index].people_ids = ids.join(',');
         question.question_rules[index].assignTo.forEach(a => {
-            let exists = this.people.find(p => p.id === a.id);
+            const exists = this.people.find(p => p.id === a.id);
             if (!exists || exists === undefined) {
                 this.people.push(a);
             }
@@ -269,7 +269,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
-        let {
+        const {
             id,
             label,
             kind,
@@ -319,7 +319,7 @@ function surveyOverviewQuestionsController(
                 this.survey.id,
                 rule.id,
             );
-            let ruleIndex = question.question_rules.indexOf(rule);
+            const ruleIndex = question.question_rules.indexOf(rule);
             question.question_rules.splice(ruleIndex, 1);
         }
 
@@ -330,10 +330,10 @@ function surveyOverviewQuestionsController(
 
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
-        let r = await this.saveQuestion(question);
+        const r = await this.saveQuestion(question);
 
         if (r.data.question_rules) {
-            let index = this.surveyQuestions.indexOf(question);
+            const index = this.surveyQuestions.indexOf(question);
             this.surveyQuestions[index].question_rules = r.data.question_rules;
         }
 
