@@ -338,15 +338,12 @@ function surveyOverviewQuestionsController(
                 a => question.question_answers.indexOf(a) === -1,
             );
 
-            const ruleIndex = question.question_rules.findIndex(
-                r => r.trigger_keywords === changedAnswer,
-            );
-
             const rules = question.question_rules.map(r => {
                 if (r.trigger_keywords === changedAnswer) {
-                    let rule = r;
-                    rule.trigger_keywords = newAnswer;
-                    return rule;
+                    return (rule = {
+                        ...r,
+                        trigger_keywords: newAnswer,
+                    });
                 }
                 return r;
             });
