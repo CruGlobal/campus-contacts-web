@@ -174,6 +174,22 @@ function surveyOverviewQuestionsController(
         };
     };
 
+    const buildRulesWithChangedAnswer = (
+        question,
+        originalAnswer,
+        newAnswer,
+    ) => {
+        return question.question_rules.map(r => {
+            if (r.trigger_keywords === originalAnswer) {
+                return {
+                    ...r,
+                    trigger_keywords: newAnswer,
+                };
+            }
+            return r;
+        });
+    };
+
     this.$onInit = () => {
         loadSurveyData();
     };
@@ -318,9 +334,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.addEmptyQuestionContent = question => {
-        if (!question.question_answers) {
-            question.question_answers = [];
-        }
+        if (!question.question_answers) question.question_answers = [];
 
         question.question_answers.push('');
         question.question_rules.push(
@@ -355,23 +369,15 @@ function surveyOverviewQuestionsController(
         const oldAnswers = question.content.split('\n');
         const newAnswer = question.question_answers[answerIndex];
 
-        if (oldAnswers.indexOf(newAnswer) === -1) {
-            const changedAnswer = oldAnswers.find(
-                a => question.question_answers.indexOf(a) === -1,
-            );
+        const originalAnswer = oldAnswers.find(
+            a => question.question_answers.indexOf(a) === -1,
+        );
 
-            const rules = question.question_rules.map(r => {
-                if (r.trigger_keywords === changedAnswer) {
-                    return {
-                        ...r,
-                        trigger_keywords: newAnswer,
-                    };
-                }
-                return r;
-            });
-
-            question.question_rules = rules;
-        }
+        question.question_rules = buildRulesWithChangedAnswer(
+            question,
+            originalAnswer,
+            newAnswer,
+        );
 
         this.saveQuestionContent(question, question.question_answers);
     };
