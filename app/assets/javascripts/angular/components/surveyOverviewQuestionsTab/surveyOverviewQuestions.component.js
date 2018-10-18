@@ -149,38 +149,29 @@ function surveyOverviewQuestionsController(
     };
 
     const buildRule = (answer, questionRules, type) => {
-        const rule = questionRules
-            .filter(r => r.trigger_keywords === answer && r.rule_code === type)
-            .map(r => {
-                const ids = r.people_ids ? r.people_ids.split(',') : [];
-                const assignTo = this.people.filter(
-                    p => ids.indexOf(p.id) >= 0,
-                );
-                return {
-                    id: r.id,
-                    label_ids: r.label_ids,
-                    organization_ids: r.organization_ids,
-                    people_ids: r.people_ids,
-                    rule_code: type,
-                    trigger_keywords: answer,
-                    assign_to: assignTo,
-                };
-            })
-            .reduce((a, c) => c, false);
+        const {
+            id = null,
+            label_ids = null,
+            organization_ids = null,
+            people_ids = null,
+        } =
+            questionRules.find(
+                r => r.trigger_keywords === answer && r.rule_code === type,
+            ) || {};
 
-        if (!rule) {
-            return {
-                id: null,
-                label_ids: null,
-                organization_ids: null,
-                people_ids: null,
-                rule_code: type,
-                trigger_keywords: answer,
-                assign_to: null,
-            };
-        }
+        const ids = people_ids ? people_ids.split(',') : [];
 
-        return rule;
+        return {
+            id,
+            label_ids,
+            organization_ids,
+            people_ids,
+            rule_code: type,
+            trigger_keywords: answer,
+            assign_to: id
+                ? this.people.filter(p => ids.indexOf(p.id) >= 0)
+                : null,
+        };
     };
 
     this.$onInit = () => {
