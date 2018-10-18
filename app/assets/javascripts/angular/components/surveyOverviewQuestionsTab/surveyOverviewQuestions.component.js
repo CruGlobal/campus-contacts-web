@@ -336,6 +336,35 @@ function surveyOverviewQuestionsController(
         this.saveQuestionContent(question, answers);
     };
 
+    this.updateQuestionAnswer = async (question, answerIndex) => {
+        const oldAnswers = question.content.split('\n');
+        const newAnswer = question.question_answers[answerIndex];
+
+        if (oldAnswers.indexOf(newAnswer) === -1) {
+            const changedAnswer = oldAnswers.find(
+                a => question.question_answers.indexOf(a) === -1,
+            );
+
+            const ruleIndex = question.question_rules.findIndex(
+                r => r.trigger_keywords === changedAnswer,
+            );
+
+            const rules = question.question_rules.map(r => {
+                if (r.trigger_keywords === changedAnswer) {
+                    console.log(r);
+                    let rule = r;
+                    rule.trigger_keywords = newAnswer;
+                    return rule;
+                }
+                return r;
+            });
+
+            question.question_rules = rules;
+        }
+
+        this.saveQuestionContent(question, question.question_answers);
+    };
+
     this.saveQuestionContent = async (question, answers) => {
         question.content = answers.join('\n');
         const { data } = await this.saveQuestion(question);
