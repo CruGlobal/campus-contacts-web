@@ -340,10 +340,10 @@ function surveyOverviewQuestionsController(
 
             const rules = question.question_rules.map(r => {
                 if (r.trigger_keywords === changedAnswer) {
-                    return (rule = {
+                    return {
                         ...r,
                         trigger_keywords: newAnswer,
-                    });
+                    };
                 }
                 return r;
             });
