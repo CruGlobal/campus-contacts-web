@@ -340,23 +340,21 @@ function surveyOverviewQuestionsController(
         const oldAnswers = question.content.split('\n');
         const newAnswer = question.question_answers[answerIndex];
 
-        if (oldAnswers.indexOf(newAnswer) === -1) {
-            const changedAnswer = oldAnswers.find(
-                a => question.question_answers.indexOf(a) === -1,
-            );
+        const changedAnswer = oldAnswers.find(
+            a => question.question_answers.indexOf(a) === -1,
+        );
 
-            const rules = question.question_rules.map(r => {
-                if (r.trigger_keywords === changedAnswer) {
-                    return {
-                        ...r,
-                        trigger_keywords: newAnswer,
-                    };
-                }
-                return r;
-            });
+        const rules = question.question_rules.map(r => {
+            if (r.trigger_keywords === changedAnswer) {
+                return {
+                    ...r,
+                    trigger_keywords: newAnswer,
+                };
+            }
+            return r;
+        });
 
-            question.question_rules = rules;
-        }
+        question.question_rules = rules;
 
         this.saveQuestionContent(question, question.question_answers);
     };
