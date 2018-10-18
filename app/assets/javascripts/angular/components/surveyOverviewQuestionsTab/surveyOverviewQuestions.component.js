@@ -133,7 +133,7 @@ function surveyOverviewQuestionsController(
                 'AUTONOTIFY',
             );
 
-            q.question_rules = autoassignRules.concat(autoNotifyRules);
+            q.question_rules = [...autoassignRules, ...autoNotifyRules];
         }
 
         return q;
