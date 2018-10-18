@@ -312,9 +312,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.addEmptyQuestionContent = question => {
-        if (!question.question_answers) {
-            question.question_answers = [];
-        }
+        if (!question.question_answers) question.question_answers = [];
 
         question.question_answers.push('');
         question.question_rules.push(
