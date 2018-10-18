@@ -344,7 +344,6 @@ function surveyOverviewQuestionsController(
 
             const rules = question.question_rules.map(r => {
                 if (r.trigger_keywords === changedAnswer) {
-                    console.log(r);
                     let rule = r;
                     rule.trigger_keywords = newAnswer;
                     return rule;
