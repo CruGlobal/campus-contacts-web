@@ -31,12 +31,12 @@
                 ng-if="$ctrl.isExpanded[question.id]"
                 ng-click="$ctrl.deleteQuestion(question.id)"
                 >
-                    <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}" style="width:20px; height:24px;">
+                    <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}">
             </a>
             <a class="ml3" href=""
                ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
                ng-click="$ctrl.copyQuestion(question)">
-                <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" style="width:21px; height:24px;">
+                <img ng-src="{{$ctrl.icons.copy}}" alt="Copy">
             </a>
             <span class="db open-close-arrow"></span>
         </h2>
@@ -86,7 +86,7 @@
                                  ng-repeat="answer in question.question_answers track by $index">
                                 <div>
                                     <a class="sort mr3">
-                                        <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}" style="width:22px; height:20px">
+                                        <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}">
                                     </a>
                                 </div>
                                 <div class="f-grow">
@@ -115,7 +115,7 @@
                                     Auto Assign
                                 </a>
                                 <a class="help fr p2" href="">
-                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">
+                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}">
                                 </a>
                             </div>
                             <div class="w-49 relative">
@@ -124,7 +124,7 @@
                                     Auto Notify
                                 </a>
                                 <a class="help fr" href="">
-                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}" style="width:16px; height:16px;">
+                                    <img alt="Help" ng-src="{{$ctrl.icons.help}}">
                                 </a>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                                   disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
-                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}">
                                 </a>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                                   disabled="rule.trigger_keywords === ''"
                                 ></assigned-select>
                                 <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
-                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}" style="width:20px; height:24px;">
+                                    <img alt="Delete" ng-src="{{$ctrl.icons.trash}}">
                                 </a>
                             </div>
                             <div class="flex items-center mv-ih">
