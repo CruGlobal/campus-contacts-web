@@ -33,6 +33,10 @@ function reportMovementIndicatorsSuggestedActionsController(httpProxy) {
                     ),
                     params: {
                         include: 'person',
+                        'fields[movement_indicator_suggestion]':
+                            'id,person,reason,label,considered',
+                        'fields[person]': 'full_name',
+                        'fields[label]': 'name,i18n',
                         limit: 1000,
                     },
                 },
