@@ -167,7 +167,7 @@ function peopleScreenService(
                   )
                 : {}),
             'fields[person]':
-                'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments',
+                'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments,organizational_labels,group_memberships',
             'fields[organizational_permission]':
                 'followup_status,organization_id,permission_id',
             'fields[email_address]': 'email,primary',
@@ -224,9 +224,9 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(selection, order) {
+        exportPeople: function(selection, order, surveyId) {
             const filterParams = _.mapKeys(
-                personSelectionService.convertToFilters(selection),
+                personSelectionService.convertToFilters(selection, surveyId),
                 function(value, key) {
                     return 'filters[' + key + ']';
                 },

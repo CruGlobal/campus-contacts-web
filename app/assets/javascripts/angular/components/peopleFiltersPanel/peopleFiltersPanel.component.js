@@ -20,7 +20,6 @@ function peopleFiltersPanelController(
     peopleFiltersPanelService,
     _,
 ) {
-    this.filters = null;
     this.filtersApplied = false;
     this.groupOptions = [];
     this.assignmentOptions = [];
@@ -28,23 +27,8 @@ function peopleFiltersPanelController(
     this.statusOptions = [];
     this.genderOptions = [];
     this.questionOptions = [];
-    this.answerMatchingOptions = [];
 
     this.$onInit = () => {
-        $scope.$watch(
-            '$ctrl.filters',
-            (newFilters, oldFilters) => {
-                if (!_.isEqual(newFilters, oldFilters)) {
-                    this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
-                        getNormalizedFilters(),
-                    );
-
-                    sendFilters();
-                }
-            },
-            true,
-        );
-
         this.resetFilters();
 
         loadFilterStats();
@@ -64,6 +48,14 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
+    this.updateFilters = () => {
+        this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
+            getNormalizedFilters(),
+        );
+
+        sendFilters();
+    };
+
     this.resetFilters = () => {
         this.filters = {
             searchString: '',
@@ -72,6 +64,7 @@ function peopleFiltersPanelController(
             statuses: {},
             groups: {},
             questions: {},
+            answerMatchingOptions: {},
             includeArchived: false,
         };
     };
@@ -137,6 +130,18 @@ function peopleFiltersPanelController(
     ]);
 
     const getNormalizedFilters = () => {
+        const questions = _.flow([
+            questions =>
+                _.mapValues(questions, answers =>
+                    getFiltersFromObj(
+                        typeof answers === 'string'
+                            ? { [answers]: !!answers } // becomes falsy if answer is empty string
+                            : answers,
+                    ),
+                ),
+            _.pickBy, // keep truthy key/value pairs
+        ])(this.filters.questions);
+
         return {
             searchString: this.filters.searchString,
             includeArchived: this.filters.includeArchived,
@@ -145,18 +150,16 @@ function peopleFiltersPanelController(
             groups: getFiltersFromObj(this.filters.groups),
             statuses: getFiltersFromObj(this.filters.statuses),
             genders: getFiltersFromObj(this.filters.genders),
-            questions: _.flow([
+            questions,
+            answerMatchingOptions: _.flow([
+                // Use defined questions to determine which matching options need to be sent
                 questions =>
-                    _.mapValues(questions, answers =>
-                        getFiltersFromObj(
-                            typeof answers === 'string'
-                                ? { [answers]: !!answers } // becomes falsy if answer is empty string
-                                : answers,
-                        ),
+                    _.mapValues(
+                        questions,
+                        (_, id) => this.filters.answerMatchingOptions[id],
                     ),
-                _.pickBy, // keep truthy key/value pairs
-            ])(this.filters.questions),
-            answerMatchingOptions: _.pickBy(this.filters.answerMatchingOptions),
+                _.pickBy,
+            ])(questions),
         };
     };
 }
