@@ -81,7 +81,10 @@ function surveyOverviewQuestionsController(
             ...new Set(
                 questions.reduce((a1, q) => {
                     const ids = q.question_rules.reduce((a2, r) => {
-                        return [...a2, ...r.people_ids.split(',')];
+                        const peopleIds = r.people_ids
+                            ? r.people_ids.split(',')
+                            : [];
+                        return [...a2, ...peopleIds];
                     }, []);
                     return [...a1, ...ids];
                 }, []),
