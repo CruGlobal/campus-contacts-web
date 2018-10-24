@@ -559,6 +559,8 @@ export default {
             goal: 'Goal Tracker',
             groups: 'Groups',
             logout: 'Sign Out',
+            login: 'Sign In',
+            requestAccess: 'Request Access',
             manage: 'Manage Ministries',
             my_profile: 'My Profile',
             powered_by_cru: 'Powered by Cru',
