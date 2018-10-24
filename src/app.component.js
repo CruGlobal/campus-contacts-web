@@ -39,7 +39,11 @@ function appController(
         }
     };
 
+    const getYear = () => { new Date().getFullYear() }
+
     this.$onInit = async () => {
+        this.year = new Date();
+        console.log(this.year)
         setAuthorizationAndState();
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',

@@ -8,9 +8,9 @@
         <ui-view></ui-view>
     </div>
 </section>
-<footer role='global'>
-    <div class='copyright'>{{'general.copyright' | t: { year: year } }}</div>
-    <section>
-      <a href='https://get.missionhub.com/terms-of-service'>{{ 'nav.terms' }}</a>
-    </section>
+<footer role='global' class='tc bg-white pt4 pb4'>
+    <span class='copyright'>{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}</span>
+    <span>
+      <a href='https://get.missionhub.com/terms-of-service' class='ml3'>{{ 'nav.terms' | t }}</a>
+    </span>
 </footer>
