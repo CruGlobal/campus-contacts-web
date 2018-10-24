@@ -573,6 +573,7 @@ export default {
             support: 'Support',
             terms: 'Terms of Service',
             trend: 'Trend Tracker',
+            copyright: 'Copyright {{ year }} Cru. All Rights Reserved.',
         },
         organizations: {
             manage: 'Manage Ministries',
