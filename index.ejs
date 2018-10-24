@@ -5,14 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
 
-    <title>Survey</title><!-- TODO: make title dynamic -->
-
+    <title>MissionHub</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/dashboard.css?body=1">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/global.css?body=1">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/superfish.css?body=1">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/superfish-navbar.css?body=1">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/mh_permissions_labels_style.css?body=1">
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/assets/mh_profile_style.css?body=1">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Montserrat:400,700|Titillium+Web:400,700">
 </head>
 
-<body ng-cloak ng-app="missionhubApp">
+<body id="dashboard_controller" ng-cloak ng-app="missionhubApp">
 
-    <ui-view></ui-view>
+    <app
+        current-organization="8"
+        access="false"    jwt-token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMzk1MDIxLCJleHAiOjE1NDA0MDMyMTF9.HiuB28QXu1gp7Z1l7UlMJGNPGoxWVFdG7_-Mbgo32zA"
+        branded="true"
+      ></app>
 
 </body>
 </html>
