@@ -7,7 +7,7 @@ angular.module('missionhubApp').component('nav', {
 
 function navController(state, loggedInPerson, $timeout) {
     var vm = this;
-
+    console.log(state);
     vm.state = state;
     $timeout(() => {
         vm.loggedInPerson = loggedInPerson;
