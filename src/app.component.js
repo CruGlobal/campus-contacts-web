@@ -3,6 +3,9 @@ import template from './app.html';
 angular.module('missionhubApp').component('app', {
     controller: appController,
     template: template,
+    transclude: {
+        legacyMenu: 'legacyMenu',
+    },
     bindings: {
         jwtToken: '@',
         access: '<',
