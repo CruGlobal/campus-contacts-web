@@ -4,7 +4,7 @@ angular.module('missionhubApp').component('app', {
     controller: appController,
     template: template,
     transclude: {
-        legacyMenu: 'legacyMenu',
+        legacyMenu: '?legacyMenu',
     },
     bindings: {
         jwtToken: '@',

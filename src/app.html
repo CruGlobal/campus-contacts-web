@@ -1,7 +1,7 @@
 <header role='global'>
     <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
     <nav ng-if="!$root.legacyNavigation"></nav>
-    <div ng-transclude="legacyMenu"></div>
+    <div ng-transclude="legacyMenu" ng-if="$root.legacyNavigation"></div>
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
 <section id='dashboard_main' class='main-container'>
