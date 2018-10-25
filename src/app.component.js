@@ -39,10 +39,6 @@ function appController(
         }
     };
 
-    const getYear = () => {
-        new Date().getFullYear();
-    };
-
     this.$onInit = async () => {
         this.year = new Date();
         setAuthorizationAndState();
