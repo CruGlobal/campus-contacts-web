@@ -1,23 +1,23 @@
 <div class="m-auto tc">
-    <h1 class="ttu">Log in</h1>
+    <h1 class="ttu">{{ 'login.login' | t }}</h1>
     <p>
         <a href
             class="btn-key btn-primary f5"
-            title="{{ 'Log in with The Key' | t }}"
+            title="{{ 'login.login_with_key' | t }}"
             target="_self"
             ng-href="{{$ctrl.url}}/users/auth/key"
         >
-            {{ "Log in with The Key" | t }}
+            {{ 'login.login_with_key' | t }}
         </a>
     </p>
     <p>
         <a href
             class="btn-primary btn-facebook f5"
-            title="{{ 'Log in with Facebook' | t }}"
+            title="{{ 'login.login_with_facebook' | t }}"
             target="_self"
             ng-href="{{$ctrl.url}}/users/auth/facebook"
         >
-            {{ "Log in with Facebook" | t }}
+            {{ 'login.login_with_facebook' | t }}
         </a>
     </p>
 </div>

@@ -414,6 +414,11 @@ export default {
                 new_label: 'Create a New Label',
             },
         },
+        login: {
+            login: 'Log in',
+            login_with_key: 'Log in with The Key',
+            login_with_facebook: 'Log in with Facebook',
+        },
         leader: 'Leader',
         mass_edit: {
             save: 'Edit {{contactCount}} contacts',
