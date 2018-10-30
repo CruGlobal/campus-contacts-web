@@ -1,4 +1,5 @@
 import template from './app.html';
+import './components/navHeader.component';
 
 angular.module('missionhubApp').component('app', {
     controller: appController,
