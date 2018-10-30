@@ -41,8 +41,8 @@ body.white-background {
 
 .btn-key {
     &:before {
-        background: url(http://localhost:3000/assets/welcome/logo-key-1x.png)
-            no-repeat center center;
+        background: url(/app/assets/images/icons/logo-key-1x.png) no-repeat
+            center center;
         width: 20px;
         height: 22px;
         display: block;
@@ -57,8 +57,8 @@ body.white-background {
 
 .btn-facebook {
     &:before {
-        background: url(http://localhost:3000/assets/welcome/facebook-1x.png)
-            no-repeat center center;
+        background: url(/app/assets/images/icons/facebook-1x.png) no-repeat
+            center center;
         width: 20px;
         height: 22px;
         display: block;
