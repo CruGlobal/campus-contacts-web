@@ -5,7 +5,7 @@ angular.module('missionhubApp').component('navHeader', {
     template: template,
 });
 
-function navHeaderController(state, loggedInPerson, $timeout) {
+function navHeaderController(state, loggedInPerson, $timeout, envService) {
     this.$onInit = () => {
         this.state = state;
         this.railsUrl = envService.read('railsUrl');
