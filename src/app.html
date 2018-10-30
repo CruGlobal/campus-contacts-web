@@ -4,10 +4,8 @@
     <div ng-transclude="legacyMenu" ng-if="$root.legacyNavigation"></div>
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
-<section id='dashboard_main' class='main-container'>
-    <div class='dashboard_panels'>
-        <ui-view></ui-view>
-    </div>
+<section class='main-container'>
+    <ui-view></ui-view>
 </section>
 <footer role='global' class='tc bg-white pt4 pb4'>
     <span class='copyright'>{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}</span>

@@ -17,9 +17,29 @@ body.white-background {
     background: white !important;
 }
 
+header {
+    margin-bottom: 140px;
+}
+
 .main-container {
-    margin: 0 auto;
-    width: 976px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    min-height: calc(100vh - 140px /* root navigation */ - 43px /* footer */);
+
+    @media screen and (min-width: 768px) {
+        width: 750px;
+    }
+
+    @media screen and (min-width: 992px) {
+        width: 976px;
+    }
+
+    @media screen and (min-width: 1352px) {
+        width: 976px;
+    }
 }
 
 .btn-primary {
