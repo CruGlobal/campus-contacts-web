@@ -290,15 +290,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
-        const {
-            id,
-            label,
-            kind,
-            style,
-            column_title,
-            content,
-            notify_via,
-        } = question;
+        const { id, label, kind, style, column_title, content } = question;
 
         return surveyService.updateSurveyQuestion(
             this.survey.id,
@@ -309,7 +301,6 @@ function surveyOverviewQuestionsController(
                 style,
                 column_title,
                 content,
-                notify_via,
             },
             question.question_rules,
         );

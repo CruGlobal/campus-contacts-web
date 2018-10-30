@@ -155,12 +155,15 @@
                             </div>
                             <div class="flex items-center mv-ih">
                                 <label class="db f6 lh-copy f5 normal pivot-gray-darker mr2">
+                                    {{ 'surveys:questions.sendNotificationsViaEmail' | t  }}
+                                </label>
+                                <label class="db f6 lh-copy f5 normal pivot-gray-darker mr2" ng-if="1===2">
                                     Send notifications via:
                                 </label>
-                                <div class="dropdown dropdown-select mr2" uib-dropdown>
+                                <div class="dropdown dropdown-select mr2" uib-dropdown ng-if="1===2">
                                     <a class="f6 link dim bg-white ihshort db pivot-gray-darker br2 dim pr5" href=""
                                        uib-dropdown-toggle>
-                                        {{question.notify_via}}
+                                        {{ question.notify_via }}
                                     </a>
                                     <ul class="bg-white f6" uib-dropdown-menu>
                                         <li>
