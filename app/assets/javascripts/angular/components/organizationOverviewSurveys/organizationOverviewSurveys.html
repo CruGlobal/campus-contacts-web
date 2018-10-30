@@ -2,22 +2,13 @@
     <div class="column column-title">
         {{ 'surveyTab:columns.survey' | t }}
     </div>
-    <div class="column column-number">
-        {{ 'surveyTab:columns.contacts' | t }}
-    </div>
-    <div class="column column-number">
-        {{ 'surveyTab:columns.unassigned' | t }}
-    </div>
-    <div class="column column-number">
-        {{ 'surveyTab:columns.uncontacted' | t }}
-    </div>
     <div class="column column-keyword">
         {{ 'surveyTab:columns.keyword' | t }}
     </div>
     <div class="column column-link">
         {{ 'surveyTab:columns.link' | t }}
     </div>
-    <div class="column column-number">
+    <div class="column column-status">
         {{ 'surveyTab:columns.status' | t }}
     </div>
     <div class="column buttons-column">
@@ -27,13 +18,10 @@
 <div class="grid-content">
     <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
         <div class="column column-title">
-            <a ui-sref="app.ministries.ministry.survey({ surveyId: survey.id })">
+            <a ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })">
                 {{survey.title}}
             </a>
         </div>
-        <div class="column column-number">{{$ctrl.surveyStats[survey.id].contact_count}}</div>
-        <div class="column column-number">{{$ctrl.surveyStats[survey.id].unassigned_count}}</div>
-        <div class="column column-number">{{$ctrl.surveyStats[survey.id].uncontacted_count}}</div>
         <div class="column column-keyword">{{survey.keyword.keyword}}</div>
         <div class="column column-link">
             <a ng-href="{{$ctrl.surveyLinkPrefix + survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix + survey.id}}</a>
@@ -56,11 +44,10 @@
         </div>
         <div class="column buttons-column text-center">
             <div uib-dropdown>
-                <ng-md-icon uib-dropdown-toggle icon="more_vert" size="26"
-                            ng-click="$ctrl.deleteSurvey(); $event.stopPropagation();"></ng-md-icon>
+                <ng-md-icon uib-dropdown-toggle icon="more_vert" size="26"></ng-md-icon>
 
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <a class="dropdown-item" ui-sref="app.ministries.ministry.survey({ surveyId: survey.id })">{{ 'surveyTab:menu.edit' | t }}</a>
+                    <a class="dropdown-item" ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })">{{ 'surveyTab:menu.edit' | t }}</a>
                     <a class="dropdown-item" ng-href="/survey_responses/new?preview=true&survey_id={{survey.id}}" target="_blank">{{ 'surveyTab:menu.preview' | t }}</a>
                     <a class="dropdown-item" href="" ng-click="$ctrl.deleteSurvey(survey)">{{ 'surveyTab:menu.delete' | t }}</a>
                     <a class="dropdown-item" href="" ng-click="$ctrl.copySurvey(survey)">{{ 'surveyTab:menu.copy' | t }}</a>

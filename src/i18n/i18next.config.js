@@ -17,4 +17,8 @@ export default i18n.init({
     ns: ['common'],
     defaultNS: 'common',
     fallbackNS: 'common',
+
+    interpolation: {
+        escapeValue: false, // AngularJS seems to escape the value again, resulting in HTML Character Entities being printed. React didn't need this.
+    },
 });

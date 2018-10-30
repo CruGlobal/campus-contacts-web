@@ -1,0 +1,19 @@
+<div class="dashboard-subnav">
+    <div class="inner">
+        <organization-breadcrumbs></organization-breadcrumbs>
+    </div>
+</div>
+
+<div class="header">
+    <div class="flex justify-between items-center pv3 ph2">
+        <div class="survey-title">
+            <a ui-sref="app.ministries.ministry.surveyResponses({ surveyId: survey.id })">
+                <img class="db mr1" ng-src="{{$ctrl.chevronLeftIcon}}"/>
+            </a>
+            {{$ctrl.survey.title}}
+        </div>
+        <icon-button icon="'person_add'" ng-click="$ctrl.addSurveyResponse()"></icon-button>
+    </div>
+</div>
+
+<people-screen org="{id: $ctrl.orgId}" loader-service="$ctrl.loaderService" survey-id="$ctrl.survey.id" questions="$ctrl.questions"></people-screen>

@@ -6,19 +6,45 @@
             </div>
         </div>
         <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"
-                              organization-id="$ctrl.org.id">
+                              organization-id="$ctrl.org.id"
+                              survey-id="$ctrl.surveyId"
+                              questions="$ctrl.questions">
         </people-filters-panel>
     </div>
     <div class="people-list">
         <div class="header row padded">
-            <div class="column select-column">
-                <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
+            <div class="sticky-column" ng-class="{'col-bg-blue': $ctrl.surveyId}">
+                <div class="column select-column">
+                    <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
+                </div>
+                <!-- This is a duplicate of below. Angular is awful and doesn't let you make simple functions for stuff like this. -->
+                <div class="column row"
+                     ng-repeat="column in $ctrl.columns"
+                     ng-if="$first"
+                     ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
+                     ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                    <span>{{column.label | t}}</span>
+                    <div class="normal-column sort-order-column" ng-if="column.sortable">
+                        <ng-md-icon icon="arrow_downward" size="12"
+                                    ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
+                        </ng-md-icon>
+                        <ng-md-icon icon="arrow_upwards" size="12"
+                                    ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
+                        </ng-md-icon>
+                    </div>
+                    <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
+                                 ui-sref=".new.defaultTab"
+                                 ng-click="$event.stopPropagation()">
+                    </icon-button>
+                </div>
             </div>
-            <div class="column row" ng-repeat="column in $ctrl.columns"
-                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable }]"
+            <div class="column row"
+                 ng-repeat="column in $ctrl.columns"
+                 ng-if="!$first"
+                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
                  ng-click="column.sortable && $ctrl.setSortColumn(column)">
                 <span>{{column.label | t}}</span>
-                <div class="normal-column sort-order-column">
+                <div class="normal-column sort-order-column" ng-if="column.sortable">
                     <ng-md-icon icon="arrow_downward" size="12"
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
                     </ng-md-icon>
@@ -26,7 +52,8 @@
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
                     </ng-md-icon>
                 </div>
-                <icon-button ng-if="column.name === 'name'" icon="'person_add'" ui-sref=".new.defaultTab"
+                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
+                             ui-sref=".new.defaultTab"
                              ng-click="$event.stopPropagation()">
                 </icon-button>
             </div>
@@ -35,6 +62,10 @@
             </div>
             <div class="column detail-column button-column">
                 <icon-button icon="'email'" disabled="true"></icon-button>
+            </div>
+            <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }"
+                 ng-repeat="question in $ctrl.questions" title="{{question.label}}">
+                {{question.label}}
             </div>
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
@@ -66,7 +97,7 @@
             <div infinite-scroll="$ctrl.loadPersonPage()"
                  infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
                  infinite-scroll-distance="0"
-                 infinite-scroll-container="'organization-overview-people .scroll-contain'"
+                 infinite-scroll-container="'people-screen .people-list'"
                  infinite-scroll-listen-for-event="checkInfiniteScroll"
                  class="grid-content">
                 <ministry-view-person
@@ -77,7 +108,9 @@
                         collapsed: ('app.ministries.ministry.people.person' | includedByState),
                         active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
                     selected="$ctrl.multiSelection[person.id]"
-                    person="person" organization-id="$ctrl.org.id">
+                    person="person" organization-id="$ctrl.org.id"
+                    questions="$ctrl.questions"
+                    odd="$odd">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}

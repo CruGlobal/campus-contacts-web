@@ -98,8 +98,8 @@ module.exports = (env = {}) => {
                             loader: 'babel-loader',
                             options: {
                                 plugins: [
-                                    'transform-runtime',
-                                    'syntax-dynamic-import',
+                                    '@babel/plugin-transform-runtime',
+                                    '@babel/plugin-syntax-dynamic-import',
                                     ...(!isTest ? ['angularjs-annotate'] : []),
                                 ],
                             },

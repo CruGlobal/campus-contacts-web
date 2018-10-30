@@ -52,18 +52,26 @@ describe('personSelectionService', function() {
 
         it('should correctly transform filter attribute names and values', function() {
             expect(
-                personSelectionService.convertToFilters({
-                    orgId: this.orgId,
-                    allSelected: true,
-                    allIncluded: false,
-                    filters: {
-                        assignedTos: [1, 2, 3],
-                        labels: [11, 12, 13],
-                        groups: [21, 22, 23],
-                        searchString: 'John',
+                personSelectionService.convertToFilters(
+                    {
+                        orgId: this.orgId,
+                        allSelected: true,
+                        allIncluded: false,
+                        unselectedPeople: [31, 32, 33],
+                        filters: {
+                            assignedTos: [1, 2, 3],
+                            labels: [11, 12, 13],
+                            groups: [21, 22, 23],
+                            searchString: 'John',
+                            statuses: ['attempted_contact'],
+                            genders: ['Female'],
+                            includeArchived: true,
+                            questions: { 5: ['One'] },
+                            answerMatchingOptions: { 5: 'contains' },
+                        },
                     },
-                    unselectedPeople: [31, 32, 33],
-                }),
+                    '10',
+                ),
             ).toEqual({
                 organization_ids: this.orgId,
                 assigned_tos: '1,2,3',
@@ -71,6 +79,14 @@ describe('personSelectionService', function() {
                 group_ids: '21,22,23',
                 exclude_ids: '31,32,33',
                 name: 'John',
+                statuses: ['attempted_contact'],
+                genders: ['Female'],
+                include_archived: true,
+                answer_sheets: {
+                    survey_ids: '10',
+                    answers: { 5: ['One'] },
+                    answers_options: { 5: 'contains' },
+                },
             });
         });
 

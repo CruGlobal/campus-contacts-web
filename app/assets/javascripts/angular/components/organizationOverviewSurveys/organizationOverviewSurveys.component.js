@@ -18,31 +18,10 @@ function organizationOverviewSurveysController(
     confirmModalService,
     envService,
     tFilter,
-    periodService,
 ) {
     this.surveyLinkPrefix = envService.is('production')
         ? 'https://mhub.cc/s/'
         : 'https://stage.mhub.cc/s/';
-
-    this.surveyStats = {};
-    this.$onInit = () => {
-        //get survey stats
-        this.getSurveyStats();
-
-        //on period change, update survey stats
-        periodService.subscribe($scope, () => {
-            this.surveyStats = {};
-            this.getSurveyStats();
-        });
-    };
-
-    this.getSurveyStats = () => {
-        _.forEach(this.organizationOverview.surveys, survey => {
-            surveyService.getStats(survey.id).then(statData => {
-                this.surveyStats[survey.id] = statData;
-            });
-        });
-    };
 
     this.createSurvey = () => {
         $uibModal
@@ -60,7 +39,7 @@ function organizationOverviewSurveysController(
                 this.organizationOverview.surveys.push(newSurvey);
 
                 //go to edit screen
-                $state.go('app.ministries.ministry.survey', {
+                $state.go('app.ministries.ministry.survey.manage', {
                     surveyId: newSurvey.id,
                 });
             });

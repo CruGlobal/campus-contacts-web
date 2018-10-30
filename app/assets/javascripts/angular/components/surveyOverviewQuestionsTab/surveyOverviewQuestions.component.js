@@ -1,11 +1,13 @@
 import template from './surveyOverviewQuestions.html';
 import _ from 'lodash';
+import { t } from 'i18next';
 
 import copyIcon from '../../../../images/icons/icon-copy.svg';
 import sortIcon from '../../../../images/icons/icon-sort.svg';
 import trashIcon from '../../../../images/icons/icon-trash.svg';
 import helpIcon from '../../../../images/icons/icon-help.svg';
 import xWhiteIcon from '../../../../images/icons/icon-x-white.svg';
+import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 angular.module('missionhubApp').component('surveyOverviewQuestions', {
     controller: surveyOverviewQuestionsController,
@@ -270,8 +272,13 @@ function surveyOverviewQuestionsController(
     this.deleteQuestion = questionId => {
         $uibModal
             .open({
-                component: 'deleteQuestionConfirmModal',
-                size: 'md',
+                component: 'iconModal',
+                resolve: {
+                    icon: () => warningIcon,
+                    paragraphs: () => [t('surveys:questions.delete_confirm')],
+                    dismissLabel: () => t('cancel'),
+                    closeLabel: () => t('general.delete'),
+                },
             })
             .result.then(() => {
                 surveyService

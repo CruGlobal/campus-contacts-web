@@ -1,4 +1,5 @@
-<span ng-click="$ctrl.toggleVisibility()">
+<span ng-click="$ctrl.toggleVisibility()" class="flex justify-between">
+    <ng-transclude></ng-transclude>
     <ng-md-icon ng-class="{collapsed: $ctrl.accordion.collapsed}"
                 ng-if="!$ctrl.accordion.accordionDisabled"
                 icon="play_arrow" class="chevron" size="14">

@@ -1,0 +1,27 @@
+tooltip {
+    .help-bubble {
+        position: absolute;
+        background: #007398;
+        color: #fff;
+        width: 300px;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        bottom: 30px;
+        left: -142px;
+        line-height: 1.5;
+        z-index: 99;
+        font-size: 0.875rem;
+    }
+    .help-bubble:after {
+        bottom: -25px;
+        left: 50%;
+        border: 15px solid transparent;
+        content: ' ';
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-top-color: #007398;
+        margin-left: -15px;
+    }
+}

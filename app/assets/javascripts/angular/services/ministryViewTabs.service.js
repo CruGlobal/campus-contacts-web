@@ -1,9 +1,10 @@
-var ministryViewTabs = [
+const ministryViewTabs = [
     'suborgs',
     'team',
     'groups',
     'people',
     'surveys',
+    'surveyResponses',
     'labels',
 ];
 angular
