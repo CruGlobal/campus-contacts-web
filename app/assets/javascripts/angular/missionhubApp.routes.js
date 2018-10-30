@@ -334,18 +334,6 @@ angular
                 },
             })
             .state({
-                name: 'app.ministries.ministry.survey',
-                url: '/survey/:surveyId',
-                component: 'surveyOverview',
-                resolve: {
-                    survey: ($state, $transition$, routesService) => {
-                        return routesService.getSurvey(
-                            $transition$.params().surveyId,
-                        );
-                    },
-                },
-            })
-            .state({
                 name: 'app.ministries.ministry.import',
                 url: '/import',
                 component: 'organizationContactImport',
@@ -361,6 +349,15 @@ angular
                 name: 'app.ministries.ministry.management',
                 url: '/management',
                 component: 'orgManagement',
+            })
+            .state({
+                name: 'app.ministries.ministry.reportMovementIndicators',
+                url: '/report-movement-indicators',
+                component: 'reportMovementIndicators',
+                resolve: {
+                    orgId: ($state, $transition$) =>
+                        $transition$.params().orgId,
+                },
             })
             .state({
                 name: 'app.ministries.ministry.defaultTab',
@@ -381,7 +378,7 @@ angular
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
-                        component: 'organizationOverview' + _.capitalize(tab),
+                        component: 'organizationOverview' + _.upperFirst(tab),
                     };
                 }),
             )
@@ -406,6 +403,13 @@ angular
                     modal: false,
                 }),
             )
+            .states(
+                generatePersonPageStates({
+                    name: 'app.ministries.ministry.survey.responses.person',
+                    url: '/:personId',
+                    modal: false,
+                }),
+            )
             .state({
                 name: 'app.userPreferences',
                 url: '/user-preferences',
@@ -416,6 +420,12 @@ angular
                 name: 'publicSurvey',
                 url: '/s/:surveyId',
                 component: 'publicSurvey',
+            })
+            .state({
+                name: 'app.ministries.ministry.survey',
+                url: '/survey/:surveyId',
+                abstract: true,
+                template: '<ui-view></ui-view>',
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService.getSurvey(
@@ -423,6 +433,16 @@ angular
                         );
                     },
                 },
+            })
+            .state({
+                name: 'app.ministries.ministry.survey.manage',
+                url: '/',
+                component: 'surveyOverview',
+            })
+            .state({
+                name: 'app.ministries.ministry.survey.responses',
+                url: '/responses',
+                component: 'surveyResponses',
             });
 
         // This is the default URL if the URL does not match any routes

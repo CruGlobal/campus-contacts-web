@@ -1,5 +1,6 @@
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
+@import '../peopleScreen/columnConfig';
 
 ministry-view-person {
     display: block;
@@ -8,23 +9,9 @@ ministry-view-person {
         height: 50px;
     }
 
-    .column.select-column {
-        width: 26px;
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    .name-column {
-        flex: 2;
-    }
-    .button-column {
-        width: 56px;
-    }
-    .gender-column {
-        width: 40px;
-    }
-    .assigned-to-column {
-        flex: 1.5;
+    @extend %column-config;
 
+    .assigned-to-column {
         .name-container {
             display: flex;
             height: $person-height;
@@ -56,8 +43,6 @@ ministry-view-person {
         }
     }
     .status-column {
-        width: 170px;
-
         .pivot_theme &.warning .form-control-select::after {
             border-top-color: $pivot-orange;
         }
@@ -72,9 +57,6 @@ ministry-view-person {
                 background-color: transparent;
             }
         }
-    }
-    .phone-number-column {
-        width: 120px;
     }
 
     icon-button {

@@ -12,8 +12,7 @@ import './rollbar.config';
 import './missionhubApp.routes';
 import './missionhubApp.run';
 
-import '../../stylesheets/bootstrap.scss';
-import '../../stylesheets/pivot_theme.scss';
+import '../../stylesheets/main.scss';
 
 /* global require */
 const srcFilesContext = require.context(

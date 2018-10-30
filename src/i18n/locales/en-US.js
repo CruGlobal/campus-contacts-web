@@ -2,6 +2,14 @@ export default {
     common: {
         select: 'Select',
         submit: 'Submit',
+        yes: 'Yes',
+        no: 'No',
+        back: 'Back',
+        goBack: 'Go Back',
+        continue: 'Continue',
+        ok: 'Ok',
+        cancel: 'Cancel',
+        help: 'Help',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
         engaged_disciple: 'Engaged Disciple',
@@ -36,9 +44,6 @@ export default {
                 prayed_to_receive_christ: 'Personal Evangelism Decisions',
                 spiritual_conversation: 'Spiritual Conversation',
             },
-            under_development_title: 'Under Development',
-            under_development:
-                'This feature is being rebuilt to support Campus changes in Infobase due to the restructuring and will be available early September.',
         },
         assignments: {
             assigned: 'Assigned',
@@ -302,6 +307,9 @@ export default {
                     loadQuestions:
                         'Error occurred while loading survey questions',
                 },
+                surveyResponses: {
+                    loadQuestions: 'Error loading survey questions',
+                },
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
@@ -346,6 +354,7 @@ export default {
             female: 'Female',
             male: 'Male',
             other: 'Other',
+            none: 'None',
             required: 'Required',
             help: 'Help',
             delete: 'Delete',
@@ -525,7 +534,7 @@ export default {
             suborgs: {
                 header: 'Ministries',
             },
-            survey_responses: {
+            surveyResponses: {
                 header: 'Survey Responses',
             },
             surveys: {
@@ -575,9 +584,9 @@ export default {
             sub_help:
                 'Checking this box allows any of the sub-ministries to appear for any involved team member when navigating MissionHub.',
             none_found: 'No ministries found',
-            delete: {
-                confirm: 'Are you sure you want to delete "{{org_name}}"?',
-                confirm_b:
+            deleteConfirmModal: {
+                title: 'Are you sure you want to delete "{{org_name}}"?',
+                description:
                     'This will remove access to interactions, assignments and contacts from any of the sub-ministries.',
             },
             cleanup: {
@@ -609,6 +618,7 @@ export default {
                     'Search for the first name, last name or email.',
             },
             show: {
+                apply_labels: 'Apply the following labels to {{name}}.',
                 apply_groups: 'Assign {{name}} to the following groups.',
                 no_groups: 'No groups assigned.',
                 no_labels: 'No labels assigned.',
@@ -634,6 +644,15 @@ export default {
             },
             labels: {
                 title: 'Labels',
+            },
+            status: {
+                title: 'Status',
+            },
+            gender: {
+                title: 'Gender',
+            },
+            questions: {
+                title: 'Survey Questions',
             },
             sidebar: {
                 include_archived: 'Include archived contacts',
@@ -752,11 +771,10 @@ export default {
             initiateAssignment: 'Answers to initiate assignment/notifications',
             autoAssign: 'Auto Assign',
             autoNotify: 'Auto Notify',
+            sendNotificationsViaEmail: 'Send notifications via email',
         },
     },
     contact_import: {
-        back: 'Back',
-        continue: 'Continue',
         step_1: {
             title: 'Select Survey and Upload CSV File',
             select_survey: 'Select Survey',
@@ -818,5 +836,150 @@ export default {
         personAssigned: 'When a person is assigned to me',
         weeklyDigest: 'Weekly Ministry Digest',
         legacyNav: 'Revert to legacy navigation',
+    },
+    peopleScreen: {
+        filterSearchPlaceholder: 'Search answers',
+        answerMatchingOptions: {
+            exactly: 'Exactly',
+            contains: 'Contains',
+            doesNotContain: 'Does not contain',
+        },
+    },
+    movementIndicators: {
+        title: 'Report Movement Indicators',
+        suggestedActions: {
+            title: 'Suggested Movement Indicator Actions',
+            subtitle:
+                'These suggestions are designed to reinforce the proper labeling of contacts for the Involved, Engaged Disciple, and Leader categories, which will be reported on the next page.',
+            loading: 'Loading suggestions…',
+            newSuggestions: 'New Suggestions ({{num}})',
+            previousSuggestions: 'Previous Suggestions ({{num}})',
+            applyAll: 'Apply All',
+            reasonPhrases: {
+                spiritualConversation:
+                    'had a spiritual conversation with someone.',
+                gospelPresentation: 'shared the gospel with someone.',
+                groupMembership: 'was added to a group.',
+                groupLeader: 'became a group leader.',
+                leader: 'was labeled as a leader.',
+                engagedDisciple: 'was labeled as an engaged disciple.',
+            },
+            applyLabel:
+                'Apply the <strong>&quot;{{label}}&quot;</strong> label?',
+            errorLoadingSuggestedActions:
+                'Error occurred while loading the suggested actions',
+            errorSavingSuggestedActions:
+                'Error occurred while saving the suggested actions',
+        },
+        confirmIndicators: {
+            title: 'Confirm Movement Indicators',
+            loading: 'Loading movement indicators…',
+            submittedInLastWeek: {
+                heading:
+                    'Movement Indicators for this ministry are up to date.',
+                description:
+                    'Movement Indicators have been submitted for the past week. Please check back next week to submit these again.',
+                descriptionContinued:
+                    "If you'd like to change any numbers previously submitted, please do so in Infobase.",
+            },
+            interactionsHeading:
+                'The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
+            labelsHeading:
+                'The pre-filled label indicators below display the most recently entered information. If these numbers have changed, feel free to update them below. These numbers will appear consistently week-to-week.',
+            errorLoadingIndicators:
+                'Error occurred while loading movement indicators to pre-fill fields',
+            errorSavingIndicators:
+                'Error occurred while saving movement indicators',
+        },
+        interactions: {
+            title: 'Interactions',
+            spiritualConversations: {
+                label: 'Spiritual Conversations',
+                tooltip:
+                    'How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)',
+            },
+            personalEvangelism: {
+                label: 'Personal Evangelism',
+                tooltip:
+                    'How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)',
+            },
+            personalEvangelismDecisions: {
+                label: 'Personal Evangelism Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?',
+            },
+            holySpiritPresentations: {
+                label: 'Holy Spirit Presentations',
+                tooltip:
+                    'How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?',
+            },
+            groupEvangelism: {
+                label: 'Group Evangelism',
+                tooltip:
+                    'What was the total number of people who heard the gospel and were brought to a point of decision through group evangelism?',
+            },
+            groupEvangelismDecisions: {
+                label: 'Group Evangelism Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a large group presentation of the gospel?',
+            },
+            mediaExposures: {
+                label: 'Media Exposures',
+                tooltip:
+                    'How many people have been exposed to gospel content with an opportunity to respond through media exposures?',
+            },
+            mediaExposureDecisions: {
+                label: 'Media Exposure Decisions',
+                tooltip:
+                    'How many people have indicated a decision to receive Christ as their Savior and Lord after being exposed to the gospel via media?',
+            },
+        },
+        students: {
+            title: 'Students',
+            involved: {
+                label: 'Involved',
+                tooltip:
+                    'How many students are regularly involved and attending movement events?',
+            },
+            engaged: {
+                label: 'Engaged Disciples',
+                tooltip:
+                    'How many students have intentionally engaged a non believer in a spiritual conversation within the past semester? (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith. Include all who are also leaders since to be a leader, one needs to be an engaged disciple.)',
+            },
+            leaders: {
+                label: 'Leaders',
+                tooltip:
+                    'How many students are engaged disciples and are leading small groups of Win-Build-Send ministry? (Examples: groups focused on reaching target audiences, launching movements, etc. This number will be smaller than engaged disciples.)',
+            },
+        },
+        faculty: {
+            title: 'Faculty',
+            involved: {
+                label: 'Involved',
+                tooltip: 'How many faculty are regularly involved? ',
+            },
+            engaged: {
+                label: 'Engaged Disciples',
+                tooltip:
+                    'How many faculty have intentionally engaged in a spiritual conversation within the past semester? (The heart is that they have gone from merely attending movement events and begun to look outside of themselves to pass on their faith. Include all who are also leaders.)',
+            },
+            leaders: {
+                label: 'Leaders',
+                tooltip:
+                    'How many faculty who are engaged disciples are leading Win-Build-Send activities? (Examples: groups focused on reaching target audiences, evangelistic Bible study, discipleship groups etc. This number will be smaller than engaged disciples.)',
+            },
+        },
+        confirmModal: {
+            description:
+                'Ready to submit your movement indicators? If you want to change these numbers later you will need to go to Infobase to do so.',
+        },
+        successModal: {
+            title: 'Movement Indicators Submitted!',
+        },
+        errorModal: {
+            title: 'Something went wrong…',
+            description:
+                'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
+        },
     },
 };

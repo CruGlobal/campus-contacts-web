@@ -77,7 +77,7 @@ function massEditController(massEditService, personService) {
     function save() {
         vm.saving = true;
         massEditService
-            .applyChanges(vm.resolve.selection, vm.changes)
+            .applyChanges(vm.resolve.selection, vm.changes, vm.resolve.surveyId)
             .then(vm.close)
             .catch(function() {
                 vm.saving = false;

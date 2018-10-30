@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import template from './peopleScreen.html';
 import './peopleScreen.scss';
 import pencilIcon from '../../../../images/icons/pencil.svg';
@@ -14,6 +16,9 @@ angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,
     bindings: {
         org: '<',
+        loaderService: '<',
+        surveyId: '<',
+        questions: '<',
     },
     require: {
         organizationOverview: '^',
@@ -31,10 +36,16 @@ function peopleScreenController(
     personService,
     peopleFiltersPanelService,
     loggedInPerson,
-    RequestDeduper,
     ProgressiveListLoader,
-    _,
+    RequestDeduper,
 ) {
+    const listLoader = new ProgressiveListLoader({
+        modelType: 'person',
+        requestDeduper: new RequestDeduper(),
+        errorMessage:
+            'error.messages.organization_overview_people.load_people_chunk',
+    });
+
     this.people = [];
     this.multiSelection = {};
     this.filters = {};
@@ -56,14 +67,6 @@ function peopleScreenController(
 
     // represents if the user has checked the "Select All" checkbox
     this.selectAllValue = false;
-
-    const requestDeduper = new RequestDeduper();
-    const listLoader = new ProgressiveListLoader({
-        modelType: 'person',
-        requestDeduper: requestDeduper,
-        errorMessage:
-            'error.messages.organization_overview_people.load_people_chunk',
-    });
 
     // Define the columns that can be selected as sort keys
     // The "getSortKey" method returns the value that a person should be sorted by when sorting by that column
@@ -113,7 +116,7 @@ function peopleScreenController(
         },
     ];
 
-    const defaultSortOrder = { column: this.columns[0], direction: 'asc' };
+    this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
 
     let unsubscribe = null;
 
@@ -122,7 +125,7 @@ function peopleScreenController(
             onNewPerson(person);
         });
 
-        this.sortOrder = _.clone(defaultSortOrder);
+        this.sortOrder = _.clone(this.defaultSortOrder);
         this.isAdmin = loggedInPerson.isAdminAt(this.org);
 
         $scope.$watch(
@@ -161,7 +164,14 @@ function peopleScreenController(
 
         // Generate the sort order list
         return peopleScreenService
-            .loadMoreOrgPeople(orgId, this.filters, getOrder(), listLoader)
+            .loadMoreOrgPeople(
+                orgId,
+                this.filters,
+                getOrder(),
+                listLoader,
+                this.loaderService,
+                this.surveyId,
+            )
             .then(resp => {
                 const oldPeople = this.people;
 
@@ -238,7 +248,7 @@ function peopleScreenController(
             if (this.sortOrder.direction === 'asc') {
                 this.sortOrder.direction = 'desc';
             } else if (this.sortOrder.direction === 'desc') {
-                this.sortOrder = _.clone(defaultSortOrder);
+                this.sortOrder = _.clone(this.defaultSortOrder);
             }
         } else {
             this.sortOrder.column = column;
@@ -283,6 +293,7 @@ function peopleScreenController(
                 component: 'massEdit',
                 resolve: {
                     selection: _.constant(getSelection()),
+                    surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
                 size: 'sm',
@@ -452,7 +463,11 @@ function peopleScreenController(
     };
 
     this.exportPeople = () => {
-        peopleScreenService.exportPeople(getSelection(), getOrder());
+        peopleScreenService.exportPeople(
+            getSelection(),
+            getOrder(),
+            this.surveyId,
+        );
     };
 
     this.transferPeople = () => {
@@ -462,6 +477,7 @@ function peopleScreenController(
                 component: 'transferModal',
                 resolve: {
                     selection: _.constant(selection),
+                    surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
                 size: 'md',

@@ -6,7 +6,10 @@ function messageModalService(httpProxy, personSelectionService) {
     var messageModalService = {
         sendMessage: function(options) {
             var selection = options.recipients;
-            var filters = personSelectionService.convertToFilters(selection);
+            var filters = personSelectionService.convertToFilters(
+                selection,
+                options.surveyId,
+            );
 
             return httpProxy.post(
                 '/bulk_messages',

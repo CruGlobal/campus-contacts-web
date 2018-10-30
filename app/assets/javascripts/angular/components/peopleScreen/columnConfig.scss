@@ -1,0 +1,61 @@
+@import '../../../../stylesheets/variables/colors';
+
+%blue-border {
+    border-right: 1px solid $pivot-dark-blue;
+}
+
+%column-config {
+    .sticky-column {
+        position: sticky;
+        left: 0;
+        z-index: 9;
+        display: flex;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+
+        &.col-bg-blue {
+            background: $pivot-darker-blue;
+            @extend %blue-border;
+        }
+        &.col-bg-gray {
+            background: $white;
+            @extend %blue-border;
+        }
+        &.col-bg-white {
+            background: $gray-5;
+            @extend %blue-border;
+        }
+    }
+    .select-column {
+        width: 26px;
+        padding: 0 6px !important;
+    }
+    .name-column {
+        width: 160px;
+    }
+    .gender-column {
+        width: 40px;
+    }
+    .assigned-to-column {
+        width: 120px;
+    }
+    .status-column {
+        width: 162px;
+    }
+    .phone-number-column {
+        width: 120px;
+    }
+    .button-column {
+        width: 63px;
+    }
+    .survey-column {
+        width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .survey-column-wide {
+        width: 200px;
+    }
+}

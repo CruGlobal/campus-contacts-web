@@ -1,9 +1,10 @@
 import template from './orgManagementSubOrg.html';
+import { t } from 'i18next';
 
 import addIcon from '../../../../images/icons/icon-add.svg';
 import editIcon from '../../../../images/icons/icon-edit.svg';
 import trashIcon from '../../../../images/icons/icon-trash-blue.svg';
-import _ from 'lodash';
+import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 angular.module('missionhubApp').component('orgManagementSubOrg', {
     controller: orgManagementSubOrgController,
@@ -74,10 +75,20 @@ function orgManagementSubOrgController(
 
         $uibModal
             .open({
-                component: 'deleteOrgConfirmModal',
-                size: 'md',
+                component: 'iconModal',
                 resolve: {
-                    org_name: _.constant(org.name),
+                    icon: () => warningIcon,
+                    title: () =>
+                        t('ministries:organizations.deleteConfirmModal.title', {
+                            org_name: org.name,
+                        }),
+                    paragraphs: () => [
+                        t(
+                            'ministries:organizations.deleteConfirmModal.description',
+                        ),
+                    ],
+                    dismissLabel: () => t('cancel'),
+                    closeLabel: () => t('general.delete'),
                 },
             })
             .result.then(() => {

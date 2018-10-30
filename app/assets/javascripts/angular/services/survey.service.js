@@ -227,7 +227,9 @@ function surveyService(
                                 is_frozen: survey.is_frozen,
                                 post_survey_message: survey.post_survey_message,
                                 login_paragraph: survey.login_paragraph,
-                                logo: survey.logo,
+                                ...(survey.logo === undefined
+                                    ? {}
+                                    : { logo: survey.logo }), // Only send logo field to API when it is a base64 string or null (to allow deletion)
                             },
                         },
                     },
@@ -365,6 +367,9 @@ function surveyService(
                     payload,
                     {
                         errorMessage: 'contact_import:errors.save',
+                        params: {
+                            include: 'person',
+                        },
                     },
                 )
                 .then(httpProxy.extractModels);

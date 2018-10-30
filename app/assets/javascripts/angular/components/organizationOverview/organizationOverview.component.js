@@ -29,20 +29,14 @@ function organizationOverviewController(
     var vm = this;
     vm.tabNames = ministryViewTabs;
     vm.adminPrivileges = true;
-    vm.cruOrg = false;
     vm.p2cOrg = false;
     vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
+    vm.surveyResponses = 'countHidden';
 
-    vm.showOrgNav = () => {
-        return !_.includes(
-            [
-                'app.ministries.ministry.survey',
-                'app.ministries.ministry.import',
-                'app.ministries.ministry.management',
-            ],
-            $state.$current.name,
+    vm.showOrgNav = () =>
+        !$state.$current.name.match(
+            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators)/,
         );
-    };
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
@@ -52,10 +46,9 @@ function organizationOverviewController(
         });
 
         vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
+        vm.directAdminPrivileges = loggedInPerson.isDirectAdminAt(vm.org);
 
-        var cruOrgId = '1';
         var rootOrgId = organizationService.getOrgHierarchyIds(vm.org)[0];
-        vm.cruOrg = rootOrgId === cruOrgId;
 
         vm.p2cOrg = vm.org.id === p2cOrgId || rootOrgId === p2cOrgId;
 
@@ -94,12 +87,4 @@ function organizationOverviewController(
                 vm.team = new Array(teamMemberCount);
             });
     }
-
-    vm.isUnderDev = () => {
-        var message = t('common:application.under_development');
-        confirmModalService.create(message, {
-            showCancel: false,
-            title: t('common:application.under_development_title'),
-        });
-    };
 }

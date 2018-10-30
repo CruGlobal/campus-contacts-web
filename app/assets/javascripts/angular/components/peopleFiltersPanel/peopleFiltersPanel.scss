@@ -14,17 +14,21 @@ people-filters-panel {
     .filter-row {
         border-bottom: 1px solid $gray-4;
         padding: 12px 0;
+    }
 
-        accordion-header {
-            display: flex;
+    .filter-sub-row {
+        margin: 12px 0;
+    }
 
-            span {
-                flex: 1;
-            }
+    accordion-header {
+        display: flex;
 
-            ng-md-icon {
-                fill: $pivot-dark-blue;
-            }
+        span {
+            flex: 1;
+        }
+
+        ng-md-icon {
+            fill: $pivot-dark-blue;
         }
     }
 

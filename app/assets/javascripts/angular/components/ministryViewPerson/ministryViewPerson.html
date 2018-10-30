@@ -1,11 +1,13 @@
 <div class="row padded">
-    <div class="column select-column">
-        <input type="checkbox" ng-model="$ctrl.selected" />
-    </div>
-    <div class="column name-column">
-        <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
-            {{$ctrl.person | personName}}
-        </a>
+    <div class="sticky-column" ng-class="$ctrl.questions && ($ctrl.odd ? 'col-bg-gray' : 'col-bg-white')">
+        <div class="column select-column">
+            <input type="checkbox" ng-model="$ctrl.selected"/>
+        </div>
+        <div class="column name-column">
+            <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
+                {{$ctrl.person | personName}}
+            </a>
+        </div>
     </div>
     <div class="column detail-column gender-column">
         <span ng-if="$ctrl.person.gender">{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) | t}}</span>
@@ -49,5 +51,8 @@
         <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
             <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
         </a>
+    </div>
+    <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }" ng-repeat="question in $ctrl.questions" title="{{$ctrl.person.answers[question.id].join(', ')}}">
+        {{$ctrl.person.answers[question.id].join(', ')}}
     </div>
 </div>

@@ -6,78 +6,83 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
     template: template,
     bindings: {
         filtersChanged: '&',
-        organizationId: '=',
+        organizationId: '<',
+        surveyId: '<',
+        questions: '<',
     },
 });
 
 function peopleFiltersPanelController(
+    $rootScope,
     $scope,
     httpProxy,
     modelsService,
     peopleFiltersPanelService,
     _,
 ) {
-    var vm = this;
-    vm.filters = null;
-    vm.filtersApplied = false;
-    vm.groupOptions = [];
-    vm.assignmentOptions = [];
-    vm.labelOptions = [];
-    vm.labelFilterCollapsed = true;
-    vm.assignedToFilterCollapsed = true;
-    vm.groupFilterCollapsed = true;
+    this.filtersApplied = false;
+    this.groupOptions = [];
+    this.assignmentOptions = [];
+    this.labelOptions = [];
+    this.statusOptions = [];
+    this.genderOptions = [];
+    this.questionOptions = [];
 
-    vm.resetFilters = resetFilters;
-
-    vm.$onInit = activate;
-
-    function activate() {
-        $scope.$watch(
-            '$ctrl.filters',
-            function(newFilters, oldFilters) {
-                if (!_.isEqual(newFilters, oldFilters)) {
-                    vm.filtersApplied = peopleFiltersPanelService.filtersHasActive(
-                        getNormalizedFilters(),
-                    );
-
-                    sendFilters();
-                }
-            },
-            true,
-        );
-
-        vm.resetFilters();
+    this.$onInit = () => {
+        this.resetFilters();
 
         loadFilterStats();
 
-        $scope.$on('massEditApplied', function() {
-            loadFilterStats();
-        });
-    }
+        this.personModifiedUnsubscribe = $rootScope.$on(
+            'personModified',
+            loadFilterStats,
+        );
+        this.massEditAppliedUnsubscribe = $rootScope.$on(
+            'massEditApplied',
+            loadFilterStats,
+        );
+    };
 
-    function resetFilters() {
-        vm.filters = {
+    this.$onDestroy = () => {
+        this.personModifiedUnsubscribe();
+        this.massEditAppliedUnsubscribe();
+    };
+
+    this.updateFilters = () => {
+        this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
+            getNormalizedFilters(),
+        );
+
+        sendFilters();
+    };
+
+    this.resetFilters = () => {
+        this.filters = {
             searchString: '',
             labels: {},
             assignedTos: {},
+            statuses: {},
             groups: {},
+            questions: {},
+            answerMatchingOptions: {},
             includeArchived: false,
         };
-    }
+    };
 
     // Send the filters to this component's parent via the filtersChanged binding
-    function sendFilters() {
-        vm.filtersChanged({ filters: getNormalizedFilters() });
-    }
+    const sendFilters = () => {
+        this.filtersChanged({ filters: getNormalizedFilters() });
+    };
 
-    function loadFilterStats() {
+    const loadFilterStats = () => {
         return httpProxy
             .get(
                 modelsService
                     .getModelMetadata('filter_stats')
-                    .url.single('people'),
+                    .url.single(this.surveyId ? 'survey' : 'people'),
                 {
-                    organization_id: vm.organizationId,
+                    organization_id: this.organizationId,
+                    survey_id: this.surveyId,
                     include_unassigned: true,
                 },
                 {
@@ -86,44 +91,75 @@ function peopleFiltersPanelController(
                 },
             )
             .then(httpProxy.extractModel)
-            .then(function(stats) {
-                vm.labelOptions = stats.labels;
-                vm.assignmentOptions = stats.assigned_tos;
-                vm.groupOptions = stats.groups;
+            .then(stats => {
+                this.labelOptions = stats.labels;
+                this.assignmentOptions = stats.assigned_tos;
+                this.groupOptions = stats.groups;
+                this.statusOptions = stats.statuses;
+                this.genderOptions = stats.genders;
+                this.questionOptions = stats.questions;
 
                 // Restrict the active filters to currently valid options
                 // A filter could include a non-existent label, for example, if people were edited so that no one
                 // has that label anymore
-                vm.filters.labels = _.pick(
-                    vm.filters.labels,
-                    _.map(vm.labelOptions, 'label_id'),
+                this.filters.labels = _.pick(
+                    this.filters.labels,
+                    _.map(this.labelOptions, 'label_id'),
                 );
-                vm.filters.assignedTos = _.pick(
-                    vm.filters.assignedTos,
-                    _.map(vm.assignmentOptions, 'person_id'),
+                this.filters.assignedTos = _.pick(
+                    this.filters.assignedTos,
+                    _.map(this.assignmentOptions, 'person_id'),
                 );
-                vm.filters.groups = _.pick(
-                    vm.filters.groups,
-                    _.map(vm.groupOptions, 'group_id'),
+                this.filters.groups = _.pick(
+                    this.filters.groups,
+                    _.map(this.groupOptions, 'group_id'),
                 );
             });
-    }
+    };
 
-    // Return the an array of an dictionary's keys that have a truthy value
-    function getTruthyKeys(dictionary) {
-        return _.chain(dictionary)
-            .pickBy()
-            .keys()
-            .value();
-    }
+    this.findStats = ({ id }) =>
+        this.questionOptions.find(({ question_id }) => question_id === id);
 
-    function getNormalizedFilters() {
+    const emptyArrayToUndefined = value =>
+        value.length === 0 ? undefined : value;
+
+    const getFiltersFromObj = _.flow([
+        _.pickBy, // keep truthy key/value pairs
+        Object.keys, // get array of keys
+        emptyArrayToUndefined,
+    ]);
+
+    const getNormalizedFilters = () => {
+        const questions = _.flow([
+            questions =>
+                _.mapValues(questions, answers =>
+                    getFiltersFromObj(
+                        typeof answers === 'string'
+                            ? { [answers]: !!answers } // becomes falsy if answer is empty string
+                            : answers,
+                    ),
+                ),
+            _.pickBy, // keep truthy key/value pairs
+        ])(this.filters.questions);
+
         return {
-            searchString: vm.filters.searchString,
-            includeArchived: vm.filters.includeArchived,
-            labels: getTruthyKeys(vm.filters.labels),
-            assignedTos: getTruthyKeys(vm.filters.assigned_tos),
-            groups: getTruthyKeys(vm.filters.groups),
+            searchString: this.filters.searchString,
+            includeArchived: this.filters.includeArchived,
+            labels: getFiltersFromObj(this.filters.labels),
+            assignedTos: getFiltersFromObj(this.filters.assigned_tos),
+            groups: getFiltersFromObj(this.filters.groups),
+            statuses: getFiltersFromObj(this.filters.statuses),
+            genders: getFiltersFromObj(this.filters.genders),
+            questions,
+            answerMatchingOptions: _.flow([
+                // Use defined questions to determine which matching options need to be sent
+                questions =>
+                    _.mapValues(
+                        questions,
+                        (_, id) => this.filters.answerMatchingOptions[id],
+                    ),
+                _.pickBy,
+            ])(questions),
         };
-    }
+    };
 }

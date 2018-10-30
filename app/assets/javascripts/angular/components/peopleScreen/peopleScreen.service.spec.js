@@ -1,4 +1,4 @@
-var peopleScreenService, httpProxy, $rootScope, $q;
+let peopleScreenService, httpProxy, $rootScope, $q;
 
 function asynchronous(fn) {
     return function(done) {
@@ -43,18 +43,6 @@ describe('peopleScreenService', function() {
         });
     }));
 
-    describe('buildOrderString', function() {
-        it('should generate a valid order string', function() {
-            expect(
-                peopleScreenService.buildOrderString([
-                    { field: 'key1', direction: 'asc' },
-                    { field: 'key2', direction: 'desc' },
-                    { field: 'key3', direction: 'desc' },
-                ]),
-            ).toBe('key1,-key2,-key3');
-        });
-    });
-
     describe('loadOrgPeopleCount', function() {
         it(
             'should load the person count',
@@ -68,5 +56,17 @@ describe('peopleScreenService', function() {
                     });
             }),
         );
+    });
+
+    describe('buildOrderString', function() {
+        it('should generate a valid order string', function() {
+            expect(
+                peopleScreenService.buildOrderString([
+                    { field: 'key1', direction: 'asc' },
+                    { field: 'key2', direction: 'desc' },
+                    { field: 'key3', direction: 'desc' },
+                ]),
+            ).toBe('key1,-key2,-key3');
+        });
     });
 });

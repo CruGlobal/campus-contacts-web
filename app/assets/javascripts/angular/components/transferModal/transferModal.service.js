@@ -3,8 +3,11 @@ angular.module('missionhubApp').factory('transferService', transferService);
 function transferService(httpProxy, JsonApiDataStore, personSelectionService) {
     return {
         // Transfer the contacts in the selection to the specified organization
-        transfer: function(selection, org, options) {
-            var filters = personSelectionService.convertToFilters(selection);
+        transfer: function(selection, org, options, surveyId) {
+            var filters = personSelectionService.convertToFilters(
+                selection,
+                surveyId,
+            );
 
             var bulkTransfer = new JsonApiDataStore.Model('bulk_transfer');
             bulkTransfer.setAttribute('person_ids', filters.ids);

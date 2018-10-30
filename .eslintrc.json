@@ -54,7 +54,6 @@
         "no-throw-literal": "error",
         "no-unmodified-loop-condition": "error",
         "no-unsafe-negation": "error",
-        "no-unused-expressions": "error",
         "no-useless-call": "error",
         "no-useless-concat": "error",
         "no-useless-escape": "error",
@@ -77,6 +76,8 @@
         "no-new-object": "error",
         "no-unneeded-ternary": "error",
 
-        "angular/definedundefined": "off"
+        "angular/definedundefined": "off",
+        "angular/typecheck-string": "off",
+        "angular/no-service-method": "off"
     }
 }

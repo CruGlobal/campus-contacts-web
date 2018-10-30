@@ -69,6 +69,15 @@ function loggedInPerson(
             return _.intersection(adminOrgIds, orgAndAncestry).length !== 0;
         },
 
+        // check if you have admin access on the org itself. access to any org above it don't count
+        isDirectAdminAt: org => {
+            return person.organizational_permissions.some(
+                ({ permission_id, organization_id }) =>
+                    permission_id === permissionService.adminId &&
+                    organization_id === org.id,
+            );
+        },
+
         updatePreferences: function(preferences) {
             var model = {
                 data: {

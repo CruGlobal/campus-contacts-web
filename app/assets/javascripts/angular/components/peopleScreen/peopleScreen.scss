@@ -1,5 +1,6 @@
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
+@import './columnConfig';
 
 people-screen {
     $visible-people: 10;
@@ -13,7 +14,8 @@ people-screen {
         height: calc(
             #{$organization-overview-content-height} - #{$person-height}
         );
-        overflow-y: auto;
+        min-width: min-content;
+        -ms-grid-columns: min-content;
     }
 
     .people-list,
@@ -74,34 +76,18 @@ people-screen {
         display: flex;
         flex-shrink: 0;
 
+        position: sticky;
+        top: 0;
+        z-index: 11;
+        min-width: min-content;
+        -ms-grid-columns: min-content;
+
         input[type='checkbox'],
         input[type='checkbox']:checked {
             background-color: $pivot-darker-blue;
             border: 1px solid $white;
         }
-        .column.select-column {
-            width: 26px;
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        .name-column {
-            flex: 2;
-        }
-        .gender-column {
-            width: 40px;
-        }
-        .assigned-to-column {
-            flex: 1.5;
-        }
-        .status-column {
-            width: 170px;
-        }
-        .phone-number-column {
-            width: 120px;
-        }
-        .button-column {
-            width: 79px;
-        }
+        @extend %column-config;
     }
 
     input[type='checkbox'] {
@@ -120,6 +106,10 @@ people-screen {
         color: $white;
         padding: 12px;
         flex-shrink: 0;
+        position: sticky;
+        top: 50px;
+        left: 0;
+        z-index: 10;
 
         ng-md-icon,
         img {

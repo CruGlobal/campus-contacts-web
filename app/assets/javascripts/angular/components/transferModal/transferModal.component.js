@@ -76,7 +76,12 @@ function transferModalController(
     function save() {
         vm.saving = true;
         transferService
-            .transfer(vm.selection, vm.selectedOrg, vm.options)
+            .transfer(
+                vm.selection,
+                vm.selectedOrg,
+                vm.options,
+                vm.resolve.surveyId,
+            )
             .then(function() {
                 vm.close({ $value: vm.options.copyContact });
             })

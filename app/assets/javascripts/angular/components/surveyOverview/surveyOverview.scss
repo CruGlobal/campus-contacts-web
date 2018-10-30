@@ -10,27 +10,6 @@ organization-contact-import {
         margin-bottom: 0;
     }
 
-    .white {
-        color: #fff !important;
-    }
-
-    .header {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .survey-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-
-        .survey-title {
-            color: $pivot-bright-blue;
-            font-size: 2em;
-        }
-    }
-
     /* Widths */
 
     $wrapper-fixed-width: 948px;
@@ -52,6 +31,20 @@ organization-contact-import {
         text-align: left;
     }
 
+    .header {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        .survey-title {
+            display: flex;
+            align-items: center;
+            color: $pivot-bright-blue;
+            font-size: 2em;
+        }
+        .white {
+            color: #ffffff;
+        }
+    }
+
     /* Backgrounds */
 
     .bg-blue {
@@ -68,15 +61,6 @@ organization-contact-import {
 
     /* Text Colors */
 
-    .gray-darkest {
-        color: $gray-darkest;
-    }
-    .gray-darker {
-        color: $gray-darker;
-    }
-    .gray-dark {
-        color: $gray-dark;
-    }
     .blue-light {
         color: $pivot-bright-blue;
     }
@@ -449,7 +433,6 @@ organization-contact-import {
         line-height: 3rem;
         vertical-align: middle;
         font-size: 1.3rem;
-        color: $gray-darker;
         margin-right: 6.5rem;
 
         &:after {
