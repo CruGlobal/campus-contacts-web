@@ -13,11 +13,7 @@ angular
         spaPage,
         _,
     ) {
-        // Only set up client-side routing on single-page app pages
-        if (!spaPage) {
-            return false;
-        }
-
+        console.log(spaPage);
         // Instantiate factories
         var asyncBindingsService = asyncBindingsServiceProvider.$get();
 
