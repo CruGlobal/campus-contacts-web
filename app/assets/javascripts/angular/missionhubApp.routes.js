@@ -10,10 +10,8 @@ angular
         ministryViewDefaultTab,
         personTabs,
         personDefaultTab,
-        spaPage,
         _,
     ) {
-        console.log(spaPage);
         // Instantiate factories
         var asyncBindingsService = asyncBindingsServiceProvider.$get();
 
