@@ -19,10 +19,9 @@
         </div>
     </organization>
     <div class="no-people-extras" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit">
-        <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more"
+        <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more btn-primary"
            bind-dynamic="'dashboard.show_more' | t"></a>
-        <br>
-        <a href ng-click="$ctrl.editMode = true" class="edit-mode"
+        <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode d-block"
            bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
     </div>
 </div>
