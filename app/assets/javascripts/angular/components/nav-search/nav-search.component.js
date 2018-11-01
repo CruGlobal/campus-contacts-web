@@ -7,7 +7,7 @@ angular.module('missionhubApp').component('navSearch', {
 });
 
 function navSearchController(peopleSearchService) {
-    var vm = this;
-
-    vm.searchPeople = peopleSearchService.search;
+    this.$onInit = () => {
+        this.searchPeople = peopleSearchService.search;
+    };
 }
