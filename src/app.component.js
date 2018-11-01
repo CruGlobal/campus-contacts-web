@@ -48,7 +48,7 @@ function appController(
         setAuthorizationAndState();
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
-            function(event, value) {
+            (event, value) => {
                 this.editOrganizations = value;
             },
         );
