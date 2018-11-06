@@ -17,6 +17,10 @@ app {
     flex-direction: column;
     justify-content: space-between;
 
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 14px;
+    color: $pivot-dark-blue;
+
     > header {
         margin-bottom: 140px;
 
@@ -172,8 +176,14 @@ app {
         }
     }
 
-    .font-titillium {
+    .font-titillium,
+    .titillium {
         font-family: 'Titillium Web', sans-serif !important;
+    }
+
+    .font-source-sans,
+    .source-sans {
+        font-family: 'Source Sans Pro', sans-serif;
     }
 
     .sub-navigation {
@@ -270,28 +280,10 @@ a {
 
 //End new section
 
-.topmenu {
-    margin-bottom: 40px;
-    height: 64px;
-    background: $pivot-darker-blue;
-    display: flex;
-}
-
 .pivot_theme {
-    font-family: 'Titillium Web', sans-serif;
-    font-size: 14px;
-    color: $pivot-dark-blue;
-
     $focus-gray: $gray-4;
     $label-color: $gray-1-5;
     $field-stroke-color: $gray-3;
-
-    .titillium {
-        font-family: 'Titillium Web', sans-serif;
-    }
-    .source-sans {
-        font-family: 'Source Sans Pro', sans-serif;
-    }
 
     textarea,
     input[type='text'],

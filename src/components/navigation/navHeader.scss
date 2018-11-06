@@ -1,0 +1,123 @@
+@import '../../../app/assets/stylesheets/variables/colors';
+
+nav-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    .main-menu {
+        height: 64px;
+        padding: 15px 15px;
+
+        .logo {
+            background: url(/app/assets/images/logo-missionhub-initials.png)
+                no-repeat;
+            background-size: 48px;
+            width: 48px;
+            height: 100%;
+
+            @media only screen and (min-width: 1130px) {
+                background: url(/app/assets/images/logo-missionhub@2x.png)
+                    no-repeat;
+                background-size: 124px;
+                width: 124px;
+            }
+        }
+
+        > ul:first-of-type {
+            > li {
+                display: inline-block;
+                position: relative;
+
+                &.current,
+                &:hover {
+                    &:after {
+                        content: '';
+                        display: inline-block;
+                        width: 0;
+                        height: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-bottom: 10px solid $white;
+                        position: absolute;
+                        left: calc(50% - 7.5px);
+                        bottom: -20px;
+                        margin-left: -10px;
+                    }
+                }
+            }
+        }
+
+        .avatar-nav {
+            display: flex;
+            font-size: 14px;
+            list-style: none;
+            margin-bottom: 0;
+
+            > li {
+                position: relative;
+                padding-bottom: 20px;
+
+                &:hover {
+                    > ul {
+                        top: 48px;
+                    }
+                }
+
+                ul {
+                    min-width: 120px;
+                    border: 1px solid #06415f;
+                    border-top: none;
+                    background-color: #06415f;
+                    list-style: none;
+                    position: absolute;
+                    top: 48px;
+                    left: -69px;
+                    padding: 0;
+                    z-index: 100;
+                    top: -999em;
+
+                    > li {
+                        background: none;
+                        position: relative;
+                        height: 30px;
+                        line-height: 30px;
+                        font-size: 14px;
+                        text-align: center;
+                        width: auto;
+
+                        > a {
+                            padding: 0 1.5em;
+                            color: $gray-4;
+                            text-decoration: none;
+                            display: block;
+
+                            &:hover {
+                                background-color: #085378;
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: $pivot-dark-blue;
+                position: relative;
+                align-items: center;
+                justify-content: space-around;
+                font-weight: bold;
+                display: flex;
+
+                img {
+                    position: absolute;
+                }
+            }
+        }
+    }
+}

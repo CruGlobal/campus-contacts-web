@@ -1,0 +1,49 @@
+.btn {
+    @include font-smoothing(on);
+    background-image: linear-gradient(to bottom, #72d9e6, #3eb1c8);
+    font-size: 15px;
+    color: #ffffff;
+    padding: 0 15px 0 15px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+    text-align: center;
+    border: 0;
+    box-shadow: none;
+    height: 36px;
+
+    &[disabled] {
+        opacity: 0.6;
+    }
+}
+
+.btn-primary {
+    background-color: $pivot-dark-blue;
+    font-size: 0.8em;
+    color: $white !important;
+    padding: 11px 15px 13px 15px;
+    padding-right: 15px;
+    text-decoration: none;
+    display: inline-block;
+    min-width: 210px;
+    border-radius: 0.25em;
+    text-align: center;
+
+    transition: color 0.15s ease-in;
+    text-transform: uppercase;
+
+    &:hover {
+        opacity: 0.5;
+        transition: opacity 0.15s ease-in;
+    }
+}
+
+.btn-secondary {
+    @include font-smoothing(off);
+    background-image: none;
+    color: $gray-1;
+    border: 1px solid $gray-3;
+}

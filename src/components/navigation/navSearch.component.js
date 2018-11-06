@@ -1,5 +1,5 @@
-import template from './nav-search.html';
-import './nav-search.scss';
+import template from './navSearch.html';
+import './navSearch.scss';
 
 angular.module('missionhubApp').component('navSearch', {
     controller: navSearchController,

@@ -1,0 +1,24 @@
+body {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 14px;
+    color: $pivot-dark-blue;
+    background-color: $background-gray;
+}
+
+.font-titillium,
+.titillium {
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+.font-source-sans,
+.source-sans {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.flex-grow-5 {
+    flex-grow: 5;
+}
+
+a {
+    color: $blue-1;
+}

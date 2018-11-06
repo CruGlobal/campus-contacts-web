@@ -1,0 +1,35 @@
+@import '../../../app/assets/stylesheets/variables/colors';
+
+nav-search {
+    .search-autocomplete-field[type='text'] {
+        cursor: pointer;
+        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8%2BCjxzdmcgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPCEtLSBHZW5lcmF0b3I6IFNrZXRjaCA0MC4zICgzMzgzOSkgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0%2BCiAgICA8dGl0bGU%2BU2VhcmNoPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM%2BPC9kZWZzPgogICAgPGcgaWQ9Ik1ILU1pbmlzdHJpZXMtVmlldyIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI%2BCiAgICAgICAgPGcgaWQ9Ik1pbmlzdHJ5LVN1cnZleXMtMS4yLVByb2ZpbGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC05OTIuMDAwMDAwLCAtMTguMDAwMDAwKSIgZmlsbD0iI0ZGRkZGRiI%2BCiAgICAgICAgICAgIDxwYXRoIGQ9Ik0xMDE1Ljc4LDQwLjcyIEwxMDA5LjU3MiwzNC41MTIgQzEwMTEuMDgxLDMyLjc2MSAxMDEyLDMwLjQ4OCAxMDEyLDI4IEMxMDEyLDIyLjQ4NiAxMDA3LjUxMywxOCAxMDAyLDE4IEM5OTYuNDg2LDE4IDk5MiwyMi40ODYgOTkyLDI4IEM5OTIsMzMuNTE0IDk5Ni40ODYsMzggMTAwMiwzOCBDMTAwNC40ODcsMzggMTAwNi43NiwzNy4wODIgMTAwOC41MTIsMzUuNTczIEwxMDE0LjcxOSw0MS43ODEgQzEwMTQuODY2LDQxLjkyNyAxMDE1LjA1Nyw0MiAxMDE1LjI1LDQyIEMxMDE1LjQ0Miw0MiAxMDE1LjYzMyw0MS45MjcgMTAxNS43OCw0MS43ODEgQzEwMTYuMDczLDQxLjQ4OCAxMDE2LjA3Myw0MS4wMTMgMTAxNS43OCw0MC43MiBaIE0xMDEwLjUsMjggQzEwMTAuNSwzMi42ODcgMTAwNi42ODYsMzYuNSAxMDAyLDM2LjUgQzk5Ny4zMTMsMzYuNSA5OTMuNSwzMi42ODcgOTkzLjUsMjggQzk5My41LDIzLjMxMyA5OTcuMzEzLDE5LjUgMTAwMiwxOS41IEMxMDA2LjY4NiwxOS41IDEwMTAuNSwyMy4zMTMgMTAxMC41LDI4IFoiIGlkPSJTZWFyY2giPjwvcGF0aD4KICAgICAgICA8L2c%2BCiAgICA8L2c%2BCjwvc3ZnPg%3D%3D)
+            5px 0 no-repeat;
+        height: 24px;
+        width: 30px;
+        border: 0 solid white;
+        font-size: 0px;
+        color: $white;
+
+        &.ui-autocomplete-loading {
+            background-color: transparent !important;
+        }
+
+        &::placeholder {
+            color: $white;
+            opacity: 0.5;
+        }
+
+        &:focus {
+            border-width: 0 0 1px;
+            background: none;
+            font-size: 12px;
+            width: 290px;
+            outline: none;
+        }
+    }
+
+    .dropdown-menu {
+        max-height: 20rem;
+    }
+}
