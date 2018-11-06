@@ -4,7 +4,7 @@
     <a href="/" class='logo fl' ng-if="$ctrl.state.branded"></a>
 
     <ul class="font-titillium fl ml3 list" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" id="primary_nav">
-        <li class='fl' ui-sref-active="current">
+        <li class='fl' ui-sref-active="current" ng-class="{ current: ('app.people' | includedByState) }">
             <a class='pivot-white f4 pl2 pr3' ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
             <a class='pivot-white f4  pl2 pr3' href="/d/people" ng-if="!$root.isSpaPage">{{ 'dashboard.people_assigned_to_you' | t }}</a>
         </li>
