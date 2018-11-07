@@ -72,9 +72,9 @@ function surveyOverviewQuestionsController(
     this.people = [];
 
     const loadSurveyData = async () => {
-        const q = await surveyService.getSurveyQuestions(this.survey.id);
-        this.people = await getPeople(q, this.survey.organization_id);
-        rebuildQuestions(q);
+        const { data } = await surveyService.getSurveyQuestions(this.survey.id);
+        this.people = await getPeople(data, this.survey.organization_id);
+        rebuildQuestions(data);
         $scope.$apply();
     };
 
@@ -241,7 +241,7 @@ function surveyOverviewQuestionsController(
     };
 
     this.updatePosition = questions => {
-        questions.filter(q => !q.predefined).forEach((q, index) => {
+        questions.forEach((q, index) => {
             if (q.position === index + 1) return;
 
             q.position = index + 1;
