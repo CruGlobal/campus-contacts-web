@@ -1,4 +1,5 @@
 .btn-key {
+    min-width: 235px;
     &:before {
         background: url(/app/assets/images/icons/logo-key-1x.png) no-repeat
             center center;
@@ -15,6 +16,7 @@
 }
 
 .btn-facebook {
+    min-width: 235px;
     &:before {
         background: url(/app/assets/images/icons/facebook-1x.png) no-repeat
             center center;
