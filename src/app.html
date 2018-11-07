@@ -1,13 +1,13 @@
-<header>
+<header ng-cloak>
     <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
     <nav-header ng-if="!$root.legacyNavigation"></nav-header>
     <div ng-transclude="legacyMenu" ng-if="$root.legacyNavigation"></div>
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
-<section class='main-container pt2 pb2 flex-grow-5'>
+<section class='main-container pt2 pb2 flex-grow-5' ng-cloak>
     <ui-view></ui-view>
 </section>
-<footer class='tc bg-white pt4 pb4'>
+<footer class='tc bg-white pt4 pb4' ng-cloak>
     <section class='main-container flex-grow-5'>
         <span class='copyright'>{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}</span>
         <span>
