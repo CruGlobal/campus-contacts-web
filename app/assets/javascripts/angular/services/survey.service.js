@@ -10,41 +10,15 @@ function surveyService(
 ) {
     return {
         getSurveyQuestions: surveyId => {
-            return $q
-                .all([
-                    httpProxy.get(
-                        '/surveys/predefined',
-                        {
-                            include: 'active_survey_elements.question',
-                        },
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                    httpProxy.get(
-                        `/surveys/${surveyId}/questions`,
-                        {
-                            include: 'question_rules',
-                        },
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                ])
-                .then(([predefinedSurvey, surveyQuestions]) => {
-                    let predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
-                        element => element.question,
-                    );
-
-                    //only include hard coded predefined questions (first/last name and phone)
-                    predefinedQuestions = predefinedQuestions.filter(question =>
-                        _.includes(['3457', '3458', '17'], question.id),
-                    );
-
-                    return [...predefinedQuestions, ...surveyQuestions.data];
-                });
+            return httpProxy.get(
+                `/surveys/${surveyId}/questions`,
+                {
+                    include: 'question_rules',
+                },
+                {
+                    errorMessage: 'error.messages.surveys.loadQuestions',
+                },
+            );
         },
 
         getPredefinedQuestions: () => {
