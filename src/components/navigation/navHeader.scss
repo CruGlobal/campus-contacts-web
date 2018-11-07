@@ -12,15 +12,13 @@ nav-header {
         padding: 15px 15px;
 
         .logo {
-            background: url(/app/assets/images/logo-missionhub-initials.png)
-                no-repeat;
+            background: url(./logo-missionhub-initials.png) no-repeat;
             background-size: 48px;
             width: 48px;
             height: 100%;
 
             @media only screen and (min-width: 1130px) {
-                background: url(/app/assets/images/logo-missionhub@2x.png)
-                    no-repeat;
+                background: url(./logo-missionhub@2x.png) no-repeat;
                 background-size: 124px;
                 width: 124px;
             }
