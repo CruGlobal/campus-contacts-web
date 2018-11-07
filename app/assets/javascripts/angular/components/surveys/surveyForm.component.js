@@ -53,8 +53,8 @@ function surveyFormController($window, surveyService) {
         this.questionChoices = {};
 
         surveyService.getSurveyQuestions(this.survey.id).then(questions => {
-            this.surveyQuestions = questions;
-            _.forEach(questions, question => {
+            this.surveyQuestions = questions.data;
+            _.forEach(questions.data, question => {
                 if (question.content) {
                     this.questionChoices[question.id] = getChoices(
                         question.content,
