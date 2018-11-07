@@ -10,7 +10,7 @@
         </li>
 
         <li class='fl' ng-class="{ current: ('app.ministries' | includedByState) }">
-            <a class='pivot-white f4 pl2 pr3' ng-if="$root.isSpaPage" ui-sref="app.ministries">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+            <a class='pivot-white f4 pl2 pr3' ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
             <a class='pivot-white f4 pl2 pr3' ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
         </li>
     </ul>
