@@ -114,6 +114,20 @@ function peopleScreenController(
                 'first_name',
             ],
         },
+        {
+            name: 'last_survey',
+            cssClass: 'detail-column assigned-to-column',
+            label: 'ministries.people.lastSurvey',
+            sortable: false,
+            getSortKey: person => {
+                return person.answer_sheets.completed_at;
+            },
+            orderFields: [
+                'answer_sheets.completed_at',
+                'last_name',
+                'first_name',
+            ],
+        },
     ];
 
     this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
@@ -174,7 +188,6 @@ function peopleScreenController(
             )
             .then(resp => {
                 const oldPeople = this.people;
-
                 this.people = resp.list;
                 this.loadedAll = resp.loadedAll;
                 this.totalCount = resp.total;

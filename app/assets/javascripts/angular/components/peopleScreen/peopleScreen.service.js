@@ -173,7 +173,7 @@ function peopleScreenService(
             'fields[email_address]': 'email,primary',
             'fields[phone_number]': 'number,primary',
             'fields[contact_assignment]': 'assigned_to,organization,created_at',
-            'fields[answer_sheet]': 'answers,survey',
+            'fields[answer_sheet]': 'answers,survey,completed_at',
             'fields[answer]': 'value,question',
         }),
 
