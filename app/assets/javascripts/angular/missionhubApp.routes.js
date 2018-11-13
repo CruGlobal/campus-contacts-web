@@ -243,14 +243,36 @@ angular
                 url: '',
                 abstract: true,
                 resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadingPromise;
+                    person: function(loggedInPerson, $q, $state) {
+                        const deferred = $q.defer();
+
+                        loggedInPerson
+                            .loadOnce()
+                            .then(user => {
+                                if (user.beta_mode === null) {
+                                    $uibModal.open({
+                                        component: 'newWelcomeModal',
+                                        resolve: {},
+                                        windowClass: 'pivot_theme',
+                                        size: 'sm',
+                                    });
+                                }
+
+                                deferred.resolve(user);
+                            })
+                            .catch(e => {
+                                if (e.status === 401) {
+                                    $state.go('login');
+                                }
+                            });
+
+                        return deferred.promise;
                     },
                 },
                 template: '<ui-view></ui-view>',
             })
             .state({
-                name: 'app.login',
+                name: 'login',
                 url: '/sign-in',
                 component: 'login',
             })

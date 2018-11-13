@@ -33,13 +33,11 @@ angular
         // authentication from the rails host through a <preload-state> component. This means
         // that the access token isn't populated at the time of application initialization,
         // the $timeout will cause delay this execution until after the first digest.
-        $timeout(function() {
-            if (state.v4AccessToken) {
-                loggedInPerson.loadOnce().then(function(me) {
-                    i18next.changeLanguage(me.user.language);
-                    updateRollbarPerson(me);
-                    $rootScope.legacyNavigation = me.user.beta_mode === false;
-                });
-            }
-        });
+        if (state.v4AccessToken) {
+            loggedInPerson.loadOnce().then(function(me) {
+                i18next.changeLanguage(me.user.language);
+                updateRollbarPerson(me);
+                $rootScope.legacyNavigation = me.user.beta_mode === false;
+            });
+        }
     });

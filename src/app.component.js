@@ -22,6 +22,7 @@ function appController(
     $uibModal,
     $rootScope,
     state,
+    $state,
     $http,
 ) {
     let deregisterEditOrganizationsEvent;
@@ -44,7 +45,7 @@ function appController(
         }
     };
 
-    this.$onInit = async () => {
+    this.$onInit = () => {
         this.year = new Date();
         setAuthorizationAndState();
         deregisterEditOrganizationsEvent = $rootScope.$on(
@@ -53,17 +54,6 @@ function appController(
                 this.editOrganizations = value;
             },
         );
-
-        const { user } = await loggedInPerson.loadOnce();
-
-        if (user.beta_mode === null) {
-            $uibModal.open({
-                component: 'newWelcomeModal',
-                resolve: {},
-                windowClass: 'pivot_theme',
-                size: 'sm',
-            });
-        }
     };
 
     this.$onDestroy = () => deregisterEditOrganizationsEvent();
