@@ -24,10 +24,13 @@ function errorService($timeout, $q, $log, toaster, _) {
     // original error if the user chooses not to retry
     function displayError(err, retryable) {
         return new $q(function(resolve, reject) {
-            if (!retryable) {
+            if (!retryable || err.status === 401) {
                 // We don't need to wait to find out whether the user will retry the operation
                 reject(err);
             }
+
+            //No popup for logged out needed
+            if (err.status === 401) return;
 
             toaster.pop({
                 title: 'Error',
