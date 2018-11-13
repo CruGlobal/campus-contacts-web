@@ -46,7 +46,7 @@
                     <a href="" ng-click="$root.openAboutModal()">About</a>
                 </li>
                 <li>
-                    <a href="/sign_out">{{ 'nav.logout' | t }}</a>
+                    <a ng-href="{{ $ctrl.railsUrl }}/sign_out" target='_self'>{{ 'nav.logout' | t }}</a>
                 </li>
             </ul>
         </li>
@@ -58,7 +58,7 @@
 
     <ul class="list fr" id="primary_nav" ng-if="!$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" >
         <li style="fl">
-            <a href="/sign_out" class='pivot-white f4 mr2'>{{ 'nav.logout' | t }}</a>
+            <a ng-href="{{ $ctrl.railsUrl }}/sign_out" class='pivot-white f4 mr2' target='_self'>{{ 'nav.logout' | t }}</a>
         </li>
     </ul>
 
