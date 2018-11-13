@@ -30,7 +30,9 @@ function errorService($timeout, $q, $log, toaster, _) {
             }
 
             //No popup for logged out needed
-            if (err.status === 401) return;
+            if (err.status === 401) {
+                return;
+            }
 
             toaster.pop({
                 title: 'Error',
