@@ -11,9 +11,11 @@ class UserPreferences {
         const { user } = this.loggedInPerson.person;
         this.language = user.language;
         this.languages = getNamesOfLoadedTranslations();
-        this.personMoved = user.notification_settings.person_moved;
-        this.personAssigned = user.notification_settings.person_assigned;
-        this.weeklyDigest = user.notification_settings.weekly_digest;
+        const { person_moved, person_assigned, weekly_digest } =
+            user.notification_settings || {};
+        this.personMoved = person_moved;
+        this.personAssigned = person_assigned;
+        this.weeklyDigest = weekly_digest;
         this.legacyNav = !user.beta_mode;
     }
 
