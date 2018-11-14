@@ -100,6 +100,7 @@ module.exports = (env = {}) => {
                                 plugins: [
                                     '@babel/plugin-transform-runtime',
                                     '@babel/plugin-syntax-dynamic-import',
+                                    '@babel/plugin-transform-template-literals',
                                     ...(!isTest ? ['angularjs-annotate'] : []),
                                 ],
                             },
