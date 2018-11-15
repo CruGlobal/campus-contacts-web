@@ -9,7 +9,6 @@ angular
         $analytics,
         $timeout,
         $transitions,
-        spaPage,
         loggedInPerson,
         updateRollbarPerson,
         sessionStorageService,
@@ -18,9 +17,7 @@ angular
     ) {
         lscache.setBucket('missionhub:');
 
-        // Determine whether this page is a SPA page or a legacy page
-        $rootScope.isSpaPage = spaPage;
-        $rootScope.isLegacyPage = !$rootScope.isSpaPage;
+        $rootScope.isLegacyPage = false;
 
         if ($rootScope.isLegacyPage) {
             $analytics.pageTrack($window.location.pathname);
