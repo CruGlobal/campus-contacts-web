@@ -10,6 +10,8 @@ angular.module('missionhubApp').component('login', {
 });
 
 function loginController(authenticationService, envService, $state) {
+    this.showLogin = false;
+
     this.$onInit = async () => {
         this.theKeyUrl = authenticationService.theKeyloginUrl;
         this.url = envService.read('railsUrl');
@@ -21,5 +23,7 @@ function loginController(authenticationService, envService, $state) {
         if (this.accessToken) {
             await authenticationService.authorizeAccess(this.accessToken);
         }
+
+        if (!this.accessToken) this.showLogin = true;
     };
 }
