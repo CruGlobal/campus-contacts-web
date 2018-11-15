@@ -1,4 +1,3 @@
-import i18next from 'i18next';
 import lscache from 'lscache';
 
 angular
@@ -7,10 +6,10 @@ angular
         $window,
         $rootScope,
         $analytics,
-        $timeout,
         $transitions,
         localStorageService,
         authenticationService,
+        sessionStorageService,
     ) {
         lscache.setBucket('missionhub:');
 

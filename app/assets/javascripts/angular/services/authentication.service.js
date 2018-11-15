@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 angular
     .module('missionhubApp')
     .factory('authenticationService', authenticationService);
@@ -11,6 +13,7 @@ function authenticationService(
     state,
     sessionStorageService,
     localStorageService,
+    loggedInPerson,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const redirectUrl = encodeURIComponent(
@@ -103,6 +106,8 @@ function authenticationService(
 
         state.hasMissionhubAccess = currentState.hasMissionhubAccess;
         state.currentOrganization = currentState.currentOrganization;
+
+        $rootScope.$broadcast('state:changed', state);
     };
 
     const setState = organization => {
@@ -124,6 +129,8 @@ function authenticationService(
         localStorageService.clear('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
+
+        $rootScope.$broadcast('state:changed', state);
     };
 
     return {

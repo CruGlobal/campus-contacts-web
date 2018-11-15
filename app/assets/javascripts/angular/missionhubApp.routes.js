@@ -243,7 +243,12 @@ angular
                 url: '',
                 abstract: true,
                 resolve: {
-                    person: function(loggedInPerson, $q, $state) {
+                    person: function(
+                        loggedInPerson,
+                        $q,
+                        $state,
+                        sessionStorageService,
+                    ) {
                         const deferred = $q.defer();
 
                         loggedInPerson
