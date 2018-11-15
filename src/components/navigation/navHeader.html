@@ -27,12 +27,7 @@
             </a>
             <ul>
                 <li>
-                    <a ng-if="!$root.isSpaPage"
-                       ng-href="{{ '/d/people/' + $ctrl.state.legacyCurrentOrganization + '/' + $ctrl.loggedInPerson.person.id + '/profile' }}">
-                        {{ 'nav.my_profile' | t }}
-                    </a>
-                    <a ng-if="$root.isSpaPage"
-                       ui-sref="app.people.person.defaultTab({
+                    <a ui-sref="app.people.person.defaultTab({
                         personId: $ctrl.loggedInPerson.person.id,
                         orgId: $ctrl.state.legacyCurrentOrganization
                       })">
@@ -46,7 +41,7 @@
                     <a href="" ng-click="$root.openAboutModal()">About</a>
                 </li>
                 <li>
-                    <a ng-href="{{ $ctrl.railsUrl }}/sign_out" target='_self'>{{ 'nav.logout' | t }}</a>
+                    <a href ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
                 </li>
             </ul>
         </li>
@@ -58,7 +53,7 @@
 
     <ul class="list fr" id="primary_nav" ng-if="!$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" >
         <li style="fl">
-            <a ng-href="{{ $ctrl.railsUrl }}/sign_out" class='pivot-white f4 mr2' target='_self'>{{ 'nav.logout' | t }}</a>
+            <a href class='pivot-white f4 mr2' ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
         </li>
     </ul>
 
