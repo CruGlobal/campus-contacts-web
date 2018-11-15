@@ -1,6 +1,5 @@
 import angular from 'angular';
 import ngAnimate from 'angular-animate';
-import ngCookies from 'angular-cookies';
 import uiRouter from '@uirouter/angularjs';
 import '@uirouter/angularjs/lib/legacy/resolveService';
 import uiSelect from 'ui-select';
@@ -36,5 +35,4 @@ export default angular.module('missionhubApp', [
     ngScrollGlue,
     angulartics,
     angularticsGoogle,
-    ngCookies,
 ]);
