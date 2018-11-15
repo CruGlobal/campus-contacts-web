@@ -10,13 +10,7 @@ angular.module('missionhubApp').component('app', {
     },
 });
 
-function appController(
-    loggedInPerson,
-    periodService,
-    $uibModal,
-    $rootScope,
-    $http,
-) {
+function appController(loggedInPerson, periodService) {
     let deregisterEditOrganizationsEvent;
 
     this.editOrganizations = false;
