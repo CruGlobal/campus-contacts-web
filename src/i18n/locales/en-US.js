@@ -768,6 +768,10 @@ export default {
             addNewQuestion: 'Add New Question',
             predefinedQuestions: 'Predefined Questions',
             delete_confirm: 'Are you sure you want to delete this question?',
+            initiateAssignment: 'Answers to initiate assignment/notifications',
+            autoAssign: 'Auto Assign',
+            autoNotify: 'Auto Notify',
+            sendNotificationsViaEmail: 'Send notifications via email',
         },
     },
     contact_import: {

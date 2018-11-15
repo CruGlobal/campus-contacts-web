@@ -11,6 +11,9 @@
     .b--pivot-#{$name} {
         border-color: $value;
     }
+    .bb--pivot-#{$name} {
+        border-bottom-color: $value !important;
+    }
     .hover-pivot-#{$name} {
         &:hover,
         &:focus {

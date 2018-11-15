@@ -17,9 +17,15 @@ angular.module('missionhubApp').component('surveyOverviewQuestions', {
     template: template,
 });
 
-function surveyOverviewQuestionsController($uibModal, surveyService) {
+function surveyOverviewQuestionsController(
+    $uibModal,
+    surveyService,
+    $scope,
+    modelsService,
+    httpProxy,
+) {
     this.isExpanded = {};
-
+    this.surveyQuestions = [];
     this.icons = {
         copy: copyIcon,
         help: helpIcon,
@@ -27,7 +33,6 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
         trash: trashIcon,
         xWhite: xWhiteIcon,
     };
-
     this.questionTypes = [
         {
             kind: 'TextField',
@@ -35,7 +40,11 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             name: 'Short Answer',
             canAdd: true,
         },
-        { kind: 'TextField', style: 'email', name: 'Email Address' },
+        {
+            kind: 'TextField',
+            style: 'email',
+            name: 'Email Address',
+        },
         {
             kind: 'ChoiceField',
             style: 'radio',
@@ -54,8 +63,170 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             name: 'Dropdown (Choose one)',
             canAdd: true,
         },
-        { kind: 'DateField', style: 'date_field', name: 'Date' },
+        {
+            kind: 'DateField',
+            style: 'date_field',
+            name: 'Date',
+        },
     ];
+    this.people = [];
+
+    const loadSurveyData = async () => {
+        const { data } = await surveyService.getSurveyQuestions(this.survey.id);
+        this.people = await getPeople(data, this.survey.organization_id);
+        rebuildQuestions(data);
+        $scope.$apply();
+    };
+
+    const getPeople = async (questions, organizationId) => {
+        const peopleIds = [
+            ...new Set(
+                questions.reduce((a1, q) => {
+                    const ids = q.question_rules.reduce((a2, r) => {
+                        const peopleIds = r.people_ids
+                            ? r.people_ids.split(',')
+                            : [];
+                        return [...a2, ...peopleIds];
+                    }, []);
+                    return [...a1, ...ids];
+                }, []),
+            ),
+        ];
+
+        const { data } = await httpProxy.get(
+            '/people',
+            {
+                'filters[ids]': peopleIds.join(','),
+                'filters[organization_ids]': this.survey.organization_id,
+                'fields[people]':
+                    'first_name,gender,last_name,primary_email_address,id',
+            },
+            {
+                errorMessage: 'error.messages.surveys.loadQuestions',
+            },
+        );
+
+        return data;
+    };
+
+    const rebuildQuestions = questions => {
+        this.surveyQuestions = questions.map(buildQuestion);
+    };
+
+    const rebuildQuestion = question => {
+        const q = buildQuestion(question);
+        const index = this.surveyQuestions.indexOf(question);
+        this.surveyQuestions[index] = q;
+    };
+
+    const buildQuestion = question => {
+        const a = question.content ? question.content.split('\n') : [];
+
+        if (question.kind === 'ChoiceField' && a) {
+            const autoassignRules = buildRules(
+                question.question_rules,
+                a,
+                'AUTOASSIGN',
+            );
+            const autoNotifyRules = buildRules(
+                question.question_rules,
+                a,
+                'AUTONOTIFY',
+            );
+
+            return {
+                ...question,
+                question_answers: a,
+                question_rules: [...autoassignRules, ...autoNotifyRules],
+            };
+        }
+
+        return {
+            ...question,
+            question_answers: a,
+        };
+    };
+
+    const buildRules = (questionRules, answerQuestion, type) => {
+        return answerQuestion.map(answer =>
+            buildRule(answer, questionRules, type),
+        );
+    };
+
+    const buildRule = (answer, questionRules, type) => {
+        const {
+            id = null,
+            label_ids = null,
+            organization_ids = null,
+            people_ids = null,
+        } =
+            questionRules.find(
+                r => r.trigger_keywords === answer && r.rule_code === type,
+            ) || {};
+
+        const ids = people_ids ? people_ids.split(',') : [];
+
+        return {
+            id,
+            label_ids,
+            organization_ids,
+            people_ids,
+            rule_code: type,
+            trigger_keywords: answer,
+            assign_to: id
+                ? this.people.filter(p => ids.indexOf(p.id) >= 0)
+                : null,
+        };
+    };
+
+    const buildRulesWithChangedAnswer = (
+        question,
+        originalAnswer,
+        newAnswer,
+    ) => {
+        return question.question_rules.map(r => {
+            if (r.trigger_keywords === originalAnswer) {
+                return {
+                    ...r,
+                    trigger_keywords: newAnswer,
+                };
+            }
+            return r;
+        });
+    };
+
+    this.$onInit = () => {
+        loadSurveyData();
+    };
+
+    this.addPersonToRule = async (question, rule) => {
+        const index = question.question_rules.indexOf(rule);
+
+        if (!question.question_rules[index].assign_to) {
+            return;
+        }
+
+        const ids = [
+            ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
+        ];
+        const currentIds = question.question_rules[index].people_ids
+            ? question.question_rules[index].people_ids.split(',')
+            : [];
+
+        if (_.isEqual(currentIds.sort(), ids.sort())) {
+            return;
+        }
+
+        question.question_rules[index].people_ids = ids.join(',');
+        question.question_rules[index].assign_to.forEach(a => {
+            const exists = this.people.find(p => p.id === a.id);
+            if (!exists) {
+                this.people.push(a);
+            }
+        });
+
+        await this.saveQuestionContent(question, question.question_answers);
+    };
 
     this.getQuestionType = (kind, style) => {
         return _.find(this.questionTypes, { kind: kind, style: style });
@@ -65,9 +236,22 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
         handle: '.sort',
     };
 
-    this.$onInit = () => {
-        surveyService.getSurveyQuestions(this.survey.id).then(questions => {
-            this.surveyQuestions = questions;
+    this.questionSortableOptions = {
+        handle: '.question-sort',
+    };
+
+    this.updatePosition = questions => {
+        questions.forEach((q, index) => {
+            if (q.position === index + 1) return;
+
+            q.position = index + 1;
+
+            const { id, position } = q;
+
+            surveyService.updateSurveyQuestion(this.survey.id, {
+                id,
+                position,
+            });
         });
     };
 
@@ -76,8 +260,7 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             component: 'predefinedQuestionsModal',
             size: 'md',
             resolve: {
-                currentQuestions: () =>
-                    this.surveyQuestions.map(question => question.id),
+                currentQuestions: () => this.surveyQuestions.map(q => q.id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
@@ -125,28 +308,97 @@ function surveyOverviewQuestionsController($uibModal, surveyService) {
             });
     };
 
-    this.saveQuestion = _.throttle(
-        question => {
-            surveyService
-                .updateSurveyQuestion(
-                    this.survey.id,
-                    _.pick(question, [
-                        'id',
-                        'label',
-                        'kind',
-                        'style',
-                        'column_title',
-                        'content',
-                    ]),
-                )
-                .then();
-        },
-        750,
-        { leading: false },
-    );
+    this.saveQuestion = question => {
+        const {
+            id,
+            label,
+            kind,
+            style,
+            column_title,
+            content,
+            position,
+        } = question;
 
-    this.saveQuestionContent = (question, answers) => {
+        return surveyService.updateSurveyQuestion(
+            this.survey.id,
+            {
+                id,
+                label,
+                kind,
+                style,
+                column_title,
+                content,
+                position,
+            },
+            question.question_rules,
+        );
+    };
+
+    this.updateQuestion = async question => {
+        await this.saveQuestion(question);
+        rebuildQuestion(question);
+        $scope.$apply();
+    };
+
+    this.addEmptyQuestionContent = question => {
+        if (!question.question_answers) question.question_answers = [];
+
+        question.question_answers.push('');
+        question.question_rules.push(
+            buildRule('', question.question_rules, 'AUTOASSIGN'),
+        );
+        question.question_rules.push(
+            buildRule('', question.question_rules, 'AUTONOTIFY'),
+        );
+    };
+
+    this.setNotifyVia = (question, via) => {
+        question.notify_via = via;
+        this.saveQuestionContent(question, question.question_answers);
+    };
+
+    this.deleteQuestionContent = async (question, answers, rule, index) => {
+        if (rule.id) {
+            await surveyService.deleteSurveyQuestionRule(
+                this.survey.id,
+                rule.id,
+            );
+            const ruleIndex = question.question_rules.indexOf(rule);
+            question.question_rules.splice(ruleIndex, 1);
+        }
+
+        question.question_answers.splice(index, 1);
         question.content = answers.join('\n');
-        this.saveQuestion(question);
+        this.saveQuestionContent(question, answers);
+    };
+
+    this.updateQuestionAnswer = async (question, answerIndex) => {
+        const oldAnswers = question.content.split('\n');
+        const newAnswer = question.question_answers[answerIndex];
+
+        const originalAnswer = oldAnswers.find(
+            a => question.question_answers.indexOf(a) === -1,
+        );
+
+        question.question_rules = buildRulesWithChangedAnswer(
+            question,
+            originalAnswer,
+            newAnswer,
+        );
+
+        this.saveQuestionContent(question, question.question_answers);
+    };
+
+    this.saveQuestionContent = async (question, answers) => {
+        question.content = answers.join('\n');
+        const { data } = await this.saveQuestion(question);
+
+        if (data.question_rules) {
+            const index = this.surveyQuestions.indexOf(question);
+            this.surveyQuestions[index].question_rules = data.question_rules;
+        }
+
+        rebuildQuestion(question);
+        $scope.$apply();
     };
 }
