@@ -85,16 +85,12 @@ function authenticationService(
         });
 
     const authorizeAccess = async accessToken => {
-        try {
-            const response = await requestTicket(accessToken);
-            const { data } = await requestV4Token(response.data.ticket);
+        const response = await requestTicket(accessToken);
+        const { data } = await requestV4Token(response.data.ticket);
 
-            setAuthorizationAndState(data.token, data.recent_organization);
+        setAuthorizationAndState(data.token, data.recent_organization);
 
-            $state.go('app.people');
-        } catch (e) {
-            console.log(e);
-        }
+        $state.go('app.people');
     };
 
     const loadState = () => {
@@ -123,7 +119,8 @@ function authenticationService(
     const clearState = () => {
         sessionStorageService.clear('state');
         localStorageService.clear('state');
-        state = {};
+        state.hasMissionhubAccess = null;
+        state.currentOrganization = null;
     };
 
     return {
