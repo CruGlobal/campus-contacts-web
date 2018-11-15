@@ -8,10 +8,6 @@ angular.module('missionhubApp').component('app', {
     transclude: {
         legacyMenu: '?legacyMenu',
     },
-    bindings: {
-        access: '<',
-        currentOrganization: '<',
-    },
 });
 
 function appController(
