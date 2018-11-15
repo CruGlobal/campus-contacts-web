@@ -9,16 +9,25 @@ angular
             },
             vars: {
                 development: {
+                    siteUrl: 'http://localhost:8080',
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     railsUrl: 'http://localhost:3000',
+                    theKeyUrl: 'https://stage.thekey.me/cas',
+                    theKeyClientId: '4921314596573158029',
                 },
                 staging: {
+                    siteUrl: 'stage.missionhub.com',
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     railsUrl: 'https://stage.missionhub.com',
+                    theKeyUrl: 'https://stage.thekey.me/cas',
+                    theKeyClientId: '4921314596573158029',
                 },
                 production: {
+                    siteUrl: 'www.missionhub.com',
                     apiUrl: 'https://api.missionhub.com/apis/v4',
                     railsUrl: 'https://missionhub.com',
+                    theKeyUrl: 'https://thekey.me/cas',
+                    theKeyClientId: '4921314596573158029',
                 },
             },
         });
