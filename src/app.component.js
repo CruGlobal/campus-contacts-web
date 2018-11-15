@@ -9,10 +9,8 @@ angular.module('missionhubApp').component('app', {
         legacyMenu: '?legacyMenu',
     },
     bindings: {
-        jwtToken: '@',
         access: '<',
         currentOrganization: '<',
-        branded: '<',
     },
 });
 
