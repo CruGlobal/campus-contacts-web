@@ -10,9 +10,9 @@ angular.module('missionhubApp').component('navHeader', {
 function navHeaderController(
     state,
     loggedInPerson,
-    $timeout,
     envService,
     authenticationService,
+    $rootScope,
 ) {
     this.loggedInPerson = loggedInPerson;
     this.state = state;

@@ -247,7 +247,7 @@ angular
                         loggedInPerson,
                         $q,
                         $state,
-                        sessionStorageService,
+                        authenticationService,
                     ) {
                         const deferred = $q.defer();
 
@@ -267,6 +267,7 @@ angular
                             })
                             .catch(e => {
                                 if (e.status === 401) {
+                                    authenticationService.removeAccess();
                                     $state.go('login');
                                 }
                             });

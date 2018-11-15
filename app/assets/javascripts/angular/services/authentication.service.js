@@ -106,6 +106,7 @@ function authenticationService(
 
         state.hasMissionhubAccess = currentState.hasMissionhubAccess;
         state.currentOrganization = currentState.currentOrganization;
+        state.loggedIn = true;
 
         $rootScope.$broadcast('state:changed', state);
     };
@@ -129,6 +130,7 @@ function authenticationService(
         localStorageService.clear('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
+        state.loggedIn = false;
 
         $rootScope.$broadcast('state:changed', state);
     };
