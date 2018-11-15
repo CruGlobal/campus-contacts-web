@@ -13,17 +13,13 @@ angular.module('missionhubApp').component('predefinedQuestionsModal', {
 function predefinedQuestionsModalController(surveyService) {
     this.$onInit = () => {
         surveyService
-            .getPredefinedQuestions(this.resolve.currentQuestions)
-            .then(questions => {
-                this.predefinedQuestions = questions;
-            });
-        surveyService
-            .getPreviouslyUsedQuestions(
+            .getReusableQuestions(
                 this.resolve.orgId,
                 this.resolve.currentQuestions,
             )
-            .then(questions => {
-                this.previouslyUsedQuestions = questions;
+            .then(({ predefined, previouslyUsed }) => {
+                this.predefinedQuestions = predefined;
+                this.previouslyUsedQuestions = previouslyUsed;
             });
     };
 
