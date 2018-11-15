@@ -95,7 +95,9 @@ function authenticationService(
     };
 
     const loadState = () => {
-        const currentState = sessionStorageService.get('state');
+        const currentState =
+            sessionStorageService.get('state') ||
+            localStorageService.get('state');
 
         if (!currentState) return;
 
