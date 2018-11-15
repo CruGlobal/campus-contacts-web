@@ -21,8 +21,6 @@ function appController(
     periodService,
     $uibModal,
     $rootScope,
-    state,
-    $state,
     $http,
 ) {
     let deregisterEditOrganizationsEvent;
@@ -31,23 +29,9 @@ function appController(
     this.getPeriod = periodService.getPeriod;
     this.loggedInPerson = loggedInPerson;
 
-    const setAuthorizationAndState = () => {
-        state.branded = this.branded;
-        state.hasMissionhubAccess = this.access;
-        state.currentOrganization = this.currentOrganization
-            ? this.currentOrganization
-            : 0;
-
-        if (this.jwtToken) {
-            state.v4AccessToken = this.jwtToken;
-            $http.defaults.headers.common.Authorization =
-                'Bearer ' + this.jwtToken;
-        }
-    };
-
     this.$onInit = () => {
         this.year = new Date();
-        setAuthorizationAndState();
+
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
             (event, value) => {
