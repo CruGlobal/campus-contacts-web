@@ -19,9 +19,7 @@ function organizationOverviewSurveysController(
     envService,
     tFilter,
 ) {
-    this.surveyLinkPrefix = envService.is('production')
-        ? 'https://mhub.cc/s/'
-        : 'https://stage.mhub.cc/s/';
+    this.surveyLinkPrefix = envService.read('surveyLinkPrefix');
 
     this.createSurvey = () => {
         $uibModal

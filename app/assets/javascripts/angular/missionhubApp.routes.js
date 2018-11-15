@@ -418,8 +418,14 @@ angular
             })
             .state({
                 name: 'publicSurvey',
-                url: '/s/:surveyId',
+                url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
+                resolve: {
+                    survey: ($state, $transition$, routesService) =>
+                        routesService.getSurvey($transition$.params().surveyId),
+                    preview: ($state, $transition$) =>
+                        !!$transition$.params().preview,
+                },
             })
             .state({
                 name: 'app.ministries.ministry.survey',
