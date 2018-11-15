@@ -14,6 +14,7 @@ angular
         sessionStorageService,
         localStorageService,
         $http,
+        authenticationService,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -28,16 +29,7 @@ angular
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
 
-        const token =
-            sessionStorageService.get('jwtToken') ||
-            localStorageService.get('jwtToken');
-
-        if (token) {
-            $http.defaults.headers.common.Authorization = 'Bearer ' + token;
-            loggedInPerson.loadOnce().then(function(me) {
-                i18next.changeLanguage(me.user.language);
-                updateRollbarPerson(me);
-                $rootScope.legacyNavigation = me.user.beta_mode === false;
-            });
+        if (authenticationService.isTokenValid()) {
+            authenticationService.setupAuthenticationState();
         }
     });
