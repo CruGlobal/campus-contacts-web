@@ -9,11 +9,7 @@ angular
         $analytics,
         $timeout,
         $transitions,
-        loggedInPerson,
-        updateRollbarPerson,
-        sessionStorageService,
         localStorageService,
-        $http,
         authenticationService,
     ) {
         lscache.setBucket('missionhub:');
@@ -28,6 +24,8 @@ angular
         $transitions.onSuccess({}, transition => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
+
+        localStorageService.allowSessionTransfer();
 
         if (authenticationService.isTokenValid()) {
             authenticationService.setupAuthenticationState();
