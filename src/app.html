@@ -2,6 +2,7 @@
     <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
     <nav-header ng-if="!$root.legacyNavigation"></nav-header>
     <div ng-transclude="legacyMenu" ng-if="$root.legacyNavigation"></div>
+    {{$ctrl.currentOrganization}}
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
 <section class='main-container pt2 pb2 flex-grow-5' ng-cloak>

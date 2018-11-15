@@ -21,6 +21,7 @@ function authenticationService(
     )}/login?response_type=token&scope=fullticket&state=randomData&client_id=${envService.read(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
+
     const getJwtToken = () => {
         return (
             sessionStorageService.get('jwtToken') ||

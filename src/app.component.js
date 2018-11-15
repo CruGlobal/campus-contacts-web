@@ -10,12 +10,13 @@ angular.module('missionhubApp').component('app', {
     },
 });
 
-function appController(loggedInPerson, periodService, $rootScope) {
+function appController(loggedInPerson, periodService, $rootScope, state) {
     let deregisterEditOrganizationsEvent;
 
     this.editOrganizations = false;
     this.getPeriod = periodService.getPeriod;
     this.loggedInPerson = loggedInPerson;
+    this.currentOrganization = state.currentOrganization;
 
     this.$onInit = () => {
         this.year = new Date();
