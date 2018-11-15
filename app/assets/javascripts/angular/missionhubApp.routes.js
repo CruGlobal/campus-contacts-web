@@ -277,6 +277,31 @@ angular
                 component: 'login',
             })
             .state({
+                name: 'auth',
+                url: '/auth?acces_token',
+                component: 'login',
+                resolve: {
+                    accessToken: $location => {
+                        const token = $location
+                            .hash()
+                            .split('&')
+                            .reduce((acc, v) => {
+                                const found = v.split('=').find(f => {
+                                    return f === 'access_token';
+                                });
+
+                                if (found === 'access_token') {
+                                    return v.split('=')[1];
+                                }
+
+                                return acc;
+                            }, false);
+
+                        return token;
+                    },
+                },
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
