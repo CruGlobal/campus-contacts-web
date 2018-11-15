@@ -21,32 +21,12 @@ function surveyService(
             );
         },
 
-        getPredefinedQuestions: currentQuestions => {
-            return httpProxy
-                .get(
-                    '/surveys/predefined',
-                    {
-                        include: 'active_survey_elements.question',
-                    },
-                    {
-                        errorMessage: 'error.messages.surveys.loadQuestions',
-                    },
-                )
-                .then(predefinedQuestions => {
-                    return predefinedQuestions.data.active_survey_elements
-                        .map(element => element.question)
-                        .filter(
-                            question => !currentQuestions.includes(question.id),
-                        );
-                });
-        },
-
-        getPreviouslyUsedQuestions: (orgId, currentQuestions) => {
+        getReusableQuestions: (orgId, currentQuestions) => {
             return httpProxy
                 .get(
                     `/organizations/${orgId}`,
                     {
-                        include: 'surveys.active_survey_elements.question',
+                        include: 'active_survey_elements.question',
                     },
                     {
                         errorMessage: 'error.messages.surveys.loadQuestions',
@@ -55,24 +35,32 @@ function surveyService(
                 .then(({ data }) => {
                     return [
                         ...new Set( // Use set to remove duplicate questions found in separate surveys
-                            data.surveys.reduce(
-                                (acc, survey) => [
-                                    ...acc,
-                                    ...survey.active_survey_elements
-                                        .map(element => element.question)
-                                        .filter(
-                                            question =>
-                                                !question.predefined &&
-                                                (question.label ||
-                                                    question.column_title), // Hide questions with no name
-                                        ),
-                                ],
-                                [],
+                            data.active_survey_elements.map(
+                                element => element.question,
                             ),
                         ),
-                    ].filter(
-                        question => !currentQuestions.includes(question.id),
-                    );
+                    ]
+                        .filter(
+                            question =>
+                                (question.label || question.column_title) && // Hide questions with no name
+                                !currentQuestions.includes(question.id), // Hide questions already in current survey
+                        )
+                        .reduce(
+                            ({ predefined, previouslyUsed }, question) => ({
+                                predefined: [
+                                    ...predefined,
+                                    ...(question.predefined ? [question] : []),
+                                ],
+                                previouslyUsed: [
+                                    ...previouslyUsed,
+                                    ...(question.predefined ? [] : [question]),
+                                ],
+                            }),
+                            {
+                                predefined: [],
+                                previouslyUsed: [],
+                            },
+                        );
                 });
         },
 
