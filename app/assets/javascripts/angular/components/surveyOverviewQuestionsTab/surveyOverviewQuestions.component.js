@@ -262,7 +262,7 @@ function surveyOverviewQuestionsController(
             resolve: {
                 orgId: () => this.survey.organization_id,
                 currentQuestions: () =>
-                    this.surveyQuestions.map(question => question.id),
+                    this.surveyQuestions.map(({ id }) => id),
                 addQuestion: () => question => {
                     this.addQuestion(question);
                 },
