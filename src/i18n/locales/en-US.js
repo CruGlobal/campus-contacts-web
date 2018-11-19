@@ -712,7 +712,7 @@ export default {
         },
     },
     surveys: {
-        preview: 'See Preview',
+        preview: 'Preview this survey',
         publicView: {
             preview: {
                 header: 'This is a preview.',
