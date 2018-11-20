@@ -50,6 +50,7 @@ function authenticationService(
         state.v4AccessToken = null;
         sessionStorageService.clear('jwtToken');
         localStorageService.clear('jwtToken');
+        $http.defaults.headers.common.Authorization = null;
     };
 
     const storeToken = token => {
