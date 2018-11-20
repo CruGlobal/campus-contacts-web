@@ -140,7 +140,7 @@ function authenticationService(
         removeAccess: () => {
             clearToken();
             clearState();
-            $state.go('login');
+            $state.go('signIn');
         },
         setupAuthenticationState: () => {
             const token = getJwtToken();

@@ -19,6 +19,7 @@ function appController(
     $timeout,
 ) {
     let deregisterEditOrganizationsEvent;
+    let deregisterStateChangedEvent;
 
     this.editOrganizations = false;
     this.getPeriod = periodService.getPeriod;
@@ -28,9 +29,12 @@ function appController(
     this.$onInit = () => {
         this.year = new Date();
 
-        $rootScope.$on('state:changed', (event, data) => {
-            this.currentOrganization = data.currentOrganization;
-        });
+        deregisterStateChangedEvent = $rootScope.$on(
+            'state:changed',
+            (event, data) => {
+                this.currentOrganization = data.currentOrganization;
+            },
+        );
 
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
@@ -40,5 +44,8 @@ function appController(
         );
     };
 
-    this.$onDestroy = () => deregisterEditOrganizationsEvent();
+    this.$onDestroy = () => {
+        deregisterEditOrganizationsEvent();
+        deregisterStateChangedEvent();
+    };
 }
