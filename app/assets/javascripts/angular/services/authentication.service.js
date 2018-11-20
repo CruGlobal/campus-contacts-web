@@ -27,9 +27,9 @@ function authenticationService(
 
     const getJwtToken = () => {
         return (
-            sessionStorageService.get('jwtToken') ||
-            localStorageService.get('jwtToken') ||
-            false
+            (envService.is('development')
+                ? localStorageService.get('jwtToken')
+                : sessionStorageService.get('jwtToken')) || false
         );
     };
 
@@ -98,9 +98,9 @@ function authenticationService(
     };
 
     const loadState = () => {
-        const currentState =
-            sessionStorageService.get('state') ||
-            localStorageService.get('state');
+        const currentState = envService.is('development')
+            ? localStorageService.get('state')
+            : sessionStorageService.get('state');
 
         if (!currentState) return;
 
