@@ -14,6 +14,7 @@ angular
                     railsUrl: 'http://localhost:3000',
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
+                    facebookAppId: '233292170040365',
                 },
                 staging: {
                     siteUrl: 'stage.missionhub.com',
@@ -21,6 +22,7 @@ angular
                     railsUrl: 'https://stage.missionhub.com',
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
+                    facebookAppId: '233292170040365',
                 },
                 production: {
                     siteUrl: 'www.missionhub.com',
@@ -28,6 +30,7 @@ angular
                     railsUrl: 'https://missionhub.com',
                     theKeyUrl: 'https://thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
+                    facebookAppId: '233292170040365',
                 },
             },
         });

@@ -9,8 +9,14 @@ angular.module('missionhubApp').component('signIn', {
     },
 });
 
-function signInController(authenticationService, envService, $state) {
+function signInController(
+    authenticationService,
+    envService,
+    $state,
+    facebookService,
+) {
     this.showLogin = false;
+    this.facebookService = facebookService;
 
     this.$onInit = async () => {
         this.theKeyUrl = authenticationService.theKeyloginUrl;

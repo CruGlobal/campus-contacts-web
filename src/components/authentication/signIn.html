@@ -14,8 +14,7 @@
         <a href
             class="btn-primary btn-facebook f5"
             title="{{ 'login.login_with_facebook' | t }}"
-            target="_self"
-            ng-href="{{$ctrl.url}}/users/auth/facebook"
+            ng-click="$ctrl.facebookService.signIn()"
         >
             {{ 'login.login_with_facebook' | t }}
         </a>
