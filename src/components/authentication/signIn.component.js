@@ -1,15 +1,15 @@
-import template from './login.html';
-import './login.scss';
+import template from './signIn.html';
+import './signIn.scss';
 
-angular.module('missionhubApp').component('login', {
-    controller: loginController,
+angular.module('missionhubApp').component('signIn', {
+    controller: signInController,
     template: template,
     bindings: {
         accessToken: '<',
     },
 });
 
-function loginController(authenticationService, envService, $state) {
+function signInController(authenticationService, envService, $state) {
     this.showLogin = false;
 
     this.$onInit = async () => {

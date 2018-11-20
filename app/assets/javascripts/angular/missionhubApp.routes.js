@@ -268,7 +268,7 @@ angular
                             .catch(e => {
                                 if (e.status === 401) {
                                     authenticationService.removeAccess();
-                                    $state.go('login');
+                                    $state.go('signIn');
                                 }
                             });
 
@@ -278,14 +278,14 @@ angular
                 template: '<ui-view></ui-view>',
             })
             .state({
-                name: 'login',
+                name: 'signIn',
                 url: '/sign-in',
-                component: 'login',
+                component: 'signIn',
             })
             .state({
                 name: 'auth',
                 url: '/auth?acces_token',
-                component: 'login',
+                component: 'signIn',
                 resolve: {
                     accessToken: $location => {
                         const token = $location

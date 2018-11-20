@@ -13,7 +13,7 @@ import './missionhubApp.routes';
 import './missionhubApp.run';
 
 import '../../../../src/app.component';
-import '../../../../src/components/authentication/login.component';
+import '../../../../src/components/authentication/signIn.component';
 
 import '../../stylesheets/main.scss';
 
