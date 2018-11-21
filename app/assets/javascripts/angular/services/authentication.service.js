@@ -14,6 +14,7 @@ function authenticationService(
     sessionStorageService,
     localStorageService,
     loggedInPerson,
+    errorService,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const redirectUrl = encodeURIComponent(
@@ -96,18 +97,24 @@ function authenticationService(
         });
 
     const authorizeAccess = async accessToken => {
-        const response = await requestTicket(accessToken);
-        const { data } = await requestV4Token(response.data.ticket);
-
-        setAuthorizationAndState(data.token, data.recent_organization);
-        $state.go('app.people');
+        try {
+            const response = await requestTicket(accessToken);
+            const { data } = await requestV4Token(response.data.ticket);
+            setAuthorizationAndState(data.token, data.recent_organization);
+            $state.go('app.people');
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
     };
 
     const authorizeFacebookAccess = async accessToken => {
-        const { data } = await requestFacebookV4Token(accessToken);
-
-        setAuthorizationAndState(data.token, data.recent_organization);
-        $state.go('app.people');
+        try {
+            const { data } = await requestFacebookV4Token(accessToken);
+            setAuthorizationAndState(data.token, data.recent_organization);
+            $state.go('app.people');
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
     };
 
     const loadState = () => {
