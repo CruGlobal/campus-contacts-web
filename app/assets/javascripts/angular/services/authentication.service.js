@@ -21,7 +21,7 @@ function authenticationService(
     );
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',
-    )}/login?response_type=token&scope=fullticket&state=randomData&client_id=${envService.read(
+    )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
 
