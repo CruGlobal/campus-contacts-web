@@ -249,30 +249,16 @@ angular
                         $state,
                         authenticationService,
                     ) {
-                        const deferred = $q.defer();
-
-                        loggedInPerson
-                            .loadOnce()
-                            .then(user => {
-                                if (user.beta_mode === null) {
-                                    $uibModal.open({
-                                        component: 'newWelcomeModal',
-                                        resolve: {},
-                                        windowClass: 'pivot_theme',
-                                        size: 'sm',
-                                    });
-                                }
-
-                                deferred.resolve(user);
-                            })
-                            .catch(e => {
-                                if (e.status === 401) {
-                                    authenticationService.removeAccess();
-                                    $state.go('signIn');
-                                }
-                            });
-
-                        return deferred.promise;
+                        return loggedInPerson.loadOnce().then(user => {
+                            if (user.beta_mode === null) {
+                                $uibModal.open({
+                                    component: 'newWelcomeModal',
+                                    resolve: {},
+                                    windowClass: 'pivot_theme',
+                                    size: 'sm',
+                                });
+                            }
+                        });
                     },
                 },
                 template: '<ui-view></ui-view>',

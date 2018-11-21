@@ -25,6 +25,8 @@ function authenticationService(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
 
+    const nonAuthenticatedRoutes = ['signIn', 'auth'];
+
     const getJwtToken = () => {
         return (
             (envService.is('development')
@@ -136,6 +138,9 @@ function authenticationService(
     };
 
     return {
+        doesRouteRequireAuthentication: routeName => {
+            return nonAuthenticatedRoutes.indexOf(routeName) >= 0;
+        },
         authorizeAccess: authorizeAccess,
         removeAccess: () => {
             clearToken();

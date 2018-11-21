@@ -9,7 +9,7 @@ angular
         $transitions,
         localStorageService,
         authenticationService,
-        sessionStorageService,
+        loggedInPerson,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -29,4 +29,25 @@ angular
         if (authenticationService.isTokenValid()) {
             authenticationService.setupAuthenticationState();
         }
+
+        $transitions.onBefore({}, transition => {
+            if (
+                authenticationService.doesRouteRequireAuthentication(
+                    transition.to().name,
+                )
+            )
+                return true;
+
+            if (!authenticationService.isTokenValid()) {
+                authenticationService.removeAccess();
+                return transition.router.stateService.target('signIn');
+            }
+
+            return loggedInPerson.loadOnce().catch(e => {
+                if (e.status === 401) {
+                    authenticationService.removeAccess();
+                    return transition.router.stateService.target('signIn');
+                }
+            });
+        });
     });
