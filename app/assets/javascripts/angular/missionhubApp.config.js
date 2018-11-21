@@ -9,7 +9,7 @@ angular
             },
             vars: {
                 development: {
-                    siteUrl: 'http://localhost:8080',
+                    siteUrl: 'https://localhost:8080',
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     railsUrl: 'http://localhost:3000',
                     theKeyUrl: 'https://stage.thekey.me/cas',
