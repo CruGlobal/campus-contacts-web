@@ -2,7 +2,7 @@
     "name": "missionhub",
     "version": "1.0.0",
     "scripts": {
-        "start": "webpack-dev-server --https ",
+        "start": "webpack-dev-server",
         "start-rails-web": "cd ../missionhub && rails s",
         "start-rails-api": "cd ../missionhub-api && rails s -p 3001",
         "build": "webpack -p",
