@@ -152,8 +152,6 @@ function authenticationService(
             loadState();
         },
         theKeyloginUrl: theKeyloginUrl,
-        isTokenValid: () => {
-            return getJwtToken();
-        },
+        isTokenValid: getJwtToken,
     };
 }
