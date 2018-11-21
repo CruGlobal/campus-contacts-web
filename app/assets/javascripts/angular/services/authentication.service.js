@@ -38,7 +38,6 @@ function authenticationService(
 
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
-        $rootScope.legacyNavigation = me.user.beta_mode === false;
     };
 
     const setHttpHeaders = token => {
