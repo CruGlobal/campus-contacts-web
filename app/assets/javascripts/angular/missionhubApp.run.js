@@ -32,7 +32,7 @@ angular
 
         $transitions.onBefore({}, transition => {
             if (
-                authenticationService.doesRouteRequireAuthentication(
+                !authenticationService.doesRouteRequireAuthentication(
                     transition.to().name,
                 )
             )

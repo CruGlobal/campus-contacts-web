@@ -139,7 +139,7 @@ function authenticationService(
 
     return {
         doesRouteRequireAuthentication: routeName => {
-            return nonAuthenticatedRoutes.indexOf(routeName) >= 0;
+            return nonAuthenticatedRoutes.indexOf(routeName) < 0;
         },
         authorizeAccess: authorizeAccess,
         removeAccess: () => {
