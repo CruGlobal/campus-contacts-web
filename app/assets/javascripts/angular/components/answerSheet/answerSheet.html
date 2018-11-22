@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="column actions-column flush-column">
-    <a ng-href="/survey_responses/{{$ctrl.answerSheet.person.id}}/edit?jump_to_hash=s_{{$ctrl.answerSheet.survey.id}}&organization_id={{$ctrl.organizationId}}">
+    <a href ng-click="$ctrl.editResponse()">
         <ng-md-icon icon="edit" size="16"></ng-md-icon>
     </a>
 </div>

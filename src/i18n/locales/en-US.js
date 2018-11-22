@@ -9,6 +9,7 @@ export default {
         continue: 'Continue',
         ok: 'Ok',
         cancel: 'Cancel',
+        choose: 'Choose',
         help: 'Help',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
@@ -536,6 +537,7 @@ export default {
             },
             surveyResponses: {
                 header: 'Survey Responses',
+                editSurveyResponse: 'Edit Survey Response',
             },
             surveys: {
                 header: 'Surveys',

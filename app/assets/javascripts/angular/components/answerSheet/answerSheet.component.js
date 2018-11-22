@@ -7,4 +7,20 @@ angular.module('missionhubApp').component('answerSheet', {
         answerSheet: '<',
         organizationId: '<',
     },
+    controller: answerSheetController,
 });
+
+function answerSheetController($uibModal) {
+    this.editResponse = () => {
+        $uibModal.open({
+            component: 'editAnswerSheetModal',
+            resolve: {
+                answerSheet: () => this.answerSheet,
+                organizationId: () => this.organizationId,
+            },
+            windowClass: 'pivot_theme',
+            backdrop: 'static',
+            keyboard: false,
+        });
+    };
+}
