@@ -10,4 +10,9 @@ edit-answer-sheet-modal {
     input[type='text'] {
         font-size: 1em !important;
     }
+
+    input[type='checkbox'] {
+        top: 2px;
+        position: relative;
+    }
 }

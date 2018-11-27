@@ -31,10 +31,13 @@
             </div>
             <div ng-switch-when="checkbox" class='mb3'>
                 <div ng-repeat="content in answer.question.content.split('\n')">
-                    <input type="checkbox" class=''
-                        ng-model="answer.value"
-                        ng-checked="{{ answer.value === content }}"
-                        ng-value="content"/>
+                    <label>
+                        <input type="checkbox" class='mr1'
+                            ng-model="answer.value"
+                            ng-checked="{{ answer.value === content }}"
+                            ng-value="content"/>
+                        {{ content }}
+                    </label>
                 </div>
             </div>
             <div ng-switch-default>
