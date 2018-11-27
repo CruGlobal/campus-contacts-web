@@ -40,7 +40,7 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
             );
         });
 
-        this.dismiss();
+        this.close();
     };
 
     this.onInit;
