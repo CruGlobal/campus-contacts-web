@@ -14,31 +14,35 @@ angular.module('missionhubApp').component('editAnswerSheetModal', {
 
 function editAnswerSheetModalController(httpProxy, modelsService) {
     this.save = async answerId => {
-        this.resolve.answerSheet.answers.forEach(async a => {
-            let { data } = await httpProxy.put(
-                modelsService
-                    .getModelMetadata('answer_sheet')
-                    .url.single(this.resolve.answerSheet.id),
-                {
-                    data: {
-                        type: 'answer_sheet',
-                        attributes: {},
-                    },
-                    included: [
-                        {
-                            type: 'answer',
-                            attributes: {
-                                question_id: a.question.id,
-                                value: a.value,
-                            },
-                        },
-                    ],
+        const answers = this.resolve.answerSheet.answers;
+
+        const includedAnswers = answers.map(a => {
+            return {
+                type: 'answer',
+                attributes: {
+                    question_id: a.question.id,
+                    value: a.value,
                 },
-                {
-                    errorMessage: 'surveyTab:errors.updateSurvey',
-                },
-            );
+            };
         });
+
+        const { data } = await httpProxy.put(
+            modelsService
+                .getModelMetadata('answer_sheet')
+                .url.single(this.resolve.answerSheet.id),
+            {
+                data: {
+                    type: 'answer_sheet',
+                    attributes: {},
+                },
+                included: includedAnswers,
+            },
+            {
+                errorMessage: 'surveyTab:errors.updateSurvey',
+            },
+        );
+
+        this.resolve.answerSheet.answers = answers;
 
         this.close();
     };
