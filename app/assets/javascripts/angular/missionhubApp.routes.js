@@ -421,14 +421,19 @@ angular
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
                 resolve: {
-                    survey: ($state, $transition$, routesService) => {
-                        try {
-                            routesService.getSurvey(
-                                $transition$.params().surveyId,
-                            );
-                        } catch (e) {
-                            //bypass built in error handler that stops the routes
-                        }
+                    survey: ($state, $transition$, routesService, $q) => {
+                        const deferred = $q.defer();
+
+                        routesService
+                            .getSurvey(19133)
+                            .then(s => {
+                                deferred.resolve(s);
+                            })
+                            .catch(e => {
+                                deferred.resolve();
+                            });
+
+                        return deferred.promise;
                     },
                     preview: ($state, $transition$) =>
                         !!$transition$.params().preview,
@@ -439,7 +444,7 @@ angular
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
                 resolve: {
-                    survey: ($state, $transition$, routesService) =>
+                    survey: ($state, $transition$, routesService, $q) =>
                         routesService.getSurvey($transition$.params().surveyId),
                     preview: () => true,
                 },
