@@ -421,7 +421,7 @@ angular
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
                 resolve: {
-                    survey: ($state, $transition$, routesService, $q) => {
+                    survey: ($state, $transition$, routesService) => {
                         return routesService
                             .getSurvey($transition$.params().surveyId)
                             .catch(e => null);
