@@ -422,18 +422,9 @@ angular
                 component: 'publicSurvey',
                 resolve: {
                     survey: ($state, $transition$, routesService, $q) => {
-                        const deferred = $q.defer();
-
-                        routesService
+                        return routesService
                             .getSurvey($transition$.params().surveyId)
-                            .then(s => {
-                                deferred.resolve(s);
-                            })
-                            .catch(e => {
-                                deferred.resolve();
-                            });
-
-                        return deferred.promise;
+                            .catch(e => null);
                     },
                     preview: ($state, $transition$) =>
                         !!$transition$.params().preview,
@@ -444,7 +435,7 @@ angular
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
                 resolve: {
-                    survey: ($state, $transition$, routesService, $q) =>
+                    survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),
                     preview: () => true,
                 },
