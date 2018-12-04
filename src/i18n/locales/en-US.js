@@ -720,6 +720,7 @@ export default {
                 description:
                     'While in preview mode, you cannot submit survey responses.',
             },
+            surveyNotFound: 'This survey could not be found',
             inactiveOrInvalid:
                 'The survey you are trying to view is inactive or your link is invalid.',
         },

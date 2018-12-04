@@ -421,8 +421,15 @@ angular
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
                 resolve: {
-                    survey: ($state, $transition$, routesService) =>
-                        routesService.getSurvey($transition$.params().surveyId),
+                    survey: ($state, $transition$, routesService) => {
+                        try {
+                            routesService.getSurvey(
+                                $transition$.params().surveyId,
+                            );
+                        } catch (e) {
+                            //bypass built in error handler that stops the routes
+                        }
+                    },
                     preview: ($state, $transition$) =>
                         !!$transition$.params().preview,
                 },
@@ -434,7 +441,7 @@ angular
                 resolve: {
                     survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),
-                    preview: ($state, $transition$) => true,
+                    preview: () => true,
                 },
             })
             .state({
