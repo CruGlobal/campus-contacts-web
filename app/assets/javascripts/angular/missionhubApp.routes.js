@@ -425,7 +425,7 @@ angular
                         const deferred = $q.defer();
 
                         routesService
-                            .getSurvey(19133)
+                            .getSurvey($transition$.params().surveyId)
                             .then(s => {
                                 deferred.resolve(s);
                             })
@@ -440,7 +440,7 @@ angular
                 },
             })
             .state({
-                name: 'previewSurvey',
+                name: 'app.previewSurvey',
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
                 resolve: {
