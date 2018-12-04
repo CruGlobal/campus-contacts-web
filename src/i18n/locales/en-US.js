@@ -716,9 +716,12 @@ export default {
         publicView: {
             preview: {
                 header: 'This is a preview.',
+                inactive: 'The survey you are viewing is inactive.',
                 description:
                     'While in preview mode, you cannot submit survey responses.',
             },
+            inactiveOrInvalid:
+                'The survey you are trying to view is inactive or your link is invalid.',
         },
         delete: {
             confirm: 'Are you sure you want to delete this survey?',
