@@ -12,7 +12,7 @@
         {{ 'surveyTab:columns.status' | t }}
     </div>
     <div class="column buttons-column">
-        <icon-button icon="'add'" ng-click="$ctrl.createSurvey()"></icon-button>
+        <icon-button icon="'add'" ng-click="$ctrl.createSurvey()" ng-if="$ctrl.directAdminPrivileges"></icon-button>
     </div>
 </div>
 <div class="grid-content">
