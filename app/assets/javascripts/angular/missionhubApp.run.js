@@ -43,7 +43,7 @@ angular
                 return transition.router.stateService.target('signIn');
             }
 
-            return loggedInPerson.loadOnce().catch(e => {
+            return loggedInPerson.load().catch(e => {
                 if (e.status === 401) {
                     authenticationService.removeAccess();
                     return transition.router.stateService.target('signIn');
