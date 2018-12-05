@@ -14,7 +14,7 @@
                 'pa3': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
         }">
-            <a class="question-sort mr3">
+            <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
                 <img ng-src="{{$ctrl.icons.sort}}" alt="{{ 'surveys:questions.sort' | t }}" style="width:22px; height:20px">
             </a>
             <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
@@ -88,7 +88,7 @@
                             <div class="flex items-center assignment-item no-line"
                                  ng-repeat="answer in question.question_answers track by $index">
                                 <div>
-                                    <a class="sort mr3">
+                                    <a class="sort mr3" ng-if="$ctrl.directAdminPrivileges">
                                         <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}">
                                     </a>
                                 </div>

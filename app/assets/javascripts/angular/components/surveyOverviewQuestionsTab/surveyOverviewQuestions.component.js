@@ -245,6 +245,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.updatePosition = questions => {
+        if (!this.directAdminPrivileges) return;
+
         questions.forEach((q, index) => {
             if (q.position === index + 1) return;
 
