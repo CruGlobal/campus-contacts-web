@@ -9,6 +9,7 @@ angular
         $transitions,
         localStorageService,
         authenticationService,
+        facebookService,
         loggedInPerson,
     ) {
         lscache.setBucket('missionhub:');
@@ -24,11 +25,17 @@ angular
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
 
+        $window.fbAsyncInit = function() {
+            facebookService.init();
+        };
+
         localStorageService.allowSessionTransfer();
 
         if (authenticationService.isTokenValid()) {
             authenticationService.setupAuthenticationState();
         }
+
+        facebookService.loadSDK()(document);
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)

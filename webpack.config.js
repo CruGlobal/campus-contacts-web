@@ -174,6 +174,7 @@ module.exports = (env = {}) => {
         devtool: 'source-map',
         devServer: {
             historyApiFallback: true,
+            https: true,
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },
