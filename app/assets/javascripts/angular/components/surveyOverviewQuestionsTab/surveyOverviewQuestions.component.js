@@ -277,6 +277,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.addQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         if (!question.content) {
             question.content = '';
         }
@@ -293,10 +295,14 @@ function surveyOverviewQuestionsController(
     };
 
     this.copyQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         this.addQuestion(_.omit(question, ['id']));
     };
 
     this.deleteQuestion = questionId => {
+        if (!this.directAdminPrivileges) return;
+
         $uibModal
             .open({
                 component: 'iconModal',
@@ -317,6 +323,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         const {
             id,
             label,
