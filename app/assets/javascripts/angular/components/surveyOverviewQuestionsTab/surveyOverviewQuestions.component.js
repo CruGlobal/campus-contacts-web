@@ -101,6 +101,7 @@ function surveyOverviewQuestionsController(
                 'filters[organization_ids]': this.survey.organization_id,
                 'fields[people]':
                     'first_name,gender,last_name,primary_email_address,id',
+                include: '',
             },
             {
                 errorMessage: 'error.messages.surveys.loadQuestions',
