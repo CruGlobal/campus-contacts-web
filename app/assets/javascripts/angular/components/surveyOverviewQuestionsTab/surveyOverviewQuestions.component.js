@@ -23,6 +23,7 @@ function surveyOverviewQuestionsController(
     $scope,
     modelsService,
     httpProxy,
+    loggedInPerson,
 ) {
     this.isExpanded = {};
     this.surveyQuestions = [];
@@ -196,15 +197,17 @@ function surveyOverviewQuestionsController(
     };
 
     this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.survey.organization,
+        );
+
         loadSurveyData();
     };
 
     this.addPersonToRule = async (question, rule) => {
         const index = question.question_rules.indexOf(rule);
 
-        if (!question.question_rules[index].assign_to) {
-            return;
-        }
+        if (!question.question_rules[index].assign_to) return;
 
         const ids = [
             ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
