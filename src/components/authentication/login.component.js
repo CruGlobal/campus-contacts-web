@@ -1,4 +1,5 @@
 import template from './login.html';
+import './login.scss';
 
 angular.module('missionhubApp').component('login', {
     controller: loginController,

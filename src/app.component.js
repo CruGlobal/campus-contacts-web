@@ -1,5 +1,6 @@
 import template from './app.html';
-import './components/navHeader.component';
+import './components/navigation/navHeader.component';
+import './app.scss';
 
 angular.module('missionhubApp').component('app', {
     controller: appController,
@@ -48,7 +49,7 @@ function appController(
         setAuthorizationAndState();
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
-            function(event, value) {
+            (event, value) => {
                 this.editOrganizations = value;
             },
         );

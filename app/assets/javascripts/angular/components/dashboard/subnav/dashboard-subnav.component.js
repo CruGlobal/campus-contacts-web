@@ -6,14 +6,10 @@ angular.module('missionhubApp').component('dashboardSubnav', {
 });
 
 function DashboardSubnavController($scope) {
-    var vm = this;
+    this.editOrganizations = false;
 
-    vm.editOrganizations = false;
-
-    vm.toggleEditOrganizations = toggleEditOrganizations;
-
-    function toggleEditOrganizations() {
-        vm.editOrganizations = !vm.editOrganizations;
-        $scope.$emit('editOrganizations', vm.editOrganizations);
-    }
+    this.toggleEditOrganizations = () => {
+        this.editOrganizations = !this.editOrganizations;
+        $scope.$emit('editOrganizations', this.editOrganizations);
+    };
 }

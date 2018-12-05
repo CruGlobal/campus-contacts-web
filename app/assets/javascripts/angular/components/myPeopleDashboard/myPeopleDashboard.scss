@@ -11,7 +11,7 @@
             line-height: 32px;
             margin: 8px;
             font-weight: bold;
-            color: $white;
+            color: $gray-1-25;
             font-family: Montserrat, sans-serif;
         }
 
@@ -22,7 +22,6 @@
                 display: inline-block;
                 line-height: 12px;
                 position: relative;
-                top: 5px;
                 margin-left: 2px;
             }
             svg {
@@ -36,17 +35,6 @@
         .show-more {
             color: $white;
             display: inline-block;
-            background: $pivot-gradient-light;
-            background: -webkit-linear-gradient(
-                down,
-                $pivot-gradient-light 0%,
-                $pivot-gradient-dark 100%
-            );
-            background: linear-gradient(
-                to bottom,
-                $pivot-gradient-light 0%,
-                $pivot-gradient-dark 100%
-            );
             line-height: 44px;
             padding: 0 60px;
             margin-bottom: 8px;
@@ -55,7 +43,6 @@
             line-height: 25px;
             svg {
                 position: relative;
-                top: 9px;
                 margin-left: 3px;
                 fill: $pivot-dark-blue;
             }

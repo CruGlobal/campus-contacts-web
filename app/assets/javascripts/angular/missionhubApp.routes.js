@@ -10,14 +10,8 @@ angular
         ministryViewDefaultTab,
         personTabs,
         personDefaultTab,
-        spaPage,
         _,
     ) {
-        // Only set up client-side routing on single-page app pages
-        if (!spaPage) {
-            return false;
-        }
-
         // Instantiate factories
         var asyncBindingsService = asyncBindingsServiceProvider.$get();
 

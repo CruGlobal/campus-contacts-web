@@ -1,9 +1,9 @@
-<div id="menu_search">
+<div>
     <input type="text"
-           class="search-autocomplete-field"
-           ng-class="{ 'ui-autocomplete-loading': loadingSearchResults }"
+           class="search-autocomplete-field pivot-white"
            placeholder="{{ 'people.search.search_placeholder' | t }}"
            autocomplete="off"
+           ng-class="{ 'ui-autocomplete-loading': loadingSearchResults }"
            ng-model="$ctrl.searchQuery"
            uib-typeahead="person for person in $ctrl.searchPeople($viewValue)"
            typeahead-popup-template-url="customTypeaheadPopup.html"

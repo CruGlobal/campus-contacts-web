@@ -1,0 +1,76 @@
+<sunset-legacy-env-bar></sunset-legacy-env-bar>
+<div class="main-menu bg-pivot-darker-blue">
+
+    <a href="/" class='logo fl' ng-if="$ctrl.state.branded"></a>
+
+    <ul class="font-titillium fl ml3 list" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" id="primary_nav">
+        <li class='fl' ui-sref-active="current" ng-class="{ current: ('app.people' | includedByState) }">
+            <a class='pivot-white f4 pl2 pr3' ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+            <a class='pivot-white f4  pl2 pr3' href="/d/people" ng-if="!$root.isSpaPage">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+        </li>
+
+        <li class='fl' ng-class="{ current: ('app.ministries' | includedByState) }">
+            <a class='pivot-white f4 pl2 pr3' ng-if="$root.isSpaPage" ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+            <a class='pivot-white f4 pl2 pr3' ng-if="!$root.isSpaPage" href="/d/ministries/root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+        </li>
+    </ul>
+
+    <ul class="avatar-nav fr" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person"  >
+        <li>
+            <a href>
+                <div class="user-avatar-wrap avatar">
+                    <div class="pivot-white">
+                        {{ $ctrl.loggedInPerson.person.first_name[0] + $ctrl.loggedInPerson.person.last_name[0] | uppercase }}
+                    </div>
+                    <img class="user-avatar" ng-src="{{$ctrl.loggedInPerson.person.picture}}">
+                </div>
+            </a>
+            <ul>
+                <li>
+                    <a ng-if="!$root.isSpaPage"
+                       ng-href="{{ '/d/people/' + $ctrl.state.legacyCurrentOrganization + '/' + $ctrl.loggedInPerson.person.id + '/profile' }}">
+                        {{ 'nav.my_profile' | t }}
+                    </a>
+                    <a ng-if="$root.isSpaPage"
+                       ui-sref="app.people.person.defaultTab({
+                        personId: $ctrl.loggedInPerson.person.id,
+                        orgId: $ctrl.state.legacyCurrentOrganization
+                      })">
+                        {{ 'nav.my_profile' | t }}
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="app.userPreferences">{{ 'nav.preferences' | t }}</a>
+                </li>
+                <li>
+                    <a href="" ng-click="$root.openAboutModal()">About</a>
+                </li>
+                <li>
+                    <a href="/sign_out">{{ 'nav.logout' | t }}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="fr" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" >
+        <nav-search></nav-search>
+    </div>
+
+    <ul class="list fr" id="primary_nav" ng-if="!$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" >
+        <li style="fl">
+            <a href="/sign_out" class='pivot-white f4 mr2'>{{ 'nav.logout' | t }}</a>
+        </li>
+    </ul>
+
+    <ul class="list fr" ng-if="!$ctrl.loggedInPerson.person">
+        <li class='fl'>
+            <a href="http://help.missionhub.com" class='pivot-white f4 pr3 pl3' target='_blank'>{{ 'nav.support' | t }}</a>
+        </li>
+        <li class='fl'>
+            <a href class='pivot-white f4 pr3 pl3' ui-sref="app.login">{{ 'nav.login' | t }}</a>
+        </li>
+        <li class='fl' >
+            <a href class='pivot-white f4 pr3 pl3' ng-href="{{ $ctrl.railsUrl }}/request_access">{{ 'nav.requestAccess' | t }}</a>
+        </li>
+    </ul>
+</div>
