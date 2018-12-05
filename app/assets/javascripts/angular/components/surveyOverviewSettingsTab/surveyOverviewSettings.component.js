@@ -48,6 +48,8 @@ function surveyOverviewSettingsController(
     };
 
     this.selectImage = () => {
+        if (!this.directAdminPrivileges) return;
+
         // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -84,6 +86,8 @@ function surveyOverviewSettingsController(
     };
 
     this.deleteImage = () => {
+        if (!this.directAdminPrivileges) return;
+
         confirmModalService
             .create(tFilter('surveys:settings:image_delete_confirm'))
             .then(() => {
