@@ -27,7 +27,22 @@
             <a ng-href="{{$ctrl.surveyLinkPrefix + survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix + survey.id}}</a>
         </div>
         <div class="column column-status" uib-dropdown>
-            <div uib-dropdown-toggle class="pointer">
+            <div ng-if="!$ctrl.directAdminPrivileges">
+                <span ng-if="!survey.is_frozen">
+                    <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+                    {{ 'surveyTab:status.live' | t }}
+                </span>
+                <span ng-if="survey.is_frozen">
+                    <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+                    {{ 'surveyTab:status.off' | t }}
+                </span>
+            </div>
+
+            <div
+                uib-dropdown-toggle
+                ng-if="$ctrl.directAdminPrivileges"
+                class="pointer"
+            >
                 <span ng-if="!survey.is_frozen">
                     <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
                     {{ 'surveyTab:status.live' | t }}
