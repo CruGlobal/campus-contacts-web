@@ -414,6 +414,11 @@ export default {
                 new_label: 'Create a New Label',
             },
         },
+        login: {
+            login: 'Log in',
+            login_with_key: 'Log in with The Key',
+            login_with_facebook: 'Log in with Facebook',
+        },
         leader: 'Leader',
         mass_edit: {
             save: 'Edit {{contactCount}} contacts',
@@ -559,6 +564,8 @@ export default {
             goal: 'Goal Tracker',
             groups: 'Groups',
             logout: 'Sign Out',
+            login: 'Sign In',
+            requestAccess: 'Request Access',
             manage: 'Manage Ministries',
             my_profile: 'My Profile',
             powered_by_cru: 'Powered by Cru',
@@ -571,6 +578,7 @@ export default {
             support: 'Support',
             terms: 'Terms of Service',
             trend: 'Trend Tracker',
+            copyright: 'Copyright {{ year }} Cru. All Rights Reserved.',
         },
         organizations: {
             manage: 'Manage Ministries',

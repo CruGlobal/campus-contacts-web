@@ -10,12 +10,15 @@ angular
             vars: {
                 development: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    railsUrl: 'http://localhost:3000',
                 },
                 staging: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    railsUrl: 'https://stage.missionhub.com',
                 },
                 production: {
                     apiUrl: 'https://api.missionhub.com/apis/v4',
+                    railsUrl: 'https://missionhub.com',
                 },
             },
         });

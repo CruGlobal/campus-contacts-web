@@ -7,17 +7,6 @@ organization {
         padding-left: 8px;
     }
     .header {
-        background: $pivot-gradient-light;
-        background: -webkit-linear-gradient(
-            down,
-            $pivot-gradient-light 0%,
-            $pivot-gradient-dark 100%
-        );
-        background: linear-gradient(
-            to bottom,
-            $pivot-gradient-light 0%,
-            $pivot-gradient-dark 100%
-        );
         color: $white;
         display: flex;
         align-items: center;

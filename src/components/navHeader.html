@@ -1,7 +1,7 @@
 <sunset-legacy-env-bar></sunset-legacy-env-bar>
-<div id="menutop" class="topmenu topmenu-with-sub">
+<div id="menutop" class="topmenu topmenu-with-sub bg-pivot-darker-blue ph3">
     <a href="/" id="logoInvert" ng-if="$ctrl.state.branded"></a>
-    <ul ng-if="$ctrl.state.hasMissionhubAccess" class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
+    <ul ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" class="sc-init-menu sf-menu sf-navbar mh-top" id="primary_nav">
         <li ui-sref-active="current">
             <a ng-if="$root.isSpaPage" ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
             <a ng-if="!$root.isSpaPage" href="/d/people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
@@ -13,13 +13,13 @@
         </li>
     </ul>
 
-    <div ng-if="$ctrl.state.hasMissionhubAccess" class="flex items-center justify-center">
+    <div ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" class="flex items-center justify-center">
         <nav-search></nav-search>
     </div>
 
-    <ul ng-if="$ctrl.state.hasMissionhubAccess" id="profile_dropdown_nav" class="sc-init-menu sf-menu mh-top">
+    <ul ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" id="profile_dropdown_nav" class="sc-init-menu sf-menu mh-top">
         <li>
-            <a href="">
+            <a href>
                 <div class="user-avatar-wrap">
                     <div class="user-initials">
                         {{ $ctrl.loggedInPerson.person.first_name[0] + $ctrl.loggedInPerson.person.last_name[0] | uppercase }}
@@ -53,9 +53,23 @@
             </ul>
         </li>
     </ul>
-    <ul ng-if="!$ctrl.state.hasMissionhubAccess" class="sf-menu mh-top" id="primary_nav">
+
+    <ul ng-if="!$ctrl.state.hasMissionhubAccess && $ctrl.loggedInPerson.person" class="sf-menu mh-top" id="primary_nav">
         <li style="margin-left: auto;">
             <a href="/sign_out">{{ 'nav.logout' | t }}</a>
         </li>
+    </ul>
+
+    <ul ng-if="!$ctrl.loggedInPerson.person" class="sf-menu mh-top" id="primary_nav">
+        <li class='ml-auto'>
+            <a href="http://help.missionhub.com" target='_blank'>{{ 'nav.support' | t }}</a>
+        </li>
+        <li>
+            <a ui-sref="app.login">{{ 'nav.login' | t }}</a>
+        </li>
+        <li>
+            <a ng-href="{{ $ctrl.railsUrl }}/request_access">{{ 'nav.requestAccess' | t }}</a>
+        </li>
+    </ul>
     </ul>
 </div>

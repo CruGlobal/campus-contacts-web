@@ -12,6 +12,9 @@ import './rollbar.config';
 import './missionhubApp.routes';
 import './missionhubApp.run';
 
+import '../../../../src/app.component';
+import '../../../../src/components/login.component';
+
 import '../../stylesheets/main.scss';
 
 /* global require */

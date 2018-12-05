@@ -256,6 +256,11 @@ angular
                 template: '<ui-view></ui-view>',
             })
             .state({
+                name: 'app.login',
+                url: '/sign-in',
+                component: 'login',
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
