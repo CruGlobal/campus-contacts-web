@@ -19,6 +19,7 @@ function surveyOverviewKeywordController(
     surveyService,
     confirmModalService,
     tFilter,
+    loggedInPerson,
 ) {
     this.helpIcon = helpIcon;
 
@@ -39,6 +40,9 @@ function surveyOverviewKeywordController(
     };
 
     this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.survey.organization,
+        );
         this.keyword = angular.copy(this.survey.keyword) || {};
 
         this.disableKeywordField =
@@ -90,6 +94,8 @@ function surveyOverviewKeywordController(
     };
 
     this.deleteKeyword = keywordId => {
+        if (!this.directAdminPrivileges) return;
+
         confirmModalService
             .create(tFilter('surveys:keyword:delete:confirm'))
             .then(() => {
@@ -100,6 +106,8 @@ function surveyOverviewKeywordController(
     };
 
     this.saveKeyword = () => {
+        if (!this.directAdminPrivileges) return;
+
         this.keywordError = '';
         if (!this.keyword.initial_response) {
             this.keywordError = tFilter(

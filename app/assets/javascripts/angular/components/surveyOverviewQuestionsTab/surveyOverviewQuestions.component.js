@@ -23,6 +23,7 @@ function surveyOverviewQuestionsController(
     $scope,
     modelsService,
     httpProxy,
+    loggedInPerson,
 ) {
     this.isExpanded = {};
     this.surveyQuestions = [];
@@ -100,6 +101,7 @@ function surveyOverviewQuestionsController(
                 'filters[organization_ids]': this.survey.organization_id,
                 'fields[people]':
                     'first_name,gender,last_name,primary_email_address,id',
+                include: '',
             },
             {
                 errorMessage: 'error.messages.surveys.loadQuestions',
@@ -196,15 +198,17 @@ function surveyOverviewQuestionsController(
     };
 
     this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.survey.organization,
+        );
+
         loadSurveyData();
     };
 
     this.addPersonToRule = async (question, rule) => {
         const index = question.question_rules.indexOf(rule);
 
-        if (!question.question_rules[index].assign_to) {
-            return;
-        }
+        if (!question.question_rules[index].assign_to) return;
 
         const ids = [
             ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
@@ -241,6 +245,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.updatePosition = questions => {
+        if (!this.directAdminPrivileges) return;
+
         questions.forEach((q, index) => {
             if (q.position === index + 1) return;
 
@@ -271,6 +277,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.addQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         if (!question.content) {
             question.content = '';
         }
@@ -287,10 +295,14 @@ function surveyOverviewQuestionsController(
     };
 
     this.copyQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         this.addQuestion(_.omit(question, ['id']));
     };
 
     this.deleteQuestion = questionId => {
+        if (!this.directAdminPrivileges) return;
+
         $uibModal
             .open({
                 component: 'iconModal',
@@ -311,6 +323,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.saveQuestion = question => {
+        if (!this.directAdminPrivileges) return;
+
         const {
             id,
             label,

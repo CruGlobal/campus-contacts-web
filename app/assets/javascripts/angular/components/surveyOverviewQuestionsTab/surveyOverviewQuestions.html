@@ -14,7 +14,7 @@
                 'pa3': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
         }">
-            <a class="question-sort mr3">
+            <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
                 <img ng-src="{{$ctrl.icons.sort}}" alt="{{ 'surveys:questions.sort' | t }}" style="width:22px; height:20px">
             </a>
             <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
@@ -28,16 +28,17 @@
                 ng-click="$event.stopPropagation()"
                 ng-change="$ctrl.updateQuestion(question)"
                 ng-model-options='{ debounce: 750 }'
+                ng-readonly="!$ctrl.directAdminPrivileges"
                 ng-if="$ctrl.isExpanded[question.id]"
                 >
             <a class="ml3" href=""
-                ng-if="$ctrl.isExpanded[question.id]"
+                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges"
                 ng-click="$ctrl.deleteQuestion(question.id)"
                 >
                     <img ng-src="{{$ctrl.icons.trash}}" alt="{{ 'general:delete' | t }}">
             </a>
             <a class="ml3" href=""
-               ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
+               ng-if="$ctrl.isExpanded[question.id] && !question.predefined && $ctrl.directAdminPrivileges"
                ng-click="$ctrl.copyQuestion(question)">
                 <img ng-src="{{$ctrl.icons.copy}}" alt="Copy">
             </a>
@@ -73,6 +74,7 @@
                             ng-change="$ctrl.updateQuestion(question)"
                             ng-model-options='{ debounce: 750 }'
                             ng-model="question.column_title"
+                            ng-readonly="!$ctrl.directAdminPrivileges"
                             >
                     </div>
                 </div>
@@ -88,7 +90,7 @@
                             <div class="flex items-center assignment-item no-line"
                                  ng-repeat="answer in question.question_answers track by $index">
                                 <div>
-                                    <a class="sort mr3">
+                                    <a class="sort mr3" ng-if="$ctrl.directAdminPrivileges">
                                         <img alt="{{ 'surveys:questions.sort' | t }}" ng-src="{{$ctrl.icons.sort}}">
                                     </a>
                                 </div>
@@ -97,6 +99,7 @@
                                         ng-change="$ctrl.updateQuestionAnswer(question, $index)"
                                         ng-model-options='{ debounce: 750 }'
                                         ng-model="question.question_answers[$index]"
+                                        ng-readonly="!$ctrl.directAdminPrivileges"
                                         >
                                 </div>
                                 <div>
@@ -104,7 +107,11 @@
                                 </div>
                             </div>
                             <div class="assignment-item no-line w-94">
-                                <button ng-click="$ctrl.addEmptyQuestionContent(question)" class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent">
+                                <button
+                                    class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent"
+                                    ng-click="$ctrl.addEmptyQuestionContent(question)"
+                                    ng-if="$ctrl.directAdminPrivileges"
+                                >
                                     {{ 'surveys:questions.newAnswer' | t }}
                                 </button>
                             </div>
@@ -137,9 +144,11 @@
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assign_to"
                                   organization-id="$ctrl.survey.organization_id"
-                                  disabled="rule.trigger_keywords === ''"
+                                  disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                 ></assigned-select>
-                                <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
+                                <a href class="ml3 delete"
+                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                    ng-if="$ctrl.directAdminPrivileges">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}">
                                 </a>
                             </div>
@@ -150,9 +159,11 @@
                                   action-after-select="$ctrl.addPersonToRule(question, rule)"
                                   assigned="rule.assign_to"
                                   organization-id="$ctrl.survey.organization_id"
-                                  disabled="rule.trigger_keywords === ''"
+                                  disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                 ></assigned-select>
-                                <a class="ml3 delete" href="" ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);">
+                                <a href class="ml3 delete"
+                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                    ng-if="$ctrl.directAdminPrivileges">
                                     <img alt="Delete" ng-src="{{$ctrl.icons.trash}}">
                                 </a>
                             </div>

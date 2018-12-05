@@ -6,27 +6,37 @@
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="surveyName">
                         {{'surveyTab:surveyName' | t}}
                     </label>
-                    <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort" id="surveyName"
-                           placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title"
-                           ng-change="$ctrl.saveSurvey()">
+                    <input
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort" id="surveyName"
+                        placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
                 </div>
                 <div class="mt4 bb pb4 b--pivot-gray tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">
                         {{'surveys:settings.welcome_message' | t}}
                     </label>
-                    <textarea class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100" id="welcomeMessage"
-                              name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
-                              ng-model="$ctrl.surveyEdit.login_paragraph"
-                              ng-change="$ctrl.saveSurvey()"></textarea>
+                    <textarea
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
+                        id="welcomeMessage"
+                        name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
+                        ng-model="$ctrl.surveyEdit.login_paragraph"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges"
+                    ></textarea>
                 </div>
                 <div class="mt4 bb pb4 b--pivot-gray tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">
                         {{'surveys:settings.success_message' | t}}
                     </label>
-                    <textarea class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100" id="successMessage"
-                              placeholder="{{'surveys:settings.success_message' | t}}"
-                              ng-model="$ctrl.surveyEdit.post_survey_message"
-                              ng-change="$ctrl.saveSurvey()"></textarea>
+                    <textarea
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
+                        id="successMessage"
+                        placeholder="{{'surveys:settings.success_message' | t}}"
+                        ng-model="$ctrl.surveyEdit.post_survey_message"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
+                    </textarea>
                 </div>
                 <div class="mt4 tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
@@ -36,12 +46,18 @@
                     <div class="image-box bg-white mb3 br2">
                         <img ng-src="{{$ctrl.surveyEdit.logo_url}}" ng-if="$ctrl.surveyEdit.logo_url">
                     </div>
-                    <button class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
-                       ng-click="$ctrl.selectImage()">
+                    <button
+                        class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
+                        ng-click="$ctrl.selectImage()"
+                        ng-if="$ctrl.directAdminPrivileges"
+                    >
                         {{'surveys:settings.image_upload' | t}}
                     </button>
-                    <button class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
-                       ng-click="$ctrl.deleteImage()" ng-if="$ctrl.surveyEdit.logo_url">
+                    <button
+                        class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
+                        ng-click="$ctrl.deleteImage()"
+                        ng-if="$ctrl.surveyEdit.logo_url && $ctrl.directAdminPrivileges"
+                    >
                         {{'surveys:settings.image_delete' | t}}
                     </button>
                 </div>
