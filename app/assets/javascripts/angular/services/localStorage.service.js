@@ -36,6 +36,8 @@ angular.module('missionhubApp').service('localStorageService', $window => {
         clear: () => {
             localStorage.clear();
         },
+        // This method when initialized, passes the current sessionStorage to new tab instances.
+        // Normally new tabs will not keep the sessionStorage.
         allowSessionTransfer: () => {
             localStorage.setItem('getSessionStorage', Date.now());
 

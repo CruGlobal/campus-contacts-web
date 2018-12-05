@@ -9,9 +9,8 @@ angular
         $transitions,
         localStorageService,
         authenticationService,
-        sessionStorageService,
-        envService,
         facebookService,
+        loggedInPerson,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -37,4 +36,21 @@ angular
         }
 
         facebookService.loadSDK()(document);
+
+        $transitions.onBefore({}, transition => {
+            if (transition.to().data && transition.to().data.isPublic)
+                return true;
+
+            if (!authenticationService.isTokenValid()) {
+                authenticationService.removeAccess();
+                return transition.router.stateService.target('signIn');
+            }
+
+            return loggedInPerson.load().catch(e => {
+                if (e.status === 401) {
+                    authenticationService.removeAccess();
+                    return transition.router.stateService.target('signIn');
+                }
+            });
+        });
     });

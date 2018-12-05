@@ -249,30 +249,16 @@ angular
                         $state,
                         authenticationService,
                     ) {
-                        const deferred = $q.defer();
-
-                        loggedInPerson
-                            .loadOnce()
-                            .then(user => {
-                                if (user.beta_mode === null) {
-                                    $uibModal.open({
-                                        component: 'newWelcomeModal',
-                                        resolve: {},
-                                        windowClass: 'pivot_theme',
-                                        size: 'sm',
-                                    });
-                                }
-
-                                deferred.resolve(user);
-                            })
-                            .catch(e => {
-                                if (e.status === 401) {
-                                    authenticationService.removeAccess();
-                                    $state.go('signIn');
-                                }
-                            });
-
-                        return deferred.promise;
+                        return loggedInPerson.loadOnce().then(user => {
+                            if (user.beta_mode === null) {
+                                $uibModal.open({
+                                    component: 'newWelcomeModal',
+                                    resolve: {},
+                                    windowClass: 'pivot_theme',
+                                    size: 'sm',
+                                });
+                            }
+                        });
                     },
                 },
                 template: '<ui-view></ui-view>',
@@ -281,30 +267,21 @@ angular
                 name: 'signIn',
                 url: '/sign-in',
                 component: 'signIn',
+                data: {
+                    isPublic: true,
+                },
             })
             .state({
                 name: 'auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {
-                    accessToken: $location => {
-                        const token = $location
-                            .hash()
-                            .split('&')
-                            .reduce((acc, v) => {
-                                const found = v.split('=').find(f => {
-                                    return f === 'access_token';
-                                });
-
-                                if (found === 'access_token') {
-                                    return v.split('=')[1];
-                                }
-
-                                return acc;
-                            }, false);
-
-                        return token;
+                    accessToken: ($location, urlHashParserService) => {
+                        return urlHashParserService.param('access_token');
                     },
+                },
+                data: {
+                    isPublic: true,
                 },
             })
             .state({
