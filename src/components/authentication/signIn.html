@@ -1,11 +1,11 @@
-<div class="m-auto tc">
+<div class="m-auto tc" ng-if="$ctrl.showLogin">
     <h1 class="ttu">{{ 'login.login' | t }}</h1>
     <p>
         <a href
             class="btn-key btn-primary f5"
             title="{{ 'login.login_with_key' | t }}"
             target="_self"
-            ng-href="{{$ctrl.url}}/users/auth/key"
+            ng-href="{{$ctrl.theKeyUrl}}"
         >
             {{ 'login.login_with_key' | t }}
         </a>

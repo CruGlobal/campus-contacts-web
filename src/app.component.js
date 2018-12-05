@@ -8,63 +8,44 @@ angular.module('missionhubApp').component('app', {
     transclude: {
         legacyMenu: '?legacyMenu',
     },
-    bindings: {
-        jwtToken: '@',
-        access: '<',
-        currentOrganization: '<',
-        branded: '<',
-    },
 });
 
 function appController(
     loggedInPerson,
     periodService,
-    $uibModal,
     $rootScope,
     state,
-    $http,
+    sessionStorageService,
+    $timeout,
 ) {
     let deregisterEditOrganizationsEvent;
+    let deregisterStateChangedEvent;
 
     this.editOrganizations = false;
     this.getPeriod = periodService.getPeriod;
     this.loggedInPerson = loggedInPerson;
+    this.currentOrganization = state.currentOrganization;
 
-    const setAuthorizationAndState = () => {
-        state.branded = this.branded;
-        state.hasMissionhubAccess = this.access;
-        state.currentOrganization = this.currentOrganization
-            ? this.currentOrganization
-            : 0;
-
-        if (this.jwtToken) {
-            state.v4AccessToken = this.jwtToken;
-            $http.defaults.headers.common.Authorization =
-                'Bearer ' + this.jwtToken;
-        }
-    };
-
-    this.$onInit = async () => {
+    this.$onInit = () => {
         this.year = new Date();
-        setAuthorizationAndState();
+
+        deregisterStateChangedEvent = $rootScope.$on(
+            'state:changed',
+            (event, data) => {
+                this.currentOrganization = data.currentOrganization;
+            },
+        );
+
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
             (event, value) => {
                 this.editOrganizations = value;
             },
         );
-
-        const { user } = await loggedInPerson.loadOnce();
-
-        if (user.beta_mode === null) {
-            $uibModal.open({
-                component: 'newWelcomeModal',
-                resolve: {},
-                windowClass: 'pivot_theme',
-                size: 'sm',
-            });
-        }
     };
 
-    this.$onDestroy = () => deregisterEditOrganizationsEvent();
+    this.$onDestroy = () => {
+        deregisterEditOrganizationsEvent();
+        deregisterStateChangedEvent();
+    };
 }

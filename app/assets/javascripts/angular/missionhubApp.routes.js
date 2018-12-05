@@ -243,16 +243,46 @@ angular
                 url: '',
                 abstract: true,
                 resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadingPromise;
+                    person: function(
+                        loggedInPerson,
+                        $q,
+                        $state,
+                        authenticationService,
+                    ) {
+                        return loggedInPerson.loadOnce().then(user => {
+                            if (user.beta_mode === null) {
+                                $uibModal.open({
+                                    component: 'newWelcomeModal',
+                                    resolve: {},
+                                    windowClass: 'pivot_theme',
+                                    size: 'sm',
+                                });
+                            }
+                        });
                     },
                 },
                 template: '<ui-view></ui-view>',
             })
             .state({
-                name: 'app.login',
+                name: 'signIn',
                 url: '/sign-in',
-                component: 'login',
+                component: 'signIn',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'auth',
+                url: '/auth?acces_token',
+                component: 'signIn',
+                resolve: {
+                    accessToken: ($location, urlHashParserService) => {
+                        return urlHashParserService.param('access_token');
+                    },
+                },
+                data: {
+                    isPublic: true,
+                },
             })
             .state({
                 name: 'app.people',
