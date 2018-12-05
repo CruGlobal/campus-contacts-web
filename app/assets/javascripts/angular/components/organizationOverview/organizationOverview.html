@@ -17,9 +17,11 @@
         </div>
 
         <div class="tabs">
-            <div class="tab" ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
-                 ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
-                 ng-if="tabName !== 'labels'">
+            <div class="tab"
+                ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
+                ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
+                ng-if="tabName !== 'labels'"
+            >
                 <span>
                     {{'ministries.' + tabName + '.header' | t}}
                     <span ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'">({{$ctrl[tabName].length}})</span>
@@ -27,7 +29,7 @@
                 <loading-spinner ng-if="$ctrl.loadDetails && !$ctrl[tabName]" class="loading" size="16">
                 </loading-spinner>
             </div>
-            <div class="tab dropdown">
+            <div class="tab dropdown" ng-if="$ctrl.directAdminPrivileges">
                 {{'ministries.tools.header' | t}}
                 <ng-md-icon icon="play_arrow" class="chevron" size="14"></ng-md-icon>
                 <div class="dropdown-container">
