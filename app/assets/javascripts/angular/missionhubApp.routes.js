@@ -267,6 +267,9 @@ angular
                 name: 'signIn',
                 url: '/sign-in',
                 component: 'signIn',
+                data: {
+                    isPublic: true,
+                },
             })
             .state({
                 name: 'auth',
@@ -276,6 +279,9 @@ angular
                     accessToken: ($location, urlHashParserService) => {
                         return urlHashParserService.param('access_token');
                     },
+                },
+                data: {
+                    isPublic: true,
                 },
             })
             .state({

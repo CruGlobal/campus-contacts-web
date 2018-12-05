@@ -31,11 +31,7 @@ angular
         }
 
         $transitions.onBefore({}, transition => {
-            if (
-                !authenticationService.doesRouteRequireAuthentication(
-                    transition.to().name,
-                )
-            )
+            if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
             if (!authenticationService.isTokenValid()) {
