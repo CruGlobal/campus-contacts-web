@@ -6,48 +6,25 @@ function surveyService(
     modelsService,
     loggedInPerson,
     periodService,
+    $log,
 ) {
     return {
         getSurveyQuestions: surveyId => {
-            return $q
-                .all([
-                    httpProxy.get(
-                        '/surveys/predefined',
-                        {
-                            include: 'active_survey_elements.question',
-                        },
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                    httpProxy.get(
-                        `/surveys/${surveyId}/questions`,
-                        {},
-                        {
-                            errorMessage:
-                                'error.messages.surveys.loadQuestions',
-                        },
-                    ),
-                ])
-                .then(([predefinedSurvey, surveyQuestions]) => {
-                    let predefinedQuestions = predefinedSurvey.data.active_survey_elements.map(
-                        element => element.question,
-                    );
-
-                    //only include hard coded predefined questions (first/last name and phone)
-                    predefinedQuestions = predefinedQuestions.filter(question =>
-                        _.includes(['3457', '3458', '17'], question.id),
-                    );
-
-                    return [...predefinedQuestions, ...surveyQuestions.data];
-                });
+            return httpProxy.get(
+                `/surveys/${surveyId}/questions`,
+                {
+                    include: 'question_rules',
+                },
+                {
+                    errorMessage: 'error.messages.surveys.loadQuestions',
+                },
+            );
         },
 
-        getPredefinedQuestions: () => {
+        getReusableQuestions: (orgId, currentQuestions) => {
             return httpProxy
                 .get(
-                    '/surveys/predefined',
+                    `/organizations/${orgId}`,
                     {
                         include: 'active_survey_elements.question',
                     },
@@ -55,10 +32,35 @@ function surveyService(
                         errorMessage: 'error.messages.surveys.loadQuestions',
                     },
                 )
-                .then(predefinedQuestions => {
-                    return predefinedQuestions.data.active_survey_elements.map(
-                        element => element.question,
-                    );
+                .then(({ data }) => {
+                    return [
+                        ...new Set( // Use set to remove duplicate questions found in separate surveys
+                            data.active_survey_elements.map(
+                                element => element.question,
+                            ),
+                        ),
+                    ]
+                        .filter(
+                            question =>
+                                (question.label || question.column_title) && // Hide questions with no name
+                                !currentQuestions.includes(question.id), // Hide questions already in current survey
+                        )
+                        .reduce(
+                            ({ predefined, previouslyUsed }, question) => ({
+                                predefined: [
+                                    ...predefined,
+                                    ...(question.predefined ? [question] : []),
+                                ],
+                                previouslyUsed: [
+                                    ...previouslyUsed,
+                                    ...(question.predefined ? [] : [question]),
+                                ],
+                            }),
+                            {
+                                predefined: [],
+                                previouslyUsed: [],
+                            },
+                        );
                 });
         },
 
@@ -116,7 +118,8 @@ function surveyService(
                           `/surveys/${surveyId}/questions/${attributes.id}`,
                           payload,
                           {
-                              errorMessage: 'surveyTab:errors.createSurvey',
+                              errorMessage:
+                                  'surveyTab:errors.addSurveyQuestion',
                           },
                       )
                       .then(survey => {
@@ -131,13 +134,55 @@ function surveyService(
                       });
         },
 
-        updateSurveyQuestion: (surveyId, attributes) => {
-            const payload = {
+        updateSurveyQuestion: (surveyId, attributes, rules) => {
+            let payload = {
                 data: {
                     type: 'question',
                     attributes: attributes,
                 },
             };
+
+            if (rules) {
+                let ruleRelationship = [];
+                let ruleIncludes = [];
+
+                rules.forEach(r => {
+                    if (r.id) {
+                        ruleRelationship.push({
+                            type: 'question_rule',
+                            id: r.id,
+                        });
+                    }
+
+                    if (!r.people_ids || r.people_ids === '') {
+                        return;
+                    }
+
+                    if (!r.trigger_keywords || r.trigger_keywords === '') {
+                        return;
+                    }
+
+                    ruleIncludes.push({
+                        id: r.id,
+                        type: 'question_rule',
+                        attributes: {
+                            label_ids: null,
+                            organization_ids: null,
+                            people_ids: r.people_ids,
+                            rule_code: r.rule_code,
+                            trigger_keywords: r.trigger_keywords,
+                        },
+                    });
+                });
+
+                payload.data.relationships = {
+                    question_rules: {
+                        data: ruleRelationship,
+                    },
+                };
+
+                payload.included = ruleIncludes;
+            }
 
             return httpProxy.put(
                 `/surveys/${surveyId}/questions/${attributes.id}`,
@@ -151,6 +196,16 @@ function surveyService(
         deleteSurveyQuestion: (surveyId, questionId) => {
             return httpProxy.delete(
                 `/surveys/${surveyId}/questions/${questionId}`,
+                null,
+                {
+                    errorMessage: 'surveyTab:errors.createSurvey',
+                },
+            );
+        },
+
+        deleteSurveyQuestionRule: (surveyId, ruleId) => {
+            return httpProxy.delete(
+                `/surveys/${surveyId}/question_rules/${ruleId}`,
                 null,
                 {
                     errorMessage: 'surveyTab:errors.createSurvey',

@@ -24,7 +24,6 @@
     ],
     "rules": {
         "block-scoped-var": "error",
-        "curly": "warn",
         "dot-notation": "error",
         "eqeqeq": ["error", "smart"],
         "no-alert": "warn",

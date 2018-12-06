@@ -10,7 +10,7 @@ angular.module('missionhubApp').component('surveyOverview', {
     template: template,
 });
 
-function surveyOverviewController() {
+function surveyOverviewController(envService) {
     this.chevronLeftIcon = chevronLeftIcon;
     this.tabNames = [
         {
@@ -27,4 +27,5 @@ function surveyOverviewController() {
         },
     ];
     this.activeTab = this.tabNames[0].id;
+    this.surveyLinkPrefix = envService.read('surveyLinkPrefix');
 }

@@ -4,18 +4,21 @@ angular
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
-                staging: ['stage.missionhub.com'],
-                production: ['missionhub.com', 'www.missionhub.com'],
+                staging: ['stage.missionhub.com', 'stage.mhub.cc'],
+                production: ['missionhub.com', 'www.missionhub.com', 'mhub.cc'],
             },
             vars: {
                 development: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                 },
                 staging: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                 },
                 production: {
                     apiUrl: 'https://api.missionhub.com/apis/v4',
+                    surveyLinkPrefix: 'https://mhub.cc/s/',
                 },
             },
         });
