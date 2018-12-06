@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .config(function(envServiceProvider, ngMdIconServiceProvider, $qProvider) {
+    .config(envServiceProvider => {
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
@@ -38,7 +38,12 @@ angular
         // run the environment check, so the comprobation is made
         // before controllers and services are built
         envServiceProvider.check();
-
+    })
+    .config($analyticsProvider => {
+        //$analyticsProvider.firstPageview(true); /* Records pages that don't use $state or $route */
+        //$analyticsProvider.withAutoBase(true);  /* Records full path */
+    })
+    .config((ngMdIconServiceProvider, $qProvider) => {
         /* eslint-disable max-len */
         ngMdIconServiceProvider.addShapes({
             dashboard:
