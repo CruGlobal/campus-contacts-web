@@ -14,12 +14,6 @@ angular
     ) {
         lscache.setBucket('missionhub:');
 
-        $rootScope.isLegacyPage = false;
-
-        if ($rootScope.isLegacyPage) {
-            $analytics.pageTrack($window.location.pathname);
-        }
-
         $rootScope.whiteBackground = false;
         $transitions.onSuccess({}, transition => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
