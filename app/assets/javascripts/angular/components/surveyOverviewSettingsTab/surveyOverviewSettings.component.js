@@ -13,9 +13,12 @@ function surveyOverviewSettingsController(
     surveyService,
     confirmModalService,
     tFilter,
+    loggedInPerson,
 ) {
     this.saveSurvey = _.throttle(
         () => {
+            if (!this.directAdminPrivileges) return;
+
             this.survey.title = this.surveyEdit.title;
             this.survey.login_paragraph = this.surveyEdit.login_paragraph;
             this.survey.post_survey_message = this.surveyEdit.post_survey_message;
@@ -32,6 +35,10 @@ function surveyOverviewSettingsController(
     );
 
     this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.survey.organization,
+        );
+
         this.surveyEdit = {
             title: this.survey.title,
             login_paragraph: this.survey.login_paragraph,
@@ -41,6 +48,8 @@ function surveyOverviewSettingsController(
     };
 
     this.selectImage = () => {
+        if (!this.directAdminPrivileges) return;
+
         // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -77,6 +86,8 @@ function surveyOverviewSettingsController(
     };
 
     this.deleteImage = () => {
+        if (!this.directAdminPrivileges) return;
+
         confirmModalService
             .create(tFilter('surveys:settings:image_delete_confirm'))
             .then(() => {

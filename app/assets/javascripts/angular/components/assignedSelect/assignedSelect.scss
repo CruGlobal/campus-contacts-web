@@ -18,4 +18,8 @@ assigned-select .ui-select-bootstrap {
     .ui-select-choices-row:hover {
         background-color: $gray-5;
     }
+
+    input:disabled {
+        cursor: not-allowed;
+    }
 }

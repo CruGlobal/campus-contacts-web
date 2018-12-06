@@ -5,6 +5,8 @@ angular.module('missionhubApp').component('assignedSelect', {
     bindings: {
         assigned: '=',
         organizationId: '<',
+        disabled: '<',
+        actionAfterSelect: '&',
     },
     controller: assignedSelectController,
     template: template,
@@ -36,6 +38,12 @@ function assignedSelectController(
                 .then(function(people) {
                     vm.people = people;
                 });
+        });
+
+        $scope.$watch('$ctrl.assigned', (o, n) => {
+            if (vm.actionAfterSelect && o !== n) {
+                vm.actionAfterSelect();
+            }
         });
     }
 }
