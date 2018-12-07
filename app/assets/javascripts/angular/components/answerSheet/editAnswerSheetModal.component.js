@@ -31,7 +31,7 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
             .url.single(this.resolve.answerSheet.id);
 
         const { data } = await httpProxy.put(
-            `${url}?include=answers`,
+            url,
             {
                 data: {
                     type: 'answer_sheet',
@@ -40,6 +40,7 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
                 included: includedAnswers,
             },
             {
+                params: { include: 'answers' },
                 errorMessage: 'surveyTab:errors.updateSurvey',
             },
         );
