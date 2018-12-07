@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="column actions-column flush-column">
-    <a href ng-click="$ctrl.editResponse()">
+    <a href ng-click="$ctrl.editResponse()" ng-if="$ctrl.directAdminPrivileges">
         <ng-md-icon icon="edit" size="16"></ng-md-icon>
     </a>
 </div>

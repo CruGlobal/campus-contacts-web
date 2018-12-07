@@ -10,7 +10,7 @@ angular.module('missionhubApp').component('answerSheet', {
     controller: answerSheetController,
 });
 
-function answerSheetController($uibModal) {
+function answerSheetController($uibModal, loggedInPerson) {
     this.editResponse = () => {
         $uibModal.open({
             component: 'editAnswerSheetModal',
@@ -22,5 +22,11 @@ function answerSheetController($uibModal) {
             backdrop: 'static',
             keyboard: false,
         });
+    };
+
+    this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.answerSheet.survey.organization,
+        );
     };
 }
