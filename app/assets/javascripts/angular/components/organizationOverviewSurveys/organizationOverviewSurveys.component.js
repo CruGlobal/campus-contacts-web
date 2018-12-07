@@ -18,10 +18,15 @@ function organizationOverviewSurveysController(
     confirmModalService,
     envService,
     tFilter,
+    loggedInPerson,
 ) {
-    this.surveyLinkPrefix = envService.is('production')
-        ? 'https://mhub.cc/s/'
-        : 'https://stage.mhub.cc/s/';
+    this.surveyLinkPrefix = envService.read('surveyLinkPrefix');
+
+    this.$onInit = () => {
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
+            this.organizationOverview.org,
+        );
+    };
 
     this.createSurvey = () => {
         $uibModal

@@ -4,8 +4,8 @@ angular
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
-                staging: ['stage.missionhub.com'],
-                production: ['missionhub.com', 'www.missionhub.com'],
+                staging: ['stage.missionhub.com', 'stage.mhub.cc'],
+                production: ['missionhub.com', 'www.missionhub.com', 'mhub.cc'],
             },
             vars: {
                 development: {
@@ -15,6 +15,7 @@ angular
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                 },
                 staging: {
                     siteUrl: 'stage.missionhub.com',
@@ -23,6 +24,7 @@ angular
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                 },
                 production: {
                     siteUrl: 'www.missionhub.com',
@@ -31,6 +33,7 @@ angular
                     theKeyUrl: 'https://thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    surveyLinkPrefix: 'https://mhub.cc/s/',
                 },
             },
         });

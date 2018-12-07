@@ -449,16 +449,16 @@ a {
 
     .btn {
         @include font-smoothing(on);
-        background-image: linear-gradient(to bottom, #72d9e6, #3eb1c8);
+        background: #007398;
         font-size: 15px;
         color: #ffffff;
-        padding: 0 15px 0 15px;
+        padding: 0 0.25rem 0 0.25rem;
         text-decoration: none;
         display: inline-block;
         text-align: left;
         -moz-appearance: none;
         -webkit-appearance: none;
-        border-radius: 0;
+        border-radius: 0.25rem;
         text-align: center;
         border: 0;
         box-shadow: none;

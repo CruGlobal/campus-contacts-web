@@ -17,7 +17,7 @@
         </div>
     </div>
     </div>
-    <a ng-href="/survey_responses/new?preview=true&survey_id={{$ctrl.survey.id}}"
+    <a ui-sref="app.previewSurvey({ surveyId: $ctrl.survey.id })"
        target="_blank"
        class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked">
         {{ 'surveys:preview' | t }}
