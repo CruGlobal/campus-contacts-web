@@ -46,6 +46,4 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
 
         this.close();
     };
-
-    this.onInit;
 }
