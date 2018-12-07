@@ -26,10 +26,12 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
             };
         });
 
+        const url = modelsService
+            .getModelMetadata('answer_sheet')
+            .url.single(this.resolve.answerSheet.id);
+
         const { data } = await httpProxy.put(
-            modelsService
-                .getModelMetadata('answer_sheet')
-                .url.single(this.resolve.answerSheet.id),
+            `${url}?include=answers`,
             {
                 data: {
                     type: 'answer_sheet',
@@ -41,8 +43,6 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
                 errorMessage: 'surveyTab:errors.updateSurvey',
             },
         );
-
-        this.resolve.answerSheet.answers = answers;
 
         this.close();
     };

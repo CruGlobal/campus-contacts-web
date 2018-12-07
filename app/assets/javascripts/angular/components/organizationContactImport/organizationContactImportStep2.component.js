@@ -22,7 +22,7 @@ function organizationContactImportStep2Controller($scope, surveyService) {
         surveyService
             .getSurveyQuestions(this.selectedSurvey.id)
             .then(questions => {
-                this.surveyQuestions = questions;
+                this.surveyQuestions = questions.data;
             });
     };
 
