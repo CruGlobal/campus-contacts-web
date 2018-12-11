@@ -11,6 +11,7 @@ angular
         authenticationService,
         facebookService,
         loggedInPerson,
+        analyticsService,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -30,6 +31,7 @@ angular
         }
 
         facebookService.loadSDK()(document);
+        analyticsService.loadAdobe()(document);
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
@@ -46,5 +48,10 @@ angular
                     return transition.router.stateService.target('signIn');
                 }
             });
+        });
+
+        $transitions.onFinish({}, transition => {
+            //const newState = transition.$to();
+            //analyticsService.track();
         });
     });
