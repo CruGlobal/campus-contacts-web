@@ -115,7 +115,7 @@ function peopleScreenController(
             ],
         },
         {
-            name: 'last_survey',
+            name: 'lastSurvey',
             cssClass: 'detail-column assigned-to-column',
             label: 'ministries.people.lastSurvey',
             sortable: true,

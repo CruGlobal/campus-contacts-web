@@ -10,6 +10,7 @@ angular.module('missionhubApp').component('ministryViewPerson', {
         selected: '=',
         questions: '<',
         odd: '<',
+        showLastSurvey: '=',
     },
 });
 
@@ -51,12 +52,14 @@ function ministryViewPersonController(
                 );
             },
         );
+        console.log(this.showLastSurvey);
+        if (this.showLastSurvey) {
+            $scope.$watchCollection('$ctrl.person.answer_sheets', () => {
+                if (!this.person.answer_sheets) vm.lastSurvey = null;
 
-        $scope.$watchCollection('$ctrl.person.answer_sheets', () => {
-            if (!this.person.answer_sheets) vm.lastSurvey = null;
-
-            vm.lastSurvey = personService.getLastSurvey(this.person);
-        });
+                vm.lastSurvey = personService.getLastSurvey(this.person);
+            });
+        }
 
         $scope.$watchCollection('$ctrl.person.phone_numbers', function() {
             vm.phoneNumber = personService.getPhoneNumber(vm.person);

@@ -44,7 +44,7 @@
             </label>
         </div>
     </div>
-    <div class="column detail-column phone-number-column">
+    <div class="column detail-column phone-number-column" ng-if="$ctrl.showLastSurvey">
         <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
     </div>
     <div class="column detail-column phone-number-column">
