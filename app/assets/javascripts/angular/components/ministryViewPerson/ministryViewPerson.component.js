@@ -52,7 +52,7 @@ function ministryViewPersonController(
                 );
             },
         );
-        console.log(this.showLastSurvey);
+
         if (this.showLastSurvey) {
             $scope.$watchCollection('$ctrl.person.answer_sheets', () => {
                 if (!this.person.answer_sheets) vm.lastSurvey = null;
