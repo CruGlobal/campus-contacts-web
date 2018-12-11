@@ -53,9 +53,9 @@ function ministryViewPersonController(
         );
 
         $scope.$watchCollection('$ctrl.person.answer_sheets', () => {
-            if (!this.person.answer_sheets) vm.last_survey = null;
+            if (!this.person.answer_sheets) vm.lastSurvey = null;
 
-            vm.last_survey = personService.getLastSurvey(this.person);
+            vm.lastSurvey = personService.getLastSurvey(this.person);
         });
 
         $scope.$watchCollection('$ctrl.person.phone_numbers', function() {

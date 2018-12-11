@@ -119,7 +119,11 @@ function peopleScreenController(
             cssClass: 'detail-column assigned-to-column',
             label: 'ministries.people.lastSurvey',
             sortable: true,
-            getSortKey: person => personService.getLastSurvey(person),
+            getSortKey: person => {
+                const lastSurvey = personService.getLastSurvey(person);
+                if (!lastSurvey) return '1969-12-12 00:00:00'; //Force null to buttom of list
+                return lastSurvey;
+            },
             orderFields: [
                 'answer_sheets.completed_at',
                 'last_name',
