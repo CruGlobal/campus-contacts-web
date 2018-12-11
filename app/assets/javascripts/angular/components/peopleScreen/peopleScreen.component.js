@@ -118,10 +118,8 @@ function peopleScreenController(
             name: 'last_survey',
             cssClass: 'detail-column assigned-to-column',
             label: 'ministries.people.lastSurvey',
-            sortable: false,
-            getSortKey: person => {
-                return person.answer_sheets.completed_at;
-            },
+            sortable: true,
+            getSortKey: person => personService.getLastSurvey(person),
             orderFields: [
                 'answer_sheets.completed_at',
                 'last_name',
