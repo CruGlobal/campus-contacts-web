@@ -1,0 +1,18 @@
+@import '../../../../stylesheets/variables/colors';
+
+edit-answer-sheet-modal {
+    .form {
+        .form-group {
+            margin-bottom: 0.25em !important;
+        }
+    }
+
+    input[type='text'] {
+        font-size: 1em !important;
+    }
+
+    input[type='checkbox'] {
+        top: 2px;
+        position: relative;
+    }
+}

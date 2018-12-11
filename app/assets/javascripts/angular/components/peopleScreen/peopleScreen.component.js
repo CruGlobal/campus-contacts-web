@@ -475,6 +475,7 @@ function peopleScreenController(
 
     this.exportPeople = () => {
         peopleScreenService.exportPeople(
+            this.org.id,
             getSelection(),
             getOrder(),
             this.surveyId,

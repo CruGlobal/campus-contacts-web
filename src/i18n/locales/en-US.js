@@ -9,6 +9,7 @@ export default {
         continue: 'Continue',
         ok: 'Ok',
         cancel: 'Cancel',
+        choose: 'Choose',
         help: 'Help',
         became_curious: 'Became curious',
         became_open_to_change: 'Became open to change',
@@ -537,6 +538,7 @@ export default {
             },
             surveyResponses: {
                 header: 'Survey Responses',
+                editSurveyResponse: 'Edit Survey Response',
             },
             surveys: {
                 header: 'Surveys',
@@ -709,10 +711,22 @@ export default {
             updateSurvey: 'Error occurred while updating survey',
             deleteSurvey: 'Error occurred while deleting survey',
             getStats: 'Error occurred while retrieving survey stats',
+            addSurveyQuestion: 'Error occurred while adding survey question',
         },
     },
     surveys: {
-        preview: 'Preview Only',
+        preview: 'Preview this survey',
+        publicView: {
+            preview: {
+                header: 'This is a preview.',
+                inactive: 'The survey you are viewing is inactive.',
+                description:
+                    'While in preview mode, you cannot submit survey responses.',
+            },
+            surveyNotFound: 'This survey could not be found',
+            inactiveOrInvalid:
+                'The survey you are trying to view is inactive or your link is invalid.',
+        },
         delete: {
             confirm: 'Are you sure you want to delete this survey?',
         },
@@ -765,10 +779,15 @@ export default {
             columnTitle: 'Column Title',
             labelPlaceholder: '[Enter question here.]',
             newAnswer: 'New Answer',
-            addPredefinedQuestion: 'Add Predefined/Previous Question',
+            addPredefinedQuestion: 'Add Predefined/Previously Used Question',
             addNewQuestion: 'Add New Question',
             predefinedQuestions: 'Predefined Questions',
+            previouslyUsedQuestions: 'Previously Used Questions',
             delete_confirm: 'Are you sure you want to delete this question?',
+            initiateAssignment: 'Answers to initiate assignment/notifications',
+            autoAssign: 'Auto Assign',
+            autoNotify: 'Auto Notify',
+            sendNotificationsViaEmail: 'Send notifications via email',
         },
     },
     contact_import: {

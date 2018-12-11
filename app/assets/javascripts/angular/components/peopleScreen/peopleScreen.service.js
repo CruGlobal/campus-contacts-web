@@ -224,13 +224,14 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(selection, order, surveyId) {
-            const filterParams = _.mapKeys(
-                personSelectionService.convertToFilters(selection, surveyId),
-                function(value, key) {
-                    return 'filters[' + key + ']';
-                },
+        exportPeople: function(orgId, selection, order, surveyId) {
+            const filterParams = peopleScreenService.buildListParams(
+                orgId,
+                selection.filters,
+                order,
+                surveyId,
             );
+
             const params = _.extend(filterParams, {
                 access_token: $http.defaults.headers.common.Authorization.slice(
                     7,
@@ -239,6 +240,7 @@ function peopleScreenService(
                 sort: peopleScreenService.buildOrderString(order),
                 format: 'csv',
             });
+
             const queryString = _.map(params, function(value, key) {
                 return (
                     encodeURIComponent(key) + '=' + encodeURIComponent(value)

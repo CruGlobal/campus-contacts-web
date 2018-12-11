@@ -23,12 +23,19 @@
                     </div>
 
                     <div class="flex justify-stretch">
-                        <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort" ng-class="{
-                            'locked': $ctrl.disableKeywordField,
-                            'b--red': $ctrl.keywordError
-                        }"
-                               ng-disabled="$ctrl.disableKeywordField"
-                               id="keyword" placeholder="{{'surveys:keyword.keyword_example' | t}}" type="text" ng-model="$ctrl.keyword.keyword">
+                        <input
+                            type="text"
+                            id="keyword"
+                            placeholder="{{'surveys:keyword.keyword_example' | t}}"
+                            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort"
+                            ng-class="{
+                                'locked': $ctrl.disableKeywordField,
+                                'b--red': $ctrl.keywordError
+                            }"
+                            ng-disabled="$ctrl.disableKeywordField"
+                            ng-readonly="!$ctrl.directAdminPrivileges"
+                            ng-model="$ctrl.keyword.keyword"
+                        >
                         <button class="f6 link dim ph4 pv2 dib white bold br2 ttu tracked bg-blue ml2"
                                 ng-if="$ctrl.survey.keyword.state === 'active'" ng-click="$ctrl.deleteKeyword($ctrl.survey.keyword.id)">
                             {{'common:general.delete' | t}}
@@ -43,10 +50,14 @@
                     <p class="f7 pivot-gray-darker mt0 lh-16">
                         {{'surveys:keyword.purpose_instructions' | t}}
                     </p>
-                    <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort" id="keywordPurpose"
-                           placeholder="{{'surveys:keyword.purpose_example' | t}}" type="text"
-                           ng-disabled="$ctrl.disableKeywordField"
-                           ng-model="$ctrl.keyword.explanation">
+                    <input
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort"
+                        id="keywordPurpose"
+                        placeholder="{{'surveys:keyword.purpose_example' | t}}"
+                        type="text"
+                        ng-disabled="$ctrl.disableKeywordField"
+                        ng-model="$ctrl.keyword.explanation"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
                 </div>
                 <div class="mt4 pb2">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="textResponse">
@@ -64,17 +75,24 @@
                             {{'surveys:keyword.response_help' | t: {interpolation: { prefix: '-', suffix: '-'} } }}
                         </p>
                     </div>
-                    <textarea class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100" id="textResponse"
-                              maxlength="140"
-                              placeholder="{{'surveys:keyword.response_example' | t: {interpolation: { prefix: '-', suffix: '-'} } }}"
-                              ng-model="$ctrl.keyword.initial_response"></textarea>
+                    <textarea
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
+                        id="textResponse"
+                        maxlength="140"
+                        placeholder="{{'surveys:keyword.response_example' | t: {interpolation: { prefix: '-', suffix: '-'} } }}"
+                        ng-model="$ctrl.keyword.initial_response"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
+                    </textarea>
                     <p class="f7 pivot-gray-darker mt2 lh-16">
                         {{ 'messages.length_limit' | t : { remaining_characters: 140 - $ctrl.keyword.initial_response.length } }}
                     </p>
                 </div>
                 <div class="mt4">
-                    <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
-                            ng-click="$ctrl.requestKeyword()" ng-if="!$ctrl.survey.keyword.state">
+                    <button
+                        class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                        ng-click="$ctrl.requestKeyword()"
+                        ng-if="!$ctrl.survey.keyword.state && $ctrl.directAdminPrivileges"
+                    >
                         {{'surveys:keyword.request' | t}}
                     </button>
                     <span class="status gray-dark bold f6 ttu mb2" ng-if="$ctrl.survey.keyword.state === 'requested'">
@@ -82,7 +100,7 @@
                     </span>
                     <button class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
                             ng-click="$ctrl.saveKeyword()"
-                            ng-if="$ctrl.survey.keyword.state === 'active'">
+                            ng-if="$ctrl.survey.keyword.state === 'active' && $ctrl.directAdminPrivileges">
                         {{'general:save' | t}}
                     </button>
                 </div>
