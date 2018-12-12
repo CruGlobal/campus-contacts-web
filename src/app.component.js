@@ -29,12 +29,6 @@ function appController(
     this.currentOrganization = state.currentOrganization;
 
     this.$onInit = () => {
-        if (envService.is('production')) {
-            ga('create', 'UA-325725-21', 'auto');
-        } else {
-            ga('create', 'UA-XXXXXXX', 'auto');
-        }
-
         this.year = new Date();
 
         deregisterStateChangedEvent = $rootScope.$on(

@@ -1,8 +1,46 @@
 angular.module('missionhubApp').factory('analyticsService', analyticsService);
 
-function analyticsService($window, envService) {
+function analyticsService($window, envService, $location) {
+    const setupGoogle = ssoUid => {
+        ga('create', envService.read('googleAnalytics'), 'auto', {
+            legacyCookieDomain: 'missionhub.com',
+            allowLinker: true,
+            sampleRate: 100,
+            ...(ssoUid ? { userId: ssoUid } : {}),
+        });
+
+        ga(tracker => {
+            ga('set', 'dimension2', tracker.get('clientId'));
+        });
+
+        ga('set', 'dimension3', ssoUid);
+    };
+
+    const setupAdobe = ssoUid => {
+        $window.digitalData = {
+            page: {
+                pageInfo: {
+                    pageName: 'MissionHub',
+                },
+            },
+            user: [
+                {
+                    profile: [
+                        {
+                            profileInfo: {
+                                ssoGuid: ssoUid,
+                            },
+                        },
+                    ],
+                },
+            ],
+        };
+
+        $window._satellite && $window._satellite.pageBottom();
+    };
+
     return {
-        loadAdobe: () => {
+        loadAdobeScript: () => {
             const url = envService.is('production')
                 ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
                 : '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb-staging.js';
@@ -24,28 +62,31 @@ function analyticsService($window, envService) {
             };
         },
         init: ssoUid => {
-            $window.digitalData = {
-                page: {
-                    pageInfo: {
-                        pageName: 'MissionHub',
+            setupGoogle(ssoUid);
+            setupAdobe(ssoUid);
+        },
+        track: transition => {
+            const newState = transition.$to();
+            const currentUrl = newState.path.reduce((acc, p) => {
+                if (p.self.url === '^') return acc;
+
+                const url = Object.entries(transition.params()).reduce(
+                    (acc, param) => {
+                        return acc.replace(`:${param[0]}`, param[1]);
                     },
-                },
-                user: [
-                    {
-                        profile: [
-                            {
-                                profileInfo: {
-                                    ssoGuid: ssoUid,
-                                },
-                            },
-                        ],
-                    },
-                ],
+                    p.self.url,
+                );
+
+                return acc + url;
+            }, '');
+
+            const fields = {
+                page: currentUrl,
+                location: envService.read('siteUrl') + currentUrl,
+                title: newState.name,
             };
 
-            $window._satellite.pageBottom();
-        },
-        track: () => {
+            ga('send', 'pageview', fields);
             $window._satellite && $window._satellite.track('page view');
         },
     };

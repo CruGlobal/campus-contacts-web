@@ -31,7 +31,8 @@ angular
         }
 
         facebookService.loadSDK()(document);
-        analyticsService.loadAdobe()(document);
+        analyticsService.loadAdobeScript()(document);
+        analyticsService.init('SSOUID');
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
@@ -51,7 +52,6 @@ angular
         });
 
         $transitions.onFinish({}, transition => {
-            //const newState = transition.$to();
-            //analyticsService.track();
+            analyticsService.track(transition);
         });
     });
