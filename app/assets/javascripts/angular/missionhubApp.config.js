@@ -15,6 +15,7 @@ angular
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    googleAnalytics: 'UA-XXXXXX-XX',
                 },
                 staging: {
                     siteUrl: 'stage.missionhub.com',
@@ -23,6 +24,7 @@ angular
                     theKeyUrl: 'https://stage.thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    googleAnalytics: 'UA-XXXXXX-XX',
                 },
                 production: {
                     siteUrl: 'www.missionhub.com',
@@ -31,6 +33,7 @@ angular
                     theKeyUrl: 'https://thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
+                    googleAnalytics: 'UA-325725-21',
                 },
             },
         });
@@ -40,8 +43,8 @@ angular
         envServiceProvider.check();
     })
     .config($analyticsProvider => {
-        //$analyticsProvider.firstPageview(true); /* Records pages that don't use $state or $route */
-        //$analyticsProvider.withAutoBase(true);  /* Records full path */
+        $analyticsProvider.firstPageview(false);
+        $analyticsProvider.virtualPageviews(false);
     })
     .config((ngMdIconServiceProvider, $qProvider) => {
         /* eslint-disable max-len */
