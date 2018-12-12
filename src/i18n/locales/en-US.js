@@ -482,6 +482,21 @@ export default {
                     name: 'Label Name',
                 },
             },
+            cleanup: {
+                title: 'Organization Cleanup',
+                description:
+                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An Annual Clean Up can help. Simply walk through these steps once a year (or however often you want) and your Mission Hub Database will again be a well-oiled machine, ready to help you transform the world!",
+                archive_alumni: 'Archive Alumni',
+                archive_alumini_description:
+                    'Go to the All Contacts screen, select the people that have graduated from your ministry and label as "Alumni',
+                archive_by_date: 'Archive by date',
+                archive_by_date_description:
+                    'Archive people who have been added before:',
+                archive_by_inactivty: 'Archive by inactivty',
+                archive_by_inactivty_description:
+                    'Archive people who have been inactive since:',
+                open_contacts: 'Open Contacts',
+            },
             people: {
                 activity: {
                     header: 'Activity',

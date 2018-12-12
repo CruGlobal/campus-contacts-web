@@ -351,6 +351,11 @@ angular
                 component: 'orgManagement',
             })
             .state({
+                name: 'app.ministries.ministry.cleanup',
+                url: '/organization-cleanup',
+                component: 'organizationCleanup',
+            })
+            .state({
                 name: 'app.ministries.ministry.reportMovementIndicators',
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
