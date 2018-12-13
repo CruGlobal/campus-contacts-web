@@ -354,6 +354,10 @@ angular
                 name: 'app.ministries.ministry.cleanup',
                 url: '/organization-cleanup',
                 component: 'organizationCleanup',
+                resolve: {
+                    orgId: ($state, $transition$) =>
+                        $transition$.params().orgId,
+                },
             })
             .state({
                 name: 'app.ministries.ministry.reportMovementIndicators',
