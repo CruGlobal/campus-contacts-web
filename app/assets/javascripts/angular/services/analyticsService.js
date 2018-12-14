@@ -71,8 +71,8 @@ function analyticsService($window, envService, $location) {
                 if (p.self.url === '^') return acc;
 
                 const url = Object.entries(transition.params()).reduce(
-                    (acc, param) => {
-                        return acc.replace(`:${param[0]}`, param[1]);
+                    (acc, [paramId, paramValue]) => {
+                        return acc.replace(`:${paramId}`, paramValue);
                     },
                     p.self.url,
                 );
