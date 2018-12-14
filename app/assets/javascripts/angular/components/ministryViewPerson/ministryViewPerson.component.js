@@ -31,7 +31,10 @@ function ministryViewPersonController(
     vm.followupStatusOptions = personService.getFollowupStatusOptions();
 
     this.$onChanges = changes => {
-        if (changes.person.currentValue === changes.person.previousValue)
+        if (
+            !changes.person ||
+            changes.person.currentValue === changes.person.previousValue
+        )
             return;
 
         const person = changes.person.currentValue;
