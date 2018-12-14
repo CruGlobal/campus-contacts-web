@@ -120,7 +120,7 @@
                     person="person" organization-id="$ctrl.org.id"
                     questions="$ctrl.questions"
                     odd="$odd",
-                    show-last-survey="$ctrl.surveyId !== false && $ctrl.surveyId !== undefined">
+                    show-last-survey="$ctrl.surveyId">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}
