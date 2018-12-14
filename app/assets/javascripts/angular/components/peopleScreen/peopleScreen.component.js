@@ -114,22 +114,6 @@ function peopleScreenController(
                 'first_name',
             ],
         },
-        {
-            name: 'lastSurvey',
-            cssClass: 'detail-column assigned-to-column',
-            label: 'ministries.people.lastSurvey',
-            sortable: true,
-            getSortKey: person => {
-                const lastSurvey = personService.getLastSurvey(person);
-                if (!lastSurvey) return '1969-12-12 00:00:00'; //Force null to buttom of list
-                return lastSurvey;
-            },
-            orderFields: [
-                'answer_sheets.completed_at',
-                'last_name',
-                'first_name',
-            ],
-        },
     ];
 
     this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
@@ -137,6 +121,8 @@ function peopleScreenController(
     let unsubscribe = null;
 
     this.$onInit = () => {
+        if (this.surveyId) addLastSurveyColumn();
+
         unsubscribe = $rootScope.$on('personCreated', (event, person) => {
             onNewPerson(person);
         });
@@ -155,6 +141,25 @@ function peopleScreenController(
 
     this.$onDestroy = () => {
         unsubscribe();
+    };
+
+    const addLastSurveyColumn = () => {
+        this.columns.push({
+            name: 'lastSurvey',
+            cssClass: 'detail-column assigned-to-column',
+            label: 'ministries.people.lastSurvey',
+            sortable: true,
+            getSortKey: person => {
+                const lastSurvey = personService.getLastSurvey(person);
+                if (!lastSurvey) return '1969-12-12 00:00:00'; //Force null to buttom of list
+                return lastSurvey;
+            },
+            orderFields: [
+                'answer_sheets.completed_at',
+                'last_name',
+                'first_name',
+            ],
+        });
     };
 
     const selectedCount = () => {

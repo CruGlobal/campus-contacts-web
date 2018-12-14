@@ -23,12 +23,7 @@
                      ng-if="$first"
                      ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
                      ng-click="column.sortable && $ctrl.setSortColumn(column)">
-                    <span
-                        ng-if="
-                            column.name !== 'lastSurvey' ||
-                            ($ctrl.surveyId && column.name === 'lastSurvey')
-                        "
-                    >
+                    <span>
                         {{column.label | t}}
                     </span>
                     <div class="normal-column sort-order-column" ng-if="column.sortable">
