@@ -17,8 +17,6 @@ function appController(
     state,
     sessionStorageService,
     $timeout,
-    $analytics,
-    envService,
 ) {
     let deregisterEditOrganizationsEvent;
     let deregisterStateChangedEvent;
