@@ -2,6 +2,8 @@ angular.module('missionhubApp').factory('analyticsService', analyticsService);
 
 function analyticsService($window, envService, $location) {
     const setupGoogle = ssoUid => {
+        if (!angular.isFunction(ga)) return;
+
         ga('create', envService.read('googleAnalytics'), 'auto', {
             legacyCookieDomain: 'missionhub.com',
             allowLinker: true,
@@ -86,7 +88,8 @@ function analyticsService($window, envService, $location) {
                 title: newState.name,
             };
 
-            ga('send', 'pageview', fields);
+            if (angular.isFunction(ga)) ga('send', 'pageview', fields);
+
             $window._satellite && $window._satellite.track('page view');
         },
     };
