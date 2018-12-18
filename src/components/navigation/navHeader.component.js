@@ -12,11 +12,9 @@ function navHeaderController(
     loggedInPerson,
     envService,
     authenticationService,
-    $rootScope,
 ) {
     this.loggedInPerson = loggedInPerson;
     this.state = state;
-    this.railsUrl = envService.read('railsUrl');
 
     this.logout = () => {
         authenticationService.removeAccess();

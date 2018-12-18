@@ -84,7 +84,7 @@ function analyticsService($window, envService, $location) {
 
             const fields = {
                 page: currentUrl,
-                location: envService.read('siteUrl') + currentUrl,
+                location: `https://${$location.host()}/${currentUrl}`,
                 title: newState.name,
             };
 
