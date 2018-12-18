@@ -2,20 +2,20 @@ angular.module('missionhubApp').factory('analyticsService', analyticsService);
 
 function analyticsService($window, envService, $location) {
     const setupGoogle = ssoUid => {
-        if (!angular.isFunction(ga)) return;
+        if (!angular.isFunction($window.ga)) return;
 
-        ga('create', envService.read('googleAnalytics'), 'auto', {
+        $window.ga('create', envService.read('googleAnalytics'), 'auto', {
             legacyCookieDomain: 'missionhub.com',
             allowLinker: true,
             sampleRate: 100,
             ...(ssoUid ? { userId: ssoUid } : {}),
         });
 
-        ga(tracker => {
-            ga('set', 'dimension2', tracker.get('clientId'));
+        $window.ga(tracker => {
+            $window.ga('set', 'dimension2', tracker.get('clientId'));
         });
 
-        ga('set', 'dimension3', ssoUid);
+        $window.ga('set', 'dimension3', ssoUid);
     };
 
     const setupAdobe = ssoUid => {
@@ -88,7 +88,8 @@ function analyticsService($window, envService, $location) {
                 title: newState.name,
             };
 
-            if (angular.isFunction(ga)) ga('send', 'pageview', fields);
+            if (angular.isFunction($window.ga))
+                $window.ga('send', 'pageview', fields);
 
             $window._satellite && $window._satellite.track('page view');
         },
