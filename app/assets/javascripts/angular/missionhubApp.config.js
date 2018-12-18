@@ -18,7 +18,7 @@ angular
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                 },
                 staging: {
-                    siteUrl: 'https://stage.missionhub.com',
+                    siteUrl: 'https://stage.mhub.cc',
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     railsUrl: 'https://stage.missionhub.com',
                     theKeyUrl: 'https://stage.thekey.me/cas',
