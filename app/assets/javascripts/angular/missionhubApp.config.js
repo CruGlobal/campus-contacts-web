@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .config(function(envServiceProvider, ngMdIconServiceProvider, $qProvider) {
+    .config(envServiceProvider => {
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
@@ -16,6 +16,7 @@ angular
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
+                    googleAnalytics: 'UA-XXXXXX-XX',
                 },
                 staging: {
                     siteUrl: 'https://stage.mhub.cc',
@@ -25,6 +26,7 @@ angular
                     theKeyClientId: '8480288430352167964',
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
+                    googleAnalytics: 'UA-XXXXXX-XX',
                 },
                 production: {
                     siteUrl: 'https://www.missionhub.com',
@@ -34,6 +36,7 @@ angular
                     theKeyClientId: '8480288430352167964',
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://mhub.cc/s/',
+                    googleAnalytics: 'UA-325725-21',
                 },
             },
         });
@@ -41,7 +44,12 @@ angular
         // run the environment check, so the comprobation is made
         // before controllers and services are built
         envServiceProvider.check();
-
+    })
+    .config($analyticsProvider => {
+        $analyticsProvider.firstPageview(false);
+        $analyticsProvider.virtualPageviews(false);
+    })
+    .config((ngMdIconServiceProvider, $qProvider) => {
         /* eslint-disable max-len */
         ngMdIconServiceProvider.addShapes({
             dashboard:

@@ -11,14 +11,9 @@ angular
         authenticationService,
         facebookService,
         loggedInPerson,
+        analyticsService,
     ) {
         lscache.setBucket('missionhub:');
-
-        $rootScope.isLegacyPage = false;
-
-        if ($rootScope.isLegacyPage) {
-            $analytics.pageTrack($window.location.pathname);
-        }
 
         $rootScope.whiteBackground = false;
         $transitions.onSuccess({}, transition => {
@@ -36,6 +31,8 @@ angular
         }
 
         facebookService.loadSDK()(document);
+        analyticsService.loadAdobeScript()(document);
+        analyticsService.init('SSOUID');
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
@@ -52,5 +49,9 @@ angular
                     return transition.router.stateService.target('signIn');
                 }
             });
+        });
+
+        $transitions.onFinish({}, transition => {
+            analyticsService.track(transition);
         });
     });
