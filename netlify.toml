@@ -1,16 +1,6 @@
 [[redirects]]
-  from = "/s/*"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/"
-  to = "/netlify-to-rails-redirect.html"
-  status = 200
-
-[[redirects]]
   from = "/*"
-  to = "/netlify-to-rails-redirect.html"
+  to = "/index.html"
   status = 200
 
 [[headers]]

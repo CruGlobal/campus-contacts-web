@@ -10,7 +10,6 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const ci = process.env.CI === 'true';
@@ -83,7 +82,6 @@ module.exports = (env = {}) => {
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
-                      new CopyWebpackPlugin(['netlify-to-rails-redirect.html']),
                   ]
                 : []),
             ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),

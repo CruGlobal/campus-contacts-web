@@ -20,7 +20,6 @@ function signInController(
 
     this.$onInit = async () => {
         this.theKeyUrl = authenticationService.theKeyloginUrl;
-        this.url = envService.read('railsUrl');
 
         if (authenticationService.isTokenValid()) {
             $state.go('app.people');

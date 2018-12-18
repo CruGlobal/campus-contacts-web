@@ -7,6 +7,7 @@ angular
 function authenticationService(
     envService,
     $http,
+    $location,
     $rootScope,
     updateRollbarPerson,
     $state,
@@ -17,10 +18,7 @@ function authenticationService(
     errorService,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
-    const redirectUrl = encodeURIComponent(
-        envService.read('siteUrl') +
-            (envService.is('production') ? '/d/auth' : '/auth'),
-    );
+    const redirectUrl = encodeURIComponent(`https://${$location.host()}/auth`);
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',
     )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
