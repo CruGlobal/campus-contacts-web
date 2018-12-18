@@ -19,7 +19,7 @@ function authenticationService(
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const redirectUrl = encodeURIComponent(
         envService.read('siteUrl') +
-            (envService.is('development') ? '/auth' : '/d/auth'),
+            (envService.is('production') ? '/d/auth' : '/auth'),
     );
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',
