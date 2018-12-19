@@ -1,5 +1,5 @@
 import template from './organizationCleanup.html';
-//import './organizationCleanup.scss';
+import './organizationCleanup.scss';
 
 angular.module('missionhubApp').component('organizationCleanup', {
     bindings: {
@@ -9,4 +9,12 @@ angular.module('missionhubApp').component('organizationCleanup', {
     controller: organizationCleanupController,
 });
 
-function organizationCleanupController() {}
+function organizationCleanupController() {
+    this.archiveDate = new Date();
+    this.dateOptions = {
+        formatYear: 'yy',
+        maxDate: new Date(2020, 5, 22),
+        minDate: new Date(),
+        startingDay: 1,
+    };
+}
