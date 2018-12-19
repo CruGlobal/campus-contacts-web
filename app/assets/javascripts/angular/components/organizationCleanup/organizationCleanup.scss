@@ -1,0 +1,33 @@
+organization-cleanup {
+    //This is only needed because of the dreadfull css in legacy
+    h1 {
+        &.f2 {
+            font-size: 2.25rem !important;
+        }
+    }
+
+    p {
+        &.f4-5 {
+            font-size: 1.125rem;
+        }
+    }
+
+    .datepicker {
+        background-image: url(./calendar-alt.svg);
+        background-repeat: no-repeat;
+        background-position: 92% center;
+        background-size: 19px 22px;
+        padding-right: 38px;
+    }
+
+    input[type='text'] {
+        border: 0 !important;
+        padding: 0.8rem;
+        font-size: 100% !important;
+        width: 100% !important;
+    }
+
+    .w-32 {
+        max-width: 32%;
+    }
+}
