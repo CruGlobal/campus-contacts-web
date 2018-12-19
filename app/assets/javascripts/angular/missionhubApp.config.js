@@ -4,7 +4,11 @@ angular
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
-                staging: ['stage.missionhub.com', 'stage.mhub.cc'],
+                staging: [
+                    'stage.missionhub.com',
+                    'stage.mhub.cc',
+                    'new.missionhub.com',
+                ],
                 production: [
                     'missionhub.com',
                     'www.missionhub.com',
