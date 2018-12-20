@@ -33,7 +33,7 @@ angular
         facebookService.loadSDK()(document);
 
         //Hack, we do not want the analytics to run when testing
-        if (!window.__karma__) analyticsService.init();
+        if (!$window.__karma__) analyticsService.init();
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
