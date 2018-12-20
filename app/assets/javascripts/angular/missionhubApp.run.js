@@ -32,7 +32,7 @@ angular
 
         facebookService.loadSDK()(document);
 
-        loggedInPerson.loadOnce().then(user => {
+        loggedInPerson.load().then(user => {
             analyticsService.init(
                 user.thekey_uid,
                 user.fb_uid,
