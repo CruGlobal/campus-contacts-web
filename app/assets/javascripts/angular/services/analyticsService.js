@@ -1,6 +1,6 @@
 angular.module('missionhubApp').factory('analyticsService', analyticsService);
 
-function analyticsService($window, envService, $location, $timeout) {
+function analyticsService($window, envService, $location) {
     const setupGoogle = ssoUid => {
         if (!angular.isFunction($window.ga)) return;
 
