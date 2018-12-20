@@ -32,13 +32,8 @@ angular
 
         facebookService.loadSDK()(document);
 
-        loggedInPerson.loadOnce().then(user => {
-            analyticsService.init(
-                user.thekey_uid,
-                user.fb_uid,
-                user.global_registry_mdm_id,
-            );
-        });
+        //Hack, we do not want the analytics to run when testing
+        if (!window.__karma__) analyticsService.init();
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
