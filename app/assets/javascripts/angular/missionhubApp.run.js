@@ -31,8 +31,14 @@ angular
         }
 
         facebookService.loadSDK()(document);
-        analyticsService.loadAdobeScript()(document);
-        analyticsService.init('SSOUID');
+
+        loggedInPerson.loadOnce().then(user => {
+            analyticsService.init(
+                user.thekey_uid,
+                user.fb_uid,
+                user.global_registry_mdm_id,
+            );
+        });
 
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)

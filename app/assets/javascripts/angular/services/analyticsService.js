@@ -1,6 +1,6 @@
 angular.module('missionhubApp').factory('analyticsService', analyticsService);
 
-function analyticsService($window, envService, $location) {
+function analyticsService($window, envService, $location, $timeout) {
     const setupGoogle = ssoUid => {
         if (!angular.isFunction($window.ga)) return;
 
@@ -18,7 +18,7 @@ function analyticsService($window, envService, $location) {
         $window.ga('set', 'dimension3', ssoUid);
     };
 
-    const setupAdobe = ssoUid => {
+    const setupAdobeData = (ssoUid, facebookId, grMasterPersonId) => {
         $window.digitalData = {
             page: {
                 pageInfo: {
@@ -31,41 +31,50 @@ function analyticsService($window, envService, $location) {
                         {
                             profileInfo: {
                                 ssoGuid: ssoUid,
+                                grMasterPersonId: grMasterPersonId,
+                            },
+                            social: {
+                                facebook: facebookId,
                             },
                         },
                     ],
                 },
             ],
         };
+    };
 
+    const loadAdobeScript = () => {
+        const url = envService.is('production')
+            ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
+            : '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb-staging.js';
+
+        return function(d) {
+            const id = 'adobe-analytics';
+            const ref = d.getElementsByTagName('script')[0];
+
+            if (d.getElementById(id)) {
+                return;
+            }
+
+            let js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = url;
+
+            ref.parentNode.insertBefore(js, ref);
+        };
+    };
+
+    const setupAdobe = (ssoUid, facebookId, grMasterPersonId) => {
         $window._satellite && $window._satellite.pageBottom();
     };
 
     return {
-        loadAdobeScript: () => {
-            const url = envService.is('production')
-                ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
-                : '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb-staging.js';
-
-            return function(d) {
-                const id = 'adobe-analytics';
-                const ref = d.getElementsByTagName('script')[0];
-
-                if (d.getElementById(id)) {
-                    return;
-                }
-
-                let js = d.createElement('script');
-                js.id = id;
-                js.async = true;
-                js.src = url;
-
-                ref.parentNode.insertBefore(js, ref);
-            };
-        },
-        init: ssoUid => {
+        init: (ssoUid, facebookId, grMasterPersonId) => {
             setupGoogle(ssoUid);
-            setupAdobe(ssoUid);
+            setupAdobeData(ssoUid, facebookId, grMasterPersonId);
+            loadAdobeScript()(document);
+            setupAdobe(ssoUid, facebookId, grMasterPersonId);
         },
         track: transition => {
             const newState = transition.$to();
