@@ -18,7 +18,10 @@ function authenticationService(
     errorService,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
-    const redirectUrl = encodeURIComponent(`https://${$location.host()}/auth`);
+    const port = envService.is('development') ? `:${$location.port()}` : '';
+    const redirectUrl = encodeURIComponent(
+        `https://${$location.host()}${port}/auth`,
+    );
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',
     )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
