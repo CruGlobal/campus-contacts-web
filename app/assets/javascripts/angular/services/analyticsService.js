@@ -65,7 +65,7 @@ function analyticsService($window, envService, $location) {
         };
     };
 
-    const setupAdobe = (ssoUid, facebookId, grMasterPersonId) => {
+    const setupAdobe = () => {
         $window._satellite && $window._satellite.pageBottom();
     };
 
@@ -74,7 +74,7 @@ function analyticsService($window, envService, $location) {
             setupGoogle(ssoUid);
             setupAdobeData(ssoUid, facebookId, grMasterPersonId);
             loadAdobeScript()(document);
-            setupAdobe(ssoUid, facebookId, grMasterPersonId);
+            setupAdobe();
         },
         track: transition => {
             const newState = transition.$to();
