@@ -20,7 +20,7 @@ angular
                 development: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     theKeyUrl: 'https://thekey.me/cas',
-                    theKeyClientId: '8138475243408077361',
+                    theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                     googleAnalytics: 'UA-XXXXXX-XX',
