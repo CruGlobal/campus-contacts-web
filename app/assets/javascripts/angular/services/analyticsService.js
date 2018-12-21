@@ -72,7 +72,7 @@ function analyticsService($window, envService, $location, loggedInPerson) {
     return {
         init: () => {
             loggedInPerson
-                .load()
+                .loadOnce()
                 .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
                     setupGoogle(thekey_uid);
                     setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
