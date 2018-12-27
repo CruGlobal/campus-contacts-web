@@ -10,7 +10,6 @@ angular
         localStorageService,
         authenticationService,
         facebookService,
-        loggedInPerson,
         analyticsService,
     ) {
         lscache.setBucket('missionhub:');
@@ -43,13 +42,6 @@ angular
                 authenticationService.removeAccess();
                 return transition.router.stateService.target('signIn');
             }
-
-            return loggedInPerson.load().catch(e => {
-                if (e.status === 401) {
-                    authenticationService.removeAccess();
-                    return transition.router.stateService.target('signIn');
-                }
-            });
         });
 
         $transitions.onFinish({}, transition => {
