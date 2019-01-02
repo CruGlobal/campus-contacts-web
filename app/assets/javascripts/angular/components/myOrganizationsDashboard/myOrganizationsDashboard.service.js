@@ -21,6 +21,7 @@ function myOrganizationsDashboardService(
                     modelsService.getModelMetadata('organization').url.all,
                     {
                         'filters[user_created]': false,
+                        'filters[descendants]': false,
                         include: 'organizational_permissions',
                     },
                     {
