@@ -28,6 +28,7 @@ function proxyService(
             const EXPIRED_ACCESS_TOKEN = 'Expired access token';
             const INVALID_ACCESS_TOKEN = 'Invalid access token';
             const INVALID_GRANT = 'invalid_grant';
+            const MISSING_TOKEN = 'Missing access token';
 
             var config = _.extend(
                 {
@@ -79,6 +80,7 @@ function proxyService(
                         if (
                             EXPIRED_ACCESS_TOKEN === errorDetail ||
                             INVALID_ACCESS_TOKEN === errorDetail ||
+                            MISSING_TOKEN === errorDetail ||
                             INVALID_GRANT === errorDetail
                         ) {
                             authenticationService.removeAccess();
