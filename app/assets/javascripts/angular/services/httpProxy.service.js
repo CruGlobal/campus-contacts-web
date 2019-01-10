@@ -48,6 +48,7 @@ function proxyService(
                 $log.warn(new Error('No error message specified'));
             }
 
+            //Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
             const authenticationService = $injector.get(
                 'authenticationService',
             );
@@ -86,7 +87,6 @@ function proxyService(
                             INVALID_ACCESS_TOKEN === errorDetail ||
                             INVALID_GRANT === errorDetail
                         ) {
-                            //Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
                             authenticationService.removeAccess();
                         }
                     }
