@@ -62,12 +62,6 @@ function proxyService(
                         authenticationService.storeJwtToken(token);
                         $http.defaults.headers.common.Authorization =
                             'Bearer ' + token;
-                    } else {
-                        const storedToken = authenticationService.getJwtToken();
-                        if (storedToken) {
-                            $http.defaults.headers.common.Authorization =
-                                'Bearer ' + storedToken;
-                        }
                     }
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
