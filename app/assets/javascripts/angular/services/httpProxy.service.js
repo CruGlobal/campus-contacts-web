@@ -13,6 +13,7 @@ function proxyService(
     _,
     $injector,
     sessionStorageService,
+    $window,
 ) {
     // Extract and return the data portion of a JSON API payload
     function extractData(response) {
@@ -60,9 +61,11 @@ function proxyService(
                     const token = res.headers('x-mh-session');
 
                     if (token) {
-                        authenticationService.storeJwtToken(token);
                         $http.defaults.headers.common.Authorization =
                             'Bearer ' + token;
+
+                        if (!$window.__karma__)
+                            authenticationService.storeJwtToken(token);
                     }
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);

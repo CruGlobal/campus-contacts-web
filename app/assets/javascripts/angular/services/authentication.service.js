@@ -16,6 +16,7 @@ function authenticationService(
     localStorageService,
     loggedInPerson,
     errorService,
+    $window,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
@@ -30,7 +31,7 @@ function authenticationService(
 
     const getJwtToken = () => {
         return (
-            (envService.is('development')
+            (envService.is('development') && !$window.__karma__
                 ? localStorageService.get('jwtToken')
                 : sessionStorageService.get('jwtToken')) || false
         );
@@ -55,14 +56,16 @@ function authenticationService(
         $http.defaults.headers.common.Authorization = null;
     };
 
-    const storeToken = token => {
+    const storeJwtToken = token => {
         if (!token) return;
 
         state.v4AccessToken = token;
         sessionStorageService.set('jwtToken', token);
 
-        if (envService.is('development'))
+        if (envService.is('development') && !$window.__karma__)
             localStorageService.set('jwtToken', token);
+
+        return;
     };
 
     const setAuthorizationAndState = (token, organization) => {
@@ -159,7 +162,7 @@ function authenticationService(
     return {
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
-        storeJwtToken: storeToken,
+        storeJwtToken: storeJwtToken,
         removeAccess: () => {
             clearToken();
             clearState();
