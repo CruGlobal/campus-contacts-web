@@ -243,12 +243,7 @@ angular
                 url: '',
                 abstract: true,
                 resolve: {
-                    person: function(
-                        loggedInPerson,
-                        $q,
-                        $state,
-                        authenticationService,
-                    ) {
+                    person: function(loggedInPerson) {
                         return loggedInPerson.loadOnce().then(user => {
                             if (user.beta_mode === null) {
                                 $uibModal.open({
