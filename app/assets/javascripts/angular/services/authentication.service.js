@@ -64,15 +64,13 @@ function authenticationService(
 
         if (envService.is('development') && !$window.__karma__)
             localStorageService.set('jwtToken', token);
-
-        return;
     };
 
     const setAuthorizationAndState = (token, organization) => {
         setState(organization);
 
         if (token) {
-            storeToken(token);
+            storeJwtToken(token);
             setHttpHeaders(token);
             setupUserSettings();
         }
@@ -143,7 +141,7 @@ function authenticationService(
 
         sessionStorageService.set('state', newState);
 
-        if (envService.is('development'))
+        if (envService.is('development') && !$window.__karma__)
             localStorageService.set('state', newState);
 
         loadState();
