@@ -45,6 +45,6 @@ angular
         });
 
         $transitions.onFinish({}, transition => {
-            analyticsService.track(transition);
+            if (!$window.__karma__) analyticsService.track(transition);
         });
     });
