@@ -73,6 +73,7 @@ function proxyService(
                             INVALID_ACCESS_TOKEN === errorDetail ||
                             INVALID_GRANT === errorDetail
                         ) {
+                            //Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
                             $injector
                                 .get('authenticationService')
                                 .removeAccess();
