@@ -79,9 +79,6 @@ function proxyService(
                         }
                     }
 
-                    if (err.status === 401)
-                        $injector.get('authenticationService').removeAccess();
-
                     err.message = tFilter(config.errorMessage);
                     throw err;
                 });
