@@ -11,6 +11,7 @@ function proxyService(
     tFilter,
     errorService,
     _,
+    $injector,
 ) {
     // Extract and return the data portion of a JSON API payload
     function extractData(response) {
@@ -23,6 +24,10 @@ function proxyService(
     // other logic that was originally in callHttp.
     function networkRequest(provider, method, url, params, data, extraConfig) {
         function makeRequest(dedupeConfig) {
+            const EXPIRED_ACCESS_TOKEN = 'Expired access token';
+            const INVALID_ACCESS_TOKEN = 'Invalid access token';
+            const INVALID_GRANT = 'invalid_grant';
+
             var config = _.extend(
                 {
                     method: method,
@@ -53,7 +58,28 @@ function proxyService(
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
                 })
-                .catch(function(err) {
+                .catch(err => {
+                    const { data } = err;
+
+                    if (
+                        data.errors &&
+                        data.errors[0] &&
+                        data.errors[0].detail
+                    ) {
+                        const errorDetail = data.errors[0].detail;
+
+                        if (
+                            EXPIRED_ACCESS_TOKEN === errorDetail ||
+                            INVALID_ACCESS_TOKEN === errorDetail ||
+                            INVALID_GRANT === errorDetail
+                        ) {
+                            //Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
+                            $injector
+                                .get('authenticationService')
+                                .removeAccess();
+                        }
+                    }
+
                     err.message = tFilter(config.errorMessage);
                     throw err;
                 });
