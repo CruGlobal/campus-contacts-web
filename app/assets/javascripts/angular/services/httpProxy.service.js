@@ -59,7 +59,7 @@ function proxyService(
                     const token = res.headers('x-mh-session');
 
                     if (token) {
-                        authenticationService.storeToken(token);
+                        authenticationService.storeJwtToken(token);
                         $http.defaults.headers.common.Authorization =
                             'Bearer ' + token;
                     } else {
