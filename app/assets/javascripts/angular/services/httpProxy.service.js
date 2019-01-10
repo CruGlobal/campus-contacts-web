@@ -54,7 +54,7 @@ function proxyService(
             );
 
             return provider(config)
-                .then(function(res) {
+                .then(res => {
                     // store rolling access token
                     const token = res.headers('x-mh-session');
 
@@ -67,7 +67,7 @@ function proxyService(
                     return JsonApiDataStore.store.syncWithMeta(res.data);
                 })
                 .catch(err => {
-                    const { data } = err;
+                    const { data } = err || {};
 
                     if (
                         data.errors &&
