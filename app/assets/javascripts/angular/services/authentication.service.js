@@ -159,6 +159,7 @@ function authenticationService(
     return {
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
+        storeToken: storeToken,
         removeAccess: () => {
             clearToken();
             clearState();

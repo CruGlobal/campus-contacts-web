@@ -12,6 +12,7 @@ function proxyService(
     errorService,
     _,
     $injector,
+    sessionStorageService,
 ) {
     // Extract and return the data portion of a JSON API payload
     function extractData(response) {
@@ -47,13 +48,25 @@ function proxyService(
                 $log.warn(new Error('No error message specified'));
             }
 
+            const authenticationService = $injector.get(
+                'authenticationService',
+            );
+
             return provider(config)
                 .then(function(res) {
                     // store rolling access token
-                    var token = res.headers('x-mh-session');
+                    const token = res.headers('x-mh-session');
+
                     if (token) {
+                        authenticationService.storeToken(token);
                         $http.defaults.headers.common.Authorization =
                             'Bearer ' + token;
+                    } else {
+                        const storedToken = authenticationService.getJwtToken();
+                        if (storedToken) {
+                            $http.defaults.headers.common.Authorization =
+                                'Bearer ' + storedToken;
+                        }
                     }
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
@@ -74,9 +87,7 @@ function proxyService(
                             INVALID_GRANT === errorDetail
                         ) {
                             //Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
-                            $injector
-                                .get('authenticationService')
-                                .removeAccess();
+                            authenticationService.removeAccess();
                         }
                     }
 
