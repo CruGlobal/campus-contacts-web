@@ -31,7 +31,7 @@ function authenticationService(
 
     const getJwtToken = () => {
         return (
-            (envService.is('development') && !$window.__karma__
+            (envService.is('development')
                 ? localStorageService.get('jwtToken')
                 : sessionStorageService.get('jwtToken')) || false
         );
@@ -62,7 +62,7 @@ function authenticationService(
         state.v4AccessToken = token;
         sessionStorageService.set('jwtToken', token);
 
-        if (envService.is('development') && !$window.__karma__)
+        if (envService.is('development'))
             localStorageService.set('jwtToken', token);
     };
 
@@ -141,7 +141,7 @@ function authenticationService(
 
         sessionStorageService.set('state', newState);
 
-        if (envService.is('development') && !$window.__karma__)
+        if (envService.is('development'))
             localStorageService.set('state', newState);
 
         loadState();
