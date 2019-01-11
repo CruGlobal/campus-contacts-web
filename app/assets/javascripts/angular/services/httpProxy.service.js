@@ -64,8 +64,7 @@ function proxyService(
                         $http.defaults.headers.common.Authorization =
                             'Bearer ' + token;
 
-                        if (!$window.__karma__)
-                            authenticationService.storeJwtToken(token);
+                        authenticationService.storeJwtToken(token);
                     }
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
