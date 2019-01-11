@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('editLabel component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         $componentController,
         _$q_,

@@ -1,8 +1,6 @@
 var massEditService, _;
 
 describe('massEditService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_massEditService_, ___) {
         massEditService = _massEditService_;
         _ = ___;

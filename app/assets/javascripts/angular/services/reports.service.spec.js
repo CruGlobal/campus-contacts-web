@@ -19,8 +19,6 @@ function async(fn) {
 }
 
 describe('reportsService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _$q_,
         _$rootScope_,

@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('RequestDeduper', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_RequestDeduper_, _$rootScope_, _$q_) {
         RequestDeduper = _RequestDeduper_;
         $rootScope = _$rootScope_;

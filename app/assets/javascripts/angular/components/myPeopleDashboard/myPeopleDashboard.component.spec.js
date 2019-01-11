@@ -4,8 +4,6 @@ import 'angular-mocks';
 var $controller, myPeopleDashboardService, $scope, loggedInPerson;
 
 describe('myPeopleDashboard Components Tests', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         $rootScope,
         $componentController,

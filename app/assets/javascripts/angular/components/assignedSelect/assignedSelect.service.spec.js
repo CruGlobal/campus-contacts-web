@@ -4,8 +4,6 @@ import 'angular-mocks';
 var assignedSelectService;
 
 describe('assignedSelectService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(function() {
         var _this = this;
         angular.mock.module(function($provide) {

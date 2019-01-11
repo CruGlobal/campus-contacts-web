@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('errorService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(function() {
         angular.mock.module(function($provide) {
             // Mock $timeout so that it always returns a resolved promise

@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('labelsService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _labelsService_,
         _$q_,

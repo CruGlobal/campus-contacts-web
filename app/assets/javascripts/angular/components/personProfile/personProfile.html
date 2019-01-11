@@ -1,8 +1,7 @@
 <form class="person-profileTab form" ng-class="{ 'flex flex-column': $ctrl.isNewPerson }" name="$ctrl.form" autocomplete="off">
     <div class="form-group" ng-if="$ctrl.personTab.orgPermission.archive_date">
         <input type="button" ng-click="$ctrl.unarchive()" class="btn btn-secondary"
-               value="Unarchive {{ $ctrl.personTab.person.first_name }}">
-        </input>
+               value="Unarchive {{ $ctrl.personTab.person.first_name }}" />
     </div>
     <div class="order-6">
         <div class="form-group-with-left-action">

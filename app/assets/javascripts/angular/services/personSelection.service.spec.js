@@ -1,8 +1,6 @@
 var personSelectionService;
 
 describe('personSelectionService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_personSelectionService_) {
         personSelectionService = _personSelectionService_;
     }));

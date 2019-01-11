@@ -5,8 +5,6 @@ var userPreferencesService, _;
 var httpProxy = jasmine.createSpyObj('httpProxy', ['put']);
 
 describe('userPreferences service', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(function() {
         var _this = this;
 

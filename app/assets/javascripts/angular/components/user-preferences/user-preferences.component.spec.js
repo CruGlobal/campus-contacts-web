@@ -4,8 +4,6 @@ import i18next from 'i18next';
 describe('userPreferences component', () => {
     let $ctrl;
 
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject($componentController => {
         $ctrl = $componentController('userPreferences', {
             loggedInPerson: {
