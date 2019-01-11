@@ -4,8 +4,6 @@ import 'angular-mocks';
 var geoDataService;
 
 describe('geoDataService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_geoDataService_) {
         geoDataService = _geoDataService_;
     }));

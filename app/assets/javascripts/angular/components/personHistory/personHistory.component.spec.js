@@ -1,6 +1,4 @@
 describe('personHistory component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     var $ctrl;
 
     beforeEach(inject(function($componentController) {

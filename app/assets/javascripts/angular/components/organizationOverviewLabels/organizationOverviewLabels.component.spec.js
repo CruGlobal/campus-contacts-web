@@ -4,8 +4,6 @@ import 'angular-mocks';
 var $ctrl, JsonApiDataStore;
 
 describe('organizationOverviewLabels component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function($componentController, _JsonApiDataStore_) {
         JsonApiDataStore = _JsonApiDataStore_;
 

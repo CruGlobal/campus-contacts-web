@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('HttpProxyService Tests', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(function() {
         var _this = this;
         this.token = null;

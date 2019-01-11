@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('loggedInPerson service', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _loggedInPerson_,
         _$q_,

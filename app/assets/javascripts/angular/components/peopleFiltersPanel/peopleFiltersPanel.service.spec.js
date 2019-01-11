@@ -4,8 +4,6 @@ import 'angular-mocks';
 var peopleFiltersPanelService;
 
 describe('peopleFiltersPanelService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_peopleFiltersPanelService_) {
         peopleFiltersPanelService = _peopleFiltersPanelService_;
     }));

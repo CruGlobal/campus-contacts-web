@@ -4,8 +4,6 @@ import 'angular-mocks';
 var ministryViewGroupService, tFilter;
 
 describe('ministryViewGroupService service', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_ministryViewGroupService_) {
         ministryViewGroupService = _ministryViewGroupService_;
     }));
