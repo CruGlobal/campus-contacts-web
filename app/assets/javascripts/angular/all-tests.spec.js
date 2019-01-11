@@ -10,6 +10,13 @@ beforeEach(
             init: jasmine.createSpy('init'),
             track: jasmine.createSpy('track'),
         },
+        authenticationService: {
+            storeJwtToken: jasmine.createSpy('storeJwtToken'),
+            removeAccess: jasmine.createSpy('removeAccess'),
+            isTokenValid: jasmine
+                .createSpy('isTokenValid')
+                .and.returnValue(false),
+        },
     }),
 );
 
