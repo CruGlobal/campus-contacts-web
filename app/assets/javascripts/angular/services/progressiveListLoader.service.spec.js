@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('ProgressiveListLoader', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _ProgressiveListLoader_,
         _$rootScope_,

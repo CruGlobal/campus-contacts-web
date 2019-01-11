@@ -4,8 +4,6 @@ import 'angular-mocks';
 var multiselectListService, _;
 
 describe('multiselectListService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_multiselectListService_, ___) {
         multiselectListService = _multiselectListService_;
         _ = ___;
