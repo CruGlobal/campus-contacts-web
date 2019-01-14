@@ -544,7 +544,7 @@ export default {
                 typeform: {
                     header: 'Integrate with Typeform',
                     step1:
-                        'Go to https://typeform.com and sign up for an account',
+                        'Go to <a href="https://typeform.com" target="_blank">https://typeform.com</a> and sign up for an account',
                     step2:
                         'Create a form and then go to the "Connect" tab followed by the "Webhooks" sub tab',
                     step3:
