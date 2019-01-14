@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{ 'ministries.surveys.typeform.header' | t }}</h3>
+</div>
+<div class="modal-body form">
+    <ol>
+        <li>{{ 'ministries.surveys.typeform.step1' | t }}</li>
+        <li>{{ 'ministries.surveys.typeform.step2' | t }}</li>
+        <li>{{ 'ministries.surveys.typeform.step3' | t }}</li>
+        <li>{{ 'ministries.surveys.typeform.step4' | t }}</li>
+        <li>{{ 'ministries.surveys.typeform.step5' | t }}</li>
+        <li>{{ 'ministries.surveys.typeform.step6' | t }}</li>
+    </ol>
+    <label for="destination-url">{{ 'ministries.surveys.typeform.destinationUrl' | t }}</label>
+    <input name="destination-url" class="form-control" ng-model="$ctrl.resolve.webhookUrl" readonly>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.close()">{{ 'general.close' | t }}</button>
+</div>

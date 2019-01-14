@@ -541,6 +541,22 @@ export default {
             },
             surveys: {
                 header: 'Surveys',
+                typeform: {
+                    header: 'Integrate with Typeform',
+                    step1:
+                        'Go to https://typeform.com and sign up for an account',
+                    step2:
+                        'Create a form and then go to the "Connect" tab followed by the "Webhooks" sub tab',
+                    step3:
+                        'Copy the URL in the box below into the Destination URL field on Typeform',
+                    step4:
+                        'Click "test webhook" (you should see a green checkmark under recent requests)',
+                    step5:
+                        'Next to the webhooks title click the slider to enable webhooks',
+                    step6:
+                        'Future submissions will be sent to MissionHub automatically',
+                    destinationUrl: 'Destination URL',
+                },
             },
             team: {
                 header: 'Team',

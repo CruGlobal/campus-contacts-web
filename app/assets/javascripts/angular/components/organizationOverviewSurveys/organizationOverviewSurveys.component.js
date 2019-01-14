@@ -99,4 +99,14 @@ function organizationOverviewSurveysController(
             keyboard: false,
         });
     };
+    this.showTypeformModal = () => {
+        $uibModal.open({
+            component: 'surveyTypeformModal',
+            resolve: {
+                webhookUrl: () =>
+                    this.organizationOverview.org.typeform_webhook_url,
+            },
+            windowClass: 'pivot_theme',
+        });
+    };
 }
