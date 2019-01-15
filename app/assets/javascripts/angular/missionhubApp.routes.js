@@ -351,6 +351,15 @@ angular
                 component: 'orgManagement',
             })
             .state({
+                name: 'app.ministries.ministry.signatures',
+                url: '/organization-signatures',
+                component: 'organizationSignatures',
+                resolve: {
+                    orgId: ($state, $transition$) =>
+                        $transition$.params().orgId,
+                },
+            })
+            .state({
                 name: 'app.ministries.ministry.reportMovementIndicators',
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
