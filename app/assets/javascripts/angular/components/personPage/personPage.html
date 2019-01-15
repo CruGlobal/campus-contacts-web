@@ -22,7 +22,12 @@
                     <icon-button icon="'email'" disabled="!$ctrl.primaryEmail"></icon-button>
                 </a>
 
-                <span ng-if="$ctrl.primaryPhone">{{$ctrl.primaryPhone.number | phone}}</span>
+                <span ng-if="$ctrl.primaryPhone">
+                    {{$ctrl.primaryPhone.number | phone}}
+                    <span ng-if="$ctrl.primaryPhone.valid_values">
+                        <img class="center" ng-src="{{$ctrl.checkIcon}}" style="width:12px; height:12px;">
+                    </span>
+                </span>
             </div>
             <div class="tabs">
                 <div class="tab" ng-class="{ disabled: disabled }" ng-repeat="tabName in $ctrl.personTabs"

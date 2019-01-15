@@ -14,6 +14,6 @@ angular
     .constant(
         'spaPage',
         window.location.pathname === '/' ||
-            /^\/[ds](\/.*)?$/.test(window.location.pathname),
+            /^\/[dsp](\/.*)?$/.test(window.location.pathname),
     )
     .constant('rollbarAccessToken', 'e749b290a241465b9e70c9cf93124721');
