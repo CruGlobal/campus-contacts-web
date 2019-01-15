@@ -418,7 +418,7 @@ angular
             })
             .state({
                 name: 'publicPhoneNumberValidation',
-                url: '/p/:code',
+                url: '/p/:code/:id',
                 component: 'publicPhoneNumberValidation',
                 resolve: {
                     phoneNumberValidation: (
@@ -429,6 +429,7 @@ angular
                         return routesService
                             .getPhoneNumberValidation(
                                 $transition$.params().code,
+                                $transition$.params().id,
                             )
                             .catch(e => null);
                     },

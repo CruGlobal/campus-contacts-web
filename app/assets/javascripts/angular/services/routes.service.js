@@ -72,14 +72,14 @@ function routesService(httpProxy, modelsService) {
             );
         },
 
-        getPhoneNumberValidation: function(code) {
+        getPhoneNumberValidation: function(code, id) {
             return httpProxy.getModel(
                 modelsService
                     .getModelMetadata('phone_number_validation')
                     .url.single(code),
                 'phone_number_validation',
-                code,
-                ['survey', 'person'],
+                id,
+                ['survey', 'phone_number'],
                 {
                     errorMessage:
                         'error.messages.routes.get_phone_number_validation',
