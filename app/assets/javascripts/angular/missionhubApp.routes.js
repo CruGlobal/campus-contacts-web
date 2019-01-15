@@ -417,6 +417,24 @@ angular
                 whiteBackground: true,
             })
             .state({
+                name: 'publicPhoneNumberValidation',
+                url: '/p/:code',
+                component: 'publicPhoneNumberValidation',
+                resolve: {
+                    phoneNumberValidation: (
+                        $state,
+                        $transition$,
+                        routesService,
+                    ) => {
+                        return routesService
+                            .getPhoneNumberValidation(
+                                $transition$.params().code,
+                            )
+                            .catch(e => null);
+                    },
+                },
+            })
+            .state({
                 name: 'publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',

@@ -71,5 +71,20 @@ function routesService(httpProxy, modelsService) {
                 },
             );
         },
+
+        getPhoneNumberValidation: function(code) {
+            return httpProxy.getModel(
+                modelsService
+                    .getModelMetadata('phone_number_validation')
+                    .url.single(code),
+                'phone_number_validation',
+                code,
+                ['survey', 'person'],
+                {
+                    errorMessage:
+                        'error.messages.routes.get_phone_number_validation',
+                },
+            );
+        },
     };
 }

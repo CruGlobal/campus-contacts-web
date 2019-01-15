@@ -1,0 +1,21 @@
+<div class="bg-pivot-gray source-sans flex justify-center pv5-l">
+    <div class="mw6 bg-white center br2 w-100">
+        <div>
+            <div ng-if="!$ctrl.publicPhoneNumberValidation">
+                <div class="black pa2 tc bg-orange">
+                    <div class="f4">{{ 'surveys:publicView.surveyNotFound' | t }}</div>
+                </div>
+                <div class='pa4'>
+                    <div class="f5 black tc ba b--orange pa2">{{ 'surveys:publicView.inactiveOrInvalid' | t }}</div>
+                </div>
+            </div>
+            <div ng-if="$ctrl.publicPhoneNumberValidation">
+                <img ng-if="$ctrl.survey.logo_url" ng-src="{{ $ctrl.survey.logo_url }}" class="w-100"/>
+                <div class="pa4 tl">
+                    <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.publicPhoneNumberValidation.survey.title }}</h1>
+                    <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.publicPhoneNumberValidation.survey.validation_success_message }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
