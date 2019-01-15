@@ -23,6 +23,7 @@ function myOrganizationsDashboardService(
                         'filters[user_created]': false,
                         'filters[descendants]': false,
                         include: 'organizational_permissions',
+                        'page[limit]': 100,
                     },
                     {
                         errorMessage: 'error.messages.organization.loadAll',
