@@ -23,7 +23,7 @@ function myPeopleDashboardService(httpProxy, modelsService, _) {
                         {
                             sort: '-active_people_count',
                             include: '',
-                            'page[limit]': 250,
+                            'page[limit]': 100,
                             'filters[user_created]': false,
                         },
                         params,
