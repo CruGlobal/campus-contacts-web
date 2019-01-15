@@ -4,12 +4,12 @@
     </h1>
     <div class='flex justify-between items-end mb4'>
         <span class=''>
-            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 bg-transparent dim' ng-href='{{ $ctrl.exportLink }}'><b>Download CSV</b></a>
+            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 bg-transparent dim' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.searchPlaceholder' | t }}</b></a>
         </span>
         <span class=''>
             <form >
                 <input type='text'
-                    placeholder="search"
+                    placeholder="{{ 'signatures.downloadCsv' | t }}"
                     class='pa3 input-reset cursor-text bg-white bw0 pivot-gray-darker ihshort br2 v-btm'
                     ng-model="search"
                     ng-keyup="$event.keyCode == 13 && $ctrl.search(search)"/>
@@ -20,11 +20,11 @@
     <table st-table="$ctrl.signatures" st-pipe="$ctrl.load" st-safe-src="$ctrl.signatureData" class="grid w-100">
         <thead>
             <tr class='bg-pivot-dark-blue'>
-                <th class='pa3 pivot-white br2 br--top br--left ttu' st-sort="updated_at">Date Signed</th>
-                <th class='pa3 pivot-white ttu' st-sort="first_name">First name</th>
-                <th class='pa3 pivot-white ttu' st-sort="last_name">Last name</th>
-                <th class='pa3 pivot-white ttu' st-sort="code_of_conduct">Code of Conduct</th>
-                <th class='pa3 pivot-white br2 ttu br--top br--right' st-sort="statement_of_faith">Statement of Faith</th>
+                <th class='pa3 pivot-white br2 br--top br--left ttu' st-sort="updated_at">{{ 'signatures.grid.dateSigned' | t }}</th>
+                <th class='pa3 pivot-white ttu' st-sort="first_name">{{ 'signatures.grid.firstName' | t }}</th>
+                <th class='pa3 pivot-white ttu' st-sort="last_name">{{ 'signatures.grid.lastName' | t }}</th>
+                <th class='pa3 pivot-white ttu' st-sort="code_of_conduct">{{ 'signatures.grid.codeOfConduct' | t }}</th>
+                <th class='pa3 pivot-white br2 ttu br--top br--right' st-sort="statement_of_faith">{{ 'signatures.grid.statementOfFaith' | t }}</th>
             </tr>
         </thead>
         <tbody class='grid-content'>
@@ -33,16 +33,16 @@
                 <td class='pa3'>{{row.first_name}}</td>
                 <td class='pa3'>{{row.last_name}}</td>
                 <td class='pa3'>
-                    <span ng-if="row.code_of_conduct">Accepted</span>
-                    <span ng-if="!row.code_of_conduct">Not Accepted Yet</span>
+                    <span ng-if="row.code_of_conduct">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="!row.code_of_conduct">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
                 </td>
                 <td class='pa3'>
-                    <span ng-if="row.statement_of_faith">Accepted</span>
-                    <span ng-if="!row.statement_of_faith">Not Accepted Yet</span>
+                    <span ng-if="row.statement_of_faith">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="!row.statement_of_faith">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
                 </td>
             </tr>
             <tr ng-if="$ctrl.signatures.length <=0">
-                <td class='pa3 tc' colspan="5">No signatures found</td>
+                <td class='pa3 tc' colspan="5">{{ 'signatures.grid.notFound' | t }}</td>
             </tr>
         </tbody>
         <tfoot>
