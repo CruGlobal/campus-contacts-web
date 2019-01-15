@@ -4,12 +4,12 @@
     </h1>
     <div class='flex justify-between items-end mb4'>
         <span class=''>
-            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 bg-transparent dim' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.searchPlaceholder' | t }}</b></a>
+            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 bg-transparent dim' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.downloadCsv' | t }}</b></a>
         </span>
         <span class=''>
             <form >
                 <input type='text'
-                    placeholder="{{ 'signatures.downloadCsv' | t }}"
+                    placeholder="{{ 'signatures.searchPlaceholder' | t }}"
                     class='pa3 input-reset cursor-text bg-white bw0 pivot-gray-darker ihshort br2 v-btm'
                     ng-model="search"
                     ng-keyup="$event.keyCode == 13 && $ctrl.search(search)"/>
