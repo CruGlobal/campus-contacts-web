@@ -713,6 +713,13 @@ export default {
             addSurveyQuestion: 'Error occurred while adding survey question',
         },
     },
+    phoneNumbers: {
+        validations: {
+            notFound: 'Your survey submission could not be found',
+            inactiveOrInvalid:
+                'Your survey submission is inactive or your link is invalid.',
+        },
+    },
     surveys: {
         preview: 'Preview this survey',
         publicView: {

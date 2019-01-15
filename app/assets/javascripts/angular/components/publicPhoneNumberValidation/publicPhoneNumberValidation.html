@@ -3,10 +3,10 @@
         <div>
             <div ng-if="!$ctrl.publicPhoneNumberValidation">
                 <div class="black pa2 tc bg-orange">
-                    <div class="f4">{{ 'surveys:publicView.surveyNotFound' | t }}</div>
+                    <div class="f4">{{ 'phoneNumbers:validations.notFound' | t }}</div>
                 </div>
                 <div class='pa4'>
-                    <div class="f5 black tc ba b--orange pa2">{{ 'surveys:publicView.inactiveOrInvalid' | t }}</div>
+                    <div class="f5 black tc ba b--orange pa2">{{ 'phoneNumbers:validations.inactiveOrInvalid' | t }}</div>
                 </div>
             </div>
             <div ng-if="$ctrl.publicPhoneNumberValidation">
