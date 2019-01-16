@@ -42,8 +42,6 @@ function organizationSignaturesController(
                 statement_of_faith: data.statement_of_faith,
             };
         });
-
-        return data;
     };
 
     const buildExportCsvLink = searchText => {
