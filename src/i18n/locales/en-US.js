@@ -746,7 +746,7 @@ export default {
             image_delete_confirm: 'Are you sure you want to delete this image?',
             validate_phone_number: 'Validate Phone Number',
             validate_phone_number_hint:
-                'If the person filling out your survey provides a phone number MissionHub can send them an SMS with a URL for them to click on.',
+                'If the person filling out your survey provides a phone number MissionHub can send them an SMS with a URL for them to click on and validate their phone number.',
             validation_message: 'Validation Message',
             validation_message_hint:
                 "This message will be sent to the person via SMS. You can use the text '%{first_name}' and MissionHub will automatically substitute their first name in place. Note: the short link will be appended to this message so keep it short!",
