@@ -23,6 +23,9 @@ function surveyOverviewSettingsController(
             this.survey.login_paragraph = this.surveyEdit.login_paragraph;
             this.survey.post_survey_message = this.surveyEdit.post_survey_message;
             this.survey.logo = this.surveyEdit.logo;
+            this.survey.validate_phone_number = this.surveyEdit.validate_phone_number;
+            this.survey.validation_message = this.surveyEdit.validation_message;
+            this.survey.validation_success_message = this.surveyEdit.validation_success_message;
 
             surveyService.updateSurvey(this.survey).then(updatedSurveyData => {
                 // clear logo base64 data after upload
@@ -44,6 +47,9 @@ function surveyOverviewSettingsController(
             login_paragraph: this.survey.login_paragraph,
             post_survey_message: this.survey.post_survey_message,
             logo_url: this.survey.logo_url,
+            validate_phone_number: this.survey.validate_phone_number,
+            validation_message: this.survey.validation_message,
+            validation_success_message: this.survey.validation_success_message,
         };
     };
 

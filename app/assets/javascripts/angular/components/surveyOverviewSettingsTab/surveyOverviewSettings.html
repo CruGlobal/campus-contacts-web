@@ -38,6 +38,47 @@
                         ng-readonly="!$ctrl.directAdminPrivileges">
                     </textarea>
                 </div>
+                <div class="mt4 bb pb4 b--pivot-gray tl">
+                    <input
+                        type="checkbox"
+                        id="validatePhoneNumber"
+                        placeholder="{{'surveys:settings.validation_message' | t}}"
+                        ng-model="$ctrl.surveyEdit.validate_phone_number"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
+                    <label class="fw6 f5 bold ml2 mb0 blue ttu tracked" for="validatePhoneNumber">
+                        {{'surveys:settings.validate_phone_number' | t}}
+                    </label>
+                    <div class="gray">{{'surveys:settings.validate_phone_number_hint' | t}}</div>
+                </div>
+                <div class="mt4 bb pb4 b--pivot-gray tl" ng-if="$ctrl.surveyEdit.validate_phone_number">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="validationMessage">
+                        {{'surveys:settings.validation_message' | t}}
+                    </label>
+                    <textarea
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
+                        id="validationMessage"
+                        placeholder="{{'surveys:settings.validation_message' | t}}"
+                        ng-model="$ctrl.surveyEdit.validation_message"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
+                    </textarea>
+                    <div class="gray">{{'surveys:settings.validation_message_hint' | t}}</div>
+                </div>
+                <div class="mt4 bb pb4 b--pivot-gray tl" ng-if="$ctrl.surveyEdit.validate_phone_number">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="validationSuccessMessage">
+                        {{'surveys:settings.validation_success_message' | t}}
+                    </label>
+                    <textarea
+                        class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
+                        id="validationSuccessMessage"
+                        placeholder="{{'surveys:settings.validation_success_message' | t}}"
+                        ng-model="$ctrl.surveyEdit.validation_success_message"
+                        ng-change="$ctrl.saveSurvey()"
+                        ng-readonly="!$ctrl.directAdminPrivileges">
+                    </textarea>
+                    <div class="gray">{{'surveys:settings.validation_success_message_hint' | t}}</div>
+                </div>
                 <div class="mt4 tl">
                     <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
                         {{'surveys:settings.image' | t}}
