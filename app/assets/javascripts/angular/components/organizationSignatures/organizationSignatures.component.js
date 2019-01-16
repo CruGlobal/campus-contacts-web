@@ -32,17 +32,14 @@ function organizationSignaturesController(
         });
     };
 
-    const prepareData = data => {
-        return data.map(data => {
-            return {
-                first_name: data.first_name,
-                last_name: data.last_name,
-                updated_at: data.updated_at,
-                code_of_conduct: data.code_of_conduct,
-                statement_of_faith: data.statement_of_faith,
-            };
-        });
-    };
+    const prepareData = data =>
+        data.map(signature => ({
+            first_name: signature.first_name,
+            last_name: signature.last_name,
+            updated_at: signature.updated_at,
+            code_of_conduct: signature.code_of_conduct,
+            statement_of_faith: signature.statement_of_faith,
+        }));
 
     const buildExportCsvLink = searchText => {
         const params = {
@@ -71,7 +68,7 @@ function organizationSignaturesController(
     const loadData = async searchText => {
         const { data } = await getSignatures(this.orgId, searchText);
         this.signatureData = prepareData(data);
-        this.signatures = [].concat(prepareData(data));
+        this.signatures = [...this.signatureData];
         this.exportLink = buildExportCsvLink(searchText);
         $scope.$apply();
     };
