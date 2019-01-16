@@ -672,6 +672,7 @@ export default {
                 statementOfFaith: 'Statement of Faith',
                 notAccecptedYet: 'Not Accepted Yet',
                 accepted: 'Accepted',
+                declined: 'Declined',
                 notFound: 'No Signatures found',
             },
             searchPlaceholder: 'Search',

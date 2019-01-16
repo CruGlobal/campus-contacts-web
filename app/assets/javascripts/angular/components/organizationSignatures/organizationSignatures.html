@@ -33,11 +33,13 @@
                 <td class='pa3 tc'>{{row.first_name}}</td>
                 <td class='pa3 tc'>{{row.last_name}}</td>
                 <td class='pa3 tc'>
-                    <span ng-if="row.code_of_conduct">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="row.code_of_conduct === 'accepted'">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="row.code_of_conduct === 'declined'">{{ 'signatures.grid.declined' | t }}</span>
                     <span ng-if="!row.code_of_conduct">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
                 </td>
                 <td class='pa3 tc'>
-                    <span ng-if="row.statement_of_faith">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="row.statement_of_faith === 'accepted'">{{ 'signatures.grid.accepted' | t }}</span>
+                    <span ng-if="row.statement_of_faith === 'declined'">{{ 'signatures.grid.declined' | t }}</span>
                     <span ng-if="!row.statement_of_faith">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
                 </td>
             </tr>
