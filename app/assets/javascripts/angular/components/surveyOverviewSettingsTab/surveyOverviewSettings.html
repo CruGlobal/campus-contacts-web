@@ -45,7 +45,7 @@
                         placeholder="{{'surveys:settings.validation_message' | t}}"
                         ng-model="$ctrl.surveyEdit.validate_phone_number"
                         ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges">
+                        ng-disabled="!$ctrl.directAdminPrivileges">
                     <label class="fw6 f5 bold ml2 mb0 blue ttu tracked" for="validatePhoneNumber">
                         {{'surveys:settings.validate_phone_number' | t}}
                     </label>
