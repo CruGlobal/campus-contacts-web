@@ -674,6 +674,7 @@ export default {
                 accepted: 'Accepted',
                 declined: 'Declined',
                 notFound: 'No Signatures found',
+                loading: 'Loading...',
             },
             searchPlaceholder: 'Search',
         },

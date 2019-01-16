@@ -12,8 +12,8 @@
                     placeholder="{{ 'signatures.searchPlaceholder' | t }}"
                     class='pa3 input-reset cursor-text bg-white bw0 pivot-gray-darker ihshort br2 v-btm'
                     ng-model="search"
-                    ng-keyup="$event.keyCode == 13 && $ctrl.search(search)"/>
-                <button class='f5 ml1 pv3 ph4 b--pivot-gray-darker bg-pivot-gray-darker pivot-white br2 search dim' ng-click="$ctrl.search(search)"></button>
+                    ng-keyup="$event.keyCode == 13 && $ctrl.search(search, $ctrl.tableState)"/>
+                <button class='f5 ml1 pv3 ph4 b--pivot-gray-darker bg-pivot-gray-darker pivot-white br2 search dim' ng-click="$ctrl.search(search, $ctrl.tableState)"></button>
             </form>
         </span>
     </div>
@@ -44,13 +44,30 @@
                 </td>
             </tr>
             <tr ng-if="$ctrl.signatures.length <=0">
-                <td class='pa3 tc' colspan="5">{{ 'signatures.grid.notFound' | t }}</td>
+                <td class='pa3 tc' colspan="5" ng-if="$ctrl.isLoading">{{ 'signatures.grid.loading' | t }}</td>
+                <td class='pa3 tc' colspan="5" ng-if="!$ctrl.isLoading">{{ 'signatures.grid.notFound' | t }}</td>
             </tr>
         </tbody>
         <tfoot>
 			<tr>
 				<td colspan="5" class="text-center">
-					<div st-pagination="" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+                    <div class="pagination mt3" ng-if="$ctrl.tableState.pagination.pages.length > 1">
+                        <ul class="list flex">
+                            <li ng-if="$ctrl.tableState.pagination.currentPage > 1">
+                                <a href ng-click="$ctrl.previousPage(search);" class='f5 pv1 ph2 pivot-gray-darker br2 dim'> < </a>
+                            </li>
+                            <li class="ml2" ng-repeat="page in $ctrl.tableState.pagination.pages" >
+                                <a href
+                                    class='f5 pv1 ph2 b--pivot-gray-darker pivot-white br2 dim'
+                                    ng-class="((page + 1) === $ctrl.tableState.pagination.currentPage) ? 'bg-pivot-gray-darker' : 'bg-pivot-gray-dark'"
+                                    ng-click="$ctrl.setPage(page, search);"
+                                    >{{ (page + 1) }}</a>
+                            </li>
+                            <li ng-if="$ctrl.tableState.pagination.currentPage < $ctrl.tableState.pagination.numberOfPages">
+                                <a href ng-click="$ctrl.nextPage(search);" class='ml1 f5 pv1 ph2 pivot-gray-darker br2 dim'> > </a>
+                            </li>
+                        </ul>
+                    </div>
 				</td>
 			</tr>
 		</tfoot>

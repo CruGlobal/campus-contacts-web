@@ -19,12 +19,15 @@ function organizationSignaturesController(
     this.signatures = [];
     this.signatureData = [];
     this.exportLink = '';
-    this.itemsPerPage = 10;
+    this.itemsPerPage = 50;
+    this.isLoading = true;
 
-    const getSignatures = (orgId, searchText) => {
+    const getSignatures = (orgId, searchText, offset) => {
         const params = {
             include: [],
+            'page[limit]': this.itemsPerPage,
             ...(searchText ? { 'filters[q]': searchText } : {}),
+            ...(offset ? { 'page[offset]': offset } : {}),
         };
 
         return httpProxy.get(`/organizations/${orgId}/signatures`, params, {
@@ -65,19 +68,61 @@ function organizationSignaturesController(
         );
     };
 
-    const loadData = async searchText => {
-        const { data } = await getSignatures(this.orgId, searchText);
+    const loadData = async (searchText, tableState) => {
+        this.isLoading = true;
+        this.signatures = [];
+        const start = (tableState && tableState.pagination.start) || 0;
+        const { data, meta } = await getSignatures(
+            this.orgId,
+            searchText,
+            start,
+        );
+        const numberOfPages = Math.ceil(meta.total / this.itemsPerPage);
+
         this.signatureData = prepareData(data);
         this.signatures = [...this.signatureData];
         this.exportLink = buildExportCsvLink(searchText);
+
+        tableState.pagination.numberOfPages = numberOfPages;
+        tableState.pagination.currentPage =
+            Math.ceil(start / this.itemsPerPage) + 1;
+        tableState.pagination.pages = [];
+
+        for (let i = 0; i < numberOfPages; i++) {
+            tableState.pagination.pages.push(i);
+        }
+
+        tableState.pagination.totalItemCount = meta.total;
+        this.tableState = tableState;
+        this.isLoading = false;
         $scope.$apply();
     };
 
-    this.load = () => {
-        loadData();
+    this.setPage = (page, searchText) => {
+        this.tableState.pagination.start = page * this.itemsPerPage;
+        loadData(searchText, this.tableState);
     };
 
-    this.search = searchText => {
-        loadData(searchText);
+    this.nextPage = searchText => {
+        this.tableState.pagination.start =
+            this.tableState.pagination.currentPage * this.itemsPerPage;
+        loadData(searchText, this.tableState);
+    };
+
+    this.previousPage = searchText => {
+        this.tableState.pagination.start =
+            (this.tableState.pagination.currentPage - 2) * this.itemsPerPage;
+        loadData(searchText, this.tableState);
+    };
+
+    this.load = tableState => {
+        tableState.pagination.numberOfPages = 0;
+        this.tableState = tableState;
+        loadData(_, tableState);
+    };
+
+    this.search = (searchText, tableState) => {
+        tableState.pagination.start = 0;
+        loadData(searchText, tableState);
     };
 }
