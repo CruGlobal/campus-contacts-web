@@ -336,6 +336,11 @@ angular
                 },
             })
             .state({
+                name: 'app.ministries.signAgreements',
+                url: '/sign-agreements',
+                component: 'organizationSignaturesSign',
+            })
+            .state({
                 name: 'app.ministries.ministry',
                 url: '/:orgId',
                 component: 'organizationOverview',

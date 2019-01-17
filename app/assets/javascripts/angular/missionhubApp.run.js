@@ -11,6 +11,7 @@ angular
         authenticationService,
         facebookService,
         analyticsService,
+        state,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -40,6 +41,17 @@ angular
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
                 return transition.router.stateService.target('signIn');
+            }
+
+            if (
+                transition.to().name !== 'app.ministries.signAgreements' &&
+                state &&
+                state.organization_with_missing_signatures_ids &&
+                state.organization_with_missing_signatures_ids.length > 0
+            ) {
+                return transition.router.stateService.target(
+                    'app.ministries.signAgreements',
+                );
             }
         });
 
