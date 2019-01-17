@@ -11,6 +11,10 @@
     <div class="column column-status">
         {{ 'surveyTab:columns.status' | t }}
     </div>
+    <div class="column column-typeform">
+        {{ 'surveyTab:columns.typeform' | t }}
+        <icon-button icon="'help_outline'" ng-click="$ctrl.showTypeformModal()"></icon-button>
+    </div>
     <div class="column buttons-column">
         <icon-button icon="'add'" ng-click="$ctrl.createSurvey()" ng-if="$ctrl.directAdminPrivileges"></icon-button>
     </div>
@@ -37,7 +41,6 @@
                     {{ 'surveyTab:status.off' | t }}
                 </span>
             </div>
-
             <div
                 uib-dropdown-toggle
                 ng-if="$ctrl.directAdminPrivileges"
@@ -56,6 +59,9 @@
                 <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">{{ 'surveyTab:status.live' | t }}</a>
                 <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">{{ 'surveyTab:status.off' | t }}</a>
             </div>
+        </div>
+        <div class="column column-typeform">
+            <ng-md-icon class="status-active" icon="check" size="26"></ng-md-icon>
         </div>
         <div class="column buttons-column text-center">
             <div uib-dropdown>
@@ -95,4 +101,3 @@
         </div>
     </div>
 </div>
-<a class="show-typeform-modal" ng-click="$ctrl.showTypeformModal()">{{ 'ministries.surveys.typeform.header' | t }}</a>

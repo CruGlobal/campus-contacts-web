@@ -544,18 +544,20 @@ export default {
                 typeform: {
                     header: 'Integrate with Typeform',
                     step1:
-                        'Go to <a href="https://typeform.com" target="_blank">https://typeform.com</a> and sign up for an account',
+                        'Sign up for an account at <a href="https://typeform.com" target="_blank">typeform.com</a>.',
                     step2:
-                        'Create a form and then go to the "Connect" tab followed by the "Webhooks" sub tab',
+                        'Create a form and then go to the "Connect" tab followed by the "Webhooks" sub tab.',
                     step3:
-                        'Copy the URL in the box below into the Destination URL field on Typeform',
+                        'Copy the MissionHub URL below into the Destination URL field on Typeform.',
                     step4:
-                        'Click "test webhook" (you should see a green checkmark under recent requests)',
+                        'Click "test webhook". You should see a green checkmark under recent requests. A new survey with a test submission should be visible in MissionHub.',
                     step5:
-                        'Next to the webhooks title click the slider to enable webhooks',
-                    step6:
-                        'Future submissions will be sent to MissionHub automatically',
-                    destinationUrl: 'Destination URL',
+                        'Next to the webhooks title click the slider to enable webhooks.',
+                    conclusion:
+                        'Future submissions will be sent to MissionHub automatically.',
+                    missionHubUrl: 'MissionHub URL',
+                    copy: 'Copy URL',
+                    copied: 'URL copied to clipboard',
                 },
             },
             team: {
@@ -708,6 +710,7 @@ export default {
             keyword: 'Keyword',
             link: 'Link',
             status: 'Status',
+            typeform: 'Typeform',
         },
         status: {
             live: 'Live',

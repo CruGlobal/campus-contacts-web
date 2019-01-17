@@ -1,18 +1,24 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{ 'ministries.surveys.typeform.header' | t }}</h3>
+    <h3 class="f3 ma0">{{ 'ministries.surveys.typeform.header' | t }}</h3>
+    <a ng-click="$ctrl.close()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form">
-    <ol>
+    <ol class="pl0">
         <li bind-dynamic="'ministries.surveys.typeform.step1' | t"></li>
         <li>{{ 'ministries.surveys.typeform.step2' | t }}</li>
         <li>{{ 'ministries.surveys.typeform.step3' | t }}</li>
         <li>{{ 'ministries.surveys.typeform.step4' | t }}</li>
         <li>{{ 'ministries.surveys.typeform.step5' | t }}</li>
-        <li>{{ 'ministries.surveys.typeform.step6' | t }}</li>
     </ol>
-    <label for="destination-url">{{ 'ministries.surveys.typeform.destinationUrl' | t }}</label>
-    <input name="destination-url" class="form-control" ng-model="$ctrl.resolve.webhookUrl" readonly>
+    <p>{{ 'ministries.surveys.typeform.conclusion' | t }}</p>
+    <label for="missionhub-url">{{ 'ministries.surveys.typeform.missionHubUrl' | t }}</label>
+    <textarea id="missionhub-url" name="missionhub-url" class="form-control" ng-model="$ctrl.resolve.webhookUrl" readonly></textarea>
+    <span ng-if="$ctrl.copied" class="text-muted">{{ 'ministries.surveys.typeform.copied' | t }}</span>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.close()">{{ 'general.close' | t }}</button>
+    <button class="btn btn-primary" type="button" ng-click="$ctrl.copy()">
+        {{ 'ministries.surveys.typeform.copy' | t }}
+    </button>
 </div>

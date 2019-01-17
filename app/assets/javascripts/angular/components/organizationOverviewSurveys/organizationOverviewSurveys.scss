@@ -3,7 +3,8 @@
 
 organization-overview-surveys {
     .header {
-        display: flex;
+        display: grid;
+        grid-template-columns: 4fr 2fr 2fr 1fr 105px 70px;
         background-color: $pivot-darker-blue;
 
         ng-md-icon svg {
@@ -13,18 +14,18 @@ organization-overview-surveys {
 
     .row {
         @extend ministry-view-group;
+        display: grid !important;
+        grid-template-columns: 4fr 2fr 2fr 1fr 105px 70px;
 
-        .column-title {
-            flex: 4;
-        }
-        .column-status {
-            flex: 1;
-        }
-        .column-keyword {
-            flex: 2;
-        }
-        .column-link {
-            flex: 2;
+        .column-typeform {
+            text-align: center;
+            icon-button {
+                display: inline;
+                margin: 0;
+                ng-md-icon svg {
+                    fill: #16c0e4;
+                }
+            }
         }
     }
 
