@@ -11,6 +11,7 @@ function organizationSignaturesSignController(
     httpProxy,
     $state,
     $rootScope,
+    $scope,
 ) {
     this.nonSignedAgreements = ['code_of_conduct', 'statement_of_faith'];
 
@@ -32,10 +33,18 @@ function organizationSignaturesSignController(
         });
     };
 
-    const updateAgreement = (type, status) => {
-        state.organization_with_missing_signatures_ids.forEach(async orgId => {
+    const updateAllAgreements = async (orgIds, type, status) => {
+        for (const orgId of orgIds) {
             await sendAgreement(orgId, type, status);
-        });
+        }
+    };
+
+    const updateAgreement = async (type, status) => {
+        await updateAllAgreements(
+            state.organization_with_missing_signatures_ids,
+            type,
+            status,
+        );
 
         this.nonSignedAgreements = this.nonSignedAgreements.filter(
             t => t !== type,
@@ -45,6 +54,8 @@ function organizationSignaturesSignController(
             authenticationService.updateUserData();
             $state.go('app.people');
         }
+
+        $scope.$apply();
     };
 
     const hasAgreedTo = type => {
