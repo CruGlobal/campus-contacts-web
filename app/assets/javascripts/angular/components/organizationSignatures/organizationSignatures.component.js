@@ -68,7 +68,7 @@ function organizationSignaturesController(
         );
     };
 
-    const loadData = async (searchText, tableState) => {
+    const loadData = async (tableState, searchText) => {
         this.isLoading = true;
         this.signatures = [];
         const start = (tableState && tableState.pagination.start) || 0;
@@ -100,29 +100,29 @@ function organizationSignaturesController(
 
     this.setPage = (page, searchText) => {
         this.tableState.pagination.start = page * this.itemsPerPage;
-        loadData(searchText, this.tableState);
+        loadData(this.tableState, searchText);
     };
 
     this.nextPage = searchText => {
         this.tableState.pagination.start =
             this.tableState.pagination.currentPage * this.itemsPerPage;
-        loadData(searchText, this.tableState);
+        loadData(this.tableState, searchText);
     };
 
     this.previousPage = searchText => {
         this.tableState.pagination.start =
             (this.tableState.pagination.currentPage - 2) * this.itemsPerPage;
-        loadData(searchText, this.tableState);
+        loadData(this.tableState, searchText);
     };
 
     this.load = tableState => {
         tableState.pagination.numberOfPages = 0;
         this.tableState = tableState;
-        loadData(_, tableState);
+        loadData(tableState);
     };
 
     this.search = (searchText, tableState) => {
         tableState.pagination.start = 0;
-        loadData(searchText, tableState);
+        loadData(tableState, searchText);
     };
 }
