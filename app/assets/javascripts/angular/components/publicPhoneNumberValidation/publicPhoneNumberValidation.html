@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div ng-if="$ctrl.phoneNumberValidation">
-                <img ng-if="$ctrl.survey.logo_url" ng-src="{{ $ctrl.survey.logo_url }}" class="w-100"/>
+                <img ng-if="$ctrl.phoneNumberValidation.survey.logo_url" ng-src="{{ $ctrl.phoneNumberValidation.survey.logo_url }}" class="w-100"/>
                 <div class="pa4 tl">
                     <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.phoneNumberValidation.survey.title }}</h1>
                     <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.phoneNumberValidation.survey.validation_success_message }}</p>
