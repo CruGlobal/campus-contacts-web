@@ -341,6 +341,18 @@ angular
                 component: 'organizationSignaturesSign',
             })
             .state({
+                name: 'app.ministries.ministry.import',
+                url: '/import',
+                component: 'organizationContactImport',
+                params: {
+                    surveyId: null,
+                },
+                resolve: {
+                    surveyId: ($state, $transition$) =>
+                        $transition$.params().surveyId,
+                },
+            })
+            .state({
                 name: 'app.ministries.ministry',
                 url: '/:orgId',
                 component: 'organizationOverview',
