@@ -548,7 +548,7 @@ export default {
                     step1:
                         'Sign up for an account at <a href="https://typeform.com" target="_blank">typeform.com</a>.',
                     step2:
-                        'Create a new form there in Typeform (you must have a question asking for their "first name"). Then go to the "Connect" tab followed by the "Webhooks" sub tab.',
+                        ' Create a new form there in Typeform - be sure you have a question on the new form asking for their "first name". Then go to the "Connect" tab followed by the "Webhooks" sub tab.',
                     step3:
                         'Copy the MissionHub URL below into the Destination URL field on Typeform.',
                     step4:

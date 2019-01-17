@@ -1,6 +1,16 @@
 survey-typeform-modal {
+    .heading {
+        line-height: 28px;
+    }
+    .modal-body {
+        color: #6c757d;
+        a,
+        label {
+            color: #007398;
+        }
+    }
     .close-button {
-        margin-top: 5px;
+        margin-top: 2px;
         ng-md-icon svg {
             fill: #007398;
         }
