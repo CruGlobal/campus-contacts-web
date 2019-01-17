@@ -37,6 +37,16 @@ function authenticationService(
         );
     };
 
+    const updateUserData = async () => {
+        const me = await loggedInPerson.load();
+
+        const currentState = envService.is('development')
+            ? localStorageService.get('state')
+            : sessionStorageService.get('state');
+
+        setState(currentState.currentOrganization, me);
+    };
+
     const setupUserSettings = async organization => {
         const me = await loggedInPerson.loadOnce();
 
@@ -181,5 +191,6 @@ function authenticationService(
         },
         theKeyloginUrl: theKeyloginUrl,
         isTokenValid: getJwtToken,
+        updateUserData: updateUserData,
     };
 }
