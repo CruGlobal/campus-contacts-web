@@ -1,4 +1,5 @@
 import template from './surveyTypeformModal.html';
+import './surveyTypeformModal.scss';
 
 angular.module('missionhubApp').component('surveyTypeformModal', {
     controller: surveyTypeformModalController,
