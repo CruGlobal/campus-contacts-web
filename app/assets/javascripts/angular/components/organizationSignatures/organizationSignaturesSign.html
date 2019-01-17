@@ -1,4 +1,67 @@
 <div>
+    <section ng-if="!$ctrl.hasSignedCodeOfConduct()">
+        <h1>Code of Conduct</h1>
+        <p><b>Power to Change seeks to glorify God by making a maximum contribution toward helping to fulfill the Great Commission in Canada and around the world by developing movements of evangelism and discipleship. As the person and work of Jesus Christ is central to our mission, I desire Jesus Christ to be in the center of my life and want to honour and please Him by the way I conduct myself, thus validating the gospel of Christ and contributing to the mission. (Col. 1:10) As a follower of Jesus Christ I am committed to obeying the Great Commandment to love God with all my heart, soul and mind and to love my neighbour as myself (Matt. 22:36-40). This will involve the following:</b></p>
+        <p><b>• Growing in Christlikeness:</b> I commit to growing in personal holiness of life characterized by honesty, truthfulness and generosity, maintaining the highest ethical standards (1 Peter 1:14-16). I commit to having the attitude of Christ in showing compassion, demonstrating humility and patience, forgiving others and considering the interests of others ahead of my own (Phil. 2:1-5; Col. 3:12-14).</p>
+        <p><b>• Practising Respect and Love for others:</b> As a representative of God’s love for people, I commit to treating others with love, respect, and regard for their value and dignity as persons. I will handle my relationships with integrity and maturity, keeping in mind my responsibility as a role model (1 Tim. 4:12), and making lifestyle choices with consideration for those around me (Rom. 14; 1 Cor. 10:23-33). I renounce all forms of hate, malicious behaviour, and harassment of others, and I will practice welcoming and respectful treatment to all people regardless of background, identity, and orientation which may be different from my own. (Eph. 5:1, 2; Titus 3:2) I will respect the sanctity of life at all stages (Psalm 139:13, 14).</p>
+        <p><b>• Living a life of faith:</b> I commit myself to relying upon God for His grace to meet every need (2 Cor. 12:9; Phil. 4:19) and living in dependence upon the Holy Spirit in my daily life and ministry (Gal. 5:16, Eph. 5:18-21).</p>
+        <p><b>• Evangelism and Discipleship:</b> I commit myself to present the gospel of Jesus Christ to people in my sphere of influence and beyond, encouraging them to become disciples of Christ through the direction and empowerment of the Holy Spirit (Mark 16:15; Acts 1:8).</p>
+        <p><b>• Serving others:</b> I commit to following Jesus by serving the people I lead and work with (Matt. 20:25-28; John 12:14-15).</p>
+        <p><b>• Stewardship:</b> I commit to honouring God with my body, as my body is the temple of the Holy Spirit (1 Cor. 6:19,20). I will make choices that build up my emotional,                 mental and physical health and will strive for purity of thought and respectful modesty (Phil. 4:8; 1 Tim. 2:9-10). I will abstain from drunkenness, illegal or mind-altering substances, unless prescribed by a physician, as well as abstaining from the habitual use of tobacco. I commit to reserving sexual expressions of intimacy for marriage, a sacred covenant between one man and one woman (Mark 10:6-9; Heb. 13:4).</p>
+        <p><b>• Community:</b> I commit myself to meeting with other believers in a local church on a regular basis, edifying others and growing together as a caring community of followers of Christ (Heb. 10:24-25).</p>
+        <p><b>I am in agreement with and hereby commit myself to this Code of Conduct, depending upon the Holy Spirit to guide and empower me.</b></p>
 
+        <div class='fr mt3'>
+            <button class='f5 ba pv1 ph4 b--pivot-gray-darker pivot-white br4 bg-pivot-gray-darker dim' ng-click="$ctrl.declineAgreement('code_of_conduct')">Decline</button>
+            <button class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ng-click="$ctrl.acceptAgreement('code_of_conduct')">Accept</button>
+        </div>
 
+    </section>
+    <section ng-if="$ctrl.hasSignedCodeOfConduct() && !$ctrl.hasSignedSignedStatementOfFaith()">
+        <h1>Statement of Faith</h1>
+        <p><b>The sole basis of our beliefs is the Bible, God's inerrant written Word, the 66 books of the Old and New Testaments. We believe that it was uniquely, verbally and fully inspired by the Holy Spirit, and that it was written without factual error in the original manuscripts. It is the supreme and final authority in all matters on which it speaks.</b></p>
+        <p><b>We accept those large areas of doctrinal teaching on which, historically, there has been general agreement among all true Christians. Because of the specialized calling of our movement, we desire to allow for freedom of conviction on other doctrinal matters, provided that any interpretation is based upon the Bible alone, and that no such interpretation shall become an issue which hinders the ministry to which God has called us. We explicitly affirm our belief in basic Bible teachings as follows:</b></p>
+        <p>1. There is one true God, eternally existing in three persons—the Father, Son and Holy Spirit—each of whom possesses equally all the attributes of Deity and the characteristics of personality.
+
+        2. Jesus Christ is God, the living Word, who became flesh through His miraculous conception by the Holy Spirit and His virgin birth. Hence, He is perfect Deity and true humanity united in one person forever.
+
+        3. He lived a sinless life and voluntarily atoned for our sins by dying on the cross as our substitute, thus satisfying divine justice and accomplishing salvation for all who trust in Him alone.
+
+        4. He rose from the dead in the same body, though glorified, in which He had lived and died.
+
+        5. He ascended bodily into heaven and sat down at the right hand of God the Father, where He, the only mediator between God and mankind, continually makes intercession for His own.
+
+        6. We were originally created in the image of God. We sinned by disobeying God; thus, we were alienated from our Creator.
+        That historic fall brought all mankind under divine condemnation.
+
+        7. Our nature is corrupted, and we are thus totally unable to please God. Every person is in need of regeneration and renewal by the Holy Spirit.
+
+        8. Our salvation is wholly a work of God's free grace and is not the work, in whole or in part, of human works or goodness or religious ceremony. God imputes His righteousness to those who put their faith in Christ alone for their salvation, and thereby justifies them in His sight.
+
+        9. It is the privilege of all who are born again of the Spirit to be assured of their salvation from the very moment in which they trust Christ as their Saviour. This assurance is not based upon any kind of human merit, but is produced by the witness of the Holy Spirit, who confirms in the believer the testimony of God in His written Word.
+
+        10. The Holy Spirit has come into the world to reveal and glorify Christ and to apply the saving work of Christ to men and women. He convicts and draws sinners to Christ, imparts new life to them, continually indwells them from the moment of spiritual birth and seals them until the day of redemption. His fullness, power and control are appropriated in the believer's life by faith.
+
+        11. We, as believers, are called to live in the power of the indwelling Spirit so that we will not fulfill the lust of the flesh but will bear fruit to the glory of God.
+
+        12. Jesus Christ is the Head of the Church, His Body, which is composed of all men and women, living and dead, who have been joined to Him through saving faith.
+
+        13. God admonishes His people to assemble together regularly for worship, for participation in ordinances, for edification through the Scriptures and for mutual encouragement.
+
+        14. At physical death the believers enter immediately into eternal conscious fellowship with the Lord, and await the resurrection of their bodies to everlasting glory and blessing.
+
+        15. At physical death the unbelievers enter immediately into eternal conscious separation from the Lord and await the resurrection of their bodies to everlasting judgment and condemnation.
+
+        16. Jesus Christ will come again to the earth—personally, visibly and bodily—to consummate history and the eternal plan of God.
+
+        17. The Lord Jesus Christ commanded all believers to proclaim the gospel throughout the world and to disciple men and women
+        of every nation. The fulfillment of that Great Commission requires that all worldly and personal ambition be subordinated to a total commitment to "Him who loved us and gave Himself for us.</p>
+        <p><b>Without mental reservation, I hereby subscribe to the above statements and pledge myself to help fulfil the Great Commission in our generation, depending upon the Holy Spirit to guide and empower me.</b></p>
+
+        <div class='fr mt3'>
+            <button class='f5 ba pv1 ph4 b--pivot-gray-darker pivot-white br4 bg-pivot-gray-darker dim' ng-click="$ctrl.declineAgreement('statement_of_faith')">Decline</button>
+            <button class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ng-click="$ctrl.acceptAgreement('statement_of_faith')">Accept</button>
+        </div>
+
+    </section>
 </div>
