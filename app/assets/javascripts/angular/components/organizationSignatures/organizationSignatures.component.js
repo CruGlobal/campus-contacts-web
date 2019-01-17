@@ -52,15 +52,18 @@ function organizationSignaturesController(
             ...(searchText ? { 'filters[q]': searchText } : {}),
         };
 
-        const query = Object.keys(params).reduce((accumulator, key, index) => {
-            return (
-                accumulator +
-                '&' +
-                encodeURIComponent(key) +
-                '=' +
-                encodeURIComponent(params[key])
-            );
-        }, '');
+        const query = Object.entries(params).reduce(
+            (accumulator, [key, value]) => {
+                return (
+                    accumulator +
+                    '&' +
+                    encodeURIComponent(key) +
+                    '=' +
+                    encodeURIComponent(value)
+                );
+            },
+            '',
+        );
 
         return (
             envService.read('apiUrl') +
