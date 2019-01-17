@@ -2,7 +2,6 @@ import template from './personPage.html';
 import './personPage.scss';
 
 import noProfileImage from '../../../../images/no_image.png';
-import checkIcon from '../../../../images/icons/icon-check-stylized.svg';
 
 angular.module('missionhubApp').component('personPage', {
     controller: personPageController,
@@ -34,7 +33,6 @@ function personPageController(
     vm.orgLabels = [];
     vm.dirty = false;
     vm.avatarPausedUploadFile = null;
-    vm.checkIcon = checkIcon;
 
     vm.uploadAvatar = uploadAvatar;
     vm.deleteAvatar = deleteAvatar;
