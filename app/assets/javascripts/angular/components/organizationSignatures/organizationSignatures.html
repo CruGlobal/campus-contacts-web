@@ -54,7 +54,7 @@
                     <div class="pagination mt3" ng-if="$ctrl.tableState.pagination.pages.length > 1">
                         <ul class="list flex">
                             <li ng-if="$ctrl.tableState.pagination.currentPage > 1">
-                                <a href ng-click="$ctrl.previousPage(search);" class='f5 pv1 ph2 pivot-gray-darker br2 dim'> < </a>
+                                <a href ng-click="$ctrl.previousPage(search);" class='f5 pv1 ph2 pivot-gray-darker br2 dim'> &lt;  </a>
                             </li>
                             <li class="ml2" ng-repeat="page in $ctrl.tableState.pagination.pages" >
                                 <a href
@@ -64,7 +64,7 @@
                                     >{{ (page + 1) }}</a>
                             </li>
                             <li ng-if="$ctrl.tableState.pagination.currentPage < $ctrl.tableState.pagination.numberOfPages">
-                                <a href ng-click="$ctrl.nextPage(search);" class='ml1 f5 pv1 ph2 pivot-gray-darker br2 dim'> > </a>
+                                <a href ng-click="$ctrl.nextPage(search);" class='ml1 f5 pv1 ph2 pivot-gray-darker br2 dim'> &gt;  </a>
                             </li>
                         </ul>
                     </div>
