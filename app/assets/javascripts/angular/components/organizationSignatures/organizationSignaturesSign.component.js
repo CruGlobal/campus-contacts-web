@@ -34,9 +34,9 @@ function organizationSignaturesSignController(
     };
 
     const updateAllAgreements = async (orgIds, type, status) => {
-        for (const orgId of orgIds) {
-            await sendAgreement(orgId, type, status);
-        }
+        await Promise.all(
+            orgIds.map(orgId => sendAgreement(orgId, type, status)),
+        );
     };
 
     const updateAgreement = async (type, status) => {
