@@ -37,9 +37,10 @@ function authenticationService(
         );
     };
 
-    const setupUserSettings = async () => {
+    const setupUserSettings = async organization => {
         const me = await loggedInPerson.loadOnce();
 
+        setState(organization, me);
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
     };
@@ -67,12 +68,10 @@ function authenticationService(
     };
 
     const setAuthorizationAndState = (token, organization) => {
-        setState(organization);
-
         if (token) {
             storeJwtToken(token);
             setHttpHeaders(token);
-            setupUserSettings();
+            setupUserSettings(organization);
         }
     };
 
@@ -128,15 +127,20 @@ function authenticationService(
 
         state.hasMissionhubAccess = currentState.hasMissionhubAccess;
         state.currentOrganization = currentState.currentOrganization;
+        state.organization_with_missing_signatures_ids =
+            currentState.organization_with_missing_signatures_ids;
         state.loggedIn = true;
 
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const setState = organization => {
+    const setState = (organization, person) => {
         const newState = {
             hasMissionhubAccess: true,
             currentOrganization: organization ? organization.id : 0,
+            organization_with_missing_signatures_ids: person
+                ? person.organization_with_missing_signatures_ids
+                : [],
         };
 
         sessionStorageService.set('state', newState);
@@ -152,6 +156,7 @@ function authenticationService(
         localStorageService.clear('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
+        state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
 
         $rootScope.$broadcast('state:changed', state);
