@@ -54,13 +54,9 @@ function organizationSignaturesController(
 
         const query = Object.entries(params).reduce(
             (accumulator, [key, value]) => {
-                return (
-                    accumulator +
-                    '&' +
-                    encodeURIComponent(key) +
-                    '=' +
-                    encodeURIComponent(value)
-                );
+                return `${accumulator}&${encodeURIComponent(
+                    key,
+                )}=${encodeURIComponent(value)}`;
             },
             '',
         );
