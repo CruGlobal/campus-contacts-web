@@ -14,14 +14,26 @@ function analyticsService(
             legacyCookieDomain: 'missionhub.com',
             allowLinker: true,
             sampleRate: 100,
-            ...(ssoUid ? { userId: ssoUid } : {}),
         });
 
         $window.ga(tracker => {
             $window.ga('set', 'dimension2', tracker.get('clientId'));
         });
 
-        $window.ga('set', 'dimension3', ssoUid);
+        if (ssoUid) {
+            $window.ga('set', 'dimension3', ssoUid);
+            $window.ga('set', 'userId', ssoUid);
+        }
+    };
+
+    const initAdobeData = () => {
+        $window.digitalData = {
+            page: {
+                pageInfo: {
+                    pageName: 'MissionHub',
+                },
+            },
+        };
     };
 
     const setupAdobeData = (ssoUid, facebookId, grMasterPersonId) => {
@@ -31,21 +43,25 @@ function analyticsService(
                     pageName: 'MissionHub',
                 },
             },
-            user: [
-                {
-                    profile: [
-                        {
-                            profileInfo: {
-                                ssoGuid: ssoUid,
-                                grMasterPersonId: grMasterPersonId,
-                            },
-                            social: {
-                                facebook: facebookId,
-                            },
-                        },
-                    ],
-                },
-            ],
+            ...(ssoUid
+                ? {
+                      user: [
+                          {
+                              profile: [
+                                  {
+                                      profileInfo: {
+                                          ssoGuid: ssoUid,
+                                          grMasterPersonId: grMasterPersonId,
+                                      },
+                                      social: {
+                                          facebook: facebookId,
+                                      },
+                                  },
+                              ],
+                          },
+                      ],
+                  }
+                : {}),
         };
     };
 
@@ -77,16 +93,24 @@ function analyticsService(
 
     return {
         init: () => {
-            if (!authenticationService.isTokenValid()) return;
-
-            loggedInPerson
-                .loadOnce()
-                .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
-                    setupGoogle(thekey_uid);
-                    setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
-                    loadAdobeScript()(document);
-                    setupAdobe();
-                });
+            if (!authenticationService.isTokenValid()) {
+                initAdobeData();
+                loadAdobeScript()(document);
+                setupAdobe();
+            } else {
+                loggedInPerson
+                    .loadOnce()
+                    .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
+                        setupGoogle(thekey_uid);
+                        setupAdobeData(
+                            thekey_uid,
+                            fb_uid,
+                            global_registry_mdm_id,
+                        );
+                        loadAdobeScript()(document);
+                        setupAdobe();
+                    });
+            }
         },
         track: transition => {
             const newState = transition.$to();
