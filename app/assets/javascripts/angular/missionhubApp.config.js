@@ -9,7 +9,7 @@ angular
             },
             vars: {
                 development: {
-                    apiUrl: 'http://localhost:3001/apis/v4',
+                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
                 },
                 staging: {

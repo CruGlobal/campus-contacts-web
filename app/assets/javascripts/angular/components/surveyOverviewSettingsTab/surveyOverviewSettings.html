@@ -38,6 +38,29 @@
                         ng-readonly="!$ctrl.directAdminPrivileges">
                     </textarea>
                 </div>
+                <div class="mt4 tl">
+                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
+                        {{'surveys:settings.image' | t}}
+                        <span class="f6 gray-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
+                    </label>
+                    <div class="image-box bg-white mb3 br2">
+                        <img ng-src="{{$ctrl.surveyEdit.logo_url}}" ng-if="$ctrl.surveyEdit.logo_url">
+                    </div>
+                    <button
+                        class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
+                        ng-click="$ctrl.selectImage()"
+                        ng-if="$ctrl.directAdminPrivileges"
+                    >
+                        {{'surveys:settings.image_upload' | t}}
+                    </button>
+                    <button
+                        class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
+                        ng-click="$ctrl.deleteImage()"
+                        ng-if="$ctrl.surveyEdit.logo_url && $ctrl.directAdminPrivileges"
+                    >
+                        {{'surveys:settings.image_delete' | t}}
+                    </button>
+                </div>
                 <div class="mt4 bb pb4 b--pivot-gray tl">
                     <input
                         type="checkbox"
@@ -78,29 +101,6 @@
                         ng-readonly="!$ctrl.directAdminPrivileges">
                     </textarea>
                     <div class="gray">{{'surveys:settings.validation_success_message_hint' | t}}</div>
-                </div>
-                <div class="mt4 tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
-                        {{'surveys:settings.image' | t}}
-                        <span class="f6 gray-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
-                    </label>
-                    <div class="image-box bg-white mb3 br2">
-                        <img ng-src="{{$ctrl.surveyEdit.logo_url}}" ng-if="$ctrl.surveyEdit.logo_url">
-                    </div>
-                    <button
-                        class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
-                        ng-click="$ctrl.selectImage()"
-                        ng-if="$ctrl.directAdminPrivileges"
-                    >
-                        {{'surveys:settings.image_upload' | t}}
-                    </button>
-                    <button
-                        class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
-                        ng-click="$ctrl.deleteImage()"
-                        ng-if="$ctrl.surveyEdit.logo_url && $ctrl.directAdminPrivileges"
-                    >
-                        {{'surveys:settings.image_delete' | t}}
-                    </button>
                 </div>
             </fieldset>
         </form>
