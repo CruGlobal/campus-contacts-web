@@ -24,7 +24,7 @@
 
                 <span ng-if="$ctrl.primaryPhone">
                     {{$ctrl.primaryPhone.number | phone}}
-                    <ng-md-icon class="phone-active" icon="check" size="14" ng-if="$ctrl.primaryPhone.valid_values"></ng-md-icon>
+                    <ng-md-icon class="phone-active" icon="check" size="14" ng-if="$ctrl.primaryPhone.validated"></ng-md-icon>
                 </span>
             </div>
             <div class="tabs">
