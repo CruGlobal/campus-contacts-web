@@ -4,7 +4,7 @@
 organization-overview-surveys {
     .header {
         display: grid;
-        grid-template-columns: 4fr 2fr 2fr 1fr 105px 70px;
+        grid-template-columns: 4fr 2fr 2fr 1fr auto auto;
         background-color: $pivot-darker-blue;
 
         ng-md-icon svg {
@@ -15,9 +15,13 @@ organization-overview-surveys {
     .row {
         @extend ministry-view-group;
         display: grid !important;
-        grid-template-columns: 4fr 2fr 2fr 1fr 105px 70px;
+        grid-template-columns: 4fr 2fr 2fr 1fr auto auto;
 
+        .buttons-column {
+            width: 70px;
+        }
         .column-typeform {
+            width: 105px;
             text-align: center;
             icon-button {
                 display: inline;
