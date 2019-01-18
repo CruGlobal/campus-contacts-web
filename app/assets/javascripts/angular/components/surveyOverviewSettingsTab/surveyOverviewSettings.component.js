@@ -1,5 +1,7 @@
 import template from './surveyOverviewSettings.html';
 import _ from 'lodash';
+import helpIcon from '../../../../images/icon-help.svg';
+import './surveyOverviewSettings.scss';
 
 angular.module('missionhubApp').component('surveyOverviewSettings', {
     controller: surveyOverviewSettingsController,
@@ -15,6 +17,7 @@ function surveyOverviewSettingsController(
     tFilter,
     loggedInPerson,
 ) {
+    this.helpIcon = helpIcon;
     this.saveSurvey = _.throttle(
         () => {
             if (!this.directAdminPrivileges) return;
