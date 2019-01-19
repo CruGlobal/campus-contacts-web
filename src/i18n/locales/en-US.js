@@ -541,6 +541,26 @@ export default {
             },
             surveys: {
                 header: 'Surveys',
+                typeform: {
+                    header: 'MissionHub now integrates with Typeform!',
+                    subheader:
+                        'Get more creative with your surveys using Typeform while driving your ministry forward with MissionHub.',
+                    step1:
+                        'Sign up for an account at <a href="https://typeform.com" target="_blank">typeform.com</a>.',
+                    step2:
+                        ' Create a new form there in Typeform - be sure you have a question on the new form asking for their "first name". Then go to the "Connect" tab followed by the "Webhooks" sub tab.',
+                    step3:
+                        'Copy the MissionHub URL below into the Destination URL field on Typeform.',
+                    step4:
+                        'Click "test webhook". You should see a green checkmark under recent requests. A new survey with a test submission should be visible in MissionHub.',
+                    step5:
+                        'Next to the webhooks title click the slider to enable webhooks.',
+                    conclusion:
+                        'Future form submissions for this survey will be sent to MissionHub automatically.',
+                    missionHubUrl: 'MissionHub URL',
+                    copy: 'Copy URL',
+                    copied: 'URL copied to clipboard',
+                },
             },
             team: {
                 header: 'Team',
@@ -692,6 +712,7 @@ export default {
             keyword: 'Keyword',
             link: 'Link',
             status: 'Status',
+            typeform: 'Typeform',
         },
         status: {
             live: 'Live',
