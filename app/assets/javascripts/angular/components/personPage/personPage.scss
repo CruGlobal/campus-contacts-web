@@ -125,4 +125,7 @@ person-page {
         overflow-x: hidden;
         padding: 10px $inner-padding 0 $inner-padding;
     }
+    ng-md-icon.phone-active svg {
+        fill: #00d264;
+    }
 }
