@@ -7,21 +7,37 @@ function analyticsService(
     loggedInPerson,
     authenticationService,
 ) {
-    const setupGoogle = ssoUid => {
+    const initGoogle = () => {
         if (!angular.isFunction($window.ga)) return;
 
         $window.ga('create', envService.read('googleAnalytics'), 'auto', {
             legacyCookieDomain: 'missionhub.com',
             allowLinker: true,
             sampleRate: 100,
-            ...(ssoUid ? { userId: ssoUid } : {}),
         });
 
         $window.ga(tracker => {
             $window.ga('set', 'dimension2', tracker.get('clientId'));
         });
+    };
 
-        $window.ga('set', 'dimension3', ssoUid);
+    const setupGoogleData = ssoUid => {
+        if (!angular.isFunction($window.ga)) return;
+
+        if (ssoUid) {
+            $window.ga('set', 'dimension3', ssoUid);
+            $window.ga('set', 'userId', ssoUid);
+        }
+    };
+
+    const initAdobeData = () => {
+        $window.digitalData = {
+            page: {
+                pageInfo: {
+                    pageName: 'MissionHub',
+                },
+            },
+        };
     };
 
     const setupAdobeData = (ssoUid, facebookId, grMasterPersonId) => {
@@ -31,22 +47,35 @@ function analyticsService(
                     pageName: 'MissionHub',
                 },
             },
-            user: [
-                {
-                    profile: [
-                        {
-                            profileInfo: {
-                                ssoGuid: ssoUid,
-                                grMasterPersonId: grMasterPersonId,
-                            },
-                            social: {
-                                facebook: facebookId,
-                            },
-                        },
-                    ],
-                },
-            ],
+            ...(ssoUid
+                ? {
+                      user: [
+                          {
+                              profile: [
+                                  {
+                                      profileInfo: {
+                                          ssoGuid: ssoUid,
+                                          grMasterPersonId: grMasterPersonId,
+                                      },
+                                      social: {
+                                          facebook: facebookId,
+                                      },
+                                  },
+                              ],
+                          },
+                      ],
+                  }
+                : {}),
         };
+    };
+
+    const setupAuthenitcatedAnalyticData = () => {
+        return loggedInPerson
+            .loadOnce()
+            .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
+                setupGoogleData(thekey_uid);
+                setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
+            });
     };
 
     const loadAdobeScript = () => {
@@ -77,16 +106,20 @@ function analyticsService(
 
     return {
         init: () => {
-            if (!authenticationService.isTokenValid()) return;
+            initAdobeData();
+            initGoogle();
+            loadAdobeScript()(document);
+            setupAdobe();
 
-            loggedInPerson
-                .loadOnce()
-                .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
-                    setupGoogle(thekey_uid);
-                    setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
-                    loadAdobeScript()(document);
-                    setupAdobe();
-                });
+            if (authenticationService.isTokenValid()) {
+                setupAuthenitcatedAnalyticData();
+            }
+        },
+        setupAuthenitcatedAnalyticData: setupAuthenitcatedAnalyticData,
+        clearAuthenticatedData: () => {
+            initAdobeData();
+            $window.ga('set', 'dimension3');
+            $window.ga('set', 'userId');
         },
         track: transition => {
             const newState = transition.$to();
@@ -109,10 +142,20 @@ function analyticsService(
                 title: newState.name,
             };
 
-            if (angular.isFunction($window.ga))
-                $window.ga('send', 'pageview', fields);
-
-            $window._satellite && $window._satellite.track('page view');
+            if (
+                authenticationService.isTokenValid() &&
+                !$window.digitalData.user
+            ) {
+                setupAuthenitcatedAnalyticData().then(() => {
+                    angular.isFunction($window.ga) &&
+                        $window.ga('send', 'pageview', fields);
+                    $window._satellite && $window._satellite.track('page view');
+                });
+            } else {
+                $window._satellite && $window._satellite.track('page view');
+                angular.isFunction($window.ga) &&
+                    $window.ga('send', 'pageview', fields);
+            }
         },
     };
 }
