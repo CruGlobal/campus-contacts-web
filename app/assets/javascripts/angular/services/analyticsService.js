@@ -7,7 +7,7 @@ function analyticsService(
     loggedInPerson,
     authenticationService,
 ) {
-    const setupGoogle = ssoUid => {
+    const initGoogle = () => {
         if (!angular.isFunction($window.ga)) return;
 
         $window.ga('create', envService.read('googleAnalytics'), 'auto', {
@@ -19,6 +19,10 @@ function analyticsService(
         $window.ga(tracker => {
             $window.ga('set', 'dimension2', tracker.get('clientId'));
         });
+    };
+
+    const setupGoogleData = ssoUid => {
+        if (!angular.isFunction($window.ga)) return;
 
         if (ssoUid) {
             $window.ga('set', 'dimension3', ssoUid);
@@ -65,6 +69,16 @@ function analyticsService(
         };
     };
 
+    const setupAuthenitcatedAnalyticData = () => {
+        return loggedInPerson
+            .loadOnce()
+            .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
+                console.log('d');
+                setupGoogleData(thekey_uid);
+                setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
+            });
+    };
+
     const loadAdobeScript = () => {
         const url = envService.is('production')
             ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
@@ -93,25 +107,16 @@ function analyticsService(
 
     return {
         init: () => {
-            if (!authenticationService.isTokenValid()) {
-                initAdobeData();
-                loadAdobeScript()(document);
-                setupAdobe();
-            } else {
-                loggedInPerson
-                    .loadOnce()
-                    .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
-                        setupGoogle(thekey_uid);
-                        setupAdobeData(
-                            thekey_uid,
-                            fb_uid,
-                            global_registry_mdm_id,
-                        );
-                        loadAdobeScript()(document);
-                        setupAdobe();
-                    });
+            initAdobeData();
+            initGoogle();
+            loadAdobeScript()(document);
+            setupAdobe();
+
+            if (authenticationService.isTokenValid()) {
+                setupAuthenitcatedAnalyticData();
             }
         },
+        setupAuthenitcatedAnalyticData: setupAuthenitcatedAnalyticData,
         track: transition => {
             const newState = transition.$to();
             const currentUrl = newState.path.reduce((acc, p) => {
@@ -133,10 +138,22 @@ function analyticsService(
                 title: newState.name,
             };
 
-            if (angular.isFunction($window.ga))
-                $window.ga('send', 'pageview', fields);
-
-            $window._satellite && $window._satellite.track('page view');
+            if (
+                authenticationService.isTokenValid() &&
+                !$window.digitalData.user
+            ) {
+                setupAuthenitcatedAnalyticData().then(() => {
+                    console.log('track auth');
+                    angular.isFunction($window.ga) &&
+                        $window.ga('send', 'pageview', fields);
+                    $window._satellite && $window._satellite.track('page view');
+                });
+            } else {
+                console.log('track');
+                $window._satellite && $window._satellite.track('page view');
+                angular.isFunction($window.ga) &&
+                    $window.ga('send', 'pageview', fields);
+            }
         },
     };
 }
