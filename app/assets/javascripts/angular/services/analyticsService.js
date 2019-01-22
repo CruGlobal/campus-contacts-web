@@ -73,7 +73,6 @@ function analyticsService(
         return loggedInPerson
             .loadOnce()
             .then(({ thekey_uid, fb_uid, global_registry_mdm_id }) => {
-                console.log('d');
                 setupGoogleData(thekey_uid);
                 setupAdobeData(thekey_uid, fb_uid, global_registry_mdm_id);
             });
@@ -117,6 +116,11 @@ function analyticsService(
             }
         },
         setupAuthenitcatedAnalyticData: setupAuthenitcatedAnalyticData,
+        clearAuthenticatedData: () => {
+            initAdobeData();
+            $window.ga('set', 'dimension3');
+            $window.ga('set', 'userId');
+        },
         track: transition => {
             const newState = transition.$to();
             const currentUrl = newState.path.reduce((acc, p) => {
@@ -143,13 +147,11 @@ function analyticsService(
                 !$window.digitalData.user
             ) {
                 setupAuthenitcatedAnalyticData().then(() => {
-                    console.log('track auth');
                     angular.isFunction($window.ga) &&
                         $window.ga('send', 'pageview', fields);
                     $window._satellite && $window._satellite.track('page view');
                 });
             } else {
-                console.log('track');
                 $window._satellite && $window._satellite.track('page view');
                 angular.isFunction($window.ga) &&
                     $window.ga('send', 'pageview', fields);

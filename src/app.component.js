@@ -27,6 +27,7 @@ function appController(periodService, $rootScope, state, analyticsService) {
                 this.currentOrganization = currentOrganization;
 
                 if (loggedIn) analyticsService.setupAuthenitcatedAnalyticData();
+                else analyticsService.clearAuthenticatedData();
             },
         );
 
