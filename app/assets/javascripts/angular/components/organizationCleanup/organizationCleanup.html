@@ -8,7 +8,7 @@
     <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
       <h4 class="mt0 mb4 fw6 tracked ttu">{{ 'ministries.cleanup.archive_alumni' | t }}</h4>
       <p class="lh-copy w-80 mt0 mb0">{{ 'ministries.cleanup.archive_alumni_description' | t }} </p>
-      <button class="f6 link pa2 ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100">{{ 'ministries.cleanup.open_contacts' | t }}</button>
+      <a href class="f6 link pa2 ba b--pivot-dark-blue ihshort tc mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ui-sref="app.ministries.ministry.people({ orgId: $ctrl.orgId })">{{ 'ministries.cleanup.open_contacts' | t }}</a>
     </div>
     <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
       <h4 class="mt0 mb4 fw6 tracked ttu flex items-center">
@@ -27,7 +27,7 @@
             uib-datepicker-popup="'yyyy/MM/dd'"
             ng-model="$ctrl.archiveBeforeDate"
             datepicker-options="dateOptions"  >
-        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100" ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)">{{ 'ministries.cleanup.archive_by_date' | t }}</button>
+        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)">{{ 'ministries.cleanup.archive_by_date' | t }}</button>
       </fieldset>
     </div>
     <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
@@ -39,7 +39,7 @@
         <p class="lh-copy w-80 mt0">{{ 'ministries.cleanup.archive_by_inactivty_description' | t }}</p>
         <label for="archiveInactivity" class="dn">Archive Inactivity Date</label>
          <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-50 ihshort br2 datepicker" value="08/31/2018" id="archiveInactivity" name="archiveInactivity" type="text">
-        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100" ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)">{{ 'ministries.cleanup.archive_by_inactivty' | t }}</button>
+        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)">{{ 'ministries.cleanup.archive_by_inactivty' | t }}</button>
       </fieldset>
     </div>
   </div>
