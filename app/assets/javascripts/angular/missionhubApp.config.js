@@ -23,7 +23,7 @@ angular
                     theKeyUrl: 'https://thekey.me/cas',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
+                    surveyLinkPrefix: 'http://localhost:8080/s/',
                     googleAnalytics: 'UA-XXXXXX-XX',
                 },
                 staging: {
