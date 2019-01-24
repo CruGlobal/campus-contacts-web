@@ -233,6 +233,7 @@ export default {
                     delete: 'Error occurred while deleting the organization.',
                     load_ancestry:
                         "Error occurred while loading the organization's ancestors",
+                    cleanup: 'Error occurred while archviving contacts',
                 },
                 organization_overview: {
                     load_org_relationships:

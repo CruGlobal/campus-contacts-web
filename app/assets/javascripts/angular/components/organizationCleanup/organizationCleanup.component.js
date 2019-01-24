@@ -20,8 +20,6 @@ function organizationCleanupController(httpProxy) {
     };
 
     const archiveContacts = async (archiveBy, dateBy) => {
-        const archiveDate = new Date();
-
         return await httpProxy.post(
             '/organizations/archives',
             {
@@ -31,16 +29,15 @@ function organizationCleanupController(httpProxy) {
                 'attributes[before_date]': dateBy.string(),
                 'attributes[archive_by]': archiveBy,
                 'attributes[archived]': true,
-                'attributes[archive_date]': archiveDate.string(),
             },
             {
-                errorMessage: 'error.messages.surveys.loadQuestions',
+                errorMessage: 'error.messages.organization.cleanup',
             },
         );
     };
 
     this.archiveInactive = async dateBy => {
-        const { data } = archiveContacts('persons_inactive_since', dateBy);
+        const { data } = archiveContacts('leaders_last_sign_in_at', dateBy);
     };
 
     this.archiveBefore = async dateBy => {
