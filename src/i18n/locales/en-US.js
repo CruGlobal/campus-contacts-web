@@ -491,7 +491,7 @@ export default {
                     'Go to the All Contacts screen, select the people that have graduated from your ministry and label as "Alumni',
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
-                    'Archive people who have been added before:',
+                    'Archive contacts who have been added before:',
                 archive_by_inactivty: 'Archive by inactivty',
                 archive_by_inactivty_description:
                     'Archive people who have been inactive since:',
