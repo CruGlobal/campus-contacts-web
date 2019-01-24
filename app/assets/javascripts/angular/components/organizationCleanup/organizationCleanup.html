@@ -21,12 +21,9 @@
         </p>
         <label for="archiveDate" class="dn">Archive Date</label>
         <input
-            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-50 ihshort br2 datepicker"
-            id="archiveDate"
-            name="archiveDate" type="text" aria-label="Use the arrow keys to pick a date"
-            uib-datepicker-popup="'yyyy/MM/dd'"
-            ng-model="$ctrl.archiveBeforeDate"
-            datepicker-options="dateOptions"  >
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            type="date"
+            ng-model="$ctrl.archiveBeforeDate">
         <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)">{{ 'ministries.cleanup.archive_by_date' | t }}</button>
       </fieldset>
     </div>
@@ -38,7 +35,11 @@
       <fieldset class="ba b--transparent pr0 mh0 w-100 pl0 pv0 mv0">
         <p class="lh-copy w-80 mt0">{{ 'ministries.cleanup.archive_by_inactivty_description' | t }}</p>
         <label for="archiveInactivity" class="dn">Archive Inactivity Date</label>
-         <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-50 ihshort br2 datepicker" value="08/31/2018" id="archiveInactivity" name="archiveInactivity" type="text">
+         <input
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            value="08/31/2018"
+            type="date"
+            ng-model="$ctrl.archiveInactivityDate">
         <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)">{{ 'ministries.cleanup.archive_by_inactivty' | t }}</button>
       </fieldset>
     </div>

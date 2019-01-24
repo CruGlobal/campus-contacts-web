@@ -20,15 +20,21 @@ function organizationCleanupController(httpProxy) {
     };
 
     const archiveContacts = async (archiveBy, dateBy) => {
+        const data = {
+            type: 'bulk_archive_contacts',
+            id: this.orgId,
+            attributes: {
+                organization_id: this.orgId,
+                before_date: dateBy,
+                archive_by: archiveBy,
+                archived: true,
+            },
+        };
+
         return await httpProxy.post(
             '/organizations/archives',
             {
-                type: 'bulk_archive_contacts',
-                id: this.orgId,
-                'attributes[organization_id]': this.orgId,
-                'attributes[before_date]': dateBy.string(),
-                'attributes[archive_by]': archiveBy,
-                'attributes[archived]': true,
+                data: data,
             },
             {
                 errorMessage: 'error.messages.organization.cleanup',
@@ -37,10 +43,14 @@ function organizationCleanupController(httpProxy) {
     };
 
     this.archiveInactive = async dateBy => {
+        if (!dateBy) return;
+
         const { data } = archiveContacts('leaders_last_sign_in_at', dateBy);
     };
 
     this.archiveBefore = async dateBy => {
+        if (!dateBy) return;
+
         const { data } = archiveContacts('persons_inactive_since', dateBy);
     };
 }
