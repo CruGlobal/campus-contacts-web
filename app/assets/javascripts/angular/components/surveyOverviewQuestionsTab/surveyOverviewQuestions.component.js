@@ -391,7 +391,6 @@ function surveyOverviewQuestionsController(
         );
 
         if (ruleIdsToDelete.length > 0) {
-            console.log(ruleIdsToDelete);
             await Promise.all(
                 ruleIdsToDelete.map(ruleId => deleteQuestionRule(ruleId)),
             );
