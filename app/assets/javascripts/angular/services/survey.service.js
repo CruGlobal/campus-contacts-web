@@ -154,10 +154,6 @@ function surveyService(
                         });
                     }
 
-                    if (!r.people_ids || r.people_ids === '') {
-                        return;
-                    }
-
                     if (!r.trigger_keywords || r.trigger_keywords === '') {
                         return;
                     }
