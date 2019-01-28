@@ -355,8 +355,7 @@ angular
                 url: '/organization-cleanup',
                 component: 'organizationCleanup',
                 resolve: {
-                    orgId: ($state, $transition$) =>
-                        $transition$.params().orgId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({
@@ -364,8 +363,7 @@ angular
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
                 resolve: {
-                    orgId: ($state, $transition$) =>
-                        $transition$.params().orgId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({
