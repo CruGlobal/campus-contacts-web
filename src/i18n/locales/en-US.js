@@ -323,6 +323,7 @@ export default {
             contacted: 'Contacted',
             do_not_contact: 'Do Not Contact',
             uncontacted: 'Uncontacted',
+            archived: 'Archived',
         },
         student_status: {
             not_student: 'Not currently a student',
