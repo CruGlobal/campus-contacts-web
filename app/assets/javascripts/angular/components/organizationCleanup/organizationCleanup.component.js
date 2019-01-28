@@ -13,12 +13,6 @@ angular.module('missionhubApp').component('organizationCleanup', {
 function organizationCleanupController(httpProxy, $scope) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
-    this.dateOptions = {
-        formatYear: 'yy',
-        maxDate: new Date(2020, 5, 22),
-        minDate: new Date(),
-        startingDay: 1,
-    };
     this.cleanupCompleted = false;
     this.checkIcon = checkIcon;
 
