@@ -19,6 +19,7 @@ function appController(periodService, $rootScope, state, analyticsService) {
     this.getPeriod = periodService.getPeriod;
     this.currentOrganization = state.currentOrganization;
     this.hideHeader = false;
+    this.hideFooter = false;
 
     this.$onInit = () => {
         this.year = new Date();
