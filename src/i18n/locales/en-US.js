@@ -497,6 +497,7 @@ export default {
                 archive_by_inactivty_description:
                     'Archive people who have been inactive since:',
                 open_contacts: 'Open Contacts',
+                success_message: 'Your contacts have been archived!',
             },
             people: {
                 activity: {

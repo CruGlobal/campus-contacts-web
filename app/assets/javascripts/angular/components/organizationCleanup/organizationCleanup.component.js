@@ -1,5 +1,6 @@
 import template from './organizationCleanup.html';
 import './organizationCleanup.scss';
+import checkIcon from '../../../../images/icons/icon-check.svg';
 
 angular.module('missionhubApp').component('organizationCleanup', {
     bindings: {
@@ -9,7 +10,7 @@ angular.module('missionhubApp').component('organizationCleanup', {
     controller: organizationCleanupController,
 });
 
-function organizationCleanupController(httpProxy) {
+function organizationCleanupController(httpProxy, $scope) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.dateOptions = {
@@ -18,8 +19,12 @@ function organizationCleanupController(httpProxy) {
         minDate: new Date(),
         startingDay: 1,
     };
+    this.cleanupCompleted = false;
+    this.checkIcon = checkIcon;
 
-    const archiveContacts = async (archiveBy, dateBy) => {
+    const archiveContacts = (archiveBy, dateBy) => {
+        this.cleanupCompleted = false;
+
         const data = {
             type: 'bulk_archive_contacts',
             id: this.orgId,
@@ -31,7 +36,7 @@ function organizationCleanupController(httpProxy) {
             },
         };
 
-        return await httpProxy.post(
+        return httpProxy.post(
             '/organizations/archives',
             {
                 data: data,
@@ -45,12 +50,26 @@ function organizationCleanupController(httpProxy) {
     this.archiveInactive = async dateBy => {
         if (!dateBy) return;
 
-        const { data } = archiveContacts('leaders_last_sign_in_at', dateBy);
+        const { data } = await archiveContacts(
+            'leaders_last_sign_in_at',
+            dateBy,
+        );
+
+        if (data) this.cleanupCompleted = true;
+
+        $scope.$apply();
     };
 
     this.archiveBefore = async dateBy => {
         if (!dateBy) return;
 
-        const { data } = archiveContacts('persons_inactive_since', dateBy);
+        const { data } = await archiveContacts(
+            'persons_inactive_since',
+            dateBy,
+        );
+
+        if (data) this.cleanupCompleted = true;
+
+        $scope.$apply();
     };
 }

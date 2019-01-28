@@ -4,6 +4,20 @@
   </h1>
   <p class="pivot-gray-darker f4-5  mb5" bind-dynamic="'ministries.cleanup.description' | t "></p>
 
+
+  <div class='tc ' ng-if="$ctrl.cleanupCompleted">
+    <header class="center tc pt4">
+        <img class="center" ng-src="{{$ctrl.checkIcon}}" style="width:150px; height:150px;">
+        <h1 class="f2 normal pivot-dark-blue mb3 mt3">{{ 'contact_import:step_4.title' | t }}</h1>
+    </header>
+    <div class="mt0 tc pb3 mb4">
+        <p class="lh-copy pivot-gray-darker f5 tc mb4">
+            {{ 'ministries.cleanup.success_message' | t }}
+        </p>
+    </div>
+  </div>
+
+
   <div class="flex justify-between items-stretch">
     <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
       <h4 class="mt0 mb4 fw6 tracked ttu">{{ 'ministries.cleanup.archive_alumni' | t }}</h4>
