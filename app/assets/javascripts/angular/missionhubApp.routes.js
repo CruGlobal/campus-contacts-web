@@ -242,6 +242,7 @@ angular
                 name: 'app',
                 url: '',
                 abstract: true,
+                component: 'app',
                 resolve: {
                     person: function(loggedInPerson) {
                         return loggedInPerson.loadOnce().then(user => {
@@ -256,10 +257,9 @@ angular
                         });
                     },
                 },
-                template: '<ui-view></ui-view>',
             })
             .state({
-                name: 'signIn',
+                name: 'app.signIn',
                 url: '/sign-in',
                 component: 'signIn',
                 data: {
@@ -267,7 +267,7 @@ angular
                 },
             })
             .state({
-                name: 'auth',
+                name: 'app.auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {
