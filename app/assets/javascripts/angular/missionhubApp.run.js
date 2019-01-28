@@ -35,6 +35,15 @@ angular
         analyticsService.init();
 
         $transitions.onBefore({}, transition => {
+            if (
+                transition.to().data &&
+                transition.to().data.hideHeaderAndFooter
+            )
+                $rootScope.$broadcast('uiState:changed', {
+                    header: 'hidden',
+                    footer: 'hidden',
+                });
+
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 

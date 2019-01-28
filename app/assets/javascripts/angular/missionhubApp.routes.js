@@ -472,6 +472,9 @@ angular
                 name: 'publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
+                data: {
+                    hideHeaderAndFooter: true,
+                },
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService
@@ -486,6 +489,9 @@ angular
                 name: 'app.previewSurvey',
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
+                data: {
+                    hideHeaderAndFooter: true,
+                },
                 resolve: {
                     survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),

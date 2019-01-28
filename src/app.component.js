@@ -13,10 +13,12 @@ angular.module('missionhubApp').component('app', {
 function appController(periodService, $rootScope, state, analyticsService) {
     let deregisterEditOrganizationsEvent;
     let deregisterStateChangedEvent;
+    let deregisterUiStateChangedEvent;
 
     this.editOrganizations = false;
     this.getPeriod = periodService.getPeriod;
     this.currentOrganization = state.currentOrganization;
+    this.hideHeader = false;
 
     this.$onInit = () => {
         this.year = new Date();
@@ -31,6 +33,14 @@ function appController(periodService, $rootScope, state, analyticsService) {
             },
         );
 
+        deregisterUiStateChangedEvent = $rootScope.$on(
+            'uiState:changed',
+            (event, { header, footer }) => {
+                this.hideHeader = header === 'hidden';
+                this.hideFooter = footer === 'hidden';
+            },
+        );
+
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
             (event, value) => {
@@ -42,5 +52,6 @@ function appController(periodService, $rootScope, state, analyticsService) {
     this.$onDestroy = () => {
         deregisterEditOrganizationsEvent();
         deregisterStateChangedEvent();
+        deregisterUiStateChangedEvent();
     };
 }
