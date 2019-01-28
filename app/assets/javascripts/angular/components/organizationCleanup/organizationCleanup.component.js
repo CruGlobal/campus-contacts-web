@@ -16,10 +16,12 @@ function organizationCleanupController(httpProxy, $scope) {
     this.cleanupCompleted = false;
     this.checkIcon = checkIcon;
 
-    const archiveContacts = (archiveBy, dateBy) => {
+    const archiveContacts = archiveBy => async dateBy => {
+        if (!dateBy) return;
+
         this.cleanupCompleted = false;
 
-        const data = {
+        const params = {
             type: 'bulk_archive_contacts',
             id: this.orgId,
             attributes: {
@@ -30,40 +32,21 @@ function organizationCleanupController(httpProxy, $scope) {
             },
         };
 
-        return httpProxy.post(
+        const { data } = await httpProxy.post(
             '/organizations/archives',
             {
-                data: data,
+                data: params,
             },
             {
                 errorMessage: 'error.messages.organization.cleanup',
             },
         );
-    };
-
-    this.archiveInactive = async dateBy => {
-        if (!dateBy) return;
-
-        const { data } = await archiveContacts(
-            'leaders_last_sign_in_at',
-            dateBy,
-        );
 
         if (data) this.cleanupCompleted = true;
 
         $scope.$apply();
     };
 
-    this.archiveBefore = async dateBy => {
-        if (!dateBy) return;
-
-        const { data } = await archiveContacts(
-            'persons_inactive_since',
-            dateBy,
-        );
-
-        if (data) this.cleanupCompleted = true;
-
-        $scope.$apply();
-    };
+    this.archiveInactive = archiveContacts('leaders_last_sign_in_at');
+    this.archiveBefore = archiveContacts('persons_inactive_since');
 }
