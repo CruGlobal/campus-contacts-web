@@ -23,6 +23,7 @@ function routesService(httpProxy, modelsService) {
                     'reverse_contact_assignments.assigned_to',
                 ],
                 {
+                    params: { 'filters[include_archived]': true },
                     errorMessage: 'error.messages.routes.get_person',
                 },
             );
