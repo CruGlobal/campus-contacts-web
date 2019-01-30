@@ -382,7 +382,7 @@ function surveyOverviewQuestionsController(
         const ruleIdsToDelete = question.question_rules.reduce(
             (accumulator, r) => {
                 if (r.trigger_keywords === keyword && r.id) {
-                    return [...new Set(accumulator.concat(...[r.id]))];
+                    return [...new Set([...accumulator, r.id])];
                 }
 
                 return accumulator;
