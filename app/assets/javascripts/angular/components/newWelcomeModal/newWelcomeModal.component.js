@@ -20,9 +20,6 @@ function newWelcomeModalController($rootScope, loggedInPerson) {
         vm.sending = true;
         loggedInPerson
             .updatePreferences({ beta_mode: true })
-            .then(function() {
-                $rootScope.legacyNavigation = false;
-            })
             .then(vm.dismiss)
             .catch(function() {
                 vm.sending = false;

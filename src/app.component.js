@@ -5,9 +5,6 @@ import './app.scss';
 angular.module('missionhubApp').component('app', {
     controller: appController,
     template: template,
-    transclude: {
-        legacyMenu: '?legacyMenu',
-    },
 });
 
 function appController(periodService, $rootScope, state, analyticsService) {

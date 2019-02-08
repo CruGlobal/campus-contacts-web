@@ -33,7 +33,6 @@ class UserPreferences {
                 weekly_digest: this.weeklyDigest,
             },
         });
-        this.$rootScope.legacyNavigation = this.legacyNav;
     }
 }
 
