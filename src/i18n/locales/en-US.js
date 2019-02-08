@@ -246,7 +246,6 @@ export default {
                         'Error occurred while loading the number of people in the organization',
                     load_people_chunk:
                         'Error occurred while loading the next batch of people',
-                    merge_people: 'Error occurred while merging people',
                 },
                 organization_overview_suborgs: {
                     load_org_chunk:
