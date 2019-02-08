@@ -212,17 +212,6 @@ function peopleScreenService(
             });
         },
 
-        // Merge the specified people
-        mergePeople: function(personIds, winnerId) {
-            const model = new JsonApiDataStore.Model('bulk_people_change');
-            model.setAttribute('person_ids', personIds);
-            model.setAttribute('winner_id', winnerId);
-            return httpProxy.post('/person_merges', model.serialize(), {
-                errorMessage:
-                    'error.messages.organization_overview_people.merge_people',
-            });
-        },
-
         // Export the selected people
         exportPeople: function(orgId, selection, order, surveyId) {
             const filterParams = peopleScreenService.buildListParams(

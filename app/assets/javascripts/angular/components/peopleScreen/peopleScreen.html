@@ -75,10 +75,6 @@
             <div class="space"></div>
             <img ng-src="{{$ctrl.pencilIcon}}" ng-click="$ctrl.massEdit()"
                  ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}">
-            <img ng-src="{{$ctrl.mergeIcon}}" ng-click="$ctrl.merge()"
-                 ng-class="{ disabled: !$ctrl.mergeable() }"
-                 ng-attr-title="{{ ($ctrl.mergeable() ? 'ministries.people.merge_hover' :
-                                          'ministries.people.merge_disabled_hover') | t }}"/>
             <img ng-src="{{$ctrl.emailIcon}}" ng-click="$ctrl.sendMessage('email')"
                  ng-attr-title="{{ 'ministries.people.email_hover' | t }}"/>
             <img ng-src="{{$ctrl.messageIcon}}" ng-click="$ctrl.sendMessage('sms')"
