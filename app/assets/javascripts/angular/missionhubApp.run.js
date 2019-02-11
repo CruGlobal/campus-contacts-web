@@ -40,7 +40,7 @@ angular
 
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
-                return transition.router.stateService.target('signIn');
+                return transition.router.stateService.target('app.signIn');
             }
 
             if (

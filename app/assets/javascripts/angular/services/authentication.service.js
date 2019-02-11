@@ -179,7 +179,7 @@ function authenticationService(
         removeAccess: () => {
             clearToken();
             clearState();
-            $state.go('signIn');
+            $state.go('app.signIn');
         },
         setupAuthenticationState: () => {
             const token = getJwtToken();
