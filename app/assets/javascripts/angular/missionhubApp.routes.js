@@ -243,6 +243,20 @@ angular
                 url: '',
                 abstract: true,
                 component: 'app',
+                resolve: {
+                    hideHeader: () => false,
+                    hideFooter: () => false,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus',
+                url: '',
+                abstract: true,
+                component: 'app',
+                resolve: {
+                    hideHeader: () => true,
+                    hideFooter: () => true,
+                },
             })
             .state({
                 name: 'app.signIn',
@@ -455,12 +469,9 @@ angular
                 },
             })
             .state({
-                name: 'publicSurvey',
+                name: 'appWithoutMenus.publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
-                data: {
-                    hideHeaderAndFooter: true,
-                },
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService
@@ -472,12 +483,9 @@ angular
                 },
             })
             .state({
-                name: 'app.previewSurvey',
+                name: 'appWithoutMenus.previewSurvey',
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
-                data: {
-                    hideHeaderAndFooter: true,
-                },
                 resolve: {
                     survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),
