@@ -243,20 +243,6 @@ angular
                 url: '',
                 abstract: true,
                 component: 'app',
-                resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadOnce().then(user => {
-                            if (user.beta_mode === null) {
-                                $uibModal.open({
-                                    component: 'newWelcomeModal',
-                                    resolve: {},
-                                    windowClass: 'pivot_theme',
-                                    size: 'sm',
-                                });
-                            }
-                        });
-                    },
-                },
             })
             .state({
                 name: 'app.signIn',
