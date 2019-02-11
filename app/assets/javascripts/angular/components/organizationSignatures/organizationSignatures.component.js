@@ -42,6 +42,7 @@ function organizationSignaturesController(
             updated_at: signature.updated_at,
             code_of_conduct: signature.code_of_conduct,
             statement_of_faith: signature.statement_of_faith,
+            organization_name: signature.organization.name,
         }));
 
     const buildExportCsvLink = searchText => {

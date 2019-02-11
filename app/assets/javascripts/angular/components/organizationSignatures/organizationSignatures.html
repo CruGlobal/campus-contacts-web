@@ -24,7 +24,8 @@
                 <th class='pa3 pivot-white ttu tc' st-sort="first_name">{{ 'signatures.grid.firstName' | t }}</th>
                 <th class='pa3 pivot-white ttu tc' st-sort="last_name">{{ 'signatures.grid.lastName' | t }}</th>
                 <th class='pa3 pivot-white ttu tc' st-sort="code_of_conduct">{{ 'signatures.grid.codeOfConduct' | t }}</th>
-                <th class='pa3 pivot-white br2 ttu tc br--top br--right' st-sort="statement_of_faith">{{ 'signatures.grid.statementOfFaith' | t }}</th>
+                <th class='pa3 pivot-white ttu tc' st-sort="statement_of_faith">{{ 'signatures.grid.statementOfFaith' | t }}</th>
+                <th class='pa3 pivot-white br2 ttu tc br--top br--right' st-sort="organization_name">{{ 'signatures.grid.organization' | t }}</th>
             </tr>
         </thead>
         <tbody class='grid-content'>
@@ -42,15 +43,16 @@
                     <span ng-if="row.statement_of_faith === 'declined'">{{ 'signatures.grid.declined' | t }}</span>
                     <span ng-if="!row.statement_of_faith">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
                 </td>
+                <td class='pa3 tc'>{{row.organization_name}}</td>
             </tr>
             <tr ng-if="$ctrl.signatures.length <=0">
-                <td class='pa3 tc' colspan="5" ng-if="$ctrl.isLoading">{{ 'signatures.grid.loading' | t }}</td>
-                <td class='pa3 tc' colspan="5" ng-if="!$ctrl.isLoading">{{ 'signatures.grid.notFound' | t }}</td>
+                <td class='pa3 tc' colspan="6" ng-if="$ctrl.isLoading">{{ 'signatures.grid.loading' | t }}</td>
+                <td class='pa3 tc' colspan="6" ng-if="!$ctrl.isLoading">{{ 'signatures.grid.notFound' | t }}</td>
             </tr>
         </tbody>
         <tfoot>
 			<tr>
-				<td colspan="5" class="text-center">
+				<td colspan="6" class="text-center">
                     <div class="pagination mt3" ng-if="$ctrl.tableState.pagination.pages.length > 1">
                         <ul class="list flex">
                             <li ng-if="$ctrl.tableState.pagination.currentPage > 1">
