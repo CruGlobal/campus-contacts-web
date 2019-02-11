@@ -675,6 +675,15 @@ export default {
             agreements: {
                 accept: 'Accept',
                 decline: 'Decline',
+                accepted: {
+                    message: 'Thank you! You May now use MissionHub',
+                    button: 'Continue to the Mission Hub App',
+                },
+                declined: {
+                    title: 'You have declined!',
+                    message:
+                        '<p>Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.</p><p>You will need to request access again after having this discussion. </p>',
+                },
                 codeOfConduct: {
                     title: 'Code of Conduct',
                     text:
