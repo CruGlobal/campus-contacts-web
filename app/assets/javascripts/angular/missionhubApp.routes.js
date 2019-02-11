@@ -242,24 +242,10 @@ angular
                 name: 'app',
                 url: '',
                 abstract: true,
-                resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadOnce().then(user => {
-                            if (user.beta_mode === null) {
-                                $uibModal.open({
-                                    component: 'newWelcomeModal',
-                                    resolve: {},
-                                    windowClass: 'pivot_theme',
-                                    size: 'sm',
-                                });
-                            }
-                        });
-                    },
-                },
-                template: '<ui-view></ui-view>',
+                component: 'app',
             })
             .state({
-                name: 'signIn',
+                name: 'app.signIn',
                 url: '/sign-in',
                 component: 'signIn',
                 data: {
@@ -267,7 +253,7 @@ angular
                 },
             })
             .state({
-                name: 'auth',
+                name: 'app.auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {
