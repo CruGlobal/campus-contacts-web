@@ -38,6 +38,10 @@ function modelsService(_) {
             include: 'phone_numbers',
             url: generateUrls('/phone_numbers'),
         },
+        phone_number_validation: {
+            include: 'phone_number_validations',
+            url: generateUrls('/phone_numbers/validations'),
+        },
         address: {
             include: 'addresses',
             url: generateUrls('/addresses'),

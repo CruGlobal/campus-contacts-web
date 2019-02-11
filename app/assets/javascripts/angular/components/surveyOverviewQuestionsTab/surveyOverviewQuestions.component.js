@@ -373,14 +373,33 @@ function surveyOverviewQuestionsController(
         this.saveQuestionContent(question, question.question_answers);
     };
 
+    const deleteQuestionRule = ruleId => {
+        return surveyService.deleteSurveyQuestionRule(this.survey.id, ruleId);
+    };
+
     this.deleteQuestionContent = async (question, answers, rule, index) => {
-        if (rule.id) {
-            await surveyService.deleteSurveyQuestionRule(
-                this.survey.id,
-                rule.id,
+        const keyword = rule.trigger_keywords;
+        const ruleIdsToDelete = question.question_rules.reduce(
+            (accumulator, r) => {
+                if (r.trigger_keywords === keyword && r.id) {
+                    return [...new Set([...accumulator, r.id])];
+                }
+
+                return accumulator;
+            },
+            [],
+        );
+
+        if (ruleIdsToDelete.length > 0) {
+            await Promise.all(
+                ruleIdsToDelete.map(ruleId => deleteQuestionRule(ruleId)),
             );
-            const ruleIndex = question.question_rules.indexOf(rule);
-            question.question_rules.splice(ruleIndex, 1);
+
+            const newRules = question.question_rules.filter(r => {
+                if (r.trigger_keywords !== keyword) return r;
+            });
+
+            question.question_rules = newRules;
         }
 
         question.question_answers.splice(index, 1);

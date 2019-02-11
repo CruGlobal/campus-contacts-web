@@ -154,10 +154,6 @@ function surveyService(
                         });
                     }
 
-                    if (!r.people_ids || r.people_ids === '') {
-                        return;
-                    }
-
                     if (!r.trigger_keywords || r.trigger_keywords === '') {
                         return;
                     }
@@ -227,6 +223,11 @@ function surveyService(
                                 is_frozen: survey.is_frozen,
                                 post_survey_message: survey.post_survey_message,
                                 login_paragraph: survey.login_paragraph,
+                                validate_phone_number:
+                                    survey.validate_phone_number,
+                                validation_message: survey.validation_message,
+                                validation_success_message:
+                                    survey.validation_success_message,
                                 ...(survey.logo === undefined
                                     ? {}
                                     : { logo: survey.logo }), // Only send logo field to API when it is a base64 string or null (to allow deletion)

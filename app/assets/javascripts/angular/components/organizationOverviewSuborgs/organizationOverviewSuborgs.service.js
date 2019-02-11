@@ -11,6 +11,7 @@ function organizationOverviewSuborgsService(httpProxy, modelsService) {
             return {
                 include: ['groups', 'surveys'].join(','),
                 'filters[parent_ids]': orgId,
+                'filters[user_created]': false,
             };
         },
 
