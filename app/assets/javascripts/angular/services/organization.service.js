@@ -14,7 +14,7 @@ function organizationService(
 
     const organizationService = {
         // Load a list of organizations
-        loadOrgs: function(orgIds, errorMessage) {
+        loadOrgsById: function(orgIds, errorMessage) {
             if (orgIds.length === 0) {
                 return $q.resolve([]);
             }
@@ -24,6 +24,7 @@ function organizationService(
                     modelsService.getModelMetadata('organization').url.all,
                     {
                         'filters[ids]': orgIds.join(','),
+                        'filters[user_created]': false,
                     },
                     {
                         errorMessage: errorMessage,
@@ -59,7 +60,7 @@ function organizationService(
             });
 
             return organizationService
-                .loadOrgs(
+                .loadOrgsById(
                     unloadedOrgIds,
                     'error.messages.organization.load_ancestry',
                 )

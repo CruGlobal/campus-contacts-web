@@ -169,9 +169,9 @@ function peopleScreenService(
             'fields[person]':
                 'first_name,last_name,gender,email_addresses,phone_numbers,answer_sheets,organizational_permissions,reverse_contact_assignments,organizational_labels,group_memberships',
             'fields[organizational_permission]':
-                'followup_status,organization_id,permission_id',
+                'followup_status,organization_id,permission_id,archive_date',
             'fields[email_address]': 'email,primary',
-            'fields[phone_number]': 'number,primary',
+            'fields[phone_number]': 'number,primary,validated',
             'fields[contact_assignment]': 'assigned_to,organization,created_at',
             'fields[answer_sheet]': 'answers,survey',
             'fields[answer]': 'value,question',

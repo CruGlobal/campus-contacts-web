@@ -106,6 +106,13 @@ function peopleScreenController(
             label: 'ministries.people.status',
             sortable: true,
             getSortKey: person => {
+                const orgPermission = personService.getOrgPermission(
+                    person,
+                    this.org.id,
+                );
+
+                if (orgPermission.archive_date !== null) return 'Archived';
+
                 return personService.getFollowupStatus(person, this.org.id);
             },
             orderFields: [
@@ -376,6 +383,7 @@ function peopleScreenController(
             resolve: {
                 medium: _.constant(medium),
                 selection: _.constant(getSelection()),
+                surveyId: () => this.surveyId,
             },
             windowClass: 'pivot_theme',
             size: 'md',
