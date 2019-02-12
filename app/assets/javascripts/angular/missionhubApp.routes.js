@@ -242,24 +242,24 @@ angular
                 name: 'app',
                 url: '',
                 abstract: true,
+                component: 'app',
                 resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadOnce().then(user => {
-                            if (user.beta_mode === null) {
-                                $uibModal.open({
-                                    component: 'newWelcomeModal',
-                                    resolve: {},
-                                    windowClass: 'pivot_theme',
-                                    size: 'sm',
-                                });
-                            }
-                        });
-                    },
+                    hideHeader: () => false,
+                    hideFooter: () => false,
                 },
-                template: '<ui-view></ui-view>',
             })
             .state({
-                name: 'signIn',
+                name: 'appWithoutMenus',
+                url: '',
+                abstract: true,
+                component: 'app',
+                resolve: {
+                    hideHeader: () => true,
+                    hideFooter: () => true,
+                },
+            })
+            .state({
+                name: 'app.signIn',
                 url: '/sign-in',
                 component: 'signIn',
                 data: {
@@ -267,7 +267,7 @@ angular
                 },
             })
             .state({
-                name: 'auth',
+                name: 'app.auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {
@@ -477,7 +477,7 @@ angular
                 },
             })
             .state({
-                name: 'publicSurvey',
+                name: 'appWithoutMenus.publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
                 resolve: {
@@ -491,7 +491,7 @@ angular
                 },
             })
             .state({
-                name: 'app.previewSurvey',
+                name: 'appWithoutMenus.previewSurvey',
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
                 resolve: {
