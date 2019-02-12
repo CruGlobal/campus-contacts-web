@@ -1,7 +1,7 @@
 <div>
     <section ng-if="!$ctrl.hasSignedCodeOfConduct()">
         <h1>{{ 'signatures.agreements.codeOfConduct.title' | t }}</h1>
-        <div bind-dynamic="'signatures.agreements.codeOfConduct.text' | t">
+        <div ng-bind-html="$ctrl.codeOfConductText">
         </div>
         <div class='fr mt3'>
             <button class='f5 ba pv1 ph4 b--pivot-gray-darker pivot-white br4 bg-pivot-gray-darker dim' ng-click="$ctrl.declineAgreement('code_of_conduct')">Decline</button>
@@ -10,7 +10,7 @@
     </section>
     <section ng-if="$ctrl.hasSignedCodeOfConduct() && !$ctrl.hasSignedSignedStatementOfFaith()">
         <h1>{{ 'signatures.agreements.statementOfFaith.title' | t }}</h1>
-        <div bind-dynamic="'signatures.agreements.statementOfFaith.text' | t">
+        <div ng-bind-html="$ctrl.statementOfFaithText">
         </div>
         <div class='fr mt3'>
             <button class='f5 ba pv1 ph4 b--pivot-gray-darker pivot-white br4 bg-pivot-gray-darker dim' ng-click="$ctrl.declineAgreement('statement_of_faith')">{{ 'signatures.agreements.decline' | t }}</button>

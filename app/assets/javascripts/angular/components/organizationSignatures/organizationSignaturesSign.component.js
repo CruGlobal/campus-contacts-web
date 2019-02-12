@@ -12,9 +12,11 @@ function organizationSignaturesSignController(
     $state,
     $rootScope,
     $scope,
+    $filter,
+    $sce,
 ) {
     this.nonSignedAgreements = ['code_of_conduct', 'statement_of_faith'];
-    this.hasDeclined = true;
+    this.hasDeclined = false;
 
     let deregisterStateChangedEvent;
 
@@ -71,9 +73,16 @@ function organizationSignaturesSignController(
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
             (event, data) => {
-                //if (data.organization_with_missing_signatures_ids.length <= 0)
-                //   $state.go('app.people');
+                if (data.organization_with_missing_signatures_ids.length <= 0)
+                    $state.go('app.people');
             },
+        );
+
+        this.codeOfConductText = $sce.trustAsHtml(
+            $filter('t')('signatures.agreements.codeOfConduct.text'),
+        );
+        this.statementOfFaithText = $sce.trustAsHtml(
+            $filter('t')('signatures.agreements.statementOfFaith.text'),
         );
     };
 
