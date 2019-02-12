@@ -23,7 +23,7 @@
                     </div>
                     <div class="mt3">
                         <label class="db fw4 lh-copy f6">{{ 'requestAccess.form.email' | t }}</label>
-                        <input class="pa1 input-reset ba bg-transparent w-100" type="email" required ng-model="requestData.email">
+                        <input class="pa1 input-reset ba bg-transparent w-100" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$" required ng-model="requestData.email" >
                     </div>
                 </fieldset>
                 <div class="mt2">

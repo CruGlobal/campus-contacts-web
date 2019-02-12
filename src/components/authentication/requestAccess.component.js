@@ -31,17 +31,20 @@ function requestAccessController(
             },
         };
 
-        await httpProxy.post(
-            '/access_requests',
-            {
-                data: params,
-            },
-            {
-                errorMessage: 'error.messages.requestAccess',
-            },
-        );
+        try {
+            await httpProxy.post(
+                '/access_requests',
+                {
+                    data: params,
+                },
+                {
+                    errorMessage: 'error.messages.requestAccess',
+                },
+            );
+            this.formSubmitting = false;
+            this.formSubmitted = true;
+        } catch (e) {}
 
-        this.formSubmitted = true;
         this.formSubmitting = false;
 
         $scope.$apply();
