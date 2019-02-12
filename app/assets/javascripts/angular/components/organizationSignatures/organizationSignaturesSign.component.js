@@ -14,7 +14,7 @@ function organizationSignaturesSignController(
     $scope,
 ) {
     this.nonSignedAgreements = ['code_of_conduct', 'statement_of_faith'];
-    this.hasDeclined = false;
+    this.hasDeclined = true;
 
     let deregisterStateChangedEvent;
 
@@ -71,8 +71,8 @@ function organizationSignaturesSignController(
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
             (event, data) => {
-                if (data.organization_with_missing_signatures_ids.length <= 0)
-                    $state.go('app.people');
+                //if (data.organization_with_missing_signatures_ids.length <= 0)
+                //   $state.go('app.people');
             },
         );
     };

@@ -23,7 +23,9 @@
     </section>
     <section class='tc' ng-if="$ctrl.hasDeclined">
         <h1>{{ 'signatures.agreements.declined.title' | t }}</h1>
-        <div class='f4' bind-dynamic="'signatures.agreements.declined.message' | t">
+        <div class='f4'>
+            <p>{{ 'signatures.agreements.declined.mainBlurb' | t }}</p>
+            <p>{{ 'signatures.agreements.declined.requestAccessBlurb' | t }}</p>
         </div>
     </section>
 </div>
