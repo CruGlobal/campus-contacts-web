@@ -31,14 +31,10 @@ function myPeopleDashboardController(
     vm.numberOfOrgsToShow = 1000;
     vm.noPeopleShowLimit = 4;
 
-    vm.$onInit = activate;
-
-    vm.$onDestroy = cleanUp;
-
-    vm.noPeopleWelcome = '';
-
-    function activate() {
+    vm.$onInit = async () => {
+        await loggedInPerson.loadOnce();
         loadAndSyncData();
+
         angular.element($document).on('people::personAdded', loadAndSyncData);
         vm.toggleOrgVisibility =
             userPreferencesService.toggleOrganizationVisibility;
@@ -57,7 +53,13 @@ function myPeopleDashboardController(
         });
 
         periodService.subscribe($scope, loadReports);
-    }
+
+        $scope.$apply();
+    };
+
+    vm.$onDestroy = cleanUp;
+
+    vm.noPeopleWelcome = '';
 
     function cleanUp() {
         angular.element($document).off('people::personAdded', loadAndSyncData);
@@ -69,6 +71,7 @@ function myPeopleDashboardController(
             'phone_numbers',
             'email_addresses',
         ];
+
         personService
             .getContactAssignments(loggedInPerson.person, null, includes)
             .then(dataLoaded);
