@@ -315,6 +315,7 @@ export default {
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
+                requestAccess: 'Error occurred while processing your request',
             },
             retry_instructions: 'Click to retry',
         },

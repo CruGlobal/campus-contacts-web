@@ -27,7 +27,7 @@
                     </div>
                 </fieldset>
                 <div class="mt2">
-                    <button type='submit' class="f6 pa1 link ba pv2 b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" >{{ 'requestAccess.form.submit' | t }}</button>
+                    <button type='submit' class="f6 pa1 link ba pv2 b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked  w-100" ng-class="{ 'bg-gray-light' : $ctrl.formSubmitting, 'bg-transparent dim' : !$ctrl.formSubmitting }" ng-disabled="$ctrl.formSubmitting">{{ 'requestAccess.form.submit' | t }}</button>
                 </div>
             </form>
         </div>

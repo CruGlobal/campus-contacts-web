@@ -6,8 +6,14 @@ angular.module('missionhubApp').component('requestAccess', {
     template: template,
 });
 
-function requestAccessController(authenticationService, envService, $state) {
+function requestAccessController(
+    authenticationService,
+    httpProxy,
+    $state,
+    $scope,
+) {
     this.formSubmitted = false;
+    this.formSubmitting = false;
 
     this.$onInit = async () => {
         //if (authenticationService.isTokenValid())
@@ -15,9 +21,7 @@ function requestAccessController(authenticationService, envService, $state) {
     };
 
     this.requestAccess = async requestData => {
-        console.log(requestData);
-
-        return;
+        this.formSubmitting = true;
 
         const params = {
             type: 'access_request',
@@ -35,10 +39,13 @@ function requestAccessController(authenticationService, envService, $state) {
                 data: params,
             },
             {
-                errorMessage: 'error.messages.organization.cleanup',
+                errorMessage: 'error.messages.requestAccess',
             },
         );
 
         this.formSubmitted = true;
+        this.formSubmitting = false;
+
+        $scope.$apply();
     };
 }
