@@ -315,6 +315,7 @@ export default {
                 template_request: {
                     load_template: 'Error occurred while loading the page',
                 },
+                requestAccess: 'Error occurred while processing your request',
             },
             retry_instructions: 'Click to retry',
         },
@@ -421,6 +422,27 @@ export default {
             login: 'Log in',
             login_with_key: 'Log in with The Key',
             login_with_facebook: 'Log in with Facebook',
+        },
+        requestAccess: {
+            title: 'Request Access',
+            createdMissionHubBlurb:
+                'MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.',
+            requestAccessBlurb:
+                'Request access and our spectacular support team will help you get started.',
+            form: {
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                organizationName: 'Organization Name',
+                email: 'Email',
+                submit: 'Request Access',
+            },
+            success: {
+                thankYou: 'Thank you',
+                message: 'We received your request and will contact you soon.',
+                otherApps:
+                    'Check out Cru’s other apps that help you connect and share your faith with the people you care about most.',
+                vistitWebsite: 'Visit our Website',
+            },
         },
         leader: 'Leader',
         mass_edit: {

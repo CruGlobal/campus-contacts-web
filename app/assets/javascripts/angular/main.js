@@ -14,6 +14,7 @@ import './missionhubApp.run';
 
 import '../../../../src/app.component';
 import '../../../../src/components/authentication/signIn.component';
+import '../../../../src/components/authentication/requestAccess.component';
 
 import '../../stylesheets/main.scss';
 

@@ -280,6 +280,14 @@ angular
                 },
             })
             .state({
+                name: 'requestAccess',
+                url: '/request-access',
+                component: 'requestAccess',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
