@@ -16,8 +16,7 @@ function requestAccessController(
     this.formSubmitting = false;
 
     this.$onInit = async () => {
-        //if (authenticationService.isTokenValid())
-        //$state.go('app.people');
+        if (authenticationService.isTokenValid()) $state.go('app.people');
     };
 
     this.requestAccess = async requestData => {
