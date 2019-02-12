@@ -1,5 +1,4 @@
 import template from './requestAccess.html';
-//import './requestAccess.scss';
 
 angular.module('missionhubApp').component('requestAccess', {
     controller: requestAccessController,
@@ -32,7 +31,7 @@ function requestAccessController(
             },
         };
 
-        const { data } = await httpProxy.post(
+        await httpProxy.post(
             '/access_requests',
             {
                 data: params,
