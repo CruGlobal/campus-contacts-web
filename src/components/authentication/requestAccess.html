@@ -4,7 +4,8 @@
           <h1 class="f2 pivot-dark-blue fw6 mb4 mt0">
             {{ 'requestAccess.title' | t }}
           </h1>
-          <p class="pivot-gray-darker f4-5 mb5" bind-dynamic="'requestAccess.description' | t "></p>
+          <p>{{ 'requestAccess.createdMissionHubBlurb' | t }}</p>
+          <p>{{ 'requestAccess.requestAccessBlurb' | t }}</p>
         </div>
         <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-50">
             <form method="get" accept-charset="utf-8" ng-submit="$ctrl.requestAccess(requestData)">

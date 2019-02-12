@@ -425,8 +425,10 @@ export default {
         },
         requestAccess: {
             title: 'Request Access',
-            description:
-                '<p>MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.</p> <p>Request access and our spectacular support team will help you get started.</p>',
+            createdMissionHubBlurb:
+                'MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.',
+            requestAccessBlurb:
+                'Request access and our spectacular support team will help you get started.',
             form: {
                 firstName: 'First Name',
                 lastName: 'Last Name',
