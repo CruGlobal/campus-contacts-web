@@ -1,0 +1,62 @@
+<div>
+    <div class="flex justify-between items-stretch" ng-if="!$ctrl.formSubmitted">
+        <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-50">
+          <h1 class="f2 pivot-dark-blue fw6 mb4 mt0">
+            {{ 'requestAccess.title' | t }}
+          </h1>
+          <p class="pivot-gray-darker f4-5 mb5" bind-dynamic="'requestAccess.description' | t "></p>
+        </div>
+        <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-50">
+            <form method="get" accept-charset="utf-8" ng-submit="$ctrl.requestAccess(requestData)">
+                <fieldset class="ba b--transparent ph0 mh0">
+                    <div class="mt0">
+                        <label class="db fw4 lh-copy f6">{{ 'requestAccess.form.firstName' | t }}</label>
+                        <input class="pa1 input-reset ba bg-transparent w-100" type="text" required ng-model="requestData.firstName">
+                    </div>
+                    <div class="mt3">
+                        <label class="db fw4 lh-copy f6">{{ 'requestAccess.form.lastName' | t }}</label>
+                        <input class="pa1 input-reset ba bg-transparent w-100" type="text" required ng-model="requestData.lastName">
+                    </div>
+                    <div class="mt3">
+                        <label class="db fw4 lh-copy f6">{{ 'requestAccess.form.organizationName' | t }}</label>
+                        <input class="pa1 input-reset ba bg-transparent w-100" type="text" required ng-model="requestData.organizationName">
+                    </div>
+                    <div class="mt3">
+                        <label class="db fw4 lh-copy f6">{{ 'requestAccess.form.email' | t }}</label>
+                        <input class="pa1 input-reset ba bg-transparent w-100" type="email" required ng-model="requestData.email">
+                    </div>
+                </fieldset>
+                <div class="mt2">
+                    <button type='submit' class="f6 pa1 link ba pv2 b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" >{{ 'requestAccess.form.submit' | t }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class='tc' ng-if="$ctrl.formSubmitted">
+        <h1 class='f2 ttu'>{{ 'requestAccess.success.thankYou' | t }}</h1>
+        <p class='f3'>{{ 'requestAccess.success.message' | t }}</p>
+        <p class="">
+            <a href="https://www.cru.org/digitalministry/apps-tools.html">
+                <img alt="" src="https://d2zuyxs7furuq7.cloudfront.net/assets/welcome/icon-1@2x-f2e30bdf09508898dcae33eb33517161.png">
+            </a>
+            <a href="https://www.cru.org/digitalministry/apps-tools.html">
+                <img alt="" src="https://d2zuyxs7furuq7.cloudfront.net/assets/welcome/icon-2@2x-fb7503467d14d209ba568a6edbdc4270.png">
+            </a>
+            <a href="https://www.cru.org/digitalministry/apps-tools.html">
+                <img alt="" src="https://d2zuyxs7furuq7.cloudfront.net/assets/welcome/icon-3@2x-affd43c336561dbe55f7f97623b66af5.png">
+            </a>
+            <a href="https://www.cru.org/digitalministry/apps-tools.html">
+                <img alt="" src="https://d2zuyxs7furuq7.cloudfront.net/assets/welcome/icon-4@2x-5708ff116593b06829af7092ff3be1c5.png">
+            </a>
+            <a href="https://www.cru.org/digitalministry/apps-tools.html">
+                <img alt="" src="https://d2zuyxs7furuq7.cloudfront.net/assets/welcome/icon-5@2x-05556670947748c232312e9941ba4390.png">
+            </a>
+        </p>
+        <p class="f3">{{ 'requestAccess.success.otherApps' | t }}</p>
+        <p>
+            <a href="https://www.cru.org/digitalministry/apps-tools.html" class="f6 pa1 link ba pv2 b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-50 dim">
+              {{ 'requestAccess.success.vistitWebsite' | t }}
+            </a>
+        </p>
+    </div>
+</div>
