@@ -24,7 +24,7 @@ function organizationSignaturesController(
 
     const getSignatures = (orgId, searchText, offset) => {
         const params = {
-            include: [],
+            include: '',
             'page[limit]': this.itemsPerPage,
             ...(searchText ? { 'filters[q]': searchText } : {}),
             ...(offset ? { 'page[offset]': offset } : {}),
