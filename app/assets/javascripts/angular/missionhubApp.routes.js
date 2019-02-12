@@ -280,7 +280,7 @@ angular
                 },
             })
             .state({
-                name: 'requestAccess',
+                name: 'app.requestAccess',
                 url: '/request-access',
                 component: 'requestAccess',
                 data: {
