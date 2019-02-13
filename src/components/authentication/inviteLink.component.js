@@ -6,6 +6,7 @@ angular.module('missionhubApp').component('inviteLink', {
     bindings: {
         rememberCode: '<',
         userId: '<',
+        orgId: '<',
     },
 });
 
@@ -13,27 +14,49 @@ function inviteLinkController(
     authenticationService,
     $state,
     sessionStorageService,
+    httpProxy,
+    loggedInPerson,
+    $location,
+    $scope,
 ) {
-    this.$onInit = async () => {
-        if (!authenticationService.isTokenValid()) {
-            const inviteState = {
-                rememberCode: this.rememberCode,
-                userId: this.userId,
-            };
-            sessionStorageService.set('inviteState', inviteState);
+    const setInviteState = (rememberCode, userId, orgId) => {
+        const inviteState = {
+            rememberCode: this.rememberCode,
+            userId: this.userId,
+            orgId: this.orgId,
+        };
+        sessionStorageService.set('inviteState', inviteState);
+        return inviteState;
+    };
 
-            $state.go('app.signIn');
-        }
+    this.$onInit = async () => {
+        const inviteState = setInviteState(
+            this.rememberCode,
+            this.userId,
+            this.orgId,
+        );
+
+        if (!authenticationService.isTokenValid()) $state.go('app.signIn');
 
         if (authenticationService.isTokenValid()) {
-            const token = await httpProxy.get(
-                `/user_remember_tokens/${this.rememberCode}`,
-                {
-                    errorMessage: 'error.messages.surveys.loadQuestions',
-                },
-            );
+            try {
+                const { data } = await httpProxy.get(
+                    `/user_remember_tokens/${this.rememberCode}`,
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                );
 
-            console.log(token);
+                const me = await loggedInPerson.load();
+
+                if (parseInt(me.user.id, 0) === parseInt(data.user_id, 0)) {
+                    sessionStorageService.clear('inviteState');
+                    $location.url(`/ministries/${this.orgId}/people`);
+                    $scope.$apply();
+                }
+            } catch (e) {
+                sessionStorageService.clear('inviteState');
+            }
         }
     };
 }
