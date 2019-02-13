@@ -501,6 +501,19 @@ angular
                 },
             })
             .state({
+                name: 'appWithoutMenus.inviteLink',
+                url: '/l/:rememberCode/:userId',
+                component: 'inviteLink',
+                data: {
+                    isPublic: true,
+                },
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                },
+            })
+            .state({
                 name: 'app.ministries.ministry.survey',
                 url: '/survey/:surveyId',
                 abstract: true,
