@@ -1,0 +1,11 @@
+<div class='tc pv5' ng-cloak>
+    <img class='br4 mb3' ng-src="{{ $ctrl.loggedInUser.picture }}" />
+    <p class='f2 pivot-gray-darker mb0' >{{ 'mergeAccount.loggedInAs' | t : { fullName: $ctrl.loggedInUser.full_name } }}.</p>
+    <p class='f2 pivot-gray-darker mb4' >{{ 'mergeAccount.continue' | t }}</p>
+    <p>
+        <a href class='f3' ng-click="$ctrl.cancelMerge()">{{ 'mergeAccount.mergeAccount' | t : { name: $ctrl.inviteAccount } }}</a>
+    </p>
+    <p>
+        <a href class='f3 pivot-gray-darker' ng-click="$ctrl.cancelMerge()">{{ 'mergeAccount.cancelMerge' | t }}</a>
+    </p>
+</div>
