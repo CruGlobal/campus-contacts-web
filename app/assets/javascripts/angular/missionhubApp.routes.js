@@ -502,7 +502,7 @@ angular
             })
             .state({
                 name: 'appWithoutMenus.inviteLink',
-                url: '/l/:rememberCode/:userId',
+                url: '/l/:rememberCode/:orgId/:userId',
                 component: 'inviteLink',
                 data: {
                     isPublic: true,
@@ -511,6 +511,7 @@ angular
                     rememberCode: $transition$ =>
                         $transition$.params().rememberCode,
                     userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({
