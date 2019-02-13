@@ -316,6 +316,11 @@ export default {
                     load_template: 'Error occurred while loading the page',
                 },
                 requestAccess: 'Error occurred while processing your request',
+                inviteLink: {
+                    loadRemeberToken:
+                        'Error occurred while loading invite information',
+                    mergeAccount: 'Error occurred while merging your accounts',
+                },
             },
             retry_instructions: 'Click to retry',
         },
@@ -444,6 +449,12 @@ export default {
                     'Check out Cru’s other apps that help you connect and share your faith with the people you care about most.',
                 vistitWebsite: 'Visit our Website',
             },
+        },
+        mergeAccount: {
+            loggedInAs: 'You are current logged in as {{fullName}}.',
+            continue: 'Do you want to continue?',
+            mergeAccount: 'Yes, merge {{name}} into my account.',
+            cancelMerge: 'No, I want to login my own account',
         },
         leader: 'Leader',
         mass_edit: {
