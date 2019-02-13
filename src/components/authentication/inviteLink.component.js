@@ -42,8 +42,10 @@ function inviteLinkController(
             try {
                 const { data } = await httpProxy.get(
                     `/user_remember_tokens/${this.rememberCode}`,
+                    {},
                     {
-                        errorMessage: 'error.messages.surveys.loadQuestions',
+                        errorMessage:
+                            'error.messages.inviteLink.loadRemeberToken',
                     },
                 );
 
@@ -53,10 +55,10 @@ function inviteLinkController(
                     sessionStorageService.clear('inviteState');
                     $location.url(`/ministries/${this.orgId}/people`);
                     $scope.$apply();
+                } else {
+                    $state.go('appWithoutMenus.mergeAccount', inviteState);
                 }
-            } catch (e) {
-                sessionStorageService.clear('inviteState');
-            }
+            } catch (e) {}
         }
     };
 }
