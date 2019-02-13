@@ -112,7 +112,11 @@ function authenticationService(
             const response = await requestTicket(accessToken);
             const { data } = await requestV4Token(response.data.ticket);
             setAuthorizationAndState(data.token, data.recent_organization);
-            $state.go('app.people');
+            const inviteState = sessionStorageService.get('inviteState');
+
+            if (inviteState)
+                $state.go('appWithoutMenus.inviteLink', inviteState);
+            else $state.go('app.people');
         } catch (e) {
             errorService.displayError(e, false);
         }
