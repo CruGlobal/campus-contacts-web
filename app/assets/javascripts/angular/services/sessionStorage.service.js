@@ -10,8 +10,8 @@ angular.module('missionhubApp').service('sessionStorageService', () => {
         destroy: key => {
             sessionStorage.removeItem(key);
         },
-        clear: () => {
-            sessionStorage.clear();
+        clear: key => {
+            sessionStorage.removeItem(key);
         },
     };
 
