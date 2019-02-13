@@ -288,6 +288,18 @@ angular
                 },
             })
             .state({
+                name: 'appWithoutMenus.mergeAccount',
+                url: '/merge-account/:rememberCode/:orgId/:userId',
+                component: 'mergeAccount',
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
+                    loggedInUser: loggedInPerson => loggedInPerson.load(),
+                },
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
