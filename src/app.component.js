@@ -5,6 +5,10 @@ import './app.scss';
 angular.module('missionhubApp').component('app', {
     controller: appController,
     template: template,
+    bindings: {
+        hideHeader: '<',
+        hideFooter: '<',
+    },
 });
 
 function appController(periodService, $rootScope, state, analyticsService) {
