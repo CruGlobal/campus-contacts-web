@@ -57,13 +57,13 @@
                             </a>
                         </li>
                         <li class="divider">
-                            <a ng-href="/charts/snapshot?organization_id={{$ctrl.org.id}}">{{ 'nav.snapshot' | t }}</a>
+                            <a ng-click="$ctrl.showWarning('/charts/snapshot?organization_id={{$ctrl.org.id}}')">{{ 'nav.snapshot' | t }}</a>
                         </li>
                         <li>
-                            <a ng-href="/charts/goal?organization_id={{$ctrl.org.id}}">{{ 'nav.goal' | t }}</a>
+                            <a ng-click="$ctrl.showWarning('/charts/goal?organization_id={{$ctrl.org.id}}')">{{ 'nav.goal' | t }}</a>
                         </li>
                         <li>
-                            <a ng-href="/charts/trend?organization_id={{$ctrl.org.id}}">{{ 'nav.trend' | t }}</a>
+                            <a ng-click="$ctrl.showWarning('/charts/trend?organization_id={{$ctrl.org.id}}')">{{ 'nav.trend' | t }}</a>
                         </li>
                     </ul>
                 </div>

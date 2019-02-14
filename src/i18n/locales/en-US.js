@@ -595,6 +595,11 @@ export default {
             support: 'Support',
             terms: 'Terms of Service',
             trend: 'Trend Tracker',
+            warning: {
+                title: 'Warning',
+                body:
+                    'These tools will be removed when we shut down Legacy. We are working to bring you a better dashboard experience in the near future!',
+            },
         },
         organizations: {
             manage: 'Manage Ministries',

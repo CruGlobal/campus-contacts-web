@@ -2,6 +2,7 @@ import template from './organizationOverview.html';
 import './organizationOverview.scss';
 
 import { t } from 'i18next';
+import _ from 'lodash';
 
 angular.module('missionhubApp').component('organizationOverview', {
     controller: organizationOverviewController,
@@ -22,6 +23,7 @@ function organizationOverviewController(
     organizationOverviewService,
     organizationService,
     loggedInPerson,
+    $uibModal,
     userPreferencesService,
     confirmModalService,
     _,
@@ -37,6 +39,17 @@ function organizationOverviewController(
         !$state.$current.name.match(
             /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators)/,
         );
+
+    vm.showWarning = url => {
+        $uibModal.open({
+            component: 'createSurvey',
+            resolve: {
+                url: url,
+            },
+            windowClass: 'pivot_theme',
+            size: 'sm',
+        });
+    };
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
