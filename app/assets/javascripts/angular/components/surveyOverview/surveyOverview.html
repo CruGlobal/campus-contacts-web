@@ -5,6 +5,7 @@
                 <img class="db mr1" ng-src="{{$ctrl.chevronLeftIcon}}"/>
             </a>
             {{$ctrl.survey.title}}
+        </div>
     </div>
 
     <div class="tabs">
@@ -12,10 +13,6 @@
              ng-click="$ctrl.activeTab = tab.id">
             <span>{{tab.name | t}}</span>
         </div>
-        <div class="tab">
-            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
-        </div>
-    </div>
     </div>
     <a ui-sref="app.previewSurvey({ surveyId: $ctrl.survey.id })"
        target="_blank"
