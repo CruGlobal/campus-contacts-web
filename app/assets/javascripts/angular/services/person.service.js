@@ -114,11 +114,11 @@ function personService(
 
             return person.answer_sheets.reduce((acc, s) => {
                 const d1 = Date.parse(acc);
-                const d2 = Date.parse(s.completed_at);
+                const d2 = Date.parse(s.updated_at);
 
-                if (!d1) return s.completed_at;
+                if (!d1) return s.updated_at;
 
-                return d1 < d2 ? s.completed_at : acc;
+                return d1 < d2 ? s.updated_at : acc;
             }, '');
         },
 

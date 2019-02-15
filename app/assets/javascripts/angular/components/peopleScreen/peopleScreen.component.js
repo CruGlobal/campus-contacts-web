@@ -155,7 +155,7 @@ function peopleScreenController(
                 return lastSurvey;
             },
             orderFields: [
-                'answer_sheets.completed_at',
+                'answer_sheets.updated_at',
                 'last_name',
                 'first_name',
             ],
