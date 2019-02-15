@@ -62,6 +62,7 @@ function inviteLinkController(
                 }
             } catch (e) {
                 this.errorWithLink = true;
+                sessionStorageService.clear('inviteState');
                 $scope.$apply();
             }
         }
