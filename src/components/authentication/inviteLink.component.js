@@ -19,6 +19,8 @@ function inviteLinkController(
     $location,
     $scope,
 ) {
+    this.errorWithLink = false;
+
     const setInviteState = (rememberCode, userId, orgId) => {
         const inviteState = {
             rememberCode: this.rememberCode,
@@ -53,12 +55,15 @@ function inviteLinkController(
 
                 if (parseInt(me.user.id, 0) === parseInt(data.user_id, 0)) {
                     sessionStorageService.clear('inviteState');
-                    $location.url(`/ministries/${this.orgId}/people`);
+                    $location.url(`/ministries/${this.orgId}/suborgs`);
                     $scope.$apply();
                 } else {
                     $state.go('appWithoutMenus.mergeAccount', inviteState);
                 }
-            } catch (e) {}
+            } catch (e) {
+                this.errorWithLink = true;
+                $scope.$apply();
+            }
         }
     };
 }

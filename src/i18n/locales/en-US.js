@@ -454,8 +454,18 @@ export default {
             loggedInAs:
                 'You are current logged in as {{fullName}} <{{email}}>.',
             continue: 'Do you want to continue?',
-            mergeAccount: 'Yes, merge {{name}} into my account.',
+            mergeAccount:
+                'Yes, merge {{fullName}} <{{username}}> into my account.',
             cancelMerge: 'No, I want to login my own account',
+            successAccountMerged:
+                'Congratulations, you have successfully merged {{oldAccountFullName}} <{{oldAccountUsername}}> into {{mergedAccountFullName}} <{{mergedAccountEmail}}>.',
+            continueAccountMerged:
+                'Sorry the invite link has expired, or is not valid.',
+            inviteLinkExpiredTitle:
+                'Sorry the invite link has expired, or is not valid.',
+            inviteLinkExpiredMessage:
+                'Please try again, and if the problem persists, contact MissionHub support.',
+            continueAfterError: 'Continue to the MissionHub App',
         },
         leader: 'Leader',
         mass_edit: {
