@@ -451,7 +451,8 @@ export default {
             },
         },
         mergeAccount: {
-            loggedInAs: 'You are current logged in as {{fullName}}.',
+            loggedInAs:
+                'You are current logged in as {{fullName}} <{{email}}>.',
             continue: 'Do you want to continue?',
             mergeAccount: 'Yes, merge {{name}} into my account.',
             cancelMerge: 'No, I want to login my own account',
