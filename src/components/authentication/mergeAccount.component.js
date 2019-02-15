@@ -18,7 +18,9 @@ function mergeAccountController(
     $scope,
     sessionStorageService,
 ) {
-    this.inviteAccount = '';
+    this.inviteFullName = '';
+    this.inviteUsername = '';
+    this.accountMerged = false;
 
     this.$onInit = async () => {
         if (!authenticationService.isTokenValid()) $state.go('app.signIn');
@@ -31,7 +33,9 @@ function mergeAccountController(
             },
         );
 
-        this.inviteAccount = `${data.full_name} <${data.username}>`;
+        this.inviteFullName = data.full_name;
+        this.inviteUsername = data.username;
+
         $scope.$apply();
     };
 
@@ -49,6 +53,7 @@ function mergeAccountController(
             );
 
             sessionStorageService.clear('inviteState');
+            this.accountMerged = true;
         } catch (e) {}
     };
 }
