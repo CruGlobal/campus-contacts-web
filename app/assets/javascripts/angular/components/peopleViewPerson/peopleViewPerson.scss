@@ -12,9 +12,6 @@ people-view-person {
     flex-wrap: wrap;
     & > .person-info {
         justify-content: space-between;
-        .no-data {
-            color: $pivot-teal;
-        }
         & > .name {
             @extend %common-margin;
             width: 335px;

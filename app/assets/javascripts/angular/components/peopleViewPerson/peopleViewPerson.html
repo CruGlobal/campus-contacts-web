@@ -8,17 +8,17 @@
     </div>
     <div class="stats"
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
-        <div>{{$ctrl.report.contact_count || '-'}}</div>
+        <div class='pivot-gray-3'>{{$ctrl.report.contact_count || '-'}}</div>
         <div>
             <a class="warning-highlight"
                href="/allcontacts?organization_id={{$ctrl.organizationId}}&status[]=uncontacted&assigned_to[]={{$ctrl.person.id}}"
                ng-if="$ctrl.report.uncontacted_count">
                 {{$ctrl.report.uncontacted_count}}
             </a>
-            <span ng-if="!$ctrl.report.uncontacted_count">-</span>
+            <span class='pivot-gray-3' ng-if="!$ctrl.report.uncontacted_count">-</span>
         </div>
-        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
-        <span class="phone no-data" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
+        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-class="{ 'pivot-gray-3' : $ctrl.reportInteractions(i) === '-' }" ng-bind="$ctrl.reportInteractions(i)"></div>
+        <span class="phone no-data pivot-gray-3" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
     </div>
     <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
         {{ $ctrl.person.phone_numbers[0].number | phone }}
