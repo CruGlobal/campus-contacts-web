@@ -1,7 +1,7 @@
-<div>{{$ctrl.report.contact_count || '-'}}</div>
+<div>{{ ($ctrl.report.contact_count | number)  || '-' }}</div>
 <div>
   <span class="warning-highlight" ng-if="$ctrl.report.uncontacted_count">
-    {{$ctrl.report.uncontacted_count}}
+    {{ $ctrl.report.uncontacted_count | number }}
   </span>
   <span ng-if="!$ctrl.report.uncontacted_count">-</span>
 </div>
