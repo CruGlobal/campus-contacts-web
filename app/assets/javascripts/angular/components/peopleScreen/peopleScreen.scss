@@ -6,6 +6,7 @@ people-screen {
     $visible-people: 10;
 
     .container {
+        border-top: 1px solid rgba($gray-dark, 0.1);
         align-items: inherit;
         max-height: #{$organization-overview-content-height};
     }
@@ -72,7 +73,6 @@ people-screen {
 
     .header {
         @extend ministry-view-person;
-        background-color: $pivot-darker-blue;
         display: flex;
         flex-shrink: 0;
 

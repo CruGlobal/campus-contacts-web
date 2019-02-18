@@ -6,10 +6,9 @@ organization-overview-groups {
         @extend ministry-view-group;
 
         display: flex;
-        background-color: $pivot-darker-blue;
 
         ng-md-icon svg {
-            fill: white;
+            fill: rgba($gray-dark, 0.7);
         }
     }
 }

@@ -3,6 +3,7 @@
 ministry-view-group {
     display: block;
     height: 50px;
+    border-top: 1px solid rgba($gray-dark, 0.1);
 
     ng-md-icon svg {
         fill: $pivot-dark-blue;
