@@ -98,16 +98,9 @@ function analyticsService(
     const loadAdobeScript = () => {
         const url = envService.is('production')
             ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
-            : '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb-staging.js';
+            : '//assets.adobedtm.com/launch-ENe4ca7f50fed34edd995d7c6294e6b509-development.min.js';
 
         return loadScript(url, 'adobe-analytics');
-    };
-
-    const loadAdobeDevScript = () => {
-        return loadScript(
-            '//assets.adobedtm.com/launch-ENe4ca7f50fed34edd995d7c6294e6b509-development.min.js',
-            'adobe-dev',
-        );
     };
 
     const setupAdobe = () => {
@@ -118,9 +111,6 @@ function analyticsService(
         init: () => {
             initAdobeData();
             initGoogle();
-
-            if (!envService.is('staging')) loadAdobeDevScript()(document);
-
             loadAdobeScript()(document);
 
             setupAdobe();
