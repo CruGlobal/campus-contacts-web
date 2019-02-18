@@ -25,6 +25,10 @@ stats-header {
         ng-md-icon {
             display: inline-block;
             width: 25px;
+
+            svg {
+                width: 20px;
+            }
         }
         svg {
             fill: rgba($gray-dark, 0.7);
