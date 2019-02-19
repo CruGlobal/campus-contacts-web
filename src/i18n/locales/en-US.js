@@ -316,6 +316,8 @@ export default {
                     load_template: 'Error occurred while loading the page',
                 },
                 requestAccess: 'Error occurred while processing your request',
+                signature_request:
+                    'Error occurred, the agreement could not be processed',
             },
             retry_instructions: 'Click to retry',
         },
