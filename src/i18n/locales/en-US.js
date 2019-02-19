@@ -726,7 +726,7 @@ export default {
                     title: 'You have declined!',
                     mainBlurb:
                         'Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.',
-                    reqestAccessBlurb:
+                    requestAccessBlurb:
                         'You will need to request access again after having this discussion.',
                 },
                 codeOfConduct: {
