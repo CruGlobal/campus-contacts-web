@@ -33,8 +33,6 @@ angular
             authenticationService.updateUserData();
 
             loggedInPerson.loadOnce().then(user => {
-                console.log(user);
-
                 if (user.beta_mode === null) {
                     $uibModal.open({
                         component: 'newWelcomeModal',
