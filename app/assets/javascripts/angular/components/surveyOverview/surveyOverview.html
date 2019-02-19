@@ -6,12 +6,12 @@
             </a>
             {{$ctrl.survey.title}}
         </div>
-    </div>
 
-    <div class="tabs">
-        <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
-             ng-click="$ctrl.activeTab = tab.id">
-            <span>{{tab.name | t}}</span>
+        <div class="tabs">
+            <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
+                 ng-click="$ctrl.activeTab = tab.id">
+                <span>{{tab.name | t}}</span>
+            </div>
         </div>
     </div>
     <a ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
