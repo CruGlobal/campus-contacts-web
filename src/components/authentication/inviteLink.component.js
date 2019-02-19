@@ -18,6 +18,8 @@ function inviteLinkController(
     loggedInPerson,
     $location,
     $scope,
+    $sce,
+    $filter,
 ) {
     this.errorWithLink = false;
 
@@ -32,6 +34,10 @@ function inviteLinkController(
     };
 
     this.$onInit = async () => {
+        this.expiredText = $sce.trustAsHtml(
+            $filter('t')('mergeAccount.inviteLinkExpiredMessage'),
+        );
+
         const inviteState = setInviteState(
             this.rememberCode,
             this.userId,

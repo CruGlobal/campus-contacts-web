@@ -1,7 +1,7 @@
 
 <div class='tc pa5 mt3' ng-if="$ctrl.errorWithLink">
     <p class='f2 pivot-gray-darker'>{{ 'mergeAccount.inviteLinkExpiredTitle' | t }}</p>
-    <p class='f3 pivot-gray-darker mb4'>{{ 'mergeAccount.inviteLinkExpiredMessage' | t }}</p>
+    <p class='f3 pivot-gray-darker mb4' ng-bind-html="$ctrl.expiredText"></p>
     <a href class="f5 ba pv2 ph4 b--pivot-dark-blue pivot-white br2 bg-pivot-dark-blue dim ml2" ng-href="/people" >
       {{ 'mergeAccount.continueAfterError' | t }}
     </a>
