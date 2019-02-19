@@ -57,6 +57,7 @@ describe('myPeopleDashboardService Tests', function() {
             'page[limit]': 100,
             sort: '-active_people_count',
             include: '',
+            'filters[user_created]': false,
         };
 
         spyOn(httpProxy, 'callHttp').and.callFake(function() {

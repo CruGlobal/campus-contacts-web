@@ -106,6 +106,13 @@ function peopleScreenController(
             label: 'ministries.people.status',
             sortable: true,
             getSortKey: person => {
+                const orgPermission = personService.getOrgPermission(
+                    person,
+                    this.org.id,
+                );
+
+                if (orgPermission.archive_date !== null) return 'Archived';
+
                 return personService.getFollowupStatus(person, this.org.id);
             },
             orderFields: [

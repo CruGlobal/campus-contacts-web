@@ -16,7 +16,7 @@ function loggedInPerson(
             .get(
                 modelsService.getModelMetadata('person').url.single('me'),
                 {
-                    include: 'user,organizational_permissions.organization',
+                    include: 'user,organizational_permissions',
                 },
                 {
                     errorMessage: 'error.messages.logged_in_person.load_user',

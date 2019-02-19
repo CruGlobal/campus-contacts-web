@@ -233,6 +233,7 @@ export default {
                     delete: 'Error occurred while deleting the organization.',
                     load_ancestry:
                         "Error occurred while loading the organization's ancestors",
+                    loadAll: 'Error occurred while loading your organizations',
                 },
                 organization_overview: {
                     load_org_relationships:
@@ -323,6 +324,7 @@ export default {
             contacted: 'Contacted',
             do_not_contact: 'Do Not Contact',
             uncontacted: 'Uncontacted',
+            archived: 'Archived',
         },
         student_status: {
             not_student: 'Not currently a student',
