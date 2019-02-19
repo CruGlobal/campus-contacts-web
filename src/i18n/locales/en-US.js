@@ -542,6 +542,26 @@ export default {
             },
             surveys: {
                 header: 'Surveys',
+                typeform: {
+                    header: 'MissionHub now integrates with Typeform!',
+                    subheader:
+                        'Get more creative with your surveys using Typeform while driving your ministry forward with MissionHub.',
+                    step1:
+                        'Sign up for an account at <a href="https://typeform.com" target="_blank">typeform.com</a>.',
+                    step2:
+                        ' Create a new form there in Typeform - be sure you have a question on the new form asking for their "first name". Then go to the "Connect" tab followed by the "Webhooks" sub tab.',
+                    step3:
+                        'Copy the MissionHub URL below into the Destination URL field on Typeform.',
+                    step4:
+                        'Click "test webhook". You should see a green checkmark under recent requests. A new survey with a test submission should be visible in MissionHub.',
+                    step5:
+                        'Next to the webhooks title click the slider to enable webhooks.',
+                    conclusion:
+                        'Future form submissions for this survey will be sent to MissionHub automatically.',
+                    missionHubUrl: 'MissionHub URL',
+                    copy: 'Copy URL',
+                    copied: 'URL copied to clipboard',
+                },
             },
             team: {
                 header: 'Team',
@@ -693,6 +713,7 @@ export default {
             keyword: 'Keyword',
             link: 'Link',
             status: 'Status',
+            typeform: 'Typeform',
         },
         status: {
             live: 'Live',
@@ -712,6 +733,13 @@ export default {
             deleteSurvey: 'Error occurred while deleting survey',
             getStats: 'Error occurred while retrieving survey stats',
             addSurveyQuestion: 'Error occurred while adding survey question',
+        },
+    },
+    phoneNumbers: {
+        validations: {
+            notFound: 'Your survey submission could not be found',
+            inactiveOrInvalid:
+                'Your survey submission is inactive or your link is invalid.',
         },
     },
     surveys: {
@@ -738,6 +766,17 @@ export default {
             image_upload: 'Upload Image',
             image_delete: 'Delete Image',
             image_delete_confirm: 'Are you sure you want to delete this image?',
+            validate_phone_number: 'Validate Phone Number',
+            validate_phone_number_hint:
+                'If the person filling out your survey provides a phone number MissionHub can send them an SMS with a short link for them to validate their phone number.',
+            validation_message: 'Validation Message',
+            validation_message_hint:
+                'This message will be sent via SMS with a short link.',
+            validation_message_help:
+                'You can use the %{first_name} template and MissionHub will automatically substitute their first name in place. A short link will be appended to this message they will need to click on!',
+            validation_success_message: 'Validation Success Message',
+            validation_success_message_hint:
+                'When they visit the short link in the SMS this message will be shown.',
         },
         keyword: {
             keyword: 'Keyword',

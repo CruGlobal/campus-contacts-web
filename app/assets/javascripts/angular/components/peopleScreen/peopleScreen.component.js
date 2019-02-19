@@ -396,6 +396,7 @@ function peopleScreenController(
             resolve: {
                 medium: _.constant(medium),
                 selection: _.constant(getSelection()),
+                surveyId: () => this.surveyId,
             },
             windowClass: 'pivot_theme',
             size: 'md',

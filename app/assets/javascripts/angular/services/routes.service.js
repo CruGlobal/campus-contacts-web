@@ -23,6 +23,7 @@ function routesService(httpProxy, modelsService) {
                     'reverse_contact_assignments.assigned_to',
                 ],
                 {
+                    params: { 'filters[include_archived]': true },
                     errorMessage: 'error.messages.routes.get_person',
                 },
             );
@@ -68,6 +69,21 @@ function routesService(httpProxy, modelsService) {
                 ['keyword'],
                 {
                     errorMessage: 'error.messages.routes.get_survey',
+                },
+            );
+        },
+
+        getPhoneNumberValidation: function(code, id) {
+            return httpProxy.getModel(
+                modelsService
+                    .getModelMetadata('phone_number_validation')
+                    .url.single(code),
+                'phone_number_validation',
+                id,
+                ['survey', 'phone_number'],
+                {
+                    errorMessage:
+                        'error.messages.routes.get_phone_number_validation',
                 },
             );
         },

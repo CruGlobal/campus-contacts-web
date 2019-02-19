@@ -171,7 +171,7 @@ function peopleScreenService(
             'fields[organizational_permission]':
                 'followup_status,organization_id,permission_id',
             'fields[email_address]': 'email,primary',
-            'fields[phone_number]': 'number,primary',
+            'fields[phone_number]': 'number,primary,validated',
             'fields[contact_assignment]': 'assigned_to,organization,created_at',
             'fields[answer_sheet]': 'answers,survey,updated_at',
             'fields[answer]': 'value,question',
