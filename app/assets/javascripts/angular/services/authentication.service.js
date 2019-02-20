@@ -171,7 +171,7 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const impersonatePerson = async userId => {
+    const impersonateUser = async userId => {
         try {
             const { data } = await $http.get(
                 `${envService.read('apiUrl')}/impersonations/${userId}`,
@@ -182,7 +182,7 @@ function authenticationService(
         }
     };
 
-    const stopImpersonatingPerson = async () => {
+    const stopImpersonatingUser = async () => {
         try {
             const { data } = await $http.delete(
                 `${envService.read('apiUrl')}/impersonations`,
@@ -210,8 +210,8 @@ function authenticationService(
             setHttpHeaders(token);
             loadState();
         },
-        impersonatePerson: impersonatePerson,
-        stopImpersonatingPerson: stopImpersonatingPerson,
+        impersonateUser: impersonateUser,
+        stopImpersonatingUser: stopImpersonatingUser,
         theKeyloginUrl: theKeyloginUrl,
         isTokenValid: getJwtToken,
         updateUserData: updateUserData,
