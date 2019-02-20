@@ -69,9 +69,12 @@
                 </div>
             </div>
         </div>
-
         <div class="pivot_theme" ng-if="!('app.ministries.root' | isState)">
             <ui-view class="grid"></ui-view>
         </div>
+    </div>
+
+    <div class="pivot_theme" ng-if="!('app.ministries.root' | isState) && !$ctrl.showOrgNav()">
+        <ui-view class="grid"></ui-view>
     </div>
 </async-content>
