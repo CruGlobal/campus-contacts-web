@@ -318,6 +318,7 @@ export default {
                 requestAccess: 'Error occurred while processing your request',
                 signature_request:
                     'Error occurred, the agreement could not be processed',
+                impersonate_request: 'Error occurred, impersonation failed',
             },
             retry_instructions: 'Click to retry',
         },
@@ -445,6 +446,9 @@ export default {
                     'Check out Cru’s other apps that help you connect and share your faith with the people you care about most.',
                 vistitWebsite: 'Visit our Website',
             },
+        },
+        impersonation: {
+            loading: 'Please wait...',
         },
         leader: 'Leader',
         mass_edit: {
