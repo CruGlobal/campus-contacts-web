@@ -172,6 +172,18 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
+    const impersonatePerson = async () => {
+        const data = await httpProxy.get(
+            `/impersonations/${this.personId}`,
+            {},
+            {
+                errorMessage: 'error.messages.impersonate_request',
+            },
+        );
+
+        setAuthorizationAndState(data.token, data.recent_organization);
+    };
+
     return {
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
@@ -189,6 +201,7 @@ function authenticationService(
             setHttpHeaders(token);
             loadState();
         },
+        impersonatePerson: impersonatePerson,
         theKeyloginUrl: theKeyloginUrl,
         isTokenValid: getJwtToken,
         updateUserData: updateUserData,
