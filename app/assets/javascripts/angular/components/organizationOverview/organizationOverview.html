@@ -1,5 +1,5 @@
 <async-content ready="$ctrl.ready">
-    <div class="br3 overflow-hidden bg-white shadow-4 mb-3" ng-class="{'hidden-org': $ctrl.org.visible === false}" ng-if="$ctrl.showOrgNav()">
+    <div class="br3 pb1 bg-white shadow-4 mb-3" ng-class="{'hidden-org': $ctrl.org.visible === false}" ng-if="$ctrl.showOrgNav()">
         <div class="flex items-center justify-between">
             <div class="pivot-dark-blue f3 ph3 pt3 " ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
             <div ng-if="$ctrl.editMode">
