@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center pv3 ph2 bg-white">
         <div class="f3 pivot-dark-blue ph3 flex">
             <a ui-sref="app.ministries.ministry.surveyResponses({ surveyId: survey.id })">
-                <span class='pivot-fill-dark-blue mr-2'>&lt;</span>
+                <div class='mr2' ng-include="$ctrl.chevronLeftIcon"></div>
             </a>
             {{$ctrl.survey.title}}
         </div>

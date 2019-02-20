@@ -10,6 +10,16 @@ organization-contact-import {
         margin-bottom: 0;
     }
 
+    .header {
+        svg {
+            height: 16px;
+
+            path {
+                fill: $pivot-dark-blue;
+            }
+        }
+    }
+
     /* Backgrounds */
 
     .bg-blue {

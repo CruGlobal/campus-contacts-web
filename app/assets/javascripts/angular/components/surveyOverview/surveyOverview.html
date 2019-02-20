@@ -2,8 +2,8 @@
     <div class="header flex justify-between">
         <div class="">
             <div class="f3 pivot-dark-blue ph3 pt3 flex">
-                <a  ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
-                    <span class='pivot-fill-dark-blue mr-2'>&lt;</span>
+                <a ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
+                    <div class='mr2' ng-include="$ctrl.chevronLeftIcon"></div>
                 </a>
                 {{$ctrl.survey.title}}
             </div>
