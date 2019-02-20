@@ -78,13 +78,8 @@ function analyticsService(
             });
     };
 
-    const loadAdobeScript = () => {
-        const url = envService.is('production')
-            ? '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb.js'
-            : '//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-b704a4f0b9d6babb4eac8ccc7c8a4fbf9e33f0fb-staging.js';
-
+    const loadScript = (url, id) => {
         return function(d) {
-            const id = 'adobe-analytics';
             const ref = d.getElementsByTagName('script')[0];
 
             if (d.getElementById(id)) {
@@ -100,6 +95,14 @@ function analyticsService(
         };
     };
 
+    const loadAdobeScript = () => {
+        const url = envService.is('production')
+            ? '//assets.adobedtm.com/launch-EN541f7d1d75de45f78e4e3881d6264bae.min.js'
+            : '//assets.adobedtm.com/launch-ENe4ca7f50fed34edd995d7c6294e6b509-development.min.js';
+
+        return loadScript(url, 'adobe-analytics');
+    };
+
     const setupAdobe = () => {
         $window._satellite && $window._satellite.pageBottom();
     };
@@ -109,6 +112,7 @@ function analyticsService(
             initAdobeData();
             initGoogle();
             loadAdobeScript()(document);
+
             setupAdobe();
 
             if (authenticationService.isTokenValid()) {

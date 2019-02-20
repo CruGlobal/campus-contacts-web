@@ -32,7 +32,7 @@ function organizationSignaturesSignController(
         };
 
         return httpProxy.post(`/organizations/${orgId}/signatures`, params, {
-            errorMessage: 'error.messages.surveys.loadQuestions',
+            errorMessage: 'error.messages.signature_request',
         });
     };
 
@@ -52,12 +52,6 @@ function organizationSignaturesSignController(
         this.nonSignedAgreements = this.nonSignedAgreements.filter(
             t => t !== type,
         );
-
-        if (this.nonSignedAgreements.length <= 0) {
-            authenticationService.updateUserData();
-            this.nonSignedAgreements = [];
-            $scope.$apply();
-        }
 
         $scope.$apply();
     };
@@ -88,6 +82,11 @@ function organizationSignaturesSignController(
 
     this.$onDestroy = () => {
         deregisterStateChangedEvent();
+    };
+
+    this.returnToApp = () => {
+        authenticationService.updateUserData();
+        $state.go('app.people');
     };
 
     this.acceptAgreement = async type => {

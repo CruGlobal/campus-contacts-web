@@ -316,6 +316,8 @@ export default {
                     load_template: 'Error occurred while loading the page',
                 },
                 requestAccess: 'Error occurred while processing your request',
+                signature_request:
+                    'Error occurred, the agreement could not be processed',
             },
             retry_instructions: 'Click to retry',
         },
@@ -726,7 +728,7 @@ export default {
                     title: 'You have declined!',
                     mainBlurb:
                         'Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.',
-                    reqestAccessBlurb:
+                    requestAccessBlurb:
                         'You will need to request access again after having this discussion.',
                 },
                 codeOfConduct: {
