@@ -4,16 +4,19 @@ angular.module('missionhubApp').component('impersonatePerson', {
     controller: impersonatePersonController,
     template: template,
     bindings: {
-        personId: '<',
+        userId: '<',
     },
 });
 
-function impersonatePersonController(authenticationService, $state) {
+function impersonatePersonController(authenticationService, $state, $scope) {
     this.$onInit = async () => {
-        if (!authenticationService.isTokenValid() || !this.personId)
-            $state.go('app.people');
+        if (!authenticationService.isTokenValid()) $state.go('app.people');
 
-        await authenticationService.impersonatePerson();
+        if (this.userId)
+            await authenticationService.impersonatePerson(this.userId);
+        else await authenticationService.stopImpersonatingPerson();
+
+        $scope.$apply();
 
         $state.go('app.people');
     };

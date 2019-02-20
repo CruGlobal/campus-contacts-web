@@ -447,6 +447,9 @@ export default {
                 vistitWebsite: 'Visit our Website',
             },
         },
+        impersonation: {
+            loading: 'Please wait...',
+        },
         leader: 'Leader',
         mass_edit: {
             save: 'Edit {{contactCount}} contacts',

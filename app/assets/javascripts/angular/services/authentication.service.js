@@ -48,8 +48,7 @@ function authenticationService(
     };
 
     const setupUserSettings = async organization => {
-        const me = await loggedInPerson.loadOnce();
-
+        const me = await loggedInPerson.load();
         setState(organization, me);
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
@@ -172,16 +171,26 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const impersonatePerson = async () => {
-        const data = await httpProxy.get(
-            `/impersonations/${this.personId}`,
-            {},
-            {
-                errorMessage: 'error.messages.impersonate_request',
-            },
-        );
+    const impersonatePerson = async userId => {
+        try {
+            const { data } = await $http.get(
+                `${envService.read('apiUrl')}/impersonations/${userId}`,
+            );
+            setAuthorizationAndState(data.token, data.recent_organization);
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
+    };
 
-        setAuthorizationAndState(data.token, data.recent_organization);
+    const stopImpersonatingPerson = async () => {
+        try {
+            const { data } = await $http.delete(
+                `${envService.read('apiUrl')}/impersonations`,
+            );
+            setAuthorizationAndState(data.token, data.recent_organization);
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
     };
 
     return {
@@ -202,6 +211,7 @@ function authenticationService(
             loadState();
         },
         impersonatePerson: impersonatePerson,
+        stopImpersonatingPerson: stopImpersonatingPerson,
         theKeyloginUrl: theKeyloginUrl,
         isTokenValid: getJwtToken,
         updateUserData: updateUserData,

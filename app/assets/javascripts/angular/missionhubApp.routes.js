@@ -289,7 +289,16 @@ angular
             })
             .state({
                 name: 'app.impersonatePerson',
-                url: '/impersonate-person/:personId',
+                url: '/impersonate-person/:userId',
+                component: 'impersonatePerson',
+                resolve: {
+                    userId: ($state, $transition$) =>
+                        $transition$.params().userId,
+                },
+            })
+            .state({
+                name: 'app.stopeImpersonatingPerson',
+                url: '/stop-impersonation',
                 component: 'impersonatePerson',
             })
             .state({
