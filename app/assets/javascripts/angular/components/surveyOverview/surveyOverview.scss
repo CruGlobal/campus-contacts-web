@@ -10,41 +10,6 @@ organization-contact-import {
         margin-bottom: 0;
     }
 
-    /* Widths */
-
-    $wrapper-fixed-width: 948px;
-
-    /* Fonts */
-
-    $base-font-family: 'Source Sans Pro', sans-serif;
-
-    body {
-        text-align: center;
-        color: $gray-darker;
-        font-family: 'Source Sans Pro', sans-serif;
-        min-width: 948px;
-    }
-
-    .wrapper {
-        width: $wrapper-fixed-width;
-        margin: 0 auto;
-        text-align: left;
-    }
-
-    .header {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        .survey-title {
-            display: flex;
-            align-items: center;
-            color: $pivot-bright-blue;
-            font-size: 2em;
-        }
-        .white {
-            color: #ffffff;
-        }
-    }
-
     /* Backgrounds */
 
     .bg-blue {
