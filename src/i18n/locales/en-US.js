@@ -722,7 +722,7 @@ export default {
                 decline: 'Decline',
                 button: 'Continue to the MissionHub App',
                 accepted: {
-                    message: 'Thank you! You may now use MissionHub',
+                    message: 'Thank you! You may now use MissionHub.',
                 },
                 declined: {
                     title: 'You have declined!',
