@@ -17,6 +17,7 @@ function authenticationService(
     loggedInPerson,
     errorService,
     $window,
+    JsonApiDataStore,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
@@ -48,6 +49,7 @@ function authenticationService(
     };
 
     const setupUserSettings = async organization => {
+        JsonApiDataStore.store.reset();
         const me = await loggedInPerson.load();
         setState(organization, me);
         i18next.changeLanguage(me.user.language);
@@ -167,6 +169,7 @@ function authenticationService(
         state.currentOrganization = null;
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
+        JsonApiDataStore.store.reset();
 
         $rootScope.$broadcast('state:changed', state);
     };
