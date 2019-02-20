@@ -309,10 +309,10 @@ organization-contact-import {
         }
 
         .tab {
-            border-bottom: 1px solid $gray-dark;
+            border-bottom: 1px solid transparent;
 
             &.active {
-                border-bottom: 1px solid $gray-5;
+                border-bottom: 1px solid $blue-1;
             }
         }
     }
