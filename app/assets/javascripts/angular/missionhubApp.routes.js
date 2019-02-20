@@ -288,6 +288,11 @@ angular
                 },
             })
             .state({
+                name: 'app.impersonatePerson',
+                url: '/impersonate-person/:personId',
+                component: 'impersonatePerson',
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
