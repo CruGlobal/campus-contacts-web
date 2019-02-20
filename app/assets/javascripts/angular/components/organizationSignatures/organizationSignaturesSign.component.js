@@ -62,7 +62,7 @@ function organizationSignaturesSignController(
     };
 
     this.$onInit = () => {
-        authenticationService.updateUserData();
+        //authenticationService.updateUserData();
 
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
@@ -94,8 +94,8 @@ function organizationSignaturesSignController(
     };
 
     this.declineAgreement = async type => {
-        await updateAgreement(type, 'declined');
         this.hasDeclined = true;
+        await updateAgreement(type, 'declined');
     };
 
     this.hasSignedCodeOfConduct = () => {
