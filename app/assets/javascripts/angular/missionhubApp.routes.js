@@ -289,7 +289,7 @@ angular
             })
             .state({
                 name: 'app.impersonateUser',
-                url: '/impersonate-person/:userId',
+                url: '/impersonate-user/:userId',
                 component: 'impersonateUser',
                 resolve: {
                     userId: ($state, $transition$) =>
@@ -297,7 +297,7 @@ angular
                 },
             })
             .state({
-                name: 'app.stopeImpersonatingUser',
+                name: 'app.stopImpersonatingUser',
                 url: '/stop-impersonation',
                 component: 'impersonateUser',
             })
