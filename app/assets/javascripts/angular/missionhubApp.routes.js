@@ -442,6 +442,50 @@ angular
             )
             .states(
                 ministryViewTabs.map(function(tab) {
+                    const formatArrayForFilter = filter => {
+                        if (!filter) return {};
+
+                        return filter
+                            .split(',')
+                            .map(value => {
+                                return { [value]: true };
+                            })
+                            .reduce((carry, f) => {
+                                return { ...carry, ...f };
+                            });
+                    };
+
+                    if (tab === 'people') {
+                        return {
+                            name: 'app.ministries.ministry.' + tab,
+                            url: '/people?statuses=&assigned_to=',
+                            component:
+                                'organizationOverview' + _.upperFirst(tab),
+                            resolve: {
+                                queryFilters: ($transition$, $location) => {
+                                    const filters = $location.search();
+
+                                    return {
+                                        ...{
+                                            assigned_tos: filters.assigned_to
+                                                ? formatArrayForFilter(
+                                                      filters.assigned_to,
+                                                  )
+                                                : {},
+                                        },
+                                        ...{
+                                            statuses: filters.statuses
+                                                ? formatArrayForFilter(
+                                                      filters.statuses,
+                                                  )
+                                                : {},
+                                        },
+                                    };
+                                },
+                            },
+                        };
+                    }
+
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
