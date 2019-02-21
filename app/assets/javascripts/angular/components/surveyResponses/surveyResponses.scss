@@ -1,14 +1,11 @@
 @import '../../../../stylesheets/variables/colors';
 
 survey-responses {
-    .header {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        .survey-title {
-            display: flex;
-            align-items: center;
-            color: $pivot-bright-blue;
-            font-size: 2em;
+    svg {
+        height: 16px;
+
+        path {
+            fill: $pivot-dark-blue;
         }
     }
 }

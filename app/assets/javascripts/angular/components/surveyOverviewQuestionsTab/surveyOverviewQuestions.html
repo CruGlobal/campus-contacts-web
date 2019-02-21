@@ -2,17 +2,17 @@
     ui-sortable="$ctrl.questionSortableOptions"
     ng-model="$ctrl.surveyQuestions"
     ui-sortable-stop="$ctrl.updatePosition($ctrl.surveyQuestions)">
-    <form class="bg-pivot-gray-5 br2 pivot-gray-darker"
+    <form class="br2 pivot-gray-darker"
         ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
             'accordion-expanded': $ctrl.isExpanded[question.id]
         }"
         ng-init="questionIndex = $index">
-        <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-pivot-gray-5 f5 flex br2"
+        <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-pivot-gray-4 f5 flex br2"
             ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
                 'pa3': !$ctrl.isExpanded[question.id],
-                'ph3 pv2 items-center': $ctrl.isExpanded[question.id]
+                'ph3 pv2 items-center mb0 br--top': $ctrl.isExpanded[question.id]
         }">
             <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
                 <img ng-src="{{$ctrl.icons.sort}}" alt="{{ 'surveys:questions.sort' | t }}" style="width:22px; height:20px">
@@ -44,7 +44,7 @@
             </a>
             <span class="db open-close-arrow"></span>
         </h2>
-        <div class="accordion-body"
+        <div class="accordion-body br2 br-bottom br bl bb b--pivot-gray-4 pv3"
              ng-if="$ctrl.isExpanded[question.id] && !question.predefined">
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
@@ -56,10 +56,11 @@
                             <a class="f5 link dim bg-white pa2 db pivot-gray-darker br2 dim" href="" uib-dropdown-toggle>
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
                             </a>
-                            <ul class="bg-white f5" uib-dropdown-menu>
+                            <ul class="bg-white pa2 f5  br--bottom shadow-4" uib-dropdown-menu>
                                 <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
-                                    <a href=""
-                                       ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);">
+                                    <a href
+                                        class='pt2'
+                                        ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);">
                                         {{type.name}}
                                     </a>
                                 </li>
@@ -120,7 +121,7 @@
                     <div class="w-48" ng-if="question.question_answers.length" ng-init="answerTab = 0">
                         <div class="tabs flex justify-between">
                             <div class="w-49 relative">
-                                <a class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                <a class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                    href="" ng-click="answerTab = 0" ng-class="{'bb bb--pivot-gray-5': answerTab === 0}">
                                     {{ 'surveys:questions.autoAssign' | t }}
                                 </a>
@@ -129,7 +130,7 @@
                                 </a>
                             </div>
                             <div class="w-49 relative">
-                                <a class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br&#45;&#45;top db b&#45;&#45;gray-dark"
+                                <a class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                    href="" ng-click="answerTab = 1" ng-class="{'bb bb--pivot-gray-5' : answerTab === 1}">
                                     {{ 'surveys:questions.autoNotify' | t }}
                                 </a>

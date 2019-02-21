@@ -7,7 +7,6 @@ organization {
         padding-left: 8px;
     }
     .header {
-        color: $white;
         display: flex;
         align-items: center;
         height: 48px;
@@ -36,7 +35,7 @@ organization {
                 width: 44px;
                 padding: 12px 10px;
                 svg {
-                    fill: $white;
+                    fill: $pivot-dark-blue;
                 }
             }
             .add-anonymous-interaction {
@@ -75,23 +74,23 @@ organization {
                 }
                 > ng-md-icon {
                     &:nth-child(1) {
-                        background-color: mix(white, $pivot-dark-blue, 20%);
+                        background-color: mix(white, $gray-3, 20%);
                     }
                     &:nth-child(2) {
-                        background-color: mix(white, $pivot-dark-blue, 30%);
+                        background-color: mix(white, $gray-3, 30%);
                     }
                     &:nth-child(3) {
-                        background-color: mix(white, $pivot-dark-blue, 40%);
+                        background-color: mix(white, $gray-3, 40%);
                     }
                     &:nth-child(4) {
-                        background-color: mix(white, $pivot-dark-blue, 50%);
+                        background-color: mix(white, $gray-3, 50%);
                     }
                     &:hover,
                     &.opened {
-                        background-color: $pivot-dark-blue;
+                        background-color: $gray-3;
                     }
                     &:active {
-                        background-color: lighten($pivot-dark-blue, 5%);
+                        background-color: lighten($gray-3, 5%);
                     }
                 }
             }

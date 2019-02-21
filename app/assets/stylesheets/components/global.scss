@@ -8,8 +8,7 @@
     &:link,
     &:hover {
         padding: 4px 7px;
-        color: $white;
-        background-color: $pivot-orange;
+        color: $pivot-orange;
         border-radius: 40%;
     }
 }
@@ -66,4 +65,8 @@ ng-md-icon.disabled {
 // I wish I knew why. -SO
 .pill {
     @extend .shared-pill-style;
+}
+
+.w-55 {
+    width: 55%;
 }
