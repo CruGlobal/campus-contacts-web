@@ -5,6 +5,9 @@ angular.module('missionhubApp').component('organizationOverviewPeople', {
     require: {
         organizationOverview: '^',
     },
+    bindings: {
+        queryFilters: '<',
+    },
     template: template,
 });
 function organizationOverviewPeopleController() {}
