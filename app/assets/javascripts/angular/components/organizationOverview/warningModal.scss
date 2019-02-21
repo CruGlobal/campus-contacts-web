@@ -1,0 +1,14 @@
+@import '../../../../stylesheets/variables/colors';
+
+warning-modal {
+    .modal-footer {
+        a {
+            color: $white !important;
+            padding-top: 0.75rem !important;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
