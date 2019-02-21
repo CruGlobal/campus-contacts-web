@@ -75,7 +75,7 @@ function organizationContactImportStep1Controller(
     };
 
     this.createSurvey = () => {
-        $uibModal
+        const modal = $uibModal
             .open({
                 component: 'createSurvey',
                 resolve: {
@@ -85,9 +85,8 @@ function organizationContactImportStep1Controller(
                 size: 'sm',
             })
             .result.then(newSurvey => {
-                $location.path(
-                    `/ministries/${this.org.id}/survey/${newSurvey.id}/`,
-                );
+                this.selectedSurvey = newSurvey;
+                $uibModal.close({});
             });
     };
 }
