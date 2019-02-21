@@ -1,4 +1,7 @@
 <div class="m-auto tc" ng-if="$ctrl.showLogin">
+    <p class='f3 pa3 bg-warning white w-50 dib' ng-if="$ctrl.inviteState">
+        {{ 'login.invite_in_progress' | t }}
+    </p>
     <h1 class="ttu">{{ 'login.login' | t }}</h1>
     <p>
         <a href

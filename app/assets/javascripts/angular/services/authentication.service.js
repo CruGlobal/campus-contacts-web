@@ -17,6 +17,7 @@ function authenticationService(
     loggedInPerson,
     errorService,
     $window,
+    JsonApiDataStore,
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
@@ -48,8 +49,8 @@ function authenticationService(
     };
 
     const setupUserSettings = async organization => {
-        const me = await loggedInPerson.loadOnce();
-
+        JsonApiDataStore.store.reset();
+        const me = await loggedInPerson.load();
         setState(organization, me);
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
@@ -62,8 +63,8 @@ function authenticationService(
 
     const clearToken = () => {
         state.v4AccessToken = null;
-        sessionStorageService.clear('jwtToken');
-        localStorageService.clear('jwtToken');
+        sessionStorageService.destroy('jwtToken');
+        localStorageService.destroy('jwtToken');
         $http.defaults.headers.common.Authorization = null;
     };
 
@@ -112,7 +113,11 @@ function authenticationService(
             const response = await requestTicket(accessToken);
             const { data } = await requestV4Token(response.data.ticket);
             setAuthorizationAndState(data.token, data.recent_organization);
-            $state.go('app.people');
+            const inviteState = sessionStorageService.get('inviteState');
+
+            inviteState
+                ? $state.go('appWithoutMenus.inviteLink', inviteState)
+                : $state.go('app.people');
         } catch (e) {
             errorService.displayError(e, false);
         }
@@ -162,14 +167,37 @@ function authenticationService(
     };
 
     const clearState = () => {
-        sessionStorageService.clear('state');
-        localStorageService.clear('state');
+        sessionStorageService.destroy('state');
+        localStorageService.destroy('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
+        JsonApiDataStore.store.reset();
 
         $rootScope.$broadcast('state:changed', state);
+    };
+
+    const impersonateUser = async userId => {
+        try {
+            const { data } = await $http.get(
+                `${envService.read('apiUrl')}/impersonations/${userId}`,
+            );
+            setAuthorizationAndState(data.token, data.recent_organization);
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
+    };
+
+    const stopImpersonatingUser = async () => {
+        try {
+            const { data } = await $http.delete(
+                `${envService.read('apiUrl')}/impersonations`,
+            );
+            setAuthorizationAndState(data.token, data.recent_organization);
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
     };
 
     return {
@@ -189,6 +217,8 @@ function authenticationService(
             setHttpHeaders(token);
             loadState();
         },
+        impersonateUser: impersonateUser,
+        stopImpersonatingUser: stopImpersonatingUser,
         theKeyloginUrl: theKeyloginUrl,
         isTokenValid: getJwtToken,
         updateUserData: updateUserData,

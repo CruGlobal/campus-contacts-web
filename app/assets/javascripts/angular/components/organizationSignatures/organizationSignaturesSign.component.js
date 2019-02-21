@@ -32,7 +32,7 @@ function organizationSignaturesSignController(
         };
 
         return httpProxy.post(`/organizations/${orgId}/signatures`, params, {
-            errorMessage: 'error.messages.surveys.loadQuestions',
+            errorMessage: 'error.messages.signature_request',
         });
     };
 
@@ -53,12 +53,6 @@ function organizationSignaturesSignController(
             t => t !== type,
         );
 
-        if (this.nonSignedAgreements.length <= 0) {
-            authenticationService.updateUserData();
-            this.nonSignedAgreements = [];
-            $scope.$apply();
-        }
-
         $scope.$apply();
     };
 
@@ -68,7 +62,7 @@ function organizationSignaturesSignController(
     };
 
     this.$onInit = () => {
-        authenticationService.updateUserData();
+        //authenticationService.updateUserData();
 
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
@@ -90,13 +84,18 @@ function organizationSignaturesSignController(
         deregisterStateChangedEvent();
     };
 
+    this.returnToApp = () => {
+        authenticationService.updateUserData();
+        $state.go('app.people');
+    };
+
     this.acceptAgreement = async type => {
         updateAgreement(type, 'accepted');
     };
 
     this.declineAgreement = async type => {
-        await updateAgreement(type, 'declined');
         this.hasDeclined = true;
+        await updateAgreement(type, 'declined');
     };
 
     this.hasSignedCodeOfConduct = () => {

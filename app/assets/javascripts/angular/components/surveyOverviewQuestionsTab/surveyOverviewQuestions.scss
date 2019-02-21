@@ -1,0 +1,14 @@
+@import '../../../../stylesheets/variables/colors';
+
+survey-overview-questions {
+    assigned-select {
+        .ui-select-match-item {
+            color: $blue-1;
+            padding: 0.25rem 0.5rem !important;
+            border-radius: 0.25rem !important;
+            border: solid 1px $gray-2 !important;
+            -webkit-appearance: initial !important;
+            background: transparent !important;
+        }
+    }
+}

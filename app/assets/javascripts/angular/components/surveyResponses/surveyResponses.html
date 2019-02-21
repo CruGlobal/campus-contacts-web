@@ -1,13 +1,14 @@
-<div class="header">
-    <div class="flex justify-between items-center pv3 ph2">
-        <div class="survey-title">
+<div class="br3 shadow-3 mb4 overflow-hidden">
+    <div class="flex justify-between items-center pv3 ph3 bg-white">
+        <div class="f3 pivot-dark-blue flex">
             <a ui-sref="app.ministries.ministry.surveyResponses({ surveyId: survey.id })">
-                <img class="db mr1" ng-src="{{$ctrl.chevronLeftIcon}}"/>
+                <div class='mr2' ng-include="$ctrl.chevronLeftIcon"></div>
             </a>
             {{$ctrl.survey.title}}
         </div>
-        <icon-button icon="'person_add'" ng-click="$ctrl.addSurveyResponse()"></icon-button>
+        <icon-button class='fill-pivot-gray-dark' icon="'person_add'" ng-click="$ctrl.addSurveyResponse()"></icon-button>
     </div>
+
+    <people-screen org="{id: $ctrl.orgId}" loader-service="$ctrl.loaderService" survey-id="$ctrl.survey.id" questions="$ctrl.questions"></people-screen>
 </div>
 
-<people-screen org="{id: $ctrl.orgId}" loader-service="$ctrl.loaderService" survey-id="$ctrl.survey.id" questions="$ctrl.questions"></people-screen>

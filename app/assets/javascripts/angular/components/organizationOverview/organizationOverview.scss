@@ -2,21 +2,8 @@
 
 organization-overview {
     display: block;
-    margin-bottom: 20px;
     &:last-child {
         margin-bottom: 0;
-    }
-
-    .header {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
-        &.hidden-org {
-            background: gray;
-            .org-name {
-                color: white;
-            }
-        }
     }
 
     .org-title-row {
@@ -32,6 +19,10 @@ organization-overview {
     }
 
     .tabs .tab {
+        &:first-of-type {
+            padding-left: 18px;
+        }
+
         &.active {
             .loading svg {
                 fill: $pivot-bright-blue;
@@ -46,23 +37,28 @@ organization-overview {
 
         .dropdown-content {
             display: none;
-            background-color: $pivot-dark-blue;
+            background-color: $white;
             min-width: 200px;
             list-style: none;
             margin: 13px 0 0 0;
             padding: 0;
             z-index: 1;
+            border: solid 1px $gray-4;
+
             li {
                 padding: 6px 10px;
                 &:nth-child(even) {
-                    background: darken($pivot-dark-blue, 3%);
+                    background: darken($gray-4, 3%);
                 }
                 &:hover {
-                    background: $pivot-darker-blue;
+                    background: $gray-3;
+                }
+                a {
+                    color: $gray-1;
                 }
             }
             .divider {
-                border-top: 2px solid $pivot-bright-blue;
+                border-top: 2px solid $gray-4;
             }
         }
 

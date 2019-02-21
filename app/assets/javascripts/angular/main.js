@@ -15,6 +15,9 @@ import './missionhubApp.run';
 import '../../../../src/app.component';
 import '../../../../src/components/authentication/signIn.component';
 import '../../../../src/components/authentication/requestAccess.component';
+import '../../../../src/components/authentication/inviteLink.component';
+import '../../../../src/components/authentication/mergeAccount.component';
+import '../../../../src/components/authentication/impersonateUser.component';
 
 import '../../stylesheets/main.scss';
 

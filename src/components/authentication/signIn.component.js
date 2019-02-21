@@ -14,6 +14,7 @@ function signInController(
     envService,
     $state,
     facebookService,
+    sessionStorageService,
 ) {
     this.showLogin = false;
     this.facebookService = facebookService;
@@ -30,5 +31,7 @@ function signInController(
         }
 
         if (!this.accessToken) this.showLogin = true;
+
+        this.inviteState = sessionStorageService.get('inviteState');
     };
 }
