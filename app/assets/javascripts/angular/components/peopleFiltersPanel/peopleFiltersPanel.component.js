@@ -9,6 +9,7 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
         organizationId: '<',
         surveyId: '<',
         questions: '<',
+        preloadedFilters: '<',
     },
 });
 
@@ -27,10 +28,9 @@ function peopleFiltersPanelController(
     this.statusOptions = [];
     this.genderOptions = [];
     this.questionOptions = [];
+    this.filters = {};
 
     this.$onInit = () => {
-        this.resetFilters();
-
         loadFilterStats();
 
         this.personModifiedUnsubscribe = $rootScope.$on(
@@ -41,6 +41,28 @@ function peopleFiltersPanelController(
             'massEditApplied',
             loadFilterStats,
         );
+    };
+
+    this.$onChanges = changes => {
+        if (
+            changes.preloadedFilters &&
+            changes.preloadedFilters.currentValue !==
+                changes.preloadedFilters.previousValue
+        ) {
+            this.filters = {
+                searchString: '',
+                labels: {},
+                assignedTos: {},
+                statuses: {},
+                groups: {},
+                questions: {},
+                answerMatchingOptions: {},
+                includeArchived: false,
+                ...changes.preloadedFilters.currentValue,
+            };
+
+            this.updateFilters();
+        }
     };
 
     this.$onDestroy = () => {
@@ -54,19 +76,6 @@ function peopleFiltersPanelController(
         );
 
         sendFilters();
-    };
-
-    this.resetFilters = () => {
-        this.filters = {
-            searchString: '',
-            labels: {},
-            assignedTos: {},
-            statuses: {},
-            groups: {},
-            questions: {},
-            answerMatchingOptions: {},
-            includeArchived: false,
-        };
     };
 
     // Send the filters to this component's parent via the filtersChanged binding
