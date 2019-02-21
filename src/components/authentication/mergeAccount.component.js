@@ -52,7 +52,7 @@ function mergeAccountController(
                 },
             );
 
-            sessionStorageService.clear('inviteState');
+            sessionStorageService.destroy('inviteState');
             this.accountMerged = true;
         } catch (e) {}
     };

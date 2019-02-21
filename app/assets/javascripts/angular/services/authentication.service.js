@@ -63,8 +63,8 @@ function authenticationService(
 
     const clearToken = () => {
         state.v4AccessToken = null;
-        sessionStorageService.clear('jwtToken');
-        localStorageService.clear('jwtToken');
+        sessionStorageService.destroy('jwtToken');
+        localStorageService.destroy('jwtToken');
         $http.defaults.headers.common.Authorization = null;
     };
 
@@ -167,8 +167,8 @@ function authenticationService(
     };
 
     const clearState = () => {
-        sessionStorageService.clear('state');
-        localStorageService.clear('state');
+        sessionStorageService.destroy('state');
+        localStorageService.destroy('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
         state.organization_with_missing_signatures_ids = null;
