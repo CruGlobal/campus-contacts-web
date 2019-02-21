@@ -115,9 +115,9 @@ function authenticationService(
             setAuthorizationAndState(data.token, data.recent_organization);
             const inviteState = sessionStorageService.get('inviteState');
 
-            if (inviteState)
-                $state.go('appWithoutMenus.inviteLink', inviteState);
-            else $state.go('app.people');
+            inviteState
+                ? $state.go('appWithoutMenus.inviteLink', inviteState)
+                : $state.go('app.people');
         } catch (e) {
             errorService.displayError(e, false);
         }
