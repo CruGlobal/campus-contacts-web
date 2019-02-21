@@ -462,7 +462,10 @@ angular
                             component:
                                 'organizationOverview' + _.upperFirst(tab),
                             resolve: {
-                                queryFilters: ($transition$, $location) => {
+                                queryFilters: /* @ngInject */ (
+                                    $transition$,
+                                    $location,
+                                ) => {
                                     const filters = $location.search();
 
                                     return {
