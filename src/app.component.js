@@ -9,9 +9,6 @@ angular.module('missionhubApp').component('app', {
         hideHeader: '<',
         hideFooter: '<',
     },
-    transclude: {
-        legacyMenu: '?legacyMenu',
-    },
 });
 
 function appController(periodService, $rootScope, state, analyticsService) {

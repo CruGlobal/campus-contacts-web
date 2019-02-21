@@ -13,9 +13,6 @@
                      ng-click="$ctrl.activeTab = tab.id">
                     <span class='pivot-gray-darker'>{{tab.name | t}}</span>
                 </div>
-                <div class="tab">
-                    <a href class='pivot-gray-darker' ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
-                </div>
             </div>
         </div>
         <a ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
