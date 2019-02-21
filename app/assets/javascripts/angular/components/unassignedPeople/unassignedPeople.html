@@ -1,6 +1,6 @@
 <div class="unassigned" ng-if="$ctrl.organization.report.unassigned_count && $ctrl.unassignedVisible">
     <div>
-        <a href="/allcontacts?organization_id={{$ctrl.organization.org.id}}&assigned_to=unassigned">
+        <a href ng-href="/ministries/{{$ctrl.organization.org.id}}/people?assigned_to=unassigned">
             {{$ctrl.organization.report.unassigned_count}} {{'contacts.index.unassigned' | t}}
         </a>
     </div>
