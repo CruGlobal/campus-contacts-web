@@ -63,8 +63,8 @@ function authenticationService(
 
     const clearToken = () => {
         state.v4AccessToken = null;
-        sessionStorageService.clear('jwtToken');
-        localStorageService.clear('jwtToken');
+        sessionStorageService.destroy('jwtToken');
+        localStorageService.destroy('jwtToken');
         $http.defaults.headers.common.Authorization = null;
     };
 
@@ -113,7 +113,11 @@ function authenticationService(
             const response = await requestTicket(accessToken);
             const { data } = await requestV4Token(response.data.ticket);
             setAuthorizationAndState(data.token, data.recent_organization);
-            $state.go('app.people');
+            const inviteState = sessionStorageService.get('inviteState');
+
+            inviteState
+                ? $state.go('appWithoutMenus.inviteLink', inviteState)
+                : $state.go('app.people');
         } catch (e) {
             errorService.displayError(e, false);
         }
@@ -163,8 +167,8 @@ function authenticationService(
     };
 
     const clearState = () => {
-        sessionStorageService.clear('state');
-        localStorageService.clear('state');
+        sessionStorageService.destroy('state');
+        localStorageService.destroy('state');
         state.hasMissionhubAccess = null;
         state.currentOrganization = null;
         state.organization_with_missing_signatures_ids = null;

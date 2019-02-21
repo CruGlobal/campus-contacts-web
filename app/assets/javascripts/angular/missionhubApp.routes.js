@@ -288,6 +288,18 @@ angular
                 },
             })
             .state({
+                name: 'appWithoutMenus.mergeAccount',
+                url: '/merge-account/:rememberCode/:orgId/:userId',
+                component: 'mergeAccount',
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
+                    loggedInUser: loggedInPerson => loggedInPerson.load(),
+                },
+            })
+            .state({
                 name: 'app.impersonateUser',
                 url: '/impersonate-user/:userId',
                 component: 'impersonateUser',
@@ -512,6 +524,20 @@ angular
                     survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),
                     preview: () => true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus.inviteLink',
+                url: '/l/:rememberCode/:orgId/:userId',
+                component: 'inviteLink',
+                data: {
+                    isPublic: true,
+                },
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({

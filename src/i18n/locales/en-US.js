@@ -316,6 +316,11 @@ export default {
                     load_template: 'Error occurred while loading the page',
                 },
                 requestAccess: 'Error occurred while processing your request',
+                inviteLink: {
+                    loadRemeberToken:
+                        'Error occurred while loading invite information',
+                    mergeAccount: 'Error occurred while merging your accounts',
+                },
                 signature_request:
                     'Error occurred, the agreement could not be processed',
                 impersonate_request: 'Error occurred, impersonation failed',
@@ -425,6 +430,7 @@ export default {
             login: 'Log in',
             login_with_key: 'Log in with The Key',
             login_with_facebook: 'Log in with Facebook',
+            invite_in_progress: 'Please login to finish your invite.',
         },
         requestAccess: {
             title: 'Request Access',
@@ -446,6 +452,22 @@ export default {
                     'Check out Cru’s other apps that help you connect and share your faith with the people you care about most.',
                 vistitWebsite: 'Visit our Website',
             },
+        },
+        mergeAccount: {
+            loggedInAs:
+                'You are current logged in as {{fullName}} <{{email}}>.',
+            continue: 'Do you want to continue?',
+            mergeAccount:
+                'Yes, merge {{fullName}} <{{username}}> into my account.',
+            cancelMerge: 'No, I want to login my own account',
+            successAccountMerged:
+                'Congratulations, you have successfully merged {{oldAccountFullName}} <{{oldAccountUsername}}> into {{mergedAccountFullName}} <{{mergedAccountEmail}}>.',
+            continueAccountMerged: 'Continue to your new ministry',
+            inviteLinkExpiredTitle:
+                'Sorry, the invite link has expired or is no longer valid.',
+            inviteLinkExpiredMessage:
+                'Please try again. If the problem persists contact MissionHub <a href="mailto:support@missionhub.com">support</a>.',
+            continueAfterError: 'Continue to MissionHub',
         },
         impersonation: {
             loading: 'Please wait...',
