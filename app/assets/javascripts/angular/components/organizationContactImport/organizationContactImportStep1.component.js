@@ -86,7 +86,6 @@ function organizationContactImportStep1Controller(
             })
             .result.then(newSurvey => {
                 this.selectedSurvey = newSurvey;
-                $uibModal.close({});
             });
     };
 }
