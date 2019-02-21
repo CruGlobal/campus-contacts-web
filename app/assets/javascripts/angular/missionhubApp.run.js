@@ -30,6 +30,7 @@ angular
 
         if (authenticationService.isTokenValid()) {
             authenticationService.setupAuthenticationState();
+            authenticationService.updateUserData();
 
             loggedInPerson.loadOnce().then(user => {
                 if (user.beta_mode === null) {

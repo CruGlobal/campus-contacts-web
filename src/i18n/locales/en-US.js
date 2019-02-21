@@ -321,6 +321,9 @@ export default {
                         'Error occurred while loading invite information',
                     mergeAccount: 'Error occurred while merging your accounts',
                 },
+                signature_request:
+                    'Error occurred, the agreement could not be processed',
+                impersonate_request: 'Error occurred, impersonation failed',
             },
             retry_instructions: 'Click to retry',
         },
@@ -465,6 +468,9 @@ export default {
             inviteLinkExpiredMessage:
                 'Please try again. If the problem persists contact MissionHub <a href="mailto:support@missionhub.com">support</a>.',
             continueAfterError: 'Continue to MissionHub',
+        },
+        impersonation: {
+            loading: 'Please wait...',
         },
         leader: 'Leader',
         mass_edit: {
@@ -742,13 +748,13 @@ export default {
                 decline: 'Decline',
                 button: 'Continue to the MissionHub App',
                 accepted: {
-                    message: 'Thank you! You may now use MissionHub',
+                    message: 'Thank you! You may now use MissionHub.',
                 },
                 declined: {
                     title: 'You have declined!',
                     mainBlurb:
                         'Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.',
-                    reqestAccessBlurb:
+                    requestAccessBlurb:
                         'You will need to request access again after having this discussion.',
                 },
                 codeOfConduct: {

@@ -1,14 +1,15 @@
-<div class="sub-navigation flex bg-white">
-    <div class="main-container flex items-center">
+<div class="sub-navigation flex bg-white ">
+    <div class="main-container flex items-center justify-between">
         <organization-breadcrumbs></organization-breadcrumbs>
-        <report-period></report-period>
-        <a ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+
+        <a href
+           class="dashboard-edit-toggle tipitmiddle order-2 tr"
+           ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
            ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
            analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
-           class="dashboard-edit-toggle tipitmiddle"
            ng-class="{'active': $ctrl.editOrganizations}"
-           href="" title="{{ 'dashboard.edit_org_order' | t }}">
-            <ng-md-icon icon="editOrder"></ng-md-icon>
+           title="{{ 'dashboard.edit_org_order' | t }}">
+            <ng-md-icon class='fill-pivot-dark-blue' icon="editOrder"></ng-md-icon>
         </a>
     </div>
 </div>

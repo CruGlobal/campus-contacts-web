@@ -1,29 +1,32 @@
-<div class="header flex justify-between">
-    <div class="self-end">
-        <div class="survey-title pv3 ph2">
-            <a ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
-                <img class="db mr1" ng-src="{{$ctrl.chevronLeftIcon}}"/>
-            </a>
-            {{$ctrl.survey.title}}
-    </div>
+<div class='br3 shadow-3 mb4 overflow-hidden'>
+    <div class="header flex justify-between">
+        <div class="">
+            <div class="f3 pivot-dark-blue ph3 pt3 flex">
+                <a ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
+                    <div class='mr2' ng-include="$ctrl.chevronLeftIcon"></div>
+                </a>
+                {{$ctrl.survey.title}}
+            </div>
 
-    <div class="tabs">
-        <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
-             ng-click="$ctrl.activeTab = tab.id">
-            <span>{{tab.name | t}}</span>
+            <div class="tabs">
+                <div class="tab" ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
+                     ng-click="$ctrl.activeTab = tab.id">
+                    <span class='pivot-gray-darker'>{{tab.name | t}}</span>
+                </div>
+                <div class="tab">
+                    <a href class='pivot-gray-darker' ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
+                </div>
+            </div>
         </div>
-        <div class="tab">
-            <a ng-href="/surveys/{{$ctrl.survey.id}}/questions">Legacy Editor</a>
-        </div>
+        <a ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
+           target="_blank"
+           class="self-center f6 link ba ph4 pv3 mr4 pivot-blue-dark bold br2 dim ttu tracked">
+            {{ 'surveys:preview' | t }}
+        </a>
     </div>
+    <div class='bg-white b--pivot-gray-4 bt pa3'>
+        <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
+        <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
+        <survey-overview-questions survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'questions'"></survey-overview-questions>
     </div>
-    <a ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
-       target="_blank"
-       class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked">
-        {{ 'surveys:preview' | t }}
-    </a>
 </div>
-
-<survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
-<survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
-<survey-overview-questions survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'questions'"></survey-overview-questions>

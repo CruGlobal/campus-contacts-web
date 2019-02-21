@@ -3,6 +3,10 @@ app {
     min-height: 100vh;
     flex-direction: column;
     justify-content: space-between;
+    background: #f2f2f2;
+    background-image: url(./background-left.png), url(./background-right.png);
+    background-position: left 100px, right 120px;
+    background-repeat: no-repeat, no-repeat;
 
     > header {
         margin-bottom: 140px;

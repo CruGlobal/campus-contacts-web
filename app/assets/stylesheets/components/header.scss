@@ -3,16 +3,16 @@
 @mixin header($background-color) {
     min-height: 50px;
     background-color: $background-color;
-    color: $white;
+    color: $gray-darker;
     svg {
-        fill: $white;
+        fill: $gray-darker;
     }
 }
 
 .header {
-    @include header($pivot-dark-blue);
+    @include header($white);
 }
 
 .subheader {
-    @include header($pivot-darker-blue);
+    @include header($white);
 }

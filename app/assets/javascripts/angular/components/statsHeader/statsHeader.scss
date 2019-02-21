@@ -4,23 +4,34 @@ stats-header {
     display: flex;
     align-items: center;
     @extend .subheader;
+    border-top: 1px solid rgba($gray-dark, 0.1);
 
     .stats-title {
         padding-left: 10px;
-        width: 370px;
+        min-width: 370px;
+
+        report-period {
+            a {
+                color: rgba($gray-dark, 0.7);
+            }
+        }
     }
 
     .stats-icons {
         display: inline-flex;
-        width: 332px;
+        min-width: 332px;
         justify-content: space-between;
         align-items: center;
         ng-md-icon {
             display: inline-block;
             width: 25px;
+
+            svg {
+                width: 20px;
+            }
         }
         svg {
-            fill: rgba(255, 255, 255, 0.5);
+            fill: rgba($gray-dark, 0.7);
         }
     }
 }

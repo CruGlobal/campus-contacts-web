@@ -1,5 +1,5 @@
 <div>
-    <section ng-if="!$ctrl.hasSignedCodeOfConduct()">
+    <section ng-if="!$ctrl.hasSignedCodeOfConduct() && !$ctrl.hasDeclined">
         <h1>{{ 'signatures.agreements.codeOfConduct.title' | t }}</h1>
         <div ng-bind-html="$ctrl.codeOfConductText">
         </div>
@@ -8,7 +8,7 @@
             <button class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ng-click="$ctrl.acceptAgreement('code_of_conduct')">Accept</button>
         </div>
     </section>
-    <section ng-if="$ctrl.hasSignedCodeOfConduct() && !$ctrl.hasSignedSignedStatementOfFaith()">
+    <section ng-if="$ctrl.hasSignedCodeOfConduct() && !$ctrl.hasSignedSignedStatementOfFaith() && !$ctrl.hasDeclined">
         <h1>{{ 'signatures.agreements.statementOfFaith.title' | t }}</h1>
         <div ng-bind-html="$ctrl.statementOfFaithText">
         </div>
@@ -17,7 +17,7 @@
             <button class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ng-click="$ctrl.acceptAgreement('statement_of_faith')">{{ 'signatures.agreements.accept' | t }}</button>
         </div>
     </section>
-    <section class='tc' ng-if="$ctrl.hasSignedCodeOfConduct() && $ctrl.hasSignedSignedStatementOfFaith() || $ctrl.hasDeclined">
+    <section class='tc' ng-if="($ctrl.hasSignedCodeOfConduct() && $ctrl.hasSignedSignedStatementOfFaith()) || $ctrl.hasDeclined">
         <div ng-if="$ctrl.hasSignedCodeOfConduct() && $ctrl.hasSignedSignedStatementOfFaith() && !$ctrl.hasDeclined">
             <h1>{{ 'signatures.agreements.accepted.message' | t }}</h1>
         </div>
@@ -28,6 +28,6 @@
                 <p>{{ 'signatures.agreements.declined.requestAccessBlurb' | t }}</p>
             </div>
         </div>
-        <button class='f5 ba pv2 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ui-sref="app.people">{{ 'signatures.agreements.button' | t }}</button>
+        <button class='f5 ba pv2 ph4 b--pivot-dark-blue pivot-white br4 bg-pivot-dark-blue dim ml2' ng-click="$ctrl.returnToApp()">{{ 'signatures.agreements.button' | t }}</button>
     </section>
 </div>
