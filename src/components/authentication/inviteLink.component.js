@@ -59,7 +59,7 @@ function inviteLinkController(
 
                 const me = await loggedInPerson.load();
 
-                if (parseInt(me.user.id, 0) === parseInt(data.user_id, 0)) {
+                if (me.user.id.toString() === data.user_id.toString()) {
                     sessionStorageService.clear('inviteState');
                     $location.url(`/ministries/${this.orgId}/suborgs`);
                     $scope.$apply();
