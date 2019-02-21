@@ -19,7 +19,11 @@ angular.module('missionhubApp').component('organizationContactImportStep1', {
     controller: organizationContactImportStep1Controller,
 });
 
-function organizationContactImportStep1Controller($scope) {
+function organizationContactImportStep1Controller(
+    $scope,
+    $uibModal,
+    $location,
+) {
     this.fileIcon = fileIcon;
     this.warningIcon = warningIcon;
     this.errorIcon = errorIcon;
@@ -68,5 +72,22 @@ function organizationContactImportStep1Controller($scope) {
                 });
             },
         });
+    };
+
+    this.createSurvey = () => {
+        $uibModal
+            .open({
+                component: 'createSurvey',
+                resolve: {
+                    organizationId: () => this.org.id,
+                },
+                windowClass: 'pivot_theme',
+                size: 'sm',
+            })
+            .result.then(newSurvey => {
+                $location.path(
+                    `/ministries/${this.org.id}/survey/${newSurvey.id}/`,
+                );
+            });
     };
 }
