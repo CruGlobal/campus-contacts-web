@@ -60,7 +60,7 @@ function inviteLinkController(
                 const me = await loggedInPerson.load();
 
                 if (me.user.id.toString() === data.user_id.toString()) {
-                    sessionStorageService.clear('inviteState');
+                    sessionStorageService.destroy('inviteState');
                     $location.url(`/ministries/${this.orgId}/suborgs`);
                     $scope.$apply();
                 } else {
@@ -68,7 +68,7 @@ function inviteLinkController(
                 }
             } catch (e) {
                 this.errorWithLink = true;
-                sessionStorageService.clear('inviteState');
+                sessionStorageService.destroy('inviteState');
                 $scope.$apply();
             }
         }
