@@ -465,20 +465,20 @@ angular
                                     const filters = $location.search();
 
                                     return {
-                                        ...{
-                                            assigned_tos: filters.assigned_to
-                                                ? formatArrayForFilter(
+                                        ...(filters.assigned_to
+                                            ? {
+                                                  assigned_tos: formatArrayForFilter(
                                                       filters.assigned_to,
-                                                  )
-                                                : {},
-                                        },
-                                        ...{
-                                            statuses: filters.statuses
-                                                ? formatArrayForFilter(
+                                                  ),
+                                              }
+                                            : {}),
+                                        ...(filters.statuses
+                                            ? {
+                                                  statuses: formatArrayForFilter(
                                                       filters.statuses,
-                                                  )
-                                                : {},
-                                        },
+                                                  ),
+                                              }
+                                            : {}),
                                     };
                                 },
                             },
