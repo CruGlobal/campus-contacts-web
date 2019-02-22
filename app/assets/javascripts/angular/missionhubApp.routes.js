@@ -447,8 +447,10 @@ angular
 
                         return filter
                             .split(',')
-                            .map(value => ({ [value]: true }))
-                            .reduce((carry, value) => ({ ...carry, ...value }));
+                            .reduce(
+                                (acc, value) => ({ ...acc, [value]: true }),
+                                {},
+                            );
                     };
 
                     if (tab === 'people') {
