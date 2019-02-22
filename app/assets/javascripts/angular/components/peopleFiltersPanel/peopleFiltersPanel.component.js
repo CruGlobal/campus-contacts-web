@@ -70,6 +70,19 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
+    this.resetFilters = () => {
+        this.filters = {
+            searchString: '',
+            labels: {},
+            assignedTos: {},
+            statuses: {},
+            groups: {},
+            questions: {},
+            answerMatchingOptions: {},
+            includeArchived: false,
+        };
+    };
+
     this.updateFilters = () => {
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
