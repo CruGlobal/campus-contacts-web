@@ -2,7 +2,7 @@
 
     <a href="/" class='logo fl'></a>
 
-    <ul class="font-titillium fl ml3 list" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" id="primary_nav">
+    <ul class="font-titillium fl ml3 list fade" ng-if="$ctrl.authenticationService.loaded && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" id="primary_nav">
         <li class='fl' ui-sref-active="current" ng-class="{ current: ('app.people' | includedByState) }">
             <a class='pivot-white f4 pl2 pr3' ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
         </li>
@@ -12,7 +12,7 @@
         </li>
     </ul>
 
-    <ul class="avatar-nav fr" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn && $ctrl.loggedInPerson.person"  >
+    <ul class="avatar-nav fr fade" ng-if="$ctrl.authenticationService.loaded && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn && $ctrl.loggedInPerson.person"  >
         <li>
             <a href>
                 <div class="user-avatar-wrap avatar">
@@ -44,17 +44,17 @@
         </li>
     </ul>
 
-    <div class="fr" ng-if="$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" >
+    <div class="nav-search fr fade" ng-if="$ctrl.authenticationService.loaded && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn">
         <nav-search></nav-search>
     </div>
 
-    <ul class="list fr" id="primary_nav" ng-if="!$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" >
-        <li style="fl">
+    <ul class="list fr fade" id="primary_nav" ng-if="$ctrl.authenticationService.loaded && !$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" >
+        <li class="fl">
             <a href class='pivot-white f4 mr2' ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
         </li>
     </ul>
 
-    <ul class="list fr" ng-if="!$ctrl.state.loggedIn">
+    <ul class="list fr fade" ng-if="$ctrl.authenticationService.loaded && !$ctrl.state.loggedIn">
         <li class='fl'>
             <a href="http://help.missionhub.com" class='pivot-white f4 pr3 pl3' target='_blank'>{{ 'nav.support' | t }}</a>
         </li>

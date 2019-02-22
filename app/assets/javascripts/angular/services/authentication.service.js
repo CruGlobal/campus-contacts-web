@@ -29,6 +29,7 @@ function authenticationService(
     )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
+    let loaded = false;
 
     const getJwtToken = () => {
         return (
@@ -147,6 +148,8 @@ function authenticationService(
         state.loggedIn = true;
 
         $rootScope.$broadcast('state:changed', state);
+
+        loaded = true;
     };
 
     const setState = (organization, person) => {
@@ -174,7 +177,7 @@ function authenticationService(
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
         JsonApiDataStore.store.reset();
-
+        loaded = false;
         $rootScope.$broadcast('state:changed', state);
     };
 
@@ -203,6 +206,7 @@ function authenticationService(
     return {
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
+        loaded: () => loaded,
         storeJwtToken: storeJwtToken,
         removeAccess: () => {
             clearToken();

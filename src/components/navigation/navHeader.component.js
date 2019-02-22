@@ -13,6 +13,7 @@ function navHeaderController(
     envService,
     authenticationService,
 ) {
+    this.authenticationService = authenticationService;
     this.loggedInPerson = loggedInPerson;
     this.state = state;
 

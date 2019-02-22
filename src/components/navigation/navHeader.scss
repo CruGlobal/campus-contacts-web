@@ -55,7 +55,8 @@ nav-header {
             margin-bottom: 0;
 
             > li {
-                position: relative;
+                position: absolute;
+                right: 15px;
                 padding-bottom: 20px;
 
                 &:hover {
@@ -117,5 +118,9 @@ nav-header {
                 }
             }
         }
+    }
+    .nav-search {
+        position: absolute;
+        right: 90px;
     }
 }
