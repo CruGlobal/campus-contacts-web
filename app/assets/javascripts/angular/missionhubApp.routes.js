@@ -442,6 +442,51 @@ angular
             )
             .states(
                 ministryViewTabs.map(function(tab) {
+                    const formatArrayForFilter = filter => {
+                        if (!filter) return {};
+
+                        return filter
+                            .split(',')
+                            .reduce(
+                                (acc, value) => ({ ...acc, [value]: true }),
+                                {},
+                            );
+                    };
+
+                    if (tab === 'people') {
+                        return {
+                            name: 'app.ministries.ministry.' + tab,
+                            url: '/people?statuses=&assigned_to=',
+                            component:
+                                'organizationOverview' + _.upperFirst(tab),
+                            resolve: {
+                                queryFilters: /* @ngInject */ (
+                                    $transition$,
+                                    $location,
+                                ) => {
+                                    const filters = $location.search();
+
+                                    return {
+                                        ...(filters.assigned_to
+                                            ? {
+                                                  assigned_tos: formatArrayForFilter(
+                                                      filters.assigned_to,
+                                                  ),
+                                              }
+                                            : {}),
+                                        ...(filters.statuses
+                                            ? {
+                                                  statuses: formatArrayForFilter(
+                                                      filters.statuses,
+                                                  ),
+                                              }
+                                            : {}),
+                                    };
+                                },
+                            },
+                        };
+                    }
+
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,

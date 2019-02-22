@@ -19,6 +19,7 @@ angular.module('missionhubApp').component('peopleScreen', {
         loaderService: '<',
         surveyId: '<',
         questions: '<',
+        queryFilters: '<',
     },
     require: {
         organizationOverview: '^',

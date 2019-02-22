@@ -7,8 +7,8 @@
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
         <div class='pivot-gray-3'>{{$ctrl.report.contact_count || '-'}}</div>
         <div>
-            <a class="warning-highlight"
-               href="/allcontacts?organization_id={{$ctrl.organizationId}}&status[]=uncontacted&assigned_to[]={{$ctrl.person.id}}"
+            <a href class="warning-highlight"
+               ng-href="/ministries/{{$ctrl.organizationId}}/people?assigned_to={{$ctrl.person.id}}&statuses=uncontacted"
                ng-if="$ctrl.report.uncontacted_count">
                 {{$ctrl.report.uncontacted_count}}
             </a>
