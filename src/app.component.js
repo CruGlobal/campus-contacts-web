@@ -8,6 +8,7 @@ angular.module('missionhubApp').component('app', {
     bindings: {
         hideHeader: '<',
         hideFooter: '<',
+        hideMenuLinks: '<',
     },
 });
 

@@ -5,6 +5,9 @@ import './navSearch.component';
 angular.module('missionhubApp').component('navHeader', {
     controller: navHeaderController,
     template: template,
+    bindings: {
+        hideMenuLinks: '<',
+    },
 });
 
 function navHeaderController(
@@ -13,7 +16,6 @@ function navHeaderController(
     envService,
     authenticationService,
 ) {
-    this.authenticationService = authenticationService;
     this.loggedInPerson = loggedInPerson;
     this.state = state;
 
