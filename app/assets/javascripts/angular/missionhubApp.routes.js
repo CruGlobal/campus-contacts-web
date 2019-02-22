@@ -267,7 +267,7 @@ angular
                 },
             })
             .state({
-                name: 'app.auth',
+                name: 'appWithoutMenus.auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {
