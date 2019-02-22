@@ -5,6 +5,9 @@ import './navSearch.component';
 angular.module('missionhubApp').component('navHeader', {
     controller: navHeaderController,
     template: template,
+    bindings: {
+        hideMenuLinks: '<',
+    },
 });
 
 function navHeaderController(

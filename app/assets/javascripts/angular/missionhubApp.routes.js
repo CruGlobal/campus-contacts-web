@@ -246,6 +246,7 @@ angular
                 resolve: {
                     hideHeader: () => false,
                     hideFooter: () => false,
+                    hideMenuLinks: () => false,
                 },
             })
             .state({
@@ -256,6 +257,18 @@ angular
                 resolve: {
                     hideHeader: () => true,
                     hideFooter: () => true,
+                    hideMenuLinks: () => false,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks',
+                url: '',
+                abstract: true,
+                component: 'app',
+                resolve: {
+                    hideHeader: () => false,
+                    hideFooter: () => false,
+                    hideMenuLinks: () => true,
                 },
             })
             .state({
@@ -267,7 +280,7 @@ angular
                 },
             })
             .state({
-                name: 'app.auth',
+                name: 'appWithoutMenuLinks.auth',
                 url: '/auth?acces_token',
                 component: 'signIn',
                 resolve: {

@@ -93,5 +93,9 @@ function loggedInPerson(
                 },
             );
         },
+
+        clearLoadingPromise: () => {
+            loadingPromise = null;
+        },
     };
 }
