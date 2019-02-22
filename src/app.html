@@ -1,6 +1,6 @@
 <header ng-cloak ng-if="!$ctrl.hideHeader">
     <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
-    <nav-header></nav-header>
+    <nav-header hide-menu-links="$ctrl.hideMenuLinks"></nav-header>
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
 <section class='main-container pt2 pb2 flex-grow-5' ng-cloak>
