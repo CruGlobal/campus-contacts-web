@@ -54,7 +54,7 @@
         </li>
     </ul>
 
-    <ul class="list fr fade" ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.loggedIn">
+    <ul class="list fr fade" ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.loggedIn && !$ctrl.loggedInPerson.loadingPromise">
         <li class='fl'>
             <a href="http://help.missionhub.com" class='pivot-white f4 pr3 pl3' target='_blank'>{{ 'nav.support' | t }}</a>
         </li>
