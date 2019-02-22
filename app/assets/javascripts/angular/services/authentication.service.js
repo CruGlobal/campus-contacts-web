@@ -174,6 +174,7 @@ function authenticationService(
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
         JsonApiDataStore.store.reset();
+        loggedInPerson.clearLoadingPromise();
 
         $rootScope.$broadcast('state:changed', state);
     };
