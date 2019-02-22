@@ -51,7 +51,7 @@ function authenticationService(
     const setupUserSettings = async organization => {
         JsonApiDataStore.store.reset();
         const me = await loggedInPerson.load();
-        setState(organization, me);
+        setState(organization ? organization.id : 0, me);
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
     };
@@ -149,10 +149,10 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const setState = (organization, person) => {
+    const setState = (organizationId, person) => {
         const newState = {
             hasMissionhubAccess: true,
-            currentOrganization: organization ? organization.id : 0,
+            currentOrganization: organizationId,
             organization_with_missing_signatures_ids: person
                 ? person.organization_with_missing_signatures_ids
                 : [],
