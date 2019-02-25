@@ -701,7 +701,11 @@ export default {
             },
             show: {
                 apply_labels: 'Apply the following labels to {{name}}.',
+                apply_labels_undefined:
+                    'Apply the following labels to this person.',
                 apply_groups: 'Assign {{name}} to the following groups.',
+                apply_groups_undefined:
+                    'Assign this person to the following groups.',
                 no_groups: 'No groups assigned.',
                 no_labels: 'No labels assigned.',
             },
