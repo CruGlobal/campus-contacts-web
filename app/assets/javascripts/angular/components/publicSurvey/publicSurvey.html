@@ -25,8 +25,9 @@
                 <div class="pa4 tl">
                     <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.survey.title }}</h1>
                     <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.survey.login_paragraph }}</p>
-                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && $ctrl.survey.post_survey_message">{{ $ctrl.survey.post_survey_message }}</p>
-                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && !$ctrl.survey.post_survey_message">{{ 'surveys:publicView.post_survey_message' | t }}</p>
+                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && $ctrl.survey.post_survey_message">
+                        {{ $ctrl.survey.post_survey_message || ('surveys:publicView.post_survey_message' | t) }}
+                    </p>
 
                     <survey-form-public
                         survey="$ctrl.survey"
