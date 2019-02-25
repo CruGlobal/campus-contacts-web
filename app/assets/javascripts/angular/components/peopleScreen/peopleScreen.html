@@ -23,7 +23,9 @@
                      ng-if="$first"
                      ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
                      ng-click="column.sortable && $ctrl.setSortColumn(column)">
-                    <span>{{column.label | t}}</span>
+                    <span>
+                        {{column.label | t}}
+                    </span>
                     <div class="normal-column sort-order-column" ng-if="column.sortable">
                         <ng-md-icon icon="arrow_downward" size="12"
                                     ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
@@ -43,7 +45,14 @@
                  ng-if="!$first"
                  ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
                  ng-click="column.sortable && $ctrl.setSortColumn(column)">
-                <span>{{column.label | t}}</span>
+                <span
+                    ng-if="
+                        column.name !== 'lastSurvey' ||
+                        ($ctrl.surveyId && column.name === 'lastSurvey')
+                    "
+                >
+                    {{column.label | t}}
+                </span>
                 <div class="normal-column sort-order-column" ng-if="column.sortable">
                     <ng-md-icon icon="arrow_downward" size="12"
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
@@ -106,7 +115,8 @@
                     selected="$ctrl.multiSelection[person.id]"
                     person="person" organization-id="$ctrl.org.id"
                     questions="$ctrl.questions"
-                    odd="$odd">
+                    odd="$odd",
+                    show-last-survey="$ctrl.surveyId">
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}

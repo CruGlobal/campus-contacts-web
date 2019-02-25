@@ -506,6 +506,7 @@ export default {
                 status: 'Status',
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
+                lastSurvey: 'Last Survey',
             },
             roots: 'Ministries',
             suborgs: {
