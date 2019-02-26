@@ -1,0 +1,47 @@
+<div>
+  <h1 class="f2 pivot-dark-blue fw6 mv4">
+    {{ 'ministries.cleanup.title' | t }}
+  </h1>
+  <p class="pivot-gray-darker f4-5  mb5" bind-dynamic="'ministries.cleanup.description' | t "></p>
+
+  <div class="flex justify-between items-stretch">
+    <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
+      <h4 class="mt0 mb4 fw6 tracked ttu">{{ 'ministries.cleanup.archive_alumni' | t }}</h4>
+      <p class="lh-copy w-80 mt0 mb0">{{ 'ministries.cleanup.archive_alumni_description' | t }} </p>
+      <a href class="f6 link pa2 ba b--pivot-dark-blue ihshort tc mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ui-sref="app.ministries.ministry.people({ orgId: $ctrl.orgId })">{{ 'ministries.cleanup.open_contacts' | t }}</a>
+    </div>
+    <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
+      <h4 class="mt0 mb4 fw6 tracked ttu flex items-center">
+        {{ 'ministries.cleanup.archive_by_date' | t }}
+        <!-- <icon-button class='ml0' icon='help' ></icon-button> --><!-- TODO: turn into tooltip when the copy for it is available -->
+    </h4>
+    <fieldset class="ba b--transparent pr0 mh0 w-100 pl0 pv0 mv0">
+        <p class="lh-copy w-80 mt0">
+            {{ 'ministries.cleanup.archive_by_date_description' | t }}
+        </p>
+        <label for="archiveDate" class="dn">Archive Date</label>
+        <input
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            type="date"
+            ng-model="$ctrl.archiveBeforeDate">
+        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)">{{ 'ministries.cleanup.archive_by_date' | t }}</button>
+      </fieldset>
+    </div>
+    <div class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32">
+      <h4 class="mt0 mb4 fw6 tracked ttu flex items-center">
+        {{ 'ministries.cleanup.archive_by_inactivty' | t }}
+        <!-- <icon-button class='ml0' icon='help'></icon-button> --><!-- TODO: turn into tooltip when the copy for it is available -->
+        </h4>
+      <fieldset class="ba b--transparent pr0 mh0 w-100 pl0 pv0 mv0">
+        <p class="lh-copy w-80 mt0">{{ 'ministries.cleanup.archive_by_inactivty_description' | t }}</p>
+        <label for="archiveInactivity" class="dn">Archive Inactivity Date</label>
+         <input
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            value="08/31/2018"
+            type="date"
+            ng-model="$ctrl.archiveInactivityDate">
+        <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)">{{ 'ministries.cleanup.archive_by_inactivty' | t }}</button>
+      </fieldset>
+    </div>
+  </div>
+</div>

@@ -233,6 +233,7 @@ export default {
                     delete: 'Error occurred while deleting the organization.',
                     load_ancestry:
                         "Error occurred while loading the organization's ancestors",
+                    cleanup: 'Error occurred while archviving contacts',
                     loadAll: 'Error occurred while loading your organizations',
                 },
                 organization_overview: {
@@ -460,6 +461,24 @@ export default {
                 columns: {
                     name: 'Label Name',
                 },
+            },
+            cleanup: {
+                title: 'Organization Cleanup',
+                description:
+                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!",
+                archive_alumni: 'Archive Alumni',
+                archive_alumni_description:
+                    'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',
+                archive_by_date: 'Archive by date',
+                archive_by_date_description:
+                    'Archive contacts who have been added before:',
+                archive_by_inactivty: 'Archive by inactivty',
+                archive_by_inactivty_description:
+                    'Archive people who have been inactive since:',
+                open_contacts: 'Open Contacts',
+                success_message: 'Your contacts have been archived!',
+                success_title: 'You Rock!',
+                success_cta: 'Take Me Home',
             },
             people: {
                 activity: {
