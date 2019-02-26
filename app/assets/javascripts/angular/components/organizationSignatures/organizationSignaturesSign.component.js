@@ -62,7 +62,7 @@ function organizationSignaturesSignController(
     };
 
     this.$onInit = () => {
-        //authenticationService.updateUserData();
+        authenticationService.updateUserData();
 
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
