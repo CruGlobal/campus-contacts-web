@@ -247,7 +247,6 @@ export default {
                         'Error occurred while loading the number of people in the organization',
                     load_people_chunk:
                         'Error occurred while loading the next batch of people',
-                    merge_people: 'Error occurred while merging people',
                 },
                 organization_overview_suborgs: {
                     load_org_chunk:
@@ -425,28 +424,6 @@ export default {
             unchanged: 'Unchanged',
         },
         member: 'Member',
-        merge_winner: {
-            merge: 'Merge',
-            subtitle:
-                'Choose the winner of the merge. The other people will be merged into the winner.',
-            title: 'Merge Winner',
-            person_fields: {
-                first_name: 'First name',
-                last_name: 'Last name',
-                gender: 'Gender',
-                email_addresses: 'Email addresses',
-                phone_numbers: 'Phone numbers',
-                created_date: 'Person created',
-                updated_date: 'Person updated',
-            },
-            user_fields: {
-                id: 'User id',
-                username: 'Username',
-                created_date: 'User created',
-                updated_date: 'User updated',
-                login_date: 'Last login',
-            },
-        },
         messages: {
             email_title: 'Email Contacts',
             email_subtitle: 'Send an email to {{recipients}}.',
@@ -537,9 +514,6 @@ export default {
                 },
                 leaders: 'leaders',
                 mass_edit_hover: 'Mass edit the selected contacts',
-                merge_disabled_hover:
-                    'Select between 2 and 4 contacts to merge them',
-                merge_hover: 'Merge the selected contacts',
                 name: 'Name',
                 profile: {
                     header: 'Profile',
@@ -551,6 +525,7 @@ export default {
                 status: 'Status',
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
+                lastSurvey: 'Last Survey',
             },
             roots: 'Ministries',
             suborgs: {
@@ -704,6 +679,21 @@ export default {
         signatures: {
             clear: 'Clear filters',
             title: 'Signatures',
+            downloadCsv: 'Download Csv',
+            grid: {
+                dateSigned: 'Date Signed',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                codeOfConduct: 'Code of Conduct',
+                statementOfFaith: 'Statement of Faith',
+                notAccecptedYet: 'Not Accepted Yet',
+                organization: 'Organization',
+                accepted: 'Accepted',
+                declined: 'Declined',
+                notFound: 'No Signatures found',
+                loading: 'Loading...',
+            },
+            searchPlaceholder: 'Search',
         },
         sporadically: 'Sporadically',
         transfer: {

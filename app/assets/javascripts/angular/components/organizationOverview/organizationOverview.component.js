@@ -35,7 +35,7 @@ function organizationOverviewController(
 
     vm.showOrgNav = () =>
         !$state.$current.name.match(
-            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators|cleanup)/,
+            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators|cleanup|signatures)/,
         );
 
     vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
