@@ -660,6 +660,21 @@ export default {
         signatures: {
             clear: 'Clear filters',
             title: 'Signatures',
+            downloadCsv: 'Download Csv',
+            grid: {
+                dateSigned: 'Date Signed',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                codeOfConduct: 'Code of Conduct',
+                statementOfFaith: 'Statement of Faith',
+                notAccecptedYet: 'Not Accepted Yet',
+                organization: 'Organization',
+                accepted: 'Accepted',
+                declined: 'Declined',
+                notFound: 'No Signatures found',
+                loading: 'Loading...',
+            },
+            searchPlaceholder: 'Search',
         },
         sporadically: 'Sporadically',
         transfer: {
