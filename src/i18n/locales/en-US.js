@@ -501,6 +501,7 @@ export default {
                 open_contacts: 'Open Contacts',
                 success_message: 'Your contacts have been archived!',
                 success_title: 'You Rock!',
+                success_cta: 'Take Me Home',
             },
             people: {
                 activity: {

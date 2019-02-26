@@ -10,16 +10,19 @@ angular.module('missionhubApp').component('organizationCleanup', {
     controller: organizationCleanupController,
 });
 
-function organizationCleanupController(httpProxy, $scope) {
+function organizationCleanupController(
+    httpProxy,
+    $scope,
+    $filter,
+    $uibModal,
+    $state,
+) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
-    this.cleanupCompleted = false;
     this.checkIcon = checkIcon;
 
     const archiveContacts = archiveBy => async dateBy => {
         if (!dateBy) return;
-
-        this.cleanupCompleted = false;
 
         const params = {
             type: 'bulk_archive_contacts',
@@ -42,7 +45,29 @@ function organizationCleanupController(httpProxy, $scope) {
             },
         );
 
-        if (data) this.cleanupCompleted = true;
+        if (data) {
+            const modalInstance = $uibModal.open({
+                component: 'iconModal',
+                resolve: {
+                    title: () =>
+                        $filter('t')('ministries.cleanup.success_title'),
+                    paragraphs: () => [
+                        $filter('t')('ministries.cleanup.success_message'),
+                    ],
+                    icon: () => this.checkIcon,
+                    closeLabel: () =>
+                        $filter('t')('ministries.cleanup.success_cta'),
+                },
+                windowClass: 'pivot_theme',
+                backdrop: 'static',
+                keyboard: false,
+            });
+
+            const result = await modalInstance.result;
+            $state.go('app.ministries.ministry.people', {
+                orgId: this.orgId,
+            });
+        }
 
         $scope.$apply();
     };
