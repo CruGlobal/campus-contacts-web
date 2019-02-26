@@ -125,4 +125,8 @@ function organizationSignaturesController(
         tableState.pagination.start = 0;
         loadData(tableState, searchText);
     };
+
+    this.searchOnChange = (searchText, tableState) => {
+        if (!searchText) this.search(searchText, tableState);
+    };
 }

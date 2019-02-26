@@ -11,6 +11,8 @@
                 <input type='text'
                     placeholder="{{ 'signatures.searchPlaceholder' | t }}"
                     class='pa3 input-reset cursor-text bg-white bw0 pivot-gray-darker ihshort br2 v-btm'
+                    ng-change="$ctrl.searchOnChange(search, $ctrl.tableState)"
+                    ng-model-options='{ debounce: 500 }'
                     ng-model="search"
                     ng-keyup="$event.keyCode == 13 && $ctrl.search(search, $ctrl.tableState)"/>
                 <button class='f5 ml1 pv3 ph4 b--pivot-gray-darker bg-pivot-gray-darker pivot-white br2 search dim' ng-click="$ctrl.search(search, $ctrl.tableState)"></button>
