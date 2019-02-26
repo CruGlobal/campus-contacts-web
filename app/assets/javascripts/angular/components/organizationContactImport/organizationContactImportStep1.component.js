@@ -19,11 +19,7 @@ angular.module('missionhubApp').component('organizationContactImportStep1', {
     controller: organizationContactImportStep1Controller,
 });
 
-function organizationContactImportStep1Controller(
-    $scope,
-    $uibModal,
-    $location,
-) {
+function organizationContactImportStep1Controller($scope, $uibModal, $state) {
     this.fileIcon = fileIcon;
     this.warningIcon = warningIcon;
     this.errorIcon = errorIcon;
@@ -85,7 +81,9 @@ function organizationContactImportStep1Controller(
                 size: 'sm',
             })
             .result.then(newSurvey => {
-                this.selectedSurvey = newSurvey;
+                $state.go('app.ministries.ministry.survey.manage', {
+                    surveyId: newSurvey.id,
+                });
             });
     };
 }
