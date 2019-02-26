@@ -23,25 +23,27 @@
                         <img class="user-avatar br-100" ng-src="{{$ctrl.loggedInPerson.person.picture}}">
                     </div>
                 </a>
-                <ul>
-                    <li>
-                        <a ui-sref="app.people.person.defaultTab({
-                            personId: $ctrl.loggedInPerson.person.id,
-                            orgId: $ctrl.state.currentOrganization
-                          })">
-                            {{ 'nav.my_profile' | t }}
-                        </a>
-                    </li>
-                    <li>
-                        <a ui-sref="app.userPreferences">{{ 'nav.preferences' | t }}</a>
-                    </li>
-                    <li>
-                        <a href="" ng-click="$root.openAboutModal()">About</a>
-                    </li>
-                    <li>
-                        <a href ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
-                    </li>
-                </ul>
+                <div>
+                    <ul>
+                        <li>
+                            <a ui-sref="app.people.person.defaultTab({
+                                personId: $ctrl.loggedInPerson.person.id,
+                                orgId: $ctrl.state.currentOrganization
+                              })">
+                                {{ 'nav.my_profile' | t }}
+                            </a>
+                        </li>
+                        <li>
+                            <a ui-sref="app.userPreferences">{{ 'nav.preferences' | t }}</a>
+                        </li>
+                        <li>
+                            <a href="" ng-click="$root.openAboutModal()">About</a>
+                        </li>
+                        <li>
+                            <a href ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </span>
