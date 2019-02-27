@@ -981,6 +981,7 @@ export default {
             exactly: 'Exactly',
             contains: 'Contains',
             doesNotContain: 'Does not contain',
+            noResponse: 'No response',
         },
     },
     movementIndicators: {

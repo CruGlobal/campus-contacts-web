@@ -132,11 +132,13 @@
                             <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
                             <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
                             <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
+                            <option value="no_response">{{ 'peopleScreen:answerMatchingOptions.noResponse' | t }}</option>
                         </select>
                         <input
                             type="text"
                             class="w-100 mt-2"
                             ng-model="$ctrl.filters.questions[question.id]"
+                            ng-if="$ctrl.filters.answerMatchingOptions[question.id] !== 'no_response' "
                             ng-model-options="{ debounce: 600 }"
                             ng-change="$ctrl.updateFilters()"
                             placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}">
