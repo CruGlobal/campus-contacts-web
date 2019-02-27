@@ -1,7 +1,7 @@
 <div class="sub-navigation flex bg-white ">
     <div class="main-container flex items-center justify-between">
         <organization-breadcrumbs></organization-breadcrumbs>
-
+        <report-period ng-if="$ctrl.$state.current.name !== 'app.ministries.root'"></report-period>
         <a href
            class="dashboard-edit-toggle tipitmiddle order-2 tr"
            ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
