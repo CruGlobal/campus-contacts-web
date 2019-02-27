@@ -12,8 +12,6 @@ angular
         facebookService,
         analyticsService,
         state,
-        loggedInPerson,
-        $uibModal,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -31,17 +29,6 @@ angular
         if (authenticationService.isTokenValid()) {
             authenticationService.setupAuthenticationState();
             authenticationService.updateUserData();
-
-            loggedInPerson.loadOnce().then(user => {
-                if (user.beta_mode === null) {
-                    $uibModal.open({
-                        component: 'newWelcomeModal',
-                        resolve: {},
-                        windowClass: 'pivot_theme',
-                        size: 'sm',
-                    });
-                }
-            });
         }
 
         facebookService.loadSDK()(document);
