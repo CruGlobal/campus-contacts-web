@@ -22,7 +22,7 @@ function DashboardController(
 
     function activate() {
         loggedInPerson.loadOnce().then(function(me) {
-            if (me.user.beta_mode === null) {
+            if (!me.user.beta_mode) {
                 $uibModal.open({
                     component: 'newWelcomeModal',
                     resolve: {},
