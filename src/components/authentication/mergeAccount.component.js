@@ -17,7 +17,6 @@ function mergeAccountController(
     httpProxy,
     $scope,
     sessionStorageService,
-    $location,
 ) {
     this.inviteFullName = '';
     this.inviteUsername = '';
