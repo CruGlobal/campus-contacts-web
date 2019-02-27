@@ -59,25 +59,6 @@ export default {
             part_time_staff: 'Part Time Field Staff',
             full_time_staff: 'Full Time Supported Staff',
         },
-        beta: {
-            welcome: {
-                accept: "Let's Go!",
-                no_thanks: 'No Thanks',
-                p1:
-                    'We are excited about the improved navigation and performance. We hope you enjoy it, too!',
-                p2:
-                    'If you need any help, click the life ring in the bottom right!',
-                title: 'Welcome to the new MissionHub!',
-                try: 'Try Beta',
-            },
-            goodbye: {
-                no_thanks: 'Not Now',
-                title: 'Say hello to the new',
-                message:
-                    "This website was made in 2011. That's like 98 human years. Wow! It's time to upgrade so we can better serve you. Soon we're all moving to the new web experience. Go there now?",
-                accept: "Let's Go!",
-            },
-        },
         contact: {
             add: 'Add',
             assigned_to: 'Assigned To',
