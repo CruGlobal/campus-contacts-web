@@ -70,6 +70,13 @@ export default {
                 title: 'Welcome to the new MissionHub!',
                 try: 'Try Beta',
             },
+            goodbye: {
+                no_thanks: 'Not Now',
+                title: 'Say hello to the new',
+                message:
+                    "This website was made in 2011. That's like 98 human years. Wow! It's time to upgrade so we can better serve you. Soon we're all moving to the new web experience. Go there now?",
+                accept: "Let's Go!",
+            },
         },
         contact: {
             add: 'Add',
