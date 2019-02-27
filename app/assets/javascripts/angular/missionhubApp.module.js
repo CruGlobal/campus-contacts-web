@@ -18,6 +18,7 @@ import 'angularjs-toaster';
 import 'angularjs-toaster/toaster.scss';
 import 'moment';
 import 'angular-moment';
+import 'angular-smart-table';
 
 export default angular.module('missionhubApp', [
     ngAnimate,
@@ -35,4 +36,5 @@ export default angular.module('missionhubApp', [
     ngScrollGlue,
     angulartics,
     angularticsGoogle,
+    'smart-table',
 ]);

@@ -70,6 +70,13 @@ export default {
                 title: 'Welcome to the new MissionHub!',
                 try: 'Try Beta',
             },
+            goodbye: {
+                no_thanks: 'Not Now',
+                title: 'Say hello to the new',
+                message:
+                    "This website was made in 2011. That's like 98 human years. Wow! It's time to upgrade so we can better serve you. Soon we're all moving to the new web experience. Go there now?",
+                accept: "Let's Go!",
+            },
         },
         contact: {
             add: 'Add',
@@ -233,6 +240,7 @@ export default {
                     delete: 'Error occurred while deleting the organization.',
                     load_ancestry:
                         "Error occurred while loading the organization's ancestors",
+                    cleanup: 'Error occurred while archviving contacts',
                     loadAll: 'Error occurred while loading your organizations',
                 },
                 organization_overview: {
@@ -246,7 +254,6 @@ export default {
                         'Error occurred while loading the number of people in the organization',
                     load_people_chunk:
                         'Error occurred while loading the next batch of people',
-                    merge_people: 'Error occurred while merging people',
                 },
                 organization_overview_suborgs: {
                     load_org_chunk:
@@ -479,28 +486,6 @@ export default {
             unchanged: 'Unchanged',
         },
         member: 'Member',
-        merge_winner: {
-            merge: 'Merge',
-            subtitle:
-                'Choose the winner of the merge. The other people will be merged into the winner.',
-            title: 'Merge Winner',
-            person_fields: {
-                first_name: 'First name',
-                last_name: 'Last name',
-                gender: 'Gender',
-                email_addresses: 'Email addresses',
-                phone_numbers: 'Phone numbers',
-                created_date: 'Person created',
-                updated_date: 'Person updated',
-            },
-            user_fields: {
-                id: 'User id',
-                username: 'Username',
-                created_date: 'User created',
-                updated_date: 'User updated',
-                login_date: 'Last login',
-            },
-        },
         messages: {
             email_title: 'Email Contacts',
             email_subtitle: 'Send an email to {{recipients}}.',
@@ -539,6 +524,24 @@ export default {
                     name: 'Label Name',
                 },
             },
+            cleanup: {
+                title: 'Organization Cleanup',
+                description:
+                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!",
+                archive_alumni: 'Archive Alumni',
+                archive_alumni_description:
+                    'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',
+                archive_by_date: 'Archive by date',
+                archive_by_date_description:
+                    'Archive contacts who have been added before:',
+                archive_by_inactivty: 'Archive by inactivty',
+                archive_by_inactivty_description:
+                    'Archive people who have been inactive since:',
+                open_contacts: 'Open Contacts',
+                success_message: 'Your contacts have been archived!',
+                success_title: 'You Rock!',
+                success_cta: 'Take Me Home',
+            },
             people: {
                 activity: {
                     header: 'Activity',
@@ -573,9 +576,6 @@ export default {
                 },
                 leaders: 'leaders',
                 mass_edit_hover: 'Mass edit the selected contacts',
-                merge_disabled_hover:
-                    'Select between 2 and 4 contacts to merge them',
-                merge_hover: 'Merge the selected contacts',
                 name: 'Name',
                 profile: {
                     header: 'Profile',
@@ -587,6 +587,7 @@ export default {
                 status: 'Status',
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
+                lastSurvey: 'Last Survey',
             },
             roots: 'Ministries',
             suborgs: {
@@ -653,6 +654,11 @@ export default {
             terms: 'Terms of Service',
             trend: 'Trend Tracker',
             copyright: 'Copyright {{ year }} Cru. All Rights Reserved.',
+            warning: {
+                title: 'Warning',
+                body:
+                    'These tools will be removed when we shut down Legacy. We are working to bring you a better dashboard experience in the near future!',
+            },
         },
         organizations: {
             manage: 'Manage Ministries',
@@ -768,6 +774,21 @@ export default {
                         "<p><b>The sole basis of our beliefs is the Bible, God's inerrant written Word, the 66 books of the Old and New Testaments. We believe that it was uniquely, verbally and fully inspired by the Holy Spirit, and that it was written without factual error in the original manuscripts. It is the supreme and final authority in all matters on which it speaks.</b></p><p><b>We accept those large areas of doctrinal teaching on which, historically, there has been general agreement among all true Christians. Because of the specialized calling of our movement, we desire to allow for freedom of conviction on other doctrinal matters, provided that any interpretation is based upon the Bible alone, and that no such interpretation shall become an issue which hinders the ministry to which God has called us. We explicitly affirm our belief in basic Bible teachings as follows:</b></p><p><b>1.</b> There is one true God, eternally existing in three persons—the Father, Son and Holy Spirit—each of whom possesses equally all the attributes of Deity and the characteristics of personality.</p><p><b>2.</b> Jesus Christ is God, the living Word, who became flesh through His miraculous conception by the Holy Spirit and His virgin birth. Hence, He is perfect Deity and true humanity united in one person forever.</p><p><b>3.</b> He lived a sinless life and voluntarily atoned for our sins by dying on the cross as our substitute, thus satisfying divine justice and accomplishing salvation for all who trust in Him alone.</p><p><b>4.</b> He rose from the dead in the same body, though glorified, in which He had lived and died.</p><p><b>5.</b> He ascended bodily into heaven and sat down at the right hand of God the Father, where He, the only mediator between God and mankind, continually makes intercession for His own.</p><p><b>6.</b> We were originally created in the image of God. We sinned by disobeying God; thus, we were alienated from our Creator.That historic fall brought all mankind under divine condemnation.</p><p><b>7.</b> Our nature is corrupted, and we are thus totally unable to please God. Every person is in need of regeneration and renewal by the Holy Spirit.</p><p><b>8.</b> Our salvation is wholly a work of God's free grace and is not the work, in whole or in part, of human works or goodness or religious ceremony. God imputes His righteousness to those who put their faith in Christ alone for their salvation, and thereby justifies them in His sight.</p><p><b>9.</b> It is the privilege of all who are born again of the Spirit to be assured of their salvation from the very moment in which they trust Christ as their Saviour. This assurance is not based upon any kind of human merit, but is produced by the witness of the Holy Spirit, who confirms in the believer the testimony of God in His written Word.</p><p><b>10.</b> The Holy Spirit has come into the world to reveal and glorify Christ and to apply the saving work of Christ to men and women. He convicts and draws sinners to Christ, imparts new life to them, continually indwells them from the moment of spiritual birth and seals them until the day of redemption. His fullness, power and control are appropriated in the believer's life by faith.</p><p><b>11.</b> We, as believers, are called to live in the power of the indwelling Spirit so that we will not fulfill the lust of the flesh but will bear fruit to the glory of God.</p><p><b>12.</b> Jesus Christ is the Head of the Church, His Body, which is composed of all men and women, living and dead, who have been joined to Him through saving faith.</p><p><b>13.</b> God admonishes His people to assemble together regularly for worship, for participation in ordinances, for edification through the Scriptures and for mutual encouragement.</p><p><b>14.</b> At physical death the believers enter immediately into eternal conscious fellowship with the Lord, and await the resurrection of their bodies to everlasting glory and blessing.</p><p><b>15.</b> At physical death the unbelievers enter immediately into eternal conscious separation from the Lord and await the resurrection of their bodies to everlasting judgment and condemnation.</p><p><b>16.</b> Jesus Christ will come again to the earth—personally, visibly and bodily—to consummate history and the eternal plan of God.</p><p><b>17.</b> The Lord Jesus Christ commanded all believers to proclaim the gospel throughout the world and to disciple men and women of every nation. The fulfillment of that Great Commission requires that all worldly and personal ambition be subordinated to a total commitment to \"Him who loved us and gave Himself for us.\"</p><p><b>Without mental reservation, I hereby subscribe to the above statements and pledge myself to help fulfil the Great Commission in our generation, depending upon the Holy Spirit to guide and empower me.</b></p>",
                 },
             },
+            downloadCsv: 'Download Csv',
+            grid: {
+                dateSigned: 'Date Signed',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                codeOfConduct: 'Code of Conduct',
+                statementOfFaith: 'Statement of Faith',
+                notAccecptedYet: 'Not Accepted Yet',
+                organization: 'Organization',
+                accepted: 'Accepted',
+                declined: 'Declined',
+                notFound: 'No Signatures found',
+                loading: 'Loading...',
+            },
+            searchPlaceholder: 'Search',
         },
         sporadically: 'Sporadically',
         transfer: {

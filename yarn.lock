@@ -1169,6 +1169,11 @@ angular-moment@^1.3.0:
   dependencies:
     moment ">=2.8.0 <3.0.0"
 
+angular-smart-table@^2.1.11:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/angular-smart-table/-/angular-smart-table-2.1.11.tgz#d0ca625f5bfb873bf3748ab861c82892e42ddfa2"
+  integrity sha512-8ZSGygQqVBkpPDzb0382ujK1eOr8fnePXpzq+sUBkUsvRaEgMeY6VoFpWmg106472mD6oMNXIW9+VDQKllXa0w==
+
 angular-ui-bootstrap@~2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
