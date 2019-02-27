@@ -982,6 +982,7 @@ export default {
             contains: 'Contains',
             doesNotContain: 'Does not contain',
             noResponse: 'No response',
+            anyResponse: 'Any response',
         },
     },
     movementIndicators: {
