@@ -367,36 +367,6 @@ function peopleScreenController(
             });
     };
 
-    // Return a boolean indicating whether the selected people can be merged
-    this.mergeable = () => {
-        // Only 2 - 4 people may be merged at a time
-        return this.selectedCount >= 2 && this.selectedCount <= 4;
-    };
-
-    this.merge = () => {
-        if (!this.mergeable()) {
-            return;
-        }
-
-        const personIds = getSelectedPeople();
-        $uibModal
-            .open({
-                component: 'mergeWinnerModal',
-                resolve: {
-                    choices: _.constant(personIds),
-                },
-                windowClass: 'pivot_theme',
-                size: 'md',
-            })
-            .result.then(winner => {
-                return peopleScreenService
-                    .mergePeople(personIds, winner.id)
-                    .then(() => {
-                        removePeopleFromList(_.without(personIds, winner.id));
-                    });
-            });
-    };
-
     this.sendMessage = medium => {
         $uibModal.open({
             component: 'messageModal',
