@@ -17,6 +17,7 @@ function mergeAccountController(
     httpProxy,
     $scope,
     sessionStorageService,
+    $location,
 ) {
     this.inviteFullName = '';
     this.inviteUsername = '';
@@ -40,7 +41,7 @@ function mergeAccountController(
     };
 
     this.cancelMerge = () => {
-        authenticationService.removeAccess();
+        authenticationService.destroyTheKeyAccess();
     };
 
     this.mergeAccount = async () => {

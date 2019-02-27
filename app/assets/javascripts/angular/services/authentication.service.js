@@ -30,6 +30,12 @@ function authenticationService(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
 
+    const theKeylogoutUrl = `${envService.read(
+        'theKeyUrl',
+    )}/logout?&client_id=${envService.read(
+        'theKeyClientId',
+    )}&service=https://${$location.host()}${port}/sign-in`;
+
     const getJwtToken = () => {
         return (
             (envService.is('development')
@@ -202,6 +208,11 @@ function authenticationService(
     };
 
     return {
+        destroyTheKeyAccess: () => {
+            clearToken();
+            clearState();
+            $window.location.href = theKeylogoutUrl;
+        },
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
         storeJwtToken: storeJwtToken,
