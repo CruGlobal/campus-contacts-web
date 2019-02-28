@@ -173,7 +173,7 @@ function peopleScreenService(
             'fields[email_address]': 'email,primary',
             'fields[phone_number]': 'number,primary,validated',
             'fields[contact_assignment]': 'assigned_to,organization,created_at',
-            'fields[answer_sheet]': 'answers,survey',
+            'fields[answer_sheet]': 'answers,survey,updated_at',
             'fields[answer]': 'value,question',
         }),
 
@@ -209,17 +209,6 @@ function peopleScreenService(
                     }),
                     {},
                 ),
-            });
-        },
-
-        // Merge the specified people
-        mergePeople: function(personIds, winnerId) {
-            const model = new JsonApiDataStore.Model('bulk_people_change');
-            model.setAttribute('person_ids', personIds);
-            model.setAttribute('winner_id', winnerId);
-            return httpProxy.post('/person_merges', model.serialize(), {
-                errorMessage:
-                    'error.messages.organization_overview_people.merge_people',
             });
         },
 

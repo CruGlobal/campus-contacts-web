@@ -5,33 +5,16 @@ angular.module('missionhubApp').component('dashboard', {
     template: template,
 });
 
-function DashboardController(
-    loggedInPerson,
-    periodService,
-    $uibModal,
-    $rootScope,
-) {
+function DashboardController(periodService, $rootScope) {
     const vm = this;
     let deregisterEditOrganizationsEvent;
 
     vm.editOrganizations = false;
     vm.getPeriod = periodService.getPeriod;
-    vm.loggedInPerson = loggedInPerson;
     vm.$onInit = activate;
     vm.$onDestroy = deactivate;
 
     function activate() {
-        loggedInPerson.loadOnce().then(function(me) {
-            if (me.user.beta_mode === null) {
-                $uibModal.open({
-                    component: 'newWelcomeModal',
-                    resolve: {},
-                    windowClass: 'pivot_theme',
-                    size: 'sm',
-                });
-            }
-        });
-
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
             function(event, value) {

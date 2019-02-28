@@ -109,6 +109,19 @@ function personService(
             return orgPermission && orgPermission.followup_status;
         },
 
+        getLastSurvey: person => {
+            if (!person.answer_sheets) return null;
+
+            return person.answer_sheets.reduce((acc, s) => {
+                const d1 = Date.parse(acc);
+                const d2 = Date.parse(s.updated_at);
+
+                if (!d1) return s.updated_at;
+
+                return d1 < d2 ? s.updated_at : acc;
+            }, '');
+        },
+
         // Return the Cru status of the person in a particular organization
         getCruStatus: function(person, organizationId) {
             var orgPermission = personService.getOrgPermission(

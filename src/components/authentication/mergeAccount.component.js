@@ -40,7 +40,7 @@ function mergeAccountController(
     };
 
     this.cancelMerge = () => {
-        authenticationService.removeAccess();
+        authenticationService.destroyTheKeyAccess();
     };
 
     this.mergeAccount = async () => {

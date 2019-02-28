@@ -10,6 +10,7 @@ angular.module('missionhubApp').component('ministryViewPerson', {
         selected: '=',
         questions: '<',
         odd: '<',
+        showLastSurvey: '=',
     },
 });
 
@@ -29,37 +30,34 @@ function ministryViewPersonController(
     vm.isContact = isContact;
     vm.followupStatusOptions = personService.getFollowupStatusOptions();
 
-    vm.$onInit = activate;
+    this.$onChanges = changes => {
+        if (
+            !changes.person ||
+            changes.person.currentValue === changes.person.previousValue
+        )
+            return;
 
-    function activate() {
-        $scope.$watchCollection(
-            '$ctrl.person.organizational_permissions',
-            function() {
-                vm.orgPermission = personService.getOrgPermission(
-                    vm.person,
-                    vm.organizationId,
-                );
-            },
+        const person = changes.person.currentValue;
+
+        if (this.showLastSurvey) {
+            if (!person.answer_sheets) this.lastSurvey = null;
+
+            this.lastSurvey = personService.getLastSurvey(person);
+        }
+
+        this.orgPermission = personService.getOrgPermission(
+            person,
+            this.organizationId,
         );
 
-        $scope.$watchCollection(
-            '$ctrl.person.reverse_contact_assignments',
-            function() {
-                vm.assignedTo = personService.getAssignedTo(
-                    vm.person,
-                    vm.organizationId,
-                );
-            },
+        this.assignedTo = personService.getAssignedTo(
+            person,
+            this.organizationId,
         );
 
-        $scope.$watchCollection('$ctrl.person.phone_numbers', function() {
-            vm.phoneNumber = personService.getPhoneNumber(vm.person);
-        });
-
-        $scope.$watchCollection('$ctrl.person.email_addresses', function() {
-            vm.emailAddress = personService.getEmailAddress(vm.person);
-        });
-    }
+        this.phoneNumber = personService.getPhoneNumber(person);
+        this.emailAddress = personService.getEmailAddress(person);
+    };
 
     function addAssignment(person) {
         return personProfileService

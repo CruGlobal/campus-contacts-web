@@ -129,6 +129,8 @@ function peopleScreenController(
     let unsubscribe = null;
 
     this.$onInit = () => {
+        if (this.surveyId) addLastSurveyColumn();
+
         unsubscribe = $rootScope.$on('personCreated', (event, person) => {
             onNewPerson(person);
         });
@@ -147,6 +149,25 @@ function peopleScreenController(
 
     this.$onDestroy = () => {
         unsubscribe();
+    };
+
+    const addLastSurveyColumn = () => {
+        this.columns.push({
+            name: 'lastSurvey',
+            cssClass: 'detail-column assigned-to-column',
+            label: 'ministries.people.lastSurvey',
+            sortable: true,
+            getSortKey: person => {
+                const lastSurvey = personService.getLastSurvey(person);
+                if (!lastSurvey) return '1969-12-12 00:00:00'; //Force null to buttom of list
+                return lastSurvey;
+            },
+            orderFields: [
+                'answer_sheets.updated_at',
+                'last_name',
+                'first_name',
+            ],
+        });
     };
 
     const selectedCount = () => {
@@ -182,7 +203,6 @@ function peopleScreenController(
             )
             .then(resp => {
                 const oldPeople = this.people;
-
                 this.people = resp.list;
                 this.loadedAll = resp.loadedAll;
                 this.totalCount = resp.total;
@@ -345,36 +365,6 @@ function peopleScreenController(
                         originalSelectAllValue &&
                         getSelectedPeople().length > 0;
                 });
-            });
-    };
-
-    // Return a boolean indicating whether the selected people can be merged
-    this.mergeable = () => {
-        // Only 2 - 4 people may be merged at a time
-        return this.selectedCount >= 2 && this.selectedCount <= 4;
-    };
-
-    this.merge = () => {
-        if (!this.mergeable()) {
-            return;
-        }
-
-        const personIds = getSelectedPeople();
-        $uibModal
-            .open({
-                component: 'mergeWinnerModal',
-                resolve: {
-                    choices: _.constant(personIds),
-                },
-                windowClass: 'pivot_theme',
-                size: 'md',
-            })
-            .result.then(winner => {
-                return peopleScreenService
-                    .mergePeople(personIds, winner.id)
-                    .then(() => {
-                        removePeopleFromList(_.without(personIds, winner.id));
-                    });
             });
     };
 

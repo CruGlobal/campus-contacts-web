@@ -33,9 +33,10 @@ function editGroupOrLabelAssignmentsController(
         loadEntryOptions();
         buildSelectedDict();
 
-        vm.title = isOrgLabelsMode()
+        const title = isOrgLabelsMode()
             ? 'people.show.apply_labels'
             : 'people.show.apply_groups';
+        vm.title = vm.resolve.person.first_name ? title : `${title}_undefined`;
         vm.subtitle = isOrgLabelsMode() ? 'people.index.labels' : 'nav.groups';
     }
 
