@@ -11,11 +11,13 @@ organization-contact-import {
     }
 
     .header {
+        background-color: $pivot-darker-blue;
+
         svg {
             height: 16px;
 
             path {
-                fill: $pivot-dark-blue;
+                fill: $white;
             }
         }
     }
@@ -322,7 +324,7 @@ organization-contact-import {
             border-bottom: 1px solid transparent;
 
             &.active {
-                border-bottom: 1px solid $blue-1;
+                //border-bottom: 1px solid $blue-1;
             }
 
             a {
