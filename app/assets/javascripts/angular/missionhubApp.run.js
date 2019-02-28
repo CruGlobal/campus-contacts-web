@@ -41,7 +41,7 @@ angular
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
-            if ($location.host() === 'mhub.cc')
+            if ($location.host().includes('mhub.cc'))
                 $window.location.href = envService.read('getMissionHub');
 
             if (!authenticationService.isTokenValid()) {
