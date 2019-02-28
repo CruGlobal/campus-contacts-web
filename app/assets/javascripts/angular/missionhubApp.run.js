@@ -12,6 +12,8 @@ angular
         facebookService,
         analyticsService,
         state,
+        $location,
+        envService,
     ) {
         lscache.setBucket('missionhub:');
 
@@ -38,6 +40,9 @@ angular
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
+
+            if ($location.host() === 'mhub.cc')
+                $window.location.href = envService.read('getMissionHub');
 
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
