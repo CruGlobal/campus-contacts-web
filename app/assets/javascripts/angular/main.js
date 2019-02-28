@@ -18,6 +18,7 @@ import '../../../../src/components/authentication/requestAccess.component';
 import '../../../../src/components/authentication/inviteLink.component';
 import '../../../../src/components/authentication/mergeAccount.component';
 import '../../../../src/components/authentication/impersonateUser.component';
+import '../../../../src/components/authentication/authLanding.component';
 
 import '../../stylesheets/main.scss';
 

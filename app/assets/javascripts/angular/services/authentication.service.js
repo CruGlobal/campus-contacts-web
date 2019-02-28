@@ -22,7 +22,7 @@ function authenticationService(
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
     const redirectUrl = encodeURIComponent(
-        `https://${$location.host()}${port}/auth`,
+        `https://${$location.host()}${port}/auth-web`,
     );
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',

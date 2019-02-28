@@ -460,6 +460,14 @@ export default {
         impersonation: {
             loading: 'Please wait...',
         },
+        authLanding: {
+            title: 'SUCCESS!',
+            thanksForVerifying:
+                'Hi, so it is you! Thanks for verifying your new MissionHub account.',
+            allSet: "You're all set to Sign In on your mobile app.",
+            excitedForYouToGrow:
+                "We're excited for you to grow closer to God by helping others experience him.",
+        },
         leader: 'Leader',
         mass_edit: {
             save: 'Edit {{contactCount}} contacts',

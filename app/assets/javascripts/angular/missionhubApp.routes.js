@@ -281,13 +281,21 @@ angular
             })
             .state({
                 name: 'appWithoutMenuLinks.auth',
-                url: '/auth?access_token',
+                url: '/auth-web?access_token',
                 component: 'signIn',
                 resolve: {
                     accessToken: ($location, urlHashParserService) => {
                         return urlHashParserService.param('access_token');
                     },
                 },
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks.authLanding',
+                url: '/auth',
+                component: 'authLanding',
                 data: {
                     isPublic: true,
                 },
