@@ -1,5 +1,3 @@
-import lscache from 'lscache';
-
 angular
     .module('missionhubApp')
     .run(function(
@@ -15,8 +13,6 @@ angular
         $location,
         envService,
     ) {
-        lscache.setBucket('missionhub:');
-
         $rootScope.whiteBackground = false;
         $transitions.onSuccess({}, transition => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
