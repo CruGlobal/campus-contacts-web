@@ -12,7 +12,9 @@ describe('myPeopleDashboard Components Tests', function() {
         $scope = $rootScope.$new();
         loggedInPerson = _loggedInPerson_;
 
-        spyOn(loggedInPerson, 'person').andReturn({ first_name: 'John' });
+        jest.spyOn(loggedInPerson, 'person').mockReturnValue({
+            first_name: 'John',
+        });
 
         $controller = $componentController(
             'myPeopleDashboard',

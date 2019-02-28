@@ -54,7 +54,7 @@ module.exports = function(config) {
 
         reporters: ['mocha', 'coverage-istanbul'],
 
-        files: ['app/assets/javascripts/angular/all-tests.spec.js'],
+        files: ['app/assets/javascripts/angular/testSetup.spec.js'],
 
         preprocessors: {
             'app/assets/javascripts/angular/all-tests.spec.js': [

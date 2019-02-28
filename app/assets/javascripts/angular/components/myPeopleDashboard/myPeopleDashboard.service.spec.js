@@ -58,11 +58,11 @@ describe('myPeopleDashboardService Tests', function() {
             'filters[user_created]': false,
         };
 
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
 
-        spyOn(JsonApiDataStore.store, 'sync').and.returnValue(
+        jest.spyOn(JsonApiDataStore.store, 'sync').mockReturnValue(
             _this.httpResponse,
         );
     }));

@@ -129,7 +129,9 @@ describe('massEditService', function() {
         it('should remove existing related models', inject(function(
             JsonApiDataStore,
         ) {
-            spyOn(JsonApiDataStore.store, 'destroy');
+            jest.spyOn(JsonApiDataStore.store, 'destroy').mockImplementation(
+                () => {},
+            );
             massEditService.applyComplexChanges(
                 {
                     123: false,
@@ -150,7 +152,9 @@ describe('massEditService', function() {
         it('should not remove non-existing related models', inject(function(
             JsonApiDataStore,
         ) {
-            spyOn(JsonApiDataStore.store, 'destroy');
+            jest.spyOn(JsonApiDataStore.store, 'destroy').mockImplementation(
+                () => {},
+            );
             massEditService.applyComplexChanges(
                 {
                     456: false,
@@ -176,19 +180,18 @@ describe('massEditService', function() {
             });
 
             var _this = this;
-            spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
-                modelType,
-                modelId,
-            ) {
-                return (
-                    {
-                        person: _this.people[modelId],
-                        organization: { id: modelId },
-                        label: { id: modelId },
-                        group: { id: modelId },
-                    }[modelType] || null
-                );
-            });
+            jest.spyOn(JsonApiDataStore.store, 'find').mockImplementation(
+                function(modelType, modelId) {
+                    return (
+                        {
+                            person: _this.people[modelId],
+                            organization: { id: modelId },
+                            label: { id: modelId },
+                            group: { id: modelId },
+                        }[modelType] || null
+                    );
+                },
+            );
         }));
 
         it('should copy person changes to changed people', function() {
@@ -237,7 +240,9 @@ describe('massEditService', function() {
             this.people[0].reverse_contact_assignments = [
                 { assigned_to: { id: '1' } },
             ];
-            spyOn(JsonApiDataStore.store, 'destroy');
+            jest.spyOn(JsonApiDataStore.store, 'destroy').mockImplementation(
+                () => {},
+            );
             massEditService.applyChangesLocally(
                 {
                     selectedPeople: [0],
@@ -255,7 +260,9 @@ describe('massEditService', function() {
 
         it('should add and remove labels', inject(function(JsonApiDataStore) {
             this.people[0].organizational_labels = [{ label: { id: '1' } }];
-            spyOn(JsonApiDataStore.store, 'destroy');
+            jest.spyOn(JsonApiDataStore.store, 'destroy').mockImplementation(
+                () => {},
+            );
             massEditService.applyChangesLocally(
                 {
                     selectedPeople: [0],
@@ -270,7 +277,9 @@ describe('massEditService', function() {
 
         it('should add and remove groups', inject(function(JsonApiDataStore) {
             this.people[0].group_memberships = [{ group: { id: '1' } }];
-            spyOn(JsonApiDataStore.store, 'destroy');
+            jest.spyOn(JsonApiDataStore.store, 'destroy').mockImplementation(
+                () => {},
+            );
             massEditService.applyChangesLocally(
                 {
                     selectedPeople: [0],
@@ -337,7 +346,7 @@ describe('massEditService', function() {
                 ],
             };
             this.selection = {};
-            spyOn(massEditService, 'optionStateFromModel').and.returnValue(
+            jest.spyOn(massEditService, 'optionStateFromModel').mockReturnValue(
                 true,
             );
         });
@@ -377,7 +386,7 @@ describe('massEditService', function() {
             this.assignedTos = [];
             this.labels = [];
             this.groups = [];
-            spyOn(massEditService, 'optionsForStatsType').and.returnValues(
+            jest.spyOn(massEditService, 'optionsForStatsType').and.returnValues(
                 this.assignedTos,
                 this.labels,
                 this.groups,
@@ -399,12 +408,11 @@ describe('massEditService', function() {
             });
 
             var people = this.people;
-            spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
-                modelType,
-                modelId,
-            ) {
-                return people[modelId];
-            });
+            jest.spyOn(JsonApiDataStore.store, 'find').mockImplementation(
+                function(modelType, modelId) {
+                    return people[modelId];
+                },
+            );
 
             this.model = {};
 
@@ -440,7 +448,7 @@ describe('massEditService', function() {
         });
 
         it('should call personHasModel once per selected person', function() {
-            var personHasModel = jasmine.createSpy();
+            var personHasModel = jest.fn();
             massEditService.optionStateFromModel(
                 this.model,
                 this.selection,
@@ -453,9 +461,7 @@ describe('massEditService', function() {
         });
 
         it('should return selected when all selected people have the model', function() {
-            var personHasModel = jasmine
-                .createSpy()
-                .and.returnValues(true, true);
+            var personHasModel = jest.fn().and.returnValues(true, true);
             expect(
                 massEditService.optionStateFromModel(
                     this.model,
@@ -466,9 +472,7 @@ describe('massEditService', function() {
         });
 
         it('should return unselected when no selected people have the model', function() {
-            var personHasModel = jasmine
-                .createSpy()
-                .and.returnValues(false, false);
+            var personHasModel = jest.fn().and.returnValues(false, false);
             expect(
                 massEditService.optionStateFromModel(
                     this.model,
@@ -479,9 +483,7 @@ describe('massEditService', function() {
         });
 
         it('should return indeterminate when some selected people have the model', function() {
-            var personHasModel = jasmine
-                .createSpy()
-                .and.returnValues(true, false);
+            var personHasModel = jest.fn().and.returnValues(true, false);
             expect(
                 massEditService.optionStateFromModel(
                     this.model,

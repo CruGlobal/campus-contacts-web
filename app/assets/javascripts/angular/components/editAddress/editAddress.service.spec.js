@@ -51,7 +51,7 @@ describe('editAddressService', function() {
                 ],
             },
         ];
-        spyOn(geoDataService, 'getCountries').and.returnValue(
+        jest.spyOn(geoDataService, 'getCountries').mockReturnValue(
             $q.resolve(countries),
         );
     }));
@@ -67,7 +67,7 @@ describe('editAddressService', function() {
     describe('isAddressTypeValid', function() {
         beforeEach(function() {
             this.otherAddresses = [this.address1, this.address2];
-            spyOn(editAddressService, 'getAddressTypes').and.returnValue([
+            jest.spyOn(editAddressService, 'getAddressTypes').mockReturnValue([
                 'type1',
                 'type2',
                 'type3',
@@ -122,7 +122,7 @@ describe('editAddressService', function() {
         });
 
         it('should choose the first available address type', function() {
-            spyOn(editAddressService, 'getAddressTypes').and.returnValue([
+            jest.spyOn(editAddressService, 'getAddressTypes').mockReturnValue([
                 'type1',
                 'type2',
                 'type3',

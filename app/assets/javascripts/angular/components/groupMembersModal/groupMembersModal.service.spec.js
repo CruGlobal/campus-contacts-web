@@ -45,8 +45,10 @@ describe('groupMembersModalService service', function() {
         it(
             'should add the new membership to the group',
             asynchronous(function() {
-                spyOn(httpProxy, 'extractModel').and.returnValue({ id: 12 });
-                spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
+                jest.spyOn(httpProxy, 'extractModel').mockReturnValue({
+                    id: 12,
+                });
+                jest.spyOn(httpProxy, 'callHttp').mockReturnValue($q.resolve());
 
                 var _this = this;
                 var person = { id: 21 };
@@ -65,7 +67,7 @@ describe('groupMembersModalService service', function() {
         it(
             'should remove the membership from the group',
             asynchronous(function() {
-                spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
+                jest.spyOn(httpProxy, 'callHttp').mockReturnValue($q.resolve());
 
                 var _this = this;
                 var membership = this.group.group_memberships[0];

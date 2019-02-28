@@ -45,9 +45,7 @@ describe('errorService', function() {
             'does nothing when the promise resolves',
             asynchronous(function() {
                 var result = 123;
-                var getPromise = jasmine
-                    .createSpy('getPromise')
-                    .and.returnValue($q.resolve(result));
+                var getPromise = jest.fn().and.returnValue($q.resolve(result));
                 var decorated = errorService.autoRetry(getPromise);
                 return decorated('arg1', 'arg2', 'arg3').then(function(value) {
                     expect(value).toBe(result);
@@ -65,8 +63,8 @@ describe('errorService', function() {
             'retries and eventually resolves when the promise rejects once',
             asynchronous(function() {
                 var result = 123;
-                var getPromise = jasmine
-                    .createSpy('getPromise')
+                var getPromise = jest
+                    .fn()
                     .and.returnValues($q.reject(), $q.resolve(result));
                 var decorated = errorService.autoRetry(getPromise, {
                     retryCount: 3,
@@ -82,15 +80,15 @@ describe('errorService', function() {
             'retries and eventually rejects when the promise always rejects',
             asynchronous(function() {
                 var error = new Error();
-                var getPromise = jasmine
-                    .createSpy('getPromise')
-                    .and.returnValue($q.reject(error));
+                var getPromise = jest.fn().and.returnValue($q.reject(error));
                 var decorated = errorService.autoRetry(getPromise, {
                     retryCount: 3,
                 });
-                spyOn(errorService, 'displayError').and.callFake(function(err) {
-                    return $q.reject(err);
-                });
+                jest.spyOn(errorService, 'displayError').mockImplementation(
+                    function(err) {
+                        return $q.reject(err);
+                    },
+                );
                 return decorated().catch(function(value) {
                     expect(value).toBe(error);
                     expect(getPromise).toHaveBeenCalledTimes(4);
@@ -107,8 +105,8 @@ describe('errorService', function() {
             asynchronous(function() {
                 var error = new Error();
                 var result = 123;
-                var getPromise = jasmine
-                    .createSpy('getPromise')
+                var getPromise = jest
+                    .fn()
                     .and.returnValues($q.reject(error), $q.resolve(result));
                 var decorated = errorService.autoRetry(getPromise, {
                     retryCount: 3,
@@ -125,9 +123,7 @@ describe('errorService', function() {
             'ignores errors that match the criteria',
             asynchronous(function() {
                 var error = new Error();
-                var getPromise = jasmine
-                    .createSpy('getPromise')
-                    .and.returnValue($q.reject(error));
+                var getPromise = jest.fn().and.returnValue($q.reject(error));
                 var decorated = errorService.autoRetry(getPromise, {
                     retryCount: 3,
                     ignoreFilter: _.constant(true),

@@ -49,13 +49,13 @@ describe('labelsService', function() {
         this.httpResponse = $q.resolve({
             data: this.label,
         });
-        spyOn(httpProxy, 'post').and.callFake(function() {
+        jest.spyOn(httpProxy, 'post').mockImplementation(function() {
             return _this.httpResponse;
         });
-        spyOn(httpProxy, 'put').and.callFake(function() {
+        jest.spyOn(httpProxy, 'put').mockImplementation(function() {
             return _this.httpResponse;
         });
-        spyOn(httpProxy, 'delete').and.callFake(function() {
+        jest.spyOn(httpProxy, 'delete').mockImplementation(function() {
             return _this.httpResponse;
         });
     }));
@@ -153,7 +153,9 @@ describe('labelsService', function() {
 
     describe('saveLabel', function() {
         it('should create a new label if the label has no id', function() {
-            spyOn(labelsService, 'createLabel');
+            jest.spyOn(labelsService, 'createLabel').mockImplementation(
+                () => {},
+            );
 
             labelsService.saveLabel(this.label);
 
@@ -162,7 +164,9 @@ describe('labelsService', function() {
 
         it('should update a label if the label has an id', function() {
             this.label.setAttribute('id', 1);
-            spyOn(labelsService, 'updateLabel');
+            jest.spyOn(labelsService, 'updateLabel').mockImplementation(
+                () => {},
+            );
 
             labelsService.saveLabel(this.label);
 

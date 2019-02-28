@@ -75,7 +75,10 @@ describe('userPreferences service', function() {
 
     describe('organizationOrderChange', function() {
         it('should save the new organization order', function() {
-            spyOn(userPreferencesService, '_updateUserPreferences');
+            jest.spyOn(
+                userPreferencesService,
+                '_updateUserPreferences',
+            ).mockImplementation(() => {});
             userPreferencesService.organizationOrderChange(
                 [
                     {
@@ -100,7 +103,10 @@ describe('userPreferences service', function() {
 
     describe('toggleOrganizationVisibility', function() {
         it('should hide an org save the updated hiddenOrgs list', function() {
-            spyOn(userPreferencesService, '_updateUserPreferences');
+            jest.spyOn(
+                userPreferencesService,
+                '_updateUserPreferences',
+            ).mockImplementation(() => {});
             this.hiddenOrgs = [4, 5];
 
             userPreferencesService.toggleOrganizationVisibility({

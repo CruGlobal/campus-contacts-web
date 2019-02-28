@@ -43,11 +43,11 @@ describe('HttpProxyService Tests', function() {
         // Mock out the $http service
         angular.mock.module(function($provide) {
             $provide.factory('$http', function($q) {
-                var $http = jasmine
-                    .createSpy('$http')
+                var $http = jest
+                    .fn()
                     .and.returnValue($q.resolve(_this.httpResponse));
                 $http.defaults = { headers: { common: {} } };
-                $http.get = jasmine.createSpy('$http.get');
+                $http.get = jest.fn();
                 return $http;
             });
         });
@@ -78,7 +78,7 @@ describe('HttpProxyService Tests', function() {
             this.data = { key2: 'value2' };
             this.config = { key3: 'value3', errorMessage: 'error' };
 
-            spyOn(envService, 'read').and.returnValue(this.apiUrl);
+            jest.spyOn(envService, 'read').mockReturnValue(this.apiUrl);
         }));
 
         it('should get the base API url from envService', inject(function(
@@ -115,7 +115,7 @@ describe('HttpProxyService Tests', function() {
                 var _this = this;
                 this.token = 'abcde';
                 this.responseData = { data: [] };
-                spyOn(this.httpResponse, 'headers').and.callThrough();
+                jest.spyOn(this.httpResponse, 'headers');
                 return httpProxy
                     .callHttp(this.method, this.url, this.params, this.data)
                     .then(function() {
@@ -149,7 +149,10 @@ describe('HttpProxyService Tests', function() {
             'should sync the JSON store with the response',
             asynchronous(function() {
                 var _this = this;
-                spyOn(JsonApiDataStore.store, 'syncWithMeta');
+                jest.spyOn(
+                    JsonApiDataStore.store,
+                    'syncWithMeta',
+                ).mockImplementation(() => {});
                 return httpProxy
                     .callHttp(this.method, this.url, this.params, this.data)
                     .then(function() {
@@ -164,7 +167,7 @@ describe('HttpProxyService Tests', function() {
             'should use the deduper instance when provided',
             asynchronous(function() {
                 var deduper = new RequestDeduper();
-                spyOn(deduper, 'request').and.returnValue($q.resolve());
+                jest.spyOn(deduper, 'request').mockReturnValue($q.resolve());
                 var config = {
                     deduper: deduper,
                 };
@@ -187,7 +190,7 @@ describe('HttpProxyService Tests', function() {
 
         describe('aliases', function() {
             beforeEach(function() {
-                spyOn(httpProxy, 'callHttp');
+                jest.spyOn(httpProxy, 'callHttp').mockImplementation(() => {});
             });
 
             it('should contain get', function() {
@@ -322,20 +325,20 @@ describe('HttpProxyService Tests', function() {
                 this.relationships = ['a', 'b', 'c'];
                 this.config = { key: 'value' };
 
-                spyOn(httpProxy, 'callHttp');
+                jest.spyOn(httpProxy, 'callHttp').mockImplementation(() => {});
             });
 
             it(
                 'should not make a network request when the model is already loaded',
                 asynchronous(function() {
-                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(
+                    jest.spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         this.model,
                         this.model,
                     );
-                    spyOn(
+                    jest.spyOn(
                         httpProxy,
                         'getUnloadedRelationships',
-                    ).and.returnValue([]);
+                    ).mockReturnValue([]);
 
                     var _this = this;
                     return httpProxy
@@ -355,14 +358,14 @@ describe('HttpProxyService Tests', function() {
             it(
                 'should make a network request when the model is not already loaded',
                 asynchronous(function() {
-                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(
+                    jest.spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         null,
                         this.model,
                     );
-                    spyOn(
+                    jest.spyOn(
                         httpProxy,
                         'getUnloadedRelationships',
-                    ).and.returnValue([]);
+                    ).mockReturnValue([]);
 
                     var _this = this;
                     return httpProxy
@@ -391,14 +394,14 @@ describe('HttpProxyService Tests', function() {
             it(
                 'should make a network request when the model relationships are not already loaded',
                 asynchronous(function() {
-                    spyOn(JsonApiDataStore.store, 'find').and.returnValues(
+                    jest.spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         this.model,
                         this.model,
                     );
-                    spyOn(
+                    jest.spyOn(
                         httpProxy,
                         'getUnloadedRelationships',
-                    ).and.returnValue(this.relationships);
+                    ).mockReturnValue(this.relationships);
 
                     var _this = this;
                     return httpProxy

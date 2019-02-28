@@ -27,7 +27,7 @@ describe('interaction component', function() {
                     id: 1,
                     interaction_type_id: 4,
                 },
-                onDelete: jasmine.createSpy('onDelete'),
+                onDelete: jest.fn(),
             },
         );
         $q = _$q_;

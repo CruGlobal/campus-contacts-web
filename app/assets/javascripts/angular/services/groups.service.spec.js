@@ -73,7 +73,7 @@ describe('groupsService', function() {
         this.httpResponse = $q.resolve({
             data: this.group,
         });
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return _this.httpResponse;
         });
     }));

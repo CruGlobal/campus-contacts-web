@@ -36,7 +36,7 @@ describe('surveyService', function() {
         this.httpResponse = {
             data: this.survey,
         };
-        spyOn(httpProxy, 'callHttp').and.callFake(() => {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(() => {
             return $q.resolve(this.httpResponse);
         });
     }));

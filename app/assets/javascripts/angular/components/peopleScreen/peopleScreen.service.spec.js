@@ -33,7 +33,7 @@ describe('peopleScreenService', function() {
         this.responsePeople = [];
         this.responseTotal = 10;
 
-        spyOn(httpProxy, 'callHttp').and.callFake(() => {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(() => {
             return $q.resolve({
                 data: this.responsePeople,
                 meta: { total: this.responseTotal },

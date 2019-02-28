@@ -57,7 +57,7 @@ describe('personProfileService', function() {
             ],
         };
 
-        spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
+        jest.spyOn(httpProxy, 'callHttp').mockReturnValue($q.resolve());
     }));
 
     describe('saveAttribute', function() {
@@ -224,7 +224,7 @@ describe('personProfileService', function() {
 
         it('should save relationships on persisted people', function() {
             this.person.id = 1;
-            spyOn(httpProxy, 'includedFromModels').and.returnValue({});
+            jest.spyOn(httpProxy, 'includedFromModels').mockReturnValue({});
             personProfileService.saveRelationship(
                 this.person,
                 this.newRelationship,
@@ -260,7 +260,10 @@ describe('personProfileService', function() {
             this.person = { id: 1 };
             this.relationship = { id: 2 };
 
-            spyOn(personProfileService, 'deleteRelationships');
+            jest.spyOn(
+                personProfileService,
+                'deleteRelationships',
+            ).mockImplementation(() => {});
             personProfileService.deleteRelationship(
                 this.person,
                 this.relationship,

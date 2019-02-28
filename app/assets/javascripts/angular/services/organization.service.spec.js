@@ -44,7 +44,7 @@ describe('organizationService', function() {
             5: { id: '5', ancestry: '1/2/3/4' },
         };
 
-        spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
+        jest.spyOn(JsonApiDataStore.store, 'find').mockImplementation(function(
             type,
             orgId,
         ) {
@@ -76,7 +76,7 @@ describe('organizationService', function() {
         it(
             'should not load orgs when all orgs are loaded',
             asynchronous(function() {
-                spyOn(organizationService, 'loadOrgsById').and.returnValue(
+                jest.spyOn(organizationService, 'loadOrgsById').mockReturnValue(
                     $q.resolve([]),
                 );
                 return organizationService
@@ -94,13 +94,14 @@ describe('organizationService', function() {
             'should load missing orgs when not all orgs are loaded',
             asynchronous(function() {
                 var _this = this;
-                spyOn(organizationService, 'loadOrgsById').and.callFake(
-                    function() {
-                        // Simulate the load of org 4
-                        _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
-                        return $q.resolve();
-                    },
-                );
+                jest.spyOn(
+                    organizationService,
+                    'loadOrgsById',
+                ).mockImplementation(function() {
+                    // Simulate the load of org 4
+                    _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
+                    return $q.resolve();
+                });
 
                 return organizationService
                     .getOrgHierarchy(this.orgs[5])
@@ -123,7 +124,7 @@ describe('organizationService', function() {
             'should ignore unloadable orgs',
             asynchronous(function() {
                 var _this = this;
-                spyOn(organizationService, 'loadOrgsById').and.returnValue(
+                jest.spyOn(organizationService, 'loadOrgsById').mockReturnValue(
                     $q.resolve([]),
                 );
                 return organizationService

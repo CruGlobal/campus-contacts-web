@@ -74,7 +74,7 @@ describe('personService', function() {
         var _this = this;
 
         this.httpResponse = {};
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
     }));

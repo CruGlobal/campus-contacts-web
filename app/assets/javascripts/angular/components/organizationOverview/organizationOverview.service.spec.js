@@ -36,7 +36,7 @@ describe('organizationOverviewService', function() {
         this.placeholderRelation = { _placeHolder: true };
         this.loadedRelation = {};
 
-        spyOn(httpProxy, 'callHttp');
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(() => {});
     }));
 
     describe('loadOrgRelations', function() {
@@ -103,10 +103,10 @@ describe('organizationOverviewService', function() {
         it(
             'should load the person count',
             asynchronous(function() {
-                spyOn(
+                jest.spyOn(
                     peopleScreenService,
                     'loadOrgPeopleCount',
-                ).and.returnValue($q.resolve(5));
+                ).mockReturnValue($q.resolve(5));
 
                 return organizationOverviewService
                     .getPersonCount({ id: 1 })
@@ -124,10 +124,10 @@ describe('organizationOverviewService', function() {
         it(
             'should load the team count',
             asynchronous(function() {
-                spyOn(
+                jest.spyOn(
                     organizationOverviewTeamService,
                     'loadOrgTeamCount',
-                ).and.returnValue($q.resolve(5));
+                ).mockReturnValue($q.resolve(5));
 
                 return organizationOverviewService
                     .getTeamCount({ id: 1 })

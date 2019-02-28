@@ -78,13 +78,13 @@ describe('interactionsService', function() {
         };
 
         this.httpResponse = { data: {} };
-        spyOn(httpProxy, 'post').and.callFake(function() {
+        jest.spyOn(httpProxy, 'post').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
-        spyOn(httpProxy, 'put').and.callFake(function() {
+        jest.spyOn(httpProxy, 'put').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
-        spyOn(httpProxy, 'delete').and.callFake(function() {
+        jest.spyOn(httpProxy, 'delete').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
     }));
@@ -190,7 +190,7 @@ describe('interactionsService', function() {
             'extracts and returns returns the new interaction model',
             asynchronous(function() {
                 var _this = this;
-                spyOn(httpProxy, 'extractModel').and.returnValue(
+                jest.spyOn(httpProxy, 'extractModel').mockReturnValue(
                     this.interactionModel,
                 );
                 return interactionsService
@@ -211,17 +211,21 @@ describe('interactionsService', function() {
                 var _this = this;
                 var personReport = {};
                 var organizationReport = {};
-                spyOn(httpProxy, 'extractModel').and.returnValue(
+                jest.spyOn(httpProxy, 'extractModel').mockReturnValue(
                     this.interactionModel,
                 );
-                spyOn(reportsService, 'lookupPersonReport').and.returnValue(
-                    personReport,
-                );
-                spyOn(
+                jest.spyOn(
+                    reportsService,
+                    'lookupPersonReport',
+                ).mockReturnValue(personReport);
+                jest.spyOn(
                     reportsService,
                     'lookupOrganizationReport',
-                ).and.returnValue(organizationReport);
-                spyOn(reportsService, 'incrementReportInteraction');
+                ).mockReturnValue(organizationReport);
+                jest.spyOn(
+                    reportsService,
+                    'incrementReportInteraction',
+                ).mockImplementation(() => {});
                 return interactionsService
                     .recordInteraction(
                         this.interaction,

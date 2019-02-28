@@ -38,7 +38,7 @@ describe('ProgressiveListLoader', function() {
         this.listLoader = new ProgressiveListLoader({ modelType: 'person' });
 
         var _this = this;
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return $q.resolve({
                 data: _this.responsePeople,
                 meta: { total: _this.responseTotal },

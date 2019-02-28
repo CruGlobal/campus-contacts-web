@@ -36,8 +36,8 @@ describe('editLabel component', function() {
             'getLabelTemplate',
             'saveLabel',
         ]);
-        this.close = jasmine.createSpy('close');
-        this.dismiss = jasmine.createSpy('dismiss');
+        this.close = jest.fn();
+        this.dismiss = jest.fn();
 
         this.label = new JsonApiDataStore.Model('label');
         this.label.setAttribute('id', 1);

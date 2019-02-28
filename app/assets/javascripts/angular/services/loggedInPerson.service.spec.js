@@ -46,11 +46,11 @@ describe('loggedInPerson service', function() {
         this.httpResponse = $q.resolve({
             data: this.person,
         });
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return _this.httpResponse;
         });
 
-        spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.person);
+        jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(this.person);
     }));
 
     describe('loggedInPerson.load', function() {

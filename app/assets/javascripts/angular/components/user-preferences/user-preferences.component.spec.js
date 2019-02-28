@@ -7,7 +7,7 @@ describe('userPreferences component', () => {
     beforeEach(inject($componentController => {
         $ctrl = $componentController('userPreferences', {
             loggedInPerson: {
-                updatePreferences: jasmine.createSpy('updatePreferences'),
+                updatePreferences: jest.fn(),
                 person: {
                     user: {
                         notification_settings: {

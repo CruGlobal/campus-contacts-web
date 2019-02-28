@@ -36,7 +36,7 @@ describe('RequestDeduper', function() {
         }
 
         it('should call makeRequest with a timeout promise', function() {
-            var makeRequest = jasmine.createSpy().and.returnValue($q.resolve());
+            var makeRequest = jest.fn().and.returnValue($q.resolve());
             this.requestDeduper.request(makeRequest);
             expect(makeRequest).toHaveBeenCalledWith({
                 timeout: jasmine.any(Object),
@@ -48,9 +48,7 @@ describe('RequestDeduper', function() {
 
         it('should resolve the timeout promise when making the second request', function() {
             var unresolvedPromise = $q(function() {});
-            var makeRequest = jasmine
-                .createSpy()
-                .and.returnValue(unresolvedPromise);
+            var makeRequest = jest.fn().and.returnValue(unresolvedPromise);
 
             // Make the first request
             this.requestDeduper.request(makeRequest);
@@ -77,7 +75,7 @@ describe('RequestDeduper', function() {
             asynchronous(function() {
                 // Make the first request
                 var firstRequestCompletion = $q.defer();
-                var catchHandler = jasmine.createSpy('catchHandler');
+                var catchHandler = jest.fn();
                 this.requestDeduper
                     .request(function() {
                         return firstRequestCompletion.promise;

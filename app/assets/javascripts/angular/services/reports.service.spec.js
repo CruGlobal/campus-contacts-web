@@ -55,15 +55,15 @@ describe('reportsService', function() {
         };
 
         this.httpResponse = {};
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        jest.spyOn(httpProxy, 'callHttp').mockImplementation(function() {
             return $q.resolve(_this.httpResponse);
         });
-        spyOn(periodService, 'getPeriod').and.returnValue(this.period);
+        jest.spyOn(periodService, 'getPeriod').mockReturnValue(this.period);
     }));
 
     describe('lookupOrganizationReport', function() {
         it('should return the found report if it exists', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(
                 this.organizationReport,
             );
             expect(reportsService.lookupOrganizationReport(this.orgId)).toBe(
@@ -72,7 +72,7 @@ describe('reportsService', function() {
         });
 
         it('should return a placeholder report if it does not exist', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(null);
             expect(reportsService.lookupOrganizationReport(this.orgId)).toEqual(
                 jasmine.objectContaining({
                     id: this.organizationReport.id,
@@ -87,7 +87,7 @@ describe('reportsService', function() {
 
     describe('lookupPersonReport', function() {
         it('should return the found report if it exists', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(
                 this.personReport,
             );
             expect(
@@ -96,7 +96,7 @@ describe('reportsService', function() {
         });
 
         it('should return a placeholder report if it does not exist', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(null);
             expect(
                 reportsService.lookupPersonReport(this.orgId, this.personId),
             ).toEqual(
@@ -113,7 +113,9 @@ describe('reportsService', function() {
 
     describe('loadPersonReport', function() {
         it('should try to find the existing person report', function() {
-            spyOn(JsonApiDataStore.store, 'find');
+            jest.spyOn(JsonApiDataStore.store, 'find').mockImplementation(
+                () => {},
+            );
             reportsService.loadPersonReport(this.orgId, this.personId);
             expect(JsonApiDataStore.store.find).toHaveBeenCalledWith(
                 'person_report',
@@ -122,7 +124,7 @@ describe('reportsService', function() {
         });
 
         it('should make a network request if the report is not loaded', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(null);
             reportsService.loadPersonReport(this.orgId, this.personId);
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
@@ -138,7 +140,7 @@ describe('reportsService', function() {
         });
 
         it('should not make a network request if the report is loaded', function() {
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(
                 this.personReport,
             );
             reportsService.loadPersonReport(this.orgId, this.personId);
@@ -147,7 +149,7 @@ describe('reportsService', function() {
 
         it('should return a promise that resolves to the report if it is already loaded', async(function() {
             var _this = this;
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(
                 this.personReport,
             );
             return reportsService
@@ -159,7 +161,7 @@ describe('reportsService', function() {
 
         it('should return a promise that resolves to the report if it is not already loaded', async(function() {
             var _this = this;
-            spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
+            jest.spyOn(JsonApiDataStore.store, 'find').mockReturnValue(null);
             this.httpResponse = {
                 data: [this.personReport],
             };
@@ -205,11 +207,10 @@ describe('reportsService', function() {
 
     describe('loadOrganizationReports', function() {
         it('should GET the organization reports URL', function() {
-            spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
-                null,
-                null,
-                null,
-            );
+            jest.spyOn(
+                reportsService,
+                'lookupOrganizationReport',
+            ).and.returnValues(null, null, null);
             reportsService.loadOrganizationReports(this.orgs);
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
@@ -224,11 +225,10 @@ describe('reportsService', function() {
         });
 
         it('should only load reports that are not already loaded', function() {
-            spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
-                null,
-                this.report2,
-                null,
-            );
+            jest.spyOn(
+                reportsService,
+                'lookupOrganizationReport',
+            ).and.returnValues(null, this.report2, null);
             reportsService.loadOrganizationReports(this.orgs);
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
@@ -243,18 +243,20 @@ describe('reportsService', function() {
         });
 
         it('should not make a network request when all reports are already loaded', function() {
-            spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
-                this.report1,
-                this.report2,
-                this.report3,
-            );
+            jest.spyOn(
+                reportsService,
+                'lookupOrganizationReport',
+            ).and.returnValues(this.report1, this.report2, this.report3);
             reportsService.loadOrganizationReports(this.orgs);
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
         it('should asynchronously return an array of organization reports when a network request is required', async(function() {
             var _this = this;
-            spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+            jest.spyOn(
+                reportsService,
+                'lookupOrganizationReport',
+            ).and.returnValues(
                 null,
                 null,
                 null,
@@ -276,7 +278,10 @@ describe('reportsService', function() {
 
         it('should asynchronously return an array of organization reports when a network request is not required', async(function() {
             var _this = this;
-            spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
+            jest.spyOn(
+                reportsService,
+                'lookupOrganizationReport',
+            ).and.returnValues(
                 this.report1,
                 this.report2,
                 this.report3,

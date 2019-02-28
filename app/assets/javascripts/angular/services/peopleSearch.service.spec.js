@@ -35,7 +35,7 @@ describe('peopleSearchService', function() {
         $rootScope = _$rootScope_;
         httpProxy = _httpProxy_;
 
-        spyOn(httpProxy, 'get').and.callFake(function() {
+        jest.spyOn(httpProxy, 'get').mockImplementation(function() {
             return _this.httpResponse;
         });
     }));
