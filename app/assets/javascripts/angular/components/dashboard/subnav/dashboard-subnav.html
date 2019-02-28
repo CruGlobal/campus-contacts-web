@@ -36,3 +36,19 @@
         </a>
     </div>
 </div>
+
+<div class="sub-navigation flex bg-white" ng-if="$ctrl.$state.includes('app.ministries')">
+    <div class="main-container flex items-center justify-between">
+        <organization-breadcrumbs></organization-breadcrumbs>
+        <report-period ng-if="$ctrl.$state.current.name !== 'app.ministries.root'"></report-period>
+        <a href
+           class="dashboard-edit-toggle tipitmiddle order-2 tr"
+           ng-click="$ctrl.editOrganizations = !$ctrl.editOrganizations"
+           ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
+           analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
+           ng-class="{'active': $ctrl.editOrganizations}"
+           title="{{ 'dashboard.edit_org_order' | t }}">
+            <ng-md-icon class='fill-pivot-dark-blue' icon="editOrder"></ng-md-icon>
+        </a>
+    </div>
+</div>

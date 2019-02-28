@@ -73,6 +73,9 @@ nav-header {
                     right: 55px;
                     z-index: 100;
                     padding-top: 10px;
+                    @media (max-width: 768px) {
+                        right: 0;
+                    }
                     ul {
                         padding: 5px;
                         border: 1px solid #06415f;

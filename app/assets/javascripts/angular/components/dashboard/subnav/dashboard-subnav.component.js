@@ -6,7 +6,8 @@ angular.module('missionhubApp').component('dashboardSubnav', {
     template: template,
 });
 
-function DashboardSubnavController($scope) {
+function DashboardSubnavController($scope, $state) {
+    this.$state = $state;
     this.editOrganizations = false;
 
     this.toggleEditOrganizations = () => {
