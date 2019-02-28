@@ -5,13 +5,13 @@
     <form class="br2 pivot-gray-darker"
         ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
-            'accordion-expanded': $ctrl.isExpanded[question.id]
+            'accordion-expanded  shadow-4': $ctrl.isExpanded[question.id]
         }"
         ng-init="questionIndex = $index">
-        <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-pivot-gray-4 f5 flex br2"
+        <h2 class="accordion-header sortable normal pivot-gray-darker mt3 bg-white f5 flex br2"
             ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
-                'pa3': !$ctrl.isExpanded[question.id],
+                'pa3 shadow-4': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center mb0 br--top': $ctrl.isExpanded[question.id]
         }">
             <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
@@ -44,7 +44,7 @@
             </a>
             <span class="db open-close-arrow"></span>
         </h2>
-        <div class="accordion-body br2 br-bottom br bl bb b--pivot-gray-4 pv3"
+        <div class="accordion-body br2 br-bottom bb b--pivot-gray-5 pv3 bg-pivot-white"
              ng-if="$ctrl.isExpanded[question.id] && !question.predefined">
             <fieldset class="ba b--transparent ph0 mh0 w-91">
                 <div class="flex justify-between mb3">
@@ -53,7 +53,7 @@
                             {{ 'surveys:questions.type' | t }}
                         </label>
                         <div class="dropdown dropdown-select w-100 mr2" uib-dropdown>
-                            <a class="f5 link dim bg-white pa2 db pivot-gray-darker br2 dim" href="" uib-dropdown-toggle>
+                            <a class="f5 link dim pa2 db pivot-gray-darker br2 dim bg-pivot-gray-5" href="" uib-dropdown-toggle>
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
                             </a>
                             <ul class="bg-white pa2 f5  br--bottom shadow-4" uib-dropdown-menu>
@@ -71,7 +71,7 @@
                         <label class="db lh-copy f6 b mb2 pivot-gray-darker ttu tracked">
                             {{ 'surveys:questions.columnTitle' | t }}
                         </label>
-                        <input type="text" class="input-reset bg-white w-100 ihshort"
+                        <input type="text" class="bg-pivot-gray-5 input-reset w-100 ihshort"
                             ng-change="$ctrl.updateQuestion(question)"
                             ng-model-options='{ debounce: 750 }'
                             ng-model="question.column_title"
@@ -96,7 +96,7 @@
                                     </a>
                                 </div>
                                 <div class="f-grow">
-                                    <input class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 br2 ihshort" type="text"
+                                    <input class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort" type="text"
                                         ng-change="$ctrl.updateQuestionAnswer(question, $index)"
                                         ng-model-options='{ debounce: 750 }'
                                         ng-model="question.question_answers[$index]"
