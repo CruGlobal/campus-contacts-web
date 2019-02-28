@@ -636,7 +636,6 @@ export default {
             cleanup: 'Organization Cleanup',
             contacts: 'Contacts',
             email_us: 'Email Us',
-            goal: 'Goal Tracker',
             groups: 'Groups',
             logout: 'Sign Out',
             login: 'Sign In',
@@ -649,10 +648,8 @@ export default {
                 in: 'in',
             },
             preferences: 'Preferences',
-            snapshot: 'Snapshot View',
             support: 'Support',
             terms: 'Terms of Service',
-            trend: 'Trend Tracker',
             copyright: 'Copyright {{ year }} Cru. All Rights Reserved.',
             warning: {
                 title: 'Warning',
