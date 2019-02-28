@@ -25,6 +25,9 @@ nav-header {
 
         > ul:first-of-type {
             display: inline-flex;
+            @media (max-width: 768px) {
+                padding-left: 0;
+            }
             > li {
                 display: inline-block;
                 position: relative;
@@ -44,6 +47,9 @@ nav-header {
                         bottom: -10px;
                         margin-left: -10px;
                     }
+                }
+                > a {
+                    white-space: nowrap;
                 }
             }
         }
