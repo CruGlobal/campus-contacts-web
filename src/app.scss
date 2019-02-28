@@ -12,7 +12,7 @@ app {
     > header {
         margin-bottom: 70px;
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 500px) {
             margin-bottom: 140px;
         }
     }
@@ -32,7 +32,7 @@ app {
         margin-left: auto;
         padding-left: 15px;
         padding-right: 15px;
-        //min-width: 765px; //Currently below this width components mess up so locking here for now.
+        min-width: 765px; //Currently below this width components mess up so locking here for now.
 
         @media screen and (min-width: 768px) {
             width: 765px;
