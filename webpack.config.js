@@ -7,7 +7,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
 
@@ -60,7 +59,6 @@ module.exports = (env = {}) => {
             new MiniCssExtractPlugin({
                 filename: '[name].[contenthash].css',
             }),
-            new ManifestPlugin(),
             ...(!isTest
                 ? [
                       new HtmlWebpackPlugin({
