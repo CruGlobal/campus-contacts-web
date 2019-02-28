@@ -128,7 +128,6 @@ export default {
                 three_months: '3m',
             },
             show_more: 'Show more',
-            snooze_for_24_hours: 'Snooze reminder for 24 hours',
             uncontacted: 'Uncontacted',
         },
         date: {
