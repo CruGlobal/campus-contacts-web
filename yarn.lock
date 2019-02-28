@@ -5976,10 +5976,10 @@ karma-sourcemap-loader@^0.3.7:
   dependencies:
     graceful-fs "^4.1.2"
 
-karma-webpack@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/karma-webpack/-/karma-webpack-3.0.5.tgz#1ff1e3a690fb73ae95ee95f9ab58f341cfc7b40f"
-  integrity sha512-nRudGJWstvVuA6Tbju9tyGUfXTtI1UXMXoRHVmM2/78D0q6s/Ye2IC157PKNDC15PWFGR0mVIRtWLAdcfsRJoA==
+karma-webpack@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/karma-webpack/-/karma-webpack-3.0.0.tgz#bf009c5b73c667c11c015717e9e520f581317c44"
+  integrity sha512-Ja1o9LLoqWaJyUNhTKaXjWiEH9y7a9H3mzP8pYB30SBsgoF5KBS/65NeHFd+QPuT9ITrym8xFt8BZeGbcOfujA==
   dependencies:
     async "^2.0.0"
     babel-runtime "^6.0.0"
