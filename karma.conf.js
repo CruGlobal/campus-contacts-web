@@ -34,7 +34,7 @@ const karmaWebpackConfig = {
     plugins: [
         ...webpackConfig.plugins,
         new webpack.NormalModuleReplacementPlugin(
-            /\.(gif|png|jpg|jpeg|(sa|sc|c)ss)$/,
+            /\.(svg|gif|png|jpg|jpeg|(sa|sc|c)ss)$/,
             'node-noop',
         ),
     ],
