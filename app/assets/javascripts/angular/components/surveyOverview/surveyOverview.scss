@@ -20,6 +20,12 @@ organization-contact-import {
                 fill: $white;
             }
         }
+
+        > a {
+            &:hover {
+                color: white;
+            }
+        }
     }
 
     /* Backgrounds */
