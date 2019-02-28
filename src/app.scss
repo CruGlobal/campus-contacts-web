@@ -18,9 +18,9 @@ app {
         z-index: 50;
         box-shadow: 0 0 10px #808284;
         > .main-container {
-            width: 100%;
-            > .icons ng-md-icon {
-                @media (max-width: 768px) {
+            @media (max-width: 768px) {
+                width: 100%;
+                > .icons ng-md-icon {
                     display: none;
                 }
             }
