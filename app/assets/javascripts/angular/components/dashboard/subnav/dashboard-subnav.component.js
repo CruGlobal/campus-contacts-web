@@ -1,3 +1,4 @@
+import './dashboard-subnav.scss';
 import template from './dashboard-subnav.html';
 
 angular.module('missionhubApp').component('dashboardSubnav', {
