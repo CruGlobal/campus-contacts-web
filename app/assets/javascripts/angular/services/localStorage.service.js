@@ -22,7 +22,7 @@ angular
                     sessionStorage.setItem(key, data[key]);
                 }
 
-                $window.location.reload();
+                if (data.jwtToken) $window.location.reload();
             }
         };
 
