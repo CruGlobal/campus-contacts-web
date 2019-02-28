@@ -25,6 +25,7 @@ angular
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
                     googleAnalytics: 'UA-XXXXXX-XX',
+                    getMissionHub: 'http://localhost:8080',
                 },
                 staging: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
@@ -33,6 +34,7 @@ angular
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                     googleAnalytics: 'UA-XXXXXX-XX',
+                    getMissionHub: 'https://stage.missionhub.com',
                 },
                 production: {
                     apiUrl: 'https://api.missionhub.com/apis/v4',
@@ -41,6 +43,7 @@ angular
                     facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://mhub.cc/s/',
                     googleAnalytics: 'UA-325725-21',
+                    getMissionHub: 'https://get.missionhub.com',
                 },
             },
         });
