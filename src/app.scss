@@ -10,7 +10,11 @@ app {
     background-attachment: fixed, fixed;
 
     > header {
-        margin-bottom: 140px;
+        margin-bottom: 70px;
+
+        @media screen and (min-width: 768px) {
+            margin-bottom: 140px;
+        }
     }
 
     .sub-navigation {
@@ -28,7 +32,7 @@ app {
         margin-left: auto;
         padding-left: 15px;
         padding-right: 15px;
-        min-width: 765px; //Currently below this width components mess up so locking here for now.
+        //min-width: 765px; //Currently below this width components mess up so locking here for now.
 
         @media screen and (min-width: 768px) {
             width: 765px;
