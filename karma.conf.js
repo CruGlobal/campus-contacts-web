@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 const path = require('path');
+const webpack = require('webpack');
 const {
     entry,
     devServer,
@@ -30,6 +31,13 @@ const karmaWebpackConfig = {
                 : []),
         ],
     },
+    plugins: [
+        ...webpackConfig.plugins,
+        new webpack.NormalModuleReplacementPlugin(
+            /\.(svg|gif|png|jpg|jpeg|(sa|sc|c)ss)$/,
+            'node-noop',
+        ),
+    ],
 };
 
 module.exports = function(config) {
