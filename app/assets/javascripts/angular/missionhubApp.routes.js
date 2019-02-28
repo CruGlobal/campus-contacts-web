@@ -281,7 +281,7 @@ angular
             })
             .state({
                 name: 'appWithoutMenuLinks.auth',
-                url: '/auth?access_token',
+                url: '/auth-web?access_token',
                 component: 'signIn',
                 resolve: {
                     accessToken: ($location, urlHashParserService) => {
