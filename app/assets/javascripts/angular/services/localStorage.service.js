@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .service('localStorageService', ($window, $injector) => {
+    .service('localStorageService', ($window, $location) => {
         const transferSession = event => {
             const newEvent = event ? event : $window.event;
 
@@ -22,13 +22,7 @@ angular
                     sessionStorage.setItem(key, data[key]);
                 }
 
-                //Circular dependencies
-                const authenticationService = $injector.get('AuthService');
-
-                if (authenticationService.isTokenValid()) {
-                    authenticationService.setupAuthenticationState();
-                    authenticationService.updateUserData();
-                }
+                $window.location.reload();
             }
         };
 
