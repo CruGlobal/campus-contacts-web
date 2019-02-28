@@ -293,6 +293,14 @@ angular
                 },
             })
             .state({
+                name: 'appWithoutMenuLinks.authLanding',
+                url: '/auth',
+                component: 'authLanding',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
                 name: 'app.requestAccess',
                 url: '/request-access',
                 component: 'requestAccess',
