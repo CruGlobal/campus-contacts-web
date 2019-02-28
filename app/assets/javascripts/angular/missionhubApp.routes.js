@@ -560,6 +560,9 @@ angular
                 name: 'publicPhoneNumberValidation',
                 url: '/p/:code/:id',
                 component: 'publicPhoneNumberValidation',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     phoneNumberValidation: (
                         $state,
@@ -579,6 +582,9 @@ angular
                 name: 'appWithoutMenus.publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService

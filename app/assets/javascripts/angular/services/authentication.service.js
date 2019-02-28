@@ -51,7 +51,11 @@ function authenticationService(
             ? localStorageService.get('state')
             : sessionStorageService.get('state');
 
-        setState(currentState.currentOrganization, me);
+        const currentOrganization = currentState
+            ? currentState.currentOrganization
+            : null;
+
+        setState(currentOrganization, me);
     };
 
     const setupUserSettings = async organization => {

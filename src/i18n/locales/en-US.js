@@ -447,7 +447,7 @@ export default {
             continue: 'Do you want to continue?',
             mergeAccount:
                 'Yes, merge {{fullName}} <{{username}}> into my account.',
-            cancelMerge: 'No, I want to login my own account',
+            cancelMerge: 'No, I want to login to my own account.',
             successAccountMerged:
                 'Congratulations, you have successfully merged {{oldAccountFullName}} <{{oldAccountUsername}}> into {{mergedAccountFullName}} <{{mergedAccountEmail}}>.',
             continueAccountMerged: 'Continue to your new ministry',
