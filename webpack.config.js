@@ -83,6 +83,10 @@ module.exports = (env = {}) => {
                       }),
                       new CopyPlugin([
                           { from: 'src/.well-known', to: '.well-known' },
+                          {
+                              from:
+                                  'src/.well-known/apple-app-site-association',
+                          },
                       ]),
                   ]
                 : []),
