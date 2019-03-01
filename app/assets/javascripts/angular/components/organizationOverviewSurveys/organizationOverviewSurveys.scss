@@ -5,10 +5,9 @@ organization-overview-surveys {
     .header {
         display: grid;
         grid-template-columns: 4fr 2fr 2fr 1fr auto auto;
-        background-color: $pivot-darker-blue;
 
         ng-md-icon svg {
-            fill: white;
+            fill: $gray-darker;
         }
     }
 

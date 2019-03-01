@@ -5,6 +5,11 @@
     a.pivot-#{$name} {
         color: $value;
     }
+
+    .fill-pivot-#{$name} {
+        fill: $value;
+    }
+
     .bg-pivot-#{$name} {
         background-color: $value;
     }

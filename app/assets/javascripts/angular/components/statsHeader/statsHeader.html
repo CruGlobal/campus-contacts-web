@@ -1,10 +1,12 @@
-<div class="stats-title"></div>
+<div class="stats-title">
+
+</div>
 <div class="stats-icons">
-    <ng-md-icon icon="assignedPeople" class="tipitmiddle"
+    <ng-md-icon class='pivot-gray-darker' icon="assignedPeople" class="tipitmiddle"
                 title="{{ 'contacts.all_contacts.title' | t }}"></ng-md-icon>
-    <ng-md-icon icon="uncontactedPerson" class="tipitmiddle"
+    <ng-md-icon class='pivot-gray-darker' icon="uncontactedPerson" class="tipitmiddle"
                 title="{{ 'contacts.statuses.uncontacted' | t }}"></ng-md-icon>
-    <ng-md-icon ng-repeat="interactionType in $ctrl.interactionTypes"
+    <ng-md-icon class='pivot-gray-darker' ng-repeat="interactionType in $ctrl.interactionTypes"
                 icon="{{interactionType.icon}}" class="tipitmiddle"
                 title="{{interactionType.title | t}}"></ng-md-icon>
 </div>

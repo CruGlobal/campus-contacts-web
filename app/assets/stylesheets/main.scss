@@ -1,11 +1,17 @@
 @import './bootstrap';
-@import './pivot_theme';
 @import './variables/colors';
+@import './components/modal';
+@import './components/forms';
 @import './variables/generateColors';
+//@import './components/global';
+
+@import './components/app';
+
+@import './components/animations';
+@import './components/buttons';
+@import './components/timepicker';
 @import './components/dropdown';
-@import './components/global';
 @import './components/grid';
-@import './components/header';
 @import './components/navigation';
 @import './components/row';
 @import './components/sheet';

@@ -9,6 +9,7 @@ angular.module('missionhubApp').component('peopleFiltersPanel', {
         organizationId: '<',
         surveyId: '<',
         questions: '<',
+        preloadedFilters: '<',
     },
 });
 
@@ -27,10 +28,9 @@ function peopleFiltersPanelController(
     this.statusOptions = [];
     this.genderOptions = [];
     this.questionOptions = [];
+    this.filters = {};
 
     this.$onInit = () => {
-        this.resetFilters();
-
         loadFilterStats();
 
         this.personModifiedUnsubscribe = $rootScope.$on(
@@ -43,17 +43,31 @@ function peopleFiltersPanelController(
         );
     };
 
+    this.$onChanges = changes => {
+        if (
+            changes.preloadedFilters &&
+            changes.preloadedFilters.currentValue !==
+                changes.preloadedFilters.previousValue
+        ) {
+            this.filters = {
+                searchString: '',
+                labels: {},
+                assignedTos: {},
+                statuses: {},
+                groups: {},
+                questions: {},
+                answerMatchingOptions: {},
+                includeArchived: false,
+                ...changes.preloadedFilters.currentValue,
+            };
+
+            this.updateFilters();
+        }
+    };
+
     this.$onDestroy = () => {
         this.personModifiedUnsubscribe();
         this.massEditAppliedUnsubscribe();
-    };
-
-    this.updateFilters = () => {
-        this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
-            getNormalizedFilters(),
-        );
-
-        sendFilters();
     };
 
     this.resetFilters = () => {
@@ -67,6 +81,14 @@ function peopleFiltersPanelController(
             answerMatchingOptions: {},
             includeArchived: false,
         };
+    };
+
+    this.updateFilters = () => {
+        this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
+            getNormalizedFilters(),
+        );
+
+        sendFilters();
     };
 
     // Send the filters to this component's parent via the filtersChanged binding

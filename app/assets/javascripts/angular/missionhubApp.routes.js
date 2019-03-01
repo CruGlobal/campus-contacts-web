@@ -10,14 +10,8 @@ angular
         ministryViewDefaultTab,
         personTabs,
         personDefaultTab,
-        spaPage,
         _,
     ) {
-        // Only set up client-side routing on single-page app pages
-        if (!spaPage) {
-            return false;
-        }
-
         // Instantiate factories
         var asyncBindingsService = asyncBindingsServiceProvider.$get();
 
@@ -248,12 +242,97 @@ angular
                 name: 'app',
                 url: '',
                 abstract: true,
+                component: 'app',
                 resolve: {
-                    person: function(loggedInPerson) {
-                        return loggedInPerson.loadingPromise;
+                    hideHeader: () => false,
+                    hideFooter: () => false,
+                    hideMenuLinks: () => false,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus',
+                url: '',
+                abstract: true,
+                component: 'app',
+                resolve: {
+                    hideHeader: () => true,
+                    hideFooter: () => true,
+                    hideMenuLinks: () => false,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks',
+                url: '',
+                abstract: true,
+                component: 'app',
+                resolve: {
+                    hideHeader: () => false,
+                    hideFooter: () => false,
+                    hideMenuLinks: () => true,
+                },
+            })
+            .state({
+                name: 'app.signIn',
+                url: '/sign-in',
+                component: 'signIn',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks.auth',
+                url: '/auth-web?access_token',
+                component: 'signIn',
+                resolve: {
+                    accessToken: ($location, urlHashParserService) => {
+                        return urlHashParserService.param('access_token');
                     },
                 },
-                template: '<ui-view></ui-view>',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks.authLanding',
+                url: '/auth',
+                component: 'authLanding',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'app.requestAccess',
+                url: '/request-access',
+                component: 'requestAccess',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus.mergeAccount',
+                url: '/merge-account/:rememberCode/:orgId/:userId',
+                component: 'mergeAccount',
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
+                    loggedInUser: loggedInPerson => loggedInPerson.load(),
+                },
+            })
+            .state({
+                name: 'app.impersonateUser',
+                url: '/impersonate-user/:userId',
+                component: 'impersonateUser',
+                resolve: {
+                    userId: ($state, $transition$) =>
+                        $transition$.params().userId,
+                },
+            })
+            .state({
+                name: 'app.stopImpersonatingUser',
+                url: '/stop-impersonation',
+                component: 'impersonateUser',
             })
             .state({
                 name: 'app.people',
@@ -312,6 +391,11 @@ angular
                 },
             })
             .state({
+                name: 'app.ministries.signAgreements',
+                url: '/sign-agreements',
+                component: 'organizationSignaturesSign',
+            })
+            .state({
                 name: 'app.ministries.ministry',
                 url: '/:orgId',
                 component: 'organizationOverview',
@@ -362,7 +446,7 @@ angular
                     orgId: $transition$ => $transition$.params().orgId,
                 },
             })
-           .state({
+            .state({
                 name: 'app.ministries.ministry.signatures',
                 url: '/organization-signatures',
                 component: 'organizationSignatures',
@@ -394,6 +478,51 @@ angular
             )
             .states(
                 ministryViewTabs.map(function(tab) {
+                    const formatArrayForFilter = filter => {
+                        if (!filter) return {};
+
+                        return filter
+                            .split(',')
+                            .reduce(
+                                (acc, value) => ({ ...acc, [value]: true }),
+                                {},
+                            );
+                    };
+
+                    if (tab === 'people') {
+                        return {
+                            name: 'app.ministries.ministry.' + tab,
+                            url: '/people?statuses=&assigned_to=',
+                            component:
+                                'organizationOverview' + _.upperFirst(tab),
+                            resolve: {
+                                queryFilters: /* @ngInject */ (
+                                    $transition$,
+                                    $location,
+                                ) => {
+                                    const filters = $location.search();
+
+                                    return {
+                                        ...(filters.assigned_to
+                                            ? {
+                                                  assigned_tos: formatArrayForFilter(
+                                                      filters.assigned_to,
+                                                  ),
+                                              }
+                                            : {}),
+                                        ...(filters.statuses
+                                            ? {
+                                                  statuses: formatArrayForFilter(
+                                                      filters.statuses,
+                                                  ),
+                                              }
+                                            : {}),
+                                    };
+                                },
+                            },
+                        };
+                    }
+
                     return {
                         name: 'app.ministries.ministry.' + tab,
                         url: '/' + tab,
@@ -439,6 +568,9 @@ angular
                 name: 'publicPhoneNumberValidation',
                 url: '/p/:code/:id',
                 component: 'publicPhoneNumberValidation',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     phoneNumberValidation: (
                         $state,
@@ -455,9 +587,12 @@ angular
                 },
             })
             .state({
-                name: 'publicSurvey',
+                name: 'appWithoutMenus.publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService
@@ -469,13 +604,27 @@ angular
                 },
             })
             .state({
-                name: 'app.previewSurvey',
+                name: 'appWithoutMenus.previewSurvey',
                 url: '/previewSurvey/:surveyId',
                 component: 'publicSurvey',
                 resolve: {
                     survey: ($state, $transition$, routesService) =>
                         routesService.getSurvey($transition$.params().surveyId),
                     preview: () => true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus.inviteLink',
+                url: '/l/:rememberCode/:orgId/:userId',
+                component: 'inviteLink',
+                data: {
+                    isPublic: true,
+                },
+                resolve: {
+                    rememberCode: $transition$ =>
+                        $transition$.params().rememberCode,
+                    userId: $transition$ => $transition$.params().userId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({

@@ -1,14 +1,10 @@
 <span ng-class="{'current-org': $ctrl.orgHierarchy.length === 0}">
-    <a ui-sref="app.ministries.root" class="ministry-name" ng-if="$root.isSpaPage">
+    <a ui-sref="app.ministries.root" class="ministry-name">
         {{'ministries.roots' | t}}
     </a>
-    <a href="/d/ministries/root" class="ministry-name" ng-if="!$root.isSpaPage">
-        {{'ministries.roots' | t}}
-    </a>
-    <span class="arrow">></span>
+    <span class="arrow" ng-if="$ctrl.orgHierarchy.length !==0">&gt;</span>
 </span>
 <span ng-repeat="org in $ctrl.orgHierarchy" ng-class="{'current-org': $last}">
-    <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="ministry-name" ng-if="$root.isSpaPage">{{org.name}}</a>
-    <a ng-href="/d/ministries/{{org.id}}/suborgs" class="ministry-name" ng-if="!$root.isSpaPage">{{org.name}}</a>
-    <span class="arrow">></span>
+    <span class="arrow" ng-if="$index > 0 ">&gt;</span>
+    <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="ministry-name">{{org.name}}</a>
 </span>

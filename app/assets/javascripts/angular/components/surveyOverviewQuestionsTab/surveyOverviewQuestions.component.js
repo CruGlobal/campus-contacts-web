@@ -1,4 +1,5 @@
 import template from './surveyOverviewQuestions.html';
+import './surveyOverviewQuestions.scss';
 import _ from 'lodash';
 import { t } from 'i18next';
 

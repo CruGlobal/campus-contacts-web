@@ -1,6 +1,4 @@
 describe('peopleScreen component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     var $ctrl, loggedInPerson;
 
     beforeEach(inject(function($componentController) {

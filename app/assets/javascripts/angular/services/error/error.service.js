@@ -29,6 +29,12 @@ function errorService($timeout, $q, $log, toaster, _) {
                 reject(err);
             }
 
+            //No popup for logged out needed
+            if (err.status === 401) {
+                resolve();
+                return;
+            }
+
             toaster.pop({
                 title: 'Error',
                 body: 'error-retry-toast-template',

@@ -1,45 +1,63 @@
-import i18next from 'i18next';
-import lscache from 'lscache';
-
 angular
     .module('missionhubApp')
     .run(function(
         $window,
         $rootScope,
         $analytics,
-        $timeout,
         $transitions,
-        spaPage,
-        loggedInPerson,
-        updateRollbarPerson,
+        localStorageService,
+        authenticationService,
+        facebookService,
+        analyticsService,
         state,
+        $location,
+        envService,
     ) {
-        lscache.setBucket('missionhub:');
-
-        // Determine whether this page is a SPA page or a legacy page
-        $rootScope.isSpaPage = spaPage;
-        $rootScope.isLegacyPage = !$rootScope.isSpaPage;
-
-        if ($rootScope.isLegacyPage) {
-            $analytics.pageTrack($window.location.pathname);
-        }
-
         $rootScope.whiteBackground = false;
         $transitions.onSuccess({}, transition => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
 
-        // This code will run when Angular initializes, but currently we are gaining our
-        // authentication from the rails host through a <preload-state> component. This means
-        // that the access token isn't populated at the time of application initialization,
-        // the $timeout will cause delay this execution until after the first digest.
-        $timeout(function() {
-            if (state.v4AccessToken) {
-                loggedInPerson.loadOnce().then(function(me) {
-                    i18next.changeLanguage(me.user.language);
-                    updateRollbarPerson(me);
-                    $rootScope.legacyNavigation = me.user.beta_mode === false;
-                });
+        $window.fbAsyncInit = function() {
+            facebookService.init();
+        };
+
+        localStorageService.allowSessionTransfer();
+
+        if (authenticationService.isTokenValid()) {
+            authenticationService.setupAuthenticationState();
+            authenticationService.updateUserData();
+        }
+
+        facebookService.loadSDK()(document);
+
+        analyticsService.init();
+
+        $transitions.onBefore({}, transition => {
+            if (transition.to().data && transition.to().data.isPublic)
+                return true;
+
+            if ($location.host().includes('mhub.cc'))
+                $window.location.href = envService.read('getMissionHub');
+
+            if (!authenticationService.isTokenValid()) {
+                authenticationService.removeAccess();
+                return transition.router.stateService.target('app.signIn');
             }
+
+            if (
+                transition.to().name !== 'app.ministries.signAgreements' &&
+                state &&
+                state.organization_with_missing_signatures_ids &&
+                state.organization_with_missing_signatures_ids.length > 0
+            ) {
+                return transition.router.stateService.target(
+                    'app.ministries.signAgreements',
+                );
+            }
+        });
+
+        $transitions.onFinish({}, transition => {
+            analyticsService.track(transition);
         });
     });

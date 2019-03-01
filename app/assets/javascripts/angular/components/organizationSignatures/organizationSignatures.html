@@ -1,16 +1,16 @@
-<div>
-    <h1 class="f2 pivot-dark-blue fw6 mv3">
+<div class='br3 bg-white shadow-4 ph4 pv3 mb4'>
+    <h1 class="f2 pivot-dark-blue fw6 mb3 mt0">
         {{ 'signatures.title' | t }}
     </h1>
     <div class='flex justify-between items-end mb4'>
         <span class=''>
-            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 bg-transparent dim ttu' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.downloadCsv' | t }}</b></a>
+            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 dim ttu' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.downloadCsv' | t }}</b></a>
         </span>
         <span class=''>
             <form >
                 <input type='text'
                     placeholder="{{ 'signatures.searchPlaceholder' | t }}"
-                    class='pa3 input-reset cursor-text bg-white bw0 pivot-gray-darker ihshort br2 v-btm'
+                    class='pa3 input-reset cursor-text  bw0 pivot-gray-darker ihshort br2 v-btm'
                     ng-change="$ctrl.searchOnChange(search, $ctrl.tableState)"
                     ng-model-options='{ debounce: 500 }'
                     ng-model="search"

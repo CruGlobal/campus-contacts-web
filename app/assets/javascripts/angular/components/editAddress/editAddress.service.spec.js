@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('editAddressService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _editAddressService_,
         _$q_,

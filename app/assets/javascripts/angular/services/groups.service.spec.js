@@ -22,8 +22,6 @@ function asynchronous(fn) {
 }
 
 describe('groupsService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _groupsService_,
         _$q_,

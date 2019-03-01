@@ -1,0 +1,48 @@
+.fade {
+    $fade-delay: 0.3s;
+    &.ng-leave {
+        animation: fade_leave $fade-delay linear;
+        -webkit-animation: fade_leave $fade-delay linear;
+    }
+
+    &.ng-enter {
+        animation: fade_enter $fade-delay linear;
+        -webkit-animation: fade_enter $fade-delay linear;
+    }
+
+    @keyframes fade_leave {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+
+    @-webkit-keyframes fade_leave {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes fade_enter {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes fade_enter {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}

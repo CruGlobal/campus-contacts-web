@@ -16,20 +16,9 @@ function organizationOverviewSurveyResponsesController(
     $scope,
     surveyService,
     periodService,
-    $uibModal,
-    localStorageService,
 ) {
-    let surveyResponseModalClosed = async modal => {
-        await modal.closed;
-        localStorageService.set('newSurveyResponseModal', true);
-    };
-
     this.surveyStats = {};
     this.$onInit = () => {
-        if (!localStorageService.get('newSurveyResponseModal')) {
-            this.showSurveyModal();
-        }
-
         //get survey stats
         this.getSurveyStats();
 
@@ -38,15 +27,6 @@ function organizationOverviewSurveyResponsesController(
             this.surveyStats = {};
             this.getSurveyStats();
         });
-    };
-
-    this.showSurveyModal = () => {
-        const modal = $uibModal.open({
-            component: 'surveyResponseModal',
-            size: 'sm',
-            windowClass: 'pivot_theme',
-        });
-        surveyResponseModalClosed(modal);
     };
 
     this.getSurveyStats = () => {

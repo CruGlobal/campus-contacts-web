@@ -1,6 +1,4 @@
 describe('organizationOverviewTeam component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     var $ctrl,
         $q,
         $rootScope,

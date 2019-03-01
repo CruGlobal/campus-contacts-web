@@ -28,8 +28,6 @@ function asynchronous(fn) {
 }
 
 describe('interactionsService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(function() {
         var _this = this;
 

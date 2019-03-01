@@ -7,10 +7,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const ci = process.env.CI === 'true';
@@ -61,7 +59,6 @@ module.exports = (env = {}) => {
             new MiniCssExtractPlugin({
                 filename: '[name].[contenthash].css',
             }),
-            new ManifestPlugin(),
             ...(!isTest
                 ? [
                       new HtmlWebpackPlugin({
@@ -83,7 +80,6 @@ module.exports = (env = {}) => {
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
-                      new CopyWebpackPlugin(['netlify-to-rails-redirect.html']),
                   ]
                 : []),
             ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),
@@ -100,6 +96,7 @@ module.exports = (env = {}) => {
                                 plugins: [
                                     '@babel/plugin-transform-runtime',
                                     '@babel/plugin-syntax-dynamic-import',
+                                    '@babel/plugin-transform-template-literals',
                                     ...(!isTest ? ['angularjs-annotate'] : []),
                                 ],
                             },
@@ -173,6 +170,7 @@ module.exports = (env = {}) => {
         devtool: 'source-map',
         devServer: {
             historyApiFallback: true,
+            https: true,
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },

@@ -19,6 +19,7 @@ angular.module('missionhubApp').component('peopleScreen', {
         loaderService: '<',
         surveyId: '<',
         questions: '<',
+        queryFilters: '<',
     },
     require: {
         organizationOverview: '^',
@@ -111,7 +112,8 @@ function peopleScreenController(
                     this.org.id,
                 );
 
-                if (orgPermission.archive_date !== null) return 'Archived';
+                if (!orgPermission || orgPermission.archive_date !== null)
+                    return 'Archived';
 
                 return personService.getFollowupStatus(person, this.org.id);
             },

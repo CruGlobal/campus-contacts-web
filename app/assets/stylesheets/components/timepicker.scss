@@ -1,0 +1,35 @@
+.uib-timepicker {
+    td {
+        padding: 0;
+    }
+
+    input[type='text'] {
+        width: 36px;
+    }
+
+    .btn {
+        height: 32px;
+        padding: 0 6px;
+    }
+
+    .btn-link {
+        background: none;
+        border: 0;
+    }
+
+    .uib-increment .btn,
+    .uib-decrement .btn {
+        background-size: 60%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        height: 20px;
+        padding: 0px;
+        width: 100%;
+    }
+    .uib-increment .btn {
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cGF0aCBkPSJNMTIgOGwtNiA2IDEuNDEgMS40MUwxMiAxMC44M2w0LjU5IDQuNThMMTggMTR6Ij48L3BhdGg+PC9zdmc+');
+    }
+    .uib-decrement .btn {
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cGF0aCBkPSJNMTYuNTkgOC41OUwxMiAxMy4xNyA3LjQxIDguNTkgNiAxMGw2IDYgNi02eiI+PC9wYXRoPjwvc3ZnPg==');
+    }
+}

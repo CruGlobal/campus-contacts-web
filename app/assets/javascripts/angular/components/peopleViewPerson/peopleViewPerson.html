@@ -1,24 +1,21 @@
 <div class="person-info row">
     <div class="name">
-        <a ng-if="!$root.legacyNavigation" ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
-        <a ng-if="$root.legacyNavigation" href="/profile/{{$ctrl.person.id}}?organization_id={{$ctrl.organizationId}}">
-            {{ $ctrl.person | personName }}
-        </a>
+        <a ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
         <span class="uncontacted" ng-if="$ctrl.uncontacted">({{'dashboard.uncontacted' | t}})</span>
     </div>
     <div class="stats"
          ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
-        <div>{{$ctrl.report.contact_count || '-'}}</div>
+        <div class='pivot-gray-3'>{{$ctrl.report.contact_count || '-'}}</div>
         <div>
-            <a class="warning-highlight"
-               href="/allcontacts?organization_id={{$ctrl.organizationId}}&status[]=uncontacted&assigned_to[]={{$ctrl.person.id}}"
+            <a href class="warning-highlight"
+               ng-href="/ministries/{{$ctrl.organizationId}}/people?assigned_to={{$ctrl.person.id}}&statuses=uncontacted"
                ng-if="$ctrl.report.uncontacted_count">
                 {{$ctrl.report.uncontacted_count}}
             </a>
-            <span ng-if="!$ctrl.report.uncontacted_count">-</span>
+            <span class='pivot-gray-3' ng-if="!$ctrl.report.uncontacted_count">-</span>
         </div>
-        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-bind="$ctrl.reportInteractions(i)"></div>
-        <span class="phone no-data" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
+        <div ng-repeat="i in [2,3,4,5,9]" class="no-data" ng-class="{ 'pivot-gray-3' : $ctrl.reportInteractions(i) === '-' }" ng-bind="$ctrl.reportInteractions(i)"></div>
+        <span class="phone no-data pivot-gray-3" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
     </div>
     <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
         {{ $ctrl.person.phone_numbers[0].number | phone }}

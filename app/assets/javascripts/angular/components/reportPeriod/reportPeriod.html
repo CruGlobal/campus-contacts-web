@@ -1,6 +1,6 @@
-<div class="dashboard-timeframe-toggle">
-    <a ng-repeat="p in $ctrl.periods"
-       href
+<div class="dashboard-timeframe-toggle dib">
+    <a href class='ph1'
+       ng-repeat="p in $ctrl.periods"
        analytics-on="click" analytics-category="Dashboard" analytics-event="Period Change" analytics-label="{{p.label}}"
        ng-click="$ctrl.setPeriod(p.period)"
        ng-class="{active: p.period === $ctrl.getPeriod()}">{{p.label | t}}</a>

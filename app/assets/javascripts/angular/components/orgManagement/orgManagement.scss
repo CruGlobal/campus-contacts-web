@@ -511,7 +511,6 @@ org-management {
             .accordion-header {
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
-                border-bottom: 1px solid $background-gray;
             }
             > .accordion-header:after {
                 transform: rotate(45deg);

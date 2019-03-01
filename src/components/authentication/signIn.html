@@ -1,0 +1,25 @@
+<div class="m-auto tc" ng-if="$ctrl.showLogin">
+    <p class='f3 pa3 bg-warning white w-50 dib' ng-if="$ctrl.inviteState">
+        {{ 'login.invite_in_progress' | t }}
+    </p>
+    <h1 class="ttu">{{ 'login.login' | t }}</h1>
+    <p>
+        <a href
+            class="btn-key btn-primary f5"
+            title="{{ 'login.login_with_key' | t }}"
+            target="_self"
+            ng-href="{{$ctrl.theKeyUrl}}"
+        >
+            {{ 'login.login_with_key' | t }}
+        </a>
+    </p>
+    <p>
+        <a href
+            class="btn-primary btn-facebook f5"
+            title="{{ 'login.login_with_facebook' | t }}"
+            ng-click="$ctrl.facebookService.signIn()"
+        >
+            {{ 'login.login_with_facebook' | t }}
+        </a>
+    </p>
+</div>

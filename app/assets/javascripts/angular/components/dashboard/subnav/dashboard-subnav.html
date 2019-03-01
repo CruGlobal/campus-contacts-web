@@ -1,30 +1,38 @@
-<div class="dashboard-subnav" ng-if="'app.people' | isState">
-    <div class="inner">
-        <div class="dashboard-mode-toggle">
+<div class="sub-navigation flex bg-white" ng-if="'app.people' | isState">
+    <div class="main-container flex items-center">
+        <div class="f4 pivot-g flex-auto order-1">
             {{ 'dashboard.people_assigned_to_you' | t }}
         </div>
-        <div class="dashboard-stats-icons">
-            <ng-md-icon icon="assignedPeople" class="tipitmiddle"
+        <div class="flex-auto tr order-2 pivot-gray-darker w-55">
+            <ng-md-icon icon="assignedPeople" class="ml2 mr3"
                         title="{{ 'contacts.all_contacts.title' | t }}"></ng-md-icon>
-            <ng-md-icon icon="uncontactedPerson" class="tipitmiddle"
+            <ng-md-icon icon="uncontactedPerson" class="ml2 mr3"
                         title="{{ 'contacts.statuses.uncontacted' | t }}"></ng-md-icon>
-            <ng-md-icon icon="spiritualConversation" class="tipitmiddle"
+            <ng-md-icon icon="spiritualConversation" class="ml2 mr3"
                         title="{{ 'application.interaction_types.spiritual_conversation' | t }}"></ng-md-icon>
-            <ng-md-icon icon="evangelism" class="tipitmiddle"
+            <ng-md-icon icon="evangelism" class="ml2 mr3"
                         title="{{ 'application.interaction_types.gospel_presentation' | t }}"></ng-md-icon>
-            <ng-md-icon icon="personalDecision" class="tipitmiddle"
+            <ng-md-icon icon="personalDecision" class="ml2 mr3"
                         title="{{ 'application.interaction_types.prayed_to_receive_christ' | t }}"></ng-md-icon>
-            <ng-md-icon icon="holySpirit" class="tipitmiddle"
+            <ng-md-icon icon="holySpirit" class="ml2 mr3"
                         title="{{ 'application.interaction_types.holy_spirit_presentation' | t }}"></ng-md-icon>
-            <ng-md-icon icon="discipleship" class="tipitmiddle"
+            <ng-md-icon icon="discipleship" class="ml2 mr3"
                         title="{{ 'application.interaction_types.discipleship' | t }}"></ng-md-icon>
         </div>
-        <report-period></report-period>
-        <a ng-click="$ctrl.toggleEditOrganizations()"
-           analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
-           class="dashboard-edit-toggle tipitmiddle" ng-class="{'active': $ctrl.editOrganizations}"
-           href="" title="{{ 'dashboard.edit_org_order' | t }}">
-            <ng-md-icon icon="editOrder"></ng-md-icon>
+        <report-period class='flex-auto order-3 tr'></report-period>
+        <a href
+           class="ml3 flex-auto order-4"
+           title="{{ 'dashboard.edit_org_order' | t }}"
+           ng-click="$ctrl.toggleEditOrganizations()"
+           analytics-on="click"
+           analytics-category="Dashboard"
+           analytics-event="Edit Organization Order"
+           ng-class="{'active': $ctrl.editOrganizations}">
+            <ng-md-icon
+                class='fr fill-pivot-dark-blue'
+                icon="editOrder"
+                ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
+            ></ng-md-icon>
         </a>
     </div>
 </div>

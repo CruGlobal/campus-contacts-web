@@ -10,7 +10,6 @@
         org="org" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
         options="{ anonymousInteractions: true, reorderable: true }">
         <div class="people-list grid" ng-if="!$ctrl.editMode">
-            <unassigned-people></unassigned-people>
             <div class="grid-content">
                 <people-view-person person="person" organization-id="org.id"
                                     ng-repeat="person in org.people | orderBy: 'last_name' track by person.id">
@@ -19,10 +18,9 @@
         </div>
     </organization>
     <div class="no-people-extras" ng-if="$ctrl.numberOfOrgsToShow == $ctrl.noPeopleShowLimit">
-        <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more"
+        <a href ng-click="$ctrl.numberOfOrgsToShow = 100" class="show-more btn-primary"
            bind-dynamic="'dashboard.show_more' | t"></a>
-        <br>
-        <a href ng-click="$ctrl.editMode = true" class="edit-mode"
+        <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode d-block"
            bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
     </div>
 </div>

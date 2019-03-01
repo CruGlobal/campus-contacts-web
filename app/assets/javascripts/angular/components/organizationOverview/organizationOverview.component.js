@@ -38,18 +38,6 @@ function organizationOverviewController(
             /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators|cleanup|signatures)/,
         );
 
-    this.showWarning = url => {
-        $uibModal.open({
-            component: 'warningModal',
-            resolve: {
-                url: () => url,
-            },
-            windowClass: 'pivot_theme',
-            backdrop: 'static',
-            keyboard: false,
-        });
-    };
-
     this.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
     function activate() {

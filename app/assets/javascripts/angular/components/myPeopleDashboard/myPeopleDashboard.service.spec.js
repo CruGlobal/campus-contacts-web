@@ -19,8 +19,6 @@ function async(fn) {
 }
 
 describe('myPeopleDashboardService Tests', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(
         _$q_,
         _$rootScope_,

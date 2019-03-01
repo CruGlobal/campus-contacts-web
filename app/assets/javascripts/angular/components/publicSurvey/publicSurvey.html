@@ -1,4 +1,4 @@
-<div class="bg-pivot-gray source-sans flex justify-center " ng-class="{ 'pv5-l' : !$ctrl.survey.is_frozen }">
+<div class="source-sans flex justify-center " ng-class="{ 'pv5-l' : !$ctrl.survey.is_frozen }">
     <div class="mw6 bg-white center br2 w-100">
         <div>
             <div ng-if="$ctrl.preview" class="black pa2 tc" ng-class="{ 'bg-yellow' : !$ctrl.survey.is_frozen, 'bg-orange' : $ctrl.survey.is_frozen }">
@@ -25,7 +25,8 @@
                 <div class="pa4 tl">
                     <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.survey.title }}</h1>
                     <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.survey.login_paragraph }}</p>
-                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou">{{ $ctrl.survey.post_survey_message }}</p>
+                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && $ctrl.survey.post_survey_message">{{ $ctrl.survey.post_survey_message }}</p>
+                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && !$ctrl.survey.post_survey_message">{{ 'surveys:publicView.post_survey_message' | t }}</p>
 
                     <survey-form-public
                         survey="$ctrl.survey"

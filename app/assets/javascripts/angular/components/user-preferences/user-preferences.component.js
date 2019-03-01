@@ -16,7 +16,6 @@ class UserPreferences {
         this.personMoved = person_moved;
         this.personAssigned = person_assigned;
         this.weeklyDigest = weekly_digest;
-        this.legacyNav = !user.beta_mode;
     }
 
     onChangeLanguage(language) {
@@ -33,9 +32,7 @@ class UserPreferences {
                 person_assigned: this.personAssigned,
                 weekly_digest: this.weeklyDigest,
             },
-            beta_mode: !this.legacyNav,
         });
-        this.$rootScope.legacyNavigation = this.legacyNav;
     }
 }
 

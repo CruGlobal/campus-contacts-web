@@ -1,6 +1,4 @@
 describe('interaction component', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     var $ctrl, $q, $rootScope, interactionsService, confirmModalService;
 
     beforeEach(inject(function(

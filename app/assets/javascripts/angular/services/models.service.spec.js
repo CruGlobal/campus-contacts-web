@@ -4,8 +4,6 @@ import 'angular-mocks';
 var modelsService;
 
 describe('modelsService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_modelsService_) {
         modelsService = _modelsService_;
     }));

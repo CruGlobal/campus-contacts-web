@@ -1,15 +1,14 @@
 @import '../../../../stylesheets/variables/colors';
-@import '../ministryViewLabel/ministryViewLabel';
+@import '../ministryViewGroup/ministryViewGroup';
 
 organization-overview-labels {
     .header {
-        @extend ministry-view-label;
+        @extend ministry-view-group;
 
         display: flex;
-        background-color: $pivot-darker-blue;
 
         ng-md-icon svg {
-            fill: white;
+            fill: rgba($gray-dark, 0.7);
         }
     }
 }

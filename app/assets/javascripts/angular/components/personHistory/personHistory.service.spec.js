@@ -4,8 +4,6 @@ import 'angular-mocks';
 var personHistoryService;
 
 describe('personHistoryService', function() {
-    beforeEach(angular.mock.module('missionhubApp'));
-
     beforeEach(inject(function(_personHistoryService_) {
         personHistoryService = _personHistoryService_;
     }));

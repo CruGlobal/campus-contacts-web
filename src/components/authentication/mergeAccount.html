@@ -1,0 +1,23 @@
+<div class='tc pv5' ng-cloak>
+    <section ng-if="!$ctrl.accountMerged">
+        <img class='br4 mb3' ng-src="{{ $ctrl.loggedInUser.picture }}" />
+        <p class='f2 pivot-gray-darker mb0' >{{ 'mergeAccount.loggedInAs' | t : { fullName: $ctrl.loggedInUser.full_name, email: $ctrl.loggedInUser.user.username  } }}</p>
+        <p class='f2 pivot-gray-darker mb4' >{{ 'mergeAccount.continue' | t }}</p>
+        <p>
+            <a href class='f3' ng-click="$ctrl.mergeAccount()">{{ 'mergeAccount.mergeAccount' | t : { fullName: $ctrl.inviteFullName, username: $ctrl.inviteUsername } }}</a>
+        </p>
+        <p>
+            <a href class='f3 pivot-gray-darker' ng-click="$ctrl.cancelMerge()">{{ 'mergeAccount.cancelMerge' | t }}</a>
+        </p>
+    </section>
+    <section ng-if="$ctrl.accountMerged">
+        <p class='f2 pivot-gray-darker mb4'>
+            {{ 'mergeAccount.successAccountMerged' | t : { oldAccountFullName: $ctrl.inviteFullName, oldAccountUsername: $ctrl.inviteUsername, mergedAccountFullName: $ctrl.loggedInUser.full_name, mergedAccountEmail: $ctrl.loggedInUser.user.username } }}
+        </p>
+        <p>
+            <a href ng-href="/ministries/{{ $ctrl.orgId }}/suborgs" class="f5 ba pv2 ph4 b--pivot-dark-blue pivot-white br2 bg-pivot-dark-blue dim ml2" >
+              {{ 'mergeAccount.continueAccountMerged' | t }}
+            </a>
+        </p>
+    </section>
+</div>
