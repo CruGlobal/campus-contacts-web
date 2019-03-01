@@ -1,5 +1,5 @@
-<div>
-  <h1 class="f2 pivot-dark-blue fw6 mv4">
+<div class='br3 shadow-4 bg-white pv3 ph4'>
+  <h1 class="f2 pivot-dark-blue fw6 mb4 mt0">
     {{ 'ministries.cleanup.title' | t }}
   </h1>
   <p class="pivot-gray-darker f4-5  mb5" bind-dynamic="'ministries.cleanup.description' | t "></p>
@@ -21,7 +21,7 @@
         </p>
         <label for="archiveDate" class="dn">Archive Date</label>
         <input
-            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-90 ihshort br2 datepicker"
             type="date"
             ng-model="$ctrl.archiveBeforeDate">
         <button class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim" ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)">{{ 'ministries.cleanup.archive_by_date' | t }}</button>
@@ -36,7 +36,7 @@
         <p class="lh-copy w-80 mt0">{{ 'ministries.cleanup.archive_by_inactivty_description' | t }}</p>
         <label for="archiveInactivity" class="dn">Archive Inactivity Date</label>
          <input
-            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-80 ihshort br2 datepicker"
+            class="pa2 input-reset bg-white bw0 pivot-gray-darker w-90 ihshort br2 datepicker"
             value="08/31/2018"
             type="date"
             ng-model="$ctrl.archiveInactivityDate">
