@@ -103,17 +103,17 @@ function analyticsService(
         return loadScript(url, 'adobe-analytics');
     };
 
-    const setupAdobe = () => {
-        $window._satellite && $window._satellite.pageBottom();
-    };
+    const trackAdobe = () =>
+        CustomEvent !== undefined &&
+        $window.document
+            .querySelector('body')
+            .dispatchEvent(new CustomEvent('content: all pages'));
 
     return {
         init: () => {
             initAdobeData();
             initGoogle();
             loadAdobeScript()(document);
-
-            setupAdobe();
 
             if (authenticationService.isTokenValid()) {
                 setupAuthenitcatedAnalyticData();
@@ -151,12 +151,12 @@ function analyticsService(
                 !$window.digitalData.user
             ) {
                 setupAuthenitcatedAnalyticData().then(() => {
+                    trackAdobe();
                     angular.isFunction($window.ga) &&
                         $window.ga('send', 'pageview', fields);
-                    $window._satellite && $window._satellite.track('page view');
                 });
             } else {
-                $window._satellite && $window._satellite.track('page view');
+                trackAdobe();
                 angular.isFunction($window.ga) &&
                     $window.ga('send', 'pageview', fields);
             }
