@@ -33,6 +33,11 @@ angular
 
         analyticsService.init();
 
+        envService.is('production') &&
+            $location.absUrl().match(/(www\.)?missionhub.com\/?$/) &&
+            !authenticationService.isTokenValid() &&
+            ($window.location.href = envService.read('getMissionHub'));
+
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
