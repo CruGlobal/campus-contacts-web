@@ -7,6 +7,7 @@ angular
         $transitions,
         localStorageService,
         authenticationService,
+        loggedInPerson,
         facebookService,
         analyticsService,
         state,
@@ -42,8 +43,10 @@ angular
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
-            if ($location.host().includes('mhub.cc'))
+            if ($location.host().includes('mhub.cc')) {
                 $window.location.href = envService.read('getMissionHub');
+                return false;
+            }
 
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
@@ -60,6 +63,8 @@ angular
                     'app.ministries.signAgreements',
                 );
             }
+
+            return loggedInPerson.loadOnce();
         });
 
         $transitions.onFinish({}, transition => {
