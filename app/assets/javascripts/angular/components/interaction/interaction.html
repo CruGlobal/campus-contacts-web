@@ -11,8 +11,8 @@
             }}</span><span ng-if="!$last">,</span>
         </span>
         <span ng-if="$ctrl.interaction.initiators.length === 0">{{'ministries.people.history.anonymous' | t}}</span>
-        >>
-        <span am-time-ago="$ctrl.interaction.timestamp"></span>
+        &gt;&gt;
+        <span>{{$ctrl.moment($ctrl.interaction.timestamp).fromNow()}}</span>
     </div>
     <div class="title">{{$ctrl.interactionType.title | t}}</div>
     <div ng-switch="$ctrl.modifyInteractionState">
