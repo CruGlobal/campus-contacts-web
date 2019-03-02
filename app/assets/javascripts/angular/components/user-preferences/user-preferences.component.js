@@ -5,17 +5,21 @@ import template from './user-preferences.html';
 import './user-preferences.scss';
 
 class UserPreferences {
-    constructor(loggedInPerson, $rootScope) {
+    constructor(loggedInPerson, $scope) {
         this.loggedInPerson = loggedInPerson;
-        this.$rootScope = $rootScope;
+        this.$scope = $scope;
         const { user } = this.loggedInPerson.person;
         this.language = user.language;
-        this.languages = getNamesOfLoadedTranslations();
         const { person_moved, person_assigned, weekly_digest } =
             user.notification_settings || {};
         this.personMoved = person_moved;
         this.personAssigned = person_assigned;
         this.weeklyDigest = weekly_digest;
+    }
+
+    async $onInit() {
+        this.languages = await getNamesOfLoadedTranslations();
+        this.$scope.$apply();
     }
 
     onChangeLanguage(language) {
