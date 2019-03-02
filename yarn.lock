@@ -1153,6 +1153,10 @@ angular-environment@^1.0.4:
   resolved "https://registry.yarnpkg.com/angular-environment/-/angular-environment-1.0.8.tgz#c8185eb8763e6ef0877aba19b2730699d1b95251"
   integrity sha1-yBheuHY+bvCHeroZsnMGmdG5UlE=
 
+"angular-legacy-sortablejs-maintained@https://github.com/OzzieOrca/angular-legacy-sortablejs#event-expose-scope":
+  version "0.6.2"
+  resolved "https://github.com/OzzieOrca/angular-legacy-sortablejs#76bb4291f99c8c2c77b2da38a377164d177f20dd"
+
 angular-material-icons@^0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/angular-material-icons/-/angular-material-icons-0.7.1.tgz#e5eab4853b61c331f58f9e7e6e54b6e1d65e4f9b"
@@ -1181,20 +1185,6 @@ angular-ui-bootstrap@~2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
   integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
-
-angular-ui-sortable@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.19.0.tgz#4ac4391fc4d4de57110db4b5d31a7c198d314fd0"
-  integrity sha512-u/uc981Nzg4XN1bMU9qKleMTSt7F1XjMWnyGw6gxPLIeQeLZm8jWNy7tj8y2r2HmvzXFbQVq2z6rObznFKAekQ==
-  dependencies:
-    angular ">=1.2.x"
-    jquery ">=3.1.x"
-    jquery-ui-dist ">=1.12.x"
-
-angular@>=1.2.x:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.0.tgz#e45d679fc8d81040a4894c7ccc16a4e1ad0a9ca6"
-  integrity sha512-3LboCLjrOuC7dWh953O0+dI3dJ7PexYRSCIrfqoN5qoHyja/wak3eWoxPKb2Sl2qwiPbrUV5KJXwgpUQ48McBQ==
 
 angular@>=1.3.0:
   version "1.6.6"
@@ -5770,16 +5760,6 @@ jpeg-js@^0.2.0:
   resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.2.0.tgz#53e448ec9d263e683266467e9442d2c5a2ef5482"
   integrity sha1-U+RI7J0mPmgyZkZ+lELSxaLvVII=
 
-jquery-ui-dist@>=1.12.x:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
-  integrity sha1-XAgV08xvkP9fqvWyaKbiO0ypBPo=
-
-jquery@>=3.1.x:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
-
 js-base64@^2.1.8:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.1.tgz#1efa39ef2c5f7980bb1784ade4a8af2de3291121"
@@ -8798,6 +8778,11 @@ sort-keys@^2.0.0:
   integrity sha1-ZYU1WEhh7JfXMNbPQYIuH1ZoQSg=
   dependencies:
     is-plain-obj "^1.0.0"
+
+sortablejs@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.8.3.tgz#5ae908ef96300966e95440a143340f5dd565a0df"
+  integrity sha512-AftvD4hdKcR5QlGi7L/JST506zGNGrysE8/QohDpwKXJarHWqCt+TUlrtoMk/wkECB607Q019/OZlJViyWiD6A==
 
 source-list-map@^2.0.0:
   version "2.0.1"
