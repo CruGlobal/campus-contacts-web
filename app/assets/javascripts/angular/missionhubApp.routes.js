@@ -197,12 +197,12 @@ angular
                         },
                     ),
 
-                    organizationId: lazyLoadedResolve(
-                        /* @ngInject */ function($uiRouter) {
-                            var $transition$ = $uiRouter.globals.transition;
-                            return $transition$.params().orgId;
-                        },
-                    ),
+                    organizationId: $uiRouter => {
+                        const $transition$ = $uiRouter.globals.transition;
+                        return $transition$.params().orgId
+                            ? $transition$.params().orgId
+                            : false;
+                    },
 
                     options: /* @ngInject */ function($uiRouter) {
                         var $transition$ = $uiRouter.globals.transition;
@@ -533,7 +533,7 @@ angular
             .states(
                 generatePersonPageStates({
                     name: 'app.people.person',
-                    url: '/:orgId/:personId',
+                    url: '/:personId',
                     modal: true,
                 }),
             )
