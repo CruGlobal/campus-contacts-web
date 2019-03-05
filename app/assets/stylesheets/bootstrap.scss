@@ -1,9 +1,6 @@
 @import '~bootstrap/scss/bootstrap-reboot';
 @import '~bootstrap/scss/dropdown';
-@import '~bootstrap/scss/close';
 @import '~bootstrap/scss/modal';
-@import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/print';
 
 // Fixes for angular-ui-bootstrap not supporting Bootstrap 4
 // Bootstrap 4 changed "in" to "show" but uib still applies old "in" class
