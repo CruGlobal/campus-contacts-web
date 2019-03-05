@@ -22,13 +22,19 @@ function authenticationService(
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
     const redirectUrl = encodeURIComponent(
-        `https://${$location.host()}${port}/auth`,
+        `https://${$location.host()}${port}/auth-web`,
     );
     const theKeyloginUrl = `${envService.read(
         'theKeyUrl',
     )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
+
+    const theKeylogoutUrl = `${envService.read(
+        'theKeyUrl',
+    )}/logout?&client_id=${envService.read(
+        'theKeyClientId',
+    )}&service=https://${$location.host()}${port}/sign-in`;
 
     const getJwtToken = () => {
         return (
@@ -45,7 +51,11 @@ function authenticationService(
             ? localStorageService.get('state')
             : sessionStorageService.get('state');
 
-        setState(currentState.currentOrganization, me);
+        const currentOrganization = currentState
+            ? currentState.currentOrganization
+            : null;
+
+        setState(currentOrganization, me);
     };
 
     const setupUserSettings = async organization => {
@@ -202,6 +212,11 @@ function authenticationService(
     };
 
     return {
+        destroyTheKeyAccess: () => {
+            clearToken();
+            clearState();
+            $window.location.href = theKeylogoutUrl;
+        },
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
         storeJwtToken: storeJwtToken,

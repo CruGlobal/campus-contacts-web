@@ -22,69 +22,69 @@ function organizationOverviewController(
     organizationOverviewService,
     organizationService,
     loggedInPerson,
+    $uibModal,
     userPreferencesService,
     confirmModalService,
     _,
 ) {
-    var vm = this;
-    vm.tabNames = ministryViewTabs;
-    vm.adminPrivileges = true;
-    vm.p2cOrg = false;
-    vm.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
-    vm.surveyResponses = 'countHidden';
+    this.tabNames = ministryViewTabs;
+    this.adminPrivileges = true;
+    this.p2cOrg = false;
+    this.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
+    this.surveyResponses = 'countHidden';
 
-    vm.showOrgNav = () =>
+    this.showOrgNav = () =>
         !$state.$current.name.match(
-            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators)/,
+            /^app\.ministries\.ministry\.(survey\.|import|management|reportMovementIndicators|cleanup|signatures)/,
         );
 
-    vm.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
+    this.$onInit = asyncBindingsService.lazyLoadedActivate(activate, ['org']);
 
     function activate() {
-        _.defaults(vm, {
+        _.defaults(this, {
             loadDetails: true,
         });
 
-        vm.adminPrivileges = loggedInPerson.isAdminAt(vm.org);
-        vm.directAdminPrivileges = loggedInPerson.isDirectAdminAt(vm.org);
+        this.adminPrivileges = loggedInPerson.isAdminAt(this.org);
+        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(this.org);
 
-        var rootOrgId = organizationService.getOrgHierarchyIds(vm.org)[0];
+        const rootOrgId = organizationService.getOrgHierarchyIds(this.org)[0];
 
-        vm.p2cOrg = vm.org.id === p2cOrgId || rootOrgId === p2cOrgId;
+        this.p2cOrg = this.org.id === p2cOrgId || rootOrgId === p2cOrgId;
 
-        if (!vm.loadDetails) {
+        if (!this.loadDetails) {
             // Abort before loading org details
             return;
         }
 
         // Make groups and surveys mirror that property on the organization
-        $scope.$watch('$ctrl.org.groups', function() {
-            vm.groups = vm.org.groups;
+        $scope.$watch('$ctrl.org.groups', () => {
+            this.groups = this.org.groups;
         });
-        $scope.$watch('$ctrl.org.surveys', function() {
-            vm.surveys = vm.org.surveys;
+        $scope.$watch('$ctrl.org.surveys', () => {
+            this.surveys = this.org.surveys;
         });
 
         // Find all of the groups and surveys related to the org
-        organizationOverviewService.loadOrgRelations(vm.org);
+        organizationOverviewService.loadOrgRelations(this.org);
 
         // The suborgs, people, and team are loaded by their respective tab components, not this component.
         // However, this component does need to know how many people and team members there are, so set the
         // people and team to a sparse array of the appropriate length.
         organizationOverviewService
-            .getSubOrgCount(vm.org)
-            .then(function(subOrgCount) {
-                vm.suborgs = new Array(subOrgCount);
+            .getSubOrgCount(this.org)
+            .then(subOrgCount => {
+                this.suborgs = new Array(subOrgCount);
             });
         organizationOverviewService
-            .getPersonCount(vm.org)
-            .then(function(personCount) {
-                vm.people = new Array(personCount);
+            .getPersonCount(this.org)
+            .then(personCount => {
+                this.people = new Array(personCount);
             });
         organizationOverviewService
-            .getTeamCount(vm.org)
-            .then(function(teamMemberCount) {
-                vm.team = new Array(teamMemberCount);
+            .getTeamCount(this.org)
+            .then(teamMemberCount => {
+                this.team = new Array(teamMemberCount);
             });
     }
 }

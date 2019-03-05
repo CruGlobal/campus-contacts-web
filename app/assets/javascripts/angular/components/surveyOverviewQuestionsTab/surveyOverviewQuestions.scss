@@ -10,5 +10,9 @@ survey-overview-questions {
             -webkit-appearance: initial !important;
             background: transparent !important;
         }
+
+        .ui-select-container {
+            background: $gray-5 !important;
+        }
     }
 }

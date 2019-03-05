@@ -10,7 +10,11 @@ app {
     background-attachment: fixed, fixed;
 
     > header {
-        margin-bottom: 140px;
+        margin-bottom: 70px;
+
+        @media screen and (min-width: 500px) {
+            margin-bottom: 140px;
+        }
     }
 
     .sub-navigation {

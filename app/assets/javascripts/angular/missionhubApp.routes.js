@@ -281,13 +281,21 @@ angular
             })
             .state({
                 name: 'appWithoutMenuLinks.auth',
-                url: '/auth?acces_token',
+                url: '/auth-web?access_token',
                 component: 'signIn',
                 resolve: {
                     accessToken: ($location, urlHashParserService) => {
                         return urlHashParserService.param('access_token');
                     },
                 },
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'appWithoutMenuLinks.authLanding',
+                url: '/auth',
+                component: 'authLanding',
                 data: {
                     isPublic: true,
                 },
@@ -431,12 +439,27 @@ angular
                 component: 'orgManagement',
             })
             .state({
+                name: 'app.ministries.ministry.cleanup',
+                url: '/organization-cleanup',
+                component: 'organizationCleanup',
+                resolve: {
+                    orgId: $transition$ => $transition$.params().orgId,
+                },
+            })
+            .state({
+                name: 'app.ministries.ministry.signatures',
+                url: '/organization-signatures',
+                component: 'organizationSignatures',
+                resolve: {
+                    orgId: $transition$ => $transition$.params().orgId,
+                },
+            })
+            .state({
                 name: 'app.ministries.ministry.reportMovementIndicators',
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
                 resolve: {
-                    orgId: ($state, $transition$) =>
-                        $transition$.params().orgId,
+                    orgId: $transition$ => $transition$.params().orgId,
                 },
             })
             .state({
@@ -545,6 +568,9 @@ angular
                 name: 'publicPhoneNumberValidation',
                 url: '/p/:code/:id',
                 component: 'publicPhoneNumberValidation',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     phoneNumberValidation: (
                         $state,
@@ -564,6 +590,9 @@ angular
                 name: 'appWithoutMenus.publicSurvey',
                 url: '/s/:surveyId?preview',
                 component: 'publicSurvey',
+                data: {
+                    isPublic: true,
+                },
                 resolve: {
                     survey: ($state, $transition$, routesService) => {
                         return routesService
