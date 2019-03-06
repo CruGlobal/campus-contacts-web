@@ -88,9 +88,8 @@ function peopleFiltersPanelController(
             option === 'no_response' || option === 'any_response' ? option : '';
 
         if (questionId) {
-            const questions = this.filters.questions;
             this.filters.questions = {
-                ...questions,
+                ...this.filters.questions,
                 ...{ [questionId]: questionFilter },
             };
         }
