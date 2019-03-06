@@ -128,7 +128,7 @@
                             class="w-100"
                             ng-init="$ctrl.filters.answerMatchingOptions[question.id] = 'contains'"
                             ng-model="$ctrl.filters.answerMatchingOptions[question.id]"
-                            ng-change="$ctrl.updateFilters($ctrl.updateFilters($ctrl.filters.answerMatchingOptions[question.id], question.id))">
+                            ng-change="$ctrl.updateFilters($ctrl.filters.answerMatchingOptions[question.id], question.id)">
                             <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
                             <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
                             <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
