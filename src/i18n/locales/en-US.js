@@ -614,6 +614,8 @@ export default {
             tools: {
                 header: 'Tools',
             },
+            noMinistriesFound:
+                'Sorry you have no ministries linked to this account.',
         },
         monthly: 'Monthly',
         nav: {
