@@ -15,7 +15,9 @@
         </div>
         <ul class="avatar-nav">
             <li>
-                <a href ng-click="open = !open">
+                <a href
+                    ng-click="open = !open"
+                    on-click-away="open = false">
                     <div class="user-avatar-wrap avatar">
                         <div class="pivot-white">
                             {{ $ctrl.loggedInPerson.person.first_name[0] + $ctrl.loggedInPerson.person.last_name[0] | uppercase }}
