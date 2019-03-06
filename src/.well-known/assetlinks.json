@@ -1,0 +1,12 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.missionhub",
+            "sha256_cert_fingerprints": [
+                "3E:D0:60:76:BE:4F:8F:2A:2F:C2:D3:AA:04:58:3A:EB:20:3C:67:52:89:7F:9B:68:B1:DC:C2:B5:FE:36:15:B3"
+            ]
+        }
+    }
+]

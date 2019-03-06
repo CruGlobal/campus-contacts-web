@@ -1,5 +1,3 @@
-import lscache from 'lscache';
-
 angular
     .module('missionhubApp')
     .run(function(
@@ -9,14 +7,13 @@ angular
         $transitions,
         localStorageService,
         authenticationService,
+        loggedInPerson,
         facebookService,
         analyticsService,
         state,
         $location,
         envService,
     ) {
-        lscache.setBucket('missionhub:');
-
         $rootScope.whiteBackground = false;
         $transitions.onSuccess({}, transition => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
@@ -37,12 +34,19 @@ angular
 
         analyticsService.init();
 
+        envService.is('production') &&
+            $location.absUrl().match(/(www\.)?missionhub\.com\/?$/) &&
+            !authenticationService.isTokenValid() &&
+            ($window.location.href = envService.read('getMissionHub'));
+
         $transitions.onBefore({}, transition => {
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
-            if ($location.host().includes('mhub.cc'))
+            if ($location.host().includes('mhub.cc')) {
                 $window.location.href = envService.read('getMissionHub');
+                return false;
+            }
 
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
@@ -59,6 +63,8 @@ angular
                     'app.ministries.signAgreements',
                 );
             }
+
+            return loggedInPerson.loadOnce();
         });
 
         $transitions.onFinish({}, transition => {

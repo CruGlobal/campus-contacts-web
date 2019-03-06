@@ -10,7 +10,6 @@
         org="org" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
         options="{ anonymousInteractions: true, reorderable: true }">
         <div class="people-list grid" ng-if="!$ctrl.editMode">
-            <unassigned-people></unassigned-people>
             <div class="grid-content">
                 <people-view-person person="person" organization-id="org.id"
                                     ng-repeat="person in org.people | orderBy: 'last_name' track by person.id">
