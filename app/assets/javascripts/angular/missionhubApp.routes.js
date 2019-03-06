@@ -197,7 +197,7 @@ angular
                         },
                     ),
 
-                    organizationId: $uiRouter => {
+                    organizationId: /* @ngInject */ $uiRouter => {
                         const $transition$ = $uiRouter.globals.transition;
                         return $transition$.params().orgId
                             ? $transition$.params().orgId
