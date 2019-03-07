@@ -24,7 +24,7 @@
     <!-- Email -->
     <a ng-href="{{$ctrl.person.email_addresses[0].email | mailto}}"
        analytics-on="click" analytics-category="Dashboard" analytics-event="Send Email">
-        <icon-button icon="'email'" disabled="$ctrl.person.email_addresses.length === 0">
+        <icon-button icon="'email'" size="18" disabled="$ctrl.person.email_addresses.length === 0">
             <ng-md-icon icon="email"></ng-md-icon>
         </icon-button>
     </a>
@@ -39,7 +39,7 @@
             <ng-md-icon icon="{{type.icon}}"></ng-md-icon>
         </square-button>
     </div>
-    <ng-md-icon icon="add" class="add-new-interaction" ng-click="$ctrl.toggleInteractionBtns()"
+    <ng-md-icon icon="add" size="16" class="add-new-interaction" ng-click="$ctrl.toggleInteractionBtns()"
                 analytics-on="click" analytics-category="Dashboard"
                 analytics-event="Open Interaction Types" analytics-if="$ctrl.addInteractionBtnsVisible"
                 ng-class="{'close': $ctrl.addInteractionBtnsVisible}">
