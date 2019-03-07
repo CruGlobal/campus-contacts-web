@@ -23,7 +23,7 @@ function iconButtonController() {
     vm.handleClick = handleClick;
 
     this.$onInit = () => {
-        this.size = !this.size ? 24 : this.size;
+        this.size = this.size ? this.size : 24;
     };
 
     function handleClick(event) {
