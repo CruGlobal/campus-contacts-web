@@ -22,6 +22,10 @@ function iconButtonController() {
 
     vm.handleClick = handleClick;
 
+    this.$onInit = () => {
+        this.size = 24;
+    };
+
     function handleClick(event) {
         if (vm.disabled) {
             event.preventDefault();
