@@ -12,6 +12,7 @@ angular.module('missionhubApp').component('iconButton', {
     bindings: {
         disabled: '<',
         icon: '<',
+        size: '<',
     },
     template: template,
 });
