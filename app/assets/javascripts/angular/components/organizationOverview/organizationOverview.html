@@ -17,12 +17,12 @@
         </div>
 
         <div class="tabs">
-            <div class="tab "
+            <div class="tab pivot-white"
                 ng-repeat="tabName in $ctrl.tabNames" ui-sref-active="active"
                 ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
                 ng-if="tabName !== 'labels'"
             >
-                <span class='pivot-white'>
+                <span class=''>
                     {{'ministries.' + tabName + '.header' | t}}
                     <span ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'">({{$ctrl[tabName].length}})</span>
                 </span>
