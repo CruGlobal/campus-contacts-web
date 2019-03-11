@@ -91,33 +91,13 @@ people-view-person {
                 display: flex;
                 align-items: center;
                 fill: $white;
-                &:nth-child(1) {
-                    background: mix(white, $pivot-dark-blue, 10%);
-                }
-                &:nth-child(2) {
-                    background: mix(white, $pivot-dark-blue, 20%);
-                }
-                &:nth-child(3) {
-                    background: mix(white, $pivot-dark-blue, 30%);
-                }
-                &:nth-child(4) {
-                    background: mix(white, $pivot-dark-blue, 40%);
-                }
-                &:nth-child(5) {
-                    background: mix(white, $pivot-dark-blue, 50%);
-                }
-                &:nth-child(6) {
-                    background: mix(white, $pivot-dark-blue, 60%);
-                }
-                &:nth-child(7) {
-                    background: mix(white, $pivot-dark-blue, 70%);
-                }
-                &:nth-child(8) {
-                    background: mix(white, $pivot-dark-blue, 80%);
-                }
+                color: $white;
+                background: $pivot-dark-blue;
+                border-right: solid 1px $white;
+
                 &:hover,
                 &.open {
-                    background: $pivot-dark-blue;
+                    background: lighten($pivot-dark-blue, 5%);
                 }
                 &:active {
                     background: lighten($pivot-dark-blue, 5%);
@@ -132,6 +112,7 @@ people-view-person {
         justify-content: space-between;
         align-items: center;
         width: 100%;
+
         & > textarea {
             display: flex;
             flex-grow: 1;
