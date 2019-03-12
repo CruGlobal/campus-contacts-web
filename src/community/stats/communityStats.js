@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import styled from '@emotion/styled';
 import { ThemeProvider } from 'emotion-theming';
+import { StagesBarGraph } from './StagesBarGraph';
 
 const Card = styled.div`
     background-color: white;
@@ -50,14 +51,17 @@ const BarChartCardRow = styled.div`
 `;
 
 const Members = () => (
-    <BarChartCardRow>
-        <BarStatCard label="Not Sure" count={10} />
-        <BarStatCard label="Uninterested" count={11} positive />
-        <BarStatCard label="Curious" count={12} />
-        <BarStatCard label="Forgiven" count={13} negative />
-        <BarStatCard label="Growing" count={14} />
-        <BarStatCard label="Guiding" count={15} />
-    </BarChartCardRow>
+    <>
+        <StagesBarGraph />
+        <BarChartCardRow>
+            <BarStatCard label="Not Sure" count={10} />
+            <BarStatCard label="Uninterested" count={11} positive />
+            <BarStatCard label="Curious" count={12} />
+            <BarStatCard label="Forgiven" count={13} negative />
+            <BarStatCard label="Growing" count={14} />
+            <BarStatCard label="Guiding" count={15} />
+        </BarChartCardRow>
+    </>
 );
 
 const theme = {

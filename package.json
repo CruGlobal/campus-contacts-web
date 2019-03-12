@@ -18,6 +18,7 @@
     "dependencies": {
         "@emotion/core": "^10.0.7",
         "@emotion/styled": "^10.0.7",
+        "@nivo/bar": "^0.52.1",
         "@uirouter/angularjs": "^1.0.20",
         "angular": "~1.7.4",
         "angular-animate": "~1.7.4",
