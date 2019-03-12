@@ -85,7 +85,7 @@ function proxyService(
                             MISSING_TOKEN === errorDetail ||
                             INVALID_GRANT === errorDetail
                         ) {
-                            authenticationService.removeAccess();
+                            authenticationService.destroyTheKeyAccess();
                         }
                     }
 
