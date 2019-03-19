@@ -1,7 +1,5 @@
 <accordion class='shadow-4' collapsed="$ctrl.collapsed" collapsible="$ctrl.collapsible && !$ctrl.editMode">
     <accordion-header>
-        <p> {{$ctrl}}</p>
-
         <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible, 'br2' : $ctrl.collapsed !== false, 'br2 br--top' : $ctrl.collapsed === false}">
             <accordion-toggle></accordion-toggle>
             <div class="org-name pivot-white">
