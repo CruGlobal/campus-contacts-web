@@ -1,13 +1,15 @@
-<accordion collapsed="$ctrl.collapsed" collapsible="$ctrl.collapsible && !$ctrl.editMode">
+<accordion class='shadow-4' collapsed="$ctrl.collapsed" collapsible="$ctrl.collapsible && !$ctrl.editMode">
     <accordion-header>
-        <div class="header br2" ng-class="{'hidden-org': !$ctrl.org.visible}">
+        <p> {{$ctrl}}</p>
+
+        <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible, 'br2' : $ctrl.collapsed !== false, 'br2 br--top' : $ctrl.collapsed === false}">
             <accordion-toggle></accordion-toggle>
-            <div class="org-name">
+            <div class="org-name pivot-white">
                 <h2 ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })">
                     {{ $ctrl.org.name }}
                 </h2>
             </div>
-            <organizational-stats org="$ctrl.org"></organizational-stats>
+            <organizational-stats class="pivot-white" org="$ctrl.org"></organizational-stats>
             <div class="right-buttons">
                 <ng-md-icon icon="addPerson"
                             ui-sref=".new.defaultTab({ orgId: $ctrl.org.id, assignToMe: true })">

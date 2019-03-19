@@ -13,6 +13,7 @@ people-view-person {
     & > .person-info {
         justify-content: space-between;
         & > .name {
+            color: $gray-darker;
             @extend %common-margin;
             width: 335px;
             a:visited {
