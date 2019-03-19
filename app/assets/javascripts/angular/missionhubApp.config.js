@@ -67,6 +67,7 @@ angular
             .addViewBox('evangelism', '0 0 16 20')
             .addViewBox('personalDecision', '0 0 20 20')
             .addViewBox('discipleship', '0 0 19 20')
+            .addViewBox('archive', '0 0 20 24')
             .addShapes({
                 dashboard:
                     '<g transform="translate(-180, -24)">' +

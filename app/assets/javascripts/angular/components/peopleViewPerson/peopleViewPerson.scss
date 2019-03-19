@@ -77,7 +77,7 @@ people-view-person {
             }
             @keyframes flexGrow {
                 to {
-                    width: 308px;
+                    width: 318px;
                 }
             }
             @keyframes flexShrink {
@@ -94,6 +94,10 @@ people-view-person {
                 color: $white;
                 background: $pivot-dark-blue;
                 border-right: solid 1px $white;
+
+                &:last-of-type {
+                    border-right: solid 1px $pivot-dark-blue;
+                }
 
                 &:hover,
                 &.open {
