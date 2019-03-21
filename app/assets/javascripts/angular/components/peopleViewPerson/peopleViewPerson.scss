@@ -87,25 +87,29 @@ people-view-person {
                 }
             }
             & > square-button {
-                padding: 4px 10px 0;
+                padding: 4px 10px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 fill: $white;
                 color: $white;
-                background: $pivot-dark-blue;
+                background: $gray-darker;
                 border-right: solid 1px $white;
 
                 &:last-of-type {
-                    border-right: solid 1px $pivot-dark-blue;
+                    border-right: solid 1px $gray-darker;
+                }
+
+                &:first-of-type {
+                    border-left: solid 1px $gray-darker;
                 }
 
                 &:hover,
                 &.open {
-                    background: lighten($pivot-dark-blue, 5%);
+                    background: lighten($gray-darker, 5%);
                 }
                 &:active {
-                    background: lighten($pivot-dark-blue, 5%);
+                    background: lighten($gray-darker, 5%);
                 }
             }
         }
