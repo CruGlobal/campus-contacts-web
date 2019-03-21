@@ -22,7 +22,7 @@
                 ui-state="'^.ministry.' + tabName" ui-state-params="{ orgId: $ctrl.org.id }"
                 ng-if="tabName !== 'labels'"
             >
-                <span class=''>
+                <span>
                     {{'ministries.' + tabName + '.header' | t}}
                     <span ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'">({{$ctrl[tabName].length}})</span>
                 </span>
