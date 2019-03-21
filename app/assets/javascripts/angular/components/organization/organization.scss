@@ -12,7 +12,7 @@ organization {
         height: 48px;
         background: $pivot-dark-blue;
         &.hidden-org {
-            background: gray;
+            background: $gray-7;
         }
 
         accordion-toggle {
