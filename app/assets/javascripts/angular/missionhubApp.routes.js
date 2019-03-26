@@ -1,3 +1,5 @@
+import '../../../../src/community/stats/communityStats';
+
 angular
     .module('missionhubApp')
     .config(function(
@@ -458,6 +460,14 @@ angular
                 name: 'app.ministries.ministry.reportMovementIndicators',
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
+                resolve: {
+                    orgId: $transition$ => $transition$.params().orgId,
+                },
+            })
+            .state({
+                name: 'app.ministries.ministry.stats',
+                url: '/stats',
+                component: 'communityStats',
                 resolve: {
                     orgId: $transition$ => $transition$.params().orgId,
                 },

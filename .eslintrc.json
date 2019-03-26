@@ -78,6 +78,7 @@
 
         "angular/definedundefined": "off",
         "angular/typecheck-string": "off",
+        "angular/typecheck-function": "off",
         "angular/no-service-method": "off"
     }
 }
