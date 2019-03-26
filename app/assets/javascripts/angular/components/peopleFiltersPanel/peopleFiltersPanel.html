@@ -67,6 +67,23 @@
     </accordion>
 
     <accordion collapsed="true"
+               accordion-disabled="!$ctrl.permissionOptions.length > 0"
+               class="filter-row filter-groups">
+        <accordion-header>
+            <accordion-toggle class="flex-auto">{{'search.permission.title' | t}}</accordion-toggle>
+        </accordion-header>
+        <accordion-content>
+            <label ng-repeat="permissionOption in $ctrl.permissionOptions" class="filter-option">
+                <input type="checkbox"
+                       ng-model="$ctrl.filters.permissions[permissionOption.permission]"
+                       ng-change="$ctrl.updateFilters()">
+                <span class="filter-option-name">{{ 'permission.' + permissionOption.permission | t }}</span>
+                <span class="filter-option-count">{{ permissionOption.count }}</span>
+            </label>
+        </accordion-content>
+    </accordion>
+
+    <accordion collapsed="true"
                accordion-disabled="!$ctrl.genderOptions.length > 0"
                class="filter-row filter-groups">
         <accordion-header>

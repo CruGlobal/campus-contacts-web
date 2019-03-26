@@ -15,6 +15,7 @@ function peopleFiltersPanelService() {
                 _.keys(filters.assignedTos).length > 0 ||
                 _.keys(filters.groups).length > 0 ||
                 _.keys(filters.statuses).length > 0 ||
+                _.keys(filters.permissions).length > 0 ||
                 _.keys(filters.genders).length > 0 ||
                 _.keys(filters.questions).length > 0 ||
                 filters.includeArchived === true
