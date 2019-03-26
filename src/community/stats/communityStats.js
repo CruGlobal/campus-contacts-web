@@ -45,6 +45,7 @@ const BarStatCard = ({ count, label, positive, negative }) => (
 );
 
 const BarChartCardRow = styled.div`
+    margin-top: 80px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-column-gap: 30px;

@@ -8,16 +8,19 @@ const Container = styled.div`
     background: white;
     margin-bottom: 30px;
     border-radius: 5px;
+    > div {
+        background: white;
+    }
 `;
 
 const TabsLayout = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-row: repeat(2, 1fr);
+    justify-items: center;
     background: #3cc8e6;
     width: 235.5px;
     margin-left: 1px;
-    height: 50px;
+    height: 70px;
     color: white;
     :active {
         background: #007398;
@@ -37,23 +40,32 @@ const TabsContainer = styled.div`
     grid-template-columns: repeat(4, 1fr);
 `;
 
-const Tabs = ({ stats, edge, edgeR, edgeL }) =>
+const Tabs = ({ objective, stats, edge, edgeR, edgeL }) =>
     edge ? (
         edgeR ? (
-            <TabsEdgeR>{stats}</TabsEdgeR>
+            <TabsEdgeR>
+                <p>{objective}</p>
+                <p>{stats}</p>
+            </TabsEdgeR>
         ) : (
-            <TabsEdgeL>{stats}</TabsEdgeL>
+            <TabsEdgeL>
+                <p>{objective}</p>
+                <p>{stats}</p>
+            </TabsEdgeL>
         )
     ) : (
-        <TabsLayout>{stats}</TabsLayout>
+        <TabsLayout>
+            <p>{objective}</p>
+            <p>{stats}</p>
+        </TabsLayout>
     );
 
 export const StagesBarGraph = () => (
     <Container>
         <TabsContainer>
-            <Tabs edge={true} stats={'MEMBERS/PERSONAL STEPS'} />
-            <Tabs stats={'Hello'} />
-            <Tabs stats={'Hello'} />
+            <Tabs edge={true} objective={'MEMBERS/PERSONAL STEPS'} stats={10} />
+            <Tabs objective={'PERSONAL STEPS COMPLETED'} stats={10} />
+            <Tabs objective={'MEMBER MOVEMENT'} stats={10} />
             <Tabs edgeR={true} edge={true} />
         </TabsContainer>
         <ResponsiveBar
@@ -104,15 +116,16 @@ export const StagesBarGraph = () => (
             keys={['members', 'stepsAdded', 'stepsCompleted']}
             indexBy="stage"
             margin={{
-                top: 10,
+                top: 30,
                 right: 0,
-                bottom: 50,
+                bottom: 30,
                 left: 0,
             }}
             padding={0.2}
             innerPadding={3}
             colors={['#ECEEF2', '#3CC8E6', '#007398']}
             colorBy="id"
+            fill={'white'}
             axisTop={null}
             groupMode={'grouped'}
             axisRight={null}
