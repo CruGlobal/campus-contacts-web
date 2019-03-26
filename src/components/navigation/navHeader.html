@@ -9,13 +9,15 @@
         </li>
     </ul>
     <a href="/" class='logo'></a>
-    <span class='flex w-25 items-center justify-end content-end'>
-        <div class="nav-search fade" ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn">
+    <span class='flex w-25 items-center justify-end content-end fade' ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn">
+        <div class="nav-search fade">
             <nav-search></nav-search>
         </div>
-        <ul class="avatar-nav fade" ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn">
+        <ul class="avatar-nav">
             <li>
-                <a href>
+                <a href
+                    ng-click="open = !open"
+                    on-click-away="open = false">
                     <div class="user-avatar-wrap avatar">
                         <div class="pivot-white">
                             {{ $ctrl.loggedInPerson.person.first_name[0] + $ctrl.loggedInPerson.person.last_name[0] | uppercase }}
@@ -23,7 +25,7 @@
                         <img class="user-avatar br-100" ng-src="{{$ctrl.loggedInPerson.person.picture}}">
                     </div>
                 </a>
-                <div>
+                <div ng-if="open" class="fade">
                     <ul>
                         <li>
                             <a ui-sref="app.people.person.defaultTab({
