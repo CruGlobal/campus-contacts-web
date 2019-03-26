@@ -13,6 +13,7 @@ people-view-person {
     & > .person-info {
         justify-content: space-between;
         & > .name {
+            color: $gray-darker;
             @extend %common-margin;
             width: 335px;
             a:visited {
@@ -77,7 +78,7 @@ people-view-person {
             }
             @keyframes flexGrow {
                 to {
-                    width: 308px;
+                    width: 318px;
                 }
             }
             @keyframes flexShrink {
@@ -86,41 +87,29 @@ people-view-person {
                 }
             }
             & > square-button {
-                padding: 4px 10px 0;
+                padding: 4px 10px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 fill: $white;
-                &:nth-child(1) {
-                    background: mix(white, $pivot-dark-blue, 10%);
+                color: $white;
+                background: $gray-darker;
+                border-right: solid 1px $white;
+
+                &:last-of-type {
+                    border-right: solid 1px $gray-darker;
                 }
-                &:nth-child(2) {
-                    background: mix(white, $pivot-dark-blue, 20%);
+
+                &:first-of-type {
+                    border-left: solid 1px $gray-darker;
                 }
-                &:nth-child(3) {
-                    background: mix(white, $pivot-dark-blue, 30%);
-                }
-                &:nth-child(4) {
-                    background: mix(white, $pivot-dark-blue, 40%);
-                }
-                &:nth-child(5) {
-                    background: mix(white, $pivot-dark-blue, 50%);
-                }
-                &:nth-child(6) {
-                    background: mix(white, $pivot-dark-blue, 60%);
-                }
-                &:nth-child(7) {
-                    background: mix(white, $pivot-dark-blue, 70%);
-                }
-                &:nth-child(8) {
-                    background: mix(white, $pivot-dark-blue, 80%);
-                }
+
                 &:hover,
                 &.open {
-                    background: $pivot-dark-blue;
+                    background: lighten($gray-darker, 5%);
                 }
                 &:active {
-                    background: lighten($pivot-dark-blue, 5%);
+                    background: lighten($gray-darker, 5%);
                 }
             }
         }
@@ -132,6 +121,7 @@ people-view-person {
         justify-content: space-between;
         align-items: center;
         width: 100%;
+
         & > textarea {
             display: flex;
             flex-grow: 1;

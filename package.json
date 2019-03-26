@@ -3,8 +3,7 @@
     "version": "1.0.0",
     "scripts": {
         "start": "webpack-dev-server",
-        "start-rails-web": "cd ../missionhub && rails s",
-        "start-rails-api": "cd ../missionhub-api && rails s -p 3001",
+        "start-rails-api": "cd ../missionhub-api && rails s",
         "build": "webpack -p",
         "build:analyze": "webpack -p --env.analyze",
         "test": "karma start --single-run",
