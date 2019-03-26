@@ -47,9 +47,6 @@ organization-overview {
 
             li {
                 padding: 6px 10px;
-                &:nth-child(even) {
-                    background: darken($gray-4, 3%);
-                }
                 &:hover {
                     background: $gray-3;
                 }

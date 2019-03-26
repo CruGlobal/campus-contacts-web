@@ -32,17 +32,20 @@ function facebookService(authenticationService, envService) {
             FB.logout(response => {});
         },
         signIn: () => {
-            FB.login(response => {
-                if (response.authResponse) {
-                    authenticationService.authorizeFacebookAccess(
-                        response.authResponse.accessToken,
-                    );
-                } else {
-                    throw new Error(
-                        'User cancelled login or did not fully authorize.',
-                    );
-                }
-            });
+            FB.login(
+                response => {
+                    if (response.authResponse) {
+                        authenticationService.authorizeFacebookAccess(
+                            response.authResponse.accessToken,
+                        );
+                    } else {
+                        throw new Error(
+                            'User cancelled login or did not fully authorize.',
+                        );
+                    }
+                },
+                { scope: 'email' },
+            );
         },
     };
 }

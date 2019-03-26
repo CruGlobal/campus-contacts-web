@@ -687,8 +687,7 @@ export default {
                 manage_labels: 'Manage Labels',
             },
             search: {
-                search_placeholder:
-                    'Search for the first name, last name or email.',
+                search_placeholder: 'Search by first name, last name or email.',
             },
             show: {
                 apply_labels: 'Apply the following labels to {{name}}.',
