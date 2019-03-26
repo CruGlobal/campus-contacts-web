@@ -143,6 +143,11 @@ function peopleScreenService(
                       'filters[statuses]': filters.statuses.join(','),
                   }
                 : {}),
+            ...(filters.permissions
+                ? {
+                      'filters[permissions]': filters.permissions.join(','),
+                  }
+                : {}),
             ...(filters.genders
                 ? {
                       'filters[genders]': filters.genders.join(','),
