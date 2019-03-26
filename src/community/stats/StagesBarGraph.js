@@ -10,6 +10,7 @@ const Container = styled.div`
     border-radius: 5px;
     > div {
         background: white;
+        border-radius: 0 0 5px 5px;
     }
 `;
 
@@ -132,7 +133,8 @@ export const StagesBarGraph = () => (
                 tickSize: 0,
             }}
             axisLeft={null}
-            enableGridY={false}
+            enableGridY={true}
+            gridYValues={[25, 50]}
             enableLabel={false}
             animate={true}
             motionStiffness={90}
