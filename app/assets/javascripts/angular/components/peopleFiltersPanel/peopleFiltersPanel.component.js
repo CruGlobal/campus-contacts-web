@@ -70,7 +70,7 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
-    this.hideQuestionResponseAnyNone = question => {
+    this.hideNonFilterableQuestionAnswerResponse = question => {
         if (question.kind !== 'TextField') return false;
 
         return (
