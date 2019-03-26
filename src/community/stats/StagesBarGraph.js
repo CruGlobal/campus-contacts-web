@@ -14,6 +14,7 @@ const Container = styled.div`
     }
 `;
 
+// The Tabs at top of graph
 const TabsLayout = styled.div`
     display: grid;
     grid-template-row: repeat(2, 1fr);
@@ -28,19 +29,25 @@ const TabsLayout = styled.div`
     }
 `;
 
+// Didn't know a way to define left and right rounded edges for the tabs on the graph so I have this solution for now
+// Tab for left corner
 const TabsEdgeL = styled(TabsLayout)`
     border-top-left-radius: 5px;
 `;
-
+// Tab for right corner
 const TabsEdgeR = styled(TabsLayout)`
     border-top-right-radius: 5px;
 `;
 
+// Container holding tabs
 const TabsContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 `;
 
+// Takes in objective(the tasks or step), stats(the numbers completed), edge to check if its a edge tab, and then either left or right.
+// I setup a conditional statement, if its a edge than check if its the right corner tab, if not than its left corner tab.
+// If its not a tab than just render a regular tab
 const Tabs = ({ objective, stats, edge, edgeR, edgeL }) =>
     edge ? (
         edgeR ? (
