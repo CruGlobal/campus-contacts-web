@@ -47,6 +47,7 @@ people-screen {
             background-color: $pivot-dark-blue;
             color: $white;
 
+            a,
             a:focus,
             a:hover,
             a:visited {
@@ -83,11 +84,16 @@ people-screen {
         min-width: min-content;
         -ms-grid-columns: min-content;
 
-        input[type='checkbox'],
-        input[type='checkbox']:checked {
-            background-color: $pivot-darker-blue;
-            border: 1px solid $white;
+        input[type='checkbox'] {
+            background-color: $gray-4;
+            border: 1px solid $gray-3;
         }
+
+        input[type='checkbox']:checked {
+            background-color: $pivot-dark-blue;
+            border: 1px solid $pivot-dark-blue;
+        }
+
         @extend %column-config;
     }
 
