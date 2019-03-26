@@ -2,9 +2,6 @@ import template from './myOrganizationsDashboardList.html';
 
 angular.module('missionhubApp').component('myOrganizationsDashboardList', {
     template: template,
-    require: {
-        myOrganizationsDashboard: '^',
-    },
     bindings: {
         rootOrgs: '<',
     },
