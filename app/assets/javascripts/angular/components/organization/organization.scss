@@ -10,10 +10,17 @@ organization {
         display: flex;
         align-items: center;
         height: 48px;
+        background: $pivot-dark-blue;
         &.hidden-org {
-            background: gray;
-            background: -webkit-linear-gradient(down, #9f999b 0%, #666062 100%);
-            background: linear-gradient(to bottom, #9f999b 0%, #666062 100%);
+            background: $gray-7;
+        }
+
+        accordion-toggle {
+            ng-md-icon {
+                svg {
+                    fill: $white;
+                }
+            }
         }
 
         ng-md-icon {
@@ -35,7 +42,7 @@ organization {
                 width: 44px;
                 padding: 12px 10px;
                 svg {
-                    fill: $pivot-dark-blue;
+                    fill: $white;
                 }
             }
             .add-anonymous-interaction {

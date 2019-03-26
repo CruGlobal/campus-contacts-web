@@ -4,7 +4,7 @@
             <input type="checkbox" ng-model="$ctrl.selected"/>
         </div>
         <div class="column name-column">
-            <a ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
+            <a href ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
                 {{$ctrl.person | personName}}
             </a>
         </div>
