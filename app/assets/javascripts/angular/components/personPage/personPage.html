@@ -27,7 +27,7 @@
                     <ng-md-icon class="phone-active" icon="check" size="14" ng-if="$ctrl.primaryPhone.validated"></ng-md-icon>
                 </span>
             </div>
-            <div class="tabs">
+            <div class="tabs" ng-if="$ctrl.organizationId">
                 <div class="tab" ng-class="{ disabled: disabled }" ng-repeat="tabName in $ctrl.personTabs"
                      ng-init="disabled = $ctrl.person.id === null && tabName !== 'profile'"
                      ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName"
