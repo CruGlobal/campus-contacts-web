@@ -11,7 +11,6 @@ angular.module('missionhubApp').component('myOrganizationsDashboardList', {
         deregisterEditOrganizationsEvent = $scope.$on(
             'editOrganizations',
             (event, value) => {
-                console.log(value);
                 this.editOrganizations = value;
             },
         );
