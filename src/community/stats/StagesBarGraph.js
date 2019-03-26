@@ -125,7 +125,6 @@ export const StagesBarGraph = () => (
             innerPadding={3}
             colors={['#ECEEF2', '#3CC8E6', '#007398']}
             colorBy="id"
-            fill={'white'}
             axisTop={null}
             groupMode={'grouped'}
             axisRight={null}
