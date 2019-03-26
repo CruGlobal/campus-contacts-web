@@ -83,7 +83,17 @@ function peopleFiltersPanelController(
         };
     };
 
-    this.updateFilters = () => {
+    this.updateFilters = (option, questionId) => {
+        const questionFilter =
+            option === 'no_response' || option === 'any_response' ? option : '';
+
+        if (questionId) {
+            this.filters.questions = {
+                ...this.filters.questions,
+                ...{ [questionId]: questionFilter },
+            };
+        }
+
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
         );
