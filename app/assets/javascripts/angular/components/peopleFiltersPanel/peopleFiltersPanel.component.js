@@ -70,6 +70,15 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
+    this.hideQuestionResponseAnyNone = question => {
+        if (question.kind !== 'TextField') return false;
+
+        return (
+            question.label.toLowerCase() === 'last name' ||
+            question.label.toLowerCase() === 'first name'
+        );
+    };
+
     this.resetFilters = () => {
         this.filters = {
             searchString: '',
