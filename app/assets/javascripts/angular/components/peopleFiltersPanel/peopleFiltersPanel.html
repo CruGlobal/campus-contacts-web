@@ -132,8 +132,8 @@
                             <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
                             <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
                             <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
-                            <option value="no_response">{{ 'peopleScreen:answerMatchingOptions.noResponse' | t }}</option>
-                            <option value="any_response">{{ 'peopleScreen:answerMatchingOptions.anyResponse' | t }}</option>
+                            <option value="no_response" ng-if="!$ctrl.hideQuestionResponseAnyNone(question)">{{ 'peopleScreen:answerMatchingOptions.noResponse' | t }}</option>
+                            <option value="any_response" ng-if="!$ctrl.hideQuestionResponseAnyNone(question)">{{ 'peopleScreen:answerMatchingOptions.anyResponse' | t }}</option>
                         </select>
                         <input
                             type="text"
