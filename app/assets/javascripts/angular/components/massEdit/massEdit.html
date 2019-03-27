@@ -2,6 +2,9 @@
     <h3 class="modal-title" id="modal-title">
         {{ 'mass_edit.title' | t }}
     </h3>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form" id="modal-body">
     <div class="form-group" ng-repeat="selectField in $ctrl.selectFields">
