@@ -4,7 +4,6 @@ organization {
     display: block;
     accordion-toggle {
         fill: $white;
-        padding-left: 8px;
     }
     .header {
         display: flex;
@@ -29,7 +28,6 @@ organization {
 
         .org-name {
             width: 287px;
-            padding: 0 8px;
             display: flex;
         }
 
