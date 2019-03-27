@@ -1,10 +1,10 @@
 <form class="person-profileTab form" ng-class="{ 'flex flex-column': $ctrl.isNewPerson }" name="$ctrl.form" autocomplete="off">
-    <div class="form-group" ng-if="$ctrl.personTab.orgPermission.archive_date">
+    <div class="form-group" ng-if="$ctrl.personTab.orgPermission.archive_date && $ctrl.personTab.organizationId">
         <input type="button" ng-click="$ctrl.unarchive()" class="btn btn-secondary"
                value="Unarchive {{ $ctrl.personTab.person.first_name }}" />
     </div>
     <div class="order-6">
-        <div class="form-group-with-left-action">
+        <div class="form-group-with-left-action" ng-if="$ctrl.personTab.organizationId">
             <div class="button-column">
                 <ng-md-icon class="icon-chip actionable primary-action"
                             icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
@@ -24,7 +24,7 @@
                 </label>
             </div>
         </div>
-        <div class="form-group-with-left-action">
+        <div class="form-group-with-left-action" ng-if="$ctrl.personTab.organizationId">
             <div class="button-column">
                 <ng-md-icon class="icon-chip actionable primary-action"
                             icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group order-4" ng-if="$ctrl.isContact()">
+    <div class="form-group order-4" ng-if="$ctrl.isContact() && $ctrl.personTab.organizationId">
         <label class="form-control-select">
             <span class="label">{{'contact.followup_status' | t}}</span>
             <select ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
@@ -55,14 +55,14 @@
             </select>
         </label>
     </div>
-    <div class="form-group order-3">
+    <div class="form-group order-3" ng-if="$ctrl.personTab.organizationId">
         <label>
             <span class="label">{{'contact.assigned_to' | t}}</span>
             <assigned-select assigned="$ctrl.personTab.assignedTo"
                              organization-id="$ctrl.personTab.organizationId"></assigned-select>
         </label>
     </div>
-    <div class="form-group order-2" ng-if="$ctrl.personTab.orgPermission">
+    <div class="form-group order-2" ng-if="$ctrl.personTab.orgPermission && $ctrl.personTab.organizationId">
         <label class="form-control-select" ng-class="{'disabled': $ctrl.permissionChangeDisabled}">
             <span class="label">{{'application.add_contact.title_permission' | t}}</span>
             <select ng-options="option.id as (option.i18n | t) for option in $ctrl.permissionOptions"
@@ -73,7 +73,7 @@
             </select>
         </label>
     </div>
-    <div class="order-5">
+    <div class="order-5" ng-if="$ctrl.personTab.organizationId">
         <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
             <label class="form-control-select">
                 <span class="label">{{'contact.cru_status' | t}}</span>

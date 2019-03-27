@@ -1,3 +1,4 @@
+import './dashboard-subnav.scss';
 import template from './dashboard-subnav.html';
 
 angular.module('missionhubApp').component('dashboardSubnav', {
@@ -5,11 +6,12 @@ angular.module('missionhubApp').component('dashboardSubnav', {
     template: template,
 });
 
-function DashboardSubnavController($scope) {
+function DashboardSubnavController($rootScope, $state) {
+    this.$state = $state;
     this.editOrganizations = false;
 
     this.toggleEditOrganizations = () => {
         this.editOrganizations = !this.editOrganizations;
-        $scope.$emit('editOrganizations', this.editOrganizations);
+        $rootScope.$broadcast('editOrganizations', this.editOrganizations);
     };
 }

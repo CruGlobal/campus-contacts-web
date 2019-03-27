@@ -1,8 +1,5 @@
 <div class="sub-navigation flex bg-white" ng-if="'app.people' | isState">
     <div class="main-container flex items-center">
-        <div class="f4 pivot-g flex-auto order-1">
-            {{ 'dashboard.people_assigned_to_you' | t }}
-        </div>
         <div class="flex-auto tr order-2 pivot-gray-darker w-55">
             <ng-md-icon icon="assignedPeople" class="ml2 mr3"
                         title="{{ 'contacts.all_contacts.title' | t }}"></ng-md-icon>
@@ -27,6 +24,26 @@
            analytics-on="click"
            analytics-category="Dashboard"
            analytics-event="Edit Organization Order"
+           ng-class="{'active': $ctrl.editOrganizations}">
+            <ng-md-icon
+                class='fr fill-pivot-dark-blue'
+                icon="editOrder"
+                ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
+            ></ng-md-icon>
+        </a>
+    </div>
+</div>
+
+<div class="sub-navigation flex bg-white" ng-if="$ctrl.$state.includes('app.ministries')">
+    <div class="main-container flex items-center justify-between">
+        <organization-breadcrumbs></organization-breadcrumbs>
+        <report-period ng-if="$ctrl.$state.current.name !== 'app.ministries.root'"></report-period>
+        <a href
+           class="dashboard-edit-toggle tipitmiddle order-2 tr"
+           title="{{ 'dashboard.edit_org_order' | t }}"
+           ng-click="$ctrl.toggleEditOrganizations()"
+           ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
+           analytics-on="click" analytics-category="Dashboard" analytics-event="Edit Organization Order"
            ng-class="{'active': $ctrl.editOrganizations}">
             <ng-md-icon
                 class='fr fill-pivot-dark-blue'
