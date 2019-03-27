@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResponsiveBar } from '@nivo/bar';
+import { ResponsiveLine } from '@nivo/line';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
@@ -26,8 +26,9 @@ const TabsLayout = styled.div`
     font-size: 12px;
     color: white;
     > p {
-        margin-left: 5px;
-        margin-bottom: 0;
+        margin-left: 10px;
+        margin-top: 5px;
+        margin-bottom: -10px;
     }
     ::after {
         color: transparent;
@@ -35,7 +36,7 @@ const TabsLayout = styled.div`
         position: absolute;
         top: 234px;
         left: 0;
-        right: 53%;
+        right: 32%;
         margin: auto;
         border-bottom: 6px solid white;
         border-left: 6px solid transparent;
@@ -48,11 +49,14 @@ const TabsLayout = styled.div`
 // Tab for left corner
 const TabsEdgeL = styled(TabsLayout)`
     border-top-left-radius: 5px;
-    background: #007398;
 `;
 // Tab for right corner
 const TabsEdgeR = styled(TabsLayout)`
     border-top-right-radius: 5px;
+`;
+
+const TabsActive = styled(TabsLayout)`
+    background: #007398;
 `;
 
 // Container holding tabs
@@ -67,7 +71,8 @@ const TabsNumber = styled.p`
 
 // Takes in objective(the tasks or step), stats(the numbers completed), edge to check if its a edge tab, and then either left or right.
 // I setup a conditional statement, if its a edge than check if its the right corner tab, if not than its left corner tab.
-// If its not a tab than just render a regular tab
+// If its not a corner tab than just render a regular tab
+// Also added active to change the background color on which tab is selected
 const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
     edge ? (
         edgeR ? (
@@ -81,6 +86,11 @@ const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
                 <TabsNumber>{stats}</TabsNumber>
             </TabsEdgeL>
         )
+    ) : active ? (
+        <TabsActive>
+            <p>{objective}</p>
+            <TabsNumber>{stats}</TabsNumber>
+        </TabsActive>
     ) : (
         <TabsLayout>
             <p>{objective}</p>
@@ -88,96 +98,98 @@ const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
         </TabsLayout>
     );
 
-export const StagesBarGraph = () => (
+export const StagesLineGraph = props => (
     <Container>
-        <h3>PERSONAL STEPS OF FAITH</h3>
-        <TabsContainer>
+        <h3>STEPS OF FAITH WITH OTHERS</h3>
+        <TabsContainer onClick={props.clicked}>
             <Tabs
                 edge={true}
-                objective={'MEMBERS/PERSONAL STEPS'}
-                stats={'20 / 40'}
-                active={true}
+                objective={'PEOPLE/STEPS OF FAITH'}
+                stats={'40 / 120'}
             />
-            <Tabs objective={'PERSONAL STEPS COMPLETED'} stats={10} />
-            <Tabs objective={'MEMBER MOVEMENT'} stats={2} />
+            <Tabs active={true} objective={'STEPS COMPLETED'} stats={20} />
+            <Tabs objective={'PEOPLE MOVEMENT'} stats={2} />
             <Tabs edgeR={true} edge={true} />
         </TabsContainer>
-        <ResponsiveBar
+        <ResponsiveLine
             data={[
                 {
-                    stage: 'No Stage',
-                    members: 10,
-                    stepsAdded: 25,
-                    stepsCompleted: 17,
-                },
-                {
-                    stage: 'Not Sure',
-                    members: 10,
-                    stepsAdded: 34,
-                    stepsCompleted: 37,
-                },
-                {
-                    stage: 'Uninterested',
-                    members: 10,
-                    stepsAdded: 53,
-                    stepsCompleted: 10,
-                },
-                {
-                    stage: 'Curious',
-                    members: 10,
-                    stepsAdded: 23,
-                    stepsCompleted: 34,
-                },
-                {
-                    stage: 'Forgiven',
-                    members: 10,
-                    stepsAdded: 53,
-                    stepsCompleted: 10,
-                },
-                {
-                    stage: 'Growing',
-                    members: 10,
-                    stepsAdded: 53,
-                    stepsCompleted: 10,
-                },
-                {
-                    stage: 'Guiding',
-                    members: 10,
-                    stepsAdded: 53,
-                    stepsCompleted: 10,
+                    id: 'Steps Completed',
+                    color: 'hsl(195, 100%, 74%)',
+                    data: [
+                        {
+                            x: '3/19/2019',
+                            y: 21,
+                        },
+                        {
+                            x: '3/20/2019',
+                            y: 23,
+                        },
+                        {
+                            x: '3/21/2019',
+                            y: 24,
+                        },
+                        {
+                            x: '3/22/2019',
+                            y: 23,
+                        },
+                        {
+                            x: '2/23/2019',
+                            y: 25,
+                        },
+                        {
+                            x: '3/24/2019',
+                            y: 26,
+                        },
+                        {
+                            x: '3/25/2019',
+                            y: 28,
+                        },
+                    ],
                 },
             ]}
-            keys={['members', 'stepsAdded', 'stepsCompleted']}
-            indexBy="stage"
             margin={{
                 top: 30,
-                right: 0,
-                bottom: 30,
-                left: 0,
+                right: 40,
+                bottom: 50,
+                left: 40,
             }}
-            padding={0.2}
-            innerPadding={3}
-            colors={['#ECEEF2', '#3CC8E6', '#007398']}
-            colorBy="id"
+            xScale={{
+                type: 'point',
+            }}
+            yScale={{
+                type: 'linear',
+                stacked: true,
+                min: 'auto',
+                max: 'auto',
+            }}
+            enableGridX={false}
+            enableGridY={false}
             axisTop={null}
-            groupMode={'grouped'}
             axisRight={null}
             axisBottom={{
-                tickSize: 0,
-                tickPadding: 13,
+                orient: 'bottom',
+                tickSize: 10,
+                tickPadding: 10,
+                tickRotation: 0,
             }}
             axisLeft={null}
-            enableGridY={true}
-            gridYValues={[25, 50]}
-            enableLabel={false}
+            dotSize={15}
+            dotColor="white"
+            dotBorderWidth={2}
+            dotBorderColor="#3CC8E6"
+            enableDotLabel={true}
+            dotLabel="y"
+            dotLabelYOffset={-15}
             animate={true}
             motionStiffness={90}
             motionDamping={15}
+            colors={'hsl(195, 100%, 74%)'}
         />
     </Container>
 );
 
-StagesBarGraph.propTypes = {
+StagesLineGraph.propTypes = {
     objective: PropTypes.string,
     stats: PropTypes.number,
 };

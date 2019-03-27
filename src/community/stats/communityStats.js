@@ -4,6 +4,8 @@ import { react2angular } from 'react2angular';
 import styled from '@emotion/styled';
 import { ThemeProvider } from 'emotion-theming';
 import { StagesBarGraph } from './StagesBarGraph';
+import { StagesLineGraph } from './StagesLineGraph';
+import { CelebrateSteps } from './celebrateSteps';
 
 const Card = styled.div`
     background-color: white;
@@ -51,9 +53,27 @@ const BarChartCardRow = styled.div`
     grid-column-gap: 30px;
 `;
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: space-between;
+    justify-content: space-between;
+`;
+
+const click = () => {
+    // console.log('Clicked');
+};
+
 const Members = () => (
     <>
-        <StagesBarGraph />
+        {/* This container holds either graphs and the celebrate section */}
+        {/* Need to figure out a conditional rendering, depending on which tab the user clicks, generate that graph */}
+        <Container>
+            {/* <StagesBarGraph clicked={click} /> */}
+            <StagesLineGraph clicked={click} />
+            <CelebrateSteps />
+        </Container>
+
         <BarChartCardRow>
             <BarStatCard label="Not Sure" count={10} />
             <BarStatCard label="Uninterested" count={11} positive />
