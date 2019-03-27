@@ -22,7 +22,6 @@
     </label>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
     <button class="btn btn-primary" type="button" ng-click="$ctrl.send()"
             ng-disabled="$ctrl.sending || !$ctrl.isValid()">
         <span ng-hide="$ctrl.sending">{{ 'general.send' | t }}</span>
