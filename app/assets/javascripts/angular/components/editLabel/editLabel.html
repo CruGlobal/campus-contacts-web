@@ -1,5 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">{{ $ctrl.title | t : { label: $ctrl.resolve.label.name } }}</h3>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form" id="modal-body">
     <div class="form-group">
