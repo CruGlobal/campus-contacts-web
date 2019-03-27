@@ -1,6 +1,6 @@
 <accordion class='shadow-4' collapsed="$ctrl.collapsed" collapsible="$ctrl.collapsible && !$ctrl.editMode">
     <accordion-header>
-        <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible, 'br2': $ctrl.collapsed === true, 'br2 br--top': $ctrl.collapsed === false}">
+        <div class="header pr2" ng-class="{'hidden-org': !$ctrl.org.visible, 'br2': $ctrl.collapsed === true, 'br2 br--top': $ctrl.collapsed === false}">
             <accordion-toggle></accordion-toggle>
             <div class="org-name pivot-white">
                 <h2 ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })">
@@ -10,8 +10,8 @@
             <organizational-stats class="pivot-white" org="$ctrl.org"></organizational-stats>
             <div class="right-buttons">
                 <ng-md-icon
-                    class='pivot-white' 
-                    size="20" icon="addPerson"
+                    class='pivot-white'
+                    size="18" icon="addPerson"
                     icon="addPerson"
                     ng-if="!$ctrl.editMode"
                     ui-sref=".new.defaultTab({ orgId: $ctrl.org.id, assignToMe: true })">
@@ -26,7 +26,7 @@
                     </ng-md-icon>
                 </div>
                 <ng-md-icon icon="add"
-                            size="20"
+                            size="16"
                             class="add-anonymous-interaction pivot-white"
                             title="{{'dashboard.anonymous.add' | t}}"
                             ng-class="{closed: $ctrl.addAnonymousInteractionButtonsVisible}"

@@ -38,9 +38,7 @@ organization {
             align-items: center;
             justify-content: space-between;
             ng-md-icon {
-                height: 48px;
-                width: 44px;
-                padding: 12px 10px;
+                padding: 12px 10px 12px 12px;
                 svg {
                     fill: $white;
                 }
