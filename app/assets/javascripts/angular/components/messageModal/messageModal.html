@@ -1,6 +1,9 @@
 <div class="modal-header">
     <h3 class="modal-title">{{ $ctrl.title | t }}</h3>
     <h4 class="modal-subtitle">{{ $ctrl.subtitle | t: { recipients: $ctrl.formattedRecipients } }}</h4>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form">
     <label class="form-group" ng-if="$ctrl.medium === 'email'">
