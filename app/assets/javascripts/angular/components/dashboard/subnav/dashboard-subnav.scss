@@ -1,4 +1,12 @@
 dashboard-subnav {
     display: block;
     height: 100%;
+
+    .organizational-stats-header {
+        margin-left: 340px;
+
+        > ng-md-icon {
+            padding-right: 28px;
+        }
+    }
 }
