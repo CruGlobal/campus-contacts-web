@@ -2,6 +2,9 @@
     <h3 class="modal-title" id="modal-title">
         {{ $ctrl.resolve.address ? 'people.index.edit_address' : 'people.index.create_address' | t }}
     </h3>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form" id="modal-body">
     <div class="form-group">
