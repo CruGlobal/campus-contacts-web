@@ -9,13 +9,15 @@
     <ui-view></ui-view>
 </section>
 <footer class="tc bg-white pt4 pb4" ng-cloak ng-if="!$ctrl.hideFooter">
-    <section class="main-container flex-grow-5">
+    <section class="main-container flex-grow-5 pivot-gray-7">
         <span class="copyright"
             >{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') }
             }}</span
         >
         <span>
-            <a href="https://get.missionhub.com/terms-of-service" class="ml3"
+            <a
+                href="https://get.missionhub.com/terms-of-service"
+                class="ml3 pivot-gray-7"
                 >{{ 'nav.terms' | t }}</a
             >
         </span>
