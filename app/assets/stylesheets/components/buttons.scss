@@ -35,7 +35,7 @@
     text-transform: uppercase;
 
     &:hover {
-        background-color: darken($pivot-dark-blue, 15%);
+        background-color: darken($pivot-dark-blue, 10%);
         transition: background-color 0.15s ease-in;
     }
 }
@@ -45,4 +45,9 @@
     background-image: none;
     color: $gray-1;
     border: 1px solid $gray-3;
+
+    &:hover {
+        background-color: darken($gray-1-5, 10%);
+        transition: background-color 0.15s ease-in;
+    }
 }
