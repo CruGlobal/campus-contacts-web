@@ -35,7 +35,7 @@
                                     ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
                         </ng-md-icon>
                     </div>
-                    <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
+                    <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'addPerson'"
                                  ui-sref=".new.defaultTab"
                                  ng-click="$event.stopPropagation()">
                     </icon-button>
@@ -62,7 +62,7 @@
                                 ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
                     </ng-md-icon>
                 </div>
-                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
+                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'addPerson'"
                              ui-sref=".new.defaultTab"
                              ng-click="$event.stopPropagation()">
                 </icon-button>
