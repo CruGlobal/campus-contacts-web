@@ -375,7 +375,7 @@ export default {
             },
             members: {
                 columns: {
-                    name: 'Contacts',
+                    name: 'Members',
                 },
                 contacts: 'contacts',
                 leader: 'Leader',
