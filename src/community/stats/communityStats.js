@@ -59,9 +59,6 @@ const Container = styled.div`
     align-items: space-between;
     justify-content: space-between;
 `;
-const click = () => {
-    graph++;
-};
 
 const Members = () => {
     // Define a hook that creats a graph state
@@ -77,16 +74,12 @@ const Members = () => {
             <Container>
                 {graph === 'Bar' ? (
                     <StagesBarGraph
-                        clicked={click}
                         setGraph={setGraph}
-                        value={graph}
                         graph={['Bar', 'Line']}
                     />
                 ) : (
                     <StagesLineGraph
-                        clicked={click}
                         setGraph={setGraph}
-                        value={graph}
                         graph={['Bar', 'Line']}
                     />
                 )}

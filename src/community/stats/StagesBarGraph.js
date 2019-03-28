@@ -26,8 +26,7 @@ const TabsLayout = styled.div`
     font-size: 12px;
     color: white;
     > p {
-        margin-left: 5px;
-        margin-bottom: 0;
+        margin: 5px 0 -10px 10px;
     }
     ::after {
         color: transparent;
