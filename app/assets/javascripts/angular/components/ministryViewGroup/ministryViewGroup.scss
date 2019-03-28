@@ -5,7 +5,8 @@ ministry-view-group {
     height: 50px;
     border-top: 1px solid rgba($gray-dark, 0.1);
 
-    ng-md-icon svg {
+    ng-md-icon svg,
+    ng-md-icon svg path {
         fill: $pivot-dark-blue;
     }
 
