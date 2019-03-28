@@ -25,10 +25,8 @@ angular
 
         localStorageService.allowSessionTransfer();
 
-        if (authenticationService.isTokenValid()) {
+        if (authenticationService.isTokenValid())
             authenticationService.setupAuthenticationState();
-            authenticationService.updateUserData();
-        }
 
         facebookService.loadSDK()(document);
 

@@ -64,4 +64,18 @@ person-profile {
     .pill {
         margin-bottom: 2px;
     }
+
+    assigned-select .ui-select-match-item {
+        color: white;
+        font-size: 14px;
+        padding: 0.1rem 0.25rem 0.25rem 0.25rem !important;
+        border-radius: 0.25rem !important;
+        border: solid 1px #808284 !important;
+        -webkit-appearance: initial !important;
+        background: #007398 !important;
+
+        .close {
+            color: white;
+        }
+    }
 }
