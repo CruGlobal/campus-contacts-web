@@ -35,7 +35,7 @@ const TabsLayout = styled.div`
         position: absolute;
         top: 234px;
         left: 0;
-        right: 53%;
+        right: 54%;
         margin: auto;
         border-bottom: 6px solid white;
         border-left: 6px solid transparent;
@@ -68,7 +68,7 @@ const TabsNumber = styled.p`
 // Takes in objective(the tasks or step), stats(the numbers completed), edge to check if its a edge tab, and then either left or right.
 // I setup a conditional statement, if its a edge than check if its the right corner tab, if not than its left corner tab.
 // If its not a tab than just render a regular tab
-const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
+const Tabs = ({ objective, stats, edge, edgeR, edgeL, active, props }) =>
     edge ? (
         edgeR ? (
             <TabsEdgeR>
@@ -88,17 +88,23 @@ const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
         </TabsLayout>
     );
 
-export const StagesBarGraph = () => (
+export const StagesBarGraph = props => (
     <Container>
         <h3>PERSONAL STEPS OF FAITH</h3>
         <TabsContainer>
-            <Tabs
-                edge={true}
-                objective={'MEMBERS/PERSONAL STEPS'}
-                stats={'20 / 40'}
-                active={true}
-            />
-            <Tabs objective={'PERSONAL STEPS COMPLETED'} stats={10} />
+            {/* On click set our graph state equal to Bar */}
+            <div onClick={() => props.setGraph(props.graph[0])}>
+                <Tabs
+                    edge={true}
+                    objective={'MEMBERS/PERSONAL STEPS'}
+                    stats={'20 / 40'}
+                    active={true}
+                />
+            </div>
+            {/* On click set our graph state equal to Line */}
+            <div onClick={() => props.setGraph(props.graph[1])}>
+                <Tabs objective={'PERSONAL STEPS COMPLETED'} stats={10} />
+            </div>
             <Tabs objective={'MEMBER MOVEMENT'} stats={2} />
             <Tabs edgeR={true} edge={true} />
         </TabsContainer>

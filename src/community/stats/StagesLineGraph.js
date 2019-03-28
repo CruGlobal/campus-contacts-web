@@ -36,7 +36,7 @@ const TabsLayout = styled.div`
         position: absolute;
         top: 234px;
         left: 0;
-        right: 32%;
+        right: 33%;
         margin: auto;
         border-bottom: 6px solid white;
         border-left: 6px solid transparent;
@@ -101,13 +101,19 @@ const Tabs = ({ objective, stats, edge, edgeR, edgeL, active }) =>
 export const StagesLineGraph = props => (
     <Container>
         <h3>STEPS OF FAITH WITH OTHERS</h3>
-        <TabsContainer onClick={props.clicked}>
-            <Tabs
-                edge={true}
-                objective={'PEOPLE/STEPS OF FAITH'}
-                stats={'40 / 120'}
-            />
-            <Tabs active={true} objective={'STEPS COMPLETED'} stats={20} />
+        <TabsContainer>
+            {/* On click set our graph state equal to Bar */}
+            <div onClick={() => props.setGraph(props.graph[0])}>
+                <Tabs
+                    edge={true}
+                    objective={'PEOPLE/STEPS OF FAITH'}
+                    stats={'40 / 120'}
+                />
+            </div>
+            {/* On click set our graph state equal to Line */}
+            <div onClick={() => props.setGraph(props.graph[1])}>
+                <Tabs active={true} objective={'STEPS COMPLETED'} stats={20} />
+            </div>
             <Tabs objective={'PEOPLE MOVEMENT'} stats={2} />
             <Tabs edgeR={true} edge={true} />
         </TabsContainer>

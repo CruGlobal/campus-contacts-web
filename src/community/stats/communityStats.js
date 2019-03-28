@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import styled from '@emotion/styled';
@@ -59,31 +59,52 @@ const Container = styled.div`
     align-items: space-between;
     justify-content: space-between;
 `;
-
 const click = () => {
-    // console.log('Clicked');
+    graph++;
 };
 
-const Members = () => (
-    <>
-        {/* This container holds either graphs and the celebrate section */}
-        {/* Need to figure out a conditional rendering, depending on which tab the user clicks, generate that graph */}
-        <Container>
-            {/* <StagesBarGraph clicked={click} /> */}
-            <StagesLineGraph clicked={click} />
-            <CelebrateSteps />
-        </Container>
+const Members = () => {
+    // Define a hook that creats a graph state
+    // We pass it down through props to our tab
+    // On click we set the graph state to which graph we wish to render
+    const [graph, setGraph] = useState('Bar');
 
-        <BarChartCardRow>
-            <BarStatCard label="Not Sure" count={10} />
-            <BarStatCard label="Uninterested" count={11} positive />
-            <BarStatCard label="Curious" count={12} />
-            <BarStatCard label="Forgiven" count={13} negative />
-            <BarStatCard label="Growing" count={14} />
-            <BarStatCard label="Guiding" count={15} />
-        </BarChartCardRow>
-    </>
-);
+    return (
+        <>
+            {/* This container holds either graphs and the celebrate section */}
+            {/* If our graph state is equal to Bar then render the bar graph, if not than render the line graph*/}
+            {/* We will add additional rendering statements in the future */}
+            <Container>
+                {graph === 'Bar' ? (
+                    <StagesBarGraph
+                        clicked={click}
+                        setGraph={setGraph}
+                        value={graph}
+                        graph={['Bar', 'Line']}
+                    />
+                ) : (
+                    <StagesLineGraph
+                        clicked={click}
+                        setGraph={setGraph}
+                        value={graph}
+                        graph={['Bar', 'Line']}
+                    />
+                )}
+
+                <CelebrateSteps />
+            </Container>
+
+            <BarChartCardRow>
+                <BarStatCard label="Not Sure" count={10} />
+                <BarStatCard label="Uninterested" count={11} positive />
+                <BarStatCard label="Curious" count={12} />
+                <BarStatCard label="Forgiven" count={13} negative />
+                <BarStatCard label="Growing" count={14} />
+                <BarStatCard label="Guiding" count={15} />
+            </BarChartCardRow>
+        </>
+    );
+};
 
 const theme = {
     colors: {
@@ -94,12 +115,14 @@ const theme = {
     },
 };
 
-const CommunityStats = ({ orgId }) => (
-    <ThemeProvider theme={theme}>
-        <h1>Org Id: {orgId}</h1>
-        <Members />
-    </ThemeProvider>
-);
+const CommunityStats = ({ orgId }) => {
+    return (
+        <ThemeProvider theme={theme}>
+            <h1>Org Id: {orgId}</h1>
+            <Members />
+        </ThemeProvider>
+    );
+};
 
 CommunityStats.propTypes = {
     orgId: PropTypes.string,
