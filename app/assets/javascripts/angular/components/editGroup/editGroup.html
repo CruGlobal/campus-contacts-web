@@ -57,8 +57,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
+    <button class="btn btn-secondary br2 br--bottom br--left" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
+    <button class="btn btn-primary br2  br--bottom br--right" type="button" ng-click="$ctrl.save()"
             ng-disabled="!$ctrl.valid() || $ctrl.saving">
         <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
         <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
