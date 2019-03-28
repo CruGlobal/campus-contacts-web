@@ -65,7 +65,7 @@ function ministryViewGroupController(
                 group: _.constant(vm.group),
             },
             windowClass: 'pivot_theme',
-            size: 'sm',
+            size: 'md',
         });
     }
 
