@@ -135,6 +135,10 @@ input[type='checkbox'] {
                 border-color: $focus-gray;
             }
         }
+        &:focus {
+            outline: none;
+            background-color: $focus-gray;
+        }
         &::after {
             content: ' ';
             position: absolute;
@@ -155,6 +159,14 @@ input[type='checkbox'] {
             }
             select {
                 color: $gray-2;
+            }
+        }
+    }
+
+    &.dropdown {
+        .form-control-select {
+            &::after {
+                top: 50%;
             }
         }
     }

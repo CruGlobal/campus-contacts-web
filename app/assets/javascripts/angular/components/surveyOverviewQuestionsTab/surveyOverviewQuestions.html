@@ -12,7 +12,7 @@
             ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
                 'pa3 shadow-4': !$ctrl.isExpanded[question.id],
-                'ph3 pv2 items-center mb0 br--top': $ctrl.isExpanded[question.id]
+                'ph3 pv2 items-center mb0 br--top bg-pivot-white': $ctrl.isExpanded[question.id]
         }">
             <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
                 <img ng-src="{{$ctrl.icons.sort}}" alt="{{ 'surveys:questions.sort' | t }}" style="width:22px; height:20px">
@@ -52,11 +52,11 @@
                         <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
                             {{ 'surveys:questions.type' | t }}
                         </label>
-                        <div class="dropdown dropdown-select w-100 mr2" uib-dropdown>
-                            <a class="f5 link dim pa2 db pivot-gray-darker br2 dim bg-pivot-gray-5" href="" uib-dropdown-toggle>
+                        <div class="dropdown dropdown-select w-100 mr2 form" uib-dropdown>
+                            <a href class="f5 link form-control form-control-select" uib-dropdown-toggle>
                                 {{$ctrl.getQuestionType(question.kind, question.style).name}}
                             </a>
-                            <ul class="bg-white pa2 f5  br--bottom shadow-4" uib-dropdown-menu>
+                            <ul class="bg-white pa2 f5 br--bottom shadow-4" uib-dropdown-menu>
                                 <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
                                     <a href
                                         class='pt2'
