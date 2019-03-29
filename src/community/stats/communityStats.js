@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { ApolloProvider, useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import styled from '@emotion/styled';
 import { ThemeProvider } from 'emotion-theming';
-import { StagesBarGraph } from './StagesBarGraph';
-import { StagesLineGraph } from './StagesLineGraph';
+
+import StagesBarGraph from './stagesBarGraph';
+import StagesLineGraph from './stagesLineGraph';
 import { CelebrateSteps } from './celebrateSteps';
+import { client } from '../state/apollo-client';
+import { GET_CURRENT_TAB } from '../graphql';
+import Tabs from './tabs';
+import DashBoardNavBar from './navBar';
+import StepsInfo from './StepsInfo';
 
 const Card = styled.div`
     background-color: white;
@@ -60,30 +67,42 @@ const Container = styled.div`
     justify-content: space-between;
 `;
 
+const InnerContainer = styled.div`
+    width: 75%;
+    height: 220px;
+    margin-bottom: 30px;
+    border-radius: 0 0 5px 5px;
+    > div {
+        background: white;
+    }
+`;
+
 const Members = () => {
-    // Define a hook that creats a graph state
-    // We pass it down through props to our tab
-    // On click we set the graph state to which graph we wish to render
-    const [graph, setGraph] = useState('Bar');
+    const {
+        data: {
+            apolloClient: { currentTab },
+        },
+    } = useQuery(GET_CURRENT_TAB);
+
+    const renderGraph = () => {
+        switch (currentTab) {
+            case 'MEMBERS':
+                return <StagesBarGraph />;
+            case 'STEPS_COMPLETED':
+                return <StagesLineGraph />;
+            default:
+                return <div />;
+        }
+    };
 
     return (
         <>
-            {/* This container holds either graphs and the celebrate section */}
-            {/* If our graph state is equal to Bar then render the bar graph, if not than render the line graph*/}
-            {/* We will add additional rendering statements in the future */}
             <Container>
-                {graph === 'Bar' ? (
-                    <StagesBarGraph
-                        setGraph={setGraph}
-                        graph={['Bar', 'Line']}
-                    />
-                ) : (
-                    <StagesLineGraph
-                        setGraph={setGraph}
-                        graph={['Bar', 'Line']}
-                    />
-                )}
-
+                <InnerContainer>
+                    <h3>STEPS OF FAITH WITH OTHERS</h3>
+                    <Tabs />
+                    {renderGraph()}
+                </InnerContainer>
                 <CelebrateSteps />
             </Container>
 
@@ -108,14 +127,15 @@ const theme = {
     },
 };
 
-const CommunityStats = ({ orgId }) => {
-    return (
+const CommunityStats = ({ orgId }) => (
+    <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-            <h1>Org Id: {orgId}</h1>
+            <DashBoardNavBar orgID={orgId} />
+            <StepsInfo />
             <Members />
         </ThemeProvider>
-    );
-};
+    </ApolloProvider>
+);
 
 CommunityStats.propTypes = {
     orgId: PropTypes.string,
