@@ -26,12 +26,7 @@ const NavBarInnerContainer = styled.div`
         margin-right: 30px;
         :hover {
             color: #007397;
-        }
-    }
-    > p {
-        margin: 0 5px;
-        :hover {
-            color: #3cc8e6;
+            cursor: pointer;
         }
     }
 `;

@@ -12,6 +12,7 @@ const Container = styled.div`
         > p {
             :hover {
                 color: #007397;
+                cursor: pointer;
             }
         }
     }
