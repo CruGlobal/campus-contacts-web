@@ -14,6 +14,7 @@ const Container = styled.div`
     flex-direction: row;
     align-items: space-between;
     justify-content: space-between;
+    margin-top: 20px;
 `;
 
 const InnerContainer = styled.div`

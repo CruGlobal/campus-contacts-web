@@ -20,6 +20,7 @@ const MessageContainer = styled.div`
     > p {
         margin-bottom: -6px;
         padding-bottom: 9px;
+        color: grey;
     }
 `;
 

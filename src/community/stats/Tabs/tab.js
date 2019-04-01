@@ -31,7 +31,7 @@ const Tabs = ({ title, value, active, onTabClick, tabsPosition }) => {
             color: transparent;
             content: '';
             position: absolute;
-            top: 375px;
+            top: 401px;
             left: 0;
             right: ${active ? tabsPosition : null}%;
             margin: auto;

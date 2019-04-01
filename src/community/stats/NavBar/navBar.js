@@ -7,6 +7,11 @@ const NavBar = styled.div`
     background: white;
     margin-bottom: 20px;
     border-radius: 5px;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    margin-bottom: 50px;
+    width: 100vw;
     > h1 {
         margin-left: 10px;
     }

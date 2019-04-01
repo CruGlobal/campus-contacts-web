@@ -8,6 +8,10 @@ const StepsContent = styled.p`
     margin 0 0 5px 0;
 `;
 
+const Container = styled.div`
+    margin-top: 150px;
+`;
+
 const StepsInfoPersonal = ({ userStats, numberStats, peopleStats }) => (
     <StepsContent>
         {userStats} members have taken {numberStats} steps with {peopleStats}{' '}
@@ -23,14 +27,14 @@ const StepsInfoSpiritual = ({ userStats }) => (
 
 const StepsInfo = () => {
     return (
-        <>
+        <Container>
             <StepsInfoPersonal
                 userStats={'20'}
                 numberStats={'120'}
                 peopleStats={'40'}
             />
             <StepsInfoSpiritual userStats={'2'} />
-        </>
+        </Container>
     );
 };
 
