@@ -13,7 +13,7 @@
             options="{ anonymousInteractions: true, reorderable: true }">
             <div class="people-list grid" ng-if="!$ctrl.editMode">
                 <div class="grid-content">
-                    <people-view-person person="person" organization-id="org.id"
+                    <people-view-person class='pl2' person="person" organization-id="org.id"
                                         ng-repeat="person in org.people | orderBy: 'last_name' track by person.id">
                     </people-view-person>
                 </div>
