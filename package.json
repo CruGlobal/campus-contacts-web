@@ -10,6 +10,8 @@
         "test-watch": "karma start",
         "test-debug": "karma start --browsers Chrome",
         "lint": "eslint '@(app|src)/**/*.js'",
+        "prettier:check": "prettier '{{src,app,bin,test,__{tests,mocks}__}/**/*.{js,json,html},./*.{js,json,html,yml}}' --list-different",
+        "prettier:write": "prettier '{{src,app,bin,test,__{tests,mocks}__}/**/*.{js,json,html},./*.{js,json,html,yml}}' --write",
         "precommit": "pretty-quick --staged",
         "onesky:upload": "babel-node ./bin/oneskyUpload.js",
         "onesky:download": "babel-node ./bin/oneskyDownload.js"
