@@ -1,3 +1,9 @@
+import angular from 'angular';
+import './httpProxy.service';
+import './models.service';
+import './organization.service';
+import './permission.service';
+
 angular.module('missionhubApp').factory('loggedInPerson', loggedInPerson);
 
 function loggedInPerson(

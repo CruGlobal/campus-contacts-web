@@ -1,4 +1,8 @@
-import 'angular-mocks';
+// import '../testSetup.spec';
+
+import angular from 'angular';
+
+import './loggedInPerson.service';
 
 // Constants
 var loggedInPerson, $q, $rootScope, httpProxy, JsonApiDataStore;

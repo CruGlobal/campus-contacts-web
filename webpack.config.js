@@ -168,6 +168,7 @@ module.exports = (env = {}) => ({
     },
     devtool: 'source-map',
     devServer: {
+        port: 443,
         historyApiFallback: true,
         https: true,
         headers: {

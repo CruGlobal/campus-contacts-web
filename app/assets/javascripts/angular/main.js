@@ -22,10 +22,10 @@ import '../../../../src/components/authentication/authLanding.component';
 
 import '../../stylesheets/main.scss';
 
-/* global require */
-const srcFilesContext = require.context(
-    './',
-    true,
-    /^(?!.*\.spec\.js$).*\.js$/,
-);
-srcFilesContext.keys().forEach(srcFilesContext);
+// /* global require */
+// const srcFilesContext = require.context(
+//     './',
+//     true,
+//     /^(?!.*\.spec\.js$).*\.js$/,
+// );
+// srcFilesContext.keys().forEach(srcFilesContext);
