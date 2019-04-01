@@ -23,7 +23,7 @@ const StagesBarGraph = () => {
     return (
         <ResponsiveBar
             data={members.data}
-            keys={['members', 'stepsAdded', 'stepsCompleted']}
+            keys={['stepsAdded', 'stepsCompleted']}
             indexBy="stage"
             margin={{
                 top: 30,
@@ -33,7 +33,7 @@ const StagesBarGraph = () => {
             }}
             padding={0.2}
             innerPadding={3}
-            colors={['#ECEEF2', '#3CC8E6', '#007398']}
+            colors={['#3CC8E6', '#007398']}
             colorBy="id"
             axisTop={null}
             groupMode={'grouped'}

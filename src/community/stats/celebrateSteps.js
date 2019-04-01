@@ -25,22 +25,22 @@ const MessageContainer = styled.div`
 
 const MessageConfig = [
     {
-        message: 'Leah Completed A Personal Step of Faith',
+        message: 'Leah Completed a Step of Faith with a Curious person',
         user: 'Leah Brooks',
         key: 'MESSAGE_1',
     },
     {
-        message: 'Leah Completed A Personal Step of Faith',
+        message: 'Leah Completed a Step of Faith with a Curious person',
         user: 'Leah Brooks',
         key: 'MESSAGE_2',
     },
     {
-        message: 'Leah Completed A Personal Step of Faith',
+        message: 'Leah Completed a Step of Faith with a Curious person',
         user: 'Leah Brooks',
         key: 'MESSAGE_3',
     },
     {
-        message: 'Leah Completed A Personal Step of Faith',
+        message: 'Leah Completed a Step of Faith with a Curious person',
         user: 'Leah Brooks',
         key: 'MESSAGE_4',
     },

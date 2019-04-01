@@ -87,6 +87,7 @@ const Filters = () => {
 
 Filters.protoTypes = {
     date: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
 };
 
 export default Filters;

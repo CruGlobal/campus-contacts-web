@@ -10,7 +10,7 @@ const StepsContent = styled.p`
 
 const StepsInfoPersonal = ({ userStats, numberStats, peopleStats }) => (
     <StepsContent>
-        {userStats} members have taken {numberStats} steps with {peopleStats}
+        {userStats} members have taken {numberStats} steps with {peopleStats}{' '}
         people.
     </StepsContent>
 );
@@ -23,14 +23,14 @@ const StepsInfoSpiritual = ({ userStats }) => (
 
 const StepsInfo = () => {
     return (
-        <div>
+        <>
             <StepsInfoPersonal
                 userStats={'20'}
                 numberStats={'120'}
                 peopleStats={'40'}
             />
             <StepsInfoSpiritual userStats={'2'} />
-        </div>
+        </>
     );
 };
 

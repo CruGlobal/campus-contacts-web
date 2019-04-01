@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
+let trianglePosition = 54;
 // Need to figure out a way to make the little triangle tab move based on the tab clicked
 const Tab = styled.div`
     display: flex;
@@ -30,7 +31,7 @@ const Tab = styled.div`
         position: absolute;
         top: 375px;
         left: 0;
-        right: 54%;
+        right: ${trianglePosition}%;
         margin: auto;
         border-bottom: 6px solid white;
         border-left: 6px solid transparent;
