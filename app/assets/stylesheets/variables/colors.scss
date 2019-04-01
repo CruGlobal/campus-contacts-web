@@ -10,6 +10,8 @@ $blue-2: #3594be;
 $blue-3: #c7dff0;
 $blue-4: #eaf1f6;
 $blue-5: #f7f9fb;
+$blue-6: #3cc8e6; //Parakeet blue
+$blue-7: #005a7f;
 $white: #fff;
 $gray-1: #333333;
 $gray-1-25: #4f4f4f;
@@ -20,13 +22,13 @@ $gray-3: #c0c0c0;
 $gray-4: #eceef2;
 $gray-5: #f0f0f0;
 $gray-6: #e1e3e7;
-$gray-7: #b4b6ba;
+$gray-7: #b4b6ba; //Narwhal gray
 
 $background-gray: #dadada;
 
-$pivot-dark-blue: #007398;
-$pivot-darker-blue: #005a7f;
-$pivot-bright-blue: #66d9f0;
+$pivot-dark-blue: $blue-1;
+$pivot-darker-blue: $blue-7;
+$pivot-bright-blue: $blue-6;
 $pivot-muted-blue: #d3e0e3;
 $pivot-muted-dark-blue: #85a4ab;
 $pivot-teal: #58c6b9;
@@ -51,6 +53,7 @@ $pivot-colors: (
     gray-6: $gray-6,
     gray-7: $gray-7,
     blue-4: $blue-4,
+    blue-6: $blue-6,
     dark-blue: $pivot-dark-blue,
     darker-blue: $pivot-darker-blue,
     bright-blue: $pivot-bright-blue,

@@ -12,7 +12,7 @@
         </div>
         <div class="normal-column">
             <div class="row text-row">
-                <span class="name">{{$ctrl.person | personName}}</span>
+                <span class="name" ng-if="$ctrl.person.first_name || $ctrl.person.last_name">{{$ctrl.person | personName}}</span>
                 <span class="warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
                     {{'contacts.statuses.uncontacted' | t}}
                 </span>
@@ -42,7 +42,6 @@
     </header>
     <div ui-view="personTab" class="person-tab-content"></div>
     <div class="modal-footer" ng-if="$ctrl.person.id === null">
-        <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
         <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
                 ng-disabled="$ctrl.saving || $ctrl.profileForm.$invalid">
             <span ng-hide="$ctrl.saving">{{ 'general.save' | t }}</span>

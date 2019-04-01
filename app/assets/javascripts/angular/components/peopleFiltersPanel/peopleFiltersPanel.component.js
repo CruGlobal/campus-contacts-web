@@ -70,6 +70,15 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
+    this.hideNonFilterableQuestionAnswerResponse = question => {
+        if (question.kind !== 'TextField') return false;
+
+        return (
+            question.label.toLowerCase() === 'last name' ||
+            question.label.toLowerCase() === 'first name'
+        );
+    };
+
     this.resetFilters = () => {
         this.filters = {
             searchString: '',
@@ -83,7 +92,17 @@ function peopleFiltersPanelController(
         };
     };
 
-    this.updateFilters = () => {
+    this.updateFilters = (option, questionId) => {
+        const questionFilter =
+            option === 'no_response' || option === 'any_response' ? option : '';
+
+        if (questionId) {
+            this.filters.questions = {
+                ...this.filters.questions,
+                ...{ [questionId]: questionFilter },
+            };
+        }
+
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
         );

@@ -1,5 +1,5 @@
 <async-content ready="$ctrl.ready">
-    <div class="br3 bg-pivot-darker-blue shadow-4 mb-3" ng-class="{'hidden-org': $ctrl.org.visible === false}" ng-if="$ctrl.showOrgNav()">
+    <div class="br3 bg-pivot-darker-blue shadow-4 mb3" ng-class="{'hidden-org': $ctrl.org.visible === false}" ng-if="$ctrl.showOrgNav()">
         <div class="flex items-center justify-between br3 br--top pb3" ng-class="$ctrl.org.visible ? 'bg-pivot-white' : 'bg-pivot-gray-6'">
             <div class="pivot-darker-blue f3 ph3 pt3 " ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })">{{$ctrl.org.name}}</div>
             <div ng-if="$ctrl.editMode">
@@ -11,7 +11,7 @@
                             ng-click="$ctrl.toggleVisibility($ctrl.org)"
                             analytics-on="click" analytics-category="Dashboard" analytics-event="Show Organization">
                 </ng-md-icon>
-                <ng-md-icon class="sort-orgs-handle" icon="dragHandle">
+                <ng-md-icon class="sort-orgs-handle mh2" icon="dragHandle">
                 </ng-md-icon>
             </div>
         </div>

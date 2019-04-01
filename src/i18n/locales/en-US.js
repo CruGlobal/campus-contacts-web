@@ -375,7 +375,7 @@ export default {
             },
             members: {
                 columns: {
-                    name: 'Contacts',
+                    name: 'Members',
                 },
                 contacts: 'contacts',
                 leader: 'Leader',
@@ -614,6 +614,8 @@ export default {
             tools: {
                 header: 'Tools',
             },
+            noMinistriesFound:
+                'Sorry you have no ministries linked to this account.',
         },
         monthly: 'Monthly',
         nav: {
@@ -992,6 +994,8 @@ export default {
             exactly: 'Exactly',
             contains: 'Contains',
             doesNotContain: 'Does not contain',
+            noResponse: 'No response',
+            anyResponse: 'Any response',
         },
     },
     movementIndicators: {

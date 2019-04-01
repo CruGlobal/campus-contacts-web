@@ -1,7 +1,5 @@
 <div class="accordion"
-    ui-sortable="$ctrl.questionSortableOptions"
-    ng-model="$ctrl.surveyQuestions"
-    ui-sortable-stop="$ctrl.updatePosition($ctrl.surveyQuestions)">
+    ng-sortable="$ctrl.questionSortableOptions">
     <form class="br2 pivot-gray-darker"
         ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         ng-class="{
@@ -85,8 +83,7 @@
                             {{ 'surveys:questions.initiateAssignment' | t }}
                         </p>
                         <div class="assignments pb2"
-                             ng-model="question.question_answers"
-                             ui-sortable="$ctrl.sortableOptions"
+                             ng-sortable="$ctrl.sortableOptions"
                              ui-sortable-stop="$ctrl.saveQuestionContent(question, question.question_answers)">
                             <div class="flex items-center assignment-item no-line"
                                  ng-repeat="answer in question.question_answers track by $index">

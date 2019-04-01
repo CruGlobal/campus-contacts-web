@@ -23,11 +23,11 @@ angular.module('missionhubApp').component('myOrganizationsDashboardList', {
 
         vm.sortableOptions = {
             handle: '.sort-orgs-handle',
-            stop: function() {
-                return userPreferencesService.organizationOrderChange(
-                    vm.rootOrgs,
-                );
-            },
+            ghostClass: 'o-40',
+            forceFallback: true, // Needed to make sticky header and scrollSensitivity work
+            scrollSensitivity: 100,
+            onEnd: () =>
+                userPreferencesService.organizationOrderChange(vm.rootOrgs),
         };
     },
 });

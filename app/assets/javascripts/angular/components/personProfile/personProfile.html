@@ -6,9 +6,9 @@
     <div class="order-6">
         <div class="form-group-with-left-action" ng-if="$ctrl.personTab.organizationId">
             <div class="button-column">
-                <ng-md-icon class="icon-chip actionable primary-action"
+                <ng-md-icon class="icon-chip actionable primary-action pivot-white"
                             icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
-                            size="16"
+                            size="12"
                             ng-click="$ctrl.editTags()"
                             title="{{'people.index.manage_labels' | t}}"></ng-md-icon>
             </div>
@@ -26,10 +26,10 @@
         </div>
         <div class="form-group-with-left-action" ng-if="$ctrl.personTab.organizationId">
             <div class="button-column">
-                <ng-md-icon class="icon-chip actionable primary-action"
+                <ng-md-icon class="icon-chip actionable primary-action pivot-white"
                             icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
-                            size="16"
                             ng-click="$ctrl.editGroups()"
+                            size="12"
                             title="{{'people.index.manage_groups' | t}}"></ng-md-icon>
             </div>
             <div class="form-group">
@@ -132,7 +132,7 @@
         </div>
         <div class="form-group-with-left-action" ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()">
             <div class="button-column" ng-if="!$ctrl.isPendingEmailAddress(emailAddress)">
-                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                <ng-md-icon class="icon-chip actionable pivot-white" icon="close" size="12"
                             ng-click="$ctrl.deleteEmailAddress(emailAddress)"
                             title="{{'contact.delete' | t}}"></ng-md-icon>
             </div>
@@ -160,7 +160,7 @@
         </div>
         <div class="form-group-with-left-action" ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()">
             <div class="button-column" ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)">
-                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                <ng-md-icon class="icon-chip actionable pivot-white" icon="close" size="12"
                             ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
                             title="{{'contact.delete' | t}}"></ng-md-icon>
             </div>
@@ -188,12 +188,12 @@
         </div>
         <div class="form-group-with-left-action dual-action" ng-repeat="address in $ctrl.personTab.person.addresses">
             <div class="button-column first-action">
-                <ng-md-icon class="icon-chip actionable primary-action" icon="edit" size="16"
+                <ng-md-icon class="icon-chip actionable primary-action pivot-white" icon="edit" size="12"
                             ng-click="$ctrl.editAddress(address)"
                             title="{{'contact.edit' | t}}"></ng-md-icon>
             </div>
             <div class="button-column second-action">
-                <ng-md-icon class="icon-chip actionable" icon="close" size="16"
+                <ng-md-icon class="icon-chip actionable pivot-white" icon="close" size="12"
                             ng-click="$ctrl.deleteAddress(address)"
                             title="{{'contact.delete' | t}}"></ng-md-icon>
             </div>
@@ -208,7 +208,7 @@
         </div>
         <div class="form-group-with-left-action">
             <div class="button-column">
-                <ng-md-icon class="icon-chip actionable primary-action" icon="add" size="16"
+                <ng-md-icon class="icon-chip actionable primary-action pivot-white" icon="add" size="12"
                             ng-click="$ctrl.editAddress(null)"
                             title="{{'contact.add' | t}}"></ng-md-icon>
             </div>

@@ -1,4 +1,4 @@
-<div ui-sortable="$ctrl.sortableOptions" ng-model="$ctrl.rootOrgs">
+<div ng-sortable="$ctrl.sortableOptions">
     <organization-overview
             ng-repeat="org in $ctrl.rootOrgs"
             org="org"
@@ -6,4 +6,7 @@
             load-details="false"
             edit-mode="$ctrl.editOrganizations">
     </organization-overview>
+    <section class='tc' ng-if="$ctrl.rootOrgs.length <= 0">
+        <h1>{{ 'ministries.noMinistriesFound' | t }}</h1>
+    </section>
 </div>
