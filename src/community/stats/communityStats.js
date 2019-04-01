@@ -3,10 +3,10 @@ import { ApolloProvider } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
-import Members from './members';
+import Members from './Members/members';
 import { client } from '../state/apollo-client';
-import DashBoardNavBar from './navBar';
-import StepsInfo from './StepsInfo';
+import DashBoardNavBar from './NavBar/navBar';
+import StepsInfo from './StepsInfo/StepsInfo';
 
 const theme = {
     colors: {

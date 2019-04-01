@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import Tab from './tab';
 import { useMutation, useQuery } from 'react-apollo-hooks';
-import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../graphql';
+import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
 
 const TabsContainer = styled.div`
     display: grid;

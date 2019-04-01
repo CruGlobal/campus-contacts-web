@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { GET_STEPS_COMPLETED } from '../graphql';
+import { GET_STEPS_COMPLETED } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 
 const StagesLineGraph = () => {

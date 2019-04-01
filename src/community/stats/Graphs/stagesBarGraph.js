@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
-import { GET_MEMBERS } from '../graphql';
+import { GET_MEMBERS } from '../../graphql';
 
 const StagesBarGraph = () => {
     const {

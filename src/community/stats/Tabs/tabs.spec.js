@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 
-import { GET_CURRENT_TAB } from '../graphql';
+import { GET_CURRENT_TAB } from '../../graphql';
 import Tabs from './tabs';
 import Tab from './tab';
 

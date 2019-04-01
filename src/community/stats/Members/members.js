@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import StagesBarGraph from './stagesBarGraph';
-import StagesLineGraph from './stagesLineGraph';
-import { CelebrateSteps } from './celebrateSteps';
-import { GET_CURRENT_TAB } from '../graphql';
+import StagesBarGraph from '../Graphs/stagesBarGraph';
+import StagesLineGraph from '../Graphs/stagesLineGraph';
+import { CelebrateSteps } from '../CelebrateSteps/celebrateSteps';
+import { GET_CURRENT_TAB } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
-import Tabs from './tabs';
-import BarStats from './barStatCard';
+import Tabs from '../Tabs/tabs';
+import BarStats from '../BarStatsCard/barStatCard';
 
 const Container = styled.div`
     display: flex;
