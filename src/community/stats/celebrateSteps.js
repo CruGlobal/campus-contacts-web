@@ -9,13 +9,42 @@ const Container = styled.div`
 
 const InsideContainer = styled.div`
     background: white;
-    padding-bottom: 20px;
     border-radius: 5px;
 `;
 
 const MessageContainer = styled.div`
     margin: 5px 10px;
+    > h3 {
+        margin-bottom: -2px;
+    }
+    > p {
+        margin-bottom: -6px;
+        padding-bottom: 9px;
+    }
 `;
+
+const MessageConfig = [
+    {
+        message: 'Leah Completed A Personal Step of Faith',
+        user: 'Leah Brooks',
+        key: 'MESSAGE_1',
+    },
+    {
+        message: 'Leah Completed A Personal Step of Faith',
+        user: 'Leah Brooks',
+        key: 'MESSAGE_2',
+    },
+    {
+        message: 'Leah Completed A Personal Step of Faith',
+        user: 'Leah Brooks',
+        key: 'MESSAGE_3',
+    },
+    {
+        message: 'Leah Completed A Personal Step of Faith',
+        user: 'Leah Brooks',
+        key: 'MESSAGE_4',
+    },
+];
 
 const Message = ({ message, user }) => (
     <MessageContainer>
@@ -24,22 +53,19 @@ const Message = ({ message, user }) => (
     </MessageContainer>
 );
 
-export const CelebrateSteps = () => (
-    <Container>
-        <h3>CELEBRATE</h3>
-        <InsideContainer>
-            <Message
-                message="Leah Completed A Personal Step of Faith"
-                user="Leah Brooks"
-            />
-            <Message
-                message="Leah Completed A Personal Step of Faith"
-                user="Leah Brooks"
-            />
-            <Message
-                message="Leah Completed A Personal Step of Faith"
-                user="Leah Brooks"
-            />
-        </InsideContainer>
-    </Container>
-);
+export const CelebrateSteps = () => {
+    return (
+        <Container>
+            <h3>CELEBRATE</h3>
+            <InsideContainer>
+                {_.map(MessageConfig, message => (
+                    <Message
+                        message={message.message}
+                        user={message.user}
+                        key={message.key}
+                    />
+                ))}
+            </InsideContainer>
+        </Container>
+    );
+};

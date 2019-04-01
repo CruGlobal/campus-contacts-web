@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
+// Need to figure out a way to make the little triangle tab move based on the tab clicked
 const Tab = styled.div`
     display: flex;
     flex-direction: column;
@@ -42,12 +43,14 @@ const TabValue = styled.p`
     font-size: 2rem;
 `;
 
-const Tabs = ({ title, value, active, onTabClick }) => (
-    <Tab active={active} onClick={onTabClick}>
-        <p>{title}</p>
-        <TabValue>{value}</TabValue>
-    </Tab>
-);
+const Tabs = ({ title, value, active, onTabClick }) => {
+    return (
+        <Tab active={active} onClick={onTabClick}>
+            <p>{title}</p>
+            <TabValue>{value}</TabValue>
+        </Tab>
+    );
+};
 
 Tabs.propTypes = {
     title: PropTypes.string.isRequired,

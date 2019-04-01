@@ -21,7 +21,7 @@ const NavBarInnerContainer = styled.div`
     width: 100%;
     margin: 0 10px;
     display: flex;
-    color: grey;
+    color: lightgrey;
     > h2 {
         margin-right: 30px;
         :hover {
