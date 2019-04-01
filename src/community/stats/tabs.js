@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import Tab from './tab';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../graphql';
+import _ from 'lodash';
 
 const TabsContainer = styled.div`
     display: grid;
@@ -31,11 +32,7 @@ const TabsConfig = [
 ];
 
 const Tabs = () => {
-    const {
-        data: {
-            apolloClient: { currentTab },
-        },
-    } = useQuery(GET_CURRENT_TAB);
+    const { loading, data } = useQuery(GET_CURRENT_TAB);
     const updateCurrentTab = useMutation(UPDATE_CURRENT_TAB);
 
     const onTabClick = name => {
@@ -44,6 +41,14 @@ const Tabs = () => {
         }
         updateCurrentTab({ variables: { name } });
     };
+
+    if (loading) {
+        return <div>Loading</div>;
+    }
+
+    const {
+        apolloClient: { currentTab },
+    } = data;
 
     return (
         <TabsContainer>
