@@ -46,47 +46,12 @@ describe('<Tabs />', () => {
         wrapper.update();
 
         expect(wrapper.find(Tab).length).toBe(4);
-        expect(
-            wrapper
-                .find(Tab)
-                .at(0)
-                .key(),
-        ).toBe('MEMBERS');
-        expect(
-            wrapper
-                .find(Tab)
-                .at(0)
-                .prop('active'),
-        ).toBeTruthy();
-        expect(
-            wrapper
-                .find(Tab)
-                .at(1)
-                .key(),
-        ).toBe('STEPS_COMPLETED');
-        expect(
-            wrapper
-                .find(Tab)
-                .at(1)
-                .prop('active'),
-        ).toBeFalsy();
-        expect(
-            wrapper
-                .find(Tab)
-                .at(2)
-                .key(),
-        ).toBe('PEOPLE_MOVEMENT');
-        expect(
-            wrapper
-                .find(Tab)
-                .at(2)
-                .prop('active'),
-        ).toBeFalsy();
-        expect(
-            wrapper
-                .find(Tab)
-                .at(3)
-                .key(),
-        ).toBe(null);
+        expect(wrapper.find(Tab).at(0).key()).toBe('MEMBERS');
+        expect(wrapper.find(Tab).at(0).prop('active')).toBeTruthy();
+        expect(wrapper.find(Tab).at(1).key(),).toBe('STEPS_COMPLETED');
+        expect(wrapper.find(Tab).at(1).prop('active')).toBeFalsy();
+        expect(wrapper.find(Tab).at(2).key()).toBe('PEOPLE_MOVEMENT');
+        expect(wrapper.find(Tab).at(2).prop('active')).toBeFalsy();
+        expect(wrapper.find(Tab).at(3).key()).toBe(null);
     });
 });
