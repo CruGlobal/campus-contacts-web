@@ -10,6 +10,7 @@ const Container = styled.div`
     color: lightgrey;
     > div {
         > p {
+            margin: 0 -50px 0 -20px;
             :hover {
                 color: #007397;
                 cursor: pointer;

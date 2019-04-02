@@ -16,19 +16,19 @@ const TabsConfig = [
         title: 'PEOPLE/STEPS OF FAITH',
         key: 'MEMBERS',
         stats: '40 / 120',
-        tabPosition: '54',
+        tabPosition: '910',
     },
     {
         title: 'STEPS COMPLETED',
         key: 'STEPS_COMPLETED',
         stats: '20',
-        tabPosition: '33',
+        tabPosition: '550',
     },
     {
         title: 'PEOPLE MOVEMENT',
         key: 'PEOPLE_MOVEMENT',
         stats: '2',
-        tabPosition: '12',
+        tabPosition: '200',
     },
     {},
 ];
