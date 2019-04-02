@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import { Spring } from 'react-spring/renderprops';
 
 const Tabs = ({ title, value, active, onTabClick }) => {
     const TabValue = styled.p`
@@ -48,10 +49,14 @@ const Tabs = ({ title, value, active, onTabClick }) => {
         ${props => (props.active ? arrow : null)}
     `;
     return (
-        <Tab active={active} onClick={onTabClick}>
-            <p>{title}</p>
-            <TabValue>{value}</TabValue>
-        </Tab>
+        <Spring to={{ background: active ? '#007398' : '#3cc8e6' }}>
+            {props => (
+                <Tab style={props} active={active} onClick={onTabClick}>
+                    <p>{title}</p>
+                    <TabValue>{value}</TabValue>
+                </Tab>
+            )}
+        </Spring>
     );
 };
 

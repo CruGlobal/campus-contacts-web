@@ -57,6 +57,7 @@
         "react-apollo": "^2.5.3",
         "react-apollo-hooks": "^0.4.4",
         "react-dom": "^16.8.4",
+        "react-spring": "^8.0.19",
         "react2angular": "^4.0.6",
         "rollbar": "^2.4.7",
         "stacktrace-js": "^2.0.0",
