@@ -17,19 +17,16 @@ const TabsConfig = [
         title: 'PEOPLE/STEPS OF FAITH',
         key: 'MEMBERS',
         stats: '40 / 120',
-        tabPosition: '54',
     },
     {
         title: 'STEPS COMPLETED',
         key: 'STEPS_COMPLETED',
         stats: '20',
-        tabPosition: '33',
     },
     {
         title: 'PEOPLE MOVEMENT',
         key: 'PEOPLE_MOVEMENT',
         stats: '2',
-        tabPosition: '12',
     },
     {},
 ];
@@ -60,7 +57,6 @@ const Tabs = () => {
                     title={tab.title}
                     value={tab.stats}
                     key={tab.key}
-                    tabsPosition={tab.tabPosition}
                     active={currentTab === tab.key}
                     onTabClick={() => onTabClick(tab.key)}
                 />

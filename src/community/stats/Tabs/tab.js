@@ -1,11 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 
-const Tabs = ({ title, value, active, onTabClick, tabsPosition }) => {
+const Tabs = ({ title, value, active, onTabClick }) => {
     const TabValue = styled.p`
         font-size: 2rem;
     `;
+
+    const arrow = css`
+        ::after {
+            color: transparent;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            margin: auto;
+            border-bottom: 6px solid white;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            width: 0;
+        }
+    `;
+
     const Tab = styled.div`
         display: flex;
         flex-direction: column;
@@ -15,6 +32,7 @@ const Tabs = ({ title, value, active, onTabClick, tabsPosition }) => {
         height: 70px;
         font-size: 12px;
         color: white;
+        position: relative;
         > p {
             margin-left: 10px;
             margin-top: 5px;
@@ -27,19 +45,7 @@ const Tabs = ({ title, value, active, onTabClick, tabsPosition }) => {
             cursor: pointer;
             opacity: 0.7;
         }
-        ::after {
-            color: transparent;
-            content: '';
-            position: absolute;
-            top: 401px;
-            left: 0;
-            right: ${active ? tabsPosition : null}%;
-            margin: auto;
-            border-bottom: 6px solid white;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            width: 0;
-        }
+        ${props => (props.active ? arrow : null)}
     `;
     return (
         <Tab active={active} onClick={onTabClick}>
