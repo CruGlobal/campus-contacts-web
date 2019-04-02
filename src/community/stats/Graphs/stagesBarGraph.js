@@ -28,7 +28,7 @@ const StagesBarGraph = () => {
             margin={{
                 top: 30,
                 right: 0,
-                bottom: 30,
+                bottom: 50,
                 left: 0,
             }}
             padding={0.2}
@@ -40,7 +40,7 @@ const StagesBarGraph = () => {
             axisRight={null}
             axisBottom={{
                 tickSize: 0,
-                tickPadding: 13,
+                tickPadding: 20,
             }}
             axisLeft={null}
             enableGridY={true}

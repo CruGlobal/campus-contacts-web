@@ -14,7 +14,7 @@ const Tabs = ({ title, value, active, onTabClick }) => {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 10%;
+            left: 7%;
             margin: auto;
             border-bottom: 6px solid white;
             border-left: 6px solid transparent;

@@ -51,7 +51,7 @@ const StagesLineGraph = () => {
             axisBottom={{
                 orient: 'bottom',
                 tickSize: 10,
-                tickPadding: 10,
+                tickPadding: 20,
                 tickRotation: 0,
             }}
             axisLeft={null}
