@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { Spring } from 'react-spring/renderprops';
 
-const Tabs = ({ title, value, active, onTabClick }) => {
+const Tab = ({ title, value, active, onTabClick }) => {
     const TabValue = styled.p`
         font-size: 2rem;
     `;
@@ -60,11 +60,11 @@ const Tabs = ({ title, value, active, onTabClick }) => {
     );
 };
 
-Tabs.propTypes = {
+Tab.propTypes = {
     title: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     onTabClick: PropTypes.func,
 };
 
-export default Tabs;
+export default Tab;

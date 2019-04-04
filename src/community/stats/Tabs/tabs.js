@@ -28,7 +28,11 @@ const TabsConfig = [
         key: 'PEOPLE_MOVEMENT',
         stats: '2',
     },
-    {},
+    {
+        title: '',
+        key: '',
+        stats: ''
+    },
 ];
 
 const Tabs = () => {

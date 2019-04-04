@@ -1,7 +1,15 @@
+import moment from 'moment';
+
 export default {
     apolloClient: {
         __typename: 'ApolloClient',
         currentTab: 'MEMBERS',
+        currentFilter: {
+            __typename: 'currentFilter',
+            key: '1W',
+            startDate: moment().subtract(1, 'week').format('l'),
+            endDate: moment().format('l')
+        },
         stepsCompleted: {
             __typename: 'StepsCompleted',
             data: [

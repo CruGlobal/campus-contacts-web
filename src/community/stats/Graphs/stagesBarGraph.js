@@ -1,16 +1,12 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
-import { GET_MEMBERS } from '../../graphql';
+import {GET_CURRENT_FILTER, GET_MEMBERS} from '../../graphql';
 
 const StagesBarGraph = () => {
-    const {
-        data: {
-            apolloClient: { members },
-        },
-        error,
-        loading,
-    } = useQuery(GET_MEMBERS);
+
+    const { data: { apolloClient: { filter } } } = useQuery(GET_CURRENT_FILTER);
+    const { data: { apolloClient: { members } }, error, loading } = useQuery(GET_MEMBERS, { variables: { filter }});
 
     if (loading) {
         return <div>Loading...</div>;
