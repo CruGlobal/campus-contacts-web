@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { GET_CELEBRATION_STEPS } from '../../graphql';
+import { useQuery } from 'react-apollo-hooks';
 
 const Container = styled.div`
     width: 22%;
@@ -24,29 +26,6 @@ const MessageContainer = styled.div`
     }
 `;
 
-const MessageConfig = [
-    {
-        message: 'Leah Completed a Step of Faith with a Curious person',
-        user: 'Leah Brooks',
-        key: 'MESSAGE_1',
-    },
-    {
-        message: 'Leah Completed a Step of Faith with a Curious person',
-        user: 'Leah Brooks',
-        key: 'MESSAGE_2',
-    },
-    {
-        message: 'Leah Completed a Step of Faith with a Curious person',
-        user: 'Leah Brooks',
-        key: 'MESSAGE_3',
-    },
-    {
-        message: 'Leah Completed a Step of Faith with a Curious person',
-        user: 'Leah Brooks',
-        key: 'MESSAGE_4',
-    },
-];
-
 const Message = ({ message, user }) => (
     <MessageContainer>
         <h3>{user}</h3>
@@ -55,11 +34,17 @@ const Message = ({ message, user }) => (
 );
 
 export const CelebrateSteps = () => {
+    const {
+        data: {
+            apolloClient: { celebrations },
+        },
+    } = useQuery(GET_CELEBRATION_STEPS);
+
     return (
         <Container>
             <h3>CELEBRATE</h3>
             <InsideContainer>
-                {_.map(MessageConfig, message => (
+                {_.map(celebrations.data, message => (
                     <Message
                         message={message.message}
                         user={message.user}

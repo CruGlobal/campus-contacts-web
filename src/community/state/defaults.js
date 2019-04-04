@@ -12,6 +12,39 @@ export default {
                 .format('l'),
             endDate: moment().format('l'),
         },
+        celebrations: {
+            __typename: 'celebrations',
+            data: [
+                {
+                    __typename: 'Data',
+                    message:
+                        'Leah Completed a Step of Faith with a Curious person',
+                    user: 'Leah Brooks',
+                    key: 'MESSAGE_1',
+                },
+                {
+                    __typename: 'Data',
+                    message:
+                        'Leah Completed a Step of Faith with a Curious person',
+                    user: 'Leah Brooks',
+                    key: 'MESSAGE_2',
+                },
+                {
+                    __typename: 'Data',
+                    message:
+                        'Leah Completed a Step of Faith with a Curious person',
+                    user: 'Leah Brooks',
+                    key: 'MESSAGE_3',
+                },
+                {
+                    __typename: 'Data',
+                    message:
+                        'Leah Completed a Step of Faith with a Curious person',
+                    user: 'Leah Brooks',
+                    key: 'MESSAGE_4',
+                },
+            ],
+        },
         stepsCompleted: {
             __typename: 'StepsCompleted',
             data: [
