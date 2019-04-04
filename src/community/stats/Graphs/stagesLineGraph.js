@@ -1,16 +1,21 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { GET_STEPS_COMPLETED } from '../../graphql';
+import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 
 const StagesLineGraph = () => {
+    const {
+        data: {
+            apolloClient: { filter },
+        },
+    } = useQuery(GET_CURRENT_FILTER);
     const {
         data: {
             apolloClient: { stepsCompleted },
         },
         error,
         loading,
-    } = useQuery(GET_STEPS_COMPLETED);
+    } = useQuery(GET_STEPS_COMPLETED, { variables: { filter } });
 
     if (loading) {
         return <div>Loading...</div>;
