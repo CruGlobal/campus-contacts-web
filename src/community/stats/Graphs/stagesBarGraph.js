@@ -20,6 +20,10 @@ const StagesBarGraph = () => {
         return <div>Error! {error.message}</div>;
     }
 
+    // We need to extact the members data and then calculate the largest number and set that to the max and then divide that number by two for the side markers
+    let max = 50;
+    let middle = max / 2;
+
     return (
         <ResponsiveBar
             data={members.data}
@@ -42,6 +46,52 @@ const StagesBarGraph = () => {
                 tickSize: 0,
                 tickPadding: 20,
             }}
+            markers={[
+                {
+                    axis: 'y',
+                    value: 0,
+                    lineStyle: { strokeOpacity: 0 },
+                    textStyle: { fill: 'lightgrey' },
+                    legend: `${middle}`,
+                    legendPosition: 'top-left',
+                    legendOrientation: 'horizontal',
+                    legendOffsetY: 55,
+                    legendOffsetX: 3,
+                },
+                {
+                    axis: 'y',
+                    value: 0,
+                    lineStyle: { stroke: 'lightgrey', strokeOpacity: 0 },
+                    textStyle: { fill: 'lightgrey' },
+                    legend: `${max}`,
+                    legendPosition: 'top-left',
+                    legendOrientation: 'horizontal',
+                    legendOffsetY: 120,
+                    legendOffsetX: 3,
+                },
+                {
+                    axis: 'y',
+                    value: 0,
+                    lineStyle: { stroke: 'lightgrey', strokeOpacity: 0 },
+                    textStyle: { fill: 'lightgrey' },
+                    legend: `${max}`,
+                    legendPosition: 'top-right',
+                    legendOrientation: 'horizontal',
+                    legendOffsetY: 120,
+                    legendOffsetX: 3,
+                },
+                {
+                    axis: 'y',
+                    value: 0,
+                    lineStyle: { stroke: 'lightgrey', strokeOpacity: 0 },
+                    textStyle: { fill: 'lightgrey' },
+                    legend: `${middle}`,
+                    legendPosition: 'top-right',
+                    legendOrientation: 'horizontal',
+                    legendOffsetY: 55,
+                    legendOffsetX: 3,
+                },
+            ]}
             axisLeft={null}
             enableGridY={true}
             gridYValues={[25, 50]}

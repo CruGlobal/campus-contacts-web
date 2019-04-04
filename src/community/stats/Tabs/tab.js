@@ -28,7 +28,7 @@ const Tabs = ({ title, value, active, onTabClick }) => {
         display: flex;
         flex-direction: column;
         align-item: flex-start;
-        background: ${props => (props.active ? '#007398' : '#3cc8e6')};
+        background: ${active ? '#007398' : '#3cc8e6'};
         width: 100%;
         height: 70px;
         font-size: 12px;
@@ -46,7 +46,7 @@ const Tabs = ({ title, value, active, onTabClick }) => {
             cursor: pointer;
             opacity: 0.7;
         }
-        ${props => (props.active ? arrow : null)}
+        ${active ? arrow : null}
     `;
     return (
         <Spring to={{ background: active ? '#007398' : '#3cc8e6' }}>

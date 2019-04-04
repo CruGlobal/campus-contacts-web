@@ -55,7 +55,6 @@ const Members = ({ positive, negative }) => {
                 </InnerContainer>
                 <CelebrateSteps />
             </Container>
-
             <BarStats positive={positive} negative={negative} />
         </>
     );
