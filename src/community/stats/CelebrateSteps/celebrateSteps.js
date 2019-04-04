@@ -38,7 +38,17 @@ export const CelebrateSteps = () => {
         data: {
             apolloClient: { celebrations },
         },
+        error,
+        loading,
     } = useQuery(GET_CELEBRATION_STEPS);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error! {error.message}</div>;
+    }
 
     return (
         <Container>
