@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import { useQuery } from 'react-apollo-hooks';
+import { GET_MEMBERS } from '../../graphql';
 
 const BarChartCardRow = styled.div`
     margin-top: 80px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-column-gap: 30px;
 `;
 
@@ -50,16 +52,35 @@ const BarStatCard = ({ count, label, positive, negative }) => (
 );
 
 const BarStats = () => {
+    const {
+        data: {
+            apolloClient: { members },
+            error,
+            loading,
+        },
+    } = useQuery(GET_MEMBERS);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error! {error.message}</div>;
+    }
+
     return (
         <BarChartCardRow>
-            <BarStatCard label="Not Sure" count={10} />
-            <BarStatCard label="Uninterested" count={11} positive />
-            <BarStatCard label="Curious" count={12} />
-            <BarStatCard label="Forgiven" count={13} negative />
-            <BarStatCard label="Growing" count={14} />
-            <BarStatCard label="Guiding" count={15} />
+            {_.map(members.data, member => (
+                <BarStatCard
+                    key={member.stage}
+                    label={member.stage}
+                    count={member.members}
+                />
+            ))}
         </BarChartCardRow>
     );
 };
 
 export default BarStats;
+
+BarStats.propTypes = {};
