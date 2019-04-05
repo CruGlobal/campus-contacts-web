@@ -17,11 +17,11 @@ const InsideContainer = styled.div`
 const MessageContainer = styled.div`
     margin: 5px 10px;
     > h3 {
-        margin-bottom: -2px;
+        margin-bottom: -1px;
     }
     > p {
         margin-bottom: -6px;
-        padding-bottom: 9px;
+        padding-bottom: 8px;
         color: grey;
     }
 `;

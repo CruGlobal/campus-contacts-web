@@ -48,7 +48,7 @@ const BarStatCard = ({ count, label }) => (
     </BarStatCardLayout>
 );
 
-const BarStats = () => {
+const BarStats = ({ style }) => {
     const {
         data: {
             apolloClient: { members },
@@ -66,7 +66,7 @@ const BarStats = () => {
     }
 
     return (
-        <BarChartCardRow>
+        <BarChartCardRow style={style}>
             {_.map(members.data, member => (
                 <BarStatCard
                     key={member.stage}

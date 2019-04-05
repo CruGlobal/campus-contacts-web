@@ -8,6 +8,7 @@ import { GET_CURRENT_TAB } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 import Tabs from '../Tabs/tabs';
 import BarStats from '../BarStatsCard/barStatCard';
+import { Spring } from 'react-spring/renderprops';
 
 const Container = styled.div`
     display: flex;
@@ -47,15 +48,21 @@ const Members = () => {
 
     return (
         <>
-            <Container>
-                <InnerContainer>
-                    <h3>STEPS OF FAITH WITH OTHERS</h3>
-                    <Tabs />
-                    {renderGraph()}
-                </InnerContainer>
-                <CelebrateSteps />
-            </Container>
-            <BarStats />
+            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => (
+                    <Container style={props}>
+                        <InnerContainer>
+                            <h3>STEPS OF FAITH WITH OTHERS</h3>
+                            <Tabs />
+                            {renderGraph()}
+                        </InnerContainer>
+                        <CelebrateSteps />
+                    </Container>
+                )}
+            </Spring>
+            <Spring from={{ marginTop: 1000 }} to={{ marginTop: 80 }}>
+                {props => <BarStats style={props} />}
+            </Spring>
         </>
     );
 };
