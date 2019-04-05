@@ -79,7 +79,7 @@ export default {
                     y: 26,
                 },
                 {
-                    __typename: 'Element',
+                    __typename: 'Data',
                     x: '3/25/2019',
                     y: 28,
                 },

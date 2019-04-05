@@ -27,7 +27,7 @@ const InnerContainer = styled.div`
     }
 `;
 
-const Members = ({ positive, negative }) => {
+const Members = () => {
     const {
         data: {
             apolloClient: { currentTab },
@@ -55,7 +55,7 @@ const Members = ({ positive, negative }) => {
                 </InnerContainer>
                 <CelebrateSteps />
             </Container>
-            <BarStats positive={positive} negative={negative} />
+            <BarStats />
         </>
     );
 };

@@ -26,8 +26,7 @@ const BarStatCardLayout = styled(Card)`
 const StatNumber = styled.span`
     font-size: 32px;
     font-weight: bold;
-    color: ${({ positive, negative, theme: { colors } }) =>
-        positive ? colors.positive : negative ? colors.negative : colors.dark};
+    color: #007398;
 `;
 
 const StatLabel = styled.span`
@@ -42,11 +41,9 @@ const StatLabel = styled.span`
     }) => light};
 `;
 
-const BarStatCard = ({ count, label, positive, negative }) => (
+const BarStatCard = ({ count, label }) => (
     <BarStatCardLayout>
-        <StatNumber positive={positive} negative={negative}>
-            {count}
-        </StatNumber>
+        <StatNumber>{count}</StatNumber>
         <StatLabel>{label}</StatLabel>
     </BarStatCardLayout>
 );
