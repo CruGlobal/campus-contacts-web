@@ -13,9 +13,14 @@
     </div>
 </div>
 <div class="grid-content">
-    <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+    <div
+        class="row"
+        ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
+    >
         <div class="column column-title">
-            <a ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })">
+            <a
+                ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })"
+            >
                 {{survey.title}}
             </a>
         </div>

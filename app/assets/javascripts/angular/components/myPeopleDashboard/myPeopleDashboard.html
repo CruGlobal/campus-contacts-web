@@ -1,5 +1,7 @@
 <div class="my-people-dashboard">
-    <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">{{'dashboard.loading_contacts' | t}}</h1>
+    <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">
+        {{'dashboard.loading_contacts' | t}}
+    </h1>
     <div ng-if="$ctrl.noPeople" class="no-people-message ng-cloak">
         <h1>{{ $ctrl.noPeopleWelcome }}</h1>
         <p bind-dynamic="'dashboard.no_contacts_help' | t"></p>
@@ -9,19 +11,30 @@
         <organization
             ng-repeat="org in $ctrl.organizations track by org.id"
             ng-if="org.visible || $ctrl.editMode"
-            org="org" edit-mode="$ctrl.editMode" collapsible="$ctrl.collapsible"
-            options="{ anonymousInteractions: true, reorderable: true }">
+            org="org"
+            edit-mode="$ctrl.editMode"
+            collapsible="$ctrl.collapsible"
+            options="{ anonymousInteractions: true, reorderable: true }"
+        >
             <div class="people-list grid" ng-if="!$ctrl.editMode">
                 <div class="grid-content">
-                    <people-view-person class='pl2' person="person" organization-id="org.id"
-                                        ng-repeat="person in org.people | orderBy: 'last_name' track by person.id">
+                    <people-view-person
+                        class="pl2"
+                        person="person"
+                        organization-id="org.id"
+                        ng-repeat="person in org.people | orderBy: 'last_name' track by person.id"
+                    >
                     </people-view-person>
                 </div>
             </div>
         </organization>
     </div>
     <div class="no-people-extras">
-        <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode db"
-           bind-dynamic="'dashboard.edit_org_order_help' | t"></a>
+        <a
+            href
+            ng-click="$ctrl.editMode = true"
+            class="mt2 edit-mode db"
+            bind-dynamic="'dashboard.edit_org_order_help' | t"
+        ></a>
     </div>
 </div>

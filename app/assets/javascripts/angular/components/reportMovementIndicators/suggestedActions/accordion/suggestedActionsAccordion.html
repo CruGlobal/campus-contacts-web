@@ -1,43 +1,59 @@
 <div class="bg-pivot-gray-5 br2 pl-4">
-    <h2 class="accordion-arrow pointer normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray"
+    <h2
+        class="accordion-arrow pointer normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray"
         ng-class="$ctrl.accordionOpen && 'accordion-arrow-open'"
-    ng-click="$ctrl.accordionOpen = !$ctrl.accordionOpen">
+        ng-click="$ctrl.accordionOpen = !$ctrl.accordionOpen"
+    >
         <span>{{ $ctrl.title | t : { num: $ctrl.suggestions.length } }}</span>
         <span class="button-wrapper w-20">
-                <button
-                    class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked bg-transparent w-100"
-                    ng-if="$ctrl.suggestions.length"
-                    ng-click="$ctrl.handleAllClick($ctrl.suggestions); $event.stopPropagation();">
-                    {{ 'movementIndicators:suggestedActions.applyAll' | t }}
-                </button>
-            </span>
+            <button
+                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked bg-transparent w-100"
+                ng-if="$ctrl.suggestions.length"
+                ng-click="$ctrl.handleAllClick($ctrl.suggestions); $event.stopPropagation();"
+            >
+                {{ 'movementIndicators:suggestedActions.applyAll' | t }}
+            </button>
+        </span>
     </h2>
     <div class="pa0" ng-show="$ctrl.accordionOpen">
         <div
             class="pivot-gray-darker items-center pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray"
-            ng-repeat="suggestion in $ctrl.suggestions">
+            ng-repeat="suggestion in $ctrl.suggestions"
+        >
             <div>
                 <span class="b pivot-dark-blue">
                     {{ suggestion.person.full_name }}
                 </span>
                 <span ng-switch="suggestion.reason">
                     <span ng-switch-when="spiritual_conversation">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.spiritualConversation' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.spiritualConversation'
+                        | t }}
                     </span>
                     <span ng-switch-when="gospel_presentation">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.gospelPresentation' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.gospelPresentation'
+                        | t }}
                     </span>
                     <span ng-switch-when="group_membership">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.groupMembership' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.groupMembership'
+                        | t }}
                     </span>
                     <span ng-switch-when="group_leader">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.groupLeader' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.groupLeader'
+                        | t }}
                     </span>
                     <span ng-switch-when="leader">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.leader' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.leader'
+                        | t }}
                     </span>
                     <span ng-switch-when="engaged_disciple">
-                        {{ 'movementIndicators:suggestedActions.reasonPhrases.engagedDisciple' | t }}
+                        {{
+                        'movementIndicators:suggestedActions.reasonPhrases.engagedDisciple'
+                        | t }}
                     </span>
                 </span>
                 <span ng-bind-html="$ctrl.getLabelQuestion(suggestion)"></span>
@@ -46,13 +62,15 @@
                 <button
                     class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked flex-auto"
                     ng-class="$ctrl.isRejected(suggestion.id) ? 'bg-pivot-darker-blue white' : 'bg-transparent'"
-                    ng-click="$ctrl.handleSuggestionActionClick(suggestion.id, false)">
+                    ng-click="$ctrl.handleSuggestionActionClick(suggestion.id, false)"
+                >
                     {{ 'no' | t }}
                 </button>
                 <button
                     class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked flex-auto ml2"
                     ng-class="$ctrl.isAccepted(suggestion.id) ? 'bg-pivot-darker-blue white' : 'bg-transparent'"
-                    ng-click="$ctrl.handleSuggestionActionClick(suggestion.id, true)">
+                    ng-click="$ctrl.handleSuggestionActionClick(suggestion.id, true)"
+                >
                     {{ 'yes' | t }}
                 </button>
             </div>

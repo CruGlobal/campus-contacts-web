@@ -1,4 +1,9 @@
-<a class="relative ml1" href="#" ng-mouseover="showHelp = true" ng-mouseout="showHelp = false">
-    <img alt="{{ 'help' | t }}" src="../../../../../../images/icon-help.svg">
+<a
+    class="relative ml1"
+    href="#"
+    ng-mouseover="showHelp = true"
+    ng-mouseout="showHelp = false"
+>
+    <img alt="{{ 'help' | t }}" src="../../../../../../images/icon-help.svg" />
     <span class="help-bubble" ng-if="showHelp">{{ $ctrl.content }}</span>
 </a>

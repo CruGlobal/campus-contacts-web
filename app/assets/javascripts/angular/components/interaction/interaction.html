@@ -1,33 +1,67 @@
 <div class="column icon-column flush-column">
-    <ng-md-icon class="icon-chip" icon="{{$ctrl.interactionType.icon}}" size="20"></ng-md-icon>
+    <ng-md-icon
+        class="icon-chip"
+        icon="{{$ctrl.interactionType.icon}}"
+        size="20"
+    ></ng-md-icon>
 </div>
 <div class="column flex-auto">
     <div class="subtitle">
         <span ng-repeat="initiator in $ctrl.interaction.initiators">
-            <span ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, personId: initiator.id })">{{
-                initiator === $ctrl.personTab.person ?
-                    ('ministries.people.history.me' | t) :
-                    (initiator | personName)
-            }}</span><span ng-if="!$last">,</span>
+            <span
+                ui-sref="^.profile({ orgId: $ctrl.interaction.organization.id, personId: initiator.id })"
+                >{{ initiator === $ctrl.personTab.person ?
+                ('ministries.people.history.me' | t) : (initiator | personName)
+                }}</span
+            ><span ng-if="!$last">,</span>
         </span>
-        <span ng-if="$ctrl.interaction.initiators.length === 0">{{'ministries.people.history.anonymous' | t}}</span>
+        <span ng-if="$ctrl.interaction.initiators.length === 0"
+            >{{'ministries.people.history.anonymous' | t}}</span
+        >
         &gt;&gt;
         <span>{{$ctrl.moment($ctrl.interaction.timestamp).fromNow()}}</span>
     </div>
     <div class="title">{{$ctrl.interactionType.title | t}}</div>
     <div ng-switch="$ctrl.modifyInteractionState">
-        <div ng-switch-default class="comment" ng-if="$ctrl.interaction.comment">{{$ctrl.interaction.comment}}</div>
-        <textarea ng-switch-when="edit"
-                  ng-model="$ctrl.interaction.comment"
-                  ng-required="$ctrl.interaction.interaction_type_id === 1"
-                  autofocus>
+        <div
+            ng-switch-default
+            class="comment"
+            ng-if="$ctrl.interaction.comment"
+        >
+            {{$ctrl.interaction.comment}}
+        </div>
+        <textarea
+            ng-switch-when="edit"
+            ng-model="$ctrl.interaction.comment"
+            ng-required="$ctrl.interaction.interaction_type_id === 1"
+            autofocus
+        >
         </textarea>
     </div>
 </div>
 <div class="column" ng-switch="$ctrl.modifyInteractionState">
-    <ng-md-icon ng-switch-when="view" icon="edit" size="16" ng-click="$ctrl.modifyInteractionState = 'edit'"></ng-md-icon>
-    <br ng-switch-when="view">
-    <ng-md-icon ng-switch-when="view" icon="delete" size="16" ng-click="$ctrl.deleteInteraction()"></ng-md-icon>
-    <ng-md-icon ng-switch-when="edit" icon="done" size="16" ng-click="$ctrl.updateInteraction()"></ng-md-icon>
-    <loading-spinner ng-switch-when="saving" class="loading" size="16"></loading-spinner>
+    <ng-md-icon
+        ng-switch-when="view"
+        icon="edit"
+        size="16"
+        ng-click="$ctrl.modifyInteractionState = 'edit'"
+    ></ng-md-icon>
+    <br ng-switch-when="view" />
+    <ng-md-icon
+        ng-switch-when="view"
+        icon="delete"
+        size="16"
+        ng-click="$ctrl.deleteInteraction()"
+    ></ng-md-icon>
+    <ng-md-icon
+        ng-switch-when="edit"
+        icon="done"
+        size="16"
+        ng-click="$ctrl.updateInteraction()"
+    ></ng-md-icon>
+    <loading-spinner
+        ng-switch-when="saving"
+        class="loading"
+        size="16"
+    ></loading-spinner>
 </div>
