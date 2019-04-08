@@ -49,13 +49,7 @@ const BarStatCard = ({ count, label }) => (
 );
 
 const BarStats = ({ style }) => {
-    const {
-        data: {
-            apolloClient: { members },
-            error,
-            loading,
-        },
-    } = useQuery(GET_MEMBERS);
+    const { data, loading, error } = useQuery(GET_MEMBERS);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -64,6 +58,10 @@ const BarStats = ({ style }) => {
     if (error) {
         return <div>Error! {error.message}</div>;
     }
+
+    const {
+        apolloClient: { members },
+    } = data;
 
     return (
         <BarChartCardRow style={style}>

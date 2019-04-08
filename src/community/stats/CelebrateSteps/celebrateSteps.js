@@ -34,13 +34,7 @@ const Message = ({ message, user }) => (
 );
 
 export const CelebrateSteps = () => {
-    const {
-        data: {
-            apolloClient: { celebrations },
-        },
-        error,
-        loading,
-    } = useQuery(GET_CELEBRATION_STEPS);
+    const { data, loading, error } = useQuery(GET_CELEBRATION_STEPS);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -49,6 +43,10 @@ export const CelebrateSteps = () => {
     if (error) {
         return <div>Error! {error.message}</div>;
     }
+
+    const {
+        apolloClient: { celebrations },
+    } = data;
 
     return (
         <Container>
@@ -65,3 +63,5 @@ export const CelebrateSteps = () => {
         </Container>
     );
 };
+
+export default CelebrateSteps;

@@ -47,6 +47,8 @@ describe('<Tabs />', () => {
         await waitForNextTick();
         wrapper.update();
 
+        
+
         expect(wrapper.find(Tab).length).toBe(4);
         expect(wrapper.find(Tab).at(0).key()).toBe('MEMBERS');
         expect(wrapper.find(Tab).at(0).prop('active')).toBeTruthy();

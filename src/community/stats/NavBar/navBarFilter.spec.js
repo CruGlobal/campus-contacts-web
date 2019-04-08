@@ -7,6 +7,7 @@ import { MockLink } from 'apollo-link-mock';
 import { GET_CURRENT_FILTER } from '../../graphql';
 import Filter from './navBarFilter';
 import moment from 'moment';
+import { wrap } from 'module';
 
 function createClient(mocks) {
     return new ApolloClient({
@@ -46,7 +47,7 @@ describe('<NavBarFilter />', () => {
         expect(wrapper.html()).toBe('<div>Loading</div>');
         await waitForNextTick();
         wrapper.update();
-
+         
        
     });
 });
