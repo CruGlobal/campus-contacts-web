@@ -6,6 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 import { GET_CELEBRATION_STEPS } from '../../graphql';
 import CelebrateSteps from './celebrateSteps';
+import { wrap } from 'module';
 
 
 function createClient(mocks) {

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { GET_CELEBRATION_STEPS } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
+import Message from './message';
 
 const Container = styled.div`
     width: 22%;
@@ -13,25 +14,6 @@ const InsideContainer = styled.div`
     background: white;
     border-radius: 5px;
 `;
-
-const MessageContainer = styled.div`
-    margin: 5px 10px;
-    > h3 {
-        margin-bottom: -1px;
-    }
-    > p {
-        margin-bottom: -6px;
-        padding-bottom: 8px;
-        color: grey;
-    }
-`;
-
-const Message = ({ message, user }) => (
-    <MessageContainer>
-        <h3>{user}</h3>
-        <p>{message}</p>
-    </MessageContainer>
-);
 
 export const CelebrateSteps = () => {
     const { data, loading, error } = useQuery(GET_CELEBRATION_STEPS);

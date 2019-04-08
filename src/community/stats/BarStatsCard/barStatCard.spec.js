@@ -96,6 +96,6 @@ describe('<BarStats />', () => {
         await waitForNextTick()
         wrapper.update()
 
-        console.log(wrapper.debug());
+       
     })
 })
