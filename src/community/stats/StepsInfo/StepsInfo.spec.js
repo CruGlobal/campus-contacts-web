@@ -11,8 +11,10 @@ describe('<StepsInfo />', () => {
                 peopleStats={'2'}
             />,
         );
-        expect(component.contains('20')).toBeTruthy();
-        expect(component.contains('120')).toBeTruthy();
-        expect(component.contains('2')).toBeTruthy();
+        // console.log(component.debug());
+        expect(component.prop('userStats')).toEqual('20')
+        expect(component.prop('numberStats')).toEqual('120');
+        expect(component.prop('peopleStats')).toEqual('2');
+        expect(component.find('StepsInfoPersonal').text()).toEqual('20 members have taken 120 steps with 40 people.')
     });
 });

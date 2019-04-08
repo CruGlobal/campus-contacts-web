@@ -9,6 +9,8 @@ import { GET_CURRENT_TAB } from '../../graphql';
 import Tabs from './tabs';
 import Tab from './tab';
 
+
+
 function createClient(mocks) {
     return new ApolloClient({
         cache: new InMemoryCache(),
@@ -52,6 +54,6 @@ describe('<Tabs />', () => {
         expect(wrapper.find(Tab).at(1).prop('active')).toBeFalsy();
         expect(wrapper.find(Tab).at(2).key()).toBe('PEOPLE_MOVEMENT');
         expect(wrapper.find(Tab).at(2).prop('active')).toBeFalsy();
-        expect(wrapper.find(Tab).at(3).key()).toBe(null);
+        expect(wrapper.find(Tab).at(3).key()).toBe('');
     });
 });
