@@ -1,39 +1,75 @@
-<div class="source-sans flex justify-center " ng-class="{ 'pv5-l' : !$ctrl.survey.is_frozen }">
+<div
+    class="source-sans flex justify-center "
+    ng-class="{ 'pv5-l' : !$ctrl.survey.is_frozen }"
+>
     <div class="mw6 bg-white center br2 w-100">
         <div>
-            <div ng-if="$ctrl.preview" class="black pa2 tc" ng-class="{ 'bg-yellow' : !$ctrl.survey.is_frozen, 'bg-orange' : $ctrl.survey.is_frozen }">
-                <div class="f4">{{ 'surveys:publicView.preview.header' | t }}</div>
-                <div class="f7">{{ 'surveys:publicView.preview.description' | t }}</div>
+            <div
+                ng-if="$ctrl.preview"
+                class="black pa2 tc"
+                ng-class="{ 'bg-yellow' : !$ctrl.survey.is_frozen, 'bg-orange' : $ctrl.survey.is_frozen }"
+            >
+                <div class="f4">
+                    {{ 'surveys:publicView.preview.header' | t }}
+                </div>
+                <div class="f7">
+                    {{ 'surveys:publicView.preview.description' | t }}
+                </div>
             </div>
 
-            <div class='ph4 pt3' ng-if="$ctrl.survey.is_frozen">
-                <div class="f5 black tc ba b--orange pa2">{{ 'surveys:publicView.preview.inactive' | t }}</div>
+            <div class="ph4 pt3" ng-if="$ctrl.survey.is_frozen">
+                <div class="f5 black tc ba b--orange pa2">
+                    {{ 'surveys:publicView.preview.inactive' | t }}
+                </div>
             </div>
 
-            <div ng-if="!$ctrl.survey" >
+            <div ng-if="!$ctrl.survey">
                 <div class="black pa2 tc bg-orange">
-                    <div class="f4">{{ 'surveys:publicView.surveyNotFound' | t }}</div>
+                    <div class="f4">
+                        {{ 'surveys:publicView.surveyNotFound' | t }}
+                    </div>
                 </div>
 
-                <div class='pa4'>
-                    <div class="f5 black tc ba b--orange pa2">{{ 'surveys:publicView.inactiveOrInvalid' | t }}</div>
+                <div class="pa4">
+                    <div class="f5 black tc ba b--orange pa2">
+                        {{ 'surveys:publicView.inactiveOrInvalid' | t }}
+                    </div>
                 </div>
             </div>
 
             <div ng-if="$ctrl.survey">
-                <img ng-if="$ctrl.survey.logo_url" ng-src="{{ $ctrl.survey.logo_url }}" class="w-100"/>
+                <img
+                    ng-if="$ctrl.survey.logo_url"
+                    ng-src="{{ $ctrl.survey.logo_url }}"
+                    class="w-100"
+                />
                 <div class="pa4 tl">
-                    <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.survey.title }}</h1>
-                    <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.survey.login_paragraph }}</p>
-                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && $ctrl.survey.post_survey_message">{{ $ctrl.survey.post_survey_message }}</p>
-                    <p class="lh-copy mt1" ng-if="$ctrl.thankYou && !$ctrl.survey.post_survey_message">{{ 'surveys:publicView.post_survey_message' | t }}</p>
+                    <h1 class="pivot-gray-darker f2 mt3 normal mb0">
+                        {{ $ctrl.survey.title }}
+                    </h1>
+                    <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">
+                        {{ $ctrl.survey.login_paragraph }}
+                    </p>
+                    <p
+                        class="lh-copy mt1"
+                        ng-if="$ctrl.thankYou && $ctrl.survey.post_survey_message"
+                    >
+                        {{ $ctrl.survey.post_survey_message }}
+                    </p>
+                    <p
+                        class="lh-copy mt1"
+                        ng-if="$ctrl.thankYou && !$ctrl.survey.post_survey_message"
+                    >
+                        {{ 'surveys:publicView.post_survey_message' | t }}
+                    </p>
 
                     <survey-form-public
                         survey="$ctrl.survey"
                         on-init="$ctrl.save = $event.save"
                         on-saving-change="$ctrl.saving = $event"
                         on-success="$ctrl.thankYou = true"
-                        ng-if="!$ctrl.thankYou">
+                        ng-if="!$ctrl.thankYou"
+                    >
                     </survey-form-public>
                 </div>
                 <button
@@ -41,7 +77,8 @@
                     ng-class="$ctrl.saving || $ctrl.preview ? ' bg-pivot-muted-blue' : 'bg-pivot-bright-blue dim'"
                     ng-click="$ctrl.save()"
                     ng-disabled="$ctrl.saving || $ctrl.preview"
-                    ng-if="!$ctrl.thankYou">
+                    ng-if="!$ctrl.thankYou"
+                >
                     {{'submit' | t}}
                 </button>
             </div>

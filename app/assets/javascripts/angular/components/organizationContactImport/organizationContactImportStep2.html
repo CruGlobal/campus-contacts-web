@@ -5,69 +5,99 @@
     </p>
     <table class="collapse w-100 f6 pivot-gray-darker">
         <thead>
-        <tr class="bg-pivot-gray-5 ttu tracked bold">
-            <th class="ph3 pv2">{{ 'contact_import:step_2.csv_column' | t }}</th>
-            <th class="ph3 pv2 flex items-center">
-                <a href="" ng-click="$ctrl.previousPreviewRow()">
-                    <ng-md-icon icon="chevron_left"></ng-md-icon>
-                </a>
-                {{ 'contact_import:step_2.preview' | t: { current: $ctrl.currentPreviewRow, max: $ctrl.csvData.length - 1 } }}
-                <a href="" ng-click="$ctrl.nextPreviewRow()">
-                    <ng-md-icon icon="chevron_right"></ng-md-icon>
-                </a>
-            </th>
-            <th class="ph3 pv2">{{ 'contact_import:step_2.question_column' | t }}</th>
-        </tr>
+            <tr class="bg-pivot-gray-5 ttu tracked bold">
+                <th class="ph3 pv2">
+                    {{ 'contact_import:step_2.csv_column' | t }}
+                </th>
+                <th class="ph3 pv2 flex items-center">
+                    <a href="" ng-click="$ctrl.previousPreviewRow()">
+                        <ng-md-icon icon="chevron_left"></ng-md-icon>
+                    </a>
+                    {{ 'contact_import:step_2.preview' | t: { current:
+                    $ctrl.currentPreviewRow, max: $ctrl.csvData.length - 1 } }}
+                    <a href="" ng-click="$ctrl.nextPreviewRow()">
+                        <ng-md-icon icon="chevron_right"></ng-md-icon>
+                    </a>
+                </th>
+                <th class="ph3 pv2">
+                    {{ 'contact_import:step_2.question_column' | t }}
+                </th>
+            </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="(index, value) in $ctrl.csvData[0] track by $index">
-            <td class="ph3 pb1 pt3 pivot-gray-darkest">{{$ctrl.csvData[0][index]}}</td>
-            <td class="ph3 pb1 pt3 pivot-gray-darkest">{{$ctrl.csvData[$ctrl.currentPreviewRow][index]}}</td>
-            <td class="ph3 pb1 pt3 pivot-gray-darkest">
-                <div class="dropdown dropdown-select w-100 mr2 icon-gray-darker" uib-dropdown>
-                    <a class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--pivot-gray-dark dim" href=""
-                       uib-dropdown-toggle>
-                        {{$ctrl.columnMap[index] ?
-                        ($ctrl.columnMap[index].column_title || $ctrl.columnMap[index].label) :
-                        ('contact_import:step_2.do_not_import' | t)}}
-                    </a>
-                    <ul class="bg-white f6" uib-dropdown-menu>
-                        <li ng-if="$ctrl.columnMap[index]">
-                            <a href="" ng-click="$ctrl.doNotImportColumn(index)">
-                                {{ 'contact_import:step_2.do_not_import' | t }}
-                            </a>
-                        </li>
-                        <li ng-repeat="question in $ctrl.surveyQuestions track by question.id"
-                            ng-if="!$ctrl.questionInUse(question.id) && (question.column_title || question.label)">
-                            <a href="" ng-click="$ctrl.columnMap[index] = question">
-                                {{question.column_title || question.label}}
-                            </a>
-                        </li>
-                        <li ng-if="!$ctrl.surveyQuestions">
-                            <a href="">
-                                {{ 'contact_import:step_2.loadingQuestions' | t }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
+            <tr ng-repeat="(index, value) in $ctrl.csvData[0] track by $index">
+                <td class="ph3 pb1 pt3 pivot-gray-darkest">
+                    {{$ctrl.csvData[0][index]}}
+                </td>
+                <td class="ph3 pb1 pt3 pivot-gray-darkest">
+                    {{$ctrl.csvData[$ctrl.currentPreviewRow][index]}}
+                </td>
+                <td class="ph3 pb1 pt3 pivot-gray-darkest">
+                    <div
+                        class="dropdown dropdown-select w-100 mr2 icon-gray-darker"
+                        uib-dropdown
+                    >
+                        <a
+                            class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker w-100 br2 b--pivot-gray-dark dim"
+                            href=""
+                            uib-dropdown-toggle
+                        >
+                            {{$ctrl.columnMap[index] ?
+                            ($ctrl.columnMap[index].column_title ||
+                            $ctrl.columnMap[index].label) :
+                            ('contact_import:step_2.do_not_import' | t)}}
+                        </a>
+                        <ul class="bg-white f6" uib-dropdown-menu>
+                            <li ng-if="$ctrl.columnMap[index]">
+                                <a
+                                    href=""
+                                    ng-click="$ctrl.doNotImportColumn(index)"
+                                >
+                                    {{ 'contact_import:step_2.do_not_import' | t
+                                    }}
+                                </a>
+                            </li>
+                            <li
+                                ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+                                ng-if="!$ctrl.questionInUse(question.id) && (question.column_title || question.label)"
+                            >
+                                <a
+                                    href=""
+                                    ng-click="$ctrl.columnMap[index] = question"
+                                >
+                                    {{question.column_title || question.label}}
+                                </a>
+                            </li>
+                            <li ng-if="!$ctrl.surveyQuestions">
+                                <a href="">
+                                    {{ 'contact_import:step_2.loadingQuestions'
+                                    | t }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
 
 <div class="buttons">
-    <button ng-click="$ctrl.previous()"
-            class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-gray-darker">
+    <button
+        ng-click="$ctrl.previous()"
+        class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-gray-darker"
+    >
         {{ 'back' | t }}
     </button>
-    <button class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
-            ng-class="{
+    <button
+        class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
+        ng-class="{
                 'disabled o-30 dim': !$ctrl.canContinue()
             }"
-            ng-click="$ctrl.next({
+        ng-click="$ctrl.next({
                 columnMap: $ctrl.columnMap
-            })">
+            })"
+    >
         {{ 'continue' | t }}
     </button>
 </div>

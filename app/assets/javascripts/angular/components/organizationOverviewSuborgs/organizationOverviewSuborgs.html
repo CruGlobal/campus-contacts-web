@@ -1,11 +1,21 @@
 <stats-header></stats-header>
-<div infinite-scroll="$ctrl.loadSubOrgsPage()"
-     infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-     class="grid-content">
-    <div class="suborg row padded" ng-repeat="org in $ctrl.subOrgs | orderBy: 'name' track by org.id"
-         >
-        <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="suborg-name">{{org.name}}</a>
+<div
+    infinite-scroll="$ctrl.loadSubOrgsPage()"
+    infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+    class="grid-content"
+>
+    <div
+        class="suborg row padded"
+        ng-repeat="org in $ctrl.subOrgs | orderBy: 'name' track by org.id"
+    >
+        <a
+            ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })"
+            class="suborg-name"
+            >{{org.name}}</a
+        >
         <organizational-stats org="org"></organizational-stats>
     </div>
-    <div ng-show="$ctrl.busy" class="row message-row">{{ 'general.loading_more' | t }}</div>
+    <div ng-show="$ctrl.busy" class="row message-row">
+        {{ 'general.loading_more' | t }}
+    </div>
 </div>

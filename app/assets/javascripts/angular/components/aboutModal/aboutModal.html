@@ -3,12 +3,28 @@
 </div>
 <div class="modal-body">
     <ul>
-        <li><a href="http://help.missionhub.com" target="_blank">{{ 'nav.support' | t }}</a></li>
-        <li><a href="mailto:support@missionhub.com" target="_blank">{{'nav.email_us' | t}}</a></li>
-        <li><a href="https://get.missionhub.com/terms-of-service" target="_blank">{{ 'nav.terms' | t }}</a></li>
+        <li>
+            <a href="http://help.missionhub.com" target="_blank"
+                >{{ 'nav.support' | t }}</a
+            >
+        </li>
+        <li>
+            <a href="mailto:support@missionhub.com" target="_blank"
+                >{{'nav.email_us' | t}}</a
+            >
+        </li>
+        <li>
+            <a
+                href="https://get.missionhub.com/terms-of-service"
+                target="_blank"
+                >{{ 'nav.terms' | t }}</a
+            >
+        </li>
     </ul>
     <span>&#169; {{ 'nav.about.copyright' | t }} {{ $ctrl.year }}</span>
-    <a href="https://www.cru.org" target="_blank">{{'nav.powered_by_cru' | t}}</a>
+    <a href="https://www.cru.org" target="_blank"
+        >{{'nav.powered_by_cru' | t}}</a
+    >
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="$ctrl.close()">

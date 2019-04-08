@@ -1,12 +1,15 @@
-<h2 class="f3 normal pivot-dark-blue fw6 mb3 mt0">{{ 'movementIndicators:suggestedActions.title' | t }}</h2>
-<p class="pivot-gray-darker f5 mt0 mb4 lh-copy">{{ 'movementIndicators:suggestedActions.subtitle' | t }}</p>
+<h2 class="f3 normal pivot-dark-blue fw6 mb3 mt0">
+    {{ 'movementIndicators:suggestedActions.title' | t }}
+</h2>
+<p class="pivot-gray-darker f5 mt0 mb4 lh-copy">
+    {{ 'movementIndicators:suggestedActions.subtitle' | t }}
+</p>
 
 <div ng-if="$ctrl.loadingSuggestions" class="f3 mb5">
     {{ 'movementIndicators:suggestedActions.loading' | t }}
 </div>
 
 <div ng-if="!$ctrl.loadingSuggestions">
-
     <report-movement-indicators-suggested-actions-accordion
         title="movementIndicators:suggestedActions.newSuggestions"
         accordion-open-by-default="true"
@@ -27,13 +30,13 @@
         handle-all-click="$ctrl.handleAllClick"
     >
     </report-movement-indicators-suggested-actions-accordion>
-
 </div>
 
 <div class="mv3 tr">
-    <button class="f5 white ph5 pv3 link ba b--pivot-dark-blue dib b br2 ttu tracked bg-pivot-dark-blue"
-            ng-click="$ctrl.saveSuggestedActions()">
+    <button
+        class="f5 white ph5 pv3 link ba b--pivot-dark-blue dib b br2 ttu tracked bg-pivot-dark-blue"
+        ng-click="$ctrl.saveSuggestedActions()"
+    >
         {{ 'continue' | t }}
     </button>
-
 </div>

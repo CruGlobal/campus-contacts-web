@@ -1,29 +1,52 @@
 <div class="import-contact-form mt5 bb b--pivot-gray pb3 mb4">
-    <div class="error red f6 flex items-center mb3" ng-if="$ctrl.importErrors.length">
+    <div
+        class="error red f6 flex items-center mb3"
+        ng-if="$ctrl.importErrors.length"
+    >
         <div ng-repeat="error in $ctrl.importErrors">{{error}}</div>
     </div>
 
     <h2 class="normal f3 fw6 blue">{{ 'contact_import:step_3.title' | t }}</h2>
     <p class="lh-copy pivot-gray-darker f4 w-90">
-        {{ 'contact_import:step_3.instructions' | t : { count : ($ctrl.csvData.length | number) } }}
+        {{ 'contact_import:step_3.instructions' | t : { count :
+        ($ctrl.csvData.length | number) } }}
     </p>
     <fieldset class="ba b--transparent ph0 mt3">
-        <legend class="blue ttu tracked f5 mb3 db">{{ 'contact_import:step_3.labels' | t }}</legend>
+        <legend class="blue ttu tracked f5 mb3 db">
+            {{ 'contact_import:step_3.labels' | t }}
+        </legend>
         <div class="checkbox-panel pa4 shadow-2 br2 w-60">
-            <div class="flex items-center mb2 pb1 checkbox-wrapper checkbox-small"
-                ng-repeat="label in $ctrl.org.labels">
-                <input class="mr2" id="check{{label.id}}" type="checkbox" ng-model="$ctrl.contactLabels[label.id]">
-                <label class="lh-copy" for="check{{label.id}}">{{label.name}}</label>
+            <div
+                class="flex items-center mb2 pb1 checkbox-wrapper checkbox-small"
+                ng-repeat="label in $ctrl.org.labels"
+            >
+                <input
+                    class="mr2"
+                    id="check{{label.id}}"
+                    type="checkbox"
+                    ng-model="$ctrl.contactLabels[label.id]"
+                />
+                <label class="lh-copy" for="check{{label.id}}"
+                    >{{label.name}}</label
+                >
             </div>
         </div>
         <div class="flex justify-stretch mt3 w-60">
-            <label class="dn" for="add-label">{{ 'contact_import:step_3.add_label' | t }}</label>
-            <input class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker br2 b--pivot-gray f-grow"
-                   ng-model="$ctrl.newLabelName"
-                   id="add-label" placeholder="{{ 'contact_import:step_3.add_label' | t }}" type="text">
-            <button class="f5 link dim ph4 pv2 dib white bold br2 ttu tracked bg-blue ml2"
-                    ng-disabled="!$ctrl.newLabelName"
-                    ng-click="$ctrl.addLabel($ctrl.newLabelName)">
+            <label class="dn" for="add-label"
+                >{{ 'contact_import:step_3.add_label' | t }}</label
+            >
+            <input
+                class="f6 link db pa3 input-reset bg-white ba pivot-gray-darker br2 b--pivot-gray f-grow"
+                ng-model="$ctrl.newLabelName"
+                id="add-label"
+                placeholder="{{ 'contact_import:step_3.add_label' | t }}"
+                type="text"
+            />
+            <button
+                class="f5 link dim ph4 pv2 dib white bold br2 ttu tracked bg-blue ml2"
+                ng-disabled="!$ctrl.newLabelName"
+                ng-click="$ctrl.addLabel($ctrl.newLabelName)"
+            >
                 {{ 'common:contact.add' | t }}
             </button>
         </div>
@@ -31,18 +54,22 @@
 </div>
 
 <div class="buttons">
-    <button ng-click="$ctrl.previous()"
-            class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-gray-darker"
-            ng-class="{
-                'disabled o-30 dim': $ctrl.disableButtons
-            }">
-        {{ 'back' | t }}
-    </button>
-    <button class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
-            ng-class="{
+    <button
+        ng-click="$ctrl.previous()"
+        class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-gray-darker"
+        ng-class="{
                 'disabled o-30 dim': $ctrl.disableButtons
             }"
-            ng-click="$ctrl.import()">
+    >
+        {{ 'back' | t }}
+    </button>
+    <button
+        class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
+        ng-class="{
+                'disabled o-30 dim': $ctrl.disableButtons
+            }"
+        ng-click="$ctrl.import()"
+    >
         {{ 'continue' | t }}
     </button>
 </div>

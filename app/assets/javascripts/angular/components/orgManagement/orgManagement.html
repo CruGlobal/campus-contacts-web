@@ -1,7 +1,12 @@
-<div class='bg-white br3 shadow-3 pb1'>
-    <h1 class="f2 normal pivot-dark-blue mt4 ph3 pt3 mb1">{{ 'common:organizations.manage' | t }}</h1>
+<div class="bg-white br3 shadow-3 pb1">
+    <h1 class="f2 normal pivot-dark-blue mt4 ph3 pt3 mb1">
+        {{ 'common:organizations.manage' | t }}
+    </h1>
 
     <div>
-        <org-management-sub-org org="$ctrl.organizationOverview.org" is-root="true"></org-management-sub-org>
+        <org-management-sub-org
+            org="$ctrl.organizationOverview.org"
+            is-root="true"
+        ></org-management-sub-org>
     </div>
 </div>
