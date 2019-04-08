@@ -102,17 +102,20 @@ const FilterConfig = [
 ];
 
 const Filters = () => {
-    const {
-        data: {
-            apolloClient: { currentFilter },
-        },
-    } = useQuery(GET_CURRENT_FILTER);
+    const { data, loading } = useQuery(GET_CURRENT_FILTER);
+
+    if (loading) {
+        return <div>Loading</div>;
+    }
 
     const updateCurrentFilter = useMutation(UPDATE_CURRENT_FILTER);
-
     const onFilterClick = filter => {
         updateCurrentFilter({ variables: { filter } });
     };
+
+    const {
+        apolloClient: { currentFilter },
+    } = data;
 
     return (
         <Container>
