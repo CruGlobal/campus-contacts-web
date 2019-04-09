@@ -7,6 +7,7 @@ import Members from './Members/members';
 import { client } from '../state/apollo-client';
 import DashBoardNavBar from './NavBar/navBar';
 import StepsInfo from './StepsInfo/StepsInfo';
+import { Spring } from 'react-spring/renderprops';
 
 const theme = {
     colors: {
@@ -21,8 +22,18 @@ const CommunityStats = ({ orgId }) => (
     <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
             <DashBoardNavBar orgID={orgId} />
-            <StepsInfo />
-            <Members positive={theme.positive} negative={theme.negative} />
+            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => <StepsInfo style={props} />}
+            </Spring>
+            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => (
+                    <Members
+                        style={props}
+                        positive={theme.positive}
+                        negative={theme.negative}
+                    />
+                )}
+            </Spring>
         </ThemeProvider>
     </ApolloProvider>
 );

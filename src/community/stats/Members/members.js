@@ -28,12 +28,20 @@ const InnerContainer = styled.div`
     }
 `;
 
-const Members = () => {
+const Members = ({ style }) => {
+    const { data, loading, error } = useQuery(GET_CURRENT_TAB);
+
+    if (loading) {
+        <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error! {error.message}</div>;
+    }
+
     const {
-        data: {
-            apolloClient: { currentTab },
-        },
-    } = useQuery(GET_CURRENT_TAB);
+        apolloClient: { currentTab },
+    } = data;
 
     const renderGraph = () => {
         switch (currentTab) {
@@ -48,18 +56,15 @@ const Members = () => {
 
     return (
         <>
-            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
-                {props => (
-                    <Container style={props}>
-                        <InnerContainer>
-                            <h3>STEPS OF FAITH WITH OTHERS</h3>
-                            <Tabs />
-                            {renderGraph()}
-                        </InnerContainer>
-                        <CelebrateSteps />
-                    </Container>
-                )}
-            </Spring>
+            <Container style={style}>
+                <InnerContainer>
+                    <h3>STEPS OF FAITH WITH OTHERS</h3>
+                    <Tabs />
+                    {renderGraph()}
+                </InnerContainer>
+                <CelebrateSteps />
+            </Container>
+
             <Spring from={{ marginTop: 1000 }} to={{ marginTop: 80 }}>
                 {props => <BarStats style={props} />}
             </Spring>
