@@ -28,8 +28,15 @@ function myPeopleDashboardController(
     vm.organizations = [];
     vm.loading = true;
     vm.noPeople = false;
-    vm.numberOfOrgsToShow = 1000;
-    vm.noPeopleShowLimit = 4;
+
+    vm.sortableOptions = {
+        handle: '.sort-orgs-handle',
+        ghostClass: 'o-40',
+        forceFallback: true, // Needed to make sticky header and scrollSensitivity work
+        scrollSensitivity: 100,
+        onEnd: () =>
+            userPreferencesService.organizationOrderChange(vm.organizations),
+    };
 
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
@@ -38,15 +45,6 @@ function myPeopleDashboardController(
         angular.element($document).on('people::personAdded', loadAndSyncData);
         vm.toggleOrgVisibility =
             userPreferencesService.toggleOrganizationVisibility;
-
-        vm.sortableOptions = {
-            handle: '.sort-orgs-handle',
-            stop: function() {
-                return userPreferencesService.organizationOrderChange(
-                    vm.organizations,
-                );
-            },
-        };
 
         vm.noPeopleWelcome = i18next.t('dashboard.no_contacts.welcome', {
             name: loggedInPerson.person.first_name.toUpperCase(),
@@ -103,12 +101,6 @@ function myPeopleDashboardController(
                 vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(
                     vm.organizations,
                 );
-
-                if (vm.organizations.length <= vm.noPeopleShowLimit) {
-                    vm.numberOfOrgsToShow = 100;
-                } else {
-                    vm.numberOfOrgsToShow = vm.noPeopleShowLimit;
-                }
                 loadReports();
             })
             .catch(function(error) {

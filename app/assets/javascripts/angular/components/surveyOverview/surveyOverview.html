@@ -1,29 +1,55 @@
-<div class='br2 mb4' ng-class="$ctrl.activeTab === 'questions' ? '' : 'shadow-3'">
-    <div class="header br2 br--top flex justify-between bg-pivot-blue-darker" ng-class="$ctrl.activeTab === 'questions' ? 'shadow-3' : ''">
+<div
+    class="br2 mb4"
+    ng-class="$ctrl.activeTab === 'questions' ? '' : 'shadow-3'"
+>
+    <div
+        class="header br2 br--top flex justify-between bg-pivot-blue-darker"
+        ng-class="$ctrl.activeTab === 'questions' ? 'shadow-3' : ''"
+    >
         <div class="">
             <div class="f3 pivot-white ph3 pt3 flex">
-                <a ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })">
-                    <div class='mr2' ng-include="$ctrl.chevronLeftIcon"></div>
+                <a
+                    ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })"
+                >
+                    <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
                 </a>
                 {{$ctrl.survey.title}}
             </div>
 
             <div class="tabs">
-                <div class="tab " ng-repeat="tab in $ctrl.tabNames" ng-class="{'active': $ctrl.activeTab === tab.id}"
-                     ng-click="$ctrl.activeTab = tab.id">
-                    <span class='pivot-white'>{{tab.name | t}}</span>
+                <div
+                    class="tab "
+                    ng-repeat="tab in $ctrl.tabNames"
+                    ng-class="{'active': $ctrl.activeTab === tab.id}"
+                    ng-click="$ctrl.activeTab = tab.id"
+                >
+                    <span class="pivot-white">{{tab.name | t}}</span>
                 </div>
             </div>
         </div>
-        <a ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
-           target="_blank"
-           class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked">
+        <a
+            ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
+            target="_blank"
+            class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked"
+        >
             {{ 'surveys:preview' | t }}
         </a>
     </div>
-    <div class='bt' ng-class="$ctrl.activeTab === 'questions' ? 'bg-transparent' : 'bg-pivot-gray-5 b--pivot-gray-4 pa3 br2 br--bottom'">
-        <survey-overview-settings survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'settings'"></survey-overview-settings>
-        <survey-overview-keyword survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'keyword'"></survey-overview-keyword>
-        <survey-overview-questions survey="$ctrl.survey" ng-if="$ctrl.activeTab === 'questions'"></survey-overview-questions>
+    <div
+        class="bt"
+        ng-class="$ctrl.activeTab === 'questions' ? 'bg-transparent' : 'bg-pivot-gray-5 b--pivot-gray-4 pa3 br2 br--bottom'"
+    >
+        <survey-overview-settings
+            survey="$ctrl.survey"
+            ng-if="$ctrl.activeTab === 'settings'"
+        ></survey-overview-settings>
+        <survey-overview-keyword
+            survey="$ctrl.survey"
+            ng-if="$ctrl.activeTab === 'keyword'"
+        ></survey-overview-keyword>
+        <survey-overview-questions
+            survey="$ctrl.survey"
+            ng-if="$ctrl.activeTab === 'questions'"
+        ></survey-overview-questions>
     </div>
 </div>

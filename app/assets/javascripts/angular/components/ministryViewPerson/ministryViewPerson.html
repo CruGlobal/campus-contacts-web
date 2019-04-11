@@ -1,7 +1,10 @@
 <div class="row padded">
-    <div class="sticky-column" ng-class="$ctrl.questions && ($ctrl.odd ? 'col-bg-gray' : 'col-bg-white')">
+    <div
+        class="sticky-column"
+        ng-class="$ctrl.questions && ($ctrl.odd ? 'col-bg-gray' : 'col-bg-white')"
+    >
         <div class="column select-column">
-            <input type="checkbox" ng-model="$ctrl.selected"/>
+            <input type="checkbox" ng-model="$ctrl.selected" />
         </div>
         <div class="column name-column">
             <a href ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
@@ -10,57 +13,97 @@
         </div>
     </div>
     <div class="column detail-column gender-column">
-        <span ng-if="$ctrl.person.gender">{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) | t}}</span>
+        <span ng-if="$ctrl.person.gender"
+            >{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) |
+            t}}</span
+        >
     </div>
-    <div class="column detail-column assigned-to-column dropdown"
-         ng-class="{warning: $ctrl.assignedTo.length === 0}">
+    <div
+        class="column detail-column assigned-to-column dropdown"
+        ng-class="{warning: $ctrl.assignedTo.length === 0}"
+    >
         <div class="name-container">
             <div class="name">
-                {{$ctrl.assignedTo.length > 0 ?
-                    ($ctrl.assignedTo[0] | personName) :
-                    ('assignments.unassigned' | t)}}
-                <span ng-if="$ctrl.assignedTo.length > 1">(+{{$ctrl.assignedTo.length - 1}})</span>
+                {{$ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] |
+                personName) : ('assignments.unassigned' | t)}}
+                <span ng-if="$ctrl.assignedTo.length > 1"
+                    >(+{{$ctrl.assignedTo.length - 1}})</span
+                >
             </div>
-            <a href="" ng-click="$ctrl.toggleAssignmentVisibility()" class="arrow" ng-class="{'arrow-up': $ctrl.assignmentsVisible}"></a>
+            <a
+                href=""
+                ng-click="$ctrl.toggleAssignmentVisibility()"
+                class="arrow"
+                ng-class="{'arrow-up': $ctrl.assignmentsVisible}"
+            ></a>
         </div>
-        <div class="dropdown-container" ng-if="$ctrl.assignmentsVisible" on-click-away="$ctrl.assignmentsVisible = false">
-            <person-multiselect class="dark dropdown-content" people-description="'ministries.people.leaders'"
-                                selected-people="$ctrl.assignedTo" organization-id="$ctrl.organizationId"
-                                add-person="$ctrl.addAssignment(person)" remove-person="$ctrl.removeAssignment(person)"
-                                focused="true" ng-keydown="$ctrl.onAssignmentsKeydown($event)">
+        <div
+            class="dropdown-container"
+            ng-if="$ctrl.assignmentsVisible"
+            on-click-away="$ctrl.assignmentsVisible = false"
+        >
+            <person-multiselect
+                class="dark dropdown-content"
+                people-description="'ministries.people.leaders'"
+                selected-people="$ctrl.assignedTo"
+                organization-id="$ctrl.organizationId"
+                add-person="$ctrl.addAssignment(person)"
+                remove-person="$ctrl.removeAssignment(person)"
+                focused="true"
+                ng-keydown="$ctrl.onAssignmentsKeydown($event)"
+            >
             </person-multiselect>
         </div>
     </div>
-    <div class="column detail-column status-column form"
-         ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}"
-         ng-if="$ctrl.orgPermission.archive_date === null">
+    <div
+        class="column detail-column status-column form"
+        ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}"
+        ng-if="$ctrl.orgPermission.archive_date === null"
+    >
         <div class="form-group">
             <label class="form-control-select" ng-if="$ctrl.isContact()">
                 <span class="label">&nbsp;</span>
-                <select class="form-control"
-                        ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
-                        ng-model="$ctrl.orgPermission.followup_status"
-                        ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')">
+                <select
+                    class="form-control"
+                    ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
+                    ng-model="$ctrl.orgPermission.followup_status"
+                    ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')"
+                >
                 </select>
             </label>
         </div>
     </div>
-    <div class="column detail-column status-column"
-         ng-if="$ctrl.orgPermission.archive_date !== null">
+    <div
+        class="column detail-column status-column"
+        ng-if="$ctrl.orgPermission.archive_date !== null"
+    >
         <span>{{'followup_status.archived' | t}}</span>
     </div>
-    <div class="column detail-column phone-number-column" ng-if="$ctrl.showLastSurvey">
+    <div
+        class="column detail-column phone-number-column"
+        ng-if="$ctrl.showLastSurvey"
+    >
         <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
     </div>
     <div class="column detail-column phone-number-column">
-        <span ng-if="$ctrl.phoneNumber">{{$ctrl.phoneNumber.number | phone}}</span>
+        <span ng-if="$ctrl.phoneNumber"
+            >{{$ctrl.phoneNumber.number | phone}}</span
+        >
     </div>
     <div class="column detail-column button-column">
         <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
-            <icon-button icon="'email'" disabled="!$ctrl.emailAddress"></icon-button>
+            <icon-button
+                icon="'email'"
+                disabled="!$ctrl.emailAddress"
+            ></icon-button>
         </a>
     </div>
-    <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }" ng-repeat="question in $ctrl.questions" title="{{$ctrl.person.answers[question.id].join(', ')}}">
+    <div
+        class="column survey-column"
+        ng-class="{ 'survey-column-wide': question.style === 'email' }"
+        ng-repeat="question in $ctrl.questions"
+        title="{{$ctrl.person.answers[question.id].join(', ')}}"
+    >
         {{$ctrl.person.answers[question.id].join(', ')}}
     </div>
 </div>

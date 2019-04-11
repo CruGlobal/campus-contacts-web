@@ -1,7 +1,11 @@
 <div class="modal-header">
     <div>
-        <h3 class="heading f3 ma0">{{ 'ministries.surveys.typeform.header' | t }}</h3>
-        <h5 class="sub-heading f5 mt2 mb0 text-muted">{{ 'ministries.surveys.typeform.subheader' | t }}</h5>
+        <h3 class="heading f3 ma0">
+            {{ 'ministries.surveys.typeform.header' | t }}
+        </h3>
+        <h5 class="sub-heading f5 mt2 mb0 text-muted">
+            {{ 'ministries.surveys.typeform.subheader' | t }}
+        </h5>
     </div>
     <a ng-click="$ctrl.close()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
@@ -16,9 +20,19 @@
         <li>{{ 'ministries.surveys.typeform.step5' | t }}</li>
     </ol>
     <p>{{ 'ministries.surveys.typeform.conclusion' | t }}</p>
-    <label for="missionhub-url">{{ 'ministries.surveys.typeform.missionHubUrl' | t }}</label>
-    <textarea id="missionhub-url" name="missionhub-url" class="form-control" ng-model="$ctrl.resolve.webhookUrl" readonly></textarea>
-    <span ng-if="$ctrl.copied" class="text-muted">{{ 'ministries.surveys.typeform.copied' | t }}</span>
+    <label for="missionhub-url"
+        >{{ 'ministries.surveys.typeform.missionHubUrl' | t }}</label
+    >
+    <textarea
+        id="missionhub-url"
+        name="missionhub-url"
+        class="form-control"
+        ng-model="$ctrl.resolve.webhookUrl"
+        readonly
+    ></textarea>
+    <span ng-if="$ctrl.copied" class="text-muted"
+        >{{ 'ministries.surveys.typeform.copied' | t }}</span
+    >
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="$ctrl.copy()">

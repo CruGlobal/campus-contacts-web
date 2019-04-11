@@ -10,9 +10,17 @@
     <div class="column time-column">{{ $ctrl.meetingTime }}</div>
     <div class="column location-column">{{ $ctrl.group.location }}</div>
     <div class="column buttons-column">
-        <ng-md-icon class="edit-action" icon="edit" size="16"
-                    ng-click="$ctrl.editGroup(); $event.stopPropagation();"></ng-md-icon>
-        <ng-md-icon class="delete-action" icon="delete" size="16"
-                    ng-click="$ctrl.deleteGroup(); $event.stopPropagation();"></ng-md-icon>
+        <ng-md-icon
+            class="edit-action"
+            icon="edit"
+            size="16"
+            ng-click="$ctrl.editGroup(); $event.stopPropagation();"
+        ></ng-md-icon>
+        <ng-md-icon
+            class="delete-action"
+            icon="delete"
+            size="16"
+            ng-click="$ctrl.deleteGroup(); $event.stopPropagation();"
+        ></ng-md-icon>
     </div>
 </div>

@@ -5,16 +5,29 @@
     </h3>
 </div>
 <div class="modal-body form" id="modal-body">
-    <multiselect-list options="$ctrl.entryOptions"
-                      original-selection="$ctrl.selectedEntries"
-                      added-output="$ctrl.addedEntries" removed-output="$ctrl.removedEntries">
+    <multiselect-list
+        options="$ctrl.entryOptions"
+        original-selection="$ctrl.selectedEntries"
+        added-output="$ctrl.addedEntries"
+        removed-output="$ctrl.removedEntries"
+    >
     </multiselect-list>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="$ctrl.saving">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">
+        {{ 'general.cancel' | t }}
+    </button>
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="$ctrl.saving"
+    >
         <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
-        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.saving"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>

@@ -3,7 +3,7 @@
 </div>
 <div class="column normal-column">
     <div class="subtitle">
-        <span am-time-ago="$ctrl.answerSheet.completed_at"></span>
+        <span>{{$ctrl.moment($ctrl.answerSheet.updated_at).fromNow()}}</span>
     </div>
     <div class="title">{{$ctrl.answerSheet.survey.title}}</div>
     <div class="qa-pair" ng-repeat="answer in $ctrl.answerSheet.answers">

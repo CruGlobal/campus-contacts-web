@@ -1,58 +1,106 @@
 <async-content ready="$ctrl.ready">
     <div class="filters row">
-        <span class="filter nav-item" ng-repeat="filter in $ctrl.filters"
-              ng-click="$ctrl.filter = filter" ng-class="{ active: filter === $ctrl.filter }">
+        <span
+            class="filter nav-item"
+            ng-repeat="filter in $ctrl.filters"
+            ng-click="$ctrl.filter = filter"
+            ng-class="{ active: filter === $ctrl.filter }"
+        >
             {{'ministries.people.history.' + filter | t}}
         </span>
     </div>
     <hr />
     <div class="scrollable-area" scroll-glue>
         <div class="history-items">
-            <div class="history-item" ng-repeat="historyItem in $ctrl.historyFeed" ng-switch="historyItem._type">
-                <interaction ng-switch-when="interaction"
-                             class="row"
-                             person="$ctrl.personTab.person"
-                             interaction="historyItem"
-                             on-delete="$ctrl.removeInteraction($event)">
+            <div
+                class="history-item"
+                ng-repeat="historyItem in $ctrl.historyFeed"
+                ng-switch="historyItem._type"
+            >
+                <interaction
+                    ng-switch-when="interaction"
+                    class="row"
+                    person="$ctrl.personTab.person"
+                    interaction="historyItem"
+                    on-delete="$ctrl.removeInteraction($event)"
+                >
                 </interaction>
-                <answer-sheet ng-switch-when="answer_sheet" class="row"
-                              answer-sheet="historyItem" organization-id="$ctrl.organizationId">
+                <answer-sheet
+                    ng-switch-when="answer_sheet"
+                    class="row"
+                    answer-sheet="historyItem"
+                    organization-id="$ctrl.organizationId"
+                >
                 </answer-sheet>
             </div>
         </div>
-        <form class="row new-interaction pivot_theme" ng-if="$ctrl.newInteractionType" ng-safe-submit="$ctrl.saveInteraction()">
+        <form
+            class="row new-interaction pivot_theme"
+            ng-if="$ctrl.newInteractionType"
+            ng-safe-submit="$ctrl.saveInteraction()"
+        >
             <div class="column icon-column flush-column">
-                <ng-md-icon class="icon-chip" icon="{{$ctrl.newInteractionType.icon}}" size="20"></ng-md-icon>
+                <ng-md-icon
+                    class="icon-chip"
+                    icon="{{$ctrl.newInteractionType.icon}}"
+                    size="20"
+                ></ng-md-icon>
             </div>
             <div class="column normal-column">
-                <textarea type="text" placeholder="{{ 'ministries.people.history.note_for_interaction'
+                <textarea
+                    type="text"
+                    placeholder="{{ 'ministries.people.history.note_for_interaction'
                                                    | t:{ interaction: ($ctrl.newInteractionType.title | t)} }}"
-                          ng-model="$ctrl.newInteractionComment" ng-required="$ctrl.newInteractionType.id === 1"
-                          ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()" focus="true">
+                    ng-model="$ctrl.newInteractionComment"
+                    ng-required="$ctrl.newInteractionType.id === 1"
+                    ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()"
+                    focus="true"
+                >
                 </textarea>
             </div>
             <button type="submit" class="column icon-column">
-                <ng-md-icon class="icon-chip actionable" icon="done" size="20"></ng-md-icon>
+                <ng-md-icon
+                    class="icon-chip actionable"
+                    icon="done"
+                    size="20"
+                ></ng-md-icon>
             </button>
             <div class="column icon-column">
-                <ng-md-icon class="icon-chip close-icon" icon="close" size="20"
-                            ng-click="$ctrl.clearInteraction()"></ng-md-icon>
+                <ng-md-icon
+                    class="icon-chip close-icon"
+                    icon="close"
+                    size="20"
+                    ng-click="$ctrl.clearInteraction()"
+                ></ng-md-icon>
             </div>
         </form>
         <div class="sheet-container">
             <div class="sheet" ng-if="$ctrl.interactionTypesVisible">
-                <div class="item actionable" ng-repeat="interactionType in $ctrl.interactionTypes"
-                     ng-click="$ctrl.createInteraction(interactionType)">
+                <div
+                    class="item actionable"
+                    ng-repeat="interactionType in $ctrl.interactionTypes"
+                    ng-click="$ctrl.createInteraction(interactionType)"
+                >
                     <ng-md-icon icon="{{interactionType.icon}}"></ng-md-icon>
                     <div>{{interactionType.title | t}}</div>
                 </div>
             </div>
         </div>
         <div class="row add-interaction" ng-if="!$ctrl.newInteractionType">
-            <ng-md-icon class="icon-chip primary-action actionable" icon="add" size="30"
-                        ng-click="$ctrl.openInteractionTypeSheet()" ng-if="!$ctrl.interactionTypesVisible"></ng-md-icon>
-            <ng-md-icon class="icon-chip actionable" icon="close" size="30"
-                        ng-click="$ctrl.closeInteractionTypeSheet()" ng-if="$ctrl.interactionTypesVisible"></ng-md-icon>
+            <ng-md-icon
+                class="icon-chip primary-action actionable"
+                icon="add"
+                size="30"
+                ng-click="$ctrl.openInteractionTypeSheet()"
+                ng-if="!$ctrl.interactionTypesVisible"
+            ></ng-md-icon>
+            <ng-md-icon
+                class="icon-chip actionable"
+                icon="close"
+                size="30"
+                ng-click="$ctrl.closeInteractionTypeSheet()"
+                ng-if="$ctrl.interactionTypesVisible"
+            ></ng-md-icon>
         </div>
     </div>
 </async-content>

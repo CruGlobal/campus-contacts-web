@@ -1,66 +1,86 @@
-    <div class="panel-body pt10 pb4">
-        <form class="measure center">
-            <fieldset class="ba b--transparent ph0 mh0" id="sign_up">
+<div class="panel-body pt10 pb4">
+    <form class="measure center">
+        <fieldset class="ba b--transparent ph0 mh0" id="sign_up">
             <div class="mt3 pv1 b--pivot-gray tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="surveyName">
-                        {{'surveyTab:surveyName' | t}}
-                    </label>
-                    <input
-                    class="pa2 input-reset bg-white pivot-gray-darker w-100 ihshort" id="surveyName"
-                        placeholder="{{'surveyTab:surveyName' | t}}" type="text" ng-model="$ctrl.surveyEdit.title"
-                        ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges">
-                </div>
+                <label
+                    class="db fw6 lh-copy f5 bold mb1 blue ttu tracked"
+                    for="surveyName"
+                >
+                    {{'surveyTab:surveyName' | t}}
+                </label>
+                <input
+                    class="pa2 input-reset bg-white pivot-gray-darker w-100 ihshort"
+                    id="surveyName"
+                    placeholder="{{'surveyTab:surveyName' | t}}"
+                    type="text"
+                    ng-model="$ctrl.surveyEdit.title"
+                    ng-change="$ctrl.saveSurvey()"
+                    ng-readonly="!$ctrl.directAdminPrivileges"
+                />
+            </div>
             <div class="mt3 pb1 tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="welcomeMessage">
-                        {{'surveys:settings.welcome_message' | t}}
-                    </label>
-                    <textarea
+                <label
+                    class="db fw6 lh-copy f5 bold mb1 blue ttu tracked"
+                    for="welcomeMessage"
+                >
+                    {{'surveys:settings.welcome_message' | t}}
+                </label>
+                <textarea
                     class="input-reset bg-white pivot-gray-darker w-100 "
-                        id="welcomeMessage"
-                        name="welcomeMessage" placeholder="{{'surveys:settings:welcome_message' | t}}"
-                        ng-model="$ctrl.surveyEdit.login_paragraph"
-                        ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges"
-                    ></textarea>
-                </div>
+                    id="welcomeMessage"
+                    name="welcomeMessage"
+                    placeholder="{{'surveys:settings:welcome_message' | t}}"
+                    ng-model="$ctrl.surveyEdit.login_paragraph"
+                    ng-change="$ctrl.saveSurvey()"
+                    ng-readonly="!$ctrl.directAdminPrivileges"
+                ></textarea>
+            </div>
             <div class="mt3 pb1 tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="successMessage">
-                        {{'surveys:settings.success_message' | t}}
-                    </label>
-                    <textarea
+                <label
+                    class="db fw6 lh-copy f5 bold mb1 blue ttu tracked"
+                    for="successMessage"
+                >
+                    {{'surveys:settings.success_message' | t}}
+                </label>
+                <textarea
                     class="input-reset bg-white pivot-gray-darker w-100"
-                        id="successMessage"
-                        placeholder="{{'surveys:settings.success_message' | t}}"
-                        ng-model="$ctrl.surveyEdit.post_survey_message"
-                        ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges">
-                    </textarea>
-                </div>
+                    id="successMessage"
+                    placeholder="{{'surveys:settings.success_message' | t}}"
+                    ng-model="$ctrl.surveyEdit.post_survey_message"
+                    ng-change="$ctrl.saveSurvey()"
+                    ng-readonly="!$ctrl.directAdminPrivileges"
+                >
+                </textarea>
+            </div>
             <div class="mt3 bb pb1 b--pivot-gray tl">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
-                        {{'surveys:settings.image' | t}}
-                        <span class="f6 gray-dark ttn normal">(480 x 240 .jpg, .png, .gif)</span>
-                    </label>
-                    <div class="image-box bg-white mb3 br2">
-                        <img ng-src="{{$ctrl.surveyEdit.logo_url}}" ng-if="$ctrl.surveyEdit.logo_url">
-                    </div>
-                    <button
-                        class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
-                        ng-click="$ctrl.selectImage()"
-                        ng-if="$ctrl.directAdminPrivileges"
+                <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked">
+                    {{'surveys:settings.image' | t}}
+                    <span class="f6 gray-dark ttn normal"
+                        >(480 x 240 .jpg, .png, .gif)</span
                     >
-                        {{'surveys:settings.image_upload' | t}}
-                    </button>
-                    <button
-                        class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
-                        ng-click="$ctrl.deleteImage()"
-                        ng-if="$ctrl.surveyEdit.logo_url && $ctrl.directAdminPrivileges"
-                    >
-                        {{'surveys:settings.image_delete' | t}}
-                    </button>
+                </label>
+                <div class="image-box bg-white mb3 br2">
+                    <img
+                        ng-src="{{$ctrl.surveyEdit.logo_url}}"
+                        ng-if="$ctrl.surveyEdit.logo_url"
+                    />
                 </div>
-                <div ng-if="$ctrl.survey.organization.typeform_enabled">
+                <button
+                    class="f6 ba w-49 tc pv2 mb2 dib blue bold br2 dim ttu tracked"
+                    ng-click="$ctrl.selectImage()"
+                    ng-if="$ctrl.directAdminPrivileges"
+                >
+                    {{'surveys:settings.image_upload' | t}}
+                </button>
+                <button
+                    class="f6 dim w-49 pv2 dib white bold br2 ttu tracked bg-blue"
+                    ng-click="$ctrl.deleteImage()"
+                    ng-if="$ctrl.surveyEdit.logo_url && $ctrl.directAdminPrivileges"
+                >
+                    {{'surveys:settings.image_delete' | t}}
+                </button>
+            </div>
+            <div ng-if="$ctrl.survey.organization.typeform_enabled">
                 <div class="mt4 bb pb4 b--pivot-gray tl">
                     <input
                         type="checkbox"
@@ -68,27 +88,46 @@
                         placeholder="{{'surveys:settings.validation_message' | t}}"
                         ng-model="$ctrl.surveyEdit.validate_phone_number"
                         ng-change="$ctrl.saveSurvey()"
-                        ng-disabled="!$ctrl.directAdminPrivileges">
-                    <label class="fw6 f5 bold ml2 mb0 blue ttu tracked" for="validatePhoneNumber">
+                        ng-disabled="!$ctrl.directAdminPrivileges"
+                    />
+                    <label
+                        class="fw6 f5 bold ml2 mb0 blue ttu tracked"
+                        for="validatePhoneNumber"
+                    >
                         {{'surveys:settings.validate_phone_number' | t}}
                     </label>
                     <p class="f7 pivot-gray-darker mt2 mb0 lh-16">
                         {{'surveys:settings.validate_phone_number_hint' | t}}
                     </p>
                 </div>
-                <div class="mt4 bb pb4 b--pivot-gray tl" ng-if="$ctrl.surveyEdit.validate_phone_number">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="validationMessage">
+                <div
+                    class="mt4 bb pb4 b--pivot-gray tl"
+                    ng-if="$ctrl.surveyEdit.validate_phone_number"
+                >
+                    <label
+                        class="db fw6 lh-copy f5 bold mb1 blue ttu tracked"
+                        for="validationMessage"
+                    >
                         {{'surveys:settings.validation_message' | t}}
                     </label>
                     <p class="f7 pivot-gray-darker mt0 lh-16">
                         {{'surveys:settings.validation_message_hint' | t}}
-                            <a class="help fr" href=""
-                               ng-click="$ctrl.showValidationMessageHelp = !$ctrl.showValidationMessageHelp">
-                                <img alt="{{'common:general.help' | t}}" ng-src="{{$ctrl.helpIcon}}"
-                                     style="width:16px; height:16px;">
+                        <a
+                            class="help fr"
+                            href=""
+                            ng-click="$ctrl.showValidationMessageHelp = !$ctrl.showValidationMessageHelp"
+                        >
+                            <img
+                                alt="{{'common:general.help' | t}}"
+                                ng-src="{{$ctrl.helpIcon}}"
+                                style="width:16px; height:16px;"
+                            />
                         </a>
                     </p>
-                    <div class="help-text" ng-if="$ctrl.showValidationMessageHelp">
+                    <div
+                        class="help-text"
+                        ng-if="$ctrl.showValidationMessageHelp"
+                    >
                         <p class="pivot-gray-darker f7 lh-copy pv2">
                             {{'surveys:settings.validation_message_help' | t}}
                         </p>
@@ -100,19 +139,27 @@
                         placeholder="{{'surveys:settings.validation_message' | t}}"
                         ng-model="$ctrl.surveyEdit.validation_message"
                         ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges">
+                        ng-readonly="!$ctrl.directAdminPrivileges"
+                    >
                     </textarea>
                     <p class="f7 pivot-gray-darker mt2 lh-16">
-                            {{ 'messages.length_limit' | t : { remaining_characters: 110 -
-                            $ctrl.surveyEdit.validation_message.length } }}
+                        {{ 'messages.length_limit' | t : { remaining_characters:
+                        110 - $ctrl.surveyEdit.validation_message.length } }}
                     </p>
                 </div>
-                <div class="mt4 bb pb4 b--pivot-gray tl" ng-if="$ctrl.surveyEdit.validate_phone_number">
-                    <label class="db fw6 lh-copy f5 bold mb1 blue ttu tracked" for="validationSuccessMessage">
+                <div
+                    class="mt4 bb pb4 b--pivot-gray tl"
+                    ng-if="$ctrl.surveyEdit.validate_phone_number"
+                >
+                    <label
+                        class="db fw6 lh-copy f5 bold mb1 blue ttu tracked"
+                        for="validationSuccessMessage"
+                    >
                         {{'surveys:settings.validation_success_message' | t}}
                     </label>
                     <p class="f7 pivot-gray-darker mt0 lh-16">
-                        {{'surveys:settings.validation_success_message_hint' | t}}
+                        {{'surveys:settings.validation_success_message_hint' |
+                        t}}
                     </p>
                     <textarea
                         class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100"
@@ -120,10 +167,11 @@
                         placeholder="{{'surveys:settings.validation_success_message' | t}}"
                         ng-model="$ctrl.surveyEdit.validation_success_message"
                         ng-change="$ctrl.saveSurvey()"
-                        ng-readonly="!$ctrl.directAdminPrivileges">
+                        ng-readonly="!$ctrl.directAdminPrivileges"
+                    >
                     </textarea>
                 </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

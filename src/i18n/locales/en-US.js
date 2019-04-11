@@ -375,7 +375,7 @@ export default {
             },
             members: {
                 columns: {
-                    name: 'Contacts',
+                    name: 'Members',
                 },
                 contacts: 'contacts',
                 leader: 'Leader',
@@ -614,6 +614,8 @@ export default {
             tools: {
                 header: 'Tools',
             },
+            noMinistriesFound:
+                'Sorry you have no ministries linked to this account.',
         },
         monthly: 'Monthly',
         nav: {
@@ -703,7 +705,9 @@ export default {
         permissions: {
             admin: 'Admin',
             no_permissions: 'No Permissions',
+            no_permission: 'No Permission',
             user: 'User',
+            owner: 'Owner',
         },
         person_multiselect: {
             no_search_results:
@@ -729,6 +733,9 @@ export default {
             },
             questions: {
                 title: 'Survey Questions',
+            },
+            permission: {
+                title: 'Permission',
             },
             sidebar: {
                 include_archived: 'Include archived contacts',
@@ -992,6 +999,8 @@ export default {
             exactly: 'Exactly',
             contains: 'Contains',
             doesNotContain: 'Does not contain',
+            noResponse: 'No response',
+            anyResponse: 'Any response',
         },
     },
     movementIndicators: {

@@ -1,57 +1,98 @@
-<accordion class='shadow-4' collapsed="$ctrl.collapsed" collapsible="$ctrl.collapsible && !$ctrl.editMode">
+<accordion
+    class="shadow-4"
+    collapsed="$ctrl.collapsed"
+    collapsible="$ctrl.collapsible && !$ctrl.editMode"
+>
     <accordion-header>
-        <div class="header" ng-class="{'hidden-org': !$ctrl.org.visible, 'br2': $ctrl.collapsed === true, 'br2 br--top': $ctrl.collapsed === false}">
-            <accordion-toggle></accordion-toggle>
-            <div class="org-name pivot-white">
-                <h2 ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })">
+        <div
+            class="header pr2"
+            ng-class="{'hidden-org': !$ctrl.org.visible, 'br2': $ctrl.collapsed === true, 'br2 br--top': $ctrl.collapsed === false}"
+        >
+            <accordion-toggle class="ml2"></accordion-toggle>
+            <div class="org-name pivot-white mh1">
+                <h2
+                    ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })"
+                >
                     {{ $ctrl.org.name }}
                 </h2>
             </div>
-            <organizational-stats class="pivot-white" org="$ctrl.org"></organizational-stats>
+            <organizational-stats
+                class="pivot-white"
+                org="$ctrl.org"
+            ></organizational-stats>
             <div class="right-buttons">
                 <ng-md-icon
-                    class='pivot-white' 
-                    size="20" icon="addPerson"
+                    class="pivot-white"
+                    size="18"
+                    icon="addPerson"
                     icon="addPerson"
                     ng-if="!$ctrl.editMode"
-                    ui-sref=".new.defaultTab({ orgId: $ctrl.org.id, assignToMe: true })">
+                    ui-sref=".new.defaultTab({ orgId: $ctrl.org.id, assignToMe: true })"
+                >
                 </ng-md-icon>
-                <div class="add-anonymous-interaction-buttons"
-                     ng-if="$ctrl.addAnonymousInteractionButtonsVisible">
-                    <ng-md-icon ng-repeat="type in $ctrl.anonymousInteractionTypes"
-                                ng-class="{opened: type.id == $ctrl.addAnonymousInteractionType.id}"
-                                ng-click="$ctrl.addAnonymousInteraction(type)"
-                                title="{{type.title | t}}"
-                                icon="{{type.icon}}">
+                <div
+                    class="add-anonymous-interaction-buttons"
+                    ng-if="$ctrl.addAnonymousInteractionButtonsVisible"
+                >
+                    <ng-md-icon
+                        ng-repeat="type in $ctrl.anonymousInteractionTypes"
+                        ng-class="{opened: type.id == $ctrl.addAnonymousInteractionType.id}"
+                        ng-click="$ctrl.addAnonymousInteraction(type)"
+                        title="{{type.title | t}}"
+                        icon="{{type.icon}}"
+                    >
                     </ng-md-icon>
                 </div>
-                <ng-md-icon icon="add"
-                            size="20"
-                            class="add-anonymous-interaction pivot-white"
-                            title="{{'dashboard.anonymous.add' | t}}"
-                            ng-class="{closed: $ctrl.addAnonymousInteractionButtonsVisible}"
-                            ng-if="$ctrl.options.anonymousInteractions"
-                            ng-click="$ctrl.toggleAnonymousInteractionButtons()"
-                            ng-hide="$ctrl.editMode">
+                <ng-md-icon
+                    icon="add"
+                    size="16"
+                    class="add-anonymous-interaction pivot-white"
+                    title="{{'dashboard.anonymous.add' | t}}"
+                    ng-class="{closed: $ctrl.addAnonymousInteractionButtonsVisible}"
+                    ng-if="$ctrl.options.anonymousInteractions"
+                    ng-click="$ctrl.toggleAnonymousInteractionButtons()"
+                    ng-hide="$ctrl.editMode"
+                >
                 </ng-md-icon>
-                <ng-md-icon icon="visibilityOn" ng-if="$ctrl.editMode && $ctrl.org.visible"
-                            ng-click="$ctrl.toggleVisibility()"
-                            analytics-on="click" analytics-category="Dashboard" analytics-event="Hide Organization">
+                <ng-md-icon
+                    icon="visibilityOn"
+                    ng-if="$ctrl.editMode && $ctrl.org.visible"
+                    ng-click="$ctrl.toggleVisibility()"
+                    analytics-on="click"
+                    analytics-category="Dashboard"
+                    analytics-event="Hide Organization"
+                >
                 </ng-md-icon>
-                <ng-md-icon icon="visibilityOff" ng-if="$ctrl.editMode && !$ctrl.org.visible"
-                            ng-click="$ctrl.toggleVisibility()"
-                            analytics-on="click" analytics-category="Dashboard" analytics-event="Show Organization">
+                <ng-md-icon
+                    icon="visibilityOff"
+                    ng-if="$ctrl.editMode && !$ctrl.org.visible"
+                    ng-click="$ctrl.toggleVisibility()"
+                    analytics-on="click"
+                    analytics-category="Dashboard"
+                    analytics-event="Show Organization"
+                >
                 </ng-md-icon>
-                <ng-md-icon class="sort-orgs-handle" icon="dragHandle"
-                            ng-if="$ctrl.options.reorderable && $ctrl.editMode">
+                <ng-md-icon
+                    class="sort-orgs-handle"
+                    icon="dragHandle"
+                    ng-if="$ctrl.options.reorderable && $ctrl.editMode"
+                >
                 </ng-md-icon>
             </div>
         </div>
-        <div class="add-anonymous-interaction-panel" ng-if="$ctrl.pendingAnonymousInteraction">
-            <textarea ng-model="$ctrl.pendingAnonymousInteraction.comment"
-                      placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.pendingAnonymousInteraction.type.title | t}}"
-                      class="auto-grow" style="height: 24px;"></textarea>
-            <a href ng-click="$ctrl.saveAnonymousInteraction()">{{'dashboard.done' |t}}</a>
+        <div
+            class="add-anonymous-interaction-panel"
+            ng-if="$ctrl.pendingAnonymousInteraction"
+        >
+            <textarea
+                ng-model="$ctrl.pendingAnonymousInteraction.comment"
+                placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.pendingAnonymousInteraction.type.title | t}}"
+                class="auto-grow"
+                style="height: 24px;"
+            ></textarea>
+            <a href ng-click="$ctrl.saveAnonymousInteraction()"
+                >{{'dashboard.done' |t}}</a
+            >
         </div>
     </accordion-header>
     <accordion-content ng-transclude></accordion-content>

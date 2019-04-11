@@ -1,68 +1,115 @@
 <div class="main-menu bg-pivot-darker-blue flex items-center justify-between">
-    <ul class="font-titillium ml0 pl0 mb0 list fade w-25" ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" id="primary_nav">
-        <li class='fl' ui-sref-active="current" ng-class="{ current: ('app.people' | includedByState) }">
-            <a class='pivot-white f4 pr3' ui-sref="app.people">{{ 'dashboard.people_assigned_to_you' | t }}</a>
+    <ul
+        class="font-titillium ml0 pl0 mb0 list fade w-25"
+        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+        id="primary_nav"
+    >
+        <li
+            class="fl"
+            ui-sref-active="current"
+            ng-class="{ current: ('app.people' | includedByState) }"
+        >
+            <a class="pivot-white f4 pr3" ui-sref="app.people"
+                >{{ 'dashboard.people_assigned_to_you' | t }}</a
+            >
         </li>
 
-        <li class='fl' ng-class="{ current: ('app.ministries' | includedByState) }">
-            <a class='pivot-white f4 pl2 pr3' ui-sref="app.ministries.root">{{ 'dashboard.organizations_assigned_to_you' | t }}</a>
+        <li
+            class="fl"
+            ng-class="{ current: ('app.ministries' | includedByState) }"
+        >
+            <a class="pivot-white f4 pl2 pr3" ui-sref="app.ministries.root"
+                >{{ 'dashboard.organizations_assigned_to_you' | t }}</a
+            >
         </li>
     </ul>
-    <a href="/" class='logo'></a>
-    <span class='flex w-25 items-center justify-end content-end fade' ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn">
+    <a href="/" class="logo"></a>
+    <span
+        class="flex w-25 items-center justify-end content-end fade"
+        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+    >
         <div class="nav-search fade">
             <nav-search></nav-search>
         </div>
         <ul class="avatar-nav">
             <li>
-                <a href
-                    ng-click="open = !open"
-                    on-click-away="open = false">
+                <a href ng-click="open = !open" on-click-away="open = false">
                     <div class="user-avatar-wrap avatar">
                         <div class="pivot-white">
-                            {{ $ctrl.loggedInPerson.person.first_name[0] + $ctrl.loggedInPerson.person.last_name[0] | uppercase }}
+                            {{ $ctrl.loggedInPerson.person.first_name[0] +
+                            $ctrl.loggedInPerson.person.last_name[0] | uppercase
+                            }}
                         </div>
-                        <img class="user-avatar br-100" ng-src="{{$ctrl.loggedInPerson.person.picture}}">
+                        <img
+                            class="user-avatar br-100"
+                            ng-src="{{$ctrl.loggedInPerson.person.picture}}"
+                        />
                     </div>
                 </a>
                 <div ng-if="open" class="fade">
                     <ul>
                         <li>
-                            <a ui-sref="app.people.person.defaultTab({
+                            <a
+                                ui-sref="app.people.person.defaultTab({
                                 personId: $ctrl.loggedInPerson.person.id,
-                              })">
+                              })"
+                            >
                                 {{ 'nav.my_profile' | t }}
                             </a>
                         </li>
                         <li>
-                            <a ui-sref="app.userPreferences">{{ 'nav.preferences' | t }}</a>
+                            <a ui-sref="app.userPreferences"
+                                >{{ 'nav.preferences' | t }}</a
+                            >
                         </li>
                         <li>
-                            <a href="" ng-click="$root.openAboutModal()">About</a>
+                            <a href="" ng-click="$root.openAboutModal()"
+                                >About</a
+                            >
                         </li>
                         <li>
-                            <a href ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
+                            <a href ng-click="$ctrl.logout()"
+                                >{{ 'nav.logout' | t }}</a
+                            >
                         </li>
                     </ul>
                 </div>
             </li>
         </ul>
     </span>
-    <ul class="list fade" id="primary_nav" ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn" >
+    <ul
+        class="list fade"
+        id="primary_nav"
+        ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+    >
         <li class="fl">
-            <a href class='pivot-white f4 mr2' ng-click="$ctrl.logout()">{{ 'nav.logout' | t }}</a>
+            <a href class="pivot-white f4 mr2" ng-click="$ctrl.logout()"
+                >{{ 'nav.logout' | t }}</a
+            >
         </li>
     </ul>
 
-    <ul class="list fade mb0" ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.loggedIn && !$ctrl.loggedInPerson.loadingPromise">
+    <ul
+        class="list fade mb0"
+        ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.loggedIn && !$ctrl.loggedInPerson.loadingPromise"
+    >
         <li>
-            <a href="http://help.missionhub.com" class='pivot-white f4 pr3 pl3' target='_blank'>{{ 'nav.support' | t }}</a>
+            <a
+                href="http://help.missionhub.com"
+                class="pivot-white f4 pr3 pl3"
+                target="_blank"
+                >{{ 'nav.support' | t }}</a
+            >
         </li>
         <li>
-            <a class='pivot-white f4 pr3 pl3' ui-sref="app.signIn">{{ 'nav.login' | t }}</a>
+            <a class="pivot-white f4 pr3 pl3" ui-sref="app.signIn"
+                >{{ 'nav.login' | t }}</a
+            >
         </li>
         <li>
-            <a class='pivot-white f4 pr3 pl3' ui-sref="app.requestAccess">{{ 'nav.requestAccess' | t }}</a>
+            <a class="pivot-white f4 pr3 pl3" ui-sref="app.requestAccess"
+                >{{ 'nav.requestAccess' | t }}</a
+            >
         </li>
     </ul>
 </div>
