@@ -5,3 +5,5 @@ export { GET_MEMBERS } from './getMembers';
 export { UPDATE_CURRENT_FILTER } from './updateCurrentFilter';
 export { GET_CURRENT_FILTER } from './getCurrentFilter';
 export { GET_CELEBRATION_STEPS } from './getCelebrations';
+export { GET_STEPSINFO_PERSONAL } from './getStepsInfoPersonal';
+export { GET_STEPSINFO_SPIRITUAL } from './getStepsInfoSpiritual';

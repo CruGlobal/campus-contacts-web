@@ -139,5 +139,15 @@ export default {
                 },
             ],
         },
+        stepsInfoPersonal: {
+            __typename: 'stepsInfoPersonal',
+            userStats: 20,
+            numberStats: 120,
+            peopleStats: 40,
+        },
+        stepsInfoSpiritual: {
+            __typename: 'stepsInfoSpiritual',
+            userStats: 2,
+        },
     },
 };

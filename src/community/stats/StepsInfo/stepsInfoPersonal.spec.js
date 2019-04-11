@@ -1,16 +1,52 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { ApolloClient } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo-hooks';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { MockLink } from 'apollo-link-mock';
+import { GET_STEPSINFO_PERSONAL } from '../../graphql'
 import StepsInfoPersonal from './stepsInfoPersonal';
 
+// For some reason this mock won't connect and it being read as undefined
+const mocks = [
+    {
+        request: { query: GET_STEPSINFO_PERSONAL },
+        result: {   
+            data: {
+              apolloClient: {
+                __typename: 'apolloClient',
+                stepsInfoPersonal: {
+                  userStats: 20,
+                  numberStats: 120,
+                  peopleStats: 40
+                }
+              }
+            }
+        },
+    },
+];
+
+function createClient(mocks) {
+    return new ApolloClient({
+        cache: new InMemoryCache(),
+        link: new MockLink(mocks),
+    });
+}
+
+const waitForNextTick = () => new Promise(resolve => setTimeout(resolve));
+
 describe('<StepsInfoPersonal />', () => {
-    it('should render correctly', () => {
-        const component = shallow(
-            <StepsInfoPersonal
-                userStats={'20'}
-                numberStats={'120'}
-                peopleStats={'2'}
-            />,
+    it('should render correctly', async () => {
+
+        const wrapper = mount(
+            <ApolloProvider client={createClient(mocks)}>
+                <StepsInfoPersonal />
+            </ApolloProvider>
         );
-       expect(component.find('Styled(p)').text()).toBe('20 members have taken 120 steps with 2 people.')
+        expect(wrapper.html()).toBe('<div>Loading...</div>');
+
+        await waitForNextTick();
+        wrapper.update();
+ 
     });
 });

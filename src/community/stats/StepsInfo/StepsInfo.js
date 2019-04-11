@@ -11,12 +11,8 @@ const Container = styled.div`
 const StepsInfo = ({ style }) => {
     return (
         <Container style={style}>
-            <StepsInfoPersonal
-                userStats={'20'}
-                numberStats={'120'}
-                peopleStats={'40'}
-            />
-            <StepsInfoSpiritual userStats={'2'} />
+            <StepsInfoPersonal />
+            <StepsInfoSpiritual />
         </Container>
     );
 };

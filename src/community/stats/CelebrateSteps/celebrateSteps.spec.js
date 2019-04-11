@@ -6,14 +6,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 import { GET_CELEBRATION_STEPS } from '../../graphql';
 import CelebrateSteps from './celebrateSteps';
+import Message from './message';
 
 
-function createClient(mocks) {
-    return new ApolloClient({
-        cache: new InMemoryCache(),
-        link: new MockLink(mocks)
-    })
-}
+
 
 const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
@@ -22,11 +18,11 @@ describe('<CelebrateSteps />', () => {
         const mocks = [
             {
                 request: { query: GET_CELEBRATION_STEPS },
-                results: {
+                result: {
                     data: {
                         apolloClient: {
+                            __typename: 'ApolloClient',
                             celebrations: {
-                                __typename: 'celebrations',
                                 data: [
                                     {
                                         __typename: 'Data',
@@ -60,19 +56,31 @@ describe('<CelebrateSteps />', () => {
                             }
                         }
                     }
-                }
+                },
+                error: new Error("Something Went Wrong!")
             }
         ]
+
+        function createClient(mocks) {
+            return new ApolloClient({
+                cache: new InMemoryCache(),
+                link: new MockLink(mocks)
+            })
+        }
+
+        const client = createClient(mocks)
        
         
         const wrapper = mount(
-            <ApolloProvider client={createClient(mocks)}>
+            <ApolloProvider client={client}>
                 <CelebrateSteps/>
-            </ApolloProvider>
+            </ApolloProvider>,
         );
         expect(wrapper.html()).toBe('<div>Loading...</div>');
-        await waitForNextTick()
-        wrapper.update()
+        await waitForNextTick();
+        // After this wrapper.update it will just render out the component with the error div.
+        wrapper.update();
       
+        // console.log(wrapper.debug())
     })
 })

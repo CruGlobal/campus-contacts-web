@@ -13,6 +13,7 @@ const Container = styled.div`
 const InsideContainer = styled.div`
     background: white;
     border-radius: 5px;
+    box-shadow: 0px 0px 15px -3px rgba(0, 0, 0, 0.16);
 `;
 
 export const CelebrateSteps = () => {

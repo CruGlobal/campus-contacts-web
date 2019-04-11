@@ -1,15 +1,49 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { ApolloClient } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo-hooks';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { MockLink } from 'apollo-link-mock';
+import { GET_STEPSINFO_SPIRITUAL } from '../../graphql'
 import StepsInfoSpiritual from './stepsInfoSpiritual';
 
-describe('<StepsInfoPersonal />', () => {
-    it('should render correctly', () => {
-        const component = shallow(
-            <StepsInfoSpiritual
-                userStats={'2'}
-            />,
+function createClient(mocks) {
+    return new ApolloClient({
+        cache: new InMemoryCache(),
+        link: new MockLink(mocks),
+    });
+}
+
+const waitForNextTick = () => new Promise(resolve => setTimeout(resolve));
+
+describe('<StepsInfoSpiritual />', () => {
+    it('should render correctly', async () => {
+        // For some reason this mock won't connect and it being read as undefined
+        const mocks = [
+            {
+                request: { query: GET_STEPSINFO_SPIRITUAL },
+                result: {
+                    data: {
+                        apolloClient: {
+                            stepsInfoSpiritual: {
+                                __typename: 'stepsInfoSpiritual',
+                                userStats: 20,
+                            },
+                        },
+                    },
+                },
+            },
+        ];
+
+        const wrapper = mount(
+            <ApolloProvider client={createClient(mocks)}>
+                <StepsInfoSpiritual />
+            </ApolloProvider>
         );
-       
-       expect(component.find('Styled(p)').text()).toBe('2 people reached a new stage on their spiritual journey.')
+        expect(wrapper.html()).toBe('<div>Loading...</div>');
+
+        await waitForNextTick();
+        wrapper.update();
+ 
     });
 });

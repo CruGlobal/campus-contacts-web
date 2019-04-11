@@ -7,6 +7,7 @@ import { MockLink } from 'apollo-link-mock';
 import { GET_CURRENT_FILTER } from '../../graphql';
 import Filter from './navBarFilter';
 import moment from 'moment';
+import { act } from 'react-dom/test-utils'
 
 function createClient(mocks) {
     return new ApolloClient({
@@ -19,34 +20,36 @@ const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
 describe('<NavBarFilter />', () => {
     it('it should render correctly', async () => {
-        const mocks = [
-            {
-                request: { query: GET_CURRENT_FILTER },
-                result: {
-                    data: {
-                        apolloClient: {
-                            currentFilter: {
-                                __typename: 'currentFilter',
-                                key: '1W',
-                                startDate: moment()
-                                    .subtract(1, 'week')
-                                    .format('l'),
-                                endDate: moment().format('l'),
-                            },
+        act(() => {
+
+            const mocks = [
+                {
+                    request: { query: GET_CURRENT_FILTER },
+                    result: {
+                        data: {
+                            apolloClient: {
+                                __typename: 'apolloClient',
+                                currentFilter: {
+                                    __typename: 'currentFilter',
+                                    key: '1W',
+                                    startDate: moment()
+                                        .subtract(1, 'week')
+                                        .format('l'),
+                                    endDate: moment().format('l'),
+                                },
+                            }
                         }
                     }
                 }
-            }
-        ]
-        const wrapper = mount(
-            <ApolloProvider client={createClient(mocks)}>
-                <Filter />
-            </ApolloProvider>
-        );
-        expect(wrapper.html()).toBe('<div>Loading</div>');
-        await waitForNextTick();
-        wrapper.update();
- 
-       
+            ]
+            const wrapper = mount(
+                <ApolloProvider client={createClient(mocks)}>
+                    <Filter />
+                </ApolloProvider>
+            );
+            expect(wrapper.html()).toBe('<div>Loading</div>');
+            waitForNextTick();
+            wrapper.update(); 
+        })       
     });
 });
