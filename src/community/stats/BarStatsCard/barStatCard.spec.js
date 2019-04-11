@@ -91,7 +91,7 @@ describe('<BarStats />', () => {
     
             const wrapper = mount(
                 <ApolloProvider client={createClient(mocks)}>
-                    <BarStats />
+                    <BarStats member={}/>
                 </ApolloProvider>
             )
     
