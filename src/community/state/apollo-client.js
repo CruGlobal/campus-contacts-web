@@ -8,7 +8,8 @@ import { createHttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 
 const httplink = createHttpLink({
-    uri: 'stage-api.missionhub.com/graphql',
+    uri: 'https://api-stage.missionhub.com/graphql',
+    useGETForQueries: true,
 });
 
 const cache = new InMemoryCache();

@@ -25,11 +25,7 @@ const StatLabel = styled.span`
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: ${({
-        theme: {
-            colors: { light },
-        },
-    }) => light};
+    color: lightgrey;
 `;
 
 const BarStatCard = ({ count, label }) => (

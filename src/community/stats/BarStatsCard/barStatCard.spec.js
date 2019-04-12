@@ -21,7 +21,9 @@ const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
 
 describe('<BarStats />', () => {
-    it('Should render Properly', async () => {       
+    it('Should render Properly', async () => {
+            const light = "hello"
+        
             const mocks = [
                 {
                     request: { query: GET_MEMBERS },
@@ -91,7 +93,7 @@ describe('<BarStats />', () => {
     
             const wrapper = mount(
                 <ApolloProvider client={createClient(mocks)}>
-                    <BarStats member={}/>
+                    <BarStats light={light}/>
                 </ApolloProvider>
             )
     
@@ -99,6 +101,28 @@ describe('<BarStats />', () => {
             await waitForNextTick()
             wrapper.update()
 
-            console.log(wrapper.debug());
+            expect(wrapper.find(BarStatCard).length).toBe(7);
+            expect(wrapper.find(BarStatCard).at(0).key()).toBe('No Stage');
+            expect(wrapper.find(BarStatCard).at(0).prop('label')).toBe('No Stage');
+            expect(wrapper.find(BarStatCard).at(0).find('span').at(1).text()).toBe('No Stage');
+            expect(wrapper.find(BarStatCard).at(1).key()).toBe('Not Sure');
+            expect(wrapper.find(BarStatCard).at(1).prop('label')).toBe('Not Sure');
+            expect(wrapper.find(BarStatCard).at(1).find('span').at(1).text()).toBe('Not Sure');
+            expect(wrapper.find(BarStatCard).at(2).key()).toBe('Uninterested');
+            expect(wrapper.find(BarStatCard).at(2).prop('label')).toBe('Uninterested');
+            expect(wrapper.find(BarStatCard).at(2).find('span').at(1).text()).toBe('Uninterested');
+            expect(wrapper.find(BarStatCard).at(3).key()).toBe('Curious');
+            expect(wrapper.find(BarStatCard).at(3).prop('label')).toBe('Curious');
+            expect(wrapper.find(BarStatCard).at(3).find('span').at(1).text()).toBe('Curious');
+            expect(wrapper.find(BarStatCard).at(4).key()).toBe('Forgiven');
+            expect(wrapper.find(BarStatCard).at(4).prop('label')).toBe('Forgiven');
+            expect(wrapper.find(BarStatCard).at(4).find('span').at(1).text()).toBe('Forgiven');
+            expect(wrapper.find(BarStatCard).at(5).key()).toBe('Growing');
+            expect(wrapper.find(BarStatCard).at(5).prop('label')).toBe('Growing');
+            expect(wrapper.find(BarStatCard).at(5).find('span').at(1).text()).toBe('Growing');
+            expect(wrapper.find(BarStatCard).at(6).key()).toBe('Guiding');
+            expect(wrapper.find(BarStatCard).at(6).prop('label')).toBe('Guiding');
+            expect(wrapper.find(BarStatCard).at(6).find('span').at(1).text()).toBe('Guiding');
+  
     })
 })

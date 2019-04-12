@@ -49,5 +49,6 @@ describe('<StepsInfoPersonal />', () => {
         await waitForNextTick();
         wrapper.update();
  
+        expect(wrapper.find('p').text()).toBe('20 members have taken 120 steps with 40 people.')
     });
 });
