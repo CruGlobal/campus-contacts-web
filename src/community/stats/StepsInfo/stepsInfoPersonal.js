@@ -14,7 +14,7 @@ const StepsInfoPersonal = () => {
     const { data, loading, error } = useQuery(GET_STEPSINFO_PERSONAL);
 
     if (loading) {
-        <div>Loading...</div>;
+        return <div>Loading...</div>;
     }
 
     if (error) {

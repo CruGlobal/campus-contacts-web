@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
 import { GET_MEMBERS } from '../../graphql';
 import BarStatCard from './statCard';
+import _ from 'lodash';
 
 const BarChartCardRow = styled.div`
     margin-top: 80px;

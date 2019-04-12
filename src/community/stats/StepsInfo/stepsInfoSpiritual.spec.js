@@ -25,6 +25,7 @@ describe('<StepsInfoSpiritual />', () => {
                 result: {
                     data: {
                         apolloClient: {
+                            __typename: 'apolloClient',
                             stepsInfoSpiritual: {
                                 __typename: 'stepsInfoSpiritual',
                                 userStats: 20,

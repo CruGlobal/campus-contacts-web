@@ -16,6 +16,7 @@ const mocks = [
               apolloClient: {
                 __typename: 'apolloClient',
                 stepsInfoPersonal: {
+                  __typename: 'stepsInfoPersonal',
                   userStats: 20,
                   numberStats: 120,
                   peopleStats: 40
