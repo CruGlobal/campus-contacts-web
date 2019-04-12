@@ -24,15 +24,15 @@ export const client = new ApolloClient({
     link: ApolloLink.from([stateLink, httplink]),
 });
 
-client
-    .query({
-        query: gql`
-            {
-                organization(id: 4) {
-                    id
-                    name
-                }
-            }
-        `,
-    })
-    .then(res => console.log(res));
+// client
+//     .query({
+//         query: gql`
+//             {
+//                 organization(id: 4) {
+//                     id
+//                     name
+//                 }
+//             }
+//         `,
+//     })
+//     .then(res => console.log(res));

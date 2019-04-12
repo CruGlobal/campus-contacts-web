@@ -8,9 +8,6 @@ import { GET_CELEBRATION_STEPS } from '../../graphql';
 import CelebrateSteps from './celebrateSteps';
 import Message from './message';
 
-
-
-
 const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
 describe('<CelebrateSteps />', () => {
@@ -21,7 +18,7 @@ describe('<CelebrateSteps />', () => {
                 result: {
                     data: {
                         apolloClient: {
-                            __typename: 'ApolloClient',
+                            __typename: 'apolloClient',
                             celebrations: {
                                 data: [
                                     {
@@ -67,12 +64,9 @@ describe('<CelebrateSteps />', () => {
                 link: new MockLink(mocks)
             })
         }
-
-        const client = createClient(mocks)
-       
         
         const wrapper = mount(
-            <ApolloProvider client={client}>
+            <ApolloProvider client={createClient(mocks)}>
                 <CelebrateSteps/>
             </ApolloProvider>,
         );

@@ -21,9 +21,7 @@ const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
 
 describe('<BarStats />', () => {
-    it('Should render Properly', async () => {
-            const light = "hello"
-        
+    it('Should render Properly', async () => {   
             const mocks = [
                 {
                     request: { query: GET_MEMBERS },
@@ -93,7 +91,7 @@ describe('<BarStats />', () => {
     
             const wrapper = mount(
                 <ApolloProvider client={createClient(mocks)}>
-                    <BarStats light={light}/>
+                    <BarStats />
                 </ApolloProvider>
             )
     
