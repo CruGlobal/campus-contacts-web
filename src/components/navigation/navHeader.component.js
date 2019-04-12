@@ -20,6 +20,6 @@ function navHeaderController(
     this.state = state;
 
     this.logout = () => {
-        authenticationService.removeAccess();
+        authenticationService.destroyTheKeyAccess();
     };
 }
