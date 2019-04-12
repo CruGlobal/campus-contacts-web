@@ -91,7 +91,8 @@
             </div>
             <div class="mt4">
                 <button
-                    class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                    class="f6 link dim ph4 pv3 mb2 dib bold br2 ttu tracked bg-blue"
+                    ng-class="{'bg-blue white' : $ctrl.hasChanged, 'bg-transparent ba b--pivot-gray-7 pivot-gray-7': !$ctrl.hasChanged}"
                     ng-click="$ctrl.requestKeyword()"
                     ng-if="!$ctrl.survey.keyword.state && $ctrl.directAdminPrivileges"
                 >
