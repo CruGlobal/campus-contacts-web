@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import NavBarFilter from './navBarFilter';
+import { GET_ORGANIZATIONS } from '../../graphql';
+import { useQuery } from 'react-apollo-hooks';
 
 const NavBar = styled.div`
     background: white;
@@ -38,17 +40,33 @@ const NavBarInnerContainer = styled.div`
     }
 `;
 
-const DashBoardNavBar = ({ orgID }) => (
-    <NavBar>
-        <h1>Org Id: {orgID}</h1>
-        <NavBarOutterContainer>
-            <NavBarInnerContainer>
-                <h2>Dashboard</h2>
-                <h2>Insights</h2>
-            </NavBarInnerContainer>
-            <NavBarFilter />
-        </NavBarOutterContainer>
-    </NavBar>
-);
+const DashBoardNavBar = ({ orgID }) => {
+    const { data, loading, error } = useQuery(GET_ORGANIZATIONS);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error! {error.message} </div>;
+    }
+
+    const {
+        organization: { name },
+    } = data;
+
+    return (
+        <NavBar>
+            <h1>{name}</h1>
+            <NavBarOutterContainer>
+                <NavBarInnerContainer>
+                    <h2>Dashboard</h2>
+                    <h2>Insights</h2>
+                </NavBarInnerContainer>
+                <NavBarFilter />
+            </NavBarOutterContainer>
+        </NavBar>
+    );
+};
 
 export default DashBoardNavBar;

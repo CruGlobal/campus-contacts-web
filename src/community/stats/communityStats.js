@@ -26,13 +26,7 @@ const CommunityStats = ({ orgId }) => (
                 {props => <StepsInfo style={props} />}
             </Spring>
             <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
-                {props => (
-                    <Members
-                        style={props}
-                        positive={theme.positive}
-                        negative={theme.negative}
-                    />
-                )}
+                {props => <Members style={props} />}
             </Spring>
         </ThemeProvider>
     </ApolloProvider>

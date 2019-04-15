@@ -5,11 +5,9 @@ import { withClientState } from 'apollo-link-state';
 import defaults from './defaults';
 import resolvers from '../resolvers';
 import { createHttpLink } from 'apollo-link-http';
-import gql from 'graphql-tag';
 
 const httplink = createHttpLink({
-    uri: 'https://api-stage.missionhub.com/graphql',
-    useGETForQueries: true,
+    uri: 'https://api-stage.missionhub.com/apis/graphql',
 });
 
 const cache = new InMemoryCache();
@@ -23,16 +21,3 @@ export const client = new ApolloClient({
     cache,
     link: ApolloLink.from([stateLink, httplink]),
 });
-
-// client
-//     .query({
-//         query: gql`
-//             {
-//                 organization(id: 4) {
-//                     id
-//                     name
-//                 }
-//             }
-//         `,
-//     })
-//     .then(res => console.log(res));

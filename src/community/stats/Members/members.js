@@ -33,7 +33,7 @@ const Members = ({ style }) => {
     const { data, loading, error } = useQuery(GET_CURRENT_TAB);
 
     if (loading) {
-        <div>Loading...</div>;
+        return <div>Loading...</div>;
     }
 
     if (error) {

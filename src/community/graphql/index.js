@@ -8,3 +8,5 @@ export { GET_CELEBRATION_STEPS } from './getCelebrations';
 export { GET_STEPSINFO_PERSONAL } from './getStepsInfoPersonal';
 export { GET_STEPSINFO_SPIRITUAL } from './getStepsInfoSpiritual';
 export { GET_ORGANIZATIONS } from './getOrganizations';
+export { GET_MEMBERS_GRAPHQL } from './getMembersGraphQL';
+export { GET_STEPS_COMPLETED_GRAPHQL } from './getStepsCompletedGraphQL';
