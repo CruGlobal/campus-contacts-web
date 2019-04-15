@@ -9,6 +9,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
             stage_1: stageReport(pathwayStageId: 1) {
@@ -16,6 +17,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
             stage_2: stageReport(pathwayStageId: 2) {
@@ -23,6 +25,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
             stage_3: stageReport(pathwayStageId: 3) {
@@ -30,6 +33,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
             stage_4: stageReport(pathwayStageId: 4) {
@@ -37,6 +41,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
             stage_5: stageReport(pathwayStageId: 5) {
@@ -44,6 +49,7 @@ export const GET_MEMBERS_GRAPHQL = gql`
                 id
                 pathwayStage {
                     name
+                    description
                 }
             }
         }

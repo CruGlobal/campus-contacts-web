@@ -28,10 +28,10 @@ const StatLabel = styled.span`
     color: lightgrey;
 `;
 
-const BarStatCard = ({ count, label }) => (
+const BarStatCard = ({ count, label, description }) => (
     <BarStatCardLayout>
         <StatNumber>{count}</StatNumber>
-        <StatLabel>{label}</StatLabel>
+        <StatLabel title={description}>{label}</StatLabel>
     </BarStatCardLayout>
 );
 

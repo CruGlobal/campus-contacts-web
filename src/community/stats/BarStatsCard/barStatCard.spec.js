@@ -38,6 +38,7 @@ describe('<BarStats />', () => {
                                 name: "Not Sure",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Not Sure"
                                 }
                                 
@@ -49,6 +50,7 @@ describe('<BarStats />', () => {
                                 name: "Uninterested",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Uninterested"
                                 }
                               },
@@ -59,6 +61,7 @@ describe('<BarStats />', () => {
                                 name: "Curious",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Curious"
                                 }
                               },
@@ -69,6 +72,7 @@ describe('<BarStats />', () => {
                                 name: "Forgiven",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Forgiven"
                                 }
                               },
@@ -79,6 +83,7 @@ describe('<BarStats />', () => {
                                 name: "Growing",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Growing"
                                 }
                               },
@@ -89,6 +94,7 @@ describe('<BarStats />', () => {
                                 name: "Guiding",
                                 pathwayStage: {
                                     __typename: 'Data',
+                                    description: 'Hello',
                                     name: "Guiding"
                                 }
                               }

@@ -35,6 +35,8 @@ const BarStats = ({ style }) => {
     orgsList.push(organization.stage_4);
     orgsList.push(organization.stage_5);
 
+    console.log(orgsList);
+
     return (
         <BarChartCardRow style={style}>
             {_.map(orgsList, member => (
@@ -42,6 +44,7 @@ const BarStats = ({ style }) => {
                     key={member.id}
                     label={member.pathwayStage.name}
                     count={member.memberCount}
+                    description={member.pathwayStage.description}
                 />
             ))}
         </BarChartCardRow>
