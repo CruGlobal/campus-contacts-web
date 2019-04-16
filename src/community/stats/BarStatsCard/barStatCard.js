@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
-import { GET_MEMBERS, GET_MEMBERS_GRAPHQL } from '../../graphql';
+import { GET_MEMBERS_GRAPHQL } from '../../graphql';
 import BarStatCard from './statCard';
 import _ from 'lodash';
 
@@ -27,6 +27,9 @@ const BarStats = ({ style }) => {
     const { organization } = data;
 
     const orgsList = [];
+
+    // Currently the way the graphql endpoint returns data we must push each stage to
+    // a seperate array and then map through that array
 
     orgsList.push(organization.stage_0);
     orgsList.push(organization.stage_1);

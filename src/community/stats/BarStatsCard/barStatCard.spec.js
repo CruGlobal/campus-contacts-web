@@ -118,21 +118,27 @@ describe('<BarStats />', () => {
             expect(wrapper.find(BarStatCard).at(0).key()).toBe('2-6-48.0.0');
             expect(wrapper.find(BarStatCard).at(0).prop('label')).toBe('Not Sure');
             expect(wrapper.find(BarStatCard).at(0).find('span').at(1).text()).toBe('Not Sure');
+            expect(wrapper.find(BarStatCard).at(0).prop('description')).toBe('Hello');
             expect(wrapper.find(BarStatCard).at(1).key()).toBe('2-1-48.0.0');
             expect(wrapper.find(BarStatCard).at(1).prop('label')).toBe('Uninterested');
             expect(wrapper.find(BarStatCard).at(1).find('span').at(1).text()).toBe('Uninterested');
+            expect(wrapper.find(BarStatCard).at(1).prop('description')).toBe('Hello');
             expect(wrapper.find(BarStatCard).at(2).key()).toBe('2-2-48.0.0');
             expect(wrapper.find(BarStatCard).at(2).prop('label')).toBe('Curious');
             expect(wrapper.find(BarStatCard).at(2).find('span').at(1).text()).toBe('Curious');
+            expect(wrapper.find(BarStatCard).at(2).prop('description')).toBe('Hello');
             expect(wrapper.find(BarStatCard).at(3).key()).toBe('2-3-48.0.0');
             expect(wrapper.find(BarStatCard).at(3).prop('label')).toBe('Forgiven');
             expect(wrapper.find(BarStatCard).at(3).find('span').at(1).text()).toBe('Forgiven');
+            expect(wrapper.find(BarStatCard).at(3).prop('description')).toBe('Hello');
             expect(wrapper.find(BarStatCard).at(4).key()).toBe('2-4-48.0.0');
             expect(wrapper.find(BarStatCard).at(4).prop('label')).toBe('Growing');
             expect(wrapper.find(BarStatCard).at(4).find('span').at(1).text()).toBe('Growing');
+            expect(wrapper.find(BarStatCard).at(4).prop('description')).toBe('Hello');
             expect(wrapper.find(BarStatCard).at(5).key()).toBe('2-5-48.0.0');
             expect(wrapper.find(BarStatCard).at(5).prop('label')).toBe('Guiding');
             expect(wrapper.find(BarStatCard).at(5).find('span').at(1).text()).toBe('Guiding');
+            expect(wrapper.find(BarStatCard).at(5).prop('description')).toBe('Hello');
   
     })
 })

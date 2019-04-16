@@ -26,7 +26,13 @@ const StagesBarGraph = () => {
 
     const orgsList = [];
 
+    // This orgsList setup is not optimal but hopefully will change as
+    // Graphql schema is changed and modified.
+
     orgsList.push(organization.stage_0);
+    // We want to index our graph by the stages name, to do that we have to go into
+    // pathwayStage.name but the graph doesn't like going into nested objects.
+    // To fix this I had to add a name value set equal to that nested value.
     orgsList[0].name = organization.stage_0.pathwayStage.name;
     orgsList.push(organization.stage_1);
     orgsList[1].name = organization.stage_1.pathwayStage.name;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -65,7 +65,7 @@ describe('<CelebrateSteps />', () => {
             })
         }
         
-        const wrapper = mount(
+        const wrapper = shallow(
             <ApolloProvider client={createClient(mocks)}>
                 <CelebrateSteps/>
             </ApolloProvider>,
@@ -75,6 +75,6 @@ describe('<CelebrateSteps />', () => {
         // After this wrapper.update it will just render out the component with the error div.
         wrapper.update();
       
-        // console.log(wrapper.debug())
+        
     })
 })

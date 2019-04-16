@@ -48,7 +48,5 @@ describe('<StepsInfoSpiritual />', () => {
 
         expect(wrapper.find('p').text()).toBe('20 people reached a new stage on their spiritual journey.')
 
-        
- 
     });
 });
