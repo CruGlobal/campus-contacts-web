@@ -141,6 +141,9 @@ const Filters = () => {
 Filters.protoTypes = {
     date: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    filter: PropTypes.object,
+    active: PropTypes.bool,
+    onFilterClick: PropTypes.func,
 };
 
 export default Filters;

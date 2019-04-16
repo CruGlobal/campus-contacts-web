@@ -54,4 +54,9 @@ const BarStats = ({ style }) => {
 
 export default BarStats;
 
-BarStats.propTypes = {};
+BarStats.propTypes = {
+    key: PropTypes.string,
+    label: PropTypes.string,
+    count: PropTypes.number,
+    description: PropTypes.string,
+};

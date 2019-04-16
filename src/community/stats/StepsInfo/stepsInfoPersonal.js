@@ -36,3 +36,9 @@ const StepsInfoPersonal = () => {
 };
 
 export default StepsInfoPersonal;
+
+StepsInfoPersonal.propTypes = {
+    userStats: PropTypes.string,
+    numberStats: PropTypes.string,
+    peopleStats: PropTypes.string,
+};

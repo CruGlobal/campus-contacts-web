@@ -74,3 +74,7 @@ const Members = ({ style }) => {
 };
 
 export default Members;
+
+Members.propTypes = {
+    currentTab: PropTypes.string,
+};

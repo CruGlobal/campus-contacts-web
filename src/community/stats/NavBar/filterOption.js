@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import PropTypes from 'prop-types';
 
 const FilterOption = ({ title, filter, onFilterClick, active }) => {
     const activeCss = css`
@@ -26,3 +27,10 @@ const FilterOption = ({ title, filter, onFilterClick, active }) => {
 };
 
 export default FilterOption;
+
+FilterOption.propTypes = {
+    title: PropTypes.string,
+    filter: PropTypes.object,
+    active: PropTypes.bool,
+    onFilterClick: PropTypes.func,
+};

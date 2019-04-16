@@ -35,3 +35,7 @@ const StepsInfoSpiritual = () => {
 };
 
 export default StepsInfoSpiritual;
+
+StepsInfoSpiritual.propTypes = {
+    userStats: PropTypes.string,
+};

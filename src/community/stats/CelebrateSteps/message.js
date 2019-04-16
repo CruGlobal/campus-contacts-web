@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 
 const MessageContainer = styled.div`
     margin: 5px 10px;
@@ -22,3 +23,8 @@ const Message = ({ message, user }) => {
 };
 
 export default Message;
+
+Message.propTypes = {
+    message: PropTypes.string,
+    user: PropTypes.string,
+};

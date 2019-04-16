@@ -4,6 +4,7 @@ import Tab from './tab';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 const TabsContainer = styled.div`
     display: grid;
@@ -69,6 +70,12 @@ const Tabs = () => {
     );
 };
 
-Tabs.propTypes = {};
+Tabs.propTypes = {
+    title: PropTypes.string,
+    value: PropTypes.string,
+    key: PropTypes.string,
+    active: PropTypes.bool,
+    onTabClick: PropTypes.func,
+};
 
 export default Tabs;

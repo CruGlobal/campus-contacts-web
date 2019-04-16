@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { GET_CELEBRATION_STEPS } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 import Message from './message';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
     width: 22%;
@@ -48,3 +49,9 @@ export const CelebrateSteps = () => {
 };
 
 export default CelebrateSteps;
+
+CelebrateSteps.propTypes = {
+    message: PropTypes.string,
+    user: PropTypes.string,
+    key: PropTypes.string,
+};

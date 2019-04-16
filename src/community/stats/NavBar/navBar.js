@@ -70,3 +70,8 @@ const DashBoardNavBar = ({ orgID }) => {
 };
 
 export default DashBoardNavBar;
+
+DashBoardNavBar.propTypes = {
+    name: PropTypes.string,
+    orgID: PropTypes.string,
+};

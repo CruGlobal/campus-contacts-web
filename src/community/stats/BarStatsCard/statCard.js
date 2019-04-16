@@ -36,3 +36,9 @@ const BarStatCard = ({ count, label, description }) => (
 );
 
 export default BarStatCard;
+
+BarStatCard.propTypes = {
+    count: PropTypes.number,
+    label: PropTypes.string,
+    description: PropTypes.string,
+};
