@@ -26,21 +26,21 @@ const BarStats = ({ style }) => {
 
     const { organization } = data;
 
-    const orgsList = [];
+    const stageReports = [];
 
     // Currently the way the graphql endpoint returns data we must push each stage to
     // a seperate array and then map through that array
 
-    orgsList.push(organization.stage_0);
-    orgsList.push(organization.stage_1);
-    orgsList.push(organization.stage_2);
-    orgsList.push(organization.stage_3);
-    orgsList.push(organization.stage_4);
-    orgsList.push(organization.stage_5);
+    stageReports.push(organization.stage_0);
+    stageReports.push(organization.stage_1);
+    stageReports.push(organization.stage_2);
+    stageReports.push(organization.stage_3);
+    stageReports.push(organization.stage_4);
+    stageReports.push(organization.stage_5);
 
     return (
         <BarChartCardRow style={style}>
-            {_.map(orgsList, member => (
+            {_.map(stageReports, member => (
                 <BarStatCard
                     key={member.id}
                     label={member.pathwayStage.name}

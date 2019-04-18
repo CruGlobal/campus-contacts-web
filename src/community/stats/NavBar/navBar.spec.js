@@ -25,7 +25,6 @@ describe('<DashBoardNavBar />', () => {
                 result: {
                     data: {
                         organization: {
-
                             __typename: 'Data',
                             name: 'Campus Ministry',
                             id: 2
@@ -35,7 +34,6 @@ describe('<DashBoardNavBar />', () => {
             }
         ]
        
-        
         const wrapper = mount(
             <ApolloProvider client={createClient(mocks)}>
                 <DashBoardNavBar></DashBoardNavBar>
@@ -43,8 +41,8 @@ describe('<DashBoardNavBar />', () => {
         )
 
         expect(wrapper.html()).toBe('<div>Loading...</div>');
-            await waitForNextTick()
-            wrapper.update()
+        await waitForNextTick()
+        wrapper.update()
 
         expect(wrapper.find('h1').text()).toBe('Campus Ministry')
 

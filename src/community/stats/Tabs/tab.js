@@ -29,6 +29,7 @@ const Tab = ({ title, value, active, onTabClick }) => {
         flex-direction: column;
         align-item: flex-start;
         background: ${active ? '#007398' : '#3cc8e6'};
+        transition: 1s ease all;
         width: 100%;
         height: 70px;
         font-size: 12px;

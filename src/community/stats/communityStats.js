@@ -22,10 +22,10 @@ const CommunityStats = ({ orgId }) => (
     <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
             <DashBoardNavBar orgID={orgId} />
-            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} delay="1500">
                 {props => <StepsInfo style={props} />}
             </Spring>
-            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+            <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} delay="1000">
                 {props => <Members style={props} />}
             </Spring>
         </ThemeProvider>

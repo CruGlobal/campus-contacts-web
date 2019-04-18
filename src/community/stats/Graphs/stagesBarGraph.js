@@ -24,26 +24,26 @@ const StagesBarGraph = () => {
 
     const { organization } = data;
 
-    const orgsList = [];
+    const stageReports = [];
 
-    // This orgsList setup is not optimal but hopefully will change as
+    // This stageReports setup is not optimal but hopefully will change as
     // Graphql schema is changed and modified.
 
-    orgsList.push(organization.stage_0);
+    stageReports.push(organization.stage_0);
     // We want to index our graph by the stages name, to do that we have to go into
     // pathwayStage.name but the graph doesn't like going into nested objects.
     // To fix this I had to add a name value set equal to that nested value.
-    orgsList[0].name = organization.stage_0.pathwayStage.name;
-    orgsList.push(organization.stage_1);
-    orgsList[1].name = organization.stage_1.pathwayStage.name;
-    orgsList.push(organization.stage_2);
-    orgsList[2].name = organization.stage_2.pathwayStage.name;
-    orgsList.push(organization.stage_3);
-    orgsList[3].name = organization.stage_3.pathwayStage.name;
-    orgsList.push(organization.stage_4);
-    orgsList[4].name = organization.stage_4.pathwayStage.name;
-    orgsList.push(organization.stage_5);
-    orgsList[5].name = organization.stage_5.pathwayStage.name;
+    stageReports[0].name = organization.stage_0.pathwayStage.name;
+    stageReports.push(organization.stage_1);
+    stageReports[1].name = organization.stage_1.pathwayStage.name;
+    stageReports.push(organization.stage_2);
+    stageReports[2].name = organization.stage_2.pathwayStage.name;
+    stageReports.push(organization.stage_3);
+    stageReports[3].name = organization.stage_3.pathwayStage.name;
+    stageReports.push(organization.stage_4);
+    stageReports[4].name = organization.stage_4.pathwayStage.name;
+    stageReports.push(organization.stage_5);
+    stageReports[5].name = organization.stage_5.pathwayStage.name;
 
     // We need to extact the members data and then calculate the largest number and set that to the max and then divide that number by two for the side markers
     let max = 18;
@@ -51,7 +51,7 @@ const StagesBarGraph = () => {
 
     return (
         <ResponsiveBar
-            data={orgsList}
+            data={stageReports}
             keys={['stepsAddedCount', 'stepsCompletedCount']}
             indexBy="name"
             margin={{
