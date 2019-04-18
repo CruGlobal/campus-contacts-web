@@ -8,9 +8,9 @@ import { GET_CURRENT_TAB } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 import Tabs from '../Tabs/tabs';
 import BarStats from '../BarStatsCard/barStatCard';
-import { Spring } from 'react-spring/renderprops';
+import { useSpring, animated } from 'react-spring';
 
-const Container = styled.div`
+const Container = styled(animated.div)`
     display: flex;
     flex-direction: row;
     align-items: space-between;
@@ -29,7 +29,7 @@ const InnerContainer = styled.div`
     }
 `;
 
-const Members = ({ style }) => {
+const Members = () => {
     const { data, loading, error } = useQuery(GET_CURRENT_TAB);
 
     if (loading) {
@@ -55,9 +55,15 @@ const Members = ({ style }) => {
         }
     };
 
+    const props = useSpring({
+        delay: '1000',
+        opacity: 1,
+        from: { opacity: 0 },
+    });
+
     return (
         <>
-            <Container style={style}>
+            <Container style={props}>
                 <InnerContainer>
                     <h3>STEPS OF FAITH WITH OTHERS</h3>
                     <Tabs />
@@ -66,9 +72,7 @@ const Members = ({ style }) => {
                 <CelebrateSteps />
             </Container>
 
-            <Spring from={{ marginTop: 1000 }} to={{ marginTop: 80 }}>
-                {props => <BarStats style={props} />}
-            </Spring>
+            <BarStats />
         </>
     );
 };

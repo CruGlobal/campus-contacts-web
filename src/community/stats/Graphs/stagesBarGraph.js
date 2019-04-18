@@ -1,7 +1,11 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
-import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED_GRAPHQL } from '../../graphql';
+import {
+    GET_CURRENT_FILTER,
+    GET_STEPS_COMPLETED_GRAPHQL,
+    GET_MEMBERS,
+} from '../../graphql';
 
 const StagesBarGraph = () => {
     const {
@@ -10,50 +14,43 @@ const StagesBarGraph = () => {
         },
     } = useQuery(GET_CURRENT_FILTER);
 
-    const { data, loading, error } = useQuery(GET_STEPS_COMPLETED_GRAPHQL, {
-        variables: { filter },
-    });
+    const {
+        data: {
+            apolloClient: { members },
+        },
+        error,
+        loading,
+    } = useQuery(GET_MEMBERS, { variables: { filter } });
 
     if (loading) {
         return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error! {error.message} </div>;
+        return <div>Error! {error.message}</div>;
     }
+    // const { data, loading, error } = useQuery(GET_STEPS_COMPLETED_GRAPHQL, {
+    //     variables: { filter },
+    // });
 
-    const { organization } = data;
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
-    const stageReports = [];
+    // if (error) {
+    //     return <div>Error! {error.message} </div>;
+    // }
 
-    // This stageReports setup is not optimal but hopefully will change as
-    // Graphql schema is changed and modified.
+    // const { organization } = data;
 
-    stageReports.push(organization.stage_0);
-    // We want to index our graph by the stages name, to do that we have to go into
-    // pathwayStage.name but the graph doesn't like going into nested objects.
-    // To fix this I had to add a name value set equal to that nested value.
-    stageReports[0].name = organization.stage_0.pathwayStage.name;
-    stageReports.push(organization.stage_1);
-    stageReports[1].name = organization.stage_1.pathwayStage.name;
-    stageReports.push(organization.stage_2);
-    stageReports[2].name = organization.stage_2.pathwayStage.name;
-    stageReports.push(organization.stage_3);
-    stageReports[3].name = organization.stage_3.pathwayStage.name;
-    stageReports.push(organization.stage_4);
-    stageReports[4].name = organization.stage_4.pathwayStage.name;
-    stageReports.push(organization.stage_5);
-    stageReports[5].name = organization.stage_5.pathwayStage.name;
-
-    // We need to extact the members data and then calculate the largest number and set that to the max and then divide that number by two for the side markers
-    let max = 18;
+    let max = 50;
     let middle = max / 2;
 
     return (
         <ResponsiveBar
-            data={stageReports}
-            keys={['stepsAddedCount', 'stepsCompletedCount']}
-            indexBy="name"
+            data={members.data}
+            keys={['stepsAdded', 'stepsCompleted']}
+            indexBy="stage"
             margin={{
                 top: 30,
                 right: 0,
@@ -93,7 +90,7 @@ const StagesBarGraph = () => {
                     legend: `${max}`,
                     legendPosition: 'top-left',
                     legendOrientation: 'horizontal',
-                    legendOffsetY: 130,
+                    legendOffsetY: 125,
                     legendOffsetX: 3,
                 },
                 {
@@ -104,7 +101,7 @@ const StagesBarGraph = () => {
                     legend: `${max}`,
                     legendPosition: 'top-right',
                     legendOrientation: 'horizontal',
-                    legendOffsetY: 130,
+                    legendOffsetY: 125,
                     legendOffsetX: 3,
                 },
                 {

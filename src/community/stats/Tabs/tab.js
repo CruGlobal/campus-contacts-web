@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-// import { Spring } from 'react-spring/renderprops';
+import { useSpring, animated } from 'react-spring';
 
 const Tab = ({ title, value, active, onTabClick }) => {
     const TabValue = styled.p`
@@ -24,12 +24,10 @@ const Tab = ({ title, value, active, onTabClick }) => {
         }
     `;
 
-    const Tab = styled.div`
+    const Tab = styled(animated.div)`
         display: flex;
         flex-direction: column;
         align-item: flex-start;
-        background: ${active ? '#007398' : '#3cc8e6'};
-        transition: 1s ease all;
         width: 100%;
         height: 70px;
         font-size: 12px;
@@ -47,24 +45,24 @@ const Tab = ({ title, value, active, onTabClick }) => {
             cursor: pointer;
             opacity: 0.7;
         }
-        ${active ? arrow : null}
+        ${active === 'true' ? arrow : null}
     `;
+
+    const props = useSpring({
+        background: active === 'true' ? '#007398' : '#3cc8e6',
+    });
     return (
-        // <Spring to={{ background: active ? '#007398' : '#3cc8e6' }}>
-        //     {props => (
-        <Tab active={active} onClick={onTabClick}>
+        <Tab style={props} active={active} onClick={onTabClick}>
             <p>{title}</p>
             <TabValue>{value}</TabValue>
         </Tab>
-        //     )}
-        // </Spring>
     );
 };
 
 Tab.propTypes = {
     title: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.string.isRequired,
     onTabClick: PropTypes.func,
 };
 

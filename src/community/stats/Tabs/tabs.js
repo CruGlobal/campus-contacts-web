@@ -62,7 +62,7 @@ const Tabs = () => {
                     title={tab.title}
                     value={tab.stats}
                     key={tab.key}
-                    active={currentTab === tab.key}
+                    active={currentTab === tab.key ? 'true' : 'false'}
                     onTabClick={() => onTabClick(tab.key)}
                 />
             ))}
