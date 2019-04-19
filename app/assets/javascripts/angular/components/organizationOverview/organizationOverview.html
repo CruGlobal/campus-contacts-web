@@ -45,7 +45,7 @@
                 ui-sref-active="active"
                 ui-state="'^.ministry.' + tabName"
                 ui-state-params="{ orgId: $ctrl.org.id }"
-                ng-if="tabName !== 'labels'"
+                ng-if="tabName !== 'labels' && $ctrl.isAllowed(tabName)"
             >
                 <span>
                     {{'ministries.' + tabName + '.header' | t}}
