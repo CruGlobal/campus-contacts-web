@@ -28,10 +28,10 @@ const StatLabel = styled.span`
     color: lightgrey;
 `;
 
-const BarStatCard = ({ count, label, description }) => (
+const BarStatCard = ({ count, label }) => (
     <BarStatCardLayout>
         <StatNumber>{count}</StatNumber>
-        <StatLabel title={description}>{label}</StatLabel>
+        <StatLabel>{label}</StatLabel>
     </BarStatCardLayout>
 );
 
@@ -40,5 +40,4 @@ export default BarStatCard;
 BarStatCard.propTypes = {
     count: PropTypes.number,
     label: PropTypes.string,
-    description: PropTypes.string,
 };

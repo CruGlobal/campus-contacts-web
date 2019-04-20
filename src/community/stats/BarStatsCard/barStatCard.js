@@ -41,10 +41,11 @@ const BarStats = () => {
         apolloClient: { members },
     } = data;
 
-    const props = useSpring({ marginTop: 80, from: { marginTop: 1000 } });
+    // UseSpring seems to break test on this component
+    // const props = useSpring({ marginTop: 80, from: { marginTop: 1000 } });
 
     return (
-        <BarChartCardRow style={props}>
+        <BarChartCardRow>
             {_.map(members.data, member => (
                 <BarStatCard
                     key={member.stage}
