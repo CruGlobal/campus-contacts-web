@@ -4,6 +4,9 @@
         {{ 'transfer.subtitle' | t : { contact_count:
         $ctrl.selection.totalSelectedPeople } }}
     </h4>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form">
     <div class="item search">
