@@ -1,15 +1,17 @@
 <div>
-    <input type="text"
-           class="search-autocomplete-field pivot-white"
-           placeholder="{{ 'people.search.search_placeholder' | t }}"
-           autocomplete="off"
-           ng-class="{ 'ui-autocomplete-loading': loadingSearchResults }"
-           ng-model="$ctrl.searchQuery"
-           uib-typeahead="person for person in $ctrl.searchPeople($viewValue)"
-           typeahead-popup-template-url="customTypeaheadPopup.html"
-           typeahead-template-url="customTypeaheadMatch.html"
-           typeahead-loading="loadingSearchResults"
-           typeahead-wait-ms="250">
+    <input
+        type="text"
+        class="search-autocomplete-field pivot-white"
+        placeholder="{{ 'people.search.search_placeholder' | t }}"
+        autocomplete="off"
+        ng-class="{ 'ui-autocomplete-loading': loadingSearchResults }"
+        ng-model="$ctrl.searchQuery"
+        uib-typeahead="person for person in $ctrl.searchPeople($viewValue)"
+        typeahead-popup-template-url="customTypeaheadPopup.html"
+        typeahead-template-url="customTypeaheadMatch.html"
+        typeahead-loading="loadingSearchResults"
+        typeahead-wait-ms="250"
+    />
 
     <script type="text/ng-template" id="customTypeaheadPopup.html">
         <ul class="dropdown-menu w-18-rem pa0 mxhi-20-rem overflow-auto"

@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 import isoLanguages from 'iso-639-1';
-import countrilyData from 'countrily-data';
 import m49Regions from 'm49-regions';
 
 const recursiveFind = (arr, findKey, findValue, recurseKey) => {
@@ -19,8 +18,11 @@ const recursiveFind = (arr, findKey, findValue, recurseKey) => {
     }, undefined);
 };
 
-export const getNamesOfLoadedTranslations = () =>
-    Object.keys(i18next.store.data)
+export const getNamesOfLoadedTranslations = async () => {
+    const countrilyData = Object.values(
+        await import(/* webpackChunkName: "countrily-data" */ 'countrily-data'),
+    );
+    return Object.keys(i18next.store.data)
         .map(code => {
             const [language, country] = code.split('-');
 
@@ -45,3 +47,4 @@ export const getNamesOfLoadedTranslations = () =>
             };
         })
         .sort((a, b) => a.name.localeCompare(b.name));
+};

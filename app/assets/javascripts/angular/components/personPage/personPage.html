@@ -1,37 +1,66 @@
 <async-content ready="$ctrl.ready">
     <header class="row">
         <div class="avatar">
-            <img ng-src="{{$ctrl.avatarUrl}}">
-            <ng-md-icon icon="edit" size="16" class="icon-chip actionable edit-avatar"
-                        ng-if="!$ctrl.hideProfilePhotoBtns" ngf-select="$ctrl.uploadAvatar($file)">
+            <img ng-src="{{$ctrl.avatarUrl}}" />
+            <ng-md-icon
+                icon="edit"
+                size="16"
+                class="icon-chip actionable edit-avatar"
+                ng-if="!$ctrl.hideProfilePhotoBtns"
+                ngf-select="$ctrl.uploadAvatar($file)"
+            >
             </ng-md-icon>
-            <ng-md-icon icon="delete" size="16" class="icon-chip actionable delete-avatar"
-                        ng-if="!$ctrl.hideProfilePhotoBtns && $ctrl.person.picture && !$ctrl.isFacebookAvatar"
-                        ng-click="$ctrl.deleteAvatar()">
+            <ng-md-icon
+                icon="delete"
+                size="16"
+                class="icon-chip actionable delete-avatar"
+                ng-if="!$ctrl.hideProfilePhotoBtns && $ctrl.person.picture && !$ctrl.isFacebookAvatar"
+                ng-click="$ctrl.deleteAvatar()"
+            >
             </ng-md-icon>
         </div>
         <div class="normal-column">
             <div class="row text-row">
-                <span class="name">{{$ctrl.person | personName}}</span>
-                <span class="warning" ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'">
+                <span
+                    class="name"
+                    ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
+                    >{{$ctrl.person | personName}}</span
+                >
+                <span
+                    class="warning"
+                    ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
+                >
                     {{'contacts.statuses.uncontacted' | t}}
                 </span>
             </div>
             <div class="row">
                 <a ng-href="{{$ctrl.primaryEmail.email | mailto}}">
-                    <icon-button icon="'email'" disabled="!$ctrl.primaryEmail"></icon-button>
+                    <icon-button
+                        icon="'email'"
+                        disabled="!$ctrl.primaryEmail"
+                    ></icon-button>
                 </a>
 
                 <span ng-if="$ctrl.primaryPhone">
                     {{$ctrl.primaryPhone.number | phone}}
-                    <ng-md-icon class="phone-active" icon="check" size="14" ng-if="$ctrl.primaryPhone.validated"></ng-md-icon>
+                    <ng-md-icon
+                        class="phone-active"
+                        icon="check"
+                        size="14"
+                        ng-if="$ctrl.primaryPhone.validated"
+                    ></ng-md-icon>
                 </span>
             </div>
             <div class="tabs" ng-if="$ctrl.organizationId">
-                <div class="tab" ng-class="{ disabled: disabled }" ng-repeat="tabName in $ctrl.personTabs"
-                     ng-init="disabled = $ctrl.person.id === null && tabName !== 'profile'"
-                     ui-sref-active="active" ui-state="$ctrl.stateName + '.' + tabName"
-                     ng-click="disabled && $event.preventDefault()">
+                <div
+                    class="tab"
+                    ng-class="{ disabled: disabled }"
+                    ng-repeat="tabName in $ctrl.personTabs"
+                    ng-init="disabled = $ctrl.person.id === null && tabName !== 'profile'"
+                    ui-sref-active="active"
+                    ui-state="$ctrl.stateName + '.' + tabName"
+                    ng-click="disabled && $event.preventDefault()"
+                >
                     {{'ministries.people.' + tabName + '.header' | t}}
                 </div>
             </div>
@@ -42,11 +71,18 @@
     </header>
     <div ui-view="personTab" class="person-tab-content"></div>
     <div class="modal-footer" ng-if="$ctrl.person.id === null">
-        <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
-        <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-                ng-disabled="$ctrl.saving || $ctrl.profileForm.$invalid">
+        <button
+            class="btn btn-primary"
+            type="button"
+            ng-click="$ctrl.save()"
+            ng-disabled="$ctrl.saving || $ctrl.profileForm.$invalid"
+        >
             <span ng-hide="$ctrl.saving">{{ 'general.save' | t }}</span>
-            <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+            <loading-spinner
+                ng-if="$ctrl.saving"
+                class="loading"
+                size="16"
+            ></loading-spinner>
         </button>
     </div>
 </async-content>

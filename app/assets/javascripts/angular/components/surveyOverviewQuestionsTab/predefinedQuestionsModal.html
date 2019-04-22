@@ -1,6 +1,8 @@
 <div class="center bg-white">
     <div class="modal-header bg-pivot-pivot-gray-5 blue pt4 pb2 tl f5">
-        <div class="ma0">{{ 'surveys:questions.addPredefinedQuestion' | t }}</div>
+        <div class="ma0">
+            {{ 'surveys:questions.addPredefinedQuestion' | t }}
+        </div>
         <a ng-click="$ctrl.dismiss()" class="close-button">
             <ng-md-icon icon="close" size="28"></ng-md-icon>
         </a>
@@ -10,9 +12,12 @@
             <h2 class="bg-pivot-gray-5 f6 ba b--pivot-gray pa2 ma0 blue">
                 {{ 'surveys:questions.predefinedQuestions' | t }}
             </h2>
-            <a href="#" class="add-question dim db pa2 pivot-gray-darker link bb bl br f6 b--pivot-gray"
+            <a
+                href="#"
+                class="add-question dim db pa2 pivot-gray-darker link bb bl br f6 b--pivot-gray"
                 ng-repeat="question in $ctrl.predefinedQuestions track by question.id"
-                ng-click="$ctrl.addQuestion(question)">
+                ng-click="$ctrl.addQuestion(question)"
+            >
                 {{question.label}}
             </a>
         </div>
@@ -20,14 +25,21 @@
             <h2 class="bg-pivot-gray-5 f6 ba b--pivot-gray pa2 ma0 blue">
                 {{ 'surveys:questions.previouslyUsedQuestions' | t }}
             </h2>
-            <a href="#" class="add-question dim db pa2 pivot-gray-darker link bb bl br f6 b--pivot-gray"
+            <a
+                href="#"
+                class="add-question dim db pa2 pivot-gray-darker link bb bl br f6 b--pivot-gray"
                 ng-repeat="question in $ctrl.previouslyUsedQuestions track by question.id"
-                ng-click="$ctrl.addQuestion(question)">
+                ng-click="$ctrl.addQuestion(question)"
+            >
                 {{question.label}}
             </a>
         </div>
     </div>
-    <a class="btn-okay bg-blue b pivot-white dim f4 ttu tracked db pv3 ph3 tc link" href="" ng-click="$ctrl.dismiss()">
+    <a
+        class="btn-okay bg-blue b pivot-white dim f4 ttu tracked db pv3 ph3 tc link"
+        href=""
+        ng-click="$ctrl.dismiss()"
+    >
         {{ 'common:dashboard.done' | t }}
     </a>
 </div>

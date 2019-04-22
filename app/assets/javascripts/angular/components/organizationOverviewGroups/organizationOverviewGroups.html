@@ -1,6 +1,7 @@
 <div class="group row header">
     <div class="column name-column">
-        {{ 'ministries.groups.columns.name' | t : { group_count : $ctrl.organizationOverview.groups.length } }}
+        {{ 'ministries.groups.columns.name' | t : { group_count :
+        $ctrl.organizationOverview.groups.length } }}
     </div>
     <div class="column leaders-column">
         {{ 'ministries.groups.columns.leaders' | t }}
@@ -12,10 +13,16 @@
         {{ 'ministries.groups.columns.location' | t }}
     </div>
     <div class="column buttons-column">
-        <icon-button icon="'add'" size="16" ng-click="$ctrl.addGroup()"></icon-button>
+        <icon-button
+            icon="'add'"
+            size="16"
+            ng-click="$ctrl.addGroup()"
+        ></icon-button>
     </div>
 </div>
 <div class="grid-content">
-    <ministry-view-group ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
-                         group="group"></ministry-view-group>
+    <ministry-view-group
+        ng-repeat="group in $ctrl.organizationOverview.groups | orderBy: 'name' track by group.id"
+        group="group"
+    ></ministry-view-group>
 </div>

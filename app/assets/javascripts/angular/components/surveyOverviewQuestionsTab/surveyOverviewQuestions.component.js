@@ -239,10 +239,21 @@ function surveyOverviewQuestionsController(
 
     this.sortableOptions = {
         handle: '.sort',
+        ghostClass: 'o-40',
+        forceFallback: true, // Needed to make sticky header and scrollSensitivity work
+        scrollSensitivity: 100,
+        onEnd: ({ scope: { question } }) => {
+            debugger;
+            this.saveQuestionContent(question, question.question_answers);
+        },
     };
 
     this.questionSortableOptions = {
         handle: '.question-sort',
+        ghostClass: 'o-40',
+        forceFallback: true, // Needed to make sticky header and scrollSensitivity work
+        scrollSensitivity: 100,
+        onEnd: () => this.updatePosition(this.surveyQuestions),
     };
 
     this.updatePosition = questions => {

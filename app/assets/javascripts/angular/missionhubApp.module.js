@@ -7,7 +7,7 @@ import 'ui-select/src/common.css';
 import ngMdIcons from 'angular-material-icons';
 import 'jsonapi-datastore/dist/ng-jsonapi-datastore';
 import ngEnvironment from 'angular-environment';
-import 'angular-ui-sortable';
+import 'angular-legacy-sortablejs-maintained';
 import uiBootstrap from 'angular-ui-bootstrap';
 import ngScrollGlue from 'angularjs-scroll-glue';
 import angulartics from 'angulartics';
@@ -17,18 +17,16 @@ import ngInfiniteScroll from 'ng-infinite-scroll';
 import 'angularjs-toaster';
 import 'angularjs-toaster/toaster.scss';
 import 'moment';
-import 'angular-moment';
 import 'angular-smart-table';
 
 export default angular.module('missionhubApp', [
     ngAnimate,
     ngMdIcons,
-    'angularMoment',
     'beauby.jsonApiDataStore',
     ngEnvironment,
     uiRouter,
     uiSelect,
-    'ui.sortable',
+    'ng-sortable',
     uiBootstrap,
     ngFileUpload,
     ngInfiniteScroll,

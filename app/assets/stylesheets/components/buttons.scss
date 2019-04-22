@@ -22,7 +22,6 @@
 
 .btn-primary {
     background-color: $pivot-dark-blue;
-    font-size: 0.8em;
     color: $white !important;
     padding: 11px 15px 13px 15px;
     padding-right: 15px;
@@ -35,8 +34,8 @@
     text-transform: uppercase;
 
     &:hover {
-        opacity: 0.5;
-        transition: opacity 0.15s ease-in;
+        background-color: darken($pivot-dark-blue, 10%);
+        transition: background-color 0.15s ease-in;
     }
 }
 
@@ -45,4 +44,9 @@
     background-image: none;
     color: $gray-1;
     border: 1px solid $gray-3;
+
+    &:hover {
+        background-color: darken($gray-1-5, 10%);
+        transition: background-color 0.15s ease-in;
+    }
 }

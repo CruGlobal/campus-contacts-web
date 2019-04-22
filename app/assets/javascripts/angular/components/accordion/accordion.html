@@ -1,2 +1,9 @@
-<div ng-transclude="header" ng-class="{uncollapsible: !$ctrl.collapsible, accordionDisabled: $ctrl.accordionDisabled}"></div>
-<div ng-transclude="content" ng-if="!$ctrl.accordionDisabled" ng-show="!$ctrl.collapsed"></div>
+<div
+    ng-transclude="header"
+    ng-class="{uncollapsible: !$ctrl.collapsible, accordionDisabled: $ctrl.accordionDisabled}"
+></div>
+<div
+    ng-transclude="content"
+    ng-if="!$ctrl.accordionDisabled"
+    ng-show="!$ctrl.collapsed"
+></div>

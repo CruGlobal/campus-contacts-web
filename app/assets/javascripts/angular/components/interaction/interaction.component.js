@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import template from './interaction.html';
 import './interaction.scss';
 
@@ -19,6 +21,7 @@ function interactionController(
     var vm = this;
 
     vm.editInteraction = false;
+    vm.moment = moment;
 
     vm.$onInit = activate;
     vm.updateInteraction = updateInteraction;

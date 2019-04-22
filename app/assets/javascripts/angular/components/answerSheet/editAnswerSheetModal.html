@@ -1,47 +1,73 @@
 <div class="modal-header">
-    <h3 class="f3 ma0">{{ 'ministries.surveyResponses.editSurveyResponse' | t }}</h3>
+    <h3 class="f3 ma0">
+        {{ 'ministries.surveyResponses.editSurveyResponse' | t }}
+    </h3>
     <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
     </a>
 </div>
 <div class="ph3 pv3">
-    <div class="qa-pair" ng-repeat="answer in $ctrl.resolve.answerSheet.answers">
-        <div class='f5 mb1 pivot-gray-darker'>{{answer.question.label}}</div>
+    <div
+        class="qa-pair"
+        ng-repeat="answer in $ctrl.resolve.answerSheet.answers"
+    >
+        <div class="f5 mb1 pivot-gray-darker">{{answer.question.label}}</div>
 
         <div ng-switch="answer.question.style">
             <div ng-switch-when="drop-down">
-                <select ng-model="answer.value" class='f5 w-100 bg-white ihshort db pivot-gray-darker mb3'>
-                    <option ng-selected="{{ !answer.value || answer.value === '' }}">{{ 'common:choose' | t }}</option>
+                <select
+                    ng-model="answer.value"
+                    class="f5 w-100 bg-white ihshort db pivot-gray-darker mb3"
+                >
+                    <option
+                        ng-selected="{{ !answer.value || answer.value === '' }}"
+                        >{{ 'common:choose' | t }}</option
+                    >
                     <option
                         ng-repeat="content in answer.question.content.split('\n')"
                         ng-value="content"
                         ng-selected="{{ answer.value === content }}"
-                    > {{ content }}</option>
+                    >
+                        {{ content }}</option
+                    >
                 </select>
             </div>
-            <div ng-switch-when="radio" class='form mb3'>
-                <div ng-repeat="content in answer.question.content.split('\n')" class='form-group form-group--radio'>
+            <div ng-switch-when="radio" class="form mb3">
+                <div
+                    ng-repeat="content in answer.question.content.split('\n')"
+                    class="form-group form-group--radio"
+                >
                     <label>
-                        <input type="radio"
+                        <input
+                            type="radio"
                             ng-model="answer.value"
                             ng-value="content"
-                            /> {{ content }}
+                        />
+                        {{ content }}
                     </label>
                 </div>
             </div>
-            <div ng-switch-when="checkbox" class='mb3'>
+            <div ng-switch-when="checkbox" class="mb3">
                 <div ng-repeat="content in answer.question.content.split('\n')">
                     <label>
-                        <input type="checkbox" class='mr1'
+                        <input
+                            type="checkbox"
+                            class="mr1"
                             ng-model="answer.value"
                             ng-checked="{{ answer.value === content }}"
-                            ng-value="content"/>
+                            ng-value="content"
+                        />
                         {{ content }}
                     </label>
                 </div>
             </div>
             <div ng-switch-default>
-                <input type='text' class='f5 pa2 in put-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2 mb3' ng-model="answer.value"/> {{ content }}
+                <input
+                    type="text"
+                    class="f5 pa2 in put-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2 mb3"
+                    ng-model="answer.value"
+                />
+                {{ content }}
             </div>
         </div>
     </div>
@@ -50,8 +76,12 @@
     <button class="btn btn-primary" type="button" ng-click="$ctrl.dismiss()">
         <span>{{ 'common:cancel' | t }}</span>
     </button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="$ctrl.saving">
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="$ctrl.saving"
+    >
         <span>{{ 'common:general.save' | t }}</span>
     </button>
 </div>

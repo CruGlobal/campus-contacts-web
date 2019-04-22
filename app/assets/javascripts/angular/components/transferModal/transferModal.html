@@ -1,7 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title">{{ 'transfer.title' | t }}</h3>
     <h4 class="modal-subtitle">
-        {{ 'transfer.subtitle' | t : { contact_count: $ctrl.selection.totalSelectedPeople } }}
+        {{ 'transfer.subtitle' | t : { contact_count:
+        $ctrl.selection.totalSelectedPeople } }}
     </h4>
     <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
@@ -9,41 +10,63 @@
 </div>
 <div class="modal-body form">
     <div class="item search">
-        <input ng-model="$ctrl.search" placeholder="{{ 'person_multiselect.search_placeholder' | t :
-                                                        { people_description: ('transfer.organizations' | t) } }}" />
+        <input
+            ng-model="$ctrl.search"
+            placeholder="{{ 'person_multiselect.search_placeholder' | t :
+                                                        { people_description: ('transfer.organizations' | t) } }}"
+        />
     </div>
     <div class="item searching" ng-if="$ctrl.searching">
-        {{ 'person_multiselect.searching' | t : { people_description: ('transfer.organizations' | t) } }}
+        {{ 'person_multiselect.searching' | t : { people_description:
+        ('transfer.organizations' | t) } }}
     </div>
-    <div class="item no-results" ng-if="$ctrl.search && !$ctrl.searching && $ctrl.searchOptions.length === 0">
-        {{ 'person_multiselect.no_search_results' | t :
-           { people_description: ('transfer.organizations' | t), search: $ctrl.search } }}
+    <div
+        class="item no-results"
+        ng-if="$ctrl.search && !$ctrl.searching && $ctrl.searchOptions.length === 0"
+    >
+        {{ 'person_multiselect.no_search_results' | t : { people_description:
+        ('transfer.organizations' | t), search: $ctrl.search } }}
     </div>
     <label class="item">
-        <input type="checkbox" ng-model="$ctrl.options.copyContact">
+        <input type="checkbox" ng-model="$ctrl.options.copyContact" />
         <span>{{ 'transfer.options.copy_contact' | t }}</span>
     </label>
     <label class="item">
-        <input type="checkbox" ng-model="$ctrl.options.copyAnswers">
+        <input type="checkbox" ng-model="$ctrl.options.copyAnswers" />
         <span>{{ 'transfer.options.copy_answers' | t }}</span>
     </label>
     <label class="item">
-        <input type="checkbox" ng-model="$ctrl.options.copyInteractions">
+        <input type="checkbox" ng-model="$ctrl.options.copyInteractions" />
         <span>{{ 'transfer.options.copy_interactions' | t }}</span>
     </label>
     <div class="item option" ng-repeat="org in $ctrl.searchOptions">
-        <div class="pill" ng-class="{ selected: org === $ctrl.selectedOrg }" ng-click="$ctrl.selectOrg(org)">
+        <div
+            class="pill"
+            ng-class="{ selected: org === $ctrl.selectedOrg }"
+            ng-click="$ctrl.selectOrg(org)"
+        >
             {{ org.name }}
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="!$ctrl.selectedOrg || $ctrl.saving">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">
+        {{ 'general.cancel' | t }}
+    </button>
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="!$ctrl.selectedOrg || $ctrl.saving"
+    >
         <span ng-hide="$ctrl.saving">
-            {{ 'transfer.transfer' | t : { contact_count: $ctrl.selection.totalSelectedPeople } }}
+            {{ 'transfer.transfer' | t : { contact_count:
+            $ctrl.selection.totalSelectedPeople } }}
         </span>
-        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.saving"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>

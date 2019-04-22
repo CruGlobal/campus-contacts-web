@@ -3,20 +3,37 @@
         <div>
             <div ng-if="!$ctrl.phoneNumberValidation">
                 <div class="black pa2 tc bg-orange">
-                    <div class="f4">{{ 'phoneNumbers:validations.notFound' | t }}</div>
+                    <div class="f4">
+                        {{ 'phoneNumbers:validations.notFound' | t }}
+                    </div>
                 </div>
-                <div class='pa4'>
-                    <div class="f5 black tc ba b--orange pa2">{{ 'phoneNumbers:validations.inactiveOrInvalid' | t }}</div>
+                <div class="pa4">
+                    <div class="f5 black tc ba b--orange pa2">
+                        {{ 'phoneNumbers:validations.inactiveOrInvalid' | t }}
+                    </div>
                 </div>
             </div>
             <div ng-if="$ctrl.phoneNumberValidation">
                 <div class="mt4">
-                    <img ng-if="$ctrl.phoneNumberValidation.survey.logo_url" ng-src="{{ $ctrl.phoneNumberValidation.survey.logo_url }}" class="w-100"/>
+                    <img
+                        ng-if="$ctrl.phoneNumberValidation.survey.logo_url"
+                        ng-src="{{ $ctrl.phoneNumberValidation.survey.logo_url }}"
+                        class="w-100"
+                    />
                 </div>
                 <div class="pr4 pb4 pl4 tl">
-                    <h1 class="pivot-gray-darker f2 mt3 normal mb0">{{ $ctrl.phoneNumberValidation.survey.title }}</h1>
-                    <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">{{ $ctrl.phoneNumberValidation.survey.validation_success_message }}</p>
-                    <small class="text-muted">{{ $ctrl.phoneNumberValidation.created_at | date : 'short' }}</small>
+                    <h1 class="pivot-gray-darker f2 mt3 normal mb0">
+                        {{ $ctrl.phoneNumberValidation.survey.title }}
+                    </h1>
+                    <p class="lh-copy mt1" ng-if="!$ctrl.thankYou">
+                        {{
+                        $ctrl.phoneNumberValidation.survey.validation_success_message
+                        }}
+                    </p>
+                    <small class="text-muted"
+                        >{{ $ctrl.phoneNumberValidation.created_at | date :
+                        'short' }}</small
+                    >
                 </div>
             </div>
         </div>

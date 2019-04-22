@@ -1,156 +1,311 @@
 <div class="pivot_theme">
-    <button class="reset"
-            ng-click="$ctrl.resetFilters(); $ctrl.updateFilters();"
-            ng-if="$ctrl.filtersApplied">
+    <button
+        class="reset"
+        ng-click="$ctrl.resetFilters(); $ctrl.updateFilters();"
+        ng-if="$ctrl.filtersApplied"
+    >
         {{ 'signatures.clear' | t }}
     </button>
 
     <div class="filter-row filter-search">
-        <input ng-model="$ctrl.filters.searchString"
-               ng-model-options="{ debounce: 600 }"
-               ng-change="$ctrl.updateFilters()"
-               placeholder="{{'contacts.index.filter' | t}}">
+        <input
+            ng-model="$ctrl.filters.searchString"
+            ng-model-options="{ debounce: 600 }"
+            ng-change="$ctrl.updateFilters()"
+            placeholder="{{'contacts.index.filter' | t}}"
+        />
     </div>
 
-    <accordion collapsed="true" accordion-disabled="!$ctrl.labelOptions.length > 0"
-               class="filter-row filter-labels">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.labelOptions.length > 0"
+        class="filter-row filter-labels"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.labels.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.labels.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
-            <label ng-repeat="labelOption in $ctrl.labelOptions" class="filter-option">
-                <input type="checkbox"
-                       ng-model="$ctrl.filters.labels[labelOption.label_id]"
-                       ng-change="$ctrl.updateFilters()">
-                <span
-                    class="filter-option-name">{{ labelOption.i18n ? (labelOption.i18n | t) : labelOption.name }}</span>
+            <label
+                ng-repeat="labelOption in $ctrl.labelOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.labels[labelOption.label_id]"
+                    ng-change="$ctrl.updateFilters()"
+                />
+                <span class="filter-option-name"
+                    >{{ labelOption.i18n ? (labelOption.i18n | t) :
+                    labelOption.name }}</span
+                >
                 <span class="filter-option-count">{{ labelOption.count }}</span>
             </label>
         </accordion-content>
     </accordion>
-    <accordion collapsed="true" accordion-disabled="!$ctrl.assignmentOptions.length > 0"
-               class="filter-row assigned-to">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.assignmentOptions.length > 0"
+        class="filter-row assigned-to"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.assignments.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.assignments.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
-            <label ng-repeat="assignmentOption in $ctrl.assignmentOptions" class="filter-option">
-                <input type="checkbox"
-                       ng-model="$ctrl.filters.assigned_tos[assignmentOption.person_id]"
-                       ng-change="$ctrl.updateFilters()">
-                <span class="filter-option-name" ng-if="assignmentOption.person_id != 'unassigned'">
+            <label
+                ng-repeat="assignmentOption in $ctrl.assignmentOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.assigned_tos[assignmentOption.person_id]"
+                    ng-change="$ctrl.updateFilters()"
+                />
+                <span
+                    class="filter-option-name"
+                    ng-if="assignmentOption.person_id != 'unassigned'"
+                >
                     {{ assignmentOption.name }}
                 </span>
-                <span class="filter-option-name" ng-if="assignmentOption.person_id == 'unassigned'">
+                <span
+                    class="filter-option-name"
+                    ng-if="assignmentOption.person_id == 'unassigned'"
+                >
                     {{ 'contacts.index.unassigned' | t }}
                 </span>
-                <span class="filter-option-count">{{ assignmentOption.count }}</span>
+                <span class="filter-option-count"
+                    >{{ assignmentOption.count }}</span
+                >
             </label>
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="true"
-               accordion-disabled="!$ctrl.statusOptions.length > 0"
-               class="filter-row filter-groups">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.statusOptions.length > 0"
+        class="filter-row filter-groups"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.status.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.status.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
-            <label ng-repeat="statusOption in $ctrl.statusOptions" class="filter-option">
-                <input type="checkbox"
-                       ng-model="$ctrl.filters.statuses[statusOption.followup_status]"
-                       ng-change="$ctrl.updateFilters()">
-                <span class="filter-option-name">{{ 'followup_status.' + statusOption.followup_status | t }}</span>
-                <span class="filter-option-count">{{ statusOption.count }}</span>
+            <label
+                ng-repeat="statusOption in $ctrl.statusOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.statuses[statusOption.followup_status]"
+                    ng-change="$ctrl.updateFilters()"
+                />
+                <span class="filter-option-name"
+                    >{{ 'followup_status.' + statusOption.followup_status | t
+                    }}</span
+                >
+                <span class="filter-option-count"
+                    >{{ statusOption.count }}</span
+                >
             </label>
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="true"
-               accordion-disabled="!$ctrl.genderOptions.length > 0"
-               class="filter-row filter-groups">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.permissionOptions.length > 0"
+        class="filter-row"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.gender.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.permission.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
-            <label ng-repeat="genderOption in $ctrl.genderOptions" class="filter-option">
-                <input type="checkbox"
-                       ng-model="$ctrl.filters.genders[genderOption.gender]"
-                       ng-change="$ctrl.updateFilters()">
-                <span class="filter-option-name">{{ 'general.' + (genderOption.gender | lowercase) | t }}</span>
-                <span class="filter-option-count">{{ genderOption.count }}</span>
+            <label
+                ng-repeat="permissionOption in $ctrl.permissionOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.permissions[permissionOption.permission]"
+                    ng-change="$ctrl.updateFilters()"
+                />
+                <span class="filter-option-name"
+                    >{{ 'permissions.' + permissionOption.permission | t
+                    }}</span
+                >
+                <span class="filter-option-count"
+                    >{{ permissionOption.count }}</span
+                >
             </label>
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="true" accordion-disabled="!$ctrl.groupOptions.length > 0"
-               class="filter-row filter-groups">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.genderOptions.length > 0"
+        class="filter-row filter-groups"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.groups.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.gender.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
-            <label ng-repeat="groupOption in $ctrl.groupOptions" class="filter-option">
-                <input type="checkbox"
-                       ng-model="$ctrl.filters.groups[groupOption.group_id]"
-                       ng-change="$ctrl.updateFilters()">
+            <label
+                ng-repeat="genderOption in $ctrl.genderOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.genders[genderOption.gender]"
+                    ng-change="$ctrl.updateFilters()"
+                />
+                <span class="filter-option-name"
+                    >{{ 'general.' + (genderOption.gender | lowercase) | t
+                    }}</span
+                >
+                <span class="filter-option-count"
+                    >{{ genderOption.count }}</span
+                >
+            </label>
+        </accordion-content>
+    </accordion>
+
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.groupOptions.length > 0"
+        class="filter-row filter-groups"
+    >
+        <accordion-header>
+            <accordion-toggle class="flex-auto"
+                >{{'search.groups.title' | t}}</accordion-toggle
+            >
+        </accordion-header>
+        <accordion-content>
+            <label
+                ng-repeat="groupOption in $ctrl.groupOptions"
+                class="filter-option"
+            >
+                <input
+                    type="checkbox"
+                    ng-model="$ctrl.filters.groups[groupOption.group_id]"
+                    ng-change="$ctrl.updateFilters()"
+                />
                 <span class="filter-option-name">{{ groupOption.name }}</span>
                 <span class="filter-option-count">{{ groupOption.count }}</span>
             </label>
         </accordion-content>
     </accordion>
 
-    <accordion collapsed="true"
-               accordion-disabled="!$ctrl.questions.length > 0"
-               ng-if="$ctrl.surveyId"
-               class="filter-row filter-groups">
+    <accordion
+        collapsed="true"
+        accordion-disabled="!$ctrl.questions.length > 0"
+        ng-if="$ctrl.surveyId"
+        class="filter-row filter-groups"
+    >
         <accordion-header>
-            <accordion-toggle class="flex-auto">{{'search.questions.title' | t}}</accordion-toggle>
+            <accordion-toggle class="flex-auto"
+                >{{'search.questions.title' | t}}</accordion-toggle
+            >
         </accordion-header>
         <accordion-content>
             <accordion
                 collapsed="true"
                 class="filter-sub-row filter-groups"
                 ng-repeat="question in $ctrl.questions"
-                ng-if="question.kind === 'TextField' || $ctrl.findStats(question)">
+                ng-if="question.kind === 'TextField' || $ctrl.findStats(question)"
+            >
                 <accordion-header>
-                    <accordion-toggle class="flex-auto">{{question.label}}</accordion-toggle>
+                    <accordion-toggle class="flex-auto"
+                        >{{question.label}}</accordion-toggle
+                    >
                 </accordion-header>
                 <accordion-content>
-                    <label ng-repeat="answerOption in $ctrl.findStats(question).answers" class="filter-option">
-                        <input type="checkbox"
-                               ng-model="$ctrl.filters.questions[question.id][answerOption.value]"
-                               ng-change="$ctrl.updateFilters()">
-                        <span class="filter-option-name">{{ answerOption.value }}</span>
-                        <span class="filter-option-count">{{ answerOption.count }}</span>
+                    <label
+                        ng-repeat="answerOption in $ctrl.findStats(question).answers"
+                        class="filter-option"
+                    >
+                        <input
+                            type="checkbox"
+                            ng-model="$ctrl.filters.questions[question.id][answerOption.value]"
+                            ng-change="$ctrl.updateFilters()"
+                        />
+                        <span class="filter-option-name"
+                            >{{ answerOption.value }}</span
+                        >
+                        <span class="filter-option-count"
+                            >{{ answerOption.count }}</span
+                        >
                     </label>
-                    <label class="filter-option flex-column" ng-if="question.kind === 'TextField'">
+                    <label
+                        class="filter-option flex-column"
+                        ng-if="question.kind === 'TextField'"
+                    >
                         <select
                             class="w-100"
+                            ng-init="$ctrl.filters.answerMatchingOptions[question.id] = 'contains'"
                             ng-model="$ctrl.filters.answerMatchingOptions[question.id]"
-                            ng-change="$ctrl.updateFilters()"
-                            ng-init="$ctrl.filters.answerMatchingOptions[question.id] = 'contains'">
-                            <option value="contains">{{ 'peopleScreen:answerMatchingOptions.contains' | t }}</option>
-                            <option value="does_not_contain">{{ 'peopleScreen:answerMatchingOptions.doesNotContain' | t }}</option>
-                            <option value="">{{ 'peopleScreen:answerMatchingOptions.exactly' | t }}</option>
+                            ng-change="$ctrl.updateFilters($ctrl.filters.answerMatchingOptions[question.id], question.id)"
+                        >
+                            <option value="contains"
+                                >{{
+                                'peopleScreen:answerMatchingOptions.contains' |
+                                t }}</option
+                            >
+                            <option value="does_not_contain"
+                                >{{
+                                'peopleScreen:answerMatchingOptions.doesNotContain'
+                                | t }}</option
+                            >
+                            <option value=""
+                                >{{ 'peopleScreen:answerMatchingOptions.exactly'
+                                | t }}</option
+                            >
+                            <option
+                                value="no_response"
+                                ng-if="!$ctrl.hideNonFilterableQuestionAnswerResponse(question)"
+                                >{{
+                                'peopleScreen:answerMatchingOptions.noResponse'
+                                | t }}</option
+                            >
+                            <option
+                                value="any_response"
+                                ng-if="!$ctrl.hideNonFilterableQuestionAnswerResponse(question)"
+                                >{{
+                                'peopleScreen:answerMatchingOptions.anyResponse'
+                                | t }}</option
+                            >
                         </select>
                         <input
                             type="text"
-                            class="w-100 mt-2"
+                            class="w-100 mt2"
                             ng-model="$ctrl.filters.questions[question.id]"
+                            ng-if="$ctrl.filters.answerMatchingOptions[question.id] !== 'no_response' && $ctrl.filters.answerMatchingOptions[question.id] !== 'any_response'"
                             ng-model-options="{ debounce: 600 }"
                             ng-change="$ctrl.updateFilters()"
-                            placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}">
+                            placeholder="{{ 'peopleScreen:filterSearchPlaceholder' | t }}"
+                        />
                     </label>
                 </accordion-content>
+            </accordion>
         </accordion-content>
     </accordion>
 
     <div class="filter-row filter-archived">
         <label>
-            <input type="checkbox"
-                   ng-model="$ctrl.filters.includeArchived"
-                   ng-change="$ctrl.updateFilters()">
-            <span class="filter-option-name">{{ 'search.sidebar.include_archived' | t }}</span>
+            <input
+                type="checkbox"
+                ng-model="$ctrl.filters.includeArchived"
+                ng-change="$ctrl.updateFilters()"
+            />
+            <span class="filter-option-name"
+                >{{ 'search.sidebar.include_archived' | t }}</span
+            >
         </label>
     </div>
 </div>

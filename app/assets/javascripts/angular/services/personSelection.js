@@ -31,6 +31,7 @@ function personSelectionService(_) {
                 name: filters.searchString || '',
                 statuses: filters.statuses,
                 genders: filters.genders,
+                permissions: filters.permissions,
                 include_archived: filters.includeArchived,
                 ...(surveyId ||
                 filters.questions ||

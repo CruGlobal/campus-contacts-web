@@ -27,6 +27,7 @@ function peopleFiltersPanelController(
     this.labelOptions = [];
     this.statusOptions = [];
     this.genderOptions = [];
+    this.permissionOptions = [];
     this.questionOptions = [];
     this.filters = {};
 
@@ -54,6 +55,7 @@ function peopleFiltersPanelController(
                 labels: {},
                 assignedTos: {},
                 statuses: {},
+                permissions: {},
                 groups: {},
                 questions: {},
                 answerMatchingOptions: {},
@@ -70,12 +72,22 @@ function peopleFiltersPanelController(
         this.massEditAppliedUnsubscribe();
     };
 
+    this.hideNonFilterableQuestionAnswerResponse = question => {
+        if (question.kind !== 'TextField') return false;
+
+        return (
+            question.label.toLowerCase() === 'last name' ||
+            question.label.toLowerCase() === 'first name'
+        );
+    };
+
     this.resetFilters = () => {
         this.filters = {
             searchString: '',
             labels: {},
             assignedTos: {},
             statuses: {},
+            permissions: {},
             groups: {},
             questions: {},
             answerMatchingOptions: {},
@@ -83,11 +95,20 @@ function peopleFiltersPanelController(
         };
     };
 
-    this.updateFilters = () => {
+    this.updateFilters = (option, questionId) => {
+        const questionFilter =
+            option === 'no_response' || option === 'any_response' ? option : '';
+
+        if (questionId) {
+            this.filters.questions = {
+                ...this.filters.questions,
+                ...{ [questionId]: questionFilter },
+            };
+        }
+
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
         );
-
         sendFilters();
     };
 
@@ -118,6 +139,7 @@ function peopleFiltersPanelController(
                 this.assignmentOptions = stats.assigned_tos;
                 this.groupOptions = stats.groups;
                 this.statusOptions = stats.statuses;
+                this.permissionOptions = stats.permissions;
                 this.genderOptions = stats.genders;
                 this.questionOptions = stats.questions;
 
@@ -171,6 +193,7 @@ function peopleFiltersPanelController(
             assignedTos: getFiltersFromObj(this.filters.assigned_tos),
             groups: getFiltersFromObj(this.filters.groups),
             statuses: getFiltersFromObj(this.filters.statuses),
+            permissions: getFiltersFromObj(this.filters.permissions),
             genders: getFiltersFromObj(this.filters.genders),
             questions,
             answerMatchingOptions: _.flow([

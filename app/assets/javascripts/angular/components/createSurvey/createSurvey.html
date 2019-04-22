@@ -1,5 +1,7 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">{{ 'surveyTab:createSurvey' | t }}</h3>
+    <h3 class="modal-title" id="modal-title">
+        {{ 'surveyTab:createSurvey' | t }}
+    </h3>
     <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
     </a>
@@ -8,15 +10,29 @@
     <div class="form-group">
         <label>
             <span class="required-field">{{ 'surveyTab:surveyName' | t }}</span>
-            <input type="text" ng-model="$ctrl.survey.title" class="form-control">
+            <input
+                type="text"
+                ng-model="$ctrl.survey.title"
+                class="form-control"
+            />
         </label>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="!$ctrl.valid() || $ctrl.saving">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">
+        {{ 'general.cancel' | t }}
+    </button>
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="!$ctrl.valid() || $ctrl.saving"
+    >
         <span ng-hide="$ctrl.saving">{{ 'surveyTab:createSurvey' | t }}</span>
-        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.saving"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>
