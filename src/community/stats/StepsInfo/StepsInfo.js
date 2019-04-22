@@ -1,10 +1,13 @@
+// COMPONENTS
+import StepsInfoPersonal from './stepsInfoPersonal';
+import StepsInfoSpiritual from './stepsInfoSpiritual';
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import StepsInfoPersonal from './stepsInfoPersonal';
-import StepsInfoSpiritual from './stepsInfoSpiritual';
 import { useSpring, animated } from 'react-spring';
 
+// CSS
 const Container = styled(animated.div)`
     margin-top: 150px;
 `;
@@ -25,3 +28,8 @@ const StepsInfo = () => {
 };
 
 export default StepsInfo;
+
+// PROPTYPES
+StepsInfo.propTypes = {
+    style: PropTypes.object,
+};

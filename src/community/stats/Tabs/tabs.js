@@ -1,11 +1,15 @@
+// COMPONENTS
+import Tab from './tab';
+// LIBRARIES
 import React from 'react';
 import styled from '@emotion/styled';
-import Tab from './tab';
 import { useMutation, useQuery } from 'react-apollo-hooks';
-import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+// QUERIES
+import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
 
+// CSS
 const TabsContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);

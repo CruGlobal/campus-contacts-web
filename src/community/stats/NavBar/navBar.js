@@ -1,10 +1,14 @@
+// COMPONENTS
+import NavBarFilter from './navBarFilter';
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import NavBarFilter from './navBarFilter';
-import { GET_ORGANIZATIONS } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
+// QUERIES
+import { GET_ORGANIZATIONS } from '../../graphql';
 
+// CSS
 const NavBar = styled.div`
     background: white;
     margin-bottom: 20px;
@@ -71,6 +75,7 @@ const DashBoardNavBar = ({ orgID }) => {
 
 export default DashBoardNavBar;
 
+// PROPTYPES
 DashBoardNavBar.propTypes = {
     name: PropTypes.string,
     orgID: PropTypes.string,

@@ -1,10 +1,14 @@
+// COMPONENTS
+import Message from './message';
+// LIBRARIES
 import React from 'react';
 import styled from '@emotion/styled';
-import { GET_CELEBRATION_STEPS } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
-import Message from './message';
 import PropTypes from 'prop-types';
+// QUERIES
+import { GET_CELEBRATION_STEPS } from '../../graphql';
 
+// CSS
 const Container = styled.div`
     width: 22%;
     height: 290px;
@@ -50,6 +54,7 @@ export const CelebrateSteps = () => {
 
 export default CelebrateSteps;
 
+// PROPTYPES
 CelebrateSteps.propTypes = {
     celebrations: PropTypes.object,
     message: PropTypes.string,

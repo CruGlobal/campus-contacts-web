@@ -1,7 +1,10 @@
+// LIBRARIES
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
-import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
+import PropTypes from 'prop-types';
+// QUERIES
+import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
 
 const StagesLineGraph = () => {
     const {
@@ -75,6 +78,8 @@ const StagesLineGraph = () => {
     );
 };
 
-StagesLineGraph.propTypes = {};
+StagesLineGraph.propTypes = {
+    stepsCompleted: PropTypes.object,
+};
 
 export default StagesLineGraph;

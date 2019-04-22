@@ -1,8 +1,11 @@
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import { useSpring, animated } from 'react-spring';
 
-const Card = styled.div`
+// CSS
+const Card = styled(animated.div)`
     background-color: white;
     border-radius: 8px;
     padding: 18px;
@@ -28,15 +31,19 @@ const StatLabel = styled.span`
     color: lightgrey;
 `;
 
-const BarStatCard = ({ count, label }) => (
-    <BarStatCardLayout>
-        <StatNumber>{count}</StatNumber>
-        <StatLabel>{label}</StatLabel>
-    </BarStatCardLayout>
-);
+const BarStatCard = ({ count, label }) => {
+    const props = useSpring({ marginTop: 0, from: { marginTop: 1000 } });
+    return (
+        <BarStatCardLayout style={props}>
+            <StatNumber>{count}</StatNumber>
+            <StatLabel>{label}</StatLabel>
+        </BarStatCardLayout>
+    );
+};
 
 export default BarStatCard;
 
+// PROPTYPES
 BarStatCard.propTypes = {
     count: PropTypes.number,
     label: PropTypes.string,

@@ -1,11 +1,10 @@
+// LIBRARIES
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
-import {
-    GET_CURRENT_FILTER,
-    GET_STEPS_COMPLETED_GRAPHQL,
-    GET_MEMBERS,
-} from '../../graphql';
+import PropTypes from 'prop-types';
+// QUERIES
+import { GET_CURRENT_FILTER, GET_MEMBERS } from '../../graphql';
 
 const StagesBarGraph = () => {
     const {
@@ -29,19 +28,6 @@ const StagesBarGraph = () => {
     if (error) {
         return <div>Error! {error.message}</div>;
     }
-    // const { data, loading, error } = useQuery(GET_STEPS_COMPLETED_GRAPHQL, {
-    //     variables: { filter },
-    // });
-
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // if (error) {
-    //     return <div>Error! {error.message} </div>;
-    // }
-
-    // const { organization } = data;
 
     let max = 50;
     let middle = max / 2;
@@ -127,6 +113,8 @@ const StagesBarGraph = () => {
     );
 };
 
-StagesBarGraph.propTypes = {};
+StagesBarGraph.propTypes = {
+    members: PropTypes.object,
+};
 
 export default StagesBarGraph;

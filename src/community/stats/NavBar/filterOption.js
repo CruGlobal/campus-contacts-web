@@ -1,3 +1,4 @@
+// LIBRARIES
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
@@ -28,6 +29,7 @@ const FilterOption = ({ title, filter, onFilterClick, active }) => {
 
 export default FilterOption;
 
+// PROPTYPES
 FilterOption.propTypes = {
     title: PropTypes.string,
     filter: PropTypes.object,

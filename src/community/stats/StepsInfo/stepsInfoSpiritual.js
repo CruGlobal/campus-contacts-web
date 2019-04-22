@@ -1,9 +1,12 @@
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
+// QUERIES
 import { GET_STEPSINFO_SPIRITUAL } from '../../graphql';
 
+// CSS
 const StepsContent = styled.p`
 color: grey;
 font-size: 1.5rem;
@@ -36,6 +39,8 @@ const StepsInfoSpiritual = () => {
 
 export default StepsInfoSpiritual;
 
+// PROPTYPES
 StepsInfoSpiritual.propTypes = {
+    stepsInfoSpiritual: PropTypes.object,
     userStats: PropTypes.string,
 };

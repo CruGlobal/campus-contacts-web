@@ -1,16 +1,20 @@
+// COMPONENTS
+import StagesBarGraph from '../Graphs/stagesBarGraph';
+import StagesLineGraph from '../Graphs/stagesLineGraph';
+import Tabs from '../Tabs/tabs';
+import BarStats from '../BarStatsCard/barStatCard';
+import { tabContent } from '../Tabs/tabContent';
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import StagesBarGraph from '../Graphs/stagesBarGraph';
-import StagesLineGraph from '../Graphs/stagesLineGraph';
-import { CelebrateSteps } from '../CelebrateSteps/celebrateSteps';
-import { GET_CURRENT_TAB, GET_TAB_CONTENT } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
-import Tabs from '../Tabs/tabs';
-import BarStats from '../BarStatsCard/barStatCard';
 import { useSpring, animated } from 'react-spring';
-import TabContent from '../Tabs/tabContent';
+// QUERIES
+import { CelebrateSteps } from '../CelebrateSteps/celebrateSteps';
+import { GET_CURRENT_TAB } from '../../graphql';
 
+// CSS
 const Container = styled(animated.div)`
     display: flex;
     flex-direction: row;
@@ -30,6 +34,7 @@ const InnerContainer = styled.div`
     }
 `;
 
+// COMPONENT
 const Members = () => {
     const { data, loading, error } = useQuery(GET_CURRENT_TAB);
 
@@ -56,20 +61,21 @@ const Members = () => {
         }
     };
 
+    // ANIMATION
     const props = useSpring({
         delay: '1000',
         opacity: 1,
         from: { opacity: 0 },
     });
 
-    const tabContent = TabContent();
+    const TabContent = tabContent();
 
     return (
         <>
             <Container style={props}>
                 <InnerContainer>
                     <h3>STEPS OF FAITH WITH OTHERS</h3>
-                    <Tabs tabsContent={tabContent} />
+                    <Tabs tabsContent={TabContent} />
                     {renderGraph()}
                 </InnerContainer>
                 <CelebrateSteps />
@@ -82,7 +88,9 @@ const Members = () => {
 
 export default Members;
 
+// PROPTYPES CHECKING
 Members.propTypes = {
     currentTab: PropTypes.string,
     renderGraph: PropTypes.func,
+    tabContent: PropTypes.func,
 };

@@ -1,7 +1,9 @@
+// LIBRARIES
 import React from 'react';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 
+// CSS
 const MessageContainer = styled.div`
     margin: 5px 10px;
     > h3 {
@@ -24,6 +26,7 @@ const Message = ({ message, user }) => {
 
 export default Message;
 
+// PROPTYPES
 Message.propTypes = {
     message: PropTypes.string,
     user: PropTypes.string,

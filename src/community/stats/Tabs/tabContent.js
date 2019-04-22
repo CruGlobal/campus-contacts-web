@@ -1,6 +1,9 @@
-import { GET_TAB_CONTENT } from '../../graphql';
+// LIBRARIES
 import { useQuery } from 'react-apollo-hooks';
-const TabContent = () => {
+// QUERIES
+import { GET_TAB_CONTENT } from '../../graphql';
+
+const tabContent = () => {
     const { data, loading, error } = useQuery(GET_TAB_CONTENT);
 
     if (loading) {
@@ -20,4 +23,4 @@ const TabContent = () => {
     return TabContent;
 };
 
-export default TabContent;
+export { tabContent };

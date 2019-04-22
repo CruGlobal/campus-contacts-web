@@ -1,11 +1,15 @@
+// COMPONENTS
+import FilterOption from './filterOption';
+// LIBRARIES
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import moment from 'moment';
-import FilterOption from './filterOption';
 import { useMutation, useQuery } from 'react-apollo-hooks';
+// QUERIES
 import { GET_CURRENT_FILTER, UPDATE_CURRENT_FILTER } from '../../graphql';
 
+// CSS
 const Container = styled.div`
     width: 100%;
     display: flex;
@@ -138,9 +142,12 @@ const Filters = () => {
     );
 };
 
-Filters.protoTypes = {
-    date: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+export default Filters;
+
+// PROPTYPES
+Filters.propTypes = {
+    date: PropTypes.string,
+    title: PropTypes.string,
     filter: PropTypes.object,
     active: PropTypes.bool,
     key: PropTypes.string,
@@ -149,5 +156,3 @@ Filters.protoTypes = {
     endDate: PropTypes.string,
     startDate: PropTypes.string,
 };
-
-export default Filters;
