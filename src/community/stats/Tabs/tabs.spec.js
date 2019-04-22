@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 
-import { GET_CURRENT_TAB } from '../../graphql';
+import { GET_CURRENT_TAB, GET_TAB_CONTENT } from '../../graphql';
 import Tabs from './tabs';
 import Tab from './tab';
 
@@ -31,6 +31,42 @@ describe('<Tabs />', () => {
                             },
                         },
                     },
+                    request: { query: GET_TAB_CONTENT },
+                    result: {
+                        data: {
+                            apolloClient: {
+                                tabsContent: {
+                                    __typename: 'tabsConfig',
+                                    data: [
+                                        {
+                                            __typename: 'Data',
+                                            title: 'PEOPLE/STEPS OF FAITH',
+                                            key: 'MEMBERS',
+                                            stats: '40 / 120',
+                                        },
+                                        {
+                                            __typename: 'Data',
+                                            title: 'STEPS COMPLETED',
+                                            key: 'STEPS_COMPLETED',
+                                            stats: '20',
+                                        },
+                                        {
+                                            __typename: 'Data',
+                                            title: 'PEOPLE MOVEMENT',
+                                            key: 'PEOPLE_MOVEMENT',
+                                            stats: '2',
+                                        },
+                                        {
+                                            __typename: 'Data',
+                                            title: '',
+                                            key: '',
+                                            stats: '',
+                                        },
+                                    ],
+                                },
+                            }
+                        }
+                    }
                 },
             ];
     

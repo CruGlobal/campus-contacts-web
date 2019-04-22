@@ -10,3 +10,4 @@ export { GET_STEPSINFO_SPIRITUAL } from './getStepsInfoSpiritual';
 export { GET_ORGANIZATIONS } from './getOrganizations';
 export { GET_MEMBERS_GRAPHQL } from './getMembersGraphQL';
 export { GET_STEPS_COMPLETED_GRAPHQL } from './getStepsCompletedGraphQL';
+export { GET_TAB_CONTENT } from './getTabsContent';

@@ -149,5 +149,34 @@ export default {
             __typename: 'stepsInfoSpiritual',
             userStats: 2,
         },
+        tabsContent: {
+            __typename: 'tabsConfig',
+            data: [
+                {
+                    __typename: 'Data',
+                    title: 'PEOPLE/STEPS OF FAITH',
+                    key: 'MEMBERS',
+                    stats: '40 / 120',
+                },
+                {
+                    __typename: 'Data',
+                    title: 'STEPS COMPLETED',
+                    key: 'STEPS_COMPLETED',
+                    stats: '20',
+                },
+                {
+                    __typename: 'Data',
+                    title: 'PEOPLE MOVEMENT',
+                    key: 'PEOPLE_MOVEMENT',
+                    stats: '2',
+                },
+                {
+                    __typename: 'Data',
+                    title: '',
+                    key: '',
+                    stats: '',
+                },
+            ],
+        },
     },
 };
