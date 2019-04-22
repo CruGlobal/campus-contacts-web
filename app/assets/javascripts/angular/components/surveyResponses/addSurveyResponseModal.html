@@ -10,7 +10,7 @@
     </a>
 </div>
 
-<div class="modal-text ph3">
+<div class="modal-text ph4">
     <survey-form-user
         survey="$ctrl.resolve.survey"
         on-init="$ctrl.save = $event.save"
@@ -22,7 +22,7 @@
 
 <div class="modal-footer">
     <button
-        class="btn btn-primary"
+        class="btn btn-primary br2 br--bottom br--left"
         type="button"
         ng-click="$ctrl.save()"
         ng-disabled="$ctrl.saving"
@@ -30,7 +30,7 @@
         <span>Save and Close</span>
     </button>
     <button
-        class="btn btn-primary"
+        class="btn btn-primary br2 br--bottom br--right"
         type="button"
         ng-click="$ctrl.save(true)"
         ng-disabled="$ctrl.saving"
