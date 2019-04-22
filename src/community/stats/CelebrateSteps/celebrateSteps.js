@@ -51,6 +51,7 @@ export const CelebrateSteps = () => {
 export default CelebrateSteps;
 
 CelebrateSteps.propTypes = {
+    celebrations: PropTypes.object,
     message: PropTypes.string,
     user: PropTypes.string,
     key: PropTypes.string,

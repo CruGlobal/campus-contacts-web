@@ -6,7 +6,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 import { GET_CELEBRATION_STEPS } from '../../graphql';
 import CelebrateSteps from './celebrateSteps';
-import Message from './message';
 
 const waitForNextTick = () => new Promise(resolve => setTimeout(resolve))
 
@@ -74,7 +73,5 @@ describe('<CelebrateSteps />', () => {
         await waitForNextTick();
         // After this wrapper.update it will just render out the component with the error div.
         wrapper.update();
-      
-        
     })
 })

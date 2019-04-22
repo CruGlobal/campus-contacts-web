@@ -29,6 +29,7 @@ const CommunityStats = ({ orgId }) => (
 
 CommunityStats.propTypes = {
     orgId: PropTypes.string,
+    theme: PropTypes.object,
 };
 
 angular

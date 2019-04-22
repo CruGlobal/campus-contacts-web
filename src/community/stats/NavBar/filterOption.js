@@ -33,4 +33,6 @@ FilterOption.propTypes = {
     filter: PropTypes.object,
     active: PropTypes.bool,
     onFilterClick: PropTypes.func,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
 };

@@ -71,6 +71,7 @@ const Tabs = () => {
 };
 
 Tabs.propTypes = {
+    currentTab: PropTypes.string,
     title: PropTypes.string,
     value: PropTypes.string,
     key: PropTypes.string,

@@ -7,10 +7,9 @@ describe('<BarStatCard />', () => {
         const Stats = {
             count: 14,
             label: 'Forgiven',
-            description: 'Hello'
         }
         const component = shallow(
-            <BarStatCard description={Stats.description} count={Stats.count} label={Stats.label}></BarStatCard>
+            <BarStatCard  count={Stats.count} label={Stats.label}></BarStatCard>
         )
         
         expect(component.find('Styled(span)').at(0).text()).toBe('14');

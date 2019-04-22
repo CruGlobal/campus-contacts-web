@@ -143,7 +143,11 @@ Filters.protoTypes = {
     title: PropTypes.string.isRequired,
     filter: PropTypes.object,
     active: PropTypes.bool,
+    key: PropTypes.string,
     onFilterClick: PropTypes.func,
+    currentFilter: PropTypes.object,
+    endDate: PropTypes.string,
+    startDate: PropTypes.string,
 };
 
 export default Filters;

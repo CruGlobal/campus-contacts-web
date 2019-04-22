@@ -81,4 +81,5 @@ export default Members;
 
 Members.propTypes = {
     currentTab: PropTypes.string,
+    renderGraph: PropTypes.func,
 };

@@ -61,7 +61,7 @@ export default BarStats;
 
 BarStats.propTypes = {
     key: PropTypes.string,
+    members: PropTypes.object,
     label: PropTypes.string,
     count: PropTypes.number,
-    description: PropTypes.string,
 };
