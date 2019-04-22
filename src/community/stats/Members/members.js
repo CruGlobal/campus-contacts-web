@@ -4,11 +4,12 @@ import styled from '@emotion/styled';
 import StagesBarGraph from '../Graphs/stagesBarGraph';
 import StagesLineGraph from '../Graphs/stagesLineGraph';
 import { CelebrateSteps } from '../CelebrateSteps/celebrateSteps';
-import { GET_CURRENT_TAB } from '../../graphql';
+import { GET_CURRENT_TAB, GET_TAB_CONTENT } from '../../graphql';
 import { useQuery } from 'react-apollo-hooks';
 import Tabs from '../Tabs/tabs';
 import BarStats from '../BarStatsCard/barStatCard';
 import { useSpring, animated } from 'react-spring';
+import TabContent from '../Tabs/tabContent';
 
 const Container = styled(animated.div)`
     display: flex;
@@ -61,12 +62,14 @@ const Members = () => {
         from: { opacity: 0 },
     });
 
+    const tabContent = TabContent();
+
     return (
         <>
             <Container style={props}>
                 <InnerContainer>
                     <h3>STEPS OF FAITH WITH OTHERS</h3>
-                    <Tabs />
+                    <Tabs tabsContent={tabContent} />
                     {renderGraph()}
                 </InnerContainer>
                 <CelebrateSteps />

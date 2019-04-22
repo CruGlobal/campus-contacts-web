@@ -2,11 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import Tab from './tab';
 import { useMutation, useQuery } from 'react-apollo-hooks';
-import {
-    GET_CURRENT_TAB,
-    UPDATE_CURRENT_TAB,
-    GET_TAB_CONTENT,
-} from '../../graphql';
+import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
@@ -17,27 +13,7 @@ const TabsContainer = styled.div`
     overflow: hidden;
 `;
 
-const tabContent = () => {
-    const { data, loading, error } = useQuery(GET_TAB_CONTENT);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error! {error.message}</div>;
-    }
-
-    const {
-        apolloClient: { tabsContent },
-    } = data;
-
-    const TabContent = tabsContent.data;
-
-    return TabContent;
-};
-
-const Tabs = () => {
+const Tabs = ({ tabsContent }) => {
     const { loading, data } = useQuery(GET_CURRENT_TAB);
     const updateCurrentTab = useMutation(UPDATE_CURRENT_TAB);
 
@@ -56,11 +32,9 @@ const Tabs = () => {
         apolloClient: { currentTab },
     } = data;
 
-    const TabContent = tabContent();
-
     return (
         <TabsContainer>
-            {_.map(TabContent, tab => (
+            {_.map(tabsContent, tab => (
                 <Tab
                     title={tab.title}
                     value={tab.stats}

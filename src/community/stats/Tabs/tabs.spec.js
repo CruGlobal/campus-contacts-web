@@ -31,48 +31,39 @@ describe('<Tabs />', () => {
                             },
                         },
                     },
-                    request: { query: GET_TAB_CONTENT },
-                    result: {
-                        data: {
-                            apolloClient: {
-                                tabsContent: {
-                                    __typename: 'tabsConfig',
-                                    data: [
-                                        {
-                                            __typename: 'Data',
-                                            title: 'PEOPLE/STEPS OF FAITH',
-                                            key: 'MEMBERS',
-                                            stats: '40 / 120',
-                                        },
-                                        {
-                                            __typename: 'Data',
-                                            title: 'STEPS COMPLETED',
-                                            key: 'STEPS_COMPLETED',
-                                            stats: '20',
-                                        },
-                                        {
-                                            __typename: 'Data',
-                                            title: 'PEOPLE MOVEMENT',
-                                            key: 'PEOPLE_MOVEMENT',
-                                            stats: '2',
-                                        },
-                                        {
-                                            __typename: 'Data',
-                                            title: '',
-                                            key: '',
-                                            stats: '',
-                                        },
-                                    ],
-                                },
-                            }
-                        }
-                    }
                 },
             ];
+
+            const TabContent = [
+                {
+                    __typename: 'Data',
+                    title: 'PEOPLE/STEPS OF FAITH',
+                    key: 'MEMBERS',
+                    stats: '40 / 120',
+                },
+                {
+                    __typename: 'Data',
+                    title: 'STEPS COMPLETED',
+                    key: 'STEPS_COMPLETED',
+                    stats: '20',
+                },
+                {
+                    __typename: 'Data',
+                    title: 'PEOPLE MOVEMENT',
+                    key: 'PEOPLE_MOVEMENT',
+                    stats: '2',
+                },
+                {
+                    __typename: 'Data',
+                    title: '',
+                    key: '',
+                    stats: '',
+                },
+            ]
     
             const wrapper = mount(
                 <ApolloProvider client={createClient(mocks)}>
-                    <Tabs />
+                    <Tabs tabsContent={TabContent}/>
                 </ApolloProvider>,
             );
     
@@ -80,8 +71,6 @@ describe('<Tabs />', () => {
     
             await waitForNextTick();
             wrapper.update();
-    
-            
     
             expect(wrapper.find(Tab).length).toBe(4);
             expect(wrapper.find(Tab).at(0).key()).toBe('MEMBERS');
