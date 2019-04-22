@@ -14,7 +14,6 @@ describe('<FilterOptions />', () => {
         const component = shallow(<FilterOptions filter={filter} onFilterClick={filterClick}></FilterOptions>)
         expect(component.prop('title')).toEqual('04/08/2019 - 04/15/2019')
         component.simulate('click');
-        expect(filterClick).toHaveBeenCalled()
-        // console.log(component.debug());
+        expect(filterClick).toHaveBeenCalled();
     })
 })

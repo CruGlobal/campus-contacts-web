@@ -49,7 +49,7 @@ const StagesBarGraph = () => {
             }}
             minValue={'auto'}
             maxValue={'auto'}
-            padding={0.4}
+            padding={0.3}
             innerPadding={3}
             colors={['#3CC8E6', '#007398']}
             colorBy="id"

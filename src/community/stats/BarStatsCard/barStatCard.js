@@ -32,9 +32,11 @@ const BarStats = () => {
         apolloClient: { members },
     } = data;
 
+    const MembersData = members.data;
+
     return (
         <BarChartCardRow>
-            {_.map(members.data, member => (
+            {_.map(MembersData, member => (
                 <BarStatCard
                     key={member.stage}
                     label={member.stage}

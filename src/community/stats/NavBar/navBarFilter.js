@@ -157,4 +157,5 @@ Filters.propTypes = {
     currentFilter: PropTypes.object,
     endDate: PropTypes.string,
     startDate: PropTypes.string,
+    FilterConfig: PropTypes.object,
 };
