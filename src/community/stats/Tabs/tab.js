@@ -60,6 +60,7 @@ const Tab = ({ title, value, active, onTabClick }) => {
     );
 };
 
+// PROPTYPES
 Tab.propTypes = {
     title: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,

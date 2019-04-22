@@ -13,6 +13,7 @@ const Container = styled(animated.div)`
 `;
 
 const StepsInfo = () => {
+    // ANIMATION
     const props = useSpring({
         delay: '1500',
         opacity: 1,

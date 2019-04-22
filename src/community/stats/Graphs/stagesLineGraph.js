@@ -9,16 +9,21 @@ import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
 const StagesLineGraph = () => {
     const {
         data: {
-            apolloClient: { filter },
+            apolloClient: {
+                currentFilter: { key },
+            },
         },
     } = useQuery(GET_CURRENT_FILTER);
+
+    const filterQuery = key;
+
     const {
         data: {
             apolloClient: { stepsCompleted },
         },
         error,
         loading,
-    } = useQuery(GET_STEPS_COMPLETED, { variables: { filter } });
+    } = useQuery(GET_STEPS_COMPLETED, { variables: { filterQuery } });
 
     if (loading) {
         return <div>Loading...</div>;

@@ -9,9 +9,13 @@ import { GET_CURRENT_FILTER, GET_MEMBERS } from '../../graphql';
 const StagesBarGraph = () => {
     const {
         data: {
-            apolloClient: { filter },
+            apolloClient: {
+                currentFilter: { key },
+            },
         },
     } = useQuery(GET_CURRENT_FILTER);
+
+    const filterQuery = key;
 
     const {
         data: {
@@ -19,7 +23,7 @@ const StagesBarGraph = () => {
         },
         error,
         loading,
-    } = useQuery(GET_MEMBERS, { variables: { filter } });
+    } = useQuery(GET_MEMBERS, { variables: { filterQuery } });
 
     if (loading) {
         return <div>Loading...</div>;

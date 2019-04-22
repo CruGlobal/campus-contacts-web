@@ -40,6 +40,7 @@ const StepsInfoPersonal = () => {
 
 export default StepsInfoPersonal;
 
+// PROPTYPES
 StepsInfoPersonal.propTypes = {
     stepsInfoPersonal: PropTypes.object,
     userStats: PropTypes.string,

@@ -9,7 +9,7 @@ describe('<StepsInfo />', () => {
         const component = shallow(
             <StepsInfo />,
         );
-        // console.log(component.debug());
+        
         expect(mock).toHaveBeenCalledTimes(0)
         expect(component.find('StepsInfoPersonal')).toBeTruthy()
         expect(component.find('StepsInfoSpiritual')).toBeTruthy()

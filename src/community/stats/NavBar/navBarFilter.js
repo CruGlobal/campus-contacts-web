@@ -118,7 +118,9 @@ const Filters = () => {
     };
 
     const {
-        apolloClient: { currentFilter },
+        apolloClient: {
+            currentFilter: { key, startDate, endDate },
+        },
     } = data;
 
     return (
@@ -129,14 +131,14 @@ const Filters = () => {
                         key={option.filter.key}
                         title={option.title}
                         filter={option.filter}
-                        active={option.filter.key === currentFilter.key}
+                        active={option.filter.key === key}
                         onFilterClick={onFilterClick}
                     />
                 ))}
             </DateContainer>
             <WeekContainer>
-                <p>{currentFilter.startDate}</p>
-                <p>{currentFilter.endDate}</p>
+                <p>{startDate}</p>
+                <p>{endDate}</p>
             </WeekContainer>
         </Container>
     );

@@ -51,6 +51,9 @@ const Tabs = ({ tabsContent }) => {
     );
 };
 
+export default Tabs;
+
+// PROPTYPES
 Tabs.propTypes = {
     currentTab: PropTypes.string,
     title: PropTypes.string,
@@ -59,5 +62,3 @@ Tabs.propTypes = {
     active: PropTypes.bool,
     onTabClick: PropTypes.func,
 };
-
-export default Tabs;
