@@ -6,5 +6,9 @@
 </span>
 <span ng-repeat="org in $ctrl.orgHierarchy" ng-class="{'current-org': $last}">
     <span class="arrow" ng-if="$index > 0 ">&gt;</span>
-    <a ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })" class="ministry-name">{{org.name}}</a>
+    <a
+        ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })"
+        class="ministry-name"
+        >{{org.name}}</a
+    >
 </span>

@@ -325,7 +325,7 @@ function peopleScreenController(
                     surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
-                size: 'sm',
+                size: 'md',
             })
             .result.then(() => {
                 $scope.$broadcast('massEditApplied');

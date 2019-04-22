@@ -1,28 +1,46 @@
 <div class="modal-header">
     <h3 class="modal-title">{{ $ctrl.title | t }}</h3>
-    <h4 class="modal-subtitle">{{ $ctrl.subtitle | t: { recipients: $ctrl.formattedRecipients } }}</h4>
+    <h4 class="modal-subtitle">
+        {{ $ctrl.subtitle | t: { recipients: $ctrl.formattedRecipients } }}
+    </h4>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form">
     <label class="form-group" ng-if="$ctrl.medium === 'email'">
         <span class="label">{{ 'general.subject' | t }}</span>
-        <input class="form-control" ng-model="$ctrl.subject">
+        <input class="form-control" ng-model="$ctrl.subject" />
     </label>
     <label class="form-group">
         <span class="label">{{ 'general.message' | t }}</span>
-        <textarea class="form-control" ng-class="$ctrl.medium" id="message"
-                  ng-model="$ctrl.message" maxlength="{{$ctrl.getMaximumLength()}}"></textarea>
+        <textarea
+            class="form-control"
+            ng-class="$ctrl.medium"
+            id="message"
+            ng-model="$ctrl.message"
+            maxlength="{{$ctrl.getMaximumLength()}}"
+        ></textarea>
     </label>
     <label class="length-limit form-group">
         <span class="label">
-            {{ 'messages.length_limit' | t : { remaining_characters: $ctrl.getRemainingLength() } }}
+            {{ 'messages.length_limit' | t : { remaining_characters:
+            $ctrl.getRemainingLength() } }}
         </span>
     </label>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.send()"
-            ng-disabled="$ctrl.sending || !$ctrl.isValid()">
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.send()"
+        ng-disabled="$ctrl.sending || !$ctrl.isValid()"
+    >
         <span ng-hide="$ctrl.sending">{{ 'general.send' | t }}</span>
-        <loading-spinner ng-if="$ctrl.sending" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.sending"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>

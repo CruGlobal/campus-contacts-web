@@ -1,19 +1,40 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">{{ $ctrl.title | t : { label: $ctrl.resolve.label.name } }}</h3>
+    <h3 class="modal-title" id="modal-title">
+        {{ $ctrl.title | t : { label: $ctrl.resolve.label.name } }}
+    </h3>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form" id="modal-body">
     <div class="form-group">
         <label>
-            <span class="required-field">{{'labels.index.label_name' | t}}</span>
-            <input type="text" ng-model="$ctrl.label.name" class="form-control">
+            <span class="required-field"
+                >{{'labels.index.label_name' | t}}</span
+            >
+            <input
+                type="text"
+                ng-model="$ctrl.label.name"
+                class="form-control"
+            />
         </label>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="!$ctrl.valid() || $ctrl.saving">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.dismiss()">
+        {{ 'general.cancel' | t }}
+    </button>
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="!$ctrl.valid() || $ctrl.saving"
+    >
         <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
-        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.saving"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>

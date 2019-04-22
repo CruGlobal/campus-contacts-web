@@ -1,41 +1,61 @@
 <form name="$ctrl.contactForm">
-    <fieldset class="ba b--transparent ph4 mh0">
-        <div class="error red f6 flex items-center mb3" ng-if="$ctrl.importError">
+    <fieldset class="ba b--transparent ph4 mh0 bg-pivot-white">
+        <div
+            class="error red f6 flex items-center mb3"
+            ng-if="$ctrl.importError"
+        >
             {{$ctrl.importError}}
         </div>
 
-        <div class="mv3" ng-repeat="question in $ctrl.surveyQuestions track by question.id">
+        <div
+            class="mv3"
+            ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+        >
             <label class="pivot-gray-darker mb1 db">{{question.label}}</label>
 
             <div ng-switch="question.kind">
-                <div ng-switch-when="ChoiceField"  ng-switch="question.style">
-                    <select ng-switch-when="drop-down"
-                            ng-model="$ctrl.answers[question.id]"
-                            ng-options="i.value as i.name for i in $ctrl.questionChoices[question.id] track by i.value">
+                <div ng-switch-when="ChoiceField" ng-switch="question.style">
+                    <select
+                        ng-switch-when="drop-down"
+                        ng-model="$ctrl.answers[question.id]"
+                        ng-options="i.value as i.name for i in $ctrl.questionChoices[question.id] track by i.value"
+                    >
                     </select>
 
-                    <div ng-switch-when="radio"
-                         ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                    <div
+                        ng-switch-when="radio"
+                        ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value"
+                    >
                         <label>
-                            <input type="radio" ng-model="$ctrl.answers[question.id]"
-                                   value="{{i.value}}">
+                            <input
+                                type="radio"
+                                ng-model="$ctrl.answers[question.id]"
+                                value="{{i.value}}"
+                            />
                             <span class="pl3">{{i.name}}</span>
                         </label>
                     </div>
 
-                    <div ng-switch-when="checkbox"
-                         ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value">
+                    <div
+                        ng-switch-when="checkbox"
+                        ng-repeat="i in $ctrl.questionChoices[question.id] track by i.value"
+                    >
                         <label>
-                            <input type="checkbox" ng-model="$ctrl.answers[question.id][i.value]">
+                            <input
+                                type="checkbox"
+                                ng-model="$ctrl.answers[question.id][i.value]"
+                            />
                             <span class="pl2">{{i.name}}</span>
                         </label>
                     </div>
                 </div>
 
-                <input class="pa2 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark"
-                       ng-model="$ctrl.answers[question.id]"
-                       type="text"
-                       ng-switch-default />
+                <input
+                    class="pa2 input-reset bg-white ba pivot-gray-darker w-100 br2 b--gray-dark"
+                    ng-model="$ctrl.answers[question.id]"
+                    type="text"
+                    ng-switch-default
+                />
             </div>
         </div>
     </fieldset>

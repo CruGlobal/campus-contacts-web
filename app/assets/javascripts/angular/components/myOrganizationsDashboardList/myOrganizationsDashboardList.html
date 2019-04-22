@@ -1,12 +1,13 @@
 <div ng-sortable="$ctrl.sortableOptions">
     <organization-overview
-            ng-repeat="org in $ctrl.rootOrgs"
-            org="org"
-            ng-if="org.visible || $ctrl.editOrganizations"
-            load-details="false"
-            edit-mode="$ctrl.editOrganizations">
+        ng-repeat="org in $ctrl.rootOrgs"
+        org="org"
+        ng-if="org.visible || $ctrl.editOrganizations"
+        load-details="false"
+        edit-mode="$ctrl.editOrganizations"
+    >
     </organization-overview>
-    <section class='tc' ng-if="$ctrl.rootOrgs.length <= 0">
+    <section class="tc" ng-if="$ctrl.rootOrgs.length <= 0">
         <h1>{{ 'ministries.noMinistriesFound' | t }}</h1>
     </section>
 </div>

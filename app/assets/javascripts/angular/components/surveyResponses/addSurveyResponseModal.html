@@ -1,29 +1,40 @@
 <div class="modal-header">
     <div class="row">
-        <h3 class="ma0">{{ 'contacts.add_contact_to' | t : {survey: $ctrl.resolve.survey.title} }}</h3>
+        <h3 class="ma0">
+            {{ 'contacts.add_contact_to' | t : {survey:
+            $ctrl.resolve.survey.title} }}
+        </h3>
     </div>
     <a ng-click="$ctrl.dismiss()" class="close-button">
         <ng-md-icon icon="close" size="28"></ng-md-icon>
     </a>
 </div>
 
-<div class="modal-text ph3">
+<div class="modal-text ph4">
     <survey-form-user
         survey="$ctrl.resolve.survey"
         on-init="$ctrl.save = $event.save"
         on-saving-change="$ctrl.saving = $event"
-        on-success="$ctrl.close()">
+        on-success="$ctrl.close()"
+    >
     </survey-form-user>
 </div>
 
-
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="$ctrl.saving">
+    <button
+        class="btn btn-primary br2 br--bottom br--left"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="$ctrl.saving"
+    >
         <span>Save and Close</span>
     </button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save(true)"
-            ng-disabled="$ctrl.saving">
+    <button
+        class="btn btn-primary br2 br--bottom br--right"
+        type="button"
+        ng-click="$ctrl.save(true)"
+        ng-disabled="$ctrl.saving"
+    >
         <span>Save and Add New</span>
     </button>
 </div>

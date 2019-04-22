@@ -6,6 +6,7 @@ addons:
 
 script:
     - yarn test
+    - yarn prettier:check
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
       yarn run onesky:download;

@@ -1,20 +1,36 @@
 <div class="modal-header">
-    <h4 class="modal-subtitle">{{ $ctrl.subtitle | t }}</h4>
-    <h3 class="modal-title" id="modal-title">
+    <h4 class="modal-title">{{ $ctrl.subtitle | t }}</h4>
+    <h3 class="modal-subtitle" id="modal-title">
         {{ $ctrl.title | t : { name: $ctrl.resolve.person.first_name } }}
     </h3>
+    <a ng-click="$ctrl.dismiss()" class="close-button">
+        <ng-md-icon icon="close" size="28"></ng-md-icon>
+    </a>
 </div>
 <div class="modal-body form" id="modal-body">
-    <multiselect-list options="$ctrl.entryOptions"
-                      original-selection="$ctrl.selectedEntries"
-                      added-output="$ctrl.addedEntries" removed-output="$ctrl.removedEntries">
+    <multiselect-list
+        options="$ctrl.entryOptions"
+        original-selection="$ctrl.selectedEntries"
+        added-output="$ctrl.addedEntries"
+        removed-output="$ctrl.removedEntries"
+    >
     </multiselect-list>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">{{ 'general.cancel' | t }}</button>
-    <button class="btn btn-primary" type="button" ng-click="$ctrl.save()"
-            ng-disabled="$ctrl.saving">
+    <button class="btn btn-secondary" type="button" ng-click="$ctrl.cancel()">
+        {{ 'general.cancel' | t }}
+    </button>
+    <button
+        class="btn btn-primary"
+        type="button"
+        ng-click="$ctrl.save()"
+        ng-disabled="$ctrl.saving"
+    >
         <span ng-hide="$ctrl.saving">{{ 'general.ok' | t }}</span>
-        <loading-spinner ng-if="$ctrl.saving" class="loading" size="16"></loading-spinner>
+        <loading-spinner
+            ng-if="$ctrl.saving"
+            class="loading"
+            size="16"
+        ></loading-spinner>
     </button>
 </div>

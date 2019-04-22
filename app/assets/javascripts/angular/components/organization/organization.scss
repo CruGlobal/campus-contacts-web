@@ -4,7 +4,6 @@ organization {
     display: block;
     accordion-toggle {
         fill: $white;
-        padding-left: 8px;
     }
     .header {
         display: flex;
@@ -28,8 +27,7 @@ organization {
         }
 
         .org-name {
-            width: 287px;
-            padding: 0 8px;
+            width: 295px;
             display: flex;
         }
 
@@ -38,9 +36,7 @@ organization {
             align-items: center;
             justify-content: space-between;
             ng-md-icon {
-                height: 48px;
-                width: 44px;
-                padding: 12px 10px;
+                padding: 12px 10px 12px 12px;
                 svg {
                     fill: $white;
                 }

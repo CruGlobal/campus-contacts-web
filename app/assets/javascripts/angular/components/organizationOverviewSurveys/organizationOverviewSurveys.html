@@ -11,33 +11,59 @@
     <div class="column column-status">
         {{ 'surveyTab:columns.status' | t }}
     </div>
-    <div class="column column-typeform" ng-if="$ctrl.organizationOverview.org.typeform_enabled">
+    <div
+        class="column column-typeform"
+        ng-if="$ctrl.organizationOverview.org.typeform_enabled"
+    >
         {{ 'surveyTab:columns.typeform' | t }}
-        <icon-button icon="'help_outline'" ng-click="$ctrl.showTypeformModal()"></icon-button>
+        <icon-button
+            icon="'help_outline'"
+            ng-click="$ctrl.showTypeformModal()"
+        ></icon-button>
     </div>
     <div class="column buttons-column">
-        <icon-button icon="'add'" size="16" ng-click="$ctrl.createSurvey()" ng-if="$ctrl.directAdminPrivileges"></icon-button>
+        <icon-button
+            icon="'add'"
+            size="16"
+            ng-click="$ctrl.createSurvey()"
+            ng-if="$ctrl.directAdminPrivileges"
+        ></icon-button>
     </div>
 </div>
 <div class="grid-content">
-    <div class="row" ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id">
+    <div
+        class="row"
+        ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
+    >
         <div class="column column-title">
-            <a ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })">
+            <a
+                ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
+            >
                 {{survey.title}}
             </a>
         </div>
         <div class="column column-keyword">{{survey.keyword.keyword}}</div>
         <div class="column column-link">
-            <a ng-href="{{$ctrl.surveyLinkPrefix}}{{survey.id}}" target="_blank">{{$ctrl.surveyLinkPrefix}}{{survey.id}}</a>
+            <a ng-href="{{$ctrl.surveyLinkPrefix}}{{survey.id}}" target="_blank"
+                >{{$ctrl.surveyLinkPrefix}}{{survey.id}}</a
+            >
         </div>
         <div class="column column-status" uib-dropdown>
             <div ng-if="!$ctrl.directAdminPrivileges">
                 <span ng-if="!survey.is_frozen">
-                    <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+                    <ng-md-icon
+                        class="status-active"
+                        icon="brightness_1"
+                        size="14"
+                    ></ng-md-icon>
                     {{ 'surveyTab:status.live' | t }}
                 </span>
                 <span ng-if="survey.is_frozen">
-                    <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+                    <ng-md-icon
+                        class="status-inactive"
+                        icon="brightness_1"
+                        size="14"
+                    ></ng-md-icon>
                     {{ 'surveyTab:status.off' | t }}
                 </span>
             </div>
@@ -47,55 +73,108 @@
                 class="pointer"
             >
                 <span ng-if="!survey.is_frozen">
-                    <ng-md-icon class="status-active" icon="brightness_1" size="14"></ng-md-icon>
+                    <ng-md-icon
+                        class="status-active"
+                        icon="brightness_1"
+                        size="14"
+                    ></ng-md-icon>
                     {{ 'surveyTab:status.live' | t }}
                 </span>
                 <span ng-if="survey.is_frozen">
-                    <ng-md-icon class="status-inactive" icon="brightness_1" size="14"></ng-md-icon>
+                    <ng-md-icon
+                        class="status-inactive"
+                        icon="brightness_1"
+                        size="14"
+                    ></ng-md-icon>
                     {{ 'surveyTab:status.off' | t }}
                 </span>
             </div>
-            <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, true)">{{ 'surveyTab:status.live' | t }}</a>
-                <a class="dropdown-item" href="" ng-click="$ctrl.changeStatus(survey, false)">{{ 'surveyTab:status.off' | t }}</a>
+            <div
+                class="dropdown-menu"
+                uib-dropdown-menu
+                role="menu"
+                aria-labelledby="single-button"
+            >
+                <a
+                    class="dropdown-item"
+                    href=""
+                    ng-click="$ctrl.changeStatus(survey, true)"
+                    >{{ 'surveyTab:status.live' | t }}</a
+                >
+                <a
+                    class="dropdown-item"
+                    href=""
+                    ng-click="$ctrl.changeStatus(survey, false)"
+                    >{{ 'surveyTab:status.off' | t }}</a
+                >
             </div>
         </div>
-        <div class="column column-typeform" ng-if="$ctrl.organizationOverview.org.typeform_enabled">
-            <ng-md-icon class="status-active" icon="check" size="26" ng-if="survey.remote_source === 'typeform'"></ng-md-icon>
+        <div
+            class="column column-typeform"
+            ng-if="$ctrl.organizationOverview.org.typeform_enabled"
+        >
+            <ng-md-icon
+                class="status-active"
+                icon="check"
+                size="26"
+                ng-if="survey.remote_source === 'typeform'"
+            ></ng-md-icon>
         </div>
         <div class="column buttons-column text-center">
             <div uib-dropdown>
-                <ng-md-icon uib-dropdown-toggle icon="more_vert" size="26"></ng-md-icon>
+                <ng-md-icon
+                    uib-dropdown-toggle
+                    icon="more_vert"
+                    size="26"
+                ></ng-md-icon>
 
-                <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <a class="dropdown-item"
+                <div
+                    class="dropdown-menu"
+                    uib-dropdown-menu
+                    role="menu"
+                    aria-labelledby="single-button"
+                >
+                    <a
+                        class="dropdown-item"
                         ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
                         ng-if="$ctrl.directAdminPrivileges"
                     >
                         {{ 'surveyTab:menu.edit' | t }}
                     </a>
-                    <a class="dropdown-item"
+                    <a
+                        class="dropdown-item"
                         target="_blank"
                         ui-sref="appWithoutMenus.previewSurvey({ surveyId: survey.id })"
                     >
                         {{ 'surveyTab:menu.preview' | t }}
                     </a>
-                    <a href
+                    <a
+                        href
                         class="dropdown-item"
                         ng-click="$ctrl.deleteSurvey(survey)"
                         ng-if="$ctrl.directAdminPrivileges"
                     >
                         {{ 'surveyTab:menu.delete' | t }}
                     </a>
-                    <a href
+                    <a
+                        href
                         class="dropdown-item"
                         ng-click="$ctrl.copySurvey(survey)"
                         ng-if="$ctrl.directAdminPrivileges"
                     >
                         {{ 'surveyTab:menu.copy' | t }}
                     </a>
-                    <a class="dropdown-item" ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })">{{ 'surveyTab:menu.import' | t }}</a>
-                    <a class="dropdown-item" href="" ng-click="$ctrl.massEntry(survey)">{{ 'surveyTab:menu.mass' | t }}</a>
+                    <a
+                        class="dropdown-item"
+                        ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })"
+                        >{{ 'surveyTab:menu.import' | t }}</a
+                    >
+                    <a
+                        class="dropdown-item"
+                        href=""
+                        ng-click="$ctrl.massEntry(survey)"
+                        >{{ 'surveyTab:menu.mass' | t }}</a
+                    >
                 </div>
             </div>
         </div>

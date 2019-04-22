@@ -1,16 +1,25 @@
 <header ng-cloak ng-if="!$ctrl.hideHeader">
-    <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
+    <toaster-container
+        toaster-options="{ 'close-button': true }"
+    ></toaster-container>
     <nav-header hide-menu-links="$ctrl.hideMenuLinks"></nav-header>
     <dashboard-subnav ng-if="$ctrl.currentOrganization"></dashboard-subnav>
 </header>
-<section class='main-container pt2 pb2 flex-grow-5' ng-cloak>
+<section class="main-container pt4 pb2 flex-grow-5" ng-cloak>
     <ui-view></ui-view>
 </section>
-<footer class='tc bg-white pt4 pb4' ng-cloak ng-if="!$ctrl.hideFooter">
-    <section class='main-container flex-grow-5'>
-        <span class='copyright'>{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}</span>
+<footer class="tc bg-white pt4 pb4" ng-cloak ng-if="!$ctrl.hideFooter">
+    <section class="main-container flex-grow-5 pivot-gray-7">
+        <span class="copyright"
+            >{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') }
+            }}</span
+        >
         <span>
-          <a href='https://get.missionhub.com/terms-of-service' class='ml3'>{{ 'nav.terms' | t }}</a>
+            <a
+                href="https://get.missionhub.com/terms-of-service"
+                class="ml3 pivot-gray-7"
+                >{{ 'nav.terms' | t }}</a
+            >
         </span>
     </section>
 </footer>

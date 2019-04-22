@@ -1,79 +1,153 @@
-<div class='br3 bg-white shadow-4 ph4 pv3 mb4'>
+<div class="br3 bg-white shadow-4 ph4 pv3 mb4">
     <h1 class="f2 pivot-dark-blue fw6 mb3 mt0">
         {{ 'signatures.title' | t }}
     </h1>
-    <div class='flex justify-between items-end mb4'>
-        <span class=''>
-            <a href target='_blank' class='f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 dim ttu' ng-href='{{ $ctrl.exportLink }}'><b>{{ 'signatures.downloadCsv' | t }}</b></a>
+    <div class="flex justify-between items-end mb4">
+        <span class="">
+            <a
+                href
+                target="_blank"
+                class="f5 ba pv1 ph4 b--pivot-dark-blue pivot-dark-blue br4 dim ttu"
+                ng-href="{{ $ctrl.exportLink }}"
+                ><b>{{ 'signatures.downloadCsv' | t }}</b></a
+            >
         </span>
-        <span class=''>
-            <form >
-                <input type='text'
+        <span class="">
+            <form>
+                <input
+                    type="text"
                     placeholder="{{ 'signatures.searchPlaceholder' | t }}"
-                    class='pa3 input-reset cursor-text  bw0 pivot-gray-darker ihshort br2 v-btm'
+                    class="pa3 input-reset cursor-text  bw0 pivot-gray-darker ihshort br2 v-btm"
                     ng-change="$ctrl.searchOnChange(search, $ctrl.tableState)"
-                    ng-model-options='{ debounce: 500 }'
+                    ng-model-options="{ debounce: 500 }"
                     ng-model="search"
-                    ng-keyup="$event.keyCode == 13 && $ctrl.search(search, $ctrl.tableState)"/>
-                <button class='f5 ml1 pv3 ph4 b--pivot-gray-darker bg-pivot-gray-darker pivot-white br2 search dim' ng-click="$ctrl.search(search, $ctrl.tableState)"></button>
+                    ng-keyup="$event.keyCode == 13 && $ctrl.search(search, $ctrl.tableState)"
+                />
+                <button
+                    class="f5 ml1 pv3 ph4 b--pivot-gray-darker bg-pivot-gray-darker pivot-white br2 search dim"
+                    ng-click="$ctrl.search(search, $ctrl.tableState)"
+                ></button>
             </form>
         </span>
     </div>
-    <table st-table="$ctrl.signatures" st-pipe="$ctrl.load" st-safe-src="$ctrl.signatureData" class="grid w-100">
+    <table
+        st-table="$ctrl.signatures"
+        st-pipe="$ctrl.load"
+        st-safe-src="$ctrl.signatureData"
+        class="grid w-100"
+    >
         <thead>
-            <tr class='bg-pivot-dark-blue'>
-                <th class='pa3 pivot-white br2 tc br--top br--left ttu' st-sort="updated_at">{{ 'signatures.grid.dateSigned' | t }}</th>
-                <th class='pa3 pivot-white ttu tc' st-sort="first_name">{{ 'signatures.grid.firstName' | t }}</th>
-                <th class='pa3 pivot-white ttu tc' st-sort="last_name">{{ 'signatures.grid.lastName' | t }}</th>
-                <th class='pa3 pivot-white ttu tc' st-sort="code_of_conduct">{{ 'signatures.grid.codeOfConduct' | t }}</th>
-                <th class='pa3 pivot-white ttu tc' st-sort="statement_of_faith">{{ 'signatures.grid.statementOfFaith' | t }}</th>
-                <th class='pa3 pivot-white br2 ttu tc br--top br--right' st-sort="organization_name">{{ 'signatures.grid.organization' | t }}</th>
+            <tr class="bg-pivot-dark-blue">
+                <th
+                    class="pa3 pivot-white br2 tc br--top br--left ttu"
+                    st-sort="updated_at"
+                >
+                    {{ 'signatures.grid.dateSigned' | t }}
+                </th>
+                <th class="pa3 pivot-white ttu tc" st-sort="first_name">
+                    {{ 'signatures.grid.firstName' | t }}
+                </th>
+                <th class="pa3 pivot-white ttu tc" st-sort="last_name">
+                    {{ 'signatures.grid.lastName' | t }}
+                </th>
+                <th class="pa3 pivot-white ttu tc" st-sort="code_of_conduct">
+                    {{ 'signatures.grid.codeOfConduct' | t }}
+                </th>
+                <th class="pa3 pivot-white ttu tc" st-sort="statement_of_faith">
+                    {{ 'signatures.grid.statementOfFaith' | t }}
+                </th>
+                <th
+                    class="pa3 pivot-white br2 ttu tc br--top br--right"
+                    st-sort="organization_name"
+                >
+                    {{ 'signatures.grid.organization' | t }}
+                </th>
             </tr>
         </thead>
-        <tbody class='grid-content'>
+        <tbody class="grid-content">
             <tr ng-repeat="row in $ctrl.signatures">
-                <td class='pa3 tc'>{{row.updated_at | date}}</td>
-                <td class='pa3 tc'>{{row.first_name}}</td>
-                <td class='pa3 tc'>{{row.last_name}}</td>
-                <td class='pa3 tc'>
-                    <span ng-if="row.code_of_conduct === 'accepted'">{{ 'signatures.grid.accepted' | t }}</span>
-                    <span ng-if="row.code_of_conduct === 'declined'">{{ 'signatures.grid.declined' | t }}</span>
-                    <span ng-if="!row.code_of_conduct">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
+                <td class="pa3 tc">{{row.updated_at | date}}</td>
+                <td class="pa3 tc">{{row.first_name}}</td>
+                <td class="pa3 tc">{{row.last_name}}</td>
+                <td class="pa3 tc">
+                    <span ng-if="row.code_of_conduct === 'accepted'"
+                        >{{ 'signatures.grid.accepted' | t }}</span
+                    >
+                    <span ng-if="row.code_of_conduct === 'declined'"
+                        >{{ 'signatures.grid.declined' | t }}</span
+                    >
+                    <span ng-if="!row.code_of_conduct"
+                        >{{ 'signatures.grid.notAccecptedYet' | t }}</span
+                    >
                 </td>
-                <td class='pa3 tc'>
-                    <span ng-if="row.statement_of_faith === 'accepted'">{{ 'signatures.grid.accepted' | t }}</span>
-                    <span ng-if="row.statement_of_faith === 'declined'">{{ 'signatures.grid.declined' | t }}</span>
-                    <span ng-if="!row.statement_of_faith">{{ 'signatures.grid.notAccecptedYet' | t }}</span>
+                <td class="pa3 tc">
+                    <span ng-if="row.statement_of_faith === 'accepted'"
+                        >{{ 'signatures.grid.accepted' | t }}</span
+                    >
+                    <span ng-if="row.statement_of_faith === 'declined'"
+                        >{{ 'signatures.grid.declined' | t }}</span
+                    >
+                    <span ng-if="!row.statement_of_faith"
+                        >{{ 'signatures.grid.notAccecptedYet' | t }}</span
+                    >
                 </td>
-                <td class='pa3 tc'>{{row.organization_name}}</td>
+                <td class="pa3 tc">{{row.organization_name}}</td>
             </tr>
             <tr ng-if="$ctrl.signatures.length <=0">
-                <td class='pa3 tc' colspan="6" ng-if="$ctrl.isLoading">{{ 'signatures.grid.loading' | t }}</td>
-                <td class='pa3 tc' colspan="6" ng-if="!$ctrl.isLoading">{{ 'signatures.grid.notFound' | t }}</td>
+                <td class="pa3 tc" colspan="6" ng-if="$ctrl.isLoading">
+                    {{ 'signatures.grid.loading' | t }}
+                </td>
+                <td class="pa3 tc" colspan="6" ng-if="!$ctrl.isLoading">
+                    {{ 'signatures.grid.notFound' | t }}
+                </td>
             </tr>
         </tbody>
         <tfoot>
-			<tr>
-				<td colspan="6" class="text-center">
-                    <div class="pagination mt3" ng-if="$ctrl.tableState.pagination.pages.length > 1">
+            <tr>
+                <td colspan="6" class="text-center">
+                    <div
+                        class="pagination mt3"
+                        ng-if="$ctrl.tableState.pagination.pages.length > 1"
+                    >
                         <ul class="list flex">
-                            <li ng-if="$ctrl.tableState.pagination.currentPage > 1">
-                                <a href ng-click="$ctrl.previousPage(search);" class='f5 pv1 ph2 pivot-gray-darker br2 dim'> &lt;  </a>
+                            <li
+                                ng-if="$ctrl.tableState.pagination.currentPage > 1"
+                            >
+                                <a
+                                    href
+                                    ng-click="$ctrl.previousPage(search);"
+                                    class="f5 pv1 ph2 pivot-gray-darker br2 dim"
+                                >
+                                    &lt;
+                                </a>
                             </li>
-                            <li class="ml2" ng-repeat="page in $ctrl.tableState.pagination.pages" >
-                                <a href
-                                    class='f5 pv1 ph2 b--pivot-gray-darker pivot-white br2 dim'
+                            <li
+                                class="ml2"
+                                ng-repeat="page in $ctrl.tableState.pagination.pages"
+                            >
+                                <a
+                                    href
+                                    class="f5 pv1 ph2 b--pivot-gray-darker pivot-white br2 dim"
                                     ng-class="((page + 1) === $ctrl.tableState.pagination.currentPage) ? 'bg-pivot-gray-darker' : 'bg-pivot-gray-dark'"
                                     ng-click="$ctrl.setPage(page, search);"
-                                    >{{ (page + 1) }}</a>
+                                    >{{ (page + 1) }}</a
+                                >
                             </li>
-                            <li ng-if="$ctrl.tableState.pagination.currentPage < $ctrl.tableState.pagination.numberOfPages">
-                                <a href ng-click="$ctrl.nextPage(search);" class='ml1 f5 pv1 ph2 pivot-gray-darker br2 dim'> &gt;  </a>
+                            <li
+                                ng-if="$ctrl.tableState.pagination.currentPage < $ctrl.tableState.pagination.numberOfPages"
+                            >
+                                <a
+                                    href
+                                    ng-click="$ctrl.nextPage(search);"
+                                    class="ml1 f5 pv1 ph2 pivot-gray-darker br2 dim"
+                                >
+                                    &gt;
+                                </a>
                             </li>
                         </ul>
                     </div>
-				</td>
-			</tr>
-		</tfoot>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>

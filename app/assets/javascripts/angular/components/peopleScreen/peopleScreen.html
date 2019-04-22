@@ -1,51 +1,79 @@
-<div class="row container" ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}">
-    <div class="people-list-filters">
+<div
+    class="row container"
+    ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
+>
+    <div class="people-list-filters bg-pivot-white">
         <div class="header row padded">
             <div class="column filters-header-column">
                 <span>{{'ministries.people.header' | t}}</span>
             </div>
         </div>
-        <people-filters-panel filters-changed="$ctrl.filtersChanged(filters)"
-                              organization-id="$ctrl.org.id"
-                              survey-id="$ctrl.surveyId"
-                              questions="$ctrl.questions"
-                              preloaded-filters="$ctrl.queryFilters">
+        <people-filters-panel
+            filters-changed="$ctrl.filtersChanged(filters)"
+            organization-id="$ctrl.org.id"
+            survey-id="$ctrl.surveyId"
+            questions="$ctrl.questions"
+            preloaded-filters="$ctrl.queryFilters"
+        >
         </people-filters-panel>
     </div>
     <div class="people-list bg-pivot-white">
         <div class="header row padded">
-            <div class="sticky-column" ng-class="{'col-bg-gray': $ctrl.surveyId}">
+            <div
+                class="sticky-column"
+                ng-class="{'col-bg-gray': $ctrl.surveyId}"
+            >
                 <div class="column select-column">
-                    <input type="checkbox" ng-model="$ctrl.selectAllValue" ng-change="$ctrl.selectAll()"/>
+                    <input
+                        type="checkbox"
+                        ng-model="$ctrl.selectAllValue"
+                        ng-change="$ctrl.selectAll()"
+                    />
                 </div>
                 <!-- This is a duplicate of below. Angular is awful and doesn't let you make simple functions for stuff like this. -->
-                <div class="column row"
-                     ng-repeat="column in $ctrl.columns"
-                     ng-if="$first"
-                     ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
-                     ng-click="column.sortable && $ctrl.setSortColumn(column)">
+                <div
+                    class="column row"
+                    ng-repeat="column in $ctrl.columns"
+                    ng-if="$first"
+                    ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
+                    ng-click="column.sortable && $ctrl.setSortColumn(column)"
+                >
                     <span>
                         {{column.label | t}}
                     </span>
-                    <div class="normal-column sort-order-column" ng-if="column.sortable">
-                        <ng-md-icon icon="arrow_downward" size="12"
-                                    ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
+                    <div
+                        class="normal-column sort-order-column"
+                        ng-if="column.sortable"
+                    >
+                        <ng-md-icon
+                            icon="arrow_downward"
+                            size="12"
+                            ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'"
+                        >
                         </ng-md-icon>
-                        <ng-md-icon icon="arrow_upwards" size="12"
-                                    ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
+                        <ng-md-icon
+                            icon="arrow_upwards"
+                            size="12"
+                            ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'"
+                        >
                         </ng-md-icon>
                     </div>
-                    <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
-                                 ui-sref=".new.defaultTab"
-                                 ng-click="$event.stopPropagation()">
+                    <icon-button
+                        ng-if="column.name === 'name' && !$ctrl.surveyId"
+                        icon="'addPerson'"
+                        ui-sref=".new.defaultTab"
+                        ng-click="$event.stopPropagation()"
+                    >
                     </icon-button>
                 </div>
             </div>
-            <div class="column row"
-                 ng-repeat="column in $ctrl.columns"
-                 ng-if="!$first"
-                 ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
-                 ng-click="column.sortable && $ctrl.setSortColumn(column)">
+            <div
+                class="column row"
+                ng-repeat="column in $ctrl.columns"
+                ng-if="!$first"
+                ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
+                ng-click="column.sortable && $ctrl.setSortColumn(column)"
+            >
                 <span
                     ng-if="
                         column.name !== 'lastSurvey' ||
@@ -54,17 +82,29 @@
                 >
                     {{column.label | t}}
                 </span>
-                <div class="normal-column sort-order-column" ng-if="column.sortable">
-                    <ng-md-icon icon="arrow_downward" size="12"
-                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'">
+                <div
+                    class="normal-column sort-order-column"
+                    ng-if="column.sortable"
+                >
+                    <ng-md-icon
+                        icon="arrow_downward"
+                        size="12"
+                        ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'"
+                    >
                     </ng-md-icon>
-                    <ng-md-icon icon="arrow_upwards" size="12"
-                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'">
+                    <ng-md-icon
+                        icon="arrow_upwards"
+                        size="12"
+                        ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'"
+                    >
                     </ng-md-icon>
                 </div>
-                <icon-button ng-if="column.name === 'name' && !$ctrl.surveyId" icon="'person_add'"
-                             ui-sref=".new.defaultTab"
-                             ng-click="$event.stopPropagation()">
+                <icon-button
+                    ng-if="column.name === 'name' && !$ctrl.surveyId"
+                    icon="'addPerson'"
+                    ui-sref=".new.defaultTab"
+                    ng-click="$event.stopPropagation()"
+                >
                 </icon-button>
             </div>
             <div class="column detail-column phone-number-column">
@@ -73,39 +113,72 @@
             <div class="column detail-column button-column">
                 <icon-button icon="'email'" disabled="true"></icon-button>
             </div>
-            <div class="column survey-column" ng-class="{ 'survey-column-wide': question.style === 'email' }"
-                 ng-repeat="question in $ctrl.questions" title="{{question.label}}">
+            <div
+                class="column survey-column"
+                ng-class="{ 'survey-column-wide': question.style === 'email' }"
+                ng-repeat="question in $ctrl.questions"
+                title="{{question.label}}"
+            >
                 {{question.label}}
             </div>
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
-            <img ng-src="{{$ctrl.closeIcon}}" ng-click="$ctrl.clearSelection()"
-                 ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}"/>
-            <div>{{ 'ministries.people.selected_contacts' | t: { contactCount: $ctrl.selectedCount } }}</div>
+            <img
+                ng-src="{{$ctrl.closeIcon}}"
+                ng-click="$ctrl.clearSelection()"
+                ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}"
+            />
+            <div>
+                {{ 'ministries.people.selected_contacts' | t: { contactCount:
+                $ctrl.selectedCount } }}
+            </div>
             <div class="space"></div>
-            <img ng-src="{{$ctrl.pencilIcon}}" ng-click="$ctrl.massEdit()"
-                 ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}">
-            <img ng-src="{{$ctrl.emailIcon}}" ng-click="$ctrl.sendMessage('email')"
-                 ng-attr-title="{{ 'ministries.people.email_hover' | t }}"/>
-            <img ng-src="{{$ctrl.messageIcon}}" ng-click="$ctrl.sendMessage('sms')"
-                 ng-attr-title="{{ 'ministries.people.sms_hover' | t }}"/>
-            <img ng-src="{{$ctrl.downloadCsvIcon}}" ng-click="$ctrl.exportPeople()"
-                 ng-attr-title="{{ 'ministries.people.export_hover' | t }}"/>
-            <img ng-src="{{$ctrl.transferIcon}}" ng-click="$ctrl.transferPeople()"
-                 ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
-                 ng-if="$ctrl.isAdmin"/>
-            <img ng-src="{{$ctrl.archiveIcon}}" ng-click="$ctrl.archivePeople()"
-                 ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"/>
-            <img ng-src="{{$ctrl.deleteIcon}}" ng-click="$ctrl.deletePeople()"
-                 ng-attr-title="{{ 'ministries.people.delete_hover' | t }}"/>
+            <img
+                ng-src="{{$ctrl.pencilIcon}}"
+                ng-click="$ctrl.massEdit()"
+                ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}"
+            />
+            <img
+                ng-src="{{$ctrl.emailIcon}}"
+                ng-click="$ctrl.sendMessage('email')"
+                ng-attr-title="{{ 'ministries.people.email_hover' | t }}"
+            />
+            <img
+                ng-src="{{$ctrl.messageIcon}}"
+                ng-click="$ctrl.sendMessage('sms')"
+                ng-attr-title="{{ 'ministries.people.sms_hover' | t }}"
+            />
+            <img
+                ng-src="{{$ctrl.downloadCsvIcon}}"
+                ng-click="$ctrl.exportPeople()"
+                ng-attr-title="{{ 'ministries.people.export_hover' | t }}"
+            />
+            <img
+                ng-src="{{$ctrl.transferIcon}}"
+                ng-click="$ctrl.transferPeople()"
+                ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
+                ng-if="$ctrl.isAdmin"
+            />
+            <img
+                ng-src="{{$ctrl.archiveIcon}}"
+                ng-click="$ctrl.archivePeople()"
+                ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"
+            />
+            <img
+                ng-src="{{$ctrl.deleteIcon}}"
+                ng-click="$ctrl.deletePeople()"
+                ng-attr-title="{{ 'ministries.people.delete_hover' | t }}"
+            />
         </div>
         <div class="scroll-contain">
-            <div infinite-scroll="$ctrl.loadPersonPage()"
-                 infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-                 infinite-scroll-distance="0"
-                 infinite-scroll-container="'people-screen .people-list'"
-                 infinite-scroll-listen-for-event="checkInfiniteScroll"
-                 class="grid-content">
+            <div
+                infinite-scroll="$ctrl.loadPersonPage()"
+                infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+                infinite-scroll-distance="0"
+                infinite-scroll-container="'people-screen .people-list'"
+                infinite-scroll-listen-for-event="checkInfiniteScroll"
+                class="grid-content"
+            >
                 <ministry-view-person
                     ng-repeat="person in $ctrl.people |
                                orderBy:$ctrl.sortOrder.column.getSortKey:$ctrl.sortOrder.direction === 'desc'
@@ -114,10 +187,13 @@
                         collapsed: ('app.ministries.ministry.people.person' | includedByState),
                         active: ('app.ministries.ministry.people.person' | includedByState:{personId: person.id}) }"
                     selected="$ctrl.multiSelection[person.id]"
-                    person="person" organization-id="$ctrl.org.id"
+                    person="person"
+                    organization-id="$ctrl.org.id"
                     questions="$ctrl.questions"
-                    odd="$odd",
-                    show-last-survey="$ctrl.surveyId">
+                    odd="$odd"
+                    ,
+                    show-last-survey="$ctrl.surveyId"
+                >
                 </ministry-view-person>
                 <div ng-if="!$ctrl.loadedAll" class="row message-row">
                     {{ 'general.loading_more' | t }}
