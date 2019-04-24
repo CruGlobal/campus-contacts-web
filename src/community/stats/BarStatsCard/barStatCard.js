@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import _ from 'lodash';
 import { useQuery } from 'react-apollo-hooks';
 // QUERIES
-import { GET_MEMBERS } from '../../graphql';
+import { GET_MEMBERS, GET_MEMBERS_1W, GET_CURRENT_FILTER } from '../../graphql';
 
 // CSS
 const BarChartCardRow = styled.div`
@@ -18,7 +18,7 @@ const BarChartCardRow = styled.div`
 `;
 
 const BarStats = () => {
-    const { data, loading, error } = useQuery(GET_MEMBERS);
+    const { data, loading, error } = useQuery(GET_CURRENT_FILTER);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -29,14 +29,37 @@ const BarStats = () => {
     }
 
     const {
-        apolloClient: { members },
+        apolloClient: {
+            currentFilter: { key },
+        },
     } = data;
 
-    const MembersData = members.data;
+    const switchMembersData = () => {
+        switch (key) {
+            case '1W': {
+                const {
+                    data: {
+                        apolloClient: { members_1W },
+                    },
+                } = useQuery(GET_MEMBERS_1W);
+                return members_1W;
+            }
+            default: {
+                const {
+                    data: {
+                        apolloClient: { members_default },
+                    },
+                } = useQuery(GET_MEMBERS);
+                return members_default;
+            }
+        }
+    };
+
+    const MembersData = switchMembersData();
 
     return (
         <BarChartCardRow>
-            {_.map(MembersData, member => (
+            {_.map(MembersData.data, member => (
                 <BarStatCard
                     key={member.stage}
                     label={member.stage}

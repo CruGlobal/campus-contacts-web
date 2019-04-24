@@ -4,26 +4,14 @@ import { ResponsiveLine } from '@nivo/line';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 // QUERIES
-import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
+import {
+    GET_CURRENT_FILTER,
+    GET_STEPS_COMPLETED,
+    GET_STEPS_COMPLETED_1W,
+} from '../../graphql';
 
 const StagesLineGraph = () => {
-    const {
-        data: {
-            apolloClient: {
-                currentFilter: { key },
-            },
-        },
-    } = useQuery(GET_CURRENT_FILTER);
-
-    const filterQuery = key;
-
-    const {
-        data: {
-            apolloClient: { stepsCompleted },
-        },
-        error,
-        loading,
-    } = useQuery(GET_STEPS_COMPLETED, { variables: { filterQuery } });
+    const { data, loading, error } = useQuery(GET_CURRENT_FILTER);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -33,13 +21,42 @@ const StagesLineGraph = () => {
         return <div>Error! {error.message}</div>;
     }
 
+    const {
+        apolloClient: {
+            currentFilter: { key },
+        },
+    } = data;
+
+    const switchStepsCompleted = () => {
+        switch (key) {
+            case '1W': {
+                const {
+                    data: {
+                        apolloClient: { stepsCompleted_1W },
+                    },
+                } = useQuery(GET_STEPS_COMPLETED_1W);
+                return stepsCompleted_1W;
+            }
+            default: {
+                const {
+                    data: {
+                        apolloClient: { stepsCompleted_default },
+                    },
+                } = useQuery(GET_STEPS_COMPLETED);
+                return stepsCompleted_default;
+            }
+        }
+    };
+
+    const StepsCompleted = switchStepsCompleted();
+
     return (
         <ResponsiveLine
             data={[
                 {
                     id: 'Steps Completed',
                     color: 'hsl(195, 100%, 74%)',
-                    data: stepsCompleted.data,
+                    data: StepsCompleted.data,
                 },
             ]}
             margin={{

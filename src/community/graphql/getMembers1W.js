@@ -1,11 +1,9 @@
 import gql from 'graphql-tag';
 
-const membersData = 'members_default';
-
-export const GET_MEMBERS = gql`
+export const GET_MEMBERS_1W = gql`
     query {
         apolloClient @client {
-            ${membersData} {
+            members_1W {
                 data {
                     stage
                     members

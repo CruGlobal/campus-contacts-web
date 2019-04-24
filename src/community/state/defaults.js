@@ -45,7 +45,7 @@ export default {
                 },
             ],
         },
-        stepsCompleted: {
+        stepsCompleted_default: {
             __typename: 'StepsCompleted',
             data: [
                 {
@@ -85,7 +85,47 @@ export default {
                 },
             ],
         },
-        members: {
+        stepsCompleted_1W: {
+            __typename: 'StepsCompleted',
+            data: [
+                {
+                    __typename: 'Data',
+                    x: '3/19/2019',
+                    y: 19,
+                },
+                {
+                    __typename: 'Data',
+                    x: '3/20/2019',
+                    y: 24,
+                },
+                {
+                    __typename: 'Data',
+                    x: '3/21/2019',
+                    y: 23,
+                },
+                {
+                    __typename: 'Data',
+                    x: '3/22/2019',
+                    y: 25,
+                },
+                {
+                    __typename: 'Data',
+                    x: '2/23/2019',
+                    y: 27,
+                },
+                {
+                    __typename: 'Data',
+                    x: '3/24/2019',
+                    y: 23,
+                },
+                {
+                    __typename: 'Data',
+                    x: '3/25/2019',
+                    y: 30,
+                },
+            ],
+        },
+        members_default: {
             __typename: 'Members',
             data: [
                 {
@@ -136,6 +176,60 @@ export default {
                     members: 16,
                     stepsAdded: 21,
                     stepsCompleted: 34,
+                },
+            ],
+        },
+        members_1W: {
+            __typename: 'Members',
+            data: [
+                {
+                    __typename: 'Data',
+                    stage: 'No Stage',
+                    members: 11,
+                    stepsAdded: 23,
+                    stepsCompleted: 14,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Not Sure',
+                    members: 12,
+                    stepsAdded: 12,
+                    stepsCompleted: 51,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Uninterested',
+                    members: 13,
+                    stepsAdded: 32,
+                    stepsCompleted: 23,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Curious',
+                    members: 14,
+                    stepsAdded: 12,
+                    stepsCompleted: 31,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Forgiven',
+                    members: 15,
+                    stepsAdded: 19,
+                    stepsCompleted: 27,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Growing',
+                    members: 16,
+                    stepsAdded: 21,
+                    stepsCompleted: 29,
+                },
+                {
+                    __typename: 'Data',
+                    stage: 'Guiding',
+                    members: 17,
+                    stepsAdded: 12,
+                    stepsCompleted: 43,
                 },
             ],
         },

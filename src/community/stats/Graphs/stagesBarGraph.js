@@ -4,26 +4,10 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 // QUERIES
-import { GET_CURRENT_FILTER, GET_MEMBERS } from '../../graphql';
+import { GET_CURRENT_FILTER, GET_MEMBERS, GET_MEMBERS_1W } from '../../graphql';
 
 const StagesBarGraph = () => {
-    const {
-        data: {
-            apolloClient: {
-                currentFilter: { key },
-            },
-        },
-    } = useQuery(GET_CURRENT_FILTER);
-
-    const filterQuery = key;
-
-    const {
-        data: {
-            apolloClient: { members },
-        },
-        error,
-        loading,
-    } = useQuery(GET_MEMBERS, { variables: { filterQuery } });
+    const { data, loading, error } = useQuery(GET_CURRENT_FILTER);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -33,12 +17,41 @@ const StagesBarGraph = () => {
         return <div>Error! {error.message}</div>;
     }
 
+    const {
+        apolloClient: {
+            currentFilter: { key },
+        },
+    } = data;
+
+    const switchMembersData = () => {
+        switch (key) {
+            case '1W': {
+                const {
+                    data: {
+                        apolloClient: { members_1W },
+                    },
+                } = useQuery(GET_MEMBERS_1W);
+                return members_1W;
+            }
+            default: {
+                const {
+                    data: {
+                        apolloClient: { members_default },
+                    },
+                } = useQuery(GET_MEMBERS);
+                return members_default;
+            }
+        }
+    };
+
+    const MembersData = switchMembersData();
+
     let max = 50;
     let middle = max / 2;
 
     return (
         <ResponsiveBar
-            data={members.data}
+            data={MembersData.data}
             keys={['stepsAdded', 'stepsCompleted']}
             indexBy="stage"
             margin={{
