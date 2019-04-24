@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import _ from 'lodash';
 import { useQuery } from 'react-apollo-hooks';
 // QUERIES
-import { GET_MEMBERS, GET_MEMBERS_1W, GET_CURRENT_FILTER } from '../../graphql';
+import { GET_MEMBERS, GET_CURRENT_FILTER } from '../../graphql';
 
 // CSS
 const BarChartCardRow = styled.div`
@@ -39,15 +39,19 @@ const BarStats = () => {
             case '1W': {
                 const {
                     data: {
-                        apolloClient: { members_1W },
+                        apolloClient: {
+                            members: { members_1W },
+                        },
                     },
-                } = useQuery(GET_MEMBERS_1W);
+                } = useQuery(GET_MEMBERS);
                 return members_1W;
             }
             default: {
                 const {
                     data: {
-                        apolloClient: { members_default },
+                        apolloClient: {
+                            members: { members_default },
+                        },
                     },
                 } = useQuery(GET_MEMBERS);
                 return members_default;

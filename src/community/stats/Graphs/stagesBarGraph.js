@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 // QUERIES
-import { GET_CURRENT_FILTER, GET_MEMBERS, GET_MEMBERS_1W } from '../../graphql';
+import { GET_CURRENT_FILTER, GET_MEMBERS } from '../../graphql';
 
 const StagesBarGraph = () => {
     const { data, loading, error } = useQuery(GET_CURRENT_FILTER);
@@ -28,15 +28,20 @@ const StagesBarGraph = () => {
             case '1W': {
                 const {
                     data: {
-                        apolloClient: { members_1W },
+                        apolloClient: {
+                            members: { members_1W },
+                        },
                     },
-                } = useQuery(GET_MEMBERS_1W);
+                } = useQuery(GET_MEMBERS);
+
                 return members_1W;
             }
             default: {
                 const {
                     data: {
-                        apolloClient: { members_default },
+                        apolloClient: {
+                            members: { members_default },
+                        },
                     },
                 } = useQuery(GET_MEMBERS);
                 return members_default;

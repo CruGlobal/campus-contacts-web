@@ -4,11 +4,7 @@ import { ResponsiveLine } from '@nivo/line';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 // QUERIES
-import {
-    GET_CURRENT_FILTER,
-    GET_STEPS_COMPLETED,
-    GET_STEPS_COMPLETED_1W,
-} from '../../graphql';
+import { GET_CURRENT_FILTER, GET_STEPS_COMPLETED } from '../../graphql';
 
 const StagesLineGraph = () => {
     const { data, loading, error } = useQuery(GET_CURRENT_FILTER);
@@ -34,7 +30,7 @@ const StagesLineGraph = () => {
                     data: {
                         apolloClient: { stepsCompleted_1W },
                     },
-                } = useQuery(GET_STEPS_COMPLETED_1W);
+                } = useQuery(GET_STEPS_COMPLETED);
                 return stepsCompleted_1W;
             }
             default: {

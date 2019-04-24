@@ -9,6 +9,12 @@ export const GET_STEPS_COMPLETED = gql`
                     y
                 }
             }
+            stepsCompleted_1W {
+                data {
+                    x
+                    y
+                }
+            }
         }
     }
 `;
