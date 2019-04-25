@@ -35,7 +35,7 @@ const BarStatCard = ({ count, label }) => {
     const props = useSpring({ marginTop: 0, from: { marginTop: 1000 } });
     return (
         <BarStatCardLayout style={props}>
-            <StatNumber>{count}</StatNumber>
+            <StatNumber title={`${count} Members`}>{count}</StatNumber>
             <StatLabel>{label}</StatLabel>
         </BarStatCardLayout>
     );

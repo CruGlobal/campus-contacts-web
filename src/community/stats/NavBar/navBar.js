@@ -45,7 +45,9 @@ const NavBarInnerContainer = styled.div`
 `;
 
 const DashBoardNavBar = ({ orgID }) => {
-    const { data, loading, error } = useQuery(GET_ORGANIZATIONS);
+    const { data, loading, error } = useQuery(GET_ORGANIZATIONS, {
+        variables: { id: orgID },
+    });
 
     if (loading) {
         return <div>Loading...</div>;

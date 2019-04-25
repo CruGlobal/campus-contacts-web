@@ -44,7 +44,7 @@ const BarStats = () => {
                         },
                     },
                 } = useQuery(GET_MEMBERS);
-                return members_1W;
+                return members_1W.data;
             }
             default: {
                 const {
@@ -54,7 +54,7 @@ const BarStats = () => {
                         },
                     },
                 } = useQuery(GET_MEMBERS);
-                return members_default;
+                return members_default.data;
             }
         }
     };
@@ -63,7 +63,7 @@ const BarStats = () => {
 
     return (
         <BarChartCardRow>
-            {_.map(MembersData.data, member => (
+            {_.map(MembersData, member => (
                 <BarStatCard
                     key={member.stage}
                     label={member.stage}

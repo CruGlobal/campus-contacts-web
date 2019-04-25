@@ -80,7 +80,5 @@ describe('<Tabs />', () => {
             expect(wrapper.find(Tab).at(2).key()).toBe('PEOPLE_MOVEMENT');
             expect(wrapper.find(Tab).at(2).prop('active')).toBe('false');
             expect(wrapper.find(Tab).at(3).key()).toBe('');
-            
-    
     });
 });
