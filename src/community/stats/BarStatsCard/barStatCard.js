@@ -60,7 +60,7 @@ const BarStats = () => {
     };
 
     const MembersData = switchMembersData();
-    console.log(MembersData);
+
     return (
         <BarChartCardRow>
             {_.map(MembersData.data, member => (
