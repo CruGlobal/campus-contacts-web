@@ -51,8 +51,20 @@ const StagesBarGraph = () => {
 
     const MembersData = switchMembersData();
 
-    let max = 50;
-    let middle = max / 2;
+    const getBiggestNumber = () => {
+        let biggestNumber = 0;
+        for (let i = 0; i < MembersData.data.length; i++) {
+            let combinedNumber =
+                MembersData.data[i].stepsCompleted +
+                MembersData.data[i].stepsAdded;
+            biggestNumber += combinedNumber;
+        }
+
+        return Math.ceil(biggestNumber / MembersData.data.length);
+    };
+
+    let max = getBiggestNumber();
+    let middle = Math.ceil(max / 2);
 
     return (
         <ResponsiveBar
@@ -87,7 +99,7 @@ const StagesBarGraph = () => {
                     legend: `${middle}`,
                     legendPosition: 'top-left',
                     legendOrientation: 'horizontal',
-                    legendOffsetY: 60,
+                    legendOffsetY: 55,
                     legendOffsetX: 3,
                 },
                 {
@@ -120,7 +132,7 @@ const StagesBarGraph = () => {
                     legend: `${middle}`,
                     legendPosition: 'top-right',
                     legendOrientation: 'horizontal',
-                    legendOffsetY: 60,
+                    legendOffsetY: 55,
                     legendOffsetX: 3,
                 },
             ]}
