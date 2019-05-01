@@ -21,13 +21,13 @@ describe('<DashBoardNavBar />', () => {
 
         const mocks = [
             {
-                request: { query: GET_ORGANIZATIONS },
+                request: { query: GET_ORGANIZATIONS, variables: {id: 15878} },
                 result: {
                     data: {
                         organization: {
                             __typename: 'Data',
-                            name: 'Campus Ministry',
-                            id: 2
+                            name: "Christian Huffman's Test Org",
+                            id: 15878
                         }
                     }
                 }
@@ -36,7 +36,7 @@ describe('<DashBoardNavBar />', () => {
        
         const wrapper = mount(
             <ApolloProvider client={createClient(mocks)}>
-                <DashBoardNavBar></DashBoardNavBar>
+                <DashBoardNavBar orgID={15878}></DashBoardNavBar>
             </ApolloProvider>
         )
 
@@ -44,7 +44,7 @@ describe('<DashBoardNavBar />', () => {
         await waitForNextTick()
         wrapper.update()
 
-        expect(wrapper.find('h1').text()).toBe('Campus Ministry')
+        expect(wrapper.find('h1').text()).toBe("Christian Huffman's Test Org")
 
     })
 })

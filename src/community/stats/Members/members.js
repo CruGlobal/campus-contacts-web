@@ -35,7 +35,7 @@ const InnerContainer = styled.div`
 `;
 
 // COMPONENT
-const Members = () => {
+const Members = ({ orgID }) => {
     const { data, loading, error } = useQuery(GET_CURRENT_TAB);
 
     if (loading) {
@@ -78,7 +78,7 @@ const Members = () => {
                     <Tabs tabsContent={TabContent} />
                     {renderGraph()}
                 </InnerContainer>
-                <CelebrateSteps />
+                <CelebrateSteps orgID={orgID} />
             </Container>
 
             <BarStats />

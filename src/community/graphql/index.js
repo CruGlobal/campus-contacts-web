@@ -9,3 +9,4 @@ export { GET_STEPSINFO_PERSONAL } from './getStepsInfoPersonal';
 export { GET_STEPSINFO_SPIRITUAL } from './getStepsInfoSpiritual';
 export { GET_ORGANIZATIONS } from './getOrganizations';
 export { GET_TAB_CONTENT } from './getTabsContent';
+export { GET_CELEBRATIONS_GRAPHQL } from './getCelebrationsGraphQL';

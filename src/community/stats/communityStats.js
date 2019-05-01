@@ -24,7 +24,7 @@ const CommunityStats = ({ orgId }) => (
         <ThemeProvider theme={theme}>
             <DashBoardNavBar orgID={orgId} />
             <StepsInfo />
-            <Members />
+            <Members orgID={orgId} />
         </ThemeProvider>
     </ApolloProvider>
 );

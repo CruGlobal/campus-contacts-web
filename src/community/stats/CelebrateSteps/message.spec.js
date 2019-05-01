@@ -5,12 +5,16 @@ import Message from './message';
 describe('<Message />', () => {
     it('Should render properly', () => {
         const information = {
-            message: 'Runs Fine',
-            user: 'Test User'
+            message: 'interaction',
+            user: {
+                fullName: "Christian Huffman",
+                firstName: "Christian"
+            },
+            interactionType: 'Holy Spirit Presentation'
         }
-        const component = shallow(<Message message={information.message} user={information.user}></Message>)
+        const component = shallow(<Message message={information.message} user={information.user} interactionType={information.interactionType}></Message>)
         
-        expect(component.find('h3').text()).toEqual('Test User')
-        expect(component.find('p').text()).toEqual('Runs Fine')
+        expect(component.find('h3').text()).toEqual('Christian Huffman')
+        expect(component.find('p').text()).toEqual('Christian has had a Holy Spirit Presentation interaction with a person.')
     })
 })

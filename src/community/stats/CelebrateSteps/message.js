@@ -15,11 +15,14 @@ const MessageContainer = styled.div`
         color: grey;
     }
 `;
-const Message = ({ message, user }) => {
+const Message = ({ message, user, interactionType }) => {
     return (
         <MessageContainer>
-            <h3>{user}</h3>
-            <p>{message}</p>
+            <h3>{user.fullName}</h3>
+            <p>
+                {user.firstName} has had a {interactionType} {message} with a
+                person.
+            </p>
         </MessageContainer>
     );
 };
@@ -29,5 +32,5 @@ export default Message;
 // PROPTYPES
 Message.propTypes = {
     message: PropTypes.string,
-    user: PropTypes.string,
+    user: PropTypes.object,
 };
