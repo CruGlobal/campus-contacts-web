@@ -1,5 +1,6 @@
 // LIBRARIES
 import { useQuery } from 'react-apollo-hooks';
+import PropTypes from 'prop-types';
 // QUERIES
 import { GET_TAB_CONTENT } from '../../graphql';
 
@@ -24,3 +25,7 @@ const tabContent = () => {
 };
 
 export { tabContent };
+
+tabContent.propTypes = {
+    TabContent: PropTypes.object,
+};

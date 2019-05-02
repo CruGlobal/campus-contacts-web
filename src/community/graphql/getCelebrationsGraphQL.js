@@ -5,7 +5,7 @@ export const GET_CELEBRATIONS_GRAPHQL = gql`
         organization(id: $id) {
             id
             name
-            organizationCelebrationItems {
+            organizationCelebrationItems(last: 4) {
                 nodes {
                     id
                     objectType

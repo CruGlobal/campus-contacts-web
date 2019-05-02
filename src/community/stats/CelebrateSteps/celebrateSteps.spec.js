@@ -4,7 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
-import { GET_CELEBRATION_STEPS } from '../../graphql';
+import { GET_CELEBRATIONS_GRAPHQL } from '../../graphql';
 import CelebrateSteps from './celebrateSteps';
 import Message from './message';
 import _ from 'lodash';
@@ -22,45 +22,52 @@ describe('<CelebrateSteps />', () => {
     it("Should render properly", async () => {
         const mocks = [
             {
-                request: { query: GET_CELEBRATION_STEPS },
+                request: { query: GET_CELEBRATIONS_GRAPHQL, variables: {id: 15878} },
                 result: {
                     data: {
-                        apolloClient: {
-                            __typename: 'apolloClient',
-                            celebrations: {
-                                __typename: 'celebrations',
-                                data: [
-                                    {
-                                        __typename: 'Data',
-                                        message:
-                                            'Leah Completed a Step of Faith with a Curious person',
-                                        user: 'Leah Brooks',
-                                        key: 'MESSAGE_1',
-                                    },
-                                    {
-                                        __typename: 'Data',
-                                        message:
-                                            'Leah Completed a Step of Faith with a Curious person',
-                                        user: 'Leah Brooks',
-                                        key: 'MESSAGE_2',
-                                    },
-                                    {
-                                        __typename: 'Data',
-                                        message:
-                                            'Leah Completed a Step of Faith with a Curious person',
-                                        user: 'Leah Brooks',
-                                        key: 'MESSAGE_3',
-                                    },
-                                    {
-                                        __typename: 'Data',
-                                        message:
-                                            'Leah Completed a Step of Faith with a Curious person',
-                                        user: 'Leah Brooks',
-                                        key: 'MESSAGE_4',
-                                    },
-                                ],
+                        organization: {
+                            id: "15878",
+                            organizationCelebrationItems: {
+                              nodes: [
+                                {
+                                  id: "6044",
+                                  objectType: "interaction",
+                                  adjectiveAttributeValue: "5",
+                                  subjectPerson: {
+                                    fullName: "Christian Huffman",
+                                    firstName: "Christian"
+                                  }
+                                },
+                                {
+                                  id: "6045",
+                                  objectType: "interaction",
+                                  adjectiveAttributeValue: "2",
+                                  subjectPerson: {
+                                    fullName: "Christian Huffman",
+                                    firstName: "Christian"
+                                  }
+                                },
+                                {
+                                  id: "6046",
+                                  objectType: "interaction",
+                                  adjectiveAttributeValue: "3",
+                                  subjectPerson: {
+                                    fullName: "Christian Huffman",
+                                    firstName: "Christian"
+                                  }
+                                },
+                                {
+                                  id: "6061",
+                                  objectType: "interaction",
+                                  adjectiveAttributeValue: "3",
+                                  subjectPerson: {
+                                    fullName: "Christian Huffman",
+                                    firstName: "Christian"
+                                  }
+                                }
+                              ]
                             }
-                        }
+                          }
                     }
                 },
                 error: new Error("Something Went Wrong!")
@@ -72,29 +79,45 @@ describe('<CelebrateSteps />', () => {
                 {
                     __typename: 'Data',
                     message:
-                        'Leah Completed a Step of Faith with a Curious person',
-                    user: 'Leah Brooks',
+                        'interaction',
+                    user: {
+                        fullName: 'Christian Huffman',
+                        firstName: 'Chrsitian'
+                    },
+                    interactionType: 'Holy Spirit Presentation',
                     key: 'MESSAGE_1',
                 },
                 {
                     __typename: 'Data',
                     message:
-                        'Leah Completed a Step of Faith with a Curious person',
-                    user: 'Leah Brooks',
+                        'interaction',
+                    user: {
+                        fullName: 'Christian Huffman',
+                        firstName: 'Chrsitian'
+                    },
+                    interactionType: 'Holy Spirit Presentation',
                     key: 'MESSAGE_2',
                 },
                 {
                     __typename: 'Data',
                     message:
-                        'Leah Completed a Step of Faith with a Curious person',
-                    user: 'Leah Brooks',
+                        'interaction',
+                    user: {
+                        fullName: 'Christian Huffman',
+                        firstName: 'Chrsitian'
+                    },
+                    interactionType: 'Holy Spirit Presentation',
                     key: 'MESSAGE_3',
                 },
                 {
                     __typename: 'Data',
                     message:
-                        'Leah Completed a Step of Faith with a Curious person',
-                    user: 'Leah Brooks',
+                        'interaction',
+                    user: {
+                        fullName: 'Christian Huffman',
+                        firstName: 'Chrsitian'
+                    },
+                    interactionType: 'Holy Spirit Presentation',
                     key: 'MESSAGE_4',
                 },
             ],
@@ -110,12 +133,13 @@ describe('<CelebrateSteps />', () => {
                         message={message.message}
                         user={message.user}
                         key={message.key}
+                        interactionType={message.interactionType}
                     />
                 ))}
                 </CelebrateSteps>
             </ApolloProvider>,
         );
-        expect(wrapper.html()).toBe('<div>Loading...</div>');
+     
         await waitForNextTick();
        
         wrapper.update();
@@ -125,13 +149,13 @@ describe('<CelebrateSteps />', () => {
         expect(wrapper.find(Message).at(1).key()).toBe('MESSAGE_2')
         expect(wrapper.find(Message).at(2).key()).toBe('MESSAGE_3')
         expect(wrapper.find(Message).at(3).key()).toBe('MESSAGE_4')
-        expect(wrapper.find(Message).at(0).prop('message')).toBe('Leah Completed a Step of Faith with a Curious person')
-        expect(wrapper.find(Message).at(1).prop('message')).toBe('Leah Completed a Step of Faith with a Curious person')
-        expect(wrapper.find(Message).at(2).prop('message')).toBe('Leah Completed a Step of Faith with a Curious person')
-        expect(wrapper.find(Message).at(3).prop('message')).toBe('Leah Completed a Step of Faith with a Curious person')
-        expect(wrapper.find(Message).at(0).prop('user')).toBe("Leah Brooks")
-        expect(wrapper.find(Message).at(1).prop('user')).toBe("Leah Brooks")
-        expect(wrapper.find(Message).at(2).prop('user')).toBe("Leah Brooks")
-        expect(wrapper.find(Message).at(3).prop('user')).toBe("Leah Brooks")
+        expect(wrapper.find(Message).at(0).prop('message')).toBe('interaction')
+        expect(wrapper.find(Message).at(1).prop('message')).toBe('interaction')
+        expect(wrapper.find(Message).at(2).prop('message')).toBe('interaction')
+        expect(wrapper.find(Message).at(3).prop('message')).toBe('interaction')
+        expect(wrapper.find(Message).at(0).prop('interactionType')).toBe('Holy Spirit Presentation')
+        expect(wrapper.find(Message).at(1).prop('interactionType')).toBe('Holy Spirit Presentation')
+        expect(wrapper.find(Message).at(2).prop('interactionType')).toBe('Holy Spirit Presentation')
+        expect(wrapper.find(Message).at(3).prop('interactionType')).toBe('Holy Spirit Presentation')
     })
 })

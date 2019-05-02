@@ -7,7 +7,6 @@ import resolvers from '../resolvers';
 import { createHttpLink } from 'apollo-link-http';
 
 // Define a new httpLink to connect to our GraphQL Endpoint
-
 const httplink = createHttpLink({
     uri: 'https://api-stage.missionhub.com/apis/graphql',
     includeExtensions: true,

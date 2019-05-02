@@ -36,6 +36,7 @@ const InnerContainer = styled.div`
 
 // COMPONENT
 const Members = ({ orgID }) => {
+    // We query for the current tab in order to decide which graph the render
     const { data, loading, error } = useQuery(GET_CURRENT_TAB);
 
     if (loading) {
@@ -50,6 +51,7 @@ const Members = ({ orgID }) => {
         apolloClient: { currentTab },
     } = data;
 
+    // Here we use a switch statement to decide what graph to render
     const renderGraph = () => {
         switch (currentTab) {
             case 'MEMBERS':
@@ -68,6 +70,7 @@ const Members = ({ orgID }) => {
         from: { opacity: 0 },
     });
 
+    // Here we grab our content that will be rendered in the tabs
     const TabContent = tabContent();
 
     return (

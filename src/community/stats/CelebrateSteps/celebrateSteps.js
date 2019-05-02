@@ -23,7 +23,7 @@ const InsideContainer = styled.div`
     box-shadow: 0px 0px 15px -3px rgba(0, 0, 0, 0.16);
 `;
 
-export const CelebrateSteps = ({ orgID }) => {
+const CelebrateSteps = ({ orgID }) => {
     const { data, loading, error } = useQuery(GET_CELEBRATIONS_GRAPHQL, {
         variables: { id: orgID },
     });
@@ -39,9 +39,9 @@ export const CelebrateSteps = ({ orgID }) => {
         organization: { organizationCelebrationItems },
     } = data;
 
-    const celebrationItems = _.takeRight(organizationCelebrationItems.nodes, 4);
+    const celebrationItems = organizationCelebrationItems.nodes;
 
-    for (let i = 0; i < celebrationItems.length; i++) {
+    for (let i = 0; i < organizationCelebrationItems.nodes.length; i++) {
         let interactionType = celebrationItems[i].adjectiveAttributeValue;
 
         switch (interactionType) {
@@ -70,9 +70,6 @@ export const CelebrateSteps = ({ orgID }) => {
                     'Discipleship Conversation';
                 break;
             }
-            default: {
-                celebrationItems[i].adjectiveAttributeValue = 'some sort of';
-            }
         }
     }
 
@@ -93,12 +90,12 @@ export const CelebrateSteps = ({ orgID }) => {
     );
 };
 
-export default CelebrateSteps;
+export { CelebrateSteps };
 
 // PROPTYPES
 CelebrateSteps.propTypes = {
-    celebrations: PropTypes.object,
+    celebrationsItems: PropTypes.object,
     message: PropTypes.string,
-    user: PropTypes.string,
+    user: PropTypes.object,
     key: PropTypes.string,
 };
