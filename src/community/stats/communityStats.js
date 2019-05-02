@@ -8,7 +8,14 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
-import { client } from '../state/apollo-client';
+
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
+import defaults from '../state/defaults';
+import resolvers from '../resolvers';
+import { createHttpLink } from 'apollo-link-http';
 
 const theme = {
     colors: {
@@ -19,23 +26,50 @@ const theme = {
     },
 };
 
-const CommunityStats = ({ orgId }) => (
-    <ApolloProvider client={client}>
-        <ThemeProvider theme={theme}>
-            <DashBoardNavBar orgID={orgId} />
-            <StepsInfo />
-            <Members orgID={orgId} />
-        </ThemeProvider>
-    </ApolloProvider>
-);
+const CommunityStats = ({ orgId, authenticationService }) => {
+    const token = authenticationService.isTokenValid();
+    const httplink = createHttpLink({
+        uri: 'https://api-stage.missionhub.com/apis/graphql',
+        includeExtensions: true,
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const cache = new InMemoryCache();
+    const stateLink = withClientState({
+        cache,
+        defaults,
+        resolvers,
+    });
+
+    const client = new ApolloClient({
+        cache,
+        link: ApolloLink.from([stateLink, httplink]),
+    });
+
+    return (
+        <ApolloProvider client={client}>
+            <ThemeProvider theme={theme}>
+                <DashBoardNavBar orgID={orgId} />
+                <StepsInfo />
+                <Members orgID={orgId} />
+            </ThemeProvider>
+        </ApolloProvider>
+    );
+};
 
 CommunityStats.propTypes = {
     orgId: PropTypes.string,
     theme: PropTypes.object,
+    token: PropTypes.string,
 };
 
 angular
     .module('missionhubApp')
-    .component('communityStats', react2angular(CommunityStats));
+    .component(
+        'communityStats',
+        react2angular(CommunityStats, ['orgId'], ['authenticationService']),
+    );
 
 export { CommunityStats };
