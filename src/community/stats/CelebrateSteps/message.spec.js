@@ -3,14 +3,14 @@ import { shallow } from 'enzyme';
 import Message from './message';
 
 describe('<Message />', () => {
-    it('Should render properly', () => {
+    it('Should render properly with correct props passed', () => {
         const information = {
             message: 'interaction',
             user: {
                 fullName: "Christian Huffman",
                 firstName: "Christian"
             },
-            interactionType: 'Holy Spirit Presentation'
+            interactionType: 'a Holy Spirit Presentation'
         }
         const component = shallow(<Message message={information.message} user={information.user} interactionType={information.interactionType}></Message>)
         

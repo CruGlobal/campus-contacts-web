@@ -63,15 +63,7 @@ const CelebrateSteps = ({ orgID }) => {
             query: GET_MORE_CELEBRATIONS_ITEMS,
             variables: { before: cursor, id: orgID, after: null },
             updateQuery: (previousResult, { fetchMoreResult }) => {
-                let oldCelebrations = previousResult;
-                if (
-                    fetchMoreResult.organization.organizationCelebrationItems
-                        .pageInfo.startCursor === null
-                ) {
-                    return (celebrationItems = oldCelebrations);
-                } else {
-                    return (celebrationItems = fetchMoreResult);
-                }
+                return (celebrationItems = fetchMoreResult);
             },
         });
     };
@@ -80,15 +72,7 @@ const CelebrateSteps = ({ orgID }) => {
             query: GET_MORE_CELEBRATIONS_ITEMS,
             variables: { after: cursor, id: orgID, before: null },
             updateQuery: (previousResult, { fetchMoreResult }) => {
-                let oldCelebrations = previousResult;
-                if (
-                    fetchMoreResult.organization.organizationCelebrationItems
-                        .pageInfo.startCursor === null
-                ) {
-                    return (celebrationItems = oldCelebrations);
-                } else {
-                    return (celebrationItems = fetchMoreResult);
-                }
+                return (celebrationItems = fetchMoreResult);
             },
         });
     };
