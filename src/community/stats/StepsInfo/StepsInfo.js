@@ -15,7 +15,7 @@ const Container = styled(animated.div)`
 const StepsInfo = () => {
     // ANIMATION
     const props = useSpring({
-        delay: '1500',
+        delay: '1100',
         opacity: 1,
         from: { opacity: 0 },
     });

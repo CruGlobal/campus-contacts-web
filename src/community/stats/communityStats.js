@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
-
+// Apollo Client Libraries
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
@@ -27,7 +27,9 @@ const theme = {
 };
 
 const CommunityStats = ({ orgId, authenticationService }) => {
+    // Utilize authenticationService to grab jwt Token for headers auth
     const token = authenticationService.isTokenValid();
+    // Initialize a new httpLink to our api
     const httplink = createHttpLink({
         uri: 'https://api-stage.missionhub.com/apis/graphql',
         includeExtensions: true,

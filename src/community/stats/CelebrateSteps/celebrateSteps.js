@@ -6,7 +6,10 @@ import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 // QUERIES
-import { GET_CELEBRATIONS_GRAPHQL } from '../../graphql';
+import {
+    GET_CELEBRATIONS_GRAPHQL,
+    GET_MORE_CELEBRATIONS_ITEMS,
+} from '../../graphql';
 
 // CSS
 const Container = styled.div`
@@ -22,11 +25,25 @@ const InsideContainer = styled.div`
     overflow: scroll;
     box-shadow: 0px 0px 15px -3px rgba(0, 0, 0, 0.16);
 `;
+const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 0 25px 5px; 10px;
+`;
+const PaginationItem = styled.span`
+    :hover {
+        border-bottom: 1px #007397 solid;
+        cursor: pointer;
+    }
+`;
 
 const CelebrateSteps = ({ orgID }) => {
-    const { data, loading, error } = useQuery(GET_CELEBRATIONS_GRAPHQL, {
-        variables: { id: orgID },
-    });
+    const { data, loading, error, fetchMore } = useQuery(
+        GET_CELEBRATIONS_GRAPHQL,
+        {
+            variables: { id: orgID },
+        },
+    );
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -39,36 +56,75 @@ const CelebrateSteps = ({ orgID }) => {
         organization: { organizationCelebrationItems },
     } = data;
 
-    const celebrationItems = organizationCelebrationItems.nodes;
+    let celebrationItems = organizationCelebrationItems;
 
-    for (let i = 0; i < organizationCelebrationItems.nodes.length; i++) {
-        let interactionType = celebrationItems[i].adjectiveAttributeValue;
+    const fetchPreviousCelebration = cursor => {
+        fetchMore({
+            query: GET_MORE_CELEBRATIONS_ITEMS,
+            variables: { before: cursor, id: orgID, after: null },
+            updateQuery: (previousResult, { fetchMoreResult }) => {
+                let oldCelebrations = previousResult;
+                if (
+                    fetchMoreResult.organization.organizationCelebrationItems
+                        .pageInfo.startCursor === null
+                ) {
+                    return (celebrationItems = oldCelebrations);
+                } else {
+                    return (celebrationItems = fetchMoreResult);
+                }
+            },
+        });
+    };
+    const fetchNextCelebration = cursor => {
+        fetchMore({
+            query: GET_MORE_CELEBRATIONS_ITEMS,
+            variables: { after: cursor, id: orgID, before: null },
+            updateQuery: (previousResult, { fetchMoreResult }) => {
+                let oldCelebrations = previousResult;
+                if (
+                    fetchMoreResult.organization.organizationCelebrationItems
+                        .pageInfo.startCursor === null
+                ) {
+                    return (celebrationItems = oldCelebrations);
+                } else {
+                    return (celebrationItems = fetchMoreResult);
+                }
+            },
+        });
+    };
+
+    for (let i = 0; i < celebrationItems.nodes.length; i++) {
+        let interactionType = celebrationItems.nodes[i].adjectiveAttributeValue;
 
         switch (interactionType) {
             case '2': {
-                celebrationItems[i].adjectiveAttributeValue =
-                    'Spiritual Conversation';
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'a Spiritual Conversation';
                 break;
             }
             case '3': {
-                celebrationItems[i].adjectiveAttributeValue =
-                    'Personal Evangelism';
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'a Personal Evangelism';
                 break;
             }
             case '4': {
-                celebrationItems[i].adjectiveAttributeValue =
-                    'Personal Evangelism Decisions';
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'a Personal Evangelism Decisions';
                 break;
             }
             case '5': {
-                celebrationItems[i].adjectiveAttributeValue =
-                    'Holy Spirit Presentation';
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'a Holy Spirit Presentation';
                 break;
             }
             case '6': {
-                celebrationItems[i].adjectiveAttributeValue =
-                    'Discipleship Conversation';
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'a Discipleship Conversation';
                 break;
+            }
+            default: {
+                celebrationItems.nodes[i].adjectiveAttributeValue =
+                    'some sort of';
             }
         }
     }
@@ -77,7 +133,7 @@ const CelebrateSteps = ({ orgID }) => {
         <Container>
             <h3>CELEBRATE</h3>
             <InsideContainer>
-                {_.map(celebrationItems, message => (
+                {_.map(celebrationItems.nodes, message => (
                     <Message
                         message={message.objectType}
                         interactionType={message.adjectiveAttributeValue}
@@ -85,6 +141,29 @@ const CelebrateSteps = ({ orgID }) => {
                         key={message.id}
                     />
                 ))}
+                <PaginationContainer>
+                    <PaginationItem
+                        onClick={() =>
+                            fetchPreviousCelebration(
+                                celebrationItems.edges[0].cursor,
+                            )
+                        }
+                    >
+                        Last Page
+                    </PaginationItem>
+
+                    <PaginationItem
+                        onClick={() =>
+                            fetchNextCelebration(
+                                celebrationItems.edges[
+                                    celebrationItems.edges.length - 1
+                                ].cursor,
+                            )
+                        }
+                    >
+                        Next Page
+                    </PaginationItem>
+                </PaginationContainer>
             </InsideContainer>
         </Container>
     );

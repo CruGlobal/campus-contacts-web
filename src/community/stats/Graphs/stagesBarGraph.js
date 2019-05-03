@@ -149,6 +149,7 @@ const StagesBarGraph = () => {
 
 StagesBarGraph.propTypes = {
     members: PropTypes.object,
+    key: PropTypes.string,
 };
 
 export default StagesBarGraph;

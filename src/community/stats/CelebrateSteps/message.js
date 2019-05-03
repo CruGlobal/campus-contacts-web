@@ -20,7 +20,7 @@ const Message = ({ message, user, interactionType }) => {
         <MessageContainer>
             <h3>{user.fullName}</h3>
             <p>
-                {user.firstName} has had a {interactionType} {message} with a
+                {user.firstName} has had {interactionType} {message} with a
                 person.
             </p>
         </MessageContainer>
