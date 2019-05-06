@@ -4,7 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
-import { GET_STEPSINFO_SPIRITUAL } from '../../graphql'
+import { GET_IMPACT_REPORT } from '../../graphql'
 import StepsInfoSpiritual from './stepsInfoSpiritual';
 
 function createClient(mocks) {
@@ -18,35 +18,35 @@ const waitForNextTick = () => new Promise(resolve => setTimeout(resolve));
 
 describe('<StepsInfoSpiritual />', () => {
     it('should render correctly', async () => {
-        // For some reason this mock won't connect and it being read as undefined
+       
         const mocks = [
             {
-                request: { query: GET_STEPSINFO_SPIRITUAL },
-                result: {
+                request: { query: GET_IMPACT_REPORT, variables: {id: 15878} },
+                result: {   
                     data: {
-                        apolloClient: {
-                            __typename: 'apolloClient',
-                            stepsInfoSpiritual: {
-                                __typename: 'stepsInfoSpiritual',
-                                userStats: 20,
-                            },
+                        impactReport: {
+                            pathwayMovedCount: '0',
+                            receiversCount: '4',
+                            stepsCount: '32',
+                            stepOwnersCount: '1',
+                            __typename: "ImpactReport"
                         },
-                    },
+                    }
                 },
             },
         ];
 
         const wrapper = mount(
             <ApolloProvider client={createClient(mocks)}>
-                <StepsInfoSpiritual />
+                <StepsInfoSpiritual orgID={15878}/>
             </ApolloProvider>
         );
         expect(wrapper.html()).toBe('<div>Loading...</div>');
 
         await waitForNextTick();
         wrapper.update();
-
-        expect(wrapper.find('p').text()).toBe('20 people reached a new stage on their spiritual journey.')
+       
+        expect(wrapper.find('p').text()).toBe('0 people reached a new stage on their spiritual journey.')
 
     });
 });

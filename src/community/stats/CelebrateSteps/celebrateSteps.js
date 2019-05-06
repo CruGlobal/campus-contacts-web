@@ -28,7 +28,7 @@ const InsideContainer = styled.div`
 const PaginationContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 0 25px 5px; 10px;
+    margin: 0 25px 5px 10px;
 `;
 const PaginationItem = styled.span`
     :hover {
@@ -37,6 +37,7 @@ const PaginationItem = styled.span`
     }
 `;
 
+// Pagination works when going backwards but not forwards, everything switches to the default case of the switch statement
 const CelebrateSteps = ({ orgID }) => {
     const { data, loading, error, fetchMore } = useQuery(
         GET_CELEBRATIONS_GRAPHQL,

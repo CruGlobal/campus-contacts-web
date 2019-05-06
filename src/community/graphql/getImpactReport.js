@@ -7,6 +7,7 @@ export const GET_IMPACT_REPORT = gql`
             stepsCount
             receiversCount
             stepOwnersCount
+            __typename
         }
     }
 `;
