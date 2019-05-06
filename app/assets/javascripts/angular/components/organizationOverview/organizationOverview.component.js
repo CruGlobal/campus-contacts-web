@@ -33,8 +33,11 @@ function organizationOverviewController(
     this.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     this.surveyResponses = 'countHidden';
 
-    this.isAllowed = tabName => {
-        return !(tabName === 'surveys' && !this.directAdminPrivileges);
+    this.isTabVisible = tabName => {
+        return (
+            tabName !== 'labels' &&
+            !(tabName === 'surveys' && !this.directAdminPrivileges)
+        );
     };
 
     this.showOrgNav = () =>
