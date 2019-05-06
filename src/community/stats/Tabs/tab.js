@@ -52,6 +52,7 @@ const Tab = ({ title, value, active, onTabClick }) => {
     const props = useSpring({
         background: active === 'true' ? '#007398' : '#3cc8e6',
     });
+
     return (
         <Tab style={props} active={active} onClick={onTabClick}>
             <p>{title}</p>

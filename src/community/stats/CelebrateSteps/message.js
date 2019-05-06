@@ -33,4 +33,5 @@ export default Message;
 Message.propTypes = {
     message: PropTypes.string,
     user: PropTypes.object,
+    interactionType: PropTypes.string,
 };

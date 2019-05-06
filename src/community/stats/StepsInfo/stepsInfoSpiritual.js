@@ -26,9 +26,9 @@ const StepsInfoSpiritual = ({ orgID }) => {
         return <div>Error! {error.message}</div>;
     }
 
-    const { impactReport } = data;
-
-    const { pathwayMovedCount } = impactReport;
+    const {
+        impactReport: { pathwayMovedCount },
+    } = data;
 
     return (
         <StepsContent>
@@ -42,6 +42,6 @@ export default StepsInfoSpiritual;
 
 // PROPTYPES
 StepsInfoSpiritual.propTypes = {
-    stepsInfoSpiritual: PropTypes.object,
-    userStats: PropTypes.string,
+    impactReport: PropTypes.object,
+    pathwayMovedCount: PropTypes.string,
 };

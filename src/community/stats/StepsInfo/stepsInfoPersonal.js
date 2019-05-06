@@ -26,9 +26,9 @@ const StepsInfoPersonal = ({ orgID }) => {
         return <div>Error! {error.message}</div>;
     }
 
-    const { impactReport } = data;
-
-    const { stepsCount, receiversCount, stepOwnersCount } = impactReport;
+    const {
+        impactReport: { stepsCount, receiversCount, stepOwnersCount },
+    } = data;
 
     return (
         <>
@@ -51,6 +51,7 @@ export default StepsInfoPersonal;
 
 // PROPTYPES
 StepsInfoPersonal.propTypes = {
+    orgID: PropTypes.string,
     impactReport: PropTypes.object,
     stepOwnersCount: PropTypes.string,
     stepsCount: PropTypes.string,

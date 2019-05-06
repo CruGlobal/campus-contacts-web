@@ -33,4 +33,5 @@ export default StepsInfo;
 // PROPTYPES
 StepsInfo.propTypes = {
     style: PropTypes.object,
+    orgID: PropTypes.string,
 };

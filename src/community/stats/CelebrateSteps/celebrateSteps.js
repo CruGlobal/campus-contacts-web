@@ -159,6 +159,7 @@ export { CelebrateSteps };
 
 // PROPTYPES
 CelebrateSteps.propTypes = {
+    orgID: PropTypes.string,
     celebrationsItems: PropTypes.object,
     message: PropTypes.string,
     user: PropTypes.object,
