@@ -11,3 +11,4 @@ export { GET_ORGANIZATIONS } from './getOrganizations';
 export { GET_TAB_CONTENT } from './getTabsContent';
 export { GET_CELEBRATIONS_GRAPHQL } from './getCelebrationsGraphQL';
 export { GET_MORE_CELEBRATIONS_ITEMS } from './getMoreCelebrationsItems';
+export { GET_IMPACT_REPORT } from './getImpactReport';

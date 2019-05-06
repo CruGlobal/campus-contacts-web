@@ -67,6 +67,7 @@ const CelebrateSteps = ({ orgID }) => {
             },
         });
     };
+
     const fetchNextCelebration = cursor => {
         fetchMore({
             query: GET_MORE_CELEBRATIONS_ITEMS,

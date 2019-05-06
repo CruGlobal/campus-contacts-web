@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
 // QUERIES
-import { GET_STEPSINFO_PERSONAL } from '../../graphql';
+import { GET_IMPACT_REPORT } from '../../graphql';
 
 // CSS
 const StepsContent = styled.p`
@@ -13,8 +13,10 @@ font-size: 1.5rem;
 margin 0 0 5px 0;
 `;
 
-const StepsInfoPersonal = () => {
-    const { data, loading, error } = useQuery(GET_STEPSINFO_PERSONAL);
+const StepsInfoPersonal = ({ orgID }) => {
+    const { data, loading, error } = useQuery(GET_IMPACT_REPORT, {
+        variables: { id: orgID },
+    });
 
     if (loading) {
         return <div>Loading...</div>;
@@ -24,17 +26,24 @@ const StepsInfoPersonal = () => {
         return <div>Error! {error.message}</div>;
     }
 
-    const {
-        apolloClient: { stepsInfoPersonal },
-    } = data;
+    const { impactReport } = data;
 
-    const { userStats, numberStats, peopleStats } = stepsInfoPersonal;
+    const { stepsCount, receiversCount, stepOwnersCount } = impactReport;
 
     return (
-        <StepsContent>
-            {userStats} members have taken {numberStats} steps with{' '}
-            {peopleStats} people.
-        </StepsContent>
+        <>
+            {stepOwnersCount > 1 ? (
+                <StepsContent>
+                    {stepOwnersCount} members have taken {stepsCount} steps with{' '}
+                    {receiversCount} people.
+                </StepsContent>
+            ) : (
+                <StepsContent>
+                    {stepOwnersCount} member has taken {stepsCount} steps with{' '}
+                    {receiversCount} people.
+                </StepsContent>
+            )}
+        </>
     );
 };
 
@@ -42,8 +51,8 @@ export default StepsInfoPersonal;
 
 // PROPTYPES
 StepsInfoPersonal.propTypes = {
-    stepsInfoPersonal: PropTypes.object,
-    userStats: PropTypes.string,
-    numberStats: PropTypes.string,
-    peopleStats: PropTypes.string,
+    impactReport: PropTypes.object,
+    stepOwnersCount: PropTypes.string,
+    stepsCount: PropTypes.string,
+    receiversCount: PropTypes.string,
 };

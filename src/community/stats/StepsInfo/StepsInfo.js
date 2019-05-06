@@ -12,7 +12,7 @@ const Container = styled(animated.div)`
     margin-top: 150px;
 `;
 
-const StepsInfo = () => {
+const StepsInfo = ({ orgID }) => {
     // ANIMATION
     const props = useSpring({
         delay: '1100',
@@ -22,8 +22,8 @@ const StepsInfo = () => {
 
     return (
         <Container style={props}>
-            <StepsInfoPersonal />
-            <StepsInfoSpiritual />
+            <StepsInfoPersonal orgID={orgID} />
+            <StepsInfoSpiritual orgID={orgID} />
         </Container>
     );
 };

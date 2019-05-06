@@ -54,7 +54,7 @@ const CommunityStats = ({ orgId, authenticationService }) => {
         <ApolloProvider client={client}>
             <ThemeProvider theme={theme}>
                 <DashBoardNavBar orgID={orgId} />
-                <StepsInfo />
+                <StepsInfo orgID={orgId} />
                 <Members orgID={orgId} />
             </ThemeProvider>
         </ApolloProvider>

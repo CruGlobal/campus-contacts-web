@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { useQuery } from 'react-apollo-hooks';
 // QUERIES
-import { GET_STEPSINFO_SPIRITUAL } from '../../graphql';
+import { GET_IMPACT_REPORT } from '../../graphql';
 
 // CSS
 const StepsContent = styled.p`
@@ -13,8 +13,10 @@ font-size: 1.5rem;
 margin 0 0 5px 0;
 `;
 
-const StepsInfoSpiritual = () => {
-    const { data, loading, error } = useQuery(GET_STEPSINFO_SPIRITUAL);
+const StepsInfoSpiritual = ({ orgID }) => {
+    const { data, loading, error } = useQuery(GET_IMPACT_REPORT, {
+        variables: { id: orgID },
+    });
 
     if (loading) {
         return <div>Loading...</div>;
@@ -24,15 +26,14 @@ const StepsInfoSpiritual = () => {
         return <div>Error! {error.message}</div>;
     }
 
-    const {
-        apolloClient: { stepsInfoSpiritual },
-    } = data;
+    const { impactReport } = data;
 
-    const { userStats } = stepsInfoSpiritual;
+    const { pathwayMovedCount } = impactReport;
 
     return (
         <StepsContent>
-            {userStats} people reached a new stage on their spiritual journey.
+            {pathwayMovedCount} people reached a new stage on their spiritual
+            journey.
         </StepsContent>
     );
 };
