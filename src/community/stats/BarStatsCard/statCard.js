@@ -33,6 +33,7 @@ const StatLabel = styled.span`
 
 const BarStatCard = ({ count, label }) => {
     const props = useSpring({ marginTop: 0, from: { marginTop: 1000 } });
+
     return (
         <BarStatCardLayout style={props}>
             <StatNumber title={`${count} Members`}>{count}</StatNumber>

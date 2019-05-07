@@ -78,7 +78,7 @@ const Members = ({ orgID }) => {
             <Container style={props}>
                 <InnerContainer>
                     <h3>STEPS OF FAITH WITH OTHERS</h3>
-                    <Tabs tabsContent={TabContent} />
+                    <Tabs tabsContent={TabContent} orgID={orgID} />
                     {renderGraph()}
                 </InnerContainer>
                 <CelebrateSteps orgID={orgID} />

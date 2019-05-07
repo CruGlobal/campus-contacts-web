@@ -117,15 +117,15 @@ describe('<NavBarFilter />', () => {
             const wrapper = shallow(
                 <ApolloProvider client={createClient(mocks)}>
                     <Filter>
-                    {_.map(FilterConfig, option => (
-                    <FilterOption
-                        key={option.filter.key}
-                        title={option.title}
-                        filter={option.filter}
-                        active={option.filter.key === key}
-                        onFilterClick={onFilterClick}
-                    />
-                ))}
+                        {_.map(FilterConfig, option => (
+                            <FilterOption
+                                key={option.filter.key}
+                                title={option.title}
+                                filter={option.filter}
+                                active={option.filter.key === key}
+                                onFilterClick={onFilterClick}
+                            />
+                        ))}
                     </Filter>
                 </ApolloProvider>
             );

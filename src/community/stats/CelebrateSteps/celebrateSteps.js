@@ -38,6 +38,7 @@ const PaginationItem = styled.span`
 `;
 
 // Pagination works when going backwards but not forwards, everything switches to the default case of the switch statement
+// TODO: Fix issue when clicking on a different tab or filter, celebrate steps automatically switch to default case
 const CelebrateSteps = ({ orgID }) => {
     const { data, loading, error, fetchMore } = useQuery(
         GET_CELEBRATIONS_GRAPHQL,
@@ -81,6 +82,16 @@ const CelebrateSteps = ({ orgID }) => {
 
     for (let i = 0; i < celebrationItems.nodes.length; i++) {
         let interactionType = celebrationItems.nodes[i].adjectiveAttributeValue;
+        let connectionType = celebrationItems.nodes[i].objectType;
+
+        switch (connectionType) {
+            case 'interaction': {
+                break;
+            }
+            default: {
+                celebrationItems.nodes[i].objectType = 'interaction';
+            }
+        }
 
         switch (interactionType) {
             case '2': {

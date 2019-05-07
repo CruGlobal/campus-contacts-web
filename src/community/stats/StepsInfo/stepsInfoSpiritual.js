@@ -42,6 +42,7 @@ export default StepsInfoSpiritual;
 
 // PROPTYPES
 StepsInfoSpiritual.propTypes = {
+    orgID: PropTypes.string,
     impactReport: PropTypes.object,
     pathwayMovedCount: PropTypes.string,
 };

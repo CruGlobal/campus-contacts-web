@@ -1,13 +1,14 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { MockLink } from 'apollo-link-mock';
 
-import { GET_CURRENT_TAB, GET_TAB_CONTENT } from '../../graphql';
+import { GET_CURRENT_TAB, GET_IMPACT_REPORT} from '../../graphql';
 import Tabs from './tabs';
 import Tab from './tab';
+import _ from 'lodash';
 
 function createClient(mocks) {
     return new ApolloClient({
@@ -32,6 +33,20 @@ describe('<Tabs />', () => {
                         },
                     },
                 },
+                {
+                    request: { query: GET_IMPACT_REPORT, variables: {id: 15878} },
+                    result: {   
+                        data: {
+                            impactReport: {
+                                pathwayMovedCount: '0',
+                                receiversCount: '4',
+                                stepsCount: '32',
+                                stepOwnersCount: '1',
+                                __typename: "ImpactReport"
+                            },
+                        }
+                    },
+                }
             ];
 
             const TabContent = [
@@ -39,19 +54,19 @@ describe('<Tabs />', () => {
                     __typename: 'Data',
                     title: 'PEOPLE/STEPS OF FAITH',
                     key: 'MEMBERS',
-                    stats: '40 / 120',
+                    stats: '4 / 32',
                 },
                 {
                     __typename: 'Data',
                     title: 'STEPS COMPLETED',
                     key: 'STEPS_COMPLETED',
-                    stats: '20',
+                    stats: '32',
                 },
                 {
                     __typename: 'Data',
                     title: 'PEOPLE MOVEMENT',
                     key: 'PEOPLE_MOVEMENT',
-                    stats: '2',
+                    stats: '0',
                 },
                 {
                     __typename: 'Data',
@@ -60,10 +75,22 @@ describe('<Tabs />', () => {
                     stats: '',
                 },
             ]
+
+            let currentTab = 'MEMBERS'
     
-            const wrapper = mount(
+            const wrapper = shallow(
                 <ApolloProvider client={createClient(mocks)}>
-                    <Tabs tabsContent={TabContent}/>
+                    <Tabs orgID={'15878'} tabsContent={TabContent}>
+                    {_.map(TabContent, tab => (
+                        <Tab
+                            title={tab.title}
+                            value={tab.stats}
+                            key={tab.key}
+                            active={currentTab === tab.key ? 'true' : 'false'}
+                            onTabClick={() => onTabClick(tab.key)}
+                        />
+                    ))}
+                    </Tabs>
                 </ApolloProvider>,
             );
     

@@ -8,9 +8,9 @@ import { GET_IMPACT_REPORT } from '../../graphql';
 
 // CSS
 const StepsContent = styled.p`
-color: grey;
-font-size: 1.5rem;
-margin 0 0 5px 0;
+    color: grey;
+    font-size: 1.5rem;
+    margin 0 0 5px 0;
 `;
 
 const StepsInfoPersonal = ({ orgID }) => {

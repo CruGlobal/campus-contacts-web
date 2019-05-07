@@ -2,12 +2,17 @@
 import Tab from './tab';
 // LIBRARIES
 import React from 'react';
+import angular from 'angular';
 import styled from '@emotion/styled';
 import { useMutation, useQuery } from 'react-apollo-hooks';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 // QUERIES
-import { GET_CURRENT_TAB, UPDATE_CURRENT_TAB } from '../../graphql';
+import {
+    GET_CURRENT_TAB,
+    UPDATE_CURRENT_TAB,
+    GET_IMPACT_REPORT,
+} from '../../graphql';
 
 // CSS
 const TabsContainer = styled.div`
@@ -17,7 +22,7 @@ const TabsContainer = styled.div`
     overflow: hidden;
 `;
 
-const Tabs = ({ tabsContent }) => {
+const Tabs = ({ tabsContent, orgID }) => {
     const { loading, data } = useQuery(GET_CURRENT_TAB);
     const updateCurrentTab = useMutation(UPDATE_CURRENT_TAB);
 
@@ -36,9 +41,59 @@ const Tabs = ({ tabsContent }) => {
         apolloClient: { currentTab },
     } = data;
 
+    const getTabsContent = () => {
+        const { data, loading } = useQuery(GET_IMPACT_REPORT, {
+            variables: { id: orgID },
+        });
+
+        if (loading) {
+            return <div>Loading</div>;
+        }
+
+        const {
+            impactReport: { stepsCount, receiversCount, pathwayMovedCount },
+        } = data;
+
+        // We create a new array that mirrors how the data should look like with the users data
+        let newTabContent = [
+            {
+                title: 'PEOPLE/STEPS OF FAITH',
+                key: 'MEMBERS',
+                stats: `${receiversCount}  /  ${stepsCount}`,
+            },
+            {
+                title: 'STEPS COMPLETED',
+                key: 'STEPS_COMPLETED',
+                stats: `${stepsCount}`,
+            },
+            {
+                title: 'PEOPLE MOVEMENT',
+                key: 'PEOPLE_MOVEMENT',
+                stats: `${pathwayMovedCount}`,
+            },
+            {
+                title: '',
+                key: '',
+                stats: '',
+            },
+        ];
+        return newTabContent;
+    };
+
+    let userTabData = getTabsContent();
+
+    // Define a variable that will be used to render tab data, depending if it has loaded or not
+    let newTabContents;
+
+    // TabsContent should be an array, but while it loads it is not
+    // If its not an array we need our placeholder data so the component can be rendered
+    angular.isArray(userTabData)
+        ? (newTabContents = userTabData)
+        : (newTabContents = tabsContent);
+
     return (
         <TabsContainer>
-            {_.map(tabsContent, tab => (
+            {_.map(newTabContents, tab => (
                 <Tab
                     title={tab.title}
                     value={tab.stats}
@@ -55,6 +110,7 @@ export default Tabs;
 
 // PROPTYPES
 Tabs.propTypes = {
+    orgID: PropTypes.string,
     currentTab: PropTypes.string,
     title: PropTypes.string,
     value: PropTypes.string,

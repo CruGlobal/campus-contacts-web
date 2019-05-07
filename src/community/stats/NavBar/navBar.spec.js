@@ -43,7 +43,7 @@ describe('<DashBoardNavBar />', () => {
         expect(wrapper.html()).toBe('<div>Loading...</div>');
         await waitForNextTick()
         wrapper.update()
-
+       
         expect(wrapper.find('h1').text()).toBe("Christian Huffman's Test Org")
 
     })

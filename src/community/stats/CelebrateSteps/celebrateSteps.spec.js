@@ -128,14 +128,14 @@ describe('<CelebrateSteps />', () => {
             <ApolloProvider client={createClient(mocks)}>
                 <CelebrateSteps>
                     <h3>CELEBRATE</h3>
-                {_.map(celebrations.data, message => (
-                    <Message
-                        message={message.message}
-                        user={message.user}
-                        key={message.key}
-                        interactionType={message.interactionType}
-                    />
-                ))}
+                    {_.map(celebrations.data, message => (
+                        <Message
+                            message={message.message}
+                            user={message.user}
+                            key={message.key}
+                            interactionType={message.interactionType}
+                        />
+                    ))}
                 </CelebrateSteps>
             </ApolloProvider>,
         );
