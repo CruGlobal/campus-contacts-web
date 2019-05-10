@@ -604,6 +604,7 @@ export default {
             },
             cleanup: 'Organization Cleanup',
             contacts: 'Contacts',
+            blog: 'Blog',
             email_us: 'Email Us',
             groups: 'Groups',
             logout: 'Sign Out',
