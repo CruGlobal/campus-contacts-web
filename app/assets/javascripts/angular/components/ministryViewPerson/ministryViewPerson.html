@@ -60,18 +60,15 @@
         ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}"
         ng-if="$ctrl.orgPermission.archive_date === null"
     >
-        <div class="form-group">
-            <label class="form-control-select" ng-if="$ctrl.isContact()">
-                <span class="label">&nbsp;</span>
-                <select
-                    class="form-control"
-                    ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
-                    ng-model="$ctrl.orgPermission.followup_status"
-                    ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')"
-                >
-                </select>
-            </label>
-        </div>
+        <label class="form-control-select" ng-if="$ctrl.isContact()">
+            <select
+                class="form-control"
+                ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
+                ng-model="$ctrl.orgPermission.followup_status"
+                ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')"
+            >
+            </select>
+        </label>
     </div>
     <div
         class="column detail-column status-column"
