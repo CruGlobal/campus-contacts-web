@@ -2,8 +2,15 @@
     {{ ($ctrl.report.contact_count | number) || '-' }}
 </div>
 <div>
-    <span class="warning-highlight" ng-if="$ctrl.report.uncontacted_count">
-        {{ $ctrl.report.uncontacted_count | number }}
+    <span ng-if="$ctrl.report.uncontacted_count">
+        <a
+            href
+            class="warning-highlight"
+            ng-href="/ministries/{{$ctrl.org.id}}/people?&statuses=uncontacted"
+            ng-if="$ctrl.report.uncontacted_count"
+        >
+            {{ $ctrl.report.uncontacted_count | number }}
+        </a>
     </span>
     <span class="pivot-gray-4" ng-if="!$ctrl.report.uncontacted_count">-</span>
 </div>
