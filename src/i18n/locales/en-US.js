@@ -419,27 +419,6 @@ export default {
             login_with_facebook: 'Log in with Facebook',
             invite_in_progress: 'Please login to finish your invite.',
         },
-        requestAccess: {
-            title: 'Request Access',
-            createdMissionHubBlurb:
-                'MissionHub was created by Cru to help non-profit ministries stay connected with all of the leaders, members and outreach within their movement.',
-            requestAccessBlurb:
-                'Request access and our spectacular support team will help you get started.',
-            form: {
-                firstName: 'First Name',
-                lastName: 'Last Name',
-                organizationName: 'Organization Name',
-                email: 'Email',
-                submit: 'Request Access',
-            },
-            success: {
-                thankYou: 'Thank you',
-                message: 'We received your request and will contact you soon.',
-                otherApps:
-                    'Check out Cru’s other apps that help you connect and share your faith with the people you care about most.',
-                vistitWebsite: 'Visit our Website',
-            },
-        },
         mergeAccount: {
             loggedInAs:
                 'You are current logged in as {{fullName}} <{{email}}>.',
@@ -625,6 +604,7 @@ export default {
             },
             cleanup: 'Organization Cleanup',
             contacts: 'Contacts',
+            blog: 'Blog',
             email_us: 'Email Us',
             groups: 'Groups',
             logout: 'Sign Out',
