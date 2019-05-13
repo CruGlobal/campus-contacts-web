@@ -44,6 +44,7 @@
                         id="keyword"
                         placeholder="{{'surveys:keyword.keyword_example' | t}}"
                         class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort"
+                        ng-change="$ctrl.hasChanged = true"
                         ng-class="{
                             'locked': $ctrl.disableKeywordField,
                             'b--red': $ctrl.keywordError
@@ -81,6 +82,7 @@
                     type="text"
                     ng-disabled="$ctrl.disableKeywordField"
                     ng-model="$ctrl.keyword.explanation"
+                    ng-change="$ctrl.hasChanged = true"
                     ng-readonly="!$ctrl.directAdminPrivileges"
                 />
             </div>
@@ -120,6 +122,7 @@
                     id="textResponse"
                     maxlength="140"
                     placeholder="{{'surveys:keyword.response_example' | t: {interpolation: { prefix: '-', suffix: '-'} } }}"
+                    ng-change="$ctrl.hasChanged = true"
                     ng-model="$ctrl.keyword.initial_response"
                     ng-readonly="!$ctrl.directAdminPrivileges"
                 >
@@ -131,21 +134,24 @@
             </div>
             <div class="mt4">
                 <button
-                    class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                    class="f6 link dim ph4 pv3 mb2 dib bold br2 ttu tracked bg-blue"
+                    ng-class="{'bg-blue white' : $ctrl.hasChanged, 'bg-transparent ba b--pivot-gray-7 pivot-gray-7': !$ctrl.hasChanged}"
                     ng-click="$ctrl.requestKeyword()"
                     ng-if="!$ctrl.survey.keyword.state && $ctrl.directAdminPrivileges"
                 >
                     {{'surveys:keyword.request' | t}}
                 </button>
                 <span
-                    class="status gray-dark bold f6 ttu mb2"
+                    class="status pivot-gray-dark bold f6 ttu mb2"
                     ng-if="$ctrl.survey.keyword.state === 'requested'"
                 >
                     {{'surveys:keyword.requested' | t}}
                 </span>
                 <button
-                    class="f6 link dim ph4 pv3 mb2 dib white bold br2 ttu tracked bg-blue"
+                    class="f6 link dim ph4 pv3 mb2 dib bold br2 ttu tracked"
+                    ng-class="$ctrl.hasChanged ? 'bg-blue white' : 'bg-transparent ba b--pivot-gray-7 pivot-gray-7'"
                     ng-click="$ctrl.saveKeyword()"
+                    ng-disabled="!$ctrl.hasChanged"
                     ng-if="$ctrl.survey.keyword.state === 'active' && $ctrl.directAdminPrivileges"
                 >
                     {{'general:save' | t}}
