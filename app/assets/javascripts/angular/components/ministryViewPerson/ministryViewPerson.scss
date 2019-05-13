@@ -43,14 +43,28 @@ ministry-view-person {
         }
     }
     .status-column {
-        .warning .form-control-select::after {
+        display: flex;
+        height: 50px;
+
+        &.warning .form-control-select::after {
             border-top-color: $pivot-orange;
+        }
+
+        .form-control-select::after {
+            top: 45%;
+        }
+
+        .form-control-select {
+            display: flex;
         }
 
         .form-control-select select {
             border: none;
             padding-left: 0;
             color: inherit;
+            font-size: 14px;
+            line-height: 21px;
+            align-self: center;
 
             &,
             &:focus {
