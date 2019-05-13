@@ -12,7 +12,9 @@ survey-overview-questions {
         }
 
         .ui-select-container {
-            background: $gray-5 !important;
+            background: $white !important;
+            border: 1px solid $gray-3 !important;
+            border-radius: 0.25rem;
         }
     }
 }

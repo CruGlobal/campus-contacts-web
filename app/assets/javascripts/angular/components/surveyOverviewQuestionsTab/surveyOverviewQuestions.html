@@ -12,7 +12,7 @@
             ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
             ng-class="{
                 'pa3 shadow-4': !$ctrl.isExpanded[question.id],
-                'ph3 pv2 items-center mb0 br--top': $ctrl.isExpanded[question.id]
+                'ph3 pv2 items-center mb0 br--top bg-pivot-white': $ctrl.isExpanded[question.id]
         }"
         >
             <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
@@ -73,11 +73,11 @@
                             {{ 'surveys:questions.type' | t }}
                         </label>
                         <div
-                            class="dropdown dropdown-select w-100 mr2"
+                            class="dropdown dropdown-select w-100 mr2 form"
                             uib-dropdown
                         >
                             <a
-                                class="f5 link dim pa2 db pivot-gray-darker br2 dim bg-pivot-gray-5"
+                                class="f5 link form-control form-control-select"
                                 href=""
                                 uib-dropdown-toggle
                             >

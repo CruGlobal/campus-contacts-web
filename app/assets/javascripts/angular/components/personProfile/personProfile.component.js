@@ -359,7 +359,7 @@ function personProfileController(
                 },
             },
             windowClass: 'pivot_theme',
-            size: 'sm',
+            size: 'md',
         });
 
         vm.modalInstance.result
@@ -392,7 +392,7 @@ function personProfileController(
                 },
             },
             windowClass: 'pivot_theme',
-            size: 'sm',
+            size: 'md',
         });
 
         addressModal.result.then(function() {

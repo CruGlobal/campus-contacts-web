@@ -30,9 +30,12 @@ function confirmModalService($uibModal) {
                 template: [
                     '<div>',
                     '<div class="modal-header">',
-                    '<h3 class="confirm-title" id="modal-title">' +
+                    '<h3 class="modal-title" id="modal-title">' +
                         options.title +
                         '</h3>',
+                    '<a ng-click="vm.cancel()" class="close-button">',
+                    '<ng-md-icon icon="close" size="28"></ng-md-icon>',
+                    '</a>',
                     '</div>',
                     '<div class="modal-body">' + message + '</div>',
                     '<div class="modal-footer">',
