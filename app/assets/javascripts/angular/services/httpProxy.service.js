@@ -73,6 +73,7 @@ function proxyService(
                     const { data } = err || {};
 
                     if (
+                        data &&
                         data.errors &&
                         data.errors[0] &&
                         data.errors[0].detail
