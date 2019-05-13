@@ -22,6 +22,7 @@ function surveyOverviewKeywordController(
     loggedInPerson,
 ) {
     this.helpIcon = helpIcon;
+    this.hasChanged = false;
 
     const keywordErrorHandler = response => {
         let {
