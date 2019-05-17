@@ -42,6 +42,10 @@ function routesService(httpProxy, modelsService) {
                 {
                     errorMessage: 'error.messages.routes.get_organization',
                 },
+                {
+                    'fields[group]':
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests,group_memberships',
+                },
             );
         },
 
