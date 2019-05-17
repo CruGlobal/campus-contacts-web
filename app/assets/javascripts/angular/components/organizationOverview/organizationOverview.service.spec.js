@@ -50,7 +50,11 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
                 jasmine.any(String),
-                { include: 'groups,surveys,surveys.keyword' },
+                {
+                    include: 'groups,surveys,surveys.keyword',
+                    'fields[group]':
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests',
+                },
                 null,
                 jasmine.objectContaining({ errorMessage: jasmine.any(String) }),
             );
@@ -76,7 +80,11 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
                 jasmine.any(String),
-                { include: 'surveys,surveys.keyword' },
+                {
+                    include: 'surveys,surveys.keyword',
+                    'fields[group]':
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests',
+                },
                 null,
                 jasmine.objectContaining({ errorMessage: jasmine.any(String) }),
             );
@@ -92,7 +100,11 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
                 jasmine.any(String),
-                { include: 'groups' },
+                {
+                    include: 'groups',
+                    'fields[group]':
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests',
+                },
                 null,
                 jasmine.objectContaining({ errorMessage: jasmine.any(String) }),
             );
