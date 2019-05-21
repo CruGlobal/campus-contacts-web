@@ -23,8 +23,6 @@ angular
             facebookService.init();
         };
 
-        localStorageService.allowSessionTransfer();
-
         if (authenticationService.isTokenValid())
             authenticationService.setupAuthenticationState();
 
