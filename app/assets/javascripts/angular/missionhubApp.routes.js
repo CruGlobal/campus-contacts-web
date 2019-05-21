@@ -525,8 +525,11 @@ angular
             .states(
                 generatePersonPageStates({
                     name: 'app.people.person',
-                    url: '/:personId',
+                    url: '/:personId/organization/:orgId',
                     modal: true,
+                    params: {
+                        orgId: { value: null },
+                    },
                 }),
             )
             .states(
