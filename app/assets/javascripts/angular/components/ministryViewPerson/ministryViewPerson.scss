@@ -45,6 +45,7 @@ ministry-view-person {
     .status-column {
         display: flex;
         height: 50px;
+        align-items: center;
 
         &.warning .form-control-select::after {
             border-top-color: $pivot-orange;

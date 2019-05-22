@@ -25,6 +25,7 @@ function assignedSelectService(
                         deduper: deduper,
                         errorMessage:
                             'error.messages.assigned_select.search_people',
+                        bypassStore: true,
                     },
                 )
                 .then(httpProxy.extractModels);
