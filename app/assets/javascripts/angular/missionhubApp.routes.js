@@ -1,3 +1,5 @@
+import '../../../../src/dashboard/insights';
+
 angular
     .module('missionhubApp')
     .config(function(
@@ -301,6 +303,14 @@ angular
                 },
             })
             .state({
+                name: 'app.requestAccess',
+                url: '/request-access',
+                component: 'requestAccess',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
                 name: 'appWithoutMenus.mergeAccount',
                 url: '/merge-account/:rememberCode/:orgId/:userId',
                 component: 'mergeAccount',
@@ -450,6 +460,14 @@ angular
                 name: 'app.ministries.ministry.reportMovementIndicators',
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
+                resolve: {
+                    orgId: $transition$ => $transition$.params().orgId,
+                },
+            })
+            .state({
+                name: 'appWithoutMenus.insights',
+                url: '/ministries/:orgId/insights',
+                component: 'insights',
                 resolve: {
                     orgId: $transition$ => $transition$.params().orgId,
                 },
