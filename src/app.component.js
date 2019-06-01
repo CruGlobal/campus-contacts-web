@@ -12,22 +12,19 @@ angular.module('missionhubApp').component('app', {
     },
 });
 
-function appController(periodService, $rootScope, state, analyticsService) {
+function appController(periodService, $rootScope, analyticsService) {
     let deregisterEditOrganizationsEvent;
     let deregisterStateChangedEvent;
 
     this.editOrganizations = false;
     this.getPeriod = periodService.getPeriod;
-    this.currentOrganization = state.currentOrganization;
 
     this.$onInit = () => {
         this.year = new Date();
 
         deregisterStateChangedEvent = $rootScope.$on(
             'state:changed',
-            (event, { loggedIn, currentOrganization }) => {
-                this.currentOrganization = currentOrganization;
-
+            (event, { loggedIn }) => {
                 if (loggedIn) analyticsService.setupAuthenitcatedAnalyticData();
                 else analyticsService.clearAuthenticatedData();
             },
