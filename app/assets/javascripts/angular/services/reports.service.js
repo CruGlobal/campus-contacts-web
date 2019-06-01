@@ -162,9 +162,11 @@ function reportsService(
         getInteractionCount: function(report, interactionTypeId) {
             var interaction =
                 report &&
-                _.find(report.interactions, {
-                    interaction_type_id: interactionTypeId,
-                });
+                _.find(
+                    report.interactions,
+                    ({ interaction_type_id }) =>
+                        `${interaction_type_id}` === interactionTypeId,
+                );
             return _.isNil(interaction) ? '-' : interaction.interaction_count;
         },
 

@@ -21,12 +21,13 @@ function personHistoryService(_) {
                     person.interactions,
                     orgId,
                 ).filter(function(interaction) {
-                    return interaction.interaction_type_id !== 1;
+                    return interaction.interaction_type_id !== '1';
                 });
             case 'notes':
                 return _.filter(
                     filterInteractionByOrg(person.interactions, orgId),
-                    { interaction_type_id: 1 },
+                    ({ interaction_type_id }) =>
+                        `${interaction_type_id}` === '1',
                 );
             case 'surveys':
                 return filterSurveyByOrg(person.answer_sheets, orgId);
