@@ -4,7 +4,7 @@
     </h1>
     <p
         class="pivot-gray-darker f4-5  mb5"
-        bind-dynamic="'ministries.cleanup.description' | t "
+        bind-dynamic="'ministries.cleanup.description' | t"
     ></p>
 
     <div class="flex justify-between items-stretch">
@@ -53,13 +53,13 @@
             class="normal pivot-gray-darker mt3-5 pa4 f5 br2 bg-pivot-gray-5 w-32"
         >
             <h4 class="mt0 mb4 fw6 tracked ttu flex items-center">
-                {{ 'ministries.cleanup.archive_by_inactivty' | t }}
+                {{ 'ministries.cleanup.archive_by_inactivity' | t }}
                 <!-- <icon-button class='ml0' icon='help'></icon-button> --><!-- TODO: turn into tooltip when the copy for it is available -->
             </h4>
             <fieldset class="ba b--transparent pr0 mh0 w-100 pl0 pv0 mv0">
                 <p class="lh-copy w-80 mt0">
-                    {{ 'ministries.cleanup.archive_by_inactivty_description' | t
-                    }}
+                    {{ 'ministries.cleanup.archive_by_inactivity_description' |
+                    t }}
                 </p>
                 <label for="archiveInactivity" class="dn"
                     >Archive Inactivity Date</label
@@ -74,7 +74,7 @@
                     class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim"
                     ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)"
                 >
-                    {{ 'ministries.cleanup.archive_by_inactivty' | t }}
+                    {{ 'ministries.cleanup.archive_by_inactivity' | t }}
                 </button>
             </fieldset>
         </div>
