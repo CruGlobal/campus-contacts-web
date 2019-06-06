@@ -1,4 +1,4 @@
 module.exports = {
-    roots: ['src/dashboard'],
-    setupFiles: ['./src/dashboard/setupTests.js'],
+    roots: ['src/'],
+    setupFiles: ['./src/setupTests.js'],
 };

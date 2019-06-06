@@ -1,50 +1,38 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { ApolloClient } from 'apollo-client';
-import { ApolloProvider } from 'react-apollo-hooks';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { MockLink } from 'apollo-link-mock';
-import { GET_ORGANIZATIONS } from '../graphql';
 import Navigation from './navigation';
+import { waitForElement } from '@testing-library/react';
 
-function createClient(mocks) {
-    return new ApolloClient({
-        cache: new InMemoryCache(),
-        link: new MockLink(mocks),
-    });
-}
-
-const waitForNextTick = () => new Promise(resolve => setTimeout(resolve));
+import { renderWithContext } from '../testUtils';
 
 describe('<Navigation />', () => {
+    it('should render properly loading state', async () => {
+        renderWithContext(<Navigation orgId={1} />, {
+            mocks: {
+                Query: () => ({
+                    organization: () => ({
+                        id: '1',
+                        name: 'Test Organization',
+                    }),
+                }),
+            },
+        }).snapshot();
+    });
+
     it('should render properly', async () => {
-        const mocks = [
+        const { snapshot, getByText } = renderWithContext(
+            <Navigation orgId={1} />,
             {
-                request: { query: GET_ORGANIZATIONS, variables: { id: '1' } },
-                result: {
-                    data: {
-                        organization: {
-                            __typename: 'Data',
-                            name: 'Test Organization',
+                mocks: {
+                    Query: () => ({
+                        organization: () => ({
                             id: '1',
-                        },
-                    },
+                            name: 'Test Organization',
+                        }),
+                    }),
                 },
             },
-        ];
-
-        const wrapper = mount(
-            <ApolloProvider client={createClient(mocks)}>
-                <Navigation orgId={'1'} />
-            </ApolloProvider>,
         );
-
-        expect(wrapper.html()).toBe('<div>Loading...</div>');
-        await waitForNextTick();
-        wrapper.update();
-
-        expect(wrapper.find('div').text()).toBe(
-            'Navigation: Test Organization',
-        );
+        await waitForElement(() => getByText('Navigation: Test Organization'));
+        snapshot();
     });
 });

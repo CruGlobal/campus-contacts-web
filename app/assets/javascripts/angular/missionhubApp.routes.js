@@ -303,14 +303,6 @@ angular
                 },
             })
             .state({
-                name: 'app.requestAccess',
-                url: '/request-access',
-                component: 'requestAccess',
-                data: {
-                    isPublic: true,
-                },
-            })
-            .state({
                 name: 'appWithoutMenus.mergeAccount',
                 url: '/merge-account/:rememberCode/:orgId/:userId',
                 component: 'mergeAccount',

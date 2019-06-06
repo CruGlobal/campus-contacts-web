@@ -4,14 +4,8 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
-import ApolloClient from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloLink } from 'apollo-link';
-import { withClientState } from 'apollo-link-state';
-import { createHttpLink } from 'apollo-link-http';
-// Project specific
-import defaults from './state/defaults';
-import resolvers from './resolvers/index';
+// Project
+import { createApolloClient } from './apolloClient';
 // Components
 import Navigation from './components/navigation';
 
@@ -22,31 +16,11 @@ const theme = {
 };
 
 const Insights = ({ orgId, authenticationService }) => {
-    // Utilize authenticationService to grab jwt Token for headers auth
     const token = authenticationService.isTokenValid();
-    // Initialize a new httpLink to our api
-    const httplink = createHttpLink({
-        uri: 'https://api-stage.missionhub.com/apis/graphql',
-        includeExtensions: true,
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-
-    const cache = new InMemoryCache();
-    const stateLink = withClientState({
-        cache,
-        defaults,
-        resolvers,
-    });
-
-    const client = new ApolloClient({
-        cache,
-        link: ApolloLink.from([stateLink, httplink]),
-    });
+    const apolloClient = createApolloClient(token);
 
     return (
-        <ApolloProvider client={client}>
+        <ApolloProvider client={apolloClient}>
             <ThemeProvider theme={theme}>
                 <Navigation orgId={orgId} />
             </ThemeProvider>
