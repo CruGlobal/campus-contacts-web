@@ -46,6 +46,10 @@ group-members-modal {
         }
     }
 
+    .modal-title {
+        width: 100%;
+    }
+
     .modal-footer {
         ng-md-icon svg {
             fill: $white;
