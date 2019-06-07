@@ -7,22 +7,23 @@ import { ThemeProvider } from 'emotion-theming';
 // Project
 import { createApolloClient } from './apolloClient';
 // Components
-import Navigation from './components/navigation';
+import Layout from './components/layout';
 
 const theme = {
     colors: {
-        light: '#A3A9AF',
+        primary: '#505256',
     },
 };
 
-const Insights = ({ orgId, authenticationService }) => {
+const Insights = ({ orgId, authenticationService, loggedInPerson }) => {
+    const { person } = loggedInPerson;
     const token = authenticationService.isTokenValid();
     const apolloClient = createApolloClient(token);
 
     return (
         <ApolloProvider client={apolloClient}>
             <ThemeProvider theme={theme}>
-                <Navigation orgId={orgId} />
+                <Layout orgId={orgId} person={person} />
             </ThemeProvider>
         </ApolloProvider>
     );
@@ -38,7 +39,11 @@ angular
     .module('missionhubApp')
     .component(
         'insights',
-        react2angular(Insights, ['orgId'], ['authenticationService']),
+        react2angular(
+            Insights,
+            ['orgId'],
+            ['authenticationService', 'loggedInPerson'],
+        ),
     );
 
 export { Insights };
