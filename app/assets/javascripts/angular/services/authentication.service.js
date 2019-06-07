@@ -46,7 +46,7 @@ function authenticationService(
         setState(me);
     };
 
-    const setupUserSettings = async organization => {
+    const setupUserSettings = async () => {
         JsonApiDataStore.store.reset();
         const me = await loggedInPerson.load();
         setState(me);
