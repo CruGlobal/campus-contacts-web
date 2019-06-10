@@ -1,7 +1,17 @@
+@import '../../../../stylesheets/variables/colors';
+
 interaction {
     display: flex;
     .comment {
         overflow-wrap: break-word;
         word-wrap: break-word;
+    }
+
+    .icon-chip {
+        background-color: $pivot-dark-blue;
+    }
+
+    .icon-chip svg {
+        color: $white;
     }
 }
