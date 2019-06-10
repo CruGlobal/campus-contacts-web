@@ -1,6 +1,6 @@
 <div class="row" ng-click="$ctrl.openGroup(group)">
     <div class="column name-column">
-        {{ $ctrl.group.name }} ({{ $ctrl.group.group_memberships.length }})
+        {{ $ctrl.group.name }} ({{ $ctrl.groupLength() }})
     </div>
     <div class="column leaders-column">
         <span ng-repeat="leader in $ctrl.getLeaders()">

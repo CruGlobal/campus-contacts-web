@@ -25,6 +25,11 @@ function ministryViewGroupController(
     vm.editGroup = editGroup;
     vm.deleteGroup = deleteGroup;
     vm.$onInit = activate;
+    vm.groupLength = groupLength;
+
+    function groupLength() {
+        return vm.group.group_memberships.filter(m => m.person !== null).length;
+    }
 
     function activate() {
         $scope.$watchGroup(

@@ -44,7 +44,7 @@ function routesService(httpProxy, modelsService) {
                 },
                 {
                     'fields[group]':
-                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests,group_memberships',
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests,group_memberships,organization',
                 },
             );
         },
