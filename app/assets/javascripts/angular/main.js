@@ -1,4 +1,4 @@
-import '../../../../src/i18n/i18next.config';
+import '../../i18n/i18next.config';
 
 import './missionhubApp.module';
 import './missionhubApp.constants';
@@ -7,12 +7,12 @@ import './rollbar.config';
 import './missionhubApp.routes';
 import './missionhubApp.run';
 
-import '../../../../src/app.component';
-import '../../../../src/components/authentication/signIn.component';
-import '../../../../src/components/authentication/inviteLink.component';
-import '../../../../src/components/authentication/mergeAccount.component';
-import '../../../../src/components/authentication/impersonateUser.component';
-import '../../../../src/components/authentication/authLanding.component';
+import '../../../app.component';
+import '../../../components/authentication/signIn.component';
+import '../../../components/authentication/inviteLink.component';
+import '../../../components/authentication/mergeAccount.component';
+import '../../../components/authentication/impersonateUser.component';
+import '../../../components/authentication/authLanding.component';
 
 import '../../stylesheets/main.scss';
 

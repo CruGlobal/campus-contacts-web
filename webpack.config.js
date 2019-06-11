@@ -82,10 +82,10 @@ module.exports = (env = {}) => {
                           hashFuncNames: ['sha512'],
                       }),
                       new CopyPlugin([
-                          { from: 'src/.well-known', to: '.well-known' },
+                          { from: 'app/.well-known', to: '.well-known' },
                           {
                               from:
-                                  'src/.well-known/apple-app-site-association',
+                                  'app/.well-known/apple-app-site-association',
                           },
                       ]),
                   ]

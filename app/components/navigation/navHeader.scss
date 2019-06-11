@@ -1,4 +1,4 @@
-@import '../../../app/assets/stylesheets/variables/colors';
+@import '../../assets/stylesheets/variables/colors';
 
 nav-header {
     z-index: 100;
@@ -11,13 +11,13 @@ nav-header {
             padding: 0 5px;
         }
         .logo {
-            background: url(./logo-missionhub-initials.png) no-repeat;
+            background: url(logo-missionhub-initials.png) no-repeat;
             background-size: 30px;
             width: 30px;
             height: 30px;
 
             @media only screen and (min-width: 835px) {
-                background: url(./logo-missionhub@2x.png) no-repeat;
+                background: url(logo-missionhub@2x.png) no-repeat;
                 background-size: 100px;
                 width: 100px;
             }
