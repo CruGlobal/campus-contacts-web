@@ -50,6 +50,16 @@ person-profile {
         }
     }
 
+    .btn-unarchive {
+        border: 1px solid #c0c0c0;
+        font-size: 1rem;
+        font-weight: bold;
+
+        &:hover {
+            background-color: #eceef2;
+        }
+    }
+
     .row button {
         $padding: 10px;
         margin-left: $padding;

@@ -17,6 +17,7 @@ people-screen {
         );
         min-width: min-content;
         -ms-grid-columns: min-content;
+        overflow: auto;
     }
 
     .people-list,

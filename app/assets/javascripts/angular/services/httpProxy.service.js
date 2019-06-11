@@ -1,5 +1,6 @@
-angular.module('missionhubApp').factory('httpProxy', proxyService);
+import { JsonApiDataStore as JsonApiDataStoreIsolated } from 'jsonapi-datastore';
 
+angular.module('missionhubApp').factory('httpProxy', proxyService);
 function proxyService(
     $http,
     $log,
@@ -65,6 +66,12 @@ function proxyService(
                             'Bearer ' + token;
 
                         authenticationService.storeJwtToken(token);
+                    }
+
+                    if (extraConfig && extraConfig.bypassStore) {
+                        return new JsonApiDataStoreIsolated().syncWithMeta(
+                            res.data,
+                        );
                     }
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
