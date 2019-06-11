@@ -34,6 +34,8 @@ function organizationOverviewService(
                 modelsService.getModelUrl(org),
                 {
                     include: include.join(','),
+                    'fields[group]':
+                        'name,location,meets,meeting_day,start_time,end_time,list_publicly,approve_join_requests',
                 },
                 {
                     errorMessage:
