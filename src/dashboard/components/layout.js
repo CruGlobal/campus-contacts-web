@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Navigation from './navigation';
 import styled from '@emotion/styled';
 import PersonalSteps from './personalSteps';
-import StepsOfFaith from './StepsOfFaith';
+import StepsOfFaith from './stepsOfFaith';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const LayoutWrapper = styled.div`

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Layout /> should render properly 1`] = `
+<div>
+  <div
+    class="css-11tk6jz"
+  >
+    <div
+      class="css-0"
+    >
+      Loading...
+    </div>
+    <div
+      class="css-0"
+    />
+  </div>
+</div>
+`;
