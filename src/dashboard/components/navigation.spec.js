@@ -4,12 +4,15 @@ import { waitForElement } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { renderWithContext } from '../testUtils';
+import AppContext from '../appContext';
 
 describe('<Navigation />', () => {
     it('should render properly loading state', async () => {
         renderWithContext(
             <Router>
-                <Navigation orgId={1} person={{ full_name: 'test' }} />
+                <AppContext.Provider value={{ person: { full_name: 'test' } }}>
+                    <Navigation orgId={1} />
+                </AppContext.Provider>
             </Router>,
             {
                 mocks: {
@@ -27,7 +30,9 @@ describe('<Navigation />', () => {
     it('should render properly', async () => {
         const { snapshot, getByText } = renderWithContext(
             <Router>
-                <Navigation orgId={1} person={{ full_name: 'test' }} />
+                <AppContext.Provider value={{ person: { full_name: 'test' } }}>
+                    <Navigation orgId={'1'} />
+                </AppContext.Provider>
             </Router>,
             {
                 mocks: {

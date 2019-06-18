@@ -73,7 +73,7 @@ exports[`<Navigation /> should render properly 1`] = `
         </a>
       </div>
       <div
-        class="css-1gpjd5x"
+        class="css-19apeeg"
       >
         <div
           class="css-ftkk7z"
@@ -81,7 +81,7 @@ exports[`<Navigation /> should render properly 1`] = `
           test
         </div>
         <img
-          class="css-144vo2n"
+          class="css-52s210"
         />
       </div>
     </div>
