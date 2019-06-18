@@ -501,8 +501,8 @@ export default {
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
                     'Archive contacts who have been added before:',
-                archive_by_inactivty: 'Archive by inactivty',
-                archive_by_inactivty_description:
+                archive_by_inactivity: 'Archive by inactivity',
+                archive_by_inactivity_description:
                     'Archive people who have been inactive since:',
                 open_contacts: 'Open Contacts',
                 success_message: 'Your contacts have been archived!',

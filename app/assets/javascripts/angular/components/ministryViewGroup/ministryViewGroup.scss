@@ -16,6 +16,9 @@ ministry-view-group {
 
     .name-column {
         flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .leaders-column {
         flex: 1;

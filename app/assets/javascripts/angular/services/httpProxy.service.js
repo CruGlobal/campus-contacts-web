@@ -211,7 +211,14 @@ function proxyService(
         // Return a promise that resolves to the model of the specified type and with the specified id
         // If the model is already loaded, it is returned (wrapped in a promise) without a network request
         // If the model's required relationships are not fully loaded, those are loaded as well
-        getModel: function(url, type, id, relationships, extraConfig) {
+        getModel: function(
+            url,
+            type,
+            id,
+            relationships,
+            extraConfig,
+            extraParameters,
+        ) {
             var model = JsonApiDataStore.store.find(type, id);
             var unloadedRelationships = proxy.getUnloadedRelationships(
                 model,
@@ -233,6 +240,7 @@ function proxyService(
                         url,
                         {
                             include: unloadedRelationships.join(','),
+                            ...extraParameters,
                         },
                         extraConfig,
                     );
