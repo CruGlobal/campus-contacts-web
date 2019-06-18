@@ -42,18 +42,14 @@ function authenticationService(
 
     const updateUserData = async () => {
         const me = await loggedInPerson.load();
-        const currentState = localStorageService.get('state');
-        const currentOrganization = currentState
-            ? currentState.currentOrganization
-            : null;
 
-        setState(currentOrganization, me);
+        setState(me);
     };
 
-    const setupUserSettings = async organization => {
+    const setupUserSettings = async () => {
         JsonApiDataStore.store.reset();
         const me = await loggedInPerson.load();
-        setState(organization ? organization.id : 0, me);
+        setState(me);
         i18next.changeLanguage(me.user.language);
         updateRollbarPerson(me);
     };
@@ -76,11 +72,11 @@ function authenticationService(
         localStorageService.set('jwtToken', token);
     };
 
-    const setAuthorizationAndState = (token, organization) => {
+    const setAuthorizationAndState = token => {
         if (token) {
             storeJwtToken(token);
             setHttpHeaders(token);
-            setupUserSettings(organization);
+            setupUserSettings();
         }
     };
 
@@ -110,7 +106,7 @@ function authenticationService(
         try {
             const response = await requestTicket(accessToken);
             const { data } = await requestV4Token(response.data.ticket);
-            setAuthorizationAndState(data.token, data.recent_organization);
+            setAuthorizationAndState(data.token);
             const inviteState = sessionStorageService.get('inviteState');
 
             inviteState
@@ -124,7 +120,7 @@ function authenticationService(
     const authorizeFacebookAccess = async accessToken => {
         try {
             const { data } = await requestFacebookV4Token(accessToken);
-            setAuthorizationAndState(data.token, data.recent_organization);
+            setAuthorizationAndState(data.token);
             $state.go('app.people');
         } catch (e) {
             errorService.displayError(e, false);
@@ -137,7 +133,6 @@ function authenticationService(
         if (!currentState) return;
 
         state.hasMissionhubAccess = currentState.hasMissionhubAccess;
-        state.currentOrganization = currentState.currentOrganization;
         state.organization_with_missing_signatures_ids =
             currentState.organization_with_missing_signatures_ids;
         state.loggedIn = true;
@@ -145,10 +140,9 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const setState = (organizationId, person) => {
+    const setState = person => {
         const newState = {
             hasMissionhubAccess: true,
-            currentOrganization: organizationId,
             organization_with_missing_signatures_ids: person
                 ? person.organization_with_missing_signatures_ids
                 : [],
@@ -162,7 +156,6 @@ function authenticationService(
     const clearState = () => {
         localStorageService.destroy('state');
         state.hasMissionhubAccess = null;
-        state.currentOrganization = null;
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
         JsonApiDataStore.store.reset();
@@ -176,7 +169,7 @@ function authenticationService(
             const { data } = await $http.get(
                 `${envService.read('apiUrl')}/impersonations/${userId}`,
             );
-            setAuthorizationAndState(data.token, data.recent_organization);
+            setAuthorizationAndState(data.token);
         } catch (e) {
             errorService.displayError(e, false);
         }
@@ -187,7 +180,7 @@ function authenticationService(
             const { data } = await $http.delete(
                 `${envService.read('apiUrl')}/impersonations`,
             );
-            setAuthorizationAndState(data.token, data.recent_organization);
+            setAuthorizationAndState(data.token);
         } catch (e) {
             errorService.displayError(e, false);
         }

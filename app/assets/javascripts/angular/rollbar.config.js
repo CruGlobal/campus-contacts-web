@@ -121,8 +121,6 @@ angular
                         person_id: person.id,
                         username: person.full_name,
                         email: person.user.username,
-                        primary_organization_id:
-                            person.user.primary_organization_id,
                     },
                 },
             });
