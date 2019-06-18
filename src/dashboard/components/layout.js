@@ -28,11 +28,11 @@ const LayoutWrapper = styled.div`
 
 const Content = styled.div``;
 
-const Layout = ({ orgId, person }) => {
+const Layout = ({ orgId }) => {
     return (
         <LayoutWrapper>
             <Router>
-                <Navigation orgId={orgId} person={person} />
+                <Navigation orgId={orgId} />
                 <Content>
                     <Route
                         path="/ministries/:id/insights/personal"

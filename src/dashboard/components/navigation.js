@@ -122,7 +122,7 @@ const StyledLink = styled(NavLink)`
     }
 `;
 
-const Navigation = ({ orgId, person }) => {
+const Navigation = ({ orgId }) => {
     const { data, loading, error } = useQuery(GET_ORGANIZATIONS, {
         variables: { id: orgId },
     });
