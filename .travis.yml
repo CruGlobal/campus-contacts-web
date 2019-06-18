@@ -6,6 +6,7 @@ addons:
 
 script:
     - yarn test
+    - yarn global add apollo
     - yarn gql:schema
     - yarn test:react
     - yarn prettier:check
