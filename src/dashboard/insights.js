@@ -6,6 +6,7 @@ import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
 // Project
 import { createApolloClient } from './apolloClient';
+import AppContext from './appContext';
 // Components
 import Layout from './components/layout';
 
@@ -15,16 +16,29 @@ const theme = {
     },
 };
 
-const Insights = ({ orgId, authenticationService, loggedInPerson }) => {
+const Insights = ({
+    orgId,
+    authenticationService,
+    loggedInPerson,
+    $rootScope,
+}) => {
     const { person } = loggedInPerson;
     const token = authenticationService.isTokenValid();
     const apolloClient = createApolloClient(token);
 
     return (
         <ApolloProvider client={apolloClient}>
-            <ThemeProvider theme={theme}>
-                <Layout orgId={orgId} person={person} />
-            </ThemeProvider>
+            <AppContext.Provider
+                value={{
+                    auth: authenticationService,
+                    person,
+                    root: $rootScope,
+                }}
+            >
+                <ThemeProvider theme={theme}>
+                    <Layout orgId={orgId} person={person} />
+                </ThemeProvider>
+            </AppContext.Provider>
         </ApolloProvider>
     );
 };
@@ -42,7 +56,7 @@ angular
         react2angular(
             Insights,
             ['orgId'],
-            ['authenticationService', 'loggedInPerson'],
+            ['authenticationService', 'loggedInPerson', '$rootScope'],
         ),
     );
 

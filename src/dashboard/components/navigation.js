@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { NavLink } from 'react-router-dom';
 // Project
 import backButton from '../assets/back-button.svg';
+import UserMenu from './userMenu';
 
 const GET_ORGANIZATIONS = gql`
     query organization($id: ID!) {
@@ -61,27 +62,6 @@ const BackLink = styled.a`
     img {
         margin-right: 10px;
     }
-`;
-
-const UserContainer = styled.div`
-    width: 200px;
-    height: 30px;
-    flex-grow: 1;
-    justify-content: flex-end;
-    display: flex;
-    align-items: center;
-`;
-
-const UserAvatar = styled.img`
-    width: 36px;
-    height: 36px;
-    border-radius: 30px;
-`;
-
-const UserName = styled.div`
-    line-height: 20px;
-    color: #505256;
-    margin-right: 15px;
 `;
 
 const LinksContainer = styled.div`
@@ -194,10 +174,7 @@ const Navigation = ({ orgId, person }) => {
                         Insights
                     </MainStyledLink>
                 </LinksContainer>
-                <UserContainer>
-                    <UserName>{person.full_name}</UserName>
-                    <UserAvatar src={person.picture} />
-                </UserContainer>
+                <UserMenu />
             </Main>
             <Sub>
                 <StyledLink to={`/ministries/${orgId}/insights/personal`}>
