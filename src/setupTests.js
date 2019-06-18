@@ -5,4 +5,6 @@ jest.mock('./dashboard/apolloClient', () => ({
     apolloClient: require('./dashboard/testUtils/apolloMockClient').createApolloMockClient(),
 }));
 
-resetGlobalMockSeeds();
+beforeEach(() => {
+    resetGlobalMockSeeds();
+});

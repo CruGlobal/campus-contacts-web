@@ -1,4 +1,4 @@
 module.exports = {
     roots: ['src/'],
-    setupFiles: ['./src/setupTests.js'],
+    setupFilesAfterEnv: ['./src/setupTests.js'],
 };
