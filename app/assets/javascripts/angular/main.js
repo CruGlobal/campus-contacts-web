@@ -1,4 +1,4 @@
-import '../../i18n/i18next.config';
+import '../../../../src/i18n/i18next.config';
 
 import './missionhubApp.module';
 import './missionhubApp.constants';
