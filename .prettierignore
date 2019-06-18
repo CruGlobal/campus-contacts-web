@@ -6,3 +6,4 @@ yarn.lock
 README.md
 netlify.toml
 .babelrc
+schema.json

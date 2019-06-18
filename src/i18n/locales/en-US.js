@@ -626,6 +626,7 @@ export default {
                 body:
                     'These tools will be removed when we shut down Legacy. We are working to bring you a better dashboard experience in the near future!',
             },
+            insights: 'Insights',
         },
         organizations: {
             manage: 'Manage Ministries',
