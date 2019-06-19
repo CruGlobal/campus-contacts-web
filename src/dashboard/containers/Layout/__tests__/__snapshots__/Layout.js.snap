@@ -9,25 +9,25 @@ exports[`<Layout /> should render properly 1`] = `
       class="css-1jxaal1"
     >
       <a
-        class="css-11b42wo"
+        class="css-1dlfb6f"
         href="/ministries/undefined/insights/personal"
       >
         Personal Steps
       </a>
       <a
-        class="css-11b42wo"
+        class="css-1dlfb6f"
         href="/ministries/undefined/insights/steps"
       >
         Steps of Faith
       </a>
       <a
-        class="css-11b42wo"
+        class="css-1dlfb6f"
         href="/ministries/undefined/insights/interactions"
       >
         Interactions
       </a>
       <a
-        class="css-11b42wo"
+        class="css-1dlfb6f"
         href="/ministries/undefined/insights/challenges"
       >
         Challenges
