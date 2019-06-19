@@ -274,12 +274,6 @@ angular
                 },
             })
             .state({
-                name: 'appReact',
-                url: '',
-                abstract: true,
-                component: 'appReact',
-            })
-            .state({
                 name: 'app.signIn',
                 url: '/sign-in',
                 component: 'signIn',
@@ -463,16 +457,8 @@ angular
                 },
             })
             .state({
-                name: 'appReact.insights',
-                url: '/ministries/:orgId/insights/personal',
-                component: 'insights',
-                resolve: {
-                    orgId: $transition$ => $transition$.params().orgId,
-                },
-            })
-            .state({
-                name: 'appReact.subRoutes',
-                url: '/ministries/:orgId/insights/:subRoute',
+                name: 'app.ministries.ministry.insights',
+                url: '/insights/:subTab',
                 component: 'insights',
                 resolve: {
                     orgId: $transition$ => $transition$.params().orgId,

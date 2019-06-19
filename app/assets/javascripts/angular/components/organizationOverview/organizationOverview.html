@@ -1,7 +1,7 @@
 <async-content ready="$ctrl.ready">
     <div
-        class="br3 bg-pivot-darker-blue shadow-4 mb3"
-        ng-class="{'hidden-org': $ctrl.org.visible === false}"
+        class="br3 bg-pivot-darker-blue mb3"
+        ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
         <div

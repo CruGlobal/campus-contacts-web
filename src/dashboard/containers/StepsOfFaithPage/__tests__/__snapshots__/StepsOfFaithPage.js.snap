@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StepsOfFaithPage /> should render properly 1`] = `
+<div>
+  <div
+    class="css-0"
+  >
+    <div
+      class="css-15zo3uz"
+    >
+      <h1
+        class="css-1au0599"
+      >
+        Steps of Faith
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        To be implemented
+      </h2>
+      <div
+        class="css-1izl14o"
+      />
+    </div>
+  </div>
+</div>
+`;

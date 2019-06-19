@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PersonalStepsPage /> should render properly 1`] = `
+<div>
+  <div
+    class="css-0"
+  >
+    <div
+      class="css-15zo3uz"
+    >
+      <h1
+        class="css-1au0599"
+      >
+        Personal Steps Completed
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Total personal steps of faith completed.
+      </h2>
+      <div
+        class="css-1izl14o"
+      />
+    </div>
+    <div
+      class="css-15zo3uz"
+    >
+      <h1
+        class="css-1au0599"
+      >
+        Member Stages/Current Personal Steps
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Total number of members and personal steps of faith selected currently in MissionHub.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-15zo3uz"
+    >
+      <h1
+        class="css-1au0599"
+      >
+        Member Movement
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Number of members who changed their stage in the past 6 months.
+      </h2>
+      <div
+        class="css-1izl14o"
+      />
+    </div>
+  </div>
+</div>
+`;

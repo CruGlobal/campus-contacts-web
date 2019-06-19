@@ -7,36 +7,19 @@ import { ThemeProvider } from 'emotion-theming';
 // Project
 import { createApolloClient } from './apolloClient';
 import AppContext from './appContext';
+import defaultTheme from './defaultTheme';
 // Components
-import Layout from './components/layout';
+import Layout from './containers/Layout';
 
-const theme = {
-    colors: {
-        primary: '#505256',
-    },
-};
-
-const Insights = ({
-    orgId,
-    authenticationService,
-    loggedInPerson,
-    $rootScope,
-}) => {
-    const { person } = loggedInPerson;
+const Insights = ({ orgId, authenticationService }) => {
     const token = authenticationService.isTokenValid();
     const apolloClient = createApolloClient(token);
 
     return (
         <ApolloProvider client={apolloClient}>
-            <AppContext.Provider
-                value={{
-                    auth: authenticationService,
-                    person,
-                    root: $rootScope,
-                }}
-            >
-                <ThemeProvider theme={theme}>
-                    <Layout orgId={orgId} person={person} />
+            <AppContext.Provider value={{ orgId }}>
+                <ThemeProvider theme={defaultTheme}>
+                    <Layout />
                 </ThemeProvider>
             </AppContext.Provider>
         </ApolloProvider>
@@ -45,19 +28,14 @@ const Insights = ({
 
 Insights.propTypes = {
     orgId: PropTypes.string,
-    theme: PropTypes.object,
-    token: PropTypes.string,
+    authenticationService: PropTypes.object,
 };
 
 angular
     .module('missionhubApp')
     .component(
         'insights',
-        react2angular(
-            Insights,
-            ['orgId'],
-            ['authenticationService', 'loggedInPerson', '$rootScope'],
-        ),
+        react2angular(Insights, ['orgId'], ['authenticationService']),
     );
 
 export { Insights };

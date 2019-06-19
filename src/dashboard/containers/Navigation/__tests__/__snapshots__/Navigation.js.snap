@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Navigation /> should render properly 1`] = `
+<div>
+  <div
+    class="css-1jxaal1"
+  >
+    <a
+      class="css-11b42wo"
+      href="/ministries/1/insights/personal"
+    >
+      Personal Steps
+    </a>
+    <a
+      class="css-11b42wo"
+      href="/ministries/1/insights/steps"
+    >
+      Steps of Faith
+    </a>
+    <a
+      class="css-11b42wo"
+      href="/ministries/1/insights/interactions"
+    >
+      Interactions
+    </a>
+    <a
+      class="css-11b42wo"
+      href="/ministries/1/insights/challenges"
+    >
+      Challenges
+    </a>
+  </div>
+</div>
+`;

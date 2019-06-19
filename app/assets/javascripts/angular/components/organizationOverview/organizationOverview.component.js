@@ -33,6 +33,10 @@ function organizationOverviewController(
     this.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     this.surveyResponses = 'countHidden';
 
+    this.isInsightsTab = () => {
+        return $state.current.name === 'app.ministries.ministry.insights';
+    };
+
     this.isTabVisible = tabName => {
         return (
             tabName !== 'labels' &&

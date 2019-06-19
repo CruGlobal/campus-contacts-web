@@ -1,54 +1,49 @@
 // Vendors
 import React from 'react';
-import PropTypes from 'prop-types';
-import Navigation from './navigation';
 import styled from '@emotion/styled';
-import PersonalSteps from './personalSteps';
-import StepsOfFaith from './stepsOfFaith';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+// Projects
+import Navigation from '../Navigation';
+import PersonalStepsPage from '../PersonalStepsPage';
+import StepsOfFaithPage from '../StepsOfFaithPage';
 
 const LayoutWrapper = styled.div`
     display: flex;
     color: ${props => props.theme.colors.primary};
-    font-family: Source Sans Pro;
+    font-family: ${props => props.theme.font.family};
     font-style: normal;
     font-weight: normal;
-    font-size: 14px;
+    font-size: ${props => props.theme.font.size};
     line-height: 20px;
-    min-height: 100vh;
     flex-direction: column;
-    justify-content: space-between;
-    background: #2f2f2f;
-    background-image: url(../assets/background-left.png),
-        url(../assets/background-right.png);
-    background-position: left 100px, right 120px;
-    background-repeat: repeat-y, no-repeat;
-    background-attachment: fixed, fixed;
+    background-color: #f2f2f2;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+    width: 100%;
+`;
 
-const Layout = ({ orgId }) => {
+const Layout = () => {
     return (
         <LayoutWrapper>
             <Router>
-                <Navigation orgId={orgId} />
+                <Navigation />
                 <Content>
                     <Route
                         path="/ministries/:id/insights/personal"
-                        component={PersonalSteps}
+                        component={PersonalStepsPage}
                     />
                     <Route
                         path="/ministries/:id/insights/steps"
-                        component={StepsOfFaith}
+                        component={StepsOfFaithPage}
                     />
                     <Route
                         path="/ministries/:id/insights/interactions"
-                        component={StepsOfFaith}
+                        component={StepsOfFaithPage}
                     />
                     <Route
                         path="/ministries/:id/insights/challenges"
-                        component={StepsOfFaith}
+                        component={StepsOfFaithPage}
                     />
                 </Content>
             </Router>
@@ -58,6 +53,4 @@ const Layout = ({ orgId }) => {
 
 export default Layout;
 
-Layout.propTypes = {
-    orgId: PropTypes.string,
-};
+Layout.propTypes = {};
