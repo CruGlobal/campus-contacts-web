@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const Container = styled.div`
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    background: ${props => props.theme.colors.white};
+    background: ${({ theme }) => theme.colors.white};
     border-radius: 8px;
     padding-left: 24px;
     padding-right: 24px;
@@ -21,7 +21,7 @@ const Title = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
-    color: ${props => props.theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     margin-bottom: 12px;
     margin-top: 0px;
 `;
@@ -30,7 +30,7 @@ const Subtitle = styled.h2`
     font-size: 14px;
     line-height: 20px;
     font-weight: normal;
-    color: ${props => props.theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     margin-top: 0;
 `;
 

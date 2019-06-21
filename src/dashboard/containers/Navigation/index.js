@@ -1,8 +1,7 @@
-// Vendors
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import { NavLink } from 'react-router-dom';
-// Project
+
 import AppContext from '../../appContext';
 
 const NavigationBar = styled.div`
@@ -25,17 +24,17 @@ const Link = styled(NavLink)`
     position: relative;
 
     :hover {
-        color: ${props => props.theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.highlight};
         text-decoration: none;
     }
 
     &.active {
-        color: ${props => props.theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.highlight};
     }
 `;
 
 const Navigation = () => {
-    const { orgId } = React.useContext(AppContext);
+    const { orgId } = useContext(AppContext);
     return (
         <NavigationBar>
             <Link to={`/ministries/${orgId}/insights/personal`}>

@@ -1,8 +1,7 @@
-// Vendors
 import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 import { withTheme } from 'emotion-theming';
-import _ from 'lodash';
+import i18n from 'i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from '@emotion/styled';
@@ -33,11 +32,11 @@ const MemberStagesChart = props => {
 
     const { stages_report: report } = data;
 
-    const MEMBERS_LABEL = 'Members';
-    const PERSONAL_STEPS_LABEL = 'Personal Steps of Faith';
-    const STAGE_LABEL = 'Stage';
+    const MEMBERS_LABEL = i18n.t('insights:members');
+    const PERSONAL_STEPS_LABEL = i18n.t('insights:personalSteps');
+    const STAGE_LABEL = i18n.t('insights:stage');
 
-    const graphData = _.map(report.data, row => ({
+    const graphData = report.data.map(row => ({
         [MEMBERS_LABEL]: row.member_count,
         [PERSONAL_STEPS_LABEL]: row.steps_completed_count,
         [STAGE_LABEL]: row.pathway_stage,

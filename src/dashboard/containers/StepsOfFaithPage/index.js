@@ -1,16 +1,13 @@
 // Vendors
 import React from 'react';
-import styled from '@emotion/styled';
-// Project
-import Card from '../../components/Card';
 
-const Wrapper = styled.div``;
+import Card from '../../components/Card';
 
 const StepsOfFaithPage = () => {
     return (
-        <Wrapper>
+        <div>
             <Card title={'Steps of Faith'} subtitle={'To be implemented'} />
-        </Wrapper>
+        </div>
     );
 };
 

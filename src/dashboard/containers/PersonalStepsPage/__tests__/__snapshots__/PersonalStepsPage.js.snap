@@ -2,9 +2,7 @@
 
 exports[`<PersonalStepsPage /> should render properly 1`] = `
 <div>
-  <div
-    class="css-0"
-  >
+  <div>
     <div
       class="css-11s8wh0"
     >

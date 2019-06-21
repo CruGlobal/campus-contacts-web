@@ -1,37 +1,29 @@
-// Vendors
 import React from 'react';
-import styled from '@emotion/styled';
-// Project
+import { useTranslation } from 'react-i18next';
+
 import Card from '../../components/Card';
 import MemberStagesChart from '../MemberStagesChart';
 
-const Wrapper = styled.div``;
+const PersonalStepsPage = () => {
+    const { t } = useTranslation('insights');
 
-const Index = () => {
     return (
-        <Wrapper>
+        <div>
             <Card
-                title={'Personal Steps Completed'}
-                subtitle={'Total personal steps of faith completed.'}
+                title={t('personalStepsCompleted')}
+                subtitle={t('personalStepsTotal')}
             />
             <Card
-                title={'Member Stages/Current Personal Steps'}
-                subtitle={
-                    'Total number of members and personal steps of faith selected currently in MissionHub.'
-                }
+                title={t('currentPersonalSteps')}
+                subtitle={t('membersTotal')}
             >
                 <MemberStagesChart />
             </Card>
-            <Card
-                title={'Member Movement'}
-                subtitle={
-                    'Number of members who changed their stage in the past 6 months.'
-                }
-            />
-        </Wrapper>
+            <Card title={t('membersMovement')} subtitle={t('membersChanged')} />
+        </div>
     );
 };
 
-export default Index;
+export default PersonalStepsPage;
 
-Index.propTypes = {};
+PersonalStepsPage.propTypes = {};

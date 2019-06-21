@@ -1,6 +1,7 @@
-import template from './organizationContactImportStep2.html';
 import * as Papa from 'papaparse';
 import _ from 'lodash';
+
+import template from './organizationContactImportStep2.html';
 
 angular.module('missionhubApp').component('organizationContactImportStep2', {
     bindings: {

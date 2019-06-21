@@ -1,19 +1,18 @@
-// Vendors
 import React from 'react';
 import styled from '@emotion/styled';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-// Projects
+
 import Navigation from '../Navigation';
 import PersonalStepsPage from '../PersonalStepsPage';
 import StepsOfFaithPage from '../StepsOfFaithPage';
 
 const LayoutWrapper = styled.div`
     display: flex;
-    color: ${props => props.theme.colors.primary};
-    font-family: ${props => props.theme.font.family};
+    color: ${({ theme }) => theme.colors.primary};
+    font-family: ${({ theme }) => theme.font.family};
     font-style: normal;
     font-weight: normal;
-    font-size: ${props => props.theme.font.size};
+    font-size: ${({ theme }) => theme.font.size};
     line-height: 20px;
     flex-direction: column;
     background-color: #f2f2f2;

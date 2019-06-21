@@ -1,6 +1,6 @@
-import template from './orgManagementEdit.html';
-
 import helpIcon from '../../../../images/icons/icon-help.svg';
+
+import template from './orgManagementEdit.html';
 
 angular.module('missionhubApp').component('orgManagementEdit', {
     controller: orgManagementEditController,

@@ -1,9 +1,8 @@
 // Vendors
 import React from 'react';
 import { waitForElement } from '@testing-library/react';
-// Project
+
 import { renderWithContext } from '../../../testUtils';
-// Subject
 import MemberStagesChart from '../';
 
 describe('<MemberStagesChart />', () => {

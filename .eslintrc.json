@@ -22,10 +22,17 @@
             }
         }
     ],
+    "plugins": ["import"],
     "rules": {
         "block-scoped-var": "error",
         "dot-notation": "error",
         "eqeqeq": ["error", "smart"],
+        "import/order": [
+            2,
+            {
+                "newlines-between": "always"
+            }
+        ],
         "no-alert": "warn",
         "no-caller": "error",
         "no-case-declarations": "error",

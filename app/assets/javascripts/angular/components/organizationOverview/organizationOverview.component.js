@@ -1,7 +1,7 @@
-import template from './organizationOverview.html';
 import './organizationOverview.scss';
-
 import { t } from 'i18next';
+
+import template from './organizationOverview.html';
 
 angular.module('missionhubApp').component('organizationOverview', {
     controller: organizationOverviewController,
