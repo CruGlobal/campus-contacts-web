@@ -1,0 +1,25 @@
+@import '../../../../stylesheets/variables/colors';
+
+unsubscribe {
+    button {
+        height: 58px;
+        font-weight: 700;
+        font-size: 18px;
+        width: 220px;
+        margin-top: 50px;
+    }
+
+    h1 {
+        font-size: 48px;
+        color: $gray-1;
+        font-weight: 200;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: $gray-1;
+        font-weight: 200;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+}

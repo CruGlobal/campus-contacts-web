@@ -282,6 +282,21 @@ angular
                 },
             })
             .state({
+                name: 'app.unsubscribe',
+                url: '/unsubscribe',
+                component: 'unsubscribe',
+                data: {
+                    isPublic: true,
+                },
+                resolve: {
+                    token: $location => $location.search().token,
+                    organizationId: $location =>
+                        $location.search().organization_id,
+                    organizationName: $location =>
+                        $location.search().organization_name,
+                },
+            })
+            .state({
                 name: 'appWithoutMenuLinks.auth',
                 url: '/auth-web?access_token',
                 component: 'signIn',
