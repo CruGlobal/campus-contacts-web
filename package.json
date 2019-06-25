@@ -15,7 +15,7 @@
         "test:react:changes": "jest -o",
         "test-watch": "karma start",
         "test-debug": "karma start --browsers Chrome",
-        "lint": "eslint '@(app|src)/**/*.js'",
+        "lint": "eslint './*.{js,ts,tsx}' './{src,app}/**/*.{js,ts,tsx}'",
         "lint:fix": "eslint './*.{js,ts,tsx}' './{src,app}/**/*.{js,ts,tsx}' --fix",
         "prettier:check": "prettier '{{src,app,bin,test,__{tests,mocks}__}/**/*.{js,json,html},./*.{js,json,html,yml}}' --list-different",
         "prettier:write": "prettier '{{src,app,bin,test,__{tests,mocks}__}/**/*.{js,json,html},./*.{js,json,html,yml}}' --write",

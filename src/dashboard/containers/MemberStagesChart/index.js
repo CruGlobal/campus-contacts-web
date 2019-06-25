@@ -1,6 +1,7 @@
 import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 import { withTheme } from 'emotion-theming';
+import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
@@ -25,9 +26,10 @@ const Wrapper = styled.div`
 
 const MemberStagesChart = props => {
     const { data, loading } = useQuery(GET_STAGE_REPORT);
+    const { t } = useTranslation('insights');
 
     if (loading) {
-        return <Wrapper>Loading...</Wrapper>;
+        return <Wrapper>{t('loading')}</Wrapper>;
     }
 
     const { stages_report: report } = data;

@@ -1,12 +1,14 @@
-// Vendors
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Card from '../../components/Card';
 
 const StepsOfFaithPage = () => {
+    const { t } = useTranslation('insights');
+
     return (
         <div>
-            <Card title={'Steps of Faith'} subtitle={'To be implemented'} />
+            <Card title={t('steps.title')} />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import AppContext from '../../appContext';
 
@@ -35,19 +36,20 @@ const Link = styled(NavLink)`
 
 const Navigation = () => {
     const { orgId } = useContext(AppContext);
+    const { t } = useTranslation('insights');
     return (
         <NavigationBar>
             <Link to={`/ministries/${orgId}/insights/personal`}>
-                Personal Steps
+                {t('tabs.personal')}
             </Link>
             <Link to={`/ministries/${orgId}/insights/steps`}>
-                Steps of Faith
+                {t('tabs.steps')}
             </Link>
             <Link to={`/ministries/${orgId}/insights/interactions`}>
-                Interactions
+                {t('tabs.interactions')}
             </Link>
             <Link to={`/ministries/${orgId}/insights/challenges`}>
-                Challenges
+                {t('tabs.challenges')}
             </Link>
         </NavigationBar>
     );

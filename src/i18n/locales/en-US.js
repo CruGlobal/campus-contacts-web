@@ -1133,5 +1133,15 @@ export default {
         membersMovement: 'Member Movement',
         membersChanged:
             'Number of members who changed their stage in the past 6 months.',
+        loading: 'Loading...',
+        tabs: {
+            personal: 'Personal Steps',
+            steps: 'Steps of Faith',
+            interactions: 'Interactions',
+            challenges: 'Challenges',
+        },
+        steps: {
+            title: 'Steps of Faith',
+        },
     },
 };
