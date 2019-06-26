@@ -5,4 +5,5 @@ module.exports = {
         '^.+\\.js$': 'babel-jest',
         '^.+\\.svg$': 'jest-svg-transformer',
     },
+    coverageDirectory: './coverage-react/',
 };

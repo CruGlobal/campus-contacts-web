@@ -2,7 +2,6 @@ import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from '@emotion/styled';
@@ -34,9 +33,9 @@ const MemberStagesChart = props => {
 
     const { stages_report: report } = data;
 
-    const MEMBERS_LABEL = i18n.t('insights:members');
-    const PERSONAL_STEPS_LABEL = i18n.t('insights:personalSteps');
-    const STAGE_LABEL = i18n.t('insights:stage');
+    const MEMBERS_LABEL = t('members');
+    const PERSONAL_STEPS_LABEL = t('personalSteps');
+    const STAGE_LABEL = t('stage');
 
     const graphData = report.data.map(row => ({
         [MEMBERS_LABEL]: row.member_count,
