@@ -419,9 +419,9 @@ export default {
             login_with_facebook: 'Log in with Facebook',
             invite_in_progress:
                 'To complete your invite, create account or log in.',
-            signUpWithKey: 'Sign Up with Email',
-            loginWithKey: 'Log In with Email',
-            useFacebook: 'Use Facebook',
+            signUpWithEmail: 'Sign Up with Email',
+            signInWithEmail: 'Sing In with Email',
+            continueFacebook: 'Continue with Facebook',
         },
         mergeAccount: {
             loggedInAs:
