@@ -1,6 +1,8 @@
-import template from './surveyOverviewSettings.html';
 import _ from 'lodash';
+
 import helpIcon from '../../../../images/icon-help.svg';
+
+import template from './surveyOverviewSettings.html';
 import './surveyOverviewSettings.scss';
 
 angular.module('missionhubApp').component('surveyOverviewSettings', {

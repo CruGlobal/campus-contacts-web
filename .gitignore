@@ -2,4 +2,5 @@
 node_modules
 dist
 coverage
+coverage-react
 schema.json

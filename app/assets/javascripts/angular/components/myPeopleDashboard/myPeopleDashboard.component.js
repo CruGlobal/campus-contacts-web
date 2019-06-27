@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 

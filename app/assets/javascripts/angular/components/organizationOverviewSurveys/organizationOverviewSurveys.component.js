@@ -1,6 +1,7 @@
-import template from './organizationOverviewSurveys.html';
 import './organizationOverviewSurveys.scss';
 import _ from 'lodash';
+
+import template from './organizationOverviewSurveys.html';
 
 angular.module('missionhubApp').component('organizationOverviewSurveys', {
     require: {

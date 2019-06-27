@@ -1121,4 +1121,27 @@ export default {
                 'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
         },
     },
+    insights: {
+        members: 'Members',
+        personalSteps: 'Personal Steps of Faith',
+        stage: 'Stage',
+        personalStepsCompleted: 'Personal Steps Completed',
+        personalStepsTotal: 'Total personal steps of faith completed.',
+        currentPersonalSteps: 'Member Stages/Current Personal Steps',
+        membersTotal:
+            'Total number of members and personal steps of faith selected currently in MissionHub.',
+        membersMovement: 'Member Movement',
+        membersChanged:
+            'Number of members who changed their stage in the past 6 months.',
+        loading: 'Loading...',
+        tabs: {
+            personal: 'Personal Steps',
+            steps: 'Steps of Faith',
+            interactions: 'Interactions',
+            challenges: 'Challenges',
+        },
+        steps: {
+            title: 'Steps of Faith',
+        },
+    },
 };

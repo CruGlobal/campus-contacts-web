@@ -1,6 +1,7 @@
-import template from './messageModal.html';
 import './messageModal.scss';
 import { t } from 'i18next';
+
+import template from './messageModal.html';
 
 angular.module('missionhubApp').component('messageModal', {
     controller: messageModalController,

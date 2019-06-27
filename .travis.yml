@@ -8,7 +8,7 @@ script:
     - yarn test
     - yarn global add apollo
     - yarn gql:schema
-    - yarn test:react
+    - yarn test:react:coverage
     - yarn prettier:check
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
