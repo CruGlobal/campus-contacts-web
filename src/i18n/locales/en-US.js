@@ -420,7 +420,7 @@ export default {
             invite_in_progress:
                 'To complete your invite, create account or log in.',
             signUpWithEmail: 'Sign Up with Email',
-            signInWithEmail: 'Sing In with Email',
+            signInWithEmail: 'Sign In with Email',
             continueFacebook: 'Continue with Facebook',
         },
         mergeAccount: {
