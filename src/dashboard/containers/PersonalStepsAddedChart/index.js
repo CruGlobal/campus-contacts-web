@@ -23,7 +23,7 @@ const Wrapper = styled.div`
     height: 400px;
 `;
 
-const MemberStagesChart = () => {
+const PersonalStepsAdded = () => {
     const { data, loading } = useQuery(GET_STAGE_REPORT);
     const { t } = useTranslation('insights');
 
@@ -33,11 +33,11 @@ const MemberStagesChart = () => {
 
     const { stages_report: report } = data;
 
-    const MEMBERS_LABEL = t('members');
+    const PERSONAL_STEPS_LABEL = t('personalSteps');
     const STAGE_LABEL = t('stage');
 
     const graphData = report.data.map(row => ({
-        [MEMBERS_LABEL]: row.member_count,
+        [PERSONAL_STEPS_LABEL]: row.steps_completed_count,
         [STAGE_LABEL]: row.pathway_stage,
     }));
 
@@ -45,11 +45,11 @@ const MemberStagesChart = () => {
         <Wrapper>
             <BarChart
                 data={graphData}
-                keys={[MEMBERS_LABEL]}
+                keys={[PERSONAL_STEPS_LABEL]}
                 indexBy={STAGE_LABEL}
             />
         </Wrapper>
     );
 };
 
-export default MemberStagesChart;
+export default PersonalStepsAdded;

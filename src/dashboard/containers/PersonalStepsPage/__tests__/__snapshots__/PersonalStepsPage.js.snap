@@ -3,35 +3,40 @@
 exports[`<PersonalStepsPage /> should render properly 1`] = `
 <div>
   <div>
+    <h1
+      class="css-16f08kk"
+    >
+      Together we have taken 1,234 personal steps of faith in 2019.
+    </h1>
     <div
-      class="css-11s8wh0"
+      class="css-1r4xttg"
     >
       <h1
-        class="css-1au0599"
+        class="css-ml4ujk"
       >
-        Personal Steps Completed
+        Personal Steps of Faith Completed
       </h1>
       <h2
         class="css-140lofm"
       >
-        Total personal steps of faith completed.
+        Personal steps of faith completed by community members.
       </h2>
       <div
         class="css-1izl14o"
       />
     </div>
     <div
-      class="css-11s8wh0"
+      class="css-1r4xttg"
     >
       <h1
-        class="css-1au0599"
+        class="css-ml4ujk"
       >
-        Member Stages/Current Personal Steps
+        Personal Steps of Faith Added
       </h1>
       <h2
         class="css-140lofm"
       >
-        Total number of members and personal steps of faith selected currently in MissionHub.
+        Current total of personal steps of faith added by members by stage.
       </h2>
       <div
         class="css-1izl14o"
@@ -44,17 +49,40 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       </div>
     </div>
     <div
-      class="css-11s8wh0"
+      class="css-1r4xttg"
     >
       <h1
-        class="css-1au0599"
+        class="css-ml4ujk"
       >
-        Member Movement
+        Community Member Stages
       </h1>
       <h2
         class="css-140lofm"
       >
-        Number of members who changed their stage in the past 6 months.
+        Current total number of members by stage.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1r4xttg"
+    >
+      <h1
+        class="css-ml4ujk"
+      >
+        Community Member Stage Changes
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Number of members who changed their stage.
       </h2>
       <div
         class="css-1izl14o"

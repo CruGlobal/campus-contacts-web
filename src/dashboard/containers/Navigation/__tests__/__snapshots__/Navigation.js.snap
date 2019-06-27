@@ -3,28 +3,28 @@
 exports[`<Navigation /> should render properly 1`] = `
 <div>
   <div
-    class="css-1jxaal1"
+    class="css-1qdtt6o"
   >
     <a
-      class="css-1dlfb6f"
+      class="css-cdd0f3"
       href="/ministries/1/insights/personal"
     >
       Personal Steps
     </a>
     <a
-      class="css-1dlfb6f"
+      class="css-cdd0f3"
       href="/ministries/1/insights/steps"
     >
       Steps of Faith
     </a>
     <a
-      class="css-1dlfb6f"
+      class="css-cdd0f3"
       href="/ministries/1/insights/interactions"
     >
       Interactions
     </a>
     <a
-      class="css-1dlfb6f"
+      class="css-cdd0f3"
       href="/ministries/1/insights/challenges"
     >
       Challenges
