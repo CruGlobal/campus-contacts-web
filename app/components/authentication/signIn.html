@@ -1,6 +1,6 @@
 <div class="m-auto tc" ng-if="$ctrl.showLogin">
     <p ng-if="$ctrl.inviteState" class="f3 pa3 bg-warning w-100 dib">
-        {{ 'login.invite_in_progress' | t }}
+        {{ 'login.inviteInProgress' | t }}
     </p>
     <p ng-if="$ctrl.inviteState">
         <a
@@ -14,28 +14,26 @@
             {{ 'login.signUpWithEmail' | t }}
         </a>
     </p>
-    <h1 ng-if="!$ctrl.inviteState" class="ttu">{{ 'login.login' | t }}</h1>
+    <h1 ng-if="!$ctrl.inviteState" class="ttu">{{ 'login.signIn' | t }}</h1>
     <p>
         <a
             href
             class="btn-key btn-primary f5"
-            title="{{ $ctrl.inviteState ? 'login.signInWithEmail' : 'login.login_with_key' | t }}"
+            title="{{ 'login.signInWithEmail' | t }}"
             target="_self"
             ng-href="{{$ctrl.theKeyUrl}}"
         >
-            {{ $ctrl.inviteState ? 'login.signInWithEmail' :
-            'login.login_with_key' | t }}
+            {{ 'login.signInWithEmail' | t }}
         </a>
     </p>
     <p>
         <a
             href
             class="btn-primary btn-facebook f5"
-            title="{{ $ctrl.inviteState ? 'login.continueFacebook' : 'login.login_with_facebook' | t }}"
+            title="{{'login.signInWithFacebook' | t }}"
             ng-click="$ctrl.facebookService.signIn()"
         >
-            {{ $ctrl.inviteState ? 'login.continueFacebook' :
-            'login.login_with_facebook' | t }}
+            {{ 'login.signInWithFacebook' | t }}
         </a>
     </p>
 </div>
