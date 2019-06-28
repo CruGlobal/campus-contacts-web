@@ -14,6 +14,8 @@ unsubscribe {
         color: $gray-1;
         font-weight: 200;
         font-family: 'Source Sans Pro', sans-serif;
+        line-height: 1.2em;
+        vertical-align: baseline;
     }
 
     h2 {
@@ -21,5 +23,6 @@ unsubscribe {
         color: $gray-1;
         font-weight: 200;
         font-family: 'Source Sans Pro', sans-serif;
+        vertical-align: baseline;
     }
 }
