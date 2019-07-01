@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const Title = styled.h1`
+const Header = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
@@ -12,14 +11,6 @@ const Title = styled.h1`
     padding-left: 21px;
 `;
 
-const Header = props => {
-    const { title } = props;
-
-    return <Title>{title}</Title>;
-};
-
 export default Header;
 
-Header.propTypes = {
-    title: PropTypes.string,
-};
+Header.propTypes = {};

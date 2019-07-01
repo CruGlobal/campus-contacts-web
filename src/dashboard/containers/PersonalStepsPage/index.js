@@ -11,11 +11,9 @@ const PersonalStepsPage = () => {
 
     return (
         <div>
-            <Header
-                title={
-                    'Together we have taken 1,234 personal steps of faith in 2019.'
-                }
-            />
+            <Header>
+                Together we have taken 1,234 personal steps of faith in 2019.
+            </Header>
             <Card
                 title={t('personalStepsCompleted')}
                 subtitle={t('personalStepsCompletedSubtitle')}
