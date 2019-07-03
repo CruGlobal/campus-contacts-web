@@ -17,7 +17,7 @@ const Title = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
-    color: ${({ theme }) => theme.colors.highlight};
+    color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 12px;
     margin-top: 0px;
 `;

@@ -5,6 +5,7 @@ import Card from '../../components/Card';
 import Header from '../../components/Header';
 import MemberStagesChart from '../MemberStagesChart';
 import PersonalStepsAddedChart from '../PersonalStepsAddedChart';
+import PersonalStepsCompletedChart from '../PersonalStepsCompletedChart';
 
 const PersonalStepsPage = () => {
     const { t } = useTranslation('insights');
@@ -17,7 +18,9 @@ const PersonalStepsPage = () => {
             <Card
                 title={t('personalStepsCompleted')}
                 subtitle={t('personalStepsCompletedSubtitle')}
-            />
+            >
+                <PersonalStepsCompletedChart />
+            </Card>
             <Card
                 title={t('personalStepsAdded')}
                 subtitle={t('personalStepsAddedSubtitle')}

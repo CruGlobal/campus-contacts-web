@@ -12,7 +12,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       class="css-1r4xttg"
     >
       <h1
-        class="css-ml4ujk"
+        class="css-5j0tpf"
       >
         Personal Steps of Faith Completed
       </h1>
@@ -23,13 +23,19 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       </h2>
       <div
         class="css-1izl14o"
-      />
+      >
+        <div
+          class="css-1a3wyyp"
+        >
+          Loading...
+        </div>
+      </div>
     </div>
     <div
       class="css-1r4xttg"
     >
       <h1
-        class="css-ml4ujk"
+        class="css-5j0tpf"
       >
         Personal Steps of Faith Added
       </h1>
@@ -52,7 +58,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       class="css-1r4xttg"
     >
       <h1
-        class="css-ml4ujk"
+        class="css-5j0tpf"
       >
         Community Member Stages
       </h1>
@@ -75,7 +81,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       class="css-1r4xttg"
     >
       <h1
-        class="css-ml4ujk"
+        class="css-5j0tpf"
       >
         Community Member Stage Changes
       </h1>
