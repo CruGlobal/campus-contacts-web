@@ -6,10 +6,10 @@ exports[`<Header /> should render properly 1`] = `
     class="css-1s7lydy"
   >
     <div
-      class="active css-1v75zlh"
+      class="active css-n7kdmv"
     />
     <div
-      class=" css-1v75zlh"
+      class=" css-n7kdmv"
     />
   </div>
 </div>
