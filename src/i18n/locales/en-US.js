@@ -419,7 +419,7 @@ export default {
                 'To complete your invite, create account or sign in.',
             signUpWithEmail: 'Sign Up with Email',
             signInWithEmail: 'Sign In with Email',
-            signInWithFacebook: 'Sign In with Facebook',
+            continueWithFacebook: 'Continue with Facebook',
         },
         mergeAccount: {
             loggedInAs:
