@@ -282,7 +282,7 @@ angular
                 },
             })
             .state({
-                name: 'app.unsubscribe',
+                name: 'appWithoutMenus.unsubscribe',
                 url: '/unsubscribe',
                 component: 'unsubscribe',
                 data: {
