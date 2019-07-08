@@ -10,32 +10,24 @@ describe('<PersonalStepsAddedChart />', () => {
         renderWithContext(<PersonalStepsAddedChart />).snapshot();
     });
 
-    /* It has to wait until this query is available in the schema
+    /*
     it('should render properly with chart', async () => {
         const { snapshot, getByText } = renderWithContext(
             <PersonalStepsAddedChart />,
             {
                 mocks: {
                     Query: () => ({
-                        stages_report: () => ({
-                            data: () => ([
-                                {
-                                    __typename: 'Data',
-                                    pathway_stage: 'NO STAGE',
-                                    member_count: 10,
-                                    steps_added_count: 12,
-                                    steps_completed_count: 37,
-                                },
-                                {
-                                    __typename: 'Data',
-                                    pathway_stage: 'NOT SURE',
-                                    member_count: 11,
-                                    steps_added_count: 34,
-                                    steps_completed_count: 37,
-                                }
-                            ])
-                        })
-                    })
+                        OrganizationStageReport: () =>  ([
+                            { memberCount: 1 },
+                            { memberCount: 2 },
+                            { memberCount: 3 },
+                        ]),
+                        organizationPathwayStagesReport: () =>  ([
+                            { memberCount: 1 },
+                            { memberCount: 2 },
+                            { memberCount: 3 },
+                        ]),
+                    }),
                 },
             },
         );
@@ -43,5 +35,5 @@ describe('<PersonalStepsAddedChart />', () => {
         await waitForElement(() => getByText('NO STAGE'));
         snapshot();
     });
-*/
+    */
 });
