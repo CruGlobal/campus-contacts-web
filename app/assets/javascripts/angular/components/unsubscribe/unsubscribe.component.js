@@ -18,8 +18,13 @@ function unsubscribeController(httpProxy, $scope) {
     this.unsubscribe = async () => {
         try {
             await httpProxy.post('/unsubscriptions', {
-                organization_id: this.organizationId,
-                token: this.token,
+                data: {
+                    type: 'unsubscription',
+                    attributes: {
+                        organization_id: this.organizationId,
+                        token: this.token,
+                    },
+                },
             });
 
             this.isUnsubscribed = true;
