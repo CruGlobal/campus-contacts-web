@@ -10,16 +10,16 @@ import moment from 'moment';
 import BarChart from '../../components/BarChart';
 import SwitchButton from '../../components/SwitchButton';
 
-const GET_STAGE_REPORT = gql`
-    query stages_report {
-        organization_days {
-            results {
+const GET_STEPS_COMPLETED_REPORT = gql`
+    query communityReport {
+        communityReport {
+            dayReport {
                 date
-                stages {
-                    pathway_stage
-                    self_steps
+                stepsCompletedCount
+                communityStagesReport {
+                    pathwayStage
+                    stepsCompletedCount
                 }
-                interactions
             }
         }
     }
@@ -119,14 +119,14 @@ const NextButton = styled.div`
 `;
 
 const PersonalStepsCompleted = () => {
-    const { data, loading } = useQuery(GET_STAGE_REPORT);
-    const { t } = useTranslation('insights');
-
     const [filter, setFilter] = React.useState({
         type: 'month',
         index: 0,
         datesRange: [moment().subtract(1, 'month'), moment()],
     });
+
+    const { data, loading } = useQuery(GET_STEPS_COMPLETED_REPORT);
+    const { t } = useTranslation('insights');
 
     if (loading) {
         return <Wrapper>{t('loading')}</Wrapper>;
@@ -162,14 +162,14 @@ const PersonalStepsCompleted = () => {
     };
 
     const {
-        organization_days: { results: report },
+        communityReport: { dayReport: report },
     } = data;
 
     const tooltip = options => {
         const { data } = options;
 
         return [
-            data.steps.map(row => (
+            data.stages.map(row => (
                 <TooltipRow key={row.name}>
                     <Label>{row.name}</Label>
                     <Value>{row.count}</Value>
@@ -183,15 +183,17 @@ const PersonalStepsCompleted = () => {
     };
 
     const graphData = report.map(row => ({
-        ['stepsTotal']: _.sumBy(row.stages, 'self_steps'),
-        ['steps']: row.stages.map(stage => ({
-            name: stage.pathway_stage,
-            count: stage.self_steps,
+        ['stepsTotal']: row.stepsCompletedCount,
+        ['stages']: row.communityStagesReport.map(stage => ({
+            name: stage.pathwayStage,
+            count: stage.stepsCompletedCount,
         })),
         ['date']: row.date.substring(0, 2),
     }));
 
-    const average = _.sumBy(graphData, 'stepsTotal') / graphData.length;
+    const average = Math.floor(
+        _.sumBy(graphData, 'stepsTotal') / graphData.length,
+    );
 
     return (
         <div>
@@ -215,9 +217,9 @@ const PersonalStepsCompleted = () => {
                 />
                 <Legend>
                     <Line className={'dashed'} />
-                    <LegendLabel>Steps of Faith</LegendLabel>
-                    <Line />
                     <LegendLabel>Average</LegendLabel>
+                    <Line />
+                    <LegendLabel>Steps of Faith</LegendLabel>
                 </Legend>
             </Footer>
         </div>

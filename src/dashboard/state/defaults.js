@@ -1,4 +1,549 @@
 export default {
+    communityReport: {
+        __typename: 'CommunityReport',
+        dayReport: [
+            {
+                __typename: 'DayReport',
+                date: '01-01-2019',
+                stepsCompletedCount: 50,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '02-01-2019',
+                stepsCompletedCount: 95,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '03-01-2019',
+                stepsCompletedCount: 42,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '04-01-2019',
+                stepsCompletedCount: 53,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '05-01-2019',
+                stepsCompletedCount: 43,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '06-01-2019',
+                stepsCompletedCount: 21,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '07-01-2019',
+                stepsCompletedCount: 30,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '08-01-2019',
+                stepsCompletedCount: 70,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '09-01-2019',
+                stepsCompletedCount: 35,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '10-01-2019',
+                stepsCompletedCount: 60,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 25,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '11-01-2019',
+                stepsCompletedCount: 50,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '12-01-2019',
+                stepsCompletedCount: 95,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '13-01-2019',
+                stepsCompletedCount: 42,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '14-01-2019',
+                stepsCompletedCount: 53,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '15-01-2019',
+                stepsCompletedCount: 43,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '16-01-2019',
+                stepsCompletedCount: 21,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '17-01-2019',
+                stepsCompletedCount: 30,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '18-01-2019',
+                stepsCompletedCount: 70,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '19-01-2019',
+                stepsCompletedCount: 35,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 5,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+            {
+                __typename: 'DayReport',
+                date: '20-01-2019',
+                stepsCompletedCount: 60,
+                communityStagesReport: [
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'NOT SURE',
+                        stepsCompletedCount: 10,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'FORGIVEN',
+                        stepsCompletedCount: 25,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'UNINTERESTED',
+                        stepsCompletedCount: 20,
+                    },
+                    {
+                        __typename: 'Stage',
+                        pathwayStage: 'GROWING',
+                        stepsCompletedCount: 15,
+                    },
+                ],
+            },
+        ],
+    },
     stages_report: {
         __typename: 'Members',
         data: [
@@ -50,391 +595,6 @@ export default {
                 member_count: 16,
                 steps_added_count: 21,
                 steps_completed_count: 34,
-            },
-        ],
-    },
-    organization_days: {
-        __typename: 'Days',
-        results: [
-            {
-                __typename: 'Day',
-                date: '01-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_sta',
-                        self_steps: 1,
-                        other_steps: 11,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 14,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 4,
-            },
-            {
-                __typename: 'Day',
-                date: '02-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 31,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 4,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '03-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 21,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 54,
-                    },
-                ],
-                interactions: 3,
-            },
-            {
-                __typename: 'Day',
-                date: '04-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 21,
-                        other_steps: 51,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 45,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '05-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 42,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 13,
-                        other_steps: 64,
-                    },
-                ],
-                interactions: 1,
-            },
-            {
-                __typename: 'Day',
-                date: '06-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 11,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 4,
-            },
-            {
-                __typename: 'Day',
-                date: '07-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 31,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 4,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '08-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 21,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 54,
-                    },
-                ],
-                interactions: 3,
-            },
-            {
-                __typename: 'Day',
-                date: '09-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 21,
-                        other_steps: 51,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 45,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '10-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 42,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 13,
-                        other_steps: 64,
-                    },
-                ],
-                interactions: 1,
-            },
-            {
-                __typename: 'Day',
-                date: '11-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 11,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 4,
-            },
-            {
-                __typename: 'Day',
-                date: '12-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 31,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 4,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '13-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 21,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 54,
-                    },
-                ],
-                interactions: 3,
-            },
-            {
-                __typename: 'Day',
-                date: '14-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 21,
-                        other_steps: 51,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 45,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '15-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 42,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 13,
-                        other_steps: 64,
-                    },
-                ],
-                interactions: 1,
-            },
-            {
-                __typename: 'Day',
-                date: '16-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 11,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 4,
-            },
-            {
-                __typename: 'Day',
-                date: '17-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 1,
-                        other_steps: 31,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 4,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '18-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 21,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 44,
-                        other_steps: 54,
-                    },
-                ],
-                interactions: 3,
-            },
-            {
-                __typename: 'Day',
-                date: '19-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 21,
-                        other_steps: 51,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 45,
-                        other_steps: 44,
-                    },
-                ],
-                interactions: 5,
-            },
-            {
-                __typename: 'Day',
-                date: '20-06-2019',
-                stages: [
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id1',
-                        self_steps: 11,
-                        other_steps: 42,
-                    },
-                    {
-                        __typename: 'Stage',
-                        pathway_stage: 'pathway_stage_id2',
-                        self_steps: 13,
-                        other_steps: 64,
-                    },
-                ],
-                interactions: 1,
             },
         ],
     },
