@@ -30,6 +30,8 @@ function authenticationService(
         'theKeyClientId',
     )}&redirect_uri=${redirectUrl}`;
 
+    const theKeySignUpUrl = `${theKeyloginUrl}?&action=signup`;
+
     const theKeylogoutUrl = `${envService.read(
         'theKeyUrl',
     )}/logout?&client_id=${envService.read(
@@ -211,6 +213,7 @@ function authenticationService(
         impersonateUser: impersonateUser,
         stopImpersonatingUser: stopImpersonatingUser,
         theKeyloginUrl: theKeyloginUrl,
+        theKeySignUpUrl: theKeySignUpUrl,
         isTokenValid: getJwtToken,
         updateUserData: updateUserData,
     };

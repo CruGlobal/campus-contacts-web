@@ -414,10 +414,12 @@ export default {
             },
         },
         login: {
-            login: 'Log in',
-            login_with_key: 'Log in with The Key',
-            login_with_facebook: 'Log in with Facebook',
-            invite_in_progress: 'Please login to finish your invite.',
+            signIn: 'Sign in',
+            inviteInProgress:
+                'To complete your invite, create account or sign in.',
+            signUpWithEmail: 'Sign Up with Email',
+            signInWithEmail: 'Sign In with Email',
+            continueWithFacebook: 'Continue with Facebook',
         },
         mergeAccount: {
             loggedInAs:
