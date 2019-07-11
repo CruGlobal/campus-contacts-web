@@ -1,5 +1,6 @@
-import template from './organizationContactImportStep4.html';
 import checkIcon from '../../../../images/icons/icon-check.svg';
+
+import template from './organizationContactImportStep4.html';
 
 angular.module('missionhubApp').component('organizationContactImportStep4', {
     bindings: {

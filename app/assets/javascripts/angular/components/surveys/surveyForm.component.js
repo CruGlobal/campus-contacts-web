@@ -1,8 +1,10 @@
+import _ from 'lodash';
+import { t } from 'i18next';
+
+import './surveyFormPublic.scss';
+
 import surveyFormUserTemplate from './surveyFormUser.html';
 import surveyFormPublicTemplate from './surveyFormPublic.html';
-import _ from 'lodash';
-import './surveyFormPublic.scss';
-import { t } from 'i18next';
 
 const bindings = {
     survey: '<',

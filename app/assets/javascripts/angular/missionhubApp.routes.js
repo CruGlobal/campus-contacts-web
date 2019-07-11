@@ -457,8 +457,8 @@ angular
                 },
             })
             .state({
-                name: 'appWithoutMenus.insights',
-                url: '/ministries/:orgId/insights',
+                name: 'app.ministries.ministry.insights',
+                url: '/insights/:subTab',
                 component: 'insights',
                 resolve: {
                     orgId: $transition$ => $transition$.params().orgId,

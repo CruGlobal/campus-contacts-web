@@ -4,16 +4,11 @@ import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
-// Project
-import { createApolloClient } from './apolloClient';
-// Components
-import Navigation from './components/navigation';
 
-const theme = {
-    colors: {
-        light: '#A3A9AF',
-    },
-};
+import { createApolloClient } from './apolloClient';
+import AppContext from './appContext';
+import defaultTheme from './defaultTheme';
+import Layout from './containers/Layout';
 
 const Insights = ({ orgId, authenticationService }) => {
     const token = authenticationService.isTokenValid();
@@ -21,17 +16,18 @@ const Insights = ({ orgId, authenticationService }) => {
 
     return (
         <ApolloProvider client={apolloClient}>
-            <ThemeProvider theme={theme}>
-                <Navigation orgId={orgId} />
-            </ThemeProvider>
+            <AppContext.Provider value={{ orgId }}>
+                <ThemeProvider theme={defaultTheme}>
+                    <Layout />
+                </ThemeProvider>
+            </AppContext.Provider>
         </ApolloProvider>
     );
 };
 
 Insights.propTypes = {
     orgId: PropTypes.string,
-    theme: PropTypes.object,
-    token: PropTypes.string,
+    authenticationService: PropTypes.object,
 };
 
 angular

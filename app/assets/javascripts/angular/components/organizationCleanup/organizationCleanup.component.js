@@ -1,6 +1,7 @@
-import template from './organizationCleanup.html';
 import './organizationCleanup.scss';
 import checkIcon from '../../../../images/icons/icon-check.svg';
+
+import template from './organizationCleanup.html';
 
 angular.module('missionhubApp').component('organizationCleanup', {
     bindings: {
