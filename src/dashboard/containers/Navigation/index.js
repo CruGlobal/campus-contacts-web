@@ -6,13 +6,14 @@ import { useTranslation } from 'react-i18next';
 import AppContext from '../../appContext';
 
 const NavigationBar = styled.div`
-    background: #007398;
+    background: #005a7f;
     height: 52px;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 18px;
     display: flex;
     justify-content: flex-start;
+    border-radius: 0 0 8px 8px;
 `;
 
 const Link = styled(NavLink)`
@@ -31,6 +32,17 @@ const Link = styled(NavLink)`
 
     &.active {
         color: ${({ theme }) => theme.colors.highlight};
+
+        ::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 40%;
+            border-bottom: 6px solid #f2f2f2;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            width: 0;
+        }
     }
 `;
 

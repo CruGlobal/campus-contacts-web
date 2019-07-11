@@ -1127,14 +1127,17 @@ export default {
         members: 'Members',
         personalSteps: 'Personal Steps of Faith',
         stage: 'Stage',
-        personalStepsCompleted: 'Personal Steps Completed',
-        personalStepsTotal: 'Total personal steps of faith completed.',
-        currentPersonalSteps: 'Member Stages/Current Personal Steps',
-        membersTotal:
-            'Total number of members and personal steps of faith selected currently in MissionHub.',
-        membersMovement: 'Member Movement',
-        membersChanged:
-            'Number of members who changed their stage in the past 6 months.',
+        personalStepsCompleted: 'Personal Steps of Faith Completed',
+        personalStepsCompletedSubtitle:
+            'Personal steps of faith completed by community members.',
+        personalStepsAdded: 'Personal Steps of Faith Added',
+        personalStepsAddedSubtitle:
+            'Current total of personal steps of faith added by members by stage.',
+        memberStages: 'Community Member Stages',
+        memberStagesSubtitle: 'Current total number of members by stage.',
+        memberStageChanges: 'Community Member Stage Changes',
+        memberStageChangesSubtitle:
+            'Number of members who changed their stage.',
         loading: 'Loading...',
         tabs: {
             personal: 'Personal Steps',

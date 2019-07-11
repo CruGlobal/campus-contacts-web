@@ -10,18 +10,14 @@ const Container = styled.div`
     padding-left: 24px;
     padding-right: 24px;
     padding-top: 43px;
-    margin-bottom: 36px;
-
-    :first-child {
-        border-radius: 0 0 8px 8px;
-    }
+    margin-top: 36px;
 `;
 
 const Title = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
-    color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.highlight};
     margin-bottom: 12px;
     margin-top: 0px;
 `;

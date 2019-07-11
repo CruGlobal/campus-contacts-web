@@ -6,28 +6,28 @@ exports[`<Layout /> should render properly 1`] = `
     class="css-nvnj86"
   >
     <div
-      class="css-1jxaal1"
+      class="css-i1qen0"
     >
       <a
-        class="css-1dlfb6f"
+        class="css-11e4oq4"
         href="/ministries/undefined/insights/personal"
       >
         Personal Steps
       </a>
       <a
-        class="css-1dlfb6f"
+        class="css-11e4oq4"
         href="/ministries/undefined/insights/steps"
       >
         Steps of Faith
       </a>
       <a
-        class="css-1dlfb6f"
+        class="css-11e4oq4"
         href="/ministries/undefined/insights/interactions"
       >
         Interactions
       </a>
       <a
-        class="css-1dlfb6f"
+        class="css-11e4oq4"
         href="/ministries/undefined/insights/challenges"
       >
         Challenges
