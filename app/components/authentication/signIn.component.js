@@ -21,6 +21,7 @@ function signInController(
 
     this.$onInit = async () => {
         this.theKeyUrl = authenticationService.theKeyloginUrl;
+        this.theKeySignUpUrl = authenticationService.theKeySignUpUrl;
 
         if (authenticationService.isTokenValid()) {
             $state.go('app.people');

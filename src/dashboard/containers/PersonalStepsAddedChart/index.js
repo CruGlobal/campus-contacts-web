@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from '@emotion/styled';
 
 import BarChart from '../../components/BarChart';
+import AppContext from '../../appContext';
 
-const GET_STAGE_REPORT = gql`
-    query stages_report {
-        stages_report {
-            data {
-                pathway_stage
-                member_count
-                steps_added_count
-                steps_completed_count
+const GET_STAGES_REPORT = gql`
+    query organizationPathwayStagesReport(
+        $period: String!
+        $organizationId: ID!
+    ) {
+        organizationPathwayStagesReport(
+            period: $period
+            organizationId: $organizationId
+        ) {
+            memberCount
+            pathwayStage {
+                name
             }
+            stepsAddedCount
         }
     }
 `;
@@ -24,21 +30,28 @@ const Wrapper = styled.div`
 `;
 
 const PersonalStepsAdded = () => {
-    const { data, loading } = useQuery(GET_STAGE_REPORT);
+    const { orgId } = useContext(AppContext);
+
+    const { data, loading } = useQuery(GET_STAGES_REPORT, {
+        variables: {
+            period: '',
+            organizationId: orgId,
+        },
+    });
     const { t } = useTranslation('insights');
 
     if (loading) {
         return <Wrapper>{t('loading')}</Wrapper>;
     }
 
-    const { stages_report: report } = data;
+    const { organizationPathwayStagesReport: report } = data;
 
     const PERSONAL_STEPS_LABEL = t('personalSteps');
     const STAGE_LABEL = t('stage');
 
-    const graphData = report.data.map(row => ({
-        [PERSONAL_STEPS_LABEL]: row.steps_completed_count,
-        [STAGE_LABEL]: row.pathway_stage,
+    const graphData = report.map(row => ({
+        [PERSONAL_STEPS_LABEL]: row.stepsAddedCount,
+        [STAGE_LABEL]: row.pathwayStage.name.toUpperCase(),
     }));
 
     return (
