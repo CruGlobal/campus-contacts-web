@@ -1130,6 +1130,7 @@ export default {
         personalStepsCompleted: 'Personal Steps of Faith Completed',
         personalStepsCompletedSubtitle:
             'Personal steps of faith completed by community members.',
+        personalStepsCompletedTotal: 'Total Personal Steps of Faith Completed',
         personalStepsAdded: 'Personal Steps of Faith Added',
         personalStepsAddedSubtitle:
             'Current total of personal steps of faith added by members by stage.',
@@ -1139,6 +1140,8 @@ export default {
         memberStageChangesSubtitle:
             'Number of members who changed their stage.',
         loading: 'Loading...',
+        monthLabel: '1M',
+        yearLabel: '1Y',
         tabs: {
             personal: 'Personal Steps',
             steps: 'Steps of Faith',

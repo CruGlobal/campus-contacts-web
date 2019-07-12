@@ -9,7 +9,28 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       Together we have taken 1,234 personal steps of faith in 2019.
     </h1>
     <div
-      class="css-1r4xttg"
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Total Personal Steps of Faith Completed
+      </h1>
+      <h2
+        class="css-140lofm"
+      />
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-1ohf0ui"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-w2m1ij"
     >
       <h1
         class="css-5j0tpf"
@@ -32,7 +53,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       </div>
     </div>
     <div
-      class="css-1r4xttg"
+      class="css-w2m1ij"
     >
       <h1
         class="css-5j0tpf"
@@ -55,7 +76,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       </div>
     </div>
     <div
-      class="css-1r4xttg"
+      class="css-w2m1ij"
     >
       <h1
         class="css-5j0tpf"
@@ -78,7 +99,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       </div>
     </div>
     <div
-      class="css-1r4xttg"
+      class="css-w2m1ij"
     >
       <h1
         class="css-5j0tpf"

@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import MemberStagesChart from '../MemberStagesChart';
 import PersonalStepsAddedChart from '../PersonalStepsAddedChart';
 import PersonalStepsCompletedChart from '../PersonalStepsCompletedChart';
+import PersonalStepsCompletedTotalChart from '../PersonalStepsCompletedTotalChart';
 
 const PersonalStepsPage = () => {
     const { t } = useTranslation('insights');
@@ -15,6 +16,9 @@ const PersonalStepsPage = () => {
             <Header>
                 Together we have taken 1,234 personal steps of faith in 2019.
             </Header>
+            <Card title={t('personalStepsCompletedTotal')}>
+                <PersonalStepsCompletedTotalChart />
+            </Card>
             <Card
                 title={t('personalStepsCompleted')}
                 subtitle={t('personalStepsCompletedSubtitle')}

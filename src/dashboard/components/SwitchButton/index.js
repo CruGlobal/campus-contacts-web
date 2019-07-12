@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useState } from 'react';
 import { withTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
 
@@ -38,7 +38,7 @@ const Button = styled.div`
 `;
 
 const SwitchButton = ({ leftLabel, rightLabel, onLeftClick, onRightClick }) => {
-    const [isLeftActive, setLeftActive] = React.useState(true);
+    const [isLeftActive, setLeftActive] = useState(true);
 
     const leftClicked = () => {
         setLeftActive(true);

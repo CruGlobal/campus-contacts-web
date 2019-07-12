@@ -6,4 +6,7 @@ module.exports = {
         '^.+\\.svg$': 'jest-svg-transformer',
     },
     coverageDirectory: './coverage-react/',
+    moduleNameMapper: {
+        '\\.(css|less|scss|sss|styl)$': 'jest-css-modules',
+    },
 };

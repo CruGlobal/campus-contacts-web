@@ -1,6 +1,38 @@
 export default {
     communityReport: {
         __typename: 'CommunityReport',
+        communityStagesReport: [
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'NOT SURE',
+                personalStepsCompletedCount: 12,
+            },
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'UNINTERESTED',
+                personalStepsCompletedCount: 5,
+            },
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'CURIOUS',
+                personalStepsCompletedCount: 4,
+            },
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'FORGIVEN',
+                personalStepsCompletedCount: 8,
+            },
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'GROWING',
+                personalStepsCompletedCount: 2,
+            },
+            {
+                __typename: 'CommunityStagesReport',
+                pathwayStage: 'GUIDING',
+                personalStepsCompletedCount: 6,
+            },
+        ],
         dayReport: [
             {
                 __typename: 'DayReport',

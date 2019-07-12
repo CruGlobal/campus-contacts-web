@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
@@ -118,8 +118,8 @@ const NextButton = styled.div`
     }
 `;
 
-const PersonalStepsCompleted = () => {
-    const [filter, setFilter] = React.useState({
+const PersonalStepsCompletedChart = () => {
+    const [filter, setFilter] = useState({
         type: 'month',
         index: 0,
         datesRange: [moment().subtract(1, 'month'), moment()],
@@ -210,8 +210,8 @@ const PersonalStepsCompleted = () => {
             </Wrapper>
             <Footer>
                 <SwitchButton
-                    leftLabel={'1M'}
-                    rightLabel={'1Y'}
+                    leftLabel={t('monthLabel')}
+                    rightLabel={t('yearLabel')}
                     onLeftClick={() => onToggleFilterClick('month')}
                     onRightClick={() => onToggleFilterClick('year')}
                 />
@@ -226,4 +226,4 @@ const PersonalStepsCompleted = () => {
     );
 };
 
-export default withTheme(PersonalStepsCompleted);
+export default withTheme(PersonalStepsCompletedChart);

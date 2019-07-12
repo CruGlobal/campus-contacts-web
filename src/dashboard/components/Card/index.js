@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const Container = styled.div`
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
     background: ${({ theme }) => theme.colors.white};
     border-radius: 8px;
     padding-left: 24px;
