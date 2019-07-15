@@ -42,7 +42,7 @@
             <a
                 class="ml3"
                 href=""
-                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges"
+                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges && !question.required"
                 ng-click="$ctrl.deleteQuestion(question.id)"
             >
                 <img
