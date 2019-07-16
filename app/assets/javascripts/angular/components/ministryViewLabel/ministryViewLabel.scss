@@ -4,8 +4,12 @@ ministry-view-label {
     display: block;
     height: 50px;
 
-    ng-md-icon svg {
-        fill: $pivot-dark-blue;
+    ng-md-icon {
+        svg {
+            path {
+                fill: $pivot-dark-blue;
+            }
+        }
     }
 
     .edit-action {
