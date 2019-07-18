@@ -188,6 +188,18 @@ function authenticationService(
         }
     };
 
+    const adminRedirect = async () => {
+        const apiDomain = envService.read('apiUrl').replace('/apis/v4', '');
+        try {
+            const { data } = await $http.post(`${apiDomain}/admin/auth`, null, {
+                withCredentials: true, // support cross domain cookie setting
+            });
+            location.replace(`${apiDomain}/admin`);
+        } catch (e) {
+            $state.go('app.people');
+        }
+    };
+
     return {
         destroyTheKeyAccess: () => {
             clearToken();
@@ -210,11 +222,12 @@ function authenticationService(
             setHttpHeaders(token);
             loadState();
         },
-        impersonateUser: impersonateUser,
-        stopImpersonatingUser: stopImpersonatingUser,
-        theKeyloginUrl: theKeyloginUrl,
-        theKeySignUpUrl: theKeySignUpUrl,
+        impersonateUser,
+        stopImpersonatingUser,
+        adminRedirect,
+        theKeyloginUrl,
+        theKeySignUpUrl,
         isTokenValid: getJwtToken,
-        updateUserData: updateUserData,
+        updateUserData,
     };
 }
