@@ -35,22 +35,18 @@ function organizationCleanupController(
                 const InactiveModal = $uibModal.open({
                     component: 'iconModal',
                     resolve: {
-                        title: () => $filter('t')(`Archive By Inactivity`),
-                        paragraphs: () => [
+                        title: () =>
                             $filter('t')(
-                                `Are You Sure That You Wish To Archive By Inactivity?`,
+                                `Are you sure you want to archive these contacts by inactivity? `,
                             ),
-                        ],
-                        icon: () => this.warningIcon,
-                        closeLabel: () => $filter('t')('Yes'),
-                        dismissLabel: () => $filter('t')('No'),
+                        closeLabel: () => $filter('t')('Ok'),
+                        dismissLabel: () => $filter('t')('Cancel'),
                     },
                     windowClass: 'pivot_theme',
                     backdrop: 'static',
                     keyboard: false,
                 });
-                // Had to throw in a catch for errors due to an AsyncGenerator.js error I was getting
-                // In the console everytime the modal was dismissed
+
                 try {
                     const InactiveResponse = await InactiveModal.result;
                     archiveInactive(archiveDate);
@@ -67,15 +63,12 @@ function organizationCleanupController(
                 const DateModal = $uibModal.open({
                     component: 'iconModal',
                     resolve: {
-                        title: () => $filter('t')(`Archive By Date`),
-                        paragraphs: () => [
+                        title: () =>
                             $filter('t')(
-                                `Are You Sure That You Wish To Archive By Date?`,
+                                `Are you sure you want to archive these contacts by date?`,
                             ),
-                        ],
-                        icon: () => this.warningIcon,
-                        closeLabel: () => $filter('t')('Yes'),
-                        dismissLabel: () => $filter('t')('No'),
+                        closeLabel: () => $filter('t')('Ok'),
+                        dismissLabel: () => $filter('t')('Cancel'),
                     },
                     windowClass: 'pivot_theme',
                     backdrop: 'static',
