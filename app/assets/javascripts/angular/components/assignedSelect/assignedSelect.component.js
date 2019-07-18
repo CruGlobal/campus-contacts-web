@@ -19,6 +19,7 @@ function assignedSelectController(
 ) {
     var vm = this;
     vm.people = [];
+    vm.labels = [];
     vm.isMe = assignedSelectService.isMe;
     vm.$onInit = activate;
 
@@ -30,6 +31,7 @@ function assignedSelectController(
             if (search === '') {
                 // Ignore empty searches
                 vm.people = [];
+                vm.labels = [];
                 return;
             }
 
@@ -37,6 +39,28 @@ function assignedSelectController(
                 .searchPeople(search, vm.organizationId, requestDeduper)
                 .then(function(people) {
                     vm.people = people;
+                })
+                .then(() => {
+                    assignedSelectService
+                        .searchLabels(search, vm.organizationId)
+                        .then(labels => {
+                            vm.labels = labels;
+                            if (search === undefined) {
+                                labels.map(label => {
+                                    vm.people = [...vm.people, label];
+                                });
+                            } else if (search !== undefined) {
+                                labels.map(label => {
+                                    if (
+                                        label.name
+                                            .toLowerCase()
+                                            .includes(search.toLowerCase())
+                                    ) {
+                                        vm.people = [...vm.people, label];
+                                    }
+                                });
+                            }
+                        });
                 });
         });
 

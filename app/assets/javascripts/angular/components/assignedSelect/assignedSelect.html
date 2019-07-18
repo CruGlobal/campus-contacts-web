@@ -9,7 +9,7 @@
         placeholder="{{ 'application.assign_search.placeholder' | t }}"
     >
         <span>
-            {{$item | personName}}
+            {{ $item | personName }}
             <span ng-if="$ctrl.isMe($item)"
                 >({{ 'application.assign_search.me' | t }})</span
             >
@@ -17,7 +17,7 @@
     </ui-select-match>
     <ui-select-choices repeat="person in $ctrl.people track by person.id">
         <span>
-            {{person | personName}}
+            {{ person | personName }}
             <span ng-if="$ctrl.isMe(person)"
                 >({{ 'application.assign_search.me' | t }})</span
             >

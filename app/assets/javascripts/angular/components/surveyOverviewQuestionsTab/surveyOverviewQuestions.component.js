@@ -73,6 +73,7 @@ function surveyOverviewQuestionsController(
         },
     ];
     this.people = [];
+    this.labels = [];
 
     const loadSurveyData = async () => {
         const { data } = await surveyService.getSurveyQuestions(this.survey.id);
@@ -167,7 +168,6 @@ function surveyOverviewQuestionsController(
             questionRules.find(
                 r => r.trigger_keywords === answer && r.rule_code === type,
             ) || {};
-
         const ids = people_ids ? people_ids.split(',') : [];
 
         return {
@@ -208,6 +208,8 @@ function surveyOverviewQuestionsController(
     };
 
     this.addPersonToRule = async (question, rule) => {
+        console.log(rule.assign_to);
+
         const index = question.question_rules.indexOf(rule);
 
         if (!question.question_rules[index].assign_to) return;
@@ -448,5 +450,9 @@ function surveyOverviewQuestionsController(
 
         rebuildQuestion(question);
         $scope.$apply();
+    };
+
+    this.Log = () => {
+        console.log('Hello');
     };
 }
