@@ -3,11 +3,11 @@ import React from 'react';
 import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../testUtils';
-import MemberStagesChart from '../';
+import PersonalStepsMemberStagesChart from '../';
 
-describe('<MemberStagesChart />', () => {
+describe('<PersonalStepsMemberStagesChart />', () => {
     it('should render properly loading state', async () => {
-        renderWithContext(<MemberStagesChart />).snapshot();
+        renderWithContext(<PersonalStepsMemberStagesChart />).snapshot();
     });
 
     /* It has to wait until this query is available in the schema

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from '@emotion/styled';
+import moment from 'moment';
 
 import BarChart from '../../components/BarChart';
 import AppContext from '../../appContext';
@@ -11,10 +12,12 @@ const GET_STAGES_REPORT = gql`
     query organizationPathwayStagesReport(
         $period: String!
         $organizationId: ID!
+        $endDate: ISO8601DateTime!
     ) {
         organizationPathwayStagesReport(
             period: $period
             organizationId: $organizationId
+            endDate: $endDate
         ) {
             memberCount
             pathwayStage {
@@ -28,13 +31,14 @@ const Wrapper = styled.div`
     height: 400px;
 `;
 
-const MemberStagesChart = () => {
+const PersonalStepsMemberStagesChart = () => {
     const { orgId } = useContext(AppContext);
 
     const { data, loading } = useQuery(GET_STAGES_REPORT, {
         variables: {
             period: '',
             organizationId: orgId,
+            endDate: moment().format(),
         },
     });
 
@@ -65,4 +69,4 @@ const MemberStagesChart = () => {
     );
 };
 
-export default MemberStagesChart;
+export default PersonalStepsMemberStagesChart;

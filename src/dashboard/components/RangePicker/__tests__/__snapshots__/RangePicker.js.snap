@@ -28,7 +28,7 @@ exports[`<RangePicker /> should render properly 1`] = `
               placeholder="Start Date"
               readonly=""
               type="text"
-              value="07/05/2019"
+              value="07/12/2019"
             />
             <p
               class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
@@ -66,7 +66,7 @@ exports[`<RangePicker /> should render properly 1`] = `
               placeholder="End Date"
               readonly=""
               type="text"
-              value="07/12/2019"
+              value="07/19/2019"
             />
             <p
               class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
