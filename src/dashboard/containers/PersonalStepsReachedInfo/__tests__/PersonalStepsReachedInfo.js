@@ -1,4 +1,3 @@
-// Vendors
 import React from 'react';
 import { waitForElement } from '@testing-library/react';
 
@@ -10,32 +9,24 @@ describe('<PersonalStepsReachedInfo />', () => {
         renderWithContext(<PersonalStepsReachedInfo />).snapshot();
     });
 
-    /*
     it('should render properly with data', async () => {
         const { snapshot, getByText } = renderWithContext(
             <PersonalStepsReachedInfo />,
             {
                 mocks: {
-                    ImpactReport: () => ({
-                            pathwayMovedCount: () => 13
-                    }),
-                    impactReport: () => ({
-                        pathwayMovedCount: () => 13
-                    }),
                     Query: () => ({
-                        ImpactReport: () =>({
-                            pathwayMovedCount: () => 13
-                        }),
                         impactReport: () => ({
-                            pathwayMovedCount: () => 13
+                            pathwayMovedCount: () => 13,
                         }),
-                    })
+                    }),
+                },
+                appContext: {
+                    orgId: 1,
                 },
             },
         );
 
-        await waitForElement(() => getByText('This year'));
+        await waitForElement(() => getByText('This year', { exact: false }));
         snapshot();
     });
-    */
 });
