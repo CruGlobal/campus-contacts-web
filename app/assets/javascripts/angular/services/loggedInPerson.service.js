@@ -62,7 +62,11 @@ function loggedInPerson(
         // check if you have admin access on the org or any above it
         isAdminAt: function(org) {
             var adminOrgIds = _.chain(person.organizational_permissions)
-                .filter({ permission_id: permissionService.adminId })
+                .filter(
+                    orgPermission =>
+                        `${orgPermission.permission_id}` ===
+                        permissionService.adminId,
+                )
                 .map('organization_id')
                 .value();
             var orgAndAncestry = organizationService.getOrgHierarchyIds(org);
@@ -73,7 +77,7 @@ function loggedInPerson(
         isDirectAdminAt: org => {
             return person.organizational_permissions.some(
                 ({ permission_id, organization_id }) =>
-                    permission_id === permissionService.adminId &&
+                    `${permission_id}` === permissionService.adminId &&
                     organization_id === org.id,
             );
         },

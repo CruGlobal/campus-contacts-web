@@ -89,7 +89,7 @@ function personService(
                 organizationId,
             );
             return orgPermission
-                ? orgPermission.permission_id ===
+                ? `${orgPermission.permission_id}` ===
                       permissionService.noPermissionId
                 : false;
         },
