@@ -22,11 +22,15 @@ function organizationCleanupController(
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
 
-    const showConfirmModal = async (title, date) => {
+    const showConfirmModal = async title => {
         const archiveValue =
             title === 'ministries.cleanup.archive_by_inactivity_description'
                 ? 'leaders_last_sign_in_at'
                 : 'persons_inactive_since';
+        const archiveDate =
+            title === 'ministries.cleanup.archive_by_inactivity_description'
+                ? this.archiveInactivityDate
+                : this.archiveBeforeDate;
 
         const confirmModal = $uibModal.open({
             component: 'iconModal',
@@ -42,7 +46,7 @@ function organizationCleanupController(
 
         try {
             const modalResponse = await confirmModal.result;
-            archiveContacts(archiveValue)(date);
+            archiveContacts(archiveValue)(archiveDate);
         } catch (err) {
             return null;
         }
