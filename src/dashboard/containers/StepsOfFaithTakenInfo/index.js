@@ -10,12 +10,13 @@ import Header from '../../components/Header';
 const GET_IMPACT_REPORT = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            stepOwnersCount
+            stepsCount
+            receiversCount
         }
     }
 `;
 
-const PersonalStepsTakenInfo = () => {
+const StepsOfFaithTakenInfo = () => {
     const { orgId } = useContext(AppContext);
 
     const { data, loading } = useQuery(GET_IMPACT_REPORT, {
@@ -33,12 +34,12 @@ const PersonalStepsTakenInfo = () => {
 
     return (
         <Header>
-            {t('personalSteps.taken', {
-                count: report.stepOwnersCount,
-                year: moment().format('YYYY'),
+            {t('stepsOfFaith.taken', {
+                count: report.stepsCount,
+                people: report.receiversCount,
             })}
         </Header>
     );
 };
 
-export default PersonalStepsTakenInfo;
+export default StepsOfFaithTakenInfo;

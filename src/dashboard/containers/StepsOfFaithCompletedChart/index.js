@@ -13,10 +13,10 @@ const GET_STEPS_COMPLETED_REPORT = gql`
         communityReport {
             dayReport {
                 date
-                personalStepsCompletedCount
+                stepsWithOthersStepsCompletedCount
                 communityStagesReport {
                     pathwayStage
-                    personalStepsCompletedCount
+                    stepsWithOthersStepsCompletedCount
                 }
             }
         }
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     position: relative;
 `;
 
-const PersonalStepsCompletedChart = () => {
+const StepsOfFaithCompletedChart = () => {
     const [dates, setDates] = useState({});
 
     const { data, loading } = useQuery(GET_STEPS_COMPLETED_REPORT);
@@ -47,10 +47,10 @@ const PersonalStepsCompletedChart = () => {
     } = data;
 
     const graphData = report.map(row => ({
-        ['total']: row.personalStepsCompletedCount,
+        ['total']: row.stepsWithOthersStepsCompletedCount,
         ['stages']: row.communityStagesReport.map(stage => ({
             name: stage.pathwayStage,
-            count: stage.personalStepsCompletedCount,
+            count: stage.stepsWithOthersStepsCompletedCount,
         })),
         ['date']: row.date.substring(0, 2),
     }));
@@ -63,14 +63,14 @@ const PersonalStepsCompletedChart = () => {
             keys={['total']}
             indexBy={'date'}
             average={average}
-            tooltipBreakdown={true}
             datesFilter={true}
+            tooltipBreakdown={true}
             onDatesChanged={dates => {
                 setDates(dates);
             }}
-            legendLabel={t('personalSteps.legend')}
+            legendLabel={t('stepsOfFaith.legendLabel')}
         />
     );
 };
 
-export default withTheme(PersonalStepsCompletedChart);
+export default withTheme(StepsOfFaithCompletedChart);

@@ -3,20 +3,105 @@
 exports[`<StepsOfFaithPage /> should render properly 1`] = `
 <div>
   <div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
     <div
       class="css-w2m1ij"
     >
       <h1
         class="css-5j0tpf"
       >
-        Steps of Faith
+        Total Steps of Faith Completed
       </h1>
       <h2
         class="css-140lofm"
       />
       <div
         class="css-1izl14o"
-      />
+      >
+        <div
+          class="css-1ohf0ui"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Steps of Faith Completed
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Total steps of faith completed with others by members since  was created on .
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-1a3wyyp"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Steps of Faith Added
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Current total number of steps of faith with others added by members.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        People Stages
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Current total number of people added by members.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
     </div>
   </div>
 </div>

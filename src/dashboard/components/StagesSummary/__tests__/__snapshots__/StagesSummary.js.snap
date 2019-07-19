@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StagesSummary /> should render properly 1`] = `
+<div>
+  <div
+    class="css-1dikqh1"
+  />
+</div>
+`;
+
+exports[`<StagesSummary /> should render properly with summary 1`] = `
+<div>
+  <div
+    class="css-1dikqh1"
+  >
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="not-sure css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        NOT SURE
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        14
+      </div>
+    </div>
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="uninterested css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        UNINTERESTED
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="curious css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        CURIOUS
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        15
+      </div>
+    </div>
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="forgiven css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        FORGIVEN
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        5
+      </div>
+    </div>
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="growing css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        GROWING
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        3
+      </div>
+    </div>
+    <div
+      class="css-tjuh7q"
+    >
+      <div
+        class="guiding css-1wutdkg"
+      />
+      <div
+        class="css-3m1unx"
+      >
+        GUIDING
+      </div>
+      <div
+        class="css-mli3xc"
+      >
+        -
+      </div>
+    </div>
+  </div>
+</div>
+`;

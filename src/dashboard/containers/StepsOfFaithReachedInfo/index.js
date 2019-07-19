@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
-import moment from 'moment';
 
 import AppContext from '../../appContext';
 import Header from '../../components/Header';
@@ -10,12 +9,12 @@ import Header from '../../components/Header';
 const GET_IMPACT_REPORT = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            stepOwnersCount
+            stepsCount
         }
     }
 `;
 
-const PersonalStepsTakenInfo = () => {
+const StepsOfFaithReachedInfo = () => {
     const { orgId } = useContext(AppContext);
 
     const { data, loading } = useQuery(GET_IMPACT_REPORT, {
@@ -33,12 +32,9 @@ const PersonalStepsTakenInfo = () => {
 
     return (
         <Header>
-            {t('personalSteps.taken', {
-                count: report.stepOwnersCount,
-                year: moment().format('YYYY'),
-            })}
+            {t('stepsOfFaith.reached', { count: report.stepsCount })}
         </Header>
     );
 };
 
-export default PersonalStepsTakenInfo;
+export default StepsOfFaithReachedInfo;

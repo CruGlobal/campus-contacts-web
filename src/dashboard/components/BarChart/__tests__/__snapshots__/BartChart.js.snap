@@ -2,16 +2,34 @@
 
 exports[`<BartChart /> should render properly 1`] = `
 <div>
-  <div
-    style="width: 100%; height: 100%;"
-  />
+  <div>
+    <div
+      class="css-1a3wyyp"
+    >
+      <div
+        style="width: 100%; height: 100%;"
+      />
+    </div>
+    <div
+      class="css-1hr8g7h"
+    />
+  </div>
 </div>
 `;
 
 exports[`<BartChart /> should render properly with data, key, index by 1`] = `
 <div>
-  <div
-    style="width: 100%; height: 100%;"
-  />
+  <div>
+    <div
+      class="css-1a3wyyp"
+    >
+      <div
+        style="width: 100%; height: 100%;"
+      />
+    </div>
+    <div
+      class="css-1hr8g7h"
+    />
+  </div>
 </div>
 `;

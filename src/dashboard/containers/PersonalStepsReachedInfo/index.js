@@ -32,7 +32,7 @@ const PersonalStepsReachedInfo = () => {
 
     return (
         <Header>
-            {t('personalStepsReached', { count: report.pathwayMovedCount })}
+            {t('personalSteps.reached', { count: report.pathwayMovedCount })}
         </Header>
     );
 };

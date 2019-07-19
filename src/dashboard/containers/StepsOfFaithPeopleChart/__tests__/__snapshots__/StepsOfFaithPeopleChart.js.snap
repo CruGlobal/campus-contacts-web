@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StepsOfFaithPeopleChart /> should render properly loading state 1`] = `
+<div>
+  <div
+    class="css-15l45ju"
+  >
+    Loading...
+  </div>
+</div>
+`;

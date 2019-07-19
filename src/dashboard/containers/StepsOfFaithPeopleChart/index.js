@@ -23,7 +23,6 @@ const GET_STAGES_REPORT = gql`
             pathwayStage {
                 name
             }
-            stepsAddedCount
         }
     }
 `;
@@ -32,7 +31,7 @@ const Wrapper = styled.div`
     height: 400px;
 `;
 
-const PersonalStepsAdded = () => {
+const StepsOfFaithPeopleChart = () => {
     const { orgId } = useContext(AppContext);
 
     const { data, loading } = useQuery(GET_STAGES_REPORT, {
@@ -42,6 +41,7 @@ const PersonalStepsAdded = () => {
             endDate: moment().format(),
         },
     });
+
     const { t } = useTranslation('insights');
 
     if (loading) {
@@ -50,23 +50,19 @@ const PersonalStepsAdded = () => {
 
     const { organizationPathwayStagesReport: report } = data;
 
-    const PERSONAL_STEPS_LABEL = t('personalSteps.label');
-    const STAGE_LABEL = t('stage');
+    const PEOPLE_LABEL = t('stepsOfFaith.peopleLabel');
+    const LABEL = t('stage');
 
     const graphData = report.map(row => ({
-        [PERSONAL_STEPS_LABEL]: row.stepsAddedCount,
-        [STAGE_LABEL]: row.pathwayStage.name.toUpperCase(),
+        [PEOPLE_LABEL]: row.memberCount,
+        [LABEL]: row.pathwayStage.name.toUpperCase(),
     }));
 
     return (
         <Wrapper>
-            <BarChart
-                data={graphData}
-                keys={[PERSONAL_STEPS_LABEL]}
-                indexBy={STAGE_LABEL}
-            />
+            <BarChart data={graphData} keys={[PEOPLE_LABEL]} indexBy={LABEL} />
         </Wrapper>
     );
 };
 
-export default PersonalStepsAdded;
+export default StepsOfFaithPeopleChart;
