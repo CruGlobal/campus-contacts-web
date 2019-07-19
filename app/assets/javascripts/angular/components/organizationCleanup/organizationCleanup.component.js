@@ -1,6 +1,5 @@
 import './organizationCleanup.scss';
 import checkIcon from '../../../../images/icons/icon-check.svg';
-import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 import template from './organizationCleanup.html';
 
@@ -22,68 +21,30 @@ function organizationCleanupController(
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
-    this.warningIcon = warningIcon;
 
-    // Opens up modal depending on the type
-    const confirmModal = async (type, archiveDate) => {
-        switch (type) {
-            case 'archive_by_inactivity': {
-                let archiveInactive = date => {
-                    archiveContacts('leaders_last_sign_in_at')(date);
-                };
+    const showConfirmModal = async (title, date) => {
+        const archiveValue =
+            title === 'ministries.cleanup.archive_by_inactivity_description'
+                ? 'leaders_last_sign_in_at'
+                : 'persons_inactive_since';
 
-                const InactiveModal = $uibModal.open({
-                    component: 'iconModal',
-                    resolve: {
-                        title: () =>
-                            $filter('t')(
-                                `Are you sure you want to archive these contacts by inactivity? `,
-                            ),
-                        closeLabel: () => $filter('t')('Ok'),
-                        dismissLabel: () => $filter('t')('Cancel'),
-                    },
-                    windowClass: 'pivot_theme',
-                    backdrop: 'static',
-                    keyboard: false,
-                });
+        const confirmModal = $uibModal.open({
+            component: 'iconModal',
+            resolve: {
+                title: () => $filter('t')(`${title}`),
+                closeLabel: () => $filter('t')('general.ok'),
+                dismissLabel: () => $filter('t')('general.cancel'),
+            },
+            windowClass: 'pivot_theme',
+            backdrop: 'static',
+            keyboard: true,
+        });
 
-                try {
-                    const InactiveResponse = await InactiveModal.result;
-                    archiveInactive(archiveDate);
-                } catch (err) {
-                    return null;
-                }
-
-                break;
-            }
-            case 'archive_by_date': {
-                let archiveBefore = date => {
-                    archiveContacts('persons_inactive_since')(date);
-                };
-                const DateModal = $uibModal.open({
-                    component: 'iconModal',
-                    resolve: {
-                        title: () =>
-                            $filter('t')(
-                                `Are you sure you want to archive these contacts by date?`,
-                            ),
-                        closeLabel: () => $filter('t')('Ok'),
-                        dismissLabel: () => $filter('t')('Cancel'),
-                    },
-                    windowClass: 'pivot_theme',
-                    backdrop: 'static',
-                    keyboard: false,
-                });
-                try {
-                    const DateResponse = await DateModal.result;
-                    archiveBefore(archiveDate);
-                } catch (error) {
-                    return null;
-                }
-                break;
-            }
-            default:
-                return null;
+        try {
+            const modalResponse = await confirmModal.result;
+            archiveContacts(archiveValue)(date);
+        } catch (err) {
+            return null;
         }
     };
 
@@ -136,5 +97,5 @@ function organizationCleanupController(
 
         $scope.$apply();
     };
-    this.openModal = confirmModal;
+    this.showConfirmModal = showConfirmModal;
 }

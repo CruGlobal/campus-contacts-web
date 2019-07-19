@@ -502,10 +502,10 @@ export default {
                     'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
-                    'Archive contacts who have been added before:',
+                    'Are you sure you want to archive these contacts by date?',
                 archive_by_inactivity: 'Archive by inactivity',
                 archive_by_inactivity_description:
-                    'Archive people who have been inactive since:',
+                    'Are you sure you want to archive these contacts by inactivity?',
                 open_contacts: 'Open Contacts',
                 success_message: 'Your contacts have been archived!',
                 success_title: 'You Rock!',
