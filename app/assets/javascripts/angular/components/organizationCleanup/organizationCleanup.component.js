@@ -24,32 +24,29 @@ function organizationCleanupController(
 
     const showConfirmModal = async title => {
         const archiveValue =
-            title === 'ministries.cleanup.archive_by_inactivity_description'
+            title === 'ministries.cleanup.archive_by_inactivity_title'
                 ? 'leaders_last_sign_in_at'
                 : 'persons_inactive_since';
         const archiveDate =
-            title === 'ministries.cleanup.archive_by_inactivity_description'
+            title === 'ministries.cleanup.archive_by_inactivity_title'
                 ? this.archiveInactivityDate
                 : this.archiveBeforeDate;
 
         const confirmModal = $uibModal.open({
             component: 'iconModal',
             resolve: {
-                title: () => $filter('t')(`${title}`),
+                title: () => $filter('t')(title),
                 closeLabel: () => $filter('t')('general.ok'),
                 dismissLabel: () => $filter('t')('general.cancel'),
             },
             windowClass: 'pivot_theme',
             backdrop: 'static',
-            keyboard: true,
         });
 
         try {
             const modalResponse = await confirmModal.result;
             archiveContacts(archiveValue)(archiveDate);
-        } catch (err) {
-            return null;
-        }
+        } catch (err) {}
     };
 
     const archiveContacts = archiveBy => async dateBy => {
