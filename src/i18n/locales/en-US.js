@@ -1129,6 +1129,8 @@ export default {
         stage: 'Stage',
         personalStepsTaken:
             'Together we have taken {{count}} personal steps of faith in {{year}}.',
+        personalStepsReached:
+            'This year, {{count}} people reached a new stage on their spiritual journey.',
         personalStepsCompleted: 'Personal Steps of Faith Completed',
         personalStepsCompletedSubtitle:
             'Personal steps of faith completed by community members.',

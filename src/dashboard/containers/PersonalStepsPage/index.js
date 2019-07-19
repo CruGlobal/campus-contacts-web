@@ -7,6 +7,7 @@ import PersonalStepsCompletedChart from '../PersonalStepsCompletedChart';
 import PersonalStepsCompletedTotalChart from '../PersonalStepsCompletedTotalChart';
 import PersonalStepsMemberStagesChart from '../PersonalStepsMemberStagesChart';
 import PersonalStepsTakenInfo from '../PersonalStepsTakenInfo';
+import PersonalStepsReachedInfo from '../PersonalStepsReachedInfo';
 
 const PersonalStepsPage = () => {
     const { t } = useTranslation('insights');
@@ -29,6 +30,7 @@ const PersonalStepsPage = () => {
             >
                 <PersonalStepsAddedChart />
             </Card>
+            <PersonalStepsReachedInfo />
             <Card
                 title={t('memberStages')}
                 subtitle={t('memberStagesSubtitle')}

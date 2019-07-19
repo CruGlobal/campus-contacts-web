@@ -75,6 +75,11 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
         </div>
       </div>
     </div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
     <div
       class="css-w2m1ij"
     >
