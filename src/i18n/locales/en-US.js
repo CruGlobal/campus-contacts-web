@@ -503,10 +503,10 @@ export default {
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
                     'Archive contacts who have been added before:',
-                archive_by_date_title:
+                archive_by_date_confirm_message:
                     'Are you sure you want to archive these contacts by date?',
                 archive_by_inactivity: 'Archive by inactivity',
-                archive_by_inactivity_title:
+                archive_by_inactivity_confirm_message:
                     'Are you sure you want to archive these contacts by inactivity?',
                 archive_by_inactivity_description:
                     'Archive people who have been inactive since:',

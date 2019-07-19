@@ -24,11 +24,11 @@ function organizationCleanupController(
 
     const showConfirmModal = async title => {
         const archiveValue =
-            title === 'ministries.cleanup.archive_by_inactivity_title'
+            title === 'ministries.cleanup.archive_by_inactivity_confirm_message'
                 ? 'leaders_last_sign_in_at'
                 : 'persons_inactive_since';
         const archiveDate =
-            title === 'ministries.cleanup.archive_by_inactivity_title'
+            title === 'ministries.cleanup.archive_by_inactivity_confirm_message'
                 ? this.archiveInactivityDate
                 : this.archiveBeforeDate;
 
