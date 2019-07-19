@@ -82,6 +82,10 @@ function surveyOverviewQuestionsController(
         $scope.$apply();
     };
 
+    const getLabel = async (questions, organizationId) => {
+        const labelIds = [];
+    };
+
     const getPeople = async (questions, organizationId) => {
         const peopleIds = [
             ...new Set(
@@ -214,8 +218,36 @@ function surveyOverviewQuestionsController(
 
         if (!question.question_rules[index].assign_to) return;
 
+        rule.assign_to.map(rule => {
+            if (rule._type === 'label') {
+                console.log('Hi');
+                let labelIds = [];
+                question.question_rules[index].assign_to.map(a => {
+                    if (a._type === 'label') {
+                        labelIds.push(a.id);
+                    }
+                });
+                const currentIds = question.question_rules[index].label_ids
+                    ? question.question_rules[index].label_ids.split(',')
+                    : [];
+
+                if (_.isEqual(currentIds.sort(), labelIds.sort())) {
+                    return undefined;
+                }
+
+                question.question_rules[index].label_ids = labelIds.join(',');
+            } else {
+            }
+        });
+
         const ids = [
-            ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
+            ...new Set(
+                question.question_rules[index].assign_to.map(a => {
+                    if (a._type) {
+                        return a.id;
+                    }
+                }),
+            ),
         ];
         const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
@@ -450,9 +482,5 @@ function surveyOverviewQuestionsController(
 
         rebuildQuestion(question);
         $scope.$apply();
-    };
-
-    this.Log = () => {
-        console.log('Hello');
     };
 }

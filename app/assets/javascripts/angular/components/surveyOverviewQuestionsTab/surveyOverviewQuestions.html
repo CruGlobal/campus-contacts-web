@@ -222,12 +222,12 @@
                                 class="relative"
                                 ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                             >
-                                <assigned-select
+                                <assigned-alt-select
                                     action-after-select="$ctrl.addPersonToRule(question, rule)"
                                     assigned="rule.assign_to"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-select>
+                                ></assigned-alt-select>
                                 <a
                                     href
                                     class="ml3 delete"

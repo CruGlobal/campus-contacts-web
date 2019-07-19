@@ -1,8 +1,8 @@
 angular
     .module('missionhubApp')
-    .factory('assignedSelectService', assignedSelectService);
+    .factory('assignedAltSelectService', assignedAltSelectService);
 
-function assignedSelectService(
+function assignedAltSelectService(
     httpProxy,
     modelsService,
     loggedInPerson,
@@ -29,6 +29,21 @@ function assignedSelectService(
                     },
                 )
                 .then(httpProxy.extractModels);
+        },
+        searchLabels: (query, organizationId) => {
+            return httpProxy
+                .get(
+                    `/organizations/${organizationId}`,
+                    {
+                        include: 'labels',
+                    },
+                    {
+                        errorMessage: 'error.messages.surveys.loadQuestions',
+                    },
+                )
+                .then(data => {
+                    return data.data.labels;
+                });
         },
         // Determine whether a person is the currently logged-in person
         isMe: function(person) {
