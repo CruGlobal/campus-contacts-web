@@ -1,6 +1,7 @@
-import template from './organizationOverviewSurveyResponses.html';
 import './organizationOverviewSurveyResponses.scss';
 import _ from 'lodash';
+
+import template from './organizationOverviewSurveyResponses.html';
 
 angular
     .module('missionhubApp')

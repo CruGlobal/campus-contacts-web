@@ -329,6 +329,14 @@ angular
                 component: 'impersonateUser',
             })
             .state({
+                name: 'admin',
+                url: '/admin',
+                resolve: {
+                    adminRedirect: authenticationService =>
+                        authenticationService.adminRedirect(),
+                },
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:
@@ -457,8 +465,8 @@ angular
                 },
             })
             .state({
-                name: 'appWithoutMenus.insights',
-                url: '/ministries/:orgId/insights',
+                name: 'app.ministries.ministry.insights',
+                url: '/insights/:subTab',
                 component: 'insights',
                 resolve: {
                     orgId: $transition$ => $transition$.params().orgId,
