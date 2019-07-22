@@ -34,7 +34,10 @@ export default {
             },
             assign_search: {
                 me: 'Me',
-                placeholder: "Type a person's name you want to assign to here",
+                assign_label_or_person:
+                    'Type label or name of a person you want to assign',
+                notify_person:
+                    'Type the name of a person you want us to notify',
             },
             interaction_types: {
                 comment: 'Comment Only',

@@ -6,7 +6,9 @@
     ng-disabled="$ctrl.disabled"
 >
     <ui-select-match
-        placeholder="{{ 'application.assign_search.placeholder' | t }}"
+        placeholder="{{
+            'application.assign_search.assign_label_or_person' | t
+        }}"
     >
         <span>
             {{ $item | personName }}
@@ -21,6 +23,9 @@
             <span ng-if="$ctrl.isMe(person)"
                 >({{ 'application.assign_search.me' | t }})</span
             >
+        </span>
+        <span class="selector-label">
+            {{ person._type }}
         </span>
     </ui-select-choices>
 </ui-select>

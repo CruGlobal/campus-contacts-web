@@ -1,6 +1,6 @@
 @import '../../../../stylesheets/variables/colors';
 
-assigned-select .ui-select-bootstrap {
+assigned-alt-select .ui-select-bootstrap {
     ul.ui-select-choices-content {
         padding: 0;
         list-style: none;
@@ -17,6 +17,18 @@ assigned-select .ui-select-bootstrap {
 
     .ui-select-choices-row:hover {
         background-color: $gray-5;
+    }
+
+    .ui-select-choices-row > span {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ui-select-choices-row > span .selector-label {
+        padding: 0 8px;
+        border: solid 1px #808284;
+        border-radius: 0.25rem 0.5rem;
     }
 
     input:disabled {

@@ -223,7 +223,7 @@
                                 ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                             >
                                 <assigned-alt-select
-                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
+                                    action-after-select="$ctrl.addPersonToRule(question, rule) && $ctrl.addLabelToRule(question, rule)"
                                     assigned="rule.assign_to"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
