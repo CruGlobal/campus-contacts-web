@@ -1,7 +1,7 @@
-import template from './personPage.html';
+import noProfileImage from '../../../../images/no_image.png';
 import './personPage.scss';
 
-import noProfileImage from '../../../../images/no_image.png';
+import template from './personPage.html';
 
 angular.module('missionhubApp').component('personPage', {
     controller: personPageController,

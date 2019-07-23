@@ -1,10 +1,11 @@
 import { t } from 'i18next';
 import _ from 'lodash';
 
-import template from './confirmMovementIndicators.html';
 import './confirmMovementIndicators.scss';
 import warningIcon from '../../../../../images/icons/icon-warning-2.svg';
 import checkIcon from '../../../../../images/icons/icon-check-stylized.svg';
+
+import template from './confirmMovementIndicators.html';
 
 angular.module('missionhubApp').component('reportMovementIndicatorsConfirm', {
     controller: reportMovementIndicatorsConfirmController,

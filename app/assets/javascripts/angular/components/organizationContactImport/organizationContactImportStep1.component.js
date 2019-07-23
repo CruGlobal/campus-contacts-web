@@ -1,10 +1,10 @@
 import * as Papa from 'papaparse';
 
-import template from './organizationContactImportStep1.html';
-
 import fileIcon from '../../../../images/icons/icon-file.svg';
 import warningIcon from '../../../../images/icons/icon-warning.svg';
 import errorIcon from '../../../../images/icons/icon-error.svg';
+
+import template from './organizationContactImportStep1.html';
 
 angular.module('missionhubApp').component('organizationContactImportStep1', {
     bindings: {

@@ -1,9 +1,10 @@
-import template from './surveyOverviewKeyword.html';
 import _ from 'lodash';
 import { t } from 'i18next';
 
 import helpIcon from '../../../../images/icon-help.svg';
 import clockIcon from '../../../../images/icon-clock.svg';
+
+import template from './surveyOverviewKeyword.html';
 
 angular.module('missionhubApp').component('surveyOverviewKeyword', {
     controller: surveyOverviewKeywordController,

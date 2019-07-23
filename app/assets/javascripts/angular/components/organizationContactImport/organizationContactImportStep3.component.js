@@ -1,7 +1,8 @@
-import template from './organizationContactImportStep3.html';
 import * as Papa from 'papaparse';
 import _ from 'lodash';
 import uuidv1 from 'uuid';
+
+import template from './organizationContactImportStep3.html';
 
 angular.module('missionhubApp').component('organizationContactImportStep3', {
     bindings: {

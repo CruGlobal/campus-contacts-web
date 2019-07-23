@@ -414,10 +414,12 @@ export default {
             },
         },
         login: {
-            login: 'Log in',
-            login_with_key: 'Log in with The Key',
-            login_with_facebook: 'Log in with Facebook',
-            invite_in_progress: 'Please login to finish your invite.',
+            signIn: 'Sign in',
+            inviteInProgress:
+                'To complete your invite, create account or sign in.',
+            signUpWithEmail: 'Sign Up with Email',
+            signInWithEmail: 'Sign In with Email',
+            continueWithFacebook: 'Continue with Facebook',
         },
         mergeAccount: {
             loggedInAs:
@@ -501,7 +503,11 @@ export default {
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
                     'Archive contacts who have been added before:',
+                archive_by_date_confirm_message:
+                    'Are you sure you want to archive these contacts by date?',
                 archive_by_inactivity: 'Archive by inactivity',
+                archive_by_inactivity_confirm_message:
+                    'Are you sure you want to archive these contacts by inactivity?',
                 archive_by_inactivity_description:
                     'Archive people who have been inactive since:',
                 open_contacts: 'Open Contacts',
@@ -1130,6 +1136,32 @@ export default {
             title: 'Something went wrong…',
             description:
                 'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
+        },
+    },
+    insights: {
+        members: 'Members',
+        personalSteps: 'Personal Steps of Faith',
+        stage: 'Stage',
+        personalStepsCompleted: 'Personal Steps of Faith Completed',
+        personalStepsCompletedSubtitle:
+            'Personal steps of faith completed by community members.',
+        personalStepsAdded: 'Personal Steps of Faith Added',
+        personalStepsAddedSubtitle:
+            'Current total of personal steps of faith added by members by stage.',
+        memberStages: 'Community Member Stages',
+        memberStagesSubtitle: 'Current total number of members by stage.',
+        memberStageChanges: 'Community Member Stage Changes',
+        memberStageChangesSubtitle:
+            'Number of members who changed their stage.',
+        loading: 'Loading...',
+        tabs: {
+            personal: 'Personal Steps',
+            steps: 'Steps of Faith',
+            interactions: 'Interactions',
+            challenges: 'Challenges',
+        },
+        steps: {
+            title: 'Steps of Faith',
         },
     },
 };

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BartChart /> should render properly 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  />
+</div>
+`;
+
+exports[`<BartChart /> should render properly with data, key, index by 1`] = `
+<div>
+  <div
+    style="width: 100%; height: 100%;"
+  />
+</div>
+`;

@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PersonalStepsPage /> should render properly 1`] = `
+<div>
+  <div>
+    <h1
+      class="css-16f08kk"
+    >
+      Together we have taken 1,234 personal steps of faith in 2019.
+    </h1>
+    <div
+      class="css-1r4xttg"
+    >
+      <h1
+        class="css-ml4ujk"
+      >
+        Personal Steps of Faith Completed
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Personal steps of faith completed by community members.
+      </h2>
+      <div
+        class="css-1izl14o"
+      />
+    </div>
+    <div
+      class="css-1r4xttg"
+    >
+      <h1
+        class="css-ml4ujk"
+      >
+        Personal Steps of Faith Added
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Current total of personal steps of faith added by members by stage.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1r4xttg"
+    >
+      <h1
+        class="css-ml4ujk"
+      >
+        Community Member Stages
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Current total number of members by stage.
+      </h2>
+      <div
+        class="css-1izl14o"
+      >
+        <div
+          class="css-15l45ju"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1r4xttg"
+    >
+      <h1
+        class="css-ml4ujk"
+      >
+        Community Member Stage Changes
+      </h1>
+      <h2
+        class="css-140lofm"
+      >
+        Number of members who changed their stage.
+      </h2>
+      <div
+        class="css-1izl14o"
+      />
+    </div>
+  </div>
+</div>
+`;

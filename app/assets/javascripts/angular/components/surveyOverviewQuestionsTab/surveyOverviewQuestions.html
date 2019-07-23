@@ -17,13 +17,13 @@
         >
             <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
                 <img
-                    ng-src="{{$ctrl.icons.sort}}"
+                    ng-src="{{ $ctrl.icons.sort }}"
                     alt="{{ 'surveys:questions.sort' | t }}"
                     style="width:22px; height:20px"
                 />
             </a>
             <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
-                {{question.label}}
+                {{ question.label }}
                 <span class="f7" ng-if="question.required"
                     >({{ 'common:general.required' | t }})</span
                 >
@@ -42,11 +42,11 @@
             <a
                 class="ml3"
                 href=""
-                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges"
+                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges && !question.required"
                 ng-click="$ctrl.deleteQuestion(question.id)"
             >
                 <img
-                    ng-src="{{$ctrl.icons.trash}}"
+                    ng-src="{{ $ctrl.icons.trash }}"
                     alt="{{ 'general:delete' | t }}"
                 />
             </a>
@@ -56,7 +56,7 @@
                 ng-if="$ctrl.isExpanded[question.id] && !question.predefined && $ctrl.directAdminPrivileges"
                 ng-click="$ctrl.copyQuestion(question)"
             >
-                <img ng-src="{{$ctrl.icons.copy}}" alt="Copy" />
+                <img ng-src="{{ $ctrl.icons.copy }}" alt="Copy" />
             </a>
             <span class="db open-close-arrow"></span>
         </h2>
@@ -81,8 +81,8 @@
                                 href=""
                                 uib-dropdown-toggle
                             >
-                                {{$ctrl.getQuestionType(question.kind,
-                                question.style).name}}
+                                {{ $ctrl.getQuestionType( question.kind,
+                                question.style ).name }}
                             </a>
                             <ul
                                 class="bg-white pa2 f5  br--bottom shadow-4"
@@ -96,7 +96,7 @@
                                         class="pt2"
                                         ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);"
                                     >
-                                        {{type.name}}
+                                        {{ type.name }}
                                     </a>
                                 </li>
                             </ul>
@@ -143,8 +143,10 @@
                                         ng-if="$ctrl.directAdminPrivileges"
                                     >
                                         <img
-                                            alt="{{ 'surveys:questions.sort' | t }}"
-                                            ng-src="{{$ctrl.icons.sort}}"
+                                            alt="{{
+                                                'surveys:questions.sort' | t
+                                            }}"
+                                            ng-src="{{ $ctrl.icons.sort }}"
                                         />
                                     </a>
                                 </div>
@@ -191,7 +193,7 @@
                                 <a class="help fr p2" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
-                                        ng-src="{{$ctrl.icons.help}}"
+                                        ng-src="{{ $ctrl.icons.help }}"
                                     />
                                 </a>
                             </div>
@@ -207,7 +209,7 @@
                                 <a class="help fr" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
-                                        ng-src="{{$ctrl.icons.help}}"
+                                        ng-src="{{ $ctrl.icons.help }}"
                                     />
                                 </a>
                             </div>
@@ -234,7 +236,7 @@
                                 >
                                     <img
                                         alt="Delete"
-                                        ng-src="{{$ctrl.icons.trash}}"
+                                        ng-src="{{ $ctrl.icons.trash }}"
                                     />
                                 </a>
                             </div>
@@ -261,7 +263,7 @@
                                 >
                                     <img
                                         alt="Delete"
-                                        ng-src="{{$ctrl.icons.trash}}"
+                                        ng-src="{{ $ctrl.icons.trash }}"
                                     />
                                 </a>
                             </div>
@@ -344,7 +346,7 @@
                     ng-click="$ctrl.addQuestion({
                     label: '', kind: type.kind, style: type.style
                 })"
-                    >{{type.name}}</a
+                    >{{ type.name }}</a
                 >
             </li>
         </ul>

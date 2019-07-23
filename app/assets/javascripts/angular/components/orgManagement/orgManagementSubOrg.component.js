@@ -1,10 +1,11 @@
-import template from './orgManagementSubOrg.html';
 import { t } from 'i18next';
 
 import addIcon from '../../../../images/icons/icon-add.svg';
 import editIcon from '../../../../images/icons/icon-edit.svg';
 import trashIcon from '../../../../images/icons/icon-trash-blue.svg';
 import warningIcon from '../../../../images/icons/icon-warning-2.svg';
+
+import template from './orgManagementSubOrg.html';
 
 angular.module('missionhubApp').component('orgManagementSubOrg', {
     controller: orgManagementSubOrgController,

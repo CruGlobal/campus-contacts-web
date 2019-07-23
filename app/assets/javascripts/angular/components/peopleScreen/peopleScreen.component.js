@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-import template from './peopleScreen.html';
 import './peopleScreen.scss';
 import pencilIcon from '../../../../images/icons/pencil.svg';
 import mergeIcon from '../../../../images/icons/merge.svg';
@@ -11,6 +10,8 @@ import transferIcon from '../../../../images/icons/transfer.svg';
 import archiveIcon from '../../../../images/icons/archive.svg';
 import deleteIcon from '../../../../images/icons/delete.svg';
 import closeIcon from '../../../../images/icons/close.svg';
+
+import template from './peopleScreen.html';
 
 angular.module('missionhubApp').component('peopleScreen', {
     controller: peopleScreenController,

@@ -1,6 +1,7 @@
-import template from './surveyResponses.html';
 import './surveyResponses.scss';
 import chevronLeftIcon from '../../../../images/icons/chevronLeft.svg';
+
+import template from './surveyResponses.html';
 
 angular.module('missionhubApp').component('surveyResponses', {
     controller: surveyResponsesController,

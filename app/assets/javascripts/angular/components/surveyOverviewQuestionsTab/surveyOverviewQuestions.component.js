@@ -1,4 +1,3 @@
-import template from './surveyOverviewQuestions.html';
 import './surveyOverviewQuestions.scss';
 import _ from 'lodash';
 import { t } from 'i18next';
@@ -9,6 +8,8 @@ import trashIcon from '../../../../images/icons/icon-trash.svg';
 import helpIcon from '../../../../images/icons/icon-help.svg';
 import xWhiteIcon from '../../../../images/icons/icon-x-white.svg';
 import warningIcon from '../../../../images/icons/icon-warning-2.svg';
+
+import template from './surveyOverviewQuestions.html';
 
 angular.module('missionhubApp').component('surveyOverviewQuestions', {
     controller: surveyOverviewQuestionsController,
@@ -22,7 +23,6 @@ function surveyOverviewQuestionsController(
     $uibModal,
     surveyService,
     $scope,
-    modelsService,
     httpProxy,
     loggedInPerson,
 ) {
@@ -80,7 +80,7 @@ function surveyOverviewQuestionsController(
         $scope.$apply();
     };
 
-    const getPeople = async (questions, organizationId) => {
+    const getPeople = async questions => {
         const peopleIds = [
             ...new Set(
                 questions.reduce((a1, q) => {

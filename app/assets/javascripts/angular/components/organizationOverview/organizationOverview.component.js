@@ -1,7 +1,7 @@
-import template from './organizationOverview.html';
 import './organizationOverview.scss';
-
 import { t } from 'i18next';
+
+import template from './organizationOverview.html';
 
 angular.module('missionhubApp').component('organizationOverview', {
     controller: organizationOverviewController,
@@ -32,6 +32,10 @@ function organizationOverviewController(
     this.p2cOrg = false;
     this.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     this.surveyResponses = 'countHidden';
+
+    this.isInsightsTab = () => {
+        return $state.current.name === 'app.ministries.ministry.insights';
+    };
 
     this.isTabVisible = tabName => {
         return (
