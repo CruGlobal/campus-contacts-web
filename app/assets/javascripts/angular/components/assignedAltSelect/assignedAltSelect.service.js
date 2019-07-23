@@ -30,6 +30,7 @@ function assignedAltSelectService(
                 )
                 .then(httpProxy.extractModels);
         },
+        // Get all the labels from the current organizations
         searchLabels: (query, organizationId) => {
             return httpProxy
                 .get(

@@ -9,6 +9,8 @@ assigned-alt-select .ui-select-bootstrap {
     .ui-select-match-item {
         height: initial;
         padding: 0 5px;
+        background-color: $pivot-dark-blue !important;
+        color: $white;
     }
 
     .ui-select-choices-row.active > span {
@@ -27,7 +29,13 @@ assigned-alt-select .ui-select-bootstrap {
 
     .ui-select-choices-row > span .selector-label {
         padding: 0 8px;
-        border: solid 1px #808284;
+        border: solid 1px $gray-2;
+        border-radius: 0.25rem 0.5rem;
+    }
+
+    .ui-select-choices-row.active > span .selector-label {
+        padding: 0 8px;
+        border: solid 1px $white;
         border-radius: 0.25rem 0.5rem;
     }
 
