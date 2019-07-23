@@ -19,7 +19,6 @@ const GET_STAGES_REPORT = gql`
             organizationId: $organizationId
             endDate: $endDate
         ) {
-            memberCount
             pathwayStage {
                 name
             }

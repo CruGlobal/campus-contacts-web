@@ -129,7 +129,11 @@ const PersonalStepsCompletedTotalChart = () => {
                 ))}
             </Stages>
             <Footer>
-                <RangePicker onDatesChange={onDatesChange} />
+                <RangePicker
+                    onDatesChange={onDatesChange}
+                    startDate={dates.startDate}
+                    endDate={dates.endDate}
+                />
             </Footer>
         </Wrapper>
     );

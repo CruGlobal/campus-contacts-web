@@ -6,7 +6,11 @@ import PersonalStepsReachedInfo from '../';
 
 describe('<PersonalStepsReachedInfo />', () => {
     it('should render properly loading state', async () => {
-        renderWithContext(<PersonalStepsReachedInfo />).snapshot();
+        renderWithContext(<PersonalStepsReachedInfo />, {
+            appContext: {
+                orgId: 1,
+            },
+        }).snapshot();
     });
 
     it('should render properly with data', async () => {

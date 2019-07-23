@@ -98,11 +98,8 @@ const CalendarIcon = styled.div`
     margin-right: 12px;
 `;
 
-const RangePicker = ({ onDatesChange }) => {
-    const [dates, setDates] = useState({
-        startDate: moment().subtract(7, 'days'),
-        endDate: moment(),
-    });
+const RangePicker = ({ onDatesChange, startDate, endDate }) => {
+    const [dates, setDates] = useState({ startDate, endDate });
     const [focus, setFocus] = useState();
 
     const datesChanged = ({ startDate, endDate }) => {
@@ -136,4 +133,6 @@ export default withTheme(RangePicker);
 
 RangePicker.propTypes = {
     onDatesChange: PropTypes.func,
+    startDate: PropTypes.object,
+    endDate: PropTypes.object,
 };

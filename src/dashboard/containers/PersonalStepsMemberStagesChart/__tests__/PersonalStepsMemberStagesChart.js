@@ -7,41 +7,42 @@ import PersonalStepsMemberStagesChart from '../';
 
 describe('<PersonalStepsMemberStagesChart />', () => {
     it('should render properly loading state', async () => {
-        renderWithContext(<PersonalStepsMemberStagesChart />).snapshot();
+        renderWithContext(<PersonalStepsMemberStagesChart />, {
+            appContext: {
+                orgId: 1,
+            },
+        }).snapshot();
     });
 
-    /* It has to wait until this query is available in the schema
     it('should render properly with chart', async () => {
         const { snapshot, getByText } = renderWithContext(
-            <MemberStagesChart />,
+            <PersonalStepsMemberStagesChart />,
             {
                 mocks: {
                     Query: () => ({
-                        stages_report: () => ({
-                            data: () => ([
-                                {
-                                    __typename: 'Data',
-                                    pathway_stage: 'NO STAGE',
-                                    member_count: 10,
-                                    steps_added_count: 12,
-                                    steps_completed_count: 37,
+                        organizationPathwayStagesReport: () => [
+                            {
+                                memberCount: 10,
+                                pathwayStage: {
+                                    name: 'NO STAGE',
                                 },
-                                {
-                                    __typename: 'Data',
-                                    pathway_stage: 'NOT SURE',
-                                    member_count: 11,
-                                    steps_added_count: 34,
-                                    steps_completed_count: 37,
-                                }
-                            ])
-                        })
-                    })
+                            },
+                            {
+                                memberCount: 11,
+                                pathwayStage: {
+                                    name: 'UNINTERESTED',
+                                },
+                            },
+                        ],
+                    }),
+                },
+                appContext: {
+                    orgId: 1,
                 },
             },
         );
 
-        await waitForElement(() => getByText('NO STAGE'));
+        await waitForElement(() => getByText('UNINTERESTED'));
         snapshot();
     });
-*/
 });

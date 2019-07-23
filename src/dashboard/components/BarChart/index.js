@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ResponsiveBar } from '@nivo/bar';
+import { Bar } from '@nivo/bar';
 import { withTheme } from 'emotion-theming';
 import { line } from 'd3-shape';
 
@@ -34,7 +34,9 @@ const BarChart = props => {
     };
 
     return (
-        <ResponsiveBar
+        <Bar
+            height={400}
+            width={848}
             data={data}
             keys={keys}
             indexBy={indexBy}

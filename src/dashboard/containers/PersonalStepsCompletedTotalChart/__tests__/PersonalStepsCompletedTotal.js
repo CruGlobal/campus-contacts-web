@@ -8,4 +8,6 @@ describe('<PersonalStepsCompletedTotal />', () => {
     it('should render properly loading state', async () => {
         renderWithContext(<PersonalStepsCompletedTotal />).snapshot();
     });
+
+    // TODO: Add unit tests when communityReport is available in GraphQL schema
 });
