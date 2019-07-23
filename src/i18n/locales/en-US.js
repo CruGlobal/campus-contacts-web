@@ -970,6 +970,17 @@ export default {
             save: 'Error occurred while saving contact',
         },
     },
+    unsubscribe: {
+        confirmation:
+            'Are you sure you want to unsubscribe from all emails from',
+        noMoreEmails:
+            'By unsubscribing, you will no longer receive emails from',
+        success:
+            'Thanks! You have successfully unsubscribed and will no longer receive emails from',
+        label: 'Unsubscribe',
+        error:
+            'We are sorry, but an error has occurred. Please try again by refreshing the page.',
+    },
     userPreferences: {
         title: 'User Preferences',
         language: 'Language',

@@ -1,0 +1,28 @@
+<div class="m-auto tc pt-5">
+    <div ng-if="$ctrl.isError">
+        <h1>{{ 'unsubscribe:error' | t }}</h1>
+    </div>
+    <div ng-if="!$ctrl.isError">
+        <div ng-if="!$ctrl.isUnsubscribed">
+            <h1>
+                {{ 'unsubscribe:confirmation' | t }} {{ $ctrl.organizationName
+                }}?
+            </h1>
+            <h2>
+                {{ 'unsubscribe:noMoreEmails' | t }} {{ $ctrl.organizationName
+                }}.
+            </h2>
+            <button
+                ng-click="$ctrl.unsubscribe()"
+                class="link ba b--pivot-dark-blue mb2 dib white bg-pivot-dark-blue bold br2 ttu tracked"
+            >
+                {{ 'unsubscribe:label' | t }}
+            </button>
+        </div>
+        <div ng-if="$ctrl.isUnsubscribed">
+            <h1>
+                {{ 'unsubscribe:success' | t }} {{ $ctrl.organizationName }}.
+            </h1>
+        </div>
+    </div>
+</div>
