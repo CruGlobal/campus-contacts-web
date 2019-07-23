@@ -5,14 +5,7 @@ angular
         myOrganizationsDashboardService,
     );
 
-function myOrganizationsDashboardService(
-    JsonApiDataStore,
-    loggedInPerson,
-    permissionService,
-    httpProxy,
-    modelsService,
-    _,
-) {
+function myOrganizationsDashboardService(httpProxy, modelsService, _) {
     return {
         // Return an array of all loaded root organizations
         getRootOrganizations: function() {

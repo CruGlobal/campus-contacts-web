@@ -329,6 +329,14 @@ angular
                 component: 'impersonateUser',
             })
             .state({
+                name: 'admin',
+                url: '/admin',
+                resolve: {
+                    adminRedirect: authenticationService =>
+                        authenticationService.adminRedirect(),
+                },
+            })
+            .state({
                 name: 'app.people',
                 url: '/people',
                 template:

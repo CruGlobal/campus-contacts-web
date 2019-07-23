@@ -43,7 +43,7 @@
                 />
                 <button
                     class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim"
-                    ng-click="$ctrl.archiveBefore($ctrl.archiveBeforeDate)"
+                    ng-click="$ctrl.showConfirmModal('ministries.cleanup.archive_by_date_confirm_message')"
                 >
                     {{ 'ministries.cleanup.archive_by_date' | t }}
                 </button>
@@ -72,7 +72,7 @@
                 />
                 <button
                     class="f6 pa2 link ba b--pivot-dark-blue ihshort mt3 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-100 dim"
-                    ng-click="$ctrl.archiveInactive($ctrl.archiveInactivityDate)"
+                    ng-click="$ctrl.showConfirmModal('ministries.cleanup.archive_by_inactivity_confirm_message')"
                 >
                     {{ 'ministries.cleanup.archive_by_inactivity' | t }}
                 </button>
