@@ -58,8 +58,6 @@ const PersonalStepsMemberStagesChart = () => {
         [STAGE_LABEL]: row.pathwayStage.name.toUpperCase(),
     }));
 
-    console.log(graphData);
-
     return (
         <Wrapper>
             <BarChart
