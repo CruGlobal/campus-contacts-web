@@ -1,4 +1,3 @@
-// Vendors
 import React from 'react';
 
 import { renderWithContext } from '../../../testUtils';
