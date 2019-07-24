@@ -47,7 +47,7 @@ const Icon = styled.div`
     }
 
     &.uninterested {
-        background-image: url(/src/dashboard/assets/icons/stage-uninterested.svg);
+        background-image: url(../../assets/icons/stage-uninterested.svg);
     }
 
     &.curious {
