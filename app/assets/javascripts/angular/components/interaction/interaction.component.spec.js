@@ -24,8 +24,8 @@ describe('interaction component', function() {
             },
             {
                 interaction: {
-                    id: 1,
-                    interaction_type_id: 4,
+                    id: '1',
+                    interaction_type_id: '4',
                 },
                 onDelete: jasmine.createSpy('onDelete'),
             },
