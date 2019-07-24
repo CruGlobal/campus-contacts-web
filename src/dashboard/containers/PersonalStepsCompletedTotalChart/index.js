@@ -47,11 +47,11 @@ const Icon = styled.div`
     }
 
     &.uninterested {
-        background-image: url(../../assets/icons/stage-uninterested.svg);
+        background-image: url(src/dashboard/assets/icons/stage-uninterested.svg);
     }
 
     &.curious {
-        background-image: url(/src/dashboard/assets/icons/stage-curious.svg);
+        background-image: url(./src/dashboard/assets/icons/stage-curious.svg);
     }
 
     &.forgiven {
