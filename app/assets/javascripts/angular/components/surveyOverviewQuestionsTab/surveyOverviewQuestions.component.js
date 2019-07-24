@@ -210,7 +210,7 @@ function surveyOverviewQuestionsController(
                 r => r.trigger_keywords === answer && r.rule_code === type,
             ) || {};
         let ids = people_ids ? people_ids.split(',') : [];
-        ids = label_ids ? [...ids, label_ids.split(',')].flat() : [...ids];
+        let labelIds = label_ids ? label_ids.split(',') : [];
 
         return {
             id,
@@ -219,6 +219,9 @@ function surveyOverviewQuestionsController(
             people_ids,
             rule_code: type,
             trigger_keywords: answer,
+            assigned_labels: id
+                ? this.people.filter(p => labelIds.indexOf(p.id) >= 0)
+                : null,
             assign_to: id
                 ? this.people.filter(p => ids.indexOf(p.id) >= 0)
                 : null,
@@ -256,7 +259,7 @@ function surveyOverviewQuestionsController(
 
         const ids = [
             ...new Set(
-                question.question_rules[index].assign_to
+                question.question_rules[index].assigned_labels
                     .filter(a => a._type === 'label')
                     .map(b => b.id),
             ),
@@ -271,7 +274,7 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].label_ids = ids.join(',');
-        question.question_rules[index].assign_to.forEach(a => {
+        question.question_rules[index].assigned_labels.forEach(a => {
             const exists = this.people.find(p => p.id === a.id);
             if (!exists) {
                 this.people.push(a);
