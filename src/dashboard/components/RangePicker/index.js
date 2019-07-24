@@ -7,6 +7,8 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker } from 'react-dates';
 
+import calendar from '../../assets/icons/calendar.svg';
+
 const Container = styled.div`
     display: flex;
     align-items: center;
@@ -92,7 +94,7 @@ const Container = styled.div`
 `;
 
 const CalendarIcon = styled.div`
-    background-image: url(/src/dashboard/assets/icons/calendar.svg);
+    background-image: url(${calendar});
     width: 24px;
     height: 24px;
     margin-right: 12px;

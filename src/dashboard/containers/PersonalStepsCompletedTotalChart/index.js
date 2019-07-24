@@ -7,6 +7,12 @@ import { withTheme } from 'emotion-theming';
 import moment from 'moment';
 
 import RangePicker from '../../components/RangePicker';
+import notSure from '../../assets/icons/stage-not-sure.svg';
+import uninterested from '../../assets/icons/stage-uninterested.svg';
+import curious from '../../assets/icons/stage-curious.svg';
+import forgiven from '../../assets/icons/stage-forgiven.svg';
+import growing from '../../assets/icons/stage-growing.svg';
+import guiding from '../../assets/icons/stage-guiding.svg';
 
 const GET_TOTAL_STEPS_COMPLETED_REPORT = gql`
     query communityReport {
@@ -43,27 +49,27 @@ const Icon = styled.div`
     background-repeat: no-repeat;
 
     &.not-sure {
-        background-image: url(/src/dashboard/assets/icons/stage-not-sure.svg);
+        background-image: url(${notSure});
     }
 
     &.uninterested {
-        background-image: url(src/dashboard/assets/icons/stage-uninterested.svg);
+        background-image: url(${uninterested});
     }
 
     &.curious {
-        background-image: url(./src/dashboard/assets/icons/stage-curious.svg);
+        background-image: url(${curious});
     }
 
     &.forgiven {
-        background-image: url(/src/dashboard/assets/icons/stage-forgiven.svg);
+        background-image: url(${forgiven});
     }
 
     &.growing {
-        background-image: url(/src/dashboard/assets/icons/stage-growing.svg);
+        background-image: url(${growing});
     }
 
     &.guiding {
-        background-image: url(/src/dashboard/assets/icons/stage-guiding.svg);
+        background-image: url(${guiding});
     }
 `;
 
