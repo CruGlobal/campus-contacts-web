@@ -23,7 +23,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
         class="css-1izl14o"
       >
         <div
-          class="css-1a3wyyp"
+          class="css-1ohf0ui"
         >
           Loading...
         </div>
@@ -45,9 +45,7 @@ exports[`<PersonalStepsPage /> should render properly 1`] = `
       <div
         class="css-1izl14o"
       >
-        <div
-          class="css-1a3wyyp"
-        >
+        <div>
           Loading...
         </div>
       </div>

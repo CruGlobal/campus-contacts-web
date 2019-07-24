@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { withTheme } from 'emotion-theming';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import { useQuery } from 'react-apollo-hooks';
+import { useTranslation } from 'react-i18next';
+
+import RangePicker from '../RangePicker';
 
 const Stages = styled.div`
     display: flex;
@@ -62,26 +67,53 @@ const Value = styled.div`
     margin-top: 9px;
 `;
 
-const StagesSummary = ({ summary }) => (
-    <Stages>
-        {summary.map(entry => (
-            <Stage key={entry.stage}>
-                <Icon className={entry.icon} />
-                <Title>{entry.stage}</Title>
-                <Value>{entry.count ? entry.count : '-'}</Value>
-            </Stage>
-        ))}
-    </Stages>
-);
+const SummaryWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Footer = styled.div`
+    margin-top: 28px;
+`;
+
+const StagesSummary = ({ orgId, query, mapData }) => {
+    const [dates, setDates] = useState({
+        startDate: moment().subtract(7, 'days'),
+        endDate: moment(),
+    });
+    const { t } = useTranslation('insights');
+    const { data, loading } = useQuery(query);
+
+    if (loading) {
+        return <SummaryWrapper>{t('loading')}</SummaryWrapper>;
+    }
+
+    const onDatesChange = ({ startDate, endDate }) => {
+        setDates({ startDate, endDate });
+    };
+
+    return (
+        <SummaryWrapper>
+            <Stages>
+                {mapData(data).map(entry => (
+                    <Stage key={entry.stage}>
+                        <Icon className={entry.icon} />
+                        <Title>{entry.stage}</Title>
+                        <Value>{entry.count ? entry.count : '-'}</Value>
+                    </Stage>
+                ))}
+            </Stages>
+            <Footer>
+                <RangePicker onDatesChange={onDatesChange} />
+            </Footer>
+        </SummaryWrapper>
+    );
+};
 
 export default withTheme(StagesSummary);
 
 StagesSummary.propTypes = {
-    summary: PropTypes.arrayOf(
-        PropTypes.shape({
-            stage: PropTypes.string.isRequired,
-            icon: PropTypes.string.isRequired,
-            count: PropTypes.number.isRequired,
-        }),
-    ).isRequired,
+    query: PropTypes.object.isRequired,
+    orgId: PropTypes.string.isRequired,
+    mapData: PropTypes.func.isRequired,
 };
