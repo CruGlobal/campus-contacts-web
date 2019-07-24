@@ -12,7 +12,7 @@ describe('personHistoryService', function() {
         beforeEach(function() {
             this.note = {
                 _type: 'interaction',
-                interaction_type_id: 1,
+                interaction_type_id: '1',
                 organization: {
                     id: 1,
                 },
@@ -20,7 +20,7 @@ describe('personHistoryService', function() {
             };
             this.interaction = {
                 _type: 'interaction',
-                interaction_type_id: 2,
+                interaction_type_id: '2',
                 organization: {
                     id: 1,
                 },
@@ -28,7 +28,7 @@ describe('personHistoryService', function() {
             };
             this.answerSheet1 = {
                 _type: 'answer_sheet',
-                interaction_type_id: 1,
+                interaction_type_id: '1',
                 survey: {
                     organization_id: 1,
                 },
@@ -36,7 +36,7 @@ describe('personHistoryService', function() {
             };
             this.answerSheet2 = {
                 _type: 'answer_sheet',
-                interaction_type_id: 2,
+                interaction_type_id: '2',
                 survey: {
                     organization_id: 1,
                 },
