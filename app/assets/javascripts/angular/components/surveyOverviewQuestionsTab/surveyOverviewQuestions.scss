@@ -1,6 +1,13 @@
 @import '../../../../stylesheets/variables/colors';
 
 survey-overview-questions {
+    .selected-tab {
+        border-bottom-color: $white !important;
+    }
+    .selected-tab:focus {
+        outline: none;
+    }
+
     assigned-select {
         .ui-select-match-item {
             color: $blue-1;

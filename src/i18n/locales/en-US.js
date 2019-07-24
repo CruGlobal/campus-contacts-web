@@ -914,6 +914,7 @@ export default {
             initiateAssignment: 'Answers to initiate assignment/notifications',
             autoAssign: 'Auto Assign',
             autoNotify: 'Auto Notify',
+            autoLabel: 'Auto Label',
             sendNotificationsViaEmail: 'Send notifications via email',
         },
     },

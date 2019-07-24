@@ -186,11 +186,27 @@
                                     class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
                                     ng-click="answerTab = 0"
-                                    ng-class="{'bb bb--pivot-gray-5': answerTab === 0}"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab': answerTab === 0}"
                                 >
                                     {{ 'surveys:questions.autoAssign' | t }}
                                 </a>
-                                <a class="help fr p2" href="">
+                                <a class="help fr p2 sm-help" href="">
+                                    <img
+                                        alt="{{ 'general:help' | t }}"
+                                        ng-src="{{ $ctrl.icons.help }}"
+                                    />
+                                </a>
+                            </div>
+                            <div class="w-49 relative">
+                                <a
+                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
+                                    href=""
+                                    ng-click="answerTab = 2"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 2}"
+                                >
+                                    {{ 'surveys:questions.autoLabel' | t }}
+                                </a>
+                                <a class="help fr sm-help" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
                                         ng-src="{{ $ctrl.icons.help }}"
@@ -202,11 +218,11 @@
                                     class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
                                     ng-click="answerTab = 1"
-                                    ng-class="{'bb bb--pivot-gray-5' : answerTab === 1}"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 1}"
                                 >
                                     {{ 'surveys:questions.autoNotify' | t }}
                                 </a>
-                                <a class="help fr" href="">
+                                <a class="help fr sm-help" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
                                         ng-src="{{ $ctrl.icons.help }}"
@@ -222,8 +238,35 @@
                                 class="relative"
                                 ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                             >
+                                <assigned-select
+                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
+                                    assigned="rule.assign_to"
+                                    organization-id="$ctrl.survey.organization_id"
+                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                ></assigned-select>
+                                <a
+                                    href
+                                    class="ml3 delete"
+                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                    ng-if="$ctrl.directAdminPrivileges"
+                                >
+                                    <img
+                                        alt="Delete"
+                                        ng-src="{{ $ctrl.icons.trash }}"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                        <div
+                            class="tab-body pa2 ba b--gray-dark"
+                            ng-if="answerTab === 2"
+                        >
+                            <div
+                                class="relative"
+                                ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
+                            >
                                 <assigned-alt-select
-                                    action-after-select="$ctrl.addPersonToRule(question, rule) && $ctrl.addLabelToRule(question, rule)"
+                                    action-after-select="$ctrl.addLabelToRule(question, rule)"
                                     assigned="rule.assign_to"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
