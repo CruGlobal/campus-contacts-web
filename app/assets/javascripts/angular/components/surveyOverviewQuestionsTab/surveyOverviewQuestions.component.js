@@ -97,7 +97,7 @@ function surveyOverviewQuestionsController(
             ),
         ];
 
-        const Labels = await httpProxy
+        const orgLabels = await httpProxy
             .get(
                 `/organizations/${organizationId}`,
                 {
@@ -109,14 +109,9 @@ function surveyOverviewQuestionsController(
             )
             .then(res => res.data.labels);
 
-        let currentLabels = [];
-        Labels.map(a => {
-            labelIds.map(b => {
-                if (a.id === b) {
-                    currentLabels.push(a);
-                }
-            });
-        });
+        const currentLabels = orgLabels.filter(label =>
+            labelIds.includes(label.id),
+        );
         return currentLabels;
     };
 
@@ -252,7 +247,7 @@ function surveyOverviewQuestionsController(
     this.addLabelToRule = async (question, rule) => {
         const index = question.question_rules.indexOf(rule);
 
-        if (!question.question_rules[index].assign_to) return;
+        if (!question.question_rules[index].assigned_labels) return;
 
         const ids = [
             ...new Set(

@@ -1,38 +1,34 @@
-import template from './assignedAltSelect.html';
-import './assignedAltSelect.scss';
+import template from './assignedLabelSelect.html';
+import './assignedLabelSelect.scss';
 
-angular.module('missionhubApp').component('assignedAltSelect', {
+angular.module('missionhubApp').component('assignedLabelSelect', {
     bindings: {
         assigned: '=',
         organizationId: '<',
         disabled: '<',
         actionAfterSelect: '&',
     },
-    controller: assignedAltSelectController,
+    controller: assignedLabelSelectController,
     template: template,
 });
 
-function assignedAltSelectController($scope, assignedAltSelectService) {
-    var vm = this;
-    vm.labels = [];
-    vm.isMe = assignedAltSelectService.isMe;
-    vm.$onInit = activate;
-
-    function activate() {
+function assignedLabelSelectController($scope, assignedLabelSelectService) {
+    this.labels = [];
+    this.$onInit = () => {
         // Refresh the person list whenever the search term changes
-        $scope.$watch('$select.search', function(search) {
+        $scope.$watch('$select.search', search => {
             if (search === '') {
                 // Ignore empty searches
-                vm.labels = [];
+                this.labels = [];
                 return;
             }
 
-            assignedAltSelectService
-                .searchLabels(search, vm.organizationId)
+            assignedLabelSelectService
+                .searchLabels(search, this.organizationId)
                 .then(labels => {
                     if (search === undefined) {
                         labels.map(label => {
-                            vm.labels = [...vm.labels, label];
+                            this.labels = [...this.labels, label];
                         });
                     } else if (search !== undefined) {
                         labels.map(label => {
@@ -41,7 +37,7 @@ function assignedAltSelectController($scope, assignedAltSelectService) {
                                     .toLowerCase()
                                     .includes(search.toLowerCase())
                             ) {
-                                vm.labels = [...vm.labels, label];
+                                this.labels = [...this.labels, label];
                             }
                         });
                     }
@@ -49,9 +45,9 @@ function assignedAltSelectController($scope, assignedAltSelectService) {
         });
 
         $scope.$watch('$ctrl.assigned', (o, n) => {
-            if (vm.actionAfterSelect && o !== n) {
-                vm.actionAfterSelect();
+            if (this.actionAfterSelect && o !== n) {
+                this.actionAfterSelect();
             }
         });
-    }
+    };
 }

@@ -1,8 +1,8 @@
 angular
     .module('missionhubApp')
-    .factory('assignedAltSelectService', assignedAltSelectService);
+    .factory('assignedLabelSelectService', assignedLabelSelectService);
 
-function assignedAltSelectService(httpProxy) {
+function assignedLabelSelectService(httpProxy) {
     return {
         // Get all the labels from the current organizations
         searchLabels: (query, organizationId) => {

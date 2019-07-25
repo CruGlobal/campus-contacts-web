@@ -7,10 +7,6 @@ angular.module('missionhubApp').filter('personName', function(_) {
             return null;
         }
 
-        if (person.name) {
-            return person.name;
-        }
-
         // Ignore missing name parts
         return [person.first_name, person.last_name]
             .filter(_.identity)

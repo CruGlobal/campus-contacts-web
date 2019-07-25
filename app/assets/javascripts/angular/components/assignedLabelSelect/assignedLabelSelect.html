@@ -9,12 +9,12 @@
         placeholder="{{ 'application.assign_search.assign_label' | t }}"
     >
         <span>
-            {{ $item | personName }}
+            {{ $item.name }}
         </span>
     </ui-select-match>
-    <ui-select-choices repeat="person in $ctrl.labels track by person.id">
+    <ui-select-choices repeat="label in $ctrl.labels track by label.id">
         <span>
-            {{ person | personName }}
+            {{ label.name }}
         </span>
     </ui-select-choices>
 </ui-select>
