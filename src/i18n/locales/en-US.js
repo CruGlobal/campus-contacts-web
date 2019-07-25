@@ -34,8 +34,8 @@ export default {
             },
             assign_search: {
                 me: 'Me',
-                assign_label_or_person:
-                    'Type label or name of a person you want to assign',
+                assign_label: 'Type the name of label you want to assign',
+                assign_person: 'Type the name of a person you want to assign',
                 notify_person:
                     'Type the name of a person you want us to notify',
             },

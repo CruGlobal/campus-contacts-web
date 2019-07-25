@@ -14,7 +14,6 @@ angular.module('missionhubApp').component('assignedAltSelect', {
 
 function assignedAltSelectController($scope, assignedAltSelectService) {
     var vm = this;
-    vm.people = [];
     vm.labels = [];
     vm.isMe = assignedAltSelectService.isMe;
     vm.$onInit = activate;
@@ -24,7 +23,6 @@ function assignedAltSelectController($scope, assignedAltSelectService) {
         $scope.$watch('$select.search', function(search) {
             if (search === '') {
                 // Ignore empty searches
-                vm.people = [];
                 vm.labels = [];
                 return;
             }
@@ -32,10 +30,9 @@ function assignedAltSelectController($scope, assignedAltSelectService) {
             assignedAltSelectService
                 .searchLabels(search, vm.organizationId)
                 .then(labels => {
-                    vm.labels = labels;
                     if (search === undefined) {
                         labels.map(label => {
-                            vm.people = [...vm.people, label];
+                            vm.labels = [...vm.labels, label];
                         });
                     } else if (search !== undefined) {
                         labels.map(label => {
@@ -44,7 +41,7 @@ function assignedAltSelectController($scope, assignedAltSelectService) {
                                     .toLowerCase()
                                     .includes(search.toLowerCase())
                             ) {
-                                vm.people = [...vm.people, label];
+                                vm.labels = [...vm.labels, label];
                             }
                         });
                     }

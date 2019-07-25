@@ -6,23 +6,15 @@
     ng-disabled="$ctrl.disabled"
 >
     <ui-select-match
-        placeholder="{{
-            'application.assign_search.assign_label_or_person' | t
-        }}"
+        placeholder="{{ 'application.assign_search.assign_label' | t }}"
     >
         <span>
             {{ $item | personName }}
-            <span ng-if="$ctrl.isMe($item)"
-                >({{ 'application.assign_search.me' | t }})</span
-            >
         </span>
     </ui-select-match>
-    <ui-select-choices repeat="person in $ctrl.people track by person.id">
+    <ui-select-choices repeat="person in $ctrl.labels track by person.id">
         <span>
             {{ person | personName }}
-            <span ng-if="$ctrl.isMe(person)"
-                >({{ 'application.assign_search.me' | t }})</span
-            >
         </span>
     </ui-select-choices>
 </ui-select>

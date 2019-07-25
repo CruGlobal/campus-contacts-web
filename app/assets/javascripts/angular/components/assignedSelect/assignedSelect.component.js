@@ -4,6 +4,7 @@ import './assignedSelect.scss';
 angular.module('missionhubApp').component('assignedSelect', {
     bindings: {
         assigned: '=',
+        ruleCode: '<',
         organizationId: '<',
         disabled: '<',
         actionAfterSelect: '&',
@@ -24,7 +25,6 @@ function assignedSelectController(
 
     function activate() {
         var requestDeduper = new RequestDeduper();
-
         // Refresh the person list whenever the search term changes
         $scope.$watch('$select.search', function(search) {
             if (search === '') {

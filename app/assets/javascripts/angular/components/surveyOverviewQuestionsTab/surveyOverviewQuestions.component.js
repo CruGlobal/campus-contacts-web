@@ -79,8 +79,6 @@ function surveyOverviewQuestionsController(
         const { data } = await surveyService.getSurveyQuestions(this.survey.id);
         this.people = await getPeople(data, this.survey.organization_id);
         this.labels = await getLabel(data, this.survey.organization_id);
-        this.people = [...this.people, this.labels].flat();
-
         rebuildQuestions(data);
         $scope.$apply();
     };
@@ -220,7 +218,7 @@ function surveyOverviewQuestionsController(
             rule_code: type,
             trigger_keywords: answer,
             assigned_labels: id
-                ? this.people.filter(p => labelIds.indexOf(p.id) >= 0)
+                ? this.labels.filter(p => labelIds.indexOf(p.id) >= 0)
                 : null,
             assign_to: id
                 ? this.people.filter(p => ids.indexOf(p.id) >= 0)
@@ -275,9 +273,9 @@ function surveyOverviewQuestionsController(
 
         question.question_rules[index].label_ids = ids.join(',');
         question.question_rules[index].assigned_labels.forEach(a => {
-            const exists = this.people.find(p => p.id === a.id);
+            const exists = this.labels.find(p => p.id === a.id);
             if (!exists) {
-                this.people.push(a);
+                this.labels.push(a);
             }
         });
         await this.saveQuestionContent(question, question.question_answers);

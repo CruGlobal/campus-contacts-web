@@ -6,7 +6,11 @@
     ng-disabled="$ctrl.disabled"
 >
     <ui-select-match
-        placeholder="{{ 'application.assign_search.notify_person' | t }}"
+        placeholder="{{
+            $ctrl.ruleCode === 'AUTOASSIGN'
+                ? ('application.assign_search.assign_person' | t)
+                : ('application.assign_search.notify_person' | t)
+        }}"
     >
         <span>
             {{ $item | personName }}

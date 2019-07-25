@@ -241,6 +241,7 @@
                                 <assigned-select
                                     action-after-select="$ctrl.addPersonToRule(question, rule)"
                                     assigned="rule.assign_to"
+                                    rule-code="rule.rule_code"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                 ></assigned-select>
