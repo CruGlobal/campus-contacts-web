@@ -1,8 +1,8 @@
 angular
     .module('missionhubApp')
-    .factory('assignedSelectService', assignedSelectService);
+    .factory('assignedPeopleSelectService', assignedPeopleSelectService);
 
-function assignedSelectService(
+function assignedPeopleSelectService(
     httpProxy,
     modelsService,
     loggedInPerson,
