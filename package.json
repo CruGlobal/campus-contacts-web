@@ -129,7 +129,7 @@
         "jasmine-core": "^3.2.1",
         "jest": "^24.8.0",
         "jest-svg-transformer": "^1.0.0",
-        "karma": "^4.0.1",
+        "karma": "^4.2.0",
         "karma-chrome-launcher": "^3.0.0",
         "karma-coverage-istanbul-reporter": "^2.1.0",
         "karma-jasmine": "^2.0.1",
