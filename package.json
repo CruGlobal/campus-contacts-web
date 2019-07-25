@@ -56,7 +56,7 @@
         "i18next": "^15.0.9",
         "iso-639-1": "^2.0.5",
         "jsonapi-datastore": "^0.4.0-beta",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.13",
         "m49-regions": "^1.0.0",
         "moment": "^2.22.2",
         "ng-file-upload": "^12.2.13",
