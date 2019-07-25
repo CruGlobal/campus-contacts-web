@@ -19,49 +19,49 @@ function interactionsService(
     //   deprecated: whether or not this interaction type is deprecated
     var interactionTypes = [
         {
-            id: 1,
+            id: '1',
             icon: 'note',
             title: 'application.interaction_types.comment',
             anonymous: false,
             deprecated: false,
         },
         {
-            id: 2,
+            id: '2',
             icon: 'spiritualConversation',
             title: 'application.interaction_types.spiritual_conversation',
             anonymous: true,
             deprecated: false,
         },
         {
-            id: 3,
+            id: '3',
             icon: 'evangelism',
             title: 'application.interaction_types.gospel_presentation',
             anonymous: true,
             deprecated: false,
         },
         {
-            id: 4,
+            id: '4',
             icon: 'personalDecision',
             title: 'application.interaction_types.prayed_to_receive_christ',
             anonymous: true,
             deprecated: false,
         },
         {
-            id: 5,
+            id: '5',
             icon: 'holySpirit',
             title: 'application.interaction_types.holy_spirit_presentation',
             anonymous: true,
             deprecated: false,
         },
         {
-            id: 6,
+            id: '6',
             icon: 'graduatingOnMission',
             title: 'application.interaction_types.graduating_on_mission',
             anonymous: true,
             deprecated: true,
         },
         {
-            id: 9,
+            id: '9',
             icon: 'discipleship',
             title: 'application.interaction_types.discipleship',
             anonymous: false,
@@ -78,7 +78,7 @@ function interactionsService(
 
         // Lookup and return the interaction type with the specified id
         getInteractionType: function(interactionTypeId) {
-            return _.find(interactionTypes, { id: interactionTypeId });
+            return _.find(interactionTypes, { id: `${interactionTypeId}` });
         },
 
         // Create a new interaction and save it on the server

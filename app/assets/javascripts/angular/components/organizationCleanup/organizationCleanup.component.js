@@ -1,6 +1,5 @@
 import './organizationCleanup.scss';
 import checkIcon from '../../../../images/icons/icon-check.svg';
-import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 import template from './organizationCleanup.html';
 
@@ -22,76 +21,32 @@ function organizationCleanupController(
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
-    this.warningIcon = warningIcon;
 
-    // Opens up modal depending on the type
-    const confirmModal = async (type, archiveDate) => {
-        switch (type) {
-            case 'archive_by_inactivity': {
-                let archiveInactive = date => {
-                    archiveContacts('leaders_last_sign_in_at')(date);
-                };
+    const showConfirmModal = async title => {
+        const archiveValue =
+            title === 'ministries.cleanup.archive_by_inactivity_confirm_message'
+                ? 'leaders_last_sign_in_at'
+                : 'persons_inactive_since';
+        const archiveDate =
+            title === 'ministries.cleanup.archive_by_inactivity_confirm_message'
+                ? this.archiveInactivityDate
+                : this.archiveBeforeDate;
 
-                const InactiveModal = $uibModal.open({
-                    component: 'iconModal',
-                    resolve: {
-                        title: () => $filter('t')(`Archive By Inactivity`),
-                        paragraphs: () => [
-                            $filter('t')(
-                                `Are You Sure That You Wish To Archive By Inactivity?`,
-                            ),
-                        ],
-                        icon: () => this.warningIcon,
-                        closeLabel: () => $filter('t')('Yes'),
-                        dismissLabel: () => $filter('t')('No'),
-                    },
-                    windowClass: 'pivot_theme',
-                    backdrop: 'static',
-                    keyboard: false,
-                });
-                // Had to throw in a catch for errors due to an AsyncGenerator.js error I was getting
-                // In the console everytime the modal was dismissed
-                try {
-                    const InactiveResponse = await InactiveModal.result;
-                    archiveInactive(archiveDate);
-                } catch (err) {
-                    return null;
-                }
+        const confirmModal = $uibModal.open({
+            component: 'iconModal',
+            resolve: {
+                title: () => $filter('t')(title),
+                closeLabel: () => $filter('t')('general.ok'),
+                dismissLabel: () => $filter('t')('general.cancel'),
+            },
+            windowClass: 'pivot_theme',
+            backdrop: 'static',
+        });
 
-                break;
-            }
-            case 'archive_by_date': {
-                let archiveBefore = date => {
-                    archiveContacts('persons_inactive_since')(date);
-                };
-                const DateModal = $uibModal.open({
-                    component: 'iconModal',
-                    resolve: {
-                        title: () => $filter('t')(`Archive By Date`),
-                        paragraphs: () => [
-                            $filter('t')(
-                                `Are You Sure That You Wish To Archive By Date?`,
-                            ),
-                        ],
-                        icon: () => this.warningIcon,
-                        closeLabel: () => $filter('t')('Yes'),
-                        dismissLabel: () => $filter('t')('No'),
-                    },
-                    windowClass: 'pivot_theme',
-                    backdrop: 'static',
-                    keyboard: false,
-                });
-                try {
-                    const DateResponse = await DateModal.result;
-                    archiveBefore(archiveDate);
-                } catch (error) {
-                    return null;
-                }
-                break;
-            }
-            default:
-                return null;
-        }
+        try {
+            const modalResponse = await confirmModal.result;
+            archiveContacts(archiveValue)(archiveDate);
+        } catch (err) {}
     };
 
     const archiveContacts = archiveBy => async dateBy => {
@@ -143,5 +98,5 @@ function organizationCleanupController(
 
         $scope.$apply();
     };
-    this.openModal = confirmModal;
+    this.showConfirmModal = showConfirmModal;
 }

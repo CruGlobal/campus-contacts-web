@@ -506,7 +506,11 @@ export default {
                 archive_by_date: 'Archive by date',
                 archive_by_date_description:
                     'Archive contacts who have been added before:',
+                archive_by_date_confirm_message:
+                    'Are you sure you want to archive these contacts by date?',
                 archive_by_inactivity: 'Archive by inactivity',
+                archive_by_inactivity_confirm_message:
+                    'Are you sure you want to archive these contacts by inactivity?',
                 archive_by_inactivity_description:
                     'Archive people who have been inactive since:',
                 open_contacts: 'Open Contacts',
@@ -969,6 +973,17 @@ export default {
                 'Error occurred while importing contacts from your CSV file',
             save: 'Error occurred while saving contact',
         },
+    },
+    unsubscribe: {
+        confirmation:
+            'Are you sure you want to unsubscribe from all emails from',
+        noMoreEmails:
+            'By unsubscribing, you will no longer receive emails from',
+        success:
+            'Thanks! You have successfully unsubscribed and will no longer receive emails from',
+        label: 'Unsubscribe',
+        error:
+            'We are sorry, but an error has occurred. Please try again by refreshing the page.',
     },
     userPreferences: {
         title: 'User Preferences',

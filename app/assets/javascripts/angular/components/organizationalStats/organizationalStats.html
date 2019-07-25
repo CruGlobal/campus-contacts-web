@@ -6,7 +6,9 @@
         <a
             href
             class="warning-highlight"
-            ng-href="/ministries/{{$ctrl.org.id}}/people?&statuses=uncontacted"
+            ng-href="/ministries/{{
+                $ctrl.org.id
+            }}/people?&statuses=uncontacted"
             ng-if="$ctrl.report.uncontacted_count"
         >
             {{ $ctrl.report.uncontacted_count | number }}
@@ -17,6 +19,6 @@
 <div
     class="no-data"
     ng-class="{ 'pivot-gray-3' : $ctrl.getInteractionCount(i) === '-' }"
-    ng-repeat="i in [2,3,4,5,9]"
+    ng-repeat="i in ['2','3','4','5','9']"
     ng-bind="$ctrl.getInteractionCount(i)"
 ></div>

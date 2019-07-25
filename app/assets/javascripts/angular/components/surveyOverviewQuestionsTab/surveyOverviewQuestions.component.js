@@ -23,7 +23,6 @@ function surveyOverviewQuestionsController(
     $uibModal,
     surveyService,
     $scope,
-    modelsService,
     httpProxy,
     loggedInPerson,
 ) {
