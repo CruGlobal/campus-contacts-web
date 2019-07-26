@@ -14,34 +14,25 @@ angular.module('missionhubApp').component('assignedLabelSelect', {
 
 function assignedLabelSelectController($scope, assignedLabelSelectService) {
     this.labels = [];
+    this.originalLabels = [];
     this.$onInit = () => {
-        // Refresh the person list whenever the search term changes
+        // When this loads, get all the labels and set this.originalLabels to all the labels. We do this once instead of every time the user types.
+        assignedLabelSelectService
+            .searchLabels('', this.organizationId)
+            .then(labels => {
+                this.originalLabels = labels;
+            });
+        // This will happen everytime the user types
         $scope.$watch('$select.search', search => {
             if (search === '') {
-                // Ignore empty searches
-                this.labels = [];
+                // Set this.labels to the original list of labels we fetched
+                this.labels = [...this.originalLabels];
                 return;
             }
-
-            assignedLabelSelectService
-                .searchLabels(search, this.organizationId)
-                .then(labels => {
-                    if (search === undefined) {
-                        labels.map(label => {
-                            this.labels = [...this.labels, label];
-                        });
-                    } else if (search !== undefined) {
-                        labels.map(label => {
-                            if (
-                                label.name
-                                    .toLowerCase()
-                                    .includes(search.toLowerCase())
-                            ) {
-                                this.labels = [...this.labels, label];
-                            }
-                        });
-                    }
-                });
+            // Here we filter out all the labels from the originalLabels array that do not include what the user is currently typing
+            this.labels = this.originalLabels.filter(label =>
+                label.name.toLowerCase().includes(search.toLowerCase()),
+            );
         });
 
         $scope.$watch('$ctrl.assigned', (o, n) => {
