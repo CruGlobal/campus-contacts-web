@@ -7,6 +7,11 @@ person-profile {
 
     display: block;
 
+    .unvalidated {
+        color: red;
+        border-color: red !important;
+    }
+
     .button-column {
         width: $button-col-width;
         margin-right: $col-spacing;

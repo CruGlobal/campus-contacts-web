@@ -14,12 +14,12 @@ function personProfileController(
     $filter,
     $uibModal,
     JsonApiDataStore,
-    jQuery,
     permissionService,
     personService,
     personProfileService,
     loggedInPerson,
     confirmModalService,
+    errorService,
     _,
 ) {
     var vm = this;
@@ -59,7 +59,9 @@ function personProfileController(
 
     function activate() {
         vm.isNewPerson = !vm.personTab.person.id;
-        vm.personTab.orgPermission.permission_id = `${vm.personTab.orgPermission.permission_id}`;
+        vm.personTab.orgPermission.permission_id = `${
+            vm.personTab.orgPermission.permission_id
+        }`;
 
         // Disable editing name fields of other users
         vm.disableNameFields =
@@ -321,15 +323,24 @@ function personProfileController(
      */
     function permissionChange(oldValue) {
         var hasEmailAddress = vm.personTab.person.email_addresses.length > 0;
+        // Set the error to null everytime this run in case the user updated their email
+        vm.personTab.orgPermission.$error = null;
         if (hasEmailAddress) {
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
         } else {
             vm.personTab.orgPermission.permission_id = oldValue;
-            jQuery.a(
-                $filter('t')(
-                    'contacts.index.for_this_permission_email_is_required_no_name',
-                ),
+            // Use error service to displayError message
+            vm.personTab.orgPermission.$error = $filter('t')(
+                'contacts.index.for_this_permission_email_is_required_no_name',
             );
+            // errorService.displayError(
+            //     {
+            //         message: $filter('t')(
+            //             'contacts.index.for_this_permission_email_is_required_no_name',
+            //         ),
+            //     },
+            //     false,
+            // );
         }
     }
 
