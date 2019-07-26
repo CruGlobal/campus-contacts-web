@@ -331,14 +331,6 @@ function personProfileController(
             vm.personTab.orgPermission.$error = $filter('t')(
                 'contacts.index.for_this_permission_email_is_required_no_name',
             );
-            // errorService.displayError(
-            //     {
-            //         message: $filter('t')(
-            //             'contacts.index.for_this_permission_email_is_required_no_name',
-            //         ),
-            //     },
-            //     false,
-            // );
         }
     }
 
