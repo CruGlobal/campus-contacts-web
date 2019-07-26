@@ -18,7 +18,7 @@ function assignedLabelSelectController($scope, assignedLabelSelectService) {
     this.$onInit = () => {
         // When this loads, get all the labels and set this.originalLabels to all the labels. We do this once instead of every time the user types.
         assignedLabelSelectService
-            .searchLabels('', this.organizationId)
+            .searchLabels(this.organizationId)
             .then(labels => {
                 this.originalLabels = labels;
             });

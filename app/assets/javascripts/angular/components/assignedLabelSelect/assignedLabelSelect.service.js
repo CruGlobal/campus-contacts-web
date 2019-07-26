@@ -5,7 +5,7 @@ angular
 function assignedLabelSelectService(httpProxy) {
     return {
         // Get all the labels from the current organizations
-        searchLabels: (query, organizationId) => {
+        searchLabels: organizationId => {
             return httpProxy
                 .get(
                     `/organizations/${organizationId}`,
