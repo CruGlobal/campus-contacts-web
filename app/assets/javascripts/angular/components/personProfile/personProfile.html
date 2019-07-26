@@ -115,7 +115,7 @@
     >
         <label
             class="form-control-select"
-            ng-class="{'disabled': $ctrl.permissionChangeDisabled}"
+            ng-class="{'disabled': $ctrl.permissionChangeDisabled }"
         >
             <span class="label"
                 >{{ 'application.add_contact.title_permission' | t }}</span
@@ -127,10 +127,17 @@
                     $ctrl.personTab.orgPermission.permission_id
                 }})"
                 ng-disabled="$ctrl.permissionChangeDisabled"
+                ng-class="{ 'unvalidated' : $ctrl.personTab.orgPermission.$error }"
                 class="form-control"
             >
             </select>
         </label>
+        <span
+            class="unvalidated"
+            ng-if="$ctrl.personTab.orgPermission.$error"
+            role="alert"
+            >{{ $ctrl.personTab.orgPermission.$error }}</span
+        >
     </div>
     <div class="order-5" ng-if="$ctrl.personTab.organizationId">
         <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
