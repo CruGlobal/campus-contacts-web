@@ -1,11 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<StepsOfFaithTakenInfo /> should render properly 1`] = `
+exports[`<PersonalStepsTakenInfo /> should render properly loading state 1`] = `
 <div>
   <h1
     class="css-1c2npbj"
   >
     Loading...
+  </h1>
+</div>
+`;
+
+exports[`<PersonalStepsTakenInfo /> should render properly with data 1`] = `
+<div>
+  <h1
+    class="css-1c2npbj"
+  >
+    This year, 13 people reached a new stage on their spiritual journey.
   </h1>
 </div>
 `;

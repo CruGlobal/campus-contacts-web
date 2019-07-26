@@ -23,7 +23,6 @@ function surveyOverviewQuestionsController(
     $uibModal,
     surveyService,
     $scope,
-    modelsService,
     httpProxy,
     loggedInPerson,
 ) {
@@ -81,7 +80,7 @@ function surveyOverviewQuestionsController(
         $scope.$apply();
     };
 
-    const getPeople = async (questions, organizationId) => {
+    const getPeople = async questions => {
         const peopleIds = [
             ...new Set(
                 questions.reduce((a1, q) => {

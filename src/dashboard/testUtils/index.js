@@ -25,7 +25,6 @@ export const renderWithContext = (
     );
 
     const renderResult = render(component, { wrapper });
-
     return {
         ...renderResult,
         snapshot: () => {

@@ -282,6 +282,21 @@ angular
                 },
             })
             .state({
+                name: 'appWithoutMenus.unsubscribe',
+                url: '/unsubscribe',
+                component: 'unsubscribe',
+                data: {
+                    isPublic: true,
+                },
+                resolve: {
+                    token: $location => $location.search().token,
+                    organizationId: $location =>
+                        $location.search().organization_id,
+                    organizationName: $location =>
+                        $location.search().organization_name,
+                },
+            })
+            .state({
                 name: 'appWithoutMenuLinks.auth',
                 url: '/auth-web?access_token',
                 component: 'signIn',
@@ -327,6 +342,14 @@ angular
                 name: 'app.stopImpersonatingUser',
                 url: '/stop-impersonation',
                 component: 'impersonateUser',
+            })
+            .state({
+                name: 'admin',
+                url: '/admin',
+                resolve: {
+                    adminRedirect: authenticationService =>
+                        authenticationService.adminRedirect(),
+                },
             })
             .state({
                 name: 'app.people',

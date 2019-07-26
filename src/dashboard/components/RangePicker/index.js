@@ -7,6 +7,8 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker } from 'react-dates';
 
+import calendar from '../../assets/icons/calendar.svg';
+
 const Container = styled.div`
     display: flex;
     align-items: center;
@@ -92,17 +94,14 @@ const Container = styled.div`
 `;
 
 const CalendarIcon = styled.div`
-    background-image: url(/src/dashboard/assets/icons/calendar.svg);
+    background-image: url(${calendar});
     width: 24px;
     height: 24px;
     margin-right: 12px;
 `;
 
-const RangePicker = ({ onDatesChange }) => {
-    const [dates, setDates] = useState({
-        startDate: moment().subtract(7, 'days'),
-        endDate: moment(),
-    });
+const RangePicker = ({ onDatesChange, startDate, endDate }) => {
+    const [dates, setDates] = useState({ startDate, endDate });
     const [focus, setFocus] = useState();
 
     const datesChanged = ({ startDate, endDate }) => {
@@ -136,4 +135,6 @@ export default withTheme(RangePicker);
 
 RangePicker.propTypes = {
     onDatesChange: PropTypes.func,
+    startDate: PropTypes.object,
+    endDate: PropTypes.object,
 };

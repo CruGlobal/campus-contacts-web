@@ -40,11 +40,11 @@ describe('userPreferences service', function() {
         this.orgOrder = null;
 
         this.orgs = [
-            (this.org1 = { id: 1, name: 'Alpha', ancestry: null }),
-            (this.org2 = { id: 2, name: 'Charlie', ancestry: '1' }),
-            (this.org3 = { id: 3, name: 'Bravo', ancestry: '1' }),
-            (this.org4 = { id: 4, name: 'Delta', ancestry: null }),
-            (this.org5 = { id: 5, name: 'Echo', ancestry: '4' }),
+            (this.org1 = { id: '1', name: 'Alpha', ancestry: null }),
+            (this.org2 = { id: '2', name: 'Charlie', ancestry: '1' }),
+            (this.org3 = { id: '3', name: 'Bravo', ancestry: '1' }),
+            (this.org4 = { id: '4', name: 'Delta', ancestry: null }),
+            (this.org5 = { id: '5', name: 'Echo', ancestry: '4' }),
         ];
     }));
 
@@ -79,10 +79,10 @@ describe('userPreferences service', function() {
             userPreferencesService.organizationOrderChange(
                 [
                     {
-                        id: 2,
+                        id: '2',
                     },
                     {
-                        id: 1,
+                        id: '1',
                     },
                 ],
                 'error message',
@@ -91,7 +91,7 @@ describe('userPreferences service', function() {
                 userPreferencesService._updateUserPreferences,
             ).toHaveBeenCalledWith(
                 {
-                    organization_order: [2, 1],
+                    organization_order: ['2', '1'],
                 },
                 'error.messages.my_people_dashboard.update_org_order',
             );
@@ -101,17 +101,17 @@ describe('userPreferences service', function() {
     describe('toggleOrganizationVisibility', function() {
         it('should hide an org save the updated hiddenOrgs list', function() {
             spyOn(userPreferencesService, '_updateUserPreferences');
-            this.hiddenOrgs = [4, 5];
+            this.hiddenOrgs = ['4', '5'];
 
             userPreferencesService.toggleOrganizationVisibility({
-                id: 2,
+                id: '2',
                 visible: true,
             });
             expect(
                 userPreferencesService._updateUserPreferences,
             ).toHaveBeenCalledWith(
                 {
-                    hidden_organizations: [4, 5, 2],
+                    hidden_organizations: ['4', '5', '2'],
                 },
                 'error.messages.my_people_dashboard.update_org_visibility',
             );
@@ -128,11 +128,11 @@ describe('userPreferences service', function() {
                     ),
                     'id',
                 ),
-            ).toEqual([3, 2, 5, 1, 4]);
+            ).toEqual(['3', '2', '5', '1', '4']);
         });
 
         it('should sort by org order with complete org order', function() {
-            this.orgOrder = [2, 5, 3, 1, 4];
+            this.orgOrder = ['2', '5', '3', '1', '4'];
             expect(
                 _.map(
                     userPreferencesService.applyUserOrgDisplayPreferences(
@@ -144,7 +144,7 @@ describe('userPreferences service', function() {
         });
 
         it('should sort by org order then by ancestry and name with incomplete org order', function() {
-            this.orgOrder = [2, 5];
+            this.orgOrder = ['2', '5'];
             expect(
                 _.map(
                     userPreferencesService.applyUserOrgDisplayPreferences(
@@ -152,11 +152,11 @@ describe('userPreferences service', function() {
                     ),
                     'id',
                 ),
-            ).toEqual([2, 5, 3, 1, 4]);
+            ).toEqual(['2', '5', '3', '1', '4']);
         });
 
         it('should handle old user preferences', function() {
-            this.orgOrder = [6, 9, 2, 5];
+            this.orgOrder = ['6', '9', '2', '5'];
             expect(
                 _.map(
                     userPreferencesService.applyUserOrgDisplayPreferences(
@@ -164,7 +164,7 @@ describe('userPreferences service', function() {
                     ),
                     'id',
                 ),
-            ).toEqual([2, 5, 3, 1, 4]);
+            ).toEqual(['2', '5', '3', '1', '4']);
         });
     });
 });
