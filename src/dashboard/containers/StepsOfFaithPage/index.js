@@ -26,7 +26,6 @@ const StepsOfFaithPage = () => {
     return (
         <div>
             <ImpactInfo
-                orgId={orgId}
                 query={GET_IMPACT_REPORT_TAKEN}
                 text={report =>
                     t('stepsOfFaith.taken', {

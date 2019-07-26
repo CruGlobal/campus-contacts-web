@@ -1180,6 +1180,14 @@ export default {
             peopleLabel: 'People',
             legend: 'Steps of Faith',
         },
+        interactions: {
+            totalCompleted: 'Total Interactions Completed',
+            completed: 'Interactions Completed',
+            completedSubtitle: 'Total interactions completed over time.',
+            taken:
+                'This year, we have had {{count}} interactions with {{people}} people.',
+            legend: 'Interactions',
+        },
         tabs: {
             personal: 'Personal Steps',
             steps: 'Steps of Faith',

@@ -71,6 +71,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 23,
                     },
                 ],
+                interactionCount: 63,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -101,6 +144,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 3,
+                    },
+                ],
+                interactionCount: 16,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -135,6 +221,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 6,
                     },
                 ],
+                interactionCount: 51,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -165,6 +294,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 5,
+                    },
+                ],
+                interactionCount: 51,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -199,6 +371,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 81,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -229,6 +444,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 33,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -263,6 +521,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 41,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -293,6 +594,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 78,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -327,6 +671,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 14,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -357,6 +744,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 38,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -391,6 +821,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 39,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -421,6 +894,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 42,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -455,6 +971,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 68,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -485,6 +1044,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 61,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -519,6 +1121,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 75,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -549,6 +1194,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 43,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -583,6 +1271,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 67,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -613,6 +1344,49 @@ export default {
                         pathwayStage: 'GROWING',
                         personalStepsCompletedCount: 15,
                         stepsWithOthersStepsCompletedCount: 13,
+                    },
+                ],
+                interactionCount: 27,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
                     },
                 ],
             },
@@ -647,6 +1421,49 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 82,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
             },
             {
                 __typename: 'DayReport',
@@ -679,6 +1496,96 @@ export default {
                         stepsWithOthersStepsCompletedCount: 13,
                     },
                 ],
+                interactionCount: 45,
+                interactions: [
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Spiritual Conversations',
+                        },
+                        interactionCount: 2,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Gospel Presentations',
+                        },
+                        interactionCount: 8,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Personal Decisions',
+                        },
+                        interactionCount: 4,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Holy spirit Conversations',
+                        },
+                        interactionCount: 0,
+                    },
+                    {
+                        __typename: 'InteractionCount',
+                        interactionType: {
+                            __typename: 'InteractionType',
+                            name: 'Discipleship Conversations',
+                        },
+                        interactionCount: 4,
+                    },
+                ],
+            },
+        ],
+        impactReport: {
+            __typename: 'CommunityStagesReport',
+            interactionsCount: 256,
+            interactionsReceiversCount: 63,
+        },
+        interactions: [
+            {
+                __typename: 'InteractionCount',
+                interactionType: {
+                    __typename: 'InteractionType',
+                    name: 'Spiritual Conversations',
+                },
+                interactionCount: 2,
+            },
+            {
+                __typename: 'InteractionCount',
+                interactionType: {
+                    __typename: 'InteractionType',
+                    name: 'Gospel Presentations',
+                },
+                interactionCount: 8,
+            },
+            {
+                __typename: 'InteractionCount',
+                interactionType: {
+                    __typename: 'InteractionType',
+                    name: 'Personal Decisions',
+                },
+                interactionCount: 4,
+            },
+            {
+                __typename: 'InteractionCount',
+                interactionType: {
+                    __typename: 'InteractionType',
+                    name: 'Holy spirit Conversations',
+                },
+                interactionCount: 0,
+            },
+            {
+                __typename: 'InteractionCount',
+                interactionType: {
+                    __typename: 'InteractionType',
+                    name: 'Discipleship Conversations',
+                },
+                interactionCount: 4,
             },
         ],
     },

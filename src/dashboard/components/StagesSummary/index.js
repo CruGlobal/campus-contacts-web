@@ -13,6 +13,11 @@ import curious from '../../assets/icons/stage-curious.svg';
 import forgiven from '../../assets/icons/stage-forgiven.svg';
 import growing from '../../assets/icons/stage-growing.svg';
 import guiding from '../../assets/icons/stage-guiding.svg';
+import spiritual from '../../assets/icons/stage-spiritual-conversations.svg';
+import gospel from '../../assets/icons/stage-gospel-presentations.svg';
+import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
+import personal from '../../assets/icons/stage-personal-decisions.svg';
+import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
 
 const Stages = styled.div`
     display: flex;
@@ -55,6 +60,26 @@ const Icon = styled.div`
     &.guiding {
         background-image: url(${guiding});
     }
+
+    &.discipleship-conversations {
+        background-image: url(${discipleship});
+    }
+
+    &.gospel-presentations {
+        background-image: url(${gospel});
+    }
+
+    &.holy-spirit-conversations {
+        background-image: url(${holySpirit});
+    }
+
+    &.personal-decisions {
+        background-image: url(${personal});
+    }
+
+    &.spiritual-conversations {
+        background-image: url(${spiritual});
+    }
 `;
 
 const Title = styled.div`
@@ -63,6 +88,10 @@ const Title = styled.div`
     line-height: 14px;
     color: ${({ theme }) => theme.colors.secondary};
     margin-top: 17px;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+    width: 110px;
+    text-align: center;
 `;
 
 const Value = styled.div`
