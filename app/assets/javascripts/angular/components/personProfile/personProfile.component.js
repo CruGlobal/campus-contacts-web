@@ -19,7 +19,6 @@ function personProfileController(
     personProfileService,
     loggedInPerson,
     confirmModalService,
-    errorService,
     _,
 ) {
     var vm = this;
