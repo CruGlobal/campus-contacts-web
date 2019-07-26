@@ -326,7 +326,7 @@ function personProfileController(
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
         } else {
             vm.personTab.orgPermission.permission_id = oldValue;
-            // Use error service to displayError message
+            // Set orgPermission $error to be the needed error message
             vm.personTab.orgPermission.$error = $filter('t')(
                 'contacts.index.for_this_permission_email_is_required_no_name',
             );
