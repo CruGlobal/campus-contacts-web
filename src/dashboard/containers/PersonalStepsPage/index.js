@@ -38,8 +38,10 @@ const PersonalStepsPage = () => {
             />
             <Card title={t('personalSteps.completedTotal')}>
                 <StagesSummary
-                    orgId={orgId}
                     query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
+                    variables={{
+                        organizationId: orgId,
+                    }}
                     mapData={data =>
                         data.communityReport.communityStagesReport.map(
                             entry => ({
@@ -74,6 +76,7 @@ const PersonalStepsPage = () => {
                     countAverage={data =>
                         Math.floor(_.sumBy(data, 'total') / data.length)
                     }
+                    label={t('personalSteps.legend')}
                 />
             </Card>
             <Card

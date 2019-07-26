@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<PersonalStepsPage /> should render properly 1`] = `
+exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
 <div>
   <div>
     <h1

@@ -1178,6 +1178,7 @@ export default {
             people: 'People Stages',
             peopleSubtitle: 'Current total number of people added by members.',
             peopleLabel: 'People',
+            legend: 'Steps of Faith',
         },
         tabs: {
             personal: 'Personal Steps',

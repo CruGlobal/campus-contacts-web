@@ -1,41 +1,137 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+import _ from 'lodash';
 
 import Card from '../../components/Card';
-import StepsOfFaithAddedChart from '../StepsOfFaithAddedChart';
-import StepsOfFaithCompletedChart from '../StepsOfFaithCompletedChart';
-import StepsOfFaithCompletedSummary from '../StepsOfFaithCompletedSummary';
-import StepsOfFaithTakenInfo from '../StepsOfFaithTakenInfo';
-import StepsOfFaithReachedInfo from '../StepsOfFaithReachedInfo';
-import StepsOfFaithPeopleChart from '../StepsOfFaithPeopleChart';
+import AppContext from '../../appContext';
+import StagesSummary from '../../components/StagesSummary';
+import StepsChart from '../../components/StepsChart';
+import ImpactInfo from '../../components/ImpactInfo';
+import FiltersChart from '../../components/FiltersChart';
+
+import {
+    GET_IMPACT_REPORT_TAKEN,
+    GET_TOTAL_STEPS_COMPLETED_REPORT,
+    GET_STEPS_COMPLETED_REPORT,
+    GET_STAGES_REPORT,
+    GET_IMPACT_REPORT_REACHED,
+    GET_STAGES_PEOPLE_REPORT,
+} from './queries';
 
 const StepsOfFaithPage = () => {
     const { t } = useTranslation('insights');
+    const { orgId } = useContext(AppContext);
 
     return (
         <div>
-            <StepsOfFaithTakenInfo />
+            <ImpactInfo
+                orgId={orgId}
+                query={GET_IMPACT_REPORT_TAKEN}
+                text={report =>
+                    t('stepsOfFaith.taken', {
+                        count: report.impactReport.stepsCount,
+                        people: report.impactReport.receiversCount,
+                    })
+                }
+                variables={{ organizationId: orgId }}
+            />
             <Card title={t('stepsOfFaith.totalCompleted')}>
-                <StepsOfFaithCompletedSummary />
+                <StagesSummary
+                    query={GET_TOTAL_STEPS_COMPLETED_REPORT}
+                    variables={{
+                        organizationId: orgId,
+                    }}
+                    mapData={data =>
+                        data.communityReport.communityStagesReport.map(
+                            entry => ({
+                                stage: entry.pathwayStage,
+                                icon: entry.pathwayStage
+                                    .toLowerCase()
+                                    .replace(' ', '-'),
+                                count: entry.otherStepsCompletedCount,
+                            }),
+                        )
+                    }
+                />
             </Card>
             <Card
                 title={t('stepsOfFaith.completed')}
                 subtitle={t('stepsOfFaith.completedSubtitle')}
             >
-                <StepsOfFaithCompletedChart />
+                <FiltersChart
+                    query={GET_STEPS_COMPLETED_REPORT}
+                    mapData={data =>
+                        data.communityReport.dayReport.map(row => ({
+                            ['total']: row.stepsWithOthersStepsCompletedCount,
+                            ['stages']: row.communityStagesReport.map(
+                                stage => ({
+                                    name: stage.pathwayStage,
+                                    count:
+                                        stage.stepsWithOthersStepsCompletedCount,
+                                }),
+                            ),
+                            ['date']: row.date.substring(0, 2),
+                        }))
+                    }
+                    countAverage={data =>
+                        Math.floor(_.sumBy(data, 'total') / data.length)
+                    }
+                    label={t('stepsOfFaith.legend')}
+                />
             </Card>
             <Card
                 title={t('stepsOfFaith.added')}
                 subtitle={t('stepsOfFaith.addedSubtitle')}
             >
-                <StepsOfFaithAddedChart />
+                <StepsChart
+                    query={GET_STAGES_REPORT}
+                    mapData={data =>
+                        data.organizationPathwayStagesReport.map(row => ({
+                            [t(
+                                'stepsOfFaith.legendLabel',
+                            )]: row.othersStepsAddedCount,
+                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                        }))
+                    }
+                    label={t('stepsOfFaith.legendLabel')}
+                    index={t('stage')}
+                    variables={{
+                        period: '',
+                        organizationId: orgId,
+                        endDate: moment().format(),
+                    }}
+                />
             </Card>
-            <StepsOfFaithReachedInfo />
+            <ImpactInfo
+                query={GET_IMPACT_REPORT_REACHED}
+                text={report =>
+                    t('stepsOfFaith.reached', {
+                        count: report.impactReport.stepsCount,
+                    })
+                }
+                variables={{ organizationId: orgId }}
+            />
             <Card
                 title={t('stepsOfFaith.people')}
                 subtitle={t('stepsOfFaith.peopleSubtitle')}
             >
-                <StepsOfFaithPeopleChart />
+                <StepsChart
+                    query={GET_STAGES_PEOPLE_REPORT}
+                    mapData={data =>
+                        data.organizationPathwayStagesReport.map(row => ({
+                            [t('stepsOfFaith.peopleLabel')]: row.memberCount,
+                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                        }))
+                    }
+                    label={t('stepsOfFaith.peopleLabel')}
+                    index={t('stage')}
+                    variables={{
+                        period: '',
+                        organizationId: orgId,
+                        endDate: moment().format(),
+                    }}
+                />
             </Card>
         </div>
     );

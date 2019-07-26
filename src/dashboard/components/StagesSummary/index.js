@@ -82,13 +82,13 @@ const Footer = styled.div`
     margin-top: 28px;
 `;
 
-const StagesSummary = ({ orgId, query, mapData }) => {
+const StagesSummary = ({ query, variables, mapData }) => {
     const [dates, setDates] = useState({
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
     });
     const { t } = useTranslation('insights');
-    const { data, loading } = useQuery(query);
+    const { data, loading } = useQuery(query, { variables });
 
     if (loading) {
         return <SummaryWrapper>{t('loading')}</SummaryWrapper>;
@@ -124,6 +124,6 @@ export default withTheme(StagesSummary);
 
 StagesSummary.propTypes = {
     query: PropTypes.object.isRequired,
-    orgId: PropTypes.string.isRequired,
+    variables: PropTypes.object.isRequired,
     mapData: PropTypes.func.isRequired,
 };

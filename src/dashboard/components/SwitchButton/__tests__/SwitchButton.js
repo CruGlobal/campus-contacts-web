@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { renderWithContext } from '../../../testUtils';
-import Header from '../';
+import SwitchButton from '../';
 
-describe('<Header />', () => {
+describe('<SwitchButton />', () => {
     it('should render properly', async () => {
-        renderWithContext(<Header />).snapshot();
+        renderWithContext(<SwitchButton />).snapshot();
     });
 });

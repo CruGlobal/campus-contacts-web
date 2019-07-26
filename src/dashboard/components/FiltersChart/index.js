@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import BarChart from '../BarChart';
 
-const FiltersChart = ({ query, mapData, countAverage }) => {
+const FiltersChart = ({ query, mapData, countAverage, label }) => {
     const [dates, setDates] = useState({});
     const { data, loading } = useQuery(query);
     const { t } = useTranslation('insights');
@@ -25,7 +25,7 @@ const FiltersChart = ({ query, mapData, countAverage }) => {
             tooltipBreakdown={true}
             datesFilter={true}
             onDatesChanged={dates => setDates(dates)}
-            legendLabel={t('personalSteps.legend')}
+            legendLabel={label}
         />
     );
 };
