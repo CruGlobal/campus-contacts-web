@@ -15,7 +15,6 @@ function peopleViewPersonController(
     $filter,
     $scope,
     confirm,
-    jQuery,
     $state,
     periodService,
     personService,
