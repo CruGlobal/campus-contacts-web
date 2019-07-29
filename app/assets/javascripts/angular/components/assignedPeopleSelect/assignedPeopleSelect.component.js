@@ -21,6 +21,7 @@ function assignedPeopleSelectController(
     this.people = [];
     this.isMe = assignedPeopleSelectService.isMe;
     this.$onInit = () => {
+        const assignedPeopleIds = this.assigned.map(({ id }) => id);
         const requestDeduper = new RequestDeduper();
         // Refresh the person list whenever the search term changes
         $scope.$watch('$select.search', search => {
@@ -35,7 +36,7 @@ function assignedPeopleSelectController(
                 .then(people => {
                     // Find all the current people in this.assigned
                     this.people = people.filter(person =>
-                        this.assigned.map(({ id }) => id).includes(person.id),
+                        assignedPeopleIds.includes(person.id),
                     );
                 });
         });
