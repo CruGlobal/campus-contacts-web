@@ -134,7 +134,7 @@
         </label>
         <span
             class="unvalidated"
-            ng-if="$ctrl.personTab.orgPermission.$error"
+            ng-if="$ctrl.personTab.orgPermission.$error !== null"
             role="alert"
             >{{ $ctrl.personTab.orgPermission.$error }}</span
         >
@@ -252,7 +252,7 @@
                         </span>
                         <input
                             type="radio"
-                            name="primary-email"
+                            name="primary_email"
                             ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
                             ng-model="$ctrl.personTab.primaryEmail"
                             ng-value="emailAddress"

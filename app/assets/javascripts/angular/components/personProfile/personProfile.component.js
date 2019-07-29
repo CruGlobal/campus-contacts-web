@@ -226,6 +226,8 @@ function personProfileController(
         var emailAddresses = vm.personTab.person.email_addresses;
         if (!vm.pendingEmailAddress) {
             addEmailAddress();
+            // If we add an email address, set the error to null
+            vm.personTab.orgPermission.$error = null;
         }
         return emailAddresses.concat(vm.pendingEmailAddress);
     }
