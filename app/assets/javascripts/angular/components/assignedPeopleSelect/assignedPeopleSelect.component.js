@@ -21,10 +21,10 @@ function assignedPeopleSelectController(
     this.people = [];
     this.isMe = assignedPeopleSelectService.isMe;
     this.$onInit = () => {
-        const assignedPeopleIds = this.assigned.map(({ id }) => id);
         const requestDeduper = new RequestDeduper();
         // Refresh the person list whenever the search term changes
         $scope.$watch('$select.search', search => {
+            const assignedPeopleIds = this.assigned.map(({ id }) => id);
             if (search === '') {
                 // Ignore empty searches
                 this.people = [];
