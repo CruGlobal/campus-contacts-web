@@ -15,6 +15,7 @@ function myPeopleDashboardController(
     $scope,
     $log,
     $document,
+    $window,
     JsonApiDataStore,
     _,
     myPeopleDashboardService,
@@ -48,7 +49,7 @@ function myPeopleDashboardController(
             loggedInPerson.person.organizational_permissions.length === 0
         ) {
             // This page we redirect to will change
-            window.location.href =
+            $window.location.href =
                 'http://get.missionhub.com/account-verification/';
         }
 
