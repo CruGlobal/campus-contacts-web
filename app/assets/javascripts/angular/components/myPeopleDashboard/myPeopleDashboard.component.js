@@ -50,7 +50,7 @@ function myPeopleDashboardController(
         ) {
             // This page we redirect to will change
             $window.location.href =
-                'http://get.missionhub.com/account-verification/';
+                'https://get.missionhub.com/account-verification/';
         }
 
         angular.element($document).on('people::personAdded', loadAndSyncData);
