@@ -17,7 +17,7 @@ const QUERY = gql`
             organizationId: $organizationId
             endDate: $endDate
         ) {
-            pathwayStage {
+            stage {
                 name
             }
             stepsAddedCount
@@ -33,7 +33,7 @@ describe('<StepsChart />', () => {
                 mapData={data =>
                     data.organizationPathwayStagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
-                        ['index']: row.pathwayStage.name.toUpperCase(),
+                        ['index']: row.stage.name.toUpperCase(),
                     }))
                 }
                 label={'label'}
@@ -54,7 +54,7 @@ describe('<StepsChart />', () => {
                 mapData={data =>
                     data.organizationPathwayStagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
-                        ['index']: row.pathwayStage.name.toUpperCase(),
+                        ['index']: row.stage.name.toUpperCase(),
                     }))
                 }
                 label={'label'}
@@ -71,13 +71,13 @@ describe('<StepsChart />', () => {
                         organizationPathwayStagesReport: () => [
                             {
                                 stepsAddedCount: 20,
-                                pathwayStage: {
+                                stage: {
                                     name: 'NO STAGE',
                                 },
                             },
                             {
                                 stepsAddedCount: 25,
-                                pathwayStage: {
+                                stage: {
                                     name: 'UNINTERESTED',
                                 },
                             },
