@@ -143,7 +143,7 @@
         "pretty-quick": "^1.11.1",
         "sass-loader": "^7.1.0",
         "webpack": "^4.38.0",
-        "webpack-bundle-analyzer": "^3.3.2",
+        "webpack-bundle-analyzer": "^3.4.1",
         "webpack-cli": "^3.3.0",
         "webpack-dev-server": "^3.7.2",
         "webpack-subresource-integrity": "^1.1.0-rc.6"
