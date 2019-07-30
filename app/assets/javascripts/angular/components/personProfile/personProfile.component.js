@@ -328,7 +328,7 @@ function personProfileController(
         if (hasEmailAddress) {
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
             // Check is the choice the user makes is No permissions, and if so allow them to update without email
-        } else if (choice == vm.permissionOptions[2].id) {
+        } else if (choice === vm.permissionOptions[2].id) {
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
         } else {
             vm.personTab.orgPermission.permission_id = oldValue;
