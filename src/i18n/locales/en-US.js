@@ -107,16 +107,23 @@ export default {
             },
             done: 'Done',
             edit_org_order: 'Edit Organization Order',
-            edit_org_order_help:
-                'Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.',
+            edit_org_order_help: {
+                part1: 'Want to customize your view? Press',
+                part2: 'above to reorder and hide ministries.',
+            },
+
             error_archiving_person:
                 'Error archiving person! Please try again or contact support.',
             loading_contacts: 'Loading Contacts',
             no_contacts: {
                 welcome: 'WELCOME {{name}}!',
             },
-            no_contacts_help:
-                'When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.',
+            no_contacts_help: {
+                part1: 'When you add a new person',
+                part2:
+                    'or someone gets assigned to you, <br> they will show up here.',
+            },
+
             notes_for_new_interaction: 'Notes for new',
             organizations_assigned_to_you: 'Ministries',
             people_assigned_to_you: 'People',

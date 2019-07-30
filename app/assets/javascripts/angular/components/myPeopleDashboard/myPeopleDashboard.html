@@ -4,7 +4,11 @@
     </h1>
     <div ng-if="$ctrl.noPeople" class="no-people-message ng-cloak">
         <h1>{{ $ctrl.noPeopleWelcome }}</h1>
-        <p bind-dynamic="$ctrl.noContactsHelp"></p>
+        <span>
+            <span ng-bind-html="$ctrl.noContactsHelpPart1"></span>
+            <ng-md-icon icon="addContact"></ng-md-icon>
+            <span ng-bind-html="$ctrl.noContactsHelpPart2"></span>
+        </span>
     </div>
 
     <div ng-sortable="$ctrl.sortableOptions">
@@ -30,11 +34,10 @@
         </organization>
     </div>
     <div class="no-people-extras">
-        <a
-            href
-            ng-click="$ctrl.editMode = true"
-            class="mt2 edit-mode db"
-            bind-dynamic="$ctrl.editOrgOrderHelp"
-        ></a>
+        <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode db">
+            <span ng-bind-html="$ctrl.editOrgOrderHelpPart1"></span>
+            <ng-md-icon icon="editOrder"></ng-md-icon>
+            <span ng-bind-html="$ctrl.editOrgOrderHelpPart2"></span>
+        </a>
     </div>
 </div>

@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 import './organizationCleanup.scss';
 import checkIcon from '../../../../images/icons/icon-check.svg';
 
@@ -24,7 +26,7 @@ function organizationCleanupController(
     this.checkIcon = checkIcon;
 
     this.ministriesCleanupDescription = $sce.trustAsHtml(
-        $filter('t')('ministries.cleanup.description'),
+        i18next.t('ministries.cleanup.description'),
     );
 
     const showConfirmModal = async title => {
