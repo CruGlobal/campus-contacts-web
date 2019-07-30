@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 const GET_IMPACT_REPORT_MOVED = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            pathwayMovedCount
+            stageProgressionCount
         }
     }
 `;
@@ -28,7 +28,7 @@ const GET_STAGES_REPORT_MEMBER_COUNT = gql`
             endDate: $endDate
         ) {
             memberCount
-            pathwayStage {
+            stage {
                 name
             }
         }
@@ -46,7 +46,7 @@ const GET_STAGES_REPORT_STEPS_ADDED = gql`
             organizationId: $organizationId
             endDate: $endDate
         ) {
-            pathwayStage {
+            stage {
                 name
             }
             stepsAddedCount

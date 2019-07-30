@@ -88,7 +88,7 @@ const PersonalStepsPage = () => {
                     mapData={data =>
                         data.organizationPathwayStagesReport.map(row => ({
                             [t('personalSteps.label')]: row.stepsAddedCount,
-                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                            [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
                     label={t('personalSteps.label')}
@@ -118,7 +118,7 @@ const PersonalStepsPage = () => {
                     mapData={data =>
                         data.organizationPathwayStagesReport.map(row => ({
                             [t('members')]: row.memberCount,
-                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                            [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
                     label={t('members')}
