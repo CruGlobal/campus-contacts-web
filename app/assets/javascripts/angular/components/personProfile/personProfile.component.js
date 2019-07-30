@@ -320,11 +320,15 @@ function personProfileController(
     ng-change="$ctrl.permissionChange({{$ctrl.personTab.orgPermission.permission_id}})"
     Reference: http://stackoverflow.com/a/28047112/879524
      */
-    function permissionChange(oldValue) {
+    function permissionChange(oldValue, choice) {
         var hasEmailAddress = vm.personTab.person.email_addresses.length > 0;
+
         // Set the error to null everytime this run in case the user updated their email
         vm.personTab.orgPermission.$error = null;
         if (hasEmailAddress) {
+            vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
+            // Check is the choice the user makes is No permissions, and if so allow them to update without email
+        } else if (choice == vm.permissionOptions[2].id) {
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
         } else {
             vm.personTab.orgPermission.permission_id = oldValue;
