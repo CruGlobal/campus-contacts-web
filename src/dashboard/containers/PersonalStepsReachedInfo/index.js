@@ -9,7 +9,7 @@ import Header from '../../components/Header';
 const GET_IMPACT_REPORT = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            pathwayMovedCount
+            stageProgressionCount
         }
     }
 `;
@@ -32,7 +32,7 @@ const PersonalStepsReachedInfo = () => {
 
     return (
         <Header>
-            {t('personalStepsReached', { count: report.pathwayMovedCount })}
+            {t('personalStepsReached', { count: report.stageProgressionCount })}
         </Header>
     );
 };

@@ -19,7 +19,7 @@ const GET_STAGES_REPORT = gql`
             organizationId: $organizationId
             endDate: $endDate
         ) {
-            pathwayStage {
+            stage {
                 name
             }
             stepsAddedCount
@@ -54,7 +54,7 @@ const PersonalStepsAdded = () => {
 
     const graphData = report.map(row => ({
         [PERSONAL_STEPS_LABEL]: row.stepsAddedCount,
-        [STAGE_LABEL]: row.pathwayStage.name.toUpperCase(),
+        [STAGE_LABEL]: row.stage.name.toUpperCase(),
     }));
 
     return (
