@@ -22,13 +22,13 @@ describe('<PersonalStepsAddedChart />', () => {
                         organizationPathwayStagesReport: () => [
                             {
                                 stepsAddedCount: 20,
-                                pathwayStage: {
+                                stage: {
                                     name: 'NO STAGE',
                                 },
                             },
                             {
                                 stepsAddedCount: 25,
-                                pathwayStage: {
+                                stage: {
                                     name: 'UNINTERESTED',
                                 },
                             },

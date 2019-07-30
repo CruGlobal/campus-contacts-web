@@ -21,7 +21,7 @@ describe('<PersonalStepsTakenInfo />', () => {
                 mocks: {
                     Query: () => ({
                         impactReport: () => ({
-                            pathwayMovedCount: () => 13,
+                            stageProgressionCount: () => 13,
                         }),
                     }),
                 },
