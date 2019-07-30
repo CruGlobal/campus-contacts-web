@@ -119,7 +119,7 @@
         "favicons-webpack-plugin": "^0.0.9",
         "file-loader": "^4.1.0",
         "fraql": "^1.2.1",
-        "graphql-tools": "^4.0.4",
+        "graphql-tools": "^4.0.5",
         "html-loader": "^0.5.5",
         "html-webpack-plugin": "^3.2.0",
         "husky": "^3.0.1",
