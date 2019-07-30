@@ -90,7 +90,7 @@ const StepsOfFaithPage = () => {
                             [t(
                                 'stepsOfFaith.legendLabel',
                             )]: row.othersStepsAddedCount,
-                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                            [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
                     label={t('stepsOfFaith.legendLabel')}
@@ -120,7 +120,7 @@ const StepsOfFaithPage = () => {
                     mapData={data =>
                         data.organizationPathwayStagesReport.map(row => ({
                             [t('stepsOfFaith.peopleLabel')]: row.memberCount,
-                            [t('stage')]: row.pathwayStage.name.toUpperCase(),
+                            [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
                     label={t('stepsOfFaith.peopleLabel')}

@@ -47,7 +47,7 @@ const GET_STAGES_REPORT = gql`
             endDate: $endDate
         ) {
             memberCount
-            pathwayStage {
+            stage {
                 name
             }
             othersStepsAddedCount
@@ -75,7 +75,7 @@ const GET_STAGES_PEOPLE_REPORT = gql`
             endDate: $endDate
         ) {
             memberCount
-            pathwayStage {
+            stage {
                 name
             }
         }
