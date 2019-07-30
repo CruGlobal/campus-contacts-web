@@ -8,7 +8,7 @@ import ImpactInfo from '../';
 const QUERY = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            pathwayMovedCount
+            stageProgressionCount
         }
     }
 `;
@@ -19,7 +19,9 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${report.impactReport.pathwayMovedCount}`
+                    `Text with value ${
+                        report.impactReport.stageProgressionCount
+                    }`
                 }
                 variables={{ organizationId: 1 }}
             />,
@@ -36,7 +38,9 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${report.impactReport.pathwayMovedCount}`
+                    `Text with value ${
+                        report.impactReport.stageProgressionCount
+                    }`
                 }
                 variables={{ organizationId: 1 }}
             />,
@@ -44,7 +48,7 @@ describe('<ImpactInfo />', () => {
                 mocks: {
                     Query: () => ({
                         impactReport: () => ({
-                            pathwayMovedCount: () => 15,
+                            stageProgressionCount: () => 15,
                         }),
                     }),
                 },

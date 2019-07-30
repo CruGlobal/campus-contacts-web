@@ -122,6 +122,7 @@ const RangePicker = ({ onDatesChange, startDate, endDate }) => {
                 onFocusChange={focusedInput => {
                     setFocus(focusedInput);
                 }}
+                hideKeyboardShortcutsPanel={true}
                 readOnly={true}
                 noBorder={true}
                 customArrowIcon={null}
