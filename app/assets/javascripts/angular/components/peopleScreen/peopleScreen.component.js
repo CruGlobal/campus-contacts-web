@@ -37,6 +37,7 @@ function peopleScreenController(
     peopleScreenService,
     personService,
     peopleFiltersPanelService,
+    organizationOverviewTeamService,
     loggedInPerson,
     ProgressiveListLoader,
     RequestDeduper,
@@ -235,6 +236,10 @@ function peopleScreenController(
         // Update the people count shown in the people tab
         if (this.organizationOverview.people) {
             this.organizationOverview.people.length++;
+            // When a new person is added, check if the Team count has changed and update the UI
+            organizationOverviewTeamService
+                .loadOrgTeamCount(this.org.id)
+                .then(resp => (this.organizationOverview.team.length = resp));
         }
     };
 
@@ -400,6 +405,10 @@ function peopleScreenController(
         // Update the people count shown in the people tab
         if (this.organizationOverview.people) {
             this.organizationOverview.people.length -= removedPeople.length;
+            // When a person is removed, check if the team count has been changed and update the UI to match it
+            organizationOverviewTeamService
+                .loadOrgTeamCount(this.org.id)
+                .then(resp => (this.organizationOverview.team.length = resp));
         }
 
         // Remove the selection state of removed people
