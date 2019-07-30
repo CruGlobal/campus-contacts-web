@@ -15,6 +15,7 @@ function myPeopleDashboardController(
     $scope,
     $log,
     $sce,
+    $filter,
     $document,
     JsonApiDataStore,
     _,
@@ -41,11 +42,11 @@ function myPeopleDashboardController(
     };
 
     this.noContactsHelp = $sce.trustAsHtml(
-        i18next.t('dashboard.no_contacts_help'),
+        $filter('t')('dashboard.no_contacts_help'),
     );
 
     this.editOrgOrderHelp = $sce.trustAsHtml(
-        i18next.t('dashboard.edit_org_order_help'),
+        $filter('t')('dashboard.edit_org_order_help'),
     );
 
     vm.$onInit = async () => {

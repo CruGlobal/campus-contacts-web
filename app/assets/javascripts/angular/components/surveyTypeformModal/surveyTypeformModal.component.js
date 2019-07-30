@@ -1,5 +1,3 @@
-import i18next from 'i18next';
-
 import template from './surveyTypeformModal.html';
 import './surveyTypeformModal.scss';
 
@@ -12,11 +10,11 @@ angular.module('missionhubApp').component('surveyTypeformModal', {
     },
 });
 
-function surveyTypeformModalController($document, $sce) {
+function surveyTypeformModalController($document, $sce, $filter) {
     var vm = this;
     vm.$document = $document;
     this.ministriesSurveysTypeformStep1 = $sce.trustAsHtml(
-        i18next.t('ministries.surveys.typeform.step1'),
+        $filter('t')('ministries.surveys.typeform.step1'),
     );
 
     vm.copy = () => {
