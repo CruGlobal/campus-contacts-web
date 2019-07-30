@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 import './organizationCleanup.scss';
 import checkIcon from '../../../../images/icons/icon-check.svg';
 
@@ -17,10 +19,15 @@ function organizationCleanupController(
     $filter,
     $uibModal,
     $state,
+    $sce,
 ) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
+
+    this.ministriesCleanupDescription = $sce.trustAsHtml(
+        i18next.t('ministries.cleanup.description'),
+    );
 
     const showConfirmModal = async title => {
         const archiveValue =

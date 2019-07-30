@@ -14,6 +14,7 @@ angular.module('missionhubApp').component('myPeopleDashboard', {
 function myPeopleDashboardController(
     $scope,
     $log,
+    $sce,
     $document,
     JsonApiDataStore,
     _,
@@ -38,6 +39,14 @@ function myPeopleDashboardController(
         onEnd: () =>
             userPreferencesService.organizationOrderChange(vm.organizations),
     };
+
+    this.noContactsHelp = $sce.trustAsHtml(
+        i18next.t('dashboard.no_contacts_help'),
+    );
+
+    this.editOrgOrderHelp = $sce.trustAsHtml(
+        i18next.t('dashboard.edit_org_order_help'),
+    );
 
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
