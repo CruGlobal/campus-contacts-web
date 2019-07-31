@@ -121,7 +121,7 @@ export default {
             no_contacts_help: {
                 part1: 'When you add a new person',
                 part2:
-                    'or someone gets assigned to you, <br> they will show up here.',
+                    'or someone gets assigned to you, they will show up here.',
             },
 
             notes_for_new_interaction: 'Notes for new',
@@ -502,8 +502,13 @@ export default {
             },
             cleanup: {
                 title: 'Organization Cleanup',
-                description:
-                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!",
+                description: {
+                    part1:
+                        "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?",
+                    part2:
+                        ' An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!',
+                },
+
                 archive_alumni: 'Archive Alumni',
                 archive_alumni_description:
                     'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',

@@ -25,8 +25,11 @@ function organizationCleanupController(
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
 
-    this.ministriesCleanupDescription = $sce.trustAsHtml(
-        i18next.t('ministries.cleanup.description'),
+    this.ministriesCleanupDescriptionPart1 = $sce.trustAsHtml(
+        i18next.t('ministries.cleanup.description.part1'),
+    );
+    this.ministriesCleanupDescriptionPart2 = $sce.trustAsHtml(
+        i18next.t('ministries.cleanup.description.part2'),
     );
 
     const showConfirmModal = async title => {
