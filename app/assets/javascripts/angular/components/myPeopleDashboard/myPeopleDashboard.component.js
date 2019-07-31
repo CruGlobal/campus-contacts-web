@@ -49,8 +49,7 @@ function myPeopleDashboardController(
             loggedInPerson.person.organizational_permissions.length === 0
         ) {
             // This page we redirect to will change
-            $window.location.href =
-                'https://get.missionhub.com/account-verification/';
+            $window.location.href = 'https://get.missionhub.com/newmobileuser/';
         }
 
         angular.element($document).on('people::personAdded', loadAndSyncData);
