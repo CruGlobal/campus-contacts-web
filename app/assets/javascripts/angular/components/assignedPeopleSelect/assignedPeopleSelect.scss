@@ -14,7 +14,8 @@ assigned-people-select .ui-select-bootstrap {
     }
 
     .ui-select-choices-row.active > span {
-        background-color: $pivot-dark-blue;
+        background-color: $gray-5;
+        color: $gray-1;
     }
 
     .ui-select-choices-row:hover {
