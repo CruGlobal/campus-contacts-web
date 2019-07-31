@@ -8,7 +8,6 @@ angular
     .constant('_', _)
     .constant('moment', moment)
     .constant('confirm', window.confirm)
-    .constant('jQuery', window.jQuery)
     .constant('nativeLocation', window.location)
     .constant('p2cOrgId', '8411')
     .constant('rollbarAccessToken', 'e749b290a241465b9e70c9cf93124721');
