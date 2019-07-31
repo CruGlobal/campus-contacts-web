@@ -127,13 +127,13 @@
                     $ctrl.personTab.orgPermission.permission_id
                 }}, $ctrl.personTab.orgPermission.permission_id)"
                 ng-disabled="$ctrl.permissionChangeDisabled"
-                ng-class="{ 'unvalidated' : $ctrl.personTab.orgPermission.$error }"
+                ng-class="{ 'invalid' : $ctrl.personTab.orgPermission.$error }"
                 class="form-control"
             >
             </select>
         </label>
         <span
-            class="unvalidated"
+            class="invalid"
             ng-if="$ctrl.personTab.orgPermission.$error !== null"
             role="alert"
             >{{ $ctrl.personTab.orgPermission.$error }}</span
