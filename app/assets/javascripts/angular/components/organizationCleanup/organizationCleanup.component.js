@@ -19,18 +19,10 @@ function organizationCleanupController(
     $filter,
     $uibModal,
     $state,
-    $sce,
 ) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
-
-    this.ministriesCleanupDescriptionPart1 = $sce.trustAsHtml(
-        i18next.t('ministries.cleanup.description.part1'),
-    );
-    this.ministriesCleanupDescriptionPart2 = $sce.trustAsHtml(
-        i18next.t('ministries.cleanup.description.part2'),
-    );
 
     const showConfirmModal = async title => {
         const archiveValue =

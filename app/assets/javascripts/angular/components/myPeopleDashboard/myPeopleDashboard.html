@@ -8,9 +8,9 @@
     >
         <h1>{{ $ctrl.noPeopleWelcome }}</h1>
         <span class="measure-wide">
-            <span>{{ $ctrl.noContactsHelpPart1 }}</span>
+            <span>{{ 'dashboard.no_contacts_help.part1' | t }}</span>
             <ng-md-icon icon="addContact"></ng-md-icon>
-            <span>{{ $ctrl.noContactsHelpPart2 }}</span>
+            <span>{{ 'dashboard.no_contacts_help.part2' | t }}</span>
         </span>
     </div>
 
@@ -38,9 +38,9 @@
     </div>
     <div class="no-people-extras">
         <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode db">
-            <span>{{ $ctrl.editOrgOrderHelpPart1 }}</span>
+            <span>{{ 'dashboard.edit_org_order_help.part1' | t }}</span>
             <ng-md-icon icon="editOrder"></ng-md-icon>
-            <span>{{ $ctrl.editOrgOrderHelpPart2 }}</span>
+            <span>{{ 'dashboard.edit_org_order_help.part2' | t }}</span>
         </a>
     </div>
 </div>

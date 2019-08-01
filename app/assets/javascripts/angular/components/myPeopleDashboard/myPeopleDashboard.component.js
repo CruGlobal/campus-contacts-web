@@ -14,8 +14,6 @@ angular.module('missionhubApp').component('myPeopleDashboard', {
 function myPeopleDashboardController(
     $scope,
     $log,
-    $sce,
-    $filter,
     $document,
     JsonApiDataStore,
     _,
@@ -52,19 +50,6 @@ function myPeopleDashboardController(
         vm.noPeopleWelcome = i18next.t('dashboard.no_contacts.welcome', {
             name: loggedInPerson.person.first_name.toUpperCase(),
         });
-        // Had to Split into two parts due to icon needings to be in between
-        this.noContactsHelpPart1 = $sce.trustAsHtml(
-            i18next.t('dashboard.no_contacts_help.part1'),
-        );
-        this.noContactsHelpPart2 = $sce.trustAsHtml(
-            i18next.t('dashboard.no_contacts_help.part2'),
-        );
-        this.editOrgOrderHelpPart1 = $sce.trustAsHtml(
-            i18next.t('dashboard.edit_org_order_help.part1'),
-        );
-        this.editOrgOrderHelpPart2 = $sce.trustAsHtml(
-            i18next.t('dashboard.edit_org_order_help.part2'),
-        );
 
         periodService.subscribe($scope, loadReports);
 
