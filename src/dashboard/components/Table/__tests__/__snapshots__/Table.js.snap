@@ -14,10 +14,10 @@ exports[`<Table /> should render properly with data 1`] = `
 <div>
   <div>
     <table
-      class="css-1f3ydut"
+      class="css-1vr8bhw"
     >
       <thead
-        class="css-tfuwtm"
+        class="css-14c5xr0"
       >
         <tr>
           <th
@@ -38,10 +38,10 @@ exports[`<Table /> should render properly with data 1`] = `
         </tr>
       </thead>
       <tbody
-        class="css-1esthja"
+        class="css-0"
       >
         <tr
-          class="css-e9u13j"
+          class="css-1ddvev5"
         >
           <td
             class="css-10yiwq9"
@@ -55,7 +55,7 @@ exports[`<Table /> should render properly with data 1`] = `
           </td>
         </tr>
         <tr
-          class="css-e9u13j"
+          class="css-1ddvev5"
         >
           <td
             class="css-10yiwq9"
@@ -74,39 +74,39 @@ exports[`<Table /> should render properly with data 1`] = `
       class="css-elql06"
     >
       <div
-        class=" css-14swvyq"
+        class=" css-1ywlavf"
       />
       <div
         class="css-1mzzuk6"
       >
         <div
-          class="active css-mjxiyf"
+          class="active css-h6r05d"
         >
           1
         </div>
         <div
-          class=" css-mjxiyf"
+          class=" css-h6r05d"
         >
           2
         </div>
         <div
-          class=" css-mjxiyf"
+          class=" css-h6r05d"
         >
           3
         </div>
         <div
-          class=" css-mjxiyf"
+          class=" css-h6r05d"
         >
           4
         </div>
         <div
-          class=" css-mjxiyf"
+          class=" css-h6r05d"
         >
           5
         </div>
       </div>
       <div
-        class=" css-1pqqm8"
+        class=" css-1ho0o10"
       />
     </div>
   </div>
