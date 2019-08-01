@@ -9,12 +9,12 @@ import BarChart from '../../components/BarChart';
 import AppContext from '../../appContext';
 
 const GET_STAGES_REPORT = gql`
-    query organizationPathwayStagesReport(
+    query organizationStagesReport(
         $period: String!
         $organizationId: ID!
         $endDate: ISO8601DateTime!
     ) {
-        organizationPathwayStagesReport(
+        organizationStagesReport(
             period: $period
             organizationId: $organizationId
             endDate: $endDate
@@ -47,7 +47,7 @@ const PersonalStepsAdded = () => {
         return <Wrapper>{t('loading')}</Wrapper>;
     }
 
-    const { organizationPathwayStagesReport: report } = data;
+    const { organizationStagesReport: report } = data;
 
     const PERSONAL_STEPS_LABEL = t('personalSteps');
     const STAGE_LABEL = t('stage');

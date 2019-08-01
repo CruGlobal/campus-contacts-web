@@ -19,7 +19,7 @@ describe('<PersonalStepsMemberStagesChart />', () => {
             {
                 mocks: {
                     Query: () => ({
-                        organizationPathwayStagesReport: () => [
+                        organizationStagesReport: () => [
                             {
                                 memberCount: 10,
                                 stage: {
