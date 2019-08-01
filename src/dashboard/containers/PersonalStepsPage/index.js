@@ -85,7 +85,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={data =>
-                        data.organizationPathwayStagesReport.map(row => ({
+                        data.organizationStagesReport.map(row => ({
                             [t('personalSteps.label')]: row.stepsAddedCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
@@ -115,7 +115,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={data =>
-                        data.organizationPathwayStagesReport.map(row => ({
+                        data.organizationStagesReport.map(row => ({
                             [t('members')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
