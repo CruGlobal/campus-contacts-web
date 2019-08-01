@@ -27,7 +27,7 @@
         "@babel/preset-react": "^7.0.0",
         "@emotion/core": "^10.0.14",
         "@emotion/styled": "^10.0.12",
-        "@nivo/bar": "^0.59.0",
+        "@nivo/bar": "^0.59.2",
         "@uirouter/angularjs": "^1.0.20",
         "angular": "~1.7.8",
         "angular-animate": "~1.7.8",
