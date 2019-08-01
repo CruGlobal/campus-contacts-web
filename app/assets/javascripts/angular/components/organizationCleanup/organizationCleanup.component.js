@@ -13,13 +13,7 @@ angular.module('missionhubApp').component('organizationCleanup', {
     controller: organizationCleanupController,
 });
 
-function organizationCleanupController(
-    httpProxy,
-    $scope,
-    $filter,
-    $uibModal,
-    $state,
-) {
+function organizationCleanupController(httpProxy, $scope, $uibModal, $state) {
     this.archiveBeforeDate = new Date();
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
@@ -37,9 +31,9 @@ function organizationCleanupController(
         const confirmModal = $uibModal.open({
             component: 'iconModal',
             resolve: {
-                title: () => $filter('t')(title),
-                closeLabel: () => $filter('t')('general.ok'),
-                dismissLabel: () => $filter('t')('general.cancel'),
+                title: () => i18next.t(title),
+                closeLabel: () => i18next.t('general.ok'),
+                dismissLabel: () => i18next.t('general.cancel'),
             },
             windowClass: 'pivot_theme',
             backdrop: 'static',
@@ -78,14 +72,13 @@ function organizationCleanupController(
             const modalInstance = $uibModal.open({
                 component: 'iconModal',
                 resolve: {
-                    title: () =>
-                        $filter('t')('ministries.cleanup.success_title'),
+                    title: () => i18next.t('ministries.cleanup.success_title'),
                     paragraphs: () => [
-                        $filter('t')('ministries.cleanup.success_message'),
+                        i18next.t('ministries.cleanup.success_message'),
                     ],
                     icon: () => this.checkIcon,
                     closeLabel: () =>
-                        $filter('t')('ministries.cleanup.success_cta'),
+                        i18next.t('ministries.cleanup.success_cta'),
                 },
                 windowClass: 'pivot_theme',
                 backdrop: 'static',
