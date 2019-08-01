@@ -1188,6 +1188,15 @@ export default {
                 'This year, we have had {{count}} interactions with {{people}} people.',
             legend: 'Interactions',
         },
+        challenges: {
+            total: 'This year, we have completed {{count}} challenges.',
+            title: 'Challenges',
+            subTitle: 'Community challenges joined and completed.',
+            join: 'Joined',
+            completed: 'Completed',
+            length: 'Length',
+            dates: 'Dates',
+        },
         tabs: {
             personal: 'Personal Steps',
             steps: 'Steps of Faith',

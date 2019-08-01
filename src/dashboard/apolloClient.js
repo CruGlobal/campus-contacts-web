@@ -23,7 +23,6 @@ export const createApolloClient = token => {
         },
     });
 
-    console.log(token);
     return new ApolloClient({
         cache,
         link: ApolloLink.from([stateLink, httplink]),

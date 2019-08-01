@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Table /> should render properly in loading 1`] = `
+<div>
+  <div
+    class="css-1b8qkfw"
+  >
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`<Table /> should render properly with data 1`] = `
+<div>
+  <div>
+    <table
+      class="css-1f3ydut"
+    >
+      <thead
+        class="css-tfuwtm"
+      >
+        <tr>
+          <th
+            class="css-1rfzrj7"
+          >
+            header-1
+          </th>
+          <th
+            class="css-1rfzrj7"
+          >
+            header-2
+          </th>
+          <th
+            class="css-1rfzrj7"
+          >
+            header-3
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="css-1esthja"
+      >
+        <tr
+          class="css-e9u13j"
+        >
+          <td
+            class="css-10yiwq9"
+          >
+            cell1
+          </td>
+          <td
+            class="css-10yiwq9"
+          >
+            cell2
+          </td>
+        </tr>
+        <tr
+          class="css-e9u13j"
+        >
+          <td
+            class="css-10yiwq9"
+          >
+            cell3
+          </td>
+          <td
+            class="css-10yiwq9"
+          >
+            cell4
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      class="css-elql06"
+    >
+      <div
+        class=" css-14swvyq"
+      />
+      <div
+        class="css-1mzzuk6"
+      >
+        <div
+          class="active css-mjxiyf"
+        >
+          1
+        </div>
+        <div
+          class=" css-mjxiyf"
+        >
+          2
+        </div>
+        <div
+          class=" css-mjxiyf"
+        >
+          3
+        </div>
+        <div
+          class=" css-mjxiyf"
+        >
+          4
+        </div>
+        <div
+          class=" css-mjxiyf"
+        >
+          5
+        </div>
+      </div>
+      <div
+        class=" css-1pqqm8"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -20,7 +20,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         class="css-140lofm"
       />
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1ohf0ui"
@@ -43,7 +43,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Total steps of faith completed with others by members since  was created on .
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div>
           Loading...
@@ -64,7 +64,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Current total number of steps of faith with others added by members.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1a3wyyp"
@@ -92,7 +92,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Current total number of people added by members.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1a3wyyp"

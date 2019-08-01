@@ -20,7 +20,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         class="css-140lofm"
       />
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1ohf0ui"
@@ -43,7 +43,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         Total interactions completed over time.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div>
           Loading...
