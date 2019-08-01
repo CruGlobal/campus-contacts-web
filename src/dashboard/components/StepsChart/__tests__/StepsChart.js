@@ -7,12 +7,12 @@ import { renderWithContext } from '../../../testUtils';
 import StepsChart from '../';
 
 const QUERY = gql`
-    query organizationPathwayStagesReport(
+    query organizationStagesReport(
         $period: String!
         $organizationId: ID!
         $endDate: ISO8601DateTime!
     ) {
-        organizationPathwayStagesReport(
+        organizationStagesReport(
             period: $period
             organizationId: $organizationId
             endDate: $endDate
@@ -31,7 +31,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.organizationPathwayStagesReport.map(row => ({
+                    data.organizationStagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -52,7 +52,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.organizationPathwayStagesReport.map(row => ({
+                    data.organizationStagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -68,7 +68,7 @@ describe('<StepsChart />', () => {
             {
                 mocks: {
                     Query: () => ({
-                        organizationPathwayStagesReport: () => [
+                        organizationStagesReport: () => [
                             {
                                 stepsAddedCount: 20,
                                 stage: {

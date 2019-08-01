@@ -87,7 +87,7 @@ const StepsOfFaithPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT}
                     mapData={data =>
-                        data.organizationPathwayStagesReport.map(row => ({
+                        data.organizationStagesReport.map(row => ({
                             [t(
                                 'stepsOfFaith.legendLabel',
                             )]: row.othersStepsAddedCount,
@@ -119,7 +119,7 @@ const StepsOfFaithPage = () => {
                 <StepsChart
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={data =>
-                        data.organizationPathwayStagesReport.map(row => ({
+                        data.organizationStagesReport.map(row => ({
                             [t('stepsOfFaith.peopleLabel')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))

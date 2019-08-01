@@ -36,12 +36,12 @@ const GET_STEPS_COMPLETED_REPORT = gql`
 `;
 
 const GET_STAGES_REPORT = gql`
-    query organizationPathwayStagesReport(
+    query organizationStagesReport(
         $period: String!
         $organizationId: ID!
         $endDate: ISO8601DateTime!
     ) {
-        organizationPathwayStagesReport(
+        organizationStagesReport(
             period: $period
             organizationId: $organizationId
             endDate: $endDate
@@ -64,12 +64,12 @@ const GET_IMPACT_REPORT_REACHED = gql`
 `;
 
 const GET_STAGES_PEOPLE_REPORT = gql`
-    query organizationPathwayStagesReport(
+    query organizationStagesReport(
         $period: String!
         $organizationId: ID!
         $endDate: ISO8601DateTime!
     ) {
-        organizationPathwayStagesReport(
+        organizationStagesReport(
             period: $period
             organizationId: $organizationId
             endDate: $endDate
