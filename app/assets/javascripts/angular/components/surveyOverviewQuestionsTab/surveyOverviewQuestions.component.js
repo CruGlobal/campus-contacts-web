@@ -72,6 +72,8 @@ function surveyOverviewQuestionsController(
         },
     ];
     this.people = [];
+    this.labels = [];
+    this.selectedTab = 0;
 
     const loadSurveyData = async () => {
         const { data } = await surveyService.getSurveyQuestions(this.survey.id);
@@ -80,7 +82,48 @@ function surveyOverviewQuestionsController(
         $scope.$apply();
     };
 
-    const getPeople = async questions => {
+    this.changeTab = tab => {
+        this.selectedTab = tab;
+    };
+
+    this.filteredNotify = question => {
+        return question.filter(question => question.rule_code === 'AUTONOTIFY');
+    };
+
+    const getLabel = async (questions, organizationId) => {
+        const labelIds = [
+            ...new Set(
+                questions.reduce((a1, q) => {
+                    const ids = q.question_rules.reduce((a2, r) => {
+                        const labelIds = r.label_ids
+                            ? r.label_ids.split(',')
+                            : [];
+                        return [...a2, ...labelIds];
+                    }, []);
+                    return [...a1, ...ids];
+                }, []),
+            ),
+        ];
+
+        const orgLabels = await httpProxy
+            .get(
+                `/organizations/${organizationId}`,
+                {
+                    include: 'labels',
+                },
+                {
+                    errorMessage: 'error.messages.surveys.loadQuestions',
+                },
+            )
+            .then(res => res.data.labels);
+
+        const currentLabels = orgLabels.filter(label =>
+            labelIds.includes(label.id),
+        );
+        return currentLabels;
+    };
+
+    const getPeople = async (questions, organizationId) => {
         const peopleIds = [
             ...new Set(
                 questions.reduce((a1, q) => {

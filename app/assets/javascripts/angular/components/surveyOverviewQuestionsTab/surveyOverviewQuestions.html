@@ -134,34 +134,59 @@
                             ui-sortable-stop="$ctrl.saveQuestionContent(question, question.question_answers)"
                         >
                             <div
-                                class="flex items-center assignment-item no-line"
+                                class="flex flex-column justify-between"
                                 ng-repeat="answer in question.question_answers track by $index"
                             >
-                                <div>
-                                    <a
-                                        class="sort mr3"
-                                        ng-if="$ctrl.directAdminPrivileges"
-                                    >
-                                        <img
-                                            alt="{{
-                                                'surveys:questions.sort' | t
-                                            }}"
-                                            ng-src="{{ $ctrl.icons.sort }}"
+                                <div
+                                    class="flex items-center assignment-item no-line"
+                                >
+                                    <div>
+                                        <a
+                                            class="sort mr3"
+                                            ng-if="$ctrl.directAdminPrivileges"
+                                        >
+                                            <img
+                                                alt="{{
+                                                    'surveys:questions.sort' | t
+                                                }}"
+                                                ng-src="{{ $ctrl.icons.sort }}"
+                                            />
+                                        </a>
+                                    </div>
+                                    <div class="f-grow">
+                                        <input
+                                            class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
+                                            type="text"
+                                            ng-change="$ctrl.updateQuestionAnswer(question, $index)"
+                                            ng-model-options="{ debounce: 750 }"
+                                            ng-model="question.question_answers[$index]"
+                                            ng-readonly="!$ctrl.directAdminPrivileges"
                                         />
-                                    </a>
+                                    </div>
+                                    <div>
+                                        ----
+                                    </div>
                                 </div>
-                                <div class="f-grow">
-                                    <input
-                                        class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
-                                        type="text"
-                                        ng-change="$ctrl.updateQuestionAnswer(question, $index)"
-                                        ng-model-options="{ debounce: 750 }"
-                                        ng-model="question.question_answers[$index]"
-                                        ng-readonly="!$ctrl.directAdminPrivileges"
-                                    />
+                                <div
+                                    class="white-space"
+                                    ng-if="$ctrl.selectedTab === 0"
+                                    ng-repeat="answer in question.question_rules[$index].assign_to track by $index"
+                                >
+                                    <span></span>
                                 </div>
-                                <div>
-                                    ----
+                                <div
+                                    class="white-space"
+                                    ng-if="$ctrl.selectedTab === 2"
+                                    ng-repeat="answer in question.question_rules[$index].assigned_labels track by $index"
+                                >
+                                    <span></span>
+                                </div>
+                                <div
+                                    class="white-space"
+                                    ng-if="$ctrl.selectedTab === 1"
+                                    ng-repeat="answer in $ctrl.filteredNotify(question.question_rules)[$index].assign_to track by $index"
+                                >
+                                    <span></span>
                                 </div>
                             </div>
                             <div class="assignment-item no-line w-94">
@@ -178,19 +203,19 @@
                     <div
                         class="w-48"
                         ng-if="question.question_answers.length"
-                        ng-init="answerTab = 0"
+                        ng-init="answerTab = 0; "
                     >
                         <div class="tabs flex justify-between">
                             <div class="w-49 relative">
                                 <a
                                     class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
-                                    ng-click="answerTab = 0"
-                                    ng-class="{'bb bb--pivot-gray-5': answerTab === 0}"
+                                    ng-click="answerTab = 0; $ctrl.changeTab(0)"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab': answerTab === 0}"
                                 >
                                     {{ 'surveys:questions.autoAssign' | t }}
                                 </a>
-                                <a class="help fr p2" href="">
+                                <a class="help fr p2 sm-help" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
                                         ng-src="{{ $ctrl.icons.help }}"
@@ -201,8 +226,24 @@
                                 <a
                                     class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
-                                    ng-click="answerTab = 1"
-                                    ng-class="{'bb bb--pivot-gray-5' : answerTab === 1}"
+                                    ng-click="answerTab = 2; $ctrl.changeTab(2)"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 2}"
+                                >
+                                    {{ 'surveys:questions.autoLabel' | t }}
+                                </a>
+                                <a class="help fr sm-help" href="">
+                                    <img
+                                        alt="{{ 'general:help' | t }}"
+                                        ng-src="{{ $ctrl.icons.help }}"
+                                    />
+                                </a>
+                            </div>
+                            <div class="w-49 relative">
+                                <a
+                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
+                                    href=""
+                                    ng-click="answerTab = 1; $ctrl.changeTab(1)"
+                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 1}"
                                 >
                                     {{ 'surveys:questions.autoNotify' | t }}
                                 </a>

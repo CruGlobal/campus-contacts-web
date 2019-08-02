@@ -10,6 +10,13 @@ organization-contact-import {
         margin-bottom: 0;
     }
 
+    .white-space {
+        height: 10px;
+        &:last-child {
+            margin: 20px 0px;
+        }
+    }
+
     .header {
         background-color: $pivot-darker-blue;
 
