@@ -107,16 +107,23 @@ export default {
             },
             done: 'Done',
             edit_org_order: 'Edit Organization Order',
-            edit_org_order_help:
-                'Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.',
+            edit_org_order_help: {
+                part1: 'Want to customize your view? Press',
+                part2: 'above to reorder and hide ministries.',
+            },
+
             error_archiving_person:
                 'Error archiving person! Please try again or contact support.',
             loading_contacts: 'Loading Contacts',
             no_contacts: {
                 welcome: 'WELCOME {{name}}!',
             },
-            no_contacts_help:
-                'When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.',
+            no_contacts_help: {
+                part1: 'When you add a new person',
+                part2:
+                    'or someone gets assigned to you, they will show up here.',
+            },
+
             notes_for_new_interaction: 'Notes for new',
             organizations_assigned_to_you: 'Ministries',
             people_assigned_to_you: 'People',
@@ -495,8 +502,13 @@ export default {
             },
             cleanup: {
                 title: 'Organization Cleanup',
-                description:
-                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!",
+                description: {
+                    part1:
+                        "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?",
+                    part2:
+                        ' An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!',
+                },
+
                 archive_alumni: 'Archive Alumni',
                 archive_alumni_description:
                     'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',

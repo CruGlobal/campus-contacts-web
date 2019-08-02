@@ -256,21 +256,19 @@ function surveyOverviewQuestionsController(
         onEnd: () => this.updatePosition(this.surveyQuestions),
     };
 
-    this.updatePosition = questions => {
+    this.updatePosition = async questions => {
         if (!this.directAdminPrivileges) return;
-
-        questions.forEach((q, index) => {
-            if (q.position === index + 1) return;
-
-            q.position = index + 1;
-
-            const { id, position } = q;
-
-            surveyService.updateSurveyQuestion(this.survey.id, {
-                id,
-                position,
-            });
-        });
+        // Use for of loop to allow for async/await so the updateSurveyQuestions function fires in sequence of each other
+        for (let question of questions) {
+            if (question.position !== questions.indexOf(question) + 1) {
+                question.position = questions.indexOf(question) + 1;
+                const { id, position } = question;
+                await surveyService.updateSurveyQuestion(this.survey.id, {
+                    id,
+                    position,
+                });
+            }
+        }
     };
 
     this.addPredefinedQuestion = () => {
