@@ -1,10 +1,17 @@
 <div class="my-people-dashboard">
     <h1 ng-show="$ctrl.loading" ng-click="$ctrl.retry">
-        {{'dashboard.loading_contacts' | t}}
+        {{ 'dashboard.loading_contacts' | t }}
     </h1>
-    <div ng-if="$ctrl.noPeople" class="no-people-message ng-cloak">
+    <div
+        ng-if="$ctrl.noPeople"
+        class="no-people-message ng-cloak flex flex-column items-center"
+    >
         <h1>{{ $ctrl.noPeopleWelcome }}</h1>
-        <p bind-dynamic="'dashboard.no_contacts_help' | t"></p>
+        <span class="measure-wide">
+            <span>{{ 'dashboard.no_contacts_help.part1' | t }}</span>
+            <ng-md-icon icon="addContact"></ng-md-icon>
+            <span>{{ 'dashboard.no_contacts_help.part2' | t }}</span>
+        </span>
     </div>
 
     <div ng-sortable="$ctrl.sortableOptions">
@@ -30,11 +37,10 @@
         </organization>
     </div>
     <div class="no-people-extras">
-        <a
-            href
-            ng-click="$ctrl.editMode = true"
-            class="mt2 edit-mode db"
-            bind-dynamic="'dashboard.edit_org_order_help' | t"
-        ></a>
+        <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode db">
+            <span>{{ 'dashboard.edit_org_order_help.part1' | t }}</span>
+            <ng-md-icon icon="editOrder"></ng-md-icon>
+            <span>{{ 'dashboard.edit_org_order_help.part2' | t }}</span>
+        </a>
     </div>
 </div>
