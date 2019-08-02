@@ -37,8 +37,7 @@ const ChallengesPage = () => {
             return `${startDate} - ${endDate}`;
         };
 
-        const rows = [];
-        data.globalCommunityChallenges.nodes.forEach(
+        return data.globalCommunityChallenges.nodes.map(
             ({
                 id,
                 title,
@@ -46,18 +45,15 @@ const ChallengesPage = () => {
                 completedCount,
                 createdAt,
                 endDate,
-            }) => {
-                const cells = [];
-                cells.push(id);
-                cells.push(title);
-                cells.push(acceptedCount);
-                cells.push(percentage(completedCount, acceptedCount));
-                cells.push(duration(createdAt, endDate));
-                cells.push(range(createdAt, endDate));
-                rows.push(cells);
-            },
+            }) => [
+                id,
+                title,
+                acceptedCount,
+                percentage(completedCount, acceptedCount),
+                duration(createdAt, endDate),
+                range(createdAt, endDate),
+            ],
         );
-        return rows;
     };
 
     const mapPage = data => {
