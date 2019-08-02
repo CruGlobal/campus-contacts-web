@@ -19,9 +19,7 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${
-                        report.impactReport.stageProgressionCount
-                    }`
+                    `Text with value ${report.impactReport.stageProgressionCount}`
                 }
                 variables={{ organizationId: 1 }}
             />,
@@ -38,9 +36,7 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${
-                        report.impactReport.stageProgressionCount
-                    }`
+                    `Text with value ${report.impactReport.stageProgressionCount}`
                 }
                 variables={{ organizationId: 1 }}
             />,
