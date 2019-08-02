@@ -15,7 +15,6 @@ function peopleViewPersonController(
     $filter,
     $scope,
     confirm,
-    jQuery,
     $state,
     periodService,
     personService,
@@ -108,11 +107,7 @@ function peopleViewPersonController(
         if (!really) {
             return;
         }
-        personService
-            .archivePerson(vm.person, vm.organizationId)
-            .catch(function() {
-                jQuery.e($filter('t')('dashboard.error_archiving_person'));
-            });
+        personService.archivePerson(vm.person, vm.organizationId);
     }
 
     // Open the profile page for this person

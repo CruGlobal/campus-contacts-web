@@ -5,7 +5,8 @@ function geoDataService(_) {
         // Return a promise that resolves to the countries list
         getCountries: function() {
             return import(
-                /* webpackChunkName: "country-region-data" */ 'country-region-data'
+                // webpackChunkName: "country-region-data"
+                'country-region-data'
             ).then(function({ default: countries }) {
                 // Manipulate the data schema
                 return countries.map(function(country) {
