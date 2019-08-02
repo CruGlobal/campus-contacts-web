@@ -45,9 +45,15 @@
     }
     .phone-number-column {
         width: 120px;
+        > icon-button {
+            margin: 0;
+        }
     }
     .button-column {
         width: 63px;
+        > icon-button {
+            margin: 0;
+        }
     }
     .survey-column {
         width: 150px;

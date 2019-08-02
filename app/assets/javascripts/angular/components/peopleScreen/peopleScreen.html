@@ -5,7 +5,7 @@
     <div class="people-list-filters bg-pivot-white">
         <div class="header row padded">
             <div class="column filters-header-column">
-                <span>{{'ministries.people.header' | t}}</span>
+                <span>{{ 'ministries.people.header' | t }}</span>
             </div>
         </div>
         <people-filters-panel
@@ -39,7 +39,7 @@
                     ng-click="column.sortable && $ctrl.setSortColumn(column)"
                 >
                     <span>
-                        {{column.label | t}}
+                        {{ column.label | t }}
                     </span>
                     <div
                         class="normal-column sort-order-column"
@@ -80,7 +80,7 @@
                         ($ctrl.surveyId && column.name === 'lastSurvey')
                     "
                 >
-                    {{column.label | t}}
+                    {{ column.label | t }}
                 </span>
                 <div
                     class="normal-column sort-order-column"
@@ -117,16 +117,18 @@
                 class="column survey-column"
                 ng-class="{ 'survey-column-wide': question.style === 'email' }"
                 ng-repeat="question in $ctrl.questions"
-                title="{{question.label}}"
+                title="{{ question.label }}"
             >
-                {{question.label}}
+                {{ question.label }}
             </div>
         </div>
         <div class="selected-people-message" ng-if="$ctrl.selectedCount > 0">
             <img
-                ng-src="{{$ctrl.closeIcon}}"
+                ng-src="{{ $ctrl.closeIcon }}"
                 ng-click="$ctrl.clearSelection()"
-                ng-attr-title="{{ 'ministries.people.clear_selection_hover' | t }}"
+                ng-attr-title="{{
+                    'ministries.people.clear_selection_hover' | t
+                }}"
             />
             <div>
                 {{ 'ministries.people.selected_contacts' | t: { contactCount:
@@ -134,38 +136,38 @@
             </div>
             <div class="space"></div>
             <img
-                ng-src="{{$ctrl.pencilIcon}}"
+                ng-src="{{ $ctrl.pencilIcon }}"
                 ng-click="$ctrl.massEdit()"
                 ng-attr-title="{{ 'ministries.people.mass_edit_hover' | t }}"
             />
             <img
-                ng-src="{{$ctrl.emailIcon}}"
+                ng-src="{{ $ctrl.emailIcon }}"
                 ng-click="$ctrl.sendMessage('email')"
                 ng-attr-title="{{ 'ministries.people.email_hover' | t }}"
             />
             <img
-                ng-src="{{$ctrl.messageIcon}}"
+                ng-src="{{ $ctrl.messageIcon }}"
                 ng-click="$ctrl.sendMessage('sms')"
                 ng-attr-title="{{ 'ministries.people.sms_hover' | t }}"
             />
             <img
-                ng-src="{{$ctrl.downloadCsvIcon}}"
+                ng-src="{{ $ctrl.downloadCsvIcon }}"
                 ng-click="$ctrl.exportPeople()"
                 ng-attr-title="{{ 'ministries.people.export_hover' | t }}"
             />
             <img
-                ng-src="{{$ctrl.transferIcon}}"
+                ng-src="{{ $ctrl.transferIcon }}"
                 ng-click="$ctrl.transferPeople()"
                 ng-attr-title="{{ 'ministries.people.transfer_hover' | t }}"
                 ng-if="$ctrl.isAdmin"
             />
             <img
-                ng-src="{{$ctrl.archiveIcon}}"
+                ng-src="{{ $ctrl.archiveIcon }}"
                 ng-click="$ctrl.archivePeople()"
                 ng-attr-title="{{ 'ministries.people.archive_hover' | t }}"
             />
             <img
-                ng-src="{{$ctrl.deleteIcon}}"
+                ng-src="{{ $ctrl.deleteIcon }}"
                 ng-click="$ctrl.deletePeople()"
                 ng-attr-title="{{ 'ministries.people.delete_hover' | t }}"
             />
