@@ -34,7 +34,10 @@ export default {
             },
             assign_search: {
                 me: 'Me',
-                placeholder: "Type a person's name you want to assign to here",
+                assign_label: 'Type the label you want to assign',
+                assign_person: 'Type the name of a person you want to assign',
+                notify_person:
+                    'Type the name of a person you want us to notify',
             },
             interaction_types: {
                 comment: 'Comment Only',
@@ -927,6 +930,7 @@ export default {
             initiateAssignment: 'Answers to initiate assignment/notifications',
             autoAssign: 'Auto Assign',
             autoNotify: 'Auto Notify',
+            autoLabel: 'Auto Label',
             sendNotificationsViaEmail: 'Send notifications via email',
         },
     },

@@ -247,7 +247,7 @@
                                 >
                                     {{ 'surveys:questions.autoNotify' | t }}
                                 </a>
-                                <a class="help fr" href="">
+                                <a class="help fr sm-help" href="">
                                     <img
                                         alt="{{ 'general:help' | t }}"
                                         ng-src="{{ $ctrl.icons.help }}"
@@ -263,12 +263,40 @@
                                 class="relative"
                                 ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                             >
-                                <assigned-select
+                                <assigned-people-select
                                     action-after-select="$ctrl.addPersonToRule(question, rule)"
                                     assigned="rule.assign_to"
+                                    rule-code="rule.rule_code"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-select>
+                                ></assigned-people-select>
+                                <a
+                                    href
+                                    class="ml3 delete"
+                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                    ng-if="$ctrl.directAdminPrivileges"
+                                >
+                                    <img
+                                        alt="Delete"
+                                        ng-src="{{ $ctrl.icons.trash }}"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                        <div
+                            class="tab-body pa2 ba b--gray-dark"
+                            ng-if="answerTab === 2"
+                        >
+                            <div
+                                class="relative"
+                                ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
+                            >
+                                <assigned-label-select
+                                    action-after-select="$ctrl.addLabelToRule(question, rule)"
+                                    assigned="rule.assigned_labels"
+                                    organization-id="$ctrl.survey.organization_id"
+                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                ></assigned-label-select>
                                 <a
                                     href
                                     class="ml3 delete"
@@ -290,12 +318,12 @@
                                 class="relative"
                                 ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index"
                             >
-                                <assigned-select
+                                <assigned-people-select
                                     action-after-select="$ctrl.addPersonToRule(question, rule)"
                                     assigned="rule.assign_to"
                                     organization-id="$ctrl.survey.organization_id"
                                     disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-select>
+                                ></assigned-people-select>
                                 <a
                                     href
                                     class="ml3 delete"
