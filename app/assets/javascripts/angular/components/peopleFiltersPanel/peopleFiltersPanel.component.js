@@ -45,6 +45,11 @@ function peopleFiltersPanelController(
     };
 
     this.$onChanges = changes => {
+        loadFilterStats();
+        peopleFiltersPanelService.updateFilterCounts(
+            this.organizationId,
+            this.surveyId,
+        );
         if (
             changes.preloadedFilters &&
             changes.preloadedFilters.currentValue !==
@@ -105,7 +110,8 @@ function peopleFiltersPanelController(
                 ...{ [questionId]: questionFilter },
             };
         }
-
+        loadFilterStats();
+        console.log(this.assignmentOptions);
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
         );
@@ -154,6 +160,7 @@ function peopleFiltersPanelController(
                     this.filters.assignedTos,
                     _.map(this.assignmentOptions, 'person_id'),
                 );
+
                 this.filters.groups = _.pick(
                     this.filters.groups,
                     _.map(this.groupOptions, 'group_id'),

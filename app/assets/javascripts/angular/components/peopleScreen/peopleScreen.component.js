@@ -240,6 +240,12 @@ function peopleScreenController(
             organizationOverviewTeamService
                 .loadOrgTeamCount(this.org.id)
                 .then(resp => (this.organizationOverview.team.length = resp));
+            peopleFiltersPanelService
+                .updateFilterCounts(this.org.id, this.surveyId)
+                .then(resp => {
+                    console.log(resp);
+                    this.assignmentOptions = resp;
+                });
         }
     };
 
