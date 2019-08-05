@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const Container = styled.div`
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
     background: ${({ theme }) => theme.colors.white};
     border-radius: 8px;
     padding-left: 24px;
@@ -17,7 +16,7 @@ const Title = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
-    color: ${({ theme }) => theme.colors.highlight};
+    color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 12px;
     margin-top: 0px;
 `;
