@@ -29,7 +29,7 @@ function reportMovementIndicatorsSuggestedActionsController($sce) {
         $sce.trustAsHtml(
             i18next.t('movementIndicators:suggestedActions.applyLabel', {
                 label: action.label.i18n
-                    ? t(action.label.i18n)
+                    ? i18next.t(action.label.i18n)
                     : action.label.name,
             }),
         );
