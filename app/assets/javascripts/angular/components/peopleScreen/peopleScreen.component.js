@@ -209,7 +209,6 @@ function peopleScreenController(
                 this.people = resp.list;
                 this.loadedAll = resp.loadedAll;
                 this.totalCount = resp.total;
-
                 // Set the selected state of all of the new people
                 _.differenceBy(this.people, oldPeople, 'id').forEach(person => {
                     this.multiSelection[person.id] = this.selectAllValue;
@@ -240,13 +239,9 @@ function peopleScreenController(
             organizationOverviewTeamService
                 .loadOrgTeamCount(this.org.id)
                 .then(resp => (this.organizationOverview.team.length = resp));
-            peopleFiltersPanelService
-                .updateFilterCounts(this.org.id, this.surveyId)
-                .then(resp => {
-                    console.log(resp);
-                    this.assignmentOptions = resp;
-                });
         }
+        // Emit to tell the peopleFilterPanel component that the assigned to count could have changed
+        $rootScope.$emit('updateFilterCount');
     };
 
     // Return an array of the ids of all people with the specified selection state (true for selected, false for
@@ -428,8 +423,9 @@ function peopleScreenController(
         $scope.$applyAsync(() => {
             $scope.$emit('checkInfiniteScroll');
         });
-
         $scope.$broadcast('massEditApplied');
+        // Emit to tell the peopleFilterPanel component that the assigned to count could have changed
+        $scope.$emit('updateFilterCount');
     };
 
     // Remove the selected people

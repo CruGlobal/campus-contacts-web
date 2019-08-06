@@ -32,8 +32,6 @@ function peopleFiltersPanelController(
     this.filters = {};
 
     this.$onInit = () => {
-        loadFilterStats();
-
         this.personModifiedUnsubscribe = $rootScope.$on(
             'personModified',
             loadFilterStats,
@@ -42,14 +40,13 @@ function peopleFiltersPanelController(
             'massEditApplied',
             loadFilterStats,
         );
+        // Listen for an update that the filter count may have changed
+        $rootScope.$on('updateFilterCount', () => {
+            loadFilterStats();
+        });
     };
 
     this.$onChanges = changes => {
-        loadFilterStats();
-        peopleFiltersPanelService.updateFilterCounts(
-            this.organizationId,
-            this.surveyId,
-        );
         if (
             changes.preloadedFilters &&
             changes.preloadedFilters.currentValue !==
@@ -110,8 +107,9 @@ function peopleFiltersPanelController(
                 ...{ [questionId]: questionFilter },
             };
         }
+
         loadFilterStats();
-        console.log(this.assignmentOptions);
+
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
         );
