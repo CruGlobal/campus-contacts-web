@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import helpIcon from '../../../../images/icon-help.svg';
 import clockIcon from '../../../../images/icon-clock.svg';
@@ -85,11 +85,11 @@ function surveyOverviewKeywordController(
                     component: 'iconModal',
                     resolve: {
                         icon: () => clockIcon,
-                        title: () => t('surveys:keyword.requested'),
+                        title: () => i18next.t('surveys:keyword.requested'),
                         paragraphs: () => [
-                            t('surveys:keyword.requested_message'),
+                            i18next.t('surveys:keyword.requested_message'),
                         ],
-                        closeLabel: () => t('ok'),
+                        closeLabel: () => i18next.t('ok'),
                     },
                 });
             }, keywordErrorHandler);

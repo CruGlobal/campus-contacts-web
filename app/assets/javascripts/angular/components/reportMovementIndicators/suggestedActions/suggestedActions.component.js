@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import template from './suggestedActions.html';
 
@@ -28,7 +28,7 @@ function reportMovementIndicatorsSuggestedActionsController(httpProxy) {
                 '/movement_indicator_suggestions/fetch',
                 { organization_id: orgId },
                 {
-                    errorMessage: t(
+                    errorMessage: i18next.t(
                         'movementIndicators:suggestedActions.errorLoadingSuggestedActions',
                     ),
                     params: {
