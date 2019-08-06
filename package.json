@@ -55,7 +55,7 @@
         "graphql": "^14.4.2",
         "graphql-tag": "^2.10.1",
         "i18next": "^17.0.8",
-        "iso-639-1": "^2.0.5",
+        "iso-639-1": "^2.1.0",
         "jsonapi-datastore": "^0.4.0-beta",
         "lodash": "^4.17.13",
         "m49-regions": "^1.0.0",
