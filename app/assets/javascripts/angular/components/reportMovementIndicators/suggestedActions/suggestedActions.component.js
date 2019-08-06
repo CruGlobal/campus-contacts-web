@@ -72,7 +72,7 @@ function reportMovementIndicatorsSuggestedActionsController(httpProxy) {
                     reject_ids: [...this.rejectedIds],
                 },
                 {
-                    errorMessage: t(
+                    errorMessage: i18next.t(
                         'movementIndicators:suggestedActions.errorSavingSuggestedActions',
                     ),
                 },
