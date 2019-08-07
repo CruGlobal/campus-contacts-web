@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import template from './suggestedActionsAccordion.html';
 import './suggestedActionsAccordion.scss';
@@ -27,9 +27,9 @@ function reportMovementIndicatorsSuggestedActionsController($sce) {
 
     this.getLabelQuestion = action =>
         $sce.trustAsHtml(
-            t('movementIndicators:suggestedActions.applyLabel', {
+            i18next.t('movementIndicators:suggestedActions.applyLabel', {
                 label: action.label.i18n
-                    ? t(action.label.i18n)
+                    ? i18next.t(action.label.i18n)
                     : action.label.name,
             }),
         );

@@ -1,6 +1,6 @@
 import './surveyOverviewQuestions.scss';
 import _ from 'lodash';
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import copyIcon from '../../../../images/icons/icon-copy.svg';
 import sortIcon from '../../../../images/icons/icon-sort.svg';
@@ -335,21 +335,19 @@ function surveyOverviewQuestionsController(
         onEnd: () => this.updatePosition(this.surveyQuestions),
     };
 
-    this.updatePosition = questions => {
+    this.updatePosition = async questions => {
         if (!this.directAdminPrivileges) return;
-
-        questions.forEach((q, index) => {
-            if (q.position === index + 1) return;
-
-            q.position = index + 1;
-
-            const { id, position } = q;
-
-            surveyService.updateSurveyQuestion(this.survey.id, {
-                id,
-                position,
-            });
-        });
+        // Use for of loop to allow for async/await so the updateSurveyQuestions function fires in sequence of each other
+        for (let question of questions) {
+            if (question.position !== questions.indexOf(question) + 1) {
+                question.position = questions.indexOf(question) + 1;
+                const { id, position } = question;
+                await surveyService.updateSurveyQuestion(this.survey.id, {
+                    id,
+                    position,
+                });
+            }
+        }
     };
 
     this.addPredefinedQuestion = () => {
@@ -399,9 +397,11 @@ function surveyOverviewQuestionsController(
                 component: 'iconModal',
                 resolve: {
                     icon: () => warningIcon,
-                    paragraphs: () => [t('surveys:questions.delete_confirm')],
-                    dismissLabel: () => t('cancel'),
-                    closeLabel: () => t('general.delete'),
+                    paragraphs: () => [
+                        i18next.t('surveys:questions.delete_confirm'),
+                    ],
+                    dismissLabel: () => i18next.t('cancel'),
+                    closeLabel: () => i18next.t('general.delete'),
                 },
             })
             .result.then(() => {
