@@ -33,11 +33,17 @@ function assignedPeopleSelectController(
             assignedPeopleSelectService
                 .searchPeople(search, this.organizationId, requestDeduper)
                 .then(people => {
-                    const assignedPeopleIds = this.assigned.map(({ id }) => id);
-                    // Find all the current people in this.assigned
-                    this.people = people.filter(
-                        person => !assignedPeopleIds.includes(person.id),
-                    );
+                    if (this.assigned === null) {
+                        this.people = people;
+                    } else {
+                        const assignedPeopleIds = this.assigned.map(
+                            ({ id }) => id,
+                        );
+                        // Find all the current people in this.assigned
+                        this.people = people.filter(
+                            person => !assignedPeopleIds.includes(person.id),
+                        );
+                    }
                 });
         });
 
