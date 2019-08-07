@@ -29,8 +29,8 @@ const StepsOfFaithPage = () => {
                 query={GET_IMPACT_REPORT_TAKEN}
                 text={report =>
                     t('stepsOfFaith.taken', {
-                        count: report.impactReport.stepsCount,
-                        people: report.impactReport.receiversCount,
+                        count: report.impactReport.othersStepsCount,
+                        people: report.impactReport.othersStepsReceiversCount,
                     })
                 }
                 variables={{ organizationId: orgId }}
@@ -96,7 +96,7 @@ const StepsOfFaithPage = () => {
                     label={t('stepsOfFaith.legendLabel')}
                     index={t('stage')}
                     variables={{
-                        period: '',
+                        period: 'P10Y',
                         organizationId: orgId,
                         endDate: moment().format(),
                     }}
@@ -126,7 +126,7 @@ const StepsOfFaithPage = () => {
                     label={t('stepsOfFaith.peopleLabel')}
                     index={t('stage')}
                     variables={{
-                        period: '',
+                        period: 'P10Y',
                         organizationId: orgId,
                         endDate: moment().format(),
                     }}

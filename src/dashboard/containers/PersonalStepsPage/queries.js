@@ -11,7 +11,7 @@ const GET_IMPACT_REPORT_MOVED = gql`
 const GET_IMPACT_REPORT_STEPS_TAKEN = gql`
     query impactReport($organizationId: ID!) {
         impactReport(organizationId: $organizationId) {
-            stepOwnersCount
+            personalStepsCount
         }
     }
 `;
@@ -49,7 +49,7 @@ const GET_STAGES_REPORT_STEPS_ADDED = gql`
             stage {
                 name
             }
-            stepsAddedCount
+            personalStepsAddedCount
         }
     }
 `;

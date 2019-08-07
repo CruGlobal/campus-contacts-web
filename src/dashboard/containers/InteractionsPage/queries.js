@@ -1,12 +1,10 @@
 import gql from 'graphql-tag';
 
 const INTERACTIONS_TOTAL_REPORT = gql`
-    query communityReport {
-        communityReport {
-            impactReport {
-                interactionsCount
-                interactionsReceiversCount
-            }
+    query impactReport($organizationId: ID!) {
+        impactReport(organizationId: $organizationId) {
+            interactionsCount
+            interactionsReceiversCount
         }
     }
 `;

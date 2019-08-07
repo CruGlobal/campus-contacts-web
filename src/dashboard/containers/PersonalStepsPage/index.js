@@ -86,14 +86,16 @@ const PersonalStepsPage = () => {
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={data =>
                         data.organizationStagesReport.map(row => ({
-                            [t('personalSteps.label')]: row.stepsAddedCount,
+                            [t(
+                                'personalSteps.label',
+                            )]: row.personalStepsAddedCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
                     label={t('personalSteps.label')}
                     index={t('stage')}
                     variables={{
-                        period: '',
+                        period: 'P10Y',
                         organizationId: orgId,
                         endDate: moment().format(),
                     }}
@@ -103,7 +105,7 @@ const PersonalStepsPage = () => {
                 query={GET_IMPACT_REPORT_MOVED}
                 text={report =>
                     t('personalSteps.reached', {
-                        count: report.impactReport.pathwayMovedCount,
+                        count: report.impactReport.stageProgressionCount,
                     })
                 }
                 variables={{ organizationId: orgId }}
@@ -123,7 +125,7 @@ const PersonalStepsPage = () => {
                     label={t('members')}
                     index={t('stage')}
                     variables={{
-                        period: '',
+                        period: 'P10Y',
                         organizationId: orgId,
                         endDate: moment().format(),
                     }}

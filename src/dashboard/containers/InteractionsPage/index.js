@@ -25,12 +25,8 @@ const InteractionsPage = () => {
                 query={INTERACTIONS_TOTAL_REPORT}
                 text={report =>
                     t('interactions.taken', {
-                        count:
-                            report.communityReport.impactReport
-                                .interactionsCount,
-                        people:
-                            report.communityReport.impactReport
-                                .interactionsReceiversCount,
+                        count: report.impactReport.interactionsCount,
+                        people: report.impactReport.interactionsReceiversCount,
                     })
                 }
                 variables={{ organizationId: orgId }}
