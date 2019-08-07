@@ -1,5 +1,4 @@
 import './organizationOverview.scss';
-import { t } from 'i18next';
 
 import template from './organizationOverview.html';
 

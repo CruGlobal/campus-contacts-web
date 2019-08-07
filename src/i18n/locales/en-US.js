@@ -107,16 +107,23 @@ export default {
             },
             done: 'Done',
             edit_org_order: 'Edit Organization Order',
-            edit_org_order_help:
-                'Want to customize your view? Press <ng-md-icon icon="editOrder"></ng-md-icon> above to reorder and hide ministries.',
+            edit_org_order_help: {
+                part1: 'Want to customize your view? Press',
+                part2: 'above to reorder and hide ministries.',
+            },
+
             error_archiving_person:
                 'Error archiving person! Please try again or contact support.',
             loading_contacts: 'Loading Contacts',
             no_contacts: {
                 welcome: 'WELCOME {{name}}!',
             },
-            no_contacts_help:
-                'When you add a new person <ng-md-icon icon="addContact"></ng-md-icon> or someone gets assigned to you, <br> they will show up here.',
+            no_contacts_help: {
+                part1: 'When you add a new person',
+                part2:
+                    'or someone gets assigned to you, they will show up here.',
+            },
+
             notes_for_new_interaction: 'Notes for new',
             organizations_assigned_to_you: 'Ministries',
             people_assigned_to_you: 'People',
@@ -495,8 +502,13 @@ export default {
             },
             cleanup: {
                 title: 'Organization Cleanup',
-                description:
-                    "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall? <br><br> An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!",
+                description: {
+                    part1:
+                        "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?",
+                    part2:
+                        ' An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!',
+                },
+
                 archive_alumni: 'Archive Alumni',
                 archive_alumni_description:
                     'Go to the Contacts screen, select the people who have graduated from your ministry and label them a "Alumni". If your ministry hasn\'t created that label yet, you can do so by adding it in Manage Labels under Tools. ',
@@ -1140,28 +1152,59 @@ export default {
     },
     insights: {
         members: 'Members',
-        personalSteps: 'Personal Steps of Faith',
         stage: 'Stage',
-        personalStepsCompleted: 'Personal Steps of Faith Completed',
-        personalStepsCompletedSubtitle:
-            'Personal steps of faith completed by community members.',
-        personalStepsAdded: 'Personal Steps of Faith Added',
-        personalStepsAddedSubtitle:
-            'Current total of personal steps of faith added by members by stage.',
-        memberStages: 'Community Member Stages',
-        memberStagesSubtitle: 'Current total number of members by stage.',
-        memberStageChanges: 'Community Member Stage Changes',
-        memberStageChangesSubtitle:
-            'Number of members who changed their stage.',
+        average: 'Average',
         loading: 'Loading...',
+        monthLabel: '1M',
+        yearLabel: '1Y',
+        personalSteps: {
+            label: 'Personal Steps of Faith',
+            legend: 'Steps of Faith',
+            taken:
+                'Together we have taken {{count}} personal steps of faith in {{year}}.',
+            reached:
+                'This year, {{count}} people reached a new stage on their spiritual journey.',
+            completedTotal: 'Total Personal Steps of Faith Completed',
+            completed: 'Personal Steps of Faith Completed',
+            completedSubtitle:
+                'Personal steps of faith completed by community members.',
+            added: 'Personal Steps of Faith Added',
+            addedSubtitle:
+                'Current total of personal steps of faith added by members by stage.',
+            members: 'Community Member Stages',
+            membersSubtitle: 'Current total number of members by stage.',
+        },
+        stepsOfFaith: {
+            taken:
+                'This year, we have taken {{count}} steps of faith with {{people}} people.',
+            totalCompleted: 'Total Steps of Faith Completed',
+            completed: 'Steps of Faith Completed',
+            completedSubtitle:
+                'Total steps of faith completed with others by members since {{organizationName}} was created on {{creationDate}}.',
+            legendLabel: 'Steps of Faith',
+            added: 'Steps of Faith Added',
+            addedSubtitle:
+                'Current total number of steps of faith with others added by members.',
+            reached:
+                'This year, {{count}} people reached a new stage on their spiritual journey.',
+            people: 'People Stages',
+            peopleSubtitle: 'Current total number of people added by members.',
+            peopleLabel: 'People',
+            legend: 'Steps of Faith',
+        },
+        interactions: {
+            totalCompleted: 'Total Interactions Completed',
+            completed: 'Interactions Completed',
+            completedSubtitle: 'Total interactions completed over time.',
+            taken:
+                'This year, we have had {{count}} interactions with {{people}} people.',
+            legend: 'Interactions',
+        },
         tabs: {
             personal: 'Personal Steps',
             steps: 'Steps of Faith',
             interactions: 'Interactions',
             challenges: 'Challenges',
-        },
-        steps: {
-            title: 'Steps of Faith',
         },
     },
 };
