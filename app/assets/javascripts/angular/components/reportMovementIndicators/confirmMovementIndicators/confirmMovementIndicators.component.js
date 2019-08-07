@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import i18next from 'i18next';
 import _ from 'lodash';
 
 import './confirmMovementIndicators.scss';
@@ -21,73 +21,73 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
     this.fieldMap = {
         interactions: {
             spiritualConversations: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.spiritualConversations.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.spiritualConversations.tooltip',
                 ),
                 apiField: 'spiritual_conversation_interactions',
             },
             personalEvangelism: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.personalEvangelism.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.personalEvangelism.tooltip',
                 ),
                 apiField: 'gospel_presentation_interactions',
             },
             personalEvangelismDecisions: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.personalEvangelismDecisions.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.personalEvangelismDecisions.tooltip',
                 ),
                 apiField: 'prayed_to_receive_christ_interactions',
             },
             holySpiritPresentations: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.holySpiritPresentations.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.holySpiritPresentations.tooltip',
                 ),
                 apiField: 'holy_spirit_presentation_interactions',
             },
             groupEvangelism: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.groupEvangelism.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.groupEvangelism.tooltip',
                 ),
                 apiField: 'group_evangelism',
             },
             groupEvangelismDecisions: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.groupEvangelismDecisions.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.groupEvangelismDecisions.tooltip',
                 ),
                 apiField: 'group_evangelism_decision',
             },
             mediaExposures: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.mediaExposures.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.mediaExposures.tooltip',
                 ),
                 apiField: 'media_exposure',
             },
             mediaExposureDecisions: {
-                label: t(
+                label: i18next.t(
                     'movementIndicators:interactions.mediaExposureDecisions.label',
                 ),
-                tooltip: t(
+                tooltip: i18next.t(
                     'movementIndicators:interactions.mediaExposureDecisions.tooltip',
                 ),
                 apiField: 'media_exposure_decisions',
@@ -95,35 +95,47 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
         },
         students: {
             involved: {
-                label: t('movementIndicators:students.involved.label'),
-                tooltip: t('movementIndicators:students.involved.tooltip'),
+                label: i18next.t('movementIndicators:students.involved.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:students.involved.tooltip',
+                ),
                 apiField: 'students_involved',
             },
             engaged: {
-                label: t('movementIndicators:students.engaged.label'),
-                tooltip: t('movementIndicators:students.engaged.tooltip'),
+                label: i18next.t('movementIndicators:students.engaged.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:students.engaged.tooltip',
+                ),
                 apiField: 'students_engaged',
             },
             leaders: {
-                label: t('movementIndicators:students.leaders.label'),
-                tooltip: t('movementIndicators:students.leaders.tooltip'),
+                label: i18next.t('movementIndicators:students.leaders.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:students.leaders.tooltip',
+                ),
                 apiField: 'student_leaders',
             },
         },
         faculty: {
             involved: {
-                label: t('movementIndicators:faculty.involved.label'),
-                tooltip: t('movementIndicators:faculty.involved.tooltip'),
+                label: i18next.t('movementIndicators:faculty.involved.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:faculty.involved.tooltip',
+                ),
                 apiField: 'faculty_involved',
             },
             engaged: {
-                label: t('movementIndicators:faculty.engaged.label'),
-                tooltip: t('movementIndicators:faculty.engaged.tooltip'),
+                label: i18next.t('movementIndicators:faculty.engaged.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:faculty.engaged.tooltip',
+                ),
                 apiField: 'faculty_engaged',
             },
             leaders: {
-                label: t('movementIndicators:faculty.leaders.label'),
-                tooltip: t('movementIndicators:faculty.leaders.tooltip'),
+                label: i18next.t('movementIndicators:faculty.leaders.label'),
+                tooltip: i18next.t(
+                    'movementIndicators:faculty.leaders.tooltip',
+                ),
                 apiField: 'faculty_leaders',
             },
         },
@@ -140,7 +152,7 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
                 `/movement_indicators/${orgId}`,
                 {},
                 {
-                    errorMessage: t(
+                    errorMessage: i18next.t(
                         'movementIndicators:confirmIndicators.errorLoadingIndicators',
                     ),
                 },
@@ -185,15 +197,15 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
                 icon: () => warningIcon,
                 reducedPadding: () => true,
                 paragraphs: () => [
-                    t('movementIndicators:confirmModal.description'),
+                    i18next.t('movementIndicators:confirmModal.description'),
                 ],
-                dismissLabel: () => t('goBack'),
-                closeLabel: () => t('submit'),
+                dismissLabel: () => i18next.t('goBack'),
+                closeLabel: () => i18next.t('submit'),
             },
         }).result;
         try {
             await httpProxy.put(`/movement_indicators/${this.orgId}`, data, {
-                errorMessage: t(
+                errorMessage: i18next.t(
                     'movementIndicators:confirmIndicators.errorSavingIndicators',
                 ),
                 ignoreFilter: () => false, // Needed to get the httpProxy to return a promise on failure instead of waiting indefinitely for toast to be clicked to retry the failed request
@@ -202,8 +214,9 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
                 component: 'iconModal',
                 resolve: {
                     icon: () => checkIcon,
-                    title: () => t('movementIndicators:successModal.title'),
-                    closeLabel: () => t('ok'),
+                    title: () =>
+                        i18next.t('movementIndicators:successModal.title'),
+                    closeLabel: () => i18next.t('ok'),
                 },
             }).result;
             this.next();
@@ -212,11 +225,12 @@ function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
                 component: 'iconModal',
                 resolve: {
                     icon: () => warningIcon,
-                    title: () => t('movementIndicators:errorModal.title'),
+                    title: () =>
+                        i18next.t('movementIndicators:errorModal.title'),
                     paragraphs: () => [
-                        t('movementIndicators:errorModal.description'),
+                        i18next.t('movementIndicators:errorModal.description'),
                     ],
-                    closeLabel: () => t('ok'),
+                    closeLabel: () => i18next.t('ok'),
                 },
             }).result;
         }

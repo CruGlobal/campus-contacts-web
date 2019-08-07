@@ -1,5 +1,5 @@
 import './messageModal.scss';
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import template from './messageModal.html';
 
@@ -55,7 +55,7 @@ function messageModalController(
         var parts = [];
 
         parts.push(
-            t('messages.recipients.contacts', {
+            i18next.t('messages.recipients.contacts', {
                 contact_count: vm.resolve.selection.totalSelectedPeople,
             }),
         );
@@ -65,12 +65,14 @@ function messageModalController(
             vm.resolve.selection.orgId,
         ).name;
         parts.push(
-            t('messages.recipients.organization', { name: organizationName }),
+            i18next.t('messages.recipients.organization', {
+                name: organizationName,
+            }),
         );
 
         if (filters.searchString) {
             parts.push(
-                t('messages.recipients.search', {
+                i18next.t('messages.recipients.search', {
                     search: filters.searchString,
                 }),
             );
@@ -109,9 +111,12 @@ function messageModalController(
                     })
                     .join(', ');
                 parts.push(
-                    t('messages.recipients.' + _.snakeCase(definition.name), {
-                        names: names,
-                    }),
+                    i18next.t(
+                        'messages.recipients.' + _.snakeCase(definition.name),
+                        {
+                            names: names,
+                        },
+                    ),
                 );
             }
         });

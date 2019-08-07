@@ -87,7 +87,7 @@ function myPeopleDashboardController(
 
     function loadReports() {
         var people = JsonApiDataStore.store.findAll('person');
-        var organizations = JsonApiDataStore.store.findAll('organization');
+        var organizations = vm.organizations;
 
         reportsService
             .loadOrganizationReports(organizations)

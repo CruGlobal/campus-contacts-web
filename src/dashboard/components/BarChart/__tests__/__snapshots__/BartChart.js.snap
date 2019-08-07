@@ -1,17 +1,682 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<BartChart /> should render properly 1`] = `
+exports[`<BarChart /> should render properly 1`] = `
 <div>
-  <div
-    style="width: 100%; height: 100%;"
-  />
+  <div>
+    <div
+      class="css-1a3wyyp"
+    >
+      <div
+        style="position: relative;"
+      >
+        <svg
+          height="400"
+          role="img"
+          width="848"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            fill="transparent"
+            height="400"
+            width="848"
+          />
+          <g
+            transform="translate(30,30)"
+          >
+            <g />
+            <g
+              transform="translate(0,280)"
+            >
+              <line
+                style="stroke: transparent; stroke-width: 1;"
+                x1="0"
+                x2="818"
+                y1="0"
+                y2="0"
+              />
+            </g>
+            <g
+              transform="translate(0,0)"
+            >
+              <line
+                style="stroke: transparent; stroke-width: 1;"
+                x1="0"
+                x2="0"
+                y1="0"
+                y2="280"
+              />
+            </g>
+            <g />
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div
+      class="css-1hr8g7h"
+    />
+  </div>
 </div>
 `;
 
-exports[`<BartChart /> should render properly with data, key, index by 1`] = `
+exports[`<BarChart /> should render properly with data, key, index by 1`] = `
 <div>
-  <div
-    style="width: 100%; height: 100%;"
-  />
+  <div>
+    <div
+      class="css-1a3wyyp"
+    >
+      <div
+        style="position: relative;"
+      >
+        <svg
+          height="400"
+          role="img"
+          width="848"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            fill="transparent"
+            height="400"
+            width="848"
+          />
+          <g
+            transform="translate(30,30)"
+          >
+            <g>
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="280"
+                y2="280"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="261"
+                y2="261"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="243"
+                y2="243"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="224"
+                y2="224"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="205"
+                y2="205"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="187"
+                y2="187"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="168"
+                y2="168"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="149"
+                y2="149"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="131"
+                y2="131"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="112"
+                y2="112"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="93"
+                y2="93"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="75"
+                y2="75"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="56"
+                y2="56"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="37"
+                y2="37"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="19"
+                y2="19"
+              />
+              <line
+                opacity="1"
+                stroke="#ECEEF2"
+                stroke-width="1"
+                x1="0"
+                x2="818"
+                y1="0"
+                y2="0"
+              />
+            </g>
+            <g
+              transform="translate(0,280)"
+            >
+              <g
+                style="opacity: 1;"
+                transform="translate(169,0)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="text-before-edge"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="middle"
+                  transform="translate(0,20) rotate(0)"
+                >
+                  2
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(409,0)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="text-before-edge"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="middle"
+                  transform="translate(0,20) rotate(0)"
+                >
+                  3
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(649,0)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="text-before-edge"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="middle"
+                  transform="translate(0,20) rotate(0)"
+                >
+                  4
+                </text>
+              </g>
+              <line
+                style="stroke: transparent; stroke-width: 1;"
+                x1="0"
+                x2="818"
+                y1="0"
+                y2="0"
+              />
+            </g>
+            <g
+              transform="translate(0,0)"
+            >
+              <g
+                style="opacity: 1;"
+                transform="translate(0,280)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  0
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,261)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  0.2
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,243)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  0.4
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,224)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  0.6
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,205)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  0.8
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,187)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  1
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,168)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  1.2
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,149)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  1.4
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,131)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  1.6
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,112)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  1.8
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,93)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  2
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,75)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  2.2
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,56)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  2.4
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,37)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  2.6
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,19)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  2.8
+                </text>
+              </g>
+              <g
+                style="opacity: 1;"
+                transform="translate(0,0)"
+              >
+                <line
+                  style="stroke: #777777; stroke-width: 1;"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="0"
+                />
+                <text
+                  dominant-baseline="central"
+                  style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                  text-anchor="end"
+                  transform="translate(-5,0) rotate(0)"
+                >
+                  3
+                </text>
+              </g>
+              <line
+                style="stroke: transparent; stroke-width: 1;"
+                x1="0"
+                x2="0"
+                y1="0"
+                y2="280"
+              />
+            </g>
+            <g>
+              <g
+                transform="translate(97, 187)"
+              >
+                <rect
+                  fill="#3CC8E6"
+                  height="93"
+                  rx="0"
+                  ry="0"
+                  stroke="#3CC8E6"
+                  stroke-width="0"
+                  width="144"
+                />
+              </g>
+              <g
+                transform="translate(337, 93)"
+              >
+                <rect
+                  fill="#3CC8E6"
+                  height="187"
+                  rx="0"
+                  ry="0"
+                  stroke="#3CC8E6"
+                  stroke-width="0"
+                  width="144"
+                />
+              </g>
+              <g
+                transform="translate(577, 0)"
+              >
+                <rect
+                  fill="#3CC8E6"
+                  height="280"
+                  rx="0"
+                  ry="0"
+                  stroke="#3CC8E6"
+                  stroke-width="0"
+                  width="144"
+                />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div
+      class="css-1hr8g7h"
+    />
+  </div>
 </div>
 `;
