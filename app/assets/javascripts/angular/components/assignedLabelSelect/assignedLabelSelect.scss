@@ -11,6 +11,7 @@ assigned-label-select .ui-select-bootstrap {
         padding: 0 5px;
         background-color: $pivot-dark-blue !important;
         color: $white;
+        text-transform: none !important;
     }
 
     .ui-select-choices-row.active > span {
