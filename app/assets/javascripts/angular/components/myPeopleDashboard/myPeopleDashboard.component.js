@@ -15,6 +15,7 @@ function myPeopleDashboardController(
     $scope,
     $log,
     $document,
+    $window,
     JsonApiDataStore,
     _,
     myPeopleDashboardService,
@@ -41,7 +42,15 @@ function myPeopleDashboardController(
 
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
-        loadAndSyncData();
+        await loadAndSyncData();
+
+        if (
+            // If the logged in person has no organization permissions, redirect the user to download mobile app
+            loggedInPerson.person.organizational_permissions.length === 0
+        ) {
+            // This page we redirect to will change
+            $window.location.href = 'https://get.missionhub.com/newmobileuser/';
+        }
 
         angular.element($document).on('people::personAdded', loadAndSyncData);
         vm.toggleOrgVisibility =
@@ -78,7 +87,7 @@ function myPeopleDashboardController(
 
     function loadReports() {
         var people = JsonApiDataStore.store.findAll('person');
-        var organizations = JsonApiDataStore.store.findAll('organization');
+        var organizations = vm.organizations;
 
         reportsService
             .loadOrganizationReports(organizations)

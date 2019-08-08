@@ -1156,28 +1156,59 @@ export default {
     },
     insights: {
         members: 'Members',
-        personalSteps: 'Personal Steps of Faith',
         stage: 'Stage',
-        personalStepsCompleted: 'Personal Steps of Faith Completed',
-        personalStepsCompletedSubtitle:
-            'Personal steps of faith completed by community members.',
-        personalStepsAdded: 'Personal Steps of Faith Added',
-        personalStepsAddedSubtitle:
-            'Current total of personal steps of faith added by members by stage.',
-        memberStages: 'Community Member Stages',
-        memberStagesSubtitle: 'Current total number of members by stage.',
-        memberStageChanges: 'Community Member Stage Changes',
-        memberStageChangesSubtitle:
-            'Number of members who changed their stage.',
+        average: 'Average',
         loading: 'Loading...',
+        monthLabel: '1M',
+        yearLabel: '1Y',
+        personalSteps: {
+            label: 'Personal Steps of Faith',
+            legend: 'Steps of Faith',
+            taken:
+                'Together we have taken {{count}} personal steps of faith in {{year}}.',
+            reached:
+                'This year, {{count}} people reached a new stage on their spiritual journey.',
+            completedTotal: 'Total Personal Steps of Faith Completed',
+            completed: 'Personal Steps of Faith Completed',
+            completedSubtitle:
+                'Personal steps of faith completed by community members.',
+            added: 'Personal Steps of Faith Added',
+            addedSubtitle:
+                'Current total of personal steps of faith added by members by stage.',
+            members: 'Community Member Stages',
+            membersSubtitle: 'Current total number of members by stage.',
+        },
+        stepsOfFaith: {
+            taken:
+                'This year, we have taken {{count}} steps of faith with {{people}} people.',
+            totalCompleted: 'Total Steps of Faith Completed',
+            completed: 'Steps of Faith Completed',
+            completedSubtitle:
+                'Total steps of faith completed with others by members since {{organizationName}} was created on {{creationDate}}.',
+            legendLabel: 'Steps of Faith',
+            added: 'Steps of Faith Added',
+            addedSubtitle:
+                'Current total number of steps of faith with others added by members.',
+            reached:
+                'This year, {{count}} people reached a new stage on their spiritual journey.',
+            people: 'People Stages',
+            peopleSubtitle: 'Current total number of people added by members.',
+            peopleLabel: 'People',
+            legend: 'Steps of Faith',
+        },
+        interactions: {
+            totalCompleted: 'Total Interactions Completed',
+            completed: 'Interactions Completed',
+            completedSubtitle: 'Total interactions completed over time.',
+            taken:
+                'This year, we have had {{count}} interactions with {{people}} people.',
+            legend: 'Interactions',
+        },
         tabs: {
             personal: 'Personal Steps',
             steps: 'Steps of Faith',
             interactions: 'Interactions',
             challenges: 'Challenges',
-        },
-        steps: {
-            title: 'Steps of Faith',
         },
     },
 };

@@ -15,10 +15,6 @@ export const globalMocks = {
     Boolean: () => faker.random.boolean(),
     ID: () => nextId(),
 
-    OrganizationStageReport: () => ({
-        memberCount: faker.random.number(),
-    }),
-
     PageInfo: () => ({
         endCursor: null,
         hasNextPage: false,

@@ -1,6 +1,6 @@
 import './surveyOverviewQuestions.scss';
 import _ from 'lodash';
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import copyIcon from '../../../../images/icons/icon-copy.svg';
 import sortIcon from '../../../../images/icons/icon-sort.svg';
@@ -406,9 +406,11 @@ function surveyOverviewQuestionsController(
                 component: 'iconModal',
                 resolve: {
                     icon: () => warningIcon,
-                    paragraphs: () => [t('surveys:questions.delete_confirm')],
-                    dismissLabel: () => t('cancel'),
-                    closeLabel: () => t('general.delete'),
+                    paragraphs: () => [
+                        i18next.t('surveys:questions.delete_confirm'),
+                    ],
+                    dismissLabel: () => i18next.t('cancel'),
+                    closeLabel: () => i18next.t('general.delete'),
                 },
             })
             .result.then(() => {
