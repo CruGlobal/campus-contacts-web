@@ -73,7 +73,6 @@ function surveyOverviewQuestionsController(
     ];
     this.people = [];
     this.labels = [];
-    this.selectedTab = 0;
 
     const loadSurveyData = async () => {
         const { data } = await surveyService.getSurveyQuestions(this.survey.id);
@@ -81,14 +80,6 @@ function surveyOverviewQuestionsController(
         this.labels = await getLabel(data, this.survey.organization_id);
         rebuildQuestions(data);
         $scope.$apply();
-    };
-
-    this.changeTab = tab => {
-        this.selectedTab = tab;
-    };
-
-    this.filteredNotify = question => {
-        return question.filter(question => question.rule_code === 'AUTONOTIFY');
     };
 
     const getLabel = async (questions, organizationId) => {

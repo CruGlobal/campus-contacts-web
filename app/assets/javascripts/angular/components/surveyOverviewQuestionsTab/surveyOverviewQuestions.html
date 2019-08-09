@@ -129,7 +129,7 @@
                             {{ 'surveys:questions.initiateAssignment' | t }}
                         </p>
                         <div
-                            class="assignments pb2"
+                            class="assignments pb2 question-container"
                             ng-sortable="$ctrl.sortableOptions"
                             ui-sortable-stop="$ctrl.saveQuestionContent(question, question.question_answers)"
                         >
@@ -167,27 +167,6 @@
                                         ----
                                     </div>
                                 </div>
-                                <div
-                                    class="white-space"
-                                    ng-if="$ctrl.selectedTab === 0"
-                                    ng-repeat="answer in question.question_rules[$index].assign_to track by $index"
-                                >
-                                    <span></span>
-                                </div>
-                                <div
-                                    class="white-space"
-                                    ng-if="$ctrl.selectedTab === 2"
-                                    ng-repeat="answer in question.question_rules[$index].assigned_labels track by $index"
-                                >
-                                    <span></span>
-                                </div>
-                                <div
-                                    class="white-space"
-                                    ng-if="$ctrl.selectedTab === 1"
-                                    ng-repeat="answer in $ctrl.filteredNotify(question.question_rules)[$index].assign_to track by $index"
-                                >
-                                    <span></span>
-                                </div>
                             </div>
                             <div class="assignment-item no-line w-94">
                                 <button
@@ -210,7 +189,7 @@
                                 <a
                                     class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
-                                    ng-click="answerTab = 0; $ctrl.changeTab(0)"
+                                    ng-click="answerTab = 0"
                                     ng-class="{'bb bb--pivot-gray-5 selected-tab': answerTab === 0}"
                                 >
                                     {{ 'surveys:questions.autoAssign' | t }}
@@ -226,7 +205,7 @@
                                 <a
                                     class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
-                                    ng-click="answerTab = 2; $ctrl.changeTab(2)"
+                                    ng-click="answerTab = 2"
                                     ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 2}"
                                 >
                                     {{ 'surveys:questions.autoLabel' | t }}
@@ -242,7 +221,7 @@
                                 <a
                                     class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
                                     href=""
-                                    ng-click="answerTab = 1; $ctrl.changeTab(1)"
+                                    ng-click="answerTab = 1"
                                     ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 1}"
                                 >
                                     {{ 'surveys:questions.autoNotify' | t }}
@@ -256,7 +235,7 @@
                             </div>
                         </div>
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="tab-body pa2 ba b--gray-dark flex flex-column"
                             ng-if="answerTab === 0"
                         >
                             <div
@@ -284,7 +263,7 @@
                             </div>
                         </div>
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="tab-body pa2 ba b--gray-dark flex flex-column"
                             ng-if="answerTab === 2"
                         >
                             <div
@@ -311,7 +290,7 @@
                             </div>
                         </div>
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="tab-body pa2 ba b--gray-dark flex flex-column"
                             ng-if="answerTab === 1"
                         >
                             <div
