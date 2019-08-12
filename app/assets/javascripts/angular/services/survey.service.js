@@ -162,7 +162,7 @@ function surveyService(
                         id: r.id,
                         type: 'question_rule',
                         attributes: {
-                            label_ids: null,
+                            label_ids: r.label_ids,
                             organization_ids: null,
                             people_ids: r.people_ids,
                             rule_code: r.rule_code,

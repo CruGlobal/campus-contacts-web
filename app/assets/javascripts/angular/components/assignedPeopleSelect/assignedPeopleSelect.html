@@ -6,10 +6,14 @@
     ng-disabled="$ctrl.disabled"
 >
     <ui-select-match
-        placeholder="{{ 'application.assign_search.placeholder' | t }}"
+        placeholder="{{
+            $ctrl.ruleCode === 'AUTOASSIGN'
+                ? ('application.assign_search.assign_person' | t)
+                : ('application.assign_search.notify_person' | t)
+        }}"
     >
         <span>
-            {{$item | personName}}
+            {{ $item | personName }}
             <span ng-if="$ctrl.isMe($item)"
                 >({{ 'application.assign_search.me' | t }})</span
             >
@@ -17,7 +21,7 @@
     </ui-select-match>
     <ui-select-choices repeat="person in $ctrl.people track by person.id">
         <span>
-            {{person | personName}}
+            {{ person | personName }}
             <span ng-if="$ctrl.isMe(person)"
                 >({{ 'application.assign_search.me' | t }})</span
             >

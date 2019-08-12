@@ -1,8 +1,8 @@
 angular
     .module('missionhubApp')
-    .factory('assignedSelectService', assignedSelectService);
+    .factory('assignedPeopleSelectService', assignedPeopleSelectService);
 
-function assignedSelectService(
+function assignedPeopleSelectService(
     httpProxy,
     modelsService,
     loggedInPerson,
@@ -30,7 +30,6 @@ function assignedSelectService(
                 )
                 .then(httpProxy.extractModels);
         },
-
         // Determine whether a person is the currently logged-in person
         isMe: function(person) {
             return loggedInPerson.person === person;
