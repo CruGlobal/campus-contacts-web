@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import addIcon from '../../../../images/icons/icon-add.svg';
 import editIcon from '../../../../images/icons/icon-edit.svg';
@@ -80,16 +80,19 @@ function orgManagementSubOrgController(
                 resolve: {
                     icon: () => warningIcon,
                     title: () =>
-                        t('ministries:organizations.deleteConfirmModal.title', {
-                            org_name: org.name,
-                        }),
+                        i18next.t(
+                            'ministries:organizations.deleteConfirmModal.title',
+                            {
+                                org_name: org.name,
+                            },
+                        ),
                     paragraphs: () => [
-                        t(
+                        i18next.t(
                             'ministries:organizations.deleteConfirmModal.description',
                         ),
                     ],
-                    dismissLabel: () => t('cancel'),
-                    closeLabel: () => t('general.delete'),
+                    dismissLabel: () => i18next.t('cancel'),
+                    closeLabel: () => i18next.t('general.delete'),
                 },
             })
             .result.then(() => {

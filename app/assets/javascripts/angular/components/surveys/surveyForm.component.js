@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { t } from 'i18next';
+import i18next from 'i18next';
 
 import './surveyFormPublic.scss';
 
@@ -42,7 +42,7 @@ function surveyFormController($window, surveyService) {
         //add undefined option
         if (includeEmptyOption) {
             choices.unshift({
-                name: t('select'),
+                name: i18next.t('select'),
             });
         }
 
