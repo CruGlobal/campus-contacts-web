@@ -32,6 +32,7 @@ function peopleFiltersPanelController(
     this.filters = {};
 
     this.$onInit = () => {
+        loadFilterStats();
         this.personModifiedUnsubscribe = $rootScope.$on(
             'personModified',
             loadFilterStats,
@@ -41,7 +42,7 @@ function peopleFiltersPanelController(
             loadFilterStats,
         );
         // Listen for an update that the filter count may have changed
-        $rootScope.$on('updateFilterCount', () => {
+        this.updateFilterCount = $rootScope.$on('updateFilterCount', () => {
             loadFilterStats();
         });
     };
@@ -72,6 +73,7 @@ function peopleFiltersPanelController(
     this.$onDestroy = () => {
         this.personModifiedUnsubscribe();
         this.massEditAppliedUnsubscribe();
+        this.updateFilterCount();
     };
 
     this.hideNonFilterableQuestionAnswerResponse = question => {
@@ -107,8 +109,6 @@ function peopleFiltersPanelController(
                 ...{ [questionId]: questionFilter },
             };
         }
-
-        loadFilterStats();
 
         this.filtersApplied = peopleFiltersPanelService.filtersHasActive(
             getNormalizedFilters(),
