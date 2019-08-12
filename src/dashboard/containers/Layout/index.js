@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
 import PersonalStepsPage from '../PersonalStepsPage';
 import StepsOfFaithPage from '../StepsOfFaithPage';
+import InteractionsPage from '../InteractionsPage';
 
 const LayoutWrapper = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ const Layout = () => {
                     />
                     <Route
                         path="/ministries/:id/insights/interactions"
-                        component={StepsOfFaithPage}
+                        component={InteractionsPage}
                     />
                     <Route
                         path="/ministries/:id/insights/challenges"
