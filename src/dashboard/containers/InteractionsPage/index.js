@@ -29,16 +29,16 @@ const InteractionsPage = () => {
                         people: report.impactReport.interactionsReceiversCount,
                     })
                 }
-                variables={{ organizationId: orgId }}
+                variables={{ communityId: orgId }}
             />
             <Card title={t('interactions.totalCompleted')}>
                 <StagesSummary
                     query={INTERACTIONS_TOTAL_COMPLETED_REPORT}
                     variables={{
-                        organizationId: orgId,
+                        communityIds: [orgId],
                     }}
                     mapData={data =>
-                        data.communityReport.interactions.map(entry => ({
+                        data.communitiesReport[0].interactions.map(entry => ({
                             stage: entry.interactionType.name,
                             icon: entry.interactionType.name
                                 .toLowerCase()
@@ -55,19 +55,20 @@ const InteractionsPage = () => {
             >
                 <FiltersChart
                     query={INTERACTIONS_COMPLETED_REPORT}
+                    variables={{
+                        communityIds: [orgId],
+                    }}
                     mapData={data =>
-                        data.communityReport.dayReport.map(row => ({
-                            ['total']: row.interactionCount,
-                            ['stages']: row.interactions.map(stage => ({
+                        data.communitiesReport[0].daysReport.map(row => ({
+                            ['total']: row.interactions,
+                            ['stages']: row.interactionResults.map(stage => ({
                                 name: stage.interactionType.name,
-                                count: stage.interactionCount,
+                                count: stage.count,
                             })),
-                            ['date']: row.date.substring(0, 2),
+                            ['date']: row.date,
                         }))
                     }
-                    countAverage={data =>
-                        Math.floor(_.sumBy(data, 'total') / data.length)
-                    }
+                    currentDate={moment()}
                     label={t('interactions.legend')}
                 />
             </Card>

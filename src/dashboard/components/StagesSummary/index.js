@@ -61,23 +61,23 @@ const Icon = styled.div`
         background-image: url(${guiding});
     }
 
-    &.discipleship-conversations {
+    &.discipleship-conversation {
         background-image: url(${discipleship});
     }
 
-    &.gospel-presentations {
+    &.personal-evangelism {
         background-image: url(${gospel});
     }
 
-    &.holy-spirit-conversations {
+    &.holy-spirit-presentation {
         background-image: url(${holySpirit});
     }
 
-    &.personal-decisions {
+    &.personal-evangelism-decisions {
         background-image: url(${personal});
     }
 
-    &.spiritual-conversations {
+    &.spiritual-conversation {
         background-image: url(${spiritual});
     }
 `;
@@ -116,8 +116,19 @@ const StagesSummary = ({ query, variables, mapData }) => {
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
     });
+    const days = dates => {
+        return Math.round(
+            moment.duration(dates.endDate.diff(dates.startDate)).asDays(),
+        );
+    };
     const { t } = useTranslation('insights');
-    const { data, loading } = useQuery(query, { variables });
+    const { data, loading } = useQuery(query, {
+        variables: {
+            ...variables,
+            endDate: dates.endDate.toDate(),
+            period: `P${days(dates)}D`,
+        },
+    });
 
     if (loading) {
         return <SummaryWrapper>{t('loading')}</SummaryWrapper>;

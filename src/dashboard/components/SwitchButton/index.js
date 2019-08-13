@@ -37,8 +37,14 @@ const Button = styled.div`
     }
 `;
 
-const SwitchButton = ({ leftLabel, rightLabel, onLeftClick, onRightClick }) => {
-    const [isLeftActive, setLeftActive] = useState(true);
+const SwitchButton = ({
+    leftLabel,
+    rightLabel,
+    onLeftClick,
+    onRightClick,
+    isMonth,
+}) => {
+    const [isLeftActive, setLeftActive] = useState(isMonth);
 
     const leftClicked = () => {
         setLeftActive(true);

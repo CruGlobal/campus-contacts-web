@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const GET_IMPACT_REPORT_TAKEN = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
+    query impactReport($communityId: ID!) {
+        impactReport(communityId: $communityId) {
             othersStepsCount
             othersStepsReceiversCount
         }
@@ -10,25 +10,45 @@ const GET_IMPACT_REPORT_TAKEN = gql`
 `;
 
 const GET_TOTAL_STEPS_COMPLETED_REPORT = gql`
-    query communityReport {
-        communityReport {
-            communityStagesReport {
-                pathwayStage
-                otherStepsCompletedCount
+    query communityStagesReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
+            stagesReport {
+                othersStepsCompletedCount
+                stage {
+                    name
+                }
             }
         }
     }
 `;
 
 const GET_STEPS_COMPLETED_REPORT = gql`
-    query communityReport {
-        communityReport {
-            dayReport {
+    query communityDayReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
+            daysReport {
                 date
-                stepsWithOthersStepsCompletedCount
-                communityStagesReport {
-                    pathwayStage
-                    stepsWithOthersStepsCompletedCount
+                othersStepsCount
+                stageResults {
+                    othersSteps
+                    stage {
+                        name
+                    }
                 }
             }
         }
@@ -36,46 +56,50 @@ const GET_STEPS_COMPLETED_REPORT = gql`
 `;
 
 const GET_STAGES_REPORT = gql`
-    query organizationStagesReport(
+    query communityStagesReport(
         $period: String!
-        $organizationId: ID!
+        $communityIds: [ID!]
         $endDate: ISO8601DateTime!
     ) {
-        organizationStagesReport(
+        communitiesReport(
             period: $period
-            organizationId: $organizationId
+            communityIds: $communityIds
             endDate: $endDate
         ) {
-            stage {
-                name
+            stagesReport {
+                othersStepsAddedCount
+                stage {
+                    name
+                }
             }
-            othersStepsAddedCount
         }
     }
 `;
 
 const GET_IMPACT_REPORT_REACHED = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
+    query impactReport($communityId: ID!) {
+        impactReport(communityId: $communityId) {
             stepsCount
         }
     }
 `;
 
 const GET_STAGES_PEOPLE_REPORT = gql`
-    query organizationStagesReport(
+    query communityStagesReport(
         $period: String!
-        $organizationId: ID!
+        $communityIds: [ID!]
         $endDate: ISO8601DateTime!
     ) {
-        organizationStagesReport(
+        communitiesReport(
             period: $period
-            organizationId: $organizationId
+            communityIds: $communityIds
             endDate: $endDate
         ) {
-            memberCount
-            stage {
-                name
+            stagesReport {
+                memberCount
+                stage {
+                    name
+                }
             }
         }
     }

@@ -4,7 +4,6 @@ import { Bar } from '@nivo/bar';
 import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
 import { line } from 'd3-shape';
-import moment from 'moment';
 import styled from '@emotion/styled';
 
 import SwitchButton from '../SwitchButton';
@@ -110,7 +109,9 @@ const BarChart = props => {
         indexBy,
         average,
         tooltipBreakdown,
-        onDatesChanged,
+        onFilterChanged,
+        index,
+        filterType,
         datesFilter,
         legendLabel,
     } = props;
@@ -118,29 +119,24 @@ const BarChart = props => {
     const { t } = useTranslation('insights');
 
     const [filter, setFilter] = useState({
-        type: 'month',
-        index: 0,
-        datesRange: [moment().subtract(1, 'month'), moment()],
+        type: filterType,
+        index: props.index,
     });
 
-    const AverageLine = ({ bars, xScale, yScale }) => {
+    const AverageLine = ({ yScale, width }) => {
         if (!average) {
             return null;
         }
 
+        const averageLine = [{ x: 0, y: average }, { x: width, y: average }];
+
         const lineGenerator = line()
-            .x(d => {
-                const val = xScale(d.data.index) + 2 * d.width + 50;
-                if (!val) {
-                    return 0;
-                }
-                return val;
-            })
-            .y(d => yScale(average));
+            .x(d => d.x)
+            .y(d => yScale(d.y));
 
         return (
             <path
-                d={lineGenerator(bars)}
+                d={lineGenerator(averageLine)}
                 fill="none"
                 strokeDasharray="10, 5"
                 strokeWidth="2"
@@ -149,28 +145,23 @@ const BarChart = props => {
         );
     };
 
-    const updateDateRange = (index, type) => {
-        const datesRange = [
-            moment().subtract(index + 1, type),
-            moment().subtract(index, type),
-        ];
-
-        setFilter({ type, index, datesRange });
-        onDatesChanged(datesRange);
+    const updateFilter = (index, type) => {
+        setFilter({ type, index });
+        onFilterChanged(type, index);
     };
 
     const onToggleFilterClick = filterType => {
-        updateDateRange(0, filterType);
+        updateFilter(0, filterType);
     };
 
     const onNextRangeClick = () => {
         const newIndex = filter.index - 1 >= 0 ? filter.index - 1 : 0;
-        updateDateRange(newIndex, filter.type);
+        updateFilter(newIndex, filter.type);
     };
 
     const onPreviousRangeClick = () => {
         const newIndex = filter.index + 1;
-        updateDateRange(newIndex, filter.type);
+        updateFilter(newIndex, filter.type);
     };
 
     const tooltip = options => {
@@ -252,6 +243,7 @@ const BarChart = props => {
             <Footer>
                 {datesFilter ? (
                     <SwitchButton
+                        isMonth={filter.type === 'month'}
                         leftLabel={t('monthLabel')}
                         rightLabel={t('yearLabel')}
                         onLeftClick={() => onToggleFilterClick('month')}
@@ -277,8 +269,9 @@ BarChart.propTypes = {
     title: PropTypes.string,
     subtitle: PropTypes.string,
     children: PropTypes.element,
+    index: PropTypes.number,
     datesFilter: PropTypes.bool,
-    onDatesChanged: PropTypes.func,
+    onFilterChanged: PropTypes.func,
     legendLabel: PropTypes.string,
     tooltipBreakdown: PropTypes.bool,
 };

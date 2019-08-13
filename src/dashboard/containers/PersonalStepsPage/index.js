@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import _ from 'lodash';
 
 import Card from '../../components/Card';
 import AppContext from '../../appContext';
@@ -33,24 +32,24 @@ const PersonalStepsPage = () => {
                         year: moment().format('YYYY'),
                     })
                 }
-                variables={{ organizationId: orgId }}
+                variables={{
+                    communityId: orgId,
+                }}
             />
             <Card title={t('personalSteps.completedTotal')}>
                 <StagesSummary
                     query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
                     variables={{
-                        organizationId: orgId,
+                        communityIds: [orgId],
                     }}
                     mapData={data =>
-                        data.communityReport.communityStagesReport.map(
-                            entry => ({
-                                stage: entry.pathwayStage,
-                                icon: entry.pathwayStage
-                                    .toLowerCase()
-                                    .replace(' ', '-'),
-                                count: entry.personalStepsCompletedCount,
-                            }),
-                        )
+                        data.communitiesReport[0].stagesReport.map(entry => ({
+                            stage: entry.stage.name,
+                            icon: entry.stage.name
+                                .toLowerCase()
+                                .replace(' ', '-'),
+                            count: entry.personalStepsCompletedCount,
+                        }))
                     }
                 />
             </Card>
@@ -60,21 +59,20 @@ const PersonalStepsPage = () => {
             >
                 <FiltersChart
                     query={GET_STEPS_COMPLETED_REPORT}
+                    variables={{
+                        communityIds: [orgId],
+                    }}
                     mapData={data =>
-                        data.communityReport.dayReport.map(row => ({
-                            ['total']: row.personalStepsCompletedCount,
-                            ['stages']: row.communityStagesReport.map(
-                                stage => ({
-                                    name: stage.pathwayStage,
-                                    count: stage.personalStepsCompletedCount,
-                                }),
-                            ),
-                            ['date']: row.date.substring(0, 2),
+                        data.communitiesReport[0].daysReport.map(row => ({
+                            ['total']: row.personalStepsCount,
+                            ['stages']: row.stageResults.map(stage => ({
+                                name: stage.stage.name,
+                                count: stage.personalSteps,
+                            })),
+                            ['date']: row.date,
                         }))
                     }
-                    countAverage={data =>
-                        Math.floor(_.sumBy(data, 'total') / data.length)
-                    }
+                    currentDate={moment()}
                     label={t('personalSteps.legend')}
                 />
             </Card>
@@ -85,10 +83,9 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={data =>
-                        data.organizationStagesReport.map(row => ({
-                            [t(
-                                'personalSteps.label',
-                            )]: row.personalStepsAddedCount,
+                        data.communitiesReport[0].stagesReport.map(row => ({
+                            [t('personalSteps.label')]: row.stage
+                                .personalStepsAddedCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }
@@ -96,7 +93,7 @@ const PersonalStepsPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        organizationId: orgId,
+                        communityIds: [orgId],
                         endDate: moment().format(),
                     }}
                 />
@@ -108,7 +105,7 @@ const PersonalStepsPage = () => {
                         count: report.impactReport.stageProgressionCount,
                     })
                 }
-                variables={{ organizationId: orgId }}
+                variables={{ communityId: orgId }}
             />
             <Card
                 title={t('personalSteps.members')}
@@ -117,7 +114,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={data =>
-                        data.organizationStagesReport.map(row => ({
+                        data.communitiesReport[0].stagesReport.map(row => ({
                             [t('members')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
@@ -126,7 +123,7 @@ const PersonalStepsPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        organizationId: orgId,
+                        communityIds: [orgId],
                         endDate: moment().format(),
                     }}
                 />

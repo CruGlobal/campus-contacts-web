@@ -1,68 +1,82 @@
 import gql from 'graphql-tag';
 
 const GET_IMPACT_REPORT_MOVED = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
+    query impactReport($communityId: ID!) {
+        impactReport(communityId: $communityId) {
             stageProgressionCount
         }
     }
 `;
 
 const GET_IMPACT_REPORT_STEPS_TAKEN = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
+    query impactReport($communityId: ID!) {
+        impactReport(communityId: $communityId) {
             personalStepsCount
         }
     }
 `;
 
 const GET_STAGES_REPORT_MEMBER_COUNT = gql`
-    query organizationStagesReport(
+    query communityStagesReport(
         $period: String!
-        $organizationId: ID!
+        $communityIds: [ID!]
         $endDate: ISO8601DateTime!
     ) {
-        organizationStagesReport(
+        communitiesReport(
             period: $period
-            organizationId: $organizationId
+            communityIds: $communityIds
             endDate: $endDate
         ) {
-            memberCount
-            stage {
-                name
+            stagesReport {
+                memberCount
+                stage {
+                    name
+                }
             }
         }
     }
 `;
 
 const GET_STAGES_REPORT_STEPS_ADDED = gql`
-    query organizationStagesReport(
+    query communityStagesReport(
         $period: String!
-        $organizationId: ID!
+        $communityIds: [ID!]
         $endDate: ISO8601DateTime!
     ) {
-        organizationStagesReport(
+        communitiesReport(
             period: $period
-            organizationId: $organizationId
+            communityIds: $communityIds
             endDate: $endDate
         ) {
-            stage {
-                name
+            stagesReport {
+                personalStepsAddedCount
+                stage {
+                    name
+                }
             }
-            personalStepsAddedCount
         }
     }
 `;
 
 const GET_STEPS_COMPLETED_REPORT = gql`
-    query communityReport {
-        communityReport {
-            dayReport {
+    query communityDayReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
+            daysReport {
                 date
-                personalStepsCompletedCount
-                communityStagesReport {
-                    pathwayStage
-                    personalStepsCompletedCount
+                personalStepsCount
+                stageResults {
+                    personalSteps
+                    stage {
+                        name
+                    }
                 }
             }
         }
@@ -70,11 +84,21 @@ const GET_STEPS_COMPLETED_REPORT = gql`
 `;
 
 const GET_TOTAL_STEPS_COMPLETED_SUMMARY = gql`
-    query communityReport {
-        communityReport {
-            communityStagesReport {
-                pathwayStage
+    query communityStagesReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
+            stagesReport {
                 personalStepsCompletedCount
+                stage {
+                    name
+                }
             }
         }
     }

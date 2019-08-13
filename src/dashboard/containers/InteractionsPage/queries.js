@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const INTERACTIONS_TOTAL_REPORT = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
+    query impactReport($communityId: ID!) {
+        impactReport(communityId: $communityId) {
             interactionsCount
             interactionsReceiversCount
         }
@@ -10,8 +10,16 @@ const INTERACTIONS_TOTAL_REPORT = gql`
 `;
 
 const INTERACTIONS_TOTAL_COMPLETED_REPORT = gql`
-    query communityReport {
-        communityReport {
+    query communityStagesReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
             interactions {
                 interactionCount
                 interactionType {
@@ -23,13 +31,21 @@ const INTERACTIONS_TOTAL_COMPLETED_REPORT = gql`
 `;
 
 const INTERACTIONS_COMPLETED_REPORT = gql`
-    query communityReport {
-        communityReport {
-            dayReport {
+    query communityDayReport(
+        $period: String!
+        $communityIds: [ID!]
+        $endDate: ISO8601DateTime!
+    ) {
+        communitiesReport(
+            period: $period
+            communityIds: $communityIds
+            endDate: $endDate
+        ) {
+            daysReport {
                 date
-                interactionCount
-                interactions {
-                    interactionCount
+                interactions
+                interactionResults {
+                    count
                     interactionType {
                         name
                     }

@@ -33,24 +33,22 @@ const StepsOfFaithPage = () => {
                         people: report.impactReport.othersStepsReceiversCount,
                     })
                 }
-                variables={{ organizationId: orgId }}
+                variables={{ communityId: orgId }}
             />
             <Card title={t('stepsOfFaith.totalCompleted')}>
                 <StagesSummary
                     query={GET_TOTAL_STEPS_COMPLETED_REPORT}
                     variables={{
-                        organizationId: orgId,
+                        communityIds: [orgId],
                     }}
                     mapData={data =>
-                        data.communityReport.communityStagesReport.map(
-                            entry => ({
-                                stage: entry.pathwayStage,
-                                icon: entry.pathwayStage
-                                    .toLowerCase()
-                                    .replace(' ', '-'),
-                                count: entry.otherStepsCompletedCount,
-                            }),
-                        )
+                        data.communitiesReport[0].stagesReport.map(entry => ({
+                            stage: entry.stage.name,
+                            icon: entry.stage.name
+                                .toLowerCase()
+                                .replace(' ', '-'),
+                            count: entry.otherStepsCompletedCount,
+                        }))
                     }
                 />
             </Card>
@@ -60,22 +58,20 @@ const StepsOfFaithPage = () => {
             >
                 <FiltersChart
                     query={GET_STEPS_COMPLETED_REPORT}
+                    variables={{
+                        communityIds: [orgId],
+                    }}
                     mapData={data =>
-                        data.communityReport.dayReport.map(row => ({
-                            ['total']: row.stepsWithOthersStepsCompletedCount,
-                            ['stages']: row.communityStagesReport.map(
-                                stage => ({
-                                    name: stage.pathwayStage,
-                                    count:
-                                        stage.stepsWithOthersStepsCompletedCount,
-                                }),
-                            ),
-                            ['date']: row.date.substring(0, 2),
+                        data.communitiesReport[0].daysReport.map(row => ({
+                            ['total']: row.othersStepsCount,
+                            ['stages']: row.stageResults.map(stage => ({
+                                name: stage.othersSteps,
+                                count: stage.stage.name,
+                            })),
+                            ['date']: row.date,
                         }))
                     }
-                    countAverage={data =>
-                        Math.floor(_.sumBy(data, 'total') / data.length)
-                    }
+                    currentDate={moment()}
                     label={t('stepsOfFaith.legend')}
                 />
             </Card>
@@ -86,7 +82,7 @@ const StepsOfFaithPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT}
                     mapData={data =>
-                        data.organizationStagesReport.map(row => ({
+                        data.communitiesReport[0].stagesReport.map(row => ({
                             [t(
                                 'stepsOfFaith.legendLabel',
                             )]: row.othersStepsAddedCount,
@@ -97,7 +93,7 @@ const StepsOfFaithPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        organizationId: orgId,
+                        communityIds: [orgId],
                         endDate: moment().format(),
                     }}
                 />
@@ -109,7 +105,7 @@ const StepsOfFaithPage = () => {
                         count: report.impactReport.stepsCount,
                     })
                 }
-                variables={{ organizationId: orgId }}
+                variables={{ communityId: orgId }}
             />
             <Card
                 title={t('stepsOfFaith.people')}
@@ -118,7 +114,7 @@ const StepsOfFaithPage = () => {
                 <StepsChart
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={data =>
-                        data.organizationStagesReport.map(row => ({
+                        data.communitiesReport[0].stagesReport.map(row => ({
                             [t('stepsOfFaith.peopleLabel')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
@@ -127,7 +123,7 @@ const StepsOfFaithPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        organizationId: orgId,
+                        communityIds: [orgId],
                         endDate: moment().format(),
                     }}
                 />
