@@ -1,6 +1,6 @@
 @import '../../../../stylesheets/variables/colors';
 
-assigned-select .ui-select-bootstrap {
+assigned-people-select .ui-select-bootstrap {
     ul.ui-select-choices-content {
         padding: 0;
         list-style: none;
@@ -9,10 +9,14 @@ assigned-select .ui-select-bootstrap {
     .ui-select-match-item {
         height: initial;
         padding: 0 5px;
+        background-color: $pivot-dark-blue !important;
+        color: $white;
+        text-transform: none !important;
     }
 
     .ui-select-choices-row.active > span {
-        background-color: $pivot-dark-blue;
+        background-color: $gray-5;
+        color: $gray-1;
     }
 
     .ui-select-choices-row:hover {
