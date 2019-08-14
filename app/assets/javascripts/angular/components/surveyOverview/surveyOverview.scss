@@ -327,7 +327,7 @@ organization-contact-import {
         }
 
         .sm-help {
-            margin-top: -11px;
+            margin-top: -18px;
             max-width: 75%;
             > img {
                 max-width: 75%;
@@ -345,8 +345,8 @@ organization-contact-import {
 
     .tab-body {
         margin-top: -1px;
-        border-bottom-left-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
+        border-top-color: #fff;
+        border-bottom-color: #fff;
 
         .ui-select-container {
             background: #fff;
@@ -365,12 +365,35 @@ organization-contact-import {
 
     /* Assignments */
 
-    .question-container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding-bottom: 30px;
+    .question-row {
+        margin-top: -12px;
+    }
+    .question-row.assignments {
+        &:last-child {
+            .tab-body {
+                border-bottom-color: #a0a2a6;
+                border-bottom-left-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+        }
+    }
+
+    .notification-container {
+        margin-top: -12px;
+        margin-left: auto;
+        border-bottom: 1px solid #a0a2a6;
+        border-left: 1px solid #a0a2a6;
+        border-right: 1px solid #a0a2a6;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+    }
+
+    .questions-container {
+        margin-top: -15px;
+    }
+
+    .unselected-tab {
+        border-bottom: 1px solid #a0a2a6;
     }
 
     .assignment-item {
