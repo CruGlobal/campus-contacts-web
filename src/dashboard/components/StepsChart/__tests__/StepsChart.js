@@ -12,15 +12,17 @@ const QUERY = gql`
         $organizationId: ID!
         $endDate: ISO8601DateTime!
     ) {
-        organizationStagesReport(
+        communitiesReport(
             period: $period
-            organizationId: $organizationId
+            communityIds: $communityIds
             endDate: $endDate
         ) {
-            stage {
-                name
+            stagesReport {
+                stepsAddedCount
+                stage {
+                    name
+                }
             }
-            stepsAddedCount
         }
     }
 `;
@@ -31,7 +33,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.organizationStagesReport.map(row => ({
+                    data.communitiesReport[0].stagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -52,7 +54,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.organizationStagesReport.map(row => ({
+                    data.communitiesReport[0].stagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -68,18 +70,22 @@ describe('<StepsChart />', () => {
             {
                 mocks: {
                     Query: () => ({
-                        organizationStagesReport: () => [
+                        communitiesReport: () => [
                             {
-                                stepsAddedCount: 20,
-                                stage: {
-                                    name: 'NO STAGE',
-                                },
-                            },
-                            {
-                                stepsAddedCount: 25,
-                                stage: {
-                                    name: 'UNINTERESTED',
-                                },
+                                stagesReport: () => [
+                                    {
+                                        stepsAddedCount: 20,
+                                        stage: {
+                                            name: 'NO STAGE',
+                                        },
+                                    },
+                                    {
+                                        stepsAddedCount: 25,
+                                        stage: {
+                                            name: 'UNINTERESTED',
+                                        },
+                                    },
+                                ],
                             },
                         ],
                     }),

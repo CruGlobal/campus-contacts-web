@@ -6,10 +6,10 @@ exports[`<SwitchButton /> should render properly 1`] = `
     class="css-1s7lydy"
   >
     <div
-      class="active css-n7kdmv"
+      class=" css-n7kdmv"
     />
     <div
-      class=" css-n7kdmv"
+      class="active css-n7kdmv"
     />
   </div>
 </div>
