@@ -28,7 +28,7 @@ const PersonalStepsPage = () => {
                 query={GET_IMPACT_REPORT_STEPS_TAKEN}
                 text={report =>
                     t('personalSteps.taken', {
-                        count: report.impactReport.stepOwnersCount,
+                        count: report.impactReport.personalStepsCompletedCount,
                         year: moment().format('YYYY'),
                     })
                 }

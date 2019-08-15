@@ -11,7 +11,7 @@ const GET_IMPACT_REPORT_MOVED = gql`
 const GET_IMPACT_REPORT_STEPS_TAKEN = gql`
     query impactReport($communityId: ID!) {
         impactReport(communityId: $communityId) {
-            personalStepsCount
+            personalStepsCompletedCount
         }
     }
 `;

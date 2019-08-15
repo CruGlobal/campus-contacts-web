@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 const GET_IMPACT_REPORT_TAKEN = gql`
     query impactReport($communityId: ID!) {
         impactReport(communityId: $communityId) {
-            othersStepsCount
-            othersStepsReceiversCount
+            othersStepsCompletedCount
+            othersStepsReceiversCompletedCount
         }
     }
 `;

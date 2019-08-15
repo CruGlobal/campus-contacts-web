@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import _ from 'lodash';
 
 import BarChart from '../BarChart';
-import _ from 'lodash';
 
 const FiltersChart = ({
     query,

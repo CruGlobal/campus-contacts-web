@@ -29,8 +29,10 @@ const StepsOfFaithPage = () => {
                 query={GET_IMPACT_REPORT_TAKEN}
                 text={report =>
                     t('stepsOfFaith.taken', {
-                        count: report.impactReport.othersStepsCount,
-                        people: report.impactReport.othersStepsReceiversCount,
+                        count: report.impactReport.othersStepsCompletedCount,
+                        people:
+                            report.impactReport
+                                .othersStepsReceiversCompletedCount,
                     })
                 }
                 variables={{ communityId: orgId }}
