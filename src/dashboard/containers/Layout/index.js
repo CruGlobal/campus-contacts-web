@@ -6,6 +6,7 @@ import Navigation from '../Navigation';
 import PersonalStepsPage from '../PersonalStepsPage';
 import StepsOfFaithPage from '../StepsOfFaithPage';
 import InteractionsPage from '../InteractionsPage';
+import ChallengesPage from '../ChallengesPage';
 
 const LayoutWrapper = styled.div`
     display: flex;
@@ -43,7 +44,7 @@ const Layout = () => {
                     />
                     <Route
                         path="/ministries/:id/insights/challenges"
-                        component={StepsOfFaithPage}
+                        component={ChallengesPage}
                     />
                 </Content>
             </Router>

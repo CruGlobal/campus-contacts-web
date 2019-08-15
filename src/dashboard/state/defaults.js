@@ -1545,6 +1545,7 @@ export default {
             __typename: 'CommunityStagesReport',
             interactionsCount: 256,
             interactionsReceiversCount: 63,
+            challengesCount: 513,
         },
         interactions: [
             {

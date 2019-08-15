@@ -20,7 +20,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         class="css-140lofm"
       />
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1ohf0ui"
@@ -43,7 +43,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         Personal steps of faith completed by community members.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div>
           Loading...
@@ -64,7 +64,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         Current total of personal steps of faith added by members by stage.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1a3wyyp"
@@ -92,7 +92,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         Current total number of members by stage.
       </h2>
       <div
-        class="css-1izl14o"
+        class="css-rr4yq"
       >
         <div
           class="css-1a3wyyp"

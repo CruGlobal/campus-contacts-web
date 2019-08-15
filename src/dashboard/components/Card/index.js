@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withTheme } from 'emotion-theming';
 
 const Container = styled.div`
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
@@ -30,25 +31,26 @@ const Subtitle = styled.h2`
 `;
 
 const Content = styled.div`
-    padding: 25px;
+    padding: ${props => (props.noPadding ? 0 : '25px')};
+    margin: ${props => (props.noPadding ? '0 -24px' : '0')};
 `;
 
 const Card = props => {
-    const { title, subtitle, children } = props;
-
+    const { title, subtitle, children, noPadding } = props;
     return (
         <Container>
             <Title>{title}</Title>
             <Subtitle>{subtitle}</Subtitle>
-            <Content>{children}</Content>
+            <Content noPadding={noPadding}>{children}</Content>
         </Container>
     );
 };
 
-export default Card;
+export default withTheme(Card);
 
 Card.propTypes = {
     title: PropTypes.string,
     subtitle: PropTypes.string,
     children: PropTypes.element,
+    noPadding: PropTypes.bool,
 };
