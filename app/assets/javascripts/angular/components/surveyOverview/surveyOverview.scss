@@ -367,13 +367,17 @@ organization-contact-import {
 
     .question-row {
         margin-top: -12px;
-    }
-    .question-row.assignments {
+        &:first-child {
+            margin-top: 0;
+        }
         &:last-child {
-            .tab-body {
+            .assignments.tab-body {
                 border-bottom-color: #a0a2a6;
                 border-bottom-left-radius: 0.25rem;
                 border-bottom-right-radius: 0.25rem;
+            }
+            .assignments-notify.tab-body {
+                border-bottom-color: #fff;
             }
         }
     }
@@ -386,6 +390,9 @@ organization-contact-import {
         border-right: 1px solid #a0a2a6;
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
+        label {
+            margin-right: auto;
+        }
     }
 
     .questions-container {
