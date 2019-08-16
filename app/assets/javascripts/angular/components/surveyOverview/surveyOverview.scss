@@ -367,12 +367,20 @@ organization-contact-import {
 
     .question-row {
         margin-top: -12px;
+        .assignments.tab-body {
+            border-top: none;
+            border-bottom: none;
+        }
+        .assignments-notify.tab-body {
+            border-top: none;
+            border-bottom: none;
+        }
         &:first-child {
             margin-top: 0;
         }
         &:last-child {
             .assignments.tab-body {
-                border-bottom-color: #a0a2a6;
+                border-bottom: 1px solid #a0a2a6;
                 border-bottom-left-radius: 0.25rem;
                 border-bottom-right-radius: 0.25rem;
             }
