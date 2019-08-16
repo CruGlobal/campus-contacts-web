@@ -329,6 +329,7 @@ export default {
             completed: 'Completed',
             contacted: 'Contacted',
             do_not_contact: 'Do Not Contact',
+            do_not_email: 'Do Not Email',
             uncontacted: 'Uncontacted',
             archived: 'Archived',
         },
