@@ -3362,9 +3362,10 @@ countrily-data@^1.0.1:
   dependencies:
     lodash "^4.17.4"
 
-country-region-data@^1.4.4:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/country-region-data/-/country-region-data-1.4.5.tgz#a4c6638c4fab3200a43d915a6e86c03c209cd85f"
+country-region-data@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/country-region-data/-/country-region-data-1.4.6.tgz#a9f41ac520a86ea0b5b7d18b3d0ae38c23dba9b7"
+  integrity sha512-HUGINgqYW3xv8IN+9MXyvvFZisG7OpGNfAiV5dvtZ4VOI6ezsfReOWErcgH9rFt7EXmgO2n5sYdFZZa9HD6g+w==
 
 create-ecdh@^4.0.0:
   version "4.0.3"
