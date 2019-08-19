@@ -229,7 +229,7 @@
                                         </div>
                                         <div
                                             class="relative flex pb2 w-48"
-                                            ng-if="rule.trigger_keywords === answer"
+                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' }).indexOf(rule) === question.question_answers.indexOf(answer)"
                                             ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                                         >
                                             <div
@@ -307,7 +307,7 @@
                                         </div>
                                         <div
                                             class="relative flex pb2 w-48"
-                                            ng-if="rule.trigger_keywords === answer"
+                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' }).indexOf(rule) === question.question_answers.indexOf(answer)"
                                             ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
                                         >
                                             <div
@@ -384,7 +384,7 @@
                                         </div>
                                         <div
                                             class="relative flex pb2 w-48"
-                                            ng-if="rule.trigger_keywords === answer"
+                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' }).indexOf(rule) === question.question_answers.indexOf(answer)"
                                             ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index"
                                         >
                                             <div
