@@ -227,25 +227,21 @@
                                                 ----
                                             </div>
                                         </div>
-                                        <div
-                                            class="relative flex pb2 w-48"
-                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' }).indexOf(rule) === question.question_answers.indexOf(answer)"
-                                            ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
-                                        >
+                                        <div class="relative flex pb2 w-48">
                                             <div
                                                 class="assignments tab-body pa2 ba b--gray-dark w-100"
                                             >
                                                 <assigned-people-select
-                                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                                    assigned="rule.assign_to"
-                                                    rule-code="rule.rule_code"
+                                                    action-after-select="$ctrl.addPersonToRule(question, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].assign_to"
+                                                    rule-code="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].rule_code"
                                                     organization-id="$ctrl.survey.organization_id"
-                                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                                 ></assigned-people-select>
                                                 <a
                                                     href
                                                     class="ml3 delete"
-                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index], $index);"
                                                     ng-if="$ctrl.directAdminPrivileges"
                                                 >
                                                     <img
@@ -305,24 +301,20 @@
                                                 ----
                                             </div>
                                         </div>
-                                        <div
-                                            class="relative flex pb2 w-48"
-                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' }).indexOf(rule) === question.question_answers.indexOf(answer)"
-                                            ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
-                                        >
+                                        <div class="relative flex pb2 w-48">
                                             <div
                                                 class="assignments tab-body pa2 ba b--gray-dark w-100"
                                             >
                                                 <assigned-label-select
-                                                    action-after-select="$ctrl.addLabelToRule(question, rule)"
-                                                    assigned="rule.assigned_labels"
+                                                    action-after-select="$ctrl.addLabelToRule(question, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].assigned_labels"
                                                     organization-id="$ctrl.survey.organization_id"
-                                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                                 ></assigned-label-select>
                                                 <a
                                                     href
                                                     class="ml3 delete"
-                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index], $index);"
                                                     ng-if="$ctrl.directAdminPrivileges"
                                                 >
                                                     <img
@@ -382,24 +374,20 @@
                                                 ----
                                             </div>
                                         </div>
-                                        <div
-                                            class="relative flex pb2 w-48"
-                                            ng-if="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' }).indexOf(rule) === question.question_answers.indexOf(answer)"
-                                            ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index"
-                                        >
+                                        <div class="relative flex pb2 w-48">
                                             <div
                                                 class="assignments-notify tab-body pa2 ba b--gray-dark w-100"
                                             >
                                                 <assigned-people-select
-                                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                                    assigned="rule.assign_to"
+                                                    action-after-select="$ctrl.addPersonToRule(question, (question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index].assign_to"
                                                     organization-id="$ctrl.survey.organization_id"
-                                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
                                                 ></assigned-people-select>
                                                 <a
                                                     href
                                                     class="ml3 delete"
-                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index], $index);"
                                                     ng-if="$ctrl.directAdminPrivileges"
                                                 >
                                                     <img
