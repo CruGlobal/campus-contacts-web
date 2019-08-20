@@ -96,7 +96,7 @@ module.exports = (env = {}) => {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.(ts|js)x?$/,
                     exclude: /node_modules/,
                     use: [
                         {
@@ -175,6 +175,7 @@ module.exports = (env = {}) => {
         },
         resolve: {
             modules: [path.resolve(__dirname, 'app'), 'node_modules'],
+            extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx'],
         },
         devtool: 'source-map',
         devServer: {
