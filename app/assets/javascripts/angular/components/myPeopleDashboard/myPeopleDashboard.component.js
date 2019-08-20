@@ -85,11 +85,11 @@ function myPeopleDashboardController(
     }
 
     function loadReports() {
-        const people = JsonApiDataStore.store.findAll('person');
+        const people = vm.organizations.flatMap(({ people }) => people);
         const organizations = vm.organizations;
 
         const limitLength = 100;
-        const warnLength = 50;
+        const warnLength = 25;
 
         if (people.length > limitLength || organizations.length > limitLength) {
             $log.error(
