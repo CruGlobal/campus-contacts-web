@@ -23,15 +23,17 @@
             <div class="button-column">
                 <ng-md-icon
                     class="icon-chip actionable primary-action pivot-white"
-                    icon="{{$ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'}}"
+                    icon="{{
+                        $ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'
+                    }}"
                     size="12"
                     ng-click="$ctrl.editTags()"
-                    title="{{'people.index.manage_labels' | t}}"
+                    title="{{ 'people.index.manage_labels' | t }}"
                 ></ng-md-icon>
             </div>
             <div class="form-group">
                 <label>
-                    <span class="label">{{'people.index.labels' | t}}</span>
+                    <span class="label">{{ 'people.index.labels' | t }}</span>
                     <div>
                         <span
                             class="pill label-pill"
@@ -41,7 +43,7 @@
                             orgLabel.label.name }}
                         </span>
                         <span ng-if="$ctrl.personTab.orgLabels.length === 0"
-                            >{{'people.show.no_labels' | t}}</span
+                            >{{ 'people.show.no_labels' | t }}</span
                         >
                     </div>
                 </label>
@@ -54,15 +56,19 @@
             <div class="button-column">
                 <ng-md-icon
                     class="icon-chip actionable primary-action pivot-white"
-                    icon="{{$ctrl.personTab.groupMemberships.length === 0 ? 'add' : 'edit'}}"
+                    icon="{{
+                        $ctrl.personTab.groupMemberships.length === 0
+                            ? 'add'
+                            : 'edit'
+                    }}"
                     ng-click="$ctrl.editGroups()"
                     size="12"
-                    title="{{'people.index.manage_groups' | t}}"
+                    title="{{ 'people.index.manage_groups' | t }}"
                 ></ng-md-icon>
             </div>
             <div class="form-group">
                 <label>
-                    <span class="label">{{'nav.groups' | t}}</span>
+                    <span class="label">{{ 'nav.groups' | t }}</span>
                     <div>
                         <span
                             class="pill label-pill"
@@ -72,7 +78,7 @@
                         </span>
                         <span
                             ng-if="$ctrl.personTab.groupMemberships.length === 0"
-                            >{{'people.show.no_groups' | t}}</span
+                            >{{ 'people.show.no_groups' | t }}</span
                         >
                     </div>
                 </label>
@@ -84,7 +90,7 @@
         ng-if="$ctrl.isContact() && $ctrl.personTab.organizationId"
     >
         <label class="form-control-select">
-            <span class="label">{{'contact.followup_status' | t}}</span>
+            <span class="label">{{ 'contact.followup_status' | t }}</span>
             <select
                 ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
                 ng-model="$ctrl.personTab.orgPermission.followup_status"
@@ -96,7 +102,7 @@
     </div>
     <div class="form-group order-3" ng-if="$ctrl.personTab.organizationId">
         <label>
-            <span class="label">{{'contact.assigned_to' | t}}</span>
+            <span class="label">{{ 'contact.assigned_to' | t }}</span>
             <assigned-select
                 assigned="$ctrl.personTab.assignedTo"
                 organization-id="$ctrl.personTab.organizationId"
@@ -109,25 +115,34 @@
     >
         <label
             class="form-control-select"
-            ng-class="{'disabled': $ctrl.permissionChangeDisabled}"
+            ng-class="{'disabled': $ctrl.permissionChangeDisabled }"
         >
             <span class="label"
-                >{{'application.add_contact.title_permission' | t}}</span
+                >{{ 'application.add_contact.title_permission' | t }}</span
             >
             <select
                 ng-options="option.id as (option.i18n | t) for option in $ctrl.permissionOptions"
                 ng-model="$ctrl.personTab.orgPermission.permission_id"
-                ng-change="$ctrl.permissionChange({{$ctrl.personTab.orgPermission.permission_id}})"
+                ng-change="$ctrl.permissionChange({{
+                    $ctrl.personTab.orgPermission.permission_id
+                }}, $ctrl.personTab.orgPermission.permission_id)"
                 ng-disabled="$ctrl.permissionChangeDisabled"
+                ng-class="{ 'invalid' : $ctrl.personTab.orgPermission.$error }"
                 class="form-control"
             >
             </select>
         </label>
+        <span
+            class="invalid"
+            ng-if="$ctrl.personTab.orgPermission.$error !== null"
+            role="alert"
+            >{{ $ctrl.personTab.orgPermission.$error }}</span
+        >
     </div>
     <div class="order-5" ng-if="$ctrl.personTab.organizationId">
         <div class="form-group" ng-if="$ctrl.personTab.orgPermission">
             <label class="form-control-select">
-                <span class="label">{{'contact.cru_status' | t}}</span>
+                <span class="label">{{ 'contact.cru_status' | t }}</span>
                 <select
                     ng-options="option.id as (option.i18n | t) for option in $ctrl.cruStatusOptions"
                     ng-model="$ctrl.personTab.orgPermission.cru_status"
@@ -139,7 +154,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-select">
-                <span class="label">{{'contact.student_status' | t}}</span>
+                <span class="label">{{ 'contact.student_status' | t }}</span>
                 <select
                     ng-options="option.id as (option.i18n | t) for option in $ctrl.enrollmentOptions"
                     ng-model="$ctrl.personTab.person.student_status"
@@ -153,7 +168,7 @@
     <div class="order-1">
         <div class="form-group">
             <label>
-                <span class="label">{{'contact.first_name' | t}}</span>
+                <span class="label">{{ 'contact.first_name' | t }}</span>
                 <input
                     type="text"
                     class="form-control"
@@ -169,7 +184,7 @@
         </div>
         <div class="form-group">
             <label>
-                <span class="label">{{'contact.last_name' | t}}</span>
+                <span class="label">{{ 'contact.last_name' | t }}</span>
                 <input
                     type="text"
                     class="form-control"
@@ -181,7 +196,7 @@
             </label>
         </div>
         <div class="form-group form-group--radio">
-            <span class="label">{{'contact.gender' | t}}</span>
+            <span class="label">{{ 'contact.gender' | t }}</span>
             <label>
                 <input
                     type="radio"
@@ -220,24 +235,24 @@
                     icon="close"
                     size="12"
                     ng-click="$ctrl.deleteEmailAddress(emailAddress)"
-                    title="{{'contact.delete' | t}}"
+                    title="{{ 'contact.delete' | t }}"
                 ></ng-md-icon>
             </div>
             <div class="form-group">
                 <label>
                     <div class="row">
                         <span class="normal-column label"
-                            >{{'contact.email_address' | t}}</span
+                            >{{ 'contact.email_address' | t }}</span
                         >
                         <span
                             class="label"
                             ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
                         >
-                            {{'contact.primary_email' | t}}
+                            {{ 'contact.primary_email' | t }}
                         </span>
                         <input
                             type="radio"
-                            name="primary-email"
+                            name="primary_email"
                             ng-if="!$ctrl.isPendingEmailAddress(emailAddress)"
                             ng-model="$ctrl.personTab.primaryEmail"
                             ng-value="emailAddress"
@@ -250,7 +265,9 @@
                             class="normal-column form-control"
                             ng-pattern="'[^@]+@[^@]+\\.[^@]+'"
                             ng-required="!$ctrl.isPendingEmailAddress(emailAddress)"
-                            name="email_address_{{(emailAddress.id || 'pending')}}"
+                            name="email_address_{{
+                                emailAddress.id || 'pending'
+                            }}"
                             ng-class="{ invalid: !$ctrl.isEmailAddressValid(emailAddress) }"
                             ng-model="emailAddress.email"
                             ng-model-options="{ updateOn: 'blur' }"
@@ -273,20 +290,20 @@
                     icon="close"
                     size="12"
                     ng-click="$ctrl.deletePhoneNumber(phoneNumber)"
-                    title="{{'contact.delete' | t}}"
+                    title="{{ 'contact.delete' | t }}"
                 ></ng-md-icon>
             </div>
             <div class="form-group">
                 <label>
                     <div class="row">
                         <span class="normal-column label"
-                            >{{'contact.phone_number' | t}}</span
+                            >{{ 'contact.phone_number' | t }}</span
                         >
                         <span
                             class="label"
                             ng-if="!$ctrl.isPendingPhoneNumber(phoneNumber)"
                         >
-                            {{'contact.primary_phone' | t}}
+                            {{ 'contact.primary_phone' | t }}
                         </span>
                         <input
                             type="radio"
@@ -303,7 +320,9 @@
                             class="normal-column form-control"
                             ng-pattern="'(\\D*\\d\\D*){8,15}'"
                             ng-required="!$ctrl.isPendingPhoneNumber(phoneNumber)"
-                            name="phone_number_{{(phoneNumber.id || 'pending')}}"
+                            name="phone_number_{{
+                                phoneNumber.id || 'pending'
+                            }}"
                             ng-class="{ invalid: !$ctrl.isPhoneNumberValid(phoneNumber) }"
                             ng-model="phoneNumber.number"
                             ng-model-options="{ updateOn: 'blur' }"
@@ -323,7 +342,7 @@
                     icon="edit"
                     size="12"
                     ng-click="$ctrl.editAddress(address)"
-                    title="{{'contact.edit' | t}}"
+                    title="{{ 'contact.edit' | t }}"
                 ></ng-md-icon>
             </div>
             <div class="button-column second-action">
@@ -332,20 +351,20 @@
                     icon="close"
                     size="12"
                     ng-click="$ctrl.deleteAddress(address)"
-                    title="{{'contact.delete' | t}}"
+                    title="{{ 'contact.delete' | t }}"
                 ></ng-md-icon>
             </div>
             <label>
                 <div class="row">
                     <span class="normal-column label"
-                        >{{('address_types.' + address.address_type) | t}}</span
+                        >{{ 'address_types.' + address.address_type | t }}</span
                     >
                 </div>
                 <div
                     class="row"
                     ng-repeat="addressPart in $ctrl.formatAddress(address)"
                 >
-                    {{addressPart}}
+                    {{ addressPart }}
                 </div>
             </label>
         </div>
@@ -356,17 +375,17 @@
                     icon="add"
                     size="12"
                     ng-click="$ctrl.editAddress(null)"
-                    title="{{'contact.add' | t}}"
+                    title="{{ 'contact.add' | t }}"
                 ></ng-md-icon>
             </div>
             <label>
                 <div class="row">
                     <span class="normal-column label"
-                        >{{'general.address' | t}}</span
+                        >{{ 'general.address' | t }}</span
                     >
                 </div>
                 <div class="row">
-                    {{'people.index.add_address' | t}}
+                    {{ 'people.index.add_address' | t }}
                 </div>
             </label>
         </div>

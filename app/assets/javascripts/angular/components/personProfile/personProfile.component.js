@@ -14,7 +14,6 @@ function personProfileController(
     $filter,
     $uibModal,
     JsonApiDataStore,
-    jQuery,
     permissionService,
     personService,
     personProfileService,
@@ -227,6 +226,8 @@ function personProfileController(
         var emailAddresses = vm.personTab.person.email_addresses;
         if (!vm.pendingEmailAddress) {
             addEmailAddress();
+            // If we add an email address, set the error to null
+            vm.personTab.orgPermission.$error = null;
         }
         return emailAddresses.concat(vm.pendingEmailAddress);
     }
@@ -319,16 +320,21 @@ function personProfileController(
     ng-change="$ctrl.permissionChange({{$ctrl.personTab.orgPermission.permission_id}})"
     Reference: http://stackoverflow.com/a/28047112/879524
      */
-    function permissionChange(oldValue) {
+    function permissionChange(oldValue, choice) {
         var hasEmailAddress = vm.personTab.person.email_addresses.length > 0;
+
+        // Set the error to null everytime this run in case the user updated their email
+        vm.personTab.orgPermission.$error = null;
         if (hasEmailAddress) {
+            vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
+            // Check is the choice the user makes is No permissions, and if so allow them to update without email
+        } else if (choice === vm.permissionOptions[2].id) {
             vm.saveAttribute(vm.personTab.orgPermission, 'permission_id');
         } else {
             vm.personTab.orgPermission.permission_id = oldValue;
-            jQuery.a(
-                $filter('t')(
-                    'contacts.index.for_this_permission_email_is_required_no_name',
-                ),
+            // Set orgPermission $error to be the needed error message
+            vm.personTab.orgPermission.$error = $filter('t')(
+                'contacts.index.for_this_permission_email_is_required_no_name',
             );
         }
     }

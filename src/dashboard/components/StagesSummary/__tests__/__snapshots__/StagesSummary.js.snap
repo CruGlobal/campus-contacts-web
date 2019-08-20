@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StagesSummary /> should render properly 1`] = `
+<div>
+  <div
+    class="css-1ohf0ui"
+  >
+    Loading...
+  </div>
+</div>
+`;
