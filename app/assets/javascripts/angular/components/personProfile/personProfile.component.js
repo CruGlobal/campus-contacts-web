@@ -32,6 +32,7 @@ function personProfileController(
     vm.isContact = isContact;
     vm.emailAddressesWithPending = emailAddressesWithPending;
     vm.phoneNumbersWithPending = phoneNumbersWithPending;
+    vm.addressWithPending = addressWithPending;
     vm.isPendingEmailAddress = isPendingEmailAddress;
     vm.isPendingPhoneNumber = isPendingPhoneNumber;
     vm.isEmailAddressValid = isEmailAddressValid;
@@ -220,6 +221,14 @@ function personProfileController(
             vm.personTab.person,
             vm.personTab.organizationId,
         );
+    }
+
+    function addressWithPending() {
+        let addresses = vm.personTab.person.addresses;
+        const filteredAddresses = addresses.filter((address, index) => {
+            return addresses.indexOf(address) >= index;
+        });
+        return filteredAddresses;
     }
 
     function emailAddressesWithPending() {

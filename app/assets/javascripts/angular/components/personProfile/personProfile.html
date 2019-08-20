@@ -334,7 +334,7 @@
         </div>
         <div
             class="form-group-with-left-action dual-action"
-            ng-repeat="address in $ctrl.personTab.person.addresses"
+            ng-repeat="address in $ctrl.addressWithPending() track by $index"
         >
             <div class="button-column first-action">
                 <ng-md-icon
