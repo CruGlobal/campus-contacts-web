@@ -224,7 +224,7 @@
         </div>
         <div
             class="form-group-with-left-action"
-            ng-repeat="emailAddress in $ctrl.emailAddressesWithPending()"
+            ng-repeat="emailAddress in $ctrl.emailAddressesWithPending() track by $index"
         >
             <div
                 class="button-column"
@@ -279,7 +279,7 @@
         </div>
         <div
             class="form-group-with-left-action"
-            ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending()"
+            ng-repeat="phoneNumber in $ctrl.phoneNumbersWithPending() track by $index"
         >
             <div
                 class="button-column"

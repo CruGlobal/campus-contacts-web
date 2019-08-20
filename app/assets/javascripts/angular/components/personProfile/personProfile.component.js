@@ -224,20 +224,32 @@ function personProfileController(
 
     function emailAddressesWithPending() {
         var emailAddresses = vm.personTab.person.email_addresses;
+        // When we add an email address, the api seems to return two copies of it
+        // This removes that extra from the response
+        const filteredEmailAddresses = emailAddresses.filter((email, index) => {
+            return emailAddresses.indexOf(email) >= index;
+        });
+
         if (!vm.pendingEmailAddress) {
             addEmailAddress();
             // If we add an email address, set the error to null
             vm.personTab.orgPermission.$error = null;
         }
-        return emailAddresses.concat(vm.pendingEmailAddress);
+
+        return filteredEmailAddresses.concat(vm.pendingEmailAddress);
     }
 
     function phoneNumbersWithPending() {
         var phoneNumbers = vm.personTab.person.phone_numbers;
+        // When we add an phone number, the api seems to return two copies of it
+        // This removes that extra from the response
+        const filteredPhoneNumbers = phoneNumbers.filter((number, index) => {
+            return phoneNumbers.indexOf(number) >= index;
+        });
         if (!vm.pendingPhoneNumber) {
             addPhoneNumber();
         }
-        return phoneNumbers.concat(vm.pendingPhoneNumber);
+        return filteredPhoneNumbers.concat(vm.pendingPhoneNumber);
     }
 
     function isPendingEmailAddress(emailAddress) {
