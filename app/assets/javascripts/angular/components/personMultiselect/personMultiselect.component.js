@@ -31,7 +31,7 @@ function personMultiselectController(
     $scope,
     $q,
     RequestDeduper,
-    assignedSelectService,
+    assignedPeopleSelectService,
     tFilter,
     _,
 ) {
@@ -62,7 +62,7 @@ function personMultiselectController(
             }
 
             vm.searching = true;
-            assignedSelectService
+            assignedPeopleSelectService
                 .searchPeople(search, vm.organizationId, requestDeduper)
                 .then(function(people) {
                     // Filter out people that are already selected

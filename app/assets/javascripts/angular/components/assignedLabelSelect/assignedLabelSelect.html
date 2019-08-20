@@ -1,0 +1,20 @@
+<ui-select
+    expose-select
+    multiple
+    ng-model="$ctrl.assigned"
+    close-on-select="false"
+    ng-disabled="$ctrl.disabled"
+>
+    <ui-select-match
+        placeholder="{{ 'application.assign_search.assign_label' | t }}"
+    >
+        <span>
+            {{ $item.name }}
+        </span>
+    </ui-select-match>
+    <ui-select-choices repeat="label in $ctrl.labels track by label.id">
+        <span>
+            {{ label.name }}
+        </span>
+    </ui-select-choices>
+</ui-select>

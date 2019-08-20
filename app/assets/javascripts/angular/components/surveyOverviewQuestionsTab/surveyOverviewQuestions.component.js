@@ -72,15 +72,50 @@ function surveyOverviewQuestionsController(
         },
     ];
     this.people = [];
+    this.labels = [];
 
     const loadSurveyData = async () => {
         const { data } = await surveyService.getSurveyQuestions(this.survey.id);
         this.people = await getPeople(data, this.survey.organization_id);
+        this.labels = await getLabel(data, this.survey.organization_id);
         rebuildQuestions(data);
         $scope.$apply();
     };
 
-    const getPeople = async questions => {
+    const getLabel = async (questions, organizationId) => {
+        const labelIds = [
+            ...new Set(
+                questions.reduce((a1, q) => {
+                    const ids = q.question_rules.reduce((a2, r) => {
+                        const labelIds = r.label_ids
+                            ? r.label_ids.split(',')
+                            : [];
+                        return [...a2, ...labelIds];
+                    }, []);
+                    return [...a1, ...ids];
+                }, []),
+            ),
+        ];
+
+        const orgLabels = await httpProxy
+            .get(
+                `/organizations/${organizationId}`,
+                {
+                    include: 'labels',
+                },
+                {
+                    errorMessage: 'error.messages.surveys.loadQuestions',
+                },
+            )
+            .then(res => res.data.labels);
+
+        const currentLabels = orgLabels.filter(label =>
+            labelIds.includes(label.id),
+        );
+        return currentLabels;
+    };
+
+    const getPeople = async (questions, organizationId) => {
         const peopleIds = [
             ...new Set(
                 questions.reduce((a1, q) => {
@@ -166,8 +201,8 @@ function surveyOverviewQuestionsController(
             questionRules.find(
                 r => r.trigger_keywords === answer && r.rule_code === type,
             ) || {};
-
-        const ids = people_ids ? people_ids.split(',') : [];
+        let ids = people_ids ? people_ids.split(',') : [];
+        let labelIds = label_ids ? label_ids.split(',') : [];
 
         return {
             id,
@@ -176,6 +211,9 @@ function surveyOverviewQuestionsController(
             people_ids,
             rule_code: type,
             trigger_keywords: answer,
+            assigned_labels: id
+                ? this.labels.filter(p => labelIds.indexOf(p.id) >= 0)
+                : null,
             assign_to: id
                 ? this.people.filter(p => ids.indexOf(p.id) >= 0)
                 : null,
@@ -206,14 +244,55 @@ function surveyOverviewQuestionsController(
         loadSurveyData();
     };
 
+    this.addLabelToRule = async (question, rule) => {
+        const index = question.question_rules.indexOf(rule);
+
+        if (!question.question_rules[index].assigned_labels) return;
+
+        const ids = [
+            ...new Set(
+                question.question_rules[index].assigned_labels
+                    .filter(a => a._type === 'label')
+                    .map(b => b.id),
+            ),
+        ];
+
+        const currentIds = question.question_rules[index].label_ids
+            ? question.question_rules[index].label_ids.split(',')
+            : [];
+
+        if (_.isEqual(currentIds.sort(), ids.sort())) {
+            return;
+        }
+
+        question.question_rules[index].label_ids = ids.join(',');
+        question.question_rules[index].assigned_labels.forEach(a => {
+            const exists = this.labels.find(p => p.id === a.id);
+            if (!exists) {
+                this.labels.push(a);
+            }
+        });
+        await this.saveQuestionContent(question, question.question_answers);
+    };
+
     this.addPersonToRule = async (question, rule) => {
         const index = question.question_rules.indexOf(rule);
 
         if (!question.question_rules[index].assign_to) return;
 
+        question.question_rules[index].assign_to.map(a => {
+            if (a._type !== 'person') {
+                return null;
+            }
+        });
         const ids = [
-            ...new Set(question.question_rules[index].assign_to.map(a => a.id)),
+            ...new Set(
+                question.question_rules[index].assign_to
+                    .filter(a => a._type === 'person')
+                    .map(b => b.id),
+            ),
         ];
+
         const currentIds = question.question_rules[index].people_ids
             ? question.question_rules[index].people_ids.split(',')
             : [];

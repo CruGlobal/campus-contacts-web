@@ -118,7 +118,6 @@ function myPeopleDashboardController(
     }
 
     function dataLoaded(assignmentsToMe) {
-        loadReports();
         var people = JsonApiDataStore.store.findAll('person');
         people.forEach(function(person) {
             if (_.isNil(person.last_name)) {
@@ -154,7 +153,7 @@ function myPeopleDashboardController(
         if (_.keys(vm.organizations).length === 0) {
             noPeople();
         }
-
+        loadReports();
         vm.loading = false;
     }
 

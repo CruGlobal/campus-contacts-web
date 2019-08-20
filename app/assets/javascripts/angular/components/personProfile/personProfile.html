@@ -1,5 +1,5 @@
 <form
-    class="person-profileTab form"
+    class="person-profileTab form bg-pivot-white"
     ng-class="{ 'flex flex-column': $ctrl.isNewPerson }"
     name="$ctrl.form"
     autocomplete="off"
@@ -103,10 +103,10 @@
     <div class="form-group order-3" ng-if="$ctrl.personTab.organizationId">
         <label>
             <span class="label">{{ 'contact.assigned_to' | t }}</span>
-            <assigned-select
+            <assigned-people-select
                 assigned="$ctrl.personTab.assignedTo"
                 organization-id="$ctrl.personTab.organizationId"
-            ></assigned-select>
+            ></assigned-people-select>
         </label>
     </div>
     <div
