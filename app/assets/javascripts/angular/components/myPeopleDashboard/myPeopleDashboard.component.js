@@ -85,17 +85,41 @@ function myPeopleDashboardController(
     }
 
     function loadReports() {
-        var people = JsonApiDataStore.store.findAll('person');
-        var organizations = vm.organizations;
+        const people = JsonApiDataStore.store.findAll('person');
+        const organizations = vm.organizations;
+
+        const limitLength = 100;
+        const warnLength = 50;
+
+        if (people.length > limitLength || organizations.length > limitLength) {
+            $log.error(
+                `Tried to load more than ${limitLength} reports. Report ids truncated.`,
+                {
+                    numPeopleIds: people.length,
+                    numCommunityIds: organizations.length,
+                },
+            );
+        } else if (
+            people.length > warnLength ||
+            organizations.length > warnLength
+        ) {
+            $log.warn(`Tried to load more than ${warnLength} reports.`, {
+                numPeopleIds: people.length,
+                numCommunityIds: organizations.length,
+            });
+        }
+
+        const limitedOrganizations = organizations.slice(0, limitLength);
+        const limitedPeople = people.slice(0, limitLength);
 
         reportsService
-            .loadOrganizationReports(organizations)
+            .loadOrganizationReports(limitedOrganizations)
             .catch(function(error) {
                 $log.error('Error loading organization reports', error);
             });
 
         reportsService
-            .loadMultiplePeopleReports(organizations, people)
+            .loadMultiplePeopleReports(limitedOrganizations, limitedPeople)
             .catch(function(error) {
                 $log.error('Error loading people reports', error);
             });
