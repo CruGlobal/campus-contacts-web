@@ -65,9 +65,9 @@ const StepsOfFaithPage = () => {
                     }}
                     mapData={data =>
                         data.communitiesReport[0].daysReport.map(row => ({
-                            ['total']: row.othersStepsCount,
+                            ['total']: row.othersStepsCompletedCount,
                             ['stages']: row.stageResults.map(stage => ({
-                                name: stage.othersSteps,
+                                name: stage.othersStepsCompletedCount,
                                 count: stage.stage.name,
                             })),
                             ['date']: row.date,

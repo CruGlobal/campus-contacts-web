@@ -71,9 +71,9 @@ const GET_STEPS_COMPLETED_REPORT = gql`
         ) {
             daysReport {
                 date
-                personalStepsCount
+                personalStepsCompletedCount
                 stageResults {
-                    personalSteps
+                    personalStepsCompletedCount
                     stage {
                         name
                     }

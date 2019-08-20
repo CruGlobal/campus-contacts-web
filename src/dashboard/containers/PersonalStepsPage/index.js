@@ -64,10 +64,10 @@ const PersonalStepsPage = () => {
                     }}
                     mapData={data =>
                         data.communitiesReport[0].daysReport.map(row => ({
-                            ['total']: row.personalStepsCount,
+                            ['total']: row.personalStepsCompletedCount,
                             ['stages']: row.stageResults.map(stage => ({
                                 name: stage.stage.name,
-                                count: stage.personalSteps,
+                                count: stage.personalStepsCompletedCount,
                             })),
                             ['date']: row.date,
                         }))
