@@ -48,7 +48,7 @@
             // Disable the help scout beacon if the user is taking a survey
             if (
                 window.location.origin !== 'https://stage.mhub.cc' ||
-                'https://mhub.cc'
+                window.location.origin !== 'https://mhub.cc'
             ) {
                 !(function(e, o, n) {
                     (window.HSCW = o),
@@ -80,13 +80,7 @@
                         (c.src = 'https://djtflbt20bdde.cloudfront.net/'),
                         r.parentNode.insertBefore(c, r);
                 })(document, window.HSCW || {}, window.HS || {});
-            }
-        </script>
-        <script>
-            if (
-                window.location.origin !== 'https://stage.mhub.cc' ||
-                'https://mhub.cc'
-            ) {
+
                 HS.beacon.config({
                     topArticles: true,
                 });
