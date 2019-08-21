@@ -1,7 +1,7 @@
 <div class="accordion-body pb3 pt3">
     <h3 class="f3 fw6 pivot-dark-blue">
-        {{$ctrl.new ? 'common:organizations.new' : 'common:organizations.edit' |
-        t}}
+        {{ $ctrl.new ? 'common:organizations.new' : ('common:organizations.edit'
+        | t) }}
     </h3>
     <fieldset class="ba b--transparent ph0 mh0 w-100">
         <div class="flex justify-between mb3">
@@ -10,10 +10,10 @@
                     class="db f6 fw6 lh-copy normal mb1 pivot-gray-darker ttu tracked flex items-center"
                     for="ministryName"
                 >
-                    {{'common:organizations.name' | t}}
+                    {{ 'common:organizations.name' | t }}
                 </label>
                 <input
-                    class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2"
+                    class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2 edit-input"
                     id="ministryName"
                     ng-model="$ctrl.orgEdit.name"
                     type="text"
@@ -24,11 +24,11 @@
                     class="db f6 fw6 lh-copy normal mb1 pivot-gray-darker ttu tracked flex items-center"
                     for="type"
                 >
-                    {{'common:organizations.type' | t}}
+                    {{ 'common:organizations.type' | t }}
                     <a class="help" href="">
                         <img
-                            alt="{{'common:general.help' | t}}"
-                            ng-src="{{$ctrl.helpIcon}}"
+                            alt="{{ 'common:general.help' | t }}"
+                            ng-src="{{ $ctrl.helpIcon }}"
                             ng-click="showTypeHelp = !showTypeHelp"
                             class="ml1 db"
                             style="width:16px; height:16px;"
@@ -37,11 +37,11 @@
                 </label>
                 <div class="help-text" ng-if="showTypeHelp">
                     <p class="pivot-gray-darker f7 lh-copy mv2">
-                        {{'common:organizations.type_help' | t}}
+                        {{ 'common:organizations.type_help' | t }}
                     </p>
                 </div>
                 <input
-                    class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2"
+                    class="pa2 input-reset bg-white bw0 pivot-gray-darker w-100 ihshort br2 edit-input"
                     id="type"
                     ng-model="$ctrl.orgEdit.terminology"
                     name="type"
@@ -59,11 +59,11 @@
                 ng-model="$ctrl.orgEdit.show_sub_orgs"
             />
             <label class="lh-copy flex f6" for="check1">
-                {{'common:organizations.show_sub' | t}}
+                {{ 'common:organizations.show_sub' | t }}
                 <a class="help" href="">
                     <img
-                        alt="{{'common:general.help' | t}}"
-                        ng-src="{{$ctrl.helpIcon}}"
+                        alt="{{ 'common:general.help' | t }}"
+                        ng-src="{{ $ctrl.helpIcon }}"
                         ng-click="showSubOrgsHelp = !showSubOrgsHelp"
                         class="ml1 db"
                         style="width:16px; height:16px;"
@@ -73,7 +73,7 @@
         </div>
         <div class="help-text" ng-if="showSubOrgsHelp">
             <p class="pivot-gray-darker f7 lh-copy mv2">
-                {{'common:organizations.sub_help' | t}}
+                {{ 'common:organizations.sub_help' | t }}
             </p>
         </div>
         <div class="tr mt2">
@@ -83,13 +83,13 @@
                 })"
                 class="f6 link ba b--pivot-dark-blue ihshort mb2 dib pivot-dark-blue bold br2 ttu tracked bg-transparent w-20"
             >
-                {{'common:general.cancel' | t}}
+                {{ 'common:general.cancel' | t }}
             </button>
             <button
                 ng-click="$ctrl.save()"
                 class="f6 link ba b--pivot-dark-blue ihshort mb2 dib white bg-pivot-dark-blue bold br2 ttu tracked ml2 w-20"
             >
-                {{'common:general.save' | t}}
+                {{ 'common:general.save' | t }}
             </button>
         </div>
     </fieldset>
