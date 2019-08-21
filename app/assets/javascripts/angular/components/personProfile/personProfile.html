@@ -22,10 +22,17 @@
         >
             <div class="button-column">
                 <ng-md-icon
+                    ng-if="$ctrl.personTab.orgLabels.length === 0"
                     class="icon-chip actionable primary-action pivot-white"
-                    icon="{{
-                        $ctrl.personTab.orgLabels.length === 0 ? 'add' : 'edit'
-                    }}"
+                    icon="add"
+                    size="12"
+                    ng-click="$ctrl.editTags()"
+                    title="{{ 'people.index.manage_labels' | t }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    ng-if="$ctrl.personTab.orgLabels.length !== 0"
+                    class="icon-chip actionable primary-action pivot-white"
+                    icon="edit"
                     size="12"
                     ng-click="$ctrl.editTags()"
                     title="{{ 'people.index.manage_labels' | t }}"
@@ -55,12 +62,17 @@
         >
             <div class="button-column">
                 <ng-md-icon
+                    ng-if="$ctrl.personTab.groupMemberships.length === 0"
                     class="icon-chip actionable primary-action pivot-white"
-                    icon="{{
-                        $ctrl.personTab.groupMemberships.length === 0
-                            ? 'add'
-                            : 'edit'
-                    }}"
+                    icon="add"
+                    ng-click="$ctrl.editGroups()"
+                    size="12"
+                    title="{{ 'people.index.manage_groups' | t }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    ng-if="$ctrl.personTab.groupMemberships.length !== 0"
+                    class="icon-chip actionable primary-action pivot-white"
+                    icon="edit"
                     ng-click="$ctrl.editGroups()"
                     size="12"
                     title="{{ 'people.index.manage_groups' | t }}"
@@ -103,10 +115,10 @@
     <div class="form-group order-3" ng-if="$ctrl.personTab.organizationId">
         <label>
             <span class="label">{{ 'contact.assigned_to' | t }}</span>
-            <assigned-select
+            <assigned-people-select
                 assigned="$ctrl.personTab.assignedTo"
                 organization-id="$ctrl.personTab.organizationId"
-            ></assigned-select>
+            ></assigned-people-select>
         </label>
     </div>
     <div
