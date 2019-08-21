@@ -283,7 +283,7 @@ function personService(
                 'organizational_permissions',
             );
 
-            const pageLimit = 100;
+            const pageLimit = 500;
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('person').url.all,
