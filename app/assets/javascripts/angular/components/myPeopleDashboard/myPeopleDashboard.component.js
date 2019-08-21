@@ -93,7 +93,7 @@ function myPeopleDashboardController(
 
         if (people.length > limitLength || organizations.length > limitLength) {
             $log.error(
-                `Tried to load more than ${limitLength} reports. Report ids truncated.`,
+                `People dashboard tried to load more than ${limitLength} reports. Report ids truncated.`,
                 {
                     numPeopleIds: people.length,
                     numCommunityIds: organizations.length,
@@ -103,10 +103,13 @@ function myPeopleDashboardController(
             people.length > warnLength ||
             organizations.length > warnLength
         ) {
-            $log.warn(`Tried to load more than ${warnLength} reports.`, {
-                numPeopleIds: people.length,
-                numCommunityIds: organizations.length,
-            });
+            $log.warn(
+                `People dashboard loaded more than ${warnLength} reports.`,
+                {
+                    numPeopleIds: people.length,
+                    numCommunityIds: organizations.length,
+                },
+            );
         }
 
         const limitedOrganizations = organizations.slice(0, limitLength);
