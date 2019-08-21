@@ -6,6 +6,7 @@ function personService(
     JsonApiDataStore,
     permissionService,
     _,
+    $log,
 ) {
     // Convert an array of string ids into an array of options with the schema { id, i18n }
     // Used by personService.get*Options()
@@ -281,6 +282,8 @@ function personService(
                     : 'reverse_contact_assignments',
                 'organizational_permissions',
             );
+
+            const pageLimit = 100;
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('person').url.all,
@@ -290,15 +293,34 @@ function personService(
                         'filters[organizations_id]': _.isNil(organizationId)
                             ? ''
                             : organizationId,
-                        'page[limit]': 1000,
+                        'page[limit]': pageLimit,
                     },
                     {
                         errorMessage:
                             'error.messages.person.get_contact_assignments',
                     },
                 )
-                .then(httpProxy.extractModels)
-                .then(function(assignedPeople) {
+                .then(function(response) {
+                    const assignedPeople = response.data;
+                    try {
+                        if (assignedPeople.length >= pageLimit) {
+                            $log.warn(
+                                `While loading people, we hit the page limit of ${pageLimit}. There may be more people that were not loaded`,
+                                {
+                                    numLoadedPeople: assignedPeople.length,
+                                    numTotalPeople: response.meta.total,
+                                    organizationId,
+                                    assignedToPersonId: person.id,
+                                },
+                            );
+                        }
+                    } catch (e) {
+                        $log.warn(
+                            'Encounterd error while logging people loading limit',
+                            e,
+                        );
+                    }
+
                     // Check whether the person is assigned to the person that we are getting assignments for
                     function isAssignmentForCurrentPerson(assignment) {
                         return assignment.assigned_to.id === person.id;
