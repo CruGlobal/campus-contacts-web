@@ -48,7 +48,6 @@ function myPeopleDashboardController(
             // If the logged in person has no organization permissions, redirect the user to download mobile app
             loggedInPerson.person.organizational_permissions.length === 0
         ) {
-            // This page we redirect to will change
             $window.location.href = 'https://get.missionhub.com/newmobileuser/';
         }
 
