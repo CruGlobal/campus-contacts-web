@@ -12,9 +12,9 @@ person-multiselect {
             align-self: flex-end;
             width: 14px;
             height: 14px;
-
+            color: $white;
             // Align the icon with the text baseline
-            margin-bottom: -1px;
+            margin-bottom: 10px;
         }
 
         input {
