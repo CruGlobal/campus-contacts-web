@@ -5,7 +5,7 @@ angular
 function myPeopleDashboardService(httpProxy, modelsService, _) {
     var myPeopleDashboardService = {
         // Check for whether the user is on mobile or not
-        isMobile: () => {
+        isMobile: navigator => {
             if (
                 navigator.userAgent.match(/Android/i) ||
                 navigator.userAgent.match(/webOS/i) ||
