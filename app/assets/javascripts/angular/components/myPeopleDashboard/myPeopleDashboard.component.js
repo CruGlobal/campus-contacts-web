@@ -43,6 +43,11 @@ function myPeopleDashboardController(
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
         await loadAndSyncData();
+        // Check if the user is on mobile, and if so redirect them to download mobile app
+        if (myPeopleDashboardService.isMobile(navigator)) {
+            $window.location.href =
+                'https://get.missionhub.com/new-ministry-user';
+        }
 
         if (
             // If the logged in person has no organization permissions, redirect the user to download mobile app

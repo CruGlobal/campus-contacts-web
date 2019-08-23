@@ -71,6 +71,14 @@ describe('myPeopleDashboardService Tests', function() {
             expect(myPeopleDashboardService.loadPeople).toBeDefined();
         });
 
+        it('should check if the user is on mobile', () => {
+            const testNavigator = {
+                userAgent: '/Android/i',
+            };
+            const isMobile = myPeopleDashboardService.isMobile(testNavigator);
+            expect(isMobile).toBe(true);
+        });
+
         it('should call GET loadPeople URL', function() {
             var params = {
                 'page[limit]': 250,
