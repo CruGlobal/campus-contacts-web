@@ -12,6 +12,7 @@ ministry-view-person {
     @extend %column-config;
 
     .assigned-to-column {
+        width: 150px;
         .name-container {
             display: flex;
             height: $person-height;
@@ -42,10 +43,19 @@ ministry-view-person {
             }
         }
     }
+    .phone-number-column {
+        padding: 0 !important;
+    }
+
+    .button-column {
+        margin-left: -30px;
+    }
+
     .status-column {
         display: flex;
         height: 50px;
         align-items: center;
+        padding: 0;
 
         &.warning .form-control-select::after {
             border-top-color: $pivot-orange;

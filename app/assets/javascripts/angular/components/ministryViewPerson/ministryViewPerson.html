@@ -8,14 +8,14 @@
         </div>
         <div class="column name-column">
             <a href ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
-                {{$ctrl.person | personName}}
+                {{ $ctrl.person | personName }}
             </a>
         </div>
     </div>
     <div class="column detail-column gender-column">
         <span ng-if="$ctrl.person.gender"
-            >{{('ministries.people.' + $ctrl.person.gender.toLowerCase()) |
-            t}}</span
+            >{{ 'ministries.people.' + $ctrl.person.gender.toLowerCase() | t
+            }}</span
         >
     </div>
     <div
@@ -24,10 +24,10 @@
     >
         <div class="name-container">
             <div class="name">
-                {{$ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] |
-                personName) : ('assignments.unassigned' | t)}}
+                {{ $ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] |
+                assignedPersonName) : ('assignments.unassigned' | t) }}.
                 <span ng-if="$ctrl.assignedTo.length > 1"
-                    >(+{{$ctrl.assignedTo.length - 1}})</span
+                    >(+{{ $ctrl.assignedTo.length - 1 }})</span
                 >
             </div>
             <a
@@ -74,7 +74,7 @@
         class="column detail-column status-column"
         ng-if="$ctrl.orgPermission.archive_date !== null"
     >
-        <span>{{'followup_status.archived' | t}}</span>
+        <span>{{ 'followup_status.archived' | t }}</span>
     </div>
     <div
         class="column detail-column phone-number-column"
@@ -84,11 +84,11 @@
     </div>
     <div class="column detail-column phone-number-column">
         <span ng-if="$ctrl.phoneNumber"
-            >{{$ctrl.phoneNumber.number | phone}}</span
+            >{{ $ctrl.phoneNumber.number | phone }}</span
         >
     </div>
     <div class="column detail-column button-column">
-        <a ng-href="{{$ctrl.emailAddress.email | mailto}}">
+        <a ng-href="{{ $ctrl.emailAddress.email | mailto }}">
             <icon-button
                 icon="'email'"
                 disabled="!$ctrl.emailAddress"
@@ -99,8 +99,8 @@
         class="column survey-column"
         ng-class="{ 'survey-column-wide': question.style === 'email' }"
         ng-repeat="question in $ctrl.questions"
-        title="{{$ctrl.person.answers[question.id].join(', ')}}"
+        title="{{ $ctrl.person.answers[question.id].join(', ') }}"
     >
-        {{$ctrl.person.answers[question.id].join(', ')}}
+        {{ $ctrl.person.answers[question.id].join(', ') }}
     </div>
 </div>
