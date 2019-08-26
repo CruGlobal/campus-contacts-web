@@ -1,10 +1,12 @@
 import gql from 'graphql-tag';
 
 const GET_IMPACT_REPORT_TAKEN = gql`
-    query impactReport($communityId: ID!) {
-        impactReport(communityId: $communityId) {
-            othersStepsCompletedCount
-            othersStepsReceiversCompletedCount
+    query impactReport($id: ID!) {
+        community(id: $id) {
+            impactReport {
+                othersStepsCompletedCount
+                othersStepsReceiversCompletedCount
+            }
         }
     }
 `;
@@ -12,39 +14,12 @@ const GET_IMPACT_REPORT_TAKEN = gql`
 const GET_TOTAL_STEPS_COMPLETED_REPORT = gql`
     query communityStagesReport(
         $period: String!
-        $communityIds: [ID!]
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            stagesReport {
-                othersStepsCompletedCount
-                stage {
-                    name
-                }
-            }
-        }
-    }
-`;
-
-const GET_STEPS_COMPLETED_REPORT = gql`
-    query communityDayReport(
-        $period: String!
-        $communityIds: [ID!]
-        $endDate: ISO8601DateTime!
-    ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            daysReport {
-                date
-                othersStepsCompletedCount
-                stageResults {
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                stagesReport {
                     othersStepsCompletedCount
                     stage {
                         name
@@ -55,21 +30,42 @@ const GET_STEPS_COMPLETED_REPORT = gql`
     }
 `;
 
+const GET_STEPS_COMPLETED_REPORT = gql`
+    query communityDayReport(
+        $period: String!
+        $id: ID!
+        $endDate: ISO8601DateTime!
+    ) {
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                daysReport {
+                    date
+                    othersStepsCompletedCount
+                    stageResults {
+                        othersStepsCompletedCount
+                        stage {
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
 const GET_STAGES_REPORT = gql`
     query communityStagesReport(
         $period: String!
-        $communityIds: [ID!]
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            stagesReport {
-                othersStepsAddedCount
-                stage {
-                    name
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                stagesReport {
+                    othersStepsAddedCount
+                    stage {
+                        name
+                    }
                 }
             }
         }
@@ -77,9 +73,11 @@ const GET_STAGES_REPORT = gql`
 `;
 
 const GET_IMPACT_REPORT_REACHED = gql`
-    query impactReport($communityId: ID!) {
-        impactReport(communityId: $communityId) {
-            stepsCount
+    query impactReport($id: ID!) {
+        community(id: $id) {
+            impactReport {
+                stepsCount
+            }
         }
     }
 `;
@@ -87,18 +85,16 @@ const GET_IMPACT_REPORT_REACHED = gql`
 const GET_STAGES_PEOPLE_REPORT = gql`
     query communityStagesReport(
         $period: String!
-        $communityIds: [ID!]
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            stagesReport {
-                memberCount
-                stage {
-                    name
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                stagesReport {
+                    memberCount
+                    stage {
+                        name
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ module.exports = {
     setupFilesAfterEnv: ['./src/setupTests.js'],
     transform: {
         '^.+\\.js$': 'babel-jest',
+        '^.+\\.tsx?$': 'ts-jest',
     },
     coverageDirectory: './coverage-react/',
     moduleNameMapper: {

@@ -7,11 +7,7 @@ import AppContext from '../../appContext';
 import Table from '../../components/Table';
 import ImpactInfo from '../../components/ImpactInfo';
 
-import {
-    GET_IMPACT_CHALLENGES,
-    GET_CHALLENGES,
-    GET_GLOBAL_CHALLENGES,
-} from './queries';
+import { GET_IMPACT_CHALLENGES, GET_CHALLENGES } from './queries';
 
 const ChallengesPage = () => {
     const { t } = useTranslation('insights');
@@ -78,7 +74,7 @@ const ChallengesPage = () => {
                 noPadding={true}
             >
                 <Table
-                    query={GET_GLOBAL_CHALLENGES}
+                    query={GET_CHALLENGES}
                     variables={{ id: orgId }}
                     headers={[
                         '',

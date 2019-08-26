@@ -117,11 +117,12 @@ const Page = styled.div`
 const PAGE_SIZE = 5;
 const PAGE_NUMBERS_SIZE = 5;
 
-const Table = ({ query, headers, mapRows, mapPage }) => {
+const Table = ({ query, headers, mapRows, mapPage, variables }) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const { data, loading, refetch } = useQuery(query, {
         variables: {
+            ...variables,
             first: PAGE_SIZE,
         },
     });
