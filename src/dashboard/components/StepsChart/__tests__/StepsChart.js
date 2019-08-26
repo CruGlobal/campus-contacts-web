@@ -7,20 +7,18 @@ import { renderWithContext } from '../../../testUtils';
 import StepsChart from '../';
 
 const QUERY = gql`
-    query organizationStagesReport(
+    query communityStagesReport(
         $period: String!
-        $organizationId: ID!
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            stagesReport {
-                stepsAddedCount
-                stage {
-                    name
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                stagesReport {
+                    stepsAddedCount
+                    stage {
+                        name
+                    }
                 }
             }
         }
@@ -33,7 +31,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.communitiesReport[0].stagesReport.map(row => ({
+                    data.community.report.stagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -42,7 +40,7 @@ describe('<StepsChart />', () => {
                 index={'index'}
                 variables={{
                     period: '',
-                    organizationId: 1,
+                    id: 1,
                     endDate: moment('2019-07-21').format(),
                 }}
             />,
@@ -54,7 +52,7 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={QUERY}
                 mapData={data =>
-                    data.communitiesReport[0].stagesReport.map(row => ({
+                    data.community.report.stagesReport.map(row => ({
                         ['label']: row.stepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
@@ -63,15 +61,15 @@ describe('<StepsChart />', () => {
                 index={'index'}
                 variables={{
                     period: '',
-                    organizationId: 1,
+                    id: 1,
                     endDate: moment('2019-07-21').format(),
                 }}
             />,
             {
                 mocks: {
                     Query: () => ({
-                        communitiesReport: () => [
-                            {
+                        community: () => ({
+                            report: () => ({
                                 stagesReport: () => [
                                     {
                                         stepsAddedCount: 20,
@@ -86,8 +84,8 @@ describe('<StepsChart />', () => {
                                         },
                                     },
                                 ],
-                            },
-                        ],
+                            }),
+                        }),
                     }),
                 },
                 appContext: {

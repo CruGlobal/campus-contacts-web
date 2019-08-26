@@ -6,9 +6,11 @@ import { renderWithContext } from '../../../testUtils';
 import ImpactInfo from '../';
 
 const QUERY = gql`
-    query impactReport($organizationId: ID!) {
-        impactReport(organizationId: $organizationId) {
-            stageProgressionCount
+    query impactReport($id: ID!) {
+        community(id: $id) {
+            impactReport {
+                stageProgressionCount
+            }
         }
     }
 `;
@@ -19,9 +21,9 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${report.impactReport.stageProgressionCount}`
+                    `Text with value ${report.community.impactReport.stageProgressionCount}`
                 }
-                variables={{ organizationId: 1 }}
+                variables={{ id: 1 }}
             />,
             {
                 appContext: {
@@ -36,15 +38,17 @@ describe('<ImpactInfo />', () => {
             <ImpactInfo
                 query={QUERY}
                 text={report =>
-                    `Text with value ${report.impactReport.stageProgressionCount}`
+                    `Text with value ${report.community.impactReport.stageProgressionCount}`
                 }
-                variables={{ organizationId: 1 }}
+                variables={{ id: 1 }}
             />,
             {
                 mocks: {
                     Query: () => ({
-                        impactReport: () => ({
-                            stageProgressionCount: () => 15,
+                        community: () => ({
+                            impactReport: () => ({
+                                stageProgressionCount: () => 15,
+                            }),
                         }),
                     }),
                 },

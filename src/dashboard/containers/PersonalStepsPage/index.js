@@ -28,22 +28,20 @@ const PersonalStepsPage = () => {
                 query={GET_IMPACT_REPORT_STEPS_TAKEN}
                 text={report =>
                     t('personalSteps.taken', {
-                        count: report.impactReport.personalStepsCompletedCount,
+                        count:
+                            report.community.impactReport
+                                .personalStepsCompletedCount,
                         year: moment().format('YYYY'),
                     })
                 }
-                variables={{
-                    communityId: orgId,
-                }}
+                variables={{ id: orgId }}
             />
             <Card title={t('personalSteps.completedTotal')}>
                 <StagesSummary
                     query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
-                    variables={{
-                        communityIds: [orgId],
-                    }}
+                    variables={{ id: orgId }}
                     mapData={data =>
-                        data.communitiesReport[0].stagesReport.map(entry => ({
+                        data.community.report.stagesReport.map(entry => ({
                             stage: entry.stage.name,
                             icon: entry.stage.name
                                 .toLowerCase()
@@ -59,11 +57,9 @@ const PersonalStepsPage = () => {
             >
                 <FiltersChart
                     query={GET_STEPS_COMPLETED_REPORT}
-                    variables={{
-                        communityIds: [orgId],
-                    }}
+                    variables={{ id: orgId }}
                     mapData={data =>
-                        data.communitiesReport[0].daysReport.map(row => ({
+                        data.community.report.daysReport.map(row => ({
                             ['total']: row.personalStepsCompletedCount,
                             ['stages']: row.stageResults.map(stage => ({
                                 name: stage.stage.name,
@@ -83,7 +79,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={data =>
-                        data.communitiesReport[0].stagesReport.map(row => ({
+                        data.community.report.stagesReport.map(row => ({
                             [t('personalSteps.label')]: row.stage
                                 .personalStepsAddedCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
@@ -93,19 +89,21 @@ const PersonalStepsPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        communityIds: [orgId],
+                        id: orgId,
                         endDate: moment().format(),
                     }}
                 />
             </Card>
+
             <ImpactInfo
                 query={GET_IMPACT_REPORT_MOVED}
                 text={report =>
                     t('personalSteps.reached', {
-                        count: report.impactReport.stageProgressionCount,
+                        count:
+                            report.community.impactReport.stageProgressionCount,
                     })
                 }
-                variables={{ communityId: orgId }}
+                variables={{ id: orgId }}
             />
             <Card
                 title={t('personalSteps.members')}
@@ -114,7 +112,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={data =>
-                        data.communitiesReport[0].stagesReport.map(row => ({
+                        data.community.report.stagesReport.map(row => ({
                             [t('members')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
@@ -123,7 +121,7 @@ const PersonalStepsPage = () => {
                     index={t('stage')}
                     variables={{
                         period: 'P10Y',
-                        communityIds: [orgId],
+                        id: orgId,
                         endDate: moment().format(),
                     }}
                 />

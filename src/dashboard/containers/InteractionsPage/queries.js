@@ -1,10 +1,12 @@
 import gql from 'graphql-tag';
 
 const INTERACTIONS_TOTAL_REPORT = gql`
-    query impactReport($communityId: ID!) {
-        impactReport(communityId: $communityId) {
-            interactionsCount
-            interactionsReceiversCount
+    query impactReport($id: ID!) {
+        community(id: $id) {
+            impactReport {
+                interactionsCount
+                interactionsReceiversCount
+            }
         }
     }
 `;
@@ -12,18 +14,16 @@ const INTERACTIONS_TOTAL_REPORT = gql`
 const INTERACTIONS_TOTAL_COMPLETED_REPORT = gql`
     query communityStagesReport(
         $period: String!
-        $communityIds: [ID!]
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            interactions {
-                interactionCount
-                interactionType {
-                    name
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                interactions {
+                    interactionCount
+                    interactionType {
+                        name
+                    }
                 }
             }
         }
@@ -33,21 +33,19 @@ const INTERACTIONS_TOTAL_COMPLETED_REPORT = gql`
 const INTERACTIONS_COMPLETED_REPORT = gql`
     query communityDayReport(
         $period: String!
-        $communityIds: [ID!]
+        $id: ID!
         $endDate: ISO8601DateTime!
     ) {
-        communitiesReport(
-            period: $period
-            communityIds: $communityIds
-            endDate: $endDate
-        ) {
-            daysReport {
-                date
-                interactions
-                interactionResults {
-                    count
-                    interactionType {
-                        name
+        community(id: $id) {
+            report(period: $period, endDate: $endDate) {
+                daysReport {
+                    date
+                    interactionsCount
+                    interactionResults {
+                        count
+                        interactionType {
+                            name
+                        }
                     }
                 }
             }

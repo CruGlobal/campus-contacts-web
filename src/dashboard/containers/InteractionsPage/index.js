@@ -25,20 +25,20 @@ const InteractionsPage = () => {
                 query={INTERACTIONS_TOTAL_REPORT}
                 text={report =>
                     t('interactions.taken', {
-                        count: report.impactReport.interactionsCount,
-                        people: report.impactReport.interactionsReceiversCount,
+                        count: report.community.impactReport.interactionsCount,
+                        people:
+                            report.community.impactReport
+                                .interactionsReceiversCount,
                     })
                 }
-                variables={{ communityId: orgId }}
+                variables={{ id: orgId }}
             />
             <Card title={t('interactions.totalCompleted')}>
                 <StagesSummary
                     query={INTERACTIONS_TOTAL_COMPLETED_REPORT}
-                    variables={{
-                        communityIds: [orgId],
-                    }}
+                    variables={{ id: orgId }}
                     mapData={data =>
-                        data.communitiesReport[0].interactions.map(entry => ({
+                        data.community.report.interactions.map(entry => ({
                             stage: entry.interactionType.name,
                             icon: entry.interactionType.name
                                 .toLowerCase()
@@ -55,12 +55,10 @@ const InteractionsPage = () => {
             >
                 <FiltersChart
                     query={INTERACTIONS_COMPLETED_REPORT}
-                    variables={{
-                        communityIds: [orgId],
-                    }}
+                    variables={{ id: orgId }}
                     mapData={data =>
-                        data.communitiesReport[0].daysReport.map(row => ({
-                            ['total']: row.interactions,
+                        data.community.report.daysReport.map(row => ({
+                            ['total']: row.interactionsCount,
                             ['stages']: row.interactionResults.map(stage => ({
                                 name: stage.interactionType.name,
                                 count: stage.count,
