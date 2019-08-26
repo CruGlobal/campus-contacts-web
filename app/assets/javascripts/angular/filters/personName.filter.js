@@ -13,7 +13,7 @@ angular.module('missionhubApp').filter('personName', function(_) {
                 .filter(_.identity)
                 .join(' ');
         }
-        if (type === 'firstChar') {
+        if (type === 'firstChar' && person.last_name) {
             // Return just the first character of the users last name
             return [person.first_name, person.last_name.charAt(0)]
                 .filter(_.identity)
