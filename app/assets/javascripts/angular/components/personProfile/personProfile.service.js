@@ -123,7 +123,14 @@ function personProfileService(
                 {
                     included: httpProxy.includedFromModels(relationships),
                 },
-            );
+            ).then(res => {
+                // Filter out extra response
+                return (person[relationshipName] = res.data[
+                    relationshipName
+                ].filter((data, index) => {
+                    return res.data[relationshipName].indexOf(data) >= index;
+                }));
+            });
         },
 
         // Delete a relationship on the server

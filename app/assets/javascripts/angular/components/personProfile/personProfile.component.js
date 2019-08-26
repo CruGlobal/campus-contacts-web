@@ -191,7 +191,7 @@ function personProfileController(
 
         $scope.$emit('personModified');
 
-        var savePromise = personProfileService.saveRelationship(
+        let savePromise = personProfileService.saveRelationship(
             vm.personTab.person,
             relationship,
             relationshipName,
@@ -232,33 +232,23 @@ function personProfileController(
     }
 
     function emailAddressesWithPending() {
-        var emailAddresses = vm.personTab.person.email_addresses;
-        // When we add an email address, the api seems to return two copies of it
-        // This removes that extra from the response
-        const filteredEmailAddresses = emailAddresses.filter((email, index) => {
-            return emailAddresses.indexOf(email) >= index;
-        });
+        let emailAddresses = vm.personTab.person.email_addresses;
 
         if (!vm.pendingEmailAddress) {
             addEmailAddress();
             // If we add an email address, set the error to null
             vm.personTab.orgPermission.$error = null;
         }
-
-        return filteredEmailAddresses.concat(vm.pendingEmailAddress);
+        return emailAddresses.concat(vm.pendingEmailAddress);
     }
 
     function phoneNumbersWithPending() {
         var phoneNumbers = vm.personTab.person.phone_numbers;
-        // When we add an phone number, the api seems to return two copies of it
-        // This removes that extra from the response
-        const filteredPhoneNumbers = phoneNumbers.filter((number, index) => {
-            return phoneNumbers.indexOf(number) >= index;
-        });
+
         if (!vm.pendingPhoneNumber) {
             addPhoneNumber();
         }
-        return filteredPhoneNumbers.concat(vm.pendingPhoneNumber);
+        return phoneNumbers.concat(vm.pendingPhoneNumber);
     }
 
     function isPendingEmailAddress(emailAddress) {
