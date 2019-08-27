@@ -49,7 +49,7 @@ const StepsOfFaithPage = () => {
                             icon: entry.stage.name
                                 .toLowerCase()
                                 .replace(' ', '-'),
-                            count: entry.otherStepsCompletedCount,
+                            count: entry.othersStepsCompletedCount,
                         }))
                     }
                 />
@@ -102,7 +102,9 @@ const StepsOfFaithPage = () => {
                 query={GET_IMPACT_REPORT_REACHED}
                 text={report =>
                     t('stepsOfFaith.reached', {
-                        count: report.community.impactReport.stepsCount,
+                        count:
+                            report.community.impactReport
+                                .membersStageProgressionCount,
                     })
                 }
                 variables={{ id: orgId }}
@@ -115,7 +117,7 @@ const StepsOfFaithPage = () => {
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={data =>
                         data.community.report.stagesReport.map(row => ({
-                            [t('stepsOfFaith.peopleLabel')]: row.memberCount,
+                            [t('stepsOfFaith.peopleLabel')]: row.contactCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))
                     }

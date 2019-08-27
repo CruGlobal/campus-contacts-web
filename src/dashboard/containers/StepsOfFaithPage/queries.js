@@ -76,7 +76,7 @@ const GET_IMPACT_REPORT_REACHED = gql`
     query impactReport($id: ID!) {
         community(id: $id) {
             impactReport {
-                stepsCount
+                membersStageProgressionCount
             }
         }
     }
@@ -91,7 +91,7 @@ const GET_STAGES_PEOPLE_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    memberCount
+                    contactCount
                     stage {
                         name
                     }
