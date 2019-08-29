@@ -25,7 +25,8 @@
         <div class="name-container">
             <div class="name">
                 {{ $ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] |
-                personName: 'firstChar') : ('assignments.unassigned' | t) }}.
+                personName: 'firstAndLastInitial') : ('assignments.unassigned' |
+                t) }}.
                 <span ng-if="$ctrl.assignedTo.length > 1"
                     >(+{{ $ctrl.assignedTo.length - 1 }})</span
                 >
