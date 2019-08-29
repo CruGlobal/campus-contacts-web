@@ -128,6 +128,17 @@ function interactionsService(
                 )
                 .then(httpProxy.extractModel)
                 .then(function(interaction) {
+                    // Filter out extra initiator
+                    const filteredInteraction = interaction.initiators.filter(
+                        (initiator, index) => {
+                            return (
+                                interaction.initiators.indexOf(initiator) >=
+                                index
+                            );
+                        },
+                    );
+                    interaction.initiators = filteredInteraction;
+
                     interaction.initiators.forEach(function(initiator) {
                         // Add the new interaction to the person report
                         var report = reportsService.lookupPersonReport(

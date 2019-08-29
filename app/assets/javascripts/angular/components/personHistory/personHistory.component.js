@@ -103,7 +103,9 @@ function personHistoryController(
 
     // Scroll to the bottom of the history list
     function scrollToBottom() {
-        var scrollContainer = $element.find('.scrollable-area')[0];
+        const scrollContainer = document.getElementsByClassName(
+            'scrollable-area',
+        )[0];
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
 
