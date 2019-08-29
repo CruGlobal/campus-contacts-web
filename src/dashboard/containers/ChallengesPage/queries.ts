@@ -11,9 +11,14 @@ const GET_IMPACT_CHALLENGES = gql`
 `;
 
 const GET_CHALLENGES = gql`
-    query globalCommunityChallenges($id: ID!, $first: Int, $after: String) {
+    query globalCommunityChallenges(
+        $id: ID!
+        $first: Int
+        $after: String
+        $sortBy: [CommunityChallengesSortEnum!]
+    ) {
         community(id: $id) {
-            communityChallenges(first: $first, after: $after) {
+            communityChallenges(first: $first, after: $after, sortBy: $sortBy) {
                 nodes {
                     id
                     title

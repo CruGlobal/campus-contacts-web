@@ -22,7 +22,9 @@ const ChallengesPage = () => {
         const duration = (start: Date, end: Date) => {
             const startDate = moment(start).startOf('day');
             const endDate = moment(end).startOf('day');
-            const days = moment.duration(endDate.diff(startDate)).asDays();
+            const days = Math.floor(
+                moment.duration(endDate.diff(startDate)).asDays(),
+            );
             return days === 1 ? '1 Day' : `${days} Days`;
         };
 
@@ -33,7 +35,7 @@ const ChallengesPage = () => {
             return `${startDate} - ${endDate}`;
         };
 
-        return data.globalCommunityChallenges.nodes.map(
+        return data.community.communityChallenges.nodes.map(
             ({
                 id,
                 title,
@@ -53,7 +55,7 @@ const ChallengesPage = () => {
     };
 
     const mapPage = (data: any) => {
-        return data.globalCommunityChallenges.pageInfo;
+        return data.community.communityChallenges.pageInfo;
     };
 
     return (
@@ -74,7 +76,10 @@ const ChallengesPage = () => {
             >
                 <Table
                     query={GET_CHALLENGES}
-                    variables={{ id: orgId }}
+                    variables={{
+                        id: orgId,
+                        sortBy: 'createdAt_DESC',
+                    }}
                     headers={[
                         '',
                         '',
