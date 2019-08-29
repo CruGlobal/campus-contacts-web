@@ -15,6 +15,7 @@ angular.module('missionhubApp').component('personHistory', {
 function personHistoryController(
     $scope,
     $element,
+    $document,
     $interval,
     $q,
     asyncBindingsService,
@@ -103,7 +104,7 @@ function personHistoryController(
 
     // Scroll to the bottom of the history list
     function scrollToBottom() {
-        const scrollContainer = document.getElementsByClassName(
+        const scrollContainer = $document.getElementsByClassName(
             'scrollable-area',
         )[0];
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
