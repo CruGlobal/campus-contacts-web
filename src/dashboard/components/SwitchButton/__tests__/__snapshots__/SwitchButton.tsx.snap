@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SwitchButton /> should render properly 1`] = `
+<div>
+  <div
+    class="css-1s7lydy"
+  >
+    <div
+      class="active css-n7kdmv"
+    >
+      left
+    </div>
+    <div
+      class=" css-n7kdmv"
+    >
+      right
+    </div>
+  </div>
+</div>
+`;
