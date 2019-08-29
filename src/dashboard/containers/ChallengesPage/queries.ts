@@ -4,7 +4,7 @@ const GET_IMPACT_CHALLENGES = gql`
     query impactReport($id: ID!) {
         community(id: $id) {
             impactReport {
-                interactionsCount
+                stepsCount
             }
         }
     }

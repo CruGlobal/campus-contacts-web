@@ -64,7 +64,7 @@ const ChallengesPage = () => {
                 query={GET_IMPACT_CHALLENGES}
                 text={report =>
                     t('challenges.total', {
-                        count: report.community.impactReport.interactionsCount,
+                        count: report.community.impactReport.stepsCount,
                     })
                 }
                 variables={{ id: orgId }}
