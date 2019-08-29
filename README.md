@@ -25,6 +25,9 @@ Note: you may replace `yarn` with `npm` if you aren't using `yarn`
 - `yarn test-debug` to run karma tests in Chrome process for debugging with Chrome's dev tools
 - `yarn lint` to run eslint and lint the app's JS files
 
+### Environment Config
+By default running this repo locally hits the stage API server. If you need to test against the local API, you can edit [missionhubApp.config.js](https://github.com/CruGlobal/missionhub-web/blob/6619d9325424bca3381c2187d3ad2d73894abb90/app/assets/javascripts/angular/missionhubApp.config.js#L22).
+
 ### Deployment
 
 - Development should be done against `master`. Code merged to `master` will be deployed immediately to the production environment.
