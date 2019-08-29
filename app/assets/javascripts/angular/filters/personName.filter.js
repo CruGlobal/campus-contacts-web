@@ -6,7 +6,7 @@ angular.module('missionhubApp').filter('personName', function(_) {
         if (!person) {
             return null;
         }
-
+        // Ignore missing name parts and if the type is firstAndLastInitial only return the first character of the users last name.
         return [
             person.first_name,
             type === 'firstAndLastInitial' && person.last_name
