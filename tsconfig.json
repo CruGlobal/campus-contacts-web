@@ -1,6 +1,6 @@
 {
     "include": ["src/**/*"],
-    "files": ["custom.d.ts"],
+    "files": ["custom.d.ts", "styled.d.ts"],
     "exclude": ["node_modules"],
     "compilerOptions": {
         "lib": ["dom", "esnext"],

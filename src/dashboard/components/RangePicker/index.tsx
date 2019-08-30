@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { withTheme } from 'emotion-theming';
-import PropTypes from 'prop-types';
 import moment, { Moment } from 'moment';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -102,15 +101,13 @@ const CalendarIcon = styled.div`
     margin-right: 12px;
 `;
 
-const RangePicker = ({
-    onDatesChange,
-    startDate,
-    endDate,
-}: {
+interface Props {
     onDatesChange: (dates: any) => void;
     startDate: Moment;
     endDate: Moment;
-}) => {
+}
+
+const RangePicker = ({ onDatesChange, startDate, endDate }: Props) => {
     const [dates, setDates] = useState({ startDate, endDate });
     const [focus, setFocus] = useState();
 
@@ -149,9 +146,3 @@ const RangePicker = ({
 };
 
 export default withTheme(RangePicker);
-
-RangePicker.propTypes = {
-    onDatesChange: PropTypes.func,
-    startDate: PropTypes.object,
-    endDate: PropTypes.object,
-};

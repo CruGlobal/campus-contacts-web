@@ -68,5 +68,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
-Navigation.propTypes = {};

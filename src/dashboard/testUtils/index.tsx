@@ -1,8 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { ReactNode } from 'react';
 import { ApolloProvider } from 'react-apollo-hooks';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from 'emotion-theming';
-import { IMocks } from 'graphql-tools';
 
 import defaultTheme from '../defaultTheme';
 import AppContext from '../appContext';
@@ -17,7 +16,7 @@ export const renderWithContext = (
 
     // Warning: don't call any functions in here that return new instances on every call.
     // All the props need to stay the same otherwise renderer won't work.
-    const wrapper = ({ children }: { children: ReactElement }) => (
+    const wrapper = ({ children }: { children: ReactNode }) => (
         <ApolloProvider client={mockApolloClient}>
             <AppContext.Provider value={appContext}>
                 <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>

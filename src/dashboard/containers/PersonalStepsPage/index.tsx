@@ -133,5 +133,3 @@ const PersonalStepsPage = () => {
 };
 
 export default PersonalStepsPage;
-
-PersonalStepsPage.propTypes = {};

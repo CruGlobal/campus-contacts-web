@@ -78,5 +78,3 @@ const InteractionsPage = () => {
 };
 
 export default InteractionsPage;
-
-InteractionsPage.propTypes = {};

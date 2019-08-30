@@ -98,5 +98,3 @@ const ChallengesPage = () => {
 };
 
 export default ChallengesPage;
-
-ChallengesPage.propTypes = {};

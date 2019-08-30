@@ -4,15 +4,13 @@ import React from 'react';
 
 import Header from '../Header';
 
-const ImpactInfo = ({
-    query,
-    text,
-    variables,
-}: {
+interface Props {
     query: any;
     text: (data: any) => string;
     variables: any;
-}) => {
+}
+
+const ImpactInfo = ({ query, text, variables }: Props) => {
     const { data, loading } = useQuery(query, { variables });
     const { t } = useTranslation('insights');
 

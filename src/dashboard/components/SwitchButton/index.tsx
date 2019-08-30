@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { withTheme } from 'emotion-theming';
-import PropTypes from 'prop-types';
 
 const Container = styled.div`
     width: 145px;
@@ -38,19 +37,21 @@ const Button = styled.div`
     }
 `;
 
+interface Props {
+    leftLabel: string;
+    rightLabel: string;
+    onLeftClick: () => void;
+    onRightClick: () => void;
+    isMonth: boolean;
+}
+
 const SwitchButton = ({
     leftLabel,
     rightLabel,
     onLeftClick,
     onRightClick,
     isMonth,
-}: {
-    leftLabel: string;
-    rightLabel: string;
-    onLeftClick: () => void;
-    onRightClick: () => void;
-    isMonth: boolean;
-}) => {
+}: Props) => {
     const [isLeftActive, setLeftActive] = useState(isMonth);
 
     const leftClicked = () => {
@@ -82,10 +83,3 @@ const SwitchButton = ({
 };
 
 export default withTheme(SwitchButton);
-
-SwitchButton.propTypes = {
-    leftLabel: PropTypes.string,
-    rightLabel: PropTypes.string,
-    onLeftClick: PropTypes.func,
-    onRightClick: PropTypes.func,
-};

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, useState } from 'react';
 import { Bar } from '@nivo/bar';
 import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
@@ -102,7 +101,24 @@ const Value = styled.div`
     align-self: flex-end;
 `;
 
-const BarChart = (props: any) => {
+interface Props {
+    theme: any;
+    data: any;
+    keys: any;
+    indexBy: string;
+    average?: number;
+    filterType: string;
+    title?: string;
+    subtitle?: string;
+    children?: ReactNode;
+    index: number;
+    datesFilter?: boolean;
+    onFilterChanged: (type: string, index: number) => void;
+    legendLabel?: string;
+    tooltipBreakdown?: boolean;
+}
+
+const BarChart = (props: Props) => {
     const {
         theme,
         data,
@@ -121,7 +137,7 @@ const BarChart = (props: any) => {
 
     const [filter, setFilter] = useState({
         type: filterType,
-        index: props.index,
+        index,
     });
 
     const AverageLine = ({
@@ -137,9 +153,9 @@ const BarChart = (props: any) => {
 
         const averageLine = [{ x: 0, y: average }, { x: width, y: average }];
 
-        const lineGenerator = line()
-            .x((d: any) => d.x)
-            .y((d: any) => yScale(d.y));
+        const lineGenerator = line<{ x: number; y: number }>()
+            .x(({ x }) => x)
+            .y(({ y }) => yScale(y));
 
         return (
             <path
@@ -176,7 +192,7 @@ const BarChart = (props: any) => {
         const { data } = options;
 
         return [
-            data.stages.map((row: any) => (
+            data.stages.map((row: { name: string; count: number }) => (
                 <TooltipRow key={row.name}>
                     <Label>{row.name}</Label>
                     <Value>{row.count}</Value>
@@ -274,19 +290,3 @@ const BarChart = (props: any) => {
 };
 
 export default withTheme(BarChart);
-
-BarChart.propTypes = {
-    data: PropTypes.object,
-    keys: PropTypes.object,
-    indexBy: PropTypes.string,
-    average: PropTypes.number,
-    filterType: PropTypes.string,
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    children: PropTypes.element,
-    index: PropTypes.number,
-    datesFilter: PropTypes.bool,
-    onFilterChanged: PropTypes.func,
-    legendLabel: PropTypes.string,
-    tooltipBreakdown: PropTypes.bool,
-};

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withTheme } from 'emotion-theming';
 
 const Container = styled.div`
@@ -23,7 +22,7 @@ const Title = styled.h1`
 `;
 
 interface SubtitleProps {
-    noMarginBottom: number;
+    noMarginBottom?: boolean;
 }
 
 const Subtitle = styled.h2<SubtitleProps>`
@@ -32,19 +31,28 @@ const Subtitle = styled.h2<SubtitleProps>`
     font-weight: normal;
     color: ${({ theme }: { theme: any }) => theme.colors.primary};
     margin-top: 0;
-    margin-bottom: ${(props: any) => (props.noMarginBottom ? '-40px' : '0')};
+    margin-bottom: ${(props: SubtitleProps) =>
+        props.noMarginBottom ? '-40px' : '0'};
 `;
 
 interface ContentProps {
-    noPadding: number;
+    noPadding?: boolean;
 }
 
 const Content = styled.div<ContentProps>`
-    padding: ${(props: any) => (props.noPadding ? 0 : '25px')};
-    margin: ${(props: any) => (props.noPadding ? '0 -24px' : '0')};
+    padding: ${(props: ContentProps) => (props.noPadding ? 0 : '25px')};
+    margin: ${(props: ContentProps) => (props.noPadding ? '0 -24px' : '0')};
 `;
 
-const Card = (props: any) => {
+interface Props {
+    title?: string;
+    subtitle?: string;
+    children?: any;
+    noPadding?: boolean;
+    noMarginBottom?: boolean;
+}
+
+const Card = (props: Props) => {
     const { title, subtitle, children, noPadding, noMarginBottom } = props;
     return (
         <Container>
@@ -56,11 +64,3 @@ const Card = (props: any) => {
 };
 
 export default withTheme(Card);
-
-Card.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    children: PropTypes.element,
-    noPadding: PropTypes.bool,
-    noMarginBottom: PropTypes.bool,
-};

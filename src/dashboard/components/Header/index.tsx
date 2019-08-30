@@ -11,5 +11,3 @@ const Header = styled.h1`
 `;
 
 export default Header;
-
-Header.propTypes = {};

@@ -5,7 +5,6 @@ import Header from '../';
 
 describe('<Header />', () => {
     it('should render properly', async () => {
-        console.log('bar', <Header />);
         renderWithContext(<Header />).snapshot();
     });
 
