@@ -17,7 +17,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Total Steps of Faith Completed
       </h1>
       <h2
-        class="css-140lofm"
+        class="css-1d5k8m6"
       />
       <div
         class="css-rr4yq"
@@ -38,7 +38,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Steps of Faith Completed
       </h1>
       <h2
-        class="css-140lofm"
+        class="css-1d5k8m6"
       >
         Total steps of faith completed with others by members since  was created on .
       </h2>
@@ -59,7 +59,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         Steps of Faith Added
       </h1>
       <h2
-        class="css-140lofm"
+        class="css-1d5k8m6"
       >
         Current total number of steps of faith with others added by members.
       </h2>
@@ -87,7 +87,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         People Stages
       </h1>
       <h2
-        class="css-140lofm"
+        class="css-1d5k8m6"
       >
         Current total number of people added by members.
       </h2>

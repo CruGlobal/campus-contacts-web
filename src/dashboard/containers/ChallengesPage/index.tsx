@@ -73,6 +73,7 @@ const ChallengesPage = () => {
                 title={t('challenges.title')}
                 subtitle={t('challenges.subTitle')}
                 noPadding={true}
+                noMarginBottom={true}
             >
                 <Table
                     query={GET_CHALLENGES}
