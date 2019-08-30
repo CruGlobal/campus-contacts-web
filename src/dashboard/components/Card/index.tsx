@@ -22,12 +22,17 @@ const Title = styled.h1`
     margin-top: 0px;
 `;
 
-const Subtitle = styled.h2`
+interface SubtitleProps {
+    noMarginBottom: number;
+}
+
+const Subtitle = styled.h2<SubtitleProps>`
     font-size: 14px;
     line-height: 20px;
     font-weight: normal;
     color: ${({ theme }: { theme: any }) => theme.colors.primary};
     margin-top: 0;
+    margin-bottom: ${(props: any) => (props.noMarginBottom ? '-40px' : '0')};
 `;
 
 interface ContentProps {
@@ -40,11 +45,11 @@ const Content = styled.div<ContentProps>`
 `;
 
 const Card = (props: any) => {
-    const { title, subtitle, children, noPadding } = props;
+    const { title, subtitle, children, noPadding, noMarginBottom } = props;
     return (
         <Container>
             <Title>{title}</Title>
-            <Subtitle>{subtitle}</Subtitle>
+            <Subtitle noMarginBottom={noMarginBottom}>{subtitle}</Subtitle>
             <Content noPadding={noPadding}>{children}</Content>
         </Container>
     );
@@ -57,4 +62,5 @@ Card.propTypes = {
     subtitle: PropTypes.string,
     children: PropTypes.element,
     noPadding: PropTypes.bool,
+    noMarginBottom: PropTypes.bool,
 };
