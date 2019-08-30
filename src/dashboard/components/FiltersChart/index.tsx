@@ -6,19 +6,21 @@ import _ from 'lodash';
 
 import BarChart from '../BarChart';
 
+interface Props {
+    query: any;
+    variables?: any;
+    mapData: (data: any) => any;
+    label: string;
+    currentDate?: Date;
+}
+
 const FiltersChart = ({
     query,
     variables,
     mapData,
     label,
     currentDate,
-}: {
-    query: any;
-    variables?: any;
-    mapData: (data: any) => any;
-    label: string;
-    currentDate?: Date;
-}) => {
+}: Props) => {
     const [index, setIndex] = useState(0);
     const [endDate, setEndDate] = useState(moment(currentDate));
     const [type, setType] = useState('month');

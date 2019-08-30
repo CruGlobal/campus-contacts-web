@@ -2,6 +2,8 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { CommunityChallengesSortEnum } from './../../../../../__generated__/globalTypes';
+
 // ====================================================
 // GraphQL query operation: globalCommunityChallenges
 // ====================================================
@@ -64,4 +66,5 @@ export interface globalCommunityChallengesVariables {
     id: string;
     first?: number | null;
     after?: string | null;
+    sortBy?: CommunityChallengesSortEnum[] | null;
 }

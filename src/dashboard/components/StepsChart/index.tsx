@@ -10,19 +10,14 @@ const Wrapper = styled.div`
     position: relative;
 `;
 
-const StepsChart = ({
-    query,
-    mapData,
-    label,
-    index,
-    variables,
-}: {
+interface Props {
     query: any;
     mapData: (data: any) => any;
     variables: any;
     label: string;
     index: string;
-}) => {
+}
+const StepsChart = ({ query, mapData, label, index, variables }: Props) => {
     const { data, loading } = useQuery(query, { variables });
     const { t } = useTranslation('insights');
 
@@ -32,7 +27,14 @@ const StepsChart = ({
 
     return (
         <Wrapper>
-            <BarChart data={mapData(data)} keys={[label]} indexBy={index} />
+            <BarChart
+                data={mapData(data)}
+                keys={[label]}
+                indexBy={index}
+                onFilterChanged={() => {}}
+                index={0}
+                filterType={'month'}
+            />
         </Wrapper>
     );
 };

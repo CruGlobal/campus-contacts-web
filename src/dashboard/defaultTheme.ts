@@ -1,4 +1,6 @@
-const defaultTheme = {
+import { DefaultTheme } from 'styled-components';
+
+const defaultTheme: DefaultTheme = {
     font: {
         family: 'Source Sans Pro',
         size: '14px',

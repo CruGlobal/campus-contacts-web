@@ -111,15 +111,13 @@ const Footer = styled.div`
     margin-top: 28px;
 `;
 
-const StagesSummary = ({
-    query,
-    variables,
-    mapData,
-}: {
+interface Props {
     query: any;
     mapData: (data: any) => any;
     variables: any;
-}) => {
+}
+
+const StagesSummary = ({ query, variables, mapData }: Props) => {
     const [dates, setDates] = useState({
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
@@ -175,9 +173,3 @@ const StagesSummary = ({
 };
 
 export default withTheme(StagesSummary);
-
-StagesSummary.propTypes = {
-    query: PropTypes.object.isRequired,
-    variables: PropTypes.object.isRequired,
-    mapData: PropTypes.func.isRequired,
-};

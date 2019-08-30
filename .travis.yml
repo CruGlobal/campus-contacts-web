@@ -8,6 +8,7 @@ script:
     - yarn test
     - yarn global add apollo
     - yarn gql:schema
+    - yarn gql:codegen
     - yarn test:react:coverage
     - yarn lint:ts
     - yarn prettier:check

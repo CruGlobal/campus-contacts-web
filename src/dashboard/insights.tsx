@@ -9,13 +9,11 @@ import AppContext from './appContext';
 import defaultTheme from './defaultTheme';
 import Layout from './containers/Layout';
 
-const Insights = ({
-    orgId,
-    authenticationService,
-}: {
-    orgId: number;
+interface Props {
+    orgId: string;
     authenticationService: any;
-}) => {
+}
+const Insights = ({ orgId, authenticationService }: Props) => {
     const token = authenticationService.isTokenValid();
     const apolloClient = createApolloClient(token);
 
@@ -28,11 +26,6 @@ const Insights = ({
             </AppContext.Provider>
         </ApolloProvider>
     );
-};
-
-Insights.propTypes = {
-    orgId: PropTypes.string,
-    authenticationService: PropTypes.object,
 };
 
 // @ts-ignore

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
@@ -118,19 +117,15 @@ const Page = styled.div`
 const PAGE_SIZE = 5;
 const PAGE_NUMBERS_SIZE = 5;
 
-const Table = ({
-    query,
-    headers,
-    mapRows,
-    mapPage,
-    variables,
-}: {
+interface Props {
     query: any;
     headers: any;
     mapRows: (data: any) => any;
     mapPage: (data: any) => any;
     variables: any;
-}) => {
+}
+
+const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const { data, loading, refetch } = useQuery(query, {
@@ -217,10 +212,3 @@ const Table = ({
 };
 
 export default withTheme(Table);
-
-Table.propTypes = {
-    query: PropTypes.object,
-    headers: PropTypes.arrayOf(PropTypes.string),
-    mapRows: PropTypes.func,
-    mapPage: PropTypes.func,
-};

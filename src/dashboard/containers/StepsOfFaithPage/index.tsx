@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import _ from 'lodash';
 
 import Card from '../../components/Card';
 import AppContext from '../../appContext';
@@ -137,5 +136,3 @@ const StepsOfFaithPage = () => {
 };
 
 export default StepsOfFaithPage;
-
-StepsOfFaithPage.propTypes = {};
