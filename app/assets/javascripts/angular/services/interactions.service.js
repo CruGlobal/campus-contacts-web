@@ -130,12 +130,8 @@ function interactionsService(
                 .then(function(interaction) {
                     // Filter out extra initiator
                     const filteredInteraction = interaction.initiators.filter(
-                        (initiator, index) => {
-                            return (
-                                interaction.initiators.indexOf(initiator) >=
-                                index
-                            );
-                        },
+                        (initiator, index) =>
+                            interaction.initiators.indexOf(initiator) >= index,
                     );
                     interaction.initiators = filteredInteraction;
 

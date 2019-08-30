@@ -191,7 +191,7 @@ function personProfileController(
 
         $scope.$emit('personModified');
 
-        let savePromise = personProfileService.saveRelationship(
+        const savePromise = personProfileService.saveRelationship(
             vm.personTab.person,
             relationship,
             relationshipName,
@@ -224,10 +224,10 @@ function personProfileController(
     }
 
     function addressWithPending() {
-        let addresses = vm.personTab.person.addresses;
-        const filteredAddresses = addresses.filter((address, index) => {
-            return addresses.indexOf(address) >= index;
-        });
+        const addresses = vm.personTab.person.addresses;
+        const filteredAddresses = addresses.filter(
+            (address, index) => addresses.indexOf(address) >= index,
+        );
         return filteredAddresses;
     }
 
