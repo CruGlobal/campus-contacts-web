@@ -36,6 +36,7 @@ const InteractionsPage = () => {
                 <StagesSummary
                     query={INTERACTIONS_TOTAL_COMPLETED_REPORT}
                     variables={{ id: orgId }}
+                    longNames={true}
                     mapData={data =>
                         data.community.report.interactions.map(
                             (entry: any) => ({
