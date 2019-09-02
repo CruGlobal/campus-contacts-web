@@ -31,7 +31,6 @@ const PersonalStepsPage = () => {
                         count:
                             report.community.impactReport
                                 .personalStepsCompletedCount,
-                        year: moment().format('YYYY'),
                     })
                 }
                 variables={{ id: orgId }}

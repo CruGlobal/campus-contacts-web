@@ -82,7 +82,11 @@ const Icon = styled.div`
     }
 `;
 
-const Title = styled.div`
+interface TitleProps {
+    longNames?: boolean;
+}
+
+const Title = styled.div<TitleProps>`
     font-weight: 600;
     font-size: 12px;
     line-height: 14px;
@@ -92,6 +96,7 @@ const Title = styled.div`
     overflow-wrap: break-word;
     width: 110px;
     text-align: center;
+    height: ${(props: TitleProps) => (props.longNames ? '42px' : '14px')};
 `;
 
 const Value = styled.div`
@@ -115,9 +120,10 @@ interface Props {
     query: any;
     mapData: (data: any) => any;
     variables: any;
+    longNames: boolean;
 }
 
-const StagesSummary = ({ query, variables, mapData }: Props) => {
+const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     const [dates, setDates] = useState({
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
@@ -156,7 +162,7 @@ const StagesSummary = ({ query, variables, mapData }: Props) => {
                 {mapData(data).map((entry: any) => (
                     <Stage key={entry.stage}>
                         <Icon className={entry.icon} />
-                        <Title>{entry.stage}</Title>
+                        <Title longNames={longNames}>{entry.stage}</Title>
                         <Value>{entry.count ? entry.count : '-'}</Value>
                     </Stage>
                 ))}

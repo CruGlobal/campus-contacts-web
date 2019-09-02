@@ -1161,7 +1161,7 @@ export default {
             label: 'Personal Steps of Faith',
             legend: 'Steps of Faith',
             taken:
-                'Together we have taken {{count}} personal steps of faith in {{year}}.',
+                'This year, we have taken {{count}} personal steps of faith.',
             reached:
                 'This year, {{count}} people reached a new stage on their spiritual journey.',
             completedTotal: 'Total Personal Steps of Faith Completed',
