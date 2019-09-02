@@ -120,7 +120,7 @@ interface Props {
     query: any;
     mapData: (data: any) => any;
     variables: any;
-    longNames: boolean;
+    longNames?: boolean;
 }
 
 const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
