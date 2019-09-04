@@ -1,9 +1,9 @@
 import 'angular-mocks';
 
 // Constants
-var assignedSelectService;
+var assignedPeopleSelectService;
 
-describe('assignedSelectService', function() {
+describe('assignedPeopleSelectService', function() {
     beforeEach(function() {
         var _this = this;
         angular.mock.module(function($provide) {
@@ -17,16 +17,16 @@ describe('assignedSelectService', function() {
         });
     });
 
-    beforeEach(inject(function(_assignedSelectService_) {
-        assignedSelectService = _assignedSelectService_;
+    beforeEach(inject(function(_assignedPeopleSelectService_) {
+        assignedPeopleSelectService = _assignedPeopleSelectService_;
 
         this.person = { id: 123 };
     }));
 
     describe('isMe', function() {
         it('should check whether the person matches the logged in person', function() {
-            expect(assignedSelectService.isMe(this.person)).toBe(true);
-            expect(assignedSelectService.isMe({ id: 456 })).toBe(false);
+            expect(assignedPeopleSelectService.isMe(this.person)).toBe(true);
+            expect(assignedPeopleSelectService.isMe({ id: 456 })).toBe(false);
         });
     });
 });

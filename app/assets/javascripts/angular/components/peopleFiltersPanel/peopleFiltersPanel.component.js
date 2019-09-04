@@ -33,7 +33,6 @@ function peopleFiltersPanelController(
 
     this.$onInit = () => {
         loadFilterStats();
-
         this.personModifiedUnsubscribe = $rootScope.$on(
             'personModified',
             loadFilterStats,
@@ -42,6 +41,10 @@ function peopleFiltersPanelController(
             'massEditApplied',
             loadFilterStats,
         );
+        // Listen for an update that the filter count may have changed
+        this.updateFilterCount = $rootScope.$on('updateFilterCount', () => {
+            loadFilterStats();
+        });
     };
 
     this.$onChanges = changes => {
@@ -70,6 +73,7 @@ function peopleFiltersPanelController(
     this.$onDestroy = () => {
         this.personModifiedUnsubscribe();
         this.massEditAppliedUnsubscribe();
+        this.updateFilterCount();
     };
 
     this.hideNonFilterableQuestionAnswerResponse = question => {
@@ -138,7 +142,9 @@ function peopleFiltersPanelController(
                 this.labelOptions = stats.labels;
                 this.assignmentOptions = stats.assigned_tos;
                 this.groupOptions = stats.groups;
-                this.statusOptions = stats.statuses;
+                this.statusOptions = stats.statuses.filter(
+                    option => option.followup_status !== 'do_not_email',
+                );
                 this.permissionOptions = stats.permissions;
                 this.genderOptions = stats.genders;
                 this.questionOptions = stats.questions;
@@ -154,6 +160,7 @@ function peopleFiltersPanelController(
                     this.filters.assignedTos,
                     _.map(this.assignmentOptions, 'person_id'),
                 );
+
                 this.filters.groups = _.pick(
                     this.filters.groups,
                     _.map(this.groupOptions, 'group_id'),

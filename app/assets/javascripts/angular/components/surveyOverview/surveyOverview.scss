@@ -326,12 +326,16 @@ organization-contact-import {
             margin-top: -8px;
         }
 
+        .sm-help {
+            margin-top: -18px;
+            max-width: 75%;
+            > img {
+                max-width: 75%;
+            }
+        }
+
         .tab {
             border-bottom: 1px solid transparent;
-
-            &.active {
-                //border-bottom: 1px solid $blue-1;
-            }
 
             a {
                 color: $gray-1;
@@ -341,12 +345,12 @@ organization-contact-import {
 
     .tab-body {
         margin-top: -1px;
-        border-bottom-left-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
+        border-top-color: #fff;
+        border-bottom-color: #fff;
 
         .ui-select-container {
             background: #fff;
-            margin: 0.6rem 0;
+            margin: 0.6rem 0 1rem 0;
             padding: 0.5rem 0.5rem;
         }
 
@@ -360,6 +364,52 @@ organization-contact-import {
     }
 
     /* Assignments */
+
+    .question-row {
+        margin-top: -12px;
+        .assignments.tab-body {
+            border-top: none;
+            border-bottom: none;
+        }
+        .assignments-notify.tab-body {
+            border-top: none;
+            border-bottom: none;
+        }
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            .assignments.tab-body {
+                border-bottom: 1px solid #a0a2a6;
+                border-bottom-left-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+            .assignments-notify.tab-body {
+                border-bottom-color: #fff;
+            }
+        }
+    }
+
+    .notification-container {
+        margin-top: -12px;
+        margin-left: auto;
+        border-bottom: 1px solid #a0a2a6;
+        border-left: 1px solid #a0a2a6;
+        border-right: 1px solid #a0a2a6;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        label {
+            margin-right: auto;
+        }
+    }
+
+    .questions-container {
+        margin-top: -15px;
+    }
+
+    .unselected-tab {
+        border-bottom: 1px solid #a0a2a6;
+    }
 
     .assignment-item {
         position: relative;
