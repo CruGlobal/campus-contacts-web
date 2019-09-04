@@ -52,8 +52,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="258"
-                  y2="258"
+                  y1="252"
+                  y2="252"
                 />
                 <line
                   opacity="1"
@@ -61,8 +61,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="235"
-                  y2="235"
+                  y1="224"
+                  y2="224"
                 />
                 <line
                   opacity="1"
@@ -70,17 +70,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="213"
-                  y2="213"
-                />
-                <line
-                  opacity="1"
-                  stroke="#ECEEF2"
-                  stroke-width="1"
-                  x1="0"
-                  x2="818"
-                  y1="190"
-                  y2="190"
+                  y1="196"
+                  y2="196"
                 />
                 <line
                   opacity="1"
@@ -97,8 +88,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="146"
-                  y2="146"
+                  y1="140"
+                  y2="140"
                 />
                 <line
                   opacity="1"
@@ -106,8 +97,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="123"
-                  y2="123"
+                  y1="112"
+                  y2="112"
                 />
                 <line
                   opacity="1"
@@ -115,8 +106,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="101"
-                  y2="101"
+                  y1="83"
+                  y2="83"
                 />
                 <line
                   opacity="1"
@@ -124,8 +115,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="78"
-                  y2="78"
+                  y1="55"
+                  y2="55"
                 />
                 <line
                   opacity="1"
@@ -133,26 +124,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="56"
-                  y2="56"
-                />
-                <line
-                  opacity="1"
-                  stroke="#ECEEF2"
-                  stroke-width="1"
-                  x1="0"
-                  x2="818"
-                  y1="34"
-                  y2="34"
-                />
-                <line
-                  opacity="1"
-                  stroke="#ECEEF2"
-                  stroke-width="1"
-                  x1="0"
-                  x2="818"
-                  y1="11"
-                  y2="11"
+                  y1="27"
+                  y2="27"
                 />
               </g>
               <g
@@ -231,7 +204,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,258)"
+                  transform="translate(0,252)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -246,12 +219,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    2
+                    10000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,235)"
+                  transform="translate(0,224)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -266,12 +239,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    4
+                    20000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,213)"
+                  transform="translate(0,196)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -286,27 +259,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    6
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,190)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    8
+                    30000
                   </text>
                 </g>
                 <g
@@ -326,12 +279,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    10
+                    40000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,146)"
+                  transform="translate(0,140)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -346,12 +299,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    12
+                    50000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,123)"
+                  transform="translate(0,112)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -366,12 +319,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    14
+                    60000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,101)"
+                  transform="translate(0,83)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -386,12 +339,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    16
+                    70000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,78)"
+                  transform="translate(0,55)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -406,12 +359,12 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    18
+                    80000
                   </text>
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,56)"
+                  transform="translate(0,27)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -426,47 +379,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="end"
                     transform="translate(-5,0) rotate(0)"
                   >
-                    20
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,34)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    22
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,11)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    24
+                    90000
                   </text>
                 </g>
                 <line
@@ -479,11 +392,11 @@ exports[`<StepsChart /> should render properly with data 1`] = `
               </g>
               <g>
                 <g
-                  transform="translate(137, 56)"
+                  transform="translate(137, 163)"
                 >
                   <rect
                     fill="#3CC8E6"
-                    height="224"
+                    height="117"
                     rx="0"
                     ry="0"
                     stroke="#3CC8E6"

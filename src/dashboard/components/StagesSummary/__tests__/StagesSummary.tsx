@@ -3,31 +3,13 @@ import gql from 'graphql-tag';
 
 import { renderWithContext } from '../../../testUtils';
 import StagesSummary from '../';
-
-const QUERY = gql`
-    query communityReport(
-        $period: String!
-        $id: ID!
-        $endDate: ISO8601DateTime!
-    ) {
-        community(id: $id) {
-            report(period: $period, endDate: $endDate) {
-                stagesReport {
-                    stage {
-                        name
-                    }
-                    personalStepsCompletedCount
-                }
-            }
-        }
-    }
-`;
+import { GET_TOTAL_STEPS_COMPLETED_SUMMARY } from '../../../containers/PersonalStepsPage/queries';
 
 describe('<StagesSummary />', () => {
     it('should render properly', async () => {
         renderWithContext(
             <StagesSummary
-                query={QUERY}
+                query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
                 variables={{
                     organizationId: 1,
                 }}

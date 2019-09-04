@@ -61,15 +61,15 @@ module.exports = (env = {}) => {
             new MiniCssExtractPlugin({
                 filename: '[name].[contenthash].css',
             }),
-            ...(!isTest
-                ? [
+            ...(isTest
+                ? []
+                : [
                       new HtmlWebpackPlugin({
                           template: 'index.ejs',
                           prod: prod,
                           minify: htmlMinDefaults,
                       }),
-                  ]
-                : []),
+                  ]),
             ...(isBuild
                 ? [
                       new webpack.NamedModulesPlugin(),
@@ -106,7 +106,7 @@ module.exports = (env = {}) => {
                                     '@babel/plugin-transform-runtime',
                                     '@babel/plugin-syntax-dynamic-import',
                                     '@babel/plugin-transform-template-literals',
-                                    ...(!isTest ? ['angularjs-annotate'] : []),
+                                    ...(isTest ? [] : ['angularjs-annotate']),
                                 ],
                             },
                         },

@@ -4,27 +4,7 @@ import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../testUtils';
 import Table from '../';
-
-const QUERY = gql`
-    query globalCommunityChallenges($first: Int, $after: String) {
-        globalCommunityChallenges(first: $first, after: $after) {
-            nodes {
-                id
-                title
-                acceptedCount
-                completedCount
-                createdAt
-                endDate
-            }
-            pageInfo {
-                hasNextPage
-                startCursor
-                endCursor
-                hasPreviousPage
-            }
-        }
-    }
-`;
+import { GET_CHALLENGES } from '../../../containers/ChallengesPage/queries';
 
 describe('<Table />', () => {
     it('should render properly in loading', async () => {
@@ -33,7 +13,7 @@ describe('<Table />', () => {
 
         renderWithContext(
             <Table
-                query={QUERY}
+                query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
                 mapPage={mapPage}
@@ -48,7 +28,7 @@ describe('<Table />', () => {
 
         const { snapshot, getByText } = renderWithContext(
             <Table
-                query={QUERY}
+                query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
                 mapPage={mapPage}

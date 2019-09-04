@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const GET_IMPACT_CHALLENGES = gql`
-    query impactReport($id: ID!) {
+    query impactReportStepsCount($id: ID!) {
         community(id: $id) {
             impactReport {
                 stepsCount
@@ -11,7 +11,7 @@ const GET_IMPACT_CHALLENGES = gql`
 `;
 
 const GET_CHALLENGES = gql`
-    query globalCommunityChallenges(
+    query communityChallenges(
         $id: ID!
         $first: Int
         $after: String

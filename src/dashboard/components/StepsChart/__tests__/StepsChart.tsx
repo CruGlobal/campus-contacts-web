@@ -5,34 +5,16 @@ import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../testUtils';
 import StepsChart from '../';
-
-const QUERY = gql`
-    query communityStagesReport(
-        $period: String!
-        $id: ID!
-        $endDate: ISO8601DateTime!
-    ) {
-        community(id: $id) {
-            report(period: $period, endDate: $endDate) {
-                stagesReport {
-                    stepsAddedCount
-                    stage {
-                        name
-                    }
-                }
-            }
-        }
-    }
-`;
+import { GET_STAGES_REPORT_STEPS_ADDED } from '../../../containers/PersonalStepsPage/queries';
 
 describe('<StepsChart />', () => {
     it('should render properly', async () => {
         renderWithContext(
             <StepsChart
-                query={QUERY}
+                query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
                     data.community.report.stagesReport.map((row: any) => ({
-                        ['label']: row.stepsAddedCount,
+                        ['label']: row.personalStepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
                 }
@@ -50,10 +32,10 @@ describe('<StepsChart />', () => {
     it('should render properly with data', async () => {
         const { snapshot, getByText } = renderWithContext(
             <StepsChart
-                query={QUERY}
+                query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
                     data.community.report.stagesReport.map((row: any) => ({
-                        ['label']: row.stepsAddedCount,
+                        ['label']: row.personalStepsAddedCount,
                         ['index']: row.stage.name.toUpperCase(),
                     }))
                 }

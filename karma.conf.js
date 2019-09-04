@@ -18,8 +18,9 @@ const karmaWebpackConfig = {
         ...webpackConfig.module,
         rules: [
             ...webpackConfig.module.rules,
-            ...(process.env.npm_lifecycle_event !== 'test-debug'
-                ? [
+            ...(process.env.npm_lifecycle_event === 'test-debug'
+                ? []
+                : [
                       {
                           test: /^(?!.*\.(spec|fixture)\.js$).*\.js$/,
                           include: path.resolve('app/'),
@@ -29,8 +30,7 @@ const karmaWebpackConfig = {
                               esModules: true,
                           },
                       },
-                  ]
-                : []),
+                  ]),
         ],
     },
     plugins: [

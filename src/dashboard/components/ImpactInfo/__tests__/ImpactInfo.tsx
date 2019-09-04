@@ -4,22 +4,13 @@ import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../testUtils';
 import ImpactInfo from '../';
-
-const QUERY = gql`
-    query impactReport($id: ID!) {
-        community(id: $id) {
-            impactReport {
-                stageProgressionCount
-            }
-        }
-    }
-`;
+import { GET_IMPACT_REPORT_MOVED } from '../../../containers/PersonalStepsPage/queries';
 
 describe('<ImpactInfo />', () => {
     it('should render properly loading state', async () => {
         renderWithContext(
             <ImpactInfo
-                query={QUERY}
+                query={GET_IMPACT_REPORT_MOVED}
                 text={report =>
                     `Text with value ${report.community.impactReport.stageProgressionCount}`
                 }
@@ -36,7 +27,7 @@ describe('<ImpactInfo />', () => {
     it('should render properly with data', async () => {
         const { snapshot, getByText } = renderWithContext(
             <ImpactInfo
-                query={QUERY}
+                query={GET_IMPACT_REPORT_MOVED}
                 text={report =>
                     `Text with value ${report.community.impactReport.stageProgressionCount}`
                 }

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const GET_IMPACT_REPORT_MOVED = gql`
-    query impactReport($id: ID!) {
+    query impactReportStageProgressionCount($id: ID!) {
         community(id: $id) {
             impactReport {
                 stageProgressionCount
@@ -11,7 +11,7 @@ const GET_IMPACT_REPORT_MOVED = gql`
 `;
 
 const GET_IMPACT_REPORT_STEPS_TAKEN = gql`
-    query impactReport($id: ID!) {
+    query impactReportPersonalStepsCompletedCount($id: ID!) {
         community(id: $id) {
             impactReport {
                 personalStepsCompletedCount
@@ -21,7 +21,7 @@ const GET_IMPACT_REPORT_STEPS_TAKEN = gql`
 `;
 
 const GET_STAGES_REPORT_MEMBER_COUNT = gql`
-    query communityStagesReport(
+    query communityReportStagesPersonalMemberCount(
         $period: String!
         $id: ID!
         $endDate: ISO8601DateTime!
@@ -40,7 +40,7 @@ const GET_STAGES_REPORT_MEMBER_COUNT = gql`
 `;
 
 const GET_STAGES_REPORT_STEPS_ADDED = gql`
-    query communityStagesReport(
+    query communityReportStagesPersonalStepsAdded(
         $period: String!
         $id: ID!
         $endDate: ISO8601DateTime!
@@ -59,7 +59,7 @@ const GET_STAGES_REPORT_STEPS_ADDED = gql`
 `;
 
 const GET_STEPS_COMPLETED_REPORT = gql`
-    query communityDayReport(
+    query communityReportDaysPersonalSteps(
         $period: String!
         $id: ID!
         $endDate: ISO8601DateTime!
@@ -82,7 +82,7 @@ const GET_STEPS_COMPLETED_REPORT = gql`
 `;
 
 const GET_TOTAL_STEPS_COMPLETED_SUMMARY = gql`
-    query communityStagesReport(
+    query communityReportStagesPersonalStepsCompleted(
         $id: ID!
         $period: String!
         $endDate: ISO8601DateTime!

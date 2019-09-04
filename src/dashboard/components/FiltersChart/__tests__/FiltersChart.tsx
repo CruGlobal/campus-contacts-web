@@ -3,27 +3,13 @@ import gql from 'graphql-tag';
 
 import { renderWithContext } from '../../../testUtils';
 import FiltersChart from '../';
-
-const QUERY = gql`
-    query communityReport {
-        communityReport {
-            dayReport {
-                date
-                stepsWithOthersStepsCompletedCount
-                communityStagesReport {
-                    pathwayStage
-                    stepsWithOthersStepsCompletedCount
-                }
-            }
-        }
-    }
-`;
+import { GET_STEPS_COMPLETED_REPORT } from '../../../containers/StepsOfFaithPage/queries';
 
 describe('<FiltersChart />', () => {
     it('should render properly', async () => {
         renderWithContext(
             <FiltersChart
-                query={QUERY}
+                query={GET_STEPS_COMPLETED_REPORT}
                 mapData={() => {}}
                 label={'test label'}
             />,
