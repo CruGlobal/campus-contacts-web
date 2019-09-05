@@ -2,8 +2,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 
 import { renderWithContext } from '../../../../testUtils';
-import StagesSummary from '..';
 import { GET_TOTAL_STEPS_COMPLETED_SUMMARY } from '../../../containers/PersonalStepsPage/queries';
+
+import StagesSummary from '..';
 
 describe('<StagesSummary />', () => {
     it('should render properly', () => {

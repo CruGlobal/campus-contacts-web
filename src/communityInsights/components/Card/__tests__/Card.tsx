@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { renderWithContext } from '../../../../testUtils';
+
 import Card from '..';
 
 describe('<Card />', () => {

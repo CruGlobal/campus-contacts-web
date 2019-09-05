@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import AppContext from '../../../appContext';
+import { AppContext } from '../../../appContext';
 
 const NavigationBar = styled.div`
     background: #005a7f;
@@ -47,7 +47,7 @@ const Link = styled(NavLink)`
 `;
 
 const Navigation = () => {
-    const { orgId }: any = useContext(AppContext);
+    const { orgId } = useContext(AppContext);
     const { t } = useTranslation('insights');
     return (
         <NavigationBar>

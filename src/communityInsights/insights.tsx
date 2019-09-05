@@ -5,8 +5,9 @@ import { react2angular } from 'react2angular';
 import { ThemeProvider } from 'emotion-theming';
 
 import { createApolloClient } from '../apolloClient';
-import AppContext from '../appContext';
+import { AppContext } from '../appContext';
 import { missionhubTheme } from '../missionhubTheme';
+
 import Layout from './containers/Layout';
 
 interface Props {

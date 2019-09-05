@@ -13,7 +13,6 @@ const SriPlugin = require('webpack-subresource-integrity');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
-const ci = process.env.CI === 'true';
 const prod = process.env.TRAVIS_BRANCH === 'master';
 
 const htmlMinDefaults = {
@@ -117,14 +116,14 @@ module.exports = (env = {}) => {
                     use: ['html-loader'],
                 },
                 {
-                    test: /\.js$/,
+                    test: /\.(ts|js)x?$/,
                     exclude: /node_modules/,
                     loader: 'eslint-loader',
                     enforce: 'pre',
                     options: {
-                        // Show errors as warnings during development to prevent start/test commands from exiting
-                        failOnError: isBuild || ci,
-                        emitWarning: !isBuild && !ci,
+                        // Show errors as warnings to prevent webpack from exiting
+                        failOnError: false,
+                        emitWarning: true,
                     },
                 },
                 {

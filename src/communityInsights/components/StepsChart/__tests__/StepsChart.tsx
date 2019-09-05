@@ -4,8 +4,9 @@ import moment from 'moment';
 import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
-import StepsChart from '..';
 import { GET_STAGES_REPORT_STEPS_ADDED } from '../../../containers/PersonalStepsPage/queries';
+
+import StepsChart from '..';
 
 describe('<StepsChart />', () => {
     it('should render properly', async () => {
@@ -73,7 +74,7 @@ describe('<StepsChart />', () => {
                     }),
                 },
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );

@@ -3,8 +3,9 @@ import gql from 'graphql-tag';
 import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
-import ImpactInfo from '..';
 import { GET_IMPACT_REPORT_MOVED } from '../../../containers/PersonalStepsPage/queries';
+
+import ImpactInfo from '..';
 
 describe('<ImpactInfo />', () => {
     it('should render properly loading state', () => {
@@ -18,7 +19,7 @@ describe('<ImpactInfo />', () => {
             />,
             {
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );
@@ -46,7 +47,7 @@ describe('<ImpactInfo />', () => {
                     }),
                 },
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );

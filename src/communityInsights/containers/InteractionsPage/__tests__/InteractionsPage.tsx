@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { renderWithContext } from '../../../../testUtils';
+
 import InteractionsPage from '..';
 
 describe('<PersonalStepsPage />', () => {
     it('should render properly in loading state', async () => {
         const { snapshot, unmount } = renderWithContext(<InteractionsPage />, {
             appContext: {
-                orgId: 1,
+                orgId: '1',
             },
         });
         snapshot();
