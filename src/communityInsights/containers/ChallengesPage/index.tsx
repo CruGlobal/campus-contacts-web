@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import Card from '../../components/Card';
-import AppContext from '../../../appContext';
+import { AppContext } from '../../../appContext';
 import Table from '../../components/Table';
 import ImpactInfo from '../../components/ImpactInfo';
 
@@ -11,7 +11,7 @@ import { GET_IMPACT_CHALLENGES, GET_CHALLENGES } from './queries';
 
 const ChallengesPage = () => {
     const { t } = useTranslation('insights');
-    const { orgId }: any = useContext(AppContext);
+    const { orgId } = useContext(AppContext);
 
     const mapRows = (data: any) => {
         const percentage = (a: number, b: number) => {

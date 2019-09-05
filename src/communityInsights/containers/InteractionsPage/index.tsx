@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import Card from '../../components/Card';
-import AppContext from '../../../appContext';
+import { AppContext } from '../../../appContext';
 import StagesSummary from '../../components/StagesSummary';
 import ImpactInfo from '../../components/ImpactInfo';
 import FiltersChart from '../../components/FiltersChart';
@@ -16,7 +16,7 @@ import {
 
 const InteractionsPage = () => {
     const { t } = useTranslation('insights');
-    const { orgId }: any = useContext(AppContext);
+    const { orgId } = useContext(AppContext);
 
     return (
         <div>

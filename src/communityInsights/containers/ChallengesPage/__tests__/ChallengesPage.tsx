@@ -8,7 +8,7 @@ describe('<ChallengesPage />', () => {
     it('should render properly in loading state', () => {
         const { snapshot, unmount } = renderWithContext(<ChallengesPage />, {
             appContext: {
-                orgId: 1,
+                orgId: '1',
             },
         });
         snapshot();

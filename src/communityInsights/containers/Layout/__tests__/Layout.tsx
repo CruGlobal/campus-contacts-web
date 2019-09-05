@@ -6,6 +6,8 @@ import Layout from '..';
 
 describe('<Layout />', () => {
     it('should render properly', async () => {
-        renderWithContext(<Layout />).snapshot();
+        renderWithContext(<Layout />, {
+            appContext: { orgId: '1' },
+        }).snapshot();
     });
 });

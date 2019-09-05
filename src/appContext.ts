@@ -1,5 +1,7 @@
 import React from 'react';
 
-const AppContext = React.createContext({});
+export const appContextDefaultValue = { orgId: '' };
 
-export default AppContext;
+export type AppContextValue = typeof appContextDefaultValue;
+
+export const AppContext = React.createContext(appContextDefaultValue);
