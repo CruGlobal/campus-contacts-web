@@ -18,7 +18,7 @@ describe('<ImpactInfo />', () => {
             />,
             {
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );
@@ -46,7 +46,7 @@ describe('<ImpactInfo />', () => {
                     }),
                 },
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );

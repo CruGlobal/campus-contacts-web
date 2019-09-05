@@ -46,7 +46,7 @@ describe('<Table />', () => {
                     }),
                 },
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );

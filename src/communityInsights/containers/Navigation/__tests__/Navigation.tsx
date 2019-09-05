@@ -10,7 +10,7 @@ describe('<Navigation />', () => {
             <Router>
                 <Navigation />
             </Router>,
-            { appContext: { orgId: 1 } },
+            { appContext: { orgId: '1' } },
         ).snapshot();
     });
 });

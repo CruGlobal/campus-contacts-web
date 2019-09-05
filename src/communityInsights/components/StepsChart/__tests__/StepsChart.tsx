@@ -73,7 +73,7 @@ describe('<StepsChart />', () => {
                     }),
                 },
                 appContext: {
-                    orgId: 1,
+                    orgId: '1',
                 },
             },
         );

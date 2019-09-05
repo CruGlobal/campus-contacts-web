@@ -7,7 +7,7 @@ describe('<StepsOfFaithPage />', () => {
     it('should render properly in loading state', async () => {
         const { snapshot, unmount } = renderWithContext(<StepsOfFaithPage />, {
             appContext: {
-                orgId: 1,
+                orgId: '1',
             },
         });
         snapshot();
