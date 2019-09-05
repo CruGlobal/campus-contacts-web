@@ -17,7 +17,7 @@ const Button = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${({ theme }: { theme: any }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     font-size: 14px;
     line-height: 20px;
 
@@ -31,9 +31,8 @@ const Button = styled.div`
     }
 
     &.active {
-        background-color: ${({ theme }: { theme: any }) =>
-            theme.colors.highlight};
-        color: ${({ theme }: { theme: any }) => theme.colors.white};
+        background-color: ${({ theme }) => theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.white};
     }
 `;
 

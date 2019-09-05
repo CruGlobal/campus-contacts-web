@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { ThemeProvider } from 'emotion-theming';
 import { IMocks } from 'graphql-tools';
 
-import defaultTheme from '../defaultTheme';
+import { missionhubTheme } from '../missionhubTheme';
 import {
     AppContext,
     AppContextValue,
@@ -32,7 +32,9 @@ export const renderWithContext = (
     const wrapper = ({ children }: { children?: ReactNode }) => (
         <ApolloProvider client={mockApolloClient}>
             <AppContext.Provider value={appContext}>
-                <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
+                <ThemeProvider theme={missionhubTheme}>
+                    {children}
+                </ThemeProvider>
             </AppContext.Provider>
         </ApolloProvider>
     );

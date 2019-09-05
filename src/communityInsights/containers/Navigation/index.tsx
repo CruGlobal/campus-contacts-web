@@ -26,12 +26,12 @@ const Link = styled(NavLink)`
     position: relative;
 
     :hover {
-        color: ${({ theme }: { theme: any }) => theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.highlight};
         text-decoration: none;
     }
 
     &.active {
-        color: ${({ theme }: { theme: any }) => theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.highlight};
 
         ::after {
             content: '';

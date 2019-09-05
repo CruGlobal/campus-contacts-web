@@ -90,7 +90,7 @@ const Title = styled.div<TitleProps>`
     font-weight: 600;
     font-size: 12px;
     line-height: 14px;
-    color: ${({ theme }: { theme: any }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     margin-top: 17px;
     text-transform: uppercase;
     overflow-wrap: break-word;
@@ -103,7 +103,7 @@ const Value = styled.div`
     font-weight: 600;
     font-size: 32px;
     line-height: 38px;
-    color: ${({ theme }: { theme: any }) => theme.colors.highlightDarker};
+    color: ${({ theme }) => theme.colors.highlightDarker};
     margin-top: 9px;
 `;
 

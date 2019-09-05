@@ -1,6 +1,6 @@
-import { DefaultTheme } from 'styled-components';
+import styled, { CreateStyled } from '@emotion/styled';
 
-const defaultTheme: DefaultTheme = {
+export const missionhubTheme = {
     font: {
         family: 'Source Sans Pro',
         size: '14px',
@@ -39,4 +39,6 @@ const defaultTheme: DefaultTheme = {
     },
 };
 
-export default defaultTheme;
+export type MissionHubTheme = typeof missionhubTheme;
+
+export default styled as CreateStyled<MissionHubTheme>;

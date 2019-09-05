@@ -13,8 +13,7 @@ const Wrapper = styled.div`
 `;
 
 const Line = styled.div`
-    border-top: 2px solid
-        ${({ theme }: { theme: any }) => theme.colors.highlight};
+    border-top: 2px solid ${({ theme }) => theme.colors.highlight};
     width: 26px;
     height: 2px;
 
@@ -37,7 +36,7 @@ const Legend = styled.div`
 const LegendLabel = styled.div`
     font-size: 12px;
     line-height: 16px;
-    color: ${({ theme }: { theme: any }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     margin-left: 5px;
     margin-right: 10px;
 `;
@@ -79,7 +78,7 @@ const TooltipRow = styled.div`
     justify-content: space-between;
 
     &.total {
-        color: ${({ theme }: { theme: any }) => theme.colors.highlight};
+        color: ${({ theme }) => theme.colors.highlight};
     }
 `;
 

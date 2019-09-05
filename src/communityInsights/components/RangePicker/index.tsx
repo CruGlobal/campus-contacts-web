@@ -55,32 +55,30 @@ const Container = styled.div`
         border-color: transparent;
         border-radius: 0;
         text-align: center;
-        color: ${({ theme }: { theme: any }) => theme.colors.primary};
+        color: ${({ theme }) => theme.colors.primary};
         cursor: pointer;
     }
 
     .CalendarDay__selected_span {
-        background: ${({ theme }: { theme: any }) => theme.colors.highlight};
+        background: ${({ theme }) => theme.colors.highlight};
         color: white;
         border: 1px solid #2fb0d8;
     }
 
     .CalendarDay__selected {
-        background: ${({ theme }: { theme: any }) =>
-            theme.colors.highlightDarker};
+        background: ${({ theme }) => theme.colors.highlightDarker};
         color: white;
         border: 1px solid #2fb0d8;
     }
 
     .CalendarDay__selected:hover {
-        background: ${({ theme }: { theme: any }) =>
-            theme.colors.highlightDarker};
+        background: ${({ theme }) => theme.colors.highlightDarker};
         color: white;
     }
 
     .CalendarDay__hovered_span:hover,
     .CalendarDay__hovered_span {
-        background: ${({ theme }: { theme: any }) => theme.colors.highlight};
+        background: ${({ theme }) => theme.colors.highlight};
         border: 1px solid #2fb0d8;
         color: white;
     }
