@@ -2,8 +2,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 
 import { renderWithContext } from '../../../../testUtils';
-import FiltersChart from '..';
 import { GET_STEPS_COMPLETED_REPORT } from '../../../containers/StepsOfFaithPage/queries';
+
+import FiltersChart from '..';
 
 describe('<FiltersChart />', () => {
     it('should render properly', async () => {

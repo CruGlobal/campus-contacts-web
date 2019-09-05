@@ -3,8 +3,9 @@ import gql from 'graphql-tag';
 import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
-import Table from '..';
 import { GET_CHALLENGES } from '../../../containers/ChallengesPage/queries';
+
+import Table from '..';
 
 describe('<Table />', () => {
     it('should render properly in loading', async () => {

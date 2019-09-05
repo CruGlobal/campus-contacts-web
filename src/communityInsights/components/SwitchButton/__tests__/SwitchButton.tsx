@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { renderWithContext } from '../../../../testUtils';
+
 import SwitchButton from '..';
 
 describe('<SwitchButton />', () => {
