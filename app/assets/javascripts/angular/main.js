@@ -14,6 +14,8 @@ import '../../../components/authentication/mergeAccount.component';
 import '../../../components/authentication/impersonateUser.component';
 import '../../../components/authentication/authLanding.component';
 
+import '../../../../src/communityInsights/insights';
+
 import '../../stylesheets/main.scss';
 
 /* global require */

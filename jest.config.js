@@ -1,6 +1,11 @@
 module.exports = {
     roots: ['src/'],
-    setupFilesAfterEnv: ['./src/setupTests.js'],
+    setupFiles: [
+        '<rootDir>/__mocks__/regeneratorRuntime.ts',
+        '<rootDir>/__mocks__/init-i18next.ts',
+        '<rootDir>/__mocks__/apolloClient.ts',
+    ],
+    setupFilesAfterEnv: ['<rootDir>/__mocks__/resetGlobalMockSeeds.ts'],
     transform: {
         '^.+\\.js$': 'babel-jest',
         '^.+\\.tsx?$': 'ts-jest',
@@ -9,7 +14,7 @@ module.exports = {
     moduleNameMapper: {
         '\\.(css|less|scss|sss|styl)$': 'jest-css-modules',
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-            '<rootDir>/src/dashboard/testUtils/fileMock.ts',
+            '<rootDir>/__mocks__/fileMock.ts',
     },
     testPathIgnorePatterns: ['__generated__'],
 };
