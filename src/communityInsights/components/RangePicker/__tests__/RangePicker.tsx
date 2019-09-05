@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { renderWithContext } from '../../../../testUtils';
+
 import RangePicker from '..';
 
 describe('<RangePicker />', () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { renderWithContext } from '../../../../testUtils';
+
 import ChallengesPage from '..';
 
 describe('<ChallengesPage />', () => {

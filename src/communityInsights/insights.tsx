@@ -7,6 +7,7 @@ import { ThemeProvider } from 'emotion-theming';
 import { createApolloClient } from '../apolloClient';
 import AppContext from '../appContext';
 import defaultTheme from '../defaultTheme';
+
 import Layout from './containers/Layout';
 
 interface Props {
