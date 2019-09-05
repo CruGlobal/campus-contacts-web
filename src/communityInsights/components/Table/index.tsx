@@ -28,7 +28,7 @@ const Column = styled.th`
     font-weight: normal;
     font-size: 14px;
     line-height: 60px;
-    color: ${({ theme }: { theme: any }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     padding: 0 15px;
 `;
 
@@ -45,7 +45,7 @@ const Cell = styled.td`
     font-weight: normal;
     font-size: 14px;
     line-height: 20px;
-    color: ${({ theme }: { theme: any }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     padding: 0 15px;
     max-width: 200px;
     overflow: hidden;
@@ -97,7 +97,7 @@ const Page = styled.div`
     height: 32px;
     font-size: 14px;
     line-height: 20px;
-    color: ${({ theme }: { theme: any }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     align-items: center;
     display: flex;
     justify-content: center;
@@ -108,8 +108,7 @@ const Page = styled.div`
 
     &.active {
         border-radius: 16px;
-        background-color: ${({ theme }: { theme: any }) =>
-            theme.colors.highlight};
+        background-color: ${({ theme }) => theme.colors.highlight};
         color: #ffffff;
     }
 `;

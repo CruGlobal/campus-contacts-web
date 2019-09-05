@@ -6,7 +6,7 @@ import { ThemeProvider } from 'emotion-theming';
 
 import { createApolloClient } from '../apolloClient';
 import AppContext from '../appContext';
-import defaultTheme from '../defaultTheme';
+import { missionhubTheme } from '../missionhubTheme';
 import Layout from './containers/Layout';
 
 interface Props {
@@ -20,7 +20,7 @@ const Insights = ({ orgId, authenticationService }: Props) => {
     return (
         <ApolloProvider client={apolloClient}>
             <AppContext.Provider value={{ orgId }}>
-                <ThemeProvider theme={defaultTheme}>
+                <ThemeProvider theme={missionhubTheme}>
                     <Layout />
                 </ThemeProvider>
             </AppContext.Provider>

@@ -3,7 +3,7 @@ import { ApolloProvider } from 'react-apollo-hooks';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from 'emotion-theming';
 
-import defaultTheme from '../defaultTheme';
+import { missionhubTheme } from '../missionhubTheme';
 import AppContext from '../appContext';
 
 import { createApolloMockClient } from './apolloMockClient';
@@ -19,7 +19,9 @@ export const renderWithContext = (
     const wrapper = ({ children }: { children: ReactNode }) => (
         <ApolloProvider client={mockApolloClient}>
             <AppContext.Provider value={appContext}>
-                <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>
+                <ThemeProvider theme={missionhubTheme}>
+                    {children}
+                </ThemeProvider>
             </AppContext.Provider>
         </ApolloProvider>
     );

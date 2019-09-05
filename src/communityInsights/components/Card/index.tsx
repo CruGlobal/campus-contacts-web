@@ -4,7 +4,7 @@ import { withTheme } from 'emotion-theming';
 
 const Container = styled.div`
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
-    background: ${({ theme }: { theme: any }) => theme.colors.white};
+    background: ${({ theme }) => theme.colors.white};
     border-radius: 8px;
     padding-left: 24px;
     padding-right: 24px;
@@ -16,7 +16,7 @@ const Title = styled.h1`
     font-weight: 300;
     font-size: 36px;
     line-height: 38px;
-    color: ${({ theme }: { theme: any }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 12px;
     margin-top: 0px;
 `;
@@ -29,7 +29,7 @@ const Subtitle = styled.h2<SubtitleProps>`
     font-size: 14px;
     line-height: 20px;
     font-weight: normal;
-    color: ${({ theme }: { theme: any }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     margin-top: 0;
     margin-bottom: ${(props: SubtitleProps) =>
         props.noMarginBottom ? '-40px' : '0'};
