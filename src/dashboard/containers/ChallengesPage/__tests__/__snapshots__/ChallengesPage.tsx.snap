@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChallengesPage /> should render properly in loading state 1`] = `
+<div>
+  <div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Challenges
+      </h1>
+      <h2
+        class="css-6t21lj"
+      >
+        Community challenges joined and completed.
+      </h2>
+      <div
+        class="css-1kf4ztl"
+      >
+        <div
+          class="css-1b8qkfw"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

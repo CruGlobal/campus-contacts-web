@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
+<div>
+  <div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Total Personal Steps of Faith Completed
+      </h1>
+      <h2
+        class="css-1d5k8m6"
+      />
+      <div
+        class="css-rr4yq"
+      >
+        <div
+          class="css-1ohf0ui"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Personal Steps of Faith Completed
+      </h1>
+      <h2
+        class="css-1d5k8m6"
+      >
+        Personal steps of faith completed by community members.
+      </h2>
+      <div
+        class="css-rr4yq"
+      >
+        <div>
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Personal Steps of Faith Added
+      </h1>
+      <h2
+        class="css-1d5k8m6"
+      >
+        Current total of personal steps of faith added by members by stage.
+      </h2>
+      <div
+        class="css-rr4yq"
+      >
+        <div
+          class="css-1a3wyyp"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <h1
+      class="css-1c2npbj"
+    >
+      Loading...
+    </h1>
+    <div
+      class="css-w2m1ij"
+    >
+      <h1
+        class="css-5j0tpf"
+      >
+        Community Member Stages
+      </h1>
+      <h2
+        class="css-1d5k8m6"
+      >
+        Current total number of members by stage.
+      </h2>
+      <div
+        class="css-rr4yq"
+      >
+        <div
+          class="css-1a3wyyp"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

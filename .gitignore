@@ -4,3 +4,4 @@ dist
 coverage
 coverage-react
 schema.json
+__generated__

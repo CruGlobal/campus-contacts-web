@@ -1165,7 +1165,7 @@ export default {
             label: 'Personal Steps of Faith',
             legend: 'Steps of Faith',
             taken:
-                'Together we have taken {{count}} personal steps of faith in {{year}}.',
+                'This year, we have taken {{count}} personal steps of faith.',
             reached:
                 'This year, {{count}} people reached a new stage on their spiritual journey.',
             completedTotal: 'Total Personal Steps of Faith Completed',
@@ -1203,6 +1203,15 @@ export default {
             taken:
                 'This year, we have had {{count}} interactions with {{people}} people.',
             legend: 'Interactions',
+        },
+        challenges: {
+            total: 'This year, we have completed {{count}} challenges.',
+            title: 'Challenges',
+            subTitle: 'Community challenges joined and completed.',
+            join: 'Joined',
+            completed: 'Completed',
+            length: 'Length',
+            dates: 'Dates',
         },
         tabs: {
             personal: 'Personal Steps',
