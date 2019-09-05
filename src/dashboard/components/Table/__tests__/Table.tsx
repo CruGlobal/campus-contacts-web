@@ -11,7 +11,7 @@ describe('<Table />', () => {
         const mapRows = () => [['cell1', 'cell2'], ['cell3', 'cell4']];
         const mapPage = () => ({});
 
-        renderWithContext(
+        const { snapshot, unmount } = renderWithContext(
             <Table
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
@@ -19,7 +19,9 @@ describe('<Table />', () => {
                 mapPage={mapPage}
                 variables={{}}
             />,
-        ).snapshot();
+        );
+        snapshot();
+        unmount();
     });
 
     it('should render properly with data', async () => {

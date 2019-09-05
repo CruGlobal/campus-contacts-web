@@ -7,8 +7,8 @@ import ImpactInfo from '../';
 import { GET_IMPACT_REPORT_MOVED } from '../../../containers/PersonalStepsPage/queries';
 
 describe('<ImpactInfo />', () => {
-    it('should render properly loading state', async () => {
-        renderWithContext(
+    it('should render properly loading state', () => {
+        const { snapshot, unmount } = renderWithContext(
             <ImpactInfo
                 query={GET_IMPACT_REPORT_MOVED}
                 text={report =>
@@ -21,7 +21,9 @@ describe('<ImpactInfo />', () => {
                     orgId: 1,
                 },
             },
-        ).snapshot();
+        );
+        snapshot();
+        unmount();
     });
 
     it('should render properly with data', async () => {

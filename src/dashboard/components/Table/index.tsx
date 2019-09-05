@@ -170,7 +170,9 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
             pageNumber - pageIndex > 0 ? pageNumber - pageIndex : 1;
         for (let i = startIndex; i < startIndex + PAGE_NUMBERS_SIZE; i++) {
             pages.push(
-                <Page className={i === pageNumber ? 'active' : ''}>{i}</Page>,
+                <Page key={i} className={i === pageNumber ? 'active' : ''}>
+                    {i}
+                </Page>,
             );
         }
         return pages;
@@ -187,10 +189,10 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
                     </tr>
                 </Header>
                 <Content>
-                    {rows.map((row: any) => (
-                        <Row>
-                            {row.map((cell: string) => (
-                                <Cell>{cell}</Cell>
+                    {rows.map((row: any, index: string) => (
+                        <Row key={index}>
+                            {row.map((cell: string, index: string) => (
+                                <Cell key={index}>{cell}</Cell>
                             ))}
                         </Row>
                     ))}

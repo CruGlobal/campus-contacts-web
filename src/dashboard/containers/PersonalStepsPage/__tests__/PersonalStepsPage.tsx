@@ -5,11 +5,13 @@ import PersonalStepsPage from '../';
 
 describe('<PersonalStepsPage />', () => {
     it('should render properly in loading state', async () => {
-        renderWithContext(<PersonalStepsPage />, {
+        const { snapshot, unmount } = renderWithContext(<PersonalStepsPage />, {
             appContext: {
                 orgId: 1,
             },
-        }).snapshot();
+        });
+        snapshot();
+        unmount();
     });
 
     // TODO: Add a test with mocking data when GraphQL schema contains above query

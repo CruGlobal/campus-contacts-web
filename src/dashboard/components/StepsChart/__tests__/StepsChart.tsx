@@ -9,7 +9,7 @@ import { GET_STAGES_REPORT_STEPS_ADDED } from '../../../containers/PersonalSteps
 
 describe('<StepsChart />', () => {
     it('should render properly', async () => {
-        renderWithContext(
+        const { snapshot, unmount } = renderWithContext(
             <StepsChart
                 query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
@@ -26,7 +26,9 @@ describe('<StepsChart />', () => {
                     endDate: moment('2019-07-21').format(),
                 }}
             />,
-        ).snapshot();
+        );
+        snapshot();
+        unmount();
     });
 
     it('should render properly with data', async () => {

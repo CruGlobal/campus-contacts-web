@@ -6,8 +6,8 @@ import StagesSummary from '../';
 import { GET_TOTAL_STEPS_COMPLETED_SUMMARY } from '../../../containers/PersonalStepsPage/queries';
 
 describe('<StagesSummary />', () => {
-    it('should render properly', async () => {
-        renderWithContext(
+    it('should render properly', () => {
+        const { snapshot, unmount } = renderWithContext(
             <StagesSummary
                 query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
                 variables={{
@@ -21,7 +21,9 @@ describe('<StagesSummary />', () => {
                     }))
                 }
             />,
-        ).snapshot();
+        );
+        snapshot();
+        unmount();
     });
 
     // TODO: Add a test with mocking data when GraphQL schema contains above query

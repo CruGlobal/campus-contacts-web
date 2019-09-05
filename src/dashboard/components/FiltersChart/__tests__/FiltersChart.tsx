@@ -7,13 +7,15 @@ import { GET_STEPS_COMPLETED_REPORT } from '../../../containers/StepsOfFaithPage
 
 describe('<FiltersChart />', () => {
     it('should render properly', async () => {
-        renderWithContext(
+        const { snapshot, unmount } = renderWithContext(
             <FiltersChart
                 query={GET_STEPS_COMPLETED_REPORT}
                 mapData={() => {}}
                 label={'test label'}
             />,
-        ).snapshot();
+        );
+        snapshot();
+        unmount();
     });
 
     // TODO: Add a test with mocking data when GraphQL schema contains above query
