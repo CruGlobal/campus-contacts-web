@@ -17,4 +17,5 @@ module.exports = {
             '<rootDir>/__mocks__/fileMock.ts',
     },
     testPathIgnorePatterns: ['__generated__'],
+    snapshotSerializers: ['jest-emotion'],
 };
