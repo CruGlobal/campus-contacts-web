@@ -22,6 +22,32 @@ const PersonalStepsPage = () => {
     const { t } = useTranslation('insights');
     const { orgId } = useContext(AppContext);
 
+    interface entry {
+        stage: {
+            name: string;
+        };
+        personalStepsCompletedCount: number;
+    }
+
+    interface stage {
+        stage: {
+            name: string;
+            count: number;
+        };
+        personalStepsCompletedCount: number;
+    }
+
+    interface row {
+        personalStepsCompletedCount: number;
+        stageResults: Array<stage>;
+        memberCount: number;
+        date: string;
+        stage: {
+            personalStepsAddedCount: number;
+            name: string;
+        };
+    }
+
     return (
         <div>
             <ImpactInfo
@@ -41,7 +67,7 @@ const PersonalStepsPage = () => {
                     variables={{ id: orgId }}
                     mapData={data =>
                         data.community.report.stagesReport.map(
-                            (entry: any) => ({
+                            (entry: entry) => ({
                                 stage: entry.stage.name,
                                 icon: entry.stage.name
                                     .toLowerCase()
@@ -60,12 +86,14 @@ const PersonalStepsPage = () => {
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={data =>
-                        data.community.report.daysReport.map((row: any) => ({
+                        data.community.report.daysReport.map((row: row) => ({
                             ['total']: row.personalStepsCompletedCount,
-                            ['stages']: row.stageResults.map((stage: any) => ({
-                                name: stage.stage.name,
-                                count: stage.personalStepsCompletedCount,
-                            })),
+                            ['stages']: row.stageResults.map(
+                                (stage: stage) => ({
+                                    name: stage.stage.name,
+                                    count: stage.personalStepsCompletedCount,
+                                }),
+                            ),
                             ['date']: row.date,
                         }))
                     }
@@ -80,7 +108,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
+                        data.community.report.stagesReport.map((row: row) => ({
                             [t('personalSteps.label')]: row.stage
                                 .personalStepsAddedCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
@@ -113,7 +141,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
+                        data.community.report.stagesReport.map((row: row) => ({
                             [t('members')]: row.memberCount,
                             [t('stage')]: row.stage.name.toUpperCase(),
                         }))

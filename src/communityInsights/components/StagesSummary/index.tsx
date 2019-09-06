@@ -88,7 +88,7 @@ interface TitleProps {
 
 const Title = styled.div<TitleProps>`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 9px;
     line-height: 14px;
     color: ${({ theme }) => theme.colors.secondary};
     margin-top: 17px;
