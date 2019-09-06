@@ -41,7 +41,7 @@ exports[`<Table /> should render properly with data 1`] = `
         class="css-0"
       >
         <tr
-          class="css-1ddvev5"
+          class="css-12891qs"
         >
           <td
             class="css-10yiwq9"
@@ -55,7 +55,7 @@ exports[`<Table /> should render properly with data 1`] = `
           </td>
         </tr>
         <tr
-          class="css-1ddvev5"
+          class="css-12891qs"
         >
           <td
             class="css-10yiwq9"
