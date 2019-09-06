@@ -22,6 +22,9 @@ organization-overview {
         &:first-of-type {
             padding-left: 18px;
         }
+        a {
+            text-decoration: none;
+        }
 
         &.active {
             .loading svg {

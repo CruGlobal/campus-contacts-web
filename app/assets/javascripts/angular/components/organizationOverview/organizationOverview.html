@@ -12,7 +12,7 @@
                 class="pivot-darker-blue f3 ph3 pt3 "
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
             >
-                {{$ctrl.org.name}}
+                {{ $ctrl.org.name }}
             </div>
             <div ng-if="$ctrl.editMode">
                 <ng-md-icon
@@ -39,6 +39,13 @@
         </div>
 
         <div class="tabs">
+            <div class="tab pivot-white">
+                <a
+                    ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
+                    ui-state-params="{ orgId: $ctrl.org.id }"
+                    >{{ 'nav.insights' | t }}</a
+                >
+            </div>
             <div
                 class="tab pivot-white"
                 ng-repeat="tabName in $ctrl.tabNames"
@@ -48,10 +55,10 @@
                 ng-if="$ctrl.isTabVisible(tabName)"
             >
                 <span>
-                    {{'ministries.' + tabName + '.header' | t}}
+                    {{ 'ministries.' + tabName + '.header' | t }}
                     <span
                         ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'"
-                        >({{$ctrl[tabName].length}})</span
+                        >({{ $ctrl[tabName].length }})</span
                     >
                 </span>
                 <loading-spinner
@@ -63,7 +70,7 @@
             </div>
             <div class="tab dropdown " ng-if="$ctrl.directAdminPrivileges">
                 <span class="pivot-white"
-                    >{{'ministries.tools.header' | t}}</span
+                    >{{ 'ministries.tools.header' | t }}</span
                 >
                 <ng-md-icon
                     icon="play_arrow"
@@ -118,13 +125,6 @@
                                 >{{ 'signatures.title' | t }}</a
                             >
                         </li>
-                        <!--<li>
-                            <a
-                                ui-state="'app.ministries.ministry.insights'"
-                                ui-state-params="{ orgId: $ctrl.org.id }"
-                                >{{ 'nav.insights' | t }}</a
-                            >
-                        </li>-->
                     </ul>
                 </div>
             </div>

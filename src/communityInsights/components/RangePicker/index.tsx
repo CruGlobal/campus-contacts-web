@@ -32,7 +32,7 @@ const Container = styled.div`
         overflow: hidden;
         cursor: pointer;
 
-        &:first-child {
+        &:first-of-type {
             border-radius: 16px 0 0 16px;
             margin-right: 1px;
         }
