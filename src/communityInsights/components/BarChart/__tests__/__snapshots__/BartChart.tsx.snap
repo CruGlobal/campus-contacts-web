@@ -1,10 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<BarChart /> should render properly 1`] = `
+.emotion-0 {
+  height: 400px;
+  position: relative;
+}
+
+.emotion-1 {
+  height: 32px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
 <div>
   <div>
     <div
-      class="css-1a3wyyp"
+      class="emotion-0"
     >
       <div
         style="position: relative;"
@@ -52,17 +69,34 @@ exports[`<BarChart /> should render properly 1`] = `
       </div>
     </div>
     <div
-      class="css-1hr8g7h"
+      class="emotion-1"
     />
   </div>
 </div>
 `;
 
 exports[`<BarChart /> should render properly with data, key, index by 1`] = `
+.emotion-0 {
+  height: 400px;
+  position: relative;
+}
+
+.emotion-1 {
+  height: 32px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
 <div>
   <div>
     <div
-      class="css-1a3wyyp"
+      class="emotion-0"
     >
       <div
         style="position: relative;"
@@ -675,7 +709,7 @@ exports[`<BarChart /> should render properly with data, key, index by 1`] = `
       </div>
     </div>
     <div
-      class="css-1hr8g7h"
+      class="emotion-1"
     />
   </div>
 </div>

@@ -1,36 +1,102 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Card /> should render properly 1`] = `
+.emotion-3 {
+  box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border-radius: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 43px;
+  margin-top: 36px;
+}
+
+.emotion-0 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+
+.emotion-1 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #505256;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.emotion-2 {
+  padding: 25px;
+  margin: 0;
+}
+
 <div>
   <div
-    class="css-w2m1ij"
+    class="emotion-3"
   >
     <h1
-      class="css-5j0tpf"
+      class="emotion-0"
     />
     <h2
-      class="css-1d5k8m6"
+      class="emotion-1"
     />
     <div
-      class="css-rr4yq"
+      class="emotion-2"
     />
   </div>
 </div>
 `;
 
 exports[`<Card /> should render properly with children 1`] = `
+.emotion-3 {
+  box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border-radius: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 43px;
+  margin-top: 36px;
+}
+
+.emotion-0 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+
+.emotion-1 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #505256;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.emotion-2 {
+  padding: 25px;
+  margin: 0;
+}
+
 <div>
   <div
-    class="css-w2m1ij"
+    class="emotion-3"
   >
     <h1
-      class="css-5j0tpf"
+      class="emotion-0"
     />
     <h2
-      class="css-1d5k8m6"
+      class="emotion-1"
     />
     <div
-      class="css-rr4yq"
+      class="emotion-2"
     >
       <div>
         Children
@@ -41,22 +107,55 @@ exports[`<Card /> should render properly with children 1`] = `
 `;
 
 exports[`<Card /> should render properly with title and subtitle 1`] = `
+.emotion-3 {
+  box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border-radius: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 43px;
+  margin-top: 36px;
+}
+
+.emotion-0 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+
+.emotion-1 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #505256;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.emotion-2 {
+  padding: 25px;
+  margin: 0;
+}
+
 <div>
   <div
-    class="css-w2m1ij"
+    class="emotion-3"
   >
     <h1
-      class="css-5j0tpf"
+      class="emotion-0"
     >
       Title
     </h1>
     <h2
-      class="css-1d5k8m6"
+      class="emotion-1"
     >
       Subtitle
     </h2>
     <div
-      class="css-rr4yq"
+      class="emotion-2"
     />
   </div>
 </div>

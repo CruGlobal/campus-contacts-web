@@ -1,9 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<StepsChart /> should render properly 1`] = `
+.emotion-0 {
+  height: 400px;
+  position: relative;
+}
+
 <div>
   <div
-    class="css-1a3wyyp"
+    class="emotion-0"
   >
     Loading...
   </div>
@@ -11,13 +16,30 @@ exports[`<StepsChart /> should render properly 1`] = `
 `;
 
 exports[`<StepsChart /> should render properly with data 1`] = `
+.emotion-0 {
+  height: 400px;
+  position: relative;
+}
+
+.emotion-1 {
+  height: 32px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
 <div>
   <div
-    class="css-1a3wyyp"
+    class="emotion-0"
   >
     <div>
       <div
-        class="css-1a3wyyp"
+        class="emotion-0"
       >
         <div
           style="position: relative;"
@@ -423,7 +445,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
         </div>
       </div>
       <div
-        class="css-1hr8g7h"
+        class="emotion-1"
       />
     </div>
   </div>
