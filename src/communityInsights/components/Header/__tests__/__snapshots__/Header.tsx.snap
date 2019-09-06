@@ -1,17 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Header /> should render properly 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
 <div>
   <h1
-    class="css-1c2npbj"
+    class="emotion-0"
   />
 </div>
 `;
 
 exports[`<Header /> should render properly with data 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
 <div>
   <h1
-    class="css-1c2npbj"
+    class="emotion-0"
   >
     Some test header
   </h1>
