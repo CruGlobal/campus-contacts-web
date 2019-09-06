@@ -23,6 +23,7 @@ function organizationOverviewController(
     loggedInPerson,
     $uibModal,
     userPreferencesService,
+    envService,
     confirmModalService,
     _,
 ) {
@@ -31,7 +32,7 @@ function organizationOverviewController(
     this.p2cOrg = false;
     this.toggleVisibility = userPreferencesService.toggleOrganizationVisibility;
     this.surveyResponses = 'countHidden';
-
+    this.envService = envService;
     this.isInsightsTab = () => {
         return $state.current.name === 'app.ministries.ministry.insights';
     };
