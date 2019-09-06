@@ -39,9 +39,11 @@
         </div>
 
         <div class="tabs">
-            <div class="tab pivot-white">
+            <div
+                class="tab pivot-white"
+                ng-if="!$ctrl.envService.is('production')"
+            >
                 <a
-                    ng-if="!$ctrl.envService.is('production')"
                     ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
                     ui-state-params="{ orgId: $ctrl.org.id }"
                     >{{ 'nav.insights' | t }}</a
