@@ -127,19 +127,21 @@ interface stagesReport {
 interface data {
     community: {
         report: {
+            interactions: Array<any>;
             stagesReport: Array<stagesReport>;
         };
     };
 }
 
-interface variables {
-    id: string;
-}
+// interface variables {
+//     id: string;
+//     organizationId: number;
+// }
 
 interface Props {
     query: any;
     mapData: (data: data) => any;
-    variables: variables;
+    variables: any;
     longNames?: boolean;
 }
 
