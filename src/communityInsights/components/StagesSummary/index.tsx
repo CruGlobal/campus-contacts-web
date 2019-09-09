@@ -116,11 +116,42 @@ const Footer = styled.div`
     margin-top: 28px;
 `;
 
+// INTERFACES
+interface stagesReport {
+    stage: {
+        name: string;
+    };
+    personalStepsCompletedCount: number;
+}
+
+interface data {
+    community: {
+        report: {
+            stagesReport: Array<stagesReport>;
+        };
+    };
+}
+
+interface variables {
+    id: string;
+}
+
 interface Props {
     query: any;
-    mapData: (data: any) => any;
-    variables: any;
+    mapData: (data: data) => any;
+    variables: variables;
     longNames?: boolean;
+}
+
+interface entry {
+    stage: string;
+    icon: string;
+    count: number;
+}
+
+interface dates {
+    endDate: Moment;
+    startDate: Moment;
 }
 
 const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
@@ -128,7 +159,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
     });
-    const days = (dates: any) => {
+    const days = (dates: dates) => {
         return Math.round(
             moment.duration(dates.endDate.diff(dates.startDate)).asDays(),
         );
@@ -159,7 +190,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     return (
         <SummaryWrapper>
             <Stages>
-                {mapData(data).map((entry: any) => (
+                {mapData(data).map((entry: entry) => (
                     <Stage key={entry.stage}>
                         <Icon className={entry.icon} />
                         <Title longNames={longNames}>{entry.stage}</Title>
