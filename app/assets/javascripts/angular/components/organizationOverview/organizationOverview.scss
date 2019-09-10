@@ -27,6 +27,10 @@ organization-overview {
         }
 
         &.active {
+            a,
+            span {
+                color: $blue-6;
+            }
             .loading svg {
                 fill: $pivot-bright-blue;
             }

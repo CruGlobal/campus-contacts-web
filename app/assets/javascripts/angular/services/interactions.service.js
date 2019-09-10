@@ -23,7 +23,7 @@ function interactionsService(
             icon: 'note',
             title: 'application.interaction_types.comment',
             anonymous: false,
-            deprecated: false,
+            deprecated: true,
         },
         {
             id: '2',
