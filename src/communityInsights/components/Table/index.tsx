@@ -52,6 +52,9 @@ const Cell = styled.td`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &:last-child {
+        padding: 0 5px;
+    }
 `;
 
 const Pagination = styled.div`
