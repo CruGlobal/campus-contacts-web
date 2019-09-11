@@ -42,13 +42,7 @@ function organizationOverviewTeamController(
         return organizationOverviewTeamService
             .loadOrgTeam(vm.organizationOverview.org, listLoader)
             .then(function(resp) {
-                // Map through each person in the list and if they are not apart of vm.team already, push them to it
-                resp.list.map(person => {
-                    if (!vm.team.includes(person)) {
-                        vm.team.push(person);
-                    }
-                });
-
+                vm.team = resp.list;
                 vm.loadedAll = resp.loadedAll;
                 // Use the nextBatch from the response which only includes unloaded people.
                 return loadTeamReports(
