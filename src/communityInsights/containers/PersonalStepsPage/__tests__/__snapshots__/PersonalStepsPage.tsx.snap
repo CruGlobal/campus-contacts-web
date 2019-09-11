@@ -1,49 +1,107 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
+.emotion-5 {
+  box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border-radius: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 43px;
+  margin-top: 36px;
+}
+
+.emotion-1 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+
+.emotion-2 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #505256;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.emotion-4 {
+  padding: 25px;
+  margin: 0;
+}
+
+.emotion-3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-12 {
+  height: 400px;
+  position: relative;
+}
+
 <div>
   <div>
     <h1
-      class="css-1c2npbj"
+      class="emotion-0"
     >
       Loading...
     </h1>
     <div
-      class="css-w2m1ij"
+      class="emotion-5"
     >
       <h1
-        class="css-5j0tpf"
+        class="emotion-1"
       >
         Total Personal Steps of Faith Completed
       </h1>
       <h2
-        class="css-1d5k8m6"
+        class="emotion-2"
       />
       <div
-        class="css-rr4yq"
+        class="emotion-4"
       >
         <div
-          class="css-1ohf0ui"
+          class="emotion-3"
         >
           Loading...
         </div>
       </div>
     </div>
     <div
-      class="css-w2m1ij"
+      class="emotion-5"
     >
       <h1
-        class="css-5j0tpf"
+        class="emotion-1"
       >
         Personal Steps of Faith Completed
       </h1>
       <h2
-        class="css-1d5k8m6"
+        class="emotion-2"
       >
         Personal steps of faith completed by community members.
       </h2>
       <div
-        class="css-rr4yq"
+        class="emotion-4"
       >
         <div>
           Loading...
@@ -51,51 +109,51 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
       </div>
     </div>
     <div
-      class="css-w2m1ij"
+      class="emotion-5"
     >
       <h1
-        class="css-5j0tpf"
+        class="emotion-1"
       >
         Personal Steps of Faith Added
       </h1>
       <h2
-        class="css-1d5k8m6"
+        class="emotion-2"
       >
         Current total of personal steps of faith added by members by stage.
       </h2>
       <div
-        class="css-rr4yq"
+        class="emotion-4"
       >
         <div
-          class="css-1a3wyyp"
+          class="emotion-12"
         >
           Loading...
         </div>
       </div>
     </div>
     <h1
-      class="css-1c2npbj"
+      class="emotion-0"
     >
       Loading...
     </h1>
     <div
-      class="css-w2m1ij"
+      class="emotion-5"
     >
       <h1
-        class="css-5j0tpf"
+        class="emotion-1"
       >
         Community Member Stages
       </h1>
       <h2
-        class="css-1d5k8m6"
+        class="emotion-2"
       >
         Current total number of members by stage.
       </h2>
       <div
-        class="css-rr4yq"
+        class="emotion-4"
       >
         <div
-          class="css-1a3wyyp"
+          class="emotion-12"
         >
           Loading...
         </div>

@@ -1,17 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SwitchButton /> should render properly 1`] = `
+.emotion-2 {
+  width: 145px;
+  height: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-0 {
+  width: 72px;
+  background-color: #eceef2;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: #B4B6BA;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.emotion-0:not(:last-child) {
+  margin-right: 1px;
+}
+
+.emotion-0:hover {
+  background-color: #e2e2e2;
+  cursor: pointer;
+}
+
+.emotion-0.active {
+  background-color: #3CC8E6;
+  color: #ffffff;
+}
+
 <div>
   <div
-    class="css-1s7lydy"
+    class="emotion-2"
   >
     <div
-      class="active css-n7kdmv"
+      class="active emotion-0"
     >
       left
     </div>
     <div
-      class=" css-n7kdmv"
+      class=" emotion-0"
     >
       right
     </div>

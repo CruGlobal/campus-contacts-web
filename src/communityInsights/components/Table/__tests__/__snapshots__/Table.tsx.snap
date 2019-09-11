@@ -1,9 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Table /> should render properly in loading 1`] = `
+.emotion-0 {
+  text-align: center;
+  padding: 25px;
+}
+
 <div>
   <div
-    class="css-1b8qkfw"
+    class="emotion-0"
   >
     Loading...
   </div>
@@ -11,59 +16,178 @@ exports[`<Table /> should render properly in loading 1`] = `
 `;
 
 exports[`<Table /> should render properly with data 1`] = `
+.emotion-11 {
+  width: 100%;
+}
+
+.emotion-3 {
+  text-align: left;
+}
+
+.emotion-0 {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 60px;
+  color: #B4B6BA;
+  padding: 0 15px;
+}
+
+.emotion-6 {
+  text-align: left;
+  height: 64px;
+}
+
+.emotion-6:nth-child(odd) {
+  background-color: #eceef2;
+}
+
+.emotion-4 {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  color: #505256;
+  padding: 0 15px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emotion-20 {
+  width: 100%;
+  height: 64px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-12 {
+  height: 16px;
+  width: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(mockFile);
+  margin-right: 20px;
+}
+
+.emotion-12.active {
+  cursor: pointer;
+  background-image: url(mockFile);
+}
+
+.emotion-18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-13 {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #B4B6BA;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-13:not(:last-child) {
+  margin-right: 4px;
+}
+
+.emotion-13.active {
+  border-radius: 16px;
+  background-color: #3CC8E6;
+  color: #ffffff;
+}
+
+.emotion-19 {
+  height: 16px;
+  width: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(mockFile);
+  margin-left: 20px;
+}
+
+.emotion-19.active {
+  cursor: pointer;
+  background-image: url(mockFile);
+}
+
 <div>
   <div>
     <table
-      class="css-s6wuh2"
+      class="emotion-11"
     >
       <thead
-        class="css-14c5xr0"
+        class="emotion-3"
       >
         <tr>
           <th
-            class="css-1rfzrj7"
+            class="emotion-0"
           >
             header-1
           </th>
           <th
-            class="css-1rfzrj7"
+            class="emotion-0"
           >
             header-2
           </th>
           <th
-            class="css-1rfzrj7"
+            class="emotion-0"
           >
             header-3
           </th>
         </tr>
       </thead>
       <tbody
-        class="css-0"
+        class="emotion-10"
       >
         <tr
-          class="css-1ddvev5"
+          class="emotion-6"
         >
           <td
-            class="css-10yiwq9"
+            class="emotion-4"
           >
             cell1
           </td>
           <td
-            class="css-10yiwq9"
+            class="emotion-4"
           >
             cell2
           </td>
         </tr>
         <tr
-          class="css-1ddvev5"
+          class="emotion-6"
         >
           <td
-            class="css-10yiwq9"
+            class="emotion-4"
           >
             cell3
           </td>
           <td
-            class="css-10yiwq9"
+            class="emotion-4"
           >
             cell4
           </td>
@@ -71,42 +195,42 @@ exports[`<Table /> should render properly with data 1`] = `
       </tbody>
     </table>
     <div
-      class="css-elql06"
+      class="emotion-20"
     >
       <div
-        class=" css-1ywlavf"
+        class=" emotion-12"
       />
       <div
-        class="css-1mzzuk6"
+        class="emotion-18"
       >
         <div
-          class="active css-h6r05d"
+          class="active emotion-13"
         >
           1
         </div>
         <div
-          class=" css-h6r05d"
+          class=" emotion-13"
         >
           2
         </div>
         <div
-          class=" css-h6r05d"
+          class=" emotion-13"
         >
           3
         </div>
         <div
-          class=" css-h6r05d"
+          class=" emotion-13"
         >
           4
         </div>
         <div
-          class=" css-h6r05d"
+          class=" emotion-13"
         >
           5
         </div>
       </div>
       <div
-        class=" css-1ho0o10"
+        class=" emotion-19"
       />
     </div>
   </div>

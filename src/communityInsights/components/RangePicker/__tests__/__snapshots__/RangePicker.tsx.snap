@@ -1,12 +1,118 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<RangePicker /> should render properly 1`] = `
+.emotion-1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-1 .DateRangePickerInput {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-1 .DateInput {
+  width: 108px;
+  height: 32px;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #eceef2;
+  text-align: center;
+  border-radius: 0 16px 16px 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.emotion-1 .DateInput:first-child {
+  border-radius: 16px 0 0 16px;
+  margin-right: 1px;
+}
+
+.emotion-1 .DateInput:hover {
+  background-color: #e2e2e2;
+}
+
+.emotion-1 .DateInput input[type='text']:focus {
+  background-color: #e2e2e2;
+}
+
+.emotion-1 .DateInput_input {
+  height: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  text-align: center;
+  color: #505256;
+  cursor: pointer;
+}
+
+.emotion-1 .CalendarDay__selected_span {
+  background: #3CC8E6;
+  color: white;
+  border: 1px solid #2fb0d8;
+}
+
+.emotion-1 .CalendarDay__selected {
+  background: #007398;
+  color: white;
+  border: 1px solid #2fb0d8;
+}
+
+.emotion-1 .CalendarDay__selected:hover {
+  background: #007398;
+  color: white;
+}
+
+.emotion-1 .CalendarDay__hovered_span:hover,
+.emotion-1 .CalendarDay__hovered_span {
+  background: #3CC8E6;
+  border: 1px solid #2fb0d8;
+  color: white;
+}
+
+.emotion-1 .DateRangePickerInput_arrow {
+  display: none;
+}
+
+.emotion-1 .DateInput_fang {
+  top: 56px;
+}
+
+.emotion-0 {
+  background-image: url(mockFile);
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
 <div>
   <div
-    class="css-1bd9r3g"
+    class="emotion-1"
   >
     <div
-      class="css-t0xo0j"
+      class="emotion-0"
     />
     <div
       class="DateRangePicker DateRangePicker_1"
