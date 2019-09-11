@@ -54,6 +54,14 @@ exports[`<Table /> should render properly with data 1`] = `
   white-space: nowrap;
 }
 
+.emotion-4:first-of-type {
+  padding: 0 25px;
+}
+
+.emotion-4:last-child {
+  padding: 0 5px;
+}
+
 .emotion-20 {
   width: 100%;
   height: 64px;

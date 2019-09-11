@@ -52,6 +52,9 @@ const Cell = styled.td`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &:first-of-type {
+        padding: 0 25px;
+    }
     &:last-child {
         padding: 0 5px;
     }
