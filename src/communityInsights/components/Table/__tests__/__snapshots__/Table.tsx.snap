@@ -17,6 +17,7 @@ exports[`<Table /> should render properly in loading 1`] = `
 
 exports[`<Table /> should render properly with data 1`] = `
 .emotion-11 {
+  table-layout: fixed;
   width: 100%;
 }
 
