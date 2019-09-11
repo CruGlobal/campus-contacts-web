@@ -16,6 +16,7 @@
     ></ng-md-icon>
     <ng-md-icon
         ng-repeat="interactionType in $ctrl.interactionTypes"
+        ng-if="interactionType.title !== 'application.interaction_types.comment'"
         icon="{{ interactionType.icon }}"
         class="tipitmiddle"
         title="{{ interactionType.title | t }}"
