@@ -15,6 +15,7 @@ const LoadingContainer = styled.div`
 `;
 
 const TableContainer = styled.table`
+    table-layout: fixed;
     width: 100%;
 `;
 
