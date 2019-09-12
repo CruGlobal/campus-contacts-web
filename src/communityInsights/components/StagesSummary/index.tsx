@@ -19,6 +19,8 @@ import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
 import personal from '../../assets/icons/stage-personal-decisions.svg';
 import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
 
+import { communityReportStagesOthersStepsCompleted } from '../../containers/StepsOfFaithPage/__generated__/communityReportStagesOthersStepsCompleted';
+
 const Stages = styled.div`
     display: flex;
     flex-direction: row;
@@ -82,10 +84,6 @@ const Icon = styled.div`
     }
 `;
 
-interface TitleProps {
-    longNames?: boolean;
-}
-
 const Title = styled.div<TitleProps>`
     font-weight: 600;
     font-size: 9px;
@@ -116,32 +114,7 @@ const Footer = styled.div`
     margin-top: 28px;
 `;
 
-// INTERFACES
-interface stagesReport {
-    stage: {
-        name: string;
-    };
-    personalStepsCompletedCount: number;
-}
-
-interface data {
-    community: {
-        report: {
-            interactions: Array<any>;
-            stagesReport: Array<stagesReport>;
-        };
-    };
-}
-
-// interface variables {
-//     id: string;
-//     organizationId: number;
-// }
-
-interface Props {
-    query: any;
-    mapData: (data: data) => any;
-    variables: any;
+interface TitleProps {
     longNames?: boolean;
 }
 
@@ -149,6 +122,15 @@ interface entry {
     stage: string;
     icon: string;
     count: number;
+}
+
+interface Props {
+    query: string;
+    mapData: (data: communityReportStagesOthersStepsCompleted) => any;
+    variables: {
+        id: string;
+    };
+    longNames?: boolean;
 }
 
 interface dates {

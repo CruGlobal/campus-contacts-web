@@ -18,6 +18,26 @@ import {
     GET_STAGES_PEOPLE_REPORT,
 } from './queries';
 
+import {
+    communityReportStagesOthersContactCount,
+    communityReportStagesOthersContactCount_community_report_stagesReport as communityReportStagesContactCountRow,
+} from './__generated__/communityReportStagesOthersContactCount';
+import { impactReportMembersStageProgressionCount as impactMembersReport } from './__generated__/impactReportMembersStageProgressionCount';
+import {
+    communityReportStagesOthersStepsCompleted,
+    communityReportStagesOthersStepsCompleted_community_report_stagesReport as communityReportEntry,
+} from './__generated__/communityReportStagesOthersStepsCompleted';
+import { impactReportOtherStepsCompleted as impactsOtherReport } from './__generated__/impactReportOtherStepsCompleted';
+import {
+    communityReportDaysOthersSteps as communityDaysOtherReport,
+    communityReportDaysOthersSteps_community_report_daysReport as communityDaysReportRow,
+    communityReportDaysOthersSteps_community_report_daysReport_stageResults as communityDaysReportStage,
+} from './__generated__/communityReportDaysOthersSteps';
+import {
+    communityReportStagesOthersStepsAdded,
+    communityReportStagesOthersStepsAdded_community_report_stagesReport as communityStepsAddedStageReportRow,
+} from './__generated__/communityReportStagesOthersStepsAdded';
+
 const StepsOfFaithPage = () => {
     const { t } = useTranslation('insights');
     const { orgId } = useContext(AppContext);
@@ -26,7 +46,7 @@ const StepsOfFaithPage = () => {
         <div>
             <ImpactInfo
                 query={GET_IMPACT_REPORT_TAKEN}
-                text={report =>
+                text={(report: impactsOtherReport) =>
                     t('stepsOfFaith.taken', {
                         count:
                             report.community.impactReport
@@ -42,9 +62,11 @@ const StepsOfFaithPage = () => {
                 <StagesSummary
                     query={GET_TOTAL_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
-                    mapData={data =>
+                    mapData={(
+                        data: communityReportStagesOthersStepsCompleted,
+                    ) =>
                         data.community.report.stagesReport.map(
-                            (entry: any) => ({
+                            (entry: communityReportEntry) => ({
                                 stage: entry.stage.name,
                                 icon: entry.stage.name
                                     .toLowerCase()
@@ -62,15 +84,19 @@ const StepsOfFaithPage = () => {
                 <FiltersChart
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
-                    mapData={data =>
-                        data.community.report.daysReport.map((row: any) => ({
-                            ['total']: row.othersStepsCompletedCount,
-                            ['stages']: row.stageResults.map((stage: any) => ({
-                                name: stage.othersStepsCompletedCount,
-                                count: stage.stage.name,
-                            })),
-                            ['date']: row.date,
-                        }))
+                    mapData={(data: communityDaysOtherReport) =>
+                        data.community.report.daysReport.map(
+                            (row: communityDaysReportRow) => ({
+                                ['total']: row.othersStepsCompletedCount,
+                                ['stages']: row.stageResults.map(
+                                    (stage: communityDaysReportStage) => ({
+                                        name: stage.othersStepsCompletedCount,
+                                        count: stage.stage.name,
+                                    }),
+                                ),
+                                ['date']: row.date,
+                            }),
+                        )
                     }
                     currentDate={moment().toDate()}
                     label={t('stepsOfFaith.legend')}
@@ -82,13 +108,15 @@ const StepsOfFaithPage = () => {
             >
                 <StepsChart
                     query={GET_STAGES_REPORT}
-                    mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
-                            [t(
-                                'stepsOfFaith.legendLabel',
-                            )]: row.othersStepsAddedCount,
-                            [t('stage')]: row.stage.name.toUpperCase(),
-                        }))
+                    mapData={(data: communityReportStagesOthersStepsAdded) =>
+                        data.community.report.stagesReport.map(
+                            (row: communityStepsAddedStageReportRow) => ({
+                                [t(
+                                    'stepsOfFaith.legendLabel',
+                                )]: row.othersStepsAddedCount,
+                                [t('stage')]: row.stage.name.toUpperCase(),
+                            }),
+                        )
                     }
                     label={t('stepsOfFaith.legendLabel')}
                     index={t('stage')}
@@ -101,7 +129,7 @@ const StepsOfFaithPage = () => {
             </Card>
             <ImpactInfo
                 query={GET_IMPACT_REPORT_REACHED}
-                text={report =>
+                text={(report: impactMembersReport) =>
                     t('stepsOfFaith.reached', {
                         count:
                             report.community.impactReport
@@ -116,11 +144,15 @@ const StepsOfFaithPage = () => {
             >
                 <StepsChart
                     query={GET_STAGES_PEOPLE_REPORT}
-                    mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
-                            [t('stepsOfFaith.peopleLabel')]: row.contactCount,
-                            [t('stage')]: row.stage.name.toUpperCase(),
-                        }))
+                    mapData={(data: communityReportStagesOthersContactCount) =>
+                        data.community.report.stagesReport.map(
+                            (row: communityReportStagesContactCountRow) => ({
+                                [t(
+                                    'stepsOfFaith.peopleLabel',
+                                )]: row.contactCount,
+                                [t('stage')]: row.stage.name.toUpperCase(),
+                            }),
+                        )
                     }
                     label={t('stepsOfFaith.peopleLabel')}
                     index={t('stage')}
