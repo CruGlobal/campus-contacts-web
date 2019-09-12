@@ -126,10 +126,8 @@ interface entry {
 
 interface Props {
     query: string;
-    mapData: (data: communityReportStagesOthersStepsCompleted) => any;
-    variables: {
-        id: string;
-    };
+    mapData: (data: any) => any;
+    variables: any;
     longNames?: boolean;
 }
 

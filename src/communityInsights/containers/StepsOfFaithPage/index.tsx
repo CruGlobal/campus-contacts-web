@@ -18,25 +18,36 @@ import {
     GET_STAGES_PEOPLE_REPORT,
 } from './queries';
 
-import {
-    communityReportStagesOthersContactCount,
-    communityReportStagesOthersContactCount_community_report_stagesReport as communityReportStagesContactCountRow,
-} from './__generated__/communityReportStagesOthersContactCount';
-import { impactReportMembersStageProgressionCount as impactMembersReport } from './__generated__/impactReportMembersStageProgressionCount';
+// GET_IMPACT_REPORT_TAKEN INTERFACES
+import { impactReportOtherStepsCompleted as impactsOtherReport } from './__generated__/impactReportOtherStepsCompleted';
+
+// GET_TOTAL_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportStagesOthersStepsCompleted,
     communityReportStagesOthersStepsCompleted_community_report_stagesReport as communityReportEntry,
 } from './__generated__/communityReportStagesOthersStepsCompleted';
-import { impactReportOtherStepsCompleted as impactsOtherReport } from './__generated__/impactReportOtherStepsCompleted';
+
+// GET_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportDaysOthersSteps as communityDaysOtherReport,
     communityReportDaysOthersSteps_community_report_daysReport as communityDaysReportRow,
     communityReportDaysOthersSteps_community_report_daysReport_stageResults as communityDaysReportStage,
 } from './__generated__/communityReportDaysOthersSteps';
+
+// GET_STAGES_REPORT INTERFACES
 import {
     communityReportStagesOthersStepsAdded,
     communityReportStagesOthersStepsAdded_community_report_stagesReport as communityStepsAddedStageReportRow,
 } from './__generated__/communityReportStagesOthersStepsAdded';
+
+// GET_IMPACT_REPORT_REACHED INTERFACES
+import { impactReportMembersStageProgressionCount as impactMembersReport } from './__generated__/impactReportMembersStageProgressionCount';
+
+// GET_STAGES_PEOPLE_REPORT INTERFACES
+import {
+    communityReportStagesOthersContactCount,
+    communityReportStagesOthersContactCount_community_report_stagesReport as communityReportStagesContactCountRow,
+} from './__generated__/communityReportStagesOthersContactCount';
 
 const StepsOfFaithPage = () => {
     const { t } = useTranslation('insights');
