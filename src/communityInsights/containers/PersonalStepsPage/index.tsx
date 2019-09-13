@@ -17,32 +17,26 @@ import {
     GET_STAGES_REPORT_STEPS_ADDED,
     GET_TOTAL_STEPS_COMPLETED_SUMMARY,
 } from './queries';
-
 // GET_IMPACT_REPORT_STEPS_TAKEN INTERFACES
 import { impactReportPersonalStepsCompletedCount } from './__generated__/impactReportPersonalStepsCompletedCount';
-
 // GET_TOTAL_STEPS_COMPLETED_SUMMARY INTERFACES
 import {
     communityReportStagesPersonalStepsCompleted,
     communityReportStagesPersonalStepsCompleted_community_report_stagesReport as communityReportStagesPersonalStepsCompletedEntry,
 } from './__generated__/communityReportStagesPersonalStepsCompleted';
-
 // GET_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportDaysPersonalSteps,
     communityReportDaysPersonalSteps_community_report_daysReport as communityReportDaysPersonalRow,
     communityReportDaysPersonalSteps_community_report_daysReport_stageResults as communityReportDaysPersonalStage,
 } from './__generated__/communityReportDaysPersonalSteps';
-
 // GET_STAGES_REPORT_STEPS_ADDED INTERFACES
 import {
     communityReportStagesPersonalStepsAdded,
     communityReportStagesPersonalStepsAdded_community_report_stagesReport as communityReportStagesPersonalStepsAddedRow,
 } from './__generated__/communityReportStagesPersonalStepsAdded';
-
 // GET_IMPACT_REPORT_MOVED INTERFACES
 import { impactReportStageProgressionCount } from './__generated__/impactReportStageProgressionCount';
-
 // GET_STAGES_REPORT_MEMBER_COUNT INTERFACES
 import {
     communityReportStagesPersonalMemberCount,

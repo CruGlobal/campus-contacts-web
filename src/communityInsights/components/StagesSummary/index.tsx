@@ -19,8 +19,6 @@ import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
 import personal from '../../assets/icons/stage-personal-decisions.svg';
 import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
 
-import { communityReportStagesOthersStepsCompleted } from '../../containers/StepsOfFaithPage/__generated__/communityReportStagesOthersStepsCompleted';
-
 const Stages = styled.div`
     display: flex;
     flex-direction: row;
