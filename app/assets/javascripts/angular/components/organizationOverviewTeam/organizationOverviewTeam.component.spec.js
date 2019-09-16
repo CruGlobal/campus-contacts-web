@@ -67,9 +67,11 @@ describe('organizationOverviewTeam component', function() {
             organizationOverviewTeamService.loadOrgTeam.and.returnValue(
                 $q.resolve({
                     list: 'teamList',
+                    nextBatch: 'teamList',
                     loadedAll: true,
                 }),
             );
+
             $ctrl.loadTeamPage();
             expect(
                 organizationOverviewTeamService.loadOrgTeam,
