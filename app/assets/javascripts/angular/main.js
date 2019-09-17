@@ -15,6 +15,7 @@ import '../../../components/authentication/impersonateUser.component';
 import '../../../components/authentication/authLanding.component';
 
 import '../../../../src/communityInsights/insights';
+import '../../../../src/graphqlPlayground/GraphqlPlaygroundLazy';
 
 import '../../stylesheets/main.scss';
 

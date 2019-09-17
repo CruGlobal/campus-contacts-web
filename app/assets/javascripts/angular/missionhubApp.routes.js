@@ -682,6 +682,14 @@ angular
                 name: 'app.ministries.ministry.survey.responses',
                 url: '/responses',
                 component: 'surveyResponses',
+            })
+            .state({
+                name: 'graphqlPlayground',
+                url: '/graphql',
+                component: 'graphqlPlayground',
+                data: {
+                    isPublic: true,
+                },
             });
 
         // This is the default URL if the URL does not match any routes
