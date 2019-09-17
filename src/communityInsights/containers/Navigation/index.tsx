@@ -32,17 +32,6 @@ const Link = styled(NavLink)`
 
     &.active {
         color: ${({ theme }) => theme.colors.highlight};
-
-        ::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 40%;
-            border-bottom: 6px solid #f2f2f2;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            width: 0;
-        }
     }
 `;
 

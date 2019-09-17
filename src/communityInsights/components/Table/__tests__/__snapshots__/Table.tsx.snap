@@ -37,7 +37,7 @@ exports[`<Table /> should render properly with data 1`] = `
   height: 64px;
 }
 
-.emotion-6:nth-child(odd) {
+.emotion-6:nth-of-type(odd) {
   background-color: #eceef2;
 }
 

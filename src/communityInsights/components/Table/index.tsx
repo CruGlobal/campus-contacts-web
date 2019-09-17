@@ -36,7 +36,7 @@ const Row = styled.tr`
     text-align: left;
     height: 64px;
 
-    :nth-child(odd) {
+    :nth-of-type(odd) {
         background-color: #eceef2;
     }
 `;
