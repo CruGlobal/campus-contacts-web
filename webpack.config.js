@@ -13,7 +13,6 @@ const SriPlugin = require('webpack-subresource-integrity');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
-const ci = process.env.CI === 'true';
 const prod = process.env.TRAVIS_BRANCH === 'master';
 
 const htmlMinDefaults = {
@@ -61,15 +60,15 @@ module.exports = (env = {}) => {
             new MiniCssExtractPlugin({
                 filename: '[name].[contenthash].css',
             }),
-            ...(!isTest
-                ? [
+            ...(isTest
+                ? []
+                : [
                       new HtmlWebpackPlugin({
                           template: 'index.ejs',
                           prod: prod,
                           minify: htmlMinDefaults,
                       }),
-                  ]
-                : []),
+                  ]),
             ...(isBuild
                 ? [
                       new webpack.NamedModulesPlugin(),
@@ -96,7 +95,7 @@ module.exports = (env = {}) => {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.(ts|js)x?$/,
                     exclude: /node_modules/,
                     use: [
                         {
@@ -106,7 +105,7 @@ module.exports = (env = {}) => {
                                     '@babel/plugin-transform-runtime',
                                     '@babel/plugin-syntax-dynamic-import',
                                     '@babel/plugin-transform-template-literals',
-                                    ...(!isTest ? ['angularjs-annotate'] : []),
+                                    ...(isTest ? [] : ['angularjs-annotate']),
                                 ],
                             },
                         },
@@ -117,14 +116,14 @@ module.exports = (env = {}) => {
                     use: ['html-loader'],
                 },
                 {
-                    test: /\.js$/,
+                    test: /\.(ts|js)x?$/,
                     exclude: /node_modules/,
                     loader: 'eslint-loader',
                     enforce: 'pre',
                     options: {
-                        // Show errors as warnings during development to prevent start/test commands from exiting
-                        failOnError: isBuild || ci,
-                        emitWarning: !isBuild && !ci,
+                        // Show errors as warnings to prevent webpack from exiting
+                        failOnError: false,
+                        emitWarning: true,
                     },
                 },
                 {
@@ -175,6 +174,7 @@ module.exports = (env = {}) => {
         },
         resolve: {
             modules: [path.resolve(__dirname, 'app'), 'node_modules'],
+            extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx'],
         },
         devtool: 'source-map',
         devServer: {

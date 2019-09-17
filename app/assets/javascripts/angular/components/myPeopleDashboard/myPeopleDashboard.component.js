@@ -43,12 +43,16 @@ function myPeopleDashboardController(
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
         await loadAndSyncData();
+        // Check if the user is on mobile, and if so redirect them to download mobile app
+        if (myPeopleDashboardService.isMobile(navigator)) {
+            $window.location.href =
+                'https://get.missionhub.com/new-ministry-user';
+        }
 
         if (
             // If the logged in person has no organization permissions, redirect the user to download mobile app
             loggedInPerson.person.organizational_permissions.length === 0
         ) {
-            // This page we redirect to will change
             $window.location.href = 'https://get.missionhub.com/newmobileuser/';
         }
 
@@ -86,17 +90,44 @@ function myPeopleDashboardController(
     }
 
     function loadReports() {
-        var people = JsonApiDataStore.store.findAll('person');
-        var organizations = vm.organizations;
+        const people = vm.organizations.flatMap(({ people }) => people);
+        const organizations = vm.organizations;
+
+        const limitLength = 100;
+        const warnLength = 25;
+
+        if (people.length > limitLength || organizations.length > limitLength) {
+            $log.error(
+                `People dashboard tried to load more than ${limitLength} reports. Report ids truncated.`,
+                {
+                    numPeopleIds: people.length,
+                    numCommunityIds: organizations.length,
+                },
+            );
+        } else if (
+            people.length > warnLength ||
+            organizations.length > warnLength
+        ) {
+            $log.warn(
+                `People dashboard loaded more than ${warnLength} reports.`,
+                {
+                    numPeopleIds: people.length,
+                    numCommunityIds: organizations.length,
+                },
+            );
+        }
+
+        const limitedOrganizations = organizations.slice(0, limitLength);
+        const limitedPeople = people.slice(0, limitLength);
 
         reportsService
-            .loadOrganizationReports(organizations)
+            .loadOrganizationReports(limitedOrganizations)
             .catch(function(error) {
                 $log.error('Error loading organization reports', error);
             });
 
         reportsService
-            .loadMultiplePeopleReports(organizations, people)
+            .loadMultiplePeopleReports(limitedOrganizations, limitedPeople)
             .catch(function(error) {
                 $log.error('Error loading people reports', error);
             });

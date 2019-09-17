@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
+.emotion-5 {
+  box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
+  background: #ffffff;
+  border-radius: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 43px;
+  margin-top: 36px;
+}
+
+.emotion-1 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+
+.emotion-2 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #505256;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.emotion-4 {
+  padding: 25px;
+  margin: 0;
+}
+
+.emotion-3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+<div>
+  <div>
+    <h1
+      class="emotion-0"
+    >
+      Loading...
+    </h1>
+    <div
+      class="emotion-5"
+    >
+      <h1
+        class="emotion-1"
+      >
+        Total Interactions Completed
+      </h1>
+      <h2
+        class="emotion-2"
+      />
+      <div
+        class="emotion-4"
+      >
+        <div
+          class="emotion-3"
+        >
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div
+      class="emotion-5"
+    >
+      <h1
+        class="emotion-1"
+      >
+        Interactions Completed
+      </h1>
+      <h2
+        class="emotion-2"
+      >
+        Total interactions completed over time.
+      </h2>
+      <div
+        class="emotion-4"
+      >
+        <div>
+          Loading...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

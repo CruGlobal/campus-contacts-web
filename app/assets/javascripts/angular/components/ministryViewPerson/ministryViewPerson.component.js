@@ -15,6 +15,7 @@ angular.module('missionhubApp').component('ministryViewPerson', {
 });
 
 function ministryViewPersonController(
+    $rootScope,
     $scope,
     personService,
     personProfileService,
@@ -29,6 +30,20 @@ function ministryViewPersonController(
     vm.onAssignmentsKeydown = onAssignmentsKeydown;
     vm.isContact = isContact;
     vm.followupStatusOptions = personService.getFollowupStatusOptions();
+
+    this.$onInit = () => {
+        // Update UI when the users add or removes an assignment
+        this.personModifiedUnsubscribe = $rootScope.$on(
+            'personModified',
+            () => {
+                this.updateAssigned();
+            },
+        );
+    };
+
+    this.$onDestroy = () => {
+        this.personModifiedUnsubscribe();
+    };
 
     this.$onChanges = changes => {
         if (
@@ -54,6 +69,13 @@ function ministryViewPersonController(
             person,
             this.organizationId,
         );
+
+        this.updateAssigned = () => {
+            this.assignedTo = personService.getAssignedTo(
+                person,
+                this.organizationId,
+            );
+        };
 
         this.phoneNumber = personService.getPhoneNumber(person);
         this.emailAddress = personService.getEmailAddress(person);

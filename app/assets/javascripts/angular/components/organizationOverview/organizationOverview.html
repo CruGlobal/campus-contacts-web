@@ -1,18 +1,17 @@
 <async-content ready="$ctrl.ready">
     <div
-        class="br3 bg-pivot-darker-blue mb3"
+        class="br3 bg-pivot-dark-blue mb3"
         ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab(), 'insights-tab': $ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
         <div
-            class="flex items-center justify-between br3 br--top pb3"
-            ng-class="$ctrl.org.visible ? 'bg-pivot-white' : 'bg-pivot-gray-6'"
+            class="flex items-center justify-between br3 br--top bg-pivot-dark-blue"
         >
             <div
-                class="pivot-darker-blue f3 ph3 pt3 "
+                class="pivot-white f3 ph3 pt3"
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
             >
-                {{$ctrl.org.name}}
+                {{ $ctrl.org.name }}
             </div>
             <div ng-if="$ctrl.editMode">
                 <ng-md-icon
@@ -41,6 +40,17 @@
         <div class="tabs">
             <div
                 class="tab pivot-white"
+                ng-class="{active: $ctrl.isInsightsTab()}"
+                ng-if="!$ctrl.envService.is('production')"
+            >
+                <a
+                    ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
+                    ui-state-params="{ orgId: $ctrl.org.id }"
+                    >{{ 'nav.insights' | t }}</a
+                >
+            </div>
+            <div
+                class="tab pivot-white"
                 ng-repeat="tabName in $ctrl.tabNames"
                 ui-sref-active="active"
                 ui-state="'^.ministry.' + tabName"
@@ -48,10 +58,10 @@
                 ng-if="$ctrl.isTabVisible(tabName)"
             >
                 <span>
-                    {{'ministries.' + tabName + '.header' | t}}
+                    {{ 'ministries.' + tabName + '.header' | t }}
                     <span
                         ng-if="$ctrl[tabName] && $ctrl[tabName] !== 'countHidden'"
-                        >({{$ctrl[tabName].length}})</span
+                        >({{ $ctrl[tabName].length }})</span
                     >
                 </span>
                 <loading-spinner
@@ -63,7 +73,7 @@
             </div>
             <div class="tab dropdown " ng-if="$ctrl.directAdminPrivileges">
                 <span class="pivot-white"
-                    >{{'ministries.tools.header' | t}}</span
+                    >{{ 'ministries.tools.header' | t }}</span
                 >
                 <ng-md-icon
                     icon="play_arrow"
@@ -118,13 +128,6 @@
                                 >{{ 'signatures.title' | t }}</a
                             >
                         </li>
-                        <!--<li>
-                            <a
-                                ui-state="'app.ministries.ministry.insights'"
-                                ui-state-params="{ orgId: $ctrl.org.id }"
-                                >{{ 'nav.insights' | t }}</a
-                            >
-                        </li>-->
                     </ul>
                 </div>
             </div>

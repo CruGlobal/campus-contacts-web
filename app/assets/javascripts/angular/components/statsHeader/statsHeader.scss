@@ -4,15 +4,17 @@ stats-header {
     display: flex;
     align-items: center;
     @extend .subheader;
-    border-top: 1px solid rgba($gray-dark, 0.1);
-
+    background: $pivot-darker-blue;
     .stats-title {
         padding-left: 10px;
         min-width: 370px;
 
         report-period {
             a {
-                color: rgba($gray-dark, 0.7);
+                color: $white;
+            }
+            a.active {
+                color: $blue-6;
             }
         }
     }
@@ -25,13 +27,14 @@ stats-header {
         ng-md-icon {
             display: inline-block;
             width: 25px;
-
+            padding: 0 5px;
+            color: rgba($white, 0.7);
             svg {
                 width: 20px;
             }
         }
         svg {
-            fill: rgba($gray-dark, 0.7);
+            fill: rgba($white, 0.7);
         }
     }
 }

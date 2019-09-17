@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Layout /> should render properly 1`] = `
+.emotion-6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  color: #505256;
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  background-color: #f2f2f2;
+}
+
+.emotion-4 {
+  background: #005a7f;
+  height: 52px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 18px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  border-radius: 0 0 8px 8px;
+}
+
+.emotion-0 {
+  font-family: Titillium Web;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 21px;
+  margin-right: 20px;
+  color: white;
+  position: relative;
+}
+
+.emotion-0:hover {
+  color: #3CC8E6;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.emotion-0.active {
+  color: #3CC8E6;
+}
+
+.emotion-5 {
+  width: 100%;
+}
+
+<div>
+  <div
+    class="emotion-6"
+  >
+    <div
+      class="emotion-4"
+    >
+      <a
+        class="emotion-0"
+        href="/ministries/1/insights/personal"
+      >
+        Personal Steps
+      </a>
+      <a
+        class="emotion-0"
+        href="/ministries/1/insights/steps"
+      >
+        Steps of Faith
+      </a>
+      <a
+        class="emotion-0"
+        href="/ministries/1/insights/interactions"
+      >
+        Interactions
+      </a>
+      <a
+        class="emotion-0"
+        href="/ministries/1/insights/challenges"
+      >
+        Challenges
+      </a>
+    </div>
+    <div
+      class="emotion-5"
+    />
+  </div>
+</div>
+`;

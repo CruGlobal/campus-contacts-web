@@ -1,5 +1,7 @@
 import process from 'process';
+
 import oneSky from '@brainly/onesky-utils';
+
 import translations from '../src/i18n/locales/en-US';
 
 async function uploadTranslations() {

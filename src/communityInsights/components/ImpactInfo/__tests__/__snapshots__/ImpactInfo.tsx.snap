@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ImpactInfo /> should render properly loading state 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
+<div>
+  <h1
+    class="emotion-0"
+  >
+    Loading...
+  </h1>
+</div>
+`;
+
+exports[`<ImpactInfo /> should render properly with data 1`] = `
+.emotion-0 {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 38px;
+  color: #505256;
+  margin-bottom: 0px;
+  margin-top: 48px;
+  padding-left: 21px;
+}
+
+<div>
+  <h1
+    class="emotion-0"
+  >
+    Text with value 15
+     
+  </h1>
+</div>
+`;
