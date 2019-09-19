@@ -19,6 +19,7 @@ function organizationOverviewSuborgsController(
     periodService,
     ProgressiveListLoader,
     organizationOverviewSuborgsService,
+    insightsUpdateModalService,
 ) {
     var vm = this;
     vm.loadedAll = false;
@@ -34,6 +35,10 @@ function organizationOverviewSuborgsController(
     vm.$onInit = activate;
 
     function activate() {
+        // TODO Remove once no longer needed
+        !insightsUpdateModalService.checkModalConfirmation()
+            ? insightsUpdateModalService.createModal()
+            : null;
         periodService.subscribe($scope, loadReports);
     }
 

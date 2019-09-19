@@ -1155,6 +1155,9 @@ export default {
         },
     },
     insights: {
+        insightsUpdateTitle: 'Introducing the new Insights Tab!',
+        insightsUpdateContent:
+            'This is content introducing the new insights tab and what it will be about.',
         members: 'Members',
         stage: 'Stage',
         average: 'Average',
