@@ -1,6 +1,8 @@
 import React from 'react';
-import NullState from '..';
+
 import { renderWithContext } from '../../../../testUtils';
+
+import NullState from '..';
 
 describe('<NullState /> for non ImpactInfo component', () => {
     it('Should render properly', () => {
