@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import _ from 'lodash';
 
 import BarChart from '../BarChart';
+import NullState from '../NullState';
 
 interface Props {
     query: any;
@@ -32,10 +32,9 @@ const FiltersChart = ({
             endDate,
         },
     });
-    const { t } = useTranslation('insights');
 
     if (loading) {
-        return <div>{t('loading')}</div>;
+        return <NullState width={400}></NullState>;
     }
 
     const updateDates = (type: string, index: number) => {

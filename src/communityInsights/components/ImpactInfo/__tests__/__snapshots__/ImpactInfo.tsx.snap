@@ -15,7 +15,9 @@ exports[`<ImpactInfo /> should render properly loading state 1`] = `
   <h1
     class="emotion-0"
   >
-    Loading...
+    <span>
+      Gathering your stats...
+    </span>
   </h1>
 </div>
 `;

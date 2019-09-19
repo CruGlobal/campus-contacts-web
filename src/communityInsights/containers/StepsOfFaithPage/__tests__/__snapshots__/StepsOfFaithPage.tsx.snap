@@ -45,18 +45,21 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
 }
 
 .emotion-3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
+  width: 100%;
+  height: 190px;
+  background-color: #ffffff;
+  -webkit-animation: fade 2s infinite linear both;
+  animation: fade 2s infinite linear both;
+  border-radius: 8px;
 }
 
-.emotion-12 {
+.emotion-8 {
+  width: 100%;
   height: 400px;
-  position: relative;
+  background-color: #ffffff;
+  -webkit-animation: fade 2s infinite linear both;
+  animation: fade 2s infinite linear both;
+  border-radius: 8px;
 }
 
 <div>
@@ -64,7 +67,9 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
     <h1
       class="emotion-0"
     >
-      Loading...
+      <span>
+        Gathering your stats...
+      </span>
     </h1>
     <div
       class="emotion-5"
@@ -82,9 +87,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
       >
         <div
           class="emotion-3"
-        >
-          Loading...
-        </div>
+        />
       </div>
     </div>
     <div
@@ -103,9 +106,9 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
       <div
         class="emotion-4"
       >
-        <div>
-          Loading...
-        </div>
+        <div
+          class="emotion-8"
+        />
       </div>
     </div>
     <div
@@ -125,16 +128,16 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         class="emotion-4"
       >
         <div
-          class="emotion-12"
-        >
-          Loading...
-        </div>
+          class="emotion-8"
+        />
       </div>
     </div>
     <h1
       class="emotion-0"
     >
-      Loading...
+      <span>
+        Gathering your stats...
+      </span>
     </h1>
     <div
       class="emotion-5"
@@ -153,10 +156,8 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         class="emotion-4"
       >
         <div
-          class="emotion-12"
-        >
-          Loading...
-        </div>
+          class="emotion-8"
+        />
       </div>
     </div>
   </div>

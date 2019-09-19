@@ -1,9 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<FiltersChart /> should render properly 1`] = `
+.emotion-0 {
+  width: 100%;
+  height: 400px;
+  background-color: #ffffff;
+  -webkit-animation: fade 2s infinite linear both;
+  animation: fade 2s infinite linear both;
+  border-radius: 8px;
+}
+
 <div>
-  <div>
-    Loading...
-  </div>
+  <div
+    class="emotion-0"
+  />
 </div>
 `;

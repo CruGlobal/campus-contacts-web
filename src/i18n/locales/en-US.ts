@@ -1161,6 +1161,7 @@ export default {
         loading: 'Loading...',
         monthLabel: '1M',
         yearLabel: '1Y',
+        gatheringStats: 'Gathering your stats...',
         personalSteps: {
             label: 'Personal Steps of Faith',
             legend: 'Steps of Faith',

@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 import { withTheme } from 'emotion-theming';
 
+import NullState from '../NullState';
 import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
 import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
-
-const LoadingContainer = styled.div`
-    text-align: center;
-    padding: 25px;
-`;
 
 const TableContainer = styled.table`
     width: 100%;
@@ -133,10 +128,9 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
             first: PAGE_SIZE,
         },
     });
-    const { t } = useTranslation('insights');
 
     if (loading) {
-        return <LoadingContainer>{t('loading')}</LoadingContainer>;
+        return <NullState width={190} />;
     }
 
     const rows = mapRows(data);

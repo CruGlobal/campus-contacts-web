@@ -45,8 +45,12 @@ exports[`<ChallengesPage /> should render properly in loading state 1`] = `
 }
 
 .emotion-3 {
-  text-align: center;
-  padding: 25px;
+  width: 100%;
+  height: 190px;
+  background-color: #ffffff;
+  -webkit-animation: fade 2s infinite linear both;
+  animation: fade 2s infinite linear both;
+  border-radius: 8px;
 }
 
 <div>
@@ -54,7 +58,9 @@ exports[`<ChallengesPage /> should render properly in loading state 1`] = `
     <h1
       class="emotion-0"
     >
-      Loading...
+      <span>
+        Gathering your stats...
+      </span>
     </h1>
     <div
       class="emotion-5"
@@ -74,9 +80,7 @@ exports[`<ChallengesPage /> should render properly in loading state 1`] = `
       >
         <div
           class="emotion-3"
-        >
-          Loading...
-        </div>
+        />
       </div>
     </div>
   </div>

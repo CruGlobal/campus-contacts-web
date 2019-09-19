@@ -1,9 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<StagesSummary /> should render properly 1`] = `
+exports[`<NullState /> for ImpactInfo Should render correct text 1`] = `
+<div>
+  <span>
+    Gathering your stats...
+  </span>
+</div>
+`;
+
+exports[`<NullState /> for non ImpactInfo component Should render properly 1`] = `
 .emotion-0 {
   width: 100%;
-  height: 190px;
+  height: 400px;
   background-color: #ffffff;
   -webkit-animation: fade 2s infinite linear both;
   animation: fade 2s infinite linear both;

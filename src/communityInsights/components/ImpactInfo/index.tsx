@@ -3,6 +3,7 @@ import { useQuery } from 'react-apollo-hooks';
 import React from 'react';
 
 import Header from '../Header';
+import NullState from '../NullState';
 
 interface Props {
     query: any;
@@ -15,7 +16,11 @@ const ImpactInfo = ({ query, text, variables }: Props) => {
     const { t } = useTranslation('insights');
 
     if (loading) {
-        return <Header>{t('loading')}</Header>;
+        return (
+            <Header>
+                <NullState impactInfo={true}></NullState>
+            </Header>
+        );
     }
     return <Header>{text(data)} </Header>;
 };

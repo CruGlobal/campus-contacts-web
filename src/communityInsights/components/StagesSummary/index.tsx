@@ -18,6 +18,7 @@ import gospel from '../../assets/icons/stage-gospel-presentations.svg';
 import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
 import personal from '../../assets/icons/stage-personal-decisions.svg';
 import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
+import NullState from '../NullState';
 
 const Stages = styled.div`
     display: flex;
@@ -133,7 +134,6 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
             moment.duration(dates.endDate.diff(dates.startDate)).asDays(),
         );
     };
-    const { t } = useTranslation('insights');
     const { data, loading } = useQuery(query, {
         variables: {
             ...variables,
@@ -143,7 +143,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     });
 
     if (loading) {
-        return <SummaryWrapper>{t('loading')}</SummaryWrapper>;
+        return <NullState width={190}></NullState>;
     }
 
     const onDatesChange = ({

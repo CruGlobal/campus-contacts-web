@@ -2,16 +2,18 @@
 
 exports[`<StepsChart /> should render properly 1`] = `
 .emotion-0 {
+  width: 100%;
   height: 400px;
-  position: relative;
+  background-color: #ffffff;
+  -webkit-animation: fade 2s infinite linear both;
+  animation: fade 2s infinite linear both;
+  border-radius: 8px;
 }
 
 <div>
   <div
     class="emotion-0"
-  >
-    Loading...
-  </div>
+  />
 </div>
 `;
 
