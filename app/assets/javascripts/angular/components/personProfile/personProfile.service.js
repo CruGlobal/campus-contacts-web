@@ -123,15 +123,6 @@ function personProfileService(
                 {
                     included: httpProxy.includedFromModels(relationships),
                 },
-            ).then(
-                res =>
-                    // Filter out extra response
-                    (person[relationshipName] = res.data[
-                        relationshipName
-                    ].filter(
-                        (data, index) =>
-                            res.data[relationshipName].indexOf(data) >= index,
-                    )),
             );
         },
 
