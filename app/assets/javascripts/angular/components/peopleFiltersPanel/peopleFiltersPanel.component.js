@@ -142,7 +142,9 @@ function peopleFiltersPanelController(
                 this.labelOptions = stats.labels;
                 this.assignmentOptions = stats.assigned_tos;
                 this.groupOptions = stats.groups;
-                this.statusOptions = stats.statuses;
+                this.statusOptions = stats.statuses.filter(
+                    option => option.followup_status !== 'do_not_email',
+                );
                 this.permissionOptions = stats.permissions;
                 this.genderOptions = stats.genders;
                 this.questionOptions = stats.questions;

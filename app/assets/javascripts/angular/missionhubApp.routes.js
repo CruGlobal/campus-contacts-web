@@ -1,5 +1,3 @@
-import '../../../../src/dashboard/insights';
-
 angular
     .module('missionhubApp')
     .config(function(

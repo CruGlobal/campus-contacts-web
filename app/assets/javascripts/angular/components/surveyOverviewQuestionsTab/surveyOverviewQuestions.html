@@ -119,74 +119,24 @@
                     </div>
                 </div>
                 <div
-                    class="flex justify-between"
+                    class="flex flex-column justify-between"
                     ng-if="question.kind === 'ChoiceField'"
+                    ng-init="answerTab = 0"
                 >
-                    <div class="w-52">
+                    <!-- Answer to Initiate and Tabs container -->
+                    <div class="w-100 flex justify-between">
                         <p
-                            class="db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3"
+                            class=" w-52 db f6 lh-copy f6 normal mb1 pivot-gray-darker ttu fw6 tracked mv3"
                         >
                             {{ 'surveys:questions.initiateAssignment' | t }}
                         </p>
-                        <div
-                            class="assignments pb2"
-                            ng-sortable="$ctrl.sortableOptions"
-                            ui-sortable-stop="$ctrl.saveQuestionContent(question, question.question_answers)"
-                        >
-                            <div
-                                class="flex items-center assignment-item no-line"
-                                ng-repeat="answer in question.question_answers track by $index"
-                            >
-                                <div>
-                                    <a
-                                        class="sort mr3"
-                                        ng-if="$ctrl.directAdminPrivileges"
-                                    >
-                                        <img
-                                            alt="{{
-                                                'surveys:questions.sort' | t
-                                            }}"
-                                            ng-src="{{ $ctrl.icons.sort }}"
-                                        />
-                                    </a>
-                                </div>
-                                <div class="f-grow">
-                                    <input
-                                        class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
-                                        type="text"
-                                        ng-change="$ctrl.updateQuestionAnswer(question, $index)"
-                                        ng-model-options="{ debounce: 750 }"
-                                        ng-model="question.question_answers[$index]"
-                                        ng-readonly="!$ctrl.directAdminPrivileges"
-                                    />
-                                </div>
-                                <div>
-                                    ----
-                                </div>
-                            </div>
-                            <div class="assignment-item no-line w-94">
-                                <button
-                                    class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent"
-                                    ng-click="$ctrl.addEmptyQuestionContent(question)"
-                                    ng-if="$ctrl.directAdminPrivileges"
-                                >
-                                    {{ 'surveys:questions.newAnswer' | t }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="w-48"
-                        ng-if="question.question_answers.length"
-                        ng-init="answerTab = 0"
-                    >
-                        <div class="tabs flex justify-between">
+                        <div class="tabs flex justify-between w-48">
                             <div class="w-49 relative">
                                 <a
-                                    class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
+                                    class="ttu b f6 bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db bb b--gray-dark"
                                     href=""
                                     ng-click="answerTab = 0"
-                                    ng-class="{'bb bb--pivot-gray-5 selected-tab': answerTab === 0}"
+                                    ng-class="{'selected-tab': answerTab === 0}"
                                 >
                                     {{ 'surveys:questions.autoAssign' | t }}
                                 </a>
@@ -199,10 +149,10 @@
                             </div>
                             <div class="w-49 relative">
                                 <a
-                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
+                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db bb b--gray-dark"
                                     href=""
                                     ng-click="answerTab = 2"
-                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 2}"
+                                    ng-class="{'selected-tab' : answerTab === 2}"
                                 >
                                     {{ 'surveys:questions.autoLabel' | t }}
                                 </a>
@@ -215,10 +165,10 @@
                             </div>
                             <div class="w-49 relative">
                                 <a
-                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db b--gray-dark"
+                                    class="ttu b f6  bl br bt pv2 ph2 link pivot-gray-darker br2 br--top db bb b--gray-dark"
                                     href=""
                                     ng-click="answerTab = 1"
-                                    ng-class="{'bb bb--pivot-gray-5 selected-tab' : answerTab === 1}"
+                                    ng-class="{'selected-tab' : answerTab === 1}"
                                 >
                                     {{ 'surveys:questions.autoNotify' | t }}
                                 </a>
@@ -230,90 +180,233 @@
                                 </a>
                             </div>
                         </div>
+                    </div>
+                    <!-- Answers and options selections -->
+                    <div class="questions-container">
+                        <!-- Auto Assign -->
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="flex flex-column w-100 "
                             ng-if="answerTab === 0"
                         >
-                            <div
-                                class="relative"
-                                ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
-                            >
-                                <assigned-people-select
-                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                    assigned="rule.assign_to"
-                                    rule-code="rule.rule_code"
-                                    organization-id="$ctrl.survey.organization_id"
-                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-people-select>
-                                <a
-                                    href
-                                    class="ml3 delete"
-                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
-                                    ng-if="$ctrl.directAdminPrivileges"
+                            <div ng-sortable="$ctrl.sortableOptions">
+                                <div
+                                    class="question-row"
+                                    ng-repeat="answer in question.question_answers track by $index"
                                 >
-                                    <img
-                                        alt="Delete"
-                                        ng-src="{{ $ctrl.icons.trash }}"
-                                    />
-                                </a>
+                                    <div class="w-100 flex">
+                                        <div
+                                            class="flex items-center assignment-item no-line w-52"
+                                        >
+                                            <div>
+                                                <a
+                                                    class="sort mr3"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="{{
+                                                            'surveys:questions.sort'
+                                                                | t
+                                                        }}"
+                                                        ng-src="{{
+                                                            $ctrl.icons.sort
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div class="f-grow">
+                                                <input
+                                                    class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
+                                                    type="text"
+                                                    ng-change="$ctrl.updateQuestionAnswer(question, $index)"
+                                                    ng-model-options="{ debounce: 750 }"
+                                                    ng-model="question.question_answers[$index]"
+                                                    ng-readonly="!$ctrl.directAdminPrivileges"
+                                                />
+                                            </div>
+                                            <div>
+                                                ----
+                                            </div>
+                                        </div>
+                                        <div class="relative flex pb2 w-48">
+                                            <div
+                                                class="assignments tab-body pa2 ba b--gray-dark w-100"
+                                            >
+                                                <assigned-people-select
+                                                    action-after-select="$ctrl.addPersonToRule(question, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].assign_to"
+                                                    rule-code="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].rule_code"
+                                                    organization-id="$ctrl.survey.organization_id"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                ></assigned-people-select>
+                                                <a
+                                                    href
+                                                    class="ml3 delete"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index], $index);"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="Delete"
+                                                        ng-src="{{
+                                                            $ctrl.icons.trash
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!-- Label Tab -->
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="flex flex-column w-100"
                             ng-if="answerTab === 2"
                         >
-                            <div
-                                class="relative"
-                                ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTOASSIGN' } track by $index"
-                            >
-                                <assigned-label-select
-                                    action-after-select="$ctrl.addLabelToRule(question, rule)"
-                                    assigned="rule.assigned_labels"
-                                    organization-id="$ctrl.survey.organization_id"
-                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-label-select>
-                                <a
-                                    href
-                                    class="ml3 delete"
-                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
-                                    ng-if="$ctrl.directAdminPrivileges"
+                            <div ng-sortable="$ctrl.sortableOptions">
+                                <div
+                                    class="question-row"
+                                    ng-repeat="answer in question.question_answers track by $index"
                                 >
-                                    <img
-                                        alt="Delete"
-                                        ng-src="{{ $ctrl.icons.trash }}"
-                                    />
-                                </a>
+                                    <div class="w-100 flex">
+                                        <div
+                                            class="flex items-center assignment-item no-line w-52"
+                                        >
+                                            <div>
+                                                <a
+                                                    class="sort mr3"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="{{
+                                                            'surveys:questions.sort'
+                                                                | t
+                                                        }}"
+                                                        ng-src="{{
+                                                            $ctrl.icons.sort
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div class="f-grow">
+                                                <input
+                                                    class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
+                                                    type="text"
+                                                    ng-change="$ctrl.updateQuestionAnswer(question, $index)"
+                                                    ng-model-options="{ debounce: 750 }"
+                                                    ng-model="question.question_answers[$index]"
+                                                    ng-readonly="!$ctrl.directAdminPrivileges"
+                                                />
+                                            </div>
+                                            <div>
+                                                ----
+                                            </div>
+                                        </div>
+                                        <div class="relative flex pb2 w-48">
+                                            <div
+                                                class="assignments tab-body pa2 ba b--gray-dark w-100"
+                                            >
+                                                <assigned-label-select
+                                                    action-after-select="$ctrl.addLabelToRule(question, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].assigned_labels"
+                                                    organization-id="$ctrl.survey.organization_id"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                ></assigned-label-select>
+                                                <a
+                                                    href
+                                                    class="ml3 delete"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTOASSIGN' })[$index], $index);"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="Delete"
+                                                        ng-src="{{
+                                                            $ctrl.icons.trash
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!-- Auto Notify -->
                         <div
-                            class="tab-body pa2 ba b--gray-dark"
+                            class="flex flex-column w-100"
                             ng-if="answerTab === 1"
                         >
-                            <div
-                                class="relative"
-                                ng-repeat="rule in question.question_rules | filter: { rule_code: 'AUTONOTIFY' } track by $index"
-                            >
-                                <assigned-people-select
-                                    action-after-select="$ctrl.addPersonToRule(question, rule)"
-                                    assigned="rule.assign_to"
-                                    organization-id="$ctrl.survey.organization_id"
-                                    disabled="rule.trigger_keywords === '' || !$ctrl.directAdminPrivileges"
-                                ></assigned-people-select>
-                                <a
-                                    href
-                                    class="ml3 delete"
-                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, rule, $index);"
-                                    ng-if="$ctrl.directAdminPrivileges"
+                            <div ng-sortable="$ctrl.sortableOptions">
+                                <div
+                                    class="question-row"
+                                    ng-repeat="answer in question.question_answers track by $index"
                                 >
-                                    <img
-                                        alt="Delete"
-                                        ng-src="{{ $ctrl.icons.trash }}"
-                                    />
-                                </a>
+                                    <div class="w-100 flex">
+                                        <div
+                                            class="flex items-center assignment-item no-line w-52"
+                                        >
+                                            <div>
+                                                <a
+                                                    class="sort mr3"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="{{
+                                                            'surveys:questions.sort'
+                                                                | t
+                                                        }}"
+                                                        ng-src="{{
+                                                            $ctrl.icons.sort
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div class="f-grow">
+                                                <input
+                                                    class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
+                                                    type="text"
+                                                    ng-change="$ctrl.updateQuestionAnswer(question, $index)"
+                                                    ng-model-options="{ debounce: 750 }"
+                                                    ng-model="question.question_answers[$index]"
+                                                    ng-readonly="!$ctrl.directAdminPrivileges"
+                                                />
+                                            </div>
+                                            <div>
+                                                ----
+                                            </div>
+                                        </div>
+                                        <div class="relative flex pb2 w-48">
+                                            <div
+                                                class="assignments-notify tab-body pa2 ba b--gray-dark w-100"
+                                            >
+                                                <assigned-people-select
+                                                    action-after-select="$ctrl.addPersonToRule(question, (question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index])"
+                                                    assigned="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index].assign_to"
+                                                    organization-id="$ctrl.survey.organization_id"
+                                                    disabled="(question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index].trigger_keywords === '' || !$ctrl.directAdminPrivileges"
+                                                ></assigned-people-select>
+                                                <a
+                                                    href
+                                                    class="ml3 delete"
+                                                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, (question.question_rules | filter: { rule_code: 'AUTONOTIFY' })[$index], $index);"
+                                                    ng-if="$ctrl.directAdminPrivileges"
+                                                >
+                                                    <img
+                                                        alt="Delete"
+                                                        ng-src="{{
+                                                            $ctrl.icons.trash
+                                                        }}"
+                                                    />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex items-center mv-ih">
+                            <div
+                                class="flex items-center mv-ih justify-end w-48 notification-container"
+                            >
                                 <label
-                                    class="db f6 lh-copy f5 normal pivot-gray-darker mr2"
+                                    class="db f6 lh-copy f5 normal pivot-gray-darker ml2"
                                 >
                                     {{
                                     'surveys:questions.sendNotificationsViaEmail'
@@ -356,6 +449,17 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="w-52 flex" ng-if="question.question_answers">
+                    <div class="assignment-item no-line w-94">
+                        <button
+                            class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent"
+                            ng-click="$ctrl.addEmptyQuestionContent(question)"
+                            ng-if="$ctrl.directAdminPrivileges"
+                        >
+                            {{ 'surveys:questions.newAnswer' | t }}
+                        </button>
                     </div>
                 </div>
             </fieldset>
