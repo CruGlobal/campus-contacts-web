@@ -36,9 +36,9 @@ function organizationOverviewSuborgsController(
 
     function activate() {
         // TODO Remove once no longer needed
-        !insightsUpdateModalService.checkModalConfirmation()
-            ? insightsUpdateModalService.createModal()
-            : null;
+        insightsUpdateModalService.checkModalConfirmation()
+            ? null
+            : insightsUpdateModalService.createModal();
         periodService.subscribe($scope, loadReports);
     }
 

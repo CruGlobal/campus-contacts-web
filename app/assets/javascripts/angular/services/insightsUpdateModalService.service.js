@@ -28,9 +28,7 @@ function insightsUpdateModalService($uibModal) {
             } catch (err) {}
         },
         checkModalConfirmation: () => {
-            return localStorage.getItem('confirmedInsightsUpdate') !== null
-                ? true
-                : false;
+            return localStorage.getItem('confirmedInsightsUpdate');
         },
     };
 }
