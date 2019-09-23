@@ -18,6 +18,10 @@ organization-overview {
         font-size: 2em;
     }
 
+    .org-link {
+        text-decoration: none;
+    }
+
     .tabs .tab {
         &:first-of-type {
             padding-left: 18px;

@@ -9,9 +9,9 @@
         ng-repeat="org in $ctrl.subOrgs | orderBy: 'name' track by org.id"
     >
         <a
-            ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })"
+            ng-href="/ministries/{{ org.id }}/insights/personal"
             class="suborg-name"
-            >{{org.name}}</a
+            >{{ org.name }}</a
         >
         <organizational-stats org="org"></organizational-stats>
     </div>

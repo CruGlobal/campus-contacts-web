@@ -10,10 +10,16 @@
         >
             <accordion-toggle class="ml2"></accordion-toggle>
             <div class="org-name pivot-white mh1">
-                <h2
-                    ui-sref="app.ministries.ministry.defaultTab({ orgId: $ctrl.org.id })"
-                >
-                    {{ $ctrl.org.name }}
+                <h2>
+                    <a
+                        class="pivot-white org-link"
+                        ng-href="/ministries/{{
+                            $ctrl.org.id
+                        }}/insights/personal"
+                        ui-state-params="{ orgId: $ctrl.org.id }"
+                    >
+                        {{ $ctrl.org.name }}
+                    </a>
                 </h2>
             </div>
             <organizational-stats
@@ -38,8 +44,8 @@
                         ng-repeat="type in $ctrl.anonymousInteractionTypes"
                         ng-class="{opened: type.id == $ctrl.addAnonymousInteractionType.id}"
                         ng-click="$ctrl.addAnonymousInteraction(type)"
-                        title="{{type.title | t}}"
-                        icon="{{type.icon}}"
+                        title="{{ type.title | t }}"
+                        icon="{{ type.icon }}"
                     >
                     </ng-md-icon>
                 </div>
@@ -47,7 +53,7 @@
                     icon="add"
                     size="16"
                     class="add-anonymous-interaction pivot-white"
-                    title="{{'dashboard.anonymous.add' | t}}"
+                    title="{{ 'dashboard.anonymous.add' | t }}"
                     ng-class="{closed: $ctrl.addAnonymousInteractionButtonsVisible}"
                     ng-if="$ctrl.options.anonymousInteractions"
                     ng-click="$ctrl.toggleAnonymousInteractionButtons()"
@@ -86,12 +92,14 @@
         >
             <textarea
                 ng-model="$ctrl.pendingAnonymousInteraction.comment"
-                placeholder="{{'dashboard.anonymous.note' | t}} {{$ctrl.pendingAnonymousInteraction.type.title | t}}"
+                placeholder="{{ 'dashboard.anonymous.note' | t }} {{
+                    $ctrl.pendingAnonymousInteraction.type.title | t
+                }}"
                 class="auto-grow"
                 style="height: 24px;"
             ></textarea>
             <a href ng-click="$ctrl.saveAnonymousInteraction()"
-                >{{'dashboard.done' |t}}</a
+                >{{ 'dashboard.done' | t }}</a
             >
         </div>
     </accordion-header>

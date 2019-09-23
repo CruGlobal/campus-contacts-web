@@ -29,6 +29,11 @@ organization {
         .org-name {
             width: 295px;
             display: flex;
+            > h2 {
+                > a {
+                    text-decoration: none;
+                }
+            }
         }
 
         .right-buttons {

@@ -7,11 +7,14 @@
         <div
             class="flex items-center justify-between br3 br--top bg-pivot-dark-blue"
         >
-            <div
-                class="pivot-white f3 ph3 pt3"
-                ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
-            >
-                {{ $ctrl.org.name }}
+            <div class="pivot-white f3 ph3 pt3">
+                <a
+                    class="pivot-white org-link"
+                    ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
+                    ui-state-params="{ orgId: $ctrl.org.id }"
+                >
+                    {{ $ctrl.org.name }}
+                </a>
             </div>
             <div ng-if="$ctrl.editMode">
                 <ng-md-icon

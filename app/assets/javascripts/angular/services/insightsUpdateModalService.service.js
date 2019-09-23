@@ -23,7 +23,7 @@ function insightsUpdateModalService($uibModal) {
             });
 
             try {
-                const modalResponse = await confirmModal.result;
+                await confirmModal.result;
                 localStorage.setItem('confirmedInsightsUpdate', true);
             } catch (err) {}
         },
