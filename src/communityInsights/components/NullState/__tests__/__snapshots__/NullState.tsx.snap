@@ -1,13 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<NullState /> for ImpactInfo Should render correct text 1`] = `
-<div>
-  <span>
-    Gathering your stats...
-  </span>
-</div>
-`;
-
 exports[`<NullState /> for non ImpactInfo component Should render properly 1`] = `
 .emotion-0 {
   width: 100%;
@@ -21,6 +13,7 @@ exports[`<NullState /> for non ImpactInfo component Should render properly 1`] =
 <div>
   <div
     class="emotion-0"
+    width="400"
   />
 </div>
 `;

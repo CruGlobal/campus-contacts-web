@@ -80,6 +80,7 @@ exports[`<ChallengesPage /> should render properly in loading state 1`] = `
       >
         <div
           class="emotion-3"
+          width="190"
         />
       </div>
     </div>

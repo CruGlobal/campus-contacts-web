@@ -14,13 +14,3 @@ describe('<NullState /> for non ImpactInfo component', () => {
         unmount();
     });
 });
-
-describe('<NullState /> for ImpactInfo', () => {
-    it('Should render correct text', () => {
-        const { snapshot, unmount } = renderWithContext(
-            <NullState impactInfo={true} />,
-        );
-        snapshot();
-        unmount();
-    });
-});

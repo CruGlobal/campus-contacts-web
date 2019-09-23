@@ -13,6 +13,7 @@ exports[`<StepsChart /> should render properly 1`] = `
 <div>
   <div
     class="emotion-0"
+    width="400"
   />
 </div>
 `;
