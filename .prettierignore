@@ -1,9 +1,7 @@
 .prettierignore
 coverage
 *.snap
-package.json
 yarn.lock
 README.md
 netlify.toml
-.babelrc
 schema.json
