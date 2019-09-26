@@ -1155,9 +1155,9 @@ export default {
         },
     },
     insights: {
-        insightsUpdateTitle: 'Introducing the new Insights Tab!',
+        insightsUpdateTitle: 'New Insights Dashboard',
         insightsUpdateContent:
-            'This is content introducing the new insights tab and what it will be about.',
+            'Check out the new Insights dashboard to see your team’s steps of faith, interactions and challenges. Now you can see and celebrate what God is doing in your movement.',
         members: 'Members',
         stage: 'Stage',
         average: 'Average',

@@ -1,0 +1,40 @@
+<div class="center bg-white source-sans">
+    <div class="flex justify-end ma3">
+        <a href="" ng-click="$ctrl.close()">
+            <svg
+                width="23"
+                height="23"
+                viewBox="0 0 23 23"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M16.9703 15.9099L12.3741 11.3137L16.9703 6.71751C17.2631 6.42477 17.2631 5.9496 16.9703 5.65685C16.6776 5.36411 16.2024 5.36411 15.9097 5.65685L11.3135 10.253L6.71728 5.65685C6.42454 5.36411 5.94936 5.36411 5.65662 5.65685C5.36388 5.9496 5.36388 6.42477 5.65662 6.71751L10.2528 11.3137L5.65662 15.9099C5.36388 16.2026 5.36388 16.6778 5.65662 16.9706C5.94936 17.2633 6.42454 17.2633 6.71728 16.9706L11.3135 12.3744L15.9097 16.9706C16.2024 17.2633 16.6776 17.2633 16.9703 16.9706C17.2631 16.6778 17.2631 16.2026 16.9703 15.9099Z"
+                    fill="#505256"
+                />
+            </svg>
+        </a>
+    </div>
+    <div class="modal-text pa4 pb5">
+        <div class="tc">
+            <img
+                ng-if="$ctrl.resolve.icon"
+                class="dib"
+                ng-src="{{ $ctrl.resolve.icon }}"
+                style="width:264px; height:262px;"
+            />
+            <h2 class="fs32 fw3 normal pivot-bright-blue mb2 mt2">
+                {{ $ctrl.resolve.title }}
+            </h2>
+        </div>
+
+        <p
+            class="lh-copy measure tc f5 pivot-gray-darker mb0 fw3 mt3"
+            ng-repeat="paragraph in $ctrl.resolve.paragraphs"
+        >
+            {{ paragraph }}
+        </p>
+    </div>
+</div>
