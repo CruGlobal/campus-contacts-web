@@ -22,8 +22,15 @@ organization-overview {
         &:first-of-type {
             padding-left: 18px;
         }
+        a {
+            text-decoration: none;
+        }
 
         &.active {
+            a,
+            span {
+                color: $blue-6;
+            }
             .loading svg {
                 fill: $pivot-bright-blue;
             }

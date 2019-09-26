@@ -44,9 +44,10 @@ function organizationOverviewTeamController(
             .then(function(resp) {
                 vm.team = resp.list;
                 vm.loadedAll = resp.loadedAll;
+                // Use the nextBatch from the response which only includes unloaded people.
                 return loadTeamReports(
                     [vm.organizationOverview.org.id],
-                    vm.team,
+                    resp.nextBatch,
                 );
             })
             .finally(function() {

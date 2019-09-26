@@ -1,22 +1,24 @@
-<div class="stats-title"></div>
+<div class="stats-title">
+    <report-period
+        ng-if="$ctrl.$state.current.name !== 'app.ministries.root'"
+    ></report-period>
+</div>
 <div class="stats-icons">
     <ng-md-icon
-        class="pivot-gray-darker"
         icon="assignedPeople"
         class="tipitmiddle"
         title="{{ 'contacts.all_contacts.title' | t }}"
     ></ng-md-icon>
     <ng-md-icon
-        class="pivot-gray-darker"
         icon="uncontactedPerson"
         class="tipitmiddle"
         title="{{ 'contacts.statuses.uncontacted' | t }}"
     ></ng-md-icon>
     <ng-md-icon
-        class="pivot-gray-darker"
         ng-repeat="interactionType in $ctrl.interactionTypes"
-        icon="{{interactionType.icon}}"
+        ng-if="interactionType.title !== 'application.interaction_types.comment'"
+        icon="{{ interactionType.icon }}"
         class="tipitmiddle"
-        title="{{interactionType.title | t}}"
+        title="{{ interactionType.title | t }}"
     ></ng-md-icon>
 </div>
