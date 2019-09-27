@@ -17,6 +17,8 @@ script:
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
       yarn run onesky:download;
       yarn run build;
+      yarn start
+      yarn test:cypress
       fi
 
 after_success:
