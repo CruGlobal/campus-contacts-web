@@ -13,7 +13,6 @@ script:
     - yarn lint
     - yarn lint:ts
     - yarn prettier:check
-    - yarn start
     - yarn test:cypress
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
