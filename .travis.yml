@@ -16,7 +16,7 @@ script:
     - yarn lint
     - yarn lint:ts
     - yarn prettier:check
-    - test:cypress:ci
+    - yarn test:cypress:ci
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
       yarn run onesky:download;
