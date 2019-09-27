@@ -13,12 +13,12 @@ script:
     - yarn lint
     - yarn lint:ts
     - yarn prettier:check
+      yarn start
+      yarn test:cypress
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
       yarn run onesky:download;
       yarn run build;
-      yarn start
-      yarn test:cypress
       fi
 
 after_success:
