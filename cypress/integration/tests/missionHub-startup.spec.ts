@@ -1,3 +1,5 @@
+// This test mirrors a datadog synthetic test(https://app.datadoghq.com/synthetics/details/u2s-kfb-d6j),
+// any changes to theistest should be made to the datadog synthetic test as well
 describe('Starting the Application', () => {
     it('should load the application', () => {
         cy.visit('/sign-in');
