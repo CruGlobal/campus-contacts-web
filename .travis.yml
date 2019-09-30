@@ -16,7 +16,6 @@ script:
     - yarn lint
     - yarn lint:ts
     - yarn prettier:check
-    - cypress install
     - yarn test:cypress:ci
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
@@ -33,6 +32,7 @@ after_success:
 cache:
     yarn: true
     directories:
+        - ~/.cache
         - node_modules
 
 before_deploy:
