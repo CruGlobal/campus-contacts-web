@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import moment, { Moment } from 'moment';
 import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
+import { stepsOfFaithMockData } from '../NullState';
 
 import RangePicker from '../RangePicker';
 import notSure from '../../assets/icons/stage-not-sure.svg';
@@ -142,10 +143,6 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
         },
     });
 
-    if (loading) {
-        return <NullState width={190}></NullState>;
-    }
-
     const onDatesChange = ({
         startDate,
         endDate,
@@ -155,17 +152,46 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     }) => {
         setDates({ startDate, endDate });
     };
-
+    if (loading) {
+        return (
+            <SummaryWrapper>
+                <Stages>
+                    {mapData(stepsOfFaithMockData).map((entry: any) => {
+                        return (
+                            <Stage key={entry.stage}>
+                                <Icon className={entry.icon} />
+                                <Title longNames={longNames}>
+                                    {entry.stage}
+                                </Title>
+                                <Value>{entry.count ? entry.count : '-'}</Value>
+                            </Stage>
+                        );
+                    })}
+                </Stages>
+                <Footer>
+                    <RangePicker
+                        onDatesChange={onDatesChange}
+                        startDate={dates.startDate}
+                        endDate={dates.endDate}
+                    />
+                </Footer>
+            </SummaryWrapper>
+        );
+        return <div>Loading</div>;
+    }
     return (
         <SummaryWrapper>
             <Stages>
-                {mapData(data).map((entry: any) => (
-                    <Stage key={entry.stage}>
-                        <Icon className={entry.icon} />
-                        <Title longNames={longNames}>{entry.stage}</Title>
-                        <Value>{entry.count ? entry.count : '-'}</Value>
-                    </Stage>
-                ))}
+                {mapData(data).map((entry: any) => {
+                    console.log(data);
+                    return (
+                        <Stage key={entry.stage}>
+                            <Icon className={entry.icon} />
+                            <Title longNames={longNames}>{entry.stage}</Title>
+                            <Value>{entry.count ? entry.count : '-'}</Value>
+                        </Stage>
+                    );
+                })}
             </Stages>
             <Footer>
                 <RangePicker

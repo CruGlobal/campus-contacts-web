@@ -6,6 +6,83 @@ interface Props {
     width: number;
 }
 
+export const stepsOfFaithMockData = {
+    community: {
+        report: {
+            interactions: [
+                {
+                    interactionCount: 0,
+                    interactionType: {
+                        name: 'Spiritual Conversation',
+                    },
+                },
+                {
+                    interactionCount: 0,
+                    interactionType: {
+                        name: 'Personal Evangelism',
+                    },
+                },
+                {
+                    interactionCount: 0,
+                    interactionType: {
+                        name: 'Personal Evangelism Decisions',
+                    },
+                },
+                {
+                    interactionCount: 0,
+                    interactionType: {
+                        name: 'Holy Spirit Presentation',
+                    },
+                },
+                {
+                    interactionCount: 0,
+                    interactionType: {
+                        name: 'Discipleship Conversation',
+                    },
+                },
+            ],
+            stagesReport: [
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Uninterested',
+                    },
+                },
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Curious',
+                    },
+                },
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Forgiven',
+                    },
+                },
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Growing',
+                    },
+                },
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Guiding',
+                    },
+                },
+                {
+                    personalStepsCompletedCount: 0,
+                    stage: {
+                        name: 'Not Sure',
+                    },
+                },
+            ],
+        },
+    },
+};
+
 const LoadingContainer = styled.div<Props>`
     width: 100%;
     height: ${(props: Props) => props.width}px;
