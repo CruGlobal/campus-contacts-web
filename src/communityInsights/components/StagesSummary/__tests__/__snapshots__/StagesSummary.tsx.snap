@@ -92,7 +92,7 @@ exports[`<StagesSummary /> should render properly 1`] = `
 
 .emotion-1 {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 9px;
   line-height: 14px;
   color: #B4B6BA;
   margin-top: 17px;
@@ -156,7 +156,7 @@ exports[`<StagesSummary /> should render properly 1`] = `
   cursor: pointer;
 }
 
-.emotion-26 .DateInput:first-child {
+.emotion-26 .DateInput:first-of-type {
   border-radius: 16px 0 0 16px;
   margin-right: 1px;
 }
