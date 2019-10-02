@@ -192,6 +192,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
                         <Title longNames={longNames}>{entry.stage}</Title>
                         <Value>{entry.count ? entry.count : '-'}</Value>
                     </Stage>
+                ))}
             </Stages>
             <Footer>
                 <RangePicker
