@@ -117,9 +117,17 @@ interface Props {
     mapRows: (data: any) => any;
     mapPage: (data: any) => any;
     variables: any;
+    nullContent: string;
 }
 
-const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
+const Table = ({
+    query,
+    headers,
+    mapRows,
+    mapPage,
+    variables,
+    nullContent,
+}: Props) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const { data, loading, refetch } = useQuery(query, {
@@ -130,7 +138,7 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
     });
 
     if (loading) {
-        return <NullState width={190} />;
+        return <NullState content={nullContent} />;
     }
 
     const rows = mapRows(data);

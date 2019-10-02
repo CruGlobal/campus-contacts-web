@@ -1154,24 +1154,7 @@ export default {
                 'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
         },
     },
-    nullState: {
-        personalStepsCompleted:
-            'This community does not have any members who have completed a personal step of faith. Challenge your community to open the MissionHub mobile app and complete a personal step of faith.',
-        personalStepsAdded:
-            'This community does not have any members with personal steps of faith. Challenge your community to open the MissionHub mobile app and add a personal step of faith.',
-        communityMembersStages:
-            'This community does not have any members with stages. Challenge your current members to open the MissionHub mobile app and choose a stage.',
-        stepsOfFaithCompleted:
-            'This community does not have any members who have completed a step of faith. Challenge your community to open the MissionHub mobile app and complete a step of faith.',
-        stepsOfFaithAdded:
-            'This community does not have any members with steps of faith. Challenge your community to open the MissionHub mobile app and add a step of faith.',
-        peopleStages:
-            'This community has not added any people to MissionHub. Challenge your current members to open the MissionHub mobile app and add someone they want to be intentional with.',
-        interactionsCompleted:
-            'This community does not have any members who have completed an interaction. Challenge your community to open the MissionHub mobile app and complete an interaction.',
-        challengesCompleted:
-            'This community does not have any challenges. Open the MissionHub mobile app and create a community challenge.',
-    },
+
     insights: {
         members: 'Members',
         stage: 'Stage',
@@ -1180,6 +1163,24 @@ export default {
         monthLabel: '1M',
         yearLabel: '1Y',
         gatheringStats: 'Gathering your stats...',
+        nullState: {
+            personalStepsCompleted:
+                'This community does not have any members who have completed a personal step of faith. Challenge your community to open the MissionHub mobile app and complete a personal step of faith.',
+            personalStepsAdded:
+                'This community does not have any members with personal steps of faith. Challenge your community to open the MissionHub mobile app and add a personal step of faith.',
+            communityMembersStages:
+                'This community does not have any members with stages. Challenge your current members to open the MissionHub mobile app and choose a stage.',
+            stepsOfFaithCompleted:
+                'This community does not have any members who have completed a step of faith. Challenge your community to open the MissionHub mobile app and complete a step of faith.',
+            stepsOfFaithAdded:
+                'This community does not have any members with steps of faith. Challenge your community to open the MissionHub mobile app and add a step of faith.',
+            peopleStages:
+                'This community has not added any people to MissionHub. Challenge your current members to open the MissionHub mobile app and add someone they want to be intentional with.',
+            interactionsCompleted:
+                'This community does not have any members who have completed an interaction. Challenge your community to open the MissionHub mobile app and complete an interaction.',
+            challengesCompleted:
+                'This community does not have any challenges. Open the MissionHub mobile app and create a community challenge.',
+        },
         personalSteps: {
             label: 'Personal Steps of Faith',
             legend: 'Steps of Faith',

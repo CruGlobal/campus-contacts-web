@@ -11,7 +11,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
   padding-left: 21px;
 }
 
-.emotion-5 {
+.emotion-29 {
   box-shadow: 0px 2px 12px rgba(0,0,0,0.2);
   background: #ffffff;
   border-radius: 8px;
@@ -39,27 +39,261 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
   margin-bottom: 0;
 }
 
-.emotion-4 {
+.emotion-28 {
   padding: 25px;
   margin: 0;
 }
 
+.emotion-27 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: space-around;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: space-around;
+  justify-content: space-around;
+}
+
+.emotion-6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .emotion-3 {
+  height: 52px;
+  width: 52px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.emotion-3.not-sure {
+  background-image: url(mockFile);
+}
+
+.emotion-3.uninterested {
+  background-image: url(mockFile);
+}
+
+.emotion-3.curious {
+  background-image: url(mockFile);
+}
+
+.emotion-3.forgiven {
+  background-image: url(mockFile);
+}
+
+.emotion-3.growing {
+  background-image: url(mockFile);
+}
+
+.emotion-3.guiding {
+  background-image: url(mockFile);
+}
+
+.emotion-3.discipleship-conversation {
+  background-image: url(mockFile);
+}
+
+.emotion-3.personal-evangelism {
+  background-image: url(mockFile);
+}
+
+.emotion-3.holy-spirit-presentation {
+  background-image: url(mockFile);
+}
+
+.emotion-3.personal-evangelism-decisions {
+  background-image: url(mockFile);
+}
+
+.emotion-3.spiritual-conversation {
+  background-image: url(mockFile);
+}
+
+.emotion-4 {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #B4B6BA;
+  margin-top: 17px;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+  width: 110px;
+  text-align: center;
+  height: 42px;
+}
+
+.emotion-5 {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 38px;
+  color: #007398;
+  margin-top: 9px;
+}
+
+.emotion-26 {
+  margin-top: 28px;
+}
+
+.emotion-25 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-25 .DateRangePickerInput {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-25 .DateInput {
+  width: 108px;
+  height: 32px;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #eceef2;
+  text-align: center;
+  border-radius: 0 16px 16px 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.emotion-25 .DateInput:first-child {
+  border-radius: 16px 0 0 16px;
+  margin-right: 1px;
+}
+
+.emotion-25 .DateInput:hover {
+  background-color: #e2e2e2;
+}
+
+.emotion-25 .DateInput input[type='text']:focus {
+  background-color: #e2e2e2;
+}
+
+.emotion-25 .DateInput_input {
+  height: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  text-align: center;
+  color: #505256;
+  cursor: pointer;
+}
+
+.emotion-25 .CalendarDay__selected_span {
+  background: #3CC8E6;
+  color: white;
+  border: 1px solid #2fb0d8;
+}
+
+.emotion-25 .CalendarDay__selected {
+  background: #007398;
+  color: white;
+  border: 1px solid #2fb0d8;
+}
+
+.emotion-25 .CalendarDay__selected:hover {
+  background: #007398;
+  color: white;
+}
+
+.emotion-25 .CalendarDay__hovered_span:hover,
+.emotion-25 .CalendarDay__hovered_span {
+  background: #3CC8E6;
+  border: 1px solid #2fb0d8;
+  color: white;
+}
+
+.emotion-25 .DateRangePickerInput_arrow {
+  display: none;
+}
+
+.emotion-25 .DateInput_fang {
+  top: 56px;
+}
+
+.emotion-24 {
+  background-image: url(mockFile);
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+.emotion-33 {
   width: 100%;
   height: 190px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   background-color: #ffffff;
-  -webkit-animation: fade 2s infinite linear both;
-  animation: fade 2s infinite linear both;
   border-radius: 8px;
 }
 
-.emotion-8 {
-  width: 100%;
-  height: 400px;
-  background-color: #ffffff;
-  -webkit-animation: fade 2s infinite linear both;
-  animation: fade 2s infinite linear both;
-  border-radius: 8px;
+.emotion-32 {
+  text-align: center;
+  width: 720px;
+  color: #007398;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  margin: 10px 0;
 }
 
 <div>
@@ -72,7 +306,7 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
       </span>
     </h1>
     <div
-      class="emotion-5"
+      class="emotion-29"
     >
       <h1
         class="emotion-1"
@@ -83,16 +317,187 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         class="emotion-2"
       />
       <div
-        class="emotion-4"
+        class="emotion-28"
       >
         <div
-          class="emotion-3"
-          width="190"
-        />
+          class="emotion-27"
+        >
+          <div
+            class="emotion-23"
+          >
+            <div
+              class="emotion-6"
+            >
+              <div
+                class="spiritual-conversation emotion-3"
+              />
+              <div
+                class="emotion-4"
+              >
+                Spiritual Conversation
+              </div>
+              <div
+                class="emotion-5"
+              >
+                -
+              </div>
+            </div>
+            <div
+              class="emotion-6"
+            >
+              <div
+                class="personal-evangelism emotion-3"
+              />
+              <div
+                class="emotion-4"
+              >
+                Personal Evangelism
+              </div>
+              <div
+                class="emotion-5"
+              >
+                -
+              </div>
+            </div>
+            <div
+              class="emotion-6"
+            >
+              <div
+                class="personal-evangelism-decisions emotion-3"
+              />
+              <div
+                class="emotion-4"
+              >
+                Personal Evangelism Decisions
+              </div>
+              <div
+                class="emotion-5"
+              >
+                -
+              </div>
+            </div>
+            <div
+              class="emotion-6"
+            >
+              <div
+                class="holy-spirit-presentation emotion-3"
+              />
+              <div
+                class="emotion-4"
+              >
+                Holy Spirit Presentation
+              </div>
+              <div
+                class="emotion-5"
+              >
+                -
+              </div>
+            </div>
+            <div
+              class="emotion-6"
+            >
+              <div
+                class="discipleship-conversation emotion-3"
+              />
+              <div
+                class="emotion-4"
+              >
+                Discipleship Conversation
+              </div>
+              <div
+                class="emotion-5"
+              >
+                -
+              </div>
+            </div>
+          </div>
+          <div
+            class="emotion-26"
+          >
+            <div
+              class="emotion-25"
+            >
+              <div
+                class="emotion-24"
+              />
+              <div
+                class="DateRangePicker DateRangePicker_1"
+              >
+                <div>
+                  <div
+                    class="DateRangePickerInput DateRangePickerInput_1"
+                  >
+                    <div
+                      class="DateInput DateInput_1"
+                    >
+                      <input
+                        aria-describedby="DateInput__screen-reader-message-startDateId"
+                        aria-label="Start Date"
+                        autocomplete="off"
+                        class="DateInput_input DateInput_input_1 DateInput_input__readOnly DateInput_input__readOnly_2"
+                        id="startDateId"
+                        name="startDateId"
+                        placeholder="Start Date"
+                        readonly=""
+                        type="text"
+                        value="09/25/2019"
+                      />
+                      <p
+                        class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                        id="DateInput__screen-reader-message-startDateId"
+                      >
+                        Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+                      </p>
+                    </div>
+                    <div
+                      aria-hidden="true"
+                      class="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+                      role="presentation"
+                    >
+                      <svg
+                        class="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
+                        focusable="false"
+                        viewBox="0 0 1000 1000"
+                      >
+                        <path
+                          d="M694 242l249 250c12 11 12 21 1 32L694 773c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210-210H68c-13 0-23-10-23-23s10-23 23-23h806L662 275c-21-22 11-54 32-33z"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="DateInput DateInput_1"
+                    >
+                      <input
+                        aria-describedby="DateInput__screen-reader-message-endDateId"
+                        aria-label="End Date"
+                        autocomplete="off"
+                        class="DateInput_input DateInput_input_1 DateInput_input__readOnly DateInput_input__readOnly_2"
+                        id="endDateId"
+                        name="endDateId"
+                        placeholder="End Date"
+                        readonly=""
+                        type="text"
+                        value="10/02/2019"
+                      />
+                      <p
+                        class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                        id="DateInput__screen-reader-message-endDateId"
+                      >
+                        Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div
-      class="emotion-5"
+      class="emotion-29"
     >
       <h1
         class="emotion-1"
@@ -105,12 +510,20 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
         Total interactions completed over time.
       </h2>
       <div
-        class="emotion-4"
+        class="emotion-28"
       >
         <div
-          class="emotion-8"
-          width="400"
-        />
+          class="emotion-33"
+        >
+          <img
+            src="mockFile"
+          />
+          <p
+            class="emotion-32"
+          >
+            This community does not have any members who have completed an interaction. Challenge your community to open the MissionHub mobile app and complete an interaction.
+          </p>
+        </div>
       </div>
     </div>
   </div>

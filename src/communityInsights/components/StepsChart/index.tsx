@@ -16,12 +16,20 @@ interface Props {
     variables: any;
     label: string;
     index: string;
+    nullContent: string;
 }
-const StepsChart = ({ query, mapData, label, index, variables }: Props) => {
+const StepsChart = ({
+    query,
+    mapData,
+    label,
+    index,
+    variables,
+    nullContent,
+}: Props) => {
     const { data, loading } = useQuery(query, { variables });
 
     if (loading) {
-        return <NullState width={400} />;
+        return <NullState content={nullContent} />;
     }
 
     return (

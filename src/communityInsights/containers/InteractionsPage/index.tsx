@@ -56,6 +56,7 @@ const InteractionsPage = () => {
                 subtitle={t('interactions.completedSubtitle')}
             >
                 <FiltersChart
+                    nullContent={'interactionsCompleted'}
                     query={INTERACTIONS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={data =>

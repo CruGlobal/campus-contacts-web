@@ -12,6 +12,7 @@ interface Props {
     mapData: (data: any) => any;
     label: string;
     currentDate?: Date;
+    nullContent: string;
 }
 
 const FiltersChart = ({
@@ -20,6 +21,7 @@ const FiltersChart = ({
     mapData,
     label,
     currentDate,
+    nullContent,
 }: Props) => {
     const [index, setIndex] = useState(0);
     const [endDate, setEndDate] = useState(moment(currentDate));
@@ -34,7 +36,7 @@ const FiltersChart = ({
     });
 
     if (loading) {
-        return <NullState width={400}></NullState>;
+        return <NullState content={nullContent} />;
     }
 
     const updateDates = (type: string, index: number) => {

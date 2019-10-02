@@ -6,9 +6,9 @@ import NullState from '..';
 
 describe('<NullState /> for non ImpactInfo component', () => {
     it('Should render properly', () => {
-        const width = 400;
+        const content = 'personalStepsCompleted';
         const { snapshot, unmount } = renderWithContext(
-            <NullState width={width} />,
+            <NullState content={content} />,
         );
         snapshot();
         unmount();

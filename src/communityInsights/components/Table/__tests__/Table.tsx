@@ -14,6 +14,7 @@ describe('<Table />', () => {
 
         const { snapshot, unmount } = renderWithContext(
             <Table
+                nullContent={'challengesCompleted'}
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
@@ -31,6 +32,7 @@ describe('<Table />', () => {
 
         const { snapshot, getByText } = renderWithContext(
             <Table
+                nullContent={'challengesCompleted'}
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}

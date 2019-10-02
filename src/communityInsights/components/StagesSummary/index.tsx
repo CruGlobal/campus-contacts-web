@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import moment, { Moment } from 'moment';
 import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
-import { stepsOfFaithMockData } from '../NullState';
 
 import RangePicker from '../RangePicker';
 import notSure from '../../assets/icons/stage-not-sure.svg';
@@ -19,8 +18,7 @@ import gospel from '../../assets/icons/stage-gospel-presentations.svg';
 import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
 import personal from '../../assets/icons/stage-personal-decisions.svg';
 import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
-import NullState from '../NullState';
-
+import { stepsOfFaithMockData } from '../NullState';
 const Stages = styled.div`
     display: flex;
     flex-direction: row;
@@ -156,17 +154,13 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
         return (
             <SummaryWrapper>
                 <Stages>
-                    {mapData(stepsOfFaithMockData).map((entry: any) => {
-                        return (
-                            <Stage key={entry.stage}>
-                                <Icon className={entry.icon} />
-                                <Title longNames={longNames}>
-                                    {entry.stage}
-                                </Title>
-                                <Value>{entry.count ? entry.count : '-'}</Value>
-                            </Stage>
-                        );
-                    })}
+                    {mapData(stepsOfFaithMockData).map((entry: any) => (
+                        <Stage key={entry.stage}>
+                            <Icon className={entry.icon} />
+                            <Title longNames={longNames}>{entry.stage}</Title>
+                            <Value>{entry.count ? entry.count : '-'}</Value>
+                        </Stage>
+                    ))}
                 </Stages>
                 <Footer>
                     <RangePicker
@@ -177,13 +171,11 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
                 </Footer>
             </SummaryWrapper>
         );
-        return <div>Loading</div>;
     }
     return (
         <SummaryWrapper>
             <Stages>
                 {mapData(data).map((entry: any) => {
-                    console.log(data);
                     return (
                         <Stage key={entry.stage}>
                             <Icon className={entry.icon} />
