@@ -42,7 +42,7 @@ exports[`<RangePicker /> should render properly 1`] = `
   cursor: pointer;
 }
 
-.emotion-1 .DateInput:first-child {
+.emotion-1 .DateInput:first-of-type {
   border-radius: 16px 0 0 16px;
   margin-right: 1px;
 }

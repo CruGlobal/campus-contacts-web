@@ -14,22 +14,30 @@
             <ng-md-icon
                 icon="spiritualConversation"
                 size="20"
-                title="{{ 'application.interaction_types.spiritual_conversation' | t }}"
+                title="{{
+                    'application.interaction_types.spiritual_conversation' | t
+                }}"
             ></ng-md-icon>
             <ng-md-icon
                 icon="evangelism"
                 size="20"
-                title="{{ 'application.interaction_types.gospel_presentation' | t }}"
+                title="{{
+                    'application.interaction_types.gospel_presentation' | t
+                }}"
             ></ng-md-icon>
             <ng-md-icon
                 icon="personalDecision"
                 size="20"
-                title="{{ 'application.interaction_types.prayed_to_receive_christ' | t }}"
+                title="{{
+                    'application.interaction_types.prayed_to_receive_christ' | t
+                }}"
             ></ng-md-icon>
             <ng-md-icon
                 icon="holySpirit"
                 size="20"
-                title="{{ 'application.interaction_types.holy_spirit_presentation' | t }}"
+                title="{{
+                    'application.interaction_types.holy_spirit_presentation' | t
+                }}"
             ></ng-md-icon>
             <ng-md-icon
                 icon="discipleship"
@@ -63,9 +71,6 @@
 >
     <div class="w-100 ministries-navigation flex items-center justify-between">
         <organization-breadcrumbs></organization-breadcrumbs>
-        <report-period
-            ng-if="$ctrl.$state.current.name !== 'app.ministries.root'"
-        ></report-period>
         <a
             href
             class="dashboard-edit-toggle tipitmiddle order-2 tr"

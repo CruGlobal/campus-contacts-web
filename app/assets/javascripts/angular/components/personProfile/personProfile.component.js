@@ -190,7 +190,7 @@ function personProfileController(
 
         $scope.$emit('personModified');
 
-        var savePromise = personProfileService.saveRelationship(
+        const savePromise = personProfileService.saveRelationship(
             vm.personTab.person,
             relationship,
             relationshipName,
@@ -223,7 +223,8 @@ function personProfileController(
     }
 
     function emailAddressesWithPending() {
-        var emailAddresses = vm.personTab.person.email_addresses;
+        let emailAddresses = vm.personTab.person.email_addresses;
+
         if (!vm.pendingEmailAddress) {
             addEmailAddress();
             // If we add an email address, set the error to null
@@ -234,6 +235,7 @@ function personProfileController(
 
     function phoneNumbersWithPending() {
         var phoneNumbers = vm.personTab.person.phone_numbers;
+
         if (!vm.pendingPhoneNumber) {
             addPhoneNumber();
         }

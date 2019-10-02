@@ -17,6 +17,31 @@ import {
     GET_STAGES_REPORT_STEPS_ADDED,
     GET_TOTAL_STEPS_COMPLETED_SUMMARY,
 } from './queries';
+// GET_IMPACT_REPORT_STEPS_TAKEN INTERFACES
+import { impactReportPersonalStepsCompletedCount } from './__generated__/impactReportPersonalStepsCompletedCount';
+// GET_TOTAL_STEPS_COMPLETED_SUMMARY INTERFACES
+import {
+    communityReportStagesPersonalStepsCompleted,
+    communityReportStagesPersonalStepsCompleted_community_report_stagesReport as communityReportStagesPersonalStepsCompletedEntry,
+} from './__generated__/communityReportStagesPersonalStepsCompleted';
+// GET_STEPS_COMPLETED_REPORT INTERFACES
+import {
+    communityReportDaysPersonalSteps,
+    communityReportDaysPersonalSteps_community_report_daysReport as communityReportDaysPersonalRow,
+    communityReportDaysPersonalSteps_community_report_daysReport_stageResults as communityReportDaysPersonalStage,
+} from './__generated__/communityReportDaysPersonalSteps';
+// GET_STAGES_REPORT_STEPS_ADDED INTERFACES
+import {
+    communityReportStagesPersonalStepsAdded,
+    communityReportStagesPersonalStepsAdded_community_report_stagesReport as communityReportStagesPersonalStepsAddedRow,
+} from './__generated__/communityReportStagesPersonalStepsAdded';
+// GET_IMPACT_REPORT_MOVED INTERFACES
+import { impactReportStageProgressionCount } from './__generated__/impactReportStageProgressionCount';
+// GET_STAGES_REPORT_MEMBER_COUNT INTERFACES
+import {
+    communityReportStagesPersonalMemberCount,
+    communityReportStagesPersonalMemberCount_community_report_stagesReport as communityReportStagesPersonalMemberCountRow,
+} from './__generated__/communityReportStagesPersonalMemberCount';
 
 const PersonalStepsPage = () => {
     const { t } = useTranslation('insights');
@@ -26,7 +51,7 @@ const PersonalStepsPage = () => {
         <div>
             <ImpactInfo
                 query={GET_IMPACT_REPORT_STEPS_TAKEN}
-                text={report =>
+                text={(report: impactReportPersonalStepsCompletedCount) =>
                     t('personalSteps.taken', {
                         count:
                             report.community.impactReport
@@ -39,9 +64,13 @@ const PersonalStepsPage = () => {
                 <StagesSummary
                     query={GET_TOTAL_STEPS_COMPLETED_SUMMARY}
                     variables={{ id: orgId }}
-                    mapData={data =>
+                    mapData={(
+                        data: communityReportStagesPersonalStepsCompleted,
+                    ) =>
                         data.community.report.stagesReport.map(
-                            (entry: any) => ({
+                            (
+                                entry: communityReportStagesPersonalStepsCompletedEntry,
+                            ) => ({
                                 stage: entry.stage.name,
                                 icon: entry.stage.name
                                     .toLowerCase()
@@ -60,15 +89,22 @@ const PersonalStepsPage = () => {
                     nullContent={'personalStepsCompleted'}
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
-                    mapData={data =>
-                        data.community.report.daysReport.map((row: any) => ({
-                            ['total']: row.personalStepsCompletedCount,
-                            ['stages']: row.stageResults.map((stage: any) => ({
-                                name: stage.stage.name,
-                                count: stage.personalStepsCompletedCount,
-                            })),
-                            ['date']: row.date,
-                        }))
+                    mapData={(data: communityReportDaysPersonalSteps) =>
+                        data.community.report.daysReport.map(
+                            (row: communityReportDaysPersonalRow) => ({
+                                ['total']: row.personalStepsCompletedCount,
+                                ['stages']: row.stageResults.map(
+                                    (
+                                        stage: communityReportDaysPersonalStage,
+                                    ) => ({
+                                        name: stage.stage.name,
+                                        count:
+                                            stage.personalStepsCompletedCount,
+                                    }),
+                                ),
+                                ['date']: row.date,
+                            }),
+                        )
                     }
                     currentDate={moment().toDate()}
                     label={t('personalSteps.legend')}
@@ -81,12 +117,17 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     nullContent={'personalStepsAdded'}
                     query={GET_STAGES_REPORT_STEPS_ADDED}
-                    mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
-                            [t('personalSteps.label')]: row.stage
-                                .personalStepsAddedCount,
-                            [t('stage')]: row.stage.name.toUpperCase(),
-                        }))
+                    mapData={(data: communityReportStagesPersonalStepsAdded) =>
+                        data.community.report.stagesReport.map(
+                            (
+                                row: communityReportStagesPersonalStepsAddedRow,
+                            ) => ({
+                                [t(
+                                    'personalSteps.label',
+                                )]: row.personalStepsAddedCount,
+                                [t('stage')]: row.stage.name.toUpperCase(),
+                            }),
+                        )
                     }
                     label={t('personalSteps.label')}
                     index={t('stage')}
@@ -100,7 +141,7 @@ const PersonalStepsPage = () => {
 
             <ImpactInfo
                 query={GET_IMPACT_REPORT_MOVED}
-                text={report =>
+                text={(report: impactReportStageProgressionCount) =>
                     t('personalSteps.reached', {
                         count:
                             report.community.impactReport.stageProgressionCount,
@@ -115,11 +156,15 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     nullContent={'communityMembersStages'}
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
-                    mapData={data =>
-                        data.community.report.stagesReport.map((row: any) => ({
-                            [t('members')]: row.memberCount,
-                            [t('stage')]: row.stage.name.toUpperCase(),
-                        }))
+                    mapData={(data: communityReportStagesPersonalMemberCount) =>
+                        data.community.report.stagesReport.map(
+                            (
+                                row: communityReportStagesPersonalMemberCountRow,
+                            ) => ({
+                                [t('members')]: row.memberCount,
+                                [t('stage')]: row.stage.name.toUpperCase(),
+                            }),
+                        )
                     }
                     label={t('members')}
                     index={t('stage')}

@@ -10,6 +10,7 @@ import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
 
 const TableContainer = styled.table`
+    table-layout: fixed;
     width: 100%;
 `;
 
@@ -31,7 +32,7 @@ const Row = styled.tr`
     text-align: left;
     height: 64px;
 
-    :nth-child(odd) {
+    :nth-of-type(odd) {
         background-color: #eceef2;
     }
 `;
@@ -46,6 +47,12 @@ const Cell = styled.td`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &:first-of-type {
+        padding: 0 25px;
+    }
+    &:last-child {
+        padding: 0 5px;
+    }
 `;
 
 const Pagination = styled.div`
