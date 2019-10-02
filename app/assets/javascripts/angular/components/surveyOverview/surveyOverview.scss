@@ -340,6 +340,12 @@ organization-contact-import {
             a {
                 color: $gray-1;
             }
+            &.active-tab {
+                > span {
+                    color: $pivot-bright-blue;
+                }
+                border-bottom: 1px solid $pivot-bright-blue;
+            }
         }
     }
 

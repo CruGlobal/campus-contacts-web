@@ -15,6 +15,7 @@ const LoadingContainer = styled.div`
 `;
 
 const TableContainer = styled.table`
+    table-layout: fixed;
     width: 100%;
 `;
 
@@ -51,6 +52,12 @@ const Cell = styled.td`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &:first-of-type {
+        padding: 0 25px;
+    }
+    &:last-child {
+        padding: 0 5px;
+    }
 `;
 
 const Pagination = styled.div`

@@ -82,13 +82,9 @@ const Icon = styled.div`
     }
 `;
 
-interface TitleProps {
-    longNames?: boolean;
-}
-
 const Title = styled.div<TitleProps>`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 9px;
     line-height: 14px;
     color: ${({ theme }) => theme.colors.secondary};
     margin-top: 17px;
@@ -116,11 +112,26 @@ const Footer = styled.div`
     margin-top: 28px;
 `;
 
+interface TitleProps {
+    longNames?: boolean;
+}
+
+interface entry {
+    stage: string;
+    icon: string;
+    count: number;
+}
+
 interface Props {
-    query: any;
+    query: string;
     mapData: (data: any) => any;
     variables: any;
     longNames?: boolean;
+}
+
+interface dates {
+    endDate: Moment;
+    startDate: Moment;
 }
 
 const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
@@ -128,7 +139,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
         startDate: moment().subtract(7, 'days'),
         endDate: moment(),
     });
-    const days = (dates: any) => {
+    const days = (dates: dates) => {
         return Math.round(
             moment.duration(dates.endDate.diff(dates.startDate)).asDays(),
         );
@@ -159,7 +170,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     return (
         <SummaryWrapper>
             <Stages>
-                {mapData(data).map((entry: any) => (
+                {mapData(data).map((entry: entry) => (
                     <Stage key={entry.stage}>
                         <Icon className={entry.icon} />
                         <Title longNames={longNames}>{entry.stage}</Title>

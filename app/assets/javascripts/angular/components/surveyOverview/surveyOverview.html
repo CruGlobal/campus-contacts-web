@@ -13,17 +13,17 @@
                 >
                     <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
                 </a>
-                {{$ctrl.survey.title}}
+                {{ $ctrl.survey.title }}
             </div>
 
             <div class="tabs">
                 <div
-                    class="tab "
+                    class="tab"
                     ng-repeat="tab in $ctrl.tabNames"
-                    ng-class="{'active': $ctrl.activeTab === tab.id}"
+                    ng-class="{'active-tab': $ctrl.activeTab === tab.id}"
                     ng-click="$ctrl.activeTab = tab.id"
                 >
-                    <span class="pivot-white">{{tab.name | t}}</span>
+                    <span class="pivot-white">{{ tab.name | t }}</span>
                 </div>
             </div>
         </div>
