@@ -163,7 +163,7 @@
         "prettier": "^1.18.2",
         "pretty-quick": "^1.11.1",
         "sass-loader": "^8.0.0",
-        "ts-jest": "^24.0.2",
+        "ts-jest": "^24.1.0",
         "typescript": "^3.5.3",
         "webpack": "^4.39.3",
         "webpack-bundle-analyzer": "^3.4.1",
