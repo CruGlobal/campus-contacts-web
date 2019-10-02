@@ -322,7 +322,6 @@ function surveyOverviewQuestionsController(
         forceFallback: true, // Needed to make sticky header and scrollSensitivity work
         scrollSensitivity: 100,
         onEnd: ({ scope: { question } }) => {
-            debugger;
             this.saveQuestionContent(question, question.question_answers);
         },
     };
