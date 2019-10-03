@@ -293,18 +293,26 @@ function personProfileController(
         var message = $filter('t')('people.edit.delete_email_confirm');
         var confirmModal = confirmModalService.create(message);
 
-        confirmModal.then(function() {
-            deleteRelationship(emailAddress, 'email_addresses');
-        });
+        confirmModal
+            .then(function() {
+                deleteRelationship(emailAddress, 'email_addresses');
+            })
+            .then(() => {
+                vm.form['email_address_pending'] = vm.pendingEmailAddress;
+            });
     }
 
     function deletePhoneNumber(phoneNumber) {
         var message = $filter('t')('people.edit.delete_phone_confirm');
         var confirmModal = confirmModalService.create(message);
 
-        confirmModal.then(function() {
-            deleteRelationship(phoneNumber, 'phone_numbers');
-        });
+        confirmModal
+            .then(function() {
+                deleteRelationship(phoneNumber, 'phone_numbers');
+            })
+            .then(() => {
+                vm.form['phone_number_pending'] = vm.pendingPhoneNumber;
+            });
     }
 
     function deleteAddress(address) {
