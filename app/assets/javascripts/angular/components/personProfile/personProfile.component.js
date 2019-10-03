@@ -278,6 +278,7 @@ function personProfileController(
         );
         vm.pendingEmailAddress.setAttribute('email', '');
         vm.pendingEmailAddress.setAttribute('primary', false);
+        vm.pendingEmailAddress.setAttribute('$valid', true);
     }
 
     // Add a new phone number to the person
@@ -287,6 +288,7 @@ function personProfileController(
         vm.pendingPhoneNumber.setAttribute('person_id', vm.personTab.person.id);
         vm.pendingPhoneNumber.setAttribute('number', '');
         vm.pendingPhoneNumber.setAttribute('primary', false);
+        vm.pendingPhoneNumber.setAttribute('$valid', true);
     }
 
     function deleteEmailAddress(emailAddress) {
@@ -298,7 +300,7 @@ function personProfileController(
                 deleteRelationship(emailAddress, 'email_addresses');
             })
             .then(() => {
-                vm.form['email_address_pending'] = vm.pendingEmailAddress;
+                vm.form.email_address_pending = vm.pendingEmailAddress;
             });
     }
 
@@ -311,7 +313,7 @@ function personProfileController(
                 deleteRelationship(phoneNumber, 'phone_numbers');
             })
             .then(() => {
-                vm.form['phone_number_pending'] = vm.pendingPhoneNumber;
+                vm.form.phone_number_pending = vm.pendingPhoneNumber;
             });
     }
 
