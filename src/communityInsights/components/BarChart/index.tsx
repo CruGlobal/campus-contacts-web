@@ -4,8 +4,8 @@ import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
 import { line } from 'd3-shape';
 import styled from '@emotion/styled';
-import NullState from '../NullState';
 
+import NullState from '../NullState';
 import SwitchButton from '../SwitchButton';
 
 const Wrapper = styled.div`
@@ -116,6 +116,8 @@ interface Props {
     onFilterChanged: (type: string, index: number) => void;
     legendLabel?: string;
     tooltipBreakdown?: boolean;
+    nullCheck: any;
+    nullContent: string;
 }
 
 const BarChart = (props: Props) => {
@@ -131,6 +133,8 @@ const BarChart = (props: Props) => {
         filterType,
         datesFilter,
         legendLabel,
+        nullCheck,
+        nullContent,
     } = props;
 
     const { t } = useTranslation('insights');
@@ -139,15 +143,6 @@ const BarChart = (props: Props) => {
         type: filterType,
         index,
     });
-
-    const checkForNullContent = (data: any) => {
-        const cool = data.filter((content: any) => {
-            console.log(content);
-            return content.total !== undefined && content.total !== 0;
-        });
-        console.log(cool);
-        return cool;
-    };
 
     const AverageLine = ({
         yScale,
@@ -214,32 +209,33 @@ const BarChart = (props: Props) => {
         ];
     };
 
-    // if (checkForNullContent(data).length === 0) {
-    //     return (
-    //         <div>
-    //             <NullState content={'personalStepsCompleted'} />
-    //             <Footer>
-    //                 {datesFilter ? (
-    //                     <SwitchButton
-    //                         isMonth={filter.type === 'month'}
-    //                         leftLabel={t('monthLabel')}
-    //                         rightLabel={t('yearLabel')}
-    //                         onLeftClick={() => onToggleFilterClick('month')}
-    //                         onRightClick={() => onToggleFilterClick('year')}
-    //                     />
-    //                 ) : null}
-    //                 {legendLabel ? (
-    //                     <Legend>
-    //                         <Line />
-    //                         <LegendLabel>{legendLabel}</LegendLabel>
-    //                         <Line className={'dashed'} />
-    //                         <LegendLabel>{t('average')}</LegendLabel>
-    //                     </Legend>
-    //                 ) : null}
-    //             </Footer>
-    //         </div>
-    //     );
-    // }
+    if (nullCheck) {
+        return (
+            <div>
+                <NullState content={nullContent} />
+                <Footer>
+                    {datesFilter ? (
+                        <SwitchButton
+                            isMonth={filter.type === 'month'}
+                            leftLabel={t('monthLabel')}
+                            rightLabel={t('yearLabel')}
+                            onLeftClick={() => onToggleFilterClick('month')}
+                            onRightClick={() => onToggleFilterClick('year')}
+                        />
+                    ) : null}
+                    {legendLabel ? (
+                        <Legend>
+                            <Line />
+                            <LegendLabel>{legendLabel}</LegendLabel>
+                            <Line className={'dashed'} />
+                            <LegendLabel>{t('average')}</LegendLabel>
+                        </Legend>
+                    ) : null}
+                </Footer>
+            </div>
+        );
+    }
+
     return (
         <div>
             <Wrapper>

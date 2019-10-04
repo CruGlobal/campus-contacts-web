@@ -36,18 +36,22 @@ const FiltersChart = ({
     });
 
     const checkForNullContent = (data: any) => {
-        return data.community.report.daysReport.filter((report: any) => {
-            return (
-                report.personalStepsAddedCount !== 0 &&
-                report.othersStepsAddedCount !== 0 &&
-                report.interactionsCount !== 0 &&
-                report.personalStepsCompletedCount !== 0 &&
-                report.othersStepsCompletedCount !== 0
-            );
-        });
+        const nullCheck = data.community.report.daysReport.filter(
+            (report: any) => {
+                return (
+                    report.personalStepsAddedCount !== 0 &&
+                    report.othersStepsAddedCount !== 0 &&
+                    report.interactionsCount !== 0 &&
+                    report.personalStepsCompletedCount !== 0 &&
+                    report.othersStepsCompletedCount !== 0
+                );
+            },
+        );
+
+        return nullCheck.length === 0;
     };
 
-    if (loading || checkForNullContent(data).length === 0) {
+    if (loading) {
         return <NullState content={nullContent} />;
     }
 
@@ -117,6 +121,8 @@ const FiltersChart = ({
 
     return (
         <BarChart
+            nullContent={nullContent}
+            nullCheck={checkForNullContent(data)}
             data={graphData}
             keys={['total']}
             indexBy={'date'}

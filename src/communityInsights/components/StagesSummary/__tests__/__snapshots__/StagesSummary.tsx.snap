@@ -360,7 +360,7 @@ exports[`<StagesSummary /> should render properly 1`] = `
                   placeholder="Start Date"
                   readonly=""
                   type="text"
-                  value="09/25/2019"
+                  value="09/27/2019"
                 />
                 <p
                   class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
@@ -398,7 +398,7 @@ exports[`<StagesSummary /> should render properly 1`] = `
                   placeholder="End Date"
                   readonly=""
                   type="text"
-                  value="10/02/2019"
+                  value="10/04/2019"
                 />
                 <p
                   class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"

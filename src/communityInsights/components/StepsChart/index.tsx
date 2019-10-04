@@ -1,15 +1,18 @@
 import { useQuery } from 'react-apollo-hooks';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 
 import BarChart from '../BarChart';
 import NullState from '../NullState';
 
-const Wrapper = styled.div`
-    height: 400px;
+const Wrapper = styled.div<isNull>`
+    height: ${(props: isNull) => (props.isNull ? 'auto' : '400px')};
     position: relative;
 `;
 
+interface isNull {
+    isNull: boolean;
+}
 interface Props {
     query: any;
     mapData: (data: any) => any;
@@ -40,16 +43,18 @@ const StepsChart = ({
             },
         );
 
-        return nullCheck.length === 0 ? true : false;
+        return nullCheck.length === 0;
     };
 
-    if (loading || checkForNullContent(data)) {
+    if (loading) {
         return <NullState content={nullContent} />;
     }
 
     return (
-        <Wrapper>
+        <Wrapper isNull={checkForNullContent(data)}>
             <BarChart
+                nullContent={nullContent}
+                nullCheck={checkForNullContent(data)}
                 data={mapData(data)}
                 keys={[label]}
                 indexBy={index}
