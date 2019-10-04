@@ -1,5 +1,5 @@
 import { useQuery } from 'react-apollo-hooks';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import BarChart from '../BarChart';
@@ -28,7 +28,22 @@ const StepsChart = ({
 }: Props) => {
     const { data, loading } = useQuery(query, { variables });
 
-    if (loading) {
+    const checkForNullContent = (data: any) => {
+        const nullCheck = data.community.report.stagesReport.filter(
+            (stages: any) => {
+                return (
+                    stages.memberCount !== 0 &&
+                    stages.personalStepsAddedCount !== 0 &&
+                    stages.othersStepsAddedCount !== 0 &&
+                    stages.contactCount !== 0
+                );
+            },
+        );
+
+        return nullCheck.length === 0 ? true : false;
+    };
+
+    if (loading || checkForNullContent(data)) {
         return <NullState content={nullContent} />;
     }
 

@@ -144,7 +144,11 @@ const Table = ({
         },
     });
 
-    if (loading) {
+    const checkForNullContent = (data: any) => {
+        return data.community.communityChallenges.nodes.length <= 1;
+    };
+
+    if (loading || checkForNullContent(data)) {
         return <NullState content={nullContent} />;
     }
 

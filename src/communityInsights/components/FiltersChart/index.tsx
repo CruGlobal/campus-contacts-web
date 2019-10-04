@@ -35,7 +35,19 @@ const FiltersChart = ({
         },
     });
 
-    if (loading) {
+    const checkForNullContent = (data: any) => {
+        return data.community.report.daysReport.filter((report: any) => {
+            return (
+                report.personalStepsAddedCount !== 0 &&
+                report.othersStepsAddedCount !== 0 &&
+                report.interactionsCount !== 0 &&
+                report.personalStepsCompletedCount !== 0 &&
+                report.othersStepsCompletedCount !== 0
+            );
+        });
+    };
+
+    if (loading || checkForNullContent(data).length === 0) {
         return <NullState content={nullContent} />;
     }
 
