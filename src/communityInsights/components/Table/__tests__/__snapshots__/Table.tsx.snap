@@ -17,6 +17,7 @@ exports[`<Table /> should render properly in loading 1`] = `
 
 exports[`<Table /> should render properly with data 1`] = `
 .emotion-11 {
+  table-layout: fixed;
   width: 100%;
 }
 
@@ -51,6 +52,14 @@ exports[`<Table /> should render properly with data 1`] = `
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.emotion-4:first-of-type {
+  padding: 0 25px;
+}
+
+.emotion-4:last-child {
+  padding: 0 5px;
 }
 
 .emotion-20 {
