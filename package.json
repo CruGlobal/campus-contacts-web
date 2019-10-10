@@ -81,7 +81,7 @@
         "rollbar": "^2.12.3",
         "sortablejs": "^1.9.0",
         "stacktrace-js": "^2.0.0",
-        "tachyons": "^4.11.1",
+        "tachyons-sass": "^4.9.5",
         "ui-select": "^0.19.6"
     },
     "devDependencies": {

@@ -4,11 +4,9 @@
         ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab(), 'insights-tab': $ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
-        <div
-            class="flex items-center justify-between br3 br--top bg-pivot-dark-blue"
-        >
+        <div class="flex items-center justify-between">
             <div
-                class="pivot-white f3 ph3 pt3"
+                class="pivot-white f3 ph3 pv3"
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
             >
                 {{ $ctrl.org.name }}
@@ -36,8 +34,10 @@
                 </ng-md-icon>
             </div>
         </div>
-
-        <div class="tabs">
+        <div
+            class="tabs flex flex-column flex-row-l"
+            ng-class="{ dn: ('app.ministries.root' | isState)}"
+        >
             <div
                 class="tab pivot-white"
                 ng-class="{active: $ctrl.isInsightsTab()}"
@@ -72,9 +72,9 @@
                 </loading-spinner>
             </div>
             <div class="tab dropdown " ng-if="$ctrl.directAdminPrivileges">
-                <span class="pivot-white"
-                    >{{ 'ministries.tools.header' | t }}</span
-                >
+                <span class="pivot-white">{{
+                    'ministries.tools.header' | t
+                }}</span>
                 <ng-md-icon
                     icon="play_arrow"
                     class="chevron fill-pivot-white"
@@ -132,7 +132,10 @@
                 </div>
             </div>
         </div>
-        <div ng-if="!('app.ministries.root' | isState)">
+        <div
+            ng-if="!('app.ministries.root' | isState)"
+            class="w-100 overflow-auto"
+        >
             <ui-view class="grid"></ui-view>
         </div>
     </div>
