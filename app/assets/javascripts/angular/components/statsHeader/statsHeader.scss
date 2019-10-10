@@ -5,6 +5,7 @@ stats-header {
     align-items: center;
     @extend .subheader;
     background: $pivot-darker-blue;
+    min-width: 765px;
     .stats-title {
         padding-left: 10px;
         min-width: 370px;

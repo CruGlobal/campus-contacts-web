@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 @import '../../../../stylesheets/variables/colors';
 
 survey-overview,
@@ -476,17 +479,22 @@ organization-contact-import {
         line-height: 3rem;
         vertical-align: middle;
         font-size: 1.3rem;
-        margin-right: 6.5rem;
+        margin-right: 1rem;
+        @media screen and (min-width: map-get($grid-breakpoints, sm)) {
+            margin-right: 6.5rem;
+        }
 
-        &:after {
-            background: $gray-5;
-            height: 0.5rem;
-            width: 5rem;
-            border-radius: 0.25rem;
-            content: '';
-            display: block;
-            margin-left: 4.3rem;
-            margin-top: -1.7rem;
+        @media screen and (min-width: map-get($grid-breakpoints, sm)) {
+            &:after {
+                background: $gray-5;
+                height: 0.5rem;
+                width: 5rem;
+                border-radius: 0.25rem;
+                content: '';
+                display: block;
+                margin-left: 4.3rem;
+                margin-top: -1.7rem;
+            }
         }
 
         &:last-child {

@@ -18,56 +18,56 @@ organization-overview {
         font-size: 2em;
     }
 
-    .tabs .tab {
-        &:first-of-type {
-            padding-left: 18px;
-        }
-        a {
-            text-decoration: none;
-        }
-
-        &.active {
-            a,
-            span {
-                color: $blue-6;
+    .tabs {
+        padding-left: 8px;
+        .tab {
+            a {
+                text-decoration: none;
             }
-            .loading svg {
-                fill: $pivot-bright-blue;
-            }
-        }
-        .loading {
-            padding-left: 3px;
-        }
-        &.dropdown {
-            display: block;
-        }
 
-        .dropdown-content {
-            display: none;
-            background-color: $white;
-            min-width: 200px;
-            list-style: none;
-            margin: 13px 0 0 0;
-            padding: 0;
-            z-index: 1;
-            border: solid 1px $gray-4;
-
-            li {
-                padding: 6px 10px;
-                &:hover {
-                    background: $gray-3;
+            &.active {
+                a,
+                span {
+                    color: $blue-6;
                 }
-                a {
-                    color: $gray-1;
+                .loading svg {
+                    fill: $pivot-bright-blue;
                 }
             }
-            .divider {
-                border-top: 2px solid $gray-4;
+            .loading {
+                padding-left: 3px;
             }
-        }
+            &.dropdown {
+                display: block;
+            }
 
-        &.dropdown:hover .dropdown-content {
-            display: block;
+            .dropdown-content {
+                display: none;
+                background-color: $white;
+                min-width: 200px;
+                list-style: none;
+                margin: 13px 0 0 0;
+                padding: 0;
+                z-index: 1;
+                border: solid 1px $gray-4;
+
+                li {
+                    padding: 6px 10px;
+                    &:hover {
+                        background: $gray-3;
+                    }
+                    a {
+                        color: $gray-1;
+                    }
+                }
+                .divider {
+                    border-top: 2px solid $gray-4;
+                }
+            }
+
+            &.dropdown:hover .dropdown-content {
+                display: block;
+            }
         }
     }
 }
