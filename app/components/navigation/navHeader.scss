@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../assets/stylesheets/variables/colors';
 
 nav-header {
@@ -7,7 +9,7 @@ nav-header {
         height: 50px;
         padding: 10px 55px;
 
-        @media (max-width: 768px) {
+        @media (max-width: map-get($grid-breakpoints, md)) {
             padding: 0 5px;
         }
         .logo {
@@ -16,7 +18,7 @@ nav-header {
             width: 30px;
             height: 30px;
 
-            @media only screen and (min-width: 835px) {
+            @media only screen and (min-width: map-get($grid-breakpoints, md)) {
                 background: url(logo-missionhub@2x.png) no-repeat;
                 background-size: 100px;
                 width: 100px;
@@ -25,7 +27,7 @@ nav-header {
 
         > ul:first-of-type {
             display: inline-flex;
-            @media (max-width: 768px) {
+            @media (max-width: map-get($grid-breakpoints, md)) {
                 padding-left: 0;
             }
             > li {
@@ -73,7 +75,7 @@ nav-header {
                     right: 55px;
                     z-index: 100;
                     padding-top: 10px;
-                    @media (max-width: 768px) {
+                    @media (max-width: map-get($grid-breakpoints, md)) {
                         right: 0;
                     }
                     ul {

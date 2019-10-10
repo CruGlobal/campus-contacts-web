@@ -14,7 +14,7 @@
         </span>
     </div>
 
-    <div ng-sortable="$ctrl.sortableOptions">
+    <div ng-sortable="$ctrl.sortableOptions" class="overflow-auto w-100">
         <organization
             ng-repeat="org in $ctrl.organizations track by org.id"
             ng-if="org.visible || $ctrl.editMode"

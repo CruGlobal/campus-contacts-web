@@ -1,67 +1,76 @@
-<div class="sub-navigation flex bg-white" ng-if="'app.people' | isState">
-    <div class="main-container flex items-center">
-        <div class="flex-auto order-2 pivot-gray-7 organizational-stats-header">
-            <ng-md-icon
-                icon="assignedPeople"
-                size="20"
-                title="{{ 'contacts.all_contacts.title' | t }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="uncontactedPerson"
-                size="20"
-                title="{{ 'contacts.statuses.uncontacted' | t }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="spiritualConversation"
-                size="20"
-                title="{{
-                    'application.interaction_types.spiritual_conversation' | t
-                }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="evangelism"
-                size="20"
-                title="{{
-                    'application.interaction_types.gospel_presentation' | t
-                }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="personalDecision"
-                size="20"
-                title="{{
-                    'application.interaction_types.prayed_to_receive_christ' | t
-                }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="holySpirit"
-                size="20"
-                title="{{
-                    'application.interaction_types.holy_spirit_presentation' | t
-                }}"
-            ></ng-md-icon>
-            <ng-md-icon
-                icon="discipleship"
-                size="20"
-                title="{{ 'application.interaction_types.discipleship' | t }}"
-            ></ng-md-icon>
+<div class="dn db-l">
+    <div class="sub-navigation flex bg-white" ng-if="'app.people' | isState">
+        <div class="main-container flex items-center">
+            <div
+                class="flex-auto order-2 pivot-gray-7 organizational-stats-header"
+            >
+                <ng-md-icon
+                    icon="assignedPeople"
+                    size="20"
+                    title="{{ 'contacts.all_contacts.title' | t }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="uncontactedPerson"
+                    size="20"
+                    title="{{ 'contacts.statuses.uncontacted' | t }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="spiritualConversation"
+                    size="20"
+                    title="{{
+                        'application.interaction_types.spiritual_conversation'
+                            | t
+                    }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="evangelism"
+                    size="20"
+                    title="{{
+                        'application.interaction_types.gospel_presentation' | t
+                    }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="personalDecision"
+                    size="20"
+                    title="{{
+                        'application.interaction_types.prayed_to_receive_christ'
+                            | t
+                    }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="holySpirit"
+                    size="20"
+                    title="{{
+                        'application.interaction_types.holy_spirit_presentation'
+                            | t
+                    }}"
+                ></ng-md-icon>
+                <ng-md-icon
+                    icon="discipleship"
+                    size="20"
+                    title="{{
+                        'application.interaction_types.discipleship' | t
+                    }}"
+                ></ng-md-icon>
+            </div>
+            <report-period class="flex-auto order-3 tr"></report-period>
+            <a
+                href
+                class="ml3 flex-auto order-4"
+                title="{{ 'dashboard.edit_org_order' | t }}"
+                ng-click="$ctrl.toggleEditOrganizations()"
+                analytics-on="click"
+                analytics-category="Dashboard"
+                analytics-event="Edit Organization Order"
+                ng-class="{'active': $ctrl.editOrganizations}"
+            >
+                <ng-md-icon
+                    class="fr fill-pivot-dark-blue"
+                    icon="editOrder"
+                    ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
+                ></ng-md-icon>
+            </a>
         </div>
-        <report-period class="flex-auto order-3 tr"></report-period>
-        <a
-            href
-            class="ml3 flex-auto order-4"
-            title="{{ 'dashboard.edit_org_order' | t }}"
-            ng-click="$ctrl.toggleEditOrganizations()"
-            analytics-on="click"
-            analytics-category="Dashboard"
-            analytics-event="Edit Organization Order"
-            ng-class="{'active': $ctrl.editOrganizations}"
-        >
-            <ng-md-icon
-                class="fr fill-pivot-dark-blue"
-                icon="editOrder"
-                ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
-            ></ng-md-icon>
-        </a>
     </div>
 </div>
 

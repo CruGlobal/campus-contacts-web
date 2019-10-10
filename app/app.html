@@ -5,15 +5,15 @@
     <nav-header hide-menu-links="$ctrl.hideMenuLinks"></nav-header>
     <dashboard-subnav></dashboard-subnav>
 </header>
-<section class="main-container pt4 pb2 flex-grow-5" ng-cloak>
+<section class="main-container pt4 pb2 flex-grow-5 w-100" ng-cloak>
     <ui-view></ui-view>
 </section>
 <footer class="tc bg-white pt4 pb4" ng-cloak ng-if="!$ctrl.hideFooter">
     <section class="main-container flex-grow-5 pivot-gray-7">
-        <span class="copyright"
-            >{{'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') }
-            }}</span
-        >
+        <span class="copyright">
+            <!-- prettier-ignore -->
+            {{ 'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}
+        </span>
         <span>
             <a
                 href="https://get.missionhub.com/terms-of-service"

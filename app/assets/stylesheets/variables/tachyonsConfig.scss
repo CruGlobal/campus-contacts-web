@@ -1,0 +1,10 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+// Copy Bootstrap sm and md breakpoints to be the Tachyons md and lg breakpoints
+$breakpoint-not-small: 'screen and (min-width: ' +
+    map-get($grid-breakpoints, sm) + ')';
+$breakpoint-medium: 'screen and (min-width: ' + map-get($grid-breakpoints, sm) +
+    ') and (max-width: ' + (map-get($grid-breakpoints, md) - 1) + ')';
+$breakpoint-large: 'screen and (min-width: ' + map-get($grid-breakpoints, md) +
+    ')';
