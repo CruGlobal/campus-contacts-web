@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h3 class="modal-title">{{ 'groups.members.title' | t }}</h3>
-    <h4 class="modal-subtitle">{{$ctrl.group.name}}</h4>
+    <h4 class="modal-subtitle">{{ $ctrl.group.name }}</h4>
 </div>
 <div class="modal-body grid">
     <div class="row header">
@@ -60,7 +60,9 @@
                 </div>
                 <div class="column email-column">
                     <a
-                        ng-href="{{ membership.person.email_addresses[0].email | mailto }}"
+                        ng-href="{{
+                            membership.person.email_addresses[0].email | mailto
+                        }}"
                     >
                         <icon-button
                             icon="'email'"

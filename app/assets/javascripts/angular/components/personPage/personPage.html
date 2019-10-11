@@ -1,7 +1,7 @@
 <async-content ready="$ctrl.ready">
     <header class="row">
         <div class="avatar">
-            <img ng-src="{{$ctrl.avatarUrl}}" />
+            <img ng-src="{{ $ctrl.avatarUrl }}" />
             <ng-md-icon
                 icon="edit"
                 size="16"
@@ -24,17 +24,17 @@
                 <span
                     class="name"
                     ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
-                    >{{$ctrl.person | personName}}</span
+                    >{{ $ctrl.person | personName }}</span
                 >
                 <span
                     class="warning"
                     ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
                 >
-                    {{'contacts.statuses.uncontacted' | t}}
+                    {{ 'contacts.statuses.uncontacted' | t }}
                 </span>
             </div>
             <div class="row">
-                <a ng-href="{{$ctrl.primaryEmail.email | mailto}}">
+                <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
                     <icon-button
                         icon="'email'"
                         disabled="!$ctrl.primaryEmail"
@@ -42,7 +42,7 @@
                 </a>
 
                 <span ng-if="$ctrl.primaryPhone">
-                    {{$ctrl.primaryPhone.number | phone}}
+                    {{ $ctrl.primaryPhone.number | phone }}
                     <ng-md-icon
                         class="phone-active"
                         icon="check"
@@ -61,7 +61,7 @@
                     ui-state="$ctrl.stateName + '.' + tabName"
                     ng-click="disabled && $event.preventDefault()"
                 >
-                    {{'ministries.people.' + tabName + '.header' | t}}
+                    {{ 'ministries.people.' + tabName + '.header' | t }}
                 </div>
             </div>
         </div>
