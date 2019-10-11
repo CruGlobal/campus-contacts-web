@@ -1,4 +1,4 @@
-<div class="group row header">
+<div class="group row header grid-fixed">
     <div class="column column-title">
         {{ 'surveyTab:columns.survey' | t }}
     </div>
@@ -30,7 +30,7 @@
         ></icon-button>
     </div>
 </div>
-<div class="grid-content">
+<div class="grid-content grid-fixed">
     <div
         class="row"
         ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
@@ -39,13 +39,15 @@
             <a
                 ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
             >
-                {{survey.title}}
+                {{ survey.title }}
             </a>
         </div>
-        <div class="column column-keyword">{{survey.keyword.keyword}}</div>
+        <div class="column column-keyword">{{ survey.keyword.keyword }}</div>
         <div class="column column-link">
-            <a ng-href="{{$ctrl.surveyLinkPrefix}}{{survey.id}}" target="_blank"
-                >{{$ctrl.surveyLinkPrefix}}{{survey.id}}</a
+            <a
+                ng-href="{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}"
+                target="_blank"
+                >{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}</a
             >
         </div>
         <div class="column column-status" uib-dropdown>

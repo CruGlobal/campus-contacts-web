@@ -1,21 +1,25 @@
-.grid .grid-content {
-    & > * {
-        background: $white;
-        &:nth-child(odd) {
-            background: $gray-4;
-        }
+.grid {
+    .grid-fixed {
+        min-width: 765px;
     }
 
-    min-width: 765px;
+    .grid-content {
+        & > * {
+            background: $white;
+            &:nth-child(odd) {
+                background: $gray-4;
+            }
+        }
 
-    .row {
-        min-height: 50px;
-        display: flex;
-        align-items: center;
+        .row {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
 
-        &.message-row {
-            padding: 10px;
-            font-size: 16px;
+            &.message-row {
+                padding: 10px;
+                font-size: 16px;
+            }
         }
     }
 }
