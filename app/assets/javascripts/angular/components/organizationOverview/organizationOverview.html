@@ -35,7 +35,7 @@
             </div>
         </div>
         <div
-            class="tabs flex flex-column flex-row-l"
+            class="tabs flex-l flex-column flex-row-l"
             ng-class="{ dn: ('app.ministries.root' | isState)}"
         >
             <div
@@ -72,9 +72,9 @@
                 </loading-spinner>
             </div>
             <div class="tab dropdown " ng-if="$ctrl.directAdminPrivileges">
-                <span class="pivot-white">{{
-                    'ministries.tools.header' | t
-                }}</span>
+                <span class="pivot-white"
+                    >{{ 'ministries.tools.header' | t }}</span
+                >
                 <ng-md-icon
                     icon="play_arrow"
                     class="chevron fill-pivot-white"
