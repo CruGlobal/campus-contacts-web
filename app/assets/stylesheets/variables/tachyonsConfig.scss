@@ -8,3 +8,7 @@ $breakpoint-medium: 'screen and (min-width: ' + map-get($grid-breakpoints, sm) +
     ') and (max-width: ' + (map-get($grid-breakpoints, md) - 1) + ')';
 $breakpoint-large: 'screen and (min-width: ' + map-get($grid-breakpoints, md) +
     ')';
+
+.sticky {
+    position: sticky;
+}

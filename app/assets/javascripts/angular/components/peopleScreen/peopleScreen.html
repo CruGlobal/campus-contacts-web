@@ -41,7 +41,7 @@
             </people-filters-panel>
         </div>
         <div class="people-list bg-pivot-white overflow-auto">
-            <div class="header row padded">
+            <div class="header row padded sticky top-0 z-999">
                 <div class="sticky-column col-bg-gray">
                     <div class="column select-column">
                         <input
@@ -154,7 +154,7 @@
                     }}"
                 />
                 <div>
-                    {{ 'ministries.people.selected_contacts' | t: {
+                    {{ 'ministries.people.selected_contacts' | t : {
                     contactCount: $ctrl.selectedCount } }}
                 </div>
                 <div class="space"></div>
