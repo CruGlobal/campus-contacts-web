@@ -1,5 +1,5 @@
 <div
-    class="container"
+    class="container relative"
     ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
 >
     <div class="w-100 bg-white dn-ns">
@@ -40,12 +40,9 @@
             >
             </people-filters-panel>
         </div>
-        <div class="people-list bg-pivot-white">
-            <div class="header row padded grid-fixed">
-                <div
-                    class="sticky-column"
-                    ng-class="{'col-bg-gray': $ctrl.surveyId}"
-                >
+        <div class="people-list bg-pivot-white overflow-auto">
+            <div class="header row padded">
+                <div class="sticky-column col-bg-gray">
                     <div class="column select-column">
                         <input
                             type="checkbox"
@@ -157,10 +154,8 @@
                     }}"
                 />
                 <div>
-                    {{
-                        'ministries.people.selected_contacts'
-                            | t: { contactCount: $ctrl.selectedCount }
-                    }}
+                    {{ 'ministries.people.selected_contacts' | t: {
+                    contactCount: $ctrl.selectedCount } }}
                 </div>
                 <div class="space"></div>
                 <img
@@ -233,6 +228,8 @@
                 </div>
             </div>
         </div>
-        <ui-view></ui-view>
+        <ui-view
+            class="absolute static-l z-999 w-100 w-auto-l h-auto-l top-0 right-0 left-0"
+        ></ui-view>
     </div>
 </div>

@@ -21,11 +21,6 @@ people-screen {
         -ms-grid-columns: min-content;
     }
 
-    .people-list,
-    ui-view {
-        overflow: auto;
-    }
-
     .sort-order-column {
         padding-top: 4px;
         padding-left: 4px;
@@ -58,7 +53,9 @@ people-screen {
     .collapsed {
         ui-view {
             flex: 3; /* 75% of available width */
-            max-width: 530px;
+            @media screen and (min-width: map-get($grid-breakpoints, md)) {
+                max-width: 530px;
+            }
         }
 
         ministry-view-person .detail-column {
