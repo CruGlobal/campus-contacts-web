@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
 @import './columnConfig';
@@ -17,20 +19,11 @@ people-screen {
         );
         min-width: min-content;
         -ms-grid-columns: min-content;
-        overflow: auto;
     }
 
     .people-list,
     ui-view {
         overflow: auto;
-    }
-
-    .people-list-filters {
-        width: 222px;
-        background-color: $white;
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid;
     }
 
     .sort-order-column {
@@ -79,9 +72,6 @@ people-screen {
         flex-shrink: 0;
         border-bottom: solid 1px $gray-4;
 
-        position: sticky;
-        top: 0;
-        z-index: 11;
         min-width: min-content;
         -ms-grid-columns: min-content;
 
