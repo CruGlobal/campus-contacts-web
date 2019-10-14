@@ -14,12 +14,13 @@ function peopleViewPersonController(
     $animate,
     $filter,
     $scope,
-    confirm,
     $state,
+    $window,
     periodService,
     personService,
     reportsService,
     interactionsService,
+    confirmModalService,
 ) {
     var vm = this;
 
@@ -60,7 +61,9 @@ function peopleViewPersonController(
         if (!vm.addInteractionBtnsVisible) {
             $animate.on(
                 'leave',
-                angular.element('.addInteractionButtons'),
+                $window.document.getElementsByClassName(
+                    'addInteractionButtons',
+                ),
                 function callback(element, phase) {
                     vm.closingInteractionButtons = phase === 'start';
                     $scope.$apply();
@@ -101,13 +104,11 @@ function peopleViewPersonController(
     }
 
     function archivePerson() {
-        var really = confirm(
-            $filter('t')('organizations.cleanup.confirm_archive'),
-        );
-        if (!really) {
-            return;
-        }
-        personService.archivePerson(vm.person, vm.organizationId);
+        confirmModalService
+            .create($filter('t')('organizations.cleanup.confirm_archive'))
+            .then(() => {
+                personService.archivePerson(vm.person, vm.organizationId);
+            });
     }
 
     // Open the profile page for this person

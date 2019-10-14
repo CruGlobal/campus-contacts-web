@@ -21,10 +21,8 @@ function organizationOverviewController(
     organizationOverviewService,
     organizationService,
     loggedInPerson,
-    $uibModal,
     userPreferencesService,
     envService,
-    confirmModalService,
     _,
 ) {
     this.tabNames = ministryViewTabs;
@@ -37,6 +35,12 @@ function organizationOverviewController(
 
     this.isInsightsTab = () => {
         return $state.current.name === 'app.ministries.ministry.insights';
+    };
+
+    this.navOpen = true;
+
+    this.toggleNav = () => {
+        this.navOpen = !this.navOpen;
     };
 
     this.isTabVisible = tabName => {
