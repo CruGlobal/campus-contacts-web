@@ -1,16 +1,16 @@
+<div class="w-100 bg-white dn-ns">
+    <a
+        href
+        class="inline-flex ma2 pa2 ba br3"
+        ng-click="$ctrl.$rootScope.showPeopleFilters = true"
+    >
+        {{ 'ministries.people.showFilters' | t }}
+    </a>
+</div>
 <div
     class="container relative"
     ng-class="{collapsed: ('app.ministries.ministry.people.person' | includedByState)}"
 >
-    <div class="w-100 bg-white dn-ns">
-        <a
-            href
-            class="inline-flex ma2 pa2 ba"
-            ng-click="$ctrl.$rootScope.showPeopleFilters = true"
-        >
-            Show Filters
-        </a>
-    </div>
     <div class="flex flex-row">
         <div
             class="people-list-filters bg-pivot-white flex-column br-ns overflow-y-auto"
