@@ -15,7 +15,7 @@
         <div
             class="people-list-filters bg-pivot-white flex-column br-ns overflow-y-auto"
             ng-class="{
-            'fixed top-0 right-0 bottom-0 left-0 w-100 w5-ns h-100 h-auto-ns z-999 static-ns': $ctrl.$rootScope.showPeopleFilters,
+            'fixed top-0 right-0 bottom-0 left-0 w-100 w5-ns h-100 h-auto-ns z-3 static-ns': $ctrl.$rootScope.showPeopleFilters,
             'dn flex-ns': !$ctrl.$rootScope.showPeopleFilters
         }"
         >
@@ -41,7 +41,7 @@
             </people-filters-panel>
         </div>
         <div class="people-list bg-pivot-white overflow-auto">
-            <div class="header row padded sticky top-0 z-999">
+            <div class="header row padded sticky top-0 z-2">
                 <div class="sticky-column col-bg-gray">
                     <div class="column select-column">
                         <input
@@ -229,7 +229,7 @@
             </div>
         </div>
         <ui-view
-            class="absolute static-l z-999 w-100 w-auto-l h-auto-l top-0 right-0 left-0"
+            class="absolute static-l z-3 w-100 w-auto-l h-auto-l top-0 right-0 left-0"
         ></ui-view>
     </div>
 </div>
