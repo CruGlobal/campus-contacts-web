@@ -14,11 +14,13 @@
             <ng-md-icon
                 icon="menu"
                 class="dn-l ph2 white"
+                ng-class="{dn: ('app.ministries.root' | isState)}"
                 ng-if="!$ctrl.orgNavOpen"
                 ng-click="$ctrl.toggleNav()"
             ></ng-md-icon>
             <ng-md-icon
                 icon="close"
+                ng-class="{dn: ('app.ministries.root' | isState)}"
                 class="dn-l ph2 white"
                 ng-if="$ctrl.orgNavOpen"
                 ng-click="$ctrl.toggleNav()"
@@ -54,6 +56,7 @@
                 class="tab pivot-white"
                 ng-class="{active: $ctrl.isInsightsTab()}"
                 ng-if="!$ctrl.envService.is('production')"
+                ng-click="$ctrl.orgNavOpen = false"
             >
                 <a
                     ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
@@ -68,6 +71,7 @@
                 ui-state="'^.ministry.' + tabName"
                 ui-state-params="{ orgId: $ctrl.org.id }"
                 ng-if="$ctrl.isTabVisible(tabName)"
+                ng-click="$ctrl.orgNavOpen = false"
             >
                 <span>
                     {{ 'ministries.' + tabName + '.header' | t }}
@@ -96,20 +100,20 @@
                     <ul
                         class="dropdown-content br3 br--bottom shadow-5 overflow-hidden"
                     >
-                        <li>
+                        <li ng-click="$ctrl.orgNavOpen = false">
                             <a
                                 ui-sref="app.ministries.ministry.import({ orgId: $ctrl.org.id })"
                                 >{{ 'contacts.index.import_contacts' | t }}</a
                             >
                         </li>
-                        <li>
+                        <li ng-click="$ctrl.orgNavOpen = false">
                             <a
                                 ui-state="'^.ministry.management'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.manage' | t }}</a
                             >
                         </li>
-                        <li>
+                        <li ng-click="$ctrl.orgNavOpen = false">
                             <a
                                 ui-state="'^.ministry.labels'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
@@ -117,14 +121,17 @@
                                 >{{ 'people.index.manage_labels' | t }}</a
                             >
                         </li>
-                        <li>
+                        <li ng-click="$ctrl.orgNavOpen = false">
                             <a
                                 ui-state="'^.ministry.cleanup'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.cleanup' | t }}</a
                             >
                         </li>
-                        <li ng-if="$ctrl.org.reports_movement_indicators">
+                        <li
+                            ng-if="$ctrl.org.reports_movement_indicators"
+                            ng-click="$ctrl.orgNavOpen = false"
+                        >
                             <a
                                 ui-state="'^.ministry.reportMovementIndicators'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
@@ -132,7 +139,10 @@
                                 {{ 'nav.report_movement_indicators' | t }}
                             </a>
                         </li>
-                        <li ng-if="$ctrl.p2cOrg">
+                        <li
+                            ng-if="$ctrl.p2cOrg"
+                            ng-click="$ctrl.orgNavOpen = false"
+                        >
                             <a
                                 ui-state="'^.ministry.signatures'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
