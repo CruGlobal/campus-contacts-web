@@ -56,6 +56,7 @@ function peopleScreenController(
     this.busy = false;
     this.selectedCount = 0;
     this.totalCount = 0;
+    this.$rootScope = $rootScope;
 
     // Icons
     this.pencilIcon = pencilIcon;

@@ -134,7 +134,8 @@
         </div>
         <div
             ng-if="!('app.ministries.root' | isState)"
-            class="w-100 overflow-auto"
+            class="w-100"
+            ng-class="{ 'overflow-x-auto': !$ctrl.$state.includes('app.ministries.ministry.people') }"
         >
             <ui-view class="grid"></ui-view>
         </div>

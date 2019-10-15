@@ -576,6 +576,7 @@ export default {
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
                 lastSurvey: 'Last Survey',
+                showFilters: 'Show Filters',
             },
             roots: 'Ministries',
             suborgs: {
