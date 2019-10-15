@@ -1,29 +1,28 @@
 <async-content ready="$ctrl.ready">
     <div
-        class="br3 bg-pivot-dark-blue mb3"
+        class="br3 bg-pivot-dark-blue mb3 org-nav-header"
         ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab(), 'insights-tab': $ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
         <div class="flex items-center justify-between">
             <div
-                class="pivot-white f3 ph3 pv3  flex flex-auto justify-between"
+                class="pivot-white f3 ph3 pv3 flex-auto"
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
             >
                 {{ $ctrl.org.name }}
-                <ng-md-icon
-                    icon="menu"
-                    class="dn-l"
-                    ng-if="!$ctrl.orgNavOpen"
-                    ng-click="$ctrl.toggleNav()"
-                    style="fill: #F2F2F2"
-                ></ng-md-icon>
-                <ng-md-icon
-                    icon="close"
-                    class="dn-l"
-                    ng-if="$ctrl.orgNavOpen"
-                    ng-click="$ctrl.toggleNav()"
-                ></ng-md-icon>
             </div>
+            <ng-md-icon
+                icon="menu"
+                class="dn-l ph2 white"
+                ng-if="!$ctrl.orgNavOpen"
+                ng-click="$ctrl.toggleNav()"
+            ></ng-md-icon>
+            <ng-md-icon
+                icon="close"
+                class="dn-l ph2 white"
+                ng-if="$ctrl.orgNavOpen"
+                ng-click="$ctrl.toggleNav()"
+            ></ng-md-icon>
             <div ng-if="$ctrl.editMode">
                 <ng-md-icon
                     icon="visibilityOn"
