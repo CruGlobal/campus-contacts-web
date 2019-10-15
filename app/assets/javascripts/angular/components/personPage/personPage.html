@@ -1,6 +1,6 @@
 <async-content ready="$ctrl.ready">
-    <header class="row">
-        <div class="avatar">
+    <header class="row justify-center ph4 pt3">
+        <div class="avatar dn db-ns">
             <img ng-src="{{ $ctrl.avatarUrl }}" />
             <ng-md-icon
                 icon="edit"
@@ -20,36 +20,38 @@
             </ng-md-icon>
         </div>
         <div class="normal-column">
-            <div class="row text-row">
-                <span
-                    class="name"
-                    ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
-                    >{{ $ctrl.person | personName }}</span
-                >
-                <span
-                    class="warning"
-                    ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
-                >
-                    {{ 'contacts.statuses.uncontacted' | t }}
-                </span>
-            </div>
-            <div class="row">
-                <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
-                    <icon-button
-                        icon="'email'"
-                        disabled="!$ctrl.primaryEmail"
-                    ></icon-button>
-                </a>
+            <div class="flex flex-column-ns justify-between">
+                <div class="row text-row">
+                    <span
+                        class="name"
+                        ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
+                        >{{ $ctrl.person | personName }}</span
+                    >
+                    <span
+                        class="warning"
+                        ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
+                    >
+                        {{ 'contacts.statuses.uncontacted' | t }}
+                    </span>
+                </div>
+                <div class="row">
+                    <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
+                        <icon-button
+                            icon="'email'"
+                            disabled="!$ctrl.primaryEmail"
+                        ></icon-button>
+                    </a>
 
-                <span ng-if="$ctrl.primaryPhone">
-                    {{ $ctrl.primaryPhone.number | phone }}
-                    <ng-md-icon
-                        class="phone-active"
-                        icon="check"
-                        size="14"
-                        ng-if="$ctrl.primaryPhone.validated"
-                    ></ng-md-icon>
-                </span>
+                    <span ng-if="$ctrl.primaryPhone">
+                        {{ $ctrl.primaryPhone.number | phone }}
+                        <ng-md-icon
+                            class="phone-active"
+                            icon="check"
+                            size="14"
+                            ng-if="$ctrl.primaryPhone.validated"
+                        ></ng-md-icon>
+                    </span>
+                </div>
             </div>
             <div class="tabs" ng-if="$ctrl.organizationId">
                 <div
