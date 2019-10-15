@@ -13,14 +13,14 @@
                 <ng-md-icon
                     icon="menu"
                     class="dn-l"
-                    ng-if="$ctrl.navOpen"
+                    ng-if="!$ctrl.orgNavOpen"
                     ng-click="$ctrl.toggleNav()"
                     style="fill: #F2F2F2"
                 ></ng-md-icon>
                 <ng-md-icon
                     icon="close"
                     class="dn-l"
-                    ng-if="!$ctrl.navOpen"
+                    ng-if="$ctrl.orgNavOpen"
                     ng-click="$ctrl.toggleNav()"
                 ></ng-md-icon>
             </div>
@@ -49,7 +49,7 @@
         </div>
         <div
             class="tabs flex-l flex-column flex-row-l"
-            ng-class="{ dn: ('app.ministries.root' | isState) || $ctrl.navOpen}"
+            ng-class="{ dn: ('app.ministries.root' | isState) || !$ctrl.orgNavOpen}"
         >
             <div
                 class="tab pivot-white"

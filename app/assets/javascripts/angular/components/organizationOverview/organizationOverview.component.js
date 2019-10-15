@@ -37,10 +37,10 @@ function organizationOverviewController(
         return $state.current.name === 'app.ministries.ministry.insights';
     };
 
-    this.navOpen = true;
+    this.orgNavOpen = false;
 
     this.toggleNav = () => {
-        this.navOpen = !this.navOpen;
+        this.orgNavOpen = !this.orgNavOpen;
     };
 
     this.isTabVisible = tabName => {

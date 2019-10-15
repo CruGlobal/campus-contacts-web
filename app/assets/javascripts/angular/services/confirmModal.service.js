@@ -1,5 +1,3 @@
-/* eslint max-len: ["error", { "ignoreStrings": true }] */
-
 angular
     .module('missionhubApp')
     .factory('confirmModalService', confirmModalService);
