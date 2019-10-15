@@ -100,50 +100,50 @@
                     <ul
                         class="dropdown-content br3 br--bottom shadow-5 overflow-hidden"
                     >
-                        <li ng-click="$ctrl.orgNavOpen = false">
+                        <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-sref="app.ministries.ministry.import({ orgId: $ctrl.org.id })"
                                 >{{ 'contacts.index.import_contacts' | t }}</a
                             >
                         </li>
-                        <li ng-click="$ctrl.orgNavOpen = false">
+                        <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.management'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.manage' | t }}</a
                             >
                         </li>
-                        <li ng-click="$ctrl.orgNavOpen = false">
+                        <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.labels'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 ui-sref-active="active"
                                 >{{ 'people.index.manage_labels' | t }}</a
                             >
                         </li>
-                        <li ng-click="$ctrl.orgNavOpen = false">
+                        <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.cleanup'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.cleanup' | t }}</a
                             >
                         </li>
-                        <li
-                            ng-if="$ctrl.org.reports_movement_indicators"
-                            ng-click="$ctrl.orgNavOpen = false"
-                        >
+                        <li ng-if="$ctrl.org.reports_movement_indicators">
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.reportMovementIndicators'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                             >
                                 {{ 'nav.report_movement_indicators' | t }}
                             </a>
                         </li>
-                        <li
-                            ng-if="$ctrl.p2cOrg"
-                            ng-click="$ctrl.orgNavOpen = false"
-                        >
+                        <li ng-if="$ctrl.p2cOrg">
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.signatures'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 ui-sref-active="active"
