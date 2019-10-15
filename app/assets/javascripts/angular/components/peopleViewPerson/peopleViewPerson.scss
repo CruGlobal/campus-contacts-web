@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/components/row';
 
@@ -15,7 +17,10 @@ people-view-person {
         & > .name {
             color: $pivot-dark-blue;
             @extend %common-margin;
-            width: 335px;
+            width: 155px;
+            @media screen and (min-width: map-get($grid-breakpoints, md)) {
+                width: 335px;
+            }
             a:visited {
                 color: inherit;
             }

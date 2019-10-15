@@ -1,6 +1,12 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 .grid {
     .grid-fixed {
-        min-width: 765px;
+        min-width: 585px;
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            min-width: 765px;
+        }
     }
 
     .grid-content {
