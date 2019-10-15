@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../../../stylesheets/components/header';
 
 stats-header {
@@ -5,10 +7,12 @@ stats-header {
     align-items: center;
     @extend .subheader;
     background: $pivot-darker-blue;
-    min-width: 765px;
     .stats-title {
         padding-left: 10px;
-        min-width: 370px;
+        min-width: 197px;
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            min-width: 370px;
+        }
 
         report-period {
             a {

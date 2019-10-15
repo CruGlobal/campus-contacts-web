@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../../../stylesheets/variables/colors';
 
 organization-overview {
@@ -86,6 +88,9 @@ organization-overview {
 
 organization-overview-suborgs {
     .suborg-name {
-        width: 344px;
+        width: 172px;
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            width: 344px;
+        }
     }
 }
