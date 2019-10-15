@@ -6,6 +6,18 @@ organization-overview {
         margin-bottom: 0;
     }
 
+    .org-nav-header {
+        ng-md-icon {
+            & > svg {
+                fill: $white;
+            }
+        }
+    }
+
+    .hidden-org {
+        background: $gray-7;
+    }
+
     .org-title-row {
         display: flex;
         justify-content: space-between;
