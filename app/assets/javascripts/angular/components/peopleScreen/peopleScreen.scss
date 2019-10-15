@@ -33,7 +33,10 @@ people-screen {
         flex-direction: column;
 
         .grid-content .active {
-            background-color: $pivot-dark-blue;
+            &,
+            & .sticky-column {
+                background-color: $pivot-dark-blue;
+            }
             color: $white;
 
             a,
