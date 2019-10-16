@@ -56,7 +56,13 @@
                     >
                 </div>
                 <div class="column phone-column">
-                    {{ membership.person.phone_numbers[0].number }}
+                    <a
+                        ng-href="tel:{{
+                            membership.person.phone_numbers[0].number
+                        }}"
+                    >
+                        {{ membership.person.phone_numbers[0].number | phone }}
+                    </a>
                 </div>
                 <div class="column email-column">
                     <a
