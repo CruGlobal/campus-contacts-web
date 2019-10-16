@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
 @import '../../../../stylesheets/variables/modals';
@@ -6,8 +9,10 @@
 person-page {
     display: flex;
     flex-direction: column;
-    organization-overview & {
-        height: calc(100vh - #{$page-trim-height});
+    @media screen and (min-width: map-get($grid-breakpoints, md)) {
+        organization-overview & {
+            height: calc(100vh - #{$page-trim-height});
+        }
     }
     .modal & {
         height: calc(100vh - #{$modal-padding * 2});
@@ -111,9 +116,10 @@ person-page {
     > async-content > .content {
         display: flex;
         flex-direction: column;
-
-        organization-overview & {
-            height: calc(100vh - #{$page-trim-height});
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            organization-overview & {
+                height: calc(100vh - #{$page-trim-height});
+            }
         }
         .modal & {
             height: calc(100vh - #{$modal-padding * 2});
