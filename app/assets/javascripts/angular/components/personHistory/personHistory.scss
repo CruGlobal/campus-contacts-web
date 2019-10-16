@@ -114,14 +114,26 @@ person-history {
             display: flex;
             width: auto;
             border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+            background: none;
             &:hover {
                 background: none;
                 border: none;
             }
         }
 
+        .column {
+            padding-right: 6px;
+        }
+
+        .column:not(:first-child) {
+            padding-left: 6px;
+        }
+
         .icon-chip {
             background-color: $pivot-dark-blue;
+            color: $white;
         }
         .close-icon {
             background-color: $gray-2;
