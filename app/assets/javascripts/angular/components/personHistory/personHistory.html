@@ -6,7 +6,7 @@
             ng-click="$ctrl.filter = filter"
             ng-class="{ active: filter === $ctrl.filter }"
         >
-            {{'ministries.people.history.' + filter | t}}
+            {{ 'ministries.people.history.' + filter | t }}
         </span>
     </div>
     <hr />
@@ -35,18 +35,17 @@
             </div>
         </div>
         <form
-            class="row new-interaction pivot_theme"
+            class="new-interaction pivot_theme flex items-start mt4"
             ng-if="$ctrl.newInteractionType"
             ng-safe-submit="$ctrl.saveInteraction()"
         >
-            <div class="column icon-column flush-column">
-                <ng-md-icon
-                    class="icon-chip"
-                    icon="{{$ctrl.newInteractionType.icon}}"
-                    size="20"
-                ></ng-md-icon>
-            </div>
-            <div class="column normal-column">
+            <ng-md-icon
+                class="icon-chip"
+                icon="{{ $ctrl.newInteractionType.icon }}"
+                size="20"
+            ></ng-md-icon>
+            <div class="text mh2">
+                <!-- prettier-ignore -->
                 <textarea
                     type="text"
                     placeholder="{{ 'ministries.people.history.note_for_interaction'
@@ -55,24 +54,23 @@
                     ng-required="$ctrl.newInteractionType.id === 1"
                     ng-keydown="$event.keyCode === 27 && $ctrl.clearInteraction()"
                     focus="true"
+                    class="w-100 h3 ba"
                 >
                 </textarea>
             </div>
-            <button type="submit" class="column icon-column">
+            <button type="submit" class="mh2">
                 <ng-md-icon
                     class="icon-chip actionable"
                     icon="done"
                     size="20"
                 ></ng-md-icon>
             </button>
-            <div class="column icon-column">
-                <ng-md-icon
-                    class="icon-chip close-icon"
-                    icon="close"
-                    size="20"
-                    ng-click="$ctrl.clearInteraction()"
-                ></ng-md-icon>
-            </div>
+            <ng-md-icon
+                class="icon-chip close-icon"
+                icon="close"
+                size="20"
+                ng-click="$ctrl.clearInteraction()"
+            ></ng-md-icon>
         </form>
         <div class="sheet-container">
             <div class="sheet" ng-if="$ctrl.interactionTypesVisible">
@@ -81,8 +79,8 @@
                     ng-repeat="interactionType in $ctrl.interactionTypes"
                     ng-click="$ctrl.createInteraction(interactionType)"
                 >
-                    <ng-md-icon icon="{{interactionType.icon}}"></ng-md-icon>
-                    <div>{{interactionType.title | t}}</div>
+                    <ng-md-icon icon="{{ interactionType.icon }}"></ng-md-icon>
+                    <div>{{ interactionType.title | t }}</div>
                 </div>
             </div>
         </div>
