@@ -57,7 +57,7 @@ people-screen {
         ui-view {
             flex: 3; /* 75% of available width */
             @media screen and (min-width: map-get($grid-breakpoints, md)) {
-                max-width: 530px;
+                max-width: 538px;
             }
         }
 

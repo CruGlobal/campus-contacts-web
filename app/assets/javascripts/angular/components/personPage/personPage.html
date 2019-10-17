@@ -20,8 +20,8 @@
             </ng-md-icon>
         </div>
         <div class="normal-column">
-            <div class="flex flex-column-ns justify-between">
-                <div class="row text-row">
+            <div class="row text-row flex justify-between">
+                <div>
                     <span
                         class="name"
                         ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
@@ -34,26 +34,29 @@
                         {{ 'contacts.statuses.uncontacted' | t }}
                     </span>
                 </div>
-                <div class="row">
-                    <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
-                        <icon-button
-                            icon="'email'"
-                            disabled="!$ctrl.primaryEmail"
-                        ></icon-button>
-                    </a>
+                <a ng-click="$ctrl.dismiss()" class="close-button">
+                    <ng-md-icon icon="close" size="28"></ng-md-icon>
+                </a>
+            </div>
+            <div class="row">
+                <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
+                    <icon-button
+                        icon="'email'"
+                        disabled="!$ctrl.primaryEmail"
+                    ></icon-button>
+                </a>
 
-                    <span ng-if="$ctrl.primaryPhone">
-                        <a ng-href="tel:{{ $ctrl.primaryPhone.number }}"
-                            >{{ $ctrl.primaryPhone.number | phone }}
-                        </a>
-                        <ng-md-icon
-                            class="phone-active"
-                            icon="check"
-                            size="14"
-                            ng-if="$ctrl.primaryPhone.validated"
-                        ></ng-md-icon>
-                    </span>
-                </div>
+                <span ng-if="$ctrl.primaryPhone">
+                    <a ng-href="tel:{{ $ctrl.primaryPhone.number }}"
+                        >{{ $ctrl.primaryPhone.number | phone }}
+                    </a>
+                    <ng-md-icon
+                        class="phone-active"
+                        icon="check"
+                        size="14"
+                        ng-if="$ctrl.primaryPhone.validated"
+                    ></ng-md-icon>
+                </span>
             </div>
             <div class="tabs" ng-if="$ctrl.organizationId">
                 <div
@@ -69,9 +72,6 @@
                 </div>
             </div>
         </div>
-        <a ng-click="$ctrl.dismiss()" class="close-button">
-            <ng-md-icon icon="close" size="28"></ng-md-icon>
-        </a>
     </header>
     <div ui-view="personTab" class="person-tab-content"></div>
     <div class="modal-footer" ng-if="$ctrl.person.id === null">
