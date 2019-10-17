@@ -1,10 +1,9 @@
 @import '../../../../stylesheets/variables/colors';
 
 survey-responses {
-    svg {
-        height: 16px;
-
-        path {
+    .chevron-left-icon {
+        svg {
+            height: 16px;
             fill: $pivot-dark-blue;
         }
     }
