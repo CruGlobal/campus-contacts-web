@@ -10,13 +10,15 @@ people-screen {
     .container {
         border-top: 1px solid rgba($gray-dark, 0.1);
         align-items: inherit;
-        max-height: #{$organization-overview-content-height};
     }
 
     .scroll-contain {
-        height: calc(
-            #{$organization-overview-content-height} - #{$person-height}
-        );
+        height: calc(100vh - #{$person-height});
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            height: calc(
+                #{$organization-overview-content-height} - #{$person-height}
+            );
+        }
         min-width: min-content;
         -ms-grid-columns: min-content;
     }

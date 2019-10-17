@@ -1,10 +1,10 @@
 <async-content ready="$ctrl.ready">
     <div
-        class="br3 bg-pivot-dark-blue mb3 org-nav-header"
+        class="br3 bg-pivot-dark-blue mb3"
         ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab(), 'insights-tab': $ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between org-nav-header">
             <div
                 class="pivot-white f3 ph3 pv3 flex-auto"
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div
-            class="tabs flex-l flex-column flex-row-l"
+            class="tabs flex-l flex-column flex-row-l org-nav-header"
             ng-class="{ dn: ('app.ministries.root' | isState) || !$ctrl.orgNavOpen}"
         >
             <div
