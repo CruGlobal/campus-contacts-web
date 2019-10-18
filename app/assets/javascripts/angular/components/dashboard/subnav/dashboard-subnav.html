@@ -1,5 +1,8 @@
-<div class="dn db-l">
-    <div class="sub-navigation flex bg-white" ng-if="'app.people' | isState">
+<div class="dn db-l overflow-hidden pb2">
+    <div
+        class="sub-navigation flex bg-white shadow-2"
+        ng-if="'app.people' | isState"
+    >
         <div class="main-container flex items-center justify-between w-100 ph3">
             <div
                 class="flex-auto order-2 pivot-gray-7 organizational-stats-header"
@@ -72,30 +75,30 @@
             </a>
         </div>
     </div>
-</div>
 
-<div
-    class="sub-navigation flex bg-white"
-    ng-if="$ctrl.$state.includes('app.ministries')"
->
-    <div class="w-100 ph2 ph5-ns flex items-center justify-between">
-        <organization-breadcrumbs></organization-breadcrumbs>
-        <a
-            href
-            class="dashboard-edit-toggle tipitmiddle order-2 tr"
-            title="{{ 'dashboard.edit_org_order' | t }}"
-            ng-click="$ctrl.toggleEditOrganizations()"
-            ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
-            analytics-on="click"
-            analytics-category="Dashboard"
-            analytics-event="Edit Organization Order"
-            ng-class="{'active': $ctrl.editOrganizations}"
-        >
-            <ng-md-icon
-                class="fr fill-pivot-dark-blue"
-                icon="editOrder"
-                ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
-            ></ng-md-icon>
-        </a>
+    <div
+        class="sub-navigation flex bg-white shadow-2"
+        ng-if="$ctrl.$state.includes('app.ministries')"
+    >
+        <div class="w-100 ph2 ph5-ns flex items-center justify-between">
+            <organization-breadcrumbs></organization-breadcrumbs>
+            <a
+                href
+                class="dashboard-edit-toggle tipitmiddle order-2 tr"
+                title="{{ 'dashboard.edit_org_order' | t }}"
+                ng-click="$ctrl.toggleEditOrganizations()"
+                ng-if="$ctrl.$state.current.name === 'app.ministries.root'"
+                analytics-on="click"
+                analytics-category="Dashboard"
+                analytics-event="Edit Organization Order"
+                ng-class="{'active': $ctrl.editOrganizations}"
+            >
+                <ng-md-icon
+                    class="fr fill-pivot-dark-blue"
+                    icon="editOrder"
+                    ng-class="{'fill-pivot-bright-blue': $ctrl.editOrganizations}"
+                ></ng-md-icon>
+            </a>
+        </div>
     </div>
 </div>

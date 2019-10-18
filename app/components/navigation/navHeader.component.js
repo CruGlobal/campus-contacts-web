@@ -1,3 +1,5 @@
+import searchIcon from '../../assets/images/icons/searchIcon.svg';
+
 import template from './navHeader.html';
 import './navHeader.scss';
 import './navSearch.component';
@@ -18,8 +20,11 @@ function navHeaderController(
 ) {
     this.loggedInPerson = loggedInPerson;
     this.state = state;
+    this.searchIcon = searchIcon;
 
     this.logout = () => {
         authenticationService.destroyTheKeyAccess();
     };
+
+    this.toggleSearchBar = () => (this.showSearchBar = !this.showSearchBar);
 }

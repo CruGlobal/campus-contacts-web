@@ -803,6 +803,9 @@ export default {
         },
         weekly: 'Weekly',
     },
+    navSearch: {
+        noPeopleFound: 'No people found',
+    },
     surveyTab: {
         createSurvey: 'Create Survey',
         copySurvey: 'Copy Survey',
