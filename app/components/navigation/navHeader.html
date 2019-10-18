@@ -30,9 +30,9 @@
         class="flex w-25 items-center justify-end content-end fade w-40-ns"
         ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
     >
-        <div class="nav-search fade">
-            <nav-search></nav-search>
-        </div>
+        <a href ng-click="$ctrl.toggleSearchBar()">
+            <img ng-src="{{ $ctrl.searchIcon }}" />
+        </a>
         <ul class="avatar-nav">
             <li>
                 <a href ng-click="open = !open" on-click-away="open = false">
@@ -117,3 +117,4 @@
         </li>
     </ul>
 </div>
+<nav-search ng-if="$ctrl.showSearchBar"></nav-search>
