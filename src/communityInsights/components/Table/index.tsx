@@ -152,6 +152,9 @@ const Table = ({
     });
     const { t } = useTranslation('insights');
 
+    if (loading) {
+        return <LoadingContainer>{t('loading')}</LoadingContainer>;
+    }
     const isNull = (data: any) => {
         return data.community.communityChallenges.nodes.length <= 0;
     };

@@ -26,7 +26,7 @@ export const renderWithContext = (
     }: RenderWithContextParams = {},
 ) => {
     const mockApolloClient = createApolloMockClient(mocks);
-
+    console.log(mockApolloClient);
     // Warning: don't call any functions in here that return new instances on every call.
     // All the props need to stay the same otherwise renderer won't work.
     const wrapper = ({ children }: { children?: ReactNode }) => (
