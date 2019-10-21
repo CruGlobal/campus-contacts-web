@@ -114,6 +114,7 @@ const PersonalStepsPage = () => {
                 subtitle={t('personalSteps.addedSubtitle')}
             >
                 <StepsChart
+                    nullContent={'personalStepsAdded'}
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={(data: communityReportStagesPersonalStepsAdded) =>
                         data.community.report.stagesReport.map(
@@ -152,6 +153,7 @@ const PersonalStepsPage = () => {
                 subtitle={t('personalSteps.membersSubtitle')}
             >
                 <StepsChart
+                    nullContent={'communityMembersStages'}
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={(data: communityReportStagesPersonalMemberCount) =>
                         data.community.report.stagesReport.map(

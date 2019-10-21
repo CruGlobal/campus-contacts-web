@@ -112,6 +112,7 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.addedSubtitle')}
             >
                 <StepsChart
+                    nullContent={'stepsOfFaithAdded'}
                     query={GET_STAGES_REPORT}
                     mapData={(data: communityReportStagesOthersStepsAdded) =>
                         data.community.report.stagesReport.map(
@@ -148,6 +149,7 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.peopleSubtitle')}
             >
                 <StepsChart
+                    nullContent={'peopleStages'}
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={(data: communityReportStagesOthersContactCount) =>
                         data.community.report.stagesReport.map(

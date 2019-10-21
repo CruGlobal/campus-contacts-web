@@ -17,6 +17,7 @@ const LayoutWrapper = styled.div`
     font-size: ${({ theme }) => theme.font.size};
     line-height: 20px;
     flex-direction: column;
+    overflow: hidden;
     background-color: #f2f2f2;
 `;
 

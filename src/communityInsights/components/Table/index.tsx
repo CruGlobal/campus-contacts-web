@@ -8,6 +8,8 @@ import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
 import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
+import { isNull } from 'util';
+import NullState from '../NullState';
 
 const LoadingContainer = styled.div`
     text-align: center;
@@ -129,9 +131,17 @@ interface Props {
     mapRows: (data: any) => any;
     mapPage: (data: any) => any;
     variables: any;
+    nullContent: string;
 }
 
-const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
+const Table = ({
+    query,
+    headers,
+    mapRows,
+    mapPage,
+    variables,
+    nullContent,
+}: Props) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const { data, loading, refetch } = useQuery(query, {
@@ -142,9 +152,9 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
     });
     const { t } = useTranslation('insights');
 
-    if (loading) {
-        return <LoadingContainer>{t('loading')}</LoadingContainer>;
-    }
+    const isNull = (data: any) => {
+        return data.community.communityChallenges.nodes.length <= 0;
+    };
 
     const rows = mapRows(data);
     const page = mapPage(data);
@@ -183,6 +193,14 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
         }
         return pages;
     };
+
+    if (loading) {
+        return <LoadingContainer>{t('loading')}</LoadingContainer>;
+    }
+
+    if (isNull(data)) {
+        return <NullState content={nullContent} />;
+    }
 
     return (
         <div>
