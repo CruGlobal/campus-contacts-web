@@ -9,7 +9,7 @@
             title="{{ 'login.signUpWithEmail' | t }}"
             target="_self"
             ng-if="$ctrl.inviteState"
-            ng-href="{{$ctrl.theKeySignUpUrl}}"
+            ng-href="{{ $ctrl.theKeySignUpUrl }}"
         >
             {{ 'login.signUpWithEmail' | t }}
         </a>
@@ -18,10 +18,11 @@
     <p>
         <a
             href
+            cy-test-id="loginWithEmailButton"
             class="btn-key btn-primary f5"
             title="{{ 'login.signInWithEmail' | t }}"
             target="_self"
-            ng-href="{{$ctrl.theKeyUrl}}"
+            ng-href="{{ $ctrl.theKeyUrl }}"
         >
             {{ 'login.signInWithEmail' | t }}
         </a>
@@ -30,7 +31,7 @@
         <a
             href
             class="btn-primary btn-facebook f5"
-            title="{{'login.continueWithFacebook' | t }}"
+            title="{{ 'login.continueWithFacebook' | t }}"
             ng-click="$ctrl.facebookService.signIn()"
         >
             {{ 'login.continueWithFacebook' | t }}
