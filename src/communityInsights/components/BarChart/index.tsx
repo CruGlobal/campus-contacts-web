@@ -169,6 +169,41 @@ const BarChart = (props: Props) => {
         );
     };
 
+    const creatNull = () => {
+        const isNull = false;
+        if (isNull) {
+            return (
+                <g>
+                    <rect width={848} fill={'white'} height={300}></rect>
+                    <image
+                        y="90"
+                        x="350"
+                        xlinkHref={require('../../assets/icons/null-completed.svg')}
+                    />
+                    <text
+                        x={20}
+                        y={34}
+                        fontSize={16}
+                        fontWeight={300}
+                        fill={'#007398'}
+                        width={720}
+                        height={50}
+                    >
+                        <tspan y="180" x="70" dy="1.4em">
+                            {t('nullState.personalStepsCompleted.part1')}
+                        </tspan>
+
+                        <tspan y="200" x="130" dy="1.4em">
+                            {t('nullState.personalStepsCompleted.part2')}
+                        </tspan>
+                    </text>
+                </g>
+            );
+        } else {
+            return null;
+        }
+    };
+
     const updateFilter = (index: number, type: string) => {
         setFilter({ type, index });
         onFilterChanged(type, index);
@@ -223,6 +258,7 @@ const BarChart = (props: Props) => {
                         'bars',
                         'markers',
                         'legends',
+                        creatNull,
                     ]}
                     margin={{
                         top: 30,
