@@ -72,4 +72,45 @@ describe('<Table />', () => {
     //     await waitForElement(() => getByText('header-1'));
     //     snapshot();
     // });
+
+    it('should render with no data', async () => {
+        const mapRows = () => [['cell1', 'cell2'], ['cell3', 'cell4']];
+        const mapPage = () => ({});
+
+        const { snapshot, getByText } = renderWithContext(
+            <Table
+                nullContent={'challengesCompleted'}
+                query={GET_CHALLENGES}
+                headers={['header-1', 'header-2', 'header-3']}
+                mapRows={mapRows}
+                mapPage={mapPage}
+                variables={{
+                    first: 5,
+                    id: '1',
+                    sortBy: 'createdAt_DESC',
+                }}
+            />,
+            {
+                mocks: {
+                    Query: () => ({
+                        community: () => ({
+                            communityChallenges: () => ({
+                                nodes: () => [],
+                            }),
+                        }),
+                    }),
+                },
+                appContext: {
+                    orgId: '1',
+                },
+            },
+        );
+
+        await waitForElement(() =>
+            getByText(
+                'This community does not have any challenges. Open the MissionHub mobile app and create a community challenge.',
+            ),
+        );
+        snapshot();
+    });
 });

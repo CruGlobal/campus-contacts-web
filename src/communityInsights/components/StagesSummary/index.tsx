@@ -18,7 +18,7 @@ import gospel from '../../assets/icons/stage-gospel-presentations.svg';
 import holySpirit from '../../assets/icons/stage-holy-spirit-conversations.svg';
 import personal from '../../assets/icons/stage-personal-decisions.svg';
 import discipleship from '../../assets/icons/stage-discipleship-conversations.svg';
-import { stepsOfFaithMockData } from '../NullState';
+
 const Stages = styled.div`
     display: flex;
     flex-direction: row;
@@ -36,47 +36,36 @@ const Icon = styled.div`
     width: 52px;
     background-size: contain;
     background-repeat: no-repeat;
-
     &.not-sure {
         background-image: url(${notSure});
     }
-
     &.uninterested {
         background-image: url(${uninterested});
     }
-
     &.curious {
         background-image: url(${curious});
     }
-
     &.forgiven {
         background-image: url(${forgiven});
     }
-
     &.growing {
         background-image: url(${growing});
     }
-
     &.guiding {
         background-image: url(${guiding});
     }
-
     &.discipleship-conversation {
         background-image: url(${discipleship});
     }
-
     &.personal-evangelism {
         background-image: url(${gospel});
     }
-
     &.holy-spirit-presentation {
         background-image: url(${holySpirit});
     }
-
     &.personal-evangelism-decisions {
         background-image: url(${personal});
     }
-
     &.spiritual-conversation {
         background-image: url(${spiritual});
     }
@@ -144,6 +133,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
             moment.duration(dates.endDate.diff(dates.startDate)).asDays(),
         );
     };
+    const { t } = useTranslation('insights');
     const { data, loading } = useQuery(query, {
         variables: {
             ...variables,
@@ -151,6 +141,10 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
             period: `P${days(dates)}D`,
         },
     });
+
+    if (loading) {
+        return <SummaryWrapper>{t('loading')}</SummaryWrapper>;
+    }
 
     const onDatesChange = ({
         startDate,
@@ -161,28 +155,7 @@ const StagesSummary = ({ query, variables, mapData, longNames }: Props) => {
     }) => {
         setDates({ startDate, endDate });
     };
-    if (loading) {
-        return (
-            <SummaryWrapper>
-                <Stages>
-                    {mapData(stepsOfFaithMockData).map((entry: any) => (
-                        <Stage key={entry.stage}>
-                            <Icon className={entry.icon} />
-                            <Title longNames={longNames}>{entry.stage}</Title>
-                            <Value>{entry.count ? entry.count : '-'}</Value>
-                        </Stage>
-                    ))}
-                </Stages>
-                <Footer>
-                    <RangePicker
-                        onDatesChange={onDatesChange}
-                        startDate={dates.startDate}
-                        endDate={dates.endDate}
-                    />
-                </Footer>
-            </SummaryWrapper>
-        );
-    }
+
     return (
         <SummaryWrapper>
             <Stages>

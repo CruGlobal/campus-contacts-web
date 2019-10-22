@@ -1,18 +1,16 @@
 import { useQuery } from 'react-apollo-hooks';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 
 import BarChart from '../BarChart';
 import NullState from '../NullState';
 
-const Wrapper = styled.div<isNull>`
-    height: ${(props: isNull) => (props.isNull ? 'auto' : '400px')};
+const Wrapper = styled.div`
+    height: 400px;
     position: relative;
 `;
 
-interface isNull {
-    isNull: boolean;
-}
 interface Props {
     query: any;
     mapData: (data: any) => any;
@@ -30,31 +28,29 @@ const StepsChart = ({
     nullContent,
 }: Props) => {
     const { data, loading } = useQuery(query, { variables });
+    const { t } = useTranslation('insights');
 
-    const checkForNullContent = (data: any) => {
-        const nullCheck = data.community.report.stagesReport.filter(
-            (stages: any) => {
-                return (
-                    stages.memberCount !== 0 &&
-                    stages.personalStepsAddedCount !== 0 &&
-                    stages.othersStepsAddedCount !== 0 &&
-                    stages.contactCount !== 0
-                );
-            },
-        );
-
-        return nullCheck.length === 0;
+    const isNull = (data: any) => {
+        return data.community.report.stagesReport.filter((stage: any) => {
+            return (
+                stage.othersStepsAddedCount > 0 ||
+                stage.contactCount > 0 ||
+                (stage.personalStepsAddedCount > 0 || stage.memberCount > 0)
+            );
+        });
     };
 
     if (loading) {
+        return <Wrapper>{t('loading')}</Wrapper>;
+    }
+
+    if (isNull(data).length === 0) {
         return <NullState content={nullContent} />;
     }
 
     return (
-        <Wrapper isNull={checkForNullContent(data)}>
+        <Wrapper>
             <BarChart
-                nullContent={nullContent}
-                nullCheck={checkForNullContent(data)}
                 data={mapData(data)}
                 keys={[label]}
                 indexBy={index}

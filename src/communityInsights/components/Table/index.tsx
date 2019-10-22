@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
+import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 import { withTheme } from 'emotion-theming';
 
-import NullState from '../NullState';
 import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
 import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
+import { isNull } from 'util';
+import NullState from '../NullState';
+
+const LoadingContainer = styled.div`
+    text-align: center;
+    padding: 25px;
+`;
 
 const TableContainer = styled.table`
     table-layout: fixed;
@@ -31,7 +38,6 @@ const Column = styled.th`
 const Row = styled.tr`
     text-align: left;
     height: 64px;
-
     :nth-of-type(odd) {
         background-color: #eceef2;
     }
@@ -70,7 +76,6 @@ const LeftArrow = styled.div`
     background-repeat: no-repeat;
     background-image: url(${leftArrow});
     margin-right: 20px;
-
     &.active {
         cursor: pointer;
         background-image: url(${leftArrowActive});
@@ -84,7 +89,6 @@ const RightArrow = styled.div`
     background-repeat: no-repeat;
     background-image: url(${rightArrow});
     margin-left: 20px;
-
     &.active {
         cursor: pointer;
         background-image: url(${rightArrowActive});
@@ -103,11 +107,9 @@ const Page = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
-
     &:not(:last-child) {
         margin-right: 4px;
     }
-
     &.active {
         border-radius: 16px;
         background-color: ${({ theme }) => theme.colors.highlight};
@@ -143,12 +145,17 @@ const Table = ({
             first: PAGE_SIZE,
         },
     });
+    const { t } = useTranslation('insights');
 
-    const checkForNullContent = (data: any) => {
-        return data.community.communityChallenges.nodes.length <= 1;
+    if (loading) {
+        return <LoadingContainer>{t('loading')}</LoadingContainer>;
+    }
+
+    const isNull = (data: any) => {
+        return data.community.communityChallenges.nodes.length <= 0;
     };
 
-    if (loading || checkForNullContent(data)) {
+    if (isNull(data)) {
         return <NullState content={nullContent} />;
     }
 

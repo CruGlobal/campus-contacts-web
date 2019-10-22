@@ -116,8 +116,6 @@ interface Props {
     onFilterChanged: (type: string, index: number) => void;
     legendLabel?: string;
     tooltipBreakdown?: boolean;
-    nullCheck: any;
-    nullContent: string;
 }
 
 const BarChart = (props: Props) => {
@@ -133,8 +131,6 @@ const BarChart = (props: Props) => {
         filterType,
         datesFilter,
         legendLabel,
-        nullCheck,
-        nullContent,
     } = props;
 
     const { t } = useTranslation('insights');
@@ -208,33 +204,6 @@ const BarChart = (props: Props) => {
             </TooltipRow>,
         ];
     };
-
-    if (nullCheck) {
-        return (
-            <div>
-                <NullState content={nullContent} />
-                <Footer>
-                    {datesFilter ? (
-                        <SwitchButton
-                            isMonth={filter.type === 'month'}
-                            leftLabel={t('monthLabel')}
-                            rightLabel={t('yearLabel')}
-                            onLeftClick={() => onToggleFilterClick('month')}
-                            onRightClick={() => onToggleFilterClick('year')}
-                        />
-                    ) : null}
-                    {legendLabel ? (
-                        <Legend>
-                            <Line />
-                            <LegendLabel>{legendLabel}</LegendLabel>
-                            <Line className={'dashed'} />
-                            <LegendLabel>{t('average')}</LegendLabel>
-                        </Legend>
-                    ) : null}
-                </Footer>
-            </div>
-        );
-    }
 
     return (
         <div>

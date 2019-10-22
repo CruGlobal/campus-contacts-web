@@ -1,6 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Table /> should render properly in loading 1`] = `
+.emotion-0 {
+  text-align: center;
+  padding: 25px;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`<Table /> should render with no data 1`] = `
 .emotion-1 {
   width: 100%;
   height: 190px;

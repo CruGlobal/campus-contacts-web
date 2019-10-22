@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import _ from 'lodash';
 
 import BarChart from '../BarChart';
-import NullState from '../NullState';
 
 interface Props {
     query: any;
@@ -12,7 +12,6 @@ interface Props {
     mapData: (data: any) => any;
     label: string;
     currentDate?: Date;
-    nullContent: string;
 }
 
 const FiltersChart = ({
@@ -21,7 +20,6 @@ const FiltersChart = ({
     mapData,
     label,
     currentDate,
-    nullContent,
 }: Props) => {
     const [index, setIndex] = useState(0);
     const [endDate, setEndDate] = useState(moment(currentDate));
@@ -34,25 +32,10 @@ const FiltersChart = ({
             endDate,
         },
     });
-
-    const checkForNullContent = (data: any) => {
-        const nullCheck = data.community.report.daysReport.filter(
-            (report: any) => {
-                return (
-                    report.personalStepsAddedCount !== 0 &&
-                    report.othersStepsAddedCount !== 0 &&
-                    report.interactionsCount !== 0 &&
-                    report.personalStepsCompletedCount !== 0 &&
-                    report.othersStepsCompletedCount !== 0
-                );
-            },
-        );
-
-        return nullCheck.length === 0;
-    };
+    const { t } = useTranslation('insights');
 
     if (loading) {
-        return <NullState content={nullContent} />;
+        return <div>{t('loading')}</div>;
     }
 
     const updateDates = (type: string, index: number) => {
@@ -121,8 +104,6 @@ const FiltersChart = ({
 
     return (
         <BarChart
-            nullContent={nullContent}
-            nullCheck={checkForNullContent(data)}
             data={graphData}
             keys={['total']}
             indexBy={'date'}

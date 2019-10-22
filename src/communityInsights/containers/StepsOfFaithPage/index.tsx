@@ -87,7 +87,6 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.completedSubtitle')}
             >
                 <FiltersChart
-                    nullContent={'stepsOfFaithCompleted'}
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityDaysOtherReport) =>
