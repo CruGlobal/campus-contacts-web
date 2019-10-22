@@ -8,7 +8,6 @@ import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
 import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
-import { isNull } from 'util';
 import NullState from '../NullState';
 
 const LoadingContainer = styled.div`
