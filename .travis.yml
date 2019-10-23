@@ -3,6 +3,10 @@ language: node_js
 node_js: '12'
 addons:
     chrome: stable
+    # This is being used by Cypress.io for e2e testing
+    apt:
+        packages:
+            - libgconf-2-4
 
 script:
     - yarn test
@@ -13,6 +17,8 @@ script:
     - yarn lint
     - yarn lint:ts
     - yarn prettier:check
+    - cypress install
+    - yarn test:cypress:ci
     - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ]
       || [ "$TRAVIS_BRANCH" == "staging" ]); then
       yarn run onesky:download;
