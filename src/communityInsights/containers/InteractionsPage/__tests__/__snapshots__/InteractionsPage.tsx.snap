@@ -54,6 +54,10 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
   flex-direction: column;
 }
 
+.emotion-8 {
+  height: 400px;
+}
+
 <div>
   <div>
     <h1
@@ -100,7 +104,9 @@ exports[`<PersonalStepsPage /> should render properly in loading state 1`] = `
       <div
         class="emotion-4"
       >
-        <div>
+        <div
+          class="emotion-8"
+        >
           Loading...
         </div>
       </div>

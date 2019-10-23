@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<NullState /> for non ImpactInfo component Should render properly 1`] = `
-.emotion-1 {
+.emotion-2 {
   width: 100%;
   height: 190px;
   display: -webkit-box;
@@ -30,12 +30,12 @@ exports[`<NullState /> for non ImpactInfo component Should render properly 1`] =
   font-size: 16px;
   font-weight: 300;
   line-height: 24px;
-  margin: 10px 0;
+  margin: 0;
 }
 
 <div>
   <div
-    class="emotion-1"
+    class="emotion-2"
   >
     <img
       src="mockFile"
@@ -43,7 +43,12 @@ exports[`<NullState /> for non ImpactInfo component Should render properly 1`] =
     <p
       class="emotion-0"
     >
-      This community does not have any members who have completed a personal step of faith. Challenge your community to open the MissionHub mobile app and complete a personal step of faith.
+      This community does not have any members who have completed a personal step of faith. Challenge your
+    </p>
+    <p
+      class="emotion-0"
+    >
+      community to open the MissionHub mobile app and complete a personal step of faith.
     </p>
   </div>
 </div>

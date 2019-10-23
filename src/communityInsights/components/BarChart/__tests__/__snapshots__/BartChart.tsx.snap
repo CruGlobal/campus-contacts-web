@@ -64,6 +64,44 @@ exports[`<BarChart /> should render properly 1`] = `
               />
             </g>
             <g />
+            <g>
+              <rect
+                fill="white"
+                height="300"
+                width="848"
+              />
+              <image
+                x="350"
+                xlink:href="mockFile"
+                y="90"
+              />
+              <text
+                fill="#007398"
+                font-size="16"
+                font-weight="300"
+                height="50"
+                transform="translate(400)"
+                width="720"
+                y="34"
+              >
+                <tspan
+                  dy="1.4em"
+                  text-anchor="middle"
+                  x="0"
+                  y="180"
+                >
+                  This community does not have any members who have completed a step of faith. Challenge your
+                </tspan>
+                <tspan
+                  dy="1.6em"
+                  text-anchor="middle"
+                  x="0"
+                  y="200"
+                >
+                  community to open the MissionHub mobile app and complete a step of faith.
+                </tspan>
+              </text>
+            </g>
           </g>
         </svg>
       </div>
@@ -703,6 +741,44 @@ exports[`<BarChart /> should render properly with data, key, index by 1`] = `
                   width="144"
                 />
               </g>
+            </g>
+            <g>
+              <rect
+                fill="white"
+                height="300"
+                width="848"
+              />
+              <image
+                x="350"
+                xlink:href="mockFile"
+                y="90"
+              />
+              <text
+                fill="#007398"
+                font-size="16"
+                font-weight="300"
+                height="50"
+                transform="translate(400)"
+                width="720"
+                y="34"
+              >
+                <tspan
+                  dy="1.4em"
+                  text-anchor="middle"
+                  x="0"
+                  y="180"
+                >
+                  This community does not have any members who have completed a step of faith. Challenge your
+                </tspan>
+                <tspan
+                  dy="1.6em"
+                  text-anchor="middle"
+                  x="0"
+                  y="200"
+                >
+                  community to open the MissionHub mobile app and complete a step of faith.
+                </tspan>
+              </text>
             </g>
           </g>
         </svg>
