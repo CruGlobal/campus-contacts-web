@@ -204,8 +204,8 @@ const BarChart = (props: Props) => {
                 return null;
         }
     };
-
-    const creatNull = () => {
+    // Create a null element to be added as a layer in the barchart svg
+    const createNull = () => {
         if (isNullCheck(data)) {
             return (
                 <g>
@@ -293,7 +293,7 @@ const BarChart = (props: Props) => {
                         'bars',
                         'markers',
                         'legends',
-                        creatNull,
+                        createNull,
                     ]}
                     margin={{
                         top: 30,
