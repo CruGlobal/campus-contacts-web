@@ -30,27 +30,14 @@ const StepsChart = ({
     const { data, loading } = useQuery(query, { variables });
     const { t } = useTranslation('insights');
 
-    const isNull = (data: any) => {
-        return data.community.report.stagesReport.filter((stage: any) => {
-            return (
-                stage.othersStepsAddedCount > 0 ||
-                stage.contactCount > 0 ||
-                (stage.personalStepsAddedCount > 0 || stage.memberCount > 0)
-            );
-        });
-    };
-
     if (loading) {
         return <Wrapper>{t('loading')}</Wrapper>;
-    }
-
-    if (isNull(data).length === 0) {
-        return <NullState content={nullContent} />;
     }
 
     return (
         <Wrapper>
             <BarChart
+                nullContent={nullContent}
                 data={mapData(data)}
                 keys={[label]}
                 indexBy={index}

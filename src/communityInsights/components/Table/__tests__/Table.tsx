@@ -108,8 +108,11 @@ describe('<Table />', () => {
 
         await waitForElement(() =>
             getByText(
-                'This community does not have any challenges. Open the MissionHub mobile app and create a community challenge.',
+                'This community does not have any challenges. Open the MissionHub mobile app',
             ),
+        );
+        await waitForElement(() =>
+            getByText('and create a community challenge.'),
         );
         snapshot();
     });

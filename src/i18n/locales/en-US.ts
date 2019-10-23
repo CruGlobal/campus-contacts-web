@@ -1171,24 +1171,46 @@ export default {
                     'community to open the MissionHub mobile app and complete a personal step of faith.',
             },
 
-            personalStepsAdded:
-                'This community does not have any members with personal steps of faith. Challenge your community to open the MissionHub mobile app and add a personal step of faith.',
-            communityMembersStages:
-                'This community does not have any members with stages. Challenge your current members to open the MissionHub mobile app and choose a stage.',
+            personalStepsAdded: {
+                part1:
+                    'This community does not have any members with personal steps of faith. Challenge your community to open the',
+                part2:
+                    ' MissionHub mobile app and add a personal step of faith.',
+            },
+            communityMembersStages: {
+                part1:
+                    'This community does not have any members with stages. Challenge your current members to open the',
+                part2: 'MissionHub mobile app and choose a stage.',
+            },
             stepsOfFaithCompleted: {
                 part1:
                     'This community does not have any members who have completed a step of faith. Challenge your',
                 part2:
                     'community to open the MissionHub mobile app and complete a step of faith.',
             },
-            stepsOfFaithAdded:
-                'This community does not have any members with steps of faith. Challenge your community to open the MissionHub mobile app and add a step of faith.',
-            peopleStages:
-                'This community has not added any people to MissionHub. Challenge your current members to open the MissionHub mobile app and add someone they want to be intentional with.',
-            interactionsCompleted:
-                'This community does not have any members who have completed an interaction. Challenge your community to open the MissionHub mobile app and complete an interaction.',
-            challengesCompleted:
-                'This community does not have any challenges. Open the MissionHub mobile app and create a community challenge.',
+            stepsOfFaithAdded: {
+                part1:
+                    'This community does not have any members with steps of faith. Challenge your community to open the',
+                part2: 'MissionHub mobile app and add a step of faith.',
+            },
+
+            peopleStages: {
+                part1:
+                    'This community has not added any people to MissionHub. Challenge your current members to open the',
+                part2:
+                    'MissionHub mobile app and add someone they want to be intentional with.',
+            },
+            interactionsCompleted: {
+                part1:
+                    'This community does not have any members who have completed an interaction. Challenge your community to ',
+                part2:
+                    'open the MissionHub mobile app and complete an interaction.',
+            },
+            challengesCompleted: {
+                part1:
+                    'This community does not have any challenges. Open the MissionHub mobile app',
+                part2: 'and create a community challenge.',
+            },
         },
         personalSteps: {
             label: 'Personal Steps of Faith',

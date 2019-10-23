@@ -87,6 +87,7 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.completedSubtitle')}
             >
                 <FiltersChart
+                    nullContent={'stepsOfFaithCompleted'}
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityDaysOtherReport) =>
@@ -117,6 +118,7 @@ const StepsOfFaithPage = () => {
                     mapData={(data: communityReportStagesOthersStepsAdded) =>
                         data.community.report.stagesReport.map(
                             (row: communityStepsAddedStageReportRow) => ({
+                                stepsOfFaith: row.othersStepsAddedCount,
                                 [t(
                                     'stepsOfFaith.legendLabel',
                                 )]: row.othersStepsAddedCount,

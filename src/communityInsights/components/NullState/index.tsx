@@ -31,7 +31,7 @@ const LoadingText = styled.p`
     font-size: 16px;
     font-weight: 300;
     line-height: 24px;
-    margin: 10px 0;
+    margin: 0;
 `;
 
 const NullState = ({ content }: Props) => {
@@ -59,7 +59,8 @@ const NullState = ({ content }: Props) => {
     return (
         <LoadingContainer>
             <img src={getImageSrc(content)}></img>
-            <LoadingText>{t(`nullState.${content}`)}</LoadingText>
+            <LoadingText>{t(`nullState.${content}.part1`)}</LoadingText>
+            <LoadingText>{t(`nullState.${content}.part2`)}</LoadingText>
         </LoadingContainer>
     );
 };

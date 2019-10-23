@@ -86,6 +86,7 @@ const PersonalStepsPage = () => {
                 subtitle={t('personalSteps.completedSubtitle')}
             >
                 <FiltersChart
+                    nullContent={'personalStepsCompleted'}
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityReportDaysPersonalSteps) =>
@@ -121,6 +122,8 @@ const PersonalStepsPage = () => {
                             (
                                 row: communityReportStagesPersonalStepsAddedRow,
                             ) => ({
+                                personalStepsOfFaith:
+                                    row.personalStepsAddedCount,
                                 [t(
                                     'personalSteps.label',
                                 )]: row.personalStepsAddedCount,

@@ -5,8 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { line } from 'd3-shape';
 import styled from '@emotion/styled';
 
-import NullState from '../NullState';
 import SwitchButton from '../SwitchButton';
+import nullAdded from '../../assets/icons/null-added.svg';
+import nullChallenges from '../../assets/icons/null-challenges.svg';
+import nullCompleted from '../../assets/icons/null-completed.svg';
+import nullInteractions from '../../assets/icons/null-interactions.svg';
+import nullStages from '../../assets/icons/null-stages.svg';
 
 const Wrapper = styled.div`
     height: 400px;
@@ -116,6 +120,7 @@ interface Props {
     onFilterChanged: (type: string, index: number) => void;
     legendLabel?: string;
     tooltipBreakdown?: boolean;
+    nullContent?: string;
 }
 
 const BarChart = (props: Props) => {
@@ -131,6 +136,7 @@ const BarChart = (props: Props) => {
         filterType,
         datesFilter,
         legendLabel,
+        nullContent,
     } = props;
 
     const { t } = useTranslation('insights');
@@ -169,19 +175,52 @@ const BarChart = (props: Props) => {
         );
     };
 
+    const isNullCheck = (data: any) => {
+        const nullCheck = data.filter((day: any) => {
+            return (
+                (day.total && day.total !== 0) ||
+                (day.Members && day.Members !== 0) ||
+                (day.People && day.People !== 0) ||
+                (day.stepsOfFaith && day.stepsOfFaith !== 0) ||
+                (day.personalStepsOfFaith && day.personalStepsOfFaith !== 0)
+            );
+        });
+
+        return nullCheck.length === 0;
+    };
+
+    const getImageSrc = (content: string | undefined) => {
+        switch (content) {
+            case 'stepsOfFaithCompleted':
+            case 'personalStepsCompleted':
+                return nullCompleted;
+            case 'personalStepsAdded':
+            case 'stepsOfFaithAdded':
+                return nullAdded;
+            case 'communityMembersStages':
+            case 'peopleStages':
+                return nullStages;
+            case 'interactionsCompleted':
+                return nullInteractions;
+            case 'challengesCompleted':
+                return nullChallenges;
+            default:
+                return null;
+        }
+    };
+
     const creatNull = () => {
-        const isNull = false;
-        if (isNull) {
+        if (isNullCheck(data)) {
             return (
                 <g>
                     <rect width={848} fill={'white'} height={300}></rect>
                     <image
                         y="90"
                         x="350"
-                        xlinkHref={require('../../assets/icons/null-completed.svg')}
+                        xlinkHref={getImageSrc(nullContent)}
                     />
                     <text
-                        x={20}
+                        transform="translate(400)"
                         y={34}
                         fontSize={16}
                         fontWeight={300}
@@ -189,12 +228,12 @@ const BarChart = (props: Props) => {
                         width={720}
                         height={50}
                     >
-                        <tspan y="180" x="70" dy="1.4em">
-                            {t('nullState.personalStepsCompleted.part1')}
+                        <tspan y="180" x="0" dy="1.4em" textAnchor="middle">
+                            {t(`nullState.${nullContent}.part1`)}
                         </tspan>
 
-                        <tspan y="200" x="130" dy="1.4em">
-                            {t('nullState.personalStepsCompleted.part2')}
+                        <tspan y="200" x="0" dy="1.6em" textAnchor="middle">
+                            {t(`nullState.${nullContent}.part2`)}
                         </tspan>
                     </text>
                 </g>
