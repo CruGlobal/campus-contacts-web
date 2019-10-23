@@ -204,7 +204,7 @@ const BarChart = (props: Props) => {
                 return null;
         }
     };
-    // Create a null element to be added as a layer in the barchart svg
+
     const creatNull = () => {
         if (isNullCheck(data)) {
             return (
