@@ -8,6 +8,7 @@ import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
 import rightArrow from '../../assets/icons/arrow-right.svg';
 import rightArrowActive from '../../assets/icons/arrow-right-active.svg';
+import NullState from '../NullState';
 
 const LoadingContainer = styled.div`
     text-align: center;
@@ -36,7 +37,6 @@ const Column = styled.th`
 const Row = styled.tr`
     text-align: left;
     height: 64px;
-
     :nth-of-type(odd) {
         background-color: #eceef2;
     }
@@ -75,7 +75,6 @@ const LeftArrow = styled.div`
     background-repeat: no-repeat;
     background-image: url(${leftArrow});
     margin-right: 20px;
-
     &.active {
         cursor: pointer;
         background-image: url(${leftArrowActive});
@@ -89,7 +88,6 @@ const RightArrow = styled.div`
     background-repeat: no-repeat;
     background-image: url(${rightArrow});
     margin-left: 20px;
-
     &.active {
         cursor: pointer;
         background-image: url(${rightArrowActive});
@@ -108,11 +106,9 @@ const Page = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
-
     &:not(:last-child) {
         margin-right: 4px;
     }
-
     &.active {
         border-radius: 16px;
         background-color: ${({ theme }) => theme.colors.highlight};
@@ -129,9 +125,17 @@ interface Props {
     mapRows: (data: any) => any;
     mapPage: (data: any) => any;
     variables: any;
+    nullContent: string;
 }
 
-const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
+const Table = ({
+    query,
+    headers,
+    mapRows,
+    mapPage,
+    variables,
+    nullContent,
+}: Props) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const { data, loading, refetch } = useQuery(query, {
@@ -144,6 +148,14 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
 
     if (loading) {
         return <LoadingContainer>{t('loading')}</LoadingContainer>;
+    }
+
+    const isNull = (data: any) => {
+        return data.community.communityChallenges.nodes.length <= 0;
+    };
+
+    if (isNull(data)) {
+        return <NullState content={nullContent} />;
     }
 
     const rows = mapRows(data);

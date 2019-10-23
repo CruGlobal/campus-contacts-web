@@ -87,6 +87,7 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.completedSubtitle')}
             >
                 <FiltersChart
+                    nullContent={'stepsOfFaithCompleted'}
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityDaysOtherReport) =>
@@ -112,10 +113,12 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.addedSubtitle')}
             >
                 <StepsChart
+                    nullContent={'stepsOfFaithAdded'}
                     query={GET_STAGES_REPORT}
                     mapData={(data: communityReportStagesOthersStepsAdded) =>
                         data.community.report.stagesReport.map(
                             (row: communityStepsAddedStageReportRow) => ({
+                                stepsOfFaith: row.othersStepsAddedCount,
                                 [t(
                                     'stepsOfFaith.legendLabel',
                                 )]: row.othersStepsAddedCount,
@@ -148,6 +151,7 @@ const StepsOfFaithPage = () => {
                 subtitle={t('stepsOfFaith.peopleSubtitle')}
             >
                 <StepsChart
+                    nullContent={'peopleStages'}
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={(data: communityReportStagesOthersContactCount) =>
                         data.community.report.stagesReport.map(

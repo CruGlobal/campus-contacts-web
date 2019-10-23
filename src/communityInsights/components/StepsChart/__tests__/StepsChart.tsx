@@ -12,6 +12,7 @@ describe('<StepsChart />', () => {
     it('should render properly', async () => {
         const { snapshot, unmount } = renderWithContext(
             <StepsChart
+                nullContent={'personalStepsAdded'}
                 query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
                     data.community.report.stagesReport.map((row: any) => ({
@@ -35,6 +36,7 @@ describe('<StepsChart />', () => {
     it('should render properly with data', async () => {
         const { snapshot, getByText } = renderWithContext(
             <StepsChart
+                nullContent={'personalStepsAdded'}
                 query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
                     data.community.report.stagesReport.map((row: any) => ({
