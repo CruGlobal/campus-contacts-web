@@ -22,25 +22,25 @@ import { impactReportPersonalStepsCompletedCount } from './__generated__/impactR
 // GET_TOTAL_STEPS_COMPLETED_SUMMARY INTERFACES
 import {
     communityReportStagesPersonalStepsCompleted,
-    communityReportStagesPersonalStepsCompleted_community_report_stagesReport as communityReportStagesPersonalStepsCompletedEntry,
+    communityReportStagesPersonalStepsCompleted_community_report_stagesReport_nodes as communityReportStagesPersonalStepsCompletedEntry,
 } from './__generated__/communityReportStagesPersonalStepsCompleted';
 // GET_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportDaysPersonalSteps,
-    communityReportDaysPersonalSteps_community_report_daysReport as communityReportDaysPersonalRow,
-    communityReportDaysPersonalSteps_community_report_daysReport_stageResults as communityReportDaysPersonalStage,
+    communityReportDaysPersonalSteps_community_report_daysReport_nodes as communityReportDaysPersonalRow,
+    communityReportDaysPersonalSteps_community_report_daysReport_nodes_stageResults_nodes as communityReportDaysPersonalStage,
 } from './__generated__/communityReportDaysPersonalSteps';
 // GET_STAGES_REPORT_STEPS_ADDED INTERFACES
 import {
     communityReportStagesPersonalStepsAdded,
-    communityReportStagesPersonalStepsAdded_community_report_stagesReport as communityReportStagesPersonalStepsAddedRow,
+    communityReportStagesPersonalStepsAdded_community_report_stagesReport_nodes as communityReportStagesPersonalStepsAddedRow,
 } from './__generated__/communityReportStagesPersonalStepsAdded';
 // GET_IMPACT_REPORT_MOVED INTERFACES
 import { impactReportStageProgressionCount } from './__generated__/impactReportStageProgressionCount';
 // GET_STAGES_REPORT_MEMBER_COUNT INTERFACES
 import {
     communityReportStagesPersonalMemberCount,
-    communityReportStagesPersonalMemberCount_community_report_stagesReport as communityReportStagesPersonalMemberCountRow,
+    communityReportStagesPersonalMemberCount_community_report_stagesReport_nodes as communityReportStagesPersonalMemberCountRow,
 } from './__generated__/communityReportStagesPersonalMemberCount';
 
 const PersonalStepsPage = () => {
@@ -67,7 +67,7 @@ const PersonalStepsPage = () => {
                     mapData={(
                         data: communityReportStagesPersonalStepsCompleted,
                     ) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (
                                 entry: communityReportStagesPersonalStepsCompletedEntry,
                             ) => ({
@@ -89,10 +89,10 @@ const PersonalStepsPage = () => {
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityReportDaysPersonalSteps) =>
-                        data.community.report.daysReport.map(
+                        data.community.report.daysReport.nodes.map(
                             (row: communityReportDaysPersonalRow) => ({
                                 ['total']: row.personalStepsCompletedCount,
-                                ['stages']: row.stageResults.map(
+                                ['stages']: row.stageResults.nodes.map(
                                     (
                                         stage: communityReportDaysPersonalStage,
                                     ) => ({
@@ -116,7 +116,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_STEPS_ADDED}
                     mapData={(data: communityReportStagesPersonalStepsAdded) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (
                                 row: communityReportStagesPersonalStepsAddedRow,
                             ) => ({
@@ -154,7 +154,7 @@ const PersonalStepsPage = () => {
                 <StepsChart
                     query={GET_STAGES_REPORT_MEMBER_COUNT}
                     mapData={(data: communityReportStagesPersonalMemberCount) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (
                                 row: communityReportStagesPersonalMemberCountRow,
                             ) => ({
