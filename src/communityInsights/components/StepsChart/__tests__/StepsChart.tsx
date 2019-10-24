@@ -14,10 +14,12 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
-                    data.community.report.stagesReport.map((row: any) => ({
-                        ['label']: row.personalStepsAddedCount,
-                        ['index']: row.stage.name.toUpperCase(),
-                    }))
+                    data.community.report.stagesReport.nodes.map(
+                        (row: any) => ({
+                            ['label']: row.personalStepsAddedCount,
+                            ['index']: row.stage.name.toUpperCase(),
+                        }),
+                    )
                 }
                 label={'label'}
                 index={'index'}
@@ -37,10 +39,12 @@ describe('<StepsChart />', () => {
             <StepsChart
                 query={GET_STAGES_REPORT_STEPS_ADDED}
                 mapData={data =>
-                    data.community.report.stagesReport.map((row: any) => ({
-                        ['label']: row.personalStepsAddedCount,
-                        ['index']: row.stage.name.toUpperCase(),
-                    }))
+                    data.community.report.stagesReport.nodes.map(
+                        (row: any) => ({
+                            ['label']: row.personalStepsAddedCount,
+                            ['index']: row.stage.name.toUpperCase(),
+                        }),
+                    )
                 }
                 label={'label'}
                 index={'index'}
@@ -79,7 +83,7 @@ describe('<StepsChart />', () => {
             },
         );
 
-        await waitForElement(() => getByText('NO STAGE'));
+        await waitForElement(() => getByText('REPELLAT QUISQUAM RECUSANDAE'));
         snapshot();
     });
 });

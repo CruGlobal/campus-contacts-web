@@ -74,8 +74,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="252"
-                  y2="252"
+                  y1="246"
+                  y2="246"
                 />
                 <line
                   opacity="1"
@@ -83,8 +83,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="224"
-                  y2="224"
+                  y1="213"
+                  y2="213"
                 />
                 <line
                   opacity="1"
@@ -92,8 +92,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="196"
-                  y2="196"
+                  y1="179"
+                  y2="179"
                 />
                 <line
                   opacity="1"
@@ -101,17 +101,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="168"
-                  y2="168"
-                />
-                <line
-                  opacity="1"
-                  stroke="#ECEEF2"
-                  stroke-width="1"
-                  x1="0"
-                  x2="818"
-                  y1="140"
-                  y2="140"
+                  y1="146"
+                  y2="146"
                 />
                 <line
                   opacity="1"
@@ -128,8 +119,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="83"
-                  y2="83"
+                  y1="79"
+                  y2="79"
                 />
                 <line
                   opacity="1"
@@ -137,8 +128,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="55"
-                  y2="55"
+                  y1="45"
+                  y2="45"
                 />
                 <line
                   opacity="1"
@@ -146,8 +137,8 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                   stroke-width="1"
                   x1="0"
                   x2="818"
-                  y1="27"
-                  y2="27"
+                  y1="11"
+                  y2="11"
                 />
               </g>
               <g
@@ -170,7 +161,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="middle"
                     transform="translate(0,20) rotate(0)"
                   >
-                    NO STAGE
+                    REPELLAT QUISQUAM RECUSANDAE
                   </text>
                 </g>
                 <g
@@ -190,7 +181,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     text-anchor="middle"
                     transform="translate(0,20) rotate(0)"
                   >
-                    UNINTERESTED
+                    CONSEQUUNTUR CORPORIS REPELLAT
                   </text>
                 </g>
                 <line
@@ -226,7 +217,27 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,252)"
+                  transform="translate(0,246)"
+                >
+                  <line
+                    style="stroke: #777777; stroke-width: 1;"
+                    x1="0"
+                    x2="0"
+                    y1="0"
+                    y2="0"
+                  />
+                  <text
+                    dominant-baseline="central"
+                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                    text-anchor="end"
+                    transform="translate(-5,0) rotate(0)"
+                  >
+                    5000
+                  </text>
+                </g>
+                <g
+                  style="opacity: 1;"
+                  transform="translate(0,213)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -246,7 +257,27 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,224)"
+                  transform="translate(0,179)"
+                >
+                  <line
+                    style="stroke: #777777; stroke-width: 1;"
+                    x1="0"
+                    x2="0"
+                    y1="0"
+                    y2="0"
+                  />
+                  <text
+                    dominant-baseline="central"
+                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                    text-anchor="end"
+                    transform="translate(-5,0) rotate(0)"
+                  >
+                    15000
+                  </text>
+                </g>
+                <g
+                  style="opacity: 1;"
+                  transform="translate(0,146)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -266,7 +297,27 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,196)"
+                  transform="translate(0,112)"
+                >
+                  <line
+                    style="stroke: #777777; stroke-width: 1;"
+                    x1="0"
+                    x2="0"
+                    y1="0"
+                    y2="0"
+                  />
+                  <text
+                    dominant-baseline="central"
+                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                    text-anchor="end"
+                    transform="translate(-5,0) rotate(0)"
+                  >
+                    25000
+                  </text>
+                </g>
+                <g
+                  style="opacity: 1;"
+                  transform="translate(0,79)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -286,7 +337,27 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                 </g>
                 <g
                   style="opacity: 1;"
-                  transform="translate(0,168)"
+                  transform="translate(0,45)"
+                >
+                  <line
+                    style="stroke: #777777; stroke-width: 1;"
+                    x1="0"
+                    x2="0"
+                    y1="0"
+                    y2="0"
+                  />
+                  <text
+                    dominant-baseline="central"
+                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
+                    text-anchor="end"
+                    transform="translate(-5,0) rotate(0)"
+                  >
+                    35000
+                  </text>
+                </g>
+                <g
+                  style="opacity: 1;"
+                  transform="translate(0,11)"
                 >
                   <line
                     style="stroke: #777777; stroke-width: 1;"
@@ -304,106 +375,6 @@ exports[`<StepsChart /> should render properly with data 1`] = `
                     40000
                   </text>
                 </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,140)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    50000
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,112)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    60000
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,83)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    70000
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,55)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    80000
-                  </text>
-                </g>
-                <g
-                  style="opacity: 1;"
-                  transform="translate(0,27)"
-                >
-                  <line
-                    style="stroke: #777777; stroke-width: 1;"
-                    x1="0"
-                    x2="0"
-                    y1="0"
-                    y2="0"
-                  />
-                  <text
-                    dominant-baseline="central"
-                    style="font-weight: 600; letter-spacing: 1px; font-family: Source Sans Pro; font-size: 10px; fill: #B4B6BA;"
-                    text-anchor="end"
-                    transform="translate(-5,0) rotate(0)"
-                  >
-                    90000
-                  </text>
-                </g>
                 <line
                   style="stroke: transparent; stroke-width: 1;"
                   x1="0"
@@ -414,20 +385,7 @@ exports[`<StepsChart /> should render properly with data 1`] = `
               </g>
               <g>
                 <g
-                  transform="translate(137, 163)"
-                >
-                  <rect
-                    fill="#3CC8E6"
-                    height="117"
-                    rx="0"
-                    ry="0"
-                    stroke="#3CC8E6"
-                    stroke-width="0"
-                    width="204"
-                  />
-                </g>
-                <g
-                  transform="translate(477, 0)"
+                  transform="translate(137, 0)"
                 >
                   <rect
                     fill="#3CC8E6"
