@@ -76,9 +76,14 @@ module.exports = (env = {}) => {
                       new InlineManifestWebpackPlugin({
                           name: 'webpackManifest',
                       }),
-                      new FaviconsWebpackPlugin(
-                          './app/assets/images/favicon.png',
-                      ),
+                      new FaviconsWebpackPlugin({
+                          logo: './app/assets/images/favicon.png',
+                          favicons: {
+                              appName: 'MissionHub',
+                              developerName: 'Cru',
+                              theme_color: '#007398',
+                          },
+                      }),
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
