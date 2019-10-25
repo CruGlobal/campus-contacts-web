@@ -59,20 +59,22 @@ describe('<StepsChart />', () => {
                     Query: () => ({
                         community: () => ({
                             report: () => ({
-                                stagesReport: () => [
-                                    {
-                                        stepsAddedCount: 20,
-                                        stage: {
-                                            name: 'NO STAGE',
+                                stagesReport: () => ({
+                                    nodes: () => [
+                                        {
+                                            stepsAddedCount: 20,
+                                            stage: {
+                                                name: 'NO STAGE',
+                                            },
                                         },
-                                    },
-                                    {
-                                        stepsAddedCount: 25,
-                                        stage: {
-                                            name: 'UNINTERESTED',
+                                        {
+                                            stepsAddedCount: 25,
+                                            stage: {
+                                                name: 'UNINTERESTED',
+                                            },
                                         },
-                                    },
-                                ],
+                                    ],
+                                }),
                             }),
                         }),
                     }),
@@ -83,7 +85,7 @@ describe('<StepsChart />', () => {
             },
         );
 
-        await waitForElement(() => getByText('REPELLAT QUISQUAM RECUSANDAE'));
+        await waitForElement(() => getByText('NO STAGE'));
         snapshot();
     });
 });
