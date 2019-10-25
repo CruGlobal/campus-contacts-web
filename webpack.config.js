@@ -82,6 +82,7 @@ module.exports = (env = {}) => {
                               appName: 'MissionHub',
                               developerName: 'Cru',
                               theme_color: '#007398',
+                              background: '#3cc8e6',
                           },
                       }),
                       new SriPlugin({
