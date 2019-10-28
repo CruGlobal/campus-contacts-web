@@ -5,3 +5,5 @@ coverage
 coverage-react
 schema.json
 __generated__
+.env
+.env.local
