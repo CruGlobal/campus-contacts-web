@@ -20,9 +20,11 @@ const GET_TOTAL_STEPS_COMPLETED_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    othersStepsCompletedCount
-                    stage {
-                        name
+                    nodes {
+                        othersStepsCompletedCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }
@@ -39,12 +41,16 @@ const GET_STEPS_COMPLETED_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 daysReport {
-                    date
-                    othersStepsCompletedCount
-                    stageResults {
+                    nodes {
+                        date
                         othersStepsCompletedCount
-                        stage {
-                            name
+                        stageResults {
+                            nodes {
+                                othersStepsCompletedCount
+                                stage {
+                                    name
+                                }
+                            }
                         }
                     }
                 }
@@ -62,9 +68,11 @@ const GET_STAGES_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    othersStepsAddedCount
-                    stage {
-                        name
+                    nodes {
+                        othersStepsAddedCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }
@@ -91,9 +99,11 @@ const GET_STAGES_PEOPLE_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    contactCount
-                    stage {
-                        name
+                    nodes {
+                        contactCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }
