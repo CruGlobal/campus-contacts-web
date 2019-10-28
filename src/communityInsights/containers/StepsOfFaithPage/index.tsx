@@ -22,25 +22,25 @@ import { impactReportOtherStepsCompleted as impactsOtherReport } from './__gener
 // GET_TOTAL_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportStagesOthersStepsCompleted,
-    communityReportStagesOthersStepsCompleted_community_report_stagesReport as communityReportEntry,
+    communityReportStagesOthersStepsCompleted_community_report_stagesReport_nodes as communityReportEntry,
 } from './__generated__/communityReportStagesOthersStepsCompleted';
 // GET_STEPS_COMPLETED_REPORT INTERFACES
 import {
     communityReportDaysOthersSteps as communityDaysOtherReport,
-    communityReportDaysOthersSteps_community_report_daysReport as communityDaysReportRow,
-    communityReportDaysOthersSteps_community_report_daysReport_stageResults as communityDaysReportStage,
+    communityReportDaysOthersSteps_community_report_daysReport_nodes as communityDaysReportRow,
+    communityReportDaysOthersSteps_community_report_daysReport_nodes_stageResults_nodes as communityDaysReportStage,
 } from './__generated__/communityReportDaysOthersSteps';
 // GET_STAGES_REPORT INTERFACES
 import {
     communityReportStagesOthersStepsAdded,
-    communityReportStagesOthersStepsAdded_community_report_stagesReport as communityStepsAddedStageReportRow,
+    communityReportStagesOthersStepsAdded_community_report_stagesReport_nodes as communityStepsAddedStageReportRow,
 } from './__generated__/communityReportStagesOthersStepsAdded';
 // GET_IMPACT_REPORT_REACHED INTERFACES
 import { impactReportMembersStageProgressionCount as impactMembersReport } from './__generated__/impactReportMembersStageProgressionCount';
 // GET_STAGES_PEOPLE_REPORT INTERFACES
 import {
     communityReportStagesOthersContactCount,
-    communityReportStagesOthersContactCount_community_report_stagesReport as communityReportStagesContactCountRow,
+    communityReportStagesOthersContactCount_community_report_stagesReport_nodes as communityReportStagesContactCountRow,
 } from './__generated__/communityReportStagesOthersContactCount';
 
 const StepsOfFaithPage = () => {
@@ -70,7 +70,7 @@ const StepsOfFaithPage = () => {
                     mapData={(
                         data: communityReportStagesOthersStepsCompleted,
                     ) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (entry: communityReportEntry) => ({
                                 stage: entry.stage.name,
                                 icon: entry.stage.name
@@ -91,10 +91,10 @@ const StepsOfFaithPage = () => {
                     query={GET_STEPS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityDaysOtherReport) =>
-                        data.community.report.daysReport.map(
+                        data.community.report.daysReport.nodes.map(
                             (row: communityDaysReportRow) => ({
                                 ['total']: row.othersStepsCompletedCount,
-                                ['stages']: row.stageResults.map(
+                                ['stages']: row.stageResults.nodes.map(
                                     (stage: communityDaysReportStage) => ({
                                         name: stage.othersStepsCompletedCount,
                                         count: stage.stage.name,
@@ -116,7 +116,7 @@ const StepsOfFaithPage = () => {
                     nullContent={'stepsOfFaithAdded'}
                     query={GET_STAGES_REPORT}
                     mapData={(data: communityReportStagesOthersStepsAdded) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (row: communityStepsAddedStageReportRow) => ({
                                 stepsOfFaith: row.othersStepsAddedCount,
                                 [t(
@@ -154,7 +154,7 @@ const StepsOfFaithPage = () => {
                     nullContent={'peopleStages'}
                     query={GET_STAGES_PEOPLE_REPORT}
                     mapData={(data: communityReportStagesOthersContactCount) =>
-                        data.community.report.stagesReport.map(
+                        data.community.report.stagesReport.nodes.map(
                             (row: communityReportStagesContactCountRow) => ({
                                 [t(
                                     'stepsOfFaith.peopleLabel',

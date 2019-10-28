@@ -18,13 +18,13 @@ import { impactReportInteractionsCount } from './__generated__/impactReportInter
 // INTERACTIONS_TOTAL_COMPLETED_REPORT INTERFACES
 import {
     communityReportInteractions,
-    communityReportInteractions_community_report_interactions as communityReportInteractionsEntry,
+    communityReportInteractions_community_report_interactions_nodes as communityReportInteractionsEntry,
 } from './__generated__/communityReportInteractions';
 // INTERACTIONS_COMPLETED_REPORT INTERFACES
 import {
     communityReportDaysInteractions,
-    communityReportDaysInteractions_community_report_daysReport as communityReportDaysInteractionsRow,
-    communityReportDaysInteractions_community_report_daysReport_interactionResults as communityReportDaysInteractionsStage,
+    communityReportDaysInteractions_community_report_daysReport_nodes as communityReportDaysInteractionsRow,
+    communityReportDaysInteractions_community_report_daysReport_nodes_interactionResults_nodes as communityReportDaysInteractionsStage,
 } from './__generated__/communityReportDaysInteractions';
 
 const InteractionsPage = () => {
@@ -51,7 +51,7 @@ const InteractionsPage = () => {
                     variables={{ id: orgId }}
                     longNames={true}
                     mapData={(data: communityReportInteractions) =>
-                        data.community.report.interactions.map(
+                        data.community.report.interactions.nodes.map(
                             (entry: communityReportInteractionsEntry) => ({
                                 stage: entry.interactionType.name,
                                 icon: entry.interactionType.name
@@ -73,10 +73,10 @@ const InteractionsPage = () => {
                     query={INTERACTIONS_COMPLETED_REPORT}
                     variables={{ id: orgId }}
                     mapData={(data: communityReportDaysInteractions) =>
-                        data.community.report.daysReport.map(
+                        data.community.report.daysReport.nodes.map(
                             (row: communityReportDaysInteractionsRow) => ({
                                 ['total']: row.interactionsCount,
-                                ['stages']: row.interactionResults.map(
+                                ['stages']: row.interactionResults.nodes.map(
                                     (
                                         stage: communityReportDaysInteractionsStage,
                                     ) => ({

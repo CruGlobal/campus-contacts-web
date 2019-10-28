@@ -20,9 +20,11 @@ const INTERACTIONS_TOTAL_COMPLETED_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 interactions {
-                    interactionCount
-                    interactionType {
-                        name
+                    nodes {
+                        interactionCount
+                        interactionType {
+                            name
+                        }
                     }
                 }
             }
@@ -39,12 +41,16 @@ const INTERACTIONS_COMPLETED_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 daysReport {
-                    date
-                    interactionsCount
-                    interactionResults {
-                        count
-                        interactionType {
-                            name
+                    nodes {
+                        date
+                        interactionsCount
+                        interactionResults {
+                            nodes {
+                                count
+                                interactionType {
+                                    name
+                                }
+                            }
                         }
                     }
                 }
