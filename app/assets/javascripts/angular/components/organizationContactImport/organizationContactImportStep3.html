@@ -3,31 +3,32 @@
         class="error red f6 flex items-center mb3"
         ng-if="$ctrl.importErrors.length"
     >
-        <div ng-repeat="error in $ctrl.importErrors">{{error}}</div>
+        <div ng-repeat="error in $ctrl.importErrors">{{ error }}</div>
     </div>
 
     <h2 class="normal f3 fw6 blue">{{ 'contact_import:step_3.title' | t }}</h2>
     <p class="lh-copy pivot-gray-darker f4 w-90">
-        {{ 'contact_import:step_3.instructions' | t : { count :
+        <!-- prettier-ignore -->
+        {{ 'contact_import:step_3.instructions' | t: { count:
         ($ctrl.csvData.length | number) } }}
     </p>
     <fieldset class="ba b--transparent ph0 mt3">
         <legend class="blue ttu tracked f5 mb3 db">
             {{ 'contact_import:step_3.labels' | t }}
         </legend>
-        <div class="checkbox-panel pa4 shadow-2 br2 w-60">
+        <div class="checkbox-panel pa4 shadow-2 br2 w-60-ns">
             <div
                 class="flex items-center mb2 pb1 checkbox-wrapper checkbox-small"
                 ng-repeat="label in $ctrl.org.labels"
             >
                 <input
                     class="mr2"
-                    id="check{{label.id}}"
+                    id="check{{ label.id }}"
                     type="checkbox"
                     ng-model="$ctrl.contactLabels[label.id]"
                 />
-                <label class="lh-copy" for="check{{label.id}}"
-                    >{{label.name}}</label
+                <label class="lh-copy" for="check{{ label.id }}"
+                    >{{ label.name }}</label
                 >
             </div>
         </div>
@@ -56,7 +57,7 @@
 <div class="buttons">
     <button
         ng-click="$ctrl.previous()"
-        class="f5 link dim ph5 w-33 pv3 mb2 dib white fl bold br-pill ttu tracked bg-pivot-gray-darker"
+        class="f5 link dim ph5 w-33-ns pv3 mb2 dib white fl-ns bold br-pill ttu tracked bg-pivot-gray-darker"
         ng-class="{
                 'disabled o-30 dim': $ctrl.disableButtons
             }"
@@ -64,7 +65,7 @@
         {{ 'back' | t }}
     </button>
     <button
-        class="f5 link dim ph5 pv3 w-33 mb2 dib white fr bold br-pill ttu tracked bg-blue"
+        class="f5 link dim ph5 pv3 w-33-ns mb2 dib white fr-ns bold br-pill ttu tracked bg-blue"
         ng-class="{
                 'disabled o-30 dim': $ctrl.disableButtons
             }"

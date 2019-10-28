@@ -1,5 +1,5 @@
 <div class="bg-white br3 shadow-3">
-    <div class="panel-box mh2 w-75 center">
+    <div class="panel-box mh2 w-75-ns ph2 center">
         <header class="flex items-stretch pt3" ng-if="$ctrl.activeStep <= 3">
             <div class="w-100 items-end">
                 <h1 class="f2 normal blue">Import Contacts</h1>
@@ -9,7 +9,7 @@
                         ng-repeat="step in [1, 2, 3]"
                         ng-class="{'bg-blue white': step === $ctrl.activeStep}"
                     >
-                        {{step}}
+                        {{ step }}
                     </div>
                 </div>
             </div>

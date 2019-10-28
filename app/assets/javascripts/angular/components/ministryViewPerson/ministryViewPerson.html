@@ -1,7 +1,7 @@
 <div class="row padded">
     <div
         class="sticky-column"
-        ng-class="$ctrl.questions && ($ctrl.odd ? 'col-bg-gray' : 'col-bg-white')"
+        ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'"
     >
         <div class="column select-column">
             <input type="checkbox" ng-model="$ctrl.selected" />
@@ -84,9 +84,11 @@
         <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
     </div>
     <div class="column detail-column phone-number-column">
-        <span ng-if="$ctrl.phoneNumber"
-            >{{ $ctrl.phoneNumber.number | phone }}</span
-        >
+        <a
+            ng-href="tel:{{ $ctrl.phoneNumber.number }}"
+            ng-if="$ctrl.phoneNumber"
+            >{{ $ctrl.phoneNumber.number | phone }}
+        </a>
     </div>
     <div class="column detail-column button-column">
         <a ng-href="{{ $ctrl.emailAddress.email | mailto }}">

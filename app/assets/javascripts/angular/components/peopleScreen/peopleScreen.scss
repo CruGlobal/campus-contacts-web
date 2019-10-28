@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import '../../../../stylesheets/variables/colors';
 @import '../../../../stylesheets/variables/ministriesView';
 @import './columnConfig';
@@ -8,29 +10,17 @@ people-screen {
     .container {
         border-top: 1px solid rgba($gray-dark, 0.1);
         align-items: inherit;
-        max-height: #{$organization-overview-content-height};
     }
 
     .scroll-contain {
-        height: calc(
-            #{$organization-overview-content-height} - #{$person-height}
-        );
+        height: calc(100vh - #{$person-height});
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            height: calc(
+                #{$organization-overview-content-height} - #{$person-height}
+            );
+        }
         min-width: min-content;
         -ms-grid-columns: min-content;
-        overflow: auto;
-    }
-
-    .people-list,
-    ui-view {
-        overflow: auto;
-    }
-
-    .people-list-filters {
-        width: 222px;
-        background-color: $white;
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid;
     }
 
     .sort-order-column {
@@ -45,7 +35,10 @@ people-screen {
         flex-direction: column;
 
         .grid-content .active {
-            background-color: $pivot-dark-blue;
+            &,
+            & .sticky-column {
+                background-color: $pivot-dark-blue;
+            }
             color: $white;
 
             a,
@@ -65,7 +58,9 @@ people-screen {
     .collapsed {
         ui-view {
             flex: 3; /* 75% of available width */
-            max-width: 530px;
+            @media screen and (min-width: map-get($grid-breakpoints, md)) {
+                max-width: 538px;
+            }
         }
 
         ministry-view-person .detail-column {
@@ -79,9 +74,6 @@ people-screen {
         flex-shrink: 0;
         border-bottom: solid 1px $gray-4;
 
-        position: sticky;
-        top: 0;
-        z-index: 11;
         min-width: min-content;
         -ms-grid-columns: min-content;
 

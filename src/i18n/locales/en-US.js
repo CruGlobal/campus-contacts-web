@@ -576,6 +576,7 @@ export default {
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
                 lastSurvey: 'Last Survey',
+                showFilters: 'Show Filters',
             },
             roots: 'Ministries',
             suborgs: {
@@ -801,6 +802,9 @@ export default {
             transfer: 'Transfer {{contact_count}} Contact(s)',
         },
         weekly: 'Weekly',
+    },
+    navSearch: {
+        noPeopleFound: 'No people found',
     },
     surveyTab: {
         createSurvey: 'Create Survey',

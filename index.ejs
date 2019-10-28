@@ -36,7 +36,14 @@
         </script>
     </head>
 
-    <body class="bg-pivot-gray" ng-cloak ng-app="missionhubApp">
+    <body
+        class="bg-pivot-gray"
+        ng-cloak
+        ng-app="missionhubApp"
+        ng-class="{
+            'overflow-hidden-s': $root.showPeopleFilters
+        }"
+    >
         <ui-view></ui-view>
 
         <script>

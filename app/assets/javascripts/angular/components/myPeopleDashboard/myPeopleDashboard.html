@@ -14,7 +14,10 @@
         </span>
     </div>
 
-    <div ng-sortable="$ctrl.sortableOptions">
+    <div
+        ng-sortable="$ctrl.sortableOptions"
+        class="overflow-auto overflow-visible-l w-100"
+    >
         <organization
             ng-repeat="org in $ctrl.organizations track by org.id"
             ng-if="org.visible || $ctrl.editMode"
@@ -24,7 +27,7 @@
             options="{ anonymousInteractions: true, reorderable: true }"
         >
             <div class="people-list grid" ng-if="!$ctrl.editMode">
-                <div class="grid-content">
+                <div class="grid-content grid-fixed">
                     <people-view-person
                         class="pl2"
                         person="person"
@@ -36,7 +39,7 @@
             </div>
         </organization>
     </div>
-    <div class="no-people-extras">
+    <div class="no-people-extras dn db-l">
         <a href ng-click="$ctrl.editMode = true" class="mt2 edit-mode db">
             <span>{{ 'dashboard.edit_org_order_help.part1' | t }}</span>
             <ng-md-icon icon="editOrder"></ng-md-icon>

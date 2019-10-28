@@ -1,4 +1,4 @@
-<div class="group row header">
+<div class="group row header grid-fixed">
     <div class="column column-title">
         {{ 'surveyTab:columns.survey' | t }}
     </div>
@@ -12,7 +12,7 @@
         {{ 'surveyTab:columns.uncontacted' | t }}
     </div>
 </div>
-<div class="grid-content">
+<div class="grid-content grid-fixed">
     <div
         class="row"
         ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
@@ -21,22 +21,22 @@
             <a
                 ui-sref="app.ministries.ministry.survey.responses({ surveyId: survey.id })"
             >
-                {{survey.title}}
+                {{ survey.title }}
             </a>
         </div>
         <div class="column column-number">
             <span>
-                {{$ctrl.surveyStats[survey.id].contact_count}}
+                {{ $ctrl.surveyStats[survey.id].contact_count }}
             </span>
         </div>
         <div class="column column-number">
             <span>
-                {{$ctrl.surveyStats[survey.id].unassigned_count}}
+                {{ $ctrl.surveyStats[survey.id].unassigned_count }}
             </span>
         </div>
         <div class="column column-number">
             <span>
-                {{$ctrl.surveyStats[survey.id].uncontacted_count}}
+                {{ $ctrl.surveyStats[survey.id].uncontacted_count }}
             </span>
         </div>
     </div>
