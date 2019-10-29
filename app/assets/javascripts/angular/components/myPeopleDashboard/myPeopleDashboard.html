@@ -47,3 +47,23 @@
         </a>
     </div>
 </div>
+<div
+    class="w-100 h-100 fixed bg-black-80 top-0 right-0 bottom-0 right-0 flex justify-center items-center"
+    ng-if="$ctrl.showSuggestLandscape()"
+    ng-click="$ctrl.dismissSuggestLandscape()"
+>
+    <div class="flex flex-column items-center tc">
+        <ng-md-icon
+            icon="screen_rotation"
+            size="80"
+            class="pa4"
+            style="fill: white"
+        ></ng-md-icon>
+        <span class="f3 white">
+            {{ 'dashboard.suggestLandscape.suggestion' | t }}
+        </span>
+        <span class="f6 pivot-gray-8">
+            {{ 'dashboard.suggestLandscape.dismiss' | t }}
+        </span>
+    </div>
+</div>
