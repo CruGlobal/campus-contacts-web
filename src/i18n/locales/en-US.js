@@ -139,6 +139,10 @@ export default {
             },
             show_more: 'Show more',
             uncontacted: 'Uncontacted',
+            suggestLandscape: {
+                suggestion: 'Pro tip: Use landscape mode!',
+                dismiss: 'Tap to dismiss',
+            },
         },
         date: {
             day_names: [

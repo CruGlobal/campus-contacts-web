@@ -4,6 +4,11 @@ angular
 
 function myPeopleDashboardService(httpProxy, modelsService, _) {
     var myPeopleDashboardService = {
+        isMobile: () =>
+            window.navigator.userAgent.match(
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i,
+            ),
+
         loadPeople: function(params) {
             return httpProxy.get(
                 modelsService.getModelMetadata('person').url.all,
