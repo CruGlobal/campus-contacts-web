@@ -1,8 +1,10 @@
 import process from 'process';
 
 import oneSky from '@brainly/onesky-utils';
-
+import dotenv from 'dotenv';
 import translations from '../src/i18n/locales/en-US';
+
+dotenv.config({ path: '.env.local' });
 
 async function uploadTranslations() {
     const options = {

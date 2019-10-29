@@ -29,9 +29,11 @@ const GET_STAGES_REPORT_MEMBER_COUNT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    memberCount
-                    stage {
-                        name
+                    nodes {
+                        memberCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }
@@ -48,9 +50,11 @@ const GET_STAGES_REPORT_STEPS_ADDED = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    personalStepsAddedCount
-                    stage {
-                        name
+                    nodes {
+                        personalStepsAddedCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }
@@ -67,12 +71,16 @@ const GET_STEPS_COMPLETED_REPORT = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 daysReport {
-                    date
-                    personalStepsCompletedCount
-                    stageResults {
+                    nodes {
+                        date
                         personalStepsCompletedCount
-                        stage {
-                            name
+                        stageResults {
+                            nodes {
+                                personalStepsCompletedCount
+                                stage {
+                                    name
+                                }
+                            }
                         }
                     }
                 }
@@ -90,9 +98,11 @@ const GET_TOTAL_STEPS_COMPLETED_SUMMARY = gql`
         community(id: $id) {
             report(period: $period, endDate: $endDate) {
                 stagesReport {
-                    personalStepsCompletedCount
-                    stage {
-                        name
+                    nodes {
+                        personalStepsCompletedCount
+                        stage {
+                            name
+                        }
                     }
                 }
             }

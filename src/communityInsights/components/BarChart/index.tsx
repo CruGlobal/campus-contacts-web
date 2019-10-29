@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { Bar } from '@nivo/bar';
+import { ResponsiveBar } from '@nivo/bar';
 import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
 import { line } from 'd3-shape';
@@ -207,9 +207,8 @@ const BarChart = (props: Props) => {
     return (
         <div>
             <Wrapper>
-                <Bar
+                <ResponsiveBar
                     height={400}
-                    width={848}
                     data={data}
                     keys={keys}
                     indexBy={indexBy}
