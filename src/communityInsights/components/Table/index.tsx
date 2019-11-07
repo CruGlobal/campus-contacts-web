@@ -162,6 +162,8 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
     const previousPage = () => {
         if (page.hasPreviousPage) {
             refetch({
+                first: null,
+                last: 5,
                 after: undefined,
                 before: page.startCursor,
             });
