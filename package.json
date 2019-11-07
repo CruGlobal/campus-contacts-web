@@ -67,7 +67,7 @@
         "iso-639-1": "^2.1.0",
         "jsonapi-datastore": "^0.4.0-beta",
         "lodash": "^4.17.13",
-        "m49-regions": "^1.0.0",
+        "m49-regions": "^1.2.0",
         "moment": "^2.22.2",
         "ng-file-upload": "^12.2.13",
         "ng-infinite-scroll": "~1.3.0",
