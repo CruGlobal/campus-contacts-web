@@ -11730,10 +11730,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollbar@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.14.0.tgz#79dfa35e1ac68a78cfab704683b4e92c9cd554a1"
-  integrity sha512-diLV0JFr1TFLzsnf6L8TBvXxHn0bu2pPEHsl48Hy/249XHHOkVhapxWpVMF5im8q9f3J8vXceniGk7HTmct2FA==
+rollbar@^2.14.4:
+  version "2.14.4"
+  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.14.4.tgz#b89f6ddd57adb88ae48f6d8c46619ef44fb27888"
+  integrity sha512-96m2/pBV8UioBjmqa7/WXiPIcumuuGvmfiB9WHRdVBdHcAuBhYBivWl+NMmS/op2XZ54qAmJyd3uThW6SSKvzQ==
   dependencies:
     async "~1.2.1"
     buffer-from "~1.1.1"
