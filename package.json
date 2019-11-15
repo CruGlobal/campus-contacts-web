@@ -126,7 +126,7 @@
         "@typescript-eslint/parser": "^2.3.3",
         "angular-mocks": "^1.7.8",
         "apollo-link-schema": "^1.2.3",
-        "babel-eslint": "^10.0.2",
+        "babel-eslint": "^10.0.3",
         "babel-jest": "^24.9.0",
         "babel-loader": "^8.0.6",
         "babel-plugin-angularjs-annotate": "^0.10.0",
