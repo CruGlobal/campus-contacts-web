@@ -125,7 +125,7 @@
         "@types/styled-components": "^4.1.18",
         "@typescript-eslint/parser": "^2.3.3",
         "angular-mocks": "^1.7.8",
-        "apollo-link-schema": "^1.2.3",
+        "apollo-link-schema": "^1.2.4",
         "babel-eslint": "^10.0.3",
         "babel-jest": "^24.9.0",
         "babel-loader": "^8.0.6",
