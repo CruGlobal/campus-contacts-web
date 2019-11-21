@@ -29,7 +29,7 @@
         "onesky:download": "babel-node ./bin/oneskyDownload.js"
     },
     "dependencies": {
-        "@babel/preset-react": "^7.0.0",
+        "@babel/preset-react": "^7.7.0",
         "@babel/preset-typescript": "^7.7.2",
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
