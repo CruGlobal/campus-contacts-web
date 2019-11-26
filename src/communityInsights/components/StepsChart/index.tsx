@@ -16,8 +16,16 @@ interface Props {
     variables: any;
     label: string;
     index: string;
+    nullContent: string;
 }
-const StepsChart = ({ query, mapData, label, index, variables }: Props) => {
+const StepsChart = ({
+    query,
+    mapData,
+    label,
+    index,
+    variables,
+    nullContent,
+}: Props) => {
     const { data, loading } = useQuery(query, { variables });
     const { t } = useTranslation('insights');
 
@@ -28,6 +36,7 @@ const StepsChart = ({ query, mapData, label, index, variables }: Props) => {
     return (
         <Wrapper>
             <BarChart
+                nullContent={nullContent}
                 data={mapData(data)}
                 keys={[label]}
                 indexBy={index}

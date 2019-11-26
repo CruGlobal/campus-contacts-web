@@ -83,6 +83,7 @@ const ChallengesPage = () => {
                 noMarginBottom={true}
             >
                 <Table
+                    nullContent={'challengesCompleted'}
                     query={GET_CHALLENGES}
                     variables={{
                         id: orgId,

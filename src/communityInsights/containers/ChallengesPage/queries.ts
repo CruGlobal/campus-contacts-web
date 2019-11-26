@@ -14,11 +14,19 @@ const GET_CHALLENGES = gql`
     query communityChallenges(
         $id: ID!
         $first: Int
+        $last: Int
         $after: String
+        $before: String
         $sortBy: [CommunityChallengesSortEnum!]
     ) {
         community(id: $id) {
-            communityChallenges(first: $first, after: $after, sortBy: $sortBy) {
+            communityChallenges(
+                first: $first
+                last: $last
+                after: $after
+                before: $before
+                sortBy: $sortBy
+            ) {
                 nodes {
                     id
                     title
