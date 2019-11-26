@@ -1161,6 +1161,56 @@ export default {
         loading: 'Loading...',
         monthLabel: '1M',
         yearLabel: '1Y',
+        gatheringStats: 'Gathering your stats...',
+        nullState: {
+            personalStepsCompleted: {
+                part1:
+                    'This community does not have any members who have completed a personal step of faith. Challenge your',
+                part2:
+                    'community to open the MissionHub mobile app and complete a personal step of faith.',
+            },
+
+            personalStepsAdded: {
+                part1:
+                    'This community does not have any members with personal steps of faith. Challenge your community to open the',
+                part2:
+                    ' MissionHub mobile app and add a personal step of faith.',
+            },
+            communityMembersStages: {
+                part1:
+                    'This community does not have any members with stages. Challenge your current members to open the',
+                part2: 'MissionHub mobile app and choose a stage.',
+            },
+            stepsOfFaithCompleted: {
+                part1:
+                    'This community does not have any members who have completed a step of faith. Challenge your',
+                part2:
+                    'community to open the MissionHub mobile app and complete a step of faith.',
+            },
+            stepsOfFaithAdded: {
+                part1:
+                    'This community does not have any members with steps of faith. Challenge your community to open the',
+                part2: 'MissionHub mobile app and add a step of faith.',
+            },
+
+            peopleStages: {
+                part1:
+                    'This community has not added any people to MissionHub. Challenge your current members to open the',
+                part2:
+                    'MissionHub mobile app and add someone they want to be intentional with.',
+            },
+            interactionsCompleted: {
+                part1:
+                    'This community does not have any members who have completed an interaction. Challenge your community to ',
+                part2:
+                    'open the MissionHub mobile app and complete an interaction.',
+            },
+            challengesCompleted: {
+                part1:
+                    'This community does not have any challenges. Open the MissionHub mobile app',
+                part2: 'and create a community challenge.',
+            },
+        },
         personalSteps: {
             label: 'Personal Steps of Faith',
             legend: 'Steps of Faith',
