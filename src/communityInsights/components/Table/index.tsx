@@ -164,6 +164,8 @@ const Table = ({
     const nextPage = () => {
         if (page.hasNextPage) {
             refetch({
+                first: PAGE_SIZE,
+                last: undefined,
                 after: page.endCursor,
                 before: undefined,
             });
@@ -174,6 +176,8 @@ const Table = ({
     const previousPage = () => {
         if (page.hasPreviousPage) {
             refetch({
+                first: undefined,
+                last: PAGE_SIZE,
                 after: undefined,
                 before: page.startCursor,
             });
