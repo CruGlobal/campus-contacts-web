@@ -11,14 +11,10 @@ class UserPreferences {
         const { user } = this.loggedInPerson.person;
         this.language = user.language;
         const {
-            person_moved,
-            person_assigned,
-            weekly_digest,
-        } = user.notification_settings || {
-            person_moved: true,
-            person_assigned: true,
-            weekly_digest: true,
-        };
+            person_moved = true,
+            person_assigned = true,
+            weekly_digest = true,
+        } = user.notification_settings || {};
         this.personMoved = person_moved;
         this.personAssigned = person_assigned;
         this.weeklyDigest = weekly_digest;
