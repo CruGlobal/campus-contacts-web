@@ -10,6 +10,7 @@ describe('<FiltersChart />', () => {
     it('should render properly', async () => {
         const { snapshot, unmount } = renderWithContext(
             <FiltersChart
+                nullContent={'stepsOfFaithCompleted'}
                 query={GET_STEPS_COMPLETED_REPORT}
                 mapData={() => {}}
                 label={'test label'}

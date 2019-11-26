@@ -54,7 +54,7 @@ exports[`<ChallengesPage /> should render properly in loading state 1`] = `
     <h1
       class="emotion-0"
     >
-      Loading...
+      Gathering your stats...
     </h1>
     <div
       class="emotion-5"
