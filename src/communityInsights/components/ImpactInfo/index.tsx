@@ -15,7 +15,7 @@ const ImpactInfo = ({ query, text, variables }: Props) => {
     const { t } = useTranslation('insights');
 
     if (loading) {
-        return <Header>{t('loading')}</Header>;
+        return <Header>{t('gatheringStats')}</Header>;
     }
     return <Header>{text(data)} </Header>;
 };
