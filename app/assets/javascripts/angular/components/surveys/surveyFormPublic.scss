@@ -20,7 +20,7 @@ survey-form-public {
             cursor: pointer;
             position: relative;
             display: inline-block;
-            height: 1.6rem;
+            min-height: 1.6rem;
 
             /*16px width of fake checkbox + 6px distance between fake checkbox and text*/
             padding-left: 2.5rem;

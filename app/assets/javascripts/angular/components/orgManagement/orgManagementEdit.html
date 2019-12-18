@@ -1,11 +1,11 @@
 <div class="accordion-body pb3 pt3">
     <h3 class="f3 fw6 pivot-dark-blue">
-        {{ $ctrl.new ? 'common:organizations.new' : ('common:organizations.edit'
-        | t) }}
+        {{ $ctrl.new ? ('common:organizations.new' | t) :
+        ('common:organizations.edit' | t) }}
     </h3>
     <fieldset class="ba b--transparent ph0 mh0 w-100">
-        <div class="flex justify-between mb3">
-            <div class="w-48">
+        <div class="flex-ns justify-between mb3">
+            <div class="w-50-ns mr3-ns">
                 <label
                     class="db f6 fw6 lh-copy normal mb1 pivot-gray-darker ttu tracked flex items-center"
                     for="ministryName"
@@ -19,7 +19,7 @@
                     type="text"
                 />
             </div>
-            <div class="w-48">
+            <div class="w-50-ns mt3 mt0-ns">
                 <label
                     class="db f6 fw6 lh-copy normal mb1 pivot-gray-darker ttu tracked flex items-center"
                     for="type"

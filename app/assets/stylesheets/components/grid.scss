@@ -1,20 +1,31 @@
-.grid .grid-content {
-    & > * {
-        background: $white;
-        &:nth-child(odd) {
-            background: $gray-4;
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+.grid {
+    .grid-fixed {
+        min-width: 585px;
+        @media screen and (min-width: map-get($grid-breakpoints, md)) {
+            min-width: 765px;
         }
     }
 
-    .row {
-        width: 100%;
-        min-height: 50px;
-        display: flex;
-        align-items: center;
+    .grid-content {
+        & > * {
+            background: $white;
+            &:nth-child(odd) {
+                background: $gray-4;
+            }
+        }
 
-        &.message-row {
-            padding: 10px;
-            font-size: 16px;
+        .row {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+
+            &.message-row {
+                padding: 10px;
+                font-size: 16px;
+            }
         }
     }
 }
