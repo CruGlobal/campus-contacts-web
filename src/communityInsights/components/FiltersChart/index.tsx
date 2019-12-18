@@ -3,6 +3,7 @@ import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import _ from 'lodash';
+import styled from '@emotion/styled';
 
 import BarChart from '../BarChart';
 
@@ -12,7 +13,12 @@ interface Props {
     mapData: (data: any) => any;
     label: string;
     currentDate?: Date;
+    nullContent: string;
 }
+
+const LoadingContainer = styled.div`
+    height: 400px;
+`;
 
 const FiltersChart = ({
     query,
@@ -20,6 +26,7 @@ const FiltersChart = ({
     mapData,
     label,
     currentDate,
+    nullContent,
 }: Props) => {
     const [index, setIndex] = useState(0);
     const [endDate, setEndDate] = useState(moment(currentDate));
@@ -35,7 +42,7 @@ const FiltersChart = ({
     const { t } = useTranslation('insights');
 
     if (loading) {
-        return <div>{t('loading')}</div>;
+        return <LoadingContainer>{t('loading')}</LoadingContainer>;
     }
 
     const updateDates = (type: string, index: number) => {
@@ -104,6 +111,7 @@ const FiltersChart = ({
 
     return (
         <BarChart
+            nullContent={nullContent}
             data={graphData}
             keys={['total']}
             indexBy={'date'}

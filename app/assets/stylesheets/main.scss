@@ -14,4 +14,5 @@
 @import './components/navigation';
 @import './components/row';
 @import './components/sheet';
-@import '~tachyons';
+@import './variables/tachyonsConfig';
+@import './tachyons';

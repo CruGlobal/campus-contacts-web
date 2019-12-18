@@ -3,14 +3,10 @@ dashboard-subnav {
     height: 100%;
 
     .organizational-stats-header {
-        margin-left: 340px;
+        margin-left: 356px;
 
-        > ng-md-icon {
+        > ng-md-icon:not(:last-child) {
             padding-right: 28px;
         }
-    }
-
-    .ministries-navigation {
-        padding: 0 55px;
     }
 }

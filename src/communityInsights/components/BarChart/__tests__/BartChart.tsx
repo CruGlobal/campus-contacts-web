@@ -8,6 +8,7 @@ describe('<BarChart />', () => {
     it('should render properly', async () => {
         renderWithContext(
             <BarChart
+                nullContent={'stepsOfFaithCompleted'}
                 data={[]}
                 keys={['a']}
                 indexBy={'b'}
@@ -23,6 +24,7 @@ describe('<BarChart />', () => {
 
         renderWithContext(
             <BarChart
+                nullContent={'stepsOfFaithCompleted'}
                 data={graphData}
                 keys={['a']}
                 indexBy={'b'}

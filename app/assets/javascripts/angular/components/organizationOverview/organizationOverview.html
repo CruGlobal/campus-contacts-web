@@ -4,15 +4,27 @@
         ng-class="{'hidden-org': $ctrl.org.visible === false, 'shadow-4': !$ctrl.isInsightsTab(), 'insights-tab': $ctrl.isInsightsTab()}"
         ng-if="$ctrl.showOrgNav()"
     >
-        <div
-            class="flex items-center justify-between br3 br--top bg-pivot-dark-blue"
-        >
+        <div class="flex items-center justify-between org-nav-header">
             <div
-                class="pivot-white f3 ph3 pt3"
+                class="pivot-white f3 ph3 pv3 flex-auto"
                 ui-sref="^.ministry.defaultTab({ orgId: $ctrl.org.id })"
             >
                 {{ $ctrl.org.name }}
             </div>
+            <ng-md-icon
+                icon="menu"
+                class="dn-l ph2 white"
+                ng-class="{dn: ('app.ministries.root' | isState)}"
+                ng-if="!$ctrl.orgNavOpen"
+                ng-click="$ctrl.toggleNav()"
+            ></ng-md-icon>
+            <ng-md-icon
+                icon="close"
+                ng-class="{dn: ('app.ministries.root' | isState)}"
+                class="dn-l ph2 white"
+                ng-if="$ctrl.orgNavOpen"
+                ng-click="$ctrl.toggleNav()"
+            ></ng-md-icon>
             <div ng-if="$ctrl.editMode">
                 <ng-md-icon
                     icon="visibilityOn"
@@ -36,12 +48,15 @@
                 </ng-md-icon>
             </div>
         </div>
-
-        <div class="tabs">
+        <div
+            class="tabs flex-l flex-column flex-row-l org-nav-header"
+            ng-class="{ dn: ('app.ministries.root' | isState) || !$ctrl.orgNavOpen}"
+        >
             <div
                 class="tab pivot-white"
                 ng-class="{active: $ctrl.isInsightsTab()}"
                 ng-if="!$ctrl.envService.is('production')"
+                ng-click="$ctrl.orgNavOpen = false"
             >
                 <a
                     ng-href="/ministries/{{ $ctrl.org.id }}/insights/personal"
@@ -56,6 +71,7 @@
                 ui-state="'^.ministry.' + tabName"
                 ui-state-params="{ orgId: $ctrl.org.id }"
                 ng-if="$ctrl.isTabVisible(tabName)"
+                ng-click="$ctrl.orgNavOpen = false"
             >
                 <span>
                     {{ 'ministries.' + tabName + '.header' | t }}
@@ -86,12 +102,14 @@
                     >
                         <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-sref="app.ministries.ministry.import({ orgId: $ctrl.org.id })"
                                 >{{ 'contacts.index.import_contacts' | t }}</a
                             >
                         </li>
                         <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.management'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.manage' | t }}</a
@@ -99,6 +117,7 @@
                         </li>
                         <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.labels'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 ui-sref-active="active"
@@ -107,6 +126,7 @@
                         </li>
                         <li>
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.cleanup'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 >{{ 'nav.cleanup' | t }}</a
@@ -114,6 +134,7 @@
                         </li>
                         <li ng-if="$ctrl.org.reports_movement_indicators">
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.reportMovementIndicators'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                             >
@@ -122,6 +143,7 @@
                         </li>
                         <li ng-if="$ctrl.p2cOrg">
                             <a
+                                ng-click="$ctrl.orgNavOpen = false"
                                 ui-state="'^.ministry.signatures'"
                                 ui-state-params="{ orgId: $ctrl.org.id }"
                                 ui-sref-active="active"
@@ -132,7 +154,11 @@
                 </div>
             </div>
         </div>
-        <div ng-if="!('app.ministries.root' | isState)">
+        <div
+            ng-if="!('app.ministries.root' | isState)"
+            class="w-100 bg-pivot-blue-7"
+            ng-class="{ 'overflow-x-auto': !$ctrl.$state.includes('app.ministries.ministry.people') }"
+        >
             <ui-view class="grid"></ui-view>
         </div>
     </div>

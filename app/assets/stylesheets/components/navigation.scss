@@ -21,16 +21,18 @@
 
         &.active {
             ::after {
-                color: transparent;
-                content: '';
-                position: absolute;
-                bottom: -9%;
-                left: 40%;
-                margin: auto;
-                border-bottom: 6px solid $pivot-darker-blue;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-                width: 0;
+                @media screen and (min-width: map-get($grid-breakpoints, md)) {
+                    color: transparent;
+                    content: '';
+                    position: absolute;
+                    bottom: -9%;
+                    left: 40%;
+                    margin: auto;
+                    border-bottom: 6px solid $pivot-darker-blue;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    width: 0;
+                }
             }
         }
         &.disabled {
