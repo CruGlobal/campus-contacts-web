@@ -3,37 +3,37 @@
     ng-class="$ctrl.activeTab === 'questions' ? '' : 'shadow-3'"
 >
     <div
-        class="header br2 br--top flex justify-between bg-pivot-blue-darker"
+        class="header br2 br--top bg-pivot-blue-darker"
         ng-class="$ctrl.activeTab === 'questions' ? 'shadow-3' : ''"
     >
-        <div class="">
-            <div class="f3 pivot-white ph3 pt3 flex">
-                <a
-                    ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })"
-                >
-                    <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
-                </a>
+        <div class="f3 pivot-white ph3 pt3 flex">
+            <a
+                ui-sref="app.ministries.ministry.surveys({ surveyId: survey.id })"
+            >
+                <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
+            </a>
+            <span class="flex-auto">
                 {{ $ctrl.survey.title }}
-            </div>
+            </span>
+            <a
+                ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
+                target="_blank"
+                class="self-center f6 link ba ph2 pv1 ph3-ns pv2-ns white bold br2 dim ttu tracked"
+            >
+                {{ 'surveys:preview' | t }}
+            </a>
+        </div>
 
-            <div class="tabs">
-                <div
-                    class="tab"
-                    ng-repeat="tab in $ctrl.tabNames"
-                    ng-class="{'active-tab': $ctrl.activeTab === tab.id}"
-                    ng-click="$ctrl.activeTab = tab.id"
-                >
-                    <span class="pivot-white">{{ tab.name | t }}</span>
-                </div>
+        <div class="tabs">
+            <div
+                class="tab"
+                ng-repeat="tab in $ctrl.tabNames"
+                ng-class="{'active-tab': $ctrl.activeTab === tab.id}"
+                ng-click="$ctrl.activeTab = tab.id"
+            >
+                <span class="pivot-white">{{ tab.name | t }}</span>
             </div>
         </div>
-        <a
-            ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
-            target="_blank"
-            class="self-center f6 link ba ph4 pv3 mr4 white bold br2 dim ttu tracked"
-        >
-            {{ 'surveys:preview' | t }}
-        </a>
     </div>
     <div
         class="bt"
