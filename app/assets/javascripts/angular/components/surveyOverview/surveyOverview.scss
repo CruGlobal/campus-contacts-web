@@ -277,13 +277,10 @@ organization-contact-import {
             border: solid $gray-darker;
             border-width: 0 2px 2px 0;
             display: inline-block;
-            padding: 4px;
             transform: rotate(45deg);
             -webkit-transform: rotate(45deg);
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            margin-top: -8px;
+            width: 16px;
+            height: 16px;
         }
     }
 
@@ -295,7 +292,7 @@ organization-contact-import {
             .open-close-arrow {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
-                margin-top: -4px;
+                margin-top: 6px;
             }
         }
     }

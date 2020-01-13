@@ -22,7 +22,10 @@
                     style="width:22px; height:20px"
                 />
             </a>
-            <span class="ml3" ng-show="!$ctrl.isExpanded[question.id]">
+            <span
+                class="ml3 flex-auto"
+                ng-show="!$ctrl.isExpanded[question.id]"
+            >
                 {{ question.label }}
                 <span class="f7" ng-if="question.required"
                     >({{ 'common:general.required' | t }})</span
@@ -30,7 +33,7 @@
             </span>
             <input
                 type="text"
-                class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker w-83 ihshort br2"
+                class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker flex-auto ihshort br2"
                 placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}"
                 ng-model="question.label"
                 ng-click="$event.stopPropagation()"
@@ -58,7 +61,7 @@
             >
                 <img ng-src="{{ $ctrl.icons.copy }}" alt="Copy" />
             </a>
-            <span class="db open-close-arrow"></span>
+            <span class="db open-close-arrow ml3"></span>
         </h2>
         <div
             class="accordion-body br2 br-bottom bb b--pivot-gray-5 pv3 bg-pivot-white"
@@ -467,8 +470,8 @@
     </form>
 </div>
 
-<div class="new-questions flex items-start mb2 mt3">
-    <div class="dropdown-large dropdown w-50 mr3">
+<div class="new-questions flex-ns items-start">
+    <div class="dropdown-large dropdown mv3 w-50-ns mr3-ns">
         <a
             class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked"
             href=""
@@ -477,7 +480,7 @@
             {{ 'surveys:questions.addPredefinedQuestion' | t }}
         </a>
     </div>
-    <div class="dropdown-large dropdown w-50" uib-dropdown>
+    <div class="dropdown-large dropdown mv3 w-50-ns" uib-dropdown>
         <a
             class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked"
             href=""
