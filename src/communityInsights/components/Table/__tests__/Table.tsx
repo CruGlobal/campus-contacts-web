@@ -1,6 +1,6 @@
 import React from 'react';
-import gql from 'graphql-tag';
-import { waitForElement } from '@testing-library/react';
+import { wait } from '@testing-library/react';
+import { MockList } from 'graphql-tools';
 
 import { renderWithContext } from '../../../../testUtils';
 import { GET_CHALLENGES } from '../../../containers/ChallengesPage/queries';
@@ -25,34 +25,33 @@ describe('<Table />', () => {
         unmount();
     });
 
-    it('should render properly with data', async () => {
+    fit('should render properly with data', async () => {
         const mapRows = () => [['cell1', 'cell2'], ['cell3', 'cell4']];
         const mapPage = () => ({});
 
-        const { snapshot, getByText } = renderWithContext(
+        const { snapshot } = renderWithContext(
             <Table
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
                 mapPage={mapPage}
-                variables={{}}
+                variables={{ first: 5 }}
             />,
             {
-                mocks: {
-                    Query: () => ({
-                        globalCommunityChallenges: () => ({
-                            nodes: () => [],
-                            pageInfo: () => {},
-                        }),
-                    }),
-                },
                 appContext: {
                     orgId: '1',
+                },
+                mocks: {
+                    GlobalCommunity: () => ({
+                        communityChallenges: () => ({
+                            nodes: () => new MockList(2),
+                        }),
+                    }),
                 },
             },
         );
 
-        await waitForElement(() => getByText('header-1'));
+        await wait();
         snapshot();
     });
 });

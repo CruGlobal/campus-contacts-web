@@ -145,7 +145,6 @@ const Table = ({ query, headers, mapRows, mapPage, variables }: Props) => {
     if (loading) {
         return <LoadingContainer>{t('loading')}</LoadingContainer>;
     }
-
     const rows = mapRows(data);
     const page = mapPage(data);
 
