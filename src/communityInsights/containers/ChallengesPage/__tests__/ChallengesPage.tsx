@@ -22,13 +22,6 @@ describe('<ChallengesPage />', () => {
             appContext: {
                 orgId: '1',
             },
-            mocks: {
-                Community: () => ({
-                    communityChallenges: () => ({
-                        nodes: () => new MockList(2),
-                    }),
-                }),
-            },
         });
 
         await wait();
