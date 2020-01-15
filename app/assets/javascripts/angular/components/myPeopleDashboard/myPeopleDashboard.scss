@@ -7,12 +7,11 @@
         text-align: center;
 
         h1 {
-            font-size: 32px;
-            line-height: 32px;
+            font-size: 38px;
+            line-height: 38px;
             margin: 8px;
             font-weight: bold;
             color: $gray-1-25;
-            font-family: Montserrat, sans-serif;
         }
 
         span {
@@ -51,6 +50,7 @@
 
     organization {
         margin-bottom: 20px;
+        min-width: 765px;
     }
 
     people-view-person > .person-info > .name {

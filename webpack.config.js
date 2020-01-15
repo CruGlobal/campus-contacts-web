@@ -11,6 +11,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
 const CopyPlugin = require('copy-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const prod = process.env.TRAVIS_BRANCH === 'master';
@@ -75,9 +76,15 @@ module.exports = (env = {}) => {
                       new InlineManifestWebpackPlugin({
                           name: 'webpackManifest',
                       }),
-                      new FaviconsWebpackPlugin(
-                          './app/assets/images/favicon.png',
-                      ),
+                      new FaviconsWebpackPlugin({
+                          logo: './app/assets/images/favicon.png',
+                          favicons: {
+                              appName: 'MissionHub',
+                              developerName: 'Cru',
+                              theme_color: '#007398',
+                              background: '#3cc8e6',
+                          },
+                      }),
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
@@ -88,6 +95,11 @@ module.exports = (env = {}) => {
                                   'src/.well-known/apple-app-site-association',
                           },
                       ]),
+                      new WorkboxPlugin.GenerateSW({
+                          clientsClaim: true,
+                          skipWaiting: true,
+                          navigateFallback: '/index.html',
+                      }),
                   ]
                 : []),
             ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),

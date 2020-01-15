@@ -6,6 +6,11 @@ import { line } from 'd3-shape';
 import styled from '@emotion/styled';
 
 import SwitchButton from '../SwitchButton';
+import nullAdded from '../../assets/icons/null-added.svg';
+import nullChallenges from '../../assets/icons/null-challenges.svg';
+import nullCompleted from '../../assets/icons/null-completed.svg';
+import nullInteractions from '../../assets/icons/null-interactions.svg';
+import nullStages from '../../assets/icons/null-stages.svg';
 
 const Wrapper = styled.div`
     height: 400px;
@@ -16,7 +21,6 @@ const Line = styled.div`
     border-top: 2px solid ${({ theme }) => theme.colors.highlight};
     width: 26px;
     height: 2px;
-
     &.dashed {
         border-top-style: dashed;
     }
@@ -51,7 +55,6 @@ const PreviousButton = styled.div`
     bottom: 57px;
     left: 19px;
     cursor: pointer;
-
     &:hover {
         border-right: 6px solid #c3c3c3;
     }
@@ -67,7 +70,6 @@ const NextButton = styled.div`
     bottom: 57px;
     right: -10px;
     cursor: pointer;
-
     &:hover {
         border-left: 6px solid #c3c3c3;
     }
@@ -76,7 +78,6 @@ const NextButton = styled.div`
 const TooltipRow = styled.div`
     display: flex;
     justify-content: space-between;
-
     &.total {
         color: ${({ theme }) => theme.colors.highlight};
     }
@@ -115,6 +116,7 @@ interface Props {
     onFilterChanged: (type: string, index: number) => void;
     legendLabel?: string;
     tooltipBreakdown?: boolean;
+    nullContent?: string;
 }
 
 const BarChart = (props: Props) => {
@@ -130,6 +132,7 @@ const BarChart = (props: Props) => {
         filterType,
         datesFilter,
         legendLabel,
+        nullContent,
     } = props;
 
     const { t } = useTranslation('insights');
@@ -166,6 +169,74 @@ const BarChart = (props: Props) => {
                 stroke="#B2ECF7"
             />
         );
+    };
+
+    const isNullCheck = (data: any) => {
+        const nullCheck = data.filter((day: any) => {
+            return (
+                (day.total && day.total !== 0) ||
+                (day.Members && day.Members !== 0) ||
+                (day.People && day.People !== 0) ||
+                (day.stepsOfFaith && day.stepsOfFaith !== 0) ||
+                (day.personalStepsOfFaith && day.personalStepsOfFaith !== 0)
+            );
+        });
+
+        return nullCheck.length === 0;
+    };
+    // Depending on the nullContent string, return the correct image
+    const getImageSrc = (content: string | undefined) => {
+        switch (content) {
+            case 'stepsOfFaithCompleted':
+            case 'personalStepsCompleted':
+                return nullCompleted;
+            case 'personalStepsAdded':
+            case 'stepsOfFaithAdded':
+                return nullAdded;
+            case 'communityMembersStages':
+            case 'peopleStages':
+                return nullStages;
+            case 'interactionsCompleted':
+                return nullInteractions;
+            case 'challengesCompleted':
+                return nullChallenges;
+            default:
+                return null;
+        }
+    };
+    // Create a null element to be added as a layer in the barchart svg
+    const createNull = () => {
+        if (isNullCheck(data)) {
+            return (
+                <g>
+                    <rect width={848} fill={'white'} height={300}></rect>
+                    <image
+                        y="90"
+                        x="350"
+                        xlinkHref={getImageSrc(nullContent)}
+                    />
+                    <text
+                        transform="translate(400)"
+                        y={34}
+                        fontSize={16}
+                        fontWeight={300}
+                        fill={'#007398'}
+                        width={720}
+                        height={50}
+                    >
+                        <tspan y="180" x="0" dy="1.4em" textAnchor="middle">
+                            {t(`nullState.${nullContent}.part1`)}
+                        </tspan>
+
+                        <tspan y="200" x="0" dy="1.6em" textAnchor="middle">
+                            {t(`nullState.${nullContent}.part2`)}
+                        </tspan>
+                    </text>
+                </g>
+            );
+        } else {
+            return null;
+        }
     };
 
     const updateFilter = (index: number, type: string) => {
@@ -221,6 +292,7 @@ const BarChart = (props: Props) => {
                         'bars',
                         'markers',
                         'legends',
+                        createNull,
                     ]}
                     margin={{
                         top: 30,

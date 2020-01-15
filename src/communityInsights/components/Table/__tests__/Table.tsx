@@ -14,6 +14,7 @@ describe('<Table />', () => {
 
         const { snapshot, unmount } = renderWithContext(
             <Table
+                nullContent={'challengesCompleted'}
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
@@ -25,12 +26,13 @@ describe('<Table />', () => {
         unmount();
     });
 
-    fit('should render properly with data', async () => {
+    it('should render properly with data', async () => {
         const mapRows = () => [['cell1', 'cell2'], ['cell3', 'cell4']];
         const mapPage = () => ({});
 
         const { snapshot } = renderWithContext(
             <Table
+                nullContent={'challengesCompleted'}
                 query={GET_CHALLENGES}
                 headers={['header-1', 'header-2', 'header-3']}
                 mapRows={mapRows}
@@ -40,13 +42,6 @@ describe('<Table />', () => {
             {
                 appContext: {
                     orgId: '1',
-                },
-                mocks: {
-                    GlobalCommunity: () => ({
-                        communityChallenges: () => ({
-                            nodes: () => new MockList(2),
-                        }),
-                    }),
                 },
             },
         );

@@ -54,7 +54,11 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
   flex-direction: column;
 }
 
-.emotion-12 {
+.emotion-8 {
+  height: 400px;
+}
+
+.emotion-13 {
   height: 400px;
   position: relative;
 }
@@ -64,7 +68,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
     <h1
       class="emotion-0"
     >
-      Loading...
+      Gathering your stats...
     </h1>
     <div
       class="emotion-5"
@@ -103,7 +107,9 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
       <div
         class="emotion-4"
       >
-        <div>
+        <div
+          class="emotion-8"
+        >
           Loading...
         </div>
       </div>
@@ -125,7 +131,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         class="emotion-4"
       >
         <div
-          class="emotion-12"
+          class="emotion-13"
         >
           Loading...
         </div>
@@ -134,7 +140,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
     <h1
       class="emotion-0"
     >
-      Loading...
+      Gathering your stats...
     </h1>
     <div
       class="emotion-5"
@@ -153,7 +159,7 @@ exports[`<StepsOfFaithPage /> should render properly in loading state 1`] = `
         class="emotion-4"
       >
         <div
-          class="emotion-12"
+          class="emotion-13"
         >
           Loading...
         </div>

@@ -2,7 +2,7 @@
 <div
     infinite-scroll="$ctrl.loadTeamPage()"
     infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-    class="grid-content"
+    class="grid-content grid-fixed"
 >
     <people-view-person
         ng-repeat="person in $ctrl.team | orderBy: 'last_name' track by person.id"

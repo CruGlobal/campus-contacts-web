@@ -2,7 +2,7 @@
 <div
     infinite-scroll="$ctrl.loadSubOrgsPage()"
     infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-    class="grid-content"
+    class="grid-content grid-fixed"
 >
     <div
         class="suborg row padded"
@@ -11,7 +11,7 @@
         <a
             ui-sref="app.ministries.ministry.defaultTab({ orgId: org.id })"
             class="suborg-name"
-            >{{org.name}}</a
+            >{{ org.name }}</a
         >
         <organizational-stats org="org"></organizational-stats>
     </div>

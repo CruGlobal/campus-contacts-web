@@ -1,7 +1,7 @@
 <async-content ready="$ctrl.ready">
-    <header class="row">
-        <div class="avatar">
-            <img ng-src="{{$ctrl.avatarUrl}}" />
+    <header class="row justify-center ph4 pt3">
+        <div class="avatar dn db-ns">
+            <img ng-src="{{ $ctrl.avatarUrl }}" />
             <ng-md-icon
                 icon="edit"
                 size="16"
@@ -20,21 +20,26 @@
             </ng-md-icon>
         </div>
         <div class="normal-column">
-            <div class="row text-row">
-                <span
-                    class="name"
-                    ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
-                    >{{$ctrl.person | personName}}</span
-                >
-                <span
-                    class="warning"
-                    ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
-                >
-                    {{'contacts.statuses.uncontacted' | t}}
-                </span>
+            <div class="row text-row flex justify-between">
+                <div>
+                    <span
+                        class="name"
+                        ng-if="$ctrl.person.first_name || $ctrl.person.last_name"
+                        >{{ $ctrl.person | personName }}</span
+                    >
+                    <span
+                        class="warning"
+                        ng-if="$ctrl.orgPermission.followup_status === 'uncontacted'"
+                    >
+                        {{ 'contacts.statuses.uncontacted' | t }}
+                    </span>
+                </div>
+                <a ng-click="$ctrl.dismiss()" class="close-button">
+                    <ng-md-icon icon="close" size="28"></ng-md-icon>
+                </a>
             </div>
             <div class="row">
-                <a ng-href="{{$ctrl.primaryEmail.email | mailto}}">
+                <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
                     <icon-button
                         icon="'email'"
                         disabled="!$ctrl.primaryEmail"
@@ -42,7 +47,9 @@
                 </a>
 
                 <span ng-if="$ctrl.primaryPhone">
-                    {{$ctrl.primaryPhone.number | phone}}
+                    <a ng-href="tel:{{ $ctrl.primaryPhone.number }}"
+                        >{{ $ctrl.primaryPhone.number | phone }}
+                    </a>
                     <ng-md-icon
                         class="phone-active"
                         icon="check"
@@ -61,13 +68,10 @@
                     ui-state="$ctrl.stateName + '.' + tabName"
                     ng-click="disabled && $event.preventDefault()"
                 >
-                    {{'ministries.people.' + tabName + '.header' | t}}
+                    {{ 'ministries.people.' + tabName + '.header' | t }}
                 </div>
             </div>
         </div>
-        <a ng-click="$ctrl.dismiss()" class="close-button">
-            <ng-md-icon icon="close" size="28"></ng-md-icon>
-        </a>
     </header>
     <div ui-view="personTab" class="person-tab-content"></div>
     <div class="modal-footer" ng-if="$ctrl.person.id === null">

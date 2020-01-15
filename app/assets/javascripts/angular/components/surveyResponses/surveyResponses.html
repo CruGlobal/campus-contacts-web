@@ -1,12 +1,15 @@
-<div class="br3 shadow-3 mb4 overflow-hidden">
+<div class="br3 shadow-3 mb4">
     <div class="flex justify-between items-center pv3 ph3 bg-white">
         <div class="f3 pivot-dark-blue flex">
             <a
                 ui-sref="app.ministries.ministry.surveyResponses({ surveyId: survey.id })"
             >
-                <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
+                <div
+                    class="mr2 chevron-left-icon"
+                    ng-include="$ctrl.chevronLeftIcon"
+                ></div>
             </a>
-            {{$ctrl.survey.title}}
+            {{ $ctrl.survey.title }}
         </div>
         <icon-button
             class="fill-pivot-gray-dark"
