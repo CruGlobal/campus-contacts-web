@@ -1,10 +1,10 @@
 import React from 'react';
+import { MockList } from 'graphql-tools';
+import { wait } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
-import { MockList } from 'graphql-tools';
 
 import ChallengesPage from '..';
-import { wait } from '@testing-library/react';
 
 describe('<ChallengesPage />', () => {
     it('should render properly in loading state', () => {
