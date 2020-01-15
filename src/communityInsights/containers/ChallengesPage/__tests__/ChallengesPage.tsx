@@ -17,19 +17,17 @@ describe('<ChallengesPage />', () => {
         unmount();
     });
 
-    fit('should render properly after loading', async () => {
+    it('should render properly after loading', async () => {
         const { snapshot } = renderWithContext(<ChallengesPage />, {
             appContext: {
                 orgId: '1',
             },
             mocks: {
-                Community: () => {
-                    return {
-                        communityChallenges: () => ({
-                            nodes: () => new MockList(1),
-                        }),
-                    };
-                },
+                Community: () => ({
+                    communityChallenges: () => ({
+                        nodes: () => new MockList(2),
+                    }),
+                }),
             },
         });
 

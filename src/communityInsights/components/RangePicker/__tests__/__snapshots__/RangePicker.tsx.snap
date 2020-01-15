@@ -140,7 +140,8 @@ exports[`<RangePicker /> should render properly 1`] = `
               class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
               id="DateInput__screen-reader-message-startDateId"
             >
-              Navigate forward to interact with the calendar and select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
             </p>
           </div>
           <div
@@ -177,7 +178,8 @@ exports[`<RangePicker /> should render properly 1`] = `
               class="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
               id="DateInput__screen-reader-message-endDateId"
             >
-              Navigate backward to interact with the calendar and select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
             </p>
           </div>
         </div>
