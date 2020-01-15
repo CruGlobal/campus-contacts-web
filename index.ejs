@@ -52,40 +52,32 @@
                 window.location.origin !== 'https://stage.mhub.cc' &&
                 window.location.origin !== 'https://mhub.cc'
             ) {
-                !(function(e, o, n) {
-                    (window.HSCW = o),
-                        (window.HS = n),
-                        (n.beacon = n.beacon || {});
-                    var t = n.beacon;
-                    (t.userConfig = {}),
-                        (t.readyQueue = []),
-                        (t.config = function(e) {
-                            this.userConfig = e;
+                !(function(e, t, n) {
+                    function a() {
+                        var e = t.getElementsByTagName('script')[0],
+                            n = t.createElement('script');
+                        (n.type = 'text/javascript'),
+                            (n.async = !0),
+                            (n.src = 'https://beacon-v2.helpscout.net'),
+                            e.parentNode.insertBefore(n, e);
+                    }
+                    if (
+                        ((e.Beacon = n = function(t, n, a) {
+                            e.Beacon.readyQueue.push({
+                                method: t,
+                                options: n,
+                                data: a,
+                            });
                         }),
-                        (t.ready = function(e) {
-                            this.readyQueue.push(e);
-                        }),
-                        (o.config = {
-                            docs: {
-                                enabled: !0,
-                                baseUrl: '//missionhub.helpscoutdocs.com/',
-                            },
-                            contact: {
-                                enabled: !0,
-                                formId: '2688bde2-4184-11e7-9841-0ab63ef01522',
-                            },
-                        });
-                    var r = e.getElementsByTagName('script')[0],
-                        c = e.createElement('script');
-                    (c.type = 'text/javascript'),
-                        (c.async = !0),
-                        (c.src = 'https://djtflbt20bdde.cloudfront.net/'),
-                        r.parentNode.insertBefore(c, r);
-                })(document, window.HSCW || {}, window.HS || {});
-
-                HS.beacon.config({
-                    topArticles: true,
-                });
+                        (n.readyQueue = []),
+                        'complete' === t.readyState)
+                    )
+                        return a();
+                    e.attachEvent
+                        ? e.attachEvent('onload', a)
+                        : e.addEventListener('load', a, !1);
+                })(window, document, window.Beacon || function() {});
+                window.Beacon('init', '8e1f984b-c505-4d96-b8cb-58f773b7883c');
             }
         </script>
     </body>
