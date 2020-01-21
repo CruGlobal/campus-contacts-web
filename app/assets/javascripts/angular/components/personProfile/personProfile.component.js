@@ -59,7 +59,6 @@ function personProfileController(
     function activate() {
         vm.isNewPerson = !vm.personTab.person.id;
         vm.personTab.orgPermission.permission_id = `${vm.personTab.orgPermission.permission_id}`;
-
         // Disable editing name fields of other users
         vm.disableNameFields =
             vm.personTab.person.user &&
