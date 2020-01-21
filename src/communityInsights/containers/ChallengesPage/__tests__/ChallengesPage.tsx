@@ -1,4 +1,6 @@
 import React from 'react';
+import { MockList } from 'graphql-tools';
+import { wait } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
 
@@ -15,5 +17,15 @@ describe('<ChallengesPage />', () => {
         unmount();
     });
 
-    // TODO: Add a test with mocking data when GraphQL schema contains above query
+    it('should render properly after loading', async () => {
+        const { snapshot } = renderWithContext(<ChallengesPage />, {
+            appContext: {
+                orgId: '1',
+            },
+        });
+
+        await wait();
+
+        snapshot();
+    });
 });

@@ -6,6 +6,7 @@ module.exports = {
         '<rootDir>/__mocks__/apolloClient.ts',
     ],
     setupFilesAfterEnv: ['<rootDir>/__mocks__/resetGlobalMockSeeds.ts'],
+    globalSetup: '<rootDir>/__mocks__/globalSetup.ts',
     transform: {
         '^.+\\.js$': 'babel-jest',
         '^.+\\.tsx?$': 'ts-jest',
