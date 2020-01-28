@@ -134,7 +134,7 @@ function surveyOverviewQuestionsController(
             '/people',
             {
                 'filters[ids]': peopleIds.join(','),
-                'filters[organization_ids]': this.survey.organization_id,
+                'filters[organization_ids]': organizationId,
                 'fields[people]':
                     'first_name,gender,last_name,primary_email_address,id',
                 include: '',

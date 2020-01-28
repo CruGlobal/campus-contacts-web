@@ -11,12 +11,16 @@ function assignedPeopleSelectService(
     return {
         // Search for people in a particular organization that match the query
         searchPeople: function(query, organizationId, deduper) {
+            if (!query || query.length < 2) {
+                return Promise.resolve([]);
+            }
+
             return httpProxy
                 .get(
-                    modelsService.getModelMetadata('person').url.search,
+                    modelsService.getModelMetadata('person').url.all,
                     {
-                        q: query,
-                        organization_ids: organizationId,
+                        'filters[name]': query,
+                        'filters[organization_ids]': organizationId,
                         'filters[permission_ids]': permissionService.adminAndUserIds.join(
                             ',',
                         ),
