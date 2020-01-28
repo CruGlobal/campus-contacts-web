@@ -832,6 +832,7 @@ export default {
             copy: 'Copy',
             import: 'Import Survey Results',
             mass: 'Mass Entry',
+            autoAssignLabelNotify: 'Auto Assign/Label/Notify',
         },
         errors: {
             createSurvey: 'Error occurred while creating survey',
@@ -921,6 +922,7 @@ export default {
         },
         questions: {
             questions: 'Questions',
+            answers: 'Answers',
             type: 'Type',
             sort: 'Sort',
             columnTitle: 'Column Title',

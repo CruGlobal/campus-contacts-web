@@ -40,4 +40,7 @@ survey-overview-questions {
             border-radius: 0.25rem;
         }
     }
+    .dropdown-toggle::after {
+        display: none;
+    }
 }

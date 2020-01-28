@@ -141,10 +141,6 @@ organization-contact-import {
         width: 94%;
     }
 
-    .f-grow {
-        flex-grow: 1;
-    }
-
     /* Custom Margins */
 
     .mv-ih {
@@ -307,13 +303,6 @@ organization-contact-import {
         cursor: text;
     }
 
-    /* Accordions */
-
-    .accordion-body {
-        padding-left: 3.38rem;
-        padding-right: 3.38rem;
-    }
-
     /* Tabs */
 
     .tabs {
@@ -366,33 +355,6 @@ organization-contact-import {
             margin-top: -11px;
             position: absolute;
             display: block;
-        }
-    }
-
-    /* Assignments */
-
-    .question-row {
-        margin-top: -12px;
-        .assignments.tab-body {
-            border-top: none;
-            border-bottom: none;
-        }
-        .assignments-notify.tab-body {
-            border-top: none;
-            border-bottom: none;
-        }
-        &:first-child {
-            margin-top: 0;
-        }
-        &:last-child {
-            .assignments.tab-body {
-                border-bottom: 1px solid #a0a2a6;
-                border-bottom-left-radius: 0.25rem;
-                border-bottom-right-radius: 0.25rem;
-            }
-            .assignments-notify.tab-body {
-                border-bottom-color: #fff;
-            }
         }
     }
 

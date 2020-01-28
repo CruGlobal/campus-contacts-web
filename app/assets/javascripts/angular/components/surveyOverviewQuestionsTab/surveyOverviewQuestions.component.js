@@ -467,8 +467,8 @@ function surveyOverviewQuestionsController(
         return surveyService.deleteSurveyQuestionRule(this.survey.id, ruleId);
     };
 
-    this.deleteQuestionContent = async (question, answers, rule, index) => {
-        const keyword = rule.trigger_keywords;
+    this.deleteQuestionContent = async (question, answers, index) => {
+        const keyword = question.content;
         const ruleIdsToDelete = question.question_rules.reduce(
             (accumulator, r) => {
                 if (r.trigger_keywords === keyword && r.id) {
