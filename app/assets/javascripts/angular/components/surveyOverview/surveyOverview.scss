@@ -303,61 +303,6 @@ organization-contact-import {
         cursor: text;
     }
 
-    /* Tabs */
-
-    .tabs {
-        position: relative;
-        z-index: 3;
-        .help {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            margin-top: -8px;
-        }
-
-        .sm-help {
-            margin-top: -18px;
-            max-width: 75%;
-            > img {
-                max-width: 75%;
-            }
-        }
-
-        .tab {
-            border-bottom: 1px solid transparent;
-
-            a {
-                color: $gray-1;
-            }
-            &.active-tab {
-                > span {
-                    color: $pivot-bright-blue;
-                }
-                border-bottom: 1px solid $pivot-bright-blue;
-            }
-        }
-    }
-
-    .tab-body {
-        margin-top: -1px;
-        border-top-color: #fff;
-        border-bottom-color: #fff;
-
-        .ui-select-container {
-            background: #fff;
-            margin: 0.6rem 0 1rem 0;
-            padding: 0.5rem 0.5rem;
-        }
-
-        .delete {
-            right: -41px;
-            top: 50%;
-            margin-top: -11px;
-            position: absolute;
-            display: block;
-        }
-    }
-
     .notification-container {
         margin-top: -12px;
         margin-left: auto;
@@ -373,10 +318,6 @@ organization-contact-import {
 
     .questions-container {
         margin-top: -15px;
-    }
-
-    .unselected-tab {
-        border-bottom: 1px solid #a0a2a6;
     }
 
     .assignment-item {

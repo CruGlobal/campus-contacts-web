@@ -1,0 +1,70 @@
+<div class="center bg-pivot-white">
+    <div class="modal-header bg-pivot-gray-5 pivot-dark-blue pt4 pb2 tl f4 ph3">
+        <div class="ma0">
+            {{ 'surveys:questions.addAutoAssignLabelNotifyRules' | t }}
+        </div>
+        <a ng-click="$ctrl.dismiss()" class="close-button">
+            <ng-md-icon icon="close" size="28"></ng-md-icon>
+        </a>
+    </div>
+    <div class="modal-text pa3">
+        <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+            {{ 'surveys:questions.question' | t }}
+        </label>
+        <p class="f6 lh-copy normal pivot-gray-darker">
+            {{ $ctrl.question.label }}
+        </p>
+        <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+            {{ 'surveys:questions.answer' | t }}
+        </label>
+        <p class="f6 lh-copy normal pivot-gray-darker">
+            {{ $ctrl.answer }}
+        </p>
+        <div>
+            <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+                {{ 'surveys:questions.autoAssign' | t }}
+            </label>
+            <assigned-people-select
+                class="db mb2"
+                action-after-select="$ctrl.addPersonToRule($ctrl.question, $ctrl.assignRule)"
+                assigned="$ctrl.assignRule.assign_to"
+                rule-code="$ctrl.assignRule.rule_code"
+                organization-id="$ctrl.survey.organization_id"
+                disabled="$ctrl.assignRule.trigger_keywords === ''"
+            ></assigned-people-select>
+        </div>
+        <div>
+            <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+                {{ 'surveys:questions.autoLabel' | t }}
+            </label>
+            <assigned-label-select
+                class="db mb2"
+                action-after-select="$ctrl.addLabelToRule($ctrl.question, $ctrl.assignRule)"
+                assigned="$ctrl.assignRule.assigned_labels"
+                organization-id="$ctrl.survey.organization_id"
+                disabled="$ctrl.assignRule.trigger_keywords === ''"
+            ></assigned-label-select>
+        </div>
+        <div>
+            <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+                {{ 'surveys:questions.autoNotify' | t }}
+            </label>
+            <assigned-people-select
+                class="db mb2"
+                action-after-select="$ctrl.addPersonToRule($ctrl.question, $ctrl.notifyRule)"
+                assigned="$ctrl.notifyRule.assign_to"
+                organization-id="$ctrl.survey.organization_id"
+                disabled="$ctrl.notifyRule.trigger_keywords === ''"
+            ></assigned-people-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a
+            class="bg-pivot-dark-blue b pivot-white dim f4 ttu tracked db pa3 link w-100 tc"
+            href=""
+            ng-click="$ctrl.dismiss()"
+        >
+            {{ 'common:dashboard.done' | t }}
+        </a>
+    </div>
+</div>

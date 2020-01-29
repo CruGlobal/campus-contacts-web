@@ -1,0 +1,23 @@
+@import '../../../../stylesheets/variables/colors';
+
+auto-assign-label-notify-modal {
+    assigned-people-select,
+    assigned-label-select {
+        .ui-select-match-item {
+            color: $blue-1;
+            padding: 0.25rem 0.5rem !important;
+            border-radius: 0.25rem !important;
+            border: solid 1px $gray-2 !important;
+            -webkit-appearance: initial !important;
+            background: transparent !important;
+        }
+
+        .ui-select-multiple.ui-select-container {
+            background: $white !important;
+            border: 1px solid $gray-3 !important;
+            border-radius: 0.25rem;
+            margin: 0.6rem 0 1rem 0;
+            padding: 0.5rem 0.5rem;
+        }
+    }
+}

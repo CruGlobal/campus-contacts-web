@@ -160,7 +160,7 @@ function surveyOverviewQuestionsController(
     const buildQuestion = question => {
         const a = question.content ? question.content.split('\n') : [];
 
-        if (question.kind === 'ChoiceField' && a) {
+        if (a) {
             const autoassignRules = buildRules(
                 question.question_rules,
                 a,
@@ -245,7 +245,12 @@ function surveyOverviewQuestionsController(
     };
 
     this.addLabelToRule = async (question, rule) => {
-        const index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.findIndex(
+            currentRule => currentRule.id === rule.id,
+        );
+
+        // This is terrible. Somehow the reference isn't preserved when editing multiple times.
+        question.question_rules[index] = rule;
 
         if (!question.question_rules[index].assigned_labels) return;
 
@@ -276,7 +281,12 @@ function surveyOverviewQuestionsController(
     };
 
     this.addPersonToRule = async (question, rule) => {
-        const index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.findIndex(
+            currentRule => currentRule.id === rule.id,
+        );
+
+        // This is terrible. Somehow the reference isn't preserved when editing multiple times.
+        question.question_rules[index] = rule;
 
         if (!question.question_rules[index].assign_to) return;
 
@@ -519,11 +529,28 @@ function surveyOverviewQuestionsController(
         const { data } = await this.saveQuestion(question);
 
         if (data.question_rules) {
-            const index = this.surveyQuestions.indexOf(question);
+            const index = this.surveyQuestions.findIndex(
+                currentQuestion => currentQuestion.id === question.id,
+            );
             this.surveyQuestions[index].question_rules = data.question_rules;
+            rebuildQuestion(this.surveyQuestions[index]);
+            $scope.$apply();
         }
+    };
 
-        rebuildQuestion(question);
-        $scope.$apply();
+    this.openAutoAssignLabelNotifyModal = (question, answer) => {
+        $uibModal.open({
+            component: 'autoAssignLabelNotifyModal',
+            size: 'md',
+            resolve: {
+                survey: () => this.survey,
+                question: () => question,
+                answer: () => answer,
+                addPersonToRule: () => (question, rule) =>
+                    this.addPersonToRule(question, rule),
+                addLabelToRule: () => (question, rule) =>
+                    this.addLabelToRule(question, rule),
+            },
+        });
     };
 }

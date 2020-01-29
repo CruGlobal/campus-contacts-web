@@ -159,7 +159,7 @@
                             <div uib-dropdown>
                                 <ng-md-icon
                                     uib-dropdown-toggle
-                                    class="dropdown-toggle"
+                                    class="dropdown-toggle ml2"
                                     icon="more_vert"
                                     size="26"
                                 ></ng-md-icon>
@@ -173,7 +173,7 @@
                                     <a
                                         href
                                         class="dropdown-item"
-                                        ng-click="$ctrl.openAutoAssignLabelNotifyModal()"
+                                        ng-click="$ctrl.openAutoAssignLabelNotifyModal(question, answer)"
                                         ng-if="$ctrl.directAdminPrivileges"
                                     >
                                         {{
