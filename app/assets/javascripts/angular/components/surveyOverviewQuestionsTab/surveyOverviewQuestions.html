@@ -192,17 +192,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-52 flex" ng-if="question.question_answers">
-                        <div class="assignment-item no-line w-94">
-                            <button
-                                class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent"
-                                ng-click="$ctrl.addEmptyQuestionContent(question)"
-                                ng-if="$ctrl.directAdminPrivileges"
-                            >
-                                {{ 'surveys:questions.newAnswer' | t }}
-                            </button>
-                        </div>
-                    </div>
+                    <button
+                        class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent center"
+                        ng-click="$ctrl.addEmptyQuestionContent(question)"
+                        ng-if="question.question_answers && $ctrl.directAdminPrivileges"
+                    >
+                        {{ 'surveys:questions.newAnswer' | t }}
+                    </button>
                 </div>
             </fieldset>
         </div>

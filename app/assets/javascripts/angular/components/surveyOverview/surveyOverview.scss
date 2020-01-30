@@ -320,33 +320,6 @@ organization-contact-import {
         margin-top: -15px;
     }
 
-    .assignment-item {
-        position: relative;
-        &:after {
-            content: '';
-            height: 1px;
-            border-bottom: 1px solid $gray-dark;
-            width: 23px;
-            position: absolute;
-            left: 100%;
-            top: 50%;
-        }
-        input,
-        button {
-            margin: 0.35rem 0;
-        }
-
-        button {
-            width: calc(100% - 38px);
-        }
-
-        &.no-line {
-            &:after {
-                display: none;
-            }
-        }
-    }
-
     /* Preview */
 
     .preview {
