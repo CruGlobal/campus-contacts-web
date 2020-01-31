@@ -63,6 +63,7 @@ function personService(
                 .find({ organization_id: organizationId })
                 .thru(function(orgPermission) {
                     if (orgPermission) {
+                        orgPermission.permission_id = `${orgPermission.permission_id}`;
                         return orgPermission;
                     }
 

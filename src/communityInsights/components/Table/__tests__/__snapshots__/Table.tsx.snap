@@ -1,5 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Table /> Should render null content when no data 1`] = `
+.emotion-2 {
+  width: 100%;
+  height: 190px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.emotion-0 {
+  text-align: center;
+  width: 720px;
+  color: #007398;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  margin: 0;
+}
+
+<div>
+  <div
+    class="emotion-2"
+  >
+    <img
+      src="mockFile"
+    />
+    <p
+      class="emotion-0"
+    >
+      This community does not have any challenges. Open the MissionHub mobile app
+    </p>
+    <p
+      class="emotion-0"
+    >
+      and create a community challenge.
+    </p>
+  </div>
+</div>
+`;
+
 exports[`<Table /> should render properly in loading 1`] = `
 .emotion-0 {
   text-align: center;
@@ -242,60 +296,6 @@ exports[`<Table /> should render properly with data 1`] = `
         class=" emotion-19"
       />
     </div>
-  </div>
-</div>
-`;
-
-exports[`<Table /> should render with no data 1`] = `
-.emotion-2 {
-  width: 100%;
-  height: 190px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  background-color: #ffffff;
-  border-radius: 8px;
-}
-
-.emotion-0 {
-  text-align: center;
-  width: 720px;
-  color: #007398;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 24px;
-  margin: 0;
-}
-
-<div>
-  <div
-    class="emotion-2"
-  >
-    <img
-      src="mockFile"
-    />
-    <p
-      class="emotion-0"
-    >
-      This community does not have any challenges. Open the MissionHub mobile app
-    </p>
-    <p
-      class="emotion-0"
-    >
-      and create a community challenge.
-    </p>
   </div>
 </div>
 `;

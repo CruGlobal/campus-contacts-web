@@ -27,6 +27,7 @@ describe('personService', function() {
         this.organizationalPermission = {
             id: 21,
             organization_id: 1,
+            permission_id: 4,
             organization: {
                 people: [{ id: 11 }, { id: 12 }],
             },
@@ -84,6 +85,11 @@ describe('personService', function() {
             expect(personService.getOrgPermission(this.person, 1)).toEqual(
                 this.organizationalPermission,
             );
+        });
+        it('should set the permission_id to be a string', function() {
+            expect(
+                personService.getOrgPermission(this.person, 1).permission_id,
+            ).toEqual('4');
         });
 
         it('should return null when the user has no organizational permission', function() {
