@@ -15,7 +15,7 @@ export const globalMocks = {
     Float: () => faker.random.number({ precision: 0.01 }),
     Boolean: () => faker.random.boolean(),
     ID: () => nextId(),
-    ISO8601DateTime: () => faker.date.past(10, '2020-01-14').toUTCString(),
+    ISO8601DateTime: () => faker.date.past(10, '2020-01-14').toISOString(),
     ISO8601Date: () =>
         moment(faker.date.past(10, '2020-01-14')).format('YYYY-MM-DD'),
 
