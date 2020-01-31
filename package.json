@@ -122,7 +122,7 @@
         "@types/react-dom": "^16.9.0",
         "@types/react-redux": "^7.1.5",
         "@types/react-router-dom": "^4.3.5",
-        "@types/styled-components": "^4.1.18",
+        "@types/styled-components": "^4.4.2",
         "@typescript-eslint/parser": "^2.3.3",
         "angular-mocks": "^1.7.8",
         "apollo-link-schema": "^1.2.4",
