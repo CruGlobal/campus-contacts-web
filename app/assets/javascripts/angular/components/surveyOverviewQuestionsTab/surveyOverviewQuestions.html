@@ -173,8 +173,9 @@
                                     <a
                                         href
                                         class="dropdown-item"
-                                        ng-click="$ctrl.openAutoAssignLabelNotifyModal(question, answer)"
+                                        ng-click="question.question_answers[$index] && $ctrl.openAutoAssignLabelNotifyModal(question, answer)"
                                         ng-if="$ctrl.directAdminPrivileges"
+                                        ng-class="{ disabled: !question.question_answers[$index] }"
                                     >
                                         {{
                                         'surveyTab:menu.autoAssignLabelNotify' |
