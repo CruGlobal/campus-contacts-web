@@ -44,13 +44,6 @@ function myPeopleDashboardController(
         await loggedInPerson.loadOnce();
         await loadAndSyncData();
 
-        if (
-            // If the logged in person has no organization permissions, redirect the user to download mobile app
-            loggedInPerson.person.organizational_permissions.length === 0
-        ) {
-            $window.location.href = 'https://get.missionhub.com/newmobileuser/';
-        }
-
         angular.element($document).on('people::personAdded', loadAndSyncData);
         vm.toggleOrgVisibility =
             userPreferencesService.toggleOrganizationVisibility;
