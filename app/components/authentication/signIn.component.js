@@ -24,7 +24,7 @@ function signInController(
         this.theKeySignUpUrl = authenticationService.theKeySignUpUrl;
 
         if (authenticationService.isTokenValid()) {
-            $state.go('app.people');
+            authenticationService.postAuthRedirect();
         }
 
         if (this.accessToken) {

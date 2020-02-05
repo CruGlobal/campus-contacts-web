@@ -46,7 +46,9 @@ angular
 
             if (!authenticationService.isTokenValid()) {
                 authenticationService.removeAccess();
-                return transition.router.stateService.target('app.signIn');
+                return transition.router.stateService.target('app.signIn', {
+                    previousUri: $location.path(),
+                });
             }
 
             if (
