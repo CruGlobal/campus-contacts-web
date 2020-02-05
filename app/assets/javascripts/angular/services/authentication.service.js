@@ -21,20 +21,22 @@ function authenticationService(
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
-    const redirectUrl = encodeURIComponent(
-        `https://${$location.host()}${port}/auth-web${
-            $location.search().previousUri
-                ? `?previousUri=${$location.search().previousUri}`
-                : ''
-        }`,
-    );
-    const theKeyloginUrl = `${envService.read(
-        'theKeyUrl',
-    )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
-        'theKeyClientId',
-    )}&redirect_uri=${redirectUrl}`;
+    const redirectUrl = () =>
+        encodeURIComponent(
+            `https://${$location.host()}${port}/auth-web${
+                $location.search().previousUri
+                    ? `?previousUri=${$location.search().previousUri}`
+                    : ''
+            }`,
+        );
+    const theKeyLoginUrl = () =>
+        `${envService.read(
+            'theKeyUrl',
+        )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
+            'theKeyClientId',
+        )}&redirect_uri=${redirectUrl()}`;
 
-    const theKeySignUpUrl = `${theKeyloginUrl}?&action=signup`;
+    const theKeySignUpUrl = () => `${theKeyLoginUrl()}?&action=signup`;
 
     const theKeylogoutUrl = `${envService.read(
         'theKeyUrl',
@@ -240,7 +242,7 @@ function authenticationService(
         stopImpersonatingUser,
         adminRedirect,
         postAuthRedirect,
-        theKeyloginUrl,
+        theKeyLoginUrl,
         theKeySignUpUrl,
         isTokenValid: getJwtToken,
         updateUserData,

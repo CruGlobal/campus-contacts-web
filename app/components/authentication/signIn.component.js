@@ -20,7 +20,7 @@ function signInController(
     this.facebookService = facebookService;
 
     this.$onInit = async () => {
-        this.theKeyUrl = authenticationService.theKeyloginUrl;
+        this.theKeyLoginUrl = authenticationService.theKeyLoginUrl;
         this.theKeySignUpUrl = authenticationService.theKeySignUpUrl;
 
         if (authenticationService.isTokenValid()) {
