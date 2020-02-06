@@ -24,6 +24,8 @@ function assignedPeopleSelectService(
                         'filters[permission_ids]': permissionService.adminAndUserIds.join(
                             ',',
                         ),
+                        'fields[person]': 'first_name,last_name',
+                        include: '',
                     },
                     {
                         deduper: deduper,
