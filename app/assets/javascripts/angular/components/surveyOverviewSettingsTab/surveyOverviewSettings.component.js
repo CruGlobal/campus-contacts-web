@@ -64,11 +64,19 @@ function surveyOverviewSettingsController(
         // eslint-disable-next-line angular/document-service
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
+        input.setAttribute('style', 'display: none');
+        input.addEventListener('click', event => event.stopPropagation());
+
+        // We append the input to the DOM to support iOS Safari which doesn't seem to fire the click event.
+        // eslint-disable-next-line angular/document-service
+        document.body.appendChild(input);
         input.click();
 
         input.addEventListener(
             'change',
             () => {
+                // eslint-disable-next-line angular/document-service
+                document.body.removeChild(input);
                 this.selectedImage = input.files[0];
 
                 //validate type
