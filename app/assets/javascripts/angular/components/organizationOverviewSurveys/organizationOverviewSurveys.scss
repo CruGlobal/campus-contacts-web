@@ -2,33 +2,10 @@
 @import '../ministryViewGroup/ministryViewGroup';
 
 organization-overview-surveys {
-    .header {
-        display: grid;
-        grid-template-columns: 4fr 2fr 2fr 1fr auto auto;
-
+    background: $white;
+    .typeform-info {
         ng-md-icon svg {
-            fill: $gray-darker;
-        }
-    }
-
-    .row {
-        @extend ministry-view-group;
-        display: grid !important;
-        grid-template-columns: 4fr 2fr 2fr 1fr auto auto;
-
-        .buttons-column {
-            width: 70px;
-        }
-        .column-typeform {
-            width: 105px;
-            text-align: center;
-            icon-button {
-                display: inline;
-                margin: 0;
-                ng-md-icon svg {
-                    fill: #16c0e4;
-                }
-            }
+            fill: #16c0e4;
         }
     }
 
@@ -40,6 +17,11 @@ organization-overview-surveys {
         padding: 1rem 1.5rem;
     }
 
+    icon-button {
+        width: auto;
+        height: auto;
+    }
+
     ng-md-icon.status-active svg {
         fill: #00d264;
     }
@@ -47,9 +29,41 @@ organization-overview-surveys {
         fill: #c6c4c6;
     }
 
-    .show-typeform-modal {
-        display: block;
-        text-align: center;
-        padding: 20px 0;
+    @mixin surveys-table($column-count) {
+        display: grid;
+        // Big name column, small last column and autosized middle ones
+        grid-template-columns: 4fr repeat($column-count - 2, auto) 0.5fr;
+        grid-template-rows: auto;
+
+        > * {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            background: $white;
+        }
+
+        // First row
+        > *:nth-child(-n + #{$column-count}) {
+            color: $gray-darker;
+        }
+
+        // Row striping
+        @for $i from 1 to $column-count + 1 {
+            > *:nth-child(#{$column-count*2}n + #{$column-count + $i}) {
+                background: $gray-4;
+            }
+        }
+
+        // Right column
+        > *:nth-child(#{$column-count}n + #{$column-count}) {
+            justify-content: flex-end;
+        }
+    }
+
+    .surveys-table {
+        @include surveys-table(5);
+    }
+    .surveys-table-with-typeform {
+        @include surveys-table(6);
     }
 }
