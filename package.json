@@ -150,7 +150,7 @@
         "image-webpack-loader": "^6.0.0",
         "inline-manifest-webpack-plugin": "^4.0.2",
         "istanbul-instrumenter-loader": "^3.0.1",
-        "jasmine-core": "^3.4.0",
+        "jasmine-core": "^3.5.0",
         "jest": "^24.9.0",
         "jest-css-modules": "^2.1.0",
         "jest-emotion": "^10.0.17",
