@@ -9,6 +9,8 @@ function myPeopleDashboardService(httpProxy, modelsService, _) {
                 /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i,
             ),
 
+        isIos: () => window.navigator.userAgent.match(/iPhone|iPad|iPod/i),
+
         loadPeople: function(params) {
             return httpProxy.get(
                 modelsService.getModelMetadata('person').url.all,
