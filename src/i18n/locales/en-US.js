@@ -143,6 +143,13 @@ export default {
                 suggestion: 'Pro tip: Use landscape mode!',
                 dismiss: 'Tap to dismiss',
             },
+            suggestIosAddToHomeScreen: {
+                title: 'Add MissionHub',
+                description:
+                    "Add MissionHub on your home screen for quick access when you're on the go.",
+                actionPart1: 'Just tap',
+                actionPart2: 'then ‘Add to Home Screen’',
+            },
         },
         date: {
             day_names: [

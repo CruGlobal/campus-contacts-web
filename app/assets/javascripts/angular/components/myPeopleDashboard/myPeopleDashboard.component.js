@@ -1,6 +1,9 @@
 import i18next from 'i18next';
 import moment from 'moment';
 
+import favicon from '../../../../images/favicon.png';
+import iosShare from '../../../../images/icons/ios-share.svg';
+
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 
@@ -31,6 +34,9 @@ function myPeopleDashboardController(
     vm.organizations = [];
     vm.loading = true;
     vm.noPeople = false;
+
+    vm.favicon = favicon;
+    vm.iosShare = iosShare;
 
     vm.sortableOptions = {
         handle: '.sort-orgs-handle',
@@ -78,6 +84,14 @@ function myPeopleDashboardController(
 
     vm.dismissSuggestLandscape = () =>
         localStorage.setItem('hideSuggestLandscape', true);
+
+    vm.showIosAddToHomeScreen = () =>
+        myPeopleDashboardService.isIos() &&
+        !window.navigator.standalone &&
+        !localStorage.getItem('hideIosAddToHomeScreen');
+
+    vm.dismissIosAddToHomeScreen = () =>
+        localStorage.setItem('hideIosAddToHomeScreen', true);
 
     function cleanUp() {
         angular.element($document).off('people::personAdded', loadAndSyncData);
