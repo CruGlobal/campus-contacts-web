@@ -2858,15 +2858,17 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@uirouter/angularjs@^1.0.20":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.22.tgz#581ab38794a2d7c2790851087072c4066b2b6c46"
+"@uirouter/angularjs@^1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.25.tgz#9969788eca03bc3f8b1d1b39946713a18e824e33"
+  integrity sha512-kf9bxBhqa1ZUw0aDlz4H17VqAD30MVJY6HM7J628vDeNN9yZt7SDYpwqSrR3y6NBadZUPjaKsDoKsyQQSWArNA==
   dependencies:
-    "@uirouter/core" "5.0.23"
+    "@uirouter/core" "6.0.4"
 
-"@uirouter/core@5.0.23":
-  version "5.0.23"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.23.tgz#363b4bea635a1b48900dc7e65793a65a3b58a79e"
+"@uirouter/core@6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.4.tgz#fcdc75ab10f1035176acf87a27d9d27a0101ecf9"
+  integrity sha512-TQ9XOzZY+jmWKkU4993MAEBIy7Bs3kijDzj+A6RHR8gq/3UoQm3Q/l1igfao5GZyBjid7eRVeipPK14ovCYQ3g==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
