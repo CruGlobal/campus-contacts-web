@@ -68,7 +68,7 @@ function organizationSignaturesSignController(
             'state:changed',
             (event, data) => {
                 if (data.organization_with_missing_signatures_ids.length <= 0)
-                    $state.go('app.people');
+                    authenticationService.postAuthRedirect();
             },
         );
 
@@ -86,7 +86,7 @@ function organizationSignaturesSignController(
 
     this.returnToApp = () => {
         authenticationService.updateUserData();
-        $state.go('app.people');
+        authenticationService.postAuthRedirect();
     };
 
     this.acceptAgreement = async type => {

@@ -273,7 +273,7 @@ angular
             })
             .state({
                 name: 'app.signIn',
-                url: '/sign-in',
+                url: '/sign-in?previousUri',
                 component: 'signIn',
                 data: {
                     isPublic: true,

@@ -9,7 +9,7 @@
             title="{{ 'login.signUpWithEmail' | t }}"
             target="_self"
             ng-if="$ctrl.inviteState"
-            ng-href="{{ $ctrl.theKeySignUpUrl }}"
+            ng-href="{{ $ctrl.theKeySignUpUrl() }}"
         >
             {{ 'login.signUpWithEmail' | t }}
         </a>
@@ -22,7 +22,7 @@
             class="btn-key btn-primary f5"
             title="{{ 'login.signInWithEmail' | t }}"
             target="_self"
-            ng-href="{{ $ctrl.theKeyUrl }}"
+            ng-href="{{ $ctrl.theKeyLoginUrl() }}"
         >
             {{ 'login.signInWithEmail' | t }}
         </a>
