@@ -134,7 +134,7 @@ function surveyOverviewQuestionsController(
             '/people',
             {
                 'filters[ids]': peopleIds.join(','),
-                'filters[organization_ids]': this.survey.organization_id,
+                'filters[organization_ids]': organizationId,
                 'fields[people]':
                     'first_name,gender,last_name,primary_email_address,id',
                 include: '',
@@ -160,7 +160,7 @@ function surveyOverviewQuestionsController(
     const buildQuestion = question => {
         const a = question.content ? question.content.split('\n') : [];
 
-        if (question.kind === 'ChoiceField' && a) {
+        if (a) {
             const autoassignRules = buildRules(
                 question.question_rules,
                 a,
@@ -245,7 +245,12 @@ function surveyOverviewQuestionsController(
     };
 
     this.addLabelToRule = async (question, rule) => {
-        const index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.findIndex(
+            currentRule => currentRule.id === rule.id,
+        );
+
+        // This is terrible. Somehow the reference isn't preserved when editing multiple times.
+        question.question_rules[index] = rule;
 
         if (!question.question_rules[index].assigned_labels) return;
 
@@ -276,7 +281,12 @@ function surveyOverviewQuestionsController(
     };
 
     this.addPersonToRule = async (question, rule) => {
-        const index = question.question_rules.indexOf(rule);
+        const index = question.question_rules.findIndex(
+            currentRule => currentRule.id === rule.id,
+        );
+
+        // This is terrible. Somehow the reference isn't preserved when editing multiple times.
+        question.question_rules[index] = rule;
 
         if (!question.question_rules[index].assign_to) return;
 
@@ -467,8 +477,8 @@ function surveyOverviewQuestionsController(
         return surveyService.deleteSurveyQuestionRule(this.survey.id, ruleId);
     };
 
-    this.deleteQuestionContent = async (question, answers, rule, index) => {
-        const keyword = rule.trigger_keywords;
+    this.deleteQuestionContent = async (question, answers, index) => {
+        const keyword = question.content;
         const ruleIdsToDelete = question.question_rules.reduce(
             (accumulator, r) => {
                 if (r.trigger_keywords === keyword && r.id) {
@@ -519,11 +529,28 @@ function surveyOverviewQuestionsController(
         const { data } = await this.saveQuestion(question);
 
         if (data.question_rules) {
-            const index = this.surveyQuestions.indexOf(question);
+            const index = this.surveyQuestions.findIndex(
+                currentQuestion => currentQuestion.id === question.id,
+            );
             this.surveyQuestions[index].question_rules = data.question_rules;
+            rebuildQuestion(this.surveyQuestions[index]);
+            $scope.$apply();
         }
+    };
 
-        rebuildQuestion(question);
-        $scope.$apply();
+    this.openAutoAssignLabelNotifyModal = (question, answer) => {
+        $uibModal.open({
+            component: 'autoAssignLabelNotifyModal',
+            size: 'md',
+            resolve: {
+                survey: () => this.survey,
+                question: () => question,
+                answer: () => answer,
+                addPersonToRule: () => (question, rule) =>
+                    this.addPersonToRule(question, rule),
+                addLabelToRule: () => (question, rule) =>
+                    this.addLabelToRule(question, rule),
+            },
+        });
     };
 }

@@ -7,9 +7,9 @@ function peopleSearchService(httpProxy, modelsService) {
         search: function(searchQuery) {
             return httpProxy
                 .get(
-                    modelsService.getModelMetadata('person').url.search,
+                    modelsService.getModelMetadata('person').url.all,
                     {
-                        q: searchQuery,
+                        'filters[name]': searchQuery,
                         include: 'organizational_permissions.organization',
                         'fields[organization]': 'name',
                     },

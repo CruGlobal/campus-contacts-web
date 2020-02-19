@@ -24,12 +24,6 @@ function assignedPeopleSelectController(
         const requestDeduper = new RequestDeduper();
         // Refresh the person list whenever the search term changes
         $scope.$watch('$select.search', search => {
-            if (search === '') {
-                // Ignore empty searches
-                this.people = [];
-                return;
-            }
-
             assignedPeopleSelectService
                 .searchPeople(search, this.organizationId, requestDeduper)
                 .then(people => {

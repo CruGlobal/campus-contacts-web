@@ -1,43 +1,7 @@
 @import '../../../../stylesheets/variables/colors';
 
 survey-overview-questions {
-    .selected-tab {
-        border-bottom-color: $white !important;
-    }
-    .selected-tab:focus {
-        outline: none;
-    }
-
-    assigned-people-select {
-        .ui-select-match-item {
-            color: $blue-1;
-            padding: 0.25rem 0.5rem !important;
-            border-radius: 0.25rem !important;
-            border: solid 1px $gray-2 !important;
-            -webkit-appearance: initial !important;
-            background: transparent !important;
-        }
-
-        .ui-select-container {
-            background: $white !important;
-            border: 1px solid $gray-3 !important;
-            border-radius: 0.25rem;
-        }
-    }
-    assigned-label-select {
-        .ui-select-match-item {
-            color: $blue-1;
-            padding: 0.25rem 0.5rem !important;
-            border-radius: 0.25rem !important;
-            border: solid 1px $gray-2 !important;
-            -webkit-appearance: initial !important;
-            background: transparent !important;
-        }
-
-        .ui-select-container {
-            background: $white !important;
-            border: 1px solid $gray-3 !important;
-            border-radius: 0.25rem;
-        }
+    .dropdown-toggle::after {
+        display: none;
     }
 }

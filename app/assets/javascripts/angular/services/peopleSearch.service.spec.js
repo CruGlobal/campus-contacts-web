@@ -54,9 +54,9 @@ describe('peopleSearchService', function() {
                     .search('query')
                     .then(function(results) {
                         expect(httpProxy.get).toHaveBeenCalledWith(
-                            '/search',
+                            '/people',
                             {
-                                q: 'query',
+                                'filters[name]': 'query',
                                 include:
                                     'organizational_permissions.organization',
                                 'fields[organization]': 'name',

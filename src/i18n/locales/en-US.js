@@ -843,6 +843,7 @@ export default {
             copy: 'Copy',
             import: 'Import Survey Results',
             mass: 'Mass Entry',
+            autoAssignLabelNotify: 'Auto Assign/Label/Notify',
         },
         errors: {
             createSurvey: 'Error occurred while creating survey',
@@ -860,7 +861,7 @@ export default {
         },
     },
     surveys: {
-        preview: 'Preview this survey',
+        preview: 'Preview',
         publicView: {
             preview: {
                 header: 'This is a preview.',
@@ -932,6 +933,9 @@ export default {
         },
         questions: {
             questions: 'Questions',
+            question: 'Question',
+            answers: 'Answers',
+            answer: 'Answer',
             type: 'Type',
             sort: 'Sort',
             columnTitle: 'Column Title',
@@ -942,7 +946,7 @@ export default {
             predefinedQuestions: 'Predefined Questions',
             previouslyUsedQuestions: 'Previously Used Questions',
             delete_confirm: 'Are you sure you want to delete this question?',
-            initiateAssignment: 'Answers to initiate assignment/notifications',
+            addAutoAssignLabelNotifyRules: 'Add Auto Assign/Label/Notify Rules',
             autoAssign: 'Auto Assign',
             autoNotify: 'Auto Notify',
             autoLabel: 'Auto Label',

@@ -2,29 +2,24 @@ angular.module('missionhubApp').factory('modelsService', modelsService);
 
 function modelsService(_) {
     function generateUrls(root, extras) {
-        return _.extend(
-            {
-                // The base URL
-                root: root,
+        return {
+            // The base URL
+            root: root,
 
-                // The URL for a single model
-                single: function(id) {
-                    return root + '/' + id;
-                },
-
-                // The URL for all models
-                all: root,
+            // The URL for a single model
+            single: function(id) {
+                return root + '/' + id;
             },
-            extras,
-        );
+
+            // The URL for all models
+            all: root,
+        };
     }
 
     var modelMetadata = {
         person: {
             include: 'people',
-            url: generateUrls('/people', {
-                search: '/search',
-            }),
+            url: generateUrls('/people'),
         },
         user: {
             include: 'users',

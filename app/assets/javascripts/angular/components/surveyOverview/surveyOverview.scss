@@ -141,10 +141,6 @@ organization-contact-import {
         width: 94%;
     }
 
-    .f-grow {
-        flex-grow: 1;
-    }
-
     /* Custom Margins */
 
     .mv-ih {
@@ -277,13 +273,10 @@ organization-contact-import {
             border: solid $gray-darker;
             border-width: 0 2px 2px 0;
             display: inline-block;
-            padding: 4px;
             transform: rotate(45deg);
             -webkit-transform: rotate(45deg);
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            margin-top: -8px;
+            width: 16px;
+            height: 16px;
         }
     }
 
@@ -295,7 +288,7 @@ organization-contact-import {
             .open-close-arrow {
                 transform: rotate(225deg);
                 -webkit-transform: rotate(225deg);
-                margin-top: -4px;
+                margin-top: 6px;
             }
         }
     }
@@ -308,95 +301,6 @@ organization-contact-import {
 
     .cursor-text {
         cursor: text;
-    }
-
-    /* Accordions */
-
-    .accordion-body {
-        padding-left: 3.38rem;
-        padding-right: 3.38rem;
-    }
-
-    /* Tabs */
-
-    .tabs {
-        position: relative;
-        z-index: 3;
-        .help {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            margin-top: -8px;
-        }
-
-        .sm-help {
-            margin-top: -18px;
-            max-width: 75%;
-            > img {
-                max-width: 75%;
-            }
-        }
-
-        .tab {
-            border-bottom: 1px solid transparent;
-
-            a {
-                color: $gray-1;
-            }
-            &.active-tab {
-                > span {
-                    color: $pivot-bright-blue;
-                }
-                border-bottom: 1px solid $pivot-bright-blue;
-            }
-        }
-    }
-
-    .tab-body {
-        margin-top: -1px;
-        border-top-color: #fff;
-        border-bottom-color: #fff;
-
-        .ui-select-container {
-            background: #fff;
-            margin: 0.6rem 0 1rem 0;
-            padding: 0.5rem 0.5rem;
-        }
-
-        .delete {
-            right: -41px;
-            top: 50%;
-            margin-top: -11px;
-            position: absolute;
-            display: block;
-        }
-    }
-
-    /* Assignments */
-
-    .question-row {
-        margin-top: -12px;
-        .assignments.tab-body {
-            border-top: none;
-            border-bottom: none;
-        }
-        .assignments-notify.tab-body {
-            border-top: none;
-            border-bottom: none;
-        }
-        &:first-child {
-            margin-top: 0;
-        }
-        &:last-child {
-            .assignments.tab-body {
-                border-bottom: 1px solid #a0a2a6;
-                border-bottom-left-radius: 0.25rem;
-                border-bottom-right-radius: 0.25rem;
-            }
-            .assignments-notify.tab-body {
-                border-bottom-color: #fff;
-            }
-        }
     }
 
     .notification-container {
@@ -414,37 +318,6 @@ organization-contact-import {
 
     .questions-container {
         margin-top: -15px;
-    }
-
-    .unselected-tab {
-        border-bottom: 1px solid #a0a2a6;
-    }
-
-    .assignment-item {
-        position: relative;
-        &:after {
-            content: '';
-            height: 1px;
-            border-bottom: 1px solid $gray-dark;
-            width: 23px;
-            position: absolute;
-            left: 100%;
-            top: 50%;
-        }
-        input,
-        button {
-            margin: 0.35rem 0;
-        }
-
-        button {
-            width: calc(100% - 38px);
-        }
-
-        &.no-line {
-            &:after {
-                display: none;
-            }
-        }
     }
 
     /* Preview */
