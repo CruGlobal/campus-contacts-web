@@ -1,4 +1,8 @@
 import i18next from 'i18next';
+import moment from 'moment';
+
+import favicon from '../../../../images/favicon.png';
+import iosShare from '../../../../images/icons/ios-share.svg';
 
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
@@ -31,6 +35,9 @@ function myPeopleDashboardController(
     vm.loading = true;
     vm.noPeople = false;
 
+    vm.favicon = favicon;
+    vm.iosShare = iosShare;
+
     vm.sortableOptions = {
         handle: '.sort-orgs-handle',
         ghostClass: 'o-40',
@@ -43,13 +50,6 @@ function myPeopleDashboardController(
     vm.$onInit = async () => {
         await loggedInPerson.loadOnce();
         await loadAndSyncData();
-
-        if (
-            // If the logged in person has no organization permissions, redirect the user to download mobile app
-            loggedInPerson.person.organizational_permissions.length === 0
-        ) {
-            $window.location.href = 'https://get.missionhub.com/newmobileuser/';
-        }
 
         angular.element($document).on('people::personAdded', loadAndSyncData);
         vm.toggleOrgVisibility =
@@ -67,6 +67,24 @@ function myPeopleDashboardController(
     vm.$onDestroy = cleanUp;
 
     vm.noPeopleWelcome = '';
+
+    vm.showSuggestLandscape = () =>
+        // Yes this code can be removed after this date https://jira.cru.org/browse/MHP-3002?focusedCommentId=84408&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-84408
+        moment().isBefore('2020-12-01') &&
+        myPeopleDashboardService.isMobile() &&
+        $window.matchMedia('(orientation: portrait)').matches &&
+        !localStorage.getItem('hideSuggestLandscape');
+
+    vm.dismissSuggestLandscape = () =>
+        localStorage.setItem('hideSuggestLandscape', true);
+
+    vm.showIosAddToHomeScreen = () =>
+        myPeopleDashboardService.isIos() &&
+        !window.navigator.standalone &&
+        !localStorage.getItem('hideIosAddToHomeScreen');
+
+    vm.dismissIosAddToHomeScreen = () =>
+        localStorage.setItem('hideIosAddToHomeScreen', true);
 
     function cleanUp() {
         angular.element($document).off('people::personAdded', loadAndSyncData);

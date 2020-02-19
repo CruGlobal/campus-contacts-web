@@ -21,16 +21,22 @@ function authenticationService(
 ) {
     const service = `${envService.read('apiUrl')}/auth/thekey`;
     const port = envService.is('development') ? `:${$location.port()}` : '';
-    const redirectUrl = encodeURIComponent(
-        `https://${$location.host()}${port}/auth-web`,
-    );
-    const theKeyloginUrl = `${envService.read(
-        'theKeyUrl',
-    )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
-        'theKeyClientId',
-    )}&redirect_uri=${redirectUrl}`;
+    const redirectUrl = () =>
+        encodeURIComponent(
+            `https://${$location.host()}${port}/auth-web${
+                $location.search().previousUri
+                    ? `?previousUri=${$location.search().previousUri}`
+                    : ''
+            }`,
+        );
+    const theKeyLoginUrl = () =>
+        `${envService.read(
+            'theKeyUrl',
+        )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
+            'theKeyClientId',
+        )}&redirect_uri=${redirectUrl()}`;
 
-    const theKeySignUpUrl = `${theKeyloginUrl}?&action=signup`;
+    const theKeySignUpUrl = () => `${theKeyLoginUrl()}?&action=signup`;
 
     const theKeylogoutUrl = `${envService.read(
         'theKeyUrl',
@@ -113,7 +119,7 @@ function authenticationService(
 
             inviteState
                 ? $state.go('appWithoutMenus.inviteLink', inviteState)
-                : $state.go('app.people');
+                : postAuthRedirect();
         } catch (e) {
             errorService.displayError(e, false);
         }
@@ -123,7 +129,7 @@ function authenticationService(
         try {
             const { data } = await requestFacebookV4Token(accessToken);
             setAuthorizationAndState(data.token);
-            $state.go('app.people');
+            postAuthRedirect();
         } catch (e) {
             errorService.displayError(e, false);
         }
@@ -200,6 +206,16 @@ function authenticationService(
         }
     };
 
+    const postAuthRedirect = () => {
+        const { previousUri } = $location.search();
+        if (previousUri) {
+            $location.url(previousUri);
+            $location.replace();
+        } else {
+            $state.go('app.people');
+        }
+    };
+
     return {
         destroyTheKeyAccess: () => {
             clearToken();
@@ -225,7 +241,8 @@ function authenticationService(
         impersonateUser,
         stopImpersonatingUser,
         adminRedirect,
-        theKeyloginUrl,
+        postAuthRedirect,
+        theKeyLoginUrl,
         theKeySignUpUrl,
         isTokenValid: getJwtToken,
         updateUserData,

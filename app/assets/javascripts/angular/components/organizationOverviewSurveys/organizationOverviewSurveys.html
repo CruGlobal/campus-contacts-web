@@ -1,18 +1,21 @@
-<div class="group row header grid-fixed">
-    <div class="column column-title">
+<div
+    class="grid-fixed"
+    ng-class="{ 'surveys-table': !$ctrl.organizationOverview.org.typeform_enabled, 'surveys-table-with-typeform': $ctrl.organizationOverview.org.typeform_enabled }"
+>
+    <div>
         {{ 'surveyTab:columns.survey' | t }}
     </div>
-    <div class="column column-keyword">
+    <div>
         {{ 'surveyTab:columns.keyword' | t }}
     </div>
-    <div class="column column-link">
+    <div>
         {{ 'surveyTab:columns.link' | t }}
     </div>
-    <div class="column column-status">
+    <div>
         {{ 'surveyTab:columns.status' | t }}
     </div>
     <div
-        class="column column-typeform"
+        class="typeform-info"
         ng-if="$ctrl.organizationOverview.org.typeform_enabled"
     >
         {{ 'surveyTab:columns.typeform' | t }}
@@ -21,7 +24,7 @@
             ng-click="$ctrl.showTypeformModal()"
         ></icon-button>
     </div>
-    <div class="column buttons-column">
+    <div>
         <icon-button
             icon="'add'"
             size="16"
@@ -29,155 +32,145 @@
             ng-if="$ctrl.directAdminPrivileges"
         ></icon-button>
     </div>
-</div>
-<div class="grid-content grid-fixed">
     <div
-        class="row"
-        ng-repeat="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
+        ng-repeat-start="survey in $ctrl.organizationOverview.surveys | orderBy: 'title' track by survey.id"
     >
-        <div class="column column-title">
-            <a
-                ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
-            >
-                {{ survey.title }}
-            </a>
+        <a
+            ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
+        >
+            {{ survey.title }}
+        </a>
+    </div>
+    <div>{{ survey.keyword.keyword }}</div>
+    <div>
+        <a ng-href="{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}" target="_blank"
+            >{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}</a
+        >
+    </div>
+    <div uib-dropdown>
+        <div ng-if="!$ctrl.directAdminPrivileges">
+            <span ng-if="!survey.is_frozen">
+                <ng-md-icon
+                    class="status-active"
+                    icon="brightness_1"
+                    size="14"
+                ></ng-md-icon>
+                {{ 'surveyTab:status.live' | t }}
+            </span>
+            <span ng-if="survey.is_frozen">
+                <ng-md-icon
+                    class="status-inactive"
+                    icon="brightness_1"
+                    size="14"
+                ></ng-md-icon>
+                {{ 'surveyTab:status.off' | t }}
+            </span>
         </div>
-        <div class="column column-keyword">{{ survey.keyword.keyword }}</div>
-        <div class="column column-link">
+        <div
+            uib-dropdown-toggle
+            ng-if="$ctrl.directAdminPrivileges"
+            class="pointer"
+        >
+            <span ng-if="!survey.is_frozen">
+                <ng-md-icon
+                    class="status-active"
+                    icon="brightness_1"
+                    size="14"
+                ></ng-md-icon>
+                {{ 'surveyTab:status.live' | t }}
+            </span>
+            <span ng-if="survey.is_frozen">
+                <ng-md-icon
+                    class="status-inactive"
+                    icon="brightness_1"
+                    size="14"
+                ></ng-md-icon>
+                {{ 'surveyTab:status.off' | t }}
+            </span>
+        </div>
+        <div
+            class="dropdown-menu"
+            uib-dropdown-menu
+            role="menu"
+            aria-labelledby="single-button"
+        >
             <a
-                ng-href="{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}"
-                target="_blank"
-                >{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}</a
+                class="dropdown-item"
+                href=""
+                ng-click="$ctrl.changeStatus(survey, true)"
+                >{{ 'surveyTab:status.live' | t }}</a
+            >
+            <a
+                class="dropdown-item"
+                href=""
+                ng-click="$ctrl.changeStatus(survey, false)"
+                >{{ 'surveyTab:status.off' | t }}</a
             >
         </div>
-        <div class="column column-status" uib-dropdown>
-            <div ng-if="!$ctrl.directAdminPrivileges">
-                <span ng-if="!survey.is_frozen">
-                    <ng-md-icon
-                        class="status-active"
-                        icon="brightness_1"
-                        size="14"
-                    ></ng-md-icon>
-                    {{ 'surveyTab:status.live' | t }}
-                </span>
-                <span ng-if="survey.is_frozen">
-                    <ng-md-icon
-                        class="status-inactive"
-                        icon="brightness_1"
-                        size="14"
-                    ></ng-md-icon>
-                    {{ 'surveyTab:status.off' | t }}
-                </span>
-            </div>
-            <div
+    </div>
+    <div ng-if="$ctrl.organizationOverview.org.typeform_enabled">
+        <ng-md-icon
+            class="status-active"
+            icon="check"
+            size="26"
+            ng-if="survey.remote_source === 'typeform'"
+        ></ng-md-icon>
+    </div>
+    <div class="buttons-column" ng-repeat-end>
+        <div uib-dropdown>
+            <ng-md-icon
                 uib-dropdown-toggle
-                ng-if="$ctrl.directAdminPrivileges"
-                class="pointer"
-            >
-                <span ng-if="!survey.is_frozen">
-                    <ng-md-icon
-                        class="status-active"
-                        icon="brightness_1"
-                        size="14"
-                    ></ng-md-icon>
-                    {{ 'surveyTab:status.live' | t }}
-                </span>
-                <span ng-if="survey.is_frozen">
-                    <ng-md-icon
-                        class="status-inactive"
-                        icon="brightness_1"
-                        size="14"
-                    ></ng-md-icon>
-                    {{ 'surveyTab:status.off' | t }}
-                </span>
-            </div>
+                icon="more_vert"
+                size="26"
+            ></ng-md-icon>
+
             <div
-                class="dropdown-menu"
+                class="dropdown-menu dropdown-menu-right"
                 uib-dropdown-menu
                 role="menu"
                 aria-labelledby="single-button"
             >
                 <a
                     class="dropdown-item"
-                    href=""
-                    ng-click="$ctrl.changeStatus(survey, true)"
-                    >{{ 'surveyTab:status.live' | t }}</a
+                    ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
+                    ng-if="$ctrl.directAdminPrivileges"
+                >
+                    {{ 'surveyTab:menu.edit' | t }}
+                </a>
+                <a
+                    class="dropdown-item"
+                    target="_blank"
+                    ui-sref="appWithoutMenus.previewSurvey({ surveyId: survey.id })"
+                >
+                    {{ 'surveyTab:menu.preview' | t }}
+                </a>
+                <a
+                    href
+                    class="dropdown-item"
+                    ng-click="$ctrl.deleteSurvey(survey)"
+                    ng-if="$ctrl.directAdminPrivileges"
+                >
+                    {{ 'surveyTab:menu.delete' | t }}
+                </a>
+                <a
+                    href
+                    class="dropdown-item"
+                    ng-click="$ctrl.copySurvey(survey)"
+                    ng-if="$ctrl.directAdminPrivileges"
+                >
+                    {{ 'surveyTab:menu.copy' | t }}
+                </a>
+                <a
+                    class="dropdown-item"
+                    ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })"
+                    >{{ 'surveyTab:menu.import' | t }}</a
                 >
                 <a
                     class="dropdown-item"
                     href=""
-                    ng-click="$ctrl.changeStatus(survey, false)"
-                    >{{ 'surveyTab:status.off' | t }}</a
+                    ng-click="$ctrl.massEntry(survey)"
+                    >{{ 'surveyTab:menu.mass' | t }}</a
                 >
-            </div>
-        </div>
-        <div
-            class="column column-typeform"
-            ng-if="$ctrl.organizationOverview.org.typeform_enabled"
-        >
-            <ng-md-icon
-                class="status-active"
-                icon="check"
-                size="26"
-                ng-if="survey.remote_source === 'typeform'"
-            ></ng-md-icon>
-        </div>
-        <div class="column buttons-column text-center">
-            <div uib-dropdown>
-                <ng-md-icon
-                    uib-dropdown-toggle
-                    icon="more_vert"
-                    size="26"
-                ></ng-md-icon>
-
-                <div
-                    class="dropdown-menu dropdown-menu-right"
-                    uib-dropdown-menu
-                    role="menu"
-                    aria-labelledby="single-button"
-                >
-                    <a
-                        class="dropdown-item"
-                        ui-sref="app.ministries.ministry.survey.manage({ surveyId: survey.id })"
-                        ng-if="$ctrl.directAdminPrivileges"
-                    >
-                        {{ 'surveyTab:menu.edit' | t }}
-                    </a>
-                    <a
-                        class="dropdown-item"
-                        target="_blank"
-                        ui-sref="appWithoutMenus.previewSurvey({ surveyId: survey.id })"
-                    >
-                        {{ 'surveyTab:menu.preview' | t }}
-                    </a>
-                    <a
-                        href
-                        class="dropdown-item"
-                        ng-click="$ctrl.deleteSurvey(survey)"
-                        ng-if="$ctrl.directAdminPrivileges"
-                    >
-                        {{ 'surveyTab:menu.delete' | t }}
-                    </a>
-                    <a
-                        href
-                        class="dropdown-item"
-                        ng-click="$ctrl.copySurvey(survey)"
-                        ng-if="$ctrl.directAdminPrivileges"
-                    >
-                        {{ 'surveyTab:menu.copy' | t }}
-                    </a>
-                    <a
-                        class="dropdown-item"
-                        ui-sref="app.ministries.ministry.import({ orgId: $ctrl.organizationOverview.org.id, surveyId: survey.id })"
-                        >{{ 'surveyTab:menu.import' | t }}</a
-                    >
-                    <a
-                        class="dropdown-item"
-                        href=""
-                        ng-click="$ctrl.massEntry(survey)"
-                        >{{ 'surveyTab:menu.mass' | t }}</a
-                    >
-                </div>
             </div>
         </div>
     </div>
