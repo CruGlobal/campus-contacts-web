@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import _ from 'lodash';
 import styled from '@emotion/styled';
+import { DocumentNode } from 'graphql';
 
 import BarChart from '../BarChart';
 
 interface Props {
-    query: any;
+    query: DocumentNode;
     variables?: any;
     mapData: (data: any) => any;
     label: string;

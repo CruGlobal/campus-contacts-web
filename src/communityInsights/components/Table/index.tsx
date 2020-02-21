@@ -3,6 +3,7 @@ import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 import { withTheme } from 'emotion-theming';
+import { DocumentNode } from 'graphql';
 
 import leftArrow from '../../assets/icons/arrow-left.svg';
 import leftArrowActive from '../../assets/icons/arrow-left-active.svg';
@@ -120,7 +121,7 @@ const PAGE_SIZE = 5;
 const PAGE_NUMBERS_SIZE = 5;
 
 interface Props {
-    query: any;
+    query: DocumentNode;
     headers: any;
     mapRows: (data: any) => any;
     mapPage: (data: any) => any;
