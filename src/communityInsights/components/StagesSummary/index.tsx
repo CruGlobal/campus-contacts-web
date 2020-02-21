@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import moment, { Moment } from 'moment';
 import { useQuery } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
+import { DocumentNode } from 'graphql';
 
 import RangePicker from '../RangePicker';
 import notSure from '../../assets/icons/stage-not-sure.svg';
@@ -123,7 +124,7 @@ interface entry {
 }
 
 interface Props {
-    query: string;
+    query: DocumentNode;
     mapData: (data: any) => any;
     variables: any;
     longNames?: boolean;

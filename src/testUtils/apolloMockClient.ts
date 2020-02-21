@@ -2,11 +2,8 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SchemaLink } from 'apollo-link-schema';
 import { addMockFunctionsToSchema } from 'graphql-tools';
-// @ts-ignore
-import { buildClientSchema } from 'graphql/utilities';
-// @ts-ignore
+import { buildClientSchema, IntrospectionQuery } from 'graphql/utilities';
 import { createMockerFromIntrospection } from 'fraql/mock';
-// @ts-ignore
 import gql from 'fraql';
 
 import introspectionQuery from '../../schema.json';
@@ -14,7 +11,9 @@ import introspectionQuery from '../../schema.json';
 import { globalMocks } from './globalMocks';
 
 export const createApolloMockClient = (mocks = {}) => {
-    const schema = buildClientSchema(introspectionQuery);
+    const schema = buildClientSchema(
+        (introspectionQuery as unknown) as IntrospectionQuery,
+    );
 
     addMockFunctionsToSchema({
         schema,

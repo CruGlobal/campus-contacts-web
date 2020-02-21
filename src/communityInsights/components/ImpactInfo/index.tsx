@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-apollo-hooks';
 import React from 'react';
+import { DocumentNode } from 'graphql';
 
 import Header from '../Header';
 
 interface Props {
-    query: any;
+    query: DocumentNode;
     text: (data: any) => string;
     variables: any;
 }

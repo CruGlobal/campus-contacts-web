@@ -2,6 +2,7 @@ import { useQuery } from 'react-apollo-hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
+import { DocumentNode } from 'graphql';
 
 import BarChart from '../BarChart';
 
@@ -11,7 +12,7 @@ const Wrapper = styled.div`
 `;
 
 interface Props {
-    query: any;
+    query: DocumentNode;
     mapData: (data: any) => any;
     variables: any;
     label: string;
