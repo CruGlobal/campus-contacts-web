@@ -2405,7 +2405,7 @@ angular-environment@^1.0.4:
 
 "angular-legacy-sortablejs-maintained@https://github.com/OzzieOrca/angular-legacy-sortablejs#event-expose-scope":
   version "0.6.2"
-  resolved "https://github.com/OzzieOrca/angular-legacy-sortablejs#76bb4291f99c8c2c77b2da38a377164d177f20dd"
+  resolved "https://github.com/OzzieOrca/angular-legacy-sortablejs#db5c136f6beab81bbd2e7d8e2448a296df3b828f"
 
 angular-material-icons@^0.7.0:
   version "0.7.1"
