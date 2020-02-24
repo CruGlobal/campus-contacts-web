@@ -4,7 +4,7 @@ import { withTheme } from 'emotion-theming';
 import moment, { Moment } from 'moment';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-import { DateRangePicker } from 'react-dates';
+import { DateRangePicker, FocusedInputShape } from 'react-dates';
 
 import calendar from '../../assets/icons/calendar.svg';
 
@@ -101,20 +101,20 @@ const CalendarIcon = styled.div`
 
 interface Props {
     onDatesChange: (dates: any) => void;
-    startDate: Moment;
-    endDate: Moment;
+    startDate: Moment | null;
+    endDate: Moment | null;
 }
 
 const RangePicker = ({ onDatesChange, startDate, endDate }: Props) => {
     const [dates, setDates] = useState({ startDate, endDate });
-    const [focus, setFocus] = useState();
+    const [focus, setFocus] = useState<FocusedInputShape | null>(null);
 
     const datesChanged = ({
         startDate,
         endDate,
     }: {
-        startDate: Moment;
-        endDate: Moment;
+        startDate: Moment | null;
+        endDate: Moment | null;
     }) => {
         setDates({ startDate, endDate });
         onDatesChange({ startDate, endDate });

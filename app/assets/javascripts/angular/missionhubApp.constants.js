@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-/* eslint angular/window-service: "off" */
-
 angular
     .module('missionhubApp')
     .constant('_', _)

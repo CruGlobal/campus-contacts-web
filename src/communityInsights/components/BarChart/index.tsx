@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { ResponsiveBar } from '@nivo/bar';
+import { ResponsiveBar, BarLayerType } from '@nivo/bar';
 import { withTheme } from 'emotion-theming';
 import { useTranslation } from 'react-i18next';
 import { line } from 'd3-shape';
@@ -284,14 +284,13 @@ const BarChart = (props: Props) => {
                     keys={keys}
                     indexBy={indexBy}
                     theme={theme.graph}
-                    // @ts-ignore
                     layers={[
                         AverageLine,
-                        'grid',
-                        'axes',
-                        'bars',
-                        'markers',
-                        'legends',
+                        'grid' as BarLayerType,
+                        'axes' as BarLayerType,
+                        'bars' as BarLayerType,
+                        'markers' as BarLayerType,
+                        'legends' as BarLayerType,
                         createNull,
                     ]}
                     margin={{
