@@ -81,7 +81,7 @@
         "react-router-dom": "^5.1.2",
         "react2angular": "^4.0.6",
         "rollbar": "^2.14.4",
-        "sortablejs": "^1.9.0",
+        "sortablejs": "^1.10.2",
         "stacktrace-js": "^2.0.1",
         "tachyons-sass": "^4.9.5",
         "ui-select": "^0.19.6"
