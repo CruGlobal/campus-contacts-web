@@ -122,7 +122,7 @@
         "eslint-config-prettier": "^6.10.0",
         "eslint-loader": "^3.0.3",
         "eslint-plugin-angular": "^4.0.1",
-        "eslint-plugin-prettier": "^3.1.1",
+        "eslint-plugin-prettier": "^3.1.2",
         "faker": "^4.1.0",
         "favicons-webpack-plugin": "^2.1.0",
         "file-loader": "^5.0.2",
