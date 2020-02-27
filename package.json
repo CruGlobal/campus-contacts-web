@@ -125,7 +125,7 @@
         "eslint-plugin-prettier": "^3.1.2",
         "faker": "^4.1.0",
         "favicons-webpack-plugin": "^2.1.0",
-        "file-loader": "^5.0.2",
+        "file-loader": "^5.1.0",
         "fraql": "^1.2.1",
         "graphql-tools": "^4.0.5",
         "html-loader": "^0.5.5",
