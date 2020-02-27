@@ -31,7 +31,7 @@
     "dependencies": {
         "@emotion/core": "^10.0.17",
         "@emotion/styled": "^10.0.17",
-        "@nivo/bar": "^0.59.2",
+        "@nivo/bar": "^0.61.1",
         "@types/mocha": "^5.2.7",
         "@uirouter/angularjs": "^1.0.25",
         "angular": "~1.7.9",
