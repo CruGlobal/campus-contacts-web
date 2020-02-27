@@ -277,9 +277,9 @@ describe('massEditService', function() {
                 },
                 { groups: { 1: false, 2: true } },
             );
-            expect(_.map(this.people[0].group_memberships, 'group.id')).toEqual(
-                ['2'],
-            );
+            expect(
+                _.map(this.people[0].group_memberships, 'group.id'),
+            ).toEqual(['2']);
             expect(JsonApiDataStore.store.destroy).toHaveBeenCalled();
         }));
     });
