@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@emotion/core": "^10.0.28",
-        "@emotion/styled": "^10.0.17",
+        "@emotion/styled": "^10.0.27",
         "@nivo/bar": "^0.61.1",
         "@types/mocha": "^7.0.1",
         "@uirouter/angularjs": "^1.0.25",
