@@ -2329,24 +2329,29 @@ acorn-jsx@^5.1.0:
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.1.0.tgz#294adb71b57398b0680015f0a38c563ee1db5384"
   integrity sha512-tMUqwBWfLFbJbizRmEcWSLw6HnFzfdJs2sOJEOwwtVPMoH/0Ay+E703oZz78VSXZiiDcZrQ5XKjPIUQixhmgVw==
 
-acorn-walk@^6.0.1, acorn-walk@^6.1.1:
+acorn-walk@^6.0.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-6.1.1.tgz#d363b66f5fac5f018ff9c3a1e7b6f8e310cc3913"
+
+acorn-walk@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.1.1.tgz#345f0dffad5c735e7373d2fec9a1023e6a44b83e"
+  integrity sha512-wdlPY2tm/9XBr7QkKlq0WQVgiuGTX6YWPyRyBviSoScBuLfTVQhvwg6wJ369GJ/1nPfTLMfnrFIfjqVg6d+jQQ==
 
 acorn@^5.3.0:
   version "5.7.4"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
   integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
-acorn@^6.0.1, acorn@^6.0.7, acorn@^6.2.1:
+acorn@^6.0.1, acorn@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.2.1.tgz#3ed8422d6dec09e6121cc7a843ca86a330a86b51"
   integrity sha512-JD0xT5FCRDNyjDda3Lrg/IxFscp9q4tiYtxE1/nOzlKCk7hIRuYjhq1kCNkbPjMRMZuFq20HNQn1I9k8Oj0E+Q==
 
-acorn@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.0.tgz#949d36f2c292535da602283586c2477c57eb2d6c"
-  integrity sha512-kL5CuoXA/dgxlBbVrflsflzQ3PAas7RYZB52NOm/6839iVYJgKMJ3cQJD+t2i5+qFa8h3MDpEOJiS64E8JLnSQ==
+acorn@^7.1.0, acorn@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
+  integrity sha512-add7dgA5ppRPxCFJoAGfMDi7PIBXq1RtGo7BhbLaxwrXPOmw8gq48Y9ozT01hUKy9byMjlR20EJhu5zlkErEkg==
 
 after@0.8.2:
   version "0.8.2"
@@ -5137,14 +5142,10 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-ejs@^2.5.7:
+ejs@^2.5.7, ejs@^2.6.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.1.tgz#5b5ab57f718b79d4aca9254457afecd36fa80228"
   integrity sha512-kS/gEPzZs3Y1rRsbGX4UOSjtP/CeJP0CxSNZHYxGfVM/VgLcv0ZqM7C45YyTj2DI2g7+P9Dd24C+IMIg6D0nYQ==
-
-ejs@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
 electron-to-chromium@^1.3.341:
   version "1.3.344"
@@ -13988,13 +13989,13 @@ webpack-bundle-analyzer@^2.9.2:
     opener "^1.4.3"
     ws "^4.0.0"
 
-webpack-bundle-analyzer@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.6.0.tgz#39b3a8f829ca044682bc6f9e011c95deb554aefd"
-  integrity sha512-orUfvVYEfBMDXgEKAKVvab5iQ2wXneIEorGNsyuOyVYpjYrI7CUOhhXNDd3huMwQ3vNNWWlGP+hzflMFYNzi2g==
+webpack-bundle-analyzer@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.6.1.tgz#bdb637c2304424f2fbff9a950c7be42a839ae73b"
+  integrity sha512-Nfd8HDwfSx1xBwC+P8QMGvHAOITxNBSvu/J/mCJvOwv+G4VWkU7zir9SSenTtyCi0LnVtmsc7G5SZo1uV+bxRw==
   dependencies:
-    acorn "^6.0.7"
-    acorn-walk "^6.1.1"
+    acorn "^7.1.1"
+    acorn-walk "^7.1.1"
     bfj "^6.1.1"
     chalk "^2.4.1"
     commander "^2.18.0"
