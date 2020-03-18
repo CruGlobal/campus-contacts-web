@@ -152,7 +152,7 @@
         "prettier": "^1.19.1",
         "pretty-quick": "^2.0.1",
         "sass-loader": "^8.0.2",
-        "start-server-and-test": "^1.10.8",
+        "start-server-and-test": "^1.10.11",
         "ts-jest": "^25.2.1",
         "typescript": "^3.8.3",
         "webpack": "^4.42.0",
