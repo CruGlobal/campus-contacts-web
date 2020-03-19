@@ -137,7 +137,7 @@
         "jasmine-core": "^3.5.0",
         "jest": "^25.1.0",
         "jest-css-modules": "^2.1.0",
-        "jest-emotion": "^10.0.27",
+        "jest-emotion": "^10.0.32",
         "jest-svg-transformer": "^1.0.0",
         "karma": "^4.4.1",
         "karma-chrome-launcher": "^3.1.0",
