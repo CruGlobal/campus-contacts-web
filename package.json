@@ -80,7 +80,7 @@
         "react-redux": "^5.1.2",
         "react-router-dom": "^5.1.2",
         "react2angular": "^4.0.6",
-        "rollbar": "^2.14.4",
+        "rollbar": "^2.15.0",
         "sortablejs": "^1.10.2",
         "stacktrace-js": "^2.0.2",
         "tachyons-sass": "^4.9.5",
