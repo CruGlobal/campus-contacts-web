@@ -62,7 +62,7 @@
         "graphql-playground-react": "^1.7.20",
         "graphql-tag": "^2.10.3",
         "i18next": "^19.3.2",
-        "iso-639-1": "^2.1.0",
+        "iso-639-1": "^2.1.1",
         "jsonapi-datastore": "^0.4.0-beta",
         "lodash": "^4.17.13",
         "m49-regions": "^1.2.0",
