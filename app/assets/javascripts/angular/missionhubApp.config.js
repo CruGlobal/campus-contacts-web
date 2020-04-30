@@ -9,6 +9,7 @@ angular
                     'stage.mhub.cc',
                     'new.missionhub.com',
                     '*.netlify.com',
+                    '*.netlify.app',
                 ],
                 production: [
                     'missionhub.com',
