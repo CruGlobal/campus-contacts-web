@@ -653,6 +653,7 @@ export default {
             preferences: 'Preferences',
             support: 'Support',
             terms: 'Terms of Service',
+            privacy: 'Privacy',
             copyright: 'Copyright {{ year }} Cru. All Rights Reserved.',
             warning: {
                 title: 'Warning',
