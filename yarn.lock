@@ -4397,10 +4397,12 @@ countrily-data@^1.0.1:
   dependencies:
     lodash "^4.17.4"
 
-country-region-data@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/country-region-data/-/country-region-data-1.5.1.tgz#a7fff4542b830299e082ed8fd7be3c030ec0dc8d"
-  integrity sha512-fRiXQ21MCZy678IJL/SSHeNMG/WR7vAY1B25D4dCQdc0o31nCytNaL8LJs2cscegtI265JvZxRc5QI4nugpu8Q==
+country-region-data@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/country-region-data/-/country-region-data-1.6.0.tgz#a0247545ef32c925fb7cd24c3c61b2473fe91dcb"
+  integrity sha512-MPsZo6VlezyxuWoWg5eL6f657qvEHbjkiak4jG1xejmvRgXBA/j+PDvxWFqB4q/clVAYE0Li4hKv9h1ymJafyQ==
+  dependencies:
+    package-lock.json "^1.0.0"
 
 create-ecdh@^4.0.0:
   version "4.0.3"
@@ -10418,6 +10420,11 @@ p-try@^1.0.0:
 p-try@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.0.0.tgz#85080bb87c64688fa47996fe8f7dfbe8211760b1"
+
+package-lock.json@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/package-lock.json/-/package-lock.json-1.0.0.tgz#c4448dcd4c5a1e176b5285de4d837adb1129d437"
+  integrity sha512-+yEXtNdlCs5N0Zy/9uvkifgf/RqnGu0WqP4j9Wu1Us4YReFe1YNBh2Krmf8B1xGxjpYnta63K55QP8bkafnOzA==
 
 pako@^1.0.5:
   version "1.0.10"
