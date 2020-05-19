@@ -5,7 +5,6 @@ import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
 import { GET_STAGES_REPORT_STEPS_ADDED } from '../../../containers/PersonalStepsPage/queries';
-
 import StepsChart from '..';
 
 describe('<StepsChart />', () => {

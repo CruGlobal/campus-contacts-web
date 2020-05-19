@@ -3,7 +3,6 @@ import { MockList } from 'graphql-tools';
 import { wait } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
-
 import ChallengesPage from '..';
 
 describe('<ChallengesPage />', () => {

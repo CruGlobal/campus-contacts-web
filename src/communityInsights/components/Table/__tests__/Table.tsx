@@ -4,7 +4,6 @@ import { MockList } from 'graphql-tools';
 
 import { renderWithContext } from '../../../../testUtils';
 import { GET_CHALLENGES } from '../../../containers/ChallengesPage/queries';
-
 import Table from '..';
 
 describe('<Table />', () => {
