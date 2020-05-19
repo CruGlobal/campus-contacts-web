@@ -6,7 +6,7 @@ function personAssignedService(JsonApiDataStore, personService) {
     return {
         // Return an array of information items about the people assigned to a particular person in a
         // particular organization
-        getAssigned: function(person, organizationId) {
+        getAssigned: function (person, organizationId) {
             // Return information about a contact assignment (currently the assignee and followup status)
             function assignmentInfoFromAssignment(assignment) {
                 var person = JsonApiDataStore.store.find(
@@ -24,7 +24,7 @@ function personAssignedService(JsonApiDataStore, personService) {
 
             return personService
                 .getContactAssignments(person, organizationId)
-                .then(function(assignments) {
+                .then(function (assignments) {
                     return assignments.map(assignmentInfoFromAssignment);
                 });
         },

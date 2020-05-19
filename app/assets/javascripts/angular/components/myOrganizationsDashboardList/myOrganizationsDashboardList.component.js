@@ -5,7 +5,7 @@ angular.module('missionhubApp').component('myOrganizationsDashboardList', {
     bindings: {
         rootOrgs: '<',
     },
-    controller: /* @ngInject */ function(userPreferencesService, $scope) {
+    controller: /* @ngInject */ function (userPreferencesService, $scope) {
         let deregisterEditOrganizationsEvent;
 
         deregisterEditOrganizationsEvent = $scope.$on(

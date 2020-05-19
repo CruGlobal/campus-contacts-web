@@ -7,13 +7,13 @@ var groupsService, $q, $rootScope, httpProxy, JsonApiDataStore, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('groupsService', function() {
-    beforeEach(inject(function(
+describe('groupsService', function () {
+    beforeEach(inject(function (
         _groupsService_,
         _$q_,
         _$rootScope_,
@@ -73,24 +73,24 @@ describe('groupsService', function() {
         this.httpResponse = $q.resolve({
             data: this.group,
         });
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return _this.httpResponse;
         });
     }));
 
-    describe('createGroup', function() {
-        it('should make a network request', function() {
+    describe('createGroup', function () {
+        it('should make a network request', function () {
             groupsService.createGroup(this.group);
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
         it(
             'should return a promise that resolves to the new group',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 return groupsService
                     .createGroup(this.group)
-                    .then(function(group) {
+                    .then(function (group) {
                         expect(group).toBe(_this.group);
                     });
             }),
@@ -98,33 +98,33 @@ describe('groupsService', function() {
 
         it(
             'should add the group to the organization',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.organization.groups = [];
                 return groupsService
                     .createGroup(this.group)
-                    .then(function(group) {
+                    .then(function (group) {
                         expect(_this.organization.groups).toEqual([group]);
                     });
             }),
         );
     });
 
-    describe('deleteGroup', function() {
+    describe('deleteGroup', function () {
         it(
             'should remove the group from the organization',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.organization.groups = [this.group];
-                return groupsService.deleteGroup(this.group).then(function() {
+                return groupsService.deleteGroup(this.group).then(function () {
                     expect(_this.organization.groups).toEqual([]);
                 });
             }),
         );
     });
 
-    describe('timeToDate', function() {
-        it('should convert milliseconds since midnight into a date object', function() {
+    describe('timeToDate', function () {
+        it('should convert milliseconds since midnight into a date object', function () {
             // 12:34:56.789
             var date = groupsService.timeToDate(
                 12 * 60 * 60 * 1000 + 34 * 60 * 1000 + 56 * 1000 + 789,
@@ -137,8 +137,8 @@ describe('groupsService', function() {
         });
     });
 
-    describe('dateToTime', function() {
-        it('should convert a date object into milliseconds since midnight', function() {
+    describe('dateToTime', function () {
+        it('should convert a date object into milliseconds since midnight', function () {
             var date = new Date();
             date.setMilliseconds(789);
             date.setSeconds(56);
@@ -152,13 +152,13 @@ describe('groupsService', function() {
         });
     });
 
-    describe('getAllMembers', function() {
-        it('should return all the members of a group', function() {
+    describe('getAllMembers', function () {
+        it('should return all the members of a group', function () {
             expect(
                 _.map(groupsService.getAllMembers(this.group), 'id'),
             ).toEqual([21, 22, 23]);
         });
-        it('should ignore unloaded group_memberships', function() {
+        it('should ignore unloaded group_memberships', function () {
             this.group.group_memberships[0]._placeHolder = true;
             expect(
                 _.map(groupsService.getAllMembers(this.group), 'id'),
@@ -166,8 +166,8 @@ describe('groupsService', function() {
         });
     });
 
-    describe('getMembersWithRole', function() {
-        it('should return all the members of a group with the specified role', function() {
+    describe('getMembersWithRole', function () {
+        it('should return all the members of a group with the specified role', function () {
             expect(
                 _.map(
                     groupsService.getMembersWithRole(this.group, 'leader'),
@@ -177,15 +177,15 @@ describe('groupsService', function() {
         });
     });
 
-    describe('findMember', function() {
-        it('should return the membership for the person', function() {
+    describe('findMember', function () {
+        it('should return the membership for the person', function () {
             var membership = this.group.group_memberships[0];
             expect(
                 groupsService.findMember(this.group, membership.person),
             ).toBe(membership);
         });
 
-        it('should return null if the person is not a member', function() {
+        it('should return null if the person is not a member', function () {
             expect(
                 groupsService.findMember(
                     this.group,
@@ -195,8 +195,8 @@ describe('groupsService', function() {
         });
     });
 
-    describe('payloadFromGroup', function() {
-        it('should generate a JSON API payload', function() {
+    describe('payloadFromGroup', function () {
+        it('should generate a JSON API payload', function () {
             this.people = [
                 new JsonApiDataStore.Model('person', 11),
                 new JsonApiDataStore.Model('person', 12),
@@ -275,7 +275,7 @@ describe('groupsService', function() {
             });
         });
 
-        it('should include organization id if it is a new group', function() {
+        it('should include organization id if it is a new group', function () {
             this.people = [];
 
             this.group = new JsonApiDataStore.Model('group');
@@ -315,20 +315,20 @@ describe('groupsService', function() {
         });
     });
 
-    describe('loadMemberships', function() {
-        beforeEach(function() {
+    describe('loadMemberships', function () {
+        beforeEach(function () {
             this.loaded = {};
             this.unloaded = { _placeHolder: true };
         });
 
-        it('should load the groups and memberships of an organization when a group is unloaded', function() {
+        it('should load the groups and memberships of an organization when a group is unloaded', function () {
             groupsService.loadMemberships({
                 groups: [{ group_memberships: [this.loaded] }, this.unloaded],
             });
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
-        it('should load the groups and memberships of an organization when a membership is unloaded', function() {
+        it('should load the groups and memberships of an organization when a membership is unloaded', function () {
             groupsService.loadMemberships({
                 groups: [
                     { group_memberships: [this.loaded] },
@@ -338,7 +338,7 @@ describe('groupsService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
-        it('should do nothing when all groups and memberships are loaded', function() {
+        it('should do nothing when all groups and memberships are loaded', function () {
             groupsService.loadMemberships({
                 groups: [
                     { group_memberships: [this.loaded, this.loaded] },
@@ -349,8 +349,8 @@ describe('groupsService', function() {
         });
     });
 
-    describe('loadMissingLeaders', function() {
-        it('should load all missing leaders across all groups', function() {
+    describe('loadMissingLeaders', function () {
+        it('should load all missing leaders across all groups', function () {
             groupsService.loadMissingLeaders({
                 groups: [
                     {
@@ -391,7 +391,7 @@ describe('groupsService', function() {
             );
         });
 
-        it('should do nothing when there are no unloaded leaders', function() {
+        it('should do nothing when there are no unloaded leaders', function () {
             groupsService.loadMissingLeaders({
                 groups: [
                     {

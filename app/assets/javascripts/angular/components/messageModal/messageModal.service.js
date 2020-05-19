@@ -4,7 +4,7 @@ angular
 
 function messageModalService(httpProxy, personSelectionService) {
     var messageModalService = {
-        sendMessage: function(options) {
+        sendMessage: function (options) {
             var selection = options.recipients;
             var filters = personSelectionService.convertToFilters(
                 selection,

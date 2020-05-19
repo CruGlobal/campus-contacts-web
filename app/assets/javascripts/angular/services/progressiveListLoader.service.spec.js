@@ -7,13 +7,13 @@ var ProgressiveListLoader, $rootScope, $q, httpProxy, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('ProgressiveListLoader', function() {
-    beforeEach(inject(function(
+describe('ProgressiveListLoader', function () {
+    beforeEach(inject(function (
         _ProgressiveListLoader_,
         _$rootScope_,
         _$q_,
@@ -38,7 +38,7 @@ describe('ProgressiveListLoader', function() {
         this.listLoader = new ProgressiveListLoader({ modelType: 'person' });
 
         var _this = this;
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return $q.resolve({
                 data: _this.responsePeople,
                 meta: { total: _this.responseTotal },
@@ -46,16 +46,16 @@ describe('ProgressiveListLoader', function() {
         });
     }));
 
-    describe('loadMore', function() {
+    describe('loadMore', function () {
         it(
             'loads first batch of people',
-            asynchronous(function() {
+            asynchronous(function () {
                 this.responsePeople = [{ id: 1 }, { id: 2 }, { id: 3 }];
                 this.responseTotal = 4;
 
                 return this.listLoader
                     .loadMore({ include: 'phone_numbers' })
-                    .then(function(resp) {
+                    .then(function (resp) {
                         var respIds = _.map(resp.list, 'id');
                         expect(respIds).toEqual([1, 2, 3]);
                         expect(resp.loadedAll).toBe(false);
@@ -76,7 +76,7 @@ describe('ProgressiveListLoader', function() {
 
         it(
             'loads second batch with more to come',
-            asynchronous(function() {
+            asynchronous(function () {
                 // put some in the list
                 this.listLoader.reset([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
@@ -88,7 +88,7 @@ describe('ProgressiveListLoader', function() {
                 ];
                 this.responseTotal = 7;
 
-                return this.listLoader.loadMore().then(function(resp) {
+                return this.listLoader.loadMore().then(function (resp) {
                     var respIds = _.map(resp.list, 'id');
                     expect(respIds).toEqual([1, 2, 3, 4, 5, 6]);
                     expect(resp.loadedAll).toBe(false);
@@ -109,13 +109,13 @@ describe('ProgressiveListLoader', function() {
 
         it(
             'loads second and final batch',
-            asynchronous(function() {
+            asynchronous(function () {
                 this.listLoader.reset([{ id: 1 }, { id: 2 }]);
 
                 this.responsePeople = [{ id: 2 }, { id: 3 }];
                 this.responseTotal = 3;
 
-                return this.listLoader.loadMore().then(function(resp) {
+                return this.listLoader.loadMore().then(function (resp) {
                     var respIds = _.map(resp.list, 'id');
                     expect(respIds).toEqual([1, 2, 3]);
                     expect(resp.loadedAll).toBe(true);

@@ -4,13 +4,13 @@ import 'angular-mocks';
 var userPreferencesService, _;
 var httpProxy = jasmine.createSpyObj('httpProxy', ['put']);
 
-describe('userPreferences service', function() {
-    beforeEach(function() {
+describe('userPreferences service', function () {
+    beforeEach(function () {
         var _this = this;
 
         // Mock out the loggedInPerson service
-        angular.mock.module(function($provide) {
-            $provide.factory('loggedInPerson', function() {
+        angular.mock.module(function ($provide) {
+            $provide.factory('loggedInPerson', function () {
                 return {
                     person: {
                         user: {
@@ -25,13 +25,13 @@ describe('userPreferences service', function() {
                 };
             });
 
-            $provide.factory('httpProxy', function() {
+            $provide.factory('httpProxy', function () {
                 return httpProxy;
             });
         });
     });
 
-    beforeEach(inject(function(_userPreferencesService_, ___) {
+    beforeEach(inject(function (_userPreferencesService_, ___) {
         userPreferencesService = _userPreferencesService_;
         _ = ___;
 
@@ -48,8 +48,8 @@ describe('userPreferences service', function() {
         ];
     }));
 
-    describe('updateUserPreference', function() {
-        it('should save the changed preferences to the server', function() {
+    describe('updateUserPreference', function () {
+        it('should save the changed preferences to the server', function () {
             userPreferencesService._updateUserPreferences(
                 {
                     somePreference: 'newValue',
@@ -73,8 +73,8 @@ describe('userPreferences service', function() {
         });
     });
 
-    describe('organizationOrderChange', function() {
-        it('should save the new organization order', function() {
+    describe('organizationOrderChange', function () {
+        it('should save the new organization order', function () {
             spyOn(userPreferencesService, '_updateUserPreferences');
             userPreferencesService.organizationOrderChange(
                 [
@@ -98,8 +98,8 @@ describe('userPreferences service', function() {
         });
     });
 
-    describe('toggleOrganizationVisibility', function() {
-        it('should hide an org save the updated hiddenOrgs list', function() {
+    describe('toggleOrganizationVisibility', function () {
+        it('should hide an org save the updated hiddenOrgs list', function () {
             spyOn(userPreferencesService, '_updateUserPreferences');
             this.hiddenOrgs = ['4', '5'];
 
@@ -118,8 +118,8 @@ describe('userPreferences service', function() {
         });
     });
 
-    describe('applyUserOrgDisplayPreferences', function() {
-        it('should sort by ancestry and name with no org order', function() {
+    describe('applyUserOrgDisplayPreferences', function () {
+        it('should sort by ancestry and name with no org order', function () {
             this.orgOrder = null;
             expect(
                 _.map(
@@ -131,7 +131,7 @@ describe('userPreferences service', function() {
             ).toEqual(['3', '2', '5', '1', '4']);
         });
 
-        it('should sort by org order with complete org order', function() {
+        it('should sort by org order with complete org order', function () {
             this.orgOrder = ['2', '5', '3', '1', '4'];
             expect(
                 _.map(
@@ -143,7 +143,7 @@ describe('userPreferences service', function() {
             ).toEqual(this.orgOrder);
         });
 
-        it('should sort by org order then by ancestry and name with incomplete org order', function() {
+        it('should sort by org order then by ancestry and name with incomplete org order', function () {
             this.orgOrder = ['2', '5'];
             expect(
                 _.map(
@@ -155,7 +155,7 @@ describe('userPreferences service', function() {
             ).toEqual(['2', '5', '3', '1', '4']);
         });
 
-        it('should handle old user preferences', function() {
+        it('should handle old user preferences', function () {
             this.orgOrder = ['6', '9', '2', '5'];
             expect(
                 _.map(

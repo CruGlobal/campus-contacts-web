@@ -40,10 +40,10 @@ function editLabelController(labelsService, _) {
 
         return labelsService
             .saveLabel(vm.label)
-            .then(function(newLabel) {
+            .then(function (newLabel) {
                 vm.close({ $value: newLabel });
             })
-            .catch(function() {
+            .catch(function () {
                 vm.saving = false;
             });
     }

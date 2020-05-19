@@ -107,9 +107,9 @@ function surveyOverviewQuestionsController(
                     errorMessage: 'error.messages.surveys.loadQuestions',
                 },
             )
-            .then(res => res.data.labels);
+            .then((res) => res.data.labels);
 
-        const currentLabels = orgLabels.filter(label =>
+        const currentLabels = orgLabels.filter((label) =>
             labelIds.includes(label.id),
         );
         return currentLabels;
@@ -147,17 +147,17 @@ function surveyOverviewQuestionsController(
         return data;
     };
 
-    const rebuildQuestions = questions => {
+    const rebuildQuestions = (questions) => {
         this.surveyQuestions = questions.map(buildQuestion);
     };
 
-    const rebuildQuestion = question => {
+    const rebuildQuestion = (question) => {
         const q = buildQuestion(question);
         const index = this.surveyQuestions.indexOf(question);
         this.surveyQuestions[index] = q;
     };
 
-    const buildQuestion = question => {
+    const buildQuestion = (question) => {
         const a = question.content ? question.content.split('\n') : [];
 
         if (a) {
@@ -186,7 +186,7 @@ function surveyOverviewQuestionsController(
     };
 
     const buildRules = (questionRules, answerQuestion, type) => {
-        return answerQuestion.map(answer =>
+        return answerQuestion.map((answer) =>
             buildRule(answer, questionRules, type),
         );
     };
@@ -199,7 +199,7 @@ function surveyOverviewQuestionsController(
             people_ids = null,
         } =
             questionRules.find(
-                r => r.trigger_keywords === answer && r.rule_code === type,
+                (r) => r.trigger_keywords === answer && r.rule_code === type,
             ) || {};
         let ids = people_ids ? people_ids.split(',') : [];
         let labelIds = label_ids ? label_ids.split(',') : [];
@@ -212,10 +212,10 @@ function surveyOverviewQuestionsController(
             rule_code: type,
             trigger_keywords: answer,
             assigned_labels: id
-                ? this.labels.filter(p => labelIds.indexOf(p.id) >= 0)
+                ? this.labels.filter((p) => labelIds.indexOf(p.id) >= 0)
                 : null,
             assign_to: id
-                ? this.people.filter(p => ids.indexOf(p.id) >= 0)
+                ? this.people.filter((p) => ids.indexOf(p.id) >= 0)
                 : null,
         };
     };
@@ -225,7 +225,7 @@ function surveyOverviewQuestionsController(
         originalAnswer,
         newAnswer,
     ) => {
-        return question.question_rules.map(r => {
+        return question.question_rules.map((r) => {
             if (r.trigger_keywords === originalAnswer) {
                 return {
                     ...r,
@@ -246,7 +246,7 @@ function surveyOverviewQuestionsController(
 
     this.addLabelToRule = async (question, rule) => {
         const index = question.question_rules.findIndex(
-            currentRule => currentRule.id === rule.id,
+            (currentRule) => currentRule.id === rule.id,
         );
 
         // This is terrible. Somehow the reference isn't preserved when editing multiple times.
@@ -257,8 +257,8 @@ function surveyOverviewQuestionsController(
         const ids = [
             ...new Set(
                 question.question_rules[index].assigned_labels
-                    .filter(a => a._type === 'label')
-                    .map(b => b.id),
+                    .filter((a) => a._type === 'label')
+                    .map((b) => b.id),
             ),
         ];
 
@@ -271,8 +271,8 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].label_ids = ids.join(',');
-        question.question_rules[index].assigned_labels.forEach(a => {
-            const exists = this.labels.find(p => p.id === a.id);
+        question.question_rules[index].assigned_labels.forEach((a) => {
+            const exists = this.labels.find((p) => p.id === a.id);
             if (!exists) {
                 this.labels.push(a);
             }
@@ -282,7 +282,7 @@ function surveyOverviewQuestionsController(
 
     this.addPersonToRule = async (question, rule) => {
         const index = question.question_rules.findIndex(
-            currentRule => currentRule.id === rule.id,
+            (currentRule) => currentRule.id === rule.id,
         );
 
         // This is terrible. Somehow the reference isn't preserved when editing multiple times.
@@ -290,7 +290,7 @@ function surveyOverviewQuestionsController(
 
         if (!question.question_rules[index].assign_to) return;
 
-        question.question_rules[index].assign_to.map(a => {
+        question.question_rules[index].assign_to.map((a) => {
             if (a._type !== 'person') {
                 return null;
             }
@@ -298,8 +298,8 @@ function surveyOverviewQuestionsController(
         const ids = [
             ...new Set(
                 question.question_rules[index].assign_to
-                    .filter(a => a._type === 'person')
-                    .map(b => b.id),
+                    .filter((a) => a._type === 'person')
+                    .map((b) => b.id),
             ),
         ];
 
@@ -312,8 +312,8 @@ function surveyOverviewQuestionsController(
         }
 
         question.question_rules[index].people_ids = ids.join(',');
-        question.question_rules[index].assign_to.forEach(a => {
-            const exists = this.people.find(p => p.id === a.id);
+        question.question_rules[index].assign_to.forEach((a) => {
+            const exists = this.people.find((p) => p.id === a.id);
             if (!exists) {
                 this.people.push(a);
             }
@@ -344,7 +344,7 @@ function surveyOverviewQuestionsController(
         onEnd: () => this.updatePosition(this.surveyQuestions),
     };
 
-    this.updatePosition = async questions => {
+    this.updatePosition = async (questions) => {
         if (!this.directAdminPrivileges) return;
         // Use for of loop to allow for async/await so the updateSurveyQuestions function fires in sequence of each other
         for (let question of questions) {
@@ -367,14 +367,14 @@ function surveyOverviewQuestionsController(
                 orgId: () => this.survey.organization_id,
                 currentQuestions: () =>
                     this.surveyQuestions.map(({ id }) => id),
-                addQuestion: () => question => {
+                addQuestion: () => (question) => {
                     this.addQuestion(question);
                 },
             },
         });
     };
 
-    this.addQuestion = question => {
+    this.addQuestion = (question) => {
         if (!this.directAdminPrivileges) return;
 
         if (!question.content) {
@@ -383,7 +383,7 @@ function surveyOverviewQuestionsController(
 
         surveyService
             .createSurveyQuestion(this.survey.id, question)
-            .then(newQuestion => {
+            .then((newQuestion) => {
                 this.surveyQuestions.push(newQuestion);
 
                 if (!newQuestion.predefined) {
@@ -392,13 +392,13 @@ function surveyOverviewQuestionsController(
             });
     };
 
-    this.copyQuestion = question => {
+    this.copyQuestion = (question) => {
         if (!this.directAdminPrivileges) return;
 
         this.addQuestion(_.omit(question, ['id']));
     };
 
-    this.deleteQuestion = questionId => {
+    this.deleteQuestion = (questionId) => {
         if (!this.directAdminPrivileges) return;
 
         $uibModal
@@ -422,7 +422,7 @@ function surveyOverviewQuestionsController(
             });
     };
 
-    this.saveQuestion = question => {
+    this.saveQuestion = (question) => {
         if (!this.directAdminPrivileges) return;
 
         const {
@@ -450,13 +450,13 @@ function surveyOverviewQuestionsController(
         );
     };
 
-    this.updateQuestion = async question => {
+    this.updateQuestion = async (question) => {
         await this.saveQuestion(question);
         rebuildQuestion(question);
         $scope.$apply();
     };
 
-    this.addEmptyQuestionContent = question => {
+    this.addEmptyQuestionContent = (question) => {
         if (!question.question_answers) question.question_answers = [];
 
         question.question_answers.push('');
@@ -473,7 +473,7 @@ function surveyOverviewQuestionsController(
         this.saveQuestionContent(question, question.question_answers);
     };
 
-    const deleteQuestionRule = ruleId => {
+    const deleteQuestionRule = (ruleId) => {
         return surveyService.deleteSurveyQuestionRule(this.survey.id, ruleId);
     };
 
@@ -492,10 +492,10 @@ function surveyOverviewQuestionsController(
 
         if (ruleIdsToDelete.length > 0) {
             await Promise.all(
-                ruleIdsToDelete.map(ruleId => deleteQuestionRule(ruleId)),
+                ruleIdsToDelete.map((ruleId) => deleteQuestionRule(ruleId)),
             );
 
-            const newRules = question.question_rules.filter(r => {
+            const newRules = question.question_rules.filter((r) => {
                 if (r.trigger_keywords !== keyword) return r;
             });
 
@@ -512,7 +512,7 @@ function surveyOverviewQuestionsController(
         const newAnswer = question.question_answers[answerIndex];
 
         const originalAnswer = oldAnswers.find(
-            a => question.question_answers.indexOf(a) === -1,
+            (a) => question.question_answers.indexOf(a) === -1,
         );
 
         question.question_rules = buildRulesWithChangedAnswer(
@@ -530,7 +530,7 @@ function surveyOverviewQuestionsController(
 
         if (data.question_rules) {
             const index = this.surveyQuestions.findIndex(
-                currentQuestion => currentQuestion.id === question.id,
+                (currentQuestion) => currentQuestion.id === question.id,
             );
             this.surveyQuestions[index].question_rules = data.question_rules;
             rebuildQuestion(this.surveyQuestions[index]);

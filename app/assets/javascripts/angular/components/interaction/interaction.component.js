@@ -39,10 +39,10 @@ function interactionController(
         vm.modifyInteractionState = 'saving';
         return interactionsService
             .updateInteraction(vm.interaction)
-            .then(function() {
+            .then(function () {
                 vm.modifyInteractionState = 'view';
             })
-            .catch(function() {
+            .catch(function () {
                 vm.modifyInteractionState = 'edit';
             });
     }
@@ -51,17 +51,17 @@ function interactionController(
         vm.modifyInteractionState = 'saving';
         return confirmModalService
             .create($filter('t')('interactions.delete_confirmation'))
-            .then(function() {
+            .then(function () {
                 return interactionsService.deleteInteraction(vm.interaction);
             })
-            .then(function() {
+            .then(function () {
                 vm.onDelete({
                     $event: {
                         interaction: vm.interaction,
                     },
                 });
             })
-            .catch(function() {
+            .catch(function () {
                 vm.modifyInteractionState = 'view';
             });
     }

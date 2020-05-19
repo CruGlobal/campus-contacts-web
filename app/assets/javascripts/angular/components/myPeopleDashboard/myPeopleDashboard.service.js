@@ -11,7 +11,7 @@ function myPeopleDashboardService(httpProxy, modelsService, _) {
 
         isIos: () => window.navigator.userAgent.match(/iPhone|iPad|iPod/i),
 
-        loadPeople: function(params) {
+        loadPeople: function (params) {
             return httpProxy.get(
                 modelsService.getModelMetadata('person').url.all,
                 params || {},
@@ -22,7 +22,7 @@ function myPeopleDashboardService(httpProxy, modelsService, _) {
             );
         },
 
-        loadOrganizations: function(params) {
+        loadOrganizations: function (params) {
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('organization').url.all,

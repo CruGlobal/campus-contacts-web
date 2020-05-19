@@ -4,13 +4,13 @@ import 'angular-mocks';
 var $q, $rootScope, reportsService, httpProxy, JsonApiDataStore, periodService;
 
 function async(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -18,8 +18,8 @@ function async(fn) {
     };
 }
 
-describe('reportsService', function() {
-    beforeEach(inject(function(
+describe('reportsService', function () {
+    beforeEach(inject(function (
         _$q_,
         _$rootScope_,
         _reportsService_,
@@ -55,14 +55,14 @@ describe('reportsService', function() {
         };
 
         this.httpResponse = {};
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
         spyOn(periodService, 'getPeriod').and.returnValue(this.period);
     }));
 
-    describe('lookupOrganizationReport', function() {
-        it('should return the found report if it exists', function() {
+    describe('lookupOrganizationReport', function () {
+        it('should return the found report if it exists', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(
                 this.organizationReport,
             );
@@ -71,7 +71,7 @@ describe('reportsService', function() {
             );
         });
 
-        it('should return a placeholder report if it does not exist', function() {
+        it('should return a placeholder report if it does not exist', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
             expect(reportsService.lookupOrganizationReport(this.orgId)).toEqual(
                 jasmine.objectContaining({
@@ -85,8 +85,8 @@ describe('reportsService', function() {
         });
     });
 
-    describe('lookupPersonReport', function() {
-        it('should return the found report if it exists', function() {
+    describe('lookupPersonReport', function () {
+        it('should return the found report if it exists', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(
                 this.personReport,
             );
@@ -95,7 +95,7 @@ describe('reportsService', function() {
             ).toBe(this.personReport);
         });
 
-        it('should return a placeholder report if it does not exist', function() {
+        it('should return a placeholder report if it does not exist', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
             expect(
                 reportsService.lookupPersonReport(this.orgId, this.personId),
@@ -111,8 +111,8 @@ describe('reportsService', function() {
         });
     });
 
-    describe('loadPersonReport', function() {
-        it('should try to find the existing person report', function() {
+    describe('loadPersonReport', function () {
+        it('should try to find the existing person report', function () {
             spyOn(JsonApiDataStore.store, 'find');
             reportsService.loadPersonReport(this.orgId, this.personId);
             expect(JsonApiDataStore.store.find).toHaveBeenCalledWith(
@@ -121,7 +121,7 @@ describe('reportsService', function() {
             );
         });
 
-        it('should make a network request if the report is not loaded', function() {
+        it('should make a network request if the report is not loaded', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
             reportsService.loadPersonReport(this.orgId, this.personId);
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
@@ -137,7 +137,7 @@ describe('reportsService', function() {
             );
         });
 
-        it('should not make a network request if the report is loaded', function() {
+        it('should not make a network request if the report is loaded', function () {
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(
                 this.personReport,
             );
@@ -145,19 +145,19 @@ describe('reportsService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should return a promise that resolves to the report if it is already loaded', async(function() {
+        it('should return a promise that resolves to the report if it is already loaded', async(function () {
             var _this = this;
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(
                 this.personReport,
             );
             return reportsService
                 .loadPersonReport(this.orgId, this.personId)
-                .then(function(personReport) {
+                .then(function (personReport) {
                     expect(personReport).toBe(_this.personReport);
                 });
         }));
 
-        it('should return a promise that resolves to the report if it is not already loaded', async(function() {
+        it('should return a promise that resolves to the report if it is not already loaded', async(function () {
             var _this = this;
             spyOn(JsonApiDataStore.store, 'find').and.returnValue(null);
             this.httpResponse = {
@@ -165,14 +165,14 @@ describe('reportsService', function() {
             };
             return reportsService
                 .loadPersonReport(this.orgId, this.personId)
-                .then(function(personReport) {
+                .then(function (personReport) {
                     expect(personReport).toBe(_this.personReport);
                 });
         }));
     });
 
-    describe('loadMultiplePeopleReports', function() {
-        it('should call GET loadMultiplePeopleReports URL and return the reports', async(function() {
+    describe('loadMultiplePeopleReports', function () {
+        it('should call GET loadMultiplePeopleReports URL and return the reports', async(function () {
             this.httpResponse = {
                 reportId: 123,
             };
@@ -195,7 +195,7 @@ describe('reportsService', function() {
                     [{ id: 123 }],
                     [{ id: 1 }, { id: 2 }],
                 )
-                .then(function(loadedPeopleReports) {
+                .then(function (loadedPeopleReports) {
                     expect(loadedPeopleReports).toEqual({
                         reportId: 123,
                     });
@@ -203,8 +203,8 @@ describe('reportsService', function() {
         }));
     });
 
-    describe('loadOrganizationReports', function() {
-        it('should GET the organization reports URL', function() {
+    describe('loadOrganizationReports', function () {
+        it('should GET the organization reports URL', function () {
             spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                 null,
                 null,
@@ -223,7 +223,7 @@ describe('reportsService', function() {
             );
         });
 
-        it('should only load reports that are not already loaded', function() {
+        it('should only load reports that are not already loaded', function () {
             spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                 null,
                 this.report2,
@@ -242,7 +242,7 @@ describe('reportsService', function() {
             );
         });
 
-        it('should not make a network request when all reports are already loaded', function() {
+        it('should not make a network request when all reports are already loaded', function () {
             spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                 this.report1,
                 this.report2,
@@ -252,7 +252,7 @@ describe('reportsService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should asynchronously return an array of organization reports when a network request is required', async(function() {
+        it('should asynchronously return an array of organization reports when a network request is required', async(function () {
             var _this = this;
             spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                 null,
@@ -265,7 +265,7 @@ describe('reportsService', function() {
 
             return reportsService
                 .loadOrganizationReports(this.orgs)
-                .then(function(loadedOrganizationReports) {
+                .then(function (loadedOrganizationReports) {
                     expect(loadedOrganizationReports).toEqual([
                         _this.report1,
                         _this.report2,
@@ -274,7 +274,7 @@ describe('reportsService', function() {
                 });
         }));
 
-        it('should asynchronously return an array of organization reports when a network request is not required', async(function() {
+        it('should asynchronously return an array of organization reports when a network request is not required', async(function () {
             var _this = this;
             spyOn(reportsService, 'lookupOrganizationReport').and.returnValues(
                 this.report1,
@@ -287,7 +287,7 @@ describe('reportsService', function() {
 
             return reportsService
                 .loadOrganizationReports(this.orgs)
-                .then(function(loadedOrganizationReports) {
+                .then(function (loadedOrganizationReports) {
                     expect(loadedOrganizationReports).toEqual([
                         _this.report1,
                         _this.report2,
@@ -297,26 +297,26 @@ describe('reportsService', function() {
         }));
     });
 
-    describe('getInteractionCount', function() {
-        it('should return the interaction count', function() {
+    describe('getInteractionCount', function () {
+        it('should return the interaction count', function () {
             expect(reportsService.getInteractionCount(this.report, '1')).toBe(
                 1,
             );
         });
 
-        it('should return no data with a report not containing interactions of a certain type', function() {
+        it('should return no data with a report not containing interactions of a certain type', function () {
             expect(reportsService.getInteractionCount(this.report, '5')).toBe(
                 '-',
             );
         });
 
-        it('should return no data with no report', function() {
+        it('should return no data with no report', function () {
             expect(reportsService.getInteractionCount(null, '1')).toBe('-');
         });
     });
 
-    describe('incrementReportInteraction', function() {
-        it('increment existing interaction counts', function() {
+    describe('incrementReportInteraction', function () {
+        it('increment existing interaction counts', function () {
             reportsService.incrementReportInteraction(this.report, '1');
             expect(this.report.interactions).toEqual([
                 { interaction_type_id: '1', interaction_count: 2 },
@@ -325,7 +325,7 @@ describe('reportsService', function() {
             ]);
         });
 
-        it('create non-existent interaction counts', function() {
+        it('create non-existent interaction counts', function () {
             reportsService.incrementReportInteraction(this.report, '5');
             expect(this.report.interactions).toEqual([
                 { interaction_type_id: '1', interaction_count: 1 },

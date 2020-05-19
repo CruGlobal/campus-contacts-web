@@ -7,13 +7,13 @@ var peopleSearchService, $q, $rootScope, httpProxy;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('peopleSearchService', function() {
-    beforeEach(inject(function(
+describe('peopleSearchService', function () {
+    beforeEach(inject(function (
         _peopleSearchService_,
         _$q_,
         _$rootScope_,
@@ -35,15 +35,15 @@ describe('peopleSearchService', function() {
         $rootScope = _$rootScope_;
         httpProxy = _httpProxy_;
 
-        spyOn(httpProxy, 'get').and.callFake(function() {
+        spyOn(httpProxy, 'get').and.callFake(function () {
             return _this.httpResponse;
         });
     }));
 
-    describe('search', function() {
+    describe('search', function () {
         it(
             'should make a request for search results',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
                 _this.httpResponse = $q.resolve({
@@ -52,7 +52,7 @@ describe('peopleSearchService', function() {
 
                 return peopleSearchService
                     .search('query')
-                    .then(function(results) {
+                    .then(function (results) {
                         expect(httpProxy.get).toHaveBeenCalledWith(
                             '/people',
                             {

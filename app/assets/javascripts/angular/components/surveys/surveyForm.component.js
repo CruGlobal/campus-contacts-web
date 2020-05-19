@@ -32,7 +32,7 @@ function surveyFormController($window, surveyService) {
     const getChoices = (content, includeEmptyOption) => {
         let choices = content.split('\n');
 
-        choices = _.map(choices, choice => {
+        choices = _.map(choices, (choice) => {
             return {
                 value: choice,
                 name: choice,
@@ -54,9 +54,9 @@ function surveyFormController($window, surveyService) {
         this.answers = {};
         this.questionChoices = {};
 
-        surveyService.getSurveyQuestions(this.survey.id).then(questions => {
+        surveyService.getSurveyQuestions(this.survey.id).then((questions) => {
             this.surveyQuestions = questions.data;
-            _.forEach(questions.data, question => {
+            _.forEach(questions.data, (question) => {
                 if (question.content) {
                     this.questionChoices[question.id] = getChoices(
                         question.content,
@@ -67,7 +67,7 @@ function surveyFormController($window, surveyService) {
         });
     };
 
-    this.save = addAnother => {
+    this.save = (addAnother) => {
         delete this.importError;
         this.onSavingChange({ $event: true });
 
@@ -87,7 +87,7 @@ function surveyFormController($window, surveyService) {
             included: [],
         };
 
-        _.forEach(_.keys(this.answers), id => {
+        _.forEach(_.keys(this.answers), (id) => {
             let answer = this.answers[id];
 
             if (_.isObject(answer)) {
@@ -97,7 +97,7 @@ function surveyFormController($window, surveyService) {
                 answer = [answer];
             }
 
-            _.forEach(answer, answer => {
+            _.forEach(answer, (answer) => {
                 postData.included.push({
                     type: 'answer',
                     attributes: {
@@ -117,7 +117,7 @@ function surveyFormController($window, surveyService) {
                     this.onSuccess();
                 }
             },
-            response => {
+            (response) => {
                 const {
                     data: { errors: [{ detail: details } = {}] = [] } = {},
                 } = response;

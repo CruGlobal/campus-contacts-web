@@ -3,13 +3,13 @@ import 'angular-mocks';
 // Constants
 var personHistoryService;
 
-describe('personHistoryService', function() {
-    beforeEach(inject(function(_personHistoryService_) {
+describe('personHistoryService', function () {
+    beforeEach(inject(function (_personHistoryService_) {
         personHistoryService = _personHistoryService_;
     }));
 
-    describe('buildHistoryFeed', function() {
-        beforeEach(function() {
+    describe('buildHistoryFeed', function () {
+        beforeEach(function () {
             this.note = {
                 _type: 'interaction',
                 interaction_type_id: '1',
@@ -48,7 +48,7 @@ describe('personHistoryService', function() {
             };
         });
 
-        it('should show all history', function() {
+        it('should show all history', function () {
             expect(
                 personHistoryService.buildHistoryFeed(this.person, 'all', 1),
             ).toEqual([
@@ -59,7 +59,7 @@ describe('personHistoryService', function() {
             ]);
         });
 
-        it('should show just interactions', function() {
+        it('should show just interactions', function () {
             expect(
                 personHistoryService.buildHistoryFeed(
                     this.person,
@@ -69,13 +69,13 @@ describe('personHistoryService', function() {
             ).toEqual([this.interaction]);
         });
 
-        it('should show just notes', function() {
+        it('should show just notes', function () {
             expect(
                 personHistoryService.buildHistoryFeed(this.person, 'notes', 1),
             ).toEqual([this.note]);
         });
 
-        it('should show just surveys', function() {
+        it('should show just surveys', function () {
             expect(
                 personHistoryService.buildHistoryFeed(
                     this.person,
@@ -85,7 +85,7 @@ describe('personHistoryService', function() {
             ).toEqual([this.answerSheet2, this.answerSheet1]);
         });
 
-        it('should filter out history from other orgs', function() {
+        it('should filter out history from other orgs', function () {
             this.interaction.organization.id = 2;
             this.answerSheet2.survey.organization_id = 2;
             expect(

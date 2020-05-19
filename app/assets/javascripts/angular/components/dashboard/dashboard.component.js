@@ -17,7 +17,7 @@ function DashboardController(periodService, $rootScope) {
     function activate() {
         deregisterEditOrganizationsEvent = $rootScope.$on(
             'editOrganizations',
-            function(event, value) {
+            function (event, value) {
                 vm.editOrganizations = value;
             },
         );

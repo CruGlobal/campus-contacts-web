@@ -4,7 +4,7 @@ angular
 
 function peopleSearchService(httpProxy, modelsService) {
     return {
-        search: function(searchQuery) {
+        search: function (searchQuery) {
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('person').url.all,

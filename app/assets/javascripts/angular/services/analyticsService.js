@@ -16,12 +16,12 @@ function analyticsService(
             sampleRate: 100,
         });
 
-        $window.ga(tracker => {
+        $window.ga((tracker) => {
             $window.ga('set', 'dimension2', tracker.get('clientId'));
         });
     };
 
-    const setupGoogleData = ssoUid => {
+    const setupGoogleData = (ssoUid) => {
         if (!angular.isFunction($window.ga)) return;
 
         if (ssoUid) {
@@ -79,7 +79,7 @@ function analyticsService(
     };
 
     const loadScript = (url, id) => {
-        return function(d) {
+        return function (d) {
             const ref = d.getElementsByTagName('script')[0];
 
             if (d.getElementById(id)) {
@@ -125,7 +125,7 @@ function analyticsService(
             $window.ga('set', 'dimension3');
             $window.ga('set', 'userId');
         },
-        track: transition => {
+        track: (transition) => {
             const newState = transition.$to();
             const currentUrl = newState.path.reduce((acc, p) => {
                 if (p.self.url === '^') return acc;

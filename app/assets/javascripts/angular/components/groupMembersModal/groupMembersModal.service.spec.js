@@ -7,13 +7,13 @@ var groupMembersModalService, $q, $rootScope, httpProxy, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('groupMembersModalService service', function() {
-    beforeEach(inject(function(
+describe('groupMembersModalService service', function () {
+    beforeEach(inject(function (
         _groupMembersModalService_,
         _$q_,
         _$rootScope_,
@@ -41,10 +41,10 @@ describe('groupMembersModalService service', function() {
         };
     }));
 
-    describe('groupMembersModalService.addMember', function() {
+    describe('groupMembersModalService.addMember', function () {
         it(
             'should add the new membership to the group',
-            asynchronous(function() {
+            asynchronous(function () {
                 spyOn(httpProxy, 'extractModel').and.returnValue({ id: 12 });
                 spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
 
@@ -52,7 +52,7 @@ describe('groupMembersModalService service', function() {
                 var person = { id: 21 };
                 return groupMembersModalService
                     .addMember(this.group, person)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             _.map(_this.group.group_memberships, 'id'),
                         ).toEqual([11, 12]);
@@ -61,17 +61,17 @@ describe('groupMembersModalService service', function() {
         );
     });
 
-    describe('groupMembersModalService.removeMember', function() {
+    describe('groupMembersModalService.removeMember', function () {
         it(
             'should remove the membership from the group',
-            asynchronous(function() {
+            asynchronous(function () {
                 spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
 
                 var _this = this;
                 var membership = this.group.group_memberships[0];
                 return groupMembersModalService
                     .removeMember(this.group, membership)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             _.map(_this.group.group_memberships, 'id'),
                         ).toEqual([]);

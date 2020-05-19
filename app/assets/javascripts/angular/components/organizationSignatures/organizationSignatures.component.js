@@ -35,8 +35,8 @@ function organizationSignaturesController(
         });
     };
 
-    const prepareData = data =>
-        data.map(signature => ({
+    const prepareData = (data) =>
+        data.map((signature) => ({
             first_name: signature.first_name,
             last_name: signature.last_name,
             updated_at: signature.updated_at,
@@ -45,7 +45,7 @@ function organizationSignaturesController(
             organization_name: signature.organization.name,
         }));
 
-    const buildExportCsvLink = searchText => {
+    const buildExportCsvLink = (searchText) => {
         const params = {
             access_token: $http.defaults.headers.common.Authorization.slice(7),
             include: '',
@@ -103,19 +103,19 @@ function organizationSignaturesController(
         loadData(this.tableState, searchText);
     };
 
-    this.nextPage = searchText => {
+    this.nextPage = (searchText) => {
         this.tableState.pagination.start =
             this.tableState.pagination.currentPage * this.itemsPerPage;
         loadData(this.tableState, searchText);
     };
 
-    this.previousPage = searchText => {
+    this.previousPage = (searchText) => {
         this.tableState.pagination.start =
             (this.tableState.pagination.currentPage - 2) * this.itemsPerPage;
         loadData(this.tableState, searchText);
     };
 
-    this.load = tableState => {
+    this.load = (tableState) => {
         tableState.pagination.numberOfPages = 0;
         this.tableState = tableState;
         loadData(tableState);

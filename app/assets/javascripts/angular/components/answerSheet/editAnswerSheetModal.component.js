@@ -13,10 +13,10 @@ angular.module('missionhubApp').component('editAnswerSheetModal', {
 });
 
 function editAnswerSheetModalController(httpProxy, modelsService) {
-    this.save = async answerId => {
+    this.save = async (answerId) => {
         const answers = this.resolve.answerSheet.answers;
 
-        const includedAnswers = answers.map(a => {
+        const includedAnswers = answers.map((a) => {
             return {
                 type: 'answer',
                 attributes: {

@@ -3,13 +3,13 @@ import 'angular-mocks';
 // Constants
 var modelsService;
 
-describe('modelsService', function() {
-    beforeEach(inject(function(_modelsService_) {
+describe('modelsService', function () {
+    beforeEach(inject(function (_modelsService_) {
         modelsService = _modelsService_;
     }));
 
-    describe('getModelUrl', function() {
-        it('should return the URL for models', function() {
+    describe('getModelUrl', function () {
+        it('should return the URL for models', function () {
             expect(modelsService.getModelUrl({ _type: 'person', id: 1 })).toBe(
                 '/people/1',
             );
@@ -21,7 +21,7 @@ describe('modelsService', function() {
             );
         });
 
-        it('should return undefined for invalid model types', function() {
+        it('should return undefined for invalid model types', function () {
             expect(
                 modelsService.getModelUrl({
                     _type: 'organizational_permission',

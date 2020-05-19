@@ -7,13 +7,13 @@ var $ctrl, $q, $rootScope, JsonApiDataStore;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('minstryViewLabel component', function() {
-    beforeEach(inject(function(
+describe('minstryViewLabel component', function () {
+    beforeEach(inject(function (
         $componentController,
         _$q_,
         _$rootScope_,
@@ -65,8 +65,8 @@ describe('minstryViewLabel component', function() {
         );
     }));
 
-    describe('$onInit', function() {
-        it('should initialize admin privileges', function() {
+    describe('$onInit', function () {
+        it('should initialize admin privileges', function () {
             this.loggedInPerson.isAdminAt.and.returnValue(true);
 
             $ctrl.$onInit();
@@ -78,8 +78,8 @@ describe('minstryViewLabel component', function() {
         });
     });
 
-    describe('editLabel', function() {
-        it('should open the edit label modal', function() {
+    describe('editLabel', function () {
+        it('should open the edit label modal', function () {
             $ctrl.editLabel();
 
             expect(this.$uibModal.open).toHaveBeenCalledWith(
@@ -98,13 +98,13 @@ describe('minstryViewLabel component', function() {
         });
     });
 
-    describe('deleteLabel', function() {
-        beforeEach(function() {
+    describe('deleteLabel', function () {
+        beforeEach(function () {
             this.confirmModalService.create.and.returnValue($q.resolve());
             this.labelsService.deleteLabel.and.returnValue($q.resolve());
         });
 
-        it('should open the confirmation dialog', function() {
+        it('should open the confirmation dialog', function () {
             $ctrl.deleteLabel();
 
             expect(this.confirmModalService.create).toHaveBeenCalled();
@@ -112,10 +112,10 @@ describe('minstryViewLabel component', function() {
 
         it(
             'should delete the label',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
-                return $ctrl.deleteLabel().then(function() {
+                return $ctrl.deleteLabel().then(function () {
                     expect(
                         _this.labelsService.deleteLabel,
                     ).toHaveBeenCalledWith(_this.label);

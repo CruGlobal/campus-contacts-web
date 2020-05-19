@@ -1,16 +1,16 @@
 angular
     .module('missionhubApp')
-    .directive('onClickAway', function($window, $parse, $timeout) {
+    .directive('onClickAway', function ($window, $parse, $timeout) {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 // Click event that added this directive to the DOM may still be propagating
                 // so wait a digest cycle to add the listener
-                $timeout(function() {
+                $timeout(function () {
                     $window.addEventListener('click', handleClick);
                 });
 
-                scope.$on('$destroy', function() {
+                scope.$on('$destroy', function () {
                     $window.removeEventListener('click', handleClick);
                 });
 

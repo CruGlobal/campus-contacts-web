@@ -43,7 +43,7 @@ function organizationOverviewController(
         this.orgNavOpen = !this.orgNavOpen;
     };
 
-    this.isTabVisible = tabName => {
+    this.isTabVisible = (tabName) => {
         return (
             tabName !== 'labels' &&
             !(tabName === 'surveys' && !this.directAdminPrivileges)
@@ -90,17 +90,17 @@ function organizationOverviewController(
         // people and team to a sparse array of the appropriate length.
         organizationOverviewService
             .getSubOrgCount(this.org)
-            .then(subOrgCount => {
+            .then((subOrgCount) => {
                 this.suborgs = new Array(subOrgCount);
             });
         organizationOverviewService
             .getPersonCount(this.org)
-            .then(personCount => {
+            .then((personCount) => {
                 this.people = new Array(personCount);
             });
         organizationOverviewService
             .getTeamCount(this.org)
-            .then(teamMemberCount => {
+            .then((teamMemberCount) => {
                 this.team = new Array(teamMemberCount);
             });
     }

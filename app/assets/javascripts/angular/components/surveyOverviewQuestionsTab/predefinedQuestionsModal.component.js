@@ -23,7 +23,7 @@ function predefinedQuestionsModalController(surveyService) {
             });
     };
 
-    this.addQuestion = question => {
+    this.addQuestion = (question) => {
         this.resolve.addQuestion(question);
 
         //remove question from list

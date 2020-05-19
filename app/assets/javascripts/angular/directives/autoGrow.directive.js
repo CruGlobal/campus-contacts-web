@@ -1,5 +1,5 @@
 // Copied from https://gist.github.com/thomseddon/4703968
-angular.module('missionhubApp').directive('autoGrow', function($document) {
+angular.module('missionhubApp').directive('autoGrow', function ($document) {
     function link(scope, element) {
         var minHeight = element[0].offsetHeight;
         var paddingLeft = element.css('paddingLeft');
@@ -36,7 +36,7 @@ angular.module('missionhubApp').directive('autoGrow', function($document) {
                 .replace(/&/g, '&amp;')
                 .replace(/\n$/, '<br/>&nbsp;')
                 .replace(/\n/g, '<br/>')
-                .replace(/\s{2,}/g, function(space) {
+                .replace(/\s{2,}/g, function (space) {
                     return times('&nbsp;', space.length - 1) + ' ';
                 });
             $shadow.html(val);
@@ -48,7 +48,7 @@ angular.module('missionhubApp').directive('autoGrow', function($document) {
             );
         }
 
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', function () {
             $shadow.remove();
         });
 

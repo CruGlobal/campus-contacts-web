@@ -135,13 +135,13 @@ function myPeopleDashboardController(
 
         reportsService
             .loadOrganizationReports(limitedOrganizations)
-            .catch(function(error) {
+            .catch(function (error) {
                 $log.error('Error loading organization reports', error);
             });
 
         reportsService
             .loadMultiplePeopleReports(limitedOrganizations, limitedPeople)
-            .catch(function(error) {
+            .catch(function (error) {
                 $log.error('Error loading people reports', error);
             });
     }
@@ -149,7 +149,7 @@ function myPeopleDashboardController(
     function loadOrganizations() {
         myPeopleDashboardService
             .loadOrganizations({ 'page[limit]': 100 })
-            .then(function(organizations) {
+            .then(function (organizations) {
                 vm.organizations = organizations;
 
                 vm.organizations = userPreferencesService.applyUserOrgDisplayPreferences(
@@ -157,14 +157,14 @@ function myPeopleDashboardController(
                 );
                 loadReports();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 $log.error('Error loading organizations', error);
             });
     }
 
     function dataLoaded(assignmentsToMe) {
         var people = JsonApiDataStore.store.findAll('person');
-        people.forEach(function(person) {
+        people.forEach(function (person) {
             if (_.isNil(person.last_name)) {
                 person.last_name = '';
             }
@@ -176,11 +176,11 @@ function myPeopleDashboardController(
             .uniq()
             .value();
 
-        vm.organizations.forEach(function(organization) {
+        vm.organizations.forEach(function (organization) {
             // Get an array of the people assigned to me on this organization
             organization.people = _.filter(assignmentsToMe, {
                 organization: organization,
-            }).map(function(assignment) {
+            }).map(function (assignment) {
                 return JsonApiDataStore.store.find(
                     'person',
                     assignment.person_id,

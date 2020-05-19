@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .config(envServiceProvider => {
+    .config((envServiceProvider) => {
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
@@ -53,7 +53,7 @@ angular
         // before controllers and services are built
         envServiceProvider.check();
     })
-    .config($analyticsProvider => {
+    .config(($analyticsProvider) => {
         $analyticsProvider.firstPageview(false);
         $analyticsProvider.virtualPageviews(false);
     })

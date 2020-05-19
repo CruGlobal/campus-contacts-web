@@ -57,7 +57,7 @@ function personHistoryController(
         vm.closeInteractionTypeSheet();
 
         scrollToBottom();
-        findAsync('.new-interaction textarea').then(function(input) {
+        findAsync('.new-interaction textarea').then(function (input) {
             input.focus();
         });
     }
@@ -71,7 +71,7 @@ function personHistoryController(
         var personId = vm.personTab.person.id;
         return interactionsService
             .recordInteraction(interaction, vm.organizationId, personId)
-            .then(function() {
+            .then(function () {
                 vm.clearInteraction();
             });
     }
@@ -112,8 +112,8 @@ function personHistoryController(
 
     // Find an element that may not exist yet and return a promise that resolves to the element when it exists
     function findAsync(selector) {
-        return $q(function(resolve) {
-            var interval = $interval(function() {
+        return $q(function (resolve) {
+            var interval = $interval(function () {
                 var element = $element.find(selector);
                 if (element.length > 0) {
                     $interval.cancel(interval);

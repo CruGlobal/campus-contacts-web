@@ -4,13 +4,13 @@ import 'angular-mocks';
 var myPeopleDashboardService, httpProxy, $rootScope, $q, JsonApiDataStore;
 
 function async(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -18,8 +18,8 @@ function async(fn) {
     };
 }
 
-describe('myPeopleDashboardService Tests', function() {
-    beforeEach(inject(function(
+describe('myPeopleDashboardService Tests', function () {
+    beforeEach(inject(function (
         _$q_,
         _$rootScope_,
         _myPeopleDashboardService_,
@@ -58,7 +58,7 @@ describe('myPeopleDashboardService Tests', function() {
             'filters[user_created]': false,
         };
 
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
 
@@ -66,12 +66,12 @@ describe('myPeopleDashboardService Tests', function() {
             _this.httpResponse,
         );
     }));
-    describe('People Tests', function() {
-        it('should contain loadPeople', function() {
+    describe('People Tests', function () {
+        it('should contain loadPeople', function () {
             expect(myPeopleDashboardService.loadPeople).toBeDefined();
         });
 
-        it('should call GET loadPeople URL', function() {
+        it('should call GET loadPeople URL', function () {
             var params = {
                 'page[limit]': 250,
                 include:
@@ -89,23 +89,23 @@ describe('myPeopleDashboardService Tests', function() {
             );
         });
 
-        it('should load people', async(function() {
+        it('should load people', async(function () {
             this.httpResponse = this.people;
 
             var _this = this;
             return myPeopleDashboardService
                 .loadPeople()
-                .then(function(loadedPeople) {
+                .then(function (loadedPeople) {
                     expect(loadedPeople).toEqual(_this.people);
                 });
         }));
 
-        it('should sync people JsonApiDataStore', async(function() {
+        it('should sync people JsonApiDataStore', async(function () {
             this.httpResponse = this.people;
 
             var _this = this;
             JsonApiDataStore.store.sync('people', this.people);
-            return myPeopleDashboardService.loadPeople().then(function() {
+            return myPeopleDashboardService.loadPeople().then(function () {
                 expect(JsonApiDataStore.store.sync).toHaveBeenCalledWith(
                     'people',
                     _this.people,
@@ -114,12 +114,12 @@ describe('myPeopleDashboardService Tests', function() {
         }));
     });
 
-    describe('Organization loading', function() {
-        it('should contain load Organization', function() {
+    describe('Organization loading', function () {
+        it('should contain load Organization', function () {
             expect(myPeopleDashboardService.loadOrganizations).toBeDefined();
         });
 
-        it('should call GET loadOrganization URL', function() {
+        it('should call GET loadOrganization URL', function () {
             myPeopleDashboardService.loadOrganizations(
                 this.loadOrganizationParams,
             );
@@ -132,14 +132,14 @@ describe('myPeopleDashboardService Tests', function() {
             );
         });
 
-        it('should load Organization', async(function() {
+        it('should load Organization', async(function () {
             this.httpResponse = { data: this.organizationReports };
 
             var _this = this;
 
             return myPeopleDashboardService
                 .loadOrganizations(this.loadOrganizationParams)
-                .then(function(loadedOrganization) {
+                .then(function (loadedOrganization) {
                     expect(loadedOrganization).toEqual(
                         _this.organizationReports,
                     );

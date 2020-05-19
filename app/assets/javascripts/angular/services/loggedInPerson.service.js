@@ -26,7 +26,7 @@ function loggedInPerson(
     }
 
     function load() {
-        loadingPromise = loadMe().then(function(me) {
+        loadingPromise = loadMe().then(function (me) {
             person = me;
             return me;
         });
@@ -52,7 +52,7 @@ function loggedInPerson(
         // Load (or reload) the person
         load: load,
 
-        loadOnce: function() {
+        loadOnce: function () {
             if (!loadingPromise) {
                 load();
             }
@@ -60,10 +60,10 @@ function loggedInPerson(
         },
 
         // check if you have admin access on the org or any above it
-        isAdminAt: function(org) {
+        isAdminAt: function (org) {
             var adminOrgIds = _.chain(person.organizational_permissions)
                 .filter(
-                    orgPermission =>
+                    (orgPermission) =>
                         `${orgPermission.permission_id}` ===
                         permissionService.adminId,
                 )
@@ -74,7 +74,7 @@ function loggedInPerson(
         },
 
         // check if you have admin access on the org itself. access to any org above it don't count
-        isDirectAdminAt: org => {
+        isDirectAdminAt: (org) => {
             return person.organizational_permissions.some(
                 ({ permission_id, organization_id }) =>
                     `${permission_id}` === permissionService.adminId &&
@@ -82,7 +82,7 @@ function loggedInPerson(
             );
         },
 
-        updatePreferences: function(preferences) {
+        updatePreferences: function (preferences) {
             var model = {
                 data: {
                     attributes: preferences,

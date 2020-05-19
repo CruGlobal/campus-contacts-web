@@ -10,18 +10,18 @@ function multiselectListService(_) {
      */
     var multiselectListService = {
         // Return a boolean indicating whether or not an option is selected
-        isSelected: function(selection, id) {
+        isSelected: function (selection, id) {
             return selection[id] === true;
         },
 
         // Return a boolean indicating whether or not an option is unselected
-        isUnselected: function(selection, id) {
+        isUnselected: function (selection, id) {
             var state = selection[id];
             return typeof state === 'undefined' || state === false;
         },
 
         // Return a boolean indicating whether or not an option is in the indeterminate state
-        isIndeterminate: function(selection, id) {
+        isIndeterminate: function (selection, id) {
             return selection[id] === null;
         },
 
@@ -33,7 +33,7 @@ function multiselectListService(_) {
         // the original selection.
         // This method will update "currentSelection", "addedOutput", and "removedOutput" as necessary, while
         // leaving "originalSelection" untouched.
-        toggle: function(id, listState) {
+        toggle: function (id, listState) {
             var originalSelection = listState.originalSelection;
             var currentSelection = listState.currentSelection;
             var addedOutput = listState.addedOutput;

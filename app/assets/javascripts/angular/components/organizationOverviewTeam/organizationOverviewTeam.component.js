@@ -28,7 +28,7 @@ function organizationOverviewTeamController(
     vm.$onInit = activate;
 
     function activate() {
-        periodService.subscribe($scope, function() {
+        periodService.subscribe($scope, function () {
             loadTeamReports([vm.organizationOverview.org.id], vm.team);
         });
     }
@@ -41,7 +41,7 @@ function organizationOverviewTeamController(
 
         return organizationOverviewTeamService
             .loadOrgTeam(vm.organizationOverview.org, listLoader)
-            .then(function(resp) {
+            .then(function (resp) {
                 vm.team = resp.list;
                 vm.loadedAll = resp.loadedAll;
                 // Use the nextBatch from the response which only includes unloaded people.
@@ -50,7 +50,7 @@ function organizationOverviewTeamController(
                     resp.nextBatch,
                 );
             })
-            .finally(function() {
+            .finally(function () {
                 vm.busy = false;
             });
     }

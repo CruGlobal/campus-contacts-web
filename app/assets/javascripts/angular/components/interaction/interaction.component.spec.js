@@ -1,7 +1,7 @@
-describe('interaction component', function() {
+describe('interaction component', function () {
     var $ctrl, $q, $rootScope, interactionsService, confirmModalService;
 
-    beforeEach(inject(function(
+    beforeEach(inject(function (
         $componentController,
         _$q_,
         _$timeout_,
@@ -34,8 +34,8 @@ describe('interaction component', function() {
         $rootScope = _$rootScope_;
     }));
 
-    describe('$onInit', function() {
-        it('should populate interactionType', function() {
+    describe('$onInit', function () {
+        it('should populate interactionType', function () {
             interactionsService.getInteractionType.and.returnValue('Test type');
 
             $ctrl.$onInit();
@@ -47,8 +47,8 @@ describe('interaction component', function() {
         });
     });
 
-    describe('updateInteraction', function() {
-        it('should update the interaction', function() {
+    describe('updateInteraction', function () {
+        it('should update the interaction', function () {
             interactionsService.updateInteraction.and.returnValue($q.resolve());
 
             $ctrl.updateInteraction();
@@ -62,7 +62,7 @@ describe('interaction component', function() {
 
             expect($ctrl.modifyInteractionState).toEqual('view');
         });
-        it('should handle an error updating the interaction', function() {
+        it('should handle an error updating the interaction', function () {
             interactionsService.updateInteraction.and.returnValue($q.reject());
 
             $ctrl.updateInteraction();
@@ -78,8 +78,8 @@ describe('interaction component', function() {
         });
     });
 
-    describe('deleteInteraction', function() {
-        it('should delete the interaction', function() {
+    describe('deleteInteraction', function () {
+        it('should delete the interaction', function () {
             confirmModalService.create.and.returnValue($q.resolve());
 
             $ctrl.deleteInteraction();
@@ -103,7 +103,7 @@ describe('interaction component', function() {
                 },
             });
         });
-        it('should handle an error deleting the interaction', function() {
+        it('should handle an error deleting the interaction', function () {
             confirmModalService.create.and.returnValue($q.resolve());
 
             $ctrl.deleteInteraction();

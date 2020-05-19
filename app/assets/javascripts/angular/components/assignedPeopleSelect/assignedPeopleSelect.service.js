@@ -10,7 +10,7 @@ function assignedPeopleSelectService(
 ) {
     return {
         // Search for people in a particular organization that match the query
-        searchPeople: function(query, organizationId, deduper) {
+        searchPeople: function (query, organizationId, deduper) {
             if (!query || query.length < 2) {
                 return Promise.resolve([]);
             }
@@ -37,7 +37,7 @@ function assignedPeopleSelectService(
                 .then(httpProxy.extractModels);
         },
         // Determine whether a person is the currently logged-in person
-        isMe: function(person) {
+        isMe: function (person) {
             return loggedInPerson.person === person;
         },
     };

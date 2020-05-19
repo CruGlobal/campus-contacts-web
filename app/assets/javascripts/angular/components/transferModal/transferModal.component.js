@@ -46,7 +46,7 @@ function transferModalController(
         var requestDeduper = new RequestDeduper();
 
         // Refresh the org list whenever the search term changes
-        $scope.$watch('$ctrl.search', function(search) {
+        $scope.$watch('$ctrl.search', function (search) {
             // Unselect the org because it may not be shown anymore
             vm.selectedOrg = null;
 
@@ -59,11 +59,11 @@ function transferModalController(
             vm.searching = true;
             organizationService
                 .searchOrgs(vm.sourceOrg, search, requestDeduper)
-                .then(function(orgs) {
+                .then(function (orgs) {
                     // Filter out people that are already selected
                     vm.searchOptions = orgs;
                 })
-                .finally(function() {
+                .finally(function () {
                     vm.searching = false;
                 });
         });
@@ -82,10 +82,10 @@ function transferModalController(
                 vm.options,
                 vm.resolve.surveyId,
             )
-            .then(function() {
+            .then(function () {
                 vm.close({ $value: vm.options.copyContact });
             })
-            .catch(function() {
+            .catch(function () {
                 vm.saving = false;
             });
     }

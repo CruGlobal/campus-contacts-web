@@ -35,14 +35,14 @@ function massEditController(massEditService, personService) {
     ];
 
     var unchangedOption = { id: null, i18n: 'mass_edit.unchanged' };
-    vm.selectFields.forEach(function(selectField) {
+    vm.selectFields.forEach(function (selectField) {
         // Prepend the unchanged option to the list of options
         selectField.options.unshift(unchangedOption);
 
         vm.changes[selectField.name] = null;
     });
 
-    vm.multiselectFields = massEditService.statDefinitions.map(function(
+    vm.multiselectFields = massEditService.statDefinitions.map(function (
         statDefinition,
     ) {
         return {
@@ -52,7 +52,7 @@ function massEditController(massEditService, personService) {
             ready: false,
         };
     });
-    vm.multiselectFields.forEach(function(multiselectField) {
+    vm.multiselectFields.forEach(function (multiselectField) {
         vm.changes[multiselectField.name + '_added'] = [];
         vm.changes[multiselectField.name + '_removed'] = [];
     });
@@ -63,8 +63,8 @@ function massEditController(massEditService, personService) {
         var selection = vm.resolve.selection;
 
         // Load the relationships needed to determine which options are selected and the options themselves
-        massEditService.loadOptions(selection).then(function(options) {
-            vm.multiselectFields.forEach(function(multiselectField) {
+        massEditService.loadOptions(selection).then(function (options) {
+            vm.multiselectFields.forEach(function (multiselectField) {
                 multiselectField.options = options[multiselectField.name];
                 multiselectField.selection = massEditService.selectionFromOptions(
                     multiselectField.options,
@@ -79,7 +79,7 @@ function massEditController(massEditService, personService) {
         massEditService
             .applyChanges(vm.resolve.selection, vm.changes, vm.resolve.surveyId)
             .then(vm.close)
-            .catch(function() {
+            .catch(function () {
                 vm.saving = false;
             });
     }

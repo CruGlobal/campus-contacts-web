@@ -12,9 +12,9 @@ function progressiveListLoader(httpProxy, modelsService, _) {
         const errorMessage = options.errorMessage;
         let list = [];
 
-        this.loadMore = function(
+        this.loadMore = function (
             params = {},
-            transformData = params => data => data,
+            transformData = (params) => (data) => data,
         ) {
             // There are two situations where our length gets out of sync from our offset:
             // 1. The already-loaded portion of the data set becomes larger on the server. In this
@@ -44,7 +44,7 @@ function progressiveListLoader(httpProxy, modelsService, _) {
                             'error.messages.progressive_list_loader.load_chunk',
                     },
                 )
-                .then(function(resp) {
+                .then(function (resp) {
                     const data = resp.data.map(transformData(params));
 
                     list = _.unionBy(list, data, 'id');
@@ -59,7 +59,7 @@ function progressiveListLoader(httpProxy, modelsService, _) {
                 });
         };
 
-        this.reset = function(newList) {
+        this.reset = function (newList) {
             list = newList || [];
             return this;
         };

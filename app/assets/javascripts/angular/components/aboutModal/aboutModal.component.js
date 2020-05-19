@@ -13,8 +13,8 @@ angular
         },
     })
     .run(
-        /* @ngInject */ function($rootScope, $uibModal) {
-            $rootScope.openAboutModal = function() {
+        /* @ngInject */ function ($rootScope, $uibModal) {
+            $rootScope.openAboutModal = function () {
                 $uibModal.open({
                     component: 'aboutModal',
                     windowClass: 'pivot_theme',

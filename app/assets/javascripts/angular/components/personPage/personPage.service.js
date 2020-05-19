@@ -3,12 +3,12 @@ angular.module('missionhubApp').factory('personPageService', personPageService);
 function personPageService(httpProxy, modelsService, _) {
     return {
         // Determine whether an avatar URL comes from Facebook
-        isFacebookAvatar: function(avatarUrl) {
+        isFacebookAvatar: function (avatarUrl) {
             return _.startsWith(avatarUrl, 'https://graph.facebook.com/');
         },
 
         // Upload an image file as the person's new avatar
-        uploadAvatar: function(person, file) {
+        uploadAvatar: function (person, file) {
             var url = modelsService.getModelUrl(person);
             var form = {
                 data: {
@@ -23,7 +23,7 @@ function personPageService(httpProxy, modelsService, _) {
         },
 
         // Delete a person's existing avatar
-        deleteAvatar: function(person) {
+        deleteAvatar: function (person) {
             return httpProxy.put(
                 modelsService.getModelUrl(person),
                 {
@@ -42,7 +42,7 @@ function personPageService(httpProxy, modelsService, _) {
         },
 
         // Save a person to the server along with all of its relationships
-        savePerson: function(person) {
+        savePerson: function (person) {
             var attributeNames = [
                 'first_name',
                 'last_name',
@@ -65,7 +65,7 @@ function personPageService(httpProxy, modelsService, _) {
             }).data;
 
             var includedRelationships = _.chain(relationshipNames)
-                .map(function(relationshipName) {
+                .map(function (relationshipName) {
                     return httpProxy.includedFromModels(
                         person[relationshipName],
                     );

@@ -38,7 +38,7 @@ function organizationSignaturesSignController(
 
     const updateAllAgreements = async (orgIds, type, status) => {
         await Promise.all(
-            orgIds.map(orgId => sendAgreement(orgId, type, status)),
+            orgIds.map((orgId) => sendAgreement(orgId, type, status)),
         );
     };
 
@@ -50,14 +50,14 @@ function organizationSignaturesSignController(
         );
 
         this.nonSignedAgreements = this.nonSignedAgreements.filter(
-            t => t !== type,
+            (t) => t !== type,
         );
 
         $scope.$apply();
     };
 
-    const hasAgreedTo = type => {
-        const signed = this.nonSignedAgreements.find(t => t === type);
+    const hasAgreedTo = (type) => {
+        const signed = this.nonSignedAgreements.find((t) => t === type);
         return !signed;
     };
 
@@ -89,11 +89,11 @@ function organizationSignaturesSignController(
         authenticationService.postAuthRedirect();
     };
 
-    this.acceptAgreement = async type => {
+    this.acceptAgreement = async (type) => {
         updateAgreement(type, 'accepted');
     };
 
-    this.declineAgreement = async type => {
+    this.declineAgreement = async (type) => {
         this.hasDeclined = true;
         await updateAgreement(type, 'declined');
     };

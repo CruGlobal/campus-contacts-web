@@ -48,7 +48,7 @@ function reportsService(
 
     var reportsService = {
         // Find and return the report for the given organization
-        lookupOrganizationReport: function(organizationId) {
+        lookupOrganizationReport: function (organizationId) {
             return findOrCreateReport(
                 'organization_report',
                 calculateOrganizationReportId(organizationId),
@@ -56,7 +56,7 @@ function reportsService(
         },
 
         // Find and return the report for the given person
-        lookupPersonReport: function(organizationId, personId) {
+        lookupPersonReport: function (organizationId, personId) {
             return findOrCreateReport(
                 'person_report',
                 calculatePersonReportId(organizationId, personId),
@@ -64,7 +64,7 @@ function reportsService(
         },
 
         // Load the person report for the given person
-        loadPersonReport: function(organizationId, personId) {
+        loadPersonReport: function (organizationId, personId) {
             // Try to find the report
             var reportId = calculatePersonReportId(organizationId, personId);
             var report = findReport('person_report', reportId);
@@ -89,13 +89,13 @@ function reportsService(
                     },
                 )
                 .then(httpProxy.extractModels)
-                .then(function(people) {
+                .then(function (people) {
                     return people[0];
                 });
         },
 
         // Load reports for specific people and organizations
-        loadMultiplePeopleReports: function(orgs, people) {
+        loadMultiplePeopleReports: function (orgs, people) {
             return httpProxy.get(
                 modelsService.getModelMetadata('person_report').url.all,
                 {
@@ -111,13 +111,13 @@ function reportsService(
         },
 
         // Load organization reports for the given organizations
-        loadOrganizationReports: function(orgs) {
+        loadOrganizationReports: function (orgs) {
             var organizationIds = _.map(orgs, 'id');
 
             // Return an array of the organization reports for the requested organization ids. Any reports that are
             // not yet loaded will be represented as a null value.
             function lookupReports() {
-                return organizationIds.map(function(organizationId) {
+                return organizationIds.map(function (organizationId) {
                     return reportsService.lookupOrganizationReport(
                         organizationId,
                     );
@@ -125,7 +125,7 @@ function reportsService(
             }
 
             // Determine which organization reports have not been loaded yet and actually need to be loaded
-            var unloadedOrgIds = organizationIds.filter(function(
+            var unloadedOrgIds = organizationIds.filter(function (
                 organizationId,
             ) {
                 var report = reportsService.lookupOrganizationReport(
@@ -153,13 +153,13 @@ function reportsService(
                         errorMessage: 'error.messages.reports.load_org_reports',
                     },
                 )
-                .then(function() {
+                .then(function () {
                     return lookupReports();
                 });
         },
 
         // Return the number of interactions of a specific type in a particular report
-        getInteractionCount: function(report, interactionTypeId) {
+        getInteractionCount: function (report, interactionTypeId) {
             var interaction =
                 report &&
                 _.find(
@@ -171,7 +171,7 @@ function reportsService(
         },
 
         // Add a new interaction to a report
-        incrementReportInteraction: function(report, interactionTypeId) {
+        incrementReportInteraction: function (report, interactionTypeId) {
             var interaction = _.find(report.interactions, {
                 interaction_type_id: interactionTypeId,
             });

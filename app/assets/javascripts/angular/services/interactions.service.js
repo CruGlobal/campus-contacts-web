@@ -71,13 +71,13 @@ function interactionsService(
 
     return {
         // Return an array containing information about the available interaction types
-        getInteractionTypes: function() {
+        getInteractionTypes: function () {
             // Excluded deprecated interaction types
             return _.filter(interactionTypes, { deprecated: false });
         },
 
         // Lookup and return the interaction type with the specified id
-        getInteractionType: function(interactionTypeId) {
+        getInteractionType: function (interactionTypeId) {
             return _.find(interactionTypes, { id: `${interactionTypeId}` });
         },
 
@@ -86,7 +86,7 @@ function interactionsService(
         // comment, organizationId is the organization_id of the associated organization, and personId is
         // the receiver of the interaction, or null if this is an anonymous interaction
         // Also, the initiator of the interaction is the currently logged-in user
-        recordInteraction: function(interaction, organizationId, personId) {
+        recordInteraction: function (interaction, organizationId, personId) {
             // Build up the relationships object
             var relationships = {
                 organization: {
@@ -127,7 +127,7 @@ function interactionsService(
                     },
                 )
                 .then(httpProxy.extractModel)
-                .then(function(interaction) {
+                .then(function (interaction) {
                     // Filter out extra initiator
                     const filteredInteraction = interaction.initiators.filter(
                         (initiator, index) =>
@@ -135,7 +135,7 @@ function interactionsService(
                     );
                     interaction.initiators = filteredInteraction;
 
-                    interaction.initiators.forEach(function(initiator) {
+                    interaction.initiators.forEach(function (initiator) {
                         // Add the new interaction to the person report
                         var report = reportsService.lookupPersonReport(
                             interaction.organization.id,
@@ -171,7 +171,7 @@ function interactionsService(
                 });
         },
 
-        updateInteraction: function(interaction) {
+        updateInteraction: function (interaction) {
             return httpProxy
                 .put(
                     modelsService
@@ -186,7 +186,7 @@ function interactionsService(
                 .then(httpProxy.extractModel);
         },
 
-        deleteInteraction: function(interaction) {
+        deleteInteraction: function (interaction) {
             return httpProxy.delete(
                 modelsService
                     .getModelMetadata('interaction')

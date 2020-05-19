@@ -53,7 +53,7 @@ function organizationController(
         });
 
         // Add new people assigned to the logged-in user to this org's people list
-        unsubscribe = $rootScope.$on('personCreated', function(event, person) {
+        unsubscribe = $rootScope.$on('personCreated', function (event, person) {
             if (
                 _.find(person.reverse_contact_assignments, {
                     assigned_to: loggedInPerson.person,
@@ -94,7 +94,7 @@ function organizationController(
         };
         interactionsService
             .recordInteraction(interaction, vm.org.id, null)
-            .then(function() {
+            .then(function () {
                 closeAnonymousInteractions();
             });
     }

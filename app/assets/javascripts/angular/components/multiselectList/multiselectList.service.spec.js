@@ -3,14 +3,14 @@ import 'angular-mocks';
 // Constants
 var multiselectListService, _;
 
-describe('multiselectListService', function() {
-    beforeEach(inject(function(_multiselectListService_, ___) {
+describe('multiselectListService', function () {
+    beforeEach(inject(function (_multiselectListService_, ___) {
         multiselectListService = _multiselectListService_;
         _ = ___;
     }));
 
-    describe('state checks', function() {
-        beforeEach(function() {
+    describe('state checks', function () {
+        beforeEach(function () {
             this.id = 1;
             this.selected = { 1: true };
             this.unselected = { 1: false };
@@ -18,14 +18,14 @@ describe('multiselectListService', function() {
             this.missing = {};
         });
 
-        describe('isSelected', function() {
-            it('should return true for selected states', function() {
+        describe('isSelected', function () {
+            it('should return true for selected states', function () {
                 expect(
                     multiselectListService.isSelected(this.selected, this.id),
                 ).toBe(true);
             });
 
-            it('should return false for other states', function() {
+            it('should return false for other states', function () {
                 expect(
                     multiselectListService.isSelected(this.unselected, this.id),
                 ).toBe(false);
@@ -41,8 +41,8 @@ describe('multiselectListService', function() {
             });
         });
 
-        describe('isUnselected', function() {
-            it('should return true for unselected and missing states', function() {
+        describe('isUnselected', function () {
+            it('should return true for unselected and missing states', function () {
                 expect(
                     multiselectListService.isUnselected(
                         this.unselected,
@@ -54,7 +54,7 @@ describe('multiselectListService', function() {
                 ).toBe(true);
             });
 
-            it('should return false for other states', function() {
+            it('should return false for other states', function () {
                 expect(
                     multiselectListService.isUnselected(this.selected, this.id),
                 ).toBe(false);
@@ -67,8 +67,8 @@ describe('multiselectListService', function() {
             });
         });
 
-        describe('isIndeterminate', function() {
-            it('should return true for indeterminate states', function() {
+        describe('isIndeterminate', function () {
+            it('should return true for indeterminate states', function () {
                 expect(
                     multiselectListService.isIndeterminate(
                         this.indeterminate,
@@ -77,7 +77,7 @@ describe('multiselectListService', function() {
                 ).toBe(true);
             });
 
-            it('should return false for other states', function() {
+            it('should return false for other states', function () {
                 expect(
                     multiselectListService.isIndeterminate(
                         this.selected,
@@ -100,7 +100,7 @@ describe('multiselectListService', function() {
         });
     });
 
-    describe('toggle', function() {
+    describe('toggle', function () {
         var id = 1;
         var states = {
             selected: { 1: true },
@@ -191,13 +191,13 @@ describe('multiselectListService', function() {
             },
         ];
 
-        tests.forEach(function(test) {
+        tests.forEach(function (test) {
             var testText =
                 'should toggle ' +
                 test.currentSelection +
                 ' state that was initially ' +
                 test.initialSelection;
-            it(testText, function() {
+            it(testText, function () {
                 var currentSelection = _.clone(states[test.currentSelection]);
                 var addedOutput = _.clone(output[test.addedOutput]);
                 var removedOutput = _.clone(output[test.removedOutput]);

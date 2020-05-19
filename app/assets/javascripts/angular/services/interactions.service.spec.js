@@ -13,13 +13,13 @@ var interactionsService,
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -27,13 +27,13 @@ function asynchronous(fn) {
     };
 }
 
-describe('interactionsService', function() {
-    beforeEach(function() {
+describe('interactionsService', function () {
+    beforeEach(function () {
         var _this = this;
 
         // Mock out the loggedInPerson service
-        angular.mock.module(function($provide) {
-            $provide.factory('loggedInPerson', function() {
+        angular.mock.module(function ($provide) {
+            $provide.factory('loggedInPerson', function () {
                 return {
                     person: {
                         get id() {
@@ -45,7 +45,7 @@ describe('interactionsService', function() {
         });
     });
 
-    beforeEach(inject(function(
+    beforeEach(inject(function (
         _interactionsService_,
         _$q_,
         _$rootScope_,
@@ -78,37 +78,37 @@ describe('interactionsService', function() {
         };
 
         this.httpResponse = { data: {} };
-        spyOn(httpProxy, 'post').and.callFake(function() {
+        spyOn(httpProxy, 'post').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
-        spyOn(httpProxy, 'put').and.callFake(function() {
+        spyOn(httpProxy, 'put').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
-        spyOn(httpProxy, 'delete').and.callFake(function() {
+        spyOn(httpProxy, 'delete').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
     }));
 
-    describe('getInteractionTypes', function() {
-        it('should not include deprecated interaction types', function() {
+    describe('getInteractionTypes', function () {
+        it('should not include deprecated interaction types', function () {
             expect(
                 _.find(interactionsService.getInteractionTypes(), { id: 6 }),
             ).not.toBeDefined();
         });
     });
 
-    describe('getInteractionType', function() {
-        it('should find interaction types', function() {
+    describe('getInteractionType', function () {
+        it('should find interaction types', function () {
             expect(interactionsService.getInteractionType(1)).toBeDefined();
         });
 
-        it('should find deprecated interaction types', function() {
+        it('should find deprecated interaction types', function () {
             expect(interactionsService.getInteractionType(6)).toBeDefined();
         });
     });
 
-    describe('recordInteraction', function() {
-        it('with no personId should create an anyonymous interaction', function() {
+    describe('recordInteraction', function () {
+        it('with no personId should create an anyonymous interaction', function () {
             interactionsService.recordInteraction(
                 this.interaction,
                 this.organizationId,
@@ -145,7 +145,7 @@ describe('interactionsService', function() {
             );
         });
 
-        it('with personId should create a personal interaction', function() {
+        it('with personId should create a personal interaction', function () {
             interactionsService.recordInteraction(
                 this.interaction,
                 this.organizationId,
@@ -188,7 +188,7 @@ describe('interactionsService', function() {
 
         it(
             'extracts and returns returns the new interaction model',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 spyOn(httpProxy, 'extractModel').and.returnValue(
                     this.interactionModel,
@@ -199,7 +199,7 @@ describe('interactionsService', function() {
                         this.organizationId,
                         this.initiatorId,
                     )
-                    .then(function(newInteraction) {
+                    .then(function (newInteraction) {
                         expect(newInteraction).toBe(_this.interactionModel);
                     });
             }),
@@ -207,7 +207,7 @@ describe('interactionsService', function() {
 
         it(
             'updates person and organization reports',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 var personReport = {};
                 var organizationReport = {};
@@ -228,7 +228,7 @@ describe('interactionsService', function() {
                         this.organizationId,
                         this.initiatorId,
                     )
-                    .then(function() {
+                    .then(function () {
                         expect(
                             reportsService.lookupPersonReport,
                         ).toHaveBeenCalledWith(
@@ -254,19 +254,19 @@ describe('interactionsService', function() {
         );
     });
 
-    describe('updateInteraction', function() {
-        beforeEach(function() {
+    describe('updateInteraction', function () {
+        beforeEach(function () {
             setupUpdateDelete.bind(this)();
         });
 
         it(
             'should save interaction changes to the server',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
                 return interactionsService
                     .updateInteraction(this.interaction)
-                    .then(function(savedInteraction) {
+                    .then(function (savedInteraction) {
                         expect(httpProxy.put).toHaveBeenCalledWith(
                             jasmine.any(String),
                             _this.interaction.serialize(),
@@ -283,19 +283,19 @@ describe('interactionsService', function() {
         );
     });
 
-    describe('deleteInteraction', function() {
-        beforeEach(function() {
+    describe('deleteInteraction', function () {
+        beforeEach(function () {
             setupUpdateDelete.bind(this)();
         });
 
         it(
             'should delete interactions from the server',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
                 return interactionsService
                     .deleteInteraction(this.interaction)
-                    .then(function() {
+                    .then(function () {
                         expect(httpProxy.delete).toHaveBeenCalledWith(
                             jasmine.any(String),
                             _this.interaction.serialize(),

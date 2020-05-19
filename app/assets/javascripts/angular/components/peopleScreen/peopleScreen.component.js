@@ -80,7 +80,7 @@ function peopleScreenController(
             cssClass: 'name-column',
             label: 'ministries.people.name',
             sortable: true,
-            getSortKey: person => {
+            getSortKey: (person) => {
                 return [
                     (person.last_name || '').toLowerCase(),
                     (person.first_name || '').toLowerCase(),
@@ -93,7 +93,7 @@ function peopleScreenController(
             cssClass: 'detail-column gender-column',
             label: 'ministries.people.gender',
             sortable: true,
-            getSortKey: person => {
+            getSortKey: (person) => {
                 return person.gender;
             },
             orderFields: ['gender', 'last_name', 'first_name'],
@@ -109,7 +109,7 @@ function peopleScreenController(
             cssClass: 'detail-column status-column',
             label: 'ministries.people.status',
             sortable: true,
-            getSortKey: person => {
+            getSortKey: (person) => {
                 const orgPermission = personService.getOrgPermission(
                     person,
                     this.org.id,
@@ -161,7 +161,7 @@ function peopleScreenController(
             cssClass: 'detail-column assigned-to-column',
             label: 'ministries.people.lastSurvey',
             sortable: true,
-            getSortKey: person => {
+            getSortKey: (person) => {
                 const lastSurvey = personService.getLastSurvey(person);
                 if (!lastSurvey) return '1969-12-12 00:00:00'; //Force null to buttom of list
                 return lastSurvey;
@@ -205,15 +205,17 @@ function peopleScreenController(
                 this.loaderService,
                 this.surveyId,
             )
-            .then(resp => {
+            .then((resp) => {
                 const oldPeople = this.people;
                 this.people = resp.list;
                 this.loadedAll = resp.loadedAll;
                 this.totalCount = resp.total;
                 // Set the selected state of all of the new people
-                _.differenceBy(this.people, oldPeople, 'id').forEach(person => {
-                    this.multiSelection[person.id] = this.selectAllValue;
-                });
+                _.differenceBy(this.people, oldPeople, 'id').forEach(
+                    (person) => {
+                        this.multiSelection[person.id] = this.selectAllValue;
+                    },
+                );
             })
             .finally(() => {
                 this.busy = false;
@@ -221,7 +223,7 @@ function peopleScreenController(
     };
 
     // Respond to the creation of a new person by potentially adding it to the person list, updating counts, etc.
-    const onNewPerson = person => {
+    const onNewPerson = (person) => {
         // If filters are applied, then refresh the list because the new person may or may not be included
         // in the person list. If no filters applied, simply add it to the person list.
         if (peopleFiltersPanelService.filtersHasActive(this.filters)) {
@@ -239,7 +241,7 @@ function peopleScreenController(
             // When a new person is added, check if the Team count has changed and update the UI
             organizationOverviewTeamService
                 .loadOrgTeamCount(this.org.id)
-                .then(resp => (this.organizationOverview.team.length = resp));
+                .then((resp) => (this.organizationOverview.team.length = resp));
         }
         // Emit to tell the peopleFilterPanel component that the assigned to count could have changed
         $rootScope.$emit('updateFilterCount');
@@ -247,9 +249,9 @@ function peopleScreenController(
 
     // Return an array of the ids of all people with the specified selection state (true for selected, false for
     // unselected)
-    const getPeopleByState = state => {
+    const getPeopleByState = (state) => {
         return _.chain(this.multiSelection)
-            .pickBy(selected => {
+            .pickBy((selected) => {
                 return selected === state;
             })
             .keys()
@@ -274,13 +276,13 @@ function peopleScreenController(
         this.multiSelection = {};
     };
 
-    this.filtersChanged = newFilters => {
+    this.filtersChanged = (newFilters) => {
         this.filters = newFilters;
         resetList();
         this.loadPersonPage();
     };
 
-    this.setSortColumn = column => {
+    this.setSortColumn = (column) => {
         if (this.sortOrder.column === column) {
             if (this.sortOrder.direction === 'asc') {
                 this.sortOrder.direction = 'desc';
@@ -298,7 +300,7 @@ function peopleScreenController(
     };
 
     this.selectAll = () => {
-        this.people.forEach(person => {
+        this.people.forEach((person) => {
             this.multiSelection[person.id] = this.selectAllValue;
         });
     };
@@ -318,7 +320,7 @@ function peopleScreenController(
 
     // Get the current sort order
     const getOrder = () => {
-        return this.sortOrder.column.orderFields.map(fieldName => {
+        return this.sortOrder.column.orderFields.map((fieldName) => {
             return { field: fieldName, direction: this.sortOrder.direction };
         });
     };
@@ -377,7 +379,7 @@ function peopleScreenController(
             });
     };
 
-    this.sendMessage = medium => {
+    this.sendMessage = (medium) => {
         $uibModal.open({
             component: 'messageModal',
             resolve: {
@@ -391,9 +393,9 @@ function peopleScreenController(
     };
 
     // Remove the specified people from the people list in the UI
-    const removePeopleFromList = peopleIds => {
+    const removePeopleFromList = (peopleIds) => {
         // Partition loaded people by whether or not they are removed
-        const partition = _.partition(this.people, person => {
+        const partition = _.partition(this.people, (person) => {
             return _.includes(peopleIds, person.id);
         });
         const removedPeople = partition[0];
@@ -410,11 +412,11 @@ function peopleScreenController(
             // When a person is removed, check if the team count has been changed and update the UI to match it
             organizationOverviewTeamService
                 .loadOrgTeamCount(this.org.id)
-                .then(resp => (this.organizationOverview.team.length = resp));
+                .then((resp) => (this.organizationOverview.team.length = resp));
         }
 
         // Remove the selection state of removed people
-        removedPeople.forEach(person => {
+        removedPeople.forEach((person) => {
             delete this.multiSelection[person.id];
         });
 
@@ -496,7 +498,7 @@ function peopleScreenController(
                 windowClass: 'pivot_theme',
                 size: 'md',
             })
-            .result.then(copyContacts => {
+            .result.then((copyContacts) => {
                 if (copyContacts === false) {
                     removePeopleFromList(selection.selectedPeople);
                 }

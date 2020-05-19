@@ -12,7 +12,7 @@ function facebookService(authenticationService, envService) {
             });
         },
         loadSDK: () => {
-            return function(d) {
+            return function (d) {
                 const id = 'facebook-jssdk';
                 const ref = d.getElementsByTagName('script')[0];
 
@@ -29,11 +29,11 @@ function facebookService(authenticationService, envService) {
             };
         },
         signOut: () => {
-            FB.logout(response => {});
+            FB.logout((response) => {});
         },
         signIn: () => {
             FB.login(
-                response => {
+                (response) => {
                     if (response.authResponse) {
                         authenticationService.authorizeFacebookAccess(
                             response.authResponse.accessToken,

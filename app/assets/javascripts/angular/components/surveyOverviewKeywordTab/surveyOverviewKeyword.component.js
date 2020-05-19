@@ -25,7 +25,7 @@ function surveyOverviewKeywordController(
     this.helpIcon = helpIcon;
     this.hasChanged = false;
 
-    const keywordErrorHandler = response => {
+    const keywordErrorHandler = (response) => {
         let {
             data: { errors: [{ detail: details } = {}] = [] } = {},
         } = response;
@@ -78,7 +78,7 @@ function surveyOverviewKeywordController(
                 orgId: this.survey.organization_id,
                 keyword: this.keyword,
             })
-            .then(keywordData => {
+            .then((keywordData) => {
                 this.keyword = keywordData;
 
                 $uibModal.open({
@@ -95,7 +95,7 @@ function surveyOverviewKeywordController(
             }, keywordErrorHandler);
     };
 
-    this.deleteKeyword = keywordId => {
+    this.deleteKeyword = (keywordId) => {
         if (!this.directAdminPrivileges) return;
 
         confirmModalService
