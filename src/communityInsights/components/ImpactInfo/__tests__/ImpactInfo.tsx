@@ -4,7 +4,6 @@ import { waitForElement } from '@testing-library/react';
 
 import { renderWithContext } from '../../../../testUtils';
 import { GET_IMPACT_REPORT_MOVED } from '../../../containers/PersonalStepsPage/queries';
-
 import ImpactInfo from '..';
 
 describe('<ImpactInfo />', () => {
