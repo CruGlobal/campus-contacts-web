@@ -4,13 +4,13 @@ import 'angular-mocks';
 var personService, $rootScope, httpProxy;
 
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -18,8 +18,13 @@ function asynchronous(fn) {
     };
 }
 
-describe('personService', function() {
-    beforeEach(inject(function(_personService_, _$rootScope_, $q, _httpProxy_) {
+describe('personService', function () {
+    beforeEach(inject(function (
+        _personService_,
+        _$rootScope_,
+        $q,
+        _httpProxy_,
+    ) {
         personService = _personService_;
         $rootScope = _$rootScope_;
         httpProxy = _httpProxy_;
@@ -75,58 +80,58 @@ describe('personService', function() {
         var _this = this;
 
         this.httpResponse = {};
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return $q.resolve(_this.httpResponse);
         });
     }));
 
-    describe('getOrgPermission', function() {
-        it("should find the person's organizational permission", function() {
+    describe('getOrgPermission', function () {
+        it("should find the person's organizational permission", function () {
             expect(personService.getOrgPermission(this.person, 1)).toEqual(
                 this.organizationalPermission,
             );
         });
-        it('should set the permission_id to be a string', function() {
+        it('should set the permission_id to be a string', function () {
             expect(
                 personService.getOrgPermission(this.person, 1).permission_id,
             ).toEqual('4');
         });
 
-        it('should return null when the user has no organizational permission', function() {
+        it('should return null when the user has no organizational permission', function () {
             expect(personService.getOrgPermission(this.person, 4)).toBe(null);
         });
     });
 
-    describe('isContact', function() {
-        it('should return true for contacts', function() {
+    describe('isContact', function () {
+        it('should return true for contacts', function () {
             this.person.organizational_permissions = [
                 { organization_id: 1, permission_id: 2 },
             ];
             expect(personService.isContact(this.person, 1)).toBe(true);
         });
 
-        it('should return false for users', function() {
+        it('should return false for users', function () {
             this.person.organizational_permissions = [
                 { organization_id: 1, permission_id: 4 },
             ];
             expect(personService.isContact(this.person, 1)).toBe(false);
         });
 
-        it('should return false for admins', function() {
+        it('should return false for admins', function () {
             this.person.organizational_permissions = [
                 { organization_id: 1, permission_id: 1 },
             ];
             expect(personService.isContact(this.person, 1)).toBe(false);
         });
 
-        it('should return false for people not on the org', function() {
+        it('should return false for people not on the org', function () {
             this.person.organizational_permissions = [];
             expect(personService.isContact(this.person, 1)).toBe(false);
         });
     });
 
-    describe('getAssignedTo', function() {
-        it("should find the person's assignments", function() {
+    describe('getAssignedTo', function () {
+        it("should find the person's assignments", function () {
             expect(personService.getAssignedTo(this.person, 1)).toEqual([
                 { name: 'Alice' },
                 { name: 'Adam' },
@@ -135,8 +140,8 @@ describe('personService', function() {
         });
     });
 
-    describe('getPhoneNumber', function() {
-        it("should find the person's primary phone number", function() {
+    describe('getPhoneNumber', function () {
+        it("should find the person's primary phone number", function () {
             expect(personService.getPhoneNumber(this.person)).toEqual({
                 number: '000000001',
                 primary: true,
@@ -144,8 +149,8 @@ describe('personService', function() {
         });
     });
 
-    describe('getEmailAddress', function() {
-        it("should find the person's primary email address", function() {
+    describe('getEmailAddress', function () {
+        it("should find the person's primary email address", function () {
             expect(personService.getEmailAddress(this.person)).toEqual({
                 address: 'c@domain.com',
                 primary: true,
@@ -153,8 +158,8 @@ describe('personService', function() {
         });
     });
 
-    describe('archivePerson', function() {
-        it('should make a network request', function() {
+    describe('archivePerson', function () {
+        it('should make a network request', function () {
             personService.archivePerson(this.person, 1);
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'PUT',
@@ -181,11 +186,11 @@ describe('personService', function() {
 
         it(
             "should remove the person from their org's people list",
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 return personService
                     .archivePerson(this.person, 1)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             _this.organizationalPermission.organization.people,
                         ).toEqual([{ id: 12 }]);
@@ -194,8 +199,8 @@ describe('personService', function() {
         );
     });
 
-    describe('getContactAssignments', function() {
-        beforeEach(function() {
+    describe('getContactAssignments', function () {
+        beforeEach(function () {
             this.organizationId = 1;
 
             this.personRelevant = {
@@ -252,8 +257,8 @@ describe('personService', function() {
             };
         });
 
-        describe('scoped to organization', function() {
-            it('should make a network request', function() {
+        describe('scoped to organization', function () {
+            it('should make a network request', function () {
                 personService.getContactAssignments(
                     this.person,
                     this.organizationId,
@@ -276,7 +281,7 @@ describe('personService', function() {
 
             it(
                 'should asynchronously return the relevant contact assignments',
-                asynchronous(function() {
+                asynchronous(function () {
                     var _this = this;
 
                     this.httpResponse = {
@@ -291,7 +296,7 @@ describe('personService', function() {
 
                     return personService
                         .getContactAssignments(this.person, this.organizationId)
-                        .then(function(assignments) {
+                        .then(function (assignments) {
                             expect(assignments).toEqual([
                                 _this.personRelevant
                                     .reverse_contact_assignments[0],
@@ -301,8 +306,8 @@ describe('personService', function() {
             );
         });
 
-        describe('not scoped to organization', function() {
-            it('should make a network request', function() {
+        describe('not scoped to organization', function () {
+            it('should make a network request', function () {
                 personService.getContactAssignments(this.person);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
@@ -322,7 +327,7 @@ describe('personService', function() {
 
             it(
                 'should asynchronously return the relevant contact assignments',
-                asynchronous(function() {
+                asynchronous(function () {
                     var _this = this;
 
                     this.httpResponse = {
@@ -336,7 +341,7 @@ describe('personService', function() {
 
                     return personService
                         .getContactAssignments(this.person)
-                        .then(function(assignments) {
+                        .then(function (assignments) {
                             expect(assignments).toEqual([
                                 _this.personRelevant
                                     .reverse_contact_assignments[0],

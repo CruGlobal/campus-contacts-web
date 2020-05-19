@@ -24,7 +24,7 @@ function personActivityController(
     function activate() {
         vm.interactionTypes = interactionsService
             .getInteractionTypes()
-            .filter(function(interactionType) {
+            .filter(function (interactionType) {
                 return interactionType.id !== 1;
             });
         vm.periods = periodService.getPeriods();
@@ -43,7 +43,7 @@ function personActivityController(
         var personId = vm.personTab.person.id;
         reportsService
             .loadPersonReport(organizationId, personId)
-            .then(function(report) {
+            .then(function (report) {
                 vm.report = report;
             });
     }

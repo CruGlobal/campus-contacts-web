@@ -41,7 +41,7 @@ function organizationOverviewSurveysController(
                 windowClass: 'pivot_theme',
                 size: 'sm',
             })
-            .result.then(newSurvey => {
+            .result.then((newSurvey) => {
                 //go to edit screen
                 $state.go('app.ministries.ministry.survey.manage', {
                     surveyId: newSurvey.id,
@@ -49,7 +49,7 @@ function organizationOverviewSurveysController(
             });
     };
 
-    this.copySurvey = survey => {
+    this.copySurvey = (survey) => {
         $uibModal.open({
             component: 'copySurvey',
             resolve: {
@@ -66,7 +66,7 @@ function organizationOverviewSurveysController(
         surveyService.updateSurvey(survey);
     };
 
-    this.deleteSurvey = survey => {
+    this.deleteSurvey = (survey) => {
         if (!survey) {
             return;
         }
@@ -87,7 +87,7 @@ function organizationOverviewSurveysController(
             });
     };
 
-    this.massEntry = survey => {
+    this.massEntry = (survey) => {
         $uibModal.open({
             component: 'addSurveyResponseModal',
             resolve: {

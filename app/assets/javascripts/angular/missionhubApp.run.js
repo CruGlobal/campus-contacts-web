@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .run(function(
+    .run(function (
         $window,
         $rootScope,
         $analytics,
@@ -15,11 +15,11 @@ angular
         envService,
     ) {
         $rootScope.whiteBackground = false;
-        $transitions.onSuccess({}, transition => {
+        $transitions.onSuccess({}, (transition) => {
             $rootScope.whiteBackground = !!transition.to().whiteBackground;
         });
 
-        $window.fbAsyncInit = function() {
+        $window.fbAsyncInit = function () {
             facebookService.init();
         };
 
@@ -35,7 +35,7 @@ angular
             !authenticationService.isTokenValid() &&
             ($window.location.href = envService.read('getMissionHub'));
 
-        $transitions.onBefore({}, transition => {
+        $transitions.onBefore({}, (transition) => {
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
@@ -65,7 +65,7 @@ angular
             return loggedInPerson.loadOnce();
         });
 
-        $transitions.onFinish({}, transition => {
+        $transitions.onFinish({}, (transition) => {
             analyticsService.track(transition);
         });
     });

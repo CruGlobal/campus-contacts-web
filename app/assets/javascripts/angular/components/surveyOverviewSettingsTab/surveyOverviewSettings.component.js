@@ -32,11 +32,13 @@ function surveyOverviewSettingsController(
             this.survey.validation_message = this.surveyEdit.validation_message;
             this.survey.validation_success_message = this.surveyEdit.validation_success_message;
 
-            surveyService.updateSurvey(this.survey).then(updatedSurveyData => {
-                // clear logo base64 data after upload
-                delete this.surveyEdit.logo;
-                this.surveyEdit.logo_url = updatedSurveyData.logo_url;
-            });
+            surveyService
+                .updateSurvey(this.survey)
+                .then((updatedSurveyData) => {
+                    // clear logo base64 data after upload
+                    delete this.surveyEdit.logo;
+                    this.surveyEdit.logo_url = updatedSurveyData.logo_url;
+                });
         },
         1500,
         { leading: false },
@@ -65,7 +67,7 @@ function surveyOverviewSettingsController(
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.setAttribute('style', 'display: none');
-        input.addEventListener('click', event => event.stopPropagation());
+        input.addEventListener('click', (event) => event.stopPropagation());
 
         // We append the input to the DOM to support iOS Safari which doesn't seem to fire the click event.
         // eslint-disable-next-line angular/document-service
@@ -94,7 +96,7 @@ function surveyOverviewSettingsController(
 
                 //base 64 encode image
                 const reader = new FileReader();
-                reader.onload = event => {
+                reader.onload = (event) => {
                     this.surveyEdit.logo = event.target.result;
                     this.saveSurvey();
                 };

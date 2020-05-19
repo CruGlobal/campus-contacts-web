@@ -54,7 +54,7 @@ function editGroupOrLabelAssignmentsController(
 
     function sortFunction() {
         if (isOrgLabelsMode()) {
-            return function(organization) {
+            return function (organization) {
                 return parseInt(organization.id, 10);
             };
         }
@@ -90,7 +90,7 @@ function editGroupOrLabelAssignmentsController(
     function buildSelectedDict() {
         vm.selectedEntries = _.chain(vm.resolve.person[vm.resolve.relationship])
             .filter(orgFilterExpression())
-            .map(function(entry) {
+            .map(function (entry) {
                 return [entry[relatedModel()].id, true];
             })
             .fromPairs()
@@ -115,7 +115,7 @@ function editGroupOrLabelAssignmentsController(
             );
         }
 
-        savingPromise.then(vm.close).catch(function() {
+        savingPromise.then(vm.close).catch(function () {
             vm.saving = false;
         });
     }

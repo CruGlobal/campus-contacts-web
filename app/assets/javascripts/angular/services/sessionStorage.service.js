@@ -3,11 +3,11 @@ angular.module('missionhubApp').service('sessionStorageService', () => {
         set: (key, value) => {
             sessionStorage.setItem(key, angular.toJson(value));
         },
-        get: key => {
+        get: (key) => {
             const value = sessionStorage.getItem(key);
             return angular.fromJson(value);
         },
-        destroy: key => {
+        destroy: (key) => {
             sessionStorage.removeItem(key);
         },
         clear: () => {

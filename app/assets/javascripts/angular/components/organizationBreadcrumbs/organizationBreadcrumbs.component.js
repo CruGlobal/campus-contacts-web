@@ -27,7 +27,7 @@ function organizationBreadcrumbsController(
                     [vm.orgId],
                     'error.messages.organization.load_ancestry',
                 )
-                .then(function() {
+                .then(function () {
                     updateOrganization(vm.orgId);
                 });
         } else {
@@ -37,7 +37,7 @@ function organizationBreadcrumbsController(
     }
 
     function subscribe() {
-        $transitions.onSuccess({ to: 'app.ministries.**' }, function(
+        $transitions.onSuccess({ to: 'app.ministries.**' }, function (
             transition,
         ) {
             updateOrganization(transition.params('to').orgId);
@@ -46,7 +46,7 @@ function organizationBreadcrumbsController(
 
     function updateOrganization(orgId) {
         var org = JsonApiDataStore.store.find('organization', orgId);
-        organizationService.getOrgHierarchy(org).then(function(hierarchy) {
+        organizationService.getOrgHierarchy(org).then(function (hierarchy) {
             vm.orgHierarchy = hierarchy;
         });
     }

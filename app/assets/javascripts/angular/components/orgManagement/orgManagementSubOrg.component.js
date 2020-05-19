@@ -37,7 +37,7 @@ function orgManagementSubOrgController(
         } else {
             organizationOverviewSuborgsService
                 .loadOrgSubOrgs(this.org)
-                .then(subOrgs => {
+                .then((subOrgs) => {
                     this.subOrgs = subOrgs;
                 });
         }

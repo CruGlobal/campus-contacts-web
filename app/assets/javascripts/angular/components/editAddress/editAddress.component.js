@@ -40,7 +40,7 @@ function editAddressController(editAddressService, personProfileService, _) {
         // Get the list of the user's other addresses
         vm.otherAddresses = _.without(vm.person.addresses, address);
 
-        loadCountries().then(function() {
+        loadCountries().then(function () {
             // For now, US regions are the only valid region choices
             loadRegions('US');
         });
@@ -52,16 +52,18 @@ function editAddressController(editAddressService, personProfileService, _) {
 
     // Populate vm.countries with the valid country choices
     function loadCountries() {
-        return editAddressService.getCountryOptions().then(function(countries) {
-            vm.countries = countries;
-        });
+        return editAddressService
+            .getCountryOptions()
+            .then(function (countries) {
+                vm.countries = countries;
+            });
     }
 
     // Populate vm.countries with the valid region choices
     function loadRegions(countryCode) {
         return editAddressService
             .getRegionOptions(countryCode)
-            .then(function(regions) {
+            .then(function (regions) {
                 vm.regions = regions;
             });
     }
@@ -78,7 +80,7 @@ function editAddressController(editAddressService, personProfileService, _) {
         vm.saving = true;
         personProfileService
             .saveAttribute(vm.person.id, vm.address, _.keys(vm.address))
-            .then(function() {
+            .then(function () {
                 if (vm.person.id === null && vm.isNewAddress) {
                     // The person is not saved on the server, so manually add the new address to the person
                     vm.person.addresses.push(vm.address);
@@ -91,7 +93,7 @@ function editAddressController(editAddressService, personProfileService, _) {
 
                 vm.close({ $value: vm.address });
             })
-            .catch(function() {
+            .catch(function () {
                 vm.saving = false;
             });
     }

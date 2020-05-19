@@ -2,13 +2,13 @@ var organizationOverviewService, httpProxy, $rootScope, $q;
 var peopleScreenService, organizationOverviewTeamService; // eslint-disable-line one-var
 
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -16,8 +16,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('organizationOverviewService', function() {
-    beforeEach(inject(function(
+describe('organizationOverviewService', function () {
+    beforeEach(inject(function (
         _organizationOverviewService_,
         _httpProxy_,
         _$rootScope_,
@@ -39,8 +39,8 @@ describe('organizationOverviewService', function() {
         spyOn(httpProxy, 'callHttp');
     }));
 
-    describe('loadOrgRelations', function() {
-        it('loads groups and surveys when they are unloaded', function() {
+    describe('loadOrgRelations', function () {
+        it('loads groups and surveys when they are unloaded', function () {
             organizationOverviewService.loadOrgRelations({
                 _type: 'organization',
                 id: this.id,
@@ -60,7 +60,7 @@ describe('organizationOverviewService', function() {
             );
         });
 
-        it('loads nothing when groups and surveys are loaded', function() {
+        it('loads nothing when groups and surveys are loaded', function () {
             organizationOverviewService.loadOrgRelations({
                 _type: 'organization',
                 id: this.id,
@@ -70,7 +70,7 @@ describe('organizationOverviewService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('loads only surveys when groups are loaded', function() {
+        it('loads only surveys when groups are loaded', function () {
             organizationOverviewService.loadOrgRelations({
                 _type: 'organization',
                 id: this.id,
@@ -90,7 +90,7 @@ describe('organizationOverviewService', function() {
             );
         });
 
-        it('loads only groups when groups are partialy loaded and surveys are loaded', function() {
+        it('loads only groups when groups are partialy loaded and surveys are loaded', function () {
             organizationOverviewService.loadOrgRelations({
                 _type: 'organization',
                 id: this.id,
@@ -111,10 +111,10 @@ describe('organizationOverviewService', function() {
         });
     });
 
-    describe('getPersonCount', function() {
+    describe('getPersonCount', function () {
         it(
             'should load the person count',
-            asynchronous(function() {
+            asynchronous(function () {
                 spyOn(
                     peopleScreenService,
                     'loadOrgPeopleCount',
@@ -122,7 +122,7 @@ describe('organizationOverviewService', function() {
 
                 return organizationOverviewService
                     .getPersonCount({ id: 1 })
-                    .then(function(personCount) {
+                    .then(function (personCount) {
                         expect(
                             peopleScreenService.loadOrgPeopleCount,
                         ).toHaveBeenCalledWith(1);
@@ -132,10 +132,10 @@ describe('organizationOverviewService', function() {
         );
     });
 
-    describe('getTeamCount', function() {
+    describe('getTeamCount', function () {
         it(
             'should load the team count',
-            asynchronous(function() {
+            asynchronous(function () {
                 spyOn(
                     organizationOverviewTeamService,
                     'loadOrgTeamCount',
@@ -143,7 +143,7 @@ describe('organizationOverviewService', function() {
 
                 return organizationOverviewService
                     .getTeamCount({ id: 1 })
-                    .then(function(personCount) {
+                    .then(function (personCount) {
                         expect(
                             organizationOverviewTeamService.loadOrgTeamCount,
                         ).toHaveBeenCalledWith(1);

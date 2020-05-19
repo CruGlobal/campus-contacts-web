@@ -11,7 +11,7 @@ function errorService($timeout, $q, $log, toaster, _) {
         networkRetryConfig: {
             retryDelay: 1000,
 
-            retryFilter: function(err) {
+            retryFilter: function (err) {
                 // Retry network errors and 500 errors
                 return err.status === -1 || err.status === 500;
             },
@@ -23,7 +23,7 @@ function errorService($timeout, $q, $log, toaster, _) {
     // Return a promise that will resolve when the user chooses to retry the operation and reject with the
     // original error if the user chooses not to retry
     function displayError(err, retryable) {
-        return new $q(function(resolve, reject) {
+        return new $q(function (resolve, reject) {
             if (!retryable) {
                 // We don't need to wait to find out whether the user will retry the operation
                 reject(err);
@@ -49,7 +49,7 @@ function errorService($timeout, $q, $log, toaster, _) {
                 timeout: retryable ? 0 : 10000,
 
                 // Retry when the toast is clicked
-                clickHandler: function(toast, isCloseButton) {
+                clickHandler: function (toast, isCloseButton) {
                     if (!isCloseButton) {
                         resolve();
                     }
@@ -59,7 +59,7 @@ function errorService($timeout, $q, $log, toaster, _) {
                 },
 
                 // Reject when the toast is closed
-                onHideCallback: function() {
+                onHideCallback: function () {
                     reject(err);
                 },
             });

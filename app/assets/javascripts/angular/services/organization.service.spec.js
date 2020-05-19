@@ -7,13 +7,13 @@ var organizationService, $rootScope, $q, JsonApiDataStore, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('organizationService', function() {
-    beforeEach(inject(function(
+describe('organizationService', function () {
+    beforeEach(inject(function (
         _organizationService_,
         _$rootScope_,
         _$q_,
@@ -44,7 +44,7 @@ describe('organizationService', function() {
             5: { id: '5', ancestry: '1/2/3/4' },
         };
 
-        spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
+        spyOn(JsonApiDataStore.store, 'find').and.callFake(function (
             type,
             orgId,
         ) {
@@ -52,36 +52,36 @@ describe('organizationService', function() {
         });
     }));
 
-    describe('getOrgHierarchyIds', function() {
-        it('should handle null orgs', function() {
+    describe('getOrgHierarchyIds', function () {
+        it('should handle null orgs', function () {
             expect(
                 organizationService.getOrgHierarchyIds(this.orgs[0]),
             ).toEqual([]);
         });
 
-        it('should handle orgs with no ancestry', function() {
+        it('should handle orgs with no ancestry', function () {
             expect(
                 organizationService.getOrgHierarchyIds(this.orgs[1]),
             ).toEqual(['1']);
         });
 
-        it('should handle orgs with ancestry', function() {
+        it('should handle orgs with ancestry', function () {
             expect(
                 organizationService.getOrgHierarchyIds(this.orgs[3]),
             ).toEqual(['1', '2', '3']);
         });
     });
 
-    describe('getOrgHierarchy', function() {
+    describe('getOrgHierarchy', function () {
         it(
             'should not load orgs when all orgs are loaded',
-            asynchronous(function() {
+            asynchronous(function () {
                 spyOn(organizationService, 'loadOrgsById').and.returnValue(
                     $q.resolve([]),
                 );
                 return organizationService
                     .getOrgHierarchy(this.orgs[3])
-                    .then(function(orgs) {
+                    .then(function (orgs) {
                         expect(_.map(orgs, 'id')).toEqual(['1', '2', '3']);
                         expect(
                             organizationService.loadOrgsById,
@@ -92,10 +92,10 @@ describe('organizationService', function() {
 
         it(
             'should load missing orgs when not all orgs are loaded',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 spyOn(organizationService, 'loadOrgsById').and.callFake(
-                    function() {
+                    function () {
                         // Simulate the load of org 4
                         _this.orgs[4] = { id: '4', ancestry: '1/2/3/4' };
                         return $q.resolve();
@@ -104,7 +104,7 @@ describe('organizationService', function() {
 
                 return organizationService
                     .getOrgHierarchy(this.orgs[5])
-                    .then(function(orgs) {
+                    .then(function (orgs) {
                         expect(_.map(orgs, 'id')).toEqual([
                             '1',
                             '2',
@@ -121,14 +121,14 @@ describe('organizationService', function() {
 
         it(
             'should ignore unloadable orgs',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 spyOn(organizationService, 'loadOrgsById').and.returnValue(
                     $q.resolve([]),
                 );
                 return organizationService
                     .getOrgHierarchy(this.orgs[5])
-                    .then(function(orgs) {
+                    .then(function (orgs) {
                         // Should not include org 4
                         expect(_.map(orgs, 'id')).toEqual(['1', '2', '3', '5']);
 

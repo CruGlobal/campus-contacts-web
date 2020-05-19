@@ -57,7 +57,7 @@ function proxyService(
             );
 
             return provider(config)
-                .then(res => {
+                .then((res) => {
                     // store rolling access token
                     const token = res.headers('x-mh-session');
 
@@ -76,7 +76,7 @@ function proxyService(
 
                     return JsonApiDataStore.store.syncWithMeta(res.data);
                 })
-                .catch(err => {
+                .catch((err) => {
                     const { data } = err || {};
 
                     if (
@@ -109,7 +109,7 @@ function proxyService(
     }
 
     var proxy = {
-        callHttp: errorService.autoRetry(function(
+        callHttp: errorService.autoRetry(function (
             method,
             url,
             params,
@@ -127,7 +127,7 @@ function proxyService(
         },
         errorService.networkRetryConfig),
 
-        submitForm: errorService.autoRetry(function(
+        submitForm: errorService.autoRetry(function (
             method,
             url,
             form,
@@ -144,19 +144,19 @@ function proxyService(
         },
         errorService.networkRetryConfig),
 
-        get: function(url, params, config) {
+        get: function (url, params, config) {
             return this.callHttp('GET', url, params, null, config);
         },
 
-        post: function(url, data, config) {
+        post: function (url, data, config) {
             return this.callHttp('POST', url, null, data, config);
         },
 
-        put: function(url, data, config) {
+        put: function (url, data, config) {
             return this.callHttp('PUT', url, null, data, config);
         },
 
-        delete: function(url, params, config) {
+        delete: function (url, params, config) {
             return this.callHttp('DELETE', url, params, null, config);
         },
 
@@ -170,20 +170,20 @@ function proxyService(
         extractModels: extractData,
 
         // Determine whether a model has been loaded
-        isLoaded: function(model) {
+        isLoaded: function (model) {
             return Boolean(model && !model._placeHolder);
         },
 
         // Given a model and an array of needed relationships, determine which of those relationships have not yet
         // been loaded
-        getUnloadedRelationships: function(model, relationships) {
+        getUnloadedRelationships: function (model, relationships) {
             if (!proxy.isLoaded(model)) {
                 // All relationships of unloaded models and placeholder models are considered unloaded
                 return relationships;
             }
 
             // Unloaded relationships contain unloaded models
-            return relationships.filter(function(relationshipPath) {
+            return relationships.filter(function (relationshipPath) {
                 var relationshipParts = relationshipPath.split('.');
                 var relationshipHead = _.head(relationshipParts);
                 var relationshipTail = _.tail(relationshipParts);
@@ -196,7 +196,7 @@ function proxyService(
                 // Try to find an an unloaded model
                 // If an unloaded model is found, this relationship will pass the filter and will be considered
                 // to be a unloaded relationship
-                return _.find(model[relationshipHead], function(item) {
+                return _.find(model[relationshipHead], function (item) {
                     // If the relationship path consisted of multiple parts, reach into the item to pull out
                     // the right property
                     return !proxy.isLoaded(
@@ -211,7 +211,7 @@ function proxyService(
         // Return a promise that resolves to the model of the specified type and with the specified id
         // If the model is already loaded, it is returned (wrapped in a promise) without a network request
         // If the model's required relationships are not fully loaded, those are loaded as well
-        getModel: function(
+        getModel: function (
             url,
             type,
             id,
@@ -226,7 +226,7 @@ function proxyService(
             );
             return $q
                 .resolve()
-                .then(function() {
+                .then(function () {
                     if (
                         proxy.isLoaded(model) &&
                         unloadedRelationships.length === 0
@@ -245,21 +245,21 @@ function proxyService(
                         extraConfig,
                     );
                 })
-                .then(function() {
+                .then(function () {
                     return JsonApiDataStore.store.find(type, id);
                 });
         },
 
         // Return the URL for a JSON API model
-        getModelUrl: function(model) {
+        getModelUrl: function (model) {
             return modelsService
                 .getModelMetadata(model._type)
                 .url.single(model.id);
         },
 
         // Generate a JSON API "included" array from an array of models
-        includedFromModels: function(models) {
-            return models.map(function(model) {
+        includedFromModels: function (models) {
+            return models.map(function (model) {
                 // Don't send the relationships' relationships
                 return model.serialize({ relationships: [] }).data;
             });

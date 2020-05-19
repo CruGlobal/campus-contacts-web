@@ -10,7 +10,7 @@ function groupsService(
 ) {
     var groupsService = {
         // Return a group with default field values
-        getGroupTemplate: function(orgId) {
+        getGroupTemplate: function (orgId) {
             var group = new JsonApiDataStore.Model('group');
             group.setAttribute('name', '');
             group.setAttribute('location', '');
@@ -27,7 +27,7 @@ function groupsService(
         },
 
         // Save a new group on the server
-        createGroup: function(group, leaders) {
+        createGroup: function (group, leaders) {
             // Include group_memberships so that we will have the group memberships for any newly-created leaders
             var payload = payloadFromGroup(group, leaders);
             return httpProxy
@@ -40,7 +40,7 @@ function groupsService(
                     },
                 )
                 .then(httpProxy.extractModel)
-                .then(function(group) {
+                .then(function (group) {
                     var org = group.organization;
                     if (org && org.groups) {
                         org.groups.push(group);
@@ -50,7 +50,7 @@ function groupsService(
         },
 
         // Save an existing group on the server
-        updateGroup: function(group, leaders) {
+        updateGroup: function (group, leaders) {
             // Include group_memberships so that we will have the group memberships for any newly-created leaders
             var payload = payloadFromGroup(group, leaders);
             return httpProxy
@@ -68,7 +68,7 @@ function groupsService(
         },
 
         // Save a group that may or may not yet exist
-        saveGroup: function(group, leaders) {
+        saveGroup: function (group, leaders) {
             if (group.id) {
                 return groupsService.updateGroup(group, leaders);
             }
@@ -76,7 +76,7 @@ function groupsService(
         },
 
         // Delete a group on the server
-        deleteGroup: function(group) {
+        deleteGroup: function (group) {
             return httpProxy
                 .delete(
                     modelsService
@@ -87,7 +87,7 @@ function groupsService(
                         errorMessage: 'error.messages.groups.delete_group',
                     },
                 )
-                .then(function() {
+                .then(function () {
                     var org = group.organization;
                     if (org && org.groups) {
                         _.pull(org.groups, group);
@@ -97,7 +97,7 @@ function groupsService(
         },
 
         // Convert a time in milliseconds since midnight into a JavaScript Date object
-        timeToDate: function(time) {
+        timeToDate: function (time) {
             return moment()
                 .startOf('day')
                 .milliseconds(time || 0)
@@ -105,22 +105,22 @@ function groupsService(
         },
 
         // Convert a JavaScript Date object into a time in milliseconds since midnight
-        dateToTime: function(date) {
+        dateToTime: function (date) {
             return moment(date).diff(moment(date).startOf('day'));
         },
 
         // Load the leaders of all of an organization's groups
-        loadLeaders: function(organization) {
-            return loadMemberships(organization).then(function() {
+        loadLeaders: function (organization) {
+            return loadMemberships(organization).then(function () {
                 return loadMissingLeaders(organization);
             });
         },
 
         // Return as a list of people the members in a group
-        getAllMembers: function(group) {
+        getAllMembers: function (group) {
             return _.reduce(
                 group.group_memberships,
-                function(allMembers, groupMembership) {
+                function (allMembers, groupMembership) {
                     // Skip all unloaded group_memberships. They seem to be loaded later
                     if (
                         !groupMembership._placeHolder &&
@@ -136,7 +136,7 @@ function groupsService(
         },
 
         // Return as a list of people the members in a group with a particular role
-        getMembersWithRole: function(group, role) {
+        getMembersWithRole: function (group, role) {
             return _.chain(group.group_memberships)
                 .filter({ role: role })
                 .map('person')
@@ -144,7 +144,7 @@ function groupsService(
         },
 
         // Find the group membership for a particular person
-        findMember: function(group, person) {
+        findMember: function (group, person) {
             return _.find(group.group_memberships, { person: person }) || null;
         },
 
@@ -176,7 +176,7 @@ function groupsService(
         var demotedLeaders = _.difference(previousLeaders, leaders);
 
         // Change the demoted members' role to "member"
-        var demoteModels = demotedLeaders.map(function(person) {
+        var demoteModels = demotedLeaders.map(function (person) {
             return modelFromRoleChange(group, person, 'member');
         });
 
@@ -184,7 +184,7 @@ function groupsService(
         var promotedMembers = _.intersection(leaders, previousMembers);
 
         // Change the promoted members' role to "leader"
-        var promoteModels = promotedMembers.map(function(person) {
+        var promoteModels = promotedMembers.map(function (person) {
             return modelFromRoleChange(group, person, 'leader');
         });
 
@@ -192,7 +192,7 @@ function groupsService(
         var createdLeaders = _.difference(leaders, previousAnyRole);
 
         // Create the new members
-        var createModels = createdLeaders.map(function(person) {
+        var createModels = createdLeaders.map(function (person) {
             var groupMembership = new JsonApiDataStore.Model(
                 'group_membership',
             );
@@ -227,7 +227,7 @@ function groupsService(
     // Load all of the group memberships for an organization
     function loadMemberships(organization) {
         // Don't load the groups if all of the organization's groups and memberships are loaded
-        var allModelsLoaded = organization.groups.every(function(group) {
+        var allModelsLoaded = organization.groups.every(function (group) {
             return (
                 httpProxy.isLoaded(group) &&
                 group.group_memberships.every(httpProxy.isLoaded)
@@ -257,7 +257,7 @@ function groupsService(
         var missingLeaderIds = _.chain(organization.groups)
             .flatMap('group_memberships')
             .filter({ role: 'leader' })
-            .filter(function(membership) {
+            .filter(function (membership) {
                 return !httpProxy.isLoaded(membership.person);
             })
             .map('person.id')

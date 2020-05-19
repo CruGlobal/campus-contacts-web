@@ -7,13 +7,13 @@ var RequestDeduper, $rootScope, $q;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('RequestDeduper', function() {
-    beforeEach(inject(function(_RequestDeduper_, _$rootScope_, _$q_) {
+describe('RequestDeduper', function () {
+    beforeEach(inject(function (_RequestDeduper_, _$rootScope_, _$q_) {
         RequestDeduper = _RequestDeduper_;
         $rootScope = _$rootScope_;
         $q = _$q_;
@@ -30,12 +30,12 @@ describe('RequestDeduper', function() {
         this.requestDeduper = new RequestDeduper();
     }));
 
-    describe('request', function() {
+    describe('request', function () {
         function makeSuccessfulRequest() {
             return $q.resolve();
         }
 
-        it('should call makeRequest with a timeout promise', function() {
+        it('should call makeRequest with a timeout promise', function () {
             var makeRequest = jasmine.createSpy().and.returnValue($q.resolve());
             this.requestDeduper.request(makeRequest);
             expect(makeRequest).toHaveBeenCalledWith({
@@ -46,8 +46,8 @@ describe('RequestDeduper', function() {
             expect(timeoutPromise.then).toEqual(jasmine.any(Function));
         });
 
-        it('should resolve the timeout promise when making the second request', function() {
-            var unresolvedPromise = $q(function() {});
+        it('should resolve the timeout promise when making the second request', function () {
+            var unresolvedPromise = $q(function () {});
             var makeRequest = jasmine
                 .createSpy()
                 .and.returnValue(unresolvedPromise);
@@ -63,7 +63,7 @@ describe('RequestDeduper', function() {
 
             // Check whether timeoutPromise is resolved
             var resolved = false;
-            timeoutPromise.then(function() {
+            timeoutPromise.then(function () {
                 resolved = true;
             });
             $rootScope.$digest();
@@ -74,12 +74,12 @@ describe('RequestDeduper', function() {
 
         it(
             'should keep the promise for a canceled request from settling',
-            asynchronous(function() {
+            asynchronous(function () {
                 // Make the first request
                 var firstRequestCompletion = $q.defer();
                 var catchHandler = jasmine.createSpy('catchHandler');
                 this.requestDeduper
-                    .request(function() {
+                    .request(function () {
                         return firstRequestCompletion.promise;
                     })
                     .catch(catchHandler);
@@ -94,7 +94,7 @@ describe('RequestDeduper', function() {
 
                 // Wrap the promise from the second request so that the catch handler from the first request has a
                 // chance to be called first
-                return $q.resolve(secondRequest).then(function() {
+                return $q.resolve(secondRequest).then(function () {
                     expect(catchHandler).not.toHaveBeenCalled();
                 });
             }),

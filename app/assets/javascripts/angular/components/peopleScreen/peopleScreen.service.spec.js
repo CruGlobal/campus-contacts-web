@@ -1,13 +1,13 @@
 let peopleScreenService, httpProxy, $rootScope, $q;
 
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -15,8 +15,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('peopleScreenService', function() {
-    beforeEach(inject(function(
+describe('peopleScreenService', function () {
+    beforeEach(inject(function (
         _peopleScreenService_,
         _httpProxy_,
         _$rootScope_,
@@ -41,23 +41,23 @@ describe('peopleScreenService', function() {
         });
     }));
 
-    describe('loadOrgPeopleCount', function() {
+    describe('loadOrgPeopleCount', function () {
         it(
             'should load the person count',
-            asynchronous(function() {
+            asynchronous(function () {
                 this.responseTotal = 5;
 
                 return peopleScreenService
                     .loadOrgPeopleCount(this.orgId)
-                    .then(function(personCount) {
+                    .then(function (personCount) {
                         expect(personCount).toBe(5);
                     });
             }),
         );
     });
 
-    describe('buildOrderString', function() {
-        it('should generate a valid order string', function() {
+    describe('buildOrderString', function () {
+        it('should generate a valid order string', function () {
             expect(
                 peopleScreenService.buildOrderString([
                     { field: 'key1', direction: 'asc' },

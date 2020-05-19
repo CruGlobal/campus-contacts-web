@@ -4,13 +4,13 @@ import 'angular-mocks';
 var surveyService, $rootScope, httpProxy;
 
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -18,8 +18,13 @@ function asynchronous(fn) {
     };
 }
 
-describe('surveyService', function() {
-    beforeEach(inject(function(_surveyService_, _$rootScope_, $q, _httpProxy_) {
+describe('surveyService', function () {
+    beforeEach(inject(function (
+        _surveyService_,
+        _$rootScope_,
+        $q,
+        _httpProxy_,
+    ) {
         surveyService = _surveyService_;
         $rootScope = _$rootScope_;
         httpProxy = _httpProxy_;
@@ -41,40 +46,44 @@ describe('surveyService', function() {
         });
     }));
 
-    describe('createSurvey', function() {
-        it('should make a network request', function() {
+    describe('createSurvey', function () {
+        it('should make a network request', function () {
             surveyService.createSurvey(this.survey);
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
         it(
             'should return a promise that resolves to the new survey',
-            asynchronous(function() {
-                return surveyService.createSurvey(this.survey).then(survey => {
-                    expect(survey).toBe(this.survey);
-                });
+            asynchronous(function () {
+                return surveyService
+                    .createSurvey(this.survey)
+                    .then((survey) => {
+                        expect(survey).toBe(this.survey);
+                    });
             }),
         );
     });
 
-    describe('updateSurvey', function() {
-        it('should make a network request', function() {
+    describe('updateSurvey', function () {
+        it('should make a network request', function () {
             surveyService.updateSurvey(this.survey);
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
         it(
             'should return a promise that resolves to the updated survey',
-            asynchronous(function() {
-                return surveyService.updateSurvey(this.survey).then(survey => {
-                    expect(survey).toBe(this.survey);
-                });
+            asynchronous(function () {
+                return surveyService
+                    .updateSurvey(this.survey)
+                    .then((survey) => {
+                        expect(survey).toBe(this.survey);
+                    });
             }),
         );
     });
 
-    describe('deleteSurvey', function() {
-        it('should make a network request', function() {
+    describe('deleteSurvey', function () {
+        it('should make a network request', function () {
             surveyService.deleteSurvey(this.survey);
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });

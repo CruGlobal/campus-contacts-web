@@ -31,13 +31,13 @@ function organizationContactImportStep3Controller(
         this.disableButtons = false;
     };
 
-    this.addLabel = labelName => {
+    this.addLabel = (labelName) => {
         let label = labelsService.getLabelTemplate(
             this.selectedSurvey.organization_id,
         );
         label.name = labelName;
 
-        labelsService.saveLabel(label).then(newLabel => {
+        labelsService.saveLabel(label).then((newLabel) => {
             this.contactLabels[newLabel.id] = true;
             this.newLabelName = '';
         });
@@ -45,7 +45,7 @@ function organizationContactImportStep3Controller(
 
     this.getLabels = () => {
         return _.keys(
-            _.pickBy(this.contactLabels, value => {
+            _.pickBy(this.contactLabels, (value) => {
                 return value;
             }),
         );
@@ -62,7 +62,7 @@ function organizationContactImportStep3Controller(
             },
         };
 
-        _.forEach(this.csvData, record => {
+        _.forEach(this.csvData, (record) => {
             let answerIds = [],
                 labelIds = [];
 
@@ -83,7 +83,7 @@ function organizationContactImportStep3Controller(
             });
 
             //map organization labels
-            _.forEach(this.getLabels(), labelId => {
+            _.forEach(this.getLabels(), (labelId) => {
                 const labelUUID = uuidv1();
 
                 postData.included.push({
@@ -117,14 +117,14 @@ function organizationContactImportStep3Controller(
                 },
             };
 
-            _.forEach(answerIds, answerId => {
+            _.forEach(answerIds, (answerId) => {
                 answerSheet.relationships.answers.data.push({
                     type: 'answer',
                     id: answerId,
                 });
             });
 
-            _.forEach(labelIds, labelId => {
+            _.forEach(labelIds, (labelId) => {
                 answerSheet.relationships.organizational_labels.data.push({
                     type: 'organizational_label',
                     id: labelId,
@@ -140,7 +140,7 @@ function organizationContactImportStep3Controller(
             () => {
                 this.next();
             },
-            response => {
+            (response) => {
                 const {
                     data: {
                         errors: [{ detail: { bulk_data } = [] } = {}] = [],

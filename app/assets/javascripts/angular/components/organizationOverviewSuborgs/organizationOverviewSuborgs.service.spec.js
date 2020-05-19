@@ -1,13 +1,13 @@
 var organizationOverviewSuborgsService, httpProxy, $rootScope, $q;
 
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -15,8 +15,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('organizationOverviewSuborgsService', function() {
-    beforeEach(inject(function(
+describe('organizationOverviewSuborgsService', function () {
+    beforeEach(inject(function (
         _organizationOverviewSuborgsService_,
         _httpProxy_,
         _$rootScope_,
@@ -34,7 +34,7 @@ describe('organizationOverviewSuborgsService', function() {
         this.responseTotal = 10;
 
         var _this = this;
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return $q.resolve({
                 data: _this.responseOrgs,
                 meta: { total: _this.responseTotal },
@@ -42,15 +42,15 @@ describe('organizationOverviewSuborgsService', function() {
         });
     }));
 
-    describe('loadOrgSubOrgCount', function() {
+    describe('loadOrgSubOrgCount', function () {
         it(
             'should load the sub org count',
-            asynchronous(function() {
+            asynchronous(function () {
                 this.responseTotal = 5;
 
                 return organizationOverviewSuborgsService
                     .loadOrgSubOrgCount(this.orgId)
-                    .then(function(subOrgCount) {
+                    .then(function (subOrgCount) {
                         expect(httpProxy.callHttp).toHaveBeenCalledWith(
                             'GET',
                             jasmine.any(String),

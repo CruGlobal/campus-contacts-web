@@ -1,7 +1,7 @@
-describe('personHistory component', function() {
+describe('personHistory component', function () {
     var $ctrl;
 
-    beforeEach(inject(function($componentController) {
+    beforeEach(inject(function ($componentController) {
         $ctrl = $componentController(
             'personHistory',
             {
@@ -35,8 +35,8 @@ describe('personHistory component', function() {
         );
     }));
 
-    describe('removeInteraction', function() {
-        it('should locally remove an interaction from the history feed', function() {
+    describe('removeInteraction', function () {
+        it('should locally remove an interaction from the history feed', function () {
             $ctrl.removeInteraction({
                 interaction: $ctrl.personTab.person.interactions[0],
             });

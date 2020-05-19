@@ -4,7 +4,7 @@ angular
 
 function confirmModalService($uibModal) {
     return {
-        create: function(message, options) {
+        create: function (message, options) {
             // eslint-disable-next-line no-param-reassign
             options = {
                 showCancel: true,
@@ -13,12 +13,12 @@ function confirmModalService($uibModal) {
             };
             var modalInstance = $uibModal.open({
                 animation: true,
-                controller: function($uibModalInstance) {
+                controller: function ($uibModalInstance) {
                     var vm = this;
-                    vm.cancel = function() {
+                    vm.cancel = function () {
                         $uibModalInstance.dismiss('cancel');
                     };
-                    vm.confirm = function() {
+                    vm.confirm = function () {
                         $uibModalInstance.close('delete');
                     };
                 },

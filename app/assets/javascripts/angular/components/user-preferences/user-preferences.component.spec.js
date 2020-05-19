@@ -4,7 +4,7 @@ import i18next from 'i18next';
 describe('userPreferences component', () => {
     let $ctrl;
 
-    beforeEach(inject($componentController => {
+    beforeEach(inject(($componentController) => {
         $ctrl = $componentController('userPreferences', {
             loggedInPerson: {
                 updatePreferences: jasmine.createSpy('updatePreferences'),

@@ -1,6 +1,6 @@
 angular
     .module('missionhubApp')
-    .config(function(
+    .config(function (
         $stateProvider,
         $locationProvider,
         $urlServiceProvider,
@@ -21,14 +21,14 @@ angular
         // Hack $stateProvider.state to support a custom state property "modal" that turns the state into a modal
         // dialog. An Angular decorator would be preferable, but there is no way of decorating a provider.
         var originalState = $stateProvider.state;
-        $stateProvider.state = function(state) {
+        $stateProvider.state = function (state) {
             var transform = state.modal ? modalState : _.identity;
             return originalState(transform(state));
         };
 
         // Add a states helper method that defines an array of states all at once
-        $stateProvider.states = function(states) {
-            states.forEach(function(state) {
+        $stateProvider.states = function (states) {
+            states.forEach(function (state) {
                 $stateProvider.state(state);
             });
             return $stateProvider;
@@ -41,11 +41,7 @@ angular
         // Return the parent state name of a ui-router state name
         function getParentState(stateName) {
             // Drop the last part of the state to get the parent state
-            return _.chain(stateName)
-                .split('.')
-                .initial()
-                .join('.')
-                .value();
+            return _.chain(stateName).split('.').initial().join('.').value();
         }
 
         // Convert a normal ui-router state definition into a state representing a modal dialog
@@ -57,14 +53,14 @@ angular
                 url: state.url,
                 abstract: state.abstract,
                 params: state.params,
-                onEnter: /* @ngInject */ function($state, $uibModal) {
+                onEnter: /* @ngInject */ function ($state, $uibModal) {
                     closedByRouteChange = false;
 
                     // The final generated template will look like this:
                     // <component-name first-attribute="$ctrl.firstAttribute"
                     //                 second-attribute="$ctrl.secondAttribute"></component-name>
                     var injectedProps = _.keys(state.resolve);
-                    var attributes = injectedProps.map(function(property) {
+                    var attributes = injectedProps.map(function (property) {
                         return (
                             _.kebabCase(property) + '="$ctrl.' + property + '"'
                         );
@@ -85,7 +81,7 @@ angular
 
                         // Explicitly inject the injected properties as dependencies
                         controller: injectedProps.concat([
-                            function() {
+                            function () {
                                 var vm = this;
 
                                 var injectedValues = arguments;
@@ -101,7 +97,7 @@ angular
                         windowClass: 'dashboard_panels pivot_theme',
                     });
 
-                    modalInstance.result.finally(function() {
+                    modalInstance.result.finally(function () {
                         modalInstance = null;
 
                         if (closedByRouteChange) {
@@ -112,7 +108,7 @@ angular
                         $state.go(getParentState(state.name));
                     });
                 },
-                onExit: function() {
+                onExit: function () {
                     if (modalInstance) {
                         closedByRouteChange = true;
                         modalInstance.close();
@@ -126,7 +122,7 @@ angular
         var personTabResolves = {
             history: {
                 history: lazyLoadedResolve(
-                    /* @ngInject */ function($uiRouter, routesService) {
+                    /* @ngInject */ function ($uiRouter, routesService) {
                         var $transition$ = $uiRouter.globals.transition;
                         return routesService.getHistory(
                             $transition$.params().personId,
@@ -163,7 +159,7 @@ angular
                     // based on its current state.
                     stateName: _.constant(state.name),
                     person: lazyLoadedResolve(
-                        /* @ngInject */ function(
+                        /* @ngInject */ function (
                             $state,
                             $uiRouter,
                             routesService,
@@ -184,7 +180,7 @@ angular
 
                             return routesService
                                 .getPerson(params.personId)
-                                .catch(function() {
+                                .catch(function () {
                                     // Go back to the parent state if the person could not be found
                                     $state.go(getParentState(state.name), {
                                         orgId: params.orgId,
@@ -197,14 +193,14 @@ angular
                         },
                     ),
 
-                    organizationId: /* @ngInject */ $uiRouter => {
+                    organizationId: /* @ngInject */ ($uiRouter) => {
                         const $transition$ = $uiRouter.globals.transition;
                         return $transition$.params().orgId
                             ? $transition$.params().orgId
                             : false;
                     },
 
-                    options: /* @ngInject */ function($uiRouter) {
+                    options: /* @ngInject */ function ($uiRouter) {
                         var $transition$ = $uiRouter.globals.transition;
                         return {
                             assignToMe: $transition$.params().assignToMe,
@@ -214,7 +210,7 @@ angular
             });
 
             // Generate a state for each tab
-            personTabs.forEach(function(tab) {
+            personTabs.forEach(function (tab) {
                 var personTabView = {
                     component: 'person' + _.capitalize(tab),
                 };
@@ -287,10 +283,10 @@ angular
                     isPublic: true,
                 },
                 resolve: {
-                    token: $location => $location.search().token,
-                    organizationId: $location =>
+                    token: ($location) => $location.search().token,
+                    organizationId: ($location) =>
                         $location.search().organization_id,
-                    organizationName: $location =>
+                    organizationName: ($location) =>
                         $location.search().organization_name,
                 },
             })
@@ -320,11 +316,11 @@ angular
                 url: '/merge-account/:rememberCode/:orgId/:userId',
                 component: 'mergeAccount',
                 resolve: {
-                    rememberCode: $transition$ =>
+                    rememberCode: ($transition$) =>
                         $transition$.params().rememberCode,
-                    userId: $transition$ => $transition$.params().userId,
-                    orgId: $transition$ => $transition$.params().orgId,
-                    loggedInUser: loggedInPerson => loggedInPerson.load(),
+                    userId: ($transition$) => $transition$.params().userId,
+                    orgId: ($transition$) => $transition$.params().orgId,
+                    loggedInUser: (loggedInPerson) => loggedInPerson.load(),
                 },
             })
             .state({
@@ -345,7 +341,7 @@ angular
                 name: 'admin',
                 url: '/admin',
                 resolve: {
-                    adminRedirect: authenticationService =>
+                    adminRedirect: (authenticationService) =>
                         authenticationService.adminRedirect(),
                 },
             })
@@ -378,7 +374,7 @@ angular
                 url: '/root',
                 component: 'myOrganizationsDashboardList',
                 resolve: {
-                    rootOrgs: function(
+                    rootOrgs: function (
                         myOrganizationsDashboardService,
                         userPreferencesService,
                         $q,
@@ -389,7 +385,7 @@ angular
                             .then(
                                 userPreferencesService.applyUserOrgDisplayPreferences,
                             )
-                            .then(orgs => {
+                            .then((orgs) => {
                                 if (orgs.length === 1) {
                                     $state.go(
                                         'app.ministries.ministry.' +
@@ -417,14 +413,14 @@ angular
                 abstract: true,
                 resolve: {
                     org: lazyLoadedResolve(
-                        /* @ngInject */ function(
+                        /* @ngInject */ function (
                             $state,
                             $transition$,
                             routesService,
                         ) {
                             return routesService
                                 .getOrganization($transition$.params().orgId)
-                                .catch(function() {
+                                .catch(function () {
                                     // Go to the root organization if the organization could not be loaded
                                     $state.go('app.ministries.root');
 
@@ -458,7 +454,7 @@ angular
                 url: '/organization-cleanup',
                 component: 'organizationCleanup',
                 resolve: {
-                    orgId: $transition$ => $transition$.params().orgId,
+                    orgId: ($transition$) => $transition$.params().orgId,
                 },
             })
             .state({
@@ -466,7 +462,7 @@ angular
                 url: '/organization-signatures',
                 component: 'organizationSignatures',
                 resolve: {
-                    orgId: $transition$ => $transition$.params().orgId,
+                    orgId: ($transition$) => $transition$.params().orgId,
                 },
             })
             .state({
@@ -474,7 +470,7 @@ angular
                 url: '/report-movement-indicators',
                 component: 'reportMovementIndicators',
                 resolve: {
-                    orgId: $transition$ => $transition$.params().orgId,
+                    orgId: ($transition$) => $transition$.params().orgId,
                 },
             })
             .state({
@@ -482,7 +478,7 @@ angular
                 url: '/insights/:subTab',
                 component: 'insights',
                 resolve: {
-                    orgId: $transition$ => $transition$.params().orgId,
+                    orgId: ($transition$) => $transition$.params().orgId,
                 },
             })
             .state({
@@ -500,8 +496,8 @@ angular
                 }),
             )
             .states(
-                ministryViewTabs.map(function(tab) {
-                    const formatArrayForFilter = filter => {
+                ministryViewTabs.map(function (tab) {
+                    const formatArrayForFilter = (filter) => {
                         if (!filter) return {};
 
                         return filter
@@ -615,7 +611,7 @@ angular
                                 $transition$.params().code,
                                 $transition$.params().id,
                             )
-                            .catch(e => null);
+                            .catch((e) => null);
                     },
                 },
             })
@@ -630,7 +626,7 @@ angular
                     survey: ($state, $transition$, routesService) => {
                         return routesService
                             .getSurvey($transition$.params().surveyId)
-                            .catch(e => null);
+                            .catch((e) => null);
                     },
                     preview: ($state, $transition$) =>
                         !!$transition$.params().preview,
@@ -654,10 +650,10 @@ angular
                     isPublic: true,
                 },
                 resolve: {
-                    rememberCode: $transition$ =>
+                    rememberCode: ($transition$) =>
                         $transition$.params().rememberCode,
-                    userId: $transition$ => $transition$.params().userId,
-                    orgId: $transition$ => $transition$.params().orgId,
+                    userId: ($transition$) => $transition$.params().userId,
+                    orgId: ($transition$) => $transition$.params().orgId,
                 },
             })
             .state({

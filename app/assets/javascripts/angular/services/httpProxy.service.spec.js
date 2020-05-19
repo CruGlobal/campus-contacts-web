@@ -7,13 +7,13 @@ var httpProxy, $rootScope, $http, $q, JsonApiDataStore, RequestDeduper;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('HttpProxyService Tests', function() {
-    beforeEach(function() {
+describe('HttpProxyService Tests', function () {
+    beforeEach(function () {
         var _this = this;
         this.token = null;
         this.responseData = {};
@@ -32,7 +32,7 @@ describe('HttpProxyService Tests', function() {
             },
         };
         this.httpResponse = {
-            headers: function(header) {
+            headers: function (header) {
                 return _this.responseHeaders[header];
             },
             get data() {
@@ -41,8 +41,8 @@ describe('HttpProxyService Tests', function() {
         };
 
         // Mock out the $http service
-        angular.mock.module(function($provide) {
-            $provide.factory('$http', function($q) {
+        angular.mock.module(function ($provide) {
+            $provide.factory('$http', function ($q) {
                 var $http = jasmine
                     .createSpy('$http')
                     .and.returnValue($q.resolve(_this.httpResponse));
@@ -53,7 +53,7 @@ describe('HttpProxyService Tests', function() {
         });
     });
 
-    beforeEach(inject(function(
+    beforeEach(inject(function (
         _httpProxy_,
         _$rootScope_,
         _$http_,
@@ -69,8 +69,8 @@ describe('HttpProxyService Tests', function() {
         RequestDeduper = _RequestDeduper_;
     }));
 
-    describe('callHttp', function() {
-        beforeEach(inject(function(envService) {
+    describe('callHttp', function () {
+        beforeEach(inject(function (envService) {
             this.apiUrl = 'http://localhost:4000';
             this.method = 'GET';
             this.url = '/';
@@ -81,7 +81,7 @@ describe('HttpProxyService Tests', function() {
             spyOn(envService, 'read').and.returnValue(this.apiUrl);
         }));
 
-        it('should get the base API url from envService', inject(function(
+        it('should get the base API url from envService', inject(function (
             envService,
         ) {
             httpProxy.callHttp(this.method, this.url, this.params, this.data);
@@ -91,7 +91,7 @@ describe('HttpProxyService Tests', function() {
             expect(httpConfig.url.indexOf(this.apiUrl)).toBe(0);
         }));
 
-        it('should call $http', function() {
+        it('should call $http', function () {
             httpProxy.callHttp(
                 this.method,
                 this.url,
@@ -111,14 +111,14 @@ describe('HttpProxyService Tests', function() {
 
         it(
             'should set the Authorization header when a token is received',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.token = 'abcde';
                 this.responseData = { data: [] };
                 spyOn(this.httpResponse, 'headers').and.callThrough();
                 return httpProxy
                     .callHttp(this.method, this.url, this.params, this.data)
-                    .then(function() {
+                    .then(function () {
                         expect(_this.httpResponse.headers).toHaveBeenCalledWith(
                             'x-mh-session',
                         );
@@ -131,13 +131,13 @@ describe('HttpProxyService Tests', function() {
 
         it(
             'should not set the Authorization header when a token is not received',
-            asynchronous(function() {
+            asynchronous(function () {
                 var originalAuthorization = 'Bearer old';
                 this.token = null;
                 $http.defaults.headers.common.Authorization = originalAuthorization;
                 return httpProxy
                     .callHttp(this.method, this.url, this.params, this.data)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             $http.defaults.headers.common.Authorization,
                         ).toBe(originalAuthorization);
@@ -147,12 +147,12 @@ describe('HttpProxyService Tests', function() {
 
         it(
             'should sync the JSON store with the response',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 spyOn(JsonApiDataStore.store, 'syncWithMeta');
                 return httpProxy
                     .callHttp(this.method, this.url, this.params, this.data)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             JsonApiDataStore.store.syncWithMeta,
                         ).toHaveBeenCalledWith(_this.responseData);
@@ -162,7 +162,7 @@ describe('HttpProxyService Tests', function() {
 
         it(
             'should use the deduper instance when provided',
-            asynchronous(function() {
+            asynchronous(function () {
                 var deduper = new RequestDeduper();
                 spyOn(deduper, 'request').and.returnValue($q.resolve());
                 var config = {
@@ -177,7 +177,7 @@ describe('HttpProxyService Tests', function() {
                         this.data,
                         config,
                     )
-                    .then(function() {
+                    .then(function () {
                         expect(deduper.request).toHaveBeenCalledWith(
                             jasmine.any(Function),
                         );
@@ -185,12 +185,12 @@ describe('HttpProxyService Tests', function() {
             }),
         );
 
-        describe('aliases', function() {
-            beforeEach(function() {
+        describe('aliases', function () {
+            beforeEach(function () {
                 spyOn(httpProxy, 'callHttp');
             });
 
-            it('should contain get', function() {
+            it('should contain get', function () {
                 httpProxy.get(this.url, this.params, this.config);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'GET',
@@ -201,7 +201,7 @@ describe('HttpProxyService Tests', function() {
                 );
             });
 
-            it('should contain post', function() {
+            it('should contain post', function () {
                 httpProxy.post(this.url, this.data, this.config);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'POST',
@@ -212,7 +212,7 @@ describe('HttpProxyService Tests', function() {
                 );
             });
 
-            it('should contain put', function() {
+            it('should contain put', function () {
                 httpProxy.put(this.url, this.data, this.config);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'PUT',
@@ -223,7 +223,7 @@ describe('HttpProxyService Tests', function() {
                 );
             });
 
-            it('should contain delete', function() {
+            it('should contain delete', function () {
                 httpProxy.delete(this.url, this.params, this.config);
                 expect(httpProxy.callHttp).toHaveBeenCalledWith(
                     'DELETE',
@@ -236,28 +236,28 @@ describe('HttpProxyService Tests', function() {
         });
     });
 
-    describe('model loading', function() {
-        beforeEach(function() {
+    describe('model loading', function () {
+        beforeEach(function () {
             this.loadedModel = {};
             this.placeholderModel = { _placeHolder: true };
         });
 
-        describe('isLoaded', function() {
-            it('should treat null models as unloaded', function() {
+        describe('isLoaded', function () {
+            it('should treat null models as unloaded', function () {
                 expect(httpProxy.isLoaded(null)).toBe(false);
             });
 
-            it('should treat a placeholder model as unloaded', function() {
+            it('should treat a placeholder model as unloaded', function () {
                 expect(httpProxy.isLoaded(this.placeholderModel)).toBe(false);
             });
 
-            it('should treat a model as loaded', function() {
+            it('should treat a model as loaded', function () {
                 expect(httpProxy.isLoaded(this.loadedModel)).toBe(true);
             });
         });
 
-        describe('getUnloadedRelationships', function() {
-            it('should treat all relationships as unloaded when the model is null', function() {
+        describe('getUnloadedRelationships', function () {
+            it('should treat all relationships as unloaded when the model is null', function () {
                 this.relationships = ['a', 'b', 'c'];
                 expect(
                     httpProxy.getUnloadedRelationships(
@@ -267,7 +267,7 @@ describe('HttpProxyService Tests', function() {
                 ).toEqual(this.relationships);
             });
 
-            it('should treat all relationships as unloaded when the model is a placeholder', function() {
+            it('should treat all relationships as unloaded when the model is a placeholder', function () {
                 this.relationships = ['a', 'b', 'c'];
                 expect(
                     httpProxy.getUnloadedRelationships(
@@ -277,7 +277,7 @@ describe('HttpProxyService Tests', function() {
                 ).toEqual(this.relationships);
             });
 
-            it('should correctly detect unloaded relationships', function() {
+            it('should correctly detect unloaded relationships', function () {
                 this.model = {
                     // a is undefined
                     b: [],
@@ -313,8 +313,8 @@ describe('HttpProxyService Tests', function() {
             });
         });
 
-        describe('getModel', function() {
-            beforeEach(function() {
+        describe('getModel', function () {
+            beforeEach(function () {
                 this.url = '/';
                 this.type = 'abc';
                 this.id = 123;
@@ -327,7 +327,7 @@ describe('HttpProxyService Tests', function() {
 
             it(
                 'should not make a network request when the model is already loaded',
-                asynchronous(function() {
+                asynchronous(function () {
                     spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         this.model,
                         this.model,
@@ -345,7 +345,7 @@ describe('HttpProxyService Tests', function() {
                             this.id,
                             this.relationships,
                         )
-                        .then(function(model) {
+                        .then(function (model) {
                             expect(model).toBe(_this.model);
                             expect(httpProxy.callHttp).not.toHaveBeenCalled();
                         });
@@ -354,7 +354,7 @@ describe('HttpProxyService Tests', function() {
 
             it(
                 'should make a network request when the model is not already loaded',
-                asynchronous(function() {
+                asynchronous(function () {
                     spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         null,
                         this.model,
@@ -373,7 +373,7 @@ describe('HttpProxyService Tests', function() {
                             this.relationships,
                             this.config,
                         )
-                        .then(function(model) {
+                        .then(function (model) {
                             expect(model).toBe(_this.model);
                             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                                 'GET',
@@ -390,7 +390,7 @@ describe('HttpProxyService Tests', function() {
 
             it(
                 'should make a network request when the model relationships are not already loaded',
-                asynchronous(function() {
+                asynchronous(function () {
                     spyOn(JsonApiDataStore.store, 'find').and.returnValues(
                         this.model,
                         this.model,
@@ -409,7 +409,7 @@ describe('HttpProxyService Tests', function() {
                             this.relationships,
                             this.config,
                         )
-                        .then(function(model) {
+                        .then(function (model) {
                             expect(model).toBe(_this.model);
                             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                                 'GET',
@@ -425,8 +425,8 @@ describe('HttpProxyService Tests', function() {
             );
         });
 
-        describe('extractModel', function() {
-            it('should return the model of a JSON API response', function() {
+        describe('extractModel', function () {
+            it('should return the model of a JSON API response', function () {
                 var model = { id: 1 };
                 expect(
                     httpProxy.extractModel({
@@ -436,8 +436,8 @@ describe('HttpProxyService Tests', function() {
             });
         });
 
-        describe('extractModels', function() {
-            it('should return the model of a JSON API response', function() {
+        describe('extractModels', function () {
+            it('should return the model of a JSON API response', function () {
                 var models = [{ id: 1 }, { id: 2 }, { id: 3 }];
                 expect(
                     httpProxy.extractModel({

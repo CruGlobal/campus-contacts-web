@@ -45,7 +45,7 @@ function ministryViewPersonController(
         this.personModifiedUnsubscribe();
     };
 
-    this.$onChanges = changes => {
+    this.$onChanges = (changes) => {
         if (
             !changes.person ||
             changes.person.currentValue === changes.person.previousValue

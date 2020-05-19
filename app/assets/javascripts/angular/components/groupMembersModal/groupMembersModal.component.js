@@ -48,7 +48,7 @@ function groupMembersModalController(
     function activate() {
         vm.group = vm.resolve.group;
 
-        $scope.$watchCollection('$ctrl.group.group_memberships', function() {
+        $scope.$watchCollection('$ctrl.group.group_memberships', function () {
             vm.members = groupsService.getAllMembers(vm.group);
         });
     }
@@ -59,14 +59,14 @@ function groupMembersModalController(
 
         return groupMembersModalService
             .loadMoreGroupMembers(vm.group, listLoader)
-            .then(function(res) {
+            .then(function (res) {
                 // Convert members to memberships
-                vm.memberships = res.list.map(function(member) {
+                vm.memberships = res.list.map(function (member) {
                     return groupsService.findMember(vm.group, member);
                 });
                 vm.loadedAll = res.loadedAll;
             })
-            .finally(function() {
+            .finally(function () {
                 vm.busy = false;
             });
     }
@@ -118,7 +118,7 @@ function groupMembersModalController(
     function addMember(person) {
         groupMembersModalService
             .addMember(vm.group, person)
-            .then(function(membership) {
+            .then(function (membership) {
                 vm.memberships.push(membership);
             });
     }
@@ -126,13 +126,13 @@ function groupMembersModalController(
     function removeMember(membership) {
         confirmModalService
             .create(tFilter('groups.members.remove_confirm'))
-            .then(function() {
+            .then(function () {
                 return groupMembersModalService.removeMember(
                     vm.group,
                     membership,
                 );
             })
-            .then(function() {
+            .then(function () {
                 _.pull(vm.memberships, membership);
             });
     }

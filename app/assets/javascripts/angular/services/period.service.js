@@ -29,19 +29,19 @@ function periodService($window, $rootScope) {
 
     return {
         // Return the current report period
-        getPeriod: function() {
+        getPeriod: function () {
             return period;
         },
 
         // Set the current report period
-        setPeriod: function(newPeriod) {
+        setPeriod: function (newPeriod) {
             period = newPeriod;
             $rootScope.$emit(changeEventName, newPeriod);
             savePeriod();
         },
 
         // Return an array of the possible periods
-        getPeriods: function() {
+        getPeriods: function () {
             return [
                 { label: 'dashboard.report_periods.one_week', period: 'P1W' },
                 { label: 'dashboard.report_periods.one_month', period: 'P1M' },
@@ -55,7 +55,7 @@ function periodService($window, $rootScope) {
         },
 
         // Request that a callback be called withenver the period changes
-        subscribe: function($scope, callback) {
+        subscribe: function ($scope, callback) {
             var unsubscribe = $rootScope.$on(changeEventName, callback);
             $scope.$on('$destroy', unsubscribe);
         },

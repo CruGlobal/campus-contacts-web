@@ -8,7 +8,7 @@ angular
 function myOrganizationsDashboardService(httpProxy, modelsService, _) {
     return {
         // Return an array of all loaded root organizations
-        getRootOrganizations: function() {
+        getRootOrganizations: function () {
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('organization').url.all,

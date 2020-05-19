@@ -5,7 +5,7 @@ angular
 function assignedLabelSelectService(httpProxy) {
     return {
         // Get all the labels from the current organizations
-        searchLabels: organizationId => {
+        searchLabels: (organizationId) => {
             return httpProxy
                 .get(
                     `/organizations/${organizationId}`,
@@ -16,7 +16,7 @@ function assignedLabelSelectService(httpProxy) {
                         errorMessage: 'error.messages.surveys.loadQuestions',
                     },
                 )
-                .then(data => {
+                .then((data) => {
                     return data.data.labels;
                 });
         },

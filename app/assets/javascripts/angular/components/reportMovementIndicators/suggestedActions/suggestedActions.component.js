@@ -21,7 +21,7 @@ function reportMovementIndicatorsSuggestedActionsController(httpProxy) {
         loadSuggestedActions(this.orgId);
     };
 
-    const loadSuggestedActions = orgId => {
+    const loadSuggestedActions = (orgId) => {
         this.loadingSuggestions = true;
         return httpProxy
             .post(
@@ -90,13 +90,13 @@ function reportMovementIndicatorsSuggestedActionsController(httpProxy) {
         toggleSet.has(id) ? toggleSet.delete(id) : toggleSet.add(id);
     };
 
-    this.handleAllClick = suggestions => {
+    this.handleAllClick = (suggestions) => {
         this.acceptedIds = new Set([
             ...this.acceptedIds,
             ...suggestions.map(({ id }) => id),
         ]);
         this.rejectedIds = new Set(
-            [...this.rejectedIds].filter(id => !this.acceptedIds.has(id)),
+            [...this.rejectedIds].filter((id) => !this.acceptedIds.has(id)),
         );
     };
 }

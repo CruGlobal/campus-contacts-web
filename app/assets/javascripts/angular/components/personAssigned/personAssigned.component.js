@@ -17,7 +17,7 @@ function personAssignedController(personAssignedService) {
     function activate() {
         personAssignedService
             .getAssigned(vm.personTab.person, vm.personTab.organizationId)
-            .then(function(assignments) {
+            .then(function (assignments) {
                 vm.assignments = assignments;
             });
     }

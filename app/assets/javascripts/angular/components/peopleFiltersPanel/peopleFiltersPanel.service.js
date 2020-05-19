@@ -7,7 +7,7 @@ angular
 function peopleFiltersPanelService() {
     return {
         // Determine whether a filters object contains any active filters or not
-        filtersHasActive: function(filters) {
+        filtersHasActive: function (filters) {
             return (
                 Boolean(filters.searchString) ||
                 filters.includeArchived === true ||

@@ -47,7 +47,7 @@ function peopleFiltersPanelController(
         });
     };
 
-    this.$onChanges = changes => {
+    this.$onChanges = (changes) => {
         if (
             changes.preloadedFilters &&
             changes.preloadedFilters.currentValue !==
@@ -76,7 +76,7 @@ function peopleFiltersPanelController(
         this.updateFilterCount();
     };
 
-    this.hideNonFilterableQuestionAnswerResponse = question => {
+    this.hideNonFilterableQuestionAnswerResponse = (question) => {
         if (question.kind !== 'TextField') return false;
 
         return (
@@ -138,12 +138,12 @@ function peopleFiltersPanelController(
                 },
             )
             .then(httpProxy.extractModel)
-            .then(stats => {
+            .then((stats) => {
                 this.labelOptions = stats.labels;
                 this.assignmentOptions = stats.assigned_tos;
                 this.groupOptions = stats.groups;
                 this.statusOptions = stats.statuses.filter(
-                    option => option.followup_status !== 'do_not_email',
+                    (option) => option.followup_status !== 'do_not_email',
                 );
                 this.permissionOptions = stats.permissions;
                 this.genderOptions = stats.genders;
@@ -171,7 +171,7 @@ function peopleFiltersPanelController(
     this.findStats = ({ id }) =>
         this.questionOptions.find(({ question_id }) => question_id === id);
 
-    const emptyArrayToUndefined = value =>
+    const emptyArrayToUndefined = (value) =>
         value.length === 0 ? undefined : value;
 
     const getFiltersFromObj = _.flow([
@@ -182,8 +182,8 @@ function peopleFiltersPanelController(
 
     const getNormalizedFilters = () => {
         const questions = _.flow([
-            questions =>
-                _.mapValues(questions, answers =>
+            (questions) =>
+                _.mapValues(questions, (answers) =>
                     getFiltersFromObj(
                         typeof answers === 'string'
                             ? { [answers]: !!answers } // becomes falsy if answer is empty string
@@ -205,7 +205,7 @@ function peopleFiltersPanelController(
             questions,
             answerMatchingOptions: _.flow([
                 // Use defined questions to determine which matching options need to be sent
-                questions =>
+                (questions) =>
                     _.mapValues(
                         questions,
                         (_, id) => this.filters.answerMatchingOptions[id],

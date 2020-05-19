@@ -24,7 +24,7 @@ function surveyResponsesController($state, httpProxy, $uibModal) {
             {},
             { errorMessage: 'error.messages.surveyResponses.loadQuestions' },
         );
-        return data.map(question => ({
+        return data.map((question) => ({
             id: question.id,
             label: question.column_title || question.label,
             kind: question.kind,

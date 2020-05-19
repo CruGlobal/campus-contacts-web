@@ -10,7 +10,7 @@ function groupMembersModalService(
 ) {
     return {
         // Load another chunk of group members
-        loadMoreGroupMembers: function(group, listLoader) {
+        loadMoreGroupMembers: function (group, listLoader) {
             // All of the group's group_memberships should have already been loaded by groupsService.loadLeaders,
             // but load the group_memberships anyway, just in case that request has not completed yet
             return listLoader.loadMore({
@@ -21,7 +21,7 @@ function groupMembersModalService(
         },
 
         // Add a member to the group
-        addMember: function(group, person) {
+        addMember: function (group, person) {
             var membership = new JsonApiDataStore.Model('group_membership');
             membership.setAttribute('role', 'member');
             membership.setAttribute('group_id', group.id);
@@ -37,14 +37,14 @@ function groupMembersModalService(
                     },
                 )
                 .then(httpProxy.extractModel)
-                .then(function(membership) {
+                .then(function (membership) {
                     group.group_memberships.push(membership);
                     return membership;
                 });
         },
 
         // Remove a member from a group
-        removeMember: function(group, membership) {
+        removeMember: function (group, membership) {
             var url = modelsService
                 .getModelMetadata('group_membership')
                 .url.single(membership.id);
@@ -57,7 +57,7 @@ function groupMembersModalService(
                             'error.messages.group_members.remove_member',
                     },
                 )
-                .then(function() {
+                .then(function () {
                     _.pull(group.group_memberships, membership);
                     return membership;
                 });

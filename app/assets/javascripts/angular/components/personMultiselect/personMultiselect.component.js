@@ -54,7 +54,7 @@ function personMultiselectController(
         var requestDeduper = new RequestDeduper();
 
         // Refresh the person list whenever the search term changes
-        $scope.$watch('$ctrl.search', function(search) {
+        $scope.$watch('$ctrl.search', function (search) {
             if (search === '') {
                 // Ignore empty searches
                 vm.searchOptions = [];
@@ -64,7 +64,7 @@ function personMultiselectController(
             vm.searching = true;
             assignedPeopleSelectService
                 .searchPeople(search, vm.organizationId, requestDeduper)
-                .then(function(people) {
+                .then(function (people) {
                     // Filter out people that are already selected
                     vm.searchOptions = _.differenceBy(
                         people,
@@ -72,7 +72,7 @@ function personMultiselectController(
                         'id',
                     );
                 })
-                .finally(function() {
+                .finally(function () {
                     vm.searching = false;
                 });
         });
@@ -90,7 +90,7 @@ function personMultiselectController(
 
     function selectPerson(person) {
         var addPerson = vm.addPerson || defaultAddPerson;
-        $q.when(addPerson({ person: person })).then(function() {
+        $q.when(addPerson({ person: person })).then(function () {
             vm.search = '';
         });
     }

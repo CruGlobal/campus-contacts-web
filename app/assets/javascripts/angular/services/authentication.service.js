@@ -62,7 +62,7 @@ function authenticationService(
         updateRollbarPerson(me);
     };
 
-    const setHttpHeaders = token => {
+    const setHttpHeaders = (token) => {
         if (!token) return;
         $http.defaults.headers.common.Authorization = 'Bearer ' + token;
     };
@@ -73,14 +73,14 @@ function authenticationService(
         $http.defaults.headers.common.Authorization = null;
     };
 
-    const storeJwtToken = token => {
+    const storeJwtToken = (token) => {
         if (!token) return;
 
         state.v4AccessToken = token;
         localStorageService.set('jwtToken', token);
     };
 
-    const setAuthorizationAndState = token => {
+    const setAuthorizationAndState = (token) => {
         if (token) {
             storeJwtToken(token);
             setHttpHeaders(token);
@@ -88,7 +88,7 @@ function authenticationService(
         }
     };
 
-    const requestTicket = accesstoken =>
+    const requestTicket = (accesstoken) =>
         $http({
             method: 'GET',
             url: `${envService.read(
@@ -99,18 +99,18 @@ function authenticationService(
             },
         });
 
-    const requestV4Token = ticket =>
+    const requestV4Token = (ticket) =>
         $http.post(`${envService.read('apiUrl')}/auth/thekey`, {
             code: ticket,
         });
 
-    const requestFacebookV4Token = token =>
+    const requestFacebookV4Token = (token) =>
         $http.post(`${envService.read('apiUrl')}/auth/facebook`, {
             fb_access_token: token,
             provider: 'facebook',
         });
 
-    const authorizeAccess = async accessToken => {
+    const authorizeAccess = async (accessToken) => {
         try {
             const response = await requestTicket(accessToken);
             const { data } = await requestV4Token(response.data.ticket);
@@ -125,7 +125,7 @@ function authenticationService(
         }
     };
 
-    const authorizeFacebookAccess = async accessToken => {
+    const authorizeFacebookAccess = async (accessToken) => {
         try {
             const { data } = await requestFacebookV4Token(accessToken);
             setAuthorizationAndState(data.token);
@@ -148,7 +148,7 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const setState = person => {
+    const setState = (person) => {
         const newState = {
             hasMissionhubAccess: true,
             organization_with_missing_signatures_ids: person
@@ -172,7 +172,7 @@ function authenticationService(
         $rootScope.$broadcast('state:changed', state);
     };
 
-    const impersonateUser = async userId => {
+    const impersonateUser = async (userId) => {
         try {
             const { data } = await $http.get(
                 `${envService.read('apiUrl')}/impersonations/${userId}`,

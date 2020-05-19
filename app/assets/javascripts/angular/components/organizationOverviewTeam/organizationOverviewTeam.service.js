@@ -7,7 +7,7 @@ angular
 
 function organizationOverviewTeamService(httpProxy, modelsService) {
     var organizationOverviewTeamService = {
-        buildGetParams: function(orgId) {
+        buildGetParams: function (orgId) {
             return {
                 include: ['phone_numbers', 'email_addresses'].join(','),
                 'filters[organization_ids]': orgId,
@@ -17,7 +17,7 @@ function organizationOverviewTeamService(httpProxy, modelsService) {
 
         // Load an organization's team members
         // The "org" parameter may either be an organization model or an organization id
-        loadOrgTeam: function(org, listLoader) {
+        loadOrgTeam: function (org, listLoader) {
             var orgId = org.id || org;
             var requestParams = organizationOverviewTeamService.buildGetParams(
                 orgId,
@@ -25,7 +25,7 @@ function organizationOverviewTeamService(httpProxy, modelsService) {
             return listLoader.loadMore(requestParams);
         },
 
-        loadOrgTeamCount: function(orgId) {
+        loadOrgTeamCount: function (orgId) {
             var requestParams = organizationOverviewTeamService.buildGetParams(
                 orgId,
             );
@@ -40,7 +40,7 @@ function organizationOverviewTeamService(httpProxy, modelsService) {
                             'error.messages.organization_overview_team.load_org_team_count',
                     },
                 )
-                .then(function(resp) {
+                .then(function (resp) {
                     return resp.meta.total;
                 });
         },

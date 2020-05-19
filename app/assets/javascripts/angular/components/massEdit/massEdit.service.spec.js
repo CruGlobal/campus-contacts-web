@@ -1,7 +1,7 @@
 var massEditService, _;
 
-describe('massEditService', function() {
-    beforeEach(inject(function(_massEditService_, ___) {
+describe('massEditService', function () {
+    beforeEach(inject(function (_massEditService_, ___) {
         massEditService = _massEditService_;
         _ = ___;
 
@@ -11,8 +11,8 @@ describe('massEditService', function() {
         this.unloadedRelationship = [this.loadedModel, this.unloadedModel];
     }));
 
-    describe('hashFromAddedRemoved', function() {
-        it('should generate a hash of added and removed fields', function() {
+    describe('hashFromAddedRemoved', function () {
+        it('should generate a hash of added and removed fields', function () {
             expect(
                 massEditService.hashFromAddedRemoved([1, 4, 5], [2, 3]),
             ).toEqual({
@@ -25,8 +25,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('prepareChanges', function() {
-        it('should filter out non-whitelisted fields', function() {
+    describe('prepareChanges', function () {
+        it('should filter out non-whitelisted fields', function () {
             expect(
                 massEditService.prepareChanges({
                     foo: true,
@@ -35,7 +35,7 @@ describe('massEditService', function() {
             ).toEqual({});
         });
 
-        it('should filter out unchanged simple fields', function() {
+        it('should filter out unchanged simple fields', function () {
             expect(
                 massEditService.prepareChanges({
                     followup_status: 1,
@@ -46,7 +46,7 @@ describe('massEditService', function() {
             ).toEqual({ followup_status: 1, student_status: 1 });
         });
 
-        it('should filter out unchanged complex fields', function() {
+        it('should filter out unchanged complex fields', function () {
             expect(
                 massEditService.prepareChanges({
                     assigned_tos_added: [],
@@ -55,7 +55,7 @@ describe('massEditService', function() {
             ).toEqual({});
         });
 
-        it('should prepare complex fields', function() {
+        it('should prepare complex fields', function () {
             expect(
                 massEditService.prepareChanges({
                     assigned_tos_added: [1],
@@ -67,15 +67,15 @@ describe('massEditService', function() {
         });
     });
 
-    describe('applyComplexChanges', function() {
-        beforeEach(function() {
+    describe('applyComplexChanges', function () {
+        beforeEach(function () {
             this.manifest = {
                 personAttribute: 'reverse_contact_assignments',
                 modelType: 'contact_assignment',
-                getModelPredicate: function(id) {
+                getModelPredicate: function (id) {
                     return ['assigned_to.id', id];
                 },
-                getModelAttributes: function(assignedToId, person, orgId) {
+                getModelAttributes: function (assignedToId, person, orgId) {
                     return {
                         assigned_to: { id: assignedToId },
                         organization_id: orgId,
@@ -92,7 +92,7 @@ describe('massEditService', function() {
             this.orgId = 2;
         });
 
-        it('should add new related models', function() {
+        it('should add new related models', function () {
             massEditService.applyComplexChanges(
                 {
                     456: true,
@@ -109,7 +109,7 @@ describe('massEditService', function() {
             ).toEqual(['123', '456']);
         });
 
-        it('should not add existing related models', function() {
+        it('should not add existing related models', function () {
             massEditService.applyComplexChanges(
                 {
                     123: true,
@@ -126,7 +126,7 @@ describe('massEditService', function() {
             ).toEqual(['123']);
         });
 
-        it('should remove existing related models', inject(function(
+        it('should remove existing related models', inject(function (
             JsonApiDataStore,
         ) {
             spyOn(JsonApiDataStore.store, 'destroy');
@@ -147,7 +147,7 @@ describe('massEditService', function() {
             expect(JsonApiDataStore.store.destroy).toHaveBeenCalled();
         }));
 
-        it('should not remove non-existing related models', inject(function(
+        it('should not remove non-existing related models', inject(function (
             JsonApiDataStore,
         ) {
             spyOn(JsonApiDataStore.store, 'destroy');
@@ -169,14 +169,14 @@ describe('massEditService', function() {
         }));
     });
 
-    describe('applyChangesLocally', function() {
-        beforeEach(inject(function(JsonApiDataStore) {
-            this.people = _.range(3).map(function(personId) {
+    describe('applyChangesLocally', function () {
+        beforeEach(inject(function (JsonApiDataStore) {
+            this.people = _.range(3).map(function (personId) {
                 return { id: personId };
             });
 
             var _this = this;
-            spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
+            spyOn(JsonApiDataStore.store, 'find').and.callFake(function (
                 modelType,
                 modelId,
             ) {
@@ -191,7 +191,7 @@ describe('massEditService', function() {
             });
         }));
 
-        it('should copy person changes to changed people', function() {
+        it('should copy person changes to changed people', function () {
             massEditService.applyChangesLocally(
                 {
                     selectedPeople: [0, 2],
@@ -203,7 +203,7 @@ describe('massEditService', function() {
             expect(this.people[2].student_status).toBe(1);
         });
 
-        it('should copy permission changes to changed people organizational permissions', function() {
+        it('should copy permission changes to changed people organizational permissions', function () {
             var orgId = 123;
             this.people[0].organizational_permissions = [
                 { id: 100, organization_id: orgId },
@@ -231,7 +231,7 @@ describe('massEditService', function() {
             ).toBe(1);
         });
 
-        it('should add and remove assignments', inject(function(
+        it('should add and remove assignments', inject(function (
             JsonApiDataStore,
         ) {
             this.people[0].reverse_contact_assignments = [
@@ -253,7 +253,7 @@ describe('massEditService', function() {
             expect(JsonApiDataStore.store.destroy).toHaveBeenCalled();
         }));
 
-        it('should add and remove labels', inject(function(JsonApiDataStore) {
+        it('should add and remove labels', inject(function (JsonApiDataStore) {
             this.people[0].organizational_labels = [{ label: { id: '1' } }];
             spyOn(JsonApiDataStore.store, 'destroy');
             massEditService.applyChangesLocally(
@@ -268,7 +268,7 @@ describe('massEditService', function() {
             expect(JsonApiDataStore.store.destroy).toHaveBeenCalled();
         }));
 
-        it('should add and remove groups', inject(function(JsonApiDataStore) {
+        it('should add and remove groups', inject(function (JsonApiDataStore) {
             this.people[0].group_memberships = [{ group: { id: '1' } }];
             spyOn(JsonApiDataStore.store, 'destroy');
             massEditService.applyChangesLocally(
@@ -284,8 +284,8 @@ describe('massEditService', function() {
         }));
     });
 
-    describe('personHasUnloadedRelationships', function() {
-        it('should should return true for unloaded relationships', function() {
+    describe('personHasUnloadedRelationships', function () {
+        it('should should return true for unloaded relationships', function () {
             expect(
                 massEditService.personHasUnloadedRelationships(
                     {
@@ -297,7 +297,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should should return false for loaded relationships', function() {
+        it('should should return false for loaded relationships', function () {
             expect(
                 massEditService.personHasUnloadedRelationships(
                     {
@@ -310,8 +310,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('relationshipHasUnloadedModels', function() {
-        it('should return true for unloaded models', function() {
+    describe('relationshipHasUnloadedModels', function () {
+        it('should return true for unloaded models', function () {
             expect(
                 massEditService.relationshipHasUnloadedModels(
                     this.unloadedRelationship,
@@ -319,7 +319,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should return false for loaded models', function() {
+        it('should return false for loaded models', function () {
             expect(
                 massEditService.relationshipHasUnloadedModels(
                     this.loadedRelationship,
@@ -328,8 +328,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('optionsForStatsType', function() {
-        beforeEach(function() {
+    describe('optionsForStatsType', function () {
+        beforeEach(function () {
             this.stats = {
                 assigned_tos: [
                     { person_id: 1, name: 'Adam', count: 1 },
@@ -342,7 +342,7 @@ describe('massEditService', function() {
             );
         });
 
-        it('should generate options from the stats', function() {
+        it('should generate options from the stats', function () {
             expect(
                 massEditService.optionsForStatsType(
                     this.stats,
@@ -355,7 +355,7 @@ describe('massEditService', function() {
             ]);
         });
 
-        it('should set the state to unselected for empty stats', function() {
+        it('should set the state to unselected for empty stats', function () {
             this.stats.assigned_tos[0].count = 0;
             expect(
                 massEditService.optionsForStatsType(
@@ -370,8 +370,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('optionsFromStats', function() {
-        it('should generate options for all types from the stats', function() {
+    describe('optionsFromStats', function () {
+        it('should generate options for all types from the stats', function () {
             this.stats = {};
             this.selection = {};
             this.assignedTos = [];
@@ -392,14 +392,14 @@ describe('massEditService', function() {
         });
     });
 
-    describe('optionStateFromModel', function() {
-        beforeEach(inject(function(JsonApiDataStore) {
-            this.people = _.range(3).map(function(personId) {
+    describe('optionStateFromModel', function () {
+        beforeEach(inject(function (JsonApiDataStore) {
+            this.people = _.range(3).map(function (personId) {
                 return { id: personId };
             });
 
             var people = this.people;
-            spyOn(JsonApiDataStore.store, 'find').and.callFake(function(
+            spyOn(JsonApiDataStore.store, 'find').and.callFake(function (
                 modelType,
                 modelId,
             ) {
@@ -416,7 +416,7 @@ describe('massEditService', function() {
             };
         }));
 
-        it('should return indeterminate when some unincluded people are selected', function() {
+        it('should return indeterminate when some unincluded people are selected', function () {
             this.selection.allSelected = true;
             this.selection.allIncluded = false;
             expect(
@@ -428,7 +428,7 @@ describe('massEditService', function() {
             ).toBe(null);
         });
 
-        it('should return unselected when no people are selected', function() {
+        it('should return unselected when no people are selected', function () {
             this.selection.selectedPeople = [];
             expect(
                 massEditService.optionStateFromModel(
@@ -439,7 +439,7 @@ describe('massEditService', function() {
             ).toBe(false);
         });
 
-        it('should call personHasModel once per selected person', function() {
+        it('should call personHasModel once per selected person', function () {
             var personHasModel = jasmine.createSpy();
             massEditService.optionStateFromModel(
                 this.model,
@@ -452,7 +452,7 @@ describe('massEditService', function() {
             ]);
         });
 
-        it('should return selected when all selected people have the model', function() {
+        it('should return selected when all selected people have the model', function () {
             var personHasModel = jasmine
                 .createSpy()
                 .and.returnValues(true, true);
@@ -465,7 +465,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should return unselected when no selected people have the model', function() {
+        it('should return unselected when no selected people have the model', function () {
             var personHasModel = jasmine
                 .createSpy()
                 .and.returnValues(false, false);
@@ -478,7 +478,7 @@ describe('massEditService', function() {
             ).toBe(false);
         });
 
-        it('should return indeterminate when some selected people have the model', function() {
+        it('should return indeterminate when some selected people have the model', function () {
             var personHasModel = jasmine
                 .createSpy()
                 .and.returnValues(true, false);
@@ -492,8 +492,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('personHasAssignment', function() {
-        beforeEach(function() {
+    describe('personHasAssignment', function () {
+        beforeEach(function () {
             this.teamMember = { id: 1 };
             this.wrongTeamMember = { id: 2 };
             this.orgId = 123;
@@ -513,7 +513,7 @@ describe('massEditService', function() {
             };
         });
 
-        it('should return true if the person is assigned to the team member', function() {
+        it('should return true if the person is assigned to the team member', function () {
             expect(
                 massEditService.personHasAssignment(
                     {
@@ -525,7 +525,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should return false if the person is not assigned to the team member', function() {
+        it('should return false if the person is not assigned to the team member', function () {
             expect(
                 massEditService.personHasAssignment(
                     {
@@ -541,8 +541,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('personHasLabel', function() {
-        beforeEach(function() {
+    describe('personHasLabel', function () {
+        beforeEach(function () {
             this.personId = 1;
             this.label = { id: 123 };
             this.wrongLabel = { id: 234 };
@@ -562,7 +562,7 @@ describe('massEditService', function() {
             };
         });
 
-        it('should return true if the person has the label', function() {
+        it('should return true if the person has the label', function () {
             expect(
                 massEditService.personHasLabel(
                     {
@@ -575,7 +575,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should return false if the person does not have the label', function() {
+        it('should return false if the person does not have the label', function () {
             expect(
                 massEditService.personHasLabel(
                     {
@@ -592,8 +592,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('personHasGroup', function() {
-        beforeEach(function() {
+    describe('personHasGroup', function () {
+        beforeEach(function () {
             this.personId = 1;
             this.group = { id: 123 };
             this.wrongGroup = { id: 234 };
@@ -601,7 +601,7 @@ describe('massEditService', function() {
             this.wrongIdGroup = { group: this.wrongGroup };
         });
 
-        it('should return true if the person has the group', function() {
+        it('should return true if the person has the group', function () {
             expect(
                 massEditService.personHasGroup(
                     {
@@ -614,7 +614,7 @@ describe('massEditService', function() {
             ).toBe(true);
         });
 
-        it('should return false if the person does not have the group', function() {
+        it('should return false if the person does not have the group', function () {
             expect(
                 massEditService.personHasGroup(
                     {
@@ -628,8 +628,8 @@ describe('massEditService', function() {
         });
     });
 
-    describe('selectionFromOptions', function() {
-        it('should return a selection object', function() {
+    describe('selectionFromOptions', function () {
+        it('should return a selection object', function () {
             expect(
                 massEditService.selectionFromOptions([
                     { id: 1, state: true },

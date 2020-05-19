@@ -14,7 +14,7 @@ function editGroupOrLabelAssignmentsService(
     _,
 ) {
     function pushNew(modelType, person, newIds, organizationId) {
-        var relationships = _.map(newIds, function(labelId) {
+        var relationships = _.map(newIds, function (labelId) {
             return buildRelationshipModel(modelType, labelId, organizationId);
         });
 
@@ -76,7 +76,7 @@ function editGroupOrLabelAssignmentsService(
         removedRelationshipIds,
         organizationId,
     ) {
-        var promises = _.map(removedRelationshipIds, function(relatedId) {
+        var promises = _.map(removedRelationshipIds, function (relatedId) {
             return deleteByRelatedId(type, relatedId, person);
         });
         if (addedRelationshipIds.length > 0) {
@@ -88,7 +88,7 @@ function editGroupOrLabelAssignmentsService(
     }
 
     function updateGroupMemberships(person, addedGroupIds, removedGroupIds) {
-        _.each(addedGroupIds, function(groupId) {
+        _.each(addedGroupIds, function (groupId) {
             var group = JsonApiDataStore.store.find('group', groupId);
             var membership = _.find(person.group_memberships, [
                 'group.id',
@@ -96,7 +96,7 @@ function editGroupOrLabelAssignmentsService(
             ]);
             group.group_memberships.push(membership);
         });
-        _.each(removedGroupIds, function(groupId) {
+        _.each(removedGroupIds, function (groupId) {
             var group = JsonApiDataStore.store.find('group', groupId);
             var membership = _.find(group.group_memberships, [
                 'person.id',
@@ -107,7 +107,7 @@ function editGroupOrLabelAssignmentsService(
     }
 
     return {
-        saveOrganizationalLabels: function(
+        saveOrganizationalLabels: function (
             person,
             organizationId,
             addedLabelIds,
@@ -122,20 +122,24 @@ function editGroupOrLabelAssignmentsService(
             );
         },
 
-        saveGroupMemberships: function(person, addedGroupIds, removedGroupIds) {
+        saveGroupMemberships: function (
+            person,
+            addedGroupIds,
+            removedGroupIds,
+        ) {
             var savePromise = saveRelationshipChanges(
                 'group_membership',
                 person,
                 addedGroupIds,
                 removedGroupIds,
             );
-            return savePromise.then(function(resp) {
+            return savePromise.then(function (resp) {
                 updateGroupMemberships(person, addedGroupIds, removedGroupIds);
                 return resp;
             });
         },
 
-        loadPlaceholderEntries: function(entries, orgId, errorMessage) {
+        loadPlaceholderEntries: function (entries, orgId, errorMessage) {
             if (_.find(entries, { _placeHolder: true })) {
                 httpProxy.get(
                     modelsService

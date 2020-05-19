@@ -31,8 +31,8 @@ function organizationOverviewSurveyResponsesController(
     };
 
     this.getSurveyStats = () => {
-        _.forEach(this.organizationOverview.surveys, survey => {
-            surveyService.getStats(survey.id).then(statData => {
+        _.forEach(this.organizationOverview.surveys, (survey) => {
+            surveyService.getStats(survey.id).then((statData) => {
                 this.surveyStats[survey.id] = statData;
             });
         });

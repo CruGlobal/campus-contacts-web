@@ -1,12 +1,12 @@
 var personSelectionService;
 
-describe('personSelectionService', function() {
-    beforeEach(inject(function(_personSelectionService_) {
+describe('personSelectionService', function () {
+    beforeEach(inject(function (_personSelectionService_) {
         personSelectionService = _personSelectionService_;
     }));
 
-    describe('containsUnincludedPeople', function() {
-        it('should return true when all people are selected and all people are not included', function() {
+    describe('containsUnincludedPeople', function () {
+        it('should return true when all people are selected and all people are not included', function () {
             expect(
                 personSelectionService.containsUnincludedPeople({
                     allSelected: true,
@@ -15,7 +15,7 @@ describe('personSelectionService', function() {
             ).toBe(true);
         });
 
-        it('should return false otherwise', function() {
+        it('should return false otherwise', function () {
             expect(
                 personSelectionService.containsUnincludedPeople({
                     allSelected: false,
@@ -31,12 +31,12 @@ describe('personSelectionService', function() {
         });
     });
 
-    describe('convertToFilters', function() {
-        beforeEach(function() {
+    describe('convertToFilters', function () {
+        beforeEach(function () {
             this.orgId = 123;
         });
 
-        it('should filter by id when all people are not selected', function() {
+        it('should filter by id when all people are not selected', function () {
             expect(
                 personSelectionService.convertToFilters({
                     orgId: this.orgId,
@@ -48,7 +48,7 @@ describe('personSelectionService', function() {
             });
         });
 
-        it('should correctly transform filter attribute names and values', function() {
+        it('should correctly transform filter attribute names and values', function () {
             expect(
                 personSelectionService.convertToFilters(
                     {
@@ -88,7 +88,7 @@ describe('personSelectionService', function() {
             });
         });
 
-        it('should default missing filter attributes', function() {
+        it('should default missing filter attributes', function () {
             expect(
                 personSelectionService.convertToFilters({
                     orgId: this.orgId,
@@ -104,7 +104,7 @@ describe('personSelectionService', function() {
             });
         });
 
-        it('should ignore empty filter attributes', function() {
+        it('should ignore empty filter attributes', function () {
             expect(
                 personSelectionService.convertToFilters({
                     orgId: this.orgId,

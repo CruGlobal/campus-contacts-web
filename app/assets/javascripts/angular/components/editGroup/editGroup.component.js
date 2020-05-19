@@ -17,10 +17,10 @@ function editGroupController(groupsService, editGroupService, tFilter, _) {
     vm.title = null;
     vm.saving = false;
     vm.meetingFrequencyOptions = ['weekly', 'monthly', 'sporadically'];
-    vm.weekDayOptions = _.range(0, 7).map(function(day) {
+    vm.weekDayOptions = _.range(0, 7).map(function (day) {
         return { value: day, label: tFilter('date.day_names.' + day) };
     });
-    vm.monthDayOptions = _.range(1, 32).map(function(day) {
+    vm.monthDayOptions = _.range(1, 32).map(function (day) {
         return { value: day, label: day.toString() };
     });
 
@@ -80,10 +80,10 @@ function editGroupController(groupsService, editGroupService, tFilter, _) {
 
         groupsService
             .saveGroup(vm.group, vm.leaders)
-            .then(function(newGroup) {
+            .then(function (newGroup) {
                 vm.close({ $value: newGroup });
             })
-            .catch(function() {
+            .catch(function () {
                 vm.saving = false;
             });
     }

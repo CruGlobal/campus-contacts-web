@@ -18,7 +18,7 @@ function organizationCleanupController(httpProxy, $scope, $uibModal, $state) {
     this.archiveInactivityDate = new Date();
     this.checkIcon = checkIcon;
 
-    const showConfirmModal = async title => {
+    const showConfirmModal = async (title) => {
         const archiveValue =
             title === 'ministries.cleanup.archive_by_inactivity_confirm_message'
                 ? 'leaders_last_sign_in_at'
@@ -45,7 +45,7 @@ function organizationCleanupController(httpProxy, $scope, $uibModal, $state) {
         } catch (err) {}
     };
 
-    const archiveContacts = archiveBy => async dateBy => {
+    const archiveContacts = (archiveBy) => async (dateBy) => {
         if (!dateBy) return;
         const params = {
             type: 'bulk_archive_contacts',

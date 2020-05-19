@@ -7,7 +7,7 @@ angular
 
 function organizationOverviewSuborgsService(httpProxy, modelsService) {
     var organizationOverviewSuborgsService = {
-        buildGetParams: function(orgId) {
+        buildGetParams: function (orgId) {
             return {
                 include: ['groups', 'surveys'].join(','),
                 'filters[parent_ids]': orgId,
@@ -17,7 +17,7 @@ function organizationOverviewSuborgsService(httpProxy, modelsService) {
 
         // Load an organization's sub-orgs
         // The "org" parameter may either be an organization model or an organization id
-        loadOrgSubOrgs: function(org, listLoader) {
+        loadOrgSubOrgs: function (org, listLoader) {
             var requestParams = organizationOverviewSuborgsService.buildGetParams(
                 org.id || org,
             );
@@ -30,12 +30,12 @@ function organizationOverviewSuborgsService(httpProxy, modelsService) {
                     modelsService.getModelMetadata('organization').url.all,
                     requestParams,
                 )
-                .then(resp => {
+                .then((resp) => {
                     return resp.data;
                 });
         },
 
-        loadOrgSubOrgCount: function(orgId) {
+        loadOrgSubOrgCount: function (orgId) {
             var requestParams = organizationOverviewSuborgsService.buildGetParams(
                 orgId,
             );
@@ -49,7 +49,7 @@ function organizationOverviewSuborgsService(httpProxy, modelsService) {
                             'error.messages.organization_overview_suborgs.load_org_suborg_count',
                     },
                 )
-                .then(function(resp) {
+                .then(function (resp) {
                     return resp.meta.total;
                 });
         },

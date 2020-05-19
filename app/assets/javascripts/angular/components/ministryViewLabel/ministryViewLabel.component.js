@@ -44,7 +44,7 @@ function ministryViewLabelController(
             .create(
                 tFilter('labels.delete.confirm', { label_name: vm.label.name }),
             )
-            .then(function() {
+            .then(function () {
                 return labelsService.deleteLabel(vm.label);
             });
     }

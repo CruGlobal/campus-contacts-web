@@ -3,7 +3,7 @@ angular.module('missionhubApp').factory('labelsService', labelsService);
 function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
     var labelsService = {
         // Return a label with default field values
-        getLabelTemplate: function(orgId) {
+        getLabelTemplate: function (orgId) {
             var label = new JsonApiDataStore.Model('label');
             label.setAttribute('name', '');
             label.setRelationship(
@@ -14,7 +14,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
         },
 
         // Save a new label on the server
-        createLabel: function(label) {
+        createLabel: function (label) {
             var payload = payloadFromLabel(label);
             return httpProxy
                 .post(
@@ -25,7 +25,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
                     },
                 )
                 .then(httpProxy.extractModel)
-                .then(function(savedLabel) {
+                .then(function (savedLabel) {
                     var org = savedLabel.organization;
                     if (org && org.labels) {
                         org.labels.push(savedLabel);
@@ -35,7 +35,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
         },
 
         // Save an existing label on the server
-        updateLabel: function(label) {
+        updateLabel: function (label) {
             var payload = payloadFromLabel(label);
             return httpProxy
                 .put(
@@ -51,7 +51,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
         },
 
         // Save a label that may or may not yet exist
-        saveLabel: function(label) {
+        saveLabel: function (label) {
             if (label.id) {
                 return labelsService.updateLabel(label);
             }
@@ -59,7 +59,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
         },
 
         // Delete a label on the server
-        deleteLabel: function(label) {
+        deleteLabel: function (label) {
             return httpProxy
                 .delete(
                     modelsService
@@ -70,7 +70,7 @@ function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
                         errorMessage: 'error.messages.labels.delete_label',
                     },
                 )
-                .then(function() {
+                .then(function () {
                     var org = label.organization;
                     if (org && org.labels) {
                         _.pull(org.labels, label);

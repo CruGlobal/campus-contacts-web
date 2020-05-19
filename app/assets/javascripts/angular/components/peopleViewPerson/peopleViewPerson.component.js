@@ -88,7 +88,7 @@ function peopleViewPersonController(
         };
         interactionsService
             .recordInteraction(interaction, vm.organizationId, vm.person.id)
-            .then(function() {
+            .then(function () {
                 vm.uncontacted = false;
                 toggleInteractionBtns();
             });

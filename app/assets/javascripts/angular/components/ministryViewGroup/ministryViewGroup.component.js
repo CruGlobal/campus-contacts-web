@@ -28,7 +28,8 @@ function ministryViewGroupController(
     vm.groupLength = groupLength;
 
     function groupLength() {
-        return vm.group.group_memberships.filter(m => m.person !== null).length;
+        return vm.group.group_memberships.filter((m) => m.person !== null)
+            .length;
     }
 
     function activate() {
@@ -39,7 +40,7 @@ function ministryViewGroupController(
                 '$ctrl.group.start_time',
                 '$ctrl.group.end_time',
             ],
-            function() {
+            function () {
                 vm.meetingTime = ministryViewGroupService.formatMeetingTime(
                     vm.group,
                 );
@@ -81,7 +82,7 @@ function ministryViewGroupController(
                     group_name: vm.group.name,
                 }),
             )
-            .then(function() {
+            .then(function () {
                 return groupsService.deleteGroup(vm.group);
             });
     }

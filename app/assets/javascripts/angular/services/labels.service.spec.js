@@ -7,13 +7,13 @@ var labelsService, $q, $rootScope, httpProxy, JsonApiDataStore;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('labelsService', function() {
-    beforeEach(inject(function(
+describe('labelsService', function () {
+    beforeEach(inject(function (
         _labelsService_,
         _$q_,
         _$rootScope_,
@@ -49,19 +49,19 @@ describe('labelsService', function() {
         this.httpResponse = $q.resolve({
             data: this.label,
         });
-        spyOn(httpProxy, 'post').and.callFake(function() {
+        spyOn(httpProxy, 'post').and.callFake(function () {
             return _this.httpResponse;
         });
-        spyOn(httpProxy, 'put').and.callFake(function() {
+        spyOn(httpProxy, 'put').and.callFake(function () {
             return _this.httpResponse;
         });
-        spyOn(httpProxy, 'delete').and.callFake(function() {
+        spyOn(httpProxy, 'delete').and.callFake(function () {
             return _this.httpResponse;
         });
     }));
 
-    describe('getLabelTemplate', function() {
-        it('should create an empty label', function() {
+    describe('getLabelTemplate', function () {
+        it('should create an empty label', function () {
             expect(
                 labelsService.getLabelTemplate(this.organization.id),
             ).toEqual(
@@ -77,8 +77,8 @@ describe('labelsService', function() {
         });
     });
 
-    describe('createLabel', function() {
-        it('should make a network request', function() {
+    describe('createLabel', function () {
+        it('should make a network request', function () {
             labelsService.createLabel(this.label);
 
             expect(httpProxy.post).toHaveBeenCalled();
@@ -86,12 +86,12 @@ describe('labelsService', function() {
 
         it(
             'should return a promise that resolves to the new label',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
                 return labelsService
                     .createLabel(this.label)
-                    .then(function(label) {
+                    .then(function (label) {
                         expect(label).toBe(_this.label);
                     });
             }),
@@ -99,24 +99,24 @@ describe('labelsService', function() {
 
         it(
             'should add the label to the organization',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.organization.labels = [];
                 return labelsService
                     .createLabel(this.label)
-                    .then(function(label) {
+                    .then(function (label) {
                         expect(_this.organization.labels).toEqual([label]);
                     });
             }),
         );
     });
 
-    describe('updateLabel', function() {
-        beforeEach(function() {
+    describe('updateLabel', function () {
+        beforeEach(function () {
             this.label.setAttribute('id', 1);
         });
 
-        it('should make a network request', function() {
+        it('should make a network request', function () {
             labelsService.updateLabel(this.label);
 
             expect(httpProxy.put).toHaveBeenCalled();
@@ -124,12 +124,12 @@ describe('labelsService', function() {
 
         it(
             'should return a promise that resolves to the label',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
 
                 return labelsService
                     .updateLabel(this.label)
-                    .then(function(label) {
+                    .then(function (label) {
                         expect(label).toBe(_this.label);
                     });
             }),
@@ -137,22 +137,22 @@ describe('labelsService', function() {
 
         it(
             'should edit the label in the organization',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.organization.setRelationship('labels', [this.label]);
                 this.label.name = 'New Name';
 
                 return labelsService
                     .updateLabel(this.label)
-                    .then(function(label) {
+                    .then(function (label) {
                         expect(_this.organization.labels).toEqual([label]);
                     });
             }),
         );
     });
 
-    describe('saveLabel', function() {
-        it('should create a new label if the label has no id', function() {
+    describe('saveLabel', function () {
+        it('should create a new label if the label has no id', function () {
             spyOn(labelsService, 'createLabel');
 
             labelsService.saveLabel(this.label);
@@ -160,7 +160,7 @@ describe('labelsService', function() {
             expect(labelsService.createLabel).toHaveBeenCalledWith(this.label);
         });
 
-        it('should update a label if the label has an id', function() {
+        it('should update a label if the label has an id', function () {
             this.label.setAttribute('id', 1);
             spyOn(labelsService, 'updateLabel');
 
@@ -170,14 +170,14 @@ describe('labelsService', function() {
         });
     });
 
-    describe('deleteLabel', function() {
+    describe('deleteLabel', function () {
         it(
             'should remove the label from the organization',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 this.organization.labels = [this.label];
 
-                return labelsService.deleteLabel(this.label).then(function() {
+                return labelsService.deleteLabel(this.label).then(function () {
                     expect(_this.organization.labels).toEqual([]);
                     expect(httpProxy.delete).toHaveBeenCalled();
                 });
@@ -185,8 +185,8 @@ describe('labelsService', function() {
         );
     });
 
-    describe('payloadFromLabel', function() {
-        it('should generate a JSON API payload', function() {
+    describe('payloadFromLabel', function () {
+        it('should generate a JSON API payload', function () {
             this.label = new JsonApiDataStore.Model('label', 3);
             this.label.setAttribute('name', 'Label');
             this.label.setRelationship('organization', this.organization);
@@ -202,7 +202,7 @@ describe('labelsService', function() {
             });
         });
 
-        it('should include organization id if it is a new label', function() {
+        it('should include organization id if it is a new label', function () {
             this.people = [];
 
             this.label = new JsonApiDataStore.Model('label');

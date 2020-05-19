@@ -3,14 +3,14 @@ import 'angular-mocks';
 // Constants
 var geoDataService;
 
-describe('geoDataService', function() {
-    beforeEach(inject(function(_geoDataService_) {
+describe('geoDataService', function () {
+    beforeEach(inject(function (_geoDataService_) {
         geoDataService = _geoDataService_;
     }));
 
-    describe('getCountries', function() {
-        it('should return a list of countries', function() {
-            return geoDataService.getCountries().then(function(countries) {
+    describe('getCountries', function () {
+        it('should return a list of countries', function () {
+            return geoDataService.getCountries().then(function (countries) {
                 expect(countries[234]).toEqual({
                     name: 'United States',
                     shortCode: 'US',

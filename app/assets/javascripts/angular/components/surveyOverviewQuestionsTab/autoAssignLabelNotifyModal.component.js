@@ -17,12 +17,12 @@ function autoAssignLabelNotifyModalController() {
         this.question = this.resolve.question;
         this.answer = this.resolve.answer;
         this.assignRule = this.question.question_rules.find(
-            rule =>
+            (rule) =>
                 rule.trigger_keywords === this.answer &&
                 rule.rule_code === 'AUTOASSIGN',
         );
         this.notifyRule = this.question.question_rules.find(
-            rule =>
+            (rule) =>
                 rule.trigger_keywords === this.answer &&
                 rule.rule_code === 'AUTONOTIFY',
         );

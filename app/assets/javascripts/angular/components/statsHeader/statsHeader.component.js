@@ -12,7 +12,7 @@ function statsHeaderController(interactionsService) {
     // Exclude the notes interaction type
     vm.interactionTypes = interactionsService
         .getInteractionTypes()
-        .filter(function(interactionType) {
+        .filter(function (interactionType) {
             return interactionType.id !== 1;
         });
 }

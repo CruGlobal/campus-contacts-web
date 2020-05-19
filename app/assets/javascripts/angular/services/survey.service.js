@@ -9,7 +9,7 @@ function surveyService(
     $log,
 ) {
     return {
-        getSurveyQuestions: surveyId => {
+        getSurveyQuestions: (surveyId) => {
             return httpProxy.get(
                 `/surveys/${surveyId}/questions`,
                 {
@@ -36,12 +36,12 @@ function surveyService(
                     return [
                         ...new Set( // Use set to remove duplicate questions found in separate surveys
                             data.active_survey_elements.map(
-                                element => element.question,
+                                (element) => element.question,
                             ),
                         ),
                     ]
                         .filter(
-                            question =>
+                            (question) =>
                                 (question.label || question.column_title) && // Hide questions with no name
                                 !currentQuestions.includes(question.id), // Hide questions already in current survey
                         )
@@ -91,7 +91,7 @@ function surveyService(
                         errorMessage: 'surveyTab:errors.createSurvey',
                     },
                 )
-                .then(survey => {
+                .then((survey) => {
                     return survey.data;
                 });
         },
@@ -122,14 +122,14 @@ function surveyService(
                                   'surveyTab:errors.addSurveyQuestion',
                           },
                       )
-                      .then(survey => {
+                      .then((survey) => {
                           return survey.data;
                       })
                 : httpProxy
                       .post(`/surveys/${surveyId}/questions`, payload, {
                           errorMessage: 'surveyTab:errors.createSurvey',
                       })
-                      .then(survey => {
+                      .then((survey) => {
                           return survey.data;
                       });
         },
@@ -146,7 +146,7 @@ function surveyService(
                 let ruleRelationship = [];
                 let ruleIncludes = [];
 
-                rules.forEach(r => {
+                rules.forEach((r) => {
                     if (r.id) {
                         ruleRelationship.push({
                             type: 'question_rule',
@@ -209,7 +209,7 @@ function surveyService(
             );
         },
 
-        updateSurvey: survey => {
+        updateSurvey: (survey) => {
             return httpProxy
                 .put(
                     modelsService
@@ -238,12 +238,12 @@ function surveyService(
                         errorMessage: 'surveyTab:errors.updateSurvey',
                     },
                 )
-                .then(survey => {
+                .then((survey) => {
                     return survey.data;
                 });
         },
 
-        deleteSurvey: survey => {
+        deleteSurvey: (survey) => {
             return httpProxy.delete(
                 modelsService.getModelMetadata('survey').url.single(survey.id),
                 null,
@@ -271,7 +271,7 @@ function surveyService(
             );
         },
 
-        deleteKeyword: keywordId => {
+        deleteKeyword: (keywordId) => {
             return httpProxy.delete(
                 modelsService
                     .getModelMetadata('sms_keyword')
@@ -283,7 +283,7 @@ function surveyService(
             );
         },
 
-        requestKeyword: data => {
+        requestKeyword: (data) => {
             const payload = {
                 data: {
                     type: 'sms_keyword',
@@ -307,12 +307,12 @@ function surveyService(
                         errorMessage: 'surveys:keyword:errors.requestKeyword',
                     },
                 )
-                .then(function(keyword) {
+                .then(function (keyword) {
                     return keyword.data;
                 });
         },
 
-        updateKeyword: data => {
+        updateKeyword: (data) => {
             const payload = {
                 data: {
                     type: 'sms_keyword',
@@ -329,12 +329,12 @@ function surveyService(
                         .url.single(data.keyword.id),
                     payload,
                 )
-                .then(function(keyword) {
+                .then(function (keyword) {
                     return keyword.data;
                 });
         },
 
-        getStats: surveyId => {
+        getStats: (surveyId) => {
             return httpProxy
                 .get(
                     modelsService.getModelMetadata('survey_report').url.all,
@@ -349,7 +349,7 @@ function surveyService(
                 .then(httpProxy.extractModels);
         },
 
-        importContacts: payload => {
+        importContacts: (payload) => {
             return httpProxy
                 .post(
                     modelsService.getModelMetadata('bulk_create_job').url.all,
@@ -361,7 +361,7 @@ function surveyService(
                 .then(httpProxy.extractModels);
         },
 
-        importAnswerSheet: payload => {
+        importAnswerSheet: (payload) => {
             return httpProxy
                 .post(
                     modelsService.getModelMetadata('answer_sheet').url.all,

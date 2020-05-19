@@ -7,13 +7,13 @@ var editAddressService, $q, $rootScope, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('editAddressService', function() {
-    beforeEach(inject(function(
+describe('editAddressService', function () {
+    beforeEach(inject(function (
         _editAddressService_,
         _$q_,
         _$rootScope_,
@@ -56,16 +56,16 @@ describe('editAddressService', function() {
         );
     }));
 
-    describe('getAddressTypes', function() {
-        it('should return an array', function() {
+    describe('getAddressTypes', function () {
+        it('should return an array', function () {
             expect(editAddressService.getAddressTypes()).toEqual(
                 jasmine.any(Array),
             );
         });
     });
 
-    describe('isAddressTypeValid', function() {
-        beforeEach(function() {
+    describe('isAddressTypeValid', function () {
+        beforeEach(function () {
             this.otherAddresses = [this.address1, this.address2];
             spyOn(editAddressService, 'getAddressTypes').and.returnValue([
                 'type1',
@@ -74,7 +74,7 @@ describe('editAddressService', function() {
             ]);
         });
 
-        it('should treat unused address types as valid', function() {
+        it('should treat unused address types as valid', function () {
             expect(
                 editAddressService.isAddressTypeValid(
                     'type3',
@@ -83,7 +83,7 @@ describe('editAddressService', function() {
             ).toBe(true);
         });
 
-        it('should treat used address types as invalid', function() {
+        it('should treat used address types as invalid', function () {
             expect(
                 editAddressService.isAddressTypeValid(
                     'type1',
@@ -93,22 +93,22 @@ describe('editAddressService', function() {
         });
     });
 
-    describe('isAddressValid', function() {
-        it('should treat addresses without a type as invalid', function() {
+    describe('isAddressValid', function () {
+        it('should treat addresses without a type as invalid', function () {
             expect(
                 editAddressService.isAddressValid({ address_type: null }),
             ).toBe(false);
         });
 
-        it('should treat addresses with a type as valid', function() {
+        it('should treat addresses with a type as valid', function () {
             expect(
                 editAddressService.isAddressValid({ address_type: 'type' }),
             ).toBe(true);
         });
     });
 
-    describe('getAddressTemplate', function() {
-        it('should set the required address fields', function() {
+    describe('getAddressTemplate', function () {
+        it('should set the required address fields', function () {
             var person = {
                 id: 1,
             };
@@ -121,7 +121,7 @@ describe('editAddressService', function() {
             );
         });
 
-        it('should choose the first available address type', function() {
+        it('should choose the first available address type', function () {
             spyOn(editAddressService, 'getAddressTypes').and.returnValue([
                 'type1',
                 'type2',
@@ -163,13 +163,13 @@ describe('editAddressService', function() {
         });
     });
 
-    describe('getCountryOptions', function() {
+    describe('getCountryOptions', function () {
         it(
             'should prioritize certain countries',
-            asynchronous(function() {
+            asynchronous(function () {
                 return editAddressService
                     .getCountryOptions()
-                    .then(function(countryOptions) {
+                    .then(function (countryOptions) {
                         expect(_.map(countryOptions, 'shortCode')).toEqual([
                             'US',
                             'CA',
@@ -181,13 +181,13 @@ describe('editAddressService', function() {
         );
     });
 
-    describe('getRegionOptions', function() {
+    describe('getRegionOptions', function () {
         it(
             "should return the country's regions",
-            asynchronous(function() {
+            asynchronous(function () {
                 return editAddressService
                     .getRegionOptions('US')
-                    .then(function(regionOptions) {
+                    .then(function (regionOptions) {
                         expect(_.map(regionOptions, 'shortCode')).toEqual([
                             'AL',
                             'AK',
@@ -199,10 +199,10 @@ describe('editAddressService', function() {
 
         it(
             'should return an empty array for an invalid country',
-            asynchronous(function() {
+            asynchronous(function () {
                 return editAddressService
                     .getRegionOptions('foo')
-                    .then(function(regionOptions) {
+                    .then(function (regionOptions) {
                         expect(_.map(regionOptions, 'shortCode')).toEqual([]);
                     });
             }),

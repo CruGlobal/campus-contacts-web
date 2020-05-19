@@ -5,14 +5,14 @@ angular
 function personSelectionService(_) {
     var personSelectionService = {
         // Return a boolean indicating whether a selection contains people that are not included in the id list
-        containsUnincludedPeople: function(selection) {
+        containsUnincludedPeople: function (selection) {
             // The selection contains unincluded people when all people are selected and not all of those people
             // are included in the person id list
             return selection.allSelected && !selection.allIncluded;
         },
 
         // Convert a filters object into the form expected by the server-side API
-        convertToFilters: function(selection, surveyId) {
+        convertToFilters: function (selection, surveyId) {
             if (!personSelectionService.containsUnincludedPeople(selection)) {
                 // Use the id filters when we have the ids of all the people who are selected
                 return {

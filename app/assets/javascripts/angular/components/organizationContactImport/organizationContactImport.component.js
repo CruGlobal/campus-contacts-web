@@ -21,7 +21,7 @@ function organizationContactImportController() {
         this.org = this.organizationOverview.org;
         this.surveys = this.organizationOverview.surveys;
         this.selectedSurvey = this.surveys.find(
-            survey => survey.id === this.surveyId,
+            (survey) => survey.id === this.surveyId,
         );
     };
 

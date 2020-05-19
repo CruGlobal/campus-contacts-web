@@ -5,7 +5,7 @@ function routesService(httpProxy, modelsService) {
     return {
         // Return a promise that resolves to the specified person in the specified organization, loading that
         // person if necessary
-        getPerson: function(personId) {
+        getPerson: function (personId) {
             var url = modelsService
                 .getModelMetadata('person')
                 .url.single(personId);
@@ -30,7 +30,7 @@ function routesService(httpProxy, modelsService) {
         },
 
         // Return a promise that resolves to the specified organization, loading that organization if necessary
-        getOrganization: function(organizationId) {
+        getOrganization: function (organizationId) {
             var url = modelsService
                 .getModelMetadata('organization')
                 .url.single(organizationId);
@@ -50,7 +50,7 @@ function routesService(httpProxy, modelsService) {
         },
 
         // Load a person's interaction history (which consists of interactions as well as survey responses)
-        getHistory: function(personId) {
+        getHistory: function (personId) {
             var url = modelsService
                 .getModelMetadata('person')
                 .url.single(personId);
@@ -65,7 +65,7 @@ function routesService(httpProxy, modelsService) {
             );
         },
 
-        getSurvey: function(surveyId) {
+        getSurvey: function (surveyId) {
             return httpProxy.getModel(
                 modelsService.getModelMetadata('survey').url.single(surveyId),
                 'survey',
@@ -77,7 +77,7 @@ function routesService(httpProxy, modelsService) {
             );
         },
 
-        getPhoneNumberValidation: function(code, id) {
+        getPhoneNumberValidation: function (code, id) {
             return httpProxy.getModel(
                 modelsService
                     .getModelMetadata('phone_number_validation')

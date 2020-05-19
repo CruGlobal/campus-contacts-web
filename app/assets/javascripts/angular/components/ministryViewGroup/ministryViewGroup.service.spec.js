@@ -3,13 +3,13 @@ import 'angular-mocks';
 // Constants
 var ministryViewGroupService, tFilter;
 
-describe('ministryViewGroupService service', function() {
-    beforeEach(inject(function(_ministryViewGroupService_) {
+describe('ministryViewGroupService service', function () {
+    beforeEach(inject(function (_ministryViewGroupService_) {
         ministryViewGroupService = _ministryViewGroupService_;
     }));
 
-    describe('ministryViewGroupService.formatOrdinal', function() {
-        it('should convert numbers to ordinal strings', function() {
+    describe('ministryViewGroupService.formatOrdinal', function () {
+        it('should convert numbers to ordinal strings', function () {
             expect(ministryViewGroupService.formatOrdinal(0)).toBe('0th');
             expect(ministryViewGroupService.formatOrdinal(1)).toBe('1st');
             expect(ministryViewGroupService.formatOrdinal(2)).toBe('2nd');
@@ -28,18 +28,18 @@ describe('ministryViewGroupService service', function() {
         });
     });
 
-    describe('ministryViewGroupService.formatTime', function() {
-        it('should format a time in milliseconds since midnight as a time string', function() {
+    describe('ministryViewGroupService.formatTime', function () {
+        it('should format a time in milliseconds since midnight as a time string', function () {
             expect(ministryViewGroupService.formatTime(0)).toBe('12:00 AM');
         });
 
-        it('should return a blank string for null times', function() {
+        it('should return a blank string for null times', function () {
             expect(ministryViewGroupService.formatTime(null)).toBe('');
         });
     });
 
-    describe('ministryViewGroupService.formatMeetingTime', function() {
-        it('should format weekly meeting times', function() {
+    describe('ministryViewGroupService.formatMeetingTime', function () {
+        it('should format weekly meeting times', function () {
             expect(
                 ministryViewGroupService.formatMeetingTime({
                     meets: 'weekly',
@@ -50,7 +50,7 @@ describe('ministryViewGroupService service', function() {
             ).toEqual('Weekly on Thursdays 6:00 PM - 8:00 PM');
         });
 
-        it('should format monthly meeting times', function() {
+        it('should format monthly meeting times', function () {
             expect(
                 ministryViewGroupService.formatMeetingTime({
                     meets: 'monthly',
@@ -61,7 +61,7 @@ describe('ministryViewGroupService service', function() {
             ).toEqual('Monthly on the 11th from 6:00 PM - 8:00 PM');
         });
 
-        it('should format sporadic meeting times', function() {
+        it('should format sporadic meeting times', function () {
             expect(
                 ministryViewGroupService.formatMeetingTime({
                     meets: 'sporadically',

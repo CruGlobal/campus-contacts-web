@@ -7,7 +7,7 @@ function modelsService(_) {
             root: root,
 
             // The URL for a single model
-            single: function(id) {
+            single: function (id) {
                 return root + '/' + id;
             },
 
@@ -105,12 +105,12 @@ function modelsService(_) {
 
     var modelsService = {
         // Return the metadata for a particular model
-        getModelMetadata: function(model) {
+        getModelMetadata: function (model) {
             return modelMetadata[model];
         },
 
         // Return the single URL for a model
-        getModelUrl: function(model) {
+        getModelUrl: function (model) {
             var metadata = modelsService.getModelMetadata(model._type);
             return metadata && metadata.url.single(model.id);
         },

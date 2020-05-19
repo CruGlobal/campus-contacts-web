@@ -22,10 +22,10 @@ angular
 function reportMovementIndicatorsSuggestedActionsController($sce) {
     this.$onInit = () => (this.accordionOpen = this.accordionOpenByDefault);
 
-    this.isAccepted = id => this.acceptedIds.has(id);
-    this.isRejected = id => this.rejectedIds.has(id);
+    this.isAccepted = (id) => this.acceptedIds.has(id);
+    this.isRejected = (id) => this.rejectedIds.has(id);
 
-    this.getLabelQuestion = action =>
+    this.getLabelQuestion = (action) =>
         $sce.trustAsHtml(
             i18next.t('movementIndicators:suggestedActions.applyLabel', {
                 label: action.label.i18n

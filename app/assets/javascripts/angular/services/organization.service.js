@@ -14,7 +14,7 @@ function organizationService(
 
     const organizationService = {
         // Load a list of organizations
-        loadOrgsById: function(orgIds, errorMessage) {
+        loadOrgsById: function (orgIds, errorMessage) {
             if (orgIds.length === 0) {
                 return $q.resolve([]);
             }
@@ -34,12 +34,12 @@ function organizationService(
         },
 
         // Lookup and return the org with the specified id if it is loaded
-        lookupOrg: function(orgId) {
+        lookupOrg: function (orgId) {
             return JsonApiDataStore.store.find('organization', orgId);
         },
 
         // Generate an array of the organization's ancestors as org ids (including the organization itself)
-        getOrgHierarchyIds: function(org) {
+        getOrgHierarchyIds: function (org) {
             if (!org) {
                 return [];
             }
@@ -48,12 +48,12 @@ function organizationService(
 
         // Return a promise that resolves to an array of the organization's ancestors (including the organization
         // itself)
-        getOrgHierarchy: function(org) {
+        getOrgHierarchy: function (org) {
             var hierarchyIds = _.difference(
                 organizationService.getOrgHierarchyIds(org),
                 [...inaccessibleOrgs],
             );
-            var unloadedOrgIds = hierarchyIds.filter(function(orgId) {
+            var unloadedOrgIds = hierarchyIds.filter(function (orgId) {
                 return !httpProxy.isLoaded(
                     organizationService.lookupOrg(orgId),
                 );
@@ -64,7 +64,7 @@ function organizationService(
                     unloadedOrgIds,
                     'error.messages.organization.load_ancestry',
                 )
-                .then(function(loadedOrgs) {
+                .then(function (loadedOrgs) {
                     // Mark as inaccessible orgs that we attempted to load but were not included in the response
                     const newInaccessibleOrgs = _.difference(
                         unloadedOrgIds,
@@ -83,7 +83,7 @@ function organizationService(
         },
 
         // Search for organizations in the same org tree as the specified org that match the query
-        searchOrgs: function(org, query, deduper) {
+        searchOrgs: function (org, query, deduper) {
             var rootOrgId = organizationService.getOrgHierarchyIds(org)[0];
             return httpProxy
                 .get(
@@ -131,7 +131,7 @@ function organizationService(
                 .then(httpProxy.extractModels);
         },
 
-        saveOrg: org => {
+        saveOrg: (org) => {
             return httpProxy
                 .put(
                     modelsService
@@ -154,7 +154,7 @@ function organizationService(
                 .then(httpProxy.extractModels);
         },
 
-        deleteOrg: org => {
+        deleteOrg: (org) => {
             return httpProxy.delete(
                 modelsService
                     .getModelMetadata('organization')

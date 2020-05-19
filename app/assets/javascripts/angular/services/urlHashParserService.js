@@ -4,12 +4,12 @@ angular
 
 function urlHashParserService($location) {
     return {
-        param: name => {
+        param: (name) => {
             return $location
                 .hash()
                 .split('&')
                 .reduce((acc, v) => {
-                    const found = v.split('=').find(f => {
+                    const found = v.split('=').find((f) => {
                         return f === name;
                     });
 

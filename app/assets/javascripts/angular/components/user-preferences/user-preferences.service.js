@@ -23,7 +23,7 @@ export const getNamesOfLoadedTranslations = async () => {
         await import(/* webpackChunkName: "countrily-data" */ 'countrily-data'),
     );
     return Object.keys(i18next.store.data)
-        .map(code => {
+        .map((code) => {
             const [language, country] = code.split('-');
 
             const languageName = isoLanguages.getName(language);
@@ -34,7 +34,7 @@ export const getNamesOfLoadedTranslations = async () => {
                           .name
                     : (
                           countrilyData.find(
-                              countrilyCountry =>
+                              (countrilyCountry) =>
                                   countrilyCountry.ISO.alpha2 === country,
                           ) || {}
                       ).demonym);

@@ -51,7 +51,7 @@ function userPreferencesService(httpProxy, modelsService, loggedInPerson, _) {
 
         var partitionedOrgs = _.reduce(
             organizations,
-            function(result, org) {
+            function (result, org) {
                 // Update org visible flag
                 org.visible = !_.includes(
                     loggedInPerson.person.user.hidden_organizations,

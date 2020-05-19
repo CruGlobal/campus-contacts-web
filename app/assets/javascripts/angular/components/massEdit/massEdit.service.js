@@ -11,7 +11,7 @@ function massEditService(
     // Return a boolean indicating whether a particular person is assigned to the team member
     function personHasAssignment(person, orgId, teamMember) {
         return Boolean(
-            _.find(person.reverse_contact_assignments, function(assignment) {
+            _.find(person.reverse_contact_assignments, function (assignment) {
                 return (
                     assignment.organization.id === orgId &&
                     assignment.assigned_to.id === teamMember.id
@@ -23,7 +23,9 @@ function massEditService(
     // Return a boolean indicating whether a particular person has the label
     function personHasLabel(person, orgId, label) {
         return Boolean(
-            _.find(person.organizational_labels, function(organizationalLabel) {
+            _.find(person.organizational_labels, function (
+                organizationalLabel,
+            ) {
                 return (
                     organizationalLabel.organization_id === orgId &&
                     organizationalLabel.label.id === label.id
@@ -69,10 +71,14 @@ function massEditService(
         assigned_tos: {
             personAttribute: 'reverse_contact_assignments',
             modelType: 'contact_assignment',
-            getModelPredicate: function(assignedToId) {
+            getModelPredicate: function (assignedToId) {
                 return ['assigned_to.id', assignedToId];
             },
-            getModelAttributes: function(assignedToId, person, organizationId) {
+            getModelAttributes: function (
+                assignedToId,
+                person,
+                organizationId,
+            ) {
                 return {
                     assigned_to: JsonApiDataStore.store.find(
                         'person',
@@ -89,10 +95,10 @@ function massEditService(
         labels: {
             personAttribute: 'organizational_labels',
             modelType: 'organizational_label',
-            getModelPredicate: function(labelId) {
+            getModelPredicate: function (labelId) {
                 return ['label.id', labelId];
             },
-            getModelAttributes: function(labelId, person, organizationId) {
+            getModelAttributes: function (labelId, person, organizationId) {
                 return {
                     label: JsonApiDataStore.store.find('label', labelId),
                     organization_id: organizationId,
@@ -103,10 +109,10 @@ function massEditService(
         groups: {
             personAttribute: 'group_memberships',
             modelType: 'group_membership',
-            getModelPredicate: function(groupId) {
+            getModelPredicate: function (groupId) {
                 return ['group.id', groupId];
             },
-            getModelAttributes: function(groupId, person, organizationId) {
+            getModelAttributes: function (groupId, person, organizationId) {
                 // eslint-disable-line no-unused-vars
                 return {
                     group: JsonApiDataStore.store.find('group', groupId),
@@ -123,7 +129,7 @@ function massEditService(
     var massEditService = {
         // Convert a list of added and removed ids into a hash with keys matching the ids and a value of true for
         // added and false for removed
-        hashFromAddedRemoved: function(addedIds, removedIds) {
+        hashFromAddedRemoved: function (addedIds, removedIds) {
             return _.extend(
                 _.zipObject(addedIds, _.fill(Array(addedIds.length), true)),
                 _.zipObject(
@@ -135,15 +141,15 @@ function massEditService(
 
         // Convert a changes object from the massEdit component into the form expected by the bulk people changes
         // endpoint
-        prepareChanges: function(changes) {
+        prepareChanges: function (changes) {
             var filteredChanges = {};
-            simpleChangeFields.forEach(function(field) {
+            simpleChangeFields.forEach(function (field) {
                 // A value of null or undefined means no change, so ignore those changes
                 if (!_.isNil(changes[field])) {
                     filteredChanges[field] = changes[field];
                 }
             });
-            complexChangeFields.forEach(function(field) {
+            complexChangeFields.forEach(function (field) {
                 var addedIds = changes[field + '_added'] || [];
                 var removedIds = changes[field + '_removed'] || [];
 
@@ -162,7 +168,7 @@ function massEditService(
         },
 
         // Apply the changes on the server
-        applyChanges: function(selection, changes, surveyId) {
+        applyChanges: function (selection, changes, surveyId) {
             var filteredChanges = massEditService.prepareChanges(changes);
             massEditService.applyChangesLocally(selection, filteredChanges);
 
@@ -212,13 +218,13 @@ function massEditService(
          *     getModelAttributes(id, person)
          * }
          */
-        applyComplexChanges: function(
+        applyComplexChanges: function (
             changes,
             person,
             organizationId,
             manifest,
         ) {
-            _.forEach(changes, function(change, id) {
+            _.forEach(changes, function (change, id) {
                 var existingModel = _.find(
                     person[manifest.personAttribute],
                     manifest.getModelPredicate(id),
@@ -243,10 +249,10 @@ function massEditService(
         },
 
         // Apply the changes locally
-        applyChangesLocally: function(selection, changes) {
+        applyChangesLocally: function (selection, changes) {
             var orgId = selection.orgId;
 
-            selection.selectedPeople.forEach(function(personId) {
+            selection.selectedPeople.forEach(function (personId) {
                 var person = JsonApiDataStore.store.find('person', personId);
                 var orgPermission = _.find(person.organizational_permissions, {
                     organization_id: orgId,
@@ -263,7 +269,7 @@ function massEditService(
                     );
                 }
 
-                _.each(complexChangeManifests, function(
+                _.each(complexChangeManifests, function (
                     changeManifest,
                     changeField,
                 ) {
@@ -296,9 +302,9 @@ function massEditService(
         ],
 
         // Return a boolean indicating whether a person has any unloaded relationships
-        personHasUnloadedRelationships: function(person, relationshipNames) {
+        personHasUnloadedRelationships: function (person, relationshipNames) {
             // Consider the person to be missing if any of its relationships are missing
-            return relationshipNames.some(function(relationshipName) {
+            return relationshipNames.some(function (relationshipName) {
                 return massEditService.relationshipHasUnloadedModels(
                     person[relationshipName],
                 );
@@ -306,12 +312,12 @@ function massEditService(
         },
 
         // Return a boolean indicating whether a relationship has any unloaded models
-        relationshipHasUnloadedModels: function(relationship) {
+        relationshipHasUnloadedModels: function (relationship) {
             return relationship.some(_.negate(httpProxy.isLoaded));
         },
 
         // Load the necessary relationships for a selection
-        loadPeopleRelationships: function(selection) {
+        loadPeopleRelationships: function (selection) {
             // Optimize by only loading relationships when optionStateFromModel will actually use those
             // relationships when determining option selection states
             if (personSelectionService.containsUnincludedPeople(selection)) {
@@ -324,7 +330,7 @@ function massEditService(
 
             // Only load people for whom at least one of their relationships contains a placeholder model
             var peopleMissingRelationships = selection.selectedPeople.filter(
-                function(personId) {
+                function (personId) {
                     var person = JsonApiDataStore.store.find(
                         'person',
                         personId,
@@ -354,7 +360,7 @@ function massEditService(
         },
 
         // Load the filter stats for an organization
-        loadFilterStats: function(orgId) {
+        loadFilterStats: function (orgId) {
             return httpProxy
                 .get(
                     modelsService
@@ -372,11 +378,11 @@ function massEditService(
         },
 
         // Return an array of options generated from a particular type of stats
-        optionsForStatsType: function(stats, statType, selection) {
+        optionsForStatsType: function (stats, statType, selection) {
             var statDefinition = _.find(massEditService.statDefinitions, {
                 type: statType,
             });
-            return stats[statDefinition.type].map(function(stat) {
+            return stats[statDefinition.type].map(function (stat) {
                 var id = stat[statDefinition.idField];
                 var state;
                 if (stat.count === 0) {
@@ -398,10 +404,10 @@ function massEditService(
         },
 
         // Return the options generated from a stats model
-        optionsFromStats: function(stats, selection) {
+        optionsFromStats: function (stats, selection) {
             var statTypes = _.map(massEditService.statDefinitions, 'type');
             return _.fromPairs(
-                statTypes.map(function(statType) {
+                statTypes.map(function (statType) {
                     // Key is the type, value is the options
                     return [
                         statType,
@@ -416,7 +422,7 @@ function massEditService(
         },
 
         // Return a promise that resolves to the available multiselect options
-        loadOptions: function(selection) {
+        loadOptions: function (selection) {
             return $q
                 .all([
                     // Load the filter stats because they include the id and name of all possible assignments, labels,
@@ -426,7 +432,7 @@ function massEditService(
                     // In parallel, load the relationships needed to determine which options are selected
                     massEditService.loadPeopleRelationships(selection),
                 ])
-                .then(function(results) {
+                .then(function (results) {
                     var stats = results[0];
                     return massEditService.optionsFromStats(stats, selection);
                 });
@@ -438,7 +444,7 @@ function massEditService(
         // "model" is the model option in question (such as a label, group, or contact assignment, for example).
         // "personHasModel" is expected to implement the algorithm for determining whether a person "has" a model.
         // It is called with the model and the person in question.
-        optionStateFromModel: function(model, selection, personHasModel) {
+        optionStateFromModel: function (model, selection, personHasModel) {
             if (personSelectionService.containsUnincludedPeople(selection)) {
                 // When unincluded contacts are selected, all options are automatically treated as indeterminate
                 return null;
@@ -449,14 +455,14 @@ function massEditService(
             }
 
             // Convert the array of person ids into an array of people
-            var selectedPeople = selection.selectedPeople.map(function(
+            var selectedPeople = selection.selectedPeople.map(function (
                 personId,
             ) {
                 return JsonApiDataStore.store.find('person', personId);
             });
 
             // Gather a list of the people with the model
-            var matchingPeople = selectedPeople.filter(function(person) {
+            var matchingPeople = selectedPeople.filter(function (person) {
                 return personHasModel(person, selection.orgId, model);
             });
 
@@ -484,9 +490,9 @@ function massEditService(
         personHasGroup: personHasGroup,
 
         // Return an option selection object from an array of options
-        selectionFromOptions: function(options) {
+        selectionFromOptions: function (options) {
             return _.chain(options)
-                .map(function(option) {
+                .map(function (option) {
                     return [option.id, option.state];
                 })
                 .fromPairs()

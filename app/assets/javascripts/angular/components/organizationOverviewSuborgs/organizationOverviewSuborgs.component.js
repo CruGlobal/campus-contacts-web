@@ -45,7 +45,7 @@ function organizationOverviewSuborgsController(
 
         return organizationOverviewSuborgsService
             .loadOrgSubOrgs(vm.organizationOverview.org, listLoader)
-            .then(function(resp) {
+            .then(function (resp) {
                 vm.subOrgs = resp.list;
                 vm.loadedAll = resp.loadedAll;
                 loadReports();
@@ -61,7 +61,7 @@ function organizationOverviewSuborgsController(
                     $state.go('^.people');
                 }
             })
-            .finally(function() {
+            .finally(function () {
                 vm.busy = false;
             });
     }
@@ -69,7 +69,7 @@ function organizationOverviewSuborgsController(
     function loadReports() {
         reportsService
             .loadOrganizationReports(vm.subOrgs)
-            .catch(function(error) {
+            .catch(function (error) {
                 $log.error('Error loading organization reports', error);
             });
     }

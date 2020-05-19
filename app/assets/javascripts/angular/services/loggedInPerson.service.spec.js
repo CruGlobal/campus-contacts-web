@@ -7,13 +7,13 @@ var loggedInPerson, $q, $rootScope, httpProxy, JsonApiDataStore;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -21,8 +21,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('loggedInPerson service', function() {
-    beforeEach(inject(function(
+describe('loggedInPerson service', function () {
+    beforeEach(inject(function (
         _loggedInPerson_,
         _$q_,
         _$rootScope_,
@@ -46,15 +46,15 @@ describe('loggedInPerson service', function() {
         this.httpResponse = $q.resolve({
             data: this.person,
         });
-        spyOn(httpProxy, 'callHttp').and.callFake(function() {
+        spyOn(httpProxy, 'callHttp').and.callFake(function () {
             return _this.httpResponse;
         });
 
         spyOn(JsonApiDataStore.store, 'find').and.returnValue(this.person);
     }));
 
-    describe('loggedInPerson.load', function() {
-        it('should GET a URL', function() {
+    describe('loggedInPerson.load', function () {
+        it('should GET a URL', function () {
             loggedInPerson.load();
             expect(httpProxy.callHttp).toHaveBeenCalledWith(
                 'GET',
@@ -67,25 +67,25 @@ describe('loggedInPerson service', function() {
 
         it(
             'should return a promise',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
-                return loggedInPerson.load().then(function(loadedPerson) {
+                return loggedInPerson.load().then(function (loadedPerson) {
                     expect(loadedPerson).toBe(_this.person);
                 });
             }),
         );
     });
 
-    describe('loggedInPerson.person', function() {
-        it('should initially be null', function() {
+    describe('loggedInPerson.person', function () {
+        it('should initially be null', function () {
             expect(loggedInPerson.person).toBe(null);
         });
 
         it(
             'should eventually be a person',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
-                return loggedInPerson.load().then(function() {
+                return loggedInPerson.load().then(function () {
                     expect(loggedInPerson.person).toBe(_this.person);
                 });
             }),
@@ -93,23 +93,23 @@ describe('loggedInPerson service', function() {
 
         it(
             'should still be null after an error',
-            asynchronous(function() {
+            asynchronous(function () {
                 this.httpResponse = $q.reject(new Error());
-                return loggedInPerson.load().catch(function() {
+                return loggedInPerson.load().catch(function () {
                     expect(loggedInPerson.person).toBe(null);
                 });
             }),
         );
 
-        it('should not be settable', function() {
-            expect(function() {
+        it('should not be settable', function () {
+            expect(function () {
                 loggedInPerson.person = this.person;
             }).toThrow();
         });
     });
 
-    describe('loggedInPerson.loadingPromise', function() {
-        it('should be the return value of loggedInPerson.load()', function() {
+    describe('loggedInPerson.loadingPromise', function () {
+        it('should be the return value of loggedInPerson.load()', function () {
             var loadingPromise = loggedInPerson.load();
             expect(loggedInPerson.loadingPromise).toBe(loadingPromise);
         });

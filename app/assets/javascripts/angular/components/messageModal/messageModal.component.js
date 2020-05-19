@@ -99,11 +99,11 @@ function messageModalController(
                 ids: exclusions,
             },
         ];
-        filterDefinitions.forEach(function(definition) {
+        filterDefinitions.forEach(function (definition) {
             var ids = definition.ids || filters[definition.name] || [];
             if (ids.length > 0) {
                 var names = ids
-                    .map(function(id) {
+                    .map(function (id) {
                         return JsonApiDataStore.store.find(
                             definition.type,
                             id,
@@ -149,7 +149,7 @@ function messageModalController(
             surveyId: vm.resolve.surveyId,
         });
 
-        sendingPromise.then(vm.close).catch(function() {
+        sendingPromise.then(vm.close).catch(function () {
             vm.sending = false;
         });
     }

@@ -67,7 +67,7 @@ function personProfileController(
         // The personPage needs access to the profile form to determine validity. Because component "require" only
         // works upwards (from descendent to ancestor), we have to have the profile component send its profile form
         // to the person component.
-        var unsubscribeForm = $scope.$watch('$ctrl.form', function(form) {
+        var unsubscribeForm = $scope.$watch('$ctrl.form', function (form) {
             if (form) {
                 vm.personTab.profileForm = form;
                 unsubscribeForm();
@@ -95,7 +95,7 @@ function personProfileController(
         $scope.$watch('$ctrl.personTab.primaryEmail', updatePrimary);
         $scope.$watch('$ctrl.personTab.primaryPhone', updatePrimary);
 
-        $scope.$watchCollection('$ctrl.personTab.assignedTo', function(
+        $scope.$watchCollection('$ctrl.personTab.assignedTo', function (
             newAssignedTo,
             oldAssignedTo,
         ) {
@@ -119,7 +119,7 @@ function personProfileController(
             );
         });
 
-        $scope.$watchCollection('$ctrl.personTab.person.gender', function(
+        $scope.$watchCollection('$ctrl.personTab.person.gender', function (
             newGender,
             oldGender,
         ) {
@@ -195,7 +195,7 @@ function personProfileController(
             relationshipName,
             attribute,
         );
-        savePromise.then(function() {
+        savePromise.then(function () {
             if (relationship === vm.pendingEmailAddress) {
                 vm.pendingEmailAddress = null;
             } else if (relationship === vm.pendingPhoneNumber) {
@@ -295,7 +295,7 @@ function personProfileController(
         var confirmModal = confirmModalService.create(message);
 
         confirmModal
-            .then(function() {
+            .then(function () {
                 deleteRelationship(emailAddress, 'email_addresses');
             })
             .then(() => {
@@ -308,7 +308,7 @@ function personProfileController(
         var confirmModal = confirmModalService.create(message);
 
         confirmModal
-            .then(function() {
+            .then(function () {
                 deleteRelationship(phoneNumber, 'phone_numbers');
             })
             .then(() => {
@@ -320,7 +320,7 @@ function personProfileController(
         var message = $filter('t')('people.edit.delete_address_confirm');
         var confirmModal = confirmModalService.create(message);
 
-        confirmModal.then(function() {
+        confirmModal.then(function () {
             deleteRelationship(address, 'addresses');
         });
     }
@@ -366,13 +366,13 @@ function personProfileController(
             animation: true,
             component: 'editGroupOrLabelAssignments',
             resolve: {
-                organizationId: function() {
+                organizationId: function () {
                     return vm.personTab.organizationId;
                 },
-                person: function() {
+                person: function () {
                     return vm.personTab.person;
                 },
-                relationship: function() {
+                relationship: function () {
                     return relationship;
                 },
             },
@@ -381,12 +381,12 @@ function personProfileController(
         });
 
         vm.modalInstance.result
-            .then(function() {
+            .then(function () {
                 $scope.$emit('personModified');
 
                 updateFunction();
             })
-            .finally(function() {
+            .finally(function () {
                 vm.modalInstance = null;
             });
     }
@@ -397,15 +397,15 @@ function personProfileController(
             animation: true,
             component: 'editAddress',
             resolve: {
-                organizationId: function() {
+                organizationId: function () {
                     return vm.personTab.organizationId;
                 },
 
-                person: function() {
+                person: function () {
                     return vm.personTab.person;
                 },
 
-                address: function() {
+                address: function () {
                     return address;
                 },
             },
@@ -413,7 +413,7 @@ function personProfileController(
             size: 'md',
         });
 
-        addressModal.result.then(function() {
+        addressModal.result.then(function () {
             $scope.$emit('personModified');
         });
     }

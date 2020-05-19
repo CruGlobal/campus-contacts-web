@@ -3,8 +3,8 @@ import 'angular-mocks';
 // Constants
 var $ctrl, JsonApiDataStore;
 
-describe('organizationOverviewLabels component', function() {
-    beforeEach(inject(function($componentController, _JsonApiDataStore_) {
+describe('organizationOverviewLabels component', function () {
+    beforeEach(inject(function ($componentController, _JsonApiDataStore_) {
         JsonApiDataStore = _JsonApiDataStore_;
 
         this.$uibModal = jasmine.createSpyObj('$uibModal', ['open']);
@@ -31,12 +31,12 @@ describe('organizationOverviewLabels component', function() {
         );
     }));
 
-    it('should make the labels available to the template', function() {
+    it('should make the labels available to the template', function () {
         expect($ctrl.organizationOverview.org.labels).toEqual([this.label]);
     });
 
-    describe('addLabel', function() {
-        it('should open the edit label modal', function() {
+    describe('addLabel', function () {
+        it('should open the edit label modal', function () {
             $ctrl.addLabel();
 
             expect(this.$uibModal.open).toHaveBeenCalledWith(

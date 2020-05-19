@@ -6,7 +6,7 @@ function personHistoryService(_) {
     return {
         // Build the history feed (interactions and completed surveys) for a person
         // feedFilter is a string and must have the value 'interactions', 'notes', 'surveys', or 'all'
-        buildHistoryFeed: function(person, feedFilter, orgId) {
+        buildHistoryFeed: function (person, feedFilter, orgId) {
             return _.sortBy(
                 filterHistoryByType(person, feedFilter, orgId),
                 getHistorySortKey,
@@ -20,7 +20,7 @@ function personHistoryService(_) {
                 return filterInteractionByOrg(
                     person.interactions,
                     orgId,
-                ).filter(function(interaction) {
+                ).filter(function (interaction) {
                     return interaction.interaction_type_id !== '1';
                 });
             case 'notes':

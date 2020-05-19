@@ -19,9 +19,9 @@ function copySurveyController(surveyService, loggedInPerson) {
         this.survey.title = this.resolve.survey.title;
 
         this.orgs = loggedInPerson.person.organizational_permissions.map(
-            orgPermission => orgPermission.organization,
+            (orgPermission) => orgPermission.organization,
         );
-        this.orgs = this.orgs.filter(org => {
+        this.orgs = this.orgs.filter((org) => {
             return loggedInPerson.isAdminAt(org);
         });
 
@@ -43,10 +43,10 @@ function copySurveyController(surveyService, loggedInPerson) {
                 this.survey.title,
             )
             .then(
-                newSurvey => {
+                (newSurvey) => {
                     this.close(newSurvey);
                 },
-                response => {
+                (response) => {
                     this.saving = false;
                     this.error = response.data.error;
                 },

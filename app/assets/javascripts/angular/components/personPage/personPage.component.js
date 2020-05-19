@@ -50,7 +50,7 @@ function personPageController(
         vm.hideProfilePhotoBtns =
             vm.person.user && loggedInPerson.person !== vm.person;
 
-        $scope.$on('personModified', function() {
+        $scope.$on('personModified', function () {
             vm.dirty = true;
         });
 
@@ -62,7 +62,7 @@ function personPageController(
             vm.person,
             vm.organizationId,
         );
-        $scope.$watch('$ctrl.person.picture', function(pictureUrl) {
+        $scope.$watch('$ctrl.person.picture', function (pictureUrl) {
             vm.avatarUrl = pictureUrl || noProfileImage;
             vm.isFacebookAvatar = personPageService.isFacebookAvatar(
                 vm.avatarUrl,
@@ -72,7 +72,7 @@ function personPageController(
             }
         });
 
-        $scope.$watchCollection('$ctrl.person.email_addresses', function(
+        $scope.$watchCollection('$ctrl.person.email_addresses', function (
             relationships,
         ) {
             vm.primaryEmail = _.find(relationships, { primary: true });
@@ -82,7 +82,7 @@ function personPageController(
                 vm.primaryEmail.primary = true;
             }
         });
-        $scope.$watchCollection('$ctrl.person.phone_numbers', function(
+        $scope.$watchCollection('$ctrl.person.phone_numbers', function (
             relationships,
         ) {
             vm.primaryPhone = _.find(relationships, { primary: true });
@@ -106,13 +106,13 @@ function personPageController(
         // Intercept transitions away from this component
         unsubscribeTransition = $transitions.onBefore(
             { exiting: vm.stateName },
-            function() {
+            function () {
                 return confirmCancel()
-                    .then(function() {
+                    .then(function () {
                         // Allow the transition to proceede
                         endDismissLock();
                     })
-                    .catch(function() {
+                    .catch(function () {
                         // Cancel the transition
                         return false;
                     });
@@ -120,7 +120,7 @@ function personPageController(
         );
 
         // Intercept close events, prevent the modal from closing, and display the dismissal confirmation
-        unsubscribeClose = $scope.$on('modal.closing', function(event) {
+        unsubscribeClose = $scope.$on('modal.closing', function (event) {
             event.preventDefault();
             vm.dismiss();
         });
@@ -153,7 +153,7 @@ function personPageController(
     // If necessary, display a confirmation dialog asking whether the user wants to cancel their changes to the
     // current contact
     function confirmCancel() {
-        return $q.resolve().then(function() {
+        return $q.resolve().then(function () {
             if (vm.person.id === null && vm.dirty) {
                 // Receive confirmation before canceling the creation of a new contact
                 return confirmModalService.create(
@@ -165,7 +165,7 @@ function personPageController(
 
     // Dismiss this page
     function dismiss() {
-        return confirmCancel().then(function() {
+        return confirmCancel().then(function () {
             endDismissLock();
             $state.go('^.^');
         });
@@ -176,7 +176,7 @@ function personPageController(
         vm.saving = true;
         personPageService
             .savePerson(vm.person)
-            .then(person => {
+            .then((person) => {
                 // Update our person model with the newly-saved one. If it is a newly-created person, it will have
                 // an id now, and the dismiss call will not ask for a confirmation before navigating away.
                 vm.person = person;

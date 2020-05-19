@@ -4,13 +4,13 @@ var personProfileService, $q, $rootScope, httpProxy, _;
 // The test function must return a promise
 // The promise will automatically be bound to "done" and the $rootScope will be automatically digested
 function asynchronous(fn) {
-    return function(done) {
+    return function (done) {
         var returnValue = fn.call(this, done);
         returnValue
-            .then(function() {
+            .then(function () {
                 done();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 done.fail(err);
             });
         $rootScope.$apply();
@@ -18,8 +18,8 @@ function asynchronous(fn) {
     };
 }
 
-describe('personProfileService', function() {
-    beforeEach(inject(function(
+describe('personProfileService', function () {
+    beforeEach(inject(function (
         _personProfileService_,
         _$q_,
         _$rootScope_,
@@ -60,8 +60,8 @@ describe('personProfileService', function() {
         spyOn(httpProxy, 'callHttp').and.returnValue($q.resolve());
     }));
 
-    describe('saveAttribute', function() {
-        beforeEach(function() {
+    describe('saveAttribute', function () {
+        beforeEach(function () {
             this.personId = 123;
             this.person = {
                 _type: 'person',
@@ -72,13 +72,13 @@ describe('personProfileService', function() {
             };
         });
 
-        it('should not save relationships on unpersisted people', function() {
+        it('should not save relationships on unpersisted people', function () {
             this.person.id = null;
             personProfileService.saveAttribute(null, this.person, 'key');
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should update individual person attributes', function() {
+        it('should update individual person attributes', function () {
             personProfileService.saveAttribute(
                 this.personId,
                 this.person,
@@ -104,7 +104,7 @@ describe('personProfileService', function() {
             );
         });
 
-        it('should update multiple person attributes', function() {
+        it('should update multiple person attributes', function () {
             personProfileService.saveAttribute(this.personId, this.person, [
                 'key1',
                 'key2',
@@ -132,7 +132,7 @@ describe('personProfileService', function() {
             );
         });
 
-        it('should update existing relationships', function() {
+        it('should update existing relationships', function () {
             var relationship = {
                 _type: 'organization',
                 id: 456,
@@ -170,7 +170,7 @@ describe('personProfileService', function() {
             );
         });
 
-        it('should create new relationships', function() {
+        it('should create new relationships', function () {
             var relationship = {
                 _type: 'organization',
                 key21: 'value21',
@@ -203,8 +203,8 @@ describe('personProfileService', function() {
         });
     });
 
-    describe('saveRelationship', function() {
-        beforeEach(function() {
+    describe('saveRelationship', function () {
+        beforeEach(function () {
             this.person = {
                 id: null,
                 relationships: [{ key: 'value' }],
@@ -213,7 +213,7 @@ describe('personProfileService', function() {
             this.newRelationship = { key: 'value2' };
         });
 
-        it('should not save relationships on unpersisted people', function() {
+        it('should not save relationships on unpersisted people', function () {
             personProfileService.saveRelationship(
                 this.person,
                 this.newRelationship,
@@ -222,7 +222,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should save relationships on persisted people', function() {
+        it('should save relationships on persisted people', function () {
             this.person.id = 1;
             spyOn(httpProxy, 'includedFromModels').and.returnValue({});
             personProfileService.saveRelationship(
@@ -233,7 +233,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).toHaveBeenCalled();
         });
 
-        it('should add created relationships on unpersisted people', function() {
+        it('should add created relationships on unpersisted people', function () {
             personProfileService.saveRelationship(
                 this.person,
                 this.newRelationship,
@@ -245,7 +245,7 @@ describe('personProfileService', function() {
             ]);
         });
 
-        it('should not add updated relationships on unpersisted people', function() {
+        it('should not add updated relationships on unpersisted people', function () {
             personProfileService.saveRelationship(
                 this.person,
                 this.person.relationships[0],
@@ -255,8 +255,8 @@ describe('personProfileService', function() {
         });
     });
 
-    describe('deleteRelationship', function() {
-        it('should call deleteRelationships', function() {
+    describe('deleteRelationship', function () {
+        it('should call deleteRelationships', function () {
             this.person = { id: 1 };
             this.relationship = { id: 2 };
 
@@ -276,8 +276,8 @@ describe('personProfileService', function() {
         });
     });
 
-    describe('deleteRelationships', function() {
-        beforeEach(function() {
+    describe('deleteRelationships', function () {
+        beforeEach(function () {
             this.relationship1 = { key: 'value1' };
             this.relationship2 = { key: 'value2' };
             this.relationship3 = { key: 'value3' };
@@ -292,7 +292,7 @@ describe('personProfileService', function() {
             };
         });
 
-        it('should not delete unpersisted models', function() {
+        it('should not delete unpersisted models', function () {
             personProfileService.deleteRelationships(
                 this.person,
                 this.relationships,
@@ -301,7 +301,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should delete persisted models', function() {
+        it('should delete persisted models', function () {
             this.person.id = 1;
             personProfileService.deleteRelationships(
                 this.person,
@@ -313,7 +313,7 @@ describe('personProfileService', function() {
 
         it(
             'should remove deleted models from the relationship',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 return personProfileService
                     .deleteRelationships(
@@ -321,7 +321,7 @@ describe('personProfileService', function() {
                         this.relationships,
                         'relationships',
                     )
-                    .then(function() {
+                    .then(function () {
                         expect(_this.person.relationships).toEqual([
                             _this.relationship3,
                         ]);
@@ -330,8 +330,8 @@ describe('personProfileService', function() {
         );
     });
 
-    describe('addAssignments', function() {
-        it('should not make a network request when adding assignments to an unpersisted person', function() {
+    describe('addAssignments', function () {
+        it('should not make a network request when adding assignments to an unpersisted person', function () {
             this.person.id = null;
             personProfileService.addAssignments(
                 this.person,
@@ -341,7 +341,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should save assignments locally when adding assignments to an unpersisted person', function() {
+        it('should save assignments locally when adding assignments to an unpersisted person', function () {
             this.person.id = null;
             personProfileService.addAssignments(
                 this.person,
@@ -349,7 +349,7 @@ describe('personProfileService', function() {
                 [{ id: 104 }, { id: 105 }],
             );
             var assignedToIds = _.chain(this.person.reverse_contact_assignments)
-                .filter(function(assignment) {
+                .filter(function (assignment) {
                     return assignment._placeHolder !== true;
                 })
                 .map('assigned_to.id')
@@ -357,7 +357,7 @@ describe('personProfileService', function() {
             expect(assignedToIds, [101, 102, 103, 104, 105]);
         });
 
-        it('should not make a network request when adding no assignments', function() {
+        it('should not make a network request when adding no assignments', function () {
             personProfileService.addAssignments(
                 this.person,
                 this.organizationId,
@@ -366,7 +366,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should make a network request when adding assigments', function() {
+        it('should make a network request when adding assigments', function () {
             personProfileService.addAssignments(
                 this.person,
                 this.organizationId,
@@ -404,12 +404,12 @@ describe('personProfileService', function() {
         });
     });
 
-    describe('removeAssignments', function() {
-        beforeEach(function() {
+    describe('removeAssignments', function () {
+        beforeEach(function () {
             this.removedPeople = [{ id: 101 }, { id: 103 }, { id: 104 }];
         });
 
-        it('should not make a network request when removing assignments from an unpersisted person', function() {
+        it('should not make a network request when removing assignments from an unpersisted person', function () {
             this.person.id = null;
             personProfileService.removeAssignments(
                 this.person,
@@ -418,7 +418,7 @@ describe('personProfileService', function() {
             expect(httpProxy.callHttp).not.toHaveBeenCalled();
         });
 
-        it('should make a network request for each removed assignment', function() {
+        it('should make a network request for each removed assignment', function () {
             personProfileService.removeAssignments(
                 this.person,
                 this.removedPeople,
@@ -448,11 +448,11 @@ describe('personProfileService', function() {
 
         it(
             'should remove deleted contact assignments',
-            asynchronous(function() {
+            asynchronous(function () {
                 var _this = this;
                 return personProfileService
                     .removeAssignments(this.person, this.removedPeople)
-                    .then(function() {
+                    .then(function () {
                         expect(
                             _.map(
                                 _this.person.reverse_contact_assignments,
@@ -464,8 +464,8 @@ describe('personProfileService', function() {
         );
     });
 
-    describe('formatAddress', function() {
-        it('should remove empty address lines', function() {
+    describe('formatAddress', function () {
+        it('should remove empty address lines', function () {
             expect(
                 personProfileService.formatAddress({
                     address1: '123 Main Street',
@@ -474,7 +474,7 @@ describe('personProfileService', function() {
             ).toEqual(['123 Main Street', 'Apt 1234']);
         });
 
-        it('should generate the region line', function() {
+        it('should generate the region line', function () {
             var tests = [
                 {
                     address: { city: 'Orlando', state: 'FL', zip: '32832' },
@@ -494,14 +494,14 @@ describe('personProfileService', function() {
                 { address: { zip: '32832' }, lines: ['32832'] },
                 { address: {}, lines: [] },
             ];
-            tests.forEach(function(test) {
+            tests.forEach(function (test) {
                 expect(
                     personProfileService.formatAddress(test.address),
                 ).toEqual(test.lines);
             });
         });
 
-        it('should hide non-US country lines', function() {
+        it('should hide non-US country lines', function () {
             expect(
                 personProfileService.formatAddress({ country: 'CA' }),
             ).toEqual(['CA']);

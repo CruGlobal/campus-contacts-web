@@ -56,10 +56,10 @@ function organizationContactImportStep1Controller($scope, $uibModal, $state) {
         );
     };
 
-    this.parseCsv = file => {
+    this.parseCsv = (file) => {
         Papa.parse(file, {
             skipEmptyLines: 'greedy',
-            complete: results => {
+            complete: (results) => {
                 $scope.$apply(() => {
                     if (results.errors.length) {
                         this.parseErrors = results.errors;
@@ -80,7 +80,7 @@ function organizationContactImportStep1Controller($scope, $uibModal, $state) {
                 windowClass: 'pivot_theme',
                 size: 'sm',
             })
-            .result.then(newSurvey => {
+            .result.then((newSurvey) => {
                 $state.go('app.ministries.ministry.survey.manage', {
                     surveyId: newSurvey.id,
                 });

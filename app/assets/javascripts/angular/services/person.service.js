@@ -11,7 +11,7 @@ function personService(
     // Convert an array of string ids into an array of options with the schema { id, i18n }
     // Used by personService.get*Options()
     function generateOptionsFromIds(ids, i18nPrefix) {
-        return ids.map(function(id) {
+        return ids.map(function (id) {
             return {
                 id: id,
                 i18n: i18nPrefix + '.' + id,
@@ -21,7 +21,7 @@ function personService(
 
     var personService = {
         // Return a new person model without any data
-        getNewPerson: function(orgId) {
+        getNewPerson: function (orgId) {
             var orgPermission = new JsonApiDataStore.Model(
                 'organizational_permission',
             );
@@ -58,10 +58,10 @@ function personService(
         },
 
         // Find and return a person's organizational permission for a particular organization
-        getOrgPermission: function(person, organizationId) {
+        getOrgPermission: function (person, organizationId) {
             return _.chain(person.organizational_permissions)
                 .find({ organization_id: organizationId })
-                .thru(function(orgPermission) {
+                .thru(function (orgPermission) {
                     if (orgPermission) {
                         orgPermission.permission_id = `${orgPermission.permission_id}`;
                         return orgPermission;
@@ -85,7 +85,7 @@ function personService(
         },
 
         // Return a boolean indicating whether a person in a contact in a particular organization
-        isContact: function(person, organizationId) {
+        isContact: function (person, organizationId) {
             var orgPermission = personService.getOrgPermission(
                 person,
                 organizationId,
@@ -96,14 +96,14 @@ function personService(
                 : false;
         },
 
-        getOrgLabels: function(person, organizationId) {
+        getOrgLabels: function (person, organizationId) {
             return _.filter(person.organizational_labels, {
                 organization_id: organizationId,
             });
         },
 
         // Return the follow-up status of the person in a particular organization
-        getFollowupStatus: function(person, organizationId) {
+        getFollowupStatus: function (person, organizationId) {
             var orgPermission = personService.getOrgPermission(
                 person,
                 organizationId,
@@ -111,7 +111,7 @@ function personService(
             return orgPermission && orgPermission.followup_status;
         },
 
-        getLastSurvey: person => {
+        getLastSurvey: (person) => {
             if (!person.answer_sheets) return null;
 
             return person.answer_sheets.reduce((acc, s) => {
@@ -125,7 +125,7 @@ function personService(
         },
 
         // Return the Cru status of the person in a particular organization
-        getCruStatus: function(person, organizationId) {
+        getCruStatus: function (person, organizationId) {
             var orgPermission = personService.getOrgPermission(
                 person,
                 organizationId,
@@ -134,7 +134,7 @@ function personService(
         },
 
         // Given a person in a particular organization, return the people that that person is assigned to
-        getAssignedTo: function(person, organizationId) {
+        getAssignedTo: function (person, organizationId) {
             return _.chain(person.reverse_contact_assignments)
                 .filter(['organization.id', organizationId])
                 .sortBy('created_at')
@@ -143,7 +143,7 @@ function personService(
         },
 
         // Return the person's primary phone number
-        getPhoneNumber: function(person) {
+        getPhoneNumber: function (person) {
             return _.chain(person.phone_numbers)
                 .find({ primary: true })
                 .defaultTo(null)
@@ -151,7 +151,7 @@ function personService(
         },
 
         // Return the person's primary email address
-        getEmailAddress: function(person) {
+        getEmailAddress: function (person) {
             return _.chain(person.email_addresses)
                 .find({ primary: true })
                 .defaultTo(null)
@@ -159,7 +159,7 @@ function personService(
         },
 
         // Return the person's group memberships
-        getGroupMemberships: function(person, organizationId) {
+        getGroupMemberships: function (person, organizationId) {
             return _.filter(person.group_memberships, [
                 'group.organization.id',
                 organizationId,
@@ -170,7 +170,7 @@ function personService(
         // Each option has an "id" property that is the database value and an "i18n" value that is the label path
 
         // Return an array of followup status options
-        getFollowupStatusOptions: function() {
+        getFollowupStatusOptions: function () {
             return generateOptionsFromIds(
                 [
                     'attempted_contact',
@@ -184,7 +184,7 @@ function personService(
         },
 
         // Return an array of Cru status options
-        getCruStatusOptions: function() {
+        getCruStatusOptions: function () {
             return generateOptionsFromIds(
                 [
                     'none',
@@ -199,7 +199,7 @@ function personService(
         },
 
         // Return an array of permission options
-        getPermissionOptions: function() {
+        getPermissionOptions: function () {
             return [
                 { id: permissionService.adminId, i18n: 'permissions.admin' },
                 { id: permissionService.userId, i18n: 'permissions.user' },
@@ -211,7 +211,7 @@ function personService(
         },
 
         // Return an array of enrollment options
-        getEnrollmentOptions: function() {
+        getEnrollmentOptions: function () {
             return generateOptionsFromIds(
                 [
                     'not_student',
@@ -225,7 +225,7 @@ function personService(
         },
 
         // Return an array of gender options
-        getGenderOptions: function() {
+        getGenderOptions: function () {
             return [
                 { id: 'Male', i18n: 'general.male' },
                 { id: 'Female', i18n: 'general.female' },
@@ -233,7 +233,7 @@ function personService(
         },
 
         // Archive the person in a particular organization
-        archivePerson: function(person, organizationId) {
+        archivePerson: function (person, organizationId) {
             var organizationalPermission = personService.getOrgPermission(
                 person,
                 organizationId,
@@ -257,7 +257,7 @@ function personService(
                 .put(modelsService.getModelUrl(person), updateJson, {
                     errorMessage: 'error.messages.person.archive_person',
                 })
-                .then(function() {
+                .then(function () {
                     // Remove the archived person from the organization's list of people
                     _.remove(organizationalPermission.organization.people, {
                         id: person.id,
@@ -269,7 +269,7 @@ function personService(
         // particular person
         // If organization is null, return all contact assignments, otherwise filter the returned assignments to
         // those related to a particular organization
-        getContactAssignments: function(
+        getContactAssignments: function (
             person,
             organizationId,
             additionalIncludes,
@@ -301,7 +301,7 @@ function personService(
                             'error.messages.person.get_contact_assignments',
                     },
                 )
-                .then(function(response) {
+                .then(function (response) {
                     const assignedPeople = response.data;
                     try {
                         if (assignedPeople.length >= pageLimit) {
@@ -368,10 +368,10 @@ function personService(
                     // Start with the array of assigned people, map it to an array of contact assignment arrays,
                     // then flatten it into a one-dimensional array
                     return _.flatten(
-                        assignedPeople.map(function(assignedPerson) {
+                        assignedPeople.map(function (assignedPerson) {
                             // Include only the relevant contact assignments
                             return assignedPerson.reverse_contact_assignments.filter(
-                                function(assignment) {
+                                function (assignment) {
                                     return isRelevantAssignment(
                                         assignment,
                                         assignedPerson,

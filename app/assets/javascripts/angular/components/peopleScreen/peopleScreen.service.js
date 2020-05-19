@@ -16,7 +16,7 @@ function peopleScreenService(
 ) {
     const peopleScreenService = {
         // Load all of the people that a list of people are assigned to
-        loadAssignedTos: function(people, orgId) {
+        loadAssignedTos: function (people, orgId) {
             // Find all of the people that any of those people are assigned to
             const assignedTos = _.chain(people)
                 .map('reverse_contact_assignments')
@@ -48,7 +48,7 @@ function peopleScreenService(
                   );
         },
         // Load an organization's people
-        loadMoreOrgPeople: function(
+        loadMoreOrgPeople: function (
             orgId,
             filters,
             order,
@@ -68,14 +68,14 @@ function peopleScreenService(
                     requestParams,
                     surveyId ? peopleScreenService.transformData : undefined,
                 )
-                .then(function(resp) {
+                .then(function (resp) {
                     // Load the assignments in parallel
                     peopleScreenService.loadAssignedTos(resp.nextBatch, orgId);
                     return resp;
                 });
         },
 
-        loadOrgPeopleCount: function(orgId) {
+        loadOrgPeopleCount: function (orgId) {
             const requestParams = peopleScreenService.buildListParams(orgId);
             requestParams['page[limit]'] = 0;
 
@@ -88,7 +88,7 @@ function peopleScreenService(
                             'error.messages.organization_overview_people.load_org_people_count',
                     },
                 )
-                .then(function(resp) {
+                .then(function (resp) {
                     return resp.meta.total;
                 });
         },
@@ -184,9 +184,9 @@ function peopleScreenService(
 
         // Convert an array of field order entries in the format { field, direction: 'asc'|'desc' into the order
         // string expected by he API
-        buildOrderString: function(order) {
+        buildOrderString: function (order) {
             return order
-                .map(function(orderEntry) {
+                .map(function (orderEntry) {
                     return `${
                         orderEntry.direction === 'desc' ? '-' : ''
                     }${orderEntry.field}`;
@@ -194,13 +194,13 @@ function peopleScreenService(
                 .join(',');
         },
 
-        transformData: params => data => {
+        transformData: (params) => (data) => {
             // We MUST mutate this object here to keep Angular watchers watching the JsonApiDataStore for changes which is stupid. Everything should work with immutable data but it wasn't implemented that way... An example where creating a new object broke something is updating a contact assignment on the peopleScreen.
             return Object.assign(data, {
                 answers: (
                     _.findLast(
                         data.answer_sheets,
-                        sheet =>
+                        (sheet) =>
                             sheet.survey.id ===
                             params['filters[answer_sheets][survey_ids]'],
                     ) || { answers: [] }
@@ -218,7 +218,7 @@ function peopleScreenService(
         },
 
         // Export the selected people
-        exportPeople: function(orgId, selection, order, surveyId) {
+        exportPeople: function (orgId, selection, order, surveyId) {
             const filterParams = peopleScreenService.buildListParams(
                 orgId,
                 selection.filters,
@@ -235,7 +235,7 @@ function peopleScreenService(
                 format: 'csv',
             });
 
-            const queryString = _.map(params, function(value, key) {
+            const queryString = _.map(params, function (value, key) {
                 return (
                     encodeURIComponent(key) + '=' + encodeURIComponent(value)
                 );
@@ -251,12 +251,12 @@ function peopleScreenService(
         },
 
         // Archive the selected people
-        archivePeople: function(selection) {
+        archivePeople: function (selection) {
             return massEditService.applyChanges(selection, { archived: true });
         },
 
         // Delete the selected people
-        deletePeople: function(selection) {
+        deletePeople: function (selection) {
             return massEditService.applyChanges(selection, { delete: true });
         },
     };

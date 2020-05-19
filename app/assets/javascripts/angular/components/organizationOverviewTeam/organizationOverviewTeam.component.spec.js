@@ -1,4 +1,4 @@
-describe('organizationOverviewTeam component', function() {
+describe('organizationOverviewTeam component', function () {
     var $ctrl,
         $q,
         $rootScope,
@@ -6,7 +6,7 @@ describe('organizationOverviewTeam component', function() {
         reportsService,
         periodService;
 
-    beforeEach(inject(function(
+    beforeEach(inject(function (
         $componentController,
         _$q_,
         _$timeout_,
@@ -40,8 +40,8 @@ describe('organizationOverviewTeam component', function() {
         $rootScope = _$rootScope_;
     }));
 
-    describe('$onInit', function() {
-        it('should reload the team reports when the period changes', function() {
+    describe('$onInit', function () {
+        it('should reload the team reports when the period changes', function () {
             $ctrl.$onInit();
 
             expect(periodService.subscribe).toHaveBeenCalledWith(
@@ -62,8 +62,8 @@ describe('organizationOverviewTeam component', function() {
         });
     });
 
-    describe('loadTeamPage', function() {
-        it('should load the people on the team', function() {
+    describe('loadTeamPage', function () {
+        it('should load the people on the team', function () {
             organizationOverviewTeamService.loadOrgTeam.and.returnValue(
                 $q.resolve({
                     list: 'teamList',
