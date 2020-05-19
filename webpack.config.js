@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -42,7 +41,7 @@ module.exports = (env = {}) => {
             filename: '[name].[chunkhash].js',
             chunkFilename: '[name].[chunkhash].js',
             path: path.resolve(__dirname, 'dist'),
-            devtoolModuleFilenameTemplate: info =>
+            devtoolModuleFilenameTemplate: (info) =>
                 info.resourcePath.replace(/^\.\//, ''),
             crossOriginLoading: 'anonymous',
         },
@@ -73,9 +72,6 @@ module.exports = (env = {}) => {
             ...(isBuild
                 ? [
                       new webpack.NamedModulesPlugin(),
-                      new InlineManifestWebpackPlugin({
-                          name: 'webpackManifest',
-                      }),
                       new FaviconsWebpackPlugin({
                           logo: './app/assets/images/favicon.png',
                           favicons: {
@@ -88,13 +84,15 @@ module.exports = (env = {}) => {
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
                       }),
-                      new CopyPlugin([
-                          { from: 'src/.well-known', to: '.well-known' },
-                          {
-                              from:
-                                  'src/.well-known/apple-app-site-association',
-                          },
-                      ]),
+                      new CopyPlugin({
+                          patterns: [
+                              { from: 'src/.well-known', to: '.well-known' },
+                              {
+                                  from:
+                                      'src/.well-known/apple-app-site-association',
+                              },
+                          ],
+                      }),
                       new WorkboxPlugin.GenerateSW({
                           clientsClaim: true,
                           skipWaiting: true,
