@@ -162,6 +162,7 @@ function organizationService(
                 null,
                 {
                     errorMessage: 'error.messages.organization.delete',
+                    showApiMessage: true,
                 },
             );
         },
