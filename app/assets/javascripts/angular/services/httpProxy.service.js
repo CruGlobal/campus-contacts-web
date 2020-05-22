@@ -97,7 +97,9 @@ function proxyService(
                         }
                     }
 
-                    err.message = tFilter(config.errorMessage);
+                    err.message =
+                        (config.showApiMessage && data?.errors?.[0]?.detail) ||
+                        tFilter(config.errorMessage);
                     throw err;
                 });
         }
