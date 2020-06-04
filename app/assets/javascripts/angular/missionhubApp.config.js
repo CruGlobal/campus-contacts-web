@@ -1,6 +1,36 @@
 angular
     .module('missionhubApp')
     .config((envServiceProvider) => {
+        const environmentVars = {
+            development: {
+                apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                theKeyUrl: 'https://thekey.me/cas',
+                theKeyClientId: '4921314596573158029',
+                facebookAppId: '233292170040365',
+                surveyLinkPrefix: 'http://localhost:8080/s/',
+                googleAnalytics: 'UA-XXXXXX-XX',
+                getMissionHub: 'http://localhost:8080',
+            },
+            staging: {
+                apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                theKeyUrl: 'https://thekey.me/cas',
+                theKeyClientId: '8138475243408077361',
+                facebookAppId: '233292170040365',
+                surveyLinkPrefix: 'https://stage.mhub.cc/s/',
+                googleAnalytics: 'UA-XXXXXX-XX',
+                getMissionHub: 'https://stage.missionhub.com',
+            },
+            production: {
+                apiUrl: 'https://api.missionhub.com/apis/v4',
+                theKeyUrl: 'https://thekey.me/cas',
+                theKeyClientId: '8480288430352167964',
+                facebookAppId: '233292170040365',
+                surveyLinkPrefix: 'https://mhub.cc/s/',
+                googleAnalytics: 'UA-325725-21',
+                getMissionHub: 'https://get.missionhub.com',
+            },
+        };
+
         envServiceProvider.config({
             domains: {
                 development: ['localhost', 'missionhub.local'],
@@ -11,40 +41,33 @@ angular
                     '*.netlify.com',
                     '*.netlify.app',
                 ],
+                stagingCampusContacts: [
+                    '*.campuscontacts.cru.org',
+                    '*.ccontacts.app',
+                    '*.d11caubtn1mk5o.amplifyapp.com',
+                ],
                 production: [
                     'missionhub.com',
                     'www.missionhub.com',
                     'mhub.cc',
                     'www.mhub.cc',
                 ],
+                productionCampusContacts: [
+                    'campuscontacts.cru.org',
+                    'ccontacts.app',
+                ],
             },
             vars: {
-                development: {
-                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
-                    theKeyUrl: 'https://thekey.me/cas',
-                    theKeyClientId: '4921314596573158029',
-                    facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'http://localhost:8080/s/',
-                    googleAnalytics: 'UA-XXXXXX-XX',
-                    getMissionHub: 'http://localhost:8080',
+                ...environmentVars,
+                stagingCampusContacts: {
+                    ...environmentVars.staging,
+                    apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
+                    surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
                 },
-                staging: {
-                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
-                    theKeyUrl: 'https://thekey.me/cas',
-                    theKeyClientId: '8138475243408077361',
-                    facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
-                    googleAnalytics: 'UA-XXXXXX-XX',
-                    getMissionHub: 'https://stage.missionhub.com',
-                },
-                production: {
-                    apiUrl: 'https://api.missionhub.com/apis/v4',
-                    theKeyUrl: 'https://thekey.me/cas',
-                    theKeyClientId: '8480288430352167964',
-                    facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'https://mhub.cc/s/',
-                    googleAnalytics: 'UA-325725-21',
-                    getMissionHub: 'https://get.missionhub.com',
+                productionCampusContacts: {
+                    ...environmentVars.production,
+                    apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
+                    surveyLinkPrefix: 'https://ccontacts.app/s/',
                 },
             },
         });

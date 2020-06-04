@@ -55,7 +55,7 @@
             <div
                 class="tab pivot-white"
                 ng-class="{active: $ctrl.isInsightsTab()}"
-                ng-if="!$ctrl.envService.is('production')"
+                ng-if="!$ctrl.(envService.is('production') && !$ctrl.envService.is('productionCampusContacts'))"
                 ng-click="$ctrl.orgNavOpen = false"
             >
                 <a
