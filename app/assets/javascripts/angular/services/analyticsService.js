@@ -96,9 +96,11 @@ function analyticsService(
     };
 
     const loadAdobeScript = () => {
-        const url = envService.is('production')
-            ? '//assets.adobedtm.com/launch-EN541f7d1d75de45f78e4e3881d6264bae.min.js'
-            : '//assets.adobedtm.com/launch-ENe4ca7f50fed34edd995d7c6294e6b509-development.min.js';
+        const url =
+            envService.is('production') ||
+            envService.is('productionCampusContacts')
+                ? '//assets.adobedtm.com/launch-EN541f7d1d75de45f78e4e3881d6264bae.min.js'
+                : '//assets.adobedtm.com/launch-ENe4ca7f50fed34edd995d7c6294e6b509-development.min.js';
 
         return loadScript(url, 'adobe-analytics');
     };

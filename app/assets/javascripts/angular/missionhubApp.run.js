@@ -30,7 +30,8 @@ angular
 
         analyticsService.init();
 
-        envService.is('production') &&
+        (envService.is('production') ||
+            envService.is('productionCampusContacts')) &&
             $location.absUrl().match(/(www\.)?missionhub\.com\/?$/) &&
             !authenticationService.isTokenValid() &&
             ($window.location.href = envService.read('getMissionHub'));

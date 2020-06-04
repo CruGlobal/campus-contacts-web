@@ -13,11 +13,11 @@
         />
 
         <script>
-            (function(i, s, o, g, r, a, m) {
+            (function (i, s, o, g, r, a, m) {
                 i['GoogleAnalyticsObject'] = r;
                 (i[r] =
                     i[r] ||
-                    function() {
+                    function () {
                         (i[r].q = i[r].q || []).push(arguments);
                     }),
                     (i[r].l = 1 * new Date());
@@ -48,10 +48,10 @@
         <script>
             // Disable the help scout beacon if the user is taking a survey
             if (
-                window.location.origin !== 'https://stage.mhub.cc' &&
-                window.location.origin !== 'https://mhub.cc'
+                !window.location.origin.includes('mhub.cc') &&
+                !window.location.origin.includes('ccontacts.app')
             ) {
-                !(function(e, t, n) {
+                !(function (e, t, n) {
                     function a() {
                         var e = t.getElementsByTagName('script')[0],
                             n = t.createElement('script');
@@ -61,7 +61,7 @@
                             e.parentNode.insertBefore(n, e);
                     }
                     if (
-                        ((e.Beacon = n = function(t, n, a) {
+                        ((e.Beacon = n = function (t, n, a) {
                             e.Beacon.readyQueue.push({
                                 method: t,
                                 options: n,
@@ -75,7 +75,7 @@
                     e.attachEvent
                         ? e.attachEvent('onload', a)
                         : e.addEventListener('load', a, !1);
-                })(window, document, window.Beacon || function() {});
+                })(window, document, window.Beacon || function () {});
                 window.Beacon('init', '8e1f984b-c505-4d96-b8cb-58f773b7883c');
             }
         </script>
