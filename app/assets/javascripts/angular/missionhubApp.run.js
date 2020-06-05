@@ -40,7 +40,10 @@ angular
             if (transition.to().data && transition.to().data.isPublic)
                 return true;
 
-            if ($location.host().includes('mhub.cc')) {
+            if (
+                $location.host().includes('mhub.cc') ||
+                $location.host().includes('ccontacts.app')
+            ) {
                 $window.location.href = envService.read('getMissionHub');
                 return false;
             }
