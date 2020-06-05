@@ -144,9 +144,9 @@ export default {
                 dismiss: 'Tap to dismiss',
             },
             suggestIosAddToHomeScreen: {
-                title: 'Add MissionHub',
+                title: 'Add Campus Contacts',
                 description:
-                    "Add MissionHub on your home screen for quick access when you're on the go.",
+                    "Add Campus Contacts on your home screen for quick access when you're on the go.",
                 actionPart1: 'Just tap',
                 actionPart2: 'then ‘Add to Home Screen’',
             },
@@ -455,8 +455,8 @@ export default {
             inviteLinkExpiredTitle:
                 'Sorry, the invite link has expired or is no longer valid.',
             inviteLinkExpiredMessage:
-                'Please try again. If the problem persists contact MissionHub <a href="mailto:support@missionhub.com">support</a>.',
-            continueAfterError: 'Continue to MissionHub',
+                'Please try again. If the problem persists contact Campus Contacts <a href="mailto:support@missionhub.com">support</a>.',
+            continueAfterError: 'Continue to Campus Contacts',
         },
         impersonation: {
             loading: 'Please wait...',
@@ -464,7 +464,7 @@ export default {
         authLanding: {
             title: 'SUCCESS!',
             thanksForVerifying:
-                'Hi, so it is you! Thanks for verifying your new MissionHub account.',
+                'Hi, so it is you! Thanks for verifying your new Campus Contacts account.',
             allSet: "You're all set to Sign In on your mobile app.",
             excitedForYouToGrow:
                 "We're excited for you to grow closer to God by helping others experience him.",
@@ -520,7 +520,7 @@ export default {
                     part1:
                         "People are messy — and so are databases. Every year your database gets clogged up with people who may have come to a meeting once upon a time, or filled out a survey once, but never got involved and don't intend to. If you are a campus ministry, you will also have a good number of people who graduate from your ministry each year. How do you get your database trimmed up and ready for the fall?",
                     part2:
-                        ' An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and MissionHub will again be a well-oiled machine, ready to help you transform the world!',
+                        ' An annual clean up can help! Simply walk through one of the steps below once a year (or however often you want) and Campus Contacts will again be a well-oiled machine, ready to help you transform the world!',
                 },
 
                 archive_alumni: 'Archive Alumni',
@@ -600,22 +600,22 @@ export default {
             surveys: {
                 header: 'Surveys',
                 typeform: {
-                    header: 'MissionHub now integrates with Typeform!',
+                    header: 'Campus Contacts now integrates with Typeform!',
                     subheader:
-                        'Get more creative with your surveys using Typeform while driving your ministry forward with MissionHub.',
+                        'Get more creative with your surveys using Typeform while driving your ministry forward with Campus Contacts.',
                     step1:
                         'Sign up for an account at <a href="https://typeform.com" target="_blank">typeform.com</a>.',
                     step2:
                         ' Create a new form there in Typeform - be sure you have a question on the new form asking for their "first name". Then go to the "Connect" tab followed by the "Webhooks" sub tab.',
                     step3:
-                        'Copy the MissionHub URL below into the Destination URL field on Typeform.',
+                        'Copy the Campus Contacts URL below into the Destination URL field on Typeform.',
                     step4:
-                        'Click "test webhook". You should see a green checkmark under recent requests. A new survey with a test submission should be visible in MissionHub.',
+                        'Click "test webhook". You should see a green checkmark under recent requests. A new survey with a test submission should be visible in Campus Contacts.',
                     step5:
                         'Next to the webhooks title click the slider to enable webhooks.',
                     conclusion:
-                        'Future form submissions for this survey will be sent to MissionHub automatically.',
-                    missionHubUrl: 'MissionHub URL',
+                        'Future form submissions for this survey will be sent to Campus Contacts automatically.',
+                    missionHubUrl: 'Campus Contacts URL',
                     copy: 'Copy URL',
                     copied: 'URL copied to clipboard',
                 },
@@ -633,7 +633,7 @@ export default {
         nav: {
             about: {
                 copyright: 'Copyright',
-                title: 'About MissionHub',
+                title: 'About Campus Contacts',
             },
             cleanup: 'Organization Cleanup',
             contacts: 'Contacts',
@@ -672,7 +672,7 @@ export default {
                 'This is how you want to identify this specific ministry. Some people use church, group, or team.',
             show_sub: 'Show Sub-Ministries',
             sub_help:
-                'Checking this box allows any of the sub-ministries to appear for any involved team member when navigating MissionHub.',
+                'Checking this box allows any of the sub-ministries to appear for any involved team member when navigating Campus Contacts.',
             none_found: 'No ministries found',
             deleteConfirmModal: {
                 title: 'Are you sure you want to delete "{{org_name}}"?',
@@ -762,14 +762,14 @@ export default {
             agreements: {
                 accept: 'Accept',
                 decline: 'Decline',
-                button: 'Continue to the MissionHub App',
+                button: 'Continue to the Campus Contacts App',
                 accepted: {
-                    message: 'Thank you! You may now use MissionHub.',
+                    message: 'Thank you! You may now use Campus Contacts.',
                 },
                 declined: {
                     title: 'You have declined!',
                     mainBlurb:
-                        'Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to MissionHub. Please talk this over with your local staff and student leadership.',
+                        'Admins will need to accept the Code of Conduct and Statement of Faith before proceeding to Campus Contacts. Please talk this over with your local staff and student leadership.',
                     requestAccessBlurb:
                         'You will need to request access again after having this discussion.',
                 },
@@ -889,12 +889,12 @@ export default {
             image_delete_confirm: 'Are you sure you want to delete this image?',
             validate_phone_number: 'Validate Phone Number',
             validate_phone_number_hint:
-                'If the person filling out your survey provides a phone number MissionHub can send them an SMS with a short link for them to validate their phone number.',
+                'If the person filling out your survey provides a phone number Campus Contacts can send them an SMS with a short link for them to validate their phone number.',
             validation_message: 'Validation Message',
             validation_message_hint:
                 'This message will be sent via SMS with a short link.',
             validation_message_help:
-                'You can use the %{first_name} template and MissionHub will automatically substitute their first name in place. A short link will be appended to this message they will need to click on!',
+                'You can use the %{first_name} template and Campus Contacts will automatically substitute their first name in place. A short link will be appended to this message they will need to click on!',
             validation_success_message: 'Validation Success Message',
             validation_success_message_hint:
                 'When they visit the short link in the SMS this message will be shown.',
@@ -1075,7 +1075,7 @@ export default {
                     "If you'd like to change any numbers previously submitted, please do so in Infobase.",
             },
             interactionsHeading:
-                'The pre-filled numbers below are a compilation of all activity in MissionHub within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
+                'The pre-filled numbers below are a compilation of all activity in Campus Contacts within the date range specified. Any activity recorded between the end date and today will not be reflected below.',
             labelsHeading:
                 'The pre-filled label indicators below display the most recently entered information. If these numbers have changed, feel free to update them below. These numbers will appear consistently week-to-week.',
             errorLoadingIndicators:

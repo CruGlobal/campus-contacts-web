@@ -9,7 +9,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
-const CopyPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
@@ -73,9 +72,9 @@ module.exports = (env = {}) => {
                 ? [
                       new webpack.NamedModulesPlugin(),
                       new FaviconsWebpackPlugin({
-                          logo: './app/assets/images/favicon.png',
+                          logo: './app/assets/images/favicon.svg',
                           favicons: {
-                              appName: 'MissionHub',
+                              appName: 'Campus Contacts',
                               developerName: 'Cru',
                               theme_color: '#007398',
                               background: '#3cc8e6',
@@ -83,15 +82,6 @@ module.exports = (env = {}) => {
                       }),
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
-                      }),
-                      new CopyPlugin({
-                          patterns: [
-                              { from: 'src/.well-known', to: '.well-known' },
-                              {
-                                  from:
-                                      'src/.well-known/apple-app-site-association',
-                              },
-                          ],
                       }),
                       new WorkboxPlugin.GenerateSW({
                           clientsClaim: true,
