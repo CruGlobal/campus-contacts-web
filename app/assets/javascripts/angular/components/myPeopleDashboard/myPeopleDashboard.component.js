@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import moment from 'moment';
 
-import favicon from '../../../../images/favicon.png';
+import favicon from '../../../../images/favicon.svg';
 import iosShare from '../../../../images/icons/ios-share.svg';
 
 import template from './myPeopleDashboard.html';

@@ -1,4 +1,5 @@
 import searchIcon from '../../assets/images/icons/searchIcon.svg';
+import campusContactsLogo from '../../assets/images/favicon.svg';
 
 import template from './navHeader.html';
 import './navHeader.scss';
@@ -21,6 +22,7 @@ function navHeaderController(
     this.loggedInPerson = loggedInPerson;
     this.state = state;
     this.searchIcon = searchIcon;
+    this.campusContactsLogo = campusContactsLogo;
 
     this.logout = () => {
         authenticationService.destroyTheKeyAccess();

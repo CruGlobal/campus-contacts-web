@@ -25,7 +25,12 @@
             >
         </li>
     </ul>
-    <a href="/" class="logo w-20-ns"></a>
+    <a href="/" class="flex justify-center items-center w-20-ns">
+        <img ng-src="{{ $ctrl.campusContactsLogo }}" height="30" class="mr2" />
+        <span class="pivot-white f5 ttu tracked dn di-l nowrap">
+            Campus Contacts
+        </span>
+    </a>
     <span
         class="flex w-25 items-center justify-end content-end fade w-40-ns"
         ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"

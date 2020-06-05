@@ -34,7 +34,7 @@ function analyticsService(
         $window.digitalData = {
             page: {
                 pageInfo: {
-                    pageName: 'MissionHub',
+                    pageName: 'Campus Contacts',
                 },
             },
         };
@@ -44,7 +44,7 @@ function analyticsService(
         $window.digitalData = {
             page: {
                 pageInfo: {
-                    pageName: 'MissionHub',
+                    pageName: 'Campus Contacts',
                 },
             },
             ...(ssoUid
