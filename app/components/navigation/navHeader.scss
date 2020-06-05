@@ -8,6 +8,10 @@ nav-header {
     .main-menu {
         height: 50px;
 
+        .logo-link:hover {
+            text-decoration: none;
+        }
+
         > ul:first-of-type {
             display: inline-flex;
             @media (max-width: map-get($grid-breakpoints, md)) {
