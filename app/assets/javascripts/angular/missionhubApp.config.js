@@ -45,7 +45,7 @@ angular
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     theKeyClientId: '8138475243408077361',
                     surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
-                    getMissionHub: 'https://stage.missionhub.com',
+                    getMissionHub: 'https://campuscontacts.cru.org',
                 },
                 production: {
                     apiUrl: 'https://api.missionhub.com/apis/v4',
