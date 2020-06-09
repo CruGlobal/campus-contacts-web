@@ -59,7 +59,7 @@ angular
                     theKeyClientId: '8480288430352167964',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',
-                    getMissionHub: 'https://get.missionhub.com',
+                    getMissionHub: 'https://campuscontacts.cru.org',
                 },
                 defaults: {
                     theKeyUrl: 'https://thekey.me/cas',
