@@ -7,10 +7,6 @@ app {
     flex-direction: column;
     justify-content: space-between;
     background: #f2f2f2;
-    background-image: url(background-left.png), url(background-right.png);
-    background-position: left 100px, right 120px;
-    background-repeat: repeat-y, no-repeat;
-    background-attachment: fixed, fixed;
 
     > header {
         height: 100%;
