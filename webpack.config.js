@@ -78,6 +78,12 @@ module.exports = (env = {}) => {
                               developerName: 'Cru',
                               theme_color: '#007398',
                               background: '#FFFFFF',
+                              icons: {
+                                  appleIcon: { offset: 10 }, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                                  appleStartup: { offset: 10 }, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                                  coast: { offset: 10 }, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                                  windows: { offset: 10 }, // Create Windows 8 tile icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                              },
                           },
                       }),
                       new SriPlugin({
