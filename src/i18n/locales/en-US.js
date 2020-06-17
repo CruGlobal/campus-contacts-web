@@ -455,7 +455,7 @@ export default {
             inviteLinkExpiredTitle:
                 'Sorry, the invite link has expired or is no longer valid.',
             inviteLinkExpiredMessage:
-                'Please try again. If the problem persists contact Campus Contacts <a href="mailto:support@missionhub.com">support</a>.',
+                'Please try again. If the problem persists contact Campus Contacts <a href="mailto:help.campuscontacts@cru.org">support</a>.',
             continueAfterError: 'Continue to Campus Contacts',
         },
         impersonation: {
@@ -1171,7 +1171,7 @@ export default {
         errorModal: {
             title: 'Something went wrong…',
             description:
-                'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact support@missonhub.com.',
+                'There was an error connecting to Infobase. Please try again. If you receive this message multiple times, please contact help.campuscontacts@cru.org.',
         },
     },
     insights: {
