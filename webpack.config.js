@@ -96,7 +96,6 @@ module.exports = (env = {}) => {
                       new WorkboxPlugin.GenerateSW({
                           clientsClaim: true,
                           skipWaiting: true,
-                          navigateFallback: '/index.html',
                       }),
                   ]
                 : []),
