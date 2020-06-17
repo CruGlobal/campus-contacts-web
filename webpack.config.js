@@ -77,7 +77,7 @@ module.exports = (env = {}) => {
                               appName: 'Campus Contacts',
                               developerName: 'Cru',
                               theme_color: '#007398',
-                              background: '#3cc8e6',
+                              background: '#FFFFFF',
                           },
                       }),
                       new SriPlugin({
