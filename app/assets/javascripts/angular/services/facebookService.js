@@ -8,24 +8,24 @@ function facebookService(authenticationService, envService) {
                 status: true,
                 cookie: true,
                 xfbml: true,
-                version: 'v2.4',
+                version: 'v7.0',
             });
         },
         loadSDK: () => {
             return function (d) {
                 const id = 'facebook-jssdk';
-                const ref = d.getElementsByTagName('script')[0];
+                const fjs = d.getElementsByTagName('script')[0];
 
                 if (d.getElementById(id)) {
                     return;
                 }
 
-                let js = d.createElement('script');
+                const js = d.createElement('script');
                 js.id = id;
                 js.async = true;
-                js.src = '//connect.facebook.net/en_US/sdk.js';
+                js.src = 'https://connect.facebook.net/en_US/sdk.js';
 
-                ref.parentNode.insertBefore(js, ref);
+                fjs.parentNode.insertBefore(js, fjs);
             };
         },
         signOut: () => {
