@@ -30,26 +30,30 @@ angular
             },
             vars: {
                 development: {
-                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     theKeyClientId: '4921314596573158029',
+                    facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
                     getMissionHub: 'http://localhost:8080',
                 },
                 staging: {
                     apiUrl: 'https://api-stage.missionhub.com/apis/v4',
                     theKeyClientId: '8138475243408077361',
+                    facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://stage.mhub.cc/s/',
                     getMissionHub: 'https://stage.missionhub.com',
                 },
                 stagingCampusContacts: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     theKeyClientId: '8138475243408077361',
+                    facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
                     getMissionHub: 'https://stage.campuscontacts.cru.org',
                 },
                 production: {
                     apiUrl: 'https://api.missionhub.com/apis/v4',
                     theKeyClientId: '8480288430352167964',
+                    facebookAppId: '233292170040365',
                     surveyLinkPrefix: 'https://mhub.cc/s/',
                     googleAnalytics: 'UA-325725-21',
                     getMissionHub: 'https://get.missionhub.com',
@@ -57,13 +61,13 @@ angular
                 productionCampusContacts: {
                     apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
                     theKeyClientId: '8480288430352167964',
+                    facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',
                     getMissionHub: 'https://campuscontacts.cru.org',
                 },
                 defaults: {
                     theKeyUrl: 'https://thekey.me/cas',
-                    facebookAppId: '233292170040365',
                     googleAnalytics: 'UA-XXXXXX-XX',
                 },
             },
