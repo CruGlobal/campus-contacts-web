@@ -20,12 +20,13 @@ angular
                     'new.missionhub.com',
                     '*.netlify.com',
                     '*.netlify.app',
+                    '*.d11caubtn1mk5o.amplifyapp.com',
                 ],
                 stagingCampusContacts: [
                     // These wildcards need to be the last domains so they don't override matches above
                     '*.campuscontacts.cru.org',
                     '*.ccontacts.app',
-                    '*.d11caubtn1mk5o.amplifyapp.com',
+                    '*.d23um2gb8xlk6n.amplifyapp.com',
                 ],
             },
             vars: {
