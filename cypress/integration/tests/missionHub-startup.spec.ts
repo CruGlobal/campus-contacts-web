@@ -2,7 +2,7 @@
 // any changes to this test should be made to the datadog synthetic test as well.
 describe('Starting the Application', () => {
     it('should load the application', () => {
-        cy.visit('/sign-in');
+        cy.visit('/sign-in-test');
     });
 });
 
@@ -19,7 +19,7 @@ describe('Href should link to the key', () => {
     it('Should have an href directing to the key for sign in', () => {
         cy.get('[cy-test-id="loginWithEmailButton"]')
             .should('have.attr', 'ng-href')
-            .then(href => {
+            .then((href) => {
                 const keyUrl = href;
                 expect(keyUrl).to.contain(
                     'https://thekey.me/cas/login?response_type=token&scope=fullticket&client_id=',

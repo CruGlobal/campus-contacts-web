@@ -268,9 +268,17 @@ angular
                 },
             })
             .state({
-                name: 'app.signIn',
-                url: '/sign-in?previousUri',
+                name: 'app.signInTest',
+                url: '/sign-in-test?previousUri',
                 component: 'signIn',
+                data: {
+                    isPublic: true,
+                },
+            })
+            .state({
+                name: 'app.signIn',
+                url: '/sign-in',
+                component: 'campusContactsLanding',
                 data: {
                     isPublic: true,
                 },
