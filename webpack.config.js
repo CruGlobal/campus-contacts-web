@@ -87,9 +87,13 @@ module.exports = (env = {}) => {
                       new CopyPlugin({
                           patterns: [
                               { from: 'src/.well-known', to: '.well-known' },
+                              // Hacks for Amplify which won't serve files without extensions and won't serve hidden directories. We have a redirect rules in Amplify to point the correct paths here. https://github.com/aws-amplify/amplify-console/issues/225#issuecomment-600765836
+                              { from: 'src/.well-known', to: 'well-known' },
                               {
                                   from:
                                       'src/.well-known/apple-app-site-association',
+                                  to:
+                                      'well-known/apple-app-site-association.json',
                               },
                           ],
                       }),
