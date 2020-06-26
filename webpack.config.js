@@ -9,6 +9,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
+const CopyPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
@@ -88,6 +89,14 @@ module.exports = (env = {}) => {
                       }),
                       new SriPlugin({
                           hashFuncNames: ['sha512'],
+                      }),
+                      new CopyPlugin({
+                          patterns: [
+                              {
+                                  from:
+                                      'app/assets/images/campuscontacts-the-key-logo.svg',
+                              },
+                          ],
                       }),
                       new WorkboxPlugin.GenerateSW({
                           clientsClaim: true,
