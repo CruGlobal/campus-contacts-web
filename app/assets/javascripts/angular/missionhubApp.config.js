@@ -46,7 +46,7 @@ angular
                 },
                 stagingCampusContacts: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
-                    theKeyClientId: '8138475243408077361',
+                    theKeyClientId: '9072391337803602723',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
                     getMissionHub: 'https://stage.campuscontacts.cru.org',
@@ -61,7 +61,7 @@ angular
                 },
                 productionCampusContacts: {
                     apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
-                    theKeyClientId: '8480288430352167964',
+                    theKeyClientId: '8575389827001069797',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',
