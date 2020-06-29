@@ -1,9 +1,13 @@
+@import '../../../../../stylesheets//variables/tachyonsConfig';
+
 report-movement-indicators-confirm {
-    .column-count-2 {
-        column-count: 2;
-        column-gap: 1rem;
-    }
-    .column-count-allow-overflow {
-        will-change: transform; // Without this in the children of the container with the column-count property, tooltips become clipped and wrap to the previous column
+    @media #{$breakpoint-not-small} {
+        .column-count-2-ns {
+            column-count: 2;
+            column-gap: 3rem;
+        }
+        .column-count-allow-overflow-ns {
+            will-change: transform; // Without this in the children of the container with the column-count property, tooltips become clipped and wrap to the previous column
+        }
     }
 }
