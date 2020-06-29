@@ -30,7 +30,7 @@ angular
             },
             vars: {
                 development: {
-                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
+                    apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     theKeyClientId: '4921314596573158029',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
                     getMissionHub: 'http://localhost:8080',
