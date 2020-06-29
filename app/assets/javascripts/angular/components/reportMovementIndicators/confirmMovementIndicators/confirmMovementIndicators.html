@@ -9,11 +9,11 @@
 
 <script type="text/ng-template" id="movementIndicatorRow.html">
     <label class="flex items-center mb3">
-        <div class="flex-auto flex items-center justify-start">
+        <span class="flex-auto">
             {{ indicator.label }}
             <tooltip content="{{ indicator.tooltip }}"/>
-        </div>
-        <input class="pa2 tc w-20 mr5"
+        </span>
+        <input class="pa2 tc w3 ml3"
                type="number"
                min="0"
                ng-model="indicator.value">
@@ -54,10 +54,10 @@
             <h4 class="tracked ttu">
                 {{ 'movementIndicators:interactions.title' | t }}
             </h4>
-            <div class="column-count-2">
+            <div class="column-count-2-ns">
                 <div
                     ng-repeat="indicator in $ctrl.fieldMap.interactions"
-                    class="column-count-allow-overflow"
+                    class="column-count-allow-overflow-ns"
                 >
                     <ng-include src="'movementIndicatorRow.html'"></ng-include>
                 </div>
@@ -67,8 +67,8 @@
         <p class="pivot-gray-darker f5 mt4">
             {{ 'movementIndicators:confirmIndicators.labelsHeading' | t }}
         </p>
-        <div class="flex mt3 pivot-gray-darker">
-            <div class="w-50 pa4 f5 bg-pivot-gray-5">
+        <div class="flex-ns mt3 pivot-gray-darker">
+            <div class="w-50-ns pa4 f5 bg-pivot-gray-5">
                 <h4 class="tracked ttu">
                     {{ 'movementIndicators:students.title' | t }}
                 </h4>
@@ -76,7 +76,7 @@
                     <ng-include src="'movementIndicatorRow.html'"></ng-include>
                 </div>
             </div>
-            <div class="w-50 pa4 f5 bg-pivot-gray-5 ml3">
+            <div class="w-50-ns pa4 f5 bg-pivot-gray-5 ml3-ns">
                 <h4 class="tracked ttu">
                     {{ 'movementIndicators:faculty.title' | t }}
                 </h4>
@@ -88,15 +88,15 @@
     </div>
 </div>
 
-<div class="mt3 mb4 flex justify-between">
+<div class="mt3 mb4 flex-ns justify-between">
     <button
-        class="f5 pivot-dark-blue ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-transparent"
+        class="w-100 w-auto-ns mb3 mb0-ns f5 pivot-dark-blue ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-transparent"
         ng-click="$ctrl.previous()"
     >
         {{ 'back' | t }}
     </button>
     <button
-        class="f5 ph5 pv3 link ba dib bold br2 ttu tracked"
+        class="w-100 w-auto-ns f5 ph5 pv3 link ba dib bold br2 ttu tracked"
         ng-class="$ctrl.submittedInLastWeek ? 'bg-transparent b--pivot-gray-dark pivot-gray-dark' : 'bg-pivot-dark-blue b--pivot-dark-blue white'"
         ng-click="$ctrl.submit()"
         ng-disabled="$ctrl.submittedInLastWeek"
