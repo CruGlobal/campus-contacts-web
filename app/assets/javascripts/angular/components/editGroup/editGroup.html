@@ -76,7 +76,10 @@
         </label>
     </div>
 
-    <div class="split-row" ng-if="$ctrl.group.meets !== 'sporadically'">
+    <div
+        class="flex flex-column flex-row-ns justify-between"
+        ng-if="$ctrl.group.meets !== 'sporadically'"
+    >
         <label>
             {{'groups.form.from' | t}}
             <div
