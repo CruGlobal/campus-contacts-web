@@ -47,7 +47,7 @@
             >{{ $ctrl.surveyLinkPrefix }}{{ survey.id }}</a
         >
     </div>
-    <div uib-dropdown>
+    <div uib-dropdown dropdown-append-to-body>
         <div ng-if="!$ctrl.directAdminPrivileges">
             <span ng-if="!survey.is_frozen">
                 <ng-md-icon
@@ -117,7 +117,7 @@
         ></ng-md-icon>
     </div>
     <div class="buttons-column" ng-repeat-end>
-        <div uib-dropdown>
+        <div uib-dropdown dropdown-append-to-body>
             <ng-md-icon
                 uib-dropdown-toggle
                 icon="more_vert"
