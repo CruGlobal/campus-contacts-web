@@ -26,7 +26,7 @@ function organizationOverviewGroupsController($uibModal, groupsService, _) {
                 organizationId: _.constant(vm.organizationOverview.org.id),
             },
             windowClass: 'pivot_theme',
-            size: 'sm',
+            size: 'md',
         });
     }
 }
