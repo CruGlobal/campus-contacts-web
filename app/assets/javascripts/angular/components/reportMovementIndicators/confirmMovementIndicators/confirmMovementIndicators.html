@@ -54,11 +54,8 @@
             <h4 class="tracked ttu">
                 {{ 'movementIndicators:interactions.title' | t }}
             </h4>
-            <div class="column-count-2-ns">
-                <div
-                    ng-repeat="indicator in $ctrl.fieldMap.interactions"
-                    class="column-count-allow-overflow-ns"
-                >
+            <div class="column-grid-ns">
+                <div ng-repeat="indicator in $ctrl.fieldMap.interactions">
                     <ng-include src="'movementIndicatorRow.html'"></ng-include>
                 </div>
             </div>
