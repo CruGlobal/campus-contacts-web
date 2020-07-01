@@ -1,23 +1,25 @@
 <div class="bg-pivot-gray-5 br2 pl-4">
-    <h2
-        class="accordion-arrow pointer normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray"
-        ng-class="$ctrl.accordionOpen && 'accordion-arrow-open'"
-        ng-click="$ctrl.accordionOpen = !$ctrl.accordionOpen"
-    >
-        <span>{{ $ctrl.title | t : { num: $ctrl.suggestions.length } }}</span>
-        <span class="button-wrapper w-20">
-            <button
-                class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked bg-transparent w-100"
-                ng-if="$ctrl.suggestions.length"
-                ng-click="$ctrl.handleAllClick($ctrl.suggestions); $event.stopPropagation();"
+    <div class="flex-ns justify-between items-center">
+        <h2
+            class="accordion-arrow pointer normal pivot-gray-darker mt3 pa3 pr4 fw6 ttu f5 flex items-center justify-between br2 bb-pivot-background-gray"
+            ng-class="$ctrl.accordionOpen && 'accordion-arrow-open'"
+            ng-click="$ctrl.accordionOpen = !$ctrl.accordionOpen"
+        >
+            <span
+                >{{ $ctrl.title | t : { num: $ctrl.suggestions.length } }}</span
             >
-                {{ 'movementIndicators:suggestedActions.applyAll' | t }}
-            </button>
-        </span>
-    </h2>
+        </h2>
+        <button
+            class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked bg-transparent w-100 w-auto-ns"
+            ng-if="$ctrl.suggestions.length"
+            ng-click="$ctrl.handleAllClick($ctrl.suggestions); $event.stopPropagation();"
+        >
+            {{ 'movementIndicators:suggestedActions.applyAll' | t }}
+        </button>
+    </div>
     <div class="pa0" ng-show="$ctrl.accordionOpen">
         <div
-            class="pivot-gray-darker items-center pa3 pr4 f5 flex justify-between br2 bb-pivot-background-gray"
+            class="pivot-gray-darker items-center ml3 mv3 f5 flex-ns justify-between br2 bb-pivot-background-gray"
             ng-repeat="suggestion in $ctrl.suggestions"
         >
             <div>
@@ -58,7 +60,7 @@
                 </span>
                 <span ng-bind-html="$ctrl.getLabelQuestion(suggestion)"></span>
             </div>
-            <div class="w-20 flex justify-between items-center">
+            <div class="flex justify-between items-center">
                 <button
                     class="f6 pivot-dark-blue link ba b--pivot-dark-blue pv2 b br2 ttu tracked flex-auto"
                     ng-class="$ctrl.isRejected(suggestion.id) ? 'bg-pivot-darker-blue white' : 'bg-transparent'"
