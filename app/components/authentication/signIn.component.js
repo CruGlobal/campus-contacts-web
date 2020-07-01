@@ -1,3 +1,5 @@
+import campusContactsLogo from '../../assets/images/favicon.svg';
+
 import template from './signIn.html';
 import './signIn.scss';
 
@@ -17,7 +19,12 @@ function signInController(
     sessionStorageService,
 ) {
     this.showLogin = false;
+    // eslint-disable-next-line angular/document-service
+    this.showRedirectMessage = document.referrer.match(
+        /^https:\/\/([a-zA-Z0-9-_]+\.)?missionhub.com(\/.*)?$/,
+    );
     this.facebookService = facebookService;
+    this.campusContactsLogo = campusContactsLogo;
 
     this.$onInit = async () => {
         this.theKeyLoginUrl = authenticationService.theKeyLoginUrl;
