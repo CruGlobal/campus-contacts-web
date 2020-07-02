@@ -13,10 +13,11 @@
         />
 
         <script>
-            const redirectUri =
-                window.location.pathname === '/'
-                    ? 'https://get.missionhub.com'
-                    : `https://campuscontacts.cru.org${window.location.pathname}`;
+            const redirectUri = window.location.host.match(/^(www\.)?mhub\.cc$/)
+                ? `https://ccontacts.app${window.location.pathname}`
+                : window.location.pathname === '/'
+                ? 'https://get.missionhub.com'
+                : `https://campuscontacts.cru.org${window.location.pathname}`;
             try {
                 navigator.serviceWorker
                     .getRegistrations()
