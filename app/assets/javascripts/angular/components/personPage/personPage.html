@@ -47,7 +47,7 @@
                 </a>
 
                 <span ng-if="$ctrl.primaryPhone">
-                    <a ng-href="tel:{{ $ctrl.primaryPhone.number }}"
+                    <a ng-href="sms:{{ $ctrl.primaryPhone.number }}"
                         >{{ $ctrl.primaryPhone.number | phone }}
                     </a>
                     <ng-md-icon

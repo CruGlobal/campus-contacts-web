@@ -5,9 +5,9 @@
     flex-direction: row;
     align-items: center;
 
-    &.padded {
-        padding-left: 15px;
-        padding-right: 15px;
+    &.padded,
+    .padded {
+        margin: 0 9px;
     }
 
     &.text-row {
@@ -15,7 +15,7 @@
     }
 
     .column {
-        @extend .medium-spacing;
+        margin: 0 9px;
     }
     .flush-column {
         padding-left: 0;

@@ -40,7 +40,7 @@
         >
     </div>
     <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
-        <a ng-href="tel:{{ $ctrl.person.phone_numbers[0].number }}">
+        <a ng-href="sms:{{ $ctrl.person.phone_numbers[0].number }}">
             {{ $ctrl.person.phone_numbers[0].number | phone }}
         </a>
     </div>
