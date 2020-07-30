@@ -126,6 +126,12 @@ function peopleScreenController(
                 'first_name',
             ],
         },
+        {
+            name: 'contactActions',
+            cssClass: 'detail-column contact-actions-column',
+            label: 'ministries.people.contactActions',
+            sortable: false,
+        },
     ];
 
     this.defaultSortOrder = { column: this.columns[0], direction: 'asc' };
@@ -158,7 +164,7 @@ function peopleScreenController(
     const addLastSurveyColumn = () => {
         this.columns.push({
             name: 'lastSurvey',
-            cssClass: 'detail-column assigned-to-column',
+            cssClass: 'detail-column last-survey-column',
             label: 'ministries.people.lastSurvey',
             sortable: true,
             getSortKey: (person) => {

@@ -8,10 +8,10 @@
     .sticky-column {
         position: sticky;
         left: 0;
+        margin-right: 15px;
         z-index: 3;
         display: flex;
         align-self: stretch;
-        display: flex;
         align-items: center;
 
         &.col-bg-blue {
@@ -27,35 +27,23 @@
             @extend %blue-border;
         }
     }
-    .select-column {
-        width: 26px;
-        padding: 0 6px !important;
-    }
     .name-column {
-        width: 160px;
+        width: 136px;
     }
     .gender-column {
-        width: 40px;
+        width: 26px;
     }
     .assigned-to-column {
         width: 120px;
     }
     .status-column {
-        width: 178px;
-        padding: 0 50px;
+        width: 146px;
     }
-    .phone-number-column {
-        width: 120px;
-        padding: 0 30px;
-        > icon-button {
-            margin: 0;
-        }
+    .contact-actions-column {
+        width: 144px;
     }
-    .button-column {
-        width: 63px;
-        > icon-button {
-            margin: 0;
-        }
+    .last-survey-column {
+        width: 90px;
     }
     .survey-column {
         width: 150px;

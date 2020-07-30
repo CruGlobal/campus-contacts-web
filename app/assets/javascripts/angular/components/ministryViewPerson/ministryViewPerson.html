@@ -3,7 +3,7 @@
         class="sticky-column"
         ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'"
     >
-        <div class="column select-column">
+        <div class="column">
             <input type="checkbox" ng-model="$ctrl.selected" />
         </div>
         <div class="column name-column">
@@ -77,26 +77,17 @@
     >
         <span>{{ 'followup_status.archived' | t }}</span>
     </div>
+    <div class="column detail-column contact-actions-column">
+        <contact-actions
+            email="$ctrl.emailAddress.email"
+            phone="$ctrl.phoneNumber.number"
+        />
+    </div>
     <div
-        class="column detail-column phone-number-column"
+        class="column detail-column last-survey-column"
         ng-if="$ctrl.showLastSurvey"
     >
         <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
-    </div>
-    <div class="column detail-column phone-number-column">
-        <a
-            ng-href="sms:{{ $ctrl.phoneNumber.number }}"
-            ng-if="$ctrl.phoneNumber"
-            >{{ $ctrl.phoneNumber.number | phone }}
-        </a>
-    </div>
-    <div class="column detail-column button-column">
-        <a ng-href="{{ $ctrl.emailAddress.email | mailto }}">
-            <icon-button
-                icon="'email'"
-                disabled="!$ctrl.emailAddress"
-            ></icon-button>
-        </a>
     </div>
     <div
         class="column survey-column"
