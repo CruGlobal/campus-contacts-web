@@ -42,24 +42,63 @@
                 </people-filters-panel>
             </div>
             <div class="people-list bg-pivot-white overflow-auto">
-                <div class="header row padded sticky top-0 z-4">
-                    <div class="sticky-column col-bg-gray">
-                        <div class="column select-column">
-                            <input
-                                type="checkbox"
-                                ng-model="$ctrl.selectAllValue"
-                                ng-change="$ctrl.selectAll()"
-                            />
+                <div class="header sticky top-0 z-4">
+                    <div class="row padded">
+                        <div class="sticky-column col-bg-gray">
+                            <div class="column">
+                                <input
+                                    type="checkbox"
+                                    ng-model="$ctrl.selectAllValue"
+                                    ng-change="$ctrl.selectAll()"
+                                />
+                            </div>
+                            <!-- This is a duplicate of below. Angular is awful and doesn't let you make simple functions for stuff like this. -->
+                            <div
+                                class="column row"
+                                ng-repeat="column in $ctrl.columns"
+                                ng-if="$first"
+                                ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
+                                ng-click="column.sortable && $ctrl.setSortColumn(column)"
+                            >
+                                <span>
+                                    {{ column.label | t }}
+                                </span>
+                                <div
+                                    class="normal-column sort-order-column"
+                                    ng-if="column.sortable"
+                                >
+                                    <ng-md-icon
+                                        icon="arrow_downward"
+                                        size="12"
+                                        ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'"
+                                    >
+                                    </ng-md-icon>
+                                    <ng-md-icon
+                                        icon="arrow_upwards"
+                                        size="12"
+                                        ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'"
+                                    >
+                                    </ng-md-icon>
+                                </div>
+                                <icon-button
+                                    ng-if="column.name === 'name' && !$ctrl.surveyId"
+                                    icon="'addPerson'"
+                                    ui-sref=".new.defaultTab"
+                                    ng-click="$event.stopPropagation()"
+                                >
+                                </icon-button>
+                            </div>
                         </div>
-                        <!-- This is a duplicate of below. Angular is awful and doesn't let you make simple functions for stuff like this. -->
                         <div
                             class="column row"
                             ng-repeat="column in $ctrl.columns"
-                            ng-if="$first"
+                            ng-if="!$first"
                             ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
                             ng-click="column.sortable && $ctrl.setSortColumn(column)"
                         >
-                            <span>
+                            <span
+                                ng-if="column.name !== 'lastSurvey' || ($ctrl.surveyId && column.name === 'lastSurvey')"
+                            >
                                 {{ column.label | t }}
                             </span>
                             <div
@@ -87,66 +126,14 @@
                             >
                             </icon-button>
                         </div>
-                    </div>
-                    <div
-                        class="column row"
-                        ng-repeat="column in $ctrl.columns"
-                        ng-if="!$first"
-                        ng-class="[column.cssClass, { 'pointer-disabled': !column.sortable}]"
-                        ng-click="column.sortable && $ctrl.setSortColumn(column)"
-                    >
-                        <span
-                            ng-if="
-column.name !== 'lastSurvey' ||
-($ctrl.surveyId && column.name === 'lastSurvey')
-"
-                        >
-                            {{ column.label | t }}
-                        </span>
                         <div
-                            class="normal-column sort-order-column"
-                            ng-if="column.sortable"
+                            class="column survey-column"
+                            ng-class="{ 'survey-column-wide': question.style === 'email' }"
+                            ng-repeat="question in $ctrl.questions"
+                            title="{{ question.label }}"
                         >
-                            <ng-md-icon
-                                icon="arrow_downward"
-                                size="12"
-                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'asc'"
-                            >
-                            </ng-md-icon>
-                            <ng-md-icon
-                                icon="arrow_upwards"
-                                size="12"
-                                ng-if="$ctrl.sortOrder.column === column && $ctrl.sortOrder.direction === 'desc'"
-                            >
-                            </ng-md-icon>
+                            {{ question.label }}
                         </div>
-                        <icon-button
-                            ng-if="column.name === 'name' && !$ctrl.surveyId"
-                            icon="'addPerson'"
-                            ui-sref=".new.defaultTab"
-                            ng-click="$event.stopPropagation()"
-                        >
-                        </icon-button>
-                    </div>
-                    <div class="column detail-column phone-number-column">
-                        <icon-button
-                            icon="'phone'"
-                            disabled="true"
-                        ></icon-button>
-                    </div>
-                    <div class="column detail-column button-column">
-                        <icon-button
-                            icon="'email'"
-                            disabled="true"
-                        ></icon-button>
-                    </div>
-                    <div
-                        class="column survey-column"
-                        ng-class="{ 'survey-column-wide': question.style === 'email' }"
-                        ng-repeat="question in $ctrl.questions"
-                        title="{{ question.label }}"
-                    >
-                        {{ question.label }}
                     </div>
                 </div>
                 <div

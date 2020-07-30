@@ -78,6 +78,12 @@ angular
         // before controllers and services are built
         envServiceProvider.check();
     })
+    .config(($compileProvider) => {
+        // Customized in order to add sms. Can retrieve original whitelist by calling it with no arguments. https://docs.angularjs.org/api/ng/provider/$compileProvider#aHrefSanitizationWhitelist
+        $compileProvider.aHrefSanitizationWhitelist(
+            /^\s*(https?|ftp|mailto|tel|sms|webcal|local|file|data|blob):/,
+        );
+    })
     .config(($analyticsProvider) => {
         $analyticsProvider.firstPageview(false);
         $analyticsProvider.virtualPageviews(false);

@@ -586,6 +586,7 @@ export default {
                 status: 'Status',
                 transfer_hover:
                     'Transfer the selected contacts to another organization',
+                contactActions: 'Contact Actions',
                 lastSurvey: 'Last Survey',
                 showFilters: 'Show Filters',
             },
@@ -1289,5 +1290,13 @@ export default {
             interactions: 'Interactions',
             challenges: 'Challenges',
         },
+    },
+    contactActions: {
+        call: 'Call',
+        text: 'Text',
+        email: 'Email',
+        copy: 'Copy Phone Number or Email',
+        copyPhone: 'Copy Phone Number',
+        copyEmail: 'Copy Email',
     },
 };
