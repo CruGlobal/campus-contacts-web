@@ -39,24 +39,16 @@
                 </a>
             </div>
             <div class="row">
-                <a ng-href="{{ $ctrl.primaryEmail.email | mailto }}">
-                    <icon-button
-                        icon="'email'"
-                        disabled="!$ctrl.primaryEmail"
-                    ></icon-button>
-                </a>
-
-                <span ng-if="$ctrl.primaryPhone">
-                    <a ng-href="sms:{{ $ctrl.primaryPhone.number }}"
-                        >{{ $ctrl.primaryPhone.number | phone }}
-                    </a>
-                    <ng-md-icon
-                        class="phone-active"
-                        icon="check"
-                        size="14"
-                        ng-if="$ctrl.primaryPhone.validated"
-                    ></ng-md-icon>
-                </span>
+                <ng-md-icon
+                    class="phone-active"
+                    icon="check"
+                    size="14"
+                    ng-if="$ctrl.primaryPhone.validated"
+                ></ng-md-icon>
+                <contact-actions
+                    phone="$ctrl.primaryPhone.number"
+                    email="$ctrl.primaryEmail.email"
+                ></contact-actions>
             </div>
             <div class="tabs" ng-if="$ctrl.organizationId">
                 <div

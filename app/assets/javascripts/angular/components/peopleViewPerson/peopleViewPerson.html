@@ -39,27 +39,13 @@
             >-</span
         >
     </div>
-    <div class="phone" ng-if="$ctrl.person.phone_numbers.length > 0">
-        <a ng-href="sms:{{ $ctrl.person.phone_numbers[0].number }}">
-            {{ $ctrl.person.phone_numbers[0].number | phone }}
-        </a>
-    </div>
 
-    <!-- Email -->
-    <a
-        ng-href="{{ $ctrl.person.email_addresses[0].email | mailto }}"
-        analytics-on="click"
-        analytics-category="Dashboard"
-        analytics-event="Send Email"
-    >
-        <icon-button
-            icon="'email'"
-            size="18"
-            disabled="$ctrl.person.email_addresses.length === 0"
-        >
-            <ng-md-icon icon="email"></ng-md-icon>
-        </icon-button>
-    </a>
+    <div>
+        <contact-actions
+            phone="$ctrl.person.phone_numbers[0].number"
+            email="$ctrl.person.email_addresses[0].email"
+        ></contact-actions>
+    </div>
 
     <div class="addInteractionButtons" ng-if="$ctrl.addInteractionBtnsVisible">
         <square-button

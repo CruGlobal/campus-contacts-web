@@ -49,15 +49,6 @@ people-view-person {
                 display: inline-block;
             }
         }
-        .phone {
-            @extend %common-margin;
-            width: 120px;
-            text-align: center;
-            display: inline-block;
-            &.no-data {
-                padding-left: 68px;
-            }
-        }
         .add-new-interaction {
             fill: $pivot-dark-blue;
             transition: transform 200ms;
@@ -159,5 +150,8 @@ people-view-person {
         -webkit-box-sizing: content-box;
         -moz-box-sizing: content-box;
         box-sizing: content-box;
+    }
+    icon-button {
+        margin: auto;
     }
 }
