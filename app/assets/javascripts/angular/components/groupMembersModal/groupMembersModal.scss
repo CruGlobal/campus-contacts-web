@@ -18,24 +18,6 @@ group-members-modal {
         flex: 1;
     }
 
-    .phone-column {
-        width: 150px;
-
-        text-align: right;
-        icon-button {
-            margin-right: -6px;
-            margin-left: auto;
-        }
-    }
-
-    .email-column {
-        width: 56px;
-    }
-
-    .action-column {
-        width: 56px;
-    }
-
     person-multiselect {
         width: 200px;
         right: -10px;

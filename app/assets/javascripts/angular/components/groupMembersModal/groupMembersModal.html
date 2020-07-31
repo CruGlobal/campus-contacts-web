@@ -7,19 +7,7 @@
         <div class="column name-column">
             {{ 'groups.members.columns.name' | t }}
         </div>
-        <div class="column phone-column">
-            <icon-button
-                icon="'sms'"
-                ng-click="$ctrl.messageGroup('sms')"
-            ></icon-button>
-        </div>
-        <div class="column email-column">
-            <icon-button
-                icon="'email'"
-                ng-click="$ctrl.messageGroup('email')"
-            ></icon-button>
-        </div>
-        <div class="column action-column dropdown">
+        <div class="column dropdown">
             <icon-button
                 icon="'add'"
                 ng-click="$ctrl.toggleMemberAdderVisibility()"
@@ -55,29 +43,11 @@
                         >({{ 'groups.members.leader' | t }})</span
                     >
                 </div>
-                <div class="column phone-column">
-                    <a
-                        ng-href="sms:{{
-                            membership.person.phone_numbers[0].number
-                        }}"
-                    >
-                        {{ membership.person.phone_numbers[0].number | phone }}
-                    </a>
-                </div>
-                <div class="column email-column">
-                    <a
-                        ng-href="{{
-                            membership.person.email_addresses[0].email | mailto
-                        }}"
-                    >
-                        <icon-button
-                            icon="'email'"
-                            disabled="membership.person.email_addresses.length === 0"
-                        >
-                        </icon-button>
-                    </a>
-                </div>
-                <div class="column action-column">
+                <div class="column flex">
+                    <contact-actions
+                        phone="membership.person.phone_numbers[0].number"
+                        email="membership.person.email_addresses[0].email"
+                    ></contact-actions>
                     <icon-button
                         icon="'close'"
                         ng-click="$ctrl.removeMember(membership)"
