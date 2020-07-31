@@ -2,6 +2,8 @@
     <a
         ng-href="{{$ctrl.phone ? 'tel:' + $ctrl.phone : ''}}"
         ng-attr-title="{{ 'contactActions:call' | t }}"
+        analytics-on="click"
+        analytics-event="Call Contact"
     >
         <icon-button icon="'phone'" disabled="!$ctrl.phone"></icon-button>
     </a>
@@ -9,13 +11,18 @@
     <a
         ng-href="{{$ctrl.phone ? 'sms:' + $ctrl.phone : ''}}"
         ng-attr-title="{{ 'contactActions:text' | t }}"
+        analytics-on="click"
+        analytics-event="Text Contact"
     >
         <icon-button icon="'textsms'" disabled="!$ctrl.phone"></icon-button>
     </a>
 
     <a
         ng-href="{{$ctrl.email ? 'mailto:' + $ctrl.email : ''}}"
+        target="_blank"
         ng-attr-title="{{ 'contactActions:email' | t }}"
+        analytics-on="click"
+        analytics-event="Email Contact"
     >
         <icon-button icon="'email'" disabled="!$ctrl.email"></icon-button>
     </a>
@@ -27,7 +34,7 @@
     >
         <icon-button
             icon="'content_copy'"
-            disabled="!$ctrl.phone && $ctrl.email"
+            disabled="!$ctrl.phone && !$ctrl.email"
         ></icon-button>
     </a>
 </div>
@@ -45,6 +52,8 @@
                 ng-click="$ctrl.copyText($ctrl.phone | phone)"
                 class="mh-100 pa2px bw1px b--pivot-dark-blue bg-pivot-dark-blue"
                 ng-attr-title="{{ 'contactActions:copyPhone' | t }}"
+                analytics-on="click"
+                analytics-event="Copy Contact Phone"
             >
                 <ng-md-icon
                     icon="content_copy"
@@ -64,6 +73,8 @@
                 ng-click="$ctrl.copyText($ctrl.email)"
                 class="mh-100 pa2px bw1px b--pivot-dark-blue bg-pivot-dark-blue"
                 ng-attr-title="{{ 'contactActions:copyEmail' | t }}"
+                analytics-on="click"
+                analytics-event="Copy Contact Email"
             >
                 <ng-md-icon
                     icon="content_copy"
