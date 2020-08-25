@@ -315,6 +315,7 @@ function peopleScreenController(
     const getSelection = () => {
         return {
             orgId: this.org.id,
+            surveyId: this.surveyId,
             filters: this.filters,
             selectedPeople: getSelectedPeople(),
             unselectedPeople: getUnselectedPeople(),
@@ -338,7 +339,6 @@ function peopleScreenController(
                 component: 'massEdit',
                 resolve: {
                     selection: _.constant(getSelection()),
-                    surveyId: () => this.surveyId,
                 },
                 windowClass: 'pivot_theme',
                 size: 'md',
