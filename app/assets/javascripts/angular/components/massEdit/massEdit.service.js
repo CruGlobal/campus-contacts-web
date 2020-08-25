@@ -168,13 +168,12 @@ function massEditService(
         },
 
         // Apply the changes on the server
-        applyChanges: function (selection, changes, surveyId) {
+        applyChanges: function (selection, changes) {
             var filteredChanges = massEditService.prepareChanges(changes);
             massEditService.applyChangesLocally(selection, filteredChanges);
 
             var normalizedFilters = personSelectionService.convertToFilters(
                 selection,
-                surveyId,
             );
 
             var payload = {

@@ -12,7 +12,7 @@ function personSelectionService(_) {
         },
 
         // Convert a filters object into the form expected by the server-side API
-        convertToFilters: function (selection, surveyId) {
+        convertToFilters: function (selection) {
             if (!personSelectionService.containsUnincludedPeople(selection)) {
                 // Use the id filters when we have the ids of all the people who are selected
                 return {
@@ -33,12 +33,12 @@ function personSelectionService(_) {
                 genders: filters.genders,
                 permissions: filters.permissions,
                 include_archived: filters.includeArchived,
-                ...(surveyId ||
+                ...(selection.surveyId ||
                 filters.questions ||
                 filters.answerMatchingOptions
                     ? {
                           answer_sheets: {
-                              survey_ids: surveyId,
+                              survey_ids: selection.surveyId,
                               answers: {
                                   ...filters.questions,
                               },

@@ -50,26 +50,24 @@ describe('personSelectionService', function () {
 
         it('should correctly transform filter attribute names and values', function () {
             expect(
-                personSelectionService.convertToFilters(
-                    {
-                        orgId: this.orgId,
-                        allSelected: true,
-                        allIncluded: false,
-                        unselectedPeople: [31, 32, 33],
-                        filters: {
-                            assignedTos: [1, 2, 3],
-                            labels: [11, 12, 13],
-                            groups: [21, 22, 23],
-                            searchString: 'John',
-                            statuses: ['attempted_contact'],
-                            genders: ['Female'],
-                            includeArchived: true,
-                            questions: { 5: ['One'] },
-                            answerMatchingOptions: { 5: 'contains' },
-                        },
+                personSelectionService.convertToFilters({
+                    orgId: this.orgId,
+                    surveyId: '10',
+                    allSelected: true,
+                    allIncluded: false,
+                    unselectedPeople: [31, 32, 33],
+                    filters: {
+                        assignedTos: [1, 2, 3],
+                        labels: [11, 12, 13],
+                        groups: [21, 22, 23],
+                        searchString: 'John',
+                        statuses: ['attempted_contact'],
+                        genders: ['Female'],
+                        includeArchived: true,
+                        questions: { 5: ['One'] },
+                        answerMatchingOptions: { 5: 'contains' },
                     },
-                    '10',
-                ),
+                }),
             ).toEqual({
                 organization_ids: this.orgId,
                 assigned_tos: '1,2,3',
