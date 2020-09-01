@@ -10,12 +10,13 @@ addons:
 
 script:
     - yarn test
-    - yarn global add apollo
-    - yarn gql:schema
-    - yarn gql:codegen
-    - yarn test:react:coverage
+    # Disable react tooling as types have been removed from the MissionHub schema
+    # - yarn global add apollo
+    # - yarn gql:schema
+    # - yarn gql:codegen
+    # - yarn test:react:coverage
     - yarn lint
-    - yarn lint:ts
+    # - yarn lint:ts
     - yarn prettier:check
     - cypress install
     - yarn test:cypress:ci
