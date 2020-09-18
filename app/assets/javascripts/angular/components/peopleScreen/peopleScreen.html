@@ -232,7 +232,11 @@
                             show-last-survey="$ctrl.surveyId"
                         >
                         </ministry-view-person>
-                        <div ng-if="!$ctrl.loadedAll" class="row message-row">
+                        <div
+                            ng-if="!$ctrl.loadedAll"
+                            class="row message-row"
+                            ng-click="$ctrl.loadPersonPage()"
+                        >
                             {{ 'general.loading_more' | t }}
                         </div>
                     </div>
