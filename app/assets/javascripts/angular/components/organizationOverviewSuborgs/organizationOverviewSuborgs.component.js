@@ -1,4 +1,5 @@
 import template from './organizationOverviewSuborgs.html';
+import './organizationOverviewSuborgs.scss';
 
 angular.module('missionhubApp').component('organizationOverviewSuborgs', {
     controller: organizationOverviewSuborgsController,
