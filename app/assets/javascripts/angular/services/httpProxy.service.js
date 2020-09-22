@@ -41,7 +41,7 @@ function proxyService(
                 errorMessage: 'error.messages.http_proxy.default_network_error',
 
                 ...extraConfig,
-                params: { ...params, ...extraConfig.params },
+                params: { ...params, ...extraConfig?.params },
                 ...dedupeConfig,
             };
 
