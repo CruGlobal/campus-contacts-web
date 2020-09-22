@@ -58,7 +58,11 @@ function routesService(httpProxy, modelsService) {
                 url,
                 'person',
                 personId,
-                ['interactions', 'answer_sheets.answers.question'],
+                [
+                    'interactions',
+                    'answer_sheets.answers.question',
+                    'answer_sheets.survey',
+                ],
                 {
                     errorMessage: 'error.messages.routes.get_history',
                 },

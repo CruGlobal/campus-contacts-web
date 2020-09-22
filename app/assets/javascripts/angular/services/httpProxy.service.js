@@ -32,20 +32,18 @@ function proxyService(
             const INVALID_GRANT = 'invalid_grant';
             const MISSING_TOKEN = 'Missing access token';
 
-            var config = _.extend(
-                {
-                    method: method,
-                    url: envService.read('apiUrl') + url,
-                    data: data,
-                    params: params,
+            var config = {
+                method: method,
+                url: envService.read('apiUrl') + url,
+                data: data,
 
-                    // Default value
-                    errorMessage:
-                        'error.messages.http_proxy.default_network_error',
-                },
-                extraConfig,
-                dedupeConfig,
-            );
+                // Default value
+                errorMessage: 'error.messages.http_proxy.default_network_error',
+
+                ...extraConfig,
+                params: { ...params, ...extraConfig.params },
+                ...dedupeConfig,
+            };
 
             if (!extraConfig || !extraConfig.errorMessage) {
                 $log.warn(new Error('No error message specified'));
