@@ -616,7 +616,7 @@ export default {
                         'Next to the webhooks title click the slider to enable webhooks.',
                     conclusion:
                         'Future form submissions for this survey will be sent to Campus Contacts automatically.',
-                    missionHubUrl: 'Campus Contacts URL',
+                    campusContactsUrl: 'Campus Contacts URL',
                     copy: 'Copy URL',
                     copied: 'URL copied to clipboard',
                 },
