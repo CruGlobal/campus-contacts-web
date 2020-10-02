@@ -1,6 +1,6 @@
 import template from './publicPhoneNumberValidation.html';
 
-angular.module('missionhubApp').component('publicPhoneNumberValidation', {
+angular.module('campusContactsApp').component('publicPhoneNumberValidation', {
     bindings: {
         phoneNumberValidation: '<',
     },

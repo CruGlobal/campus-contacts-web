@@ -1,5 +1,5 @@
 // Copied from https://gist.github.com/thomseddon/4703968
-angular.module('missionhubApp').directive('autoGrow', function ($document) {
+angular.module('campusContactsApp').directive('autoGrow', function ($document) {
     function link(scope, element) {
         var minHeight = element[0].offsetHeight;
         var paddingLeft = element.css('paddingLeft');

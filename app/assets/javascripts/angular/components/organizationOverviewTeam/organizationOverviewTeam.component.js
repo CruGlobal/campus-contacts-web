@@ -1,6 +1,6 @@
 import template from './organizationOverviewTeam.html';
 
-angular.module('missionhubApp').component('organizationOverviewTeam', {
+angular.module('campusContactsApp').component('organizationOverviewTeam', {
     controller: organizationOverviewTeamController,
     require: {
         organizationOverview: '^',

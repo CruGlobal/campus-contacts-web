@@ -6,7 +6,7 @@ import clockIcon from '../../../../images/icon-clock.svg';
 
 import template from './surveyOverviewKeyword.html';
 
-angular.module('missionhubApp').component('surveyOverviewKeyword', {
+angular.module('campusContactsApp').component('surveyOverviewKeyword', {
     controller: surveyOverviewKeywordController,
     bindings: {
         survey: '<',

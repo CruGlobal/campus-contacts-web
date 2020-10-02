@@ -4,7 +4,7 @@ import _ from 'lodash';
 import template from './organizationOverviewSurveyResponses.html';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component('organizationOverviewSurveyResponses', {
         require: {
             organizationOverview: '^',

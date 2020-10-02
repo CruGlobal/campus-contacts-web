@@ -1,7 +1,7 @@
 import template from './assignedPeopleSelect.html';
 import './assignedPeopleSelect.scss';
 
-angular.module('missionhubApp').component('assignedPeopleSelect', {
+angular.module('campusContactsApp').component('assignedPeopleSelect', {
     bindings: {
         assigned: '=',
         ruleCode: '<',

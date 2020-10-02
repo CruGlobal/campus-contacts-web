@@ -1,6 +1,6 @@
 import template from './predefinedQuestionsModal.html';
 
-angular.module('missionhubApp').component('predefinedQuestionsModal', {
+angular.module('campusContactsApp').component('predefinedQuestionsModal', {
     controller: predefinedQuestionsModalController,
     template: template,
     bindings: {

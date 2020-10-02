@@ -2,7 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .constant('_', _)
     .constant('moment', moment)
     .constant('p2cOrgId', '8411')

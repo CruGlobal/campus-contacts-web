@@ -1,7 +1,7 @@
 import template from './peopleViewPerson.html';
 import './peopleViewPerson.scss';
 
-angular.module('missionhubApp').component('peopleViewPerson', {
+angular.module('campusContactsApp').component('peopleViewPerson', {
     controller: peopleViewPersonController,
     template: template,
     bindings: {

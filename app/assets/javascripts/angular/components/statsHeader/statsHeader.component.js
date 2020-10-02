@@ -1,7 +1,7 @@
 import template from './statsHeader.html';
 import './statsHeader.scss';
 
-angular.module('missionhubApp').component('statsHeader', {
+angular.module('campusContactsApp').component('statsHeader', {
     controller: statsHeaderController,
     template: template,
 });

@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('transferService', transferService);
+angular.module('campusContactsApp').factory('transferService', transferService);
 
 function transferService(httpProxy, JsonApiDataStore, personSelectionService) {
     return {

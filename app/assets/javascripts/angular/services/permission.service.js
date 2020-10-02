@@ -1,4 +1,6 @@
-angular.module('missionhubApp').factory('permissionService', permissionService);
+angular
+    .module('campusContactsApp')
+    .factory('permissionService', permissionService);
 
 // This service contains action logic that is shared across components
 function permissionService() {

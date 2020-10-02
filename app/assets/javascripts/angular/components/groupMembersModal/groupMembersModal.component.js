@@ -1,7 +1,7 @@
 import template from './groupMembersModal.html';
 import './groupMembersModal.scss';
 
-angular.module('missionhubApp').component('groupMembersModal', {
+angular.module('campusContactsApp').component('groupMembersModal', {
     bindings: {
         resolve: '<',
         close: '&',

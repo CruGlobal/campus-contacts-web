@@ -5,7 +5,7 @@ import checkIcon from '../../../../images/icons/icon-check.svg';
 
 import template from './organizationCleanup.html';
 
-angular.module('missionhubApp').component('organizationCleanup', {
+angular.module('campusContactsApp').component('organizationCleanup', {
     bindings: {
         orgId: '<',
     },

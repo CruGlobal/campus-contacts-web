@@ -21,7 +21,7 @@ const GraphqlPlaygroundLoader = (props: GraphqlPlaygroundProps) => (
 );
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component(
         'graphqlPlayground',
         react2angular(GraphqlPlaygroundLoader, null, [

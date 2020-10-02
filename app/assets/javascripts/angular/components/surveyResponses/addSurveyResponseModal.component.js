@@ -2,7 +2,7 @@ import template from './addSurveyResponseModal.html';
 
 import './addSurveyResponseModal.scss';
 
-angular.module('missionhubApp').component('addSurveyResponseModal', {
+angular.module('campusContactsApp').component('addSurveyResponseModal', {
     bindings: {
         resolve: '<',
         dismiss: '&',

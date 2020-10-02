@@ -378,4 +378,4 @@ function surveyService(
     };
 }
 
-angular.module('missionhubApp').factory('surveyService', surveyService);
+angular.module('campusContactsApp').factory('surveyService', surveyService);

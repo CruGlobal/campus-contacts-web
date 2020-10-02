@@ -3,7 +3,7 @@ import chevronLeftIcon from '../../../../images/icons/chevronLeft.svg';
 
 import template from './surveyOverview.html';
 
-angular.module('missionhubApp').component('surveyOverview', {
+angular.module('campusContactsApp').component('surveyOverview', {
     controller: surveyOverviewController,
     bindings: {
         survey: '<',

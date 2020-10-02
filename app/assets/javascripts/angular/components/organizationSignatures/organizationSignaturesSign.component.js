@@ -1,6 +1,6 @@
 import template from './organizationSignaturesSign.html';
 
-angular.module('missionhubApp').component('organizationSignaturesSign', {
+angular.module('campusContactsApp').component('organizationSignaturesSign', {
     template: template,
     controller: organizationSignaturesSignController,
 });

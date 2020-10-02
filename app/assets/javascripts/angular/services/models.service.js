@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('modelsService', modelsService);
+angular.module('campusContactsApp').factory('modelsService', modelsService);
 
 function modelsService(_) {
     function generateUrls(root, extras) {

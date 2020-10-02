@@ -2,7 +2,7 @@ import template from './app.html';
 import './components/navigation/navHeader.component';
 import './app.scss';
 
-angular.module('missionhubApp').component('app', {
+angular.module('campusContactsApp').component('app', {
     controller: appController,
     template: template,
     bindings: {

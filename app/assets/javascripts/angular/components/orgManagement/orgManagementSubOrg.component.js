@@ -7,7 +7,7 @@ import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 import template from './orgManagementSubOrg.html';
 
-angular.module('missionhubApp').component('orgManagementSubOrg', {
+angular.module('campusContactsApp').component('orgManagementSubOrg', {
     controller: orgManagementSubOrgController,
     bindings: {
         org: '<',

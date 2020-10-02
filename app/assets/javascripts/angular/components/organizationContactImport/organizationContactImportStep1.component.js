@@ -6,18 +6,20 @@ import errorIcon from '../../../../images/icons/icon-error.svg';
 
 import template from './organizationContactImportStep1.html';
 
-angular.module('missionhubApp').component('organizationContactImportStep1', {
-    bindings: {
-        org: '<',
-        surveys: '<',
-        next: '&',
-        selectedSurvey: '<',
-        fileName: '<',
-        csvData: '<',
-    },
-    template: template,
-    controller: organizationContactImportStep1Controller,
-});
+angular
+    .module('campusContactsApp')
+    .component('organizationContactImportStep1', {
+        bindings: {
+            org: '<',
+            surveys: '<',
+            next: '&',
+            selectedSurvey: '<',
+            fileName: '<',
+            csvData: '<',
+        },
+        template: template,
+        controller: organizationContactImportStep1Controller,
+    });
 
 function organizationContactImportStep1Controller($scope, $uibModal, $state) {
     this.fileIcon = fileIcon;

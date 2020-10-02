@@ -1,7 +1,7 @@
 import template from './editGroupOrLabelAssignments.html';
 import './editGroupOrLabelAssignments.scss';
 
-angular.module('missionhubApp').component('editGroupOrLabelAssignments', {
+angular.module('campusContactsApp').component('editGroupOrLabelAssignments', {
     controller: editGroupOrLabelAssignmentsController,
     bindings: {
         resolve: '<',

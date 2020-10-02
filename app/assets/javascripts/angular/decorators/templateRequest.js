@@ -1,7 +1,9 @@
 /*
  * Decorate $templateRequest so that failures can be retried.
  */
-angular.module('missionhubApp').decorator('$templateRequest', $templateRequest);
+angular
+    .module('campusContactsApp')
+    .decorator('$templateRequest', $templateRequest);
 
 function $templateRequest($delegate, errorService, tFilter, _) {
     var retryConfig = _.defaults(

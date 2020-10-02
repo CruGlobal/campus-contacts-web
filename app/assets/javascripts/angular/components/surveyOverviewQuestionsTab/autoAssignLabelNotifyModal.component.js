@@ -1,7 +1,7 @@
 import template from './autoAssignLabelNotifyModal.html';
 import './autoAssignLabelNotifyModal.scss';
 
-angular.module('missionhubApp').component('autoAssignLabelNotifyModal', {
+angular.module('campusContactsApp').component('autoAssignLabelNotifyModal', {
     controller: autoAssignLabelNotifyModalController,
     template: template,
     bindings: {

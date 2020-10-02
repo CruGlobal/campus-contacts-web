@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('editAddressService', editAddressService);
 
 function editAddressService(geoDataService, JsonApiDataStore, _) {

@@ -1,7 +1,7 @@
 import template from './organizationOverviewLabels.html';
 import './organizationOverviewLabels.scss';
 
-angular.module('missionhubApp').component('organizationOverviewLabels', {
+angular.module('campusContactsApp').component('organizationOverviewLabels', {
     controller: organizationOverviewLabelsController,
     require: {
         organizationOverview: '^',

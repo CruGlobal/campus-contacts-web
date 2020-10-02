@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('geoDataService', geoDataService);
+angular.module('campusContactsApp').factory('geoDataService', geoDataService);
 
 function geoDataService(_) {
     return {

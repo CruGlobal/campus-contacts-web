@@ -8,6 +8,6 @@ const ministryViewTabs = [
     'labels',
 ];
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .constant('ministryViewTabs', ministryViewTabs)
     .constant('ministryViewDefaultTab', ministryViewTabs[0]);

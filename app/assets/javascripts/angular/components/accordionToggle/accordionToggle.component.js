@@ -1,7 +1,7 @@
 import template from './accordionToggle.html';
 import './accordionToggle.scss';
 
-angular.module('missionhubApp').component('accordionToggle', {
+angular.module('campusContactsApp').component('accordionToggle', {
     controller: accordionToggleController,
     require: {
         accordion: '^',

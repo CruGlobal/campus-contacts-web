@@ -1,6 +1,6 @@
 import template from './copySurvey.html';
 
-angular.module('missionhubApp').component('copySurvey', {
+angular.module('campusContactsApp').component('copySurvey', {
     controller: copySurveyController,
     bindings: {
         resolve: '<',

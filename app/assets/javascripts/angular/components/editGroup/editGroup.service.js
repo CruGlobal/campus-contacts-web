@@ -1,4 +1,6 @@
-angular.module('missionhubApp').factory('editGroupService', editGroupService);
+angular
+    .module('campusContactsApp')
+    .factory('editGroupService', editGroupService);
 
 function editGroupService() {
     return {

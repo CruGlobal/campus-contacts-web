@@ -1,6 +1,6 @@
 import template from './dashboard.html';
 
-angular.module('missionhubApp').component('dashboard', {
+angular.module('campusContactsApp').component('dashboard', {
     controller: DashboardController,
     template: template,
 });

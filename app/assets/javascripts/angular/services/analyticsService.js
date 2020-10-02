@@ -1,4 +1,6 @@
-angular.module('missionhubApp').factory('analyticsService', analyticsService);
+angular
+    .module('campusContactsApp')
+    .factory('analyticsService', analyticsService);
 
 function analyticsService(
     $window,

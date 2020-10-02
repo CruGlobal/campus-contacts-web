@@ -1,4 +1,6 @@
-angular.module('missionhubApp').factory('personPageService', personPageService);
+angular
+    .module('campusContactsApp')
+    .factory('personPageService', personPageService);
 
 function personPageService(httpProxy, modelsService, _) {
     return {

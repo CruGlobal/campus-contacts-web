@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('labelsService', labelsService);
+angular.module('campusContactsApp').factory('labelsService', labelsService);
 
 function labelsService(httpProxy, JsonApiDataStore, modelsService, _) {
     var labelsService = {

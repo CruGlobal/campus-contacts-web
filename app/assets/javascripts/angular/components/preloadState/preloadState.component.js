@@ -1,4 +1,4 @@
-angular.module('missionhubApp').component('preloadState', {
+angular.module('campusContactsApp').component('preloadState', {
     controller: preloadStateController,
     bindings: {
         name: '@',

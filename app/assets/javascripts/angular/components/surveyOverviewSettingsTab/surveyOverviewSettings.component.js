@@ -5,7 +5,7 @@ import helpIcon from '../../../../images/icon-help.svg';
 import template from './surveyOverviewSettings.html';
 import './surveyOverviewSettings.scss';
 
-angular.module('missionhubApp').component('surveyOverviewSettings', {
+angular.module('campusContactsApp').component('surveyOverviewSettings', {
     controller: surveyOverviewSettingsController,
     bindings: {
         survey: '<',

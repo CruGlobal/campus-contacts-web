@@ -2,7 +2,7 @@ import template from './organizationContactImport.html';
 import './organizationContactImport.scss';
 import '../surveyOverview/surveyOverview.scss';
 
-angular.module('missionhubApp').component('organizationContactImport', {
+angular.module('campusContactsApp').component('organizationContactImport', {
     require: {
         organizationOverview: '^',
     },

@@ -2,7 +2,7 @@ import template from './editAnswerSheetModal.html';
 
 import './editAnswerSheetModal.scss';
 
-angular.module('missionhubApp').component('editAnswerSheetModal', {
+angular.module('campusContactsApp').component('editAnswerSheetModal', {
     bindings: {
         resolve: '<',
         dismiss: '&',

@@ -2,7 +2,7 @@ import rollbar from 'rollbar';
 import StackTrace from 'stacktrace-js';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .config(function (rollbarAccessToken, envServiceProvider, $provide, _) {
         var rollbarConfig = {
             accessToken: rollbarAccessToken,

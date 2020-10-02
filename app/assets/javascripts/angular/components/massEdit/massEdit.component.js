@@ -1,7 +1,7 @@
 import template from './massEdit.html';
 import './massEdit.scss';
 
-angular.module('missionhubApp').component('massEdit', {
+angular.module('campusContactsApp').component('massEdit', {
     controller: massEditController,
     bindings: {
         resolve: '<',

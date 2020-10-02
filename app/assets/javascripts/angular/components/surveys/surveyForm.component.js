@@ -16,7 +16,7 @@ const bindings = {
 // Note: angularjs-annotate doesn't work if you try move the controller part of the component config to a shared object
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component('surveyFormUser', {
         controller: surveyFormController,
         bindings,

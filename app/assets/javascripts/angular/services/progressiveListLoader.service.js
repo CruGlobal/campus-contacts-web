@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('ProgressiveListLoader', progressiveListLoader);
 
 function progressiveListLoader(httpProxy, modelsService, _) {

@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('authenticationService', authenticationService);
 
 function authenticationService(

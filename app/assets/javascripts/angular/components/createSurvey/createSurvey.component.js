@@ -1,6 +1,6 @@
 import template from './createSurvey.html';
 
-angular.module('missionhubApp').component('createSurvey', {
+angular.module('campusContactsApp').component('createSurvey', {
     controller: createSurveyController,
     bindings: {
         resolve: '<',

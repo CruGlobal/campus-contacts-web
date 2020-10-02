@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory(
         'organizationOverviewSuborgsService',
         organizationOverviewSuborgsService,

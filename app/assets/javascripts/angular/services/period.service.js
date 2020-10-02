@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('periodService', periodService);
+angular.module('campusContactsApp').factory('periodService', periodService);
 
 // This service contains action logic that is shared across components
 function periodService($window, $rootScope) {

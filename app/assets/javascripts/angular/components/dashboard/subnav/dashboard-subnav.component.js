@@ -1,7 +1,7 @@
 import './dashboard-subnav.scss';
 import template from './dashboard-subnav.html';
 
-angular.module('missionhubApp').component('dashboardSubnav', {
+angular.module('campusContactsApp').component('dashboardSubnav', {
     controller: DashboardSubnavController,
     template: template,
 });

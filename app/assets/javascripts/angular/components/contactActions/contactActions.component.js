@@ -1,7 +1,7 @@
 import template from './contactActions.html';
 import './contactActions.scss';
 
-angular.module('missionhubApp').component('contactActions', {
+angular.module('campusContactsApp').component('contactActions', {
     bindings: {
         phone: '<',
         email: '<',

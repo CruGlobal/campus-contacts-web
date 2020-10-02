@@ -1,5 +1,5 @@
 import template from './authLanding.html';
 
-angular.module('missionhubApp').component('authLanding', {
+angular.module('campusContactsApp').component('authLanding', {
     template: template,
 });

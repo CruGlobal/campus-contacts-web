@@ -30,7 +30,7 @@ const Insights = ({ orgId, authenticationService }: Props) => {
 };
 
 // @ts-ignore
-angular.module('missionhubApp').component(
+angular.module('campusContactsApp').component(
     'insights',
     // @ts-ignore
     react2angular(Insights, ['orgId'], ['authenticationService']),

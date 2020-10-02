@@ -1,6 +1,6 @@
 import template from './myOrganizationsDashboardList.html';
 
-angular.module('missionhubApp').component('myOrganizationsDashboardList', {
+angular.module('campusContactsApp').component('myOrganizationsDashboardList', {
     template: template,
     bindings: {
         rootOrgs: '<',

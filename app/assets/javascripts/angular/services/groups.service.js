@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('groupsService', groupsService);
+angular.module('campusContactsApp').factory('groupsService', groupsService);
 
 function groupsService(
     $q,

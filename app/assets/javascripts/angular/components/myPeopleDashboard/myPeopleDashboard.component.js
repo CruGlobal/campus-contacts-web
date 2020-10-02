@@ -7,7 +7,7 @@ import iosShare from '../../../../images/icons/ios-share.svg';
 import template from './myPeopleDashboard.html';
 import './myPeopleDashboard.scss';
 
-angular.module('missionhubApp').component('myPeopleDashboard', {
+angular.module('campusContactsApp').component('myPeopleDashboard', {
     controller: myPeopleDashboardController,
     bindings: {
         editMode: '<',

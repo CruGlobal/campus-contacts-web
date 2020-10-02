@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('peopleScreenService', peopleScreenService);
 
 function peopleScreenService(

@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('state', stateService);
+angular.module('campusContactsApp').factory('state', stateService);
 
 function stateService() {
     var service = {

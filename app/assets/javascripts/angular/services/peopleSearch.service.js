@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('peopleSearchService', peopleSearchService);
 
 function peopleSearchService(httpProxy, modelsService) {

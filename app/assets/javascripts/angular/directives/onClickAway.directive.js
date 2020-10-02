@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .directive('onClickAway', function ($window, $parse, $timeout) {
         return {
             restrict: 'A',

@@ -3,7 +3,7 @@ import moment from 'moment';
 import template from './answerSheet.html';
 import './answerSheet.scss';
 
-angular.module('missionhubApp').component('answerSheet', {
+angular.module('campusContactsApp').component('answerSheet', {
     template: template,
     bindings: {
         answerSheet: '<',

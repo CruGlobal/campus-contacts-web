@@ -1,6 +1,6 @@
 // Adapted from: http://stackoverflow.com/questions/12700145/how-to-format-a-telephone-number-in-angularjs
 
-angular.module('missionhubApp').filter('phone', function () {
+angular.module('campusContactsApp').filter('phone', function () {
     return function (inputNumber) {
         if (!inputNumber) {
             return '';

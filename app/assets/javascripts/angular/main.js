@@ -2,12 +2,12 @@ import './workboxServiceWorker';
 
 import '../../../../src/i18n/i18next.config';
 
-import './missionhubApp.module';
-import './missionhubApp.constants';
-import './missionhubApp.config';
+import './campusContactsApp.module';
+import './campusContactsApp.constants';
+import './campusContactsApp.config';
 import './rollbar.config';
-import './missionhubApp.routes';
-import './missionhubApp.run';
+import './campusContactsApp.routes';
+import './campusContactsApp.run';
 
 import '../../../app.component';
 import '../../../components/authentication/signIn.component';

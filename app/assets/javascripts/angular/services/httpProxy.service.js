@@ -1,6 +1,6 @@
 import { JsonApiDataStore as JsonApiDataStoreIsolated } from 'jsonapi-datastore';
 
-angular.module('missionhubApp').factory('httpProxy', proxyService);
+angular.module('campusContactsApp').factory('httpProxy', proxyService);
 function proxyService(
     $http,
     $log,

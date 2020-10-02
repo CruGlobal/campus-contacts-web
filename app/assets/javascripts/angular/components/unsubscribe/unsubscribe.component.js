@@ -1,7 +1,7 @@
 import template from './unsubscribe.html';
 import './unsubscribe.scss';
 
-angular.module('missionhubApp').component('unsubscribe', {
+angular.module('campusContactsApp').component('unsubscribe', {
     controller: unsubscribeController,
     template: template,
     bindings: {

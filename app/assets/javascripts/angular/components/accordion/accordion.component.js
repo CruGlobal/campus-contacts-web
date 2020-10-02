@@ -1,7 +1,7 @@
 import template from './accordion.html';
 import './accordion.scss';
 
-angular.module('missionhubApp').component('accordion', {
+angular.module('campusContactsApp').component('accordion', {
     controller: accordionController,
     bindings: {
         collapsed: '=?',
