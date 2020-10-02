@@ -3,26 +3,9 @@ angular
     .config((envServiceProvider) => {
         envServiceProvider.config({
             domains: {
-                development: ['localhost', 'missionhub.local'],
-                production: [
-                    'missionhub.com',
-                    'www.missionhub.com',
-                    'mhub.cc',
-                    'www.mhub.cc',
-                ],
-                productionCampusContacts: [
-                    'campuscontacts.cru.org',
-                    'ccontacts.app',
-                ],
+                development: ['localhost'],
+                production: ['campuscontacts.cru.org', 'ccontacts.app'],
                 staging: [
-                    'stage.missionhub.com',
-                    'stage.mhub.cc',
-                    'new.missionhub.com',
-                    '*.netlify.com',
-                    '*.netlify.app',
-                    '*.d11caubtn1mk5o.amplifyapp.com',
-                ],
-                stagingCampusContacts: [
                     // These wildcards need to be the last domains so they don't override matches above
                     '*.campuscontacts.cru.org',
                     '*.ccontacts.app',
@@ -32,40 +15,25 @@ angular
             vars: {
                 development: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
+                    publicUri: 'https://localhost:8080',
                     theKeyClientId: '4921314596573158029',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
-                    getMissionHub: 'http://localhost:8080',
                 },
                 staging: {
-                    apiUrl: 'https://api-stage.missionhub.com/apis/v4',
-                    theKeyClientId: '8138475243408077361',
-                    facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'https://stage.mhub.cc/s/',
-                    getMissionHub: 'https://stage.missionhub.com',
-                },
-                stagingCampusContacts: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
+                    publicUri: 'https://stage.campuscontacts.cru.org',
                     theKeyClientId: '9072391337803602723',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
-                    getMissionHub: 'https://stage.campuscontacts.cru.org',
                 },
                 production: {
-                    apiUrl: 'https://api.missionhub.com/apis/v4',
-                    theKeyClientId: '8480288430352167964',
-                    facebookAppId: '233292170040365',
-                    surveyLinkPrefix: 'https://mhub.cc/s/',
-                    googleAnalytics: 'UA-325725-21',
-                    getMissionHub: 'https://get.missionhub.com',
-                },
-                productionCampusContacts: {
                     apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
+                    publicUri: 'https://campuscontacts.cru.org',
                     theKeyClientId: '8575389827001069797',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',
-                    getMissionHub: 'https://campuscontacts.cru.org',
                 },
                 defaults: {
                     theKeyUrl: 'https://thekey.me/cas',
