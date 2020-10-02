@@ -20,7 +20,7 @@ function surveyTypeformModalController($document, $sce) {
     );
 
     vm.copy = () => {
-        const el = vm.$document[0].getElementById('missionhub-url');
+        const el = vm.$document[0].getElementById('campus-contacts-url');
         el.select();
         vm.$document[0].execCommand('copy');
         vm.copied = true;
