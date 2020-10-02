@@ -3,7 +3,7 @@
 >
     <ul
         class="font-titillium ml0 pl0 mb0 list fade w-40-ns"
-        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasCampusContactsAccess && $ctrl.state.loggedIn"
         id="primary_nav"
     >
         <li
@@ -33,7 +33,7 @@
     </a>
     <span
         class="flex w-25 items-center justify-end content-end fade w-40-ns"
-        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+        ng-if="!$ctrl.hideMenuLinks && $ctrl.state.hasCampusContactsAccess && $ctrl.state.loggedIn"
     >
         <a href ng-click="$ctrl.toggleSearchBar()">
             <img ng-src="{{ $ctrl.searchIcon }}" />
@@ -87,7 +87,7 @@
     <ul
         class="list fade"
         id="primary_nav"
-        ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.hasMissionhubAccess && $ctrl.state.loggedIn"
+        ng-if="!$ctrl.hideMenuLinks && !$ctrl.state.hasCampusContactsAccess && $ctrl.state.loggedIn"
     >
         <li class="fl">
             <a href class="pivot-white f4 mr2" ng-click="$ctrl.logout()"
