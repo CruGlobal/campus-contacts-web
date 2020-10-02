@@ -140,7 +140,9 @@ function authenticationService(
 
         if (!currentState) return;
 
-        state.hasMissionhubAccess = currentState.hasMissionhubAccess;
+        state.hasCampusContactsAccess =
+            currentState.hasCampusContactsAccess ||
+            currentState.hasMissionhubAccess; // hasMissionhubAccess can be deleted during another deployment 2 days after this one when user JWTs have expired and a sign in will happen again
         state.organization_with_missing_signatures_ids =
             currentState.organization_with_missing_signatures_ids;
         state.loggedIn = true;
@@ -150,7 +152,7 @@ function authenticationService(
 
     const setState = (person) => {
         const newState = {
-            hasMissionhubAccess: true,
+            hasCampusContactsAccess: true,
             organization_with_missing_signatures_ids: person
                 ? person.organization_with_missing_signatures_ids
                 : [],
@@ -163,7 +165,7 @@ function authenticationService(
 
     const clearState = () => {
         localStorageService.destroy('state');
-        state.hasMissionhubAccess = null;
+        state.hasCampusContactsAccess = null;
         state.organization_with_missing_signatures_ids = null;
         state.loggedIn = false;
         JsonApiDataStore.store.reset();
