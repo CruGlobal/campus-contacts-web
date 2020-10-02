@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
         "start": "webpack-dev-server",
-        "start-rails-api": "cd ../missionhub-api && rails s",
+        "start-rails-api": "cd ../campus-contacts-api && rails s",
         "build": "webpack -p",
         "build:analyze": "webpack -p --env.analyze",
         "gql:schema": "apollo client:download-schema",
