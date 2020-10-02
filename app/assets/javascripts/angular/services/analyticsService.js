@@ -13,7 +13,6 @@ function analyticsService(
         if (!angular.isFunction($window.ga)) return;
 
         $window.ga('create', envService.read('googleAnalytics'), 'auto', {
-            legacyCookieDomain: 'missionhub.com',
             allowLinker: true,
             sampleRate: 100,
         });
