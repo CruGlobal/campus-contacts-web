@@ -1,7 +1,7 @@
-# MissionHub Web App
+# Campus Contacts Web App
 
-[![Build Status](https://travis-ci.org/CruGlobal/missionhub-web.svg?branch=master)](https://travis-ci.org/CruGlobal/missionhub-web) [![codecov](https://codecov.io/gh/CruGlobal/missionhub-web/branch/master/graph/badge.svg)](https://codecov.io/gh/CruGlobal/missionhub-web)
-[missionhub.com](https://www.missionhub.com) | [stage.missionhub.com](https://stage.missionhub.com)
+[![Build Status](https://travis-ci.org/CruGlobal/campus-contacts-web.svg?branch=master)](https://travis-ci.org/CruGlobal/campus-contacts-web) [![codecov](https://codecov.io/gh/CruGlobal/campus-contacts-web/branch/master/graph/badge.svg)](https://codecov.io/gh/CruGlobal/campus-contacts-web)
+[campuscontacts.cru.org](https://campuscontacts.cru.org) | [stage.campuscontacts.cru.org](https://stage.campuscontacts.cru.org) | [ccontacts.app/](https://ccontacts.app/) | [stage.ccontacts.app/](https://stage.ccontacts.app/)
 
 ## Development
 
@@ -17,7 +17,7 @@ Use yarn for faster installs and to update the yarn lock file: https://yarnpkg.c
 ### Development Tasks
 Note: you may replace `yarn` with `npm` if you aren't using `yarn`
 - `yarn start` to start the webpack dev server for this repo
-- `yarn start-rails-api` to start the rails api server (looks in `../missionhub-api`)
+- `yarn start-rails-api` to start the rails api server (looks in `../campus-contacts-api`)
 - `yarn build` to generate minified output files. These files are output to `/dist`.
 - `yarn build:analyze` to open a visualization of bundle sizes after building
 - `yarn test` to run karma tests once
@@ -26,7 +26,7 @@ Note: you may replace `yarn` with `npm` if you aren't using `yarn`
 - `yarn lint` to run eslint and lint the app's JS files
 
 ### Environment Config
-By default running this repo locally hits the stage API server. If you need to test against the local API, you can edit [missionhubApp.config.js](https://github.com/CruGlobal/missionhub-web/blob/6619d9325424bca3381c2187d3ad2d73894abb90/app/assets/javascripts/angular/missionhubApp.config.js#L22).
+By default running this repo locally hits the stage API server. If you need to test against the local API, you can edit [campusContactsApp.config.js](https://github.com/CruGlobal/campus-contacts-web/blob/master/app/assets/javascripts/angular/campusContactsApp.config.js#L17).
 
 ### Deployment
 
