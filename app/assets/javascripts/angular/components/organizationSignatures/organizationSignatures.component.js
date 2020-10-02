@@ -1,7 +1,7 @@
 import template from './organizationSignatures.html';
 import './organizationSignatures.scss';
 
-angular.module('missionhubApp').component('organizationSignatures', {
+angular.module('campusContactsApp').component('organizationSignatures', {
     bindings: {
         orgId: '<',
     },

@@ -1,6 +1,6 @@
 import template from './editLabel.html';
 
-angular.module('missionhubApp').component('editLabel', {
+angular.module('campusContactsApp').component('editLabel', {
     controller: editLabelController,
     bindings: {
         resolve: '<',

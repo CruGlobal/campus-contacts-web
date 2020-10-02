@@ -1,7 +1,7 @@
 import template from './ministryViewPerson.html';
 import './ministryViewPerson.scss';
 
-angular.module('missionhubApp').component('ministryViewPerson', {
+angular.module('campusContactsApp').component('ministryViewPerson', {
     controller: ministryViewPersonController,
     template: template,
     bindings: {

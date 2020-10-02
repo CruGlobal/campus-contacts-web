@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('facebookService', facebookService);
+angular.module('campusContactsApp').factory('facebookService', facebookService);
 
 function facebookService(authenticationService, envService) {
     return {

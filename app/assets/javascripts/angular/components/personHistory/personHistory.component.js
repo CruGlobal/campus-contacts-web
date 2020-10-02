@@ -1,7 +1,7 @@
 import template from './personHistory.html';
 import './personHistory.scss';
 
-angular.module('missionhubApp').component('personHistory', {
+angular.module('campusContactsApp').component('personHistory', {
     controller: personHistoryController,
     bindings: {
         history: '<',

@@ -4,7 +4,7 @@ import template from './suggestedActionsAccordion.html';
 import './suggestedActionsAccordion.scss';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component('reportMovementIndicatorsSuggestedActionsAccordion', {
         controller: reportMovementIndicatorsSuggestedActionsController,
         bindings: {

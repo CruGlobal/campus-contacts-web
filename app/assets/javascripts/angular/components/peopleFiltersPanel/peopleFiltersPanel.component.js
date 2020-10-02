@@ -1,7 +1,7 @@
 import template from './peopleFiltersPanel.html';
 import './peopleFiltersPanel.scss';
 
-angular.module('missionhubApp').component('peopleFiltersPanel', {
+angular.module('campusContactsApp').component('peopleFiltersPanel', {
     controller: peopleFiltersPanelController,
     template: template,
     bindings: {

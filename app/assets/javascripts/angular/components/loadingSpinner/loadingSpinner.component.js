@@ -1,7 +1,7 @@
 import template from './loadingSpinner.html';
 import './loadingSpinner.scss';
 
-angular.module('missionhubApp').component('loadingSpinner', {
+angular.module('campusContactsApp').component('loadingSpinner', {
     bindings: {
         size: '<',
     },

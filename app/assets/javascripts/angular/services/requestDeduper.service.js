@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('RequestDeduper', requestDeduper);
+angular.module('campusContactsApp').factory('RequestDeduper', requestDeduper);
 
 function requestDeduper($q, _) {
     /*

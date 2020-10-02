@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('routesService', routesService);
+angular.module('campusContactsApp').factory('routesService', routesService);
 
 // This service contains logic used by the routes
 function routesService(httpProxy, modelsService) {

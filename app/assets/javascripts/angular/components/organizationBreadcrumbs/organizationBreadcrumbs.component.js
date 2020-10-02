@@ -1,7 +1,7 @@
 import template from './organizationBreadcrumbs.html';
 import './organizationBreadcrumbs.scss';
 
-angular.module('missionhubApp').component('organizationBreadcrumbs', {
+angular.module('campusContactsApp').component('organizationBreadcrumbs', {
     controller: organizationBreadcrumbsController,
     template: template,
     bindings: {

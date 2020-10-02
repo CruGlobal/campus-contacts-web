@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('confirmModalService', confirmModalService);
 
 function confirmModalService($uibModal) {
@@ -27,8 +27,8 @@ function confirmModalService($uibModal) {
                 size: 'sm',
                 template: `<div>
                     <div class="modal-header">
-                    <h3 class="modal-title" id="modal-title"> 
-                        ${options.title} 
+                    <h3 class="modal-title" id="modal-title">
+                        ${options.title}
                     </h3>
                     <a ng-click="vm.cancel()" class="close-button">
                     <ng-md-icon icon="close" size="28"></ng-md-icon>

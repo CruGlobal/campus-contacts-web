@@ -1,7 +1,7 @@
 import template from './myOrganizationsDashboard.html';
 import './myOrganizationsDashboard.scss';
 
-angular.module('missionhubApp').component('myOrganizationsDashboard', {
+angular.module('campusContactsApp').component('myOrganizationsDashboard', {
     template: template,
     controller: function ($state) {
         this.$state = $state;

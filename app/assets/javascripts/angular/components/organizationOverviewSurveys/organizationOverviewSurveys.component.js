@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import template from './organizationOverviewSurveys.html';
 
-angular.module('missionhubApp').component('organizationOverviewSurveys', {
+angular.module('campusContactsApp').component('organizationOverviewSurveys', {
     require: {
         organizationOverview: '^',
     },

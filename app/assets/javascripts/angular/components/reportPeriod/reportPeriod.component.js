@@ -1,7 +1,7 @@
 import template from './reportPeriod.html';
 import './reportPeriod.scss';
 
-angular.module('missionhubApp').component('reportPeriod', {
+angular.module('campusContactsApp').component('reportPeriod', {
     controller: reportPeriodController,
     template: template,
 });

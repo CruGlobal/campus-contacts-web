@@ -1,6 +1,6 @@
 import './errorRetryToastTemplate.directive';
 
-angular.module('missionhubApp').factory('errorService', errorService);
+angular.module('campusContactsApp').factory('errorService', errorService);
 
 function errorService($timeout, $q, $log, toaster, _) {
     var errorService = {

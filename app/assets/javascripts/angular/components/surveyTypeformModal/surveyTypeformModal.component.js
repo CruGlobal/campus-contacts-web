@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import template from './surveyTypeformModal.html';
 import './surveyTypeformModal.scss';
 
-angular.module('missionhubApp').component('surveyTypeformModal', {
+angular.module('campusContactsApp').component('surveyTypeformModal', {
     controller: surveyTypeformModalController,
     template: template,
     bindings: {

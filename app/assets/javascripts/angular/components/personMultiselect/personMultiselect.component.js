@@ -1,7 +1,7 @@
 import template from './personMultiselect.html';
 import './personMultiselect.scss';
 
-angular.module('missionhubApp').component('personMultiselect', {
+angular.module('campusContactsApp').component('personMultiselect', {
     controller: personMultiselectController,
     bindings: {
         organizationId: '<',

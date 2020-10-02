@@ -1,7 +1,7 @@
 import template from './editAddress.html';
 import './editAddress.scss';
 
-angular.module('missionhubApp').component('editAddress', {
+angular.module('campusContactsApp').component('editAddress', {
     controller: editAddressController,
     bindings: {
         resolve: '<',

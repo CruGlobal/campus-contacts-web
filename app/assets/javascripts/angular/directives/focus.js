@@ -1,5 +1,5 @@
 // This directive focuses the element if the "focus" attribute is truthy.
-angular.module('missionhubApp').directive('focus', function () {
+angular.module('campusContactsApp').directive('focus', function () {
     return {
         restrict: 'A',
         scope: { focus: '<' },

@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('asyncBindingsService', asyncBindingsService);
 
 function asyncBindingsService($injector, $q, _) {

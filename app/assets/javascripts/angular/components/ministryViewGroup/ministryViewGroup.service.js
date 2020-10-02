@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('ministryViewGroupService', ministryViewGroupService);
 
 function ministryViewGroupService(groupsService, tFilter, moment, _) {

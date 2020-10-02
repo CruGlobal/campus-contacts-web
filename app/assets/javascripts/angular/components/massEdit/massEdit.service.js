@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('massEditService', massEditService);
+angular.module('campusContactsApp').factory('massEditService', massEditService);
 
 function massEditService(
     $q,

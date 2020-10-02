@@ -1,7 +1,7 @@
 import template from './assignedLabelSelect.html';
 import './assignedLabelSelect.scss';
 
-angular.module('missionhubApp').component('assignedLabelSelect', {
+angular.module('campusContactsApp').component('assignedLabelSelect', {
     bindings: {
         assigned: '=',
         organizationId: '<',

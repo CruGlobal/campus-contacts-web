@@ -1,6 +1,6 @@
 import template from './impersonateUser.html';
 
-angular.module('missionhubApp').component('impersonateUser', {
+angular.module('campusContactsApp').component('impersonateUser', {
     controller: impersonatePersonController,
     template: template,
     bindings: {

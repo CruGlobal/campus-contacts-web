@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('myPeopleDashboardService', myPeopleDashboardService);
 
 function myPeopleDashboardService(httpProxy, modelsService, _) {

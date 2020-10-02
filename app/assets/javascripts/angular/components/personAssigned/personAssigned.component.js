@@ -1,7 +1,7 @@
 import template from './personAssigned.html';
 import './personAssigned.scss';
 
-angular.module('missionhubApp').component('personAssigned', {
+angular.module('campusContactsApp').component('personAssigned', {
     controller: personAssignedController,
     require: {
         personTab: '^personPage',

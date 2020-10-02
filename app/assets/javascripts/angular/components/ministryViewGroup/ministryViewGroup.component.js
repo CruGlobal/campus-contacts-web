@@ -1,7 +1,7 @@
 import template from './ministryViewGroup.html';
 import './ministryViewGroup.scss';
 
-angular.module('missionhubApp').component('ministryViewGroup', {
+angular.module('campusContactsApp').component('ministryViewGroup', {
     controller: ministryViewGroupController,
     template: template,
     bindings: {

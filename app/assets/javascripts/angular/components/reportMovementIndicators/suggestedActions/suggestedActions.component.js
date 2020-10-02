@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import template from './suggestedActions.html';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component('reportMovementIndicatorsSuggestedActions', {
         controller: reportMovementIndicatorsSuggestedActionsController,
         bindings: {

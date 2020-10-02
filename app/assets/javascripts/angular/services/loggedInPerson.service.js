@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('loggedInPerson', loggedInPerson);
+angular.module('campusContactsApp').factory('loggedInPerson', loggedInPerson);
 
 function loggedInPerson(
     httpProxy,

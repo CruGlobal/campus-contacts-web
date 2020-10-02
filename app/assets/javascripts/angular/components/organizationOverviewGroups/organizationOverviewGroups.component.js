@@ -1,7 +1,7 @@
 import template from './organizationOverviewGroups.html';
 import './organizationOverviewGroups.scss';
 
-angular.module('missionhubApp').component('organizationOverviewGroups', {
+angular.module('campusContactsApp').component('organizationOverviewGroups', {
     controller: organizationOverviewGroupsController,
     require: {
         organizationOverview: '^',

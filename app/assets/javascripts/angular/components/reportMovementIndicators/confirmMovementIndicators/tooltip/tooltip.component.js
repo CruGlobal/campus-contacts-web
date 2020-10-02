@@ -1,7 +1,7 @@
 import template from './tooltip.html';
 import './tooltip.scss';
 
-angular.module('missionhubApp').component('tooltip', {
+angular.module('campusContactsApp').component('tooltip', {
     bindings: {
         content: '@',
     },

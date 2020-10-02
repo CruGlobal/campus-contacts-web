@@ -1,6 +1,6 @@
 import template from './publicSurvey.html';
 
-angular.module('missionhubApp').component('publicSurvey', {
+angular.module('campusContactsApp').component('publicSurvey', {
     bindings: {
         survey: '<',
         preview: '<',

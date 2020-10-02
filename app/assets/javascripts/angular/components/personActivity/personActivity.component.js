@@ -1,7 +1,7 @@
 import template from './personActivity.html';
 import './personActivity.scss';
 
-angular.module('missionhubApp').component('personActivity', {
+angular.module('campusContactsApp').component('personActivity', {
     controller: personActivityController,
     require: {
         personTab: '^personPage',

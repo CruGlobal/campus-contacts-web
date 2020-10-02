@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('peopleFiltersPanelService', peopleFiltersPanelService);
 
 function peopleFiltersPanelService() {

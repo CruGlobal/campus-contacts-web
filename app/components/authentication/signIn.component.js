@@ -3,7 +3,7 @@ import campusContactsLogo from '../../assets/images/favicon.svg';
 import template from './signIn.html';
 import './signIn.scss';
 
-angular.module('missionhubApp').component('signIn', {
+angular.module('campusContactsApp').component('signIn', {
     controller: signInController,
     template: template,
     bindings: {

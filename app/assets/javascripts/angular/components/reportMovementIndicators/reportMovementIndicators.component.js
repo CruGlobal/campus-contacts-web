@@ -1,6 +1,6 @@
 import template from './reportMovementIndicators.html';
 
-angular.module('missionhubApp').component('reportMovementIndicators', {
+angular.module('campusContactsApp').component('reportMovementIndicators', {
     controller: reportMovementIndicatorsController,
     bindings: {
         orgId: '<',

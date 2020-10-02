@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('interactionsService', interactionsService);
 
 // This service contains action logic that is shared across components

@@ -3,7 +3,7 @@ import moment from 'moment';
 import template from './interaction.html';
 import './interaction.scss';
 
-angular.module('missionhubApp').component('interaction', {
+angular.module('campusContactsApp').component('interaction', {
     controller: interactionController,
     template: template,
     bindings: {

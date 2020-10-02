@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('assignedLabelSelectService', assignedLabelSelectService);
 
 function assignedLabelSelectService(httpProxy) {

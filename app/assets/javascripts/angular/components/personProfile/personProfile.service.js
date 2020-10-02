@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('personProfileService', personProfileService);
 
 function personProfileService(

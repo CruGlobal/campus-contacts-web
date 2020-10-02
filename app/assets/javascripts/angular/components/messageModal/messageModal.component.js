@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 import template from './messageModal.html';
 
-angular.module('missionhubApp').component('messageModal', {
+angular.module('campusContactsApp').component('messageModal', {
     controller: messageModalController,
     template: template,
     bindings: {

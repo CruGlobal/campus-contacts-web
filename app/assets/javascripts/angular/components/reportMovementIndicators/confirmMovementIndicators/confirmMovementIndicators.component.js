@@ -7,15 +7,17 @@ import checkIcon from '../../../../../images/icons/icon-check-stylized.svg';
 
 import template from './confirmMovementIndicators.html';
 
-angular.module('missionhubApp').component('reportMovementIndicatorsConfirm', {
-    controller: reportMovementIndicatorsConfirmController,
-    bindings: {
-        orgId: '<',
-        next: '&',
-        previous: '&',
-    },
-    template,
-});
+angular
+    .module('campusContactsApp')
+    .component('reportMovementIndicatorsConfirm', {
+        controller: reportMovementIndicatorsConfirmController,
+        bindings: {
+            orgId: '<',
+            next: '&',
+            previous: '&',
+        },
+        template,
+    });
 
 function reportMovementIndicatorsConfirmController(httpProxy, $uibModal) {
     this.fieldMap = {

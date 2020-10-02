@@ -1,7 +1,7 @@
 import template from './organization.html';
 import './organization.scss';
 
-angular.module('missionhubApp').component('organization', {
+angular.module('campusContactsApp').component('organization', {
     controller: organizationController,
     bindings: {
         options: '<?',

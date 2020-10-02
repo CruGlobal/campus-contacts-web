@@ -11,7 +11,7 @@ import warningIcon from '../../../../images/icons/icon-warning-2.svg';
 
 import template from './surveyOverviewQuestions.html';
 
-angular.module('missionhubApp').component('surveyOverviewQuestions', {
+angular.module('campusContactsApp').component('surveyOverviewQuestions', {
     controller: surveyOverviewQuestionsController,
     bindings: {
         survey: '<',

@@ -2,7 +2,7 @@ import './main.js';
 import angular from 'angular';
 import 'angular-mocks';
 
-beforeEach(angular.mock.module('missionhubApp'));
+beforeEach(angular.mock.module('campusContactsApp'));
 
 beforeEach(
     angular.mock.module({

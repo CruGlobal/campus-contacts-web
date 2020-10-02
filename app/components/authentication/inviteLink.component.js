@@ -1,6 +1,6 @@
 import template from './inviteLink.html';
 
-angular.module('missionhubApp').component('inviteLink', {
+angular.module('campusContactsApp').component('inviteLink', {
     controller: inviteLinkController,
     template: template,
     bindings: {

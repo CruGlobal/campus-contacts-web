@@ -5,7 +5,7 @@ import template from './navHeader.html';
 import './navHeader.scss';
 import './navSearch.component';
 
-angular.module('missionhubApp').component('navHeader', {
+angular.module('campusContactsApp').component('navHeader', {
     controller: navHeaderController,
     template: template,
     bindings: {

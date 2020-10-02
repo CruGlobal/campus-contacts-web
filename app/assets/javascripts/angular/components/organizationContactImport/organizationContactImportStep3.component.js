@@ -4,18 +4,20 @@ import uuidv1 from 'uuid';
 
 import template from './organizationContactImportStep3.html';
 
-angular.module('missionhubApp').component('organizationContactImportStep3', {
-    bindings: {
-        org: '<',
-        next: '&',
-        previous: '&',
-        csvData: '<',
-        selectedSurvey: '<',
-        columnMap: '<',
-    },
-    template: template,
-    controller: organizationContactImportStep3Controller,
-});
+angular
+    .module('campusContactsApp')
+    .component('organizationContactImportStep3', {
+        bindings: {
+            org: '<',
+            next: '&',
+            previous: '&',
+            csvData: '<',
+            selectedSurvey: '<',
+            columnMap: '<',
+        },
+        template: template,
+        controller: organizationContactImportStep3Controller,
+    });
 
 function organizationContactImportStep3Controller(
     $scope,

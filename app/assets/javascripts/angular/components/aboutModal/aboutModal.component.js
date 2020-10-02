@@ -2,7 +2,7 @@ import template from './aboutModal.html';
 import './aboutModal.scss';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .component('aboutModal', {
         controller: aboutModalController,
         template: template,

@@ -1,7 +1,7 @@
 import template from './editGroup.html';
 import './editGroup.scss';
 
-angular.module('missionhubApp').component('editGroup', {
+angular.module('campusContactsApp').component('editGroup', {
     controller: editGroupController,
     bindings: {
         resolve: '<',

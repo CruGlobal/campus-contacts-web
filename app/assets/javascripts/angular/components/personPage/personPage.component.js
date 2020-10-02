@@ -3,7 +3,7 @@ import './personPage.scss';
 
 import template from './personPage.html';
 
-angular.module('missionhubApp').component('personPage', {
+angular.module('campusContactsApp').component('personPage', {
     controller: personPageController,
     template: template,
     bindings: {

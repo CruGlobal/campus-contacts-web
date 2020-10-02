@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('userPreferencesService', userPreferencesService);
 
 function userPreferencesService(httpProxy, modelsService, loggedInPerson, _) {

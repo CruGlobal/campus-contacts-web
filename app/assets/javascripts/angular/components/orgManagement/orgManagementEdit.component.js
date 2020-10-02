@@ -2,7 +2,7 @@ import helpIcon from '../../../../images/icons/icon-help.svg';
 
 import template from './orgManagementEdit.html';
 
-angular.module('missionhubApp').component('orgManagementEdit', {
+angular.module('campusContactsApp').component('orgManagementEdit', {
     controller: orgManagementEditController,
     bindings: {
         org: '<',

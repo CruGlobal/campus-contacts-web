@@ -1,7 +1,7 @@
 import template from './ministryViewLabel.html';
 import './ministryViewLabel.scss';
 
-angular.module('missionhubApp').component('ministryViewLabel', {
+angular.module('campusContactsApp').component('ministryViewLabel', {
     controller: ministryViewLabelController,
     template: template,
     bindings: {

@@ -1,7 +1,7 @@
 import template from './transferModal.html';
 import './transferModal.scss';
 
-angular.module('missionhubApp').component('transferModal', {
+angular.module('campusContactsApp').component('transferModal', {
     controller: transferModalController,
     template: template,
     bindings: {

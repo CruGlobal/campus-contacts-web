@@ -1,7 +1,7 @@
 import template from './multiselectList.html';
 import './multiselectList.scss';
 
-angular.module('missionhubApp').component('multiselectList', {
+angular.module('campusContactsApp').component('multiselectList', {
     controller: multiselectListController,
     bindings: {
         // list of objects that have an id and name

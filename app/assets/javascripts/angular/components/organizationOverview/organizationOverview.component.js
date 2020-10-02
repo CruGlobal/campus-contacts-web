@@ -2,7 +2,7 @@ import './organizationOverview.scss';
 
 import template from './organizationOverview.html';
 
-angular.module('missionhubApp').component('organizationOverview', {
+angular.module('campusContactsApp').component('organizationOverview', {
     controller: organizationOverviewController,
     bindings: {
         org: '<',

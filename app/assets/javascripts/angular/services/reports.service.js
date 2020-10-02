@@ -1,4 +1,4 @@
-angular.module('missionhubApp').factory('reportsService', reportsService);
+angular.module('campusContactsApp').factory('reportsService', reportsService);
 
 // This service contains action logic that is shared across components
 function reportsService(

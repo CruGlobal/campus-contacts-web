@@ -1,4 +1,4 @@
-angular.module('missionhubApp').service('sessionStorageService', () => {
+angular.module('campusContactsApp').service('sessionStorageService', () => {
     const storage = {
         set: (key, value) => {
             sessionStorage.setItem(key, angular.toJson(value));

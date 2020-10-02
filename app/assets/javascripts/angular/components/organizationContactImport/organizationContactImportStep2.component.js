@@ -3,17 +3,19 @@ import _ from 'lodash';
 
 import template from './organizationContactImportStep2.html';
 
-angular.module('missionhubApp').component('organizationContactImportStep2', {
-    bindings: {
-        next: '&',
-        previous: '&',
-        csvData: '<',
-        selectedSurvey: '<',
-        columnMap: '<',
-    },
-    template: template,
-    controller: organizationContactImportStep2Controller,
-});
+angular
+    .module('campusContactsApp')
+    .component('organizationContactImportStep2', {
+        bindings: {
+            next: '&',
+            previous: '&',
+            csvData: '<',
+            selectedSurvey: '<',
+            columnMap: '<',
+        },
+        template: template,
+        controller: organizationContactImportStep2Controller,
+    });
 
 function organizationContactImportStep2Controller($scope, surveyService) {
     this.currentPreviewRow = 1;

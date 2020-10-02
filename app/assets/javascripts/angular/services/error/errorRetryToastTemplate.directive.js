@@ -1,7 +1,7 @@
 import template from './errorRetryToastTemplate.html';
 
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .directive('errorRetryToastTemplate', function () {
         return {
             template: template,

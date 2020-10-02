@@ -1,6 +1,6 @@
 // ng-safe-submit is similar to ng-submit except that it automatically prevents double-submissions. The
 // ng-safe-submit event handler can return a promise. If it does, the form is disabled until the promise resolves.
-angular.module('missionhubApp').directive('ngSafeSubmit', function ($q, _) {
+angular.module('campusContactsApp').directive('ngSafeSubmit', function ($q, _) {
     return {
         restrict: 'A',
         scope: { ngSafeSubmit: '&' },

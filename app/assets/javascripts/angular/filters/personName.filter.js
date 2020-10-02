@@ -1,7 +1,7 @@
 /*
  * The personName filter takes a person and converts it into the person's name.
  */
-angular.module('missionhubApp').filter('personName', function (_) {
+angular.module('campusContactsApp').filter('personName', function (_) {
     return function (person, type) {
         if (!person) {
             return null;

@@ -1,4 +1,4 @@
-angular.module('missionhubApp').directive('exposeSelect', function () {
+angular.module('campusContactsApp').directive('exposeSelect', function () {
     return {
         controller: function ($scope) {
             // Put the $select instance from the ui-select component on the parent scope so that the parent of

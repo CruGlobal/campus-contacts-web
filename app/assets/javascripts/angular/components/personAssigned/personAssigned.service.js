@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('personAssignedService', personAssignedService);
 
 function personAssignedService(JsonApiDataStore, personService) {

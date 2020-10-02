@@ -1,4 +1,4 @@
-angular.module('missionhubApp').service('localStorageService', () => {
+angular.module('campusContactsApp').service('localStorageService', () => {
     const storage = {
         set: (key, value) => {
             localStorage.setItem(key, angular.toJson(value));

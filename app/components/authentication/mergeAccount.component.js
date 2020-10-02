@@ -1,6 +1,6 @@
 import template from './mergeAccount.html';
 
-angular.module('missionhubApp').component('mergeAccount', {
+angular.module('campusContactsApp').component('mergeAccount', {
     controller: mergeAccountController,
     template: template,
     bindings: {

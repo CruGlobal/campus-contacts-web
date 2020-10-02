@@ -43,7 +43,7 @@ class UserPreferences {
     }
 }
 
-angular.module('missionhubApp').component('userPreferences', {
+angular.module('campusContactsApp').component('userPreferences', {
     controller: UserPreferences,
     template: template,
 });

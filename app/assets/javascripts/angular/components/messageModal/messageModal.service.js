@@ -1,5 +1,5 @@
 angular
-    .module('missionhubApp')
+    .module('campusContactsApp')
     .factory('messageModalService', messageModalService);
 
 function messageModalService(httpProxy, personSelectionService) {

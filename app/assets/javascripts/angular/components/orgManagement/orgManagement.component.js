@@ -1,7 +1,7 @@
 import template from './orgManagement.html';
 import './orgManagement.scss';
 
-angular.module('missionhubApp').component('orgManagement', {
+angular.module('campusContactsApp').component('orgManagement', {
     controller: orgManagementController,
     require: {
         organizationOverview: '^',

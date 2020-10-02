@@ -19,7 +19,7 @@ import 'angularjs-toaster/toaster.scss';
 import 'moment';
 import 'angular-smart-table';
 
-export default angular.module('missionhubApp', [
+export default angular.module('campusContactsApp', [
     ngAnimate,
     ngMdIcons,
     'beauby.jsonApiDataStore',

@@ -13,7 +13,7 @@ import closeIcon from '../../../../images/icons/close.svg';
 
 import template from './peopleScreen.html';
 
-angular.module('missionhubApp').component('peopleScreen', {
+angular.module('campusContactsApp').component('peopleScreen', {
     controller: peopleScreenController,
     bindings: {
         org: '<',
