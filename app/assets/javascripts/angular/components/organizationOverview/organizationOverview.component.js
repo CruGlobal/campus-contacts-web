@@ -33,10 +33,6 @@ function organizationOverviewController(
     this.envService = envService;
     this.$state = $state;
 
-    this.isInsightsTab = () => {
-        return $state.current.name === 'app.ministries.ministry.insights';
-    };
-
     this.orgNavOpen = false;
 
     this.toggleNav = () => {

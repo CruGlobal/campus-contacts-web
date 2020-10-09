@@ -1,11 +1,10 @@
 import i18n from 'i18next';
 import mapValues from 'lodash/mapValues';
-import { initReactI18next } from 'react-i18next';
 
 import translations from './locales/translations.json';
 import en_US from './locales/en-US';
 
-export default i18n.use(initReactI18next).init({
+export default i18n.init({
     fallbackLng: 'en-US',
 
     // Use downloaded translations if available but use en-US from source to make development easier

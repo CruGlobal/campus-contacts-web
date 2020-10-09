@@ -474,14 +474,6 @@ angular
                 },
             })
             .state({
-                name: 'app.ministries.ministry.insights',
-                url: '/insights/:subTab',
-                component: 'insights',
-                resolve: {
-                    orgId: ($transition$) => $transition$.params().orgId,
-                },
-            })
-            .state({
                 name: 'app.ministries.ministry.defaultTab',
                 redirectTo: 'app.ministries.ministry.' + ministryViewDefaultTab,
             })
@@ -678,14 +670,6 @@ angular
                 name: 'app.ministries.ministry.survey.responses',
                 url: '/responses',
                 component: 'surveyResponses',
-            })
-            .state({
-                name: 'graphqlPlayground',
-                url: '/graphql',
-                component: 'graphqlPlayground',
-                data: {
-                    isPublic: true,
-                },
             });
 
         // This is the default URL if the URL does not match any routes
