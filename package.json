@@ -101,7 +101,7 @@
         "sass-loader": "^10.0.4",
         "start-server-and-test": "^1.11.0",
         "webpack": "^4.44.2",
-        "webpack-bundle-analyzer": "^3.8.0",
+        "webpack-bundle-analyzer": "^3.9.0",
         "webpack-cli": "^3.3.11",
         "webpack-dev-server": "^3.11.0",
         "webpack-subresource-integrity": "^1.5.1",
