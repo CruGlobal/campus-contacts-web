@@ -866,10 +866,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@brainly/onesky-utils@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@brainly/onesky-utils/-/onesky-utils-1.4.0.tgz#4892ba2999bc227cd9c1a93f4feb6c7068ef45c3"
-  integrity sha512-hDbDdTBVFHHwjt5odydiRWkzU0jHnc+1ftbxdPT79YmNSkcsrs37Sd9VQVs/n92aagIGKk2Ga0dl13vIymwGug==
+"@brainly/onesky-utils@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@brainly/onesky-utils/-/onesky-utils-1.4.1.tgz#ee2d15567e9c617b534295fdd50abea9a3a7593e"
+  integrity sha512-Vi4u1xGUxS0IKqNZkHsgrd9z53/6P3oqdCV6Ao7O9itScnYjXfy00tZoagmAbrLtqbwsI4O08HjVQ2aYwW5vSg==
   dependencies:
     md5 "^2.0.0"
     request "^2.88.0"
