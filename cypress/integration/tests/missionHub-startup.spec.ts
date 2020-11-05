@@ -19,7 +19,7 @@ describe('Href should link to the key', () => {
     it('Should have an href directing to the key for sign in', () => {
         cy.get('[cy-test-id="loginWithEmailButton"]')
             .should('have.attr', 'ng-href')
-            .then(href => {
+            .then((href) => {
                 const keyUrl = href;
                 expect(keyUrl).to.contain(
                     'https://thekey.me/cas/login?response_type=token&scope=fullticket&client_id=',
@@ -31,6 +31,10 @@ describe('Href should link to the key', () => {
 describe('People Dashboard', () => {
     it('should load the people dashboard', () => {
         cy.signIn();
-        cy.get('[href="/ministries/14665"]').should('be', 'Test Organization');
+        cy.get('[href="/ministries/14665"]').should(($element) => {
+            const text = $element.text();
+
+            expect(text).to.include('Test Organization');
+        });
     });
 });
