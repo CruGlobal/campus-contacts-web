@@ -1,7 +1,5 @@
 <div class="group row header grid-fixed">
-    <div class="column column-title">
-        {{ 'surveyTab:columns.survey' | t }}
-    </div>
+    <div class="column column-title">{{ 'surveyTab:columns.survey' | t }}</div>
     <div class="column column-number">
         {{ 'surveyTab:columns.contacts' | t }}
     </div>
@@ -25,19 +23,13 @@
             </a>
         </div>
         <div class="column column-number">
-            <span>
-                {{ $ctrl.surveyStats[survey.id].contact_count }}
-            </span>
+            <span>{{ $ctrl.surveyStats[survey.id].contact_count }}</span>
         </div>
         <div class="column column-number">
-            <span>
-                {{ $ctrl.surveyStats[survey.id].unassigned_count }}
-            </span>
+            <span>{{ $ctrl.surveyStats[survey.id].unassigned_count }}</span>
         </div>
         <div class="column column-number">
-            <span>
-                {{ $ctrl.surveyStats[survey.id].uncontacted_count }}
-            </span>
+            <span>{{ $ctrl.surveyStats[survey.id].uncontacted_count }}</span>
         </div>
     </div>
 </div>

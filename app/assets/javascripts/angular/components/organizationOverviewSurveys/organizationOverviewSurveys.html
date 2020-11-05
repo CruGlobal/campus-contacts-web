@@ -2,18 +2,10 @@
     class="grid-fixed"
     ng-class="{ 'surveys-table': !$ctrl.organizationOverview.org.typeform_enabled, 'surveys-table-with-typeform': $ctrl.organizationOverview.org.typeform_enabled }"
 >
-    <div>
-        {{ 'surveyTab:columns.survey' | t }}
-    </div>
-    <div>
-        {{ 'surveyTab:columns.keyword' | t }}
-    </div>
-    <div>
-        {{ 'surveyTab:columns.link' | t }}
-    </div>
-    <div>
-        {{ 'surveyTab:columns.status' | t }}
-    </div>
+    <div>{{ 'surveyTab:columns.survey' | t }}</div>
+    <div>{{ 'surveyTab:columns.keyword' | t }}</div>
+    <div>{{ 'surveyTab:columns.link' | t }}</div>
+    <div>{{ 'surveyTab:columns.status' | t }}</div>
     <div
         class="typeform-info"
         ng-if="$ctrl.organizationOverview.org.typeform_enabled"

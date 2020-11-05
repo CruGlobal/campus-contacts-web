@@ -21,15 +21,16 @@
                 >
                     <option
                         ng-selected="{{ !answer.value || answer.value === '' }}"
-                        >{{ 'common:choose' | t }}</option
                     >
+                        {{ 'common:choose' | t }}
+                    </option>
                     <option
                         ng-repeat="content in answer.question.content.split('\n')"
                         ng-value="content"
                         ng-selected="{{ answer.value === content }}"
                     >
-                        {{ content }}</option
-                    >
+                        {{ content }}
+                    </option>
                 </select>
             </div>
             <div ng-switch-when="radio" class="form mb3">

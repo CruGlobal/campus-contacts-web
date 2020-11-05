@@ -8,13 +8,9 @@
     <ui-select-match
         placeholder="{{ 'application.assign_search.assign_label' | t }}"
     >
-        <span>
-            {{ $item.name }}
-        </span>
+        <span>{{ $item.name }}</span>
     </ui-select-match>
     <ui-select-choices repeat="label in $ctrl.labels track by label.id">
-        <span>
-            {{ label.name }}
-        </span>
+        <span>{{ label.name }}</span>
     </ui-select-choices>
 </ui-select>

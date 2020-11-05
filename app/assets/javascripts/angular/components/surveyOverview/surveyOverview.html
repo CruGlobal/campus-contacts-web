@@ -12,9 +12,7 @@
             >
                 <div class="mr2" ng-include="$ctrl.chevronLeftIcon"></div>
             </a>
-            <span class="flex-auto">
-                {{ $ctrl.survey.title }}
-            </span>
+            <span class="flex-auto">{{ $ctrl.survey.title }}</span>
             <a
                 ui-sref="appWithoutMenus.previewSurvey({ surveyId: $ctrl.survey.id })"
                 target="_blank"

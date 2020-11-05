@@ -19,8 +19,7 @@
                         ng-switch-when="drop-down"
                         ng-model="$ctrl.answers[question.id]"
                         ng-options="i.value as i.name for i in $ctrl.questionChoices[question.id] track by i.value"
-                    >
-                    </select>
+                    ></select>
 
                     <div
                         ng-switch-when="radio"
