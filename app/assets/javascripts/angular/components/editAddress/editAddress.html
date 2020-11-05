@@ -22,8 +22,7 @@
                                     disable when !$ctrl.isAddressTypeValid(type, $ctrl.person, $ctrl.address)
                                     for type in $ctrl.addressTypes"
                     ng-model="$ctrl.address.address_type"
-                >
-                </select>
+                ></select>
             </div>
         </label>
         <label
@@ -51,8 +50,7 @@
                     class="form-control"
                     ng-options="region.shortCode as region.name for region in $ctrl.regions"
                     ng-model="$ctrl.address.state"
-                >
-                </select>
+                ></select>
             </div>
         </label>
         <label>
@@ -78,8 +76,7 @@
                     class="form-control"
                     ng-options="country.shortCode as country.name for country in $ctrl.countries"
                     ng-model="$ctrl.address.country"
-                >
-                </select>
+                ></select>
             </div>
         </label>
     </div>

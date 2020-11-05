@@ -7,9 +7,7 @@
     </a>
 </div>
 <div class="modal-body form">
-    <div class="error red f6 mb3" ng-if="$ctrl.error">
-        {{ $ctrl.error }}
-    </div>
+    <div class="error red f6 mb3" ng-if="$ctrl.error">{{ $ctrl.error }}</div>
 
     <div class="form-group">
         <label>
@@ -29,8 +27,7 @@
                 class="form-control"
                 ng-model="$ctrl.survey.parent_organization"
                 ng-options="org.id as org.name for org in $ctrl.orgs"
-            >
-            </select>
+            ></select>
         </label>
     </div>
 </div>

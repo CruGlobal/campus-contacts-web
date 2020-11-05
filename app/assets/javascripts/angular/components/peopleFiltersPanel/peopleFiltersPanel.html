@@ -252,34 +252,35 @@
                             ng-model="$ctrl.filters.answerMatchingOptions[question.id]"
                             ng-change="$ctrl.updateFilters($ctrl.filters.answerMatchingOptions[question.id], question.id)"
                         >
-                            <option value="contains"
-                                >{{
-                                'peopleScreen:answerMatchingOptions.contains' |
-                                t }}</option
-                            >
-                            <option value="does_not_contain"
-                                >{{
+                            <option value="contains">
+                                {{ 'peopleScreen:answerMatchingOptions.contains'
+                                | t }}
+                            </option>
+                            <option value="does_not_contain">
+                                {{
                                 'peopleScreen:answerMatchingOptions.doesNotContain'
-                                | t }}</option
-                            >
-                            <option value=""
-                                >{{ 'peopleScreen:answerMatchingOptions.exactly'
-                                | t }}</option
-                            >
+                                | t }}
+                            </option>
+                            <option value="">
+                                {{ 'peopleScreen:answerMatchingOptions.exactly'
+                                | t }}
+                            </option>
                             <option
                                 value="no_response"
                                 ng-if="!$ctrl.hideNonFilterableQuestionAnswerResponse(question)"
-                                >{{
-                                'peopleScreen:answerMatchingOptions.noResponse'
-                                | t }}</option
                             >
+                                {{
+                                'peopleScreen:answerMatchingOptions.noResponse'
+                                | t }}
+                            </option>
                             <option
                                 value="any_response"
                                 ng-if="!$ctrl.hideNonFilterableQuestionAnswerResponse(question)"
-                                >{{
-                                'peopleScreen:answerMatchingOptions.anyResponse'
-                                | t }}</option
                             >
+                                {{
+                                'peopleScreen:answerMatchingOptions.anyResponse'
+                                | t }}
+                            </option>
                         </select>
                         <input
                             type="text"
