@@ -21,7 +21,7 @@
         "onesky:download": "babel-node ./bin/oneskyDownload.js"
     },
     "dependencies": {
-        "@types/mocha": "^7.0.2",
+        "@types/mocha": "^8.0.3",
         "@uirouter/angularjs": "^1.0.26",
         "angular": "~1.8.0",
         "angular-animate": "~1.8.2",
