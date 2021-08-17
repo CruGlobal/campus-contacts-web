@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '../../assets/stylesheets/variables/colors';
 
 nav-search {
@@ -24,8 +25,8 @@ nav-search {
             }
             @keyframes lds-ripple {
                 0% {
-                    top: ($lds-ripple-size) / 2;
-                    left: ($lds-ripple-size) / 2;
+                    top: math.div($lds-ripple-size, 2);
+                    left: math.div($lds-ripple-size, 2);
                     width: 0;
                     height: 0;
                     opacity: 1;
