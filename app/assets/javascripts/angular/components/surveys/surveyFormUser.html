@@ -11,11 +11,7 @@
             class="mv3"
             ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         >
-            <label class="pivot-gray-darker mb1 db"
-                >{{question.label}}<span class="red"
-                    >{{question.required ? '*' : ''}}</span
-                ></label
-            >
+            <label class="pivot-gray-darker mb1 db">{{question.label}}</label>
 
             <div ng-switch="question.kind">
                 <div ng-switch-when="ChoiceField" ng-switch="question.style">

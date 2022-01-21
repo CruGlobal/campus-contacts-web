@@ -12,9 +12,7 @@
             ng-repeat="question in $ctrl.surveyQuestions track by question.id"
         >
             <label class="pivot-gray-darker f3 mb3 db"
-                >{{question.label}}<span class="red"
-                    >{{question.required ? '*' : ''}}</span
-                ></label
+                >{{question.label}}</label
             >
 
             <div ng-switch="question.kind">
