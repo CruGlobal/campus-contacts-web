@@ -27,9 +27,10 @@
                 ng-show="!$ctrl.isExpanded[question.id]"
             >
                 {{ question.label }}
-                <span class="f7" ng-if="question.required"
-                    >({{ 'common:general.required' | t }})</span
-                >
+                <tooltip
+                    ng-if="question.required"
+                    content="{{ 'This question must be shown on all surveys' | t }}"
+                ></tooltip>
             </span>
             <input
                 type="text"
