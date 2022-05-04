@@ -916,7 +916,7 @@ export default {
             response_help:
                 "When someone texts in the keyword, this is the message they will receive. The {{ link }} will automatically be replaced with a link to the survey. If you want to include a link to your specific website, don't include it here.",
             response_example:
-                'Example: Thanks for taking our survey! Reply with “i” or press {{ link }} if you have a smartphone.',
+                'Example: Thanks for taking our survey! Press {{ link }}.',
             request: 'Request Keyword',
             requested: 'Keyword Requested',
             requested_message:
