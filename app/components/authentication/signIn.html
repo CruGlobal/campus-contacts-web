@@ -18,7 +18,7 @@
             class="btn-key btn-primary f5 ma2"
             title="{{ $ctrl.inviteState? 'login.signUpWithEmail' : 'login.signInWithEmail' | t }}"
             target="_self"
-            ng-href="{{ $ctrl.theKeyLoginUrl() }}"
+            ng-click="$ctrl.oktaService.signIn()"
         >
             {{ $ctrl.inviteState? 'login.signUpWithEmail' :
             'login.signInWithEmail' | t }}

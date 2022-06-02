@@ -9,6 +9,7 @@ angular
         authenticationService,
         loggedInPerson,
         facebookService,
+        oktaService,
         analyticsService,
         state,
         $location,
@@ -22,6 +23,7 @@ angular
         $window.fbAsyncInit = function () {
             facebookService.init();
         };
+        oktaService.init();
 
         if (authenticationService.isTokenValid())
             authenticationService.setupAuthenticationState();

@@ -16,10 +16,12 @@ function signInController(
     envService,
     $state,
     facebookService,
+    oktaService,
     sessionStorageService,
 ) {
     this.showLogin = false;
     this.facebookService = facebookService;
+    this.oktaService = oktaService;
     this.campusContactsLogo = campusContactsLogo;
 
     this.$onInit = async () => {

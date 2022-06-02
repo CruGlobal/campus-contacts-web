@@ -110,6 +110,12 @@ function authenticationService(
             provider: 'facebook',
         });
 
+    const requestOktaV4Token = (token) =>
+        $http.post(`${envService.read('apiUrl')}/auth/okta`, {
+            okta_access_token: token,
+            provider: 'okta',
+        });
+
     const authorizeAccess = async (accessToken) => {
         try {
             const response = await requestTicket(accessToken);
@@ -128,6 +134,16 @@ function authenticationService(
     const authorizeFacebookAccess = async (accessToken) => {
         try {
             const { data } = await requestFacebookV4Token(accessToken);
+            setAuthorizationAndState(data.token);
+            postAuthRedirect();
+        } catch (e) {
+            errorService.displayError(e, false);
+        }
+    };
+
+    const authorizeOktaAccess = async (accessToken) => {
+        try {
+            const { data } = await requestOktaV4Token(accessToken);
             setAuthorizationAndState(data.token);
             postAuthRedirect();
         } catch (e) {
@@ -226,6 +242,7 @@ function authenticationService(
         },
         authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
+        authorizeOktaAccess: authorizeOktaAccess,
         storeJwtToken: storeJwtToken,
         removeAccess: () => {
             clearToken();
