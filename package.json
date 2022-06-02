@@ -21,6 +21,7 @@
         "onesky:download": "babel-node ./bin/oneskyDownload.js"
     },
     "dependencies": {
+        "@okta/okta-auth-js": "^6.5.1",
         "@types/mocha": "^8.0.4",
         "@uirouter/angularjs": "^1.0.28",
         "angular": "~1.8.0",
