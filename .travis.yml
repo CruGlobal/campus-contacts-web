@@ -1,19 +1,11 @@
 sudo: false
 language: node_js
 node_js: '12'
-addons:
-    chrome: stable
-    # This is being used by Cypress.io for e2e testing
-    apt:
-        packages:
-            - libgconf-2-4
 
 script:
     - yarn test
     - yarn lint
     - yarn prettier:check
-    - cypress install
-    - yarn test:cypress:ci
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
