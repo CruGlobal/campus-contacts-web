@@ -1,5 +1,0 @@
-{
-    "baseUrl": "https://localhost:8080",
-    "chromeWebSecurity": false,
-    "video": false
-}
