@@ -9,8 +9,8 @@ dotenv.config({ path: '.env.local' });
 
 async function downloadTranslations() {
     const options = {
-        apiKey: process.env.secrets.ONESKY_API_KEY,
-        secret: process.env.secrets.ONESKY_SECRET_KEY,
+        apiKey: process.env.ONESKY_API_KEY,
+        secret: process.env.ONESKY_SECRET_KEY,
         projectId: '240181',
         fileName: 'en-US.json',
         format: 'I18NEXT_MULTILINGUAL_JSON',
