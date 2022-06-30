@@ -25,7 +25,7 @@ function navHeaderController(
     this.campusContactsLogo = campusContactsLogo;
 
     this.logout = () => {
-        authenticationService.destroyTheKeyAccess();
+        authenticationService.destroyOktaAccess();
     };
 
     this.toggleSearchBar = () => (this.showSearchBar = !this.showSearchBar);
