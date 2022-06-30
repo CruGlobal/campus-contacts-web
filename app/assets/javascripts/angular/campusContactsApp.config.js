@@ -16,7 +16,6 @@ angular
                 development: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     publicUri: 'https://localhost:8080',
-                    theKeyClientId: '4921314596573158029',
                     oktaClientId: '0oa1oqxpke9BXTbhp0h8',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'http://localhost:8080/s/',
@@ -24,7 +23,6 @@ angular
                 staging: {
                     apiUrl: 'https://campus-contacts-api-stage.cru.org/apis/v4',
                     publicUri: 'https://stage.campuscontacts.cru.org',
-                    theKeyClientId: '9072391337803602723',
                     oktaClientId: '0oa1oqxpke9BXTbhp0h8',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://stage.ccontacts.app/s/',
@@ -32,14 +30,12 @@ angular
                 production: {
                     apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
                     publicUri: 'https://campuscontacts.cru.org',
-                    theKeyClientId: '8575389827001069797',
                     oktaClientId: '0oa1oqxpke9BXTbhp0h8',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',
                 },
                 defaults: {
-                    theKeyUrl: 'https://thekey.me/cas',
                     oktaUrl: 'https://signon.okta.com',
                     googleAnalytics: 'UA-XXXXXX-XX',
                 },
