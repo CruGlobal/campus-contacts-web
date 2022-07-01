@@ -1,5 +1,3 @@
-import { OktaAuth } from '@okta/okta-auth-js';
-
 angular.module('campusContactsApp').factory('oktaService', oktaService);
 
 let idToken = 'none';

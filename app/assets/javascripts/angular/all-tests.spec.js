@@ -2,6 +2,17 @@ import './main.js';
 import angular from 'angular';
 import 'angular-mocks';
 
+class OktaAuth {
+    constructor(config) {
+        this.token = '';
+        this.tokenManager = {};
+    }
+    start() {}
+    signOut() {}
+}
+
+window.OktaAuth = OktaAuth;
+
 beforeEach(angular.mock.module('campusContactsApp'));
 
 beforeEach(
