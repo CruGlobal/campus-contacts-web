@@ -16,22 +16,21 @@ function signInController(
     envService,
     $state,
     facebookService,
+    oktaService,
     sessionStorageService,
 ) {
     this.showLogin = false;
     this.facebookService = facebookService;
+    this.oktaService = oktaService;
     this.campusContactsLogo = campusContactsLogo;
 
     this.$onInit = async () => {
-        this.theKeyLoginUrl = authenticationService.theKeyLoginUrl;
-        this.theKeySignUpUrl = authenticationService.theKeySignUpUrl;
-
         if (authenticationService.isTokenValid()) {
             authenticationService.postAuthRedirect();
         }
 
         if (this.accessToken) {
-            await authenticationService.authorizeAccess(this.accessToken);
+            await authenticationService.authorizeOktaAccess(this.accessToken);
         }
 
         if (!this.accessToken) this.showLogin = true;

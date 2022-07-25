@@ -19,30 +19,7 @@ function authenticationService(
     $window,
     JsonApiDataStore,
 ) {
-    const service = `${envService.read('apiUrl')}/auth/thekey`;
-    const port = envService.is('development') ? `:${$location.port()}` : '';
-    const redirectUrl = () =>
-        encodeURIComponent(
-            `https://${$location.host()}${port}/auth-web${
-                $location.search().previousUri
-                    ? `?previousUri=${$location.search().previousUri}`
-                    : ''
-            }`,
-        );
-    const theKeyLoginUrl = () =>
-        `${envService.read(
-            'theKeyUrl',
-        )}/login?response_type=token&scope=fullticket&client_id=${envService.read(
-            'theKeyClientId',
-        )}&redirect_uri=${redirectUrl()}`;
-
-    const theKeySignUpUrl = () => `${theKeyLoginUrl()}?&action=signup`;
-
-    const theKeylogoutUrl = `${envService.read(
-        'theKeyUrl',
-    )}/logout?&client_id=${envService.read(
-        'theKeyClientId',
-    )}&service=https://${$location.host()}${port}/sign-in`;
+    const oktaLogoutUrl = `${envService.read('oktaUrl')}/login/signout`;
 
     const getJwtToken = () => {
         return localStorageService.get('jwtToken') || false;
@@ -88,46 +65,31 @@ function authenticationService(
         }
     };
 
-    const requestTicket = (accesstoken) =>
-        $http({
-            method: 'GET',
-            url: `${envService.read(
-                'theKeyUrl',
-            )}/api/oauth/ticket?service=${service}`,
-            headers: {
-                Authorization: `Bearer ${accesstoken}`,
-            },
-        });
-
-    const requestV4Token = (ticket) =>
-        $http.post(`${envService.read('apiUrl')}/auth/thekey`, {
-            code: ticket,
-        });
-
     const requestFacebookV4Token = (token) =>
         $http.post(`${envService.read('apiUrl')}/auth/facebook`, {
             fb_access_token: token,
             provider: 'facebook',
         });
 
-    const authorizeAccess = async (accessToken) => {
-        try {
-            const response = await requestTicket(accessToken);
-            const { data } = await requestV4Token(response.data.ticket);
-            setAuthorizationAndState(data.token);
-            const inviteState = sessionStorageService.get('inviteState');
+    const requestOktaV4Token = (token) =>
+        $http.post(`${envService.read('apiUrl')}/auth/okta`, {
+            okta_access_token: token,
+            provider: 'okta',
+        });
 
-            inviteState
-                ? $state.go('appWithoutMenus.inviteLink', inviteState)
-                : postAuthRedirect();
+    const authorizeFacebookAccess = async (accessToken) => {
+        try {
+            const { data } = await requestFacebookV4Token(accessToken);
+            setAuthorizationAndState(data.token);
+            postAuthRedirect();
         } catch (e) {
             errorService.displayError(e, false);
         }
     };
 
-    const authorizeFacebookAccess = async (accessToken) => {
+    const authorizeOktaAccess = async (accessToken) => {
         try {
-            const { data } = await requestFacebookV4Token(accessToken);
+            const { data } = await requestOktaV4Token(accessToken);
             setAuthorizationAndState(data.token);
             postAuthRedirect();
         } catch (e) {
@@ -219,13 +181,13 @@ function authenticationService(
     };
 
     return {
-        destroyTheKeyAccess: () => {
+        destroyOktaAccess: () => {
             clearToken();
             clearState();
-            $window.location.href = theKeylogoutUrl;
+            $window.location.href = oktaLogoutUrl;
         },
-        authorizeAccess: authorizeAccess,
         authorizeFacebookAccess: authorizeFacebookAccess,
+        authorizeOktaAccess: authorizeOktaAccess,
         storeJwtToken: storeJwtToken,
         removeAccess: () => {
             clearToken();
@@ -244,8 +206,6 @@ function authenticationService(
         stopImpersonatingUser,
         adminRedirect,
         postAuthRedirect,
-        theKeyLoginUrl,
-        theKeySignUpUrl,
         isTokenValid: getJwtToken,
         updateUserData,
     };
