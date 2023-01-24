@@ -30,11 +30,14 @@ jobs:
       - name: 📦 Install dependencies
         run: yarn install
 
-      - name: 💅 Prettier check
-        run: yarn prettier:check
+      - name: Karma Test
+        run: yarn test
 
       - name: 💨 Lint check
         run: yarn lint
+
+      - name: 💅 Prettier check
+        run: yarn prettier:check
 
       - name: 🏗️ Build app
         run: yarn build --prod
