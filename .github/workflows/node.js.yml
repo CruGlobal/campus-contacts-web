@@ -1,0 +1,40 @@
+name: OneSky Upload
+
+on:
+  push:
+    branches:
+      - travis-gha-conversion
+  pull_request:
+    branches:
+      - travis-gha-conversion
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Checks & Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12'
+
+      - name: 📦 Install dependencies
+        run: yarn install
+
+      - name: 💅 Prettier check
+        run: yarn prettier:check
+
+      - name: 💨 Lint check
+        run: yarn lint
+
+      - name: 🏗️ Build app
+        run: yarn build --prod
