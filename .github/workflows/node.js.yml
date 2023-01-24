@@ -3,15 +3,15 @@ name: OneSky Upload
 on:
     push:
         branches:
-        - travis-gha-conversion
+            - travis-gha-conversion
     pull_request:
         branches:
-        - travis-gha-conversion
+            - travis-gha-conversion
     workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     build:
@@ -19,25 +19,25 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-        - name: Repository checkout
-            uses: actions/checkout@v3
+            - name: Repository checkout
+                uses: actions/checkout@v3
 
-        - name: Node.js setup
-            uses: actions/setup-node@v3
-            with:
-            node-version: '12'
+            - name: Node.js setup
+                uses: actions/setup-node@v3
+                with:
+                    node-version: '12'
 
-        - name: 📦 Install dependencies
-            run: yarn install
+            - name: 📦 Install dependencies
+                run: yarn install
 
-        - name: Karma Test
-            run: yarn test
+            - name: Karma Test
+                run: yarn test
 
-        - name: 💨 Lint check
-            run: yarn lint
+            - name: 💨 Lint check
+                run: yarn lint
 
-        - name: 💅 Prettier check
-            run: yarn prettier:check
+            - name: 💅 Prettier check
+                run: yarn prettier:check
 
-        - name: 🏗️ Build app
-            run: yarn build --prod
+            - name: 🏗️ Build app
+                run: yarn build --prod
