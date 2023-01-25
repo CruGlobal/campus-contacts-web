@@ -41,3 +41,26 @@ jobs:
 
       - name: 🏗️ Build app
         run: yarn build --prod
+
+  deploy:
+    name: Deploy to OneSky
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12'
+
+      - name: 📦 Install dependencies
+        run: yarn install
+
+      - name: Deploy to OneSky
+        run: 'Deploy me!'
+
+
+
