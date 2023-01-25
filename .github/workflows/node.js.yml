@@ -46,6 +46,7 @@ jobs:
     name: Deploy to OneSky
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Repository checkout
@@ -60,7 +61,7 @@ jobs:
         run: yarn install
 
       - name: Deploy to OneSky
-        run: 'Deploy me!'
+        run: echo 'Deploy me!'
 
 
 
