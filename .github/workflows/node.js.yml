@@ -61,7 +61,7 @@ jobs:
         run: yarn install
 
       - name: Deploy to OneSky
-        run: echo 'Deploy me!'
+        run: yarn onesky:upload
 
 
 
