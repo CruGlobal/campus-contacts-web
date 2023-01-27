@@ -1,72 +1,72 @@
 name: OneSky Upload
 
 on:
-  push:
-    branches:
-      - travis-gha-conversion
-  pull_request:
-    branches:
-      - travis-gha-conversion
-  workflow_dispatch:
+    push:
+        branches:
+            - travis-gha-conversion
+    pull_request:
+        branches:
+            - travis-gha-conversion
+    workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  build:
-    name: Checks & Build Test
-    runs-on: ubuntu-latest
+    build:
+        name: Checks & Build Test
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v3
+        steps:
+            - name: Repository checkout
+              uses: actions/checkout@v3
 
-      - name: Node.js setup
-        uses: actions/setup-node@v3
-        with:
-          node-version: '12'
+            - name: Node.js setup
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '12'
 
-      - name: 📦 Install dependencies
-        run: yarn install
+            - name: 📦 Install dependencies
+              run: yarn install
 
-      - name: Karma Test
-        run: yarn test
+            - name: Karma Test
+              run: yarn test
 
-      - name: 💨 Lint check
-        run: yarn lint
+            - name: 💨 Lint check
+              run: yarn lint
 
-      - name: 💅 Prettier check
-        run: yarn prettier:check
+            - name: 💅 Prettier check
+              run: yarn prettier:check
 
-      - name: 🏗️ Build app
-        run: yarn build --prod
+            - name: 🏗️ Build app
+              run: yarn build --prod
 
-  deploy:
-    name: Connect & Upload
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
-    runs-on: ubuntu-latest
-    needs: build
+    deploy:
+        name: Connect & Upload
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
+        runs-on: ubuntu-latest
+        needs: build
 
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v3
+        steps:
+            - name: Repository checkout
+              uses: actions/checkout@v3
 
-      - name: Node.js setup
-        uses: actions/setup-node@v3
-        with:
-          node-version: '12'
+            - name: Node.js setup
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '12'
 
-      - name: 📦 Install dependencies
-        run: yarn install
+            - name: 📦 Install dependencies
+              run: yarn install
 
-      - name: Curl connection
-        uses: wei/curl@v1
-        with:
-          args: -s https://codecov.io/bash
+            - name: Curl connection
+              uses: wei/curl@v1
+              with:
+                  args: -s https://codecov.io/bash
 
-      - name: Upload to OneSky
-        run: yarn onesky:upload
-
-
-
+            - name: Upload to OneSky
+              run: yarn onesky:upload
+              env:
+                  ONESKY_API_KEY: ${{ secrets.ONESKY_API_KEY }}
+                  ONESKY_SECRET_KEY: ${{ secrets.ONESKY_SECRET_KEY }}
