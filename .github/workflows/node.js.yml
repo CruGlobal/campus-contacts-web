@@ -60,10 +60,8 @@ jobs:
             - name: 📦 Install dependencies
               run: yarn install
 
-            - name: Curl connection
-              uses: wei/curl@v1
-              with:
-                  args: -s https://codecov.io/bash
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v3
 
             - name: Upload to OneSky
               run: yarn onesky:upload
