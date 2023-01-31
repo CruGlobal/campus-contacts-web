@@ -2,14 +2,8 @@ name: Build & Upload
 
 on:
     push:
-        branches:
-            - travis-gha-conversion
-            - staging
-            - master
     pull_request:
-        branches:
-            - staging
-            - master
+        branches: [master]
     workflow_dispatch:
 
 concurrency:
