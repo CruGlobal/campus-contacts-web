@@ -50,7 +50,7 @@ jobs:
               uses: codecov/codecov-action@v3
 
     deploy:
-        name: Connect & Upload
+        name: OneSky Upload
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
         runs-on: ubuntu-latest
         needs: build
