@@ -1,4 +1,4 @@
-name: OneSky Upload
+name: Build & Upload
 
 on:
     push:
