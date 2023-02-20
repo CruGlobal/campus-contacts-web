@@ -45,7 +45,7 @@ jobs:
 
     deploy:
         name: OneSky Upload
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/travis-gha-conversion'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
         needs: build
 
