@@ -30,6 +30,7 @@ angular
                 production: {
                     apiUrl: 'https://campus-contacts-api.cru.org/apis/v4',
                     publicUri: 'https://campuscontacts.cru.org',
+                    oktaClientId: '0oa1oqxpke9BXTbhp0h8',
                     facebookAppId: '264148437992398',
                     surveyLinkPrefix: 'https://ccontacts.app/s/',
                     googleAnalytics: 'UA-325725-21',

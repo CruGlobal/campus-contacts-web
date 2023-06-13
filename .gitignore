@@ -7,3 +7,5 @@ __generated__
 .env
 .env.local
 *.iml
+.DS_Store
+.tool-versions
