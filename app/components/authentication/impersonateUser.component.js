@@ -1,23 +1,23 @@
 import template from './impersonateUser.html';
 
 angular.module('campusContactsApp').component('impersonateUser', {
-    controller: impersonatePersonController,
-    template: template,
-    bindings: {
-        userId: '<',
-    },
+  controller: impersonatePersonController,
+  template,
+  bindings: {
+    userId: '<',
+  },
 });
 
 function impersonatePersonController(authenticationService, $state, $scope) {
-    this.$onInit = async () => {
-        if (!authenticationService.isTokenValid()) $state.go('app.people');
+  this.$onInit = async () => {
+    if (!authenticationService.isTokenValid()) $state.go('app.people');
 
-        this.userId
-            ? await authenticationService.impersonateUser(this.userId)
-            : await authenticationService.stopImpersonatingUser();
+    this.userId
+      ? await authenticationService.impersonateUser(this.userId)
+      : await authenticationService.stopImpersonatingUser();
 
-        $scope.$apply();
+    $scope.$apply();
 
-        $state.go('app.people');
-    };
+    $state.go('app.people');
+  };
 }

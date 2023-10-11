@@ -1,94 +1,83 @@
 <div class="person-info row ph2">
-    <div class="name">
-        <a ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
-        <span class="uncontacted" ng-if="$ctrl.uncontacted"
-            >({{ 'dashboard.uncontacted' | t }})</span
-        >
-    </div>
-    <div
-        class="stats"
-        ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}"
-    >
-        <div class="pivot-gray-3">{{ $ctrl.report.contact_count || '-' }}</div>
-        <div>
-            <a
-                href
-                class="warning-highlight"
-                ng-href="/ministries/{{
+  <div class="name">
+    <a ng-click="$ctrl.openProfile()">{{ $ctrl.person | personName }}</a>
+    <span class="uncontacted" ng-if="$ctrl.uncontacted">({{ 'dashboard.uncontacted' | t }})</span>
+  </div>
+  <div class="stats" ng-class="{'stats-collapsed': $ctrl.addInteractionBtnsVisible || $ctrl.closingInteractionButtons}">
+    <div class="pivot-gray-3">{{ $ctrl.report.contact_count || '-' }}</div>
+    <div>
+      <a
+        href
+        class="warning-highlight"
+        ng-href="/ministries/{{
                     $ctrl.organizationId
                 }}/people?assigned_to={{
                     $ctrl.person.id
                 }}&statuses=uncontacted"
-                ng-if="$ctrl.report.uncontacted_count"
-            >
-                {{ $ctrl.report.uncontacted_count }}
-            </a>
-            <span class="pivot-gray-3" ng-if="!$ctrl.report.uncontacted_count"
-                >-</span
-            >
-        </div>
-        <div
-            ng-repeat="i in [2,3,4,5,9]"
-            class="no-data"
-            ng-class="{ 'pivot-gray-3' : $ctrl.reportInteractions(i) === '-' }"
-            ng-bind="$ctrl.reportInteractions(i)"
-        ></div>
-        <span
-            class="phone no-data pivot-gray-3"
-            ng-if="$ctrl.person.phone_numbers.length === 0"
-            >-</span
-        >
+        ng-if="$ctrl.report.uncontacted_count"
+      >
+        {{ $ctrl.report.uncontacted_count }}
+      </a>
+      <span class="pivot-gray-3" ng-if="!$ctrl.report.uncontacted_count">-</span>
     </div>
+    <div
+      ng-repeat="i in [2,3,4,5,9]"
+      class="no-data"
+      ng-class="{ 'pivot-gray-3' : $ctrl.reportInteractions(i) === '-' }"
+      ng-bind="$ctrl.reportInteractions(i)"
+    ></div>
+    <span class="phone no-data pivot-gray-3" ng-if="$ctrl.person.phone_numbers.length === 0">-</span>
+  </div>
 
-    <div>
-        <contact-actions
-            phone="$ctrl.person.phone_numbers[0].number"
-            email="$ctrl.person.email_addresses[0].email"
-        ></contact-actions>
-    </div>
+  <div>
+    <contact-actions
+      phone="$ctrl.person.phone_numbers[0].number"
+      email="$ctrl.person.email_addresses[0].email"
+    ></contact-actions>
+  </div>
 
-    <div class="addInteractionButtons" ng-if="$ctrl.addInteractionBtnsVisible">
-        <square-button
-            ng-repeat="type in $ctrl.interactionTypes"
-            ng-click="$ctrl.openAddInteractionPanel(type)"
-            ng-class="{'open': $ctrl.openPanelType === type}"
-            analytics-on="click"
-            analytics-category="Dashboard"
-            analytics-event="Select Interaction"
-            analytics-label="{{ type.title }}"
-            title="{{ type.title | t }}"
-        >
-            <ng-md-icon icon="{{ type.icon }}"></ng-md-icon>
-        </square-button>
-    </div>
-    <ng-md-icon
-        icon="add"
-        size="16"
-        class="add-new-interaction"
-        ng-click="$ctrl.toggleInteractionBtns()"
-        analytics-on="click"
-        analytics-category="Dashboard"
-        analytics-event="Open Interaction Types"
-        analytics-if="$ctrl.addInteractionBtnsVisible"
-        ng-class="{'close': $ctrl.addInteractionBtnsVisible}"
+  <div class="addInteractionButtons" ng-if="$ctrl.addInteractionBtnsVisible">
+    <square-button
+      ng-repeat="type in $ctrl.interactionTypes"
+      ng-click="$ctrl.openAddInteractionPanel(type)"
+      ng-class="{'open': $ctrl.openPanelType === type}"
+      analytics-on="click"
+      analytics-category="Dashboard"
+      analytics-event="Select Interaction"
+      analytics-label="{{ type.title }}"
+      title="{{ type.title | t }}"
     >
-    </ng-md-icon>
+      <ng-md-icon icon="{{ type.icon }}"></ng-md-icon>
+    </square-button>
+  </div>
+  <ng-md-icon
+    icon="add"
+    size="16"
+    class="add-new-interaction"
+    ng-click="$ctrl.toggleInteractionBtns()"
+    analytics-on="click"
+    analytics-category="Dashboard"
+    analytics-event="Open Interaction Types"
+    analytics-if="$ctrl.addInteractionBtnsVisible"
+    ng-class="{'close': $ctrl.addInteractionBtnsVisible}"
+  >
+  </ng-md-icon>
 </div>
 <div class="addInteractionPanel" ng-if="$ctrl.openPanelType">
-    <textarea
-        placeholder="{{ 'dashboard.notes_for_new_interaction' | t }} {{
+  <textarea
+    placeholder="{{ 'dashboard.notes_for_new_interaction' | t }} {{
             $ctrl.openPanelType.title | t
         }}"
-        ng-model="$ctrl.interactionComment"
-        class="auto-grow"
-    ></textarea>
-    <a
-        href
-        ng-click="$ctrl.saveInteraction()"
-        analytics-on="click"
-        analytics-category="Dashboard"
-        analytics-event="Save New {{ $ctrl.openPanelType.title }}"
-    >
-        {{ 'dashboard.done' | t }}
-    </a>
+    ng-model="$ctrl.interactionComment"
+    class="auto-grow"
+  ></textarea>
+  <a
+    href
+    ng-click="$ctrl.saveInteraction()"
+    analytics-on="click"
+    analytics-category="Dashboard"
+    analytics-event="Save New {{ $ctrl.openPanelType.title }}"
+  >
+    {{ 'dashboard.done' | t }}
+  </a>
 </div>

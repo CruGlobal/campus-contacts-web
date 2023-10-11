@@ -1,16 +1,14 @@
 <stats-header></stats-header>
 <div
-    infinite-scroll="$ctrl.loadTeamPage()"
-    infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-    class="grid-content grid-fixed"
+  infinite-scroll="$ctrl.loadTeamPage()"
+  infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+  class="grid-content grid-fixed"
 >
-    <people-view-person
-        ng-repeat="person in $ctrl.team | orderBy: 'last_name' track by person.id"
-        person="person"
-        organization-id="$ctrl.organizationOverview.org.id"
-    >
-    </people-view-person>
-    <div ng-show="$ctrl.busy" class="row message-row">
-        {{ 'general.loading_more' | t }}
-    </div>
+  <people-view-person
+    ng-repeat="person in $ctrl.team | orderBy: 'last_name' track by person.id"
+    person="person"
+    organization-id="$ctrl.organizationOverview.org.id"
+  >
+  </people-view-person>
+  <div ng-show="$ctrl.busy" class="row message-row">{{ 'general.loading_more' | t }}</div>
 </div>

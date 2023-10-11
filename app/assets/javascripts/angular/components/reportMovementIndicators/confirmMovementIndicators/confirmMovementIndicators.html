@@ -1,103 +1,75 @@
-<h2 class="f3 fw6 mb3">
-    {{ 'movementIndicators:confirmIndicators.title' | t }}
-</h2>
+<h2 class="f3 fw6 mb3">{{ 'movementIndicators:confirmIndicators.title' | t }}</h2>
 
 <h3 class="tracked f5 ttu mb3 fw6" ng-if="$ctrl.startDate || $ctrl.endDate">
-    {{ $ctrl.startDate | date : 'shortDate' }} &ndash; {{ $ctrl.endDate | date :
-    'shortDate' }}
+  {{ $ctrl.startDate | date : 'shortDate' }} &ndash; {{ $ctrl.endDate | date : 'shortDate' }}
 </h3>
 
 <script type="text/ng-template" id="movementIndicatorRow.html">
-    <label class="flex items-center mb3">
-        <span class="flex-auto">
-            {{ indicator.label }}
-            <tooltip content="{{ indicator.tooltip }}"/>
-        </span>
-        <input class="pa2 tc w3 ml3"
-               type="number"
-               min="0"
-               ng-model="indicator.value">
-    </label>
+  <label class="flex items-center mb3">
+      <span class="flex-auto">
+          {{ indicator.label }}
+          <tooltip content="{{ indicator.tooltip }}"/>
+      </span>
+      <input class="pa2 tc w3 ml3"
+             type="number"
+             min="0"
+             ng-model="indicator.value">
+  </label>
 </script>
 
 <div ng-if="$ctrl.loadingMovementIndicators" class="f3 mb5">
-    {{ 'movementIndicators:confirmIndicators.loading' | t }}
+  {{ 'movementIndicators:confirmIndicators.loading' | t }}
 </div>
 
 <div ng-if="!$ctrl.loadingMovementIndicators">
-    <div
-        ng-if="$ctrl.submittedInLastWeek"
-        class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker"
-    >
-        <h2 class="f4 fw6 mb3">
-            {{
-            'movementIndicators:confirmIndicators.submittedInLastWeek.heading' |
-            t }}
-        </h2>
-        <p>
-            {{
-            'movementIndicators:confirmIndicators.submittedInLastWeek.description'
-            | t }}
-        </p>
-        <p>
-            {{
-            'movementIndicators:confirmIndicators.submittedInLastWeek.descriptionContinued'
-            | t }}
-        </p>
+  <div ng-if="$ctrl.submittedInLastWeek" class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
+    <h2 class="f4 fw6 mb3">{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.heading' | t }}</h2>
+    <p>{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.description' | t }}</p>
+    <p>{{ 'movementIndicators:confirmIndicators.submittedInLastWeek.descriptionContinued' | t }}</p>
+  </div>
+
+  <div ng-if="!$ctrl.submittedInLastWeek">
+    <p class="pivot-gray-darker f5 mt4">{{ 'movementIndicators:confirmIndicators.interactionsHeading' | t }}</p>
+    <div class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
+      <h4 class="tracked ttu">{{ 'movementIndicators:interactions.title' | t }}</h4>
+      <div class="column-grid-ns">
+        <div ng-repeat="indicator in $ctrl.fieldMap.interactions">
+          <ng-include src="'movementIndicatorRow.html'"></ng-include>
+        </div>
+      </div>
     </div>
 
-    <div ng-if="!$ctrl.submittedInLastWeek">
-        <p class="pivot-gray-darker f5 mt4">
-            {{ 'movementIndicators:confirmIndicators.interactionsHeading' | t }}
-        </p>
-        <div class="pa4 f5 bg-pivot-gray-5 pivot-gray-darker">
-            <h4 class="tracked ttu">
-                {{ 'movementIndicators:interactions.title' | t }}
-            </h4>
-            <div class="column-grid-ns">
-                <div ng-repeat="indicator in $ctrl.fieldMap.interactions">
-                    <ng-include src="'movementIndicatorRow.html'"></ng-include>
-                </div>
-            </div>
+    <p class="pivot-gray-darker f5 mt4">{{ 'movementIndicators:confirmIndicators.labelsHeading' | t }}</p>
+    <div class="flex-ns mt3 pivot-gray-darker">
+      <div class="w-50-ns pa4 f5 bg-pivot-gray-5">
+        <h4 class="tracked ttu">{{ 'movementIndicators:students.title' | t }}</h4>
+        <div ng-repeat="indicator in $ctrl.fieldMap.students">
+          <ng-include src="'movementIndicatorRow.html'"></ng-include>
         </div>
-
-        <p class="pivot-gray-darker f5 mt4">
-            {{ 'movementIndicators:confirmIndicators.labelsHeading' | t }}
-        </p>
-        <div class="flex-ns mt3 pivot-gray-darker">
-            <div class="w-50-ns pa4 f5 bg-pivot-gray-5">
-                <h4 class="tracked ttu">
-                    {{ 'movementIndicators:students.title' | t }}
-                </h4>
-                <div ng-repeat="indicator in $ctrl.fieldMap.students">
-                    <ng-include src="'movementIndicatorRow.html'"></ng-include>
-                </div>
-            </div>
-            <div class="w-50-ns pa4 f5 bg-pivot-gray-5 ml3-ns">
-                <h4 class="tracked ttu">
-                    {{ 'movementIndicators:faculty.title' | t }}
-                </h4>
-                <div ng-repeat="indicator in $ctrl.fieldMap.faculty">
-                    <ng-include src="'movementIndicatorRow.html'"></ng-include>
-                </div>
-            </div>
+      </div>
+      <div class="w-50-ns pa4 f5 bg-pivot-gray-5 ml3-ns">
+        <h4 class="tracked ttu">{{ 'movementIndicators:faculty.title' | t }}</h4>
+        <div ng-repeat="indicator in $ctrl.fieldMap.faculty">
+          <ng-include src="'movementIndicatorRow.html'"></ng-include>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="mt3 mb4 flex-ns justify-between">
-    <button
-        class="w-100 w-auto-ns mb3 mb0-ns f5 pivot-dark-blue ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-transparent"
-        ng-click="$ctrl.previous()"
-    >
-        {{ 'back' | t }}
-    </button>
-    <button
-        class="w-100 w-auto-ns f5 ph5 pv3 link ba dib bold br2 ttu tracked"
-        ng-class="$ctrl.submittedInLastWeek ? 'bg-transparent b--pivot-gray-dark pivot-gray-dark' : 'bg-pivot-dark-blue b--pivot-dark-blue white'"
-        ng-click="$ctrl.submit()"
-        ng-disabled="$ctrl.submittedInLastWeek"
-    >
-        {{ 'submit' | t }}
-    </button>
+  <button
+    class="w-100 w-auto-ns mb3 mb0-ns f5 pivot-dark-blue ph5 pv3 link ba b--pivot-dark-blue dib bold br2 ttu tracked bg-transparent"
+    ng-click="$ctrl.previous()"
+  >
+    {{ 'back' | t }}
+  </button>
+  <button
+    class="w-100 w-auto-ns f5 ph5 pv3 link ba dib bold br2 ttu tracked"
+    ng-class="$ctrl.submittedInLastWeek ? 'bg-transparent b--pivot-gray-dark pivot-gray-dark' : 'bg-pivot-dark-blue b--pivot-dark-blue white'"
+    ng-click="$ctrl.submit()"
+    ng-disabled="$ctrl.submittedInLastWeek"
+  >
+    {{ 'submit' | t }}
+  </button>
 </div>

@@ -3,43 +3,37 @@ import './components/navigation/navHeader.component';
 import './app.scss';
 
 angular.module('campusContactsApp').component('app', {
-    controller: appController,
-    template: template,
-    bindings: {
-        hideHeader: '<',
-        hideFooter: '<',
-        hideMenuLinks: '<',
-    },
+  controller: appController,
+  template,
+  bindings: {
+    hideHeader: '<',
+    hideFooter: '<',
+    hideMenuLinks: '<',
+  },
 });
 
 function appController(periodService, $rootScope, analyticsService) {
-    let deregisterEditOrganizationsEvent;
-    let deregisterStateChangedEvent;
+  let deregisterEditOrganizationsEvent;
+  let deregisterStateChangedEvent;
 
-    this.editOrganizations = false;
-    this.getPeriod = periodService.getPeriod;
+  this.editOrganizations = false;
+  this.getPeriod = periodService.getPeriod;
 
-    this.$onInit = () => {
-        this.year = new Date();
+  this.$onInit = () => {
+    this.year = new Date();
 
-        deregisterStateChangedEvent = $rootScope.$on(
-            'state:changed',
-            (event, { loggedIn }) => {
-                if (loggedIn) analyticsService.setupAuthenitcatedAnalyticData();
-                else analyticsService.clearAuthenticatedData();
-            },
-        );
+    deregisterStateChangedEvent = $rootScope.$on('state:changed', (event, { loggedIn }) => {
+      if (loggedIn) analyticsService.setupAuthenitcatedAnalyticData();
+      else analyticsService.clearAuthenticatedData();
+    });
 
-        deregisterEditOrganizationsEvent = $rootScope.$on(
-            'editOrganizations',
-            (event, value) => {
-                this.editOrganizations = value;
-            },
-        );
-    };
+    deregisterEditOrganizationsEvent = $rootScope.$on('editOrganizations', (event, value) => {
+      this.editOrganizations = value;
+    });
+  };
 
-    this.$onDestroy = () => {
-        deregisterEditOrganizationsEvent();
-        deregisterStateChangedEvent();
-    };
+  this.$onDestroy = () => {
+    deregisterEditOrganizationsEvent();
+    deregisterStateChangedEvent();
+  };
 }

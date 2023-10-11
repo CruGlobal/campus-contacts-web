@@ -1,99 +1,72 @@
 <div class="row padded">
-    <div
-        class="sticky-column"
-        ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'"
-    >
-        <div class="column">
-            <input type="checkbox" ng-model="$ctrl.selected" />
-        </div>
-        <div class="column name-column">
-            <a href ui-sref=".person.defaultTab({ personId: $ctrl.person.id })">
-                {{ $ctrl.person | personName }}
-            </a>
-        </div>
+  <div class="sticky-column" ng-class="$ctrl.odd ? 'col-bg-gray' : 'col-bg-white'">
+    <div class="column">
+      <input type="checkbox" ng-model="$ctrl.selected" />
     </div>
-    <div class="column detail-column gender-column">
-        <span ng-if="$ctrl.person.gender"
-            >{{ 'ministries.people.' + $ctrl.person.gender.toLowerCase() | t
-            }}</span
-        >
+    <div class="column name-column">
+      <a href ui-sref=".person.defaultTab({ personId: $ctrl.person.id })"> {{ $ctrl.person | personName }} </a>
     </div>
-    <div
-        class="column detail-column assigned-to-column dropdown"
-        ng-class="{warning: $ctrl.assignedTo.length === 0}"
-    >
-        <div class="name-container">
-            <div class="name">
-                {{ $ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] |
-                personName: 'firstAndLastInitial') : ('assignments.unassigned' |
-                t) }}
-                <span ng-if="$ctrl.assignedTo.length > 1"
-                    >(+{{ $ctrl.assignedTo.length - 1 }})</span
-                >
-            </div>
-            <a
-                href=""
-                ng-click="$ctrl.toggleAssignmentVisibility()"
-                class="arrow"
-                ng-class="{'arrow-up': $ctrl.assignmentsVisible}"
-            ></a>
-        </div>
-        <div
-            class="dropdown-container"
-            ng-if="$ctrl.assignmentsVisible"
-            on-click-away="$ctrl.assignmentsVisible = false"
-        >
-            <person-multiselect
-                class="dark dropdown-content"
-                people-description="'ministries.people.leaders'"
-                selected-people="$ctrl.assignedTo"
-                organization-id="$ctrl.organizationId"
-                add-person="$ctrl.addAssignment(person)"
-                remove-person="$ctrl.removeAssignment(person)"
-                focused="true"
-                ng-keydown="$ctrl.onAssignmentsKeydown($event)"
-            >
-            </person-multiselect>
-        </div>
+  </div>
+  <div class="column detail-column gender-column">
+    <span ng-if="$ctrl.person.gender">{{ 'ministries.people.' + $ctrl.person.gender.toLowerCase() | t }}</span>
+  </div>
+  <div class="column detail-column assigned-to-column dropdown" ng-class="{warning: $ctrl.assignedTo.length === 0}">
+    <div class="name-container">
+      <div class="name">
+        {{ $ctrl.assignedTo.length > 0 ? ($ctrl.assignedTo[0] | personName: 'firstAndLastInitial') :
+        ('assignments.unassigned' | t) }}
+        <span ng-if="$ctrl.assignedTo.length > 1">(+{{ $ctrl.assignedTo.length - 1 }})</span>
+      </div>
+      <a
+        href=""
+        ng-click="$ctrl.toggleAssignmentVisibility()"
+        class="arrow"
+        ng-class="{'arrow-up': $ctrl.assignmentsVisible}"
+      ></a>
     </div>
-    <div
-        class="column detail-column status-column form"
-        ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}"
-        ng-if="$ctrl.orgPermission.archive_date === null"
-    >
-        <label class="form-control-select" ng-if="$ctrl.isContact()">
-            <select
-                class="form-control"
-                ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
-                ng-model="$ctrl.orgPermission.followup_status"
-                ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')"
-            ></select>
-        </label>
+    <div class="dropdown-container" ng-if="$ctrl.assignmentsVisible" on-click-away="$ctrl.assignmentsVisible = false">
+      <person-multiselect
+        class="dark dropdown-content"
+        people-description="'ministries.people.leaders'"
+        selected-people="$ctrl.assignedTo"
+        organization-id="$ctrl.organizationId"
+        add-person="$ctrl.addAssignment(person)"
+        remove-person="$ctrl.removeAssignment(person)"
+        focused="true"
+        ng-keydown="$ctrl.onAssignmentsKeydown($event)"
+      >
+      </person-multiselect>
     </div>
-    <div
-        class="column detail-column status-column"
-        ng-if="$ctrl.orgPermission.archive_date !== null"
-    >
-        <span>{{ 'followup_status.archived' | t }}</span>
-    </div>
-    <div class="column detail-column contact-actions-column">
-        <contact-actions
-            phone="$ctrl.phoneNumber.number"
-            email="$ctrl.emailAddress.email"
-        ></contact-actions>
-    </div>
-    <div
-        class="column detail-column last-survey-column"
-        ng-if="$ctrl.showLastSurvey"
-    >
-        <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
-    </div>
-    <div
-        class="column survey-column"
-        ng-class="{ 'survey-column-wide': question.style === 'email' }"
-        ng-repeat="question in $ctrl.questions"
-        title="{{ $ctrl.person.answers[question.id].join(', ') }}"
-    >
-        {{ $ctrl.person.answers[question.id].join(', ') }}
-    </div>
+  </div>
+  <div
+    class="column detail-column status-column form"
+    ng-class="{warning: $ctrl.orgPermission.followup_status === 'uncontacted'}"
+    ng-if="$ctrl.orgPermission.archive_date === null"
+  >
+    <label class="form-control-select" ng-if="$ctrl.isContact()">
+      <select
+        class="form-control"
+        ng-options="option.id as (option.i18n | t) for option in $ctrl.followupStatusOptions"
+        ng-model="$ctrl.orgPermission.followup_status"
+        ng-change="$ctrl.saveAttribute($ctrl.orgPermission, 'followup_status')"
+      ></select>
+    </label>
+  </div>
+  <div class="column detail-column status-column" ng-if="$ctrl.orgPermission.archive_date !== null">
+    <span>{{ 'followup_status.archived' | t }}</span>
+  </div>
+  <div class="column detail-column contact-actions-column">
+    <contact-actions phone="$ctrl.phoneNumber.number" email="$ctrl.emailAddress.email"></contact-actions>
+  </div>
+  <div class="column detail-column last-survey-column" ng-if="$ctrl.showLastSurvey">
+    <span ng-if="$ctrl.lastSurvey">{{ $ctrl.lastSurvey | date }}</span>
+  </div>
+  <div
+    class="column survey-column"
+    ng-class="{ 'survey-column-wide': question.style === 'email' }"
+    ng-repeat="question in $ctrl.questions"
+    title="{{ $ctrl.person.answers[question.id].join(', ') }}"
+  >
+    {{ $ctrl.person.answers[question.id].join(', ') }}
+  </div>
 </div>

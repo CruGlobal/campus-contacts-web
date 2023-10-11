@@ -1,24 +1,24 @@
 <div ng-class="{ 'pivot-gray-4' : !$ctrl.report.contact_count }">
-    {{ ($ctrl.report.contact_count | number) || '-' }}
+  {{ ($ctrl.report.contact_count | number) || '-' }}
 </div>
 <div>
-    <span ng-if="$ctrl.report.uncontacted_count">
-        <a
-            href
-            class="warning-highlight"
-            ng-href="/ministries/{{
+  <span ng-if="$ctrl.report.uncontacted_count">
+    <a
+      href
+      class="warning-highlight"
+      ng-href="/ministries/{{
                 $ctrl.org.id
             }}/people?&statuses=uncontacted"
-            ng-if="$ctrl.report.uncontacted_count"
-        >
-            {{ $ctrl.report.uncontacted_count | number }}
-        </a>
-    </span>
-    <span class="pivot-gray-8" ng-if="!$ctrl.report.uncontacted_count">-</span>
+      ng-if="$ctrl.report.uncontacted_count"
+    >
+      {{ $ctrl.report.uncontacted_count | number }}
+    </a>
+  </span>
+  <span class="pivot-gray-8" ng-if="!$ctrl.report.uncontacted_count">-</span>
 </div>
 <div
-    class="no-data"
-    ng-class="{ 'pivot-gray-3' : $ctrl.getInteractionCount(i) === '-' }"
-    ng-repeat="i in ['2','3','4','5','9']"
-    ng-bind="$ctrl.getInteractionCount(i)"
+  class="no-data"
+  ng-class="{ 'pivot-gray-3' : $ctrl.getInteractionCount(i) === '-' }"
+  ng-repeat="i in ['2','3','4','5','9']"
+  ng-bind="$ctrl.getInteractionCount(i)"
 ></div>
