@@ -49,7 +49,9 @@ function proxyService(
         $log.warn(new Error('No error message specified'));
       }
 
-      // Angular throws a circular dependency. Happens since the authenticationService also calls on another service that httpProxyService calls. So only way around is the injector.
+      // Angular throws a circular dependency. Happens since the authenticationService
+      // also calls on another service that httpProxyService calls.
+      // So only way around is the injector.
       const authenticationService = $injector.get('authenticationService');
 
       return provider(config)

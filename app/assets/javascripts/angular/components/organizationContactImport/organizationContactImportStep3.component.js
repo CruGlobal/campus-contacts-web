@@ -1,4 +1,3 @@
-import * as Papa from 'papaparse';
 import _ from 'lodash';
 import uuidv1 from 'uuid';
 

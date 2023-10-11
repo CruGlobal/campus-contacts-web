@@ -1,7 +1,7 @@
 import 'angular-mocks';
 
 // Constants
-let ministryViewGroupService, tFilter;
+let ministryViewGroupService;
 
 describe('ministryViewGroupService service', function () {
   beforeEach(inject(function (_ministryViewGroupService_) {

@@ -161,7 +161,10 @@ function peopleScreenService(
     },
 
     transformData: (params) => (data) => {
-      // We MUST mutate this object here to keep Angular watchers watching the JsonApiDataStore for changes which is stupid. Everything should work with immutable data but it wasn't implemented that way... An example where creating a new object broke something is updating a contact assignment on the peopleScreen.
+      // We MUST mutate this object here to keep Angular watchers watching the JsonApiDataStore for
+      // changes which is stupid. Everything should work with immutable data
+      // but it wasn't implemented that way... An example where creating a new object broke
+      //  something is updating a contact assignment on the peopleScreen.
       return Object.assign(data, {
         answers: (
           _.findLast(

@@ -4,14 +4,17 @@ let idToken = 'none';
 let accessToken = 'none';
 
 function setIdToken(token) {
+  // eslint-disable-next-line no-unused-vars
   idToken = token;
 }
 
 function setAccessToken(token) {
+  // eslint-disable-next-line no-unused-vars
   accessToken = token;
 }
 
 function oktaService(authenticationService, envService) {
+  // eslint-disable-next-line no-undef
   const authClient = new OktaAuth({
     issuer: 'https://signon.okta.com/oauth2/default',
     clientId: envService.read('oktaClientId'),
@@ -30,7 +33,8 @@ function oktaService(authenticationService, envService) {
       authClient.signOut();
     },
     signIn: async () => {
-      // There are other options like full page redirects or passing username/password directly but this seemed like the nicest to me.
+      // There are other options like full page redirects or passing username/password
+      // directly but this seemed like the nicest to me.
       const response = await authClient.token.getWithPopup({
         scopes: ['openid', 'email', 'profile'],
       });

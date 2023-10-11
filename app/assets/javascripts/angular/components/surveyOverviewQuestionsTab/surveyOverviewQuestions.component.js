@@ -242,7 +242,7 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope, htt
 
     if (!question.question_rules[index].assign_to) return;
 
-    question.question_rules[index].assign_to.map((a) => {
+    question.question_rules[index].assign_to.forEach((a) => {
       if (a._type !== 'person') {
         return null;
       }
@@ -419,9 +419,7 @@ function surveyOverviewQuestionsController($uibModal, surveyService, $scope, htt
     if (ruleIdsToDelete.length > 0) {
       await Promise.all(ruleIdsToDelete.map((ruleId) => deleteQuestionRule(ruleId)));
 
-      const newRules = question.question_rules.filter((r) => {
-        if (r.trigger_keywords !== keyword) return r;
-      });
+      const newRules = question.question_rules.filter((r) => r.trigger_keywords !== keyword);
 
       question.question_rules = newRules;
     }

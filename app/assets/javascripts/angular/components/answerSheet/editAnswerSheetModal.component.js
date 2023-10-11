@@ -13,7 +13,7 @@ angular.module('campusContactsApp').component('editAnswerSheetModal', {
 });
 
 function editAnswerSheetModalController(httpProxy, modelsService) {
-  this.save = async (answerId) => {
+  this.save = async () => {
     const answers = this.resolve.answerSheet.answers;
 
     const includedAnswers = answers.map((a) => {
@@ -28,7 +28,7 @@ function editAnswerSheetModalController(httpProxy, modelsService) {
 
     const url = modelsService.getModelMetadata('answer_sheet').url.single(this.resolve.answerSheet.id);
 
-    const { data } = await httpProxy.put(
+    await httpProxy.put(
       url,
       {
         data: {

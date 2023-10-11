@@ -71,7 +71,7 @@ function organizationContactImportStep1Controller($scope, $uibModal, $state) {
   };
 
   this.createSurvey = () => {
-    const modal = $uibModal
+    $uibModal
       .open({
         component: 'createSurvey',
         resolve: {

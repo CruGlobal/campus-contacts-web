@@ -6,9 +6,7 @@ angular.module('campusContactsApp').component('myOrganizationsDashboardList', {
     rootOrgs: '<',
   },
   controller: /* @ngInject */ function (userPreferencesService, $scope) {
-    let deregisterEditOrganizationsEvent;
-
-    deregisterEditOrganizationsEvent = $scope.$on('editOrganizations', (event, value) => {
+    const deregisterEditOrganizationsEvent = $scope.$on('editOrganizations', (_, value) => {
       this.editOrganizations = value;
     });
 

@@ -66,8 +66,7 @@ describe('myPeopleDashboardService Tests', function () {
     it('should call GET loadPeople URL', function () {
       const params = {
         'page[limit]': 250,
-        include:
-          'phone_numbers,email_addresses,reverse_contact_assignments.organization,' + 'organizational_permissions',
+        include: 'phone_numbers,email_addresses,reverse_contact_assignments.organization,organizational_permissions',
         'filters[assigned_tos]': 'me',
       };
       myPeopleDashboardService.loadPeople(params);

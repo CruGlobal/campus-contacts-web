@@ -40,7 +40,7 @@ function organizationCleanupController(httpProxy, $scope, $uibModal, $state) {
     });
 
     try {
-      const modalResponse = await confirmModal.result;
+      await confirmModal.result;
       archiveContacts(archiveValue)(archiveDate);
     } catch (err) {}
   };
@@ -82,7 +82,7 @@ function organizationCleanupController(httpProxy, $scope, $uibModal, $state) {
         keyboard: false,
       });
 
-      const result = await modalInstance.result;
+      await modalInstance.result;
       $state.go('app.ministries.ministry.people', {
         orgId: this.orgId,
       });

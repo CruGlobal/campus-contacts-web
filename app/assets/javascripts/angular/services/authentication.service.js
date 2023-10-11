@@ -150,7 +150,7 @@ function authenticationService(
   const adminRedirect = async () => {
     const apiDomain = envService.read('apiUrl').replace('/apis/v4', '');
     try {
-      const { data } = await $http.post(`${apiDomain}/admin/auth`, null, {
+      await $http.post(`${apiDomain}/admin/auth`, null, {
         withCredentials: true, // support cross domain cookie setting
       });
       location.replace(`${apiDomain}/admin`);

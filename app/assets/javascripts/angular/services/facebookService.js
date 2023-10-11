@@ -3,6 +3,7 @@ angular.module('campusContactsApp').factory('facebookService', facebookService);
 function facebookService(authenticationService, envService) {
   return {
     init: () => {
+      // eslint-disable-next-line no-undef
       FB.init({
         appId: envService.read('facebookAppId'),
         status: true,
@@ -29,9 +30,11 @@ function facebookService(authenticationService, envService) {
       };
     },
     signOut: () => {
+      // eslint-disable-next-line no-undef
       FB.logout((response) => {});
     },
     signIn: () => {
+      // eslint-disable-next-line no-undef
       FB.login(
         (response) => {
           if (response.authResponse) {

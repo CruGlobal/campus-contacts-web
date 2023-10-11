@@ -36,6 +36,7 @@
         "angular/no-service-method": "off",
         "angular/window-service": "off",
         "block-scoped-var": "error",
+        "camelcase": "off",
         "consistent-this": ["error", "_this", "vm"],
         "dot-notation": "error",
         "eqeqeq": ["error", "smart"],

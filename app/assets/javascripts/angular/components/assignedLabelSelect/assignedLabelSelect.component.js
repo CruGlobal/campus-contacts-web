@@ -16,7 +16,8 @@ function assignedLabelSelectController($scope, assignedLabelSelectService) {
   this.labels = [];
   this.originalLabels = [];
   this.$onInit = () => {
-    // When this loads, get all the labels and set this.originalLabels to all the labels. We do this once instead of every time the user types.
+    // When this loads, get all the labels and set this.originalLabels to all the labels.
+    // We do this once instead of every time the user types.
     assignedLabelSelectService.searchLabels(this.organizationId).then((labels) => {
       this.originalLabels = labels;
     });
@@ -27,7 +28,8 @@ function assignedLabelSelectController($scope, assignedLabelSelectService) {
         this.labels = [...this.originalLabels];
         return;
       }
-      // Here we filter out all the labels from the originalLabels array that do not include what the user is currently typing
+      // Here we filter out all the labels from the originalLabels array
+      // that do not include what the user is currently typing
       this.labels = this.originalLabels.filter((label) => label.name.toLowerCase().includes(search.toLowerCase()));
     });
 
