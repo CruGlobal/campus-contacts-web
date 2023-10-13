@@ -1,14 +1,12 @@
 import 'angular-mocks';
 
 // Constants
-let $controller, myPeopleDashboardService, $scope, loggedInPerson;
+let $controller, myPeopleDashboardService, userPreferencesService, $scope, loggedInPerson;
 
 describe('myPeopleDashboard Components Tests', function () {
   beforeEach(inject(function ($rootScope, $componentController, _loggedInPerson_) {
     $scope = $rootScope.$new();
     loggedInPerson = _loggedInPerson_;
-
-    spyOn(loggedInPerson, 'person').andReturn({ first_name: 'John' });
 
     $controller = $componentController(
       'myPeopleDashboard',
@@ -16,22 +14,25 @@ describe('myPeopleDashboard Components Tests', function () {
       { myBinding: { period: '<', editMode: '<' } },
       loggedInPerson,
     );
+    myPeopleDashboardService = jasmine.createSpyObj('myPeopleDashboardService', ['loadPeople', 'loadReports']);
 
-    myPeopleDashboardService = jasmine.createSpyObj('myPeopleDashboardService', [
-      'loadPeople',
-      'loadReports',
-      'loadOrganizations',
-    ]);
-
-    describe('Components.Controller', function () {
-      it('should exist', function () {
-        expect($controller).toBeDefined();
-      });
-
-      it('loadPeople should have been called', function () {
-        myPeopleDashboardService.loadPeople();
-        expect(myPeopleDashboardService.loadPeople).toHaveBeenCalled();
-      });
-    });
+    userPreferencesService = jasmine.createSpyObj('userPreferencesService', ['applyUserOrgDisplayPreferences']);
   }));
+
+  describe('Components.Controller', function () {
+    it('should exist', function () {
+      expect($controller).toBeDefined();
+    });
+
+    it('loadPeople should have been called', function () {
+      myPeopleDashboardService.loadPeople();
+      expect(myPeopleDashboardService.loadPeople).toHaveBeenCalled();
+    });
+  });
+
+  describe('People Tests', function () {
+    it('should contain loadPeople', function () {
+      expect(myPeopleDashboardService.loadPeople).toBeDefined();
+    });
+  });
 });

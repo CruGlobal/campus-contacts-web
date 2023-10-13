@@ -928,7 +928,7 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@brainly/onesky-utils@^1.4.1":
+"@brainly/onesky-utils@^1.4.2":
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/@brainly/onesky-utils/-/onesky-utils-1.4.2.tgz#6087295e6813e55b36774395378342b1c977285b"
   integrity sha512-r8IZmIqCQQQbljqn9eulMl2S+UHf93lWqMmmLv3zJzfGP9ilpAmkolnVvVKyI2ppq1CR92JmqthRtmImaOFxbw==
