@@ -1,7 +1,7 @@
 import 'angular-mocks';
 
 // Constants
-let $controller, myPeopleDashboardService, userPreferencesService, $scope, loggedInPerson;
+let $controller, myPeopleDashboardService, $scope, loggedInPerson;
 
 describe('myPeopleDashboard Components Tests', function () {
   beforeEach(inject(function ($rootScope, $componentController, _loggedInPerson_) {
@@ -15,8 +15,6 @@ describe('myPeopleDashboard Components Tests', function () {
       loggedInPerson,
     );
     myPeopleDashboardService = jasmine.createSpyObj('myPeopleDashboardService', ['loadPeople', 'loadReports']);
-
-    userPreferencesService = jasmine.createSpyObj('userPreferencesService', ['applyUserOrgDisplayPreferences']);
   }));
 
   describe('Components.Controller', function () {
