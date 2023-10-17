@@ -1,48 +1,37 @@
-angular
-    .module('campusContactsApp')
-    .factory('myPeopleDashboardService', myPeopleDashboardService);
+angular.module('campusContactsApp').factory('myPeopleDashboardService', myPeopleDashboardService);
 
 function myPeopleDashboardService(httpProxy, modelsService, _) {
-    var myPeopleDashboardService = {
-        isMobile: () =>
-            window.navigator.userAgent.match(
-                /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i,
-            ),
+  const myPeopleDashboardService = {
+    isMobile: () => window.navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i),
 
-        isIos: () => window.navigator.userAgent.match(/iPhone|iPad|iPod/i),
+    isIos: () => window.navigator.userAgent.match(/iPhone|iPad|iPod/i),
 
-        loadPeople: function (params) {
-            return httpProxy.get(
-                modelsService.getModelMetadata('person').url.all,
-                params || {},
-                {
-                    errorMessage:
-                        'error.messages.my_people_dashboard.load_people',
-                },
-            );
-        },
+    loadPeople: function (params) {
+      return httpProxy.get(modelsService.getModelMetadata('person').url.all, params || {}, {
+        errorMessage: 'error.messages.my_people_dashboard.load_people',
+      });
+    },
 
-        loadOrganizations: function (params) {
-            return httpProxy
-                .get(
-                    modelsService.getModelMetadata('organization').url.all,
-                    _.extend(
-                        {
-                            sort: '-active_people_count',
-                            include: '',
-                            'page[limit]': 100,
-                            'filters[user_created]': false,
-                        },
-                        params,
-                    ),
-                    {
-                        errorMessage:
-                            'error.messages.my_people_dashboard.load_orgs',
-                    },
-                )
-                .then(httpProxy.extractModels);
-        },
-    };
+    loadOrganizations: function (params) {
+      return httpProxy
+        .get(
+          modelsService.getModelMetadata('organization').url.all,
+          _.extend(
+            {
+              sort: '-active_people_count',
+              include: '',
+              'page[limit]': 100,
+              'filters[user_created]': false,
+            },
+            params,
+          ),
+          {
+            errorMessage: 'error.messages.my_people_dashboard.load_orgs',
+          },
+        )
+        .then(httpProxy.extractModels);
+    },
+  };
 
-    return myPeopleDashboardService;
+  return myPeopleDashboardService;
 }

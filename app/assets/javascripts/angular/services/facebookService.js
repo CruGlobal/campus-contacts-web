@@ -1,51 +1,50 @@
 angular.module('campusContactsApp').factory('facebookService', facebookService);
 
 function facebookService(authenticationService, envService) {
-    return {
-        init: () => {
-            FB.init({
-                appId: envService.read('facebookAppId'),
-                status: true,
-                cookie: true,
-                xfbml: true,
-                version: 'v7.0',
-            });
-        },
-        loadSDK: () => {
-            return function (d) {
-                const id = 'facebook-jssdk';
-                const fjs = d.getElementsByTagName('script')[0];
+  return {
+    init: () => {
+      // eslint-disable-next-line no-undef
+      FB.init({
+        appId: envService.read('facebookAppId'),
+        status: true,
+        cookie: true,
+        xfbml: true,
+        version: 'v7.0',
+      });
+    },
+    loadSDK: () => {
+      return function (d) {
+        const id = 'facebook-jssdk';
+        const fjs = d.getElementsByTagName('script')[0];
 
-                if (d.getElementById(id)) {
-                    return;
-                }
+        if (d.getElementById(id)) {
+          return;
+        }
 
-                const js = d.createElement('script');
-                js.id = id;
-                js.async = true;
-                js.src = 'https://connect.facebook.net/en_US/sdk.js';
+        const js = d.createElement('script');
+        js.id = id;
+        js.async = true;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js';
 
-                fjs.parentNode.insertBefore(js, fjs);
-            };
+        fjs.parentNode.insertBefore(js, fjs);
+      };
+    },
+    signOut: () => {
+      // eslint-disable-next-line no-undef
+      FB.logout((response) => {});
+    },
+    signIn: () => {
+      // eslint-disable-next-line no-undef
+      FB.login(
+        (response) => {
+          if (response.authResponse) {
+            authenticationService.authorizeFacebookAccess(response.authResponse.accessToken);
+          } else {
+            throw new Error('User cancelled login or did not fully authorize.');
+          }
         },
-        signOut: () => {
-            FB.logout((response) => {});
-        },
-        signIn: () => {
-            FB.login(
-                (response) => {
-                    if (response.authResponse) {
-                        authenticationService.authorizeFacebookAccess(
-                            response.authResponse.accessToken,
-                        );
-                    } else {
-                        throw new Error(
-                            'User cancelled login or did not fully authorize.',
-                        );
-                    }
-                },
-                { scope: 'email' },
-            );
-        },
-    };
+        { scope: 'email' },
+      );
+    },
+  };
 }

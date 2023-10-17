@@ -1,35 +1,31 @@
 <div class="flex flex-column items-center">
-    <div>
-        <img ng-src="{{ $ctrl.campusContactsLogo }}" height="75" />
-    </div>
-    <div class="pivot-blue-6 f4 b ttu tracked mt3 tc">Campus Contacts</div>
-    <h3 class="measure tc">
-        A simple contact management tool to find, connect, and communicate with
-        people on your campus
-    </h3>
+  <div>
+    <img ng-src="{{ $ctrl.campusContactsLogo }}" height="75" />
+  </div>
+  <div class="pivot-blue-6 f4 b ttu tracked mt3 tc">Campus Contacts</div>
+  <h3 class="measure tc">
+    A simple contact management tool to find, connect, and communicate with people on your campus
+  </h3>
 
-    <p ng-if="$ctrl.inviteState" class="f3 ma2">
-        {{ 'login.inviteInProgress' | t }}
-    </p>
-    <div class="flex-ns justify-center tc" ng-if="$ctrl.showLogin">
-        <a
-            href
-            cy-test-id="loginWithEmailButton"
-            class="btn-key btn-primary f5 ma2"
-            title="{{ $ctrl.inviteState? 'login.signUpWithEmail' : 'login.signInWithEmail' | t }}"
-            target="_self"
-            ng-click="$ctrl.oktaService.signIn()"
-        >
-            {{ $ctrl.inviteState? 'login.signUpWithEmail' :
-            'login.signInWithEmail' | t }}
-        </a>
-        <a
-            href
-            class="btn-primary btn-facebook f5 ma2"
-            title="{{ 'login.continueWithFacebook' | t }}"
-            ng-click="$ctrl.facebookService.signIn()"
-        >
-            {{ 'login.continueWithFacebook' | t }}
-        </a>
-    </div>
+  <p ng-if="$ctrl.inviteState" class="f3 ma2">{{ 'login.inviteInProgress' | t }}</p>
+  <div class="flex-ns justify-center tc" ng-if="$ctrl.showLogin">
+    <a
+      href
+      cy-test-id="loginWithEmailButton"
+      class="btn-key btn-primary f5 ma2"
+      title="{{ $ctrl.inviteState? 'login.signUpWithEmail' : 'login.signInWithEmail' | t }}"
+      target="_self"
+      ng-click="$ctrl.oktaService.signIn()"
+    >
+      {{ $ctrl.inviteState? 'login.signUpWithEmail' : 'login.signInWithEmail' | t }}
+    </a>
+    <a
+      href
+      class="btn-primary btn-facebook f5 ma2"
+      title="{{ 'login.continueWithFacebook' | t }}"
+      ng-click="$ctrl.facebookService.signIn()"
+    >
+      {{ 'login.continueWithFacebook' | t }}
+    </a>
+  </div>
 </div>

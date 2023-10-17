@@ -4,33 +4,31 @@ import template from './answerSheet.html';
 import './answerSheet.scss';
 
 angular.module('campusContactsApp').component('answerSheet', {
-    template: template,
-    bindings: {
-        answerSheet: '<',
-        organizationId: '<',
-    },
-    controller: answerSheetController,
+  template,
+  bindings: {
+    answerSheet: '<',
+    organizationId: '<',
+  },
+  controller: answerSheetController,
 });
 
 function answerSheetController($uibModal, loggedInPerson) {
-    this.moment = moment;
+  this.moment = moment;
 
-    this.editResponse = () => {
-        $uibModal.open({
-            component: 'editAnswerSheetModal',
-            resolve: {
-                answerSheet: () => this.answerSheet,
-                organizationId: () => this.organizationId,
-            },
-            windowClass: 'pivot_theme',
-            backdrop: 'static',
-            keyboard: false,
-        });
-    };
+  this.editResponse = () => {
+    $uibModal.open({
+      component: 'editAnswerSheetModal',
+      resolve: {
+        answerSheet: () => this.answerSheet,
+        organizationId: () => this.organizationId,
+      },
+      windowClass: 'pivot_theme',
+      backdrop: 'static',
+      keyboard: false,
+    });
+  };
 
-    this.$onInit = () => {
-        this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(
-            this.answerSheet.survey.organization,
-        );
-    };
+  this.$onInit = () => {
+    this.directAdminPrivileges = loggedInPerson.isDirectAdminAt(this.answerSheet.survey.organization);
+  };
 }

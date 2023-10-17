@@ -1,67 +1,55 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{ 'groups.members.title' | t }}</h3>
-    <h4 class="modal-subtitle">{{ $ctrl.group.name }}</h4>
+  <h3 class="modal-title">{{ 'groups.members.title' | t }}</h3>
+  <h4 class="modal-subtitle">{{ $ctrl.group.name }}</h4>
 </div>
 <div class="modal-body grid">
-    <div class="row header">
-        <div class="column name-column">
-            {{ 'groups.members.columns.name' | t }}
-        </div>
-        <div class="column dropdown">
-            <icon-button
-                icon="'add'"
-                ng-click="$ctrl.toggleMemberAdderVisibility()"
-            ></icon-button>
-            <div class="dropdown-container" ng-if="$ctrl.memberAdderVisible">
-                <person-multiselect
-                    class="light dropdown-content"
-                    people-description="'groups.members.contacts'"
-                    add-person="$ctrl.addMember(person)"
-                    selected-people="$ctrl.members"
-                    organization-id="$ctrl.group.organization.id"
-                >
-                </person-multiselect>
-            </div>
-        </div>
-    </div>
-    <div class="scroll-contain">
-        <div
-            infinite-scroll="$ctrl.loadMemberPage()"
-            infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
-            infinite-scroll-distance="0"
-            infinite-scroll-container="'group-members-modal .scroll-contain'"
-            class="grid-content"
+  <div class="row header">
+    <div class="column name-column">{{ 'groups.members.columns.name' | t }}</div>
+    <div class="column dropdown">
+      <icon-button icon="'add'" ng-click="$ctrl.toggleMemberAdderVisibility()"></icon-button>
+      <div class="dropdown-container" ng-if="$ctrl.memberAdderVisible">
+        <person-multiselect
+          class="light dropdown-content"
+          people-description="'groups.members.contacts'"
+          add-person="$ctrl.addMember(person)"
+          selected-people="$ctrl.members"
+          organization-id="$ctrl.group.organization.id"
         >
-            <div
-                ng-repeat="membership in $ctrl.memberships |
-                                orderBy:['role', 'person.last_name', 'person.first_name'] track by membership.id"
-                class="row member"
-            >
-                <div class="column name-column">
-                    {{ membership.person | personName }}
-                    <span ng-if="membership.role === 'leader'"
-                        >({{ 'groups.members.leader' | t }})</span
-                    >
-                </div>
-                <div class="column flex">
-                    <contact-actions
-                        phone="membership.person.phone_numbers[0].number"
-                        email="membership.person.email_addresses[0].email"
-                    ></contact-actions>
-                    <icon-button
-                        icon="'close'"
-                        ng-click="$ctrl.removeMember(membership)"
-                    ></icon-button>
-                </div>
-            </div>
-            <div ng-if="!$ctrl.loadedAll" class="row message-row">
-                {{ 'general.loading_more' | t }}
-            </div>
-        </div>
+        </person-multiselect>
+      </div>
     </div>
+  </div>
+  <div class="scroll-contain">
+    <div
+      infinite-scroll="$ctrl.loadMemberPage()"
+      infinite-scroll-disabled="$ctrl.busy || $ctrl.loadedAll"
+      infinite-scroll-distance="0"
+      infinite-scroll-container="'group-members-modal .scroll-contain'"
+      class="grid-content"
+    >
+      <div
+        ng-repeat="membership in $ctrl.memberships |
+                                orderBy:['role', 'person.last_name', 'person.first_name'] track by membership.id"
+        class="row member"
+      >
+        <div class="column name-column">
+          {{ membership.person | personName }}
+          <span ng-if="membership.role === 'leader'">({{ 'groups.members.leader' | t }})</span>
+        </div>
+        <div class="column flex">
+          <contact-actions
+            phone="membership.person.phone_numbers[0].number"
+            email="membership.person.email_addresses[0].email"
+          ></contact-actions>
+          <icon-button icon="'close'" ng-click="$ctrl.removeMember(membership)"></icon-button>
+        </div>
+      </div>
+      <div ng-if="!$ctrl.loadedAll" class="row message-row">{{ 'general.loading_more' | t }}</div>
+    </div>
+  </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary pv2" type="button" ng-click="$ctrl.close()">
-        <ng-md-icon icon="done" size="32"></ng-md-icon>
-    </button>
+  <button class="btn btn-primary pv2" type="button" ng-click="$ctrl.close()">
+    <ng-md-icon icon="done" size="32"></ng-md-icon>
+  </button>
 </div>

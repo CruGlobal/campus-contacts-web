@@ -1,18 +1,18 @@
 <div class="column icon-column flush-column">
-    <ng-md-icon class="icon-chip" icon="survey" size="20"></ng-md-icon>
+  <ng-md-icon class="icon-chip" icon="survey" size="20"></ng-md-icon>
 </div>
 <div class="column normal-column">
-    <div class="subtitle">
-        <span>{{$ctrl.moment($ctrl.answerSheet.updated_at).fromNow()}}</span>
-    </div>
-    <div class="title">{{$ctrl.answerSheet.survey.title}}</div>
-    <div class="qa-pair" ng-repeat="answer in $ctrl.answerSheet.answers">
-        <div class="question">{{answer.question.label}}</div>
-        <div class="answer">{{answer.value}}</div>
-    </div>
+  <div class="subtitle">
+    <span>{{$ctrl.moment($ctrl.answerSheet.updated_at).fromNow()}}</span>
+  </div>
+  <div class="title">{{$ctrl.answerSheet.survey.title}}</div>
+  <div class="qa-pair" ng-repeat="answer in $ctrl.answerSheet.answers">
+    <div class="question">{{answer.question.label}}</div>
+    <div class="answer">{{answer.value}}</div>
+  </div>
 </div>
 <div class="column actions-column flush-column">
-    <a href ng-click="$ctrl.editResponse()" ng-if="$ctrl.directAdminPrivileges">
-        <ng-md-icon icon="edit" size="16"></ng-md-icon>
-    </a>
+  <a href ng-click="$ctrl.editResponse()" ng-if="$ctrl.directAdminPrivileges">
+    <ng-md-icon icon="edit" size="16"></ng-md-icon>
+  </a>
 </div>

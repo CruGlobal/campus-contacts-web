@@ -2,20 +2,20 @@ import template from './contactActions.html';
 import './contactActions.scss';
 
 angular.module('campusContactsApp').component('contactActions', {
-    bindings: {
-        phone: '<',
-        email: '<',
-    },
-    template: template,
-    controller: contactActionsController,
+  bindings: {
+    phone: '<',
+    email: '<',
+  },
+  template,
+  controller: contactActionsController,
 });
 
 function contactActionsController() {
-    this.actionsVisible = false;
+  this.actionsVisible = false;
 
-    this.toggleActions = () => {
-        this.actionsVisible = !this.actionsVisible;
-    };
+  this.toggleActions = () => {
+    this.actionsVisible = !this.actionsVisible;
+  };
 
-    this.copyText = (text) => navigator.clipboard.writeText(text);
+  this.copyText = (text) => navigator.clipboard.writeText(text);
 }

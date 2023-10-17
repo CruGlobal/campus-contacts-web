@@ -8,24 +8,24 @@ import './iconButton.scss';
  */
 
 angular.module('campusContactsApp').component('iconButton', {
-    controller: iconButtonController,
-    bindings: {
-        disabled: '<',
-        icon: '<',
-        size: '<',
-    },
-    template: template,
+  controller: iconButtonController,
+  bindings: {
+    disabled: '<',
+    icon: '<',
+    size: '<',
+  },
+  template,
 });
 
 function iconButtonController() {
-    var vm = this;
+  const vm = this;
 
-    vm.handleClick = handleClick;
+  vm.handleClick = handleClick;
 
-    function handleClick(event) {
-        if (vm.disabled) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+  function handleClick(event) {
+    if (vm.disabled) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+  }
 }

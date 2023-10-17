@@ -7,7 +7,13 @@
     "env": {
         "browser": true
     },
-    "extends": ["angular"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:prettier/recommended",
+        "angular",
+        "standard",
+        "prettier"
+    ],
     "overrides": [
         {
             "files": ["app/assets/javascripts/angular/**/*.spec.js"],
@@ -25,18 +31,40 @@
     ],
     "plugins": ["import"],
     "rules": {
+        "angular/definedundefined": "off",
+        "angular/typecheck-string": "off",
+        "angular/no-service-method": "off",
+        "angular/window-service": "off",
         "block-scoped-var": "error",
+        "camelcase": "off",
+        "consistent-this": ["error", "_this", "vm"],
         "dot-notation": "error",
         "eqeqeq": ["error", "smart"],
+        "max-len": [
+            "error",
+            {
+              "code": 120,
+              "ignoreRegExpLiterals": true,
+              "ignoreStrings": true,
+              "ignoreTemplateLiterals": true,
+              "ignoreTrailingComments": true,
+              "ignoreUrls": true
+            }
+        ],
         "import/order": [
             2,
             {
                 "newlines-between": "always"
             }
         ],
+        "new-cap": "error",
+        "new-parens": "error",
         "no-alert": "warn",
+        "no-array-constructor": "error",
+        "no-bitwise": "error",
         "no-caller": "error",
         "no-case-declarations": "error",
+        "no-continue": "error",
         "no-eval": "error",
         "no-extend-native": "error",
         "no-extra-bind": "error",
@@ -44,13 +72,16 @@
         "no-global-assign": "error",
         "no-implied-eval": "error",
         "no-iterator": "error",
+        "no-lonely-if": "error",
         "no-label-var": "error",
         "no-labels": "error",
         "no-lone-blocks": "error",
         "no-loop-func": "error",
         "no-multi-str": "error",
+        "no-negated-condition": "error",
         "no-new": "error",
         "no-new-func": "error",
+        "no-new-object": "error",
         "no-new-wrappers": "error",
         "no-octal-escape": "error",
         "no-param-reassign": "error",
@@ -61,6 +92,7 @@
         "no-shadow-restricted-names": "error",
         "no-throw-literal": "error",
         "no-unmodified-loop-condition": "error",
+        "no-unneeded-ternary": "error",
         "no-unsafe-negation": "error",
         "no-useless-call": "error",
         "no-useless-concat": "error",
@@ -68,25 +100,13 @@
         "no-useless-return": "error",
         "no-void": "error",
         "no-with": "error",
+        "prettier/prettier": [
+            "error",
+            { "singleQuote": true, "tabWidth": 2 }
+        ],
         "radix": "error",
         "strict": ["error", "function"],
         "wrap-iife": ["error", "inside"],
-        "yoda": "error",
-
-        "consistent-this": ["error", "_this", "vm"],
-        "new-cap": "error",
-        "new-parens": "error",
-        "no-array-constructor": "error",
-        "no-bitwise": "error",
-        "no-continue": "error",
-        "no-lonely-if": "error",
-        "no-negated-condition": "error",
-        "no-new-object": "error",
-        "no-unneeded-ternary": "error",
-
-        "angular/definedundefined": "off",
-        "angular/typecheck-string": "off",
-        "angular/no-service-method": "off",
-        "angular/window-service": "off"
+        "yoda": "error"
     }
 }
