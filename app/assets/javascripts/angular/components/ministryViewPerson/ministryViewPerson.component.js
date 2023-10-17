@@ -2,115 +2,90 @@ import template from './ministryViewPerson.html';
 import './ministryViewPerson.scss';
 
 angular.module('campusContactsApp').component('ministryViewPerson', {
-    controller: ministryViewPersonController,
-    template: template,
-    bindings: {
-        person: '<',
-        organizationId: '<',
-        selected: '=',
-        questions: '<',
-        odd: '<',
-        showLastSurvey: '=',
-    },
+  controller: ministryViewPersonController,
+  template,
+  bindings: {
+    person: '<',
+    organizationId: '<',
+    selected: '=',
+    questions: '<',
+    odd: '<',
+    showLastSurvey: '=',
+  },
 });
 
-function ministryViewPersonController(
-    $rootScope,
-    $scope,
-    personService,
-    personProfileService,
-) {
-    var vm = this;
+function ministryViewPersonController($rootScope, $scope, personService, personProfileService) {
+  const vm = this;
 
-    vm.loadingAssignmentOptions = false;
-    vm.addAssignment = addAssignment;
-    vm.removeAssignment = removeAssignment;
-    vm.saveAttribute = saveAttribute;
-    vm.toggleAssignmentVisibility = toggleAssignmentVisibility;
-    vm.onAssignmentsKeydown = onAssignmentsKeydown;
-    vm.isContact = isContact;
-    vm.followupStatusOptions = personService.getFollowupStatusOptions();
+  vm.loadingAssignmentOptions = false;
+  vm.addAssignment = addAssignment;
+  vm.removeAssignment = removeAssignment;
+  vm.saveAttribute = saveAttribute;
+  vm.toggleAssignmentVisibility = toggleAssignmentVisibility;
+  vm.onAssignmentsKeydown = onAssignmentsKeydown;
+  vm.isContact = isContact;
+  vm.followupStatusOptions = personService.getFollowupStatusOptions();
 
-    this.$onInit = () => {
-        // Update UI when the users add or removes an assignment
-        this.personModifiedUnsubscribe = $rootScope.$on(
-            'personModified',
-            () => {
-                this.updateAssigned();
-            },
-        );
+  this.$onInit = () => {
+    // Update UI when the users add or removes an assignment
+    this.personModifiedUnsubscribe = $rootScope.$on('personModified', () => {
+      this.updateAssigned();
+    });
+  };
+
+  this.$onDestroy = () => {
+    this.personModifiedUnsubscribe();
+  };
+
+  this.$onChanges = (changes) => {
+    if (!changes.person || changes.person.currentValue === changes.person.previousValue) return;
+
+    const person = changes.person.currentValue;
+
+    if (this.showLastSurvey) {
+      if (!person.answer_sheets) this.lastSurvey = null;
+
+      this.lastSurvey = personService.getLastSurvey(person);
+    }
+
+    this.orgPermission = personService.getOrgPermission(person, this.organizationId);
+
+    this.assignedTo = personService.getAssignedTo(person, this.organizationId);
+
+    this.updateAssigned = () => {
+      this.assignedTo = personService.getAssignedTo(person, this.organizationId);
     };
 
-    this.$onDestroy = () => {
-        this.personModifiedUnsubscribe();
-    };
+    this.phoneNumber = personService.getPhoneNumber(person);
+    this.emailAddress = personService.getEmailAddress(person);
+  };
 
-    this.$onChanges = (changes) => {
-        if (
-            !changes.person ||
-            changes.person.currentValue === changes.person.previousValue
-        )
-            return;
+  function addAssignment(person) {
+    return personProfileService
+      .addAssignments(vm.person, vm.organizationId, [person])
+      .then(() => $scope.$emit('personModified'));
+  }
 
-        const person = changes.person.currentValue;
+  function removeAssignment(person) {
+    return personProfileService.removeAssignments(vm.person, [person]).then(() => $scope.$emit('personModified'));
+  }
 
-        if (this.showLastSurvey) {
-            if (!person.answer_sheets) this.lastSurvey = null;
+  function saveAttribute(model, attribute) {
+    personProfileService.saveAttribute(vm.person.id, model, attribute).then(() => $scope.$emit('personModified'));
+  }
 
-            this.lastSurvey = personService.getLastSurvey(person);
-        }
+  function toggleAssignmentVisibility() {
+    vm.assignmentsVisible = !vm.assignmentsVisible;
+  }
 
-        this.orgPermission = personService.getOrgPermission(
-            person,
-            this.organizationId,
-        );
-
-        this.assignedTo = personService.getAssignedTo(
-            person,
-            this.organizationId,
-        );
-
-        this.updateAssigned = () => {
-            this.assignedTo = personService.getAssignedTo(
-                person,
-                this.organizationId,
-            );
-        };
-
-        this.phoneNumber = personService.getPhoneNumber(person);
-        this.emailAddress = personService.getEmailAddress(person);
-    };
-
-    function addAssignment(person) {
-        return personProfileService
-            .addAssignments(vm.person, vm.organizationId, [person])
-            .then(() => $scope.$emit('personModified'));
+  function onAssignmentsKeydown(event) {
+    if (event.keyCode === 27) {
+      // Escape key was pressed, so hide the assignments selector
+      vm.assignmentsVisible = false;
     }
+  }
 
-    function removeAssignment(person) {
-        return personProfileService
-            .removeAssignments(vm.person, [person])
-            .then(() => $scope.$emit('personModified'));
-    }
-
-    function saveAttribute(model, attribute) {
-        personProfileService
-            .saveAttribute(vm.person.id, model, attribute)
-            .then(() => $scope.$emit('personModified'));
-    }
-
-    function toggleAssignmentVisibility() {
-        vm.assignmentsVisible = !vm.assignmentsVisible;
-    }
-
-    function onAssignmentsKeydown(event) {
-        if (event.keyCode === 27) {
-            // Escape key was pressed, so hide the assignments selector
-            vm.assignmentsVisible = false;
-        }
-    }
-
-    function isContact() {
-        return personService.isContact(vm.person, vm.organizationId);
-    }
+  function isContact() {
+    return personService.isContact(vm.person, vm.organizationId);
+  }
 }

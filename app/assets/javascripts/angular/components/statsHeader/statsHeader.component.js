@@ -2,17 +2,15 @@ import template from './statsHeader.html';
 import './statsHeader.scss';
 
 angular.module('campusContactsApp').component('statsHeader', {
-    controller: statsHeaderController,
-    template: template,
+  controller: statsHeaderController,
+  template,
 });
 
 function statsHeaderController(interactionsService) {
-    var vm = this;
+  const vm = this;
 
-    // Exclude the notes interaction type
-    vm.interactionTypes = interactionsService
-        .getInteractionTypes()
-        .filter(function (interactionType) {
-            return interactionType.id !== 1;
-        });
+  // Exclude the notes interaction type
+  vm.interactionTypes = interactionsService.getInteractionTypes().filter(function (interactionType) {
+    return interactionType.id !== 1;
+  });
 }

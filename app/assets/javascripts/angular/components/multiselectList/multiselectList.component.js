@@ -2,58 +2,58 @@ import template from './multiselectList.html';
 import './multiselectList.scss';
 
 angular.module('campusContactsApp').component('multiselectList', {
-    controller: multiselectListController,
-    bindings: {
-        // list of objects that have an id and name
-        options: '=',
+  controller: multiselectListController,
+  bindings: {
+    // list of objects that have an id and name
+    options: '=',
 
-        // dictionary with id keys and value of true/false/null
-        originalSelection: '=',
-        addedOutput: '=',
-        removedOutput: '=',
-    },
-    template: template,
+    // dictionary with id keys and value of true/false/null
+    originalSelection: '=',
+    addedOutput: '=',
+    removedOutput: '=',
+  },
+  template,
 });
 
 function multiselectListController(multiselectListService, _) {
-    var vm = this;
+  const vm = this;
 
-    vm.toggle = toggle;
-    vm.isSelected = isSelected;
-    vm.isUnselected = isUnselected;
-    vm.isIndeterminate = isIndeterminate;
+  vm.toggle = toggle;
+  vm.isSelected = isSelected;
+  vm.isUnselected = isUnselected;
+  vm.isIndeterminate = isIndeterminate;
 
-    vm.$onInit = activate;
+  vm.$onInit = activate;
 
-    function activate() {
-        fillSelected();
+  function activate() {
+    fillSelected();
 
-        vm.addedOutput = vm.addedOutput || [];
-        vm.removedOutput = vm.removedOutput || [];
-    }
+    vm.addedOutput = vm.addedOutput || [];
+    vm.removedOutput = vm.removedOutput || [];
+  }
 
-    function fillSelected() {
-        vm.selected = _.clone(vm.originalSelection);
-    }
+  function fillSelected() {
+    vm.selected = _.clone(vm.originalSelection);
+  }
 
-    function toggle(id) {
-        multiselectListService.toggle(id, {
-            originalSelection: vm.originalSelection,
-            currentSelection: vm.selected,
-            addedOutput: vm.addedOutput,
-            removedOutput: vm.removedOutput,
-        });
-    }
+  function toggle(id) {
+    multiselectListService.toggle(id, {
+      originalSelection: vm.originalSelection,
+      currentSelection: vm.selected,
+      addedOutput: vm.addedOutput,
+      removedOutput: vm.removedOutput,
+    });
+  }
 
-    function isSelected(id) {
-        return multiselectListService.isSelected(vm.selected, id);
-    }
+  function isSelected(id) {
+    return multiselectListService.isSelected(vm.selected, id);
+  }
 
-    function isUnselected(id) {
-        return multiselectListService.isUnselected(vm.selected, id);
-    }
+  function isUnselected(id) {
+    return multiselectListService.isUnselected(vm.selected, id);
+  }
 
-    function isIndeterminate(id) {
-        return multiselectListService.isIndeterminate(vm.selected, id);
-    }
+  function isIndeterminate(id) {
+    return multiselectListService.isIndeterminate(vm.selected, id);
+  }
 }

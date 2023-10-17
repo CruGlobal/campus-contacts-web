@@ -1,51 +1,48 @@
 import template from './createSurvey.html';
 
 angular.module('campusContactsApp').component('createSurvey', {
-    controller: createSurveyController,
-    bindings: {
-        resolve: '<',
-        close: '&',
-        dismiss: '&',
-    },
-    template: template,
+  controller: createSurveyController,
+  bindings: {
+    resolve: '<',
+    close: '&',
+    dismiss: '&',
+  },
+  template,
 });
 
 function createSurveyController(surveyService) {
-    var vm = this;
+  const vm = this;
 
-    vm.title = null;
-    vm.saving = false;
-    vm.survey = {};
+  vm.title = null;
+  vm.saving = false;
+  vm.survey = {};
 
-    vm.valid = valid;
-    vm.save = save;
-    vm.cancel = cancel;
+  vm.valid = valid;
+  vm.save = save;
+  vm.cancel = cancel;
 
-    vm.$onInit = activate;
+  vm.$onInit = activate;
 
-    function activate() {
-        vm.orgId = vm.resolve.organizationId;
+  function activate() {
+    vm.orgId = vm.resolve.organizationId;
+  }
+
+  function valid() {
+    return vm.survey.title;
+  }
+
+  async function save() {
+    vm.saving = true;
+
+    try {
+      const newSurvey = await surveyService.createSurvey(vm.survey.title, vm.orgId);
+      vm.close({ $value: newSurvey });
+    } catch (err) {
+      vm.saving = false;
     }
+  }
 
-    function valid() {
-        return vm.survey.title;
-    }
-
-    async function save() {
-        vm.saving = true;
-
-        try {
-            const newSurvey = await surveyService.createSurvey(
-                vm.survey.title,
-                vm.orgId,
-            );
-            vm.close({ $value: newSurvey });
-        } catch (err) {
-            vm.saving = false;
-        }
-    }
-
-    function cancel() {
-        vm.dismiss();
-    }
+  function cancel() {
+    vm.dismiss();
+  }
 }

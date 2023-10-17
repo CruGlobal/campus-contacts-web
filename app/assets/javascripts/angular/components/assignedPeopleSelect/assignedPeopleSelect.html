@@ -1,30 +1,20 @@
-<ui-select
-    expose-select
-    multiple
-    ng-model="$ctrl.assigned"
-    close-on-select="false"
-    ng-disabled="$ctrl.disabled"
->
-    <ui-select-match
-        placeholder="{{
+<ui-select expose-select multiple ng-model="$ctrl.assigned" close-on-select="false" ng-disabled="$ctrl.disabled">
+  <ui-select-match
+    placeholder="{{
             $ctrl.ruleCode === 'AUTOASSIGN'
                 ? ('application.assign_search.assign_person' | t)
                 : ('application.assign_search.notify_person' | t)
         }}"
-    >
-        <span>
-            {{ $item | personName }}
-            <span ng-if="$ctrl.isMe($item)"
-                >({{ 'application.assign_search.me' | t }})</span
-            >
-        </span>
-    </ui-select-match>
-    <ui-select-choices repeat="person in $ctrl.people track by person.id">
-        <span>
-            {{ person | personName }}
-            <span ng-if="$ctrl.isMe(person)"
-                >({{ 'application.assign_search.me' | t }})</span
-            >
-        </span>
-    </ui-select-choices>
+  >
+    <span>
+      {{ $item | personName }}
+      <span ng-if="$ctrl.isMe($item)">({{ 'application.assign_search.me' | t }})</span>
+    </span>
+  </ui-select-match>
+  <ui-select-choices repeat="person in $ctrl.people track by person.id">
+    <span>
+      {{ person | personName }}
+      <span ng-if="$ctrl.isMe(person)">({{ 'application.assign_search.me' | t }})</span>
+    </span>
+  </ui-select-choices>
 </ui-select>

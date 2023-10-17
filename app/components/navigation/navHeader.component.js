@@ -6,27 +6,22 @@ import './navHeader.scss';
 import './navSearch.component';
 
 angular.module('campusContactsApp').component('navHeader', {
-    controller: navHeaderController,
-    template: template,
-    bindings: {
-        hideMenuLinks: '<',
-    },
+  controller: navHeaderController,
+  template,
+  bindings: {
+    hideMenuLinks: '<',
+  },
 });
 
-function navHeaderController(
-    state,
-    loggedInPerson,
-    envService,
-    authenticationService,
-) {
-    this.loggedInPerson = loggedInPerson;
-    this.state = state;
-    this.searchIcon = searchIcon;
-    this.campusContactsLogo = campusContactsLogo;
+function navHeaderController(state, loggedInPerson, envService, authenticationService) {
+  this.loggedInPerson = loggedInPerson;
+  this.state = state;
+  this.searchIcon = searchIcon;
+  this.campusContactsLogo = campusContactsLogo;
 
-    this.logout = () => {
-        authenticationService.destroyOktaAccess();
-    };
+  this.logout = () => {
+    authenticationService.destroyOktaAccess();
+  };
 
-    this.toggleSearchBar = () => (this.showSearchBar = !this.showSearchBar);
+  this.toggleSearchBar = () => (this.showSearchBar = !this.showSearchBar);
 }

@@ -1,61 +1,57 @@
 import template from './organizationOverviewTeam.html';
 
 angular.module('campusContactsApp').component('organizationOverviewTeam', {
-    controller: organizationOverviewTeamController,
-    require: {
-        organizationOverview: '^',
-    },
-    template: template,
+  controller: organizationOverviewTeamController,
+  require: {
+    organizationOverview: '^',
+  },
+  template,
 });
 
 function organizationOverviewTeamController(
-    organizationOverviewTeamService,
-    ProgressiveListLoader,
-    reportsService,
-    periodService,
-    $scope,
+  organizationOverviewTeamService,
+  ProgressiveListLoader,
+  reportsService,
+  periodService,
+  $scope,
 ) {
-    var vm = this;
-    vm.team = [];
-    vm.loadTeamPage = loadTeamPage;
+  const vm = this;
+  vm.team = [];
+  vm.loadTeamPage = loadTeamPage;
 
-    var listLoader = new ProgressiveListLoader({
-        modelType: 'person',
-        errorMessage:
-            'error.messages.organization_overview_team.load_team_chunk',
+  const listLoader = new ProgressiveListLoader({
+    modelType: 'person',
+    errorMessage: 'error.messages.organization_overview_team.load_team_chunk',
+  });
+
+  vm.$onInit = activate;
+
+  function activate() {
+    periodService.subscribe($scope, function () {
+      loadTeamReports([vm.organizationOverview.org.id], vm.team);
     });
+  }
 
-    vm.$onInit = activate;
-
-    function activate() {
-        periodService.subscribe($scope, function () {
-            loadTeamReports([vm.organizationOverview.org.id], vm.team);
-        });
+  function loadTeamPage() {
+    if (vm.busy) {
+      return;
     }
+    vm.busy = true;
 
-    function loadTeamPage() {
-        if (vm.busy) {
-            return;
-        }
-        vm.busy = true;
+    return organizationOverviewTeamService
+      .loadOrgTeam(vm.organizationOverview.org, listLoader)
+      .then(function (resp) {
+        vm.team = resp.list;
+        vm.loadedAll = resp.loadedAll;
+        // Use the nextBatch from the response which only includes unloaded people.
+        return loadTeamReports([vm.organizationOverview.org.id], resp.nextBatch);
+      })
+      .finally(function () {
+        vm.busy = false;
+      });
+  }
 
-        return organizationOverviewTeamService
-            .loadOrgTeam(vm.organizationOverview.org, listLoader)
-            .then(function (resp) {
-                vm.team = resp.list;
-                vm.loadedAll = resp.loadedAll;
-                // Use the nextBatch from the response which only includes unloaded people.
-                return loadTeamReports(
-                    [vm.organizationOverview.org.id],
-                    resp.nextBatch,
-                );
-            })
-            .finally(function () {
-                vm.busy = false;
-            });
-    }
-
-    function loadTeamReports(orgIds, team) {
-        return reportsService.loadMultiplePeopleReports(orgIds, team);
-    }
+  function loadTeamReports(orgIds, team) {
+    return reportsService.loadMultiplePeopleReports(orgIds, team);
+  }
 }

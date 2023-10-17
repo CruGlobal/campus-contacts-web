@@ -1,29 +1,26 @@
 import template from './dashboard.html';
 
 angular.module('campusContactsApp').component('dashboard', {
-    controller: DashboardController,
-    template: template,
+  controller: DashboardController,
+  template,
 });
 
 function DashboardController(periodService, $rootScope) {
-    const vm = this;
-    let deregisterEditOrganizationsEvent;
+  const vm = this;
+  let deregisterEditOrganizationsEvent;
 
-    vm.editOrganizations = false;
-    vm.getPeriod = periodService.getPeriod;
-    vm.$onInit = activate;
-    vm.$onDestroy = deactivate;
+  vm.editOrganizations = false;
+  vm.getPeriod = periodService.getPeriod;
+  vm.$onInit = activate;
+  vm.$onDestroy = deactivate;
 
-    function activate() {
-        deregisterEditOrganizationsEvent = $rootScope.$on(
-            'editOrganizations',
-            function (event, value) {
-                vm.editOrganizations = value;
-            },
-        );
-    }
+  function activate() {
+    deregisterEditOrganizationsEvent = $rootScope.$on('editOrganizations', function (event, value) {
+      vm.editOrganizations = value;
+    });
+  }
 
-    function deactivate() {
-        deregisterEditOrganizationsEvent();
-    }
+  function deactivate() {
+    deregisterEditOrganizationsEvent();
+  }
 }

@@ -6,7 +6,7 @@
  * even though it really is not.
  */
 angular.module('campusContactsApp').filter('mailto', function () {
-    return function (address) {
-        return address ? 'mailto:' + address : null;
-    };
+  return function (address) {
+    return address ? 'mailto:' + address : null;
+  };
 });

@@ -1,242 +1,191 @@
 <div class="accordion" ng-sortable="$ctrl.questionSortableOptions">
-    <form
-        class="br2 pivot-gray-darker"
-        ng-repeat="question in $ctrl.surveyQuestions track by question.id"
-        ng-class="{
+  <form
+    class="br2 pivot-gray-darker"
+    ng-repeat="question in $ctrl.surveyQuestions track by question.id"
+    ng-class="{
             'accordion-expanded  shadow-4': $ctrl.isExpanded[question.id]
         }"
-        ng-init="questionIndex = $index"
-    >
-        <h2
-            class="accordion-header sortable normal pivot-gray-darker mt3 bg-white f5 flex br2"
-            ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
-            ng-class="{
+    ng-init="questionIndex = $index"
+  >
+    <h2
+      class="accordion-header sortable normal pivot-gray-darker mt3 bg-white f5 flex br2"
+      ng-click="$ctrl.isExpanded[question.id] = !$ctrl.isExpanded[question.id]"
+      ng-class="{
                 'pa3 shadow-4': !$ctrl.isExpanded[question.id],
                 'ph3 pv2 items-center mb0 br--top bg-pivot-white': $ctrl.isExpanded[question.id]
         }"
-        >
-            <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
-                <img
-                    ng-src="{{ $ctrl.icons.sort }}"
-                    alt="{{ 'surveys:questions.sort' | t }}"
-                    style="width: 22px; height: 20px"
-                />
-            </a>
-            <span
-                class="ml3 flex-auto"
-                ng-show="!$ctrl.isExpanded[question.id]"
-            >
-                {{ question.label }}
-                <tooltip
-                    ng-if="question.required"
-                    content="{{ 'This question must be shown on all surveys' | t }}"
-                ></tooltip>
-            </span>
+    >
+      <a class="question-sort mr3" ng-if="$ctrl.directAdminPrivileges">
+        <img
+          ng-src="{{ $ctrl.icons.sort }}"
+          alt="{{ 'surveys:questions.sort' | t }}"
+          style="width: 22px; height: 20px"
+        />
+      </a>
+      <span class="ml3 flex-auto" ng-show="!$ctrl.isExpanded[question.id]">
+        {{ question.label }}
+        <tooltip ng-if="question.required" content="{{ 'This question must be shown on all surveys' | t }}"></tooltip>
+      </span>
+      <input
+        type="text"
+        class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker flex-auto ihshort br2"
+        placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}"
+        ng-model="question.label"
+        ng-click="$event.stopPropagation()"
+        ng-change="$ctrl.updateQuestion(question)"
+        ng-model-options="{ debounce: 750 }"
+        ng-readonly="!$ctrl.directAdminPrivileges"
+        ng-if="$ctrl.isExpanded[question.id]"
+      />
+      <a
+        class="ml3"
+        href=""
+        ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges && !question.required"
+        ng-click="$ctrl.deleteQuestion(question.id)"
+      >
+        <img ng-src="{{ $ctrl.icons.trash }}" alt="{{ 'general:delete' | t }}" />
+      </a>
+      <a
+        class="ml3"
+        href=""
+        ng-if="$ctrl.isExpanded[question.id] && !question.predefined && $ctrl.directAdminPrivileges"
+        ng-click="$ctrl.copyQuestion(question)"
+      >
+        <img ng-src="{{ $ctrl.icons.copy }}" alt="Copy" />
+      </a>
+      <span class="db open-close-arrow ml3"></span>
+    </h2>
+    <div
+      class="accordion-body br2 br-bottom bb b--pivot-gray-5 pa3 bg-pivot-white"
+      ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
+    >
+      <fieldset>
+        <div class="flex-ns justify-between">
+          <div class="w-50-ns mb3 mr3-ns">
+            <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">
+              {{ 'surveys:questions.type' | t }}
+            </label>
+            <div class="dropdown dropdown-select w-100 mr2 form" uib-dropdown>
+              <a class="f5 link form-control form-control-select" href="" uib-dropdown-toggle>
+                {{ $ctrl.getQuestionType( question.kind, question.style ).name }}
+              </a>
+              <ul class="bg-white pa2 f5 br--bottom shadow-4" uib-dropdown-menu>
+                <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
+                  <a
+                    href
+                    class="pt2"
+                    ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);"
+                  >
+                    {{ type.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="w-50-ns mb3">
+            <label class="db lh-copy f6 b mb2 pivot-gray-darker ttu tracked">
+              {{ 'surveys:questions.columnTitle' | t }}
+            </label>
             <input
-                type="text"
-                class="pa2 input-reset cursor-text bg-white bw0 pivot-gray-darker flex-auto ihshort br2"
-                placeholder="{{ 'surveys:questions.labelPlaceholder' | t }}"
-                ng-model="question.label"
-                ng-click="$event.stopPropagation()"
-                ng-change="$ctrl.updateQuestion(question)"
-                ng-model-options="{ debounce: 750 }"
-                ng-readonly="!$ctrl.directAdminPrivileges"
-                ng-if="$ctrl.isExpanded[question.id]"
+              type="text"
+              class="bg-pivot-gray-5 input-reset w-100 ihshort"
+              ng-change="$ctrl.updateQuestion(question)"
+              ng-model-options="{ debounce: 750 }"
+              ng-model="question.column_title"
+              ng-readonly="!$ctrl.directAdminPrivileges"
             />
-            <a
-                class="ml3"
-                href=""
-                ng-if="$ctrl.isExpanded[question.id] && $ctrl.directAdminPrivileges && !question.required"
-                ng-click="$ctrl.deleteQuestion(question.id)"
-            >
-                <img
-                    ng-src="{{ $ctrl.icons.trash }}"
-                    alt="{{ 'general:delete' | t }}"
-                />
-            </a>
-            <a
-                class="ml3"
-                href=""
-                ng-if="$ctrl.isExpanded[question.id] && !question.predefined && $ctrl.directAdminPrivileges"
-                ng-click="$ctrl.copyQuestion(question)"
-            >
-                <img ng-src="{{ $ctrl.icons.copy }}" alt="Copy" />
-            </a>
-            <span class="db open-close-arrow ml3"></span>
-        </h2>
-        <div
-            class="accordion-body br2 br-bottom bb b--pivot-gray-5 pa3 bg-pivot-white"
-            ng-if="$ctrl.isExpanded[question.id] && !question.predefined"
-        >
-            <fieldset>
-                <div class="flex-ns justify-between">
-                    <div class="w-50-ns mb3 mr3-ns">
-                        <label
-                            class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked"
-                        >
-                            {{ 'surveys:questions.type' | t }}
-                        </label>
-                        <div
-                            class="dropdown dropdown-select w-100 mr2 form"
-                            uib-dropdown
-                        >
-                            <a
-                                class="f5 link form-control form-control-select"
-                                href=""
-                                uib-dropdown-toggle
-                            >
-                                {{ $ctrl.getQuestionType( question.kind,
-                                question.style ).name }}
-                            </a>
-                            <ul
-                                class="bg-white pa2 f5 br--bottom shadow-4"
-                                uib-dropdown-menu
-                            >
-                                <li
-                                    ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index"
-                                >
-                                    <a
-                                        href
-                                        class="pt2"
-                                        ng-click="question.kind = type.kind; question.style = type.style; $ctrl.updateQuestion(question);"
-                                    >
-                                        {{ type.name }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="w-50-ns mb3">
-                        <label
-                            class="db lh-copy f6 b mb2 pivot-gray-darker ttu tracked"
-                        >
-                            {{ 'surveys:questions.columnTitle' | t }}
-                        </label>
-                        <input
-                            type="text"
-                            class="bg-pivot-gray-5 input-reset w-100 ihshort"
-                            ng-change="$ctrl.updateQuestion(question)"
-                            ng-model-options="{ debounce: 750 }"
-                            ng-model="question.column_title"
-                            ng-readonly="!$ctrl.directAdminPrivileges"
-                        />
-                    </div>
-                </div>
-                <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked"
-                    >{{ 'surveys:questions.answers' | t }}</label
-                >
-                <div
-                    class="flex flex-column justify-between"
-                    ng-if="question.question_answers"
-                >
-                    <div ng-sortable="$ctrl.sortableOptions">
-                        <div
-                            class="flex items-center mb2"
-                            ng-repeat="answer in
+          </div>
+        </div>
+        <label class="db f6 lh-copy b mb2 pivot-gray-darker ttu tracked">{{ 'surveys:questions.answers' | t }}</label>
+        <div class="flex flex-column justify-between" ng-if="question.question_answers">
+          <div ng-sortable="$ctrl.sortableOptions">
+            <div
+              class="flex items-center mb2"
+              ng-repeat="answer in
                         question.question_answers track by $index"
-                        >
-                            <a
-                                class="sort mr3"
-                                ng-if="$ctrl.directAdminPrivileges"
-                            >
-                                <img
-                                    alt="{{
+            >
+              <a class="sort mr3" ng-if="$ctrl.directAdminPrivileges">
+                <img
+                  alt="{{
                                                             'surveys:questions.sort'
                                                                 | t
                                                         }}"
-                                    ng-src="{{
+                  ng-src="{{
                                                             $ctrl.icons.sort
                                                         }}"
-                                />
-                            </a>
-                            <input
-                                class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
-                                type="text"
-                                ng-change="$ctrl.updateQuestionAnswer(question, $index)"
-                                ng-model-options="{ debounce: 750 }"
-                                ng-model="question.question_answers[$index]"
-                                ng-readonly="!$ctrl.directAdminPrivileges"
-                            />
-                            <div uib-dropdown>
-                                <ng-md-icon
-                                    uib-dropdown-toggle
-                                    class="dropdown-toggle ml2"
-                                    icon="more_vert"
-                                    size="26"
-                                ></ng-md-icon>
+                />
+              </a>
+              <input
+                class="pa2 input-reset bw0 pivot-gray-darker w-100 br2 ihshort"
+                type="text"
+                ng-change="$ctrl.updateQuestionAnswer(question, $index)"
+                ng-model-options="{ debounce: 750 }"
+                ng-model="question.question_answers[$index]"
+                ng-readonly="!$ctrl.directAdminPrivileges"
+              />
+              <div uib-dropdown>
+                <ng-md-icon uib-dropdown-toggle class="dropdown-toggle ml2" icon="more_vert" size="26"></ng-md-icon>
 
-                                <div
-                                    class="dropdown-menu dropdown-menu-right"
-                                    uib-dropdown-menu
-                                    role="menu"
-                                    aria-labelledby="single-button"
-                                >
-                                    <a
-                                        href
-                                        class="dropdown-item"
-                                        ng-click="question.question_answers[$index] && $ctrl.openAutoAssignLabelNotifyModal(question, answer)"
-                                        ng-if="$ctrl.directAdminPrivileges"
-                                        ng-class="{ disabled: !question.question_answers[$index] }"
-                                    >
-                                        {{
-                                        'surveyTab:menu.autoAssignLabelNotify' |
-                                        t }}
-                                    </a>
-                                    <a
-                                        href
-                                        class="dropdown-item"
-                                        ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);"
-                                        ng-if="$ctrl.directAdminPrivileges"
-                                    >
-                                        {{ 'surveyTab:menu.delete' | t }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button
-                        class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent center"
-                        ng-click="$ctrl.addEmptyQuestionContent(question)"
-                        ng-if="question.question_answers && $ctrl.directAdminPrivileges"
-                    >
-                        {{ 'surveys:questions.newAnswer' | t }}
-                    </button>
+                <div
+                  class="dropdown-menu dropdown-menu-right"
+                  uib-dropdown-menu
+                  role="menu"
+                  aria-labelledby="single-button"
+                >
+                  <a
+                    href
+                    class="dropdown-item"
+                    ng-click="question.question_answers[$index] && $ctrl.openAutoAssignLabelNotifyModal(question, answer)"
+                    ng-if="$ctrl.directAdminPrivileges"
+                    ng-class="{ disabled: !question.question_answers[$index] }"
+                  >
+                    {{ 'surveyTab:menu.autoAssignLabelNotify' | t }}
+                  </a>
+                  <a
+                    href
+                    class="dropdown-item"
+                    ng-click="$ctrl.deleteQuestionContent(question, question.question_answers, $index);"
+                    ng-if="$ctrl.directAdminPrivileges"
+                  >
+                    {{ 'surveyTab:menu.delete' | t }}
+                  </a>
                 </div>
-            </fieldset>
+              </div>
+            </div>
+          </div>
+          <button
+            class="f6 link ba b--blue ihshort fr mb2 dib blue bold br2 ttu tracked bg-transparent center"
+            ng-click="$ctrl.addEmptyQuestionContent(question)"
+            ng-if="question.question_answers && $ctrl.directAdminPrivileges"
+          >
+            {{ 'surveys:questions.newAnswer' | t }}
+          </button>
         </div>
-    </form>
+      </fieldset>
+    </div>
+  </form>
 </div>
 
 <div class="new-questions flex-ns items-start">
-    <div class="dropdown-large dropdown mv3 w-50-ns mr3-ns">
+  <div class="dropdown-large dropdown mv3 w-50-ns mr3-ns">
+    <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" ng-click="$ctrl.addPredefinedQuestion()">
+      {{ 'surveys:questions.addPredefinedQuestion' | t }}
+    </a>
+  </div>
+  <div class="dropdown-large dropdown mv3 w-50-ns" uib-dropdown>
+    <a class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked" href="" uib-dropdown-toggle>
+      {{ 'surveys:questions.addNewQuestion' | t }}
+    </a>
+    <ul class="bg-white" uib-dropdown-menu>
+      <li ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index">
         <a
-            class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked"
-            href=""
-            ng-click="$ctrl.addPredefinedQuestion()"
-        >
-            {{ 'surveys:questions.addPredefinedQuestion' | t }}
-        </a>
-    </div>
-    <div class="dropdown-large dropdown mv3 w-50-ns" uib-dropdown>
-        <a
-            class="f6 link dim ba ph3 pv3 db blue br2 dim ttu tracked"
-            href=""
-            uib-dropdown-toggle
-        >
-            {{ 'surveys:questions.addNewQuestion' | t }}
-        </a>
-        <ul class="bg-white" uib-dropdown-menu>
-            <li
-                ng-repeat="type in $ctrl.questionTypes | filter:{canAdd: true} track by $index"
-            >
-                <a
-                    href=""
-                    ng-click="$ctrl.addQuestion({
+          href=""
+          ng-click="$ctrl.addQuestion({
                     label: '', kind: type.kind, style: type.style
                 })"
-                    >{{ type.name }}</a
-                >
-            </li>
-        </ul>
-    </div>
+          >{{ type.name }}</a
+        >
+      </li>
+    </ul>
+  </div>
 </div>

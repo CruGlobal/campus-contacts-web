@@ -1,34 +1,26 @@
 <header ng-cloak ng-if="!$ctrl.hideHeader">
-    <toaster-container
-        toaster-options="{ 'close-button': true }"
-    ></toaster-container>
-    <nav-header hide-menu-links="$ctrl.hideMenuLinks"></nav-header>
-    <dashboard-subnav></dashboard-subnav>
+  <toaster-container toaster-options="{ 'close-button': true }"></toaster-container>
+  <nav-header hide-menu-links="$ctrl.hideMenuLinks"></nav-header>
+  <dashboard-subnav></dashboard-subnav>
 </header>
 <section class="main-container ph1 ph3-l pt4 pb2 flex-grow-5 w-100" ng-cloak>
-    <ui-view></ui-view>
+  <ui-view></ui-view>
 </section>
 <footer class="tc bg-white pt4 pb4" ng-cloak ng-if="!$ctrl.hideFooter">
-    <section class="main-container flex-grow-5 pivot-gray-7">
-        <span class="copyright">
-            <!-- prettier-ignore -->
-            {{ 'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}
-        </span>
-        <span>
-            <a
-                href="https://www.cru.org/us/en/about/terms-of-use.html"
-                target="_blank"
-                class="ml3 pivot-gray-7"
-                >{{ 'nav.terms' | t }}</a
-            >
-        </span>
-        <span>
-            <a
-                href="https://www.cru.org/us/en/about/privacy.html"
-                target="_blank"
-                class="ml3 pivot-gray-7"
-                >{{ 'nav.privacy' | t }}</a
-            >
-        </span>
-    </section>
+  <section class="main-container flex-grow-5 pivot-gray-7">
+    <span class="copyright">
+      <!-- prettier-ignore -->
+      {{ 'nav.copyright' | t: { year: ($ctrl.year | date: 'yyyy') } }}
+    </span>
+    <span>
+      <a href="https://www.cru.org/us/en/about/terms-of-use.html" target="_blank" class="ml3 pivot-gray-7"
+        >{{ 'nav.terms' | t }}</a
+      >
+    </span>
+    <span>
+      <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" class="ml3 pivot-gray-7"
+        >{{ 'nav.privacy' | t }}</a
+      >
+    </span>
+  </section>
 </footer>

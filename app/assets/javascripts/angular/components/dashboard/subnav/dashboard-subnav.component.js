@@ -2,16 +2,16 @@ import './dashboard-subnav.scss';
 import template from './dashboard-subnav.html';
 
 angular.module('campusContactsApp').component('dashboardSubnav', {
-    controller: DashboardSubnavController,
-    template: template,
+  controller: DashboardSubnavController,
+  template,
 });
 
 function DashboardSubnavController($rootScope, $state) {
-    this.$state = $state;
-    this.editOrganizations = false;
+  this.$state = $state;
+  this.editOrganizations = false;
 
-    this.toggleEditOrganizations = () => {
-        this.editOrganizations = !this.editOrganizations;
-        $rootScope.$broadcast('editOrganizations', this.editOrganizations);
-    };
+  this.toggleEditOrganizations = () => {
+    this.editOrganizations = !this.editOrganizations;
+    $rootScope.$broadcast('editOrganizations', this.editOrganizations);
+  };
 }

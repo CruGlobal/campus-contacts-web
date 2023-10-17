@@ -2,50 +2,41 @@ import template from './ministryViewLabel.html';
 import './ministryViewLabel.scss';
 
 angular.module('campusContactsApp').component('ministryViewLabel', {
-    controller: ministryViewLabelController,
-    template: template,
-    bindings: {
-        label: '<',
-    },
+  controller: ministryViewLabelController,
+  template,
+  bindings: {
+    label: '<',
+  },
 });
 
-function ministryViewLabelController(
-    $uibModal,
-    confirmModalService,
-    tFilter,
-    labelsService,
-    loggedInPerson,
-    _,
-) {
-    var vm = this;
+function ministryViewLabelController($uibModal, confirmModalService, tFilter, labelsService, loggedInPerson, _) {
+  const vm = this;
 
-    vm.editLabel = editLabel;
-    vm.deleteLabel = deleteLabel;
-    vm.$onInit = activate;
+  vm.editLabel = editLabel;
+  vm.deleteLabel = deleteLabel;
+  vm.$onInit = activate;
 
-    function activate() {
-        vm.adminPrivileges = loggedInPerson.isAdminAt(vm.label.organization);
-    }
+  function activate() {
+    vm.adminPrivileges = loggedInPerson.isAdminAt(vm.label.organization);
+  }
 
-    function editLabel() {
-        $uibModal.open({
-            component: 'editLabel',
-            resolve: {
-                organizationId: _.constant(vm.label.organization.id),
-                label: _.constant(vm.label),
-            },
-            windowClass: 'pivot_theme',
-            size: 'sm',
-        });
-    }
+  function editLabel() {
+    $uibModal.open({
+      component: 'editLabel',
+      resolve: {
+        organizationId: _.constant(vm.label.organization.id),
+        label: _.constant(vm.label),
+      },
+      windowClass: 'pivot_theme',
+      size: 'sm',
+    });
+  }
 
-    function deleteLabel() {
-        return confirmModalService
-            .create(
-                tFilter('labels.delete.confirm', { label_name: vm.label.name }),
-            )
-            .then(function () {
-                return labelsService.deleteLabel(vm.label);
-            });
-    }
+  function deleteLabel() {
+    return confirmModalService
+      .create(tFilter('labels.delete.confirm', { label_name: vm.label.name }))
+      .then(function () {
+        return labelsService.deleteLabel(vm.label);
+      });
+  }
 }

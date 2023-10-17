@@ -1,108 +1,92 @@
 import template from './organizationSignaturesSign.html';
 
 angular.module('campusContactsApp').component('organizationSignaturesSign', {
-    template: template,
-    controller: organizationSignaturesSignController,
+  template,
+  controller: organizationSignaturesSignController,
 });
 
 function organizationSignaturesSignController(
-    state,
-    authenticationService,
-    httpProxy,
-    $state,
-    $rootScope,
-    $scope,
-    $filter,
-    $sce,
+  state,
+  authenticationService,
+  httpProxy,
+  $state,
+  $rootScope,
+  $scope,
+  $filter,
+  $sce,
 ) {
-    this.nonSignedAgreements = ['code_of_conduct', 'statement_of_faith'];
-    this.hasDeclined = false;
+  this.nonSignedAgreements = ['code_of_conduct', 'statement_of_faith'];
+  this.hasDeclined = false;
 
-    let deregisterStateChangedEvent;
+  let deregisterStateChangedEvent;
 
-    const sendAgreement = (orgId, type, status) => {
-        const params = {
-            include: [],
-            data: {
-                attributes: {
-                    kind: type,
-                    status: status,
-                },
-            },
-        };
-
-        return httpProxy.post(`/organizations/${orgId}/signatures`, params, {
-            errorMessage: 'error.messages.signature_request',
-        });
+  const sendAgreement = (orgId, type, status) => {
+    const params = {
+      include: [],
+      data: {
+        attributes: {
+          kind: type,
+          status,
+        },
+      },
     };
 
-    const updateAllAgreements = async (orgIds, type, status) => {
-        await Promise.all(
-            orgIds.map((orgId) => sendAgreement(orgId, type, status)),
-        );
-    };
+    return httpProxy.post(`/organizations/${orgId}/signatures`, params, {
+      errorMessage: 'error.messages.signature_request',
+    });
+  };
 
-    const updateAgreement = async (type, status) => {
-        await updateAllAgreements(
-            state.organization_with_missing_signatures_ids,
-            type,
-            status,
-        );
+  const updateAllAgreements = async (orgIds, type, status) => {
+    await Promise.all(orgIds.map((orgId) => sendAgreement(orgId, type, status)));
+  };
 
-        this.nonSignedAgreements = this.nonSignedAgreements.filter(
-            (t) => t !== type,
-        );
+  const updateAgreement = async (type, status) => {
+    await updateAllAgreements(state.organization_with_missing_signatures_ids, type, status);
 
-        $scope.$apply();
-    };
+    this.nonSignedAgreements = this.nonSignedAgreements.filter((t) => t !== type);
 
-    const hasAgreedTo = (type) => {
-        const signed = this.nonSignedAgreements.find((t) => t === type);
-        return !signed;
-    };
+    $scope.$apply();
+  };
 
-    this.$onInit = () => {
-        authenticationService.updateUserData();
+  const hasAgreedTo = (type) => {
+    const signed = this.nonSignedAgreements.find((t) => t === type);
+    return !signed;
+  };
 
-        deregisterStateChangedEvent = $rootScope.$on(
-            'state:changed',
-            (event, data) => {
-                if (data.organization_with_missing_signatures_ids.length <= 0)
-                    authenticationService.postAuthRedirect();
-            },
-        );
+  this.$onInit = () => {
+    authenticationService.updateUserData();
 
-        this.codeOfConductText = $sce.trustAsHtml(
-            $filter('t')('signatures.agreements.codeOfConduct.text'),
-        );
-        this.statementOfFaithText = $sce.trustAsHtml(
-            $filter('t')('signatures.agreements.statementOfFaith.text'),
-        );
-    };
+    deregisterStateChangedEvent = $rootScope.$on('state:changed', (event, data) => {
+      if (data.organization_with_missing_signatures_ids.length <= 0) authenticationService.postAuthRedirect();
+    });
 
-    this.$onDestroy = () => {
-        deregisterStateChangedEvent();
-    };
+    this.codeOfConductText = $sce.trustAsHtml($filter('t')('signatures.agreements.codeOfConduct.text'));
+    this.statementOfFaithText = $sce.trustAsHtml($filter('t')('signatures.agreements.statementOfFaith.text'));
+  };
 
-    this.returnToApp = () => {
-        authenticationService.updateUserData();
-        authenticationService.postAuthRedirect();
-    };
+  this.$onDestroy = () => {
+    deregisterStateChangedEvent();
+  };
 
-    this.acceptAgreement = async (type) => {
-        updateAgreement(type, 'accepted');
-    };
+  this.returnToApp = () => {
+    authenticationService.updateUserData();
+    authenticationService.postAuthRedirect();
+  };
 
-    this.declineAgreement = async (type) => {
-        this.hasDeclined = true;
-        await updateAgreement(type, 'declined');
-    };
+  this.acceptAgreement = async (type) => {
+    updateAgreement(type, 'accepted');
+  };
 
-    this.hasSignedCodeOfConduct = () => {
-        return hasAgreedTo('code_of_conduct');
-    };
+  this.declineAgreement = async (type) => {
+    this.hasDeclined = true;
+    await updateAgreement(type, 'declined');
+  };
 
-    this.hasSignedSignedStatementOfFaith = () => {
-        return hasAgreedTo('statement_of_faith');
-    };
+  this.hasSignedCodeOfConduct = () => {
+    return hasAgreedTo('code_of_conduct');
+  };
+
+  this.hasSignedSignedStatementOfFaith = () => {
+    return hasAgreedTo('statement_of_faith');
+  };
 }

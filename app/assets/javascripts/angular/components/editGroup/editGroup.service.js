@@ -1,12 +1,10 @@
-angular
-    .module('campusContactsApp')
-    .factory('editGroupService', editGroupService);
+angular.module('campusContactsApp').factory('editGroupService', editGroupService);
 
 function editGroupService() {
-    return {
-        // Determine whether a group has valid field values
-        isGroupValid: function (group) {
-            return group.name && group.location;
-        },
-    };
+  return {
+    // Determine whether a group has valid field values
+    isGroupValid: function (group) {
+      return group.name && group.location;
+    },
+  };
 }

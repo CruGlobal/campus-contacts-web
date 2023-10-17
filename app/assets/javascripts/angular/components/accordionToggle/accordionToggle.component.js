@@ -2,20 +2,20 @@ import template from './accordionToggle.html';
 import './accordionToggle.scss';
 
 angular.module('campusContactsApp').component('accordionToggle', {
-    controller: accordionToggleController,
-    require: {
-        accordion: '^',
-    },
-    template: template,
-    transclude: true,
+  controller: accordionToggleController,
+  require: {
+    accordion: '^',
+  },
+  template,
+  transclude: true,
 });
 
 function accordionToggleController() {
-    var vm = this;
+  const vm = this;
 
-    vm.toggleVisibility = toggleVisibility;
+  vm.toggleVisibility = toggleVisibility;
 
-    function toggleVisibility() {
-        vm.accordion.collapsed = !vm.accordion.collapsed;
-    }
+  function toggleVisibility() {
+    vm.accordion.collapsed = !vm.accordion.collapsed;
+  }
 }
