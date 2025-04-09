@@ -2,38 +2,38 @@
 @import '~bootstrap/scss/variables';
 
 app {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    justify-content: space-between;
-    background: #f2f2f2;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #f2f2f2;
 
-    > header {
-        height: 100%;
+  > header {
+    height: 100%;
+  }
+
+  .sub-navigation {
+    height: 48.5px;
+    > .main-container {
+      @media (max-width: 768px) {
+        width: 100%;
+        > .icons ng-md-icon {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .main-container {
+    margin-right: auto;
+    margin-left: auto;
+
+    @media screen and (min-width: map-get($grid-breakpoints, md)) {
+      max-width: 100%;
     }
 
-    .sub-navigation {
-        height: 48.5px;
-        > .main-container {
-            @media (max-width: 768px) {
-                width: 100%;
-                > .icons ng-md-icon {
-                    display: none;
-                }
-            }
-        }
+    @media screen and (min-width: map-get($grid-breakpoints, lg)) {
+      max-width: 976px;
     }
-
-    .main-container {
-        margin-right: auto;
-        margin-left: auto;
-
-        @media screen and (min-width: map-get($grid-breakpoints, md)) {
-            max-width: 100%;
-        }
-
-        @media screen and (min-width: map-get($grid-breakpoints, lg)) {
-            max-width: 976px;
-        }
-    }
+  }
 }
