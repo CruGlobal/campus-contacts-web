@@ -24,4 +24,8 @@ function navHeaderController(state, loggedInPerson, envService, authenticationSe
   };
 
   this.toggleSearchBar = () => (this.showSearchBar = !this.showSearchBar);
+
+  this.helpEmailBody = encodeURIComponent(`Team Name (from Infobase):
+Team Leader email:
+Possible Team Admin:`);
 }
